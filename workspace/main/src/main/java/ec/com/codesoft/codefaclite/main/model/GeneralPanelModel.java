@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.main.model;
 
 
+import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
 import ec.com.codesoft.codefaclite.main.panel.GeneralPanelForm;
 import ec.com.codesoft.codefaclite.main.panel.OtraVentana;
 import ec.com.codesoft.codefaclite.main.panel.OtraVentana2;
@@ -109,17 +110,33 @@ public class GeneralPanelModel extends GeneralPanelForm{
             }
         });
         
-       
-        getjMenuItem2().addActionListener(new ActionListener() {
+       getjMenuItem1().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
                     //seleccionaPanel(new OtraVentana2());
-                    OtraVentanaModel2 ayuda=new OtraVentanaModel2();
+                    OtraVentanaModel ayuda=new OtraVentanaModel();
                     ayuda.addInternalFrameListener(listenerFrame);
+                    
                     getjDesktopPane1().add(ayuda);
                     ayuda.setMaximum(true);
                     ayuda.show();
+                } catch (PropertyVetoException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            }
+        });
+        getjMenuCliente().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    //seleccionaPanel(new OtraVentana2());
+                    ClienteModel clienteModelo=new ClienteModel();
+                    clienteModelo.addInternalFrameListener(listenerFrame);
+                    getjDesktopPane1().add(clienteModelo);
+                    clienteModelo.setMaximum(true);
+                    clienteModelo.show();
                 } catch (PropertyVetoException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                 }

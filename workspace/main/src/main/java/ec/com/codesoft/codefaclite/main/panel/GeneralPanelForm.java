@@ -64,6 +64,7 @@ public class GeneralPanelForm extends javax.swing.JFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        jMenuCliente = new javax.swing.JMenuItem();
         jMenu7 = new javax.swing.JMenu();
         jMenu8 = new javax.swing.JMenu();
 
@@ -82,6 +83,7 @@ public class GeneralPanelForm extends javax.swing.JFrame {
         jMenuBar3.add(jMenu6);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new java.awt.BorderLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -164,7 +166,16 @@ public class GeneralPanelForm extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Edit");
+        jMenu2.setText("Crm");
+
+        jMenuCliente.setText("Clientes");
+        jMenuCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuClienteActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuCliente);
+
         jMenuBar1.add(jMenu2);
 
         jMenu7.setText("Facturacion");
@@ -205,6 +216,10 @@ public class GeneralPanelForm extends javax.swing.JFrame {
         //AyudaForm ayuda=new AyudaForm();
        
     }//GEN-LAST:event_btnActualizarActionPerformed
+
+    private void jMenuClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuClienteActionPerformed
+       
+    }//GEN-LAST:event_jMenuClienteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -266,6 +281,7 @@ public class GeneralPanelForm extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuBar jMenuBar3;
+    private javax.swing.JMenuItem jMenuCliente;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
@@ -310,6 +326,14 @@ public class GeneralPanelForm extends javax.swing.JFrame {
 
     public JButton getBtnActualizar() {
         return btnActualizar;
+    }
+
+    public JMenuItem getjMenuCliente() {
+        return jMenuCliente;
+    }
+
+    public void setjMenuCliente(JMenuItem jMenuCliente) {
+        this.jMenuCliente = jMenuCliente;
     }
 
     public void setBtnActualizar(JButton btnActualizar) {
