@@ -6,10 +6,9 @@
 package ec.com.codesoft.codefaclite.main.model;
 
 
+import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
 import ec.com.codesoft.codefaclite.main.panel.GeneralPanelForm;
-import ec.com.codesoft.codefaclite.main.panel.OtraVentana;
-import ec.com.codesoft.codefaclite.main.panel.OtraVentana2;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Image;
@@ -95,6 +94,7 @@ public class GeneralPanelModel extends GeneralPanelForm{
         getjMenuItem1().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                /*
                 try {
                     //seleccionaPanel(new OtraVentana2());
                     OtraVentanaModel ayuda=new OtraVentanaModel();
@@ -106,14 +106,16 @@ public class GeneralPanelModel extends GeneralPanelForm{
                 } catch (PropertyVetoException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
+                */
             }
         });
         
        getjMenuItem1().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                /*
                 try {
+                    
                     //seleccionaPanel(new OtraVentana2());
                     OtraVentanaModel ayuda=new OtraVentanaModel();
                     ayuda.addInternalFrameListener(listenerFrame);
@@ -123,7 +125,7 @@ public class GeneralPanelModel extends GeneralPanelForm{
                     ayuda.show();
                 } catch (PropertyVetoException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                }*/
                 
             }
         });
@@ -250,65 +252,7 @@ public class GeneralPanelModel extends GeneralPanelForm{
                         }
      };
     
-    ActionListener listenerBotones= new ActionListener() 
-    {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    //seleccionaPanel(new OtraVentana2());
-                    OtraVentanaModel ayuda=new OtraVentanaModel();
-                    ayuda.addInternalFrameListener(new InternalFrameListener() {
-                        @Override
-                        public void internalFrameOpened(InternalFrameEvent e) {
-
-                        }
-
-                        @Override
-                        public void internalFrameClosing(InternalFrameEvent e) {
-
-                        }
-
-                        @Override
-                        public void internalFrameClosed(InternalFrameEvent e) {
-                            //habilitarBotones(false);
-                        }
-
-                        @Override
-                        public void internalFrameIconified(InternalFrameEvent e) {
-
-                        }
-
-                        @Override
-                        public void internalFrameDeiconified(InternalFrameEvent e) {
-                            //JOptionPane.showMessageDialog(null,"internalFrameDeiconified");
-                            habilitarConfiguracioneBotones();
-                        }
-
-                        @Override
-                        public void internalFrameActivated(InternalFrameEvent e) {
-                            //JOptionPane.showMessageDialog(null,"internalFrameActivated");
-                            habilitarConfiguracioneBotones();
-                           
-                        }
-
-                        @Override
-                        public void internalFrameDeactivated(InternalFrameEvent e) {
-                             habilitarBotones(false);
-                            //habilitarConfiguracioneBotones();
-                            //JOptionPane.showMessageDialog(null,"internalFrameDeactivated");
-                        }
-                    });
-                    
-                    getjDesktopPane1().add(ayuda);
-                    ayuda.setMaximum(true);
-                    ayuda.show();
-                } catch (PropertyVetoException ex) {
-                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                
-            }
-    };
-    
+        
     
     private void habilitarBotones(Boolean opcion)
     {

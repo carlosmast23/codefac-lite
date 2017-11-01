@@ -3,3 +3,9 @@
 /workspace/ws-client-iess/target/
 /main/target/
 /workspace/resources/target/
+/workspace/crm/target/
+/workspace/coreCodefacLite/target/
+
+#excluir arhivos de compilacion
+
+*.class

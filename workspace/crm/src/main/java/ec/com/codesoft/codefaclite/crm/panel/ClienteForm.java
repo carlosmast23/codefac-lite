@@ -5,7 +5,9 @@
  */
 package ec.com.codesoft.codefaclite.crm.panel;
 
-import ec.com.codesoft.codefaclite.main.model.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+
+
 
 /**
  *

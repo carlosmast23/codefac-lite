@@ -5,10 +5,9 @@
  */
 package ec.com.codesoft.codefaclite.main.init;
 
-import ec.com.codesoft.codefaclite.main.model.BuscarDialogoModel;
+
 import ec.com.codesoft.codefaclite.main.model.GeneralPanelModel;
 import ec.com.codesoft.codefaclite.main.panel.LoginForm;
-import ec.com.codesoft.codefaclite.main.test.UsuarioModeloBusqueda;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 

@@ -5,10 +5,10 @@
  */
 package ec.com.codesoft.codefaclite.crm.model;
 
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.crm.busqueda.ClienteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.crm.panel.ClienteForm;
-import ec.com.codesoft.codefaclite.main.model.BuscarDialogoModel;
-import ec.com.codesoft.codefaclite.main.model.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import java.util.HashMap;
 import java.util.Map;

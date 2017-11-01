@@ -5,7 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.crm.busqueda;
 
-import ec.com.codesoft.codefaclite.main.model.InterfaceModelFind;
+
+import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import java.util.ArrayList;
 import java.util.Vector;
