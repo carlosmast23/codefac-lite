@@ -9,3 +9,4 @@
 #excluir arhivos de compilacion
 
 *.class
+*.jar
