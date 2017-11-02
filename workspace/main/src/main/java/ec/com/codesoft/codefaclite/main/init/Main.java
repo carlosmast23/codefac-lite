@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.main.model.GeneralPanelModel;
 import ec.com.codesoft.codefaclite.main.panel.LoginForm;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import static java.awt.Frame.MAXIMIZED_BOTH;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -22,6 +23,7 @@ public class Main {
         panel.setVisible(true);
         panel.setExtendedState(MAXIMIZED_BOTH);
         
+        //JOptionPane.showMessageDialog(null,"jemplo ");
         /*
         UsuarioModeloBusqueda modelo=new UsuarioModeloBusqueda();
         

@@ -10,3 +10,8 @@
 
 *.class
 *.jar
+/workspace/mavenCodefacLite/target/
+
+#Configuraciones del netbeans
+nbactions.xml
+nb-configuration.xml
