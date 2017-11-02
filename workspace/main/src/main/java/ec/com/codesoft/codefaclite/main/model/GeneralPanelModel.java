@@ -132,19 +132,11 @@ public class GeneralPanelModel extends GeneralPanelForm{
         getjMenuCliente().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    //seleccionaPanel(new OtraVentana2());
-                    ClienteModel clienteModelo=new ClienteModel();
-                    clienteModelo.addInternalFrameListener(listenerFrame);
-                    getjDesktopPane1().add(clienteModelo);
-                    clienteModelo.setMaximum(true);
-                    clienteModelo.show();
-                } catch (PropertyVetoException ex) {
-                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                agregarListenerMenu(new ClienteModel());
                 
             }
         });
+        
         
         getBtnGuardar().addActionListener(new ActionListener() {
             @Override
@@ -199,16 +191,20 @@ public class GeneralPanelModel extends GeneralPanelForm{
                                
             }
         });
-        /*
-        getjList2().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                System.out.println(getjList2().getSelectedIndex());
-                GeneralPanelInterface vista=controladorVista.getListaPaneles().get(getjList2().getSelectedIndex());
-                mostrarVista(vista);
-            }
-        });*/
+        
     }   
+    
+    private void agregarListenerMenu(GeneralPanelInterface panel)
+    {
+        try {
+            panel.addInternalFrameListener(listenerFrame);
+            getjDesktopPane1().add(panel);
+            panel.setMaximum(true);
+            panel.show();
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     InternalFrameListener listenerFrame=new InternalFrameListener() {
                         @Override
