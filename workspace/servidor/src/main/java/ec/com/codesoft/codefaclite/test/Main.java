@@ -29,8 +29,8 @@ public class Main {
         entityManager=factory.createEntityManager();
         
         Persona p=new Persona();
-        p.setCedula("123213");
-        p.setNombre("JUAN" );
+        p.setCedula("1282872");
+        p.setNombre("PEPEMUENTES" );
         
         entityManager.getTransaction().begin();
         entityManager.persist(p);

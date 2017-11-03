@@ -18,21 +18,21 @@ import javax.persistence.PersistenceContext;
  */
 public class PersonaFacade extends AbstractFacade<Persona>
 {
-    @PersistenceContext(unitName = "persistenceUnitCodefac")
-    private EntityManager em;
+    //@PersistenceContext(unitName = "persistenceUnitCodefac")
+    //private EntityManager em;
 
     public PersonaFacade() 
     {
         super(Persona.class);
     }    
     
-    
+    /*
     @Override
     protected EntityManager getEntityManager() {
         //EntityManagerFactory factory=Persistence.createEntityManagerFactory("pu_ejemplo");
         //em= factory.createEntityManager();
         return em;
-    }
+    }*/
     
     public int addNumbers(int numberA, int numberB) {
         return numberA - numberB;

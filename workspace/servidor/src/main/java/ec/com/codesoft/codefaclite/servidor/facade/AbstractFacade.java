@@ -7,6 +7,9 @@ package ec.com.codesoft.codefaclite.servidor.facade;
 
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 
 /**
  *
@@ -14,6 +17,8 @@ import javax.persistence.EntityManager;
  */
 public abstract class AbstractFacade<T>
 {
+    public EntityManager entityManager=Persistence.createEntityManagerFactory("pu_ejemplo").createEntityManager();
+    
     public static final String namePersistence="pu_ejemplo";
     private Class<T> entityClass;
     
@@ -22,18 +27,33 @@ public abstract class AbstractFacade<T>
         this.entityClass = entityClass;
     }
 
-    protected abstract EntityManager getEntityManager();
+    //protected abstract EntityManager getEntityManager();
+    public EntityManager getEntityManager()
+    {
+        //EntityManagerFactory factory=Persistence.createEntityManagerFactory(namePersistence);
+        return entityManager;
+    }
 
     public void create(T entity) {
+        EntityTransaction tx= getEntityManager().getTransaction();
+        tx.begin();
+        //getEntityManager().getTransaction().begin();
         getEntityManager().persist(entity);
+        tx.commit();
+        //getEntityManager().getTransaction().commit();
     }
 
     public void edit(T entity) {
+        EntityTransaction tx= getEntityManager().getTransaction();
+        tx.begin();
         getEntityManager().merge(entity);
+        tx.commit();
     }
 
     public void remove(T entity) {
+        getEntityManager().getTransaction().begin();
         getEntityManager().remove(getEntityManager().merge(entity));
+        getEntityManager().getTransaction().commit();
     }
 
     public T find(Object id) {

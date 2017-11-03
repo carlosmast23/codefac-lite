@@ -17,7 +17,9 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
     public static final int BOTON_GRABAR = 1;
     public static final int BOTON_EDITAR = 2;
     public static final int BOTON_ELIMINAR = 3;
+    public static final int BOTON_IMPRIMIR = 4;
     
+    public InterfazComunicacionPanel panelPadre;
     
     public static final String ESTADO_GRABAR="G";
     
@@ -25,7 +27,10 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
     public abstract void grabar();
     public abstract void editar();
     public abstract void eliminar();
+    public abstract void imprimir();
     public abstract String getNombre();
     
     public abstract Map<Integer,Boolean> permisosFormulario();
+    
+    
 }

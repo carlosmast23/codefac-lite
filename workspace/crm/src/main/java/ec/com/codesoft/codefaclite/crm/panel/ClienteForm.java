@@ -6,6 +6,20 @@
 package ec.com.codesoft.codefaclite.crm.panel;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.crm.test.EjemploCrm;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import net.sf.jasperreports.engine.JREmptyDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.view.JasperViewer;
 
 
 
@@ -20,6 +34,31 @@ public abstract class ClienteForm extends GeneralPanelInterface {
      */
     public ClienteForm() {
         initComponents();
+       // imprimirJasper();
+    }
+    
+    private void imprimirJasper()
+    {
+        try {
+            //String path=EjemploCrm.class.getResource("/img/iconos/edit-icon.png").getPath().toString();
+            String path=EjemploCrm.class.getResource("/reportes/crm/reporteEjemplo.jrxml").getPath();
+            InputStream input=EjemploCrm.class.getResource("/reportes/crm/reporteEjemplo.jrxml").openStream();
+            //JasperReport report=(JasperReport) JRLoader.loadObject(input);
+            
+            System.out.println(path);
+            
+            Map parameters = new HashMap();
+            parameters.put("nombre","carlos");
+            JasperReport report =JasperCompileManager.compileReport(input);
+            JasperPrint print =JasperFillManager.fillReport(report, parameters,new JREmptyDataSource());
+            JasperViewer.viewReport(print,false);
+            //JasperPrintManager.printReport(print, false);
+            System.out.println("abriendo jasperreport");
+        } catch (JRException ex) {
+            Logger.getLogger(EjemploCrm.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(EjemploCrm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

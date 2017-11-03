@@ -20,7 +20,7 @@ import javax.swing.JPanel;
  *
  * @author Carlos
  */
-public class GeneralPanelForm extends javax.swing.JFrame {
+public class GeneralPanelForm extends javax.swing.JFrame  {
 
     /**
      * Creates new form PanelGeneralForm
@@ -83,11 +83,11 @@ public class GeneralPanelForm extends javax.swing.JFrame {
         jMenuBar3.add(jMenu6);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new java.awt.BorderLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/save-icon.png"))); // NOI18N
+        btnGuardar.setMargin(new java.awt.Insets(0, 14, 0, 14));
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGuardarActionPerformed(evt);
@@ -96,6 +96,7 @@ public class GeneralPanelForm extends javax.swing.JFrame {
         jPanel1.add(btnGuardar);
 
         btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/edit-icon.png"))); // NOI18N
+        btnEditar.setMargin(new java.awt.Insets(0, 14, 0, 14));
         btnEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEditarActionPerformed(evt);
@@ -104,9 +105,11 @@ public class GeneralPanelForm extends javax.swing.JFrame {
         jPanel1.add(btnEditar);
 
         btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/delete-icon.png"))); // NOI18N
+        btnEliminar.setMargin(new java.awt.Insets(0, 14, 0, 14));
         jPanel1.add(btnEliminar);
 
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find-icon.png"))); // NOI18N
+        btnBuscar.setMargin(new java.awt.Insets(0, 14, 0, 14));
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscarActionPerformed(evt);
@@ -115,6 +118,7 @@ public class GeneralPanelForm extends javax.swing.JFrame {
         jPanel1.add(btnBuscar);
 
         btnActualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/refresh-icon.png"))); // NOI18N
+        btnActualizar.setMargin(new java.awt.Insets(0, 14, 0, 14));
         btnActualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnActualizarActionPerformed(evt);
@@ -123,6 +127,7 @@ public class GeneralPanelForm extends javax.swing.JFrame {
         jPanel1.add(btnActualizar);
 
         btnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/print-icon.png"))); // NOI18N
+        btnImprimir.setMargin(new java.awt.Insets(0, 14, 0, 14));
         btnImprimir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnImprimirActionPerformed(evt);
@@ -131,6 +136,7 @@ public class GeneralPanelForm extends javax.swing.JFrame {
         jPanel1.add(btnImprimir);
 
         btnAyuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/help_icon.png"))); // NOI18N
+        btnAyuda.setMargin(new java.awt.Insets(0, 14, 0, 14));
         jPanel1.add(btnAyuda);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
@@ -195,7 +201,7 @@ public class GeneralPanelForm extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         ClassLoader classLoader = RecursoCodefac.class.getClassLoader();
-        System.out.println(classLoader.getResource("img/iconos/save-icon.png").getPath());
+        System.out.println(classLoader.getResource("img/iconos/save-icon.png").getFile());
         btnBuscar.setIcon(new ImageIcon(classLoader.getResource("img/iconos/save-icon.png").getFile()));
        
     }//GEN-LAST:event_btnBuscarActionPerformed

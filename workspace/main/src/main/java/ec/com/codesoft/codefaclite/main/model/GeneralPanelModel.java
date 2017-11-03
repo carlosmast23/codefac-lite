@@ -6,13 +6,20 @@
 package ec.com.codesoft.codefaclite.main.model;
 
 
+import com.sun.org.apache.bcel.internal.generic.AALOAD;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
 import ec.com.codesoft.codefaclite.main.panel.GeneralPanelForm;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Image;
 import java.awt.Panel;
+import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
@@ -35,6 +42,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 import javax.swing.border.Border;
 import javax.swing.event.InternalFrameEvent;
@@ -42,11 +50,14 @@ import javax.swing.event.InternalFrameListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.StyledEditorKit;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.swing.JRViewer;
 /**
  *
  * @author Carlos
  */
-public class GeneralPanelModel extends GeneralPanelForm{
+public class GeneralPanelModel extends GeneralPanelForm implements InterfazComunicacionPanel{
+    private GeneralPanelModel generalPanelModel=this;
     private ControladorVista controladorVista;
     private GeneralPanelInterface panelActual;
     DefaultListModel modelo;
@@ -192,11 +203,30 @@ public class GeneralPanelModel extends GeneralPanelForm{
             }
         });
         
+        getBtnImprimir().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                try
+                {
+                    JInternalFrame frame= getjDesktopPane1().getSelectedFrame();
+                    GeneralPanelInterface frameInterface=(GeneralPanelInterface) frame;
+                    frameInterface.imprimir();
+                }
+                catch (UnsupportedOperationException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    //getjButton4().setEnabled(false);
+                }
+                               
+            }
+        });
+        
     }   
     
     private void agregarListenerMenu(GeneralPanelInterface panel)
     {
         try {
+            panel.panelPadre=generalPanelModel;
             panel.addInternalFrameListener(listenerFrame);
             getjDesktopPane1().add(panel);
             panel.setMaximum(true);
@@ -282,6 +312,10 @@ public class GeneralPanelModel extends GeneralPanelForm{
                 case GeneralPanelInterface.BOTON_ELIMINAR:
                     getBtnEliminar().setEnabled(value);
                     break;
+                    
+                case GeneralPanelInterface.BOTON_IMPRIMIR:
+                    getBtnImprimir().setEnabled(value);
+                    break;
             }
 
         }
@@ -346,6 +380,59 @@ public class GeneralPanelModel extends GeneralPanelForm{
         });*/
 
     }
+    
+    
+    public void agregarReportePantalla()
+    {
+        try {
+            // Se construye el panel que ira dentro del JInternalFrame
+            JPanel p = new JPanel();
+            p.setLayout(new FlowLayout());
+            p.add(new JLabel("JPanel para el repote jasper"));
+            p.add(new JTextField(10));
+            
+            // Se construye el JInternalFrame
+            JInternalFrame internal = new JInternalFrame("Un Internal Frame");
+            internal.add(p);
+            getjDesktopPane1().add(internal);
+            internal.setMaximum(true);
+            internal.show();
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public void crearReportePantalla(JasperPrint jasperPrint,String nombrePantalla) {
+        JRViewer viewer=new JRViewer(jasperPrint);
+        JInternalFrame internal = new JInternalFrame("Un Internal Frame");
+        internal.setClosable(true);
+        internal.setIconifiable(true);
+        internal.setMaximizable(true);
+        internal.setResizable(true);
+        internal.setTitle(nombrePantalla);
+        
+        //internal.setFrameIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/report-ico.png"))); // NOI18N
+        internal.setFrameIcon(new javax.swing.ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("report-ico.png"))); // NOI18N
+        try {
+            if (internal.isIcon()) {
+                internal.setIcon(false);
+            } else if (internal.isMaximum()) {
+                internal.setMaximum(false);
+            }
+        } catch(PropertyVetoException e) {
+            return;
+        }
+        Dimension pantallaPrincipal=getjDesktopPane1().getSize();
+        Dimension pantallaReporte=new Dimension((int)((double)pantallaPrincipal.width/(double)2),(int)((double)pantallaPrincipal.height*3/(double)4));
+        //internal.setPreferredSize(pantallaReporte);
+        internal.setSize(pantallaReporte);
+        internal.validate();
+        internal.add(viewer);
+        getjDesktopPane1().add(internal);
+        internal.show();
+    }
+    
    
 }
     
