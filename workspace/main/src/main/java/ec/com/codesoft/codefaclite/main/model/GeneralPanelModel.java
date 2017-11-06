@@ -80,6 +80,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private ControladorVista controladorVista;
     private GeneralPanelInterface panelActual;
     private SwingBrowser browser ;
+    private SwingBrowser browserPublicidad ;
     DefaultListModel modelo;
 
     public GeneralPanelModel() 
@@ -88,7 +89,12 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         agregarListener();
         agregarListenerMenu();
         habilitarBotones(false);
-        getjSplitPanel().setRightComponent(getJpanelAuxiliar());
+        //getjSplitPanel().setRightComponent(getJpanelAuxiliar());
+               
+        Component componente=getjSplitPanel().getLeftComponent();
+        getjSplitPanel().setLeftComponent(getJpanelAuxiliar());
+        getjSplitPanel().setRightComponent(componente);
+        getjSplitPanel().setDividerLocation(0.0d);
         
         //Image IMG=new ImageIcon(getClass().getResource("/imagenes/casalibertad.jpg")).getImage();
         //BufferedImage image=ImageIO.read(IMG);
@@ -115,7 +121,21 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             browser.setBounds(1, 1, getJPanelContenidoAuxiliar().getWidth() - 1, getJPanelContenidoAuxiliar().getHeight() - 1);
             getJPanelContenidoAuxiliar().removeAll();
             getJPanelContenidoAuxiliar().add(browser);
-            getjSplitPanel().setDividerLocation(0.75);
+            getjSplitPanel().setDividerLocation(0.25);
+            //getjSplitPanelVerticalSecundario().setDividerLocation(0.75);
+    }
+    
+    private void cargarPublicidad()
+    {
+            browserPublicidad = new SwingBrowser();
+            //browserPublicidad.loadURL(panel.getURLAyuda());
+            browserPublicidad.loadURL("http://www.vm.codesoft-ec.com/general/publicidad");
+            //System.out.println("creando panel:"+getJPanelPublicidadContenidoContenido().getWidth()+":"+getJPanelPublicidadContenido().getHeight());
+            browserPublicidad.setBounds(1, 1, getjPanelPublicidadContenido().getWidth() - 1, getjPanelPublicidadContenido().getHeight() - 1);
+            getjPanelPublicidadContenido().removeAll();
+            getjPanelPublicidadContenido().add(browserPublicidad);
+            //getjSplitPanel().setDividerLocation(0.75);
+            getjSplitPanelVerticalSecundario().setDividerLocation(0.70);
     }
   
     private void agregarListenerMenu()
@@ -274,6 +294,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     generalPanelModel.repaint();
                     */
                     cargarAyuda();
+                    cargarPublicidad();
                 }
             });
         
@@ -292,7 +313,15 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
          getBtnSalirPantallAuxiliar().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    getjSplitPanel().setDividerLocation(0.999999999999d);
+                    getjSplitPanel().setDividerLocation(0d);
+                    browser=null;
+                }
+            });
+         
+         getBtnSalirPantallaPublicidad().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    getjSplitPanelVerticalSecundario().setDividerLocation(0.999999999999d);
                     browser=null;
                 }
             });

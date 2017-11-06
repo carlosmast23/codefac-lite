@@ -50,10 +50,17 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenu5 = new javax.swing.JMenu();
         jMenu6 = new javax.swing.JMenu();
         JpanelAuxiliar = new javax.swing.JPanel();
+        jSplitPanelVerticalSecundario = new javax.swing.JSplitPane();
+        JPanelPublicidad = new javax.swing.JPanel();
+        jPanelPublicidadContenido = new javax.swing.JPanel();
+        jPanelPublicidadBorde = new javax.swing.JPanel();
+        btnSalirPantallaPublicidad = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        JPanelAuxiliarInterno = new javax.swing.JPanel();
+        JPanelContenidoAuxiliar = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         btnSalirPantallAuxiliar = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        JPanelContenidoAuxiliar = new javax.swing.JPanel();
         JPanelMenu = new javax.swing.JPanel();
         btnGuardar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
@@ -91,7 +98,42 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenu6.setText("Edit");
         jMenuBar3.add(jMenu6);
 
-        JpanelAuxiliar.setLayout(new java.awt.BorderLayout());
+        JpanelAuxiliar.setLayout(new javax.swing.BoxLayout(JpanelAuxiliar, javax.swing.BoxLayout.LINE_AXIS));
+
+        jSplitPanelVerticalSecundario.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+
+        JPanelPublicidad.setBackground(new java.awt.Color(255, 255, 255));
+        JPanelPublicidad.setLayout(new java.awt.BorderLayout());
+        JPanelPublicidad.add(jPanelPublicidadContenido, java.awt.BorderLayout.CENTER);
+
+        jPanelPublicidadBorde.setBackground(new java.awt.Color(62, 93, 162));
+        jPanelPublicidadBorde.setLayout(new java.awt.BorderLayout());
+
+        btnSalirPantallaPublicidad.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/salir-ico.png"))); // NOI18N
+        btnSalirPantallaPublicidad.setMargin(new java.awt.Insets(2, 5, 2, 5));
+        btnSalirPantallaPublicidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirPantallaPublicidadActionPerformed(evt);
+            }
+        });
+        jPanelPublicidadBorde.add(btnSalirPantallaPublicidad, java.awt.BorderLayout.LINE_END);
+
+        jLabel3.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("Publicidad");
+        jPanelPublicidadBorde.add(jLabel3, java.awt.BorderLayout.CENTER);
+
+        JPanelPublicidad.add(jPanelPublicidadBorde, java.awt.BorderLayout.PAGE_START);
+
+        jSplitPanelVerticalSecundario.setBottomComponent(JPanelPublicidad);
+
+        JPanelAuxiliarInterno.setLayout(new java.awt.BorderLayout());
+
+        JPanelContenidoAuxiliar.setBackground(new java.awt.Color(51, 0, 153));
+        JPanelContenidoAuxiliar.setLayout(new javax.swing.BoxLayout(JPanelContenidoAuxiliar, javax.swing.BoxLayout.LINE_AXIS));
+        JPanelAuxiliarInterno.add(JPanelContenidoAuxiliar, java.awt.BorderLayout.CENTER);
 
         jPanel2.setBackground(new java.awt.Color(62, 93, 162));
         jPanel2.setLayout(new java.awt.BorderLayout());
@@ -112,12 +154,15 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jLabel2.setText("Pantalla de Ayuda");
         jPanel2.add(jLabel2, java.awt.BorderLayout.CENTER);
 
-        JpanelAuxiliar.add(jPanel2, java.awt.BorderLayout.PAGE_START);
+        JPanelAuxiliarInterno.add(jPanel2, java.awt.BorderLayout.PAGE_START);
 
-        JPanelContenidoAuxiliar.setLayout(new javax.swing.BoxLayout(JPanelContenidoAuxiliar, javax.swing.BoxLayout.LINE_AXIS));
-        JpanelAuxiliar.add(JPanelContenidoAuxiliar, java.awt.BorderLayout.CENTER);
+        jSplitPanelVerticalSecundario.setLeftComponent(JPanelAuxiliarInterno);
+
+        JpanelAuxiliar.add(jSplitPanelVerticalSecundario);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(800, 600));
+        setSize(new java.awt.Dimension(800, 600));
 
         JPanelMenu.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -273,6 +318,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnSalirPantallAuxiliarActionPerformed
 
+    private void btnSalirPantallaPublicidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirPantallaPublicidadActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSalirPantallaPublicidadActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -313,9 +362,11 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel JPanelAuxiliarInterno;
     private javax.swing.JPanel JPanelContenidoAuxiliar;
     private javax.swing.JPanel JPanelMenu;
     private javax.swing.JPanel JPanelPiePagina;
+    private javax.swing.JPanel JPanelPublicidad;
     private javax.swing.JPanel JpanelAuxiliar;
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnAyuda;
@@ -325,9 +376,11 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnImprimir;
     private javax.swing.JButton btnSalirPantallAuxiliar;
+    private javax.swing.JButton btnSalirPantallaPublicidad;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -346,7 +399,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanelPublicidadBorde;
+    private javax.swing.JPanel jPanelPublicidadContenido;
     private javax.swing.JSplitPane jSplitPanel;
+    private javax.swing.JSplitPane jSplitPanelVerticalSecundario;
     // End of variables declaration//GEN-END:variables
 
     public JMenuItem getjMenuItem1() {
@@ -478,8 +534,39 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     public void setBtnSalirPantallAuxiliar(JButton btnSalirPantallAuxiliar) {
         this.btnSalirPantallAuxiliar = btnSalirPantallAuxiliar;
     }
-    
-    
-    
 
+    public JSplitPane getjSplitPanelVerticalSecundario() {
+        return jSplitPanelVerticalSecundario;
+    }
+
+    public void setjSplitPanelVerticalSecundario(JSplitPane jSplitPanelVerticalSecundario) {
+        this.jSplitPanelVerticalSecundario = jSplitPanelVerticalSecundario;
+    }
+
+    public JPanel getJPanelPublicidad() {
+        return JPanelPublicidad;
+    }
+
+    public void setJPanelPublicidad(JPanel JPanelPublicidad) {
+        this.JPanelPublicidad = JPanelPublicidad;
+    }
+
+    public JButton getBtnSalirPantallaPublicidad() {
+        return btnSalirPantallaPublicidad;
+    }
+
+    public void setBtnSalirPantallaPublicidad(JButton btnSalirPantallaPublicidad) {
+        this.btnSalirPantallaPublicidad = btnSalirPantallaPublicidad;
+    }
+
+    public JPanel getjPanelPublicidadContenido() {
+        return jPanelPublicidadContenido;
+    }
+
+    public void setjPanelPublicidadContenido(JPanel jPanelPublicidadContenido) {
+        this.jPanelPublicidadContenido = jPanelPublicidadContenido;
+    }
+    
+    
+    
 }
