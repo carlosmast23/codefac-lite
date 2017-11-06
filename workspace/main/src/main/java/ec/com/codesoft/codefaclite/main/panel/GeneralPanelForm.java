@@ -16,6 +16,7 @@ import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
+import javax.swing.JTable;
 
 /**
  *
@@ -60,7 +61,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         JPanelContenidoAuxiliar = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         btnSalirPantallAuxiliar = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
+        lblTituloContenedorAuxiliar = new javax.swing.JLabel();
+        JPanelConsola = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTablaConsola = new javax.swing.JTable();
         JPanelMenu = new javax.swing.JPanel();
         btnGuardar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
@@ -147,18 +151,35 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         });
         jPanel2.add(btnSalirPantallAuxiliar, java.awt.BorderLayout.LINE_END);
 
-        jLabel2.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Pantalla de Ayuda");
-        jPanel2.add(jLabel2, java.awt.BorderLayout.CENTER);
+        lblTituloContenedorAuxiliar.setBackground(new java.awt.Color(255, 255, 255));
+        lblTituloContenedorAuxiliar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblTituloContenedorAuxiliar.setForeground(new java.awt.Color(255, 255, 255));
+        lblTituloContenedorAuxiliar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTituloContenedorAuxiliar.setText("Pantalla de Ayuda");
+        jPanel2.add(lblTituloContenedorAuxiliar, java.awt.BorderLayout.CENTER);
 
         JPanelAuxiliarInterno.add(jPanel2, java.awt.BorderLayout.PAGE_START);
 
         jSplitPanelVerticalSecundario.setLeftComponent(JPanelAuxiliarInterno);
 
         JpanelAuxiliar.add(jSplitPanelVerticalSecundario);
+
+        JPanelConsola.setLayout(new java.awt.BorderLayout());
+
+        jTablaConsola.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTablaConsola);
+
+        JPanelConsola.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(800, 600));
@@ -167,6 +188,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         JPanelMenu.setBackground(new java.awt.Color(255, 255, 255));
 
         btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/save-icon.png"))); // NOI18N
+        btnGuardar.setToolTipText("Grabar");
         btnGuardar.setMargin(new java.awt.Insets(0, 14, 0, 14));
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -176,6 +198,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         JPanelMenu.add(btnGuardar);
 
         btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/edit-icon.png"))); // NOI18N
+        btnEditar.setToolTipText("Editar");
         btnEditar.setMargin(new java.awt.Insets(0, 14, 0, 14));
         btnEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -185,10 +208,12 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         JPanelMenu.add(btnEditar);
 
         btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/delete-icon.png"))); // NOI18N
+        btnEliminar.setToolTipText("Eliminar");
         btnEliminar.setMargin(new java.awt.Insets(0, 14, 0, 14));
         JPanelMenu.add(btnEliminar);
 
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find-icon.png"))); // NOI18N
+        btnBuscar.setToolTipText("Buscar");
         btnBuscar.setMargin(new java.awt.Insets(0, 14, 0, 14));
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -198,6 +223,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         JPanelMenu.add(btnBuscar);
 
         btnActualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/refresh-icon.png"))); // NOI18N
+        btnActualizar.setToolTipText("Refrescar");
         btnActualizar.setMargin(new java.awt.Insets(0, 14, 0, 14));
         btnActualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -207,6 +233,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         JPanelMenu.add(btnActualizar);
 
         btnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/print-icon.png"))); // NOI18N
+        btnImprimir.setToolTipText("Imprimir");
         btnImprimir.setMargin(new java.awt.Insets(0, 14, 0, 14));
         btnImprimir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -216,6 +243,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         JPanelMenu.add(btnImprimir);
 
         btnAyuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/help_icon.png"))); // NOI18N
+        btnAyuda.setToolTipText("Ayuda");
         btnAyuda.setMargin(new java.awt.Insets(0, 14, 0, 14));
         JPanelMenu.add(btnAyuda);
 
@@ -363,6 +391,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel JPanelAuxiliarInterno;
+    private javax.swing.JPanel JPanelConsola;
     private javax.swing.JPanel JPanelContenidoAuxiliar;
     private javax.swing.JPanel JPanelMenu;
     private javax.swing.JPanel JPanelPiePagina;
@@ -379,7 +408,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JButton btnSalirPantallaPublicidad;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
@@ -401,8 +429,11 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanelPublicidadBorde;
     private javax.swing.JPanel jPanelPublicidadContenido;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSplitPane jSplitPanel;
     private javax.swing.JSplitPane jSplitPanelVerticalSecundario;
+    private javax.swing.JTable jTablaConsola;
+    private javax.swing.JLabel lblTituloContenedorAuxiliar;
     // End of variables declaration//GEN-END:variables
 
     public JMenuItem getjMenuItem1() {
@@ -565,6 +596,18 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
     public void setjPanelPublicidadContenido(JPanel jPanelPublicidadContenido) {
         this.jPanelPublicidadContenido = jPanelPublicidadContenido;
+    }
+
+    public JTable getjTablaConsola() {
+        return jTablaConsola;
+    }
+
+    public void setjTablaConsola(JTable jTablaConsola) {
+        this.jTablaConsola = jTablaConsola;
+    }
+
+    public JPanel getJPanelConsola() {
+        return JPanelConsola;
     }
     
     

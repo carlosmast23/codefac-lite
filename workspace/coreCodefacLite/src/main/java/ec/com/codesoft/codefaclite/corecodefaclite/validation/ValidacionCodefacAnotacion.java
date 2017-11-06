@@ -21,4 +21,5 @@ public @interface ValidacionCodefacAnotacion {
     int min() default 0;
     int max() default 100;
     String expresionRegular() default "";
+    String nombre() default "campo";
 }

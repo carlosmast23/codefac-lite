@@ -29,6 +29,8 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -42,8 +44,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 import javax.swing.Action;
 import javax.swing.DefaultListCellRenderer;
@@ -61,6 +65,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
+import javax.swing.ListSelectionModel;
 import javax.swing.ToolTipManager;
 import javax.swing.border.Border;
 import javax.swing.event.InternalFrameEvent;
@@ -212,7 +217,14 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 {
                     JInternalFrame frame= getjDesktopPane1().getSelectedFrame();
                     GeneralPanelInterface frameInterface=(GeneralPanelInterface) frame;
-                    frameInterface.grabar();
+                    if(validarFormulario(frameInterface))
+                    {
+                        frameInterface.grabar();
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null,"Error de validacion");
+                    }
                 }
                 catch (UnsupportedOperationException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -385,6 +397,121 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 }
             }
         }
+    }
+    
+    private boolean validarFormulario(GeneralPanelInterface panel)
+    {
+       ConsolaGeneral consola=new ConsolaGeneral();
+       boolean validado=true;
+       
+       Class classVentana=panel.getClass();
+        Method[] metodos=classVentana.getMethods();
+        for (Method metodo : metodos) {
+            ValidacionCodefacAnotacion validacion=metodo.getAnnotation(ValidacionCodefacAnotacion.class);
+            //System.out.println(metodo.getName());
+            if(validacion!=null)
+            {
+                validado=false;
+                try {
+                    JTextComponent componente=(JTextComponent) metodo.invoke(panel);
+                    componente.setBackground(new Color(255,255,102));
+                    Vector<String> errores=validar(validacion,componente);
+                    for (String error : errores) {
+                        consola.agregarDatos(validacion.nombre(),error,componente);
+                    }
+                    
+                    
+                    //JTextField
+                    
+                    
+                    
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalArgumentException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InvocationTargetException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        
+        if(!validado)
+        {
+            mostrarConsola(consola);
+        }
+        
+        return validado;
+    }
+    
+    private Vector<String> validar(ValidacionCodefacAnotacion validacion,JTextComponent componente)
+    {
+        Vector<String> validar=new Vector<String>();
+        if(validacion.requerido())
+        {
+            if(componente.getText().equals(""))
+            {
+                validar.add("campo requerido");
+            }
+        }
+        
+        if(componente.getText().length()<validacion.min())
+        {
+            validar.add("tamaño min requerido");
+        }
+        
+        if(componente.getText().length()>validacion.max())
+        {
+            validar.add("tamaño max requerido");
+        }
+        
+        if(!validacion.expresionRegular().equals("")){
+            if(!Pattern.matches(validacion.expresionRegular(),componente.getText()))
+            {
+                validar.add("expresion regular fallo");
+            }
+        }
+        
+
+        
+        return validar;
+    }
+    
+    private void mostrarConsola(ConsolaGeneral consola)
+    {
+        
+       getjTablaConsola().addMouseListener(new MouseListener() {
+           @Override
+           public void mouseClicked(MouseEvent e) {
+               int fila=getjTablaConsola().getSelectedRow();
+               consola.seleccionarFila(fila);
+           }
+
+           @Override
+           public void mousePressed(MouseEvent e) {
+               
+           }
+
+           @Override
+           public void mouseReleased(MouseEvent e) {
+               
+           }
+
+           @Override
+           public void mouseEntered(MouseEvent e) {
+               
+           }
+
+           @Override
+           public void mouseExited(MouseEvent e) {
+               
+           }
+       });
+       
+       getjTablaConsola().setModel(consola.getModeloTabla());
+       getJPanelContenidoAuxiliar().removeAll();
+       getJPanelContenidoAuxiliar().add(getJPanelConsola());
+       getjSplitPanel().setDividerLocation(0.25d);
+       
     }
     
     private void agregarValidadores(GeneralPanelInterface panel)
