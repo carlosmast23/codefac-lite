@@ -5,6 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.crm.panel;
 
+import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.crm.test.EjemploCrm;
 import java.io.IOException;
@@ -13,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JTextField;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -300,4 +303,27 @@ public abstract class ClienteForm extends GeneralPanelInterface {
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
     // End of variables declaration//GEN-END:variables
+    
+    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
+    @ValidacionCodefacAnotacion(requerido=true , min=0 ,max = 15,expresionRegular = "")
+    public JTextField getjTextField1() {
+        return jTextField1;
+    }
+
+    
+    public void setjTextField1(JTextField jTextField1) {
+        this.jTextField1 = jTextField1;
+    }
+
+    @ValidacionCodefacAnotacion()
+    public JTextField getjTextField2() {
+        return jTextField2;
+    }
+
+    public void setjTextField2(JTextField jTextField2) {
+        this.jTextField2 = jTextField2;
+    }
+
+    
+
 }

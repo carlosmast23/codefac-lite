@@ -6,13 +6,16 @@
 package ec.com.codesoft.codefaclite.main.model;
 
 
-import com.sun.org.apache.bcel.internal.generic.AALOAD;
+
+import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
 import ec.com.codesoft.codefaclite.main.panel.GeneralPanelForm;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -24,9 +27,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyVetoException;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
@@ -37,18 +50,24 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JEditorPane;
+import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
+import javax.swing.ToolTipManager;
 import javax.swing.border.Border;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.text.JTextComponent;
 import javax.swing.text.StyledEditorKit;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.swing.JRViewer;
@@ -60,13 +79,16 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private GeneralPanelModel generalPanelModel=this;
     private ControladorVista controladorVista;
     private GeneralPanelInterface panelActual;
+    private SwingBrowser browser ;
     DefaultListModel modelo;
 
     public GeneralPanelModel() 
     {
         iniciarComponentes();
         agregarListener();
+        agregarListenerMenu();
         habilitarBotones(false);
+        getjSplitPanel().setRightComponent(getJpanelAuxiliar());
         
         //Image IMG=new ImageIcon(getClass().getResource("/imagenes/casalibertad.jpg")).getImage();
         //BufferedImage image=ImageIO.read(IMG);
@@ -83,12 +105,22 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         
     }
     
-    
-    
-    private void agregarListener()
+    private void cargarAyuda()
     {
-        
-            getjDesktopPane1().addComponentListener(new ComponentAdapter() {
+            browser = new SwingBrowser();
+            GeneralPanelInterface panel=(GeneralPanelInterface) getjDesktopPane1().getSelectedFrame();
+            browser.loadURL(panel.getURLAyuda());
+            //browser.loadURL("https://es.wikipedia.org/wiki/Vlad%C3%ADmir_Makanin");
+            System.out.println("creando panel:"+getJPanelContenidoAuxiliar().getWidth()+":"+getJPanelContenidoAuxiliar().getHeight());
+            browser.setBounds(1, 1, getJPanelContenidoAuxiliar().getWidth() - 1, getJPanelContenidoAuxiliar().getHeight() - 1);
+            getJPanelContenidoAuxiliar().removeAll();
+            getJPanelContenidoAuxiliar().add(browser);
+            getjSplitPanel().setDividerLocation(0.75);
+    }
+  
+    private void agregarListenerMenu()
+    {
+                  getjDesktopPane1().addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(final ComponentEvent e) {
                 super.componentResized(e);
@@ -147,7 +179,10 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 
             }
         });
-        
+    }
+    
+    private void agregarListener()
+    {
         
         getBtnGuardar().addActionListener(new ActionListener() {
             @Override
@@ -221,6 +256,47 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             }
         });
         
+        getBtnAyuda().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    /*
+                    String pagina = "http://www.google.com";
+                    JEditorPane pane = new JEditorPane();
+                    pane.setSize(400,400);
+                    JScrollPane scroll = new JScrollPane(pane);
+                    scroll.setSize(400,400);
+                    JPanel panelPagina=new JPanel();
+                    panelPagina.add(scroll);
+                    panelPagina.setSize(400, 400);
+                    generalPanelModel.add(panelPagina,java.awt.BorderLayout.LINE_END);
+                    generalPanelModel.invalidate();
+                    generalPanelModel.validate();
+                    generalPanelModel.repaint();
+                    */
+                    cargarAyuda();
+                }
+            });
+        
+         getjSplitPanel().addPropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY, new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if(browser!=null)
+                {
+                    //System.out.println("redimensionando panel:"+getJPanelContenidoAuxiliar().getWidth()+":"+getJPanelContenidoAuxiliar().getHeight());
+                    browser.setBounds(1, 1, getJPanelContenidoAuxiliar().getWidth() - 1, getJPanelContenidoAuxiliar().getHeight() - 1);
+                }
+            }
+        });
+        
+         getBtnSalirPantallAuxiliar().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    getjSplitPanel().setDividerLocation(0.999999999999d);
+                    browser=null;
+                }
+            });
+        
     }   
     
     private void agregarListenerMenu(GeneralPanelInterface panel)
@@ -231,10 +307,108 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             getjDesktopPane1().add(panel);
             panel.setMaximum(true);
             panel.show();
+            agregarValidadores(panel);
+            agregarAyudas(panel);
         } catch (PropertyVetoException ex) {
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    private void agregarAyudas(GeneralPanelInterface panel)
+    {
+        Class classVentana=panel.getClass();
+        Method[] metodos=classVentana.getMethods();
+        for (Method metodo : metodos) {
+            AyudaCodefacAnotacion validacion=metodo.getAnnotation(AyudaCodefacAnotacion.class);
+            //System.out.println(metodo.getName());
+            if(validacion!=null)
+            {
+                try {
+                    JTextComponent componente=(JTextComponent) metodo.invoke(panel);
+                    InputStream input=RecursoCodefac.AYUDA.getResourceInputStream(validacion.recurso());
+                    
+                    InputStreamReader reader=new InputStreamReader(input);
+                    BufferedReader br = new BufferedReader(reader);
+                    String line = null;
+                    String htmlText="";
+                    while ( (line = br.readLine()) != null)
+                    {
+                        System.out.println(line);
+                        htmlText+=line;
+                    }
+                    
+                    File file = new File(RecursoCodefac.AYUDA.getResourcePath(validacion.recurso()));
+                    //File file = new File(getClass().getResource("/pagina/ayudaHtml.html").toURI());
+                    
+                    String path="file:"+file.getParentFile().toURI().getPath();
+                    htmlText=htmlText.replace("[recurso]",path);
+                    ToolTipManager.sharedInstance().setDismissDelay(100000);
+                    componente.setToolTipText(htmlText);
+
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalArgumentException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InvocationTargetException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }
+    
+    private void agregarValidadores(GeneralPanelInterface panel)
+    {
+       Class classVentana=panel.getClass();
+        Method[] metodos=classVentana.getMethods();
+        for (Method metodo : metodos) {
+            ValidacionCodefacAnotacion validacion=metodo.getAnnotation(ValidacionCodefacAnotacion.class);
+            //System.out.println(metodo.getName());
+            if(validacion!=null)
+            {
+                try {
+                    JTextComponent componente=(JTextComponent) metodo.invoke(panel);
+                    componente.addFocusListener(new FocusListener() {
+                        @Override
+                        public void focusGained(FocusEvent e) {
+                            
+                        }
+
+                        @Override
+                        public void focusLost(FocusEvent e) {
+                            if(componente.getText().equals(""))
+                            {
+                                //componente.setText("ingrese datos");
+                                //componente.requestFocus();
+                                componente.setBackground(new Color(255,255,102));
+                                //omponent[] componentes=componente.getComponents();
+                                //Container c=componente.getParent();
+                                //JLabel myLabel = new JLabel("Team 1");
+                                //c.add(myLabel);
+                                //for (Component componente1 : componentes) {
+                                //    System.out.println(componente1);
+                                //}
+                                
+                            }
+                            else
+                            {
+                                componente.setBackground(Color.WHITE);
+                            }
+                        }
+                    });
+
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalArgumentException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InvocationTargetException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }
+    
     
     InternalFrameListener listenerFrame=new InternalFrameListener() {
                         @Override
@@ -315,6 +489,10 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     
                 case GeneralPanelInterface.BOTON_IMPRIMIR:
                     getBtnImprimir().setEnabled(value);
+                    break;
+                    
+                case GeneralPanelInterface.BOTON_AYUDA:
+                    getBtnAyuda().setEnabled(value);
                     break;
             }
 

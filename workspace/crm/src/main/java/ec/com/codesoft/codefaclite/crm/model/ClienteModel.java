@@ -72,6 +72,7 @@ public class ClienteModel extends ClienteForm
         permisos.put(GeneralPanelInterface.BOTON_EDITAR, true);
         permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
         permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
         return permisos;
     }
 
@@ -87,6 +88,11 @@ public class ClienteModel extends ClienteForm
             data.add(new DataEjemploReporte("carlos","1"));
             data.add(new DataEjemploReporte("pedro","2"));
             ReporteCodefac.generarReporteInternalFrame(path, parameters, data, panelPadre, "Reporte Nuevos ");    
+    }
+
+    @Override
+    public String getURLAyuda() {
+        return "https://support.office.com/es-es";
     }
     
     

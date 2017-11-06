@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.recursos;
 
+import java.io.InputStream;
 import java.net.URL;
 
 /**
@@ -15,7 +16,8 @@ public enum RecursoCodefac {
     IMAGENES_ICONOS("img/iconos"),
     IMAGENES_GENERAL("img/general"),
     
-    JASPER_CRM("reportes/crm");
+    JASPER_CRM("reportes/crm"),
+    AYUDA("ayuda");
     
     private String subPathResource;
 
@@ -41,6 +43,11 @@ public enum RecursoCodefac {
     public String getResourcePath(String file)
     {
         return getClass().getResource("/"+subPathResource+"/"+file).getPath();
+    }
+    
+     public InputStream getResourceInputStream(String file)
+    {
+        return getClass().getResourceAsStream("/"+subPathResource+"/"+file);
     }
     
 }

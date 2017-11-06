@@ -15,6 +15,7 @@ import javax.swing.JDesktopPane;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 
 /**
  *
@@ -27,6 +28,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
      */
     public GeneralPanelForm() {
         initComponents();
+        jSplitPanel.setDividerLocation(2000);
     }
     
     
@@ -47,7 +49,12 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuBar3 = new javax.swing.JMenuBar();
         jMenu5 = new javax.swing.JMenu();
         jMenu6 = new javax.swing.JMenu();
-        jPanel1 = new javax.swing.JPanel();
+        JpanelAuxiliar = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        btnSalirPantallAuxiliar = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        JPanelContenidoAuxiliar = new javax.swing.JPanel();
+        JPanelMenu = new javax.swing.JPanel();
         btnGuardar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
@@ -55,10 +62,12 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         btnActualizar = new javax.swing.JButton();
         btnImprimir = new javax.swing.JButton();
         btnAyuda = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
+        JPanelPiePagina = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
+        jSplitPanel = new javax.swing.JSplitPane();
         jDesktopPane1 = new javax.swing.JDesktopPane();
+        jPanel1 = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -82,9 +91,35 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenu6.setText("Edit");
         jMenuBar3.add(jMenu6);
 
+        JpanelAuxiliar.setLayout(new java.awt.BorderLayout());
+
+        jPanel2.setBackground(new java.awt.Color(62, 93, 162));
+        jPanel2.setLayout(new java.awt.BorderLayout());
+
+        btnSalirPantallAuxiliar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/salir-ico.png"))); // NOI18N
+        btnSalirPantallAuxiliar.setMargin(new java.awt.Insets(2, 5, 2, 5));
+        btnSalirPantallAuxiliar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirPantallAuxiliarActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnSalirPantallAuxiliar, java.awt.BorderLayout.LINE_END);
+
+        jLabel2.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("Pantalla de Ayuda");
+        jPanel2.add(jLabel2, java.awt.BorderLayout.CENTER);
+
+        JpanelAuxiliar.add(jPanel2, java.awt.BorderLayout.PAGE_START);
+
+        JPanelContenidoAuxiliar.setLayout(new javax.swing.BoxLayout(JPanelContenidoAuxiliar, javax.swing.BoxLayout.LINE_AXIS));
+        JpanelAuxiliar.add(JPanelContenidoAuxiliar, java.awt.BorderLayout.CENTER);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        JPanelMenu.setBackground(new java.awt.Color(255, 255, 255));
 
         btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/save-icon.png"))); // NOI18N
         btnGuardar.setMargin(new java.awt.Insets(0, 14, 0, 14));
@@ -93,7 +128,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnGuardar);
+        JPanelMenu.add(btnGuardar);
 
         btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/edit-icon.png"))); // NOI18N
         btnEditar.setMargin(new java.awt.Insets(0, 14, 0, 14));
@@ -102,11 +137,11 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
                 btnEditarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnEditar);
+        JPanelMenu.add(btnEditar);
 
         btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/delete-icon.png"))); // NOI18N
         btnEliminar.setMargin(new java.awt.Insets(0, 14, 0, 14));
-        jPanel1.add(btnEliminar);
+        JPanelMenu.add(btnEliminar);
 
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find-icon.png"))); // NOI18N
         btnBuscar.setMargin(new java.awt.Insets(0, 14, 0, 14));
@@ -115,7 +150,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
                 btnBuscarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnBuscar);
+        JPanelMenu.add(btnBuscar);
 
         btnActualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/refresh-icon.png"))); // NOI18N
         btnActualizar.setMargin(new java.awt.Insets(0, 14, 0, 14));
@@ -124,7 +159,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
                 btnActualizarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnActualizar);
+        JPanelMenu.add(btnActualizar);
 
         btnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/print-icon.png"))); // NOI18N
         btnImprimir.setMargin(new java.awt.Insets(0, 14, 0, 14));
@@ -133,29 +168,36 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
                 btnImprimirActionPerformed(evt);
             }
         });
-        jPanel1.add(btnImprimir);
+        JPanelMenu.add(btnImprimir);
 
         btnAyuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/help_icon.png"))); // NOI18N
         btnAyuda.setMargin(new java.awt.Insets(0, 14, 0, 14));
-        jPanel1.add(btnAyuda);
+        JPanelMenu.add(btnAyuda);
 
-        getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
+        getContentPane().add(JPanelMenu, java.awt.BorderLayout.PAGE_START);
 
-        jPanel2.setBackground(new java.awt.Color(62, 93, 162));
-        jPanel2.setForeground(new java.awt.Color(62, 93, 162));
-        jPanel2.setToolTipText("");
+        JPanelPiePagina.setBackground(new java.awt.Color(62, 93, 162));
+        JPanelPiePagina.setForeground(new java.awt.Color(62, 93, 162));
+        JPanelPiePagina.setToolTipText("");
 
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img.general/letraCodefac.png"))); // NOI18N
         jLabel1.setText("Todos los derechos reservador por @Codesoft 2017");
-        jPanel2.add(jLabel1);
+        JPanelPiePagina.add(jLabel1);
 
-        getContentPane().add(jPanel2, java.awt.BorderLayout.PAGE_END);
+        getContentPane().add(JPanelPiePagina, java.awt.BorderLayout.PAGE_END);
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setLayout(new java.awt.BorderLayout());
         getContentPane().add(jPanel3, java.awt.BorderLayout.LINE_START);
-        getContentPane().add(jDesktopPane1, java.awt.BorderLayout.CENTER);
+
+        jSplitPanel.setDividerLocation(800);
+        jSplitPanel.setLeftComponent(jDesktopPane1);
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jSplitPanel.setRightComponent(jPanel1);
+
+        getContentPane().add(jSplitPanel, java.awt.BorderLayout.CENTER);
 
         jMenu1.setText("Inicio");
 
@@ -227,6 +269,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
        
     }//GEN-LAST:event_jMenuClienteActionPerformed
 
+    private void btnSalirPantallAuxiliarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirPantallAuxiliarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSalirPantallAuxiliarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -267,6 +313,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel JPanelContenidoAuxiliar;
+    private javax.swing.JPanel JPanelMenu;
+    private javax.swing.JPanel JPanelPiePagina;
+    private javax.swing.JPanel JpanelAuxiliar;
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnAyuda;
     private javax.swing.JButton btnBuscar;
@@ -274,8 +324,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnImprimir;
+    private javax.swing.JButton btnSalirPantallAuxiliar;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -294,6 +346,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JSplitPane jSplitPanel;
     // End of variables declaration//GEN-END:variables
 
     public JMenuItem getjMenuItem1() {
@@ -392,6 +445,38 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
     public void setBtnImprimir(JButton btnImprimir) {
         this.btnImprimir = btnImprimir;
+    }
+
+    public JSplitPane getjSplitPanel() {
+        return jSplitPanel;
+    }
+
+    public void setjSplitPanel(JSplitPane jSplitPanel) {
+        this.jSplitPanel = jSplitPanel;
+    }
+
+    public JPanel getJpanelAuxiliar() {
+        return JpanelAuxiliar;
+    }
+
+    public void setJpanelAuxiliar(JPanel JpanelAuxiliar) {
+        this.JpanelAuxiliar = JpanelAuxiliar;
+    }
+
+    public JPanel getJPanelContenidoAuxiliar() {
+        return JPanelContenidoAuxiliar;
+    }
+
+    public void setJPanelContenidoAuxiliar(JPanel JPanelContenidoAuxiliar) {
+        this.JPanelContenidoAuxiliar = JPanelContenidoAuxiliar;
+    }
+
+    public JButton getBtnSalirPantallAuxiliar() {
+        return btnSalirPantallAuxiliar;
+    }
+
+    public void setBtnSalirPantallAuxiliar(JButton btnSalirPantallAuxiliar) {
+        this.btnSalirPantallAuxiliar = btnSalirPantallAuxiliar;
     }
     
     
