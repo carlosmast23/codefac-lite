@@ -8,7 +8,9 @@ package ec.com.codesoft.codefaclite.crm.busqueda;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
+import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -30,24 +32,12 @@ public class ClienteBusquedaDialogo implements InterfaceModelFind<Persona>
     }
 
     @Override
-    public ArrayList<Persona> getConsulta() 
+    public List<Persona> getConsulta() 
     {
-        ArrayList<Persona> personas=new ArrayList<Persona>();
-//        Persona p=new Persona();
-//        p.setCedula(1707641427);
-//        p.setNombreSocial("Carlos");
-//        Persona p1=new Persona();
-//        p1.setCedula(2307641427);
-//        p1.setNombreSocial("Alfonso");
-//        Persona p2=new Persona();
-//        p2.setCedula(9807641427);
-//        p2.setNombreSocial("Ñauñay");
-//        
-//        personas.add(p);
-//        personas.add(p1);
-//        personas.add(p2);
+        ArrayList<Persona> personas = new ArrayList<Persona>();
+        PersonaService personaservice = new PersonaService();
         
-        return personas;
+        return personaservice.buscar();
     }
 
     @Override

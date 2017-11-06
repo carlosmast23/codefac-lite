@@ -51,6 +51,7 @@ public class ClienteModel extends ClienteForm
     public void grabar() 
     {
         Persona p = new Persona();
+        p.setIdcliente(2);
         p.setNombreSocial(getjTextNombreSocial().getText());
         p.setTipoIdentificacion((String) getjComboIdentificacion().getSelectedItem());
         p.setCedula(Integer.parseInt(getjTextIdentificacion().getText()));
@@ -61,7 +62,8 @@ public class ClienteModel extends ClienteForm
         p.setTelefonoCelular(getjTextCelular().getText());
         p.setCorreoElectronico(getjTextCorreo().getText());
         
-        //personaService.grabar(p);
+        personaService.grabar(p);
+        System.err.println("GRABADO");
        
     }
 

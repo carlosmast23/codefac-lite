@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Carlos
  */
 @Entity
-@Table(name = "PERSONA")
+@Table(name = "CLIENTE")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Persona.findAll", query = "SELECT p FROM Persona p"),
@@ -48,22 +48,22 @@ public class Persona implements Serializable {
     private String direccion;
     @Column(name = "TELEFONO_CONVENCIONAL")
     private String telefonoConvencional;
-    @Column(name = "TELEFONO_CONVENCIONALEXTENSION")
+    @Column(name = "EXTENSION_TELEFONO")
     private String extensionTelefono;
     @Column(name = "TELEFONO_CELULAR")
     private String telefonoCelular;
     @Column(name = "CORREO_ELECTRONICO")
     private String correoElectronico;
-    
-    
 
-    public Persona() {
+    public Integer getIdcliente() {
+        return idcliente;
     }
 
-    public Persona(Integer cedula) {
-        this.cedula = cedula;
+    public void setIdcliente(Integer idcliente) {
+        this.idcliente = idcliente;
     }
-
+    
+    
     public Integer getCedula() {
         return cedula;
     }

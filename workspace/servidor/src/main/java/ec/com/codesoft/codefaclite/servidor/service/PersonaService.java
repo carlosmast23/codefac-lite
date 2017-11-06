@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.facade.PersonaFacade;
+import java.util.List;
 
 /**
  *
@@ -24,7 +25,12 @@ public class PersonaService
     public void grabar(Persona p)
     {
         personaFacade.create(p);
-    }            
+    }
+    
+    public List<Persona> buscar()
+    {
+        return personaFacade.findAll();
+    }
             
     
 }

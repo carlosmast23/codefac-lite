@@ -25,7 +25,7 @@ public class Main2 {
        //eliminarDatos();
         //grabar();
         //editar();
-        eliminar();
+        //eliminar();
         imprimir();
     }
     
