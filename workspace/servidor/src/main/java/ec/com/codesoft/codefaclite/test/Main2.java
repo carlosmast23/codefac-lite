@@ -33,8 +33,8 @@ public class Main2 {
     public static void grabar()
     {
         Persona p=new Persona();
-        p.setCedula("148331837");
-        p.setNombre("JUAN");
+        p.setCedula(148331837);
+        //p.setNombre("JUAN");
         
         //Persona p2=new Persona();
         //p2.setCedula("1451");
@@ -79,7 +79,7 @@ public class Main2 {
         PersonaFacade personaFacade=new PersonaFacade();
         List<Persona> personasList=personaFacade.findAll();
         for (Persona persona : personasList) {
-            System.out.println(persona.getNombre());
+            System.out.println(persona.getNombreSocial());
         }
     }
     
@@ -89,7 +89,7 @@ public class Main2 {
         PersonaFacade personaFacade=new PersonaFacade();
         List<Persona> personasList=personaFacade.findAll();
         for (Persona persona : personasList) {
-            persona.setNombre(persona.getNombre()+"-");
+            persona.setNombreSocial(persona.getNombreSocial()+"-");
             personaFacade.edit(persona);
             //System.out.println(persona.getNombre());
         }
@@ -100,7 +100,7 @@ public class Main2 {
         PersonaFacade personaFacade=new PersonaFacade();
         List<Persona> personasList=personaFacade.findAll();
         for (Persona persona : personasList) {
-            persona.setNombre(persona.getNombre()+"-");
+            persona.setNombreSocial(persona.getNombreSocial()+"-");
             personaFacade.remove(persona);
             return;
             //System.out.println(persona.getNombre());

@@ -12,7 +12,7 @@ import java.util.Map;
  *
  * @author Robert
  */
-public class ConfigurarBaseForm extends GeneralPanelInterface {
+public abstract class ConfigurarBaseForm extends GeneralPanelInterface {
 
     /**
      * Creates new form ConfigurarBaseForm

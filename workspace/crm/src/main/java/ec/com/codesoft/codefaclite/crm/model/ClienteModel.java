@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.crm.reportdata.DataEjemploReporte;
 import ec.com.codesoft.codefaclite.crm.test.EjemploCrm;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
+import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -38,10 +39,30 @@ import net.sf.jasperreports.view.JasperViewer;
  */
 public class ClienteModel extends ClienteForm
 {
+    private PersonaService personaService;
 
+    public ClienteModel()
+    {
+        this.personaService = new PersonaService();
+    }
+    
+    
     @Override
-    public void grabar() {
-        System.out.println("estoy grabando el formulario de robert");
+    public void grabar() 
+    {
+        Persona p = new Persona();
+        p.setNombreSocial(getjTextNombreSocial().getText());
+        p.setTipoIdentificacion((String) getjComboIdentificacion().getSelectedItem());
+        p.setCedula(Integer.parseInt(getjTextIdentificacion().getText()));
+        p.setTipCliente((String) getjComboTipoCliente().getSelectedItem());
+        p.setDireccion(getjTextAreaDireccion().getText());
+        p.setTelefonoConvencional(getjTextTelefono().getText());
+        p.setExtensionTelefono(getjTextExtension().getText());
+        p.setTelefonoCelular(getjTextCelular().getText());
+        p.setCorreoElectronico(getjTextCorreo().getText());
+        
+        //personaService.grabar(p);
+       
     }
 
     @Override
@@ -52,7 +73,7 @@ public class ClienteModel extends ClienteForm
         buscarDialogoModel.setVisible(true);
         Persona p=(Persona) buscarDialogoModel.getResultado();
         System.out.println(p.getCedula());
-        System.out.println(p.getNombre());
+        System.out.println(p.getNombreSocial());
     }
 
     @Override

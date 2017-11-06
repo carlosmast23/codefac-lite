@@ -9,6 +9,8 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -25,39 +27,115 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Persona.findAll", query = "SELECT p FROM Persona p"),
     @NamedQuery(name = "Persona.findByCedula", query = "SELECT p FROM Persona p WHERE p.cedula = :cedula"),
-    @NamedQuery(name = "Persona.findByNombre", query = "SELECT p FROM Persona p WHERE p.nombre = :nombre")})
+    @NamedQuery(name = "Persona.findByNombre", query = "SELECT p FROM Persona p WHERE p.nombreSocial = :nombre")})
 public class Persona implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
+    @Column (name = "ID_CLIENTE")
+    private Integer  idcliente;
     @Column(name = "CEDULA")
-    private String cedula;
-    @Column(name = "NOMBRE")
-    private String nombre;
+    private Integer cedula;
+    @Column(name = "TIPO_IDENTIFICACION")
+    private String tipoIdentificacion;
+    @Column(name = "NOMBRE_SOCIAL")
+    private String nombreSocial;
+    @Column(name = "TIPO_CLIENTE")
+    private String tipCliente;
+    @Column(name = "DIRECCION")
+    private String direccion;
+    @Column(name = "TELEFONO_CONVENCIONAL")
+    private String telefonoConvencional;
+    @Column(name = "TELEFONO_CONVENCIONALEXTENSION")
+    private String extensionTelefono;
+    @Column(name = "TELEFONO_CELULAR")
+    private String telefonoCelular;
+    @Column(name = "CORREO_ELECTRONICO")
+    private String correoElectronico;
+    
+    
 
     public Persona() {
     }
 
-    public Persona(String cedula) {
+    public Persona(Integer cedula) {
         this.cedula = cedula;
     }
 
-    public String getCedula() {
+    public Integer getCedula() {
         return cedula;
     }
 
-    public void setCedula(String cedula) {
+    public void setCedula(Integer cedula) {
         this.cedula = cedula;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getTipoIdentificacion() {
+        return tipoIdentificacion;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setTipoIdentificacion(String tipoIdentificacion) {
+        this.tipoIdentificacion = tipoIdentificacion;
     }
+
+    public String getNombreSocial() {
+        return nombreSocial;
+    }
+
+    public void setNombreSocial(String nombreSocial) {
+        this.nombreSocial = nombreSocial;
+    }
+
+    public String getTipCliente() {
+        return tipCliente;
+    }
+
+    public void setTipCliente(String tipCliente) {
+        this.tipCliente = tipCliente;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public String getTelefonoConvencional() {
+        return telefonoConvencional;
+    }
+
+    public void setTelefonoConvencional(String telefonoConvencional) {
+        this.telefonoConvencional = telefonoConvencional;
+    }
+
+    public String getExtensionTelefono() {
+        return extensionTelefono;
+    }
+
+    public void setExtensionTelefono(String extensionTelefono) {
+        this.extensionTelefono = extensionTelefono;
+    }
+
+    public String getTelefonoCelular() {
+        return telefonoCelular;
+    }
+
+    public void setTelefonoCelular(String telefonoCelular) {
+        this.telefonoCelular = telefonoCelular;
+    }
+
+    public String getCorreoElectronico() {
+        return correoElectronico;
+    }
+
+    public void setCorreoElectronico(String correoElectronico) {
+        this.correoElectronico = correoElectronico;
+    }
+
 
     @Override
     public int hashCode() {

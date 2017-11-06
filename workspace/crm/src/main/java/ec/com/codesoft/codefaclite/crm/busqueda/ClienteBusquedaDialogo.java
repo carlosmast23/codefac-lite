@@ -33,19 +33,19 @@ public class ClienteBusquedaDialogo implements InterfaceModelFind<Persona>
     public ArrayList<Persona> getConsulta() 
     {
         ArrayList<Persona> personas=new ArrayList<Persona>();
-        Persona p=new Persona();
-        p.setCedula("1707641427");
-        p.setNombre("Carlos");
-        Persona p1=new Persona();
-        p1.setCedula("2307641427");
-        p1.setNombre("Alfonso");
-        Persona p2=new Persona();
-        p2.setCedula("9807641427");
-        p2.setNombre("Ñauñay");
-        
-        personas.add(p);
-        personas.add(p1);
-        personas.add(p2);
+//        Persona p=new Persona();
+//        p.setCedula(1707641427);
+//        p.setNombreSocial("Carlos");
+//        Persona p1=new Persona();
+//        p1.setCedula(2307641427);
+//        p1.setNombreSocial("Alfonso");
+//        Persona p2=new Persona();
+//        p2.setCedula(9807641427);
+//        p2.setNombreSocial("Ñauñay");
+//        
+//        personas.add(p);
+//        personas.add(p1);
+//        personas.add(p2);
         
         return personas;
     }
@@ -54,7 +54,7 @@ public class ClienteBusquedaDialogo implements InterfaceModelFind<Persona>
     public void agregarObjeto(Persona t, Vector dato) 
     {
         dato.add(t.getCedula());
-        dato.add(t.getNombre());
+        dato.add(t.getNombreSocial());
    
     }
     @Override

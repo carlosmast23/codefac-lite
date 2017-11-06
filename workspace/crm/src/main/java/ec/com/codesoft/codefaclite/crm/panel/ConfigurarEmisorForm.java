@@ -12,7 +12,7 @@ import java.util.Map;
  *
  * @author Robert
  */
-public class ConfigurarEmisorForm extends GeneralPanelInterface {
+public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
 
     /**
      * Creates new form ConfigurarEmisor

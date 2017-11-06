@@ -12,7 +12,7 @@ import java.util.Map;
  *
  * @author Robert
  */
-public class ConfigurarDirectoriosForm extends GeneralPanelInterface {
+public abstract class ConfigurarDirectoriosForm extends GeneralPanelInterface {
 
     /**
      * Creates new form ConfigurarDirectoriosForm

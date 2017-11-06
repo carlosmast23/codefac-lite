@@ -29,8 +29,8 @@ public class Main {
         entityManager=factory.createEntityManager();
         
         Persona p=new Persona();
-        p.setCedula("1282872");
-        p.setNombre("PEPEMUENTES" );
+        p.setCedula(1282872);
+        p.setNombreSocial("PEPEMUENTES" );
         
         entityManager.getTransaction().begin();
         entityManager.persist(p);
@@ -40,7 +40,7 @@ public class Main {
         cq.select(cq.from(Persona.class));
         List<Persona> lista=entityManager.createQuery(cq).getResultList();
         for (Persona persona : lista) {
-            System.out.println(persona.getCedula()+" - "+persona.getNombre());
+            System.out.println(persona.getCedula()+" - "+persona.getNombreSocial());
             
         }
         

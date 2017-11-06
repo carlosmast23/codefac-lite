@@ -15,6 +15,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JComboBox;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
@@ -37,6 +40,7 @@ public abstract class ClienteForm extends GeneralPanelInterface {
      */
     public ClienteForm() {
         initComponents();
+      
        // imprimirJasper();
     }
     
@@ -78,23 +82,23 @@ public abstract class ClienteForm extends GeneralPanelInterface {
         jLabel1 = new javax.swing.JLabel();
         jPanelCaracteristicasGenerales = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        jTextNombreSocial = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jTextField2 = new javax.swing.JTextField();
+        jComboIdentificacion = new javax.swing.JComboBox<>();
+        jTextIdentificacion = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        jComboTipoCliente = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        jTextAreaDireccion = new javax.swing.JTextArea();
         jLabel7 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        jTextTelefono = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        jTextExtension = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        jTextCelular = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
+        jTextCorreo = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
 
         setClosable(true);
@@ -124,15 +128,13 @@ public abstract class ClienteForm extends GeneralPanelInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelCaracteristicasGenerales.add(jLabel2, gridBagConstraints);
-
-        jTextField1.setText("jTextField1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        jPanelCaracteristicasGenerales.add(jTextField1, gridBagConstraints);
+        jPanelCaracteristicasGenerales.add(jTextNombreSocial, gridBagConstraints);
 
         jLabel3.setText("Tipo Identificacion:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -142,21 +144,19 @@ public abstract class ClienteForm extends GeneralPanelInterface {
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelCaracteristicasGenerales.add(jLabel3, gridBagConstraints);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboIdentificacion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CEDULA", "RUC", "PASAPORTE", "IDENTIFICACION DEL EXTERIOR", "PLACA" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        jPanelCaracteristicasGenerales.add(jComboBox1, gridBagConstraints);
-
-        jTextField2.setText("jTextField2");
+        jPanelCaracteristicasGenerales.add(jComboIdentificacion, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        jPanelCaracteristicasGenerales.add(jTextField2, gridBagConstraints);
+        jPanelCaracteristicasGenerales.add(jTextIdentificacion, gridBagConstraints);
 
         jLabel5.setText("Tipo Cliente:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -166,13 +166,13 @@ public abstract class ClienteForm extends GeneralPanelInterface {
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelCaracteristicasGenerales.add(jLabel5, gridBagConstraints);
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboTipoCliente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CLIENTE", "SUJETO RETENIDO", "DESTINATARIO" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        jPanelCaracteristicasGenerales.add(jComboBox2, gridBagConstraints);
+        jPanelCaracteristicasGenerales.add(jComboTipoCliente, gridBagConstraints);
 
         jLabel6.setText("Direcciòn:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -182,9 +182,9 @@ public abstract class ClienteForm extends GeneralPanelInterface {
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelCaracteristicasGenerales.add(jLabel6, gridBagConstraints);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        jTextAreaDireccion.setColumns(20);
+        jTextAreaDireccion.setRows(5);
+        jScrollPane1.setViewportView(jTextAreaDireccion);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -200,14 +200,12 @@ public abstract class ClienteForm extends GeneralPanelInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelCaracteristicasGenerales.add(jLabel7, gridBagConstraints);
-
-        jTextField3.setText("jTextField3");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        jPanelCaracteristicasGenerales.add(jTextField3, gridBagConstraints);
+        jPanelCaracteristicasGenerales.add(jTextTelefono, gridBagConstraints);
 
         jLabel8.setText("Extensiòn:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -216,14 +214,12 @@ public abstract class ClienteForm extends GeneralPanelInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelCaracteristicasGenerales.add(jLabel8, gridBagConstraints);
-
-        jTextField4.setText("jTextField4");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        jPanelCaracteristicasGenerales.add(jTextField4, gridBagConstraints);
+        jPanelCaracteristicasGenerales.add(jTextExtension, gridBagConstraints);
 
         jLabel9.setText("Telèfono Celular:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -232,14 +228,12 @@ public abstract class ClienteForm extends GeneralPanelInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelCaracteristicasGenerales.add(jLabel9, gridBagConstraints);
-
-        jTextField5.setText("jTextField5");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        jPanelCaracteristicasGenerales.add(jTextField5, gridBagConstraints);
+        jPanelCaracteristicasGenerales.add(jTextCelular, gridBagConstraints);
 
         jLabel10.setText("Correo Electrònico:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -248,14 +242,12 @@ public abstract class ClienteForm extends GeneralPanelInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelCaracteristicasGenerales.add(jLabel10, gridBagConstraints);
-
-        jTextField6.setText("jTextField6");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        jPanelCaracteristicasGenerales.add(jTextField6, gridBagConstraints);
+        jPanelCaracteristicasGenerales.add(jTextCorreo, gridBagConstraints);
 
         jLabel4.setText("Identificaciòn:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -280,8 +272,8 @@ public abstract class ClienteForm extends GeneralPanelInterface {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JComboBox<String> jComboIdentificacion;
+    private javax.swing.JComboBox<String> jComboTipoCliente;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -295,35 +287,114 @@ public abstract class ClienteForm extends GeneralPanelInterface {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanelCaracteristicasGenerales;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
+    private javax.swing.JTextArea jTextAreaDireccion;
+    private javax.swing.JTextField jTextCelular;
+    private javax.swing.JTextField jTextCorreo;
+    private javax.swing.JTextField jTextExtension;
+    private javax.swing.JTextField jTextIdentificacion;
+    private javax.swing.JTextField jTextNombreSocial;
+    private javax.swing.JTextField jTextTelefono;
     // End of variables declaration//GEN-END:variables
     
     @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
     @ValidacionCodefacAnotacion(requerido=true , min=0 ,max = 15,expresionRegular = "")
     public JTextField getjTextField1() {
-        return jTextField1;
+        return jTextNombreSocial;
     }
 
     
     public void setjTextField1(JTextField jTextField1) {
-        this.jTextField1 = jTextField1;
+        this.jTextNombreSocial = jTextField1;
     }
 
     @ValidacionCodefacAnotacion()
     public JTextField getjTextField2() {
-        return jTextField2;
+        return jTextIdentificacion;
     }
 
     public void setjTextField2(JTextField jTextField2) {
-        this.jTextField2 = jTextField2;
+        this.jTextIdentificacion = jTextField2;
     }
 
-    
+    public JComboBox<String> getjComboIdentificacion() {
+        return jComboIdentificacion;
+    }
 
+    public void setjComboIdentificacion(JComboBox<String> jComboIdentificacion) {
+        this.jComboIdentificacion = jComboIdentificacion;
+    }
+
+    public JComboBox<String> getjComboTipoCliente() {
+        return jComboTipoCliente;
+    }
+
+    public void setjComboTipoCliente(JComboBox<String> jComboTipoCliente) {
+        this.jComboTipoCliente = jComboTipoCliente;
+    }
+
+    public JPanel getjPanelCaracteristicasGenerales() {
+        return jPanelCaracteristicasGenerales;
+    }
+
+    public void setjPanelCaracteristicasGenerales(JPanel jPanelCaracteristicasGenerales) {
+        this.jPanelCaracteristicasGenerales = jPanelCaracteristicasGenerales;
+    }
+
+    public JTextArea getjTextAreaDireccion() {
+        return jTextAreaDireccion;
+    }
+
+    public void setjTextAreaDireccion(JTextArea jTextAreaDireccion) {
+        this.jTextAreaDireccion = jTextAreaDireccion;
+    }
+
+    public JTextField getjTextCelular() {
+        return jTextCelular;
+    }
+
+    public void setjTextCelular(JTextField jTextCelular) {
+        this.jTextCelular = jTextCelular;
+    }
+
+    public JTextField getjTextCorreo() {
+        return jTextCorreo;
+    }
+
+    public void setjTextCorreo(JTextField jTextCorreo) {
+        this.jTextCorreo = jTextCorreo;
+    }
+
+    public JTextField getjTextExtension() {
+        return jTextExtension;
+    }
+
+    public void setjTextExtension(JTextField jTextExtension) {
+        this.jTextExtension = jTextExtension;
+    }
+
+    public JTextField getjTextIdentificacion() {
+        return jTextIdentificacion;
+    }
+
+    public void setjTextIdentificacion(JTextField jTextIdentificacion) {
+        this.jTextIdentificacion = jTextIdentificacion;
+    }
+
+    public JTextField getjTextNombreSocial() {
+        return jTextNombreSocial;
+    }
+
+    public void setjTextNombreSocial(JTextField jTextNombre) {
+        this.jTextNombreSocial = jTextNombre;
+    }
+
+    public JTextField getjTextTelefono() {
+        return jTextTelefono;
+    }
+
+    public void setjTextTelefono(JTextField jTextTelefono) {
+        this.jTextTelefono = jTextTelefono;
+    }
+    
+    
 }
