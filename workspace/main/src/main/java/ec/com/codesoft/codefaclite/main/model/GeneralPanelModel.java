@@ -508,13 +508,14 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             //System.out.println(metodo.getName());
             if(validacion!=null)
             {
-                validado=false;
+                
                 try {
                     JTextComponent componente=(JTextComponent) metodo.invoke(panel);
                     componente.setBackground(new Color(255,255,102));
                     Vector<String> errores=validar(validacion,componente);
                     for (String error : errores) {
                         consola.agregarDatos(validacion.nombre(),error,componente);
+                        validado=false;
                     }
                     
                     
