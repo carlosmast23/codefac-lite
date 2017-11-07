@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.main.model;
 
 
 import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
@@ -145,7 +146,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
   
     private void agregarListenerMenu()
     {
-                  getjDesktopPane1().addComponentListener(new ComponentAdapter() {
+        getjDesktopPane1().addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(final ComponentEvent e) {
                 super.componentResized(e);
@@ -206,10 +207,30 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         });
     }
     
+    private String getTituloOriginal(String titulo)
+    {
+        int inicio=titulo.indexOf("[");
+        if(inicio<0)
+            return titulo;
+        else
+            return titulo.substring(0,inicio-1);
+    }
+    
     private void agregarListener()
     {
+        getBtnNuevo().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JInternalFrame frame= getjDesktopPane1().getSelectedFrame();
+                String tituloOriginal=getTituloOriginal(frame.getTitle());
+                frame.setTitle(tituloOriginal+" [Nuevo]");
+                GeneralPanelInterface frameInterface=(GeneralPanelInterface) frame;
+                frameInterface.estadoFormulario= GeneralPanelInterface.ESTADO_GRABAR;
+                limpiar(frameInterface);
+            }
+        });
         
-        getBtnGuardar().addActionListener(new ActionListener() {
+         getBtnGuardar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 
@@ -217,14 +238,32 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 {
                     JInternalFrame frame= getjDesktopPane1().getSelectedFrame();
                     GeneralPanelInterface frameInterface=(GeneralPanelInterface) frame;
-                    if(validarFormulario(frameInterface))
-                    {
-                        frameInterface.grabar();
+                    
+                    if(frameInterface.estadoFormulario.equals(GeneralPanelInterface.ESTADO_GRABAR))
+                    {                    
+                        if(validarFormulario(frameInterface))
+                        {
+                            frameInterface.grabar();
+                        }
+                        else
+                        {
+                            JOptionPane.showMessageDialog(null,"Error de validacion Nuevo");
+                        }
                     }
                     else
                     {
-                        JOptionPane.showMessageDialog(null,"Error de validacion");
+                        if(validarFormulario(frameInterface))
+                        {
+                            frameInterface.editar();
+                        }
+                        else
+                        {
+                            JOptionPane.showMessageDialog(null,"Error de validacion Editar");
+                        }
+                    
                     }
+                    frameInterface.estadoFormulario=GeneralPanelInterface.ESTADO_GRABAR;
+                    limpiar(frameInterface);
                 }
                 catch (UnsupportedOperationException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -234,7 +273,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             }
         });
         
-        getBtnEditar().addActionListener(new ActionListener() {
+        
+        
+        getBtnBuscar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 
@@ -242,7 +283,28 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 {
                     JInternalFrame frame= getjDesktopPane1().getSelectedFrame();
                     GeneralPanelInterface frameInterface=(GeneralPanelInterface) frame;
-                    frameInterface.editar();
+                    String tituloOriginal = getTituloOriginal(frame.getTitle());
+                    frame.setTitle(tituloOriginal + " [Editar]");                    
+                    frameInterface.buscar();
+                    frameInterface.estadoFormulario= GeneralPanelInterface.ESTADO_EDITAR;
+                }
+                catch (UnsupportedOperationException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    //getjButton4().setEnabled(false);
+                }
+                               
+            }
+        });
+        
+        getBtnActualizar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                try
+                {
+                    JInternalFrame frame= getjDesktopPane1().getSelectedFrame();
+                    GeneralPanelInterface frameInterface=(GeneralPanelInterface) frame;
+                    frameInterface.actualizar();
                 }
                 catch (UnsupportedOperationException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -260,7 +322,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 {
                     JInternalFrame frame= getjDesktopPane1().getSelectedFrame();
                     GeneralPanelInterface frameInterface=(GeneralPanelInterface) frame;
+                    String tituloOriginal=getTituloOriginal(frame.getTitle());
+                    frame.setTitle(tituloOriginal+" [Nuevo]");
                     frameInterface.eliminar();
+                    frameInterface.estadoFormulario= GeneralPanelInterface.ESTADO_GRABAR;
+                    limpiar(frameInterface);
                 }
                 catch (UnsupportedOperationException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -345,6 +411,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         try {
             panel.panelPadre=generalPanelModel;
             panel.addInternalFrameListener(listenerFrame);
+            String tituloOriginal=getTituloOriginal(panel.getTitle());
+            panel.setTitle(tituloOriginal+" [Nuevo]");
             getjDesktopPane1().add(panel);
             panel.setMaximum(true);
             panel.show();
@@ -397,6 +465,35 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 }
             }
         }
+    }
+    
+    private void limpiar(GeneralPanelInterface panel)
+    {
+       ConsolaGeneral consola=new ConsolaGeneral();
+       boolean validado=true;
+       
+       Class classVentana=panel.getClass();
+        Method[] metodos=classVentana.getMethods();
+        for (Method metodo : metodos) {
+            LimpiarAnotacion validacion=metodo.getAnnotation(LimpiarAnotacion.class);
+            //System.out.println(metodo.getName());
+            if(validacion!=null)
+            {
+                validado=false;
+                try {
+                    JTextComponent componente=(JTextComponent) metodo.invoke(panel);
+                    componente.setText("");
+                    
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalArgumentException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InvocationTargetException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+
     }
     
     private boolean validarFormulario(GeneralPanelInterface panel)
@@ -615,10 +712,10 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         getBtnActualizar().setEnabled(opcion);
         getBtnAyuda().setEnabled(opcion);
         getBtnBuscar().setEnabled(opcion);
-        getBtnEditar().setEnabled(opcion);
         getBtnEliminar().setEnabled(opcion);
         getBtnGuardar().setEnabled(opcion);
         getBtnImprimir().setEnabled(opcion);
+        getBtnNuevo().setEnabled(opcion);
     }
  
     private void habilitarConfiguracioneBotones()
@@ -635,10 +732,6 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     getBtnGuardar().setEnabled(value);
                     break;
 
-                case GeneralPanelInterface.BOTON_EDITAR:
-                    getBtnEditar().setEnabled(value);
-                    break;
-
                 case GeneralPanelInterface.BOTON_ELIMINAR:
                     getBtnEliminar().setEnabled(value);
                     break;
@@ -649,6 +742,18 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     
                 case GeneralPanelInterface.BOTON_AYUDA:
                     getBtnAyuda().setEnabled(value);
+                    break;
+                    
+                case GeneralPanelInterface.BOTON_NUEVO:
+                    getBtnNuevo().setEnabled(value);
+                    break;
+                    
+                case GeneralPanelInterface.BOTON_REFRESCAR:
+                    getBtnActualizar().setEnabled(value);
+                    break;
+                
+                case GeneralPanelInterface.BOTON_BUSCAR:
+                    getBtnBuscar().setEnabled(value);
                     break;
             }
 

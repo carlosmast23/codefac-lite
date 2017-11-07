@@ -66,8 +66,8 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTablaConsola = new javax.swing.JTable();
         JPanelMenu = new javax.swing.JPanel();
+        btnNuevo = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
-        btnEditar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
         btnActualizar = new javax.swing.JButton();
@@ -187,6 +187,11 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
         JPanelMenu.setBackground(new java.awt.Color(255, 255, 255));
 
+        btnNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/nuevo-icono.png"))); // NOI18N
+        btnNuevo.setToolTipText("Nuevo");
+        btnNuevo.setMargin(new java.awt.Insets(0, 14, 0, 14));
+        JPanelMenu.add(btnNuevo);
+
         btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/save-icon.png"))); // NOI18N
         btnGuardar.setToolTipText("Grabar");
         btnGuardar.setMargin(new java.awt.Insets(0, 14, 0, 14));
@@ -196,16 +201,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
             }
         });
         JPanelMenu.add(btnGuardar);
-
-        btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/edit-icon.png"))); // NOI18N
-        btnEditar.setToolTipText("Editar");
-        btnEditar.setMargin(new java.awt.Insets(0, 14, 0, 14));
-        btnEditar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditarActionPerformed(evt);
-            }
-        });
-        JPanelMenu.add(btnEditar);
 
         btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/delete-icon.png"))); // NOI18N
         btnEliminar.setToolTipText("Eliminar");
@@ -310,14 +305,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnEditarActionPerformed
-
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        ClassLoader classLoader = RecursoCodefac.class.getClassLoader();
-        System.out.println(classLoader.getResource("img/iconos/save-icon.png").getFile());
-        btnBuscar.setIcon(new ImageIcon(classLoader.getResource("img/iconos/save-icon.png").getFile()));
+        //ClassLoader classLoader = RecursoCodefac.class.getClassLoader();
+        //System.out.println(classLoader.getResource("img/iconos/save-icon.png").getFile());
+        //btnBuscar.setIcon(new ImageIcon(classLoader.getResource("img/iconos/save-icon.png").getFile()));
        
     }//GEN-LAST:event_btnBuscarActionPerformed
 
@@ -400,10 +391,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnAyuda;
     private javax.swing.JButton btnBuscar;
-    private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnImprimir;
+    private javax.swing.JButton btnNuevo;
     private javax.swing.JButton btnSalirPantallAuxiliar;
     private javax.swing.JButton btnSalirPantallaPublicidad;
     private javax.swing.JDesktopPane jDesktopPane1;
@@ -500,14 +491,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
     public void setBtnBuscar(JButton btnBuscar) {
         this.btnBuscar = btnBuscar;
-    }
-
-    public JButton getBtnEditar() {
-        return btnEditar;
-    }
-
-    public void setBtnEditar(JButton btnEditar) {
-        this.btnEditar = btnEditar;
     }
 
     public JButton getBtnEliminar() {
@@ -608,6 +591,14 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
     public JPanel getJPanelConsola() {
         return JPanelConsola;
+    }
+
+    public JButton getBtnNuevo() {
+        return btnNuevo;
+    }
+
+    public void setBtnNuevo(JButton btnNuevo) {
+        this.btnNuevo = btnNuevo;
     }
     
     
