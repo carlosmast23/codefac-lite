@@ -17,7 +17,7 @@ import javax.persistence.Persistence;
  */
 public abstract class AbstractFacade<T>
 {
-    public EntityManager entityManager=Persistence.createEntityManagerFactory("pu_ejemplo").createEntityManager();
+    public static EntityManager entityManager;
     
     public static final String namePersistence="pu_ejemplo";
     private Class<T> entityClass;
@@ -73,6 +73,11 @@ public abstract class AbstractFacade<T>
         q.setMaxResults(range[1] - range[0] + 1);
         q.setFirstResult(range[0]);
         return q.getResultList();
+    }
+    
+    public static void cargarEntityManager()
+    {
+        entityManager=Persistence.createEntityManagerFactory(namePersistence).createEntityManager();
     }
 
 }

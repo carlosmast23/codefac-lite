@@ -9,6 +9,8 @@ package ec.com.codesoft.codefaclite.main.init;
 import ec.com.codesoft.codefaclite.main.model.GeneralPanelModel;
 import ec.com.codesoft.codefaclite.main.panel.LoginForm;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
+import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
+import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 import javax.swing.JOptionPane;
 
@@ -18,7 +20,7 @@ import javax.swing.JOptionPane;
  */
 public class Main {
     public static void main(String[] args) {
-        
+        componentesIniciales();        
         GeneralPanelModel panel=new GeneralPanelModel();
         panel.setVisible(true);
         panel.setExtendedState(MAXIMIZED_BOTH);
@@ -33,6 +35,20 @@ public class Main {
         
         System.out.println(persona.getCedula()+"-"+persona.getNombre());
         */
+        
+    }
+    
+    public static void componentesIniciales()
+    {
+        try {
+            AbstractFacade.cargarEntityManager();
+        } catch (Exception e) {
+            //e.p
+            UtilidadesServidor.crearBaseDatos();
+            JOptionPane.showMessageDialog(null,"Creada base de datos");
+            AbstractFacade.cargarEntityManager();
+            
+        }
         
     }
 }

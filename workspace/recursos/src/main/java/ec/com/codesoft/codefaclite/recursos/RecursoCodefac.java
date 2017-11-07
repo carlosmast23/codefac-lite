@@ -15,7 +15,7 @@ import java.net.URL;
 public enum RecursoCodefac {
     IMAGENES_ICONOS("img/iconos"),
     IMAGENES_GENERAL("img/general"),
-    
+    SQL("sql"),
     JASPER_CRM("reportes/crm"),
     AYUDA("ayuda");
     
