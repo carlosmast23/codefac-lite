@@ -15,3 +15,8 @@
 #Configuraciones del netbeans
 nbactions.xml
 nb-configuration.xml
+/workspace/utilidades/target/
+
+#excluir base de datos
+/workspace/main/DB/
+/workspace/servidor/DB/
