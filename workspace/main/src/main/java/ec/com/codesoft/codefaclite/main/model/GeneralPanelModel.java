@@ -262,6 +262,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         }
                     
                     }
+                    
+                    String tituloOriginal=getTituloOriginal(frame.getTitle());
+                    frame.setTitle(tituloOriginal+" [Nuevo]");
                     frameInterface.estadoFormulario=GeneralPanelInterface.ESTADO_GRABAR;
                     limpiar(frameInterface);
                 }
