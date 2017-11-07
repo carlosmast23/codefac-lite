@@ -40,6 +40,7 @@ import net.sf.jasperreports.view.JasperViewer;
 public class ClienteModel extends ClienteForm
 {
     private PersonaService personaService;
+    private Persona persona;
 
     public ClienteModel()
     {
@@ -70,12 +71,10 @@ public class ClienteModel extends ClienteForm
     @Override
     public void editar() 
     {
-        ClienteBusquedaDialogo clienteBusquedaDialogo= new ClienteBusquedaDialogo();
-        BuscarDialogoModel buscarDialogoModel=new BuscarDialogoModel(clienteBusquedaDialogo);
-        buscarDialogoModel.setVisible(true);
-        Persona p=(Persona) buscarDialogoModel.getResultado();
-        System.out.println(p.getCedula());
-        System.out.println(p.getNombreSocial());
+        persona.setCedula(Integer.parseInt(getjTextIdentificacion().getText()));
+        persona.setNombreSocial(getjTextNombreSocial().getText());
+        personaService.editar(persona);
+        System.out.println("Se edito correctamente");
     }
 
     @Override
@@ -91,8 +90,9 @@ public class ClienteModel extends ClienteForm
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
         Map<Integer,Boolean> permisos=new HashMap<Integer,Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_NUEVO,true);
         permisos.put(GeneralPanelInterface.BOTON_GRABAR,true);
-        permisos.put(GeneralPanelInterface.BOTON_EDITAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
         permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
         permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
         permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
@@ -116,6 +116,23 @@ public class ClienteModel extends ClienteForm
     @Override
     public String getURLAyuda() {
         return "https://support.office.com/es-es";
+    }
+
+    @Override
+    public void actualizar() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void buscar() {
+        ClienteBusquedaDialogo clienteBusquedaDialogo= new ClienteBusquedaDialogo();
+        BuscarDialogoModel buscarDialogoModel=new BuscarDialogoModel(clienteBusquedaDialogo);
+        buscarDialogoModel.setVisible(true);
+        persona=(Persona) buscarDialogoModel.getResultado();
+        getjTextNombreSocial().setText(persona.getNombreSocial());
+        getjTextIdentificacion().setText(""+persona.getCedula());
+        System.out.println(persona.getCedula());
+        System.out.println(persona.getNombreSocial());
     }
     
     

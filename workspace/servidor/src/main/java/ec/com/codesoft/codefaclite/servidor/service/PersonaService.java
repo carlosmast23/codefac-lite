@@ -27,6 +27,11 @@ public class PersonaService
         personaFacade.create(p);
     }
     
+    public void editar(Persona p)
+    {
+        personaFacade.edit(p);
+    }
+    
     public List<Persona> buscar()
     {
         return personaFacade.findAll();

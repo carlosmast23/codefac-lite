@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.crm.panel;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.crm.test.EjemploCrm;
@@ -295,9 +296,9 @@ public abstract class ClienteForm extends GeneralPanelInterface {
     private javax.swing.JTextField jTextNombreSocial;
     private javax.swing.JTextField jTextTelefono;
     // End of variables declaration//GEN-END:variables
-    
+    @LimpiarAnotacion
     @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
-    @ValidacionCodefacAnotacion(requerido=true , min=0 ,max = 15,expresionRegular = "")
+    @ValidacionCodefacAnotacion(requerido=true , min=0 ,max = 15,expresionRegular = "",nombre = "Nombre Social")
     public JTextField getjTextField1() {
         return jTextNombreSocial;
     }
@@ -307,6 +308,7 @@ public abstract class ClienteForm extends GeneralPanelInterface {
         this.jTextNombreSocial = jTextField1;
     }
 
+    @LimpiarAnotacion
     @ValidacionCodefacAnotacion()
     public JTextField getjTextField2() {
         return jTextIdentificacion;
