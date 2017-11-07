@@ -153,10 +153,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 System.out.println("Resizing");
                 Image fondoImg=new javax.swing.ImageIcon(getClass().getResource("/img.general/fondoGeneral.png")).getImage();
                 getjDesktopPane1().setBorder(new Fondo(fondoImg));
-        }
-            
-            
-
+        }       
             
     });
         
@@ -227,6 +224,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 GeneralPanelInterface frameInterface=(GeneralPanelInterface) frame;
                 frameInterface.estadoFormulario= GeneralPanelInterface.ESTADO_GRABAR;
                 limpiar(frameInterface);
+                limpiarCamposValidacion(frameInterface);
             }
         });
         
@@ -267,6 +265,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     frame.setTitle(tituloOriginal+" [Nuevo]");
                     frameInterface.estadoFormulario=GeneralPanelInterface.ESTADO_GRABAR;
                     limpiar(frameInterface);
+                    limpiarCamposValidacion(frameInterface);
                 }
                 catch (UnsupportedOperationException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -290,6 +289,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     frame.setTitle(tituloOriginal + " [Editar]");                    
                     frameInterface.buscar();
                     frameInterface.estadoFormulario= GeneralPanelInterface.ESTADO_EDITAR;
+                    limpiarCamposValidacion(frameInterface);
                 }
                 catch (UnsupportedOperationException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -308,6 +308,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     JInternalFrame frame= getjDesktopPane1().getSelectedFrame();
                     GeneralPanelInterface frameInterface=(GeneralPanelInterface) frame;
                     frameInterface.actualizar();
+                    limpiarCamposValidacion(frameInterface);
                 }
                 catch (UnsupportedOperationException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -330,6 +331,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     frameInterface.eliminar();
                     frameInterface.estadoFormulario= GeneralPanelInterface.ESTADO_GRABAR;
                     limpiar(frameInterface);
+                    limpiarCamposValidacion(frameInterface);
                 }
                 catch (UnsupportedOperationException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -348,6 +350,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     JInternalFrame frame= getjDesktopPane1().getSelectedFrame();
                     GeneralPanelInterface frameInterface=(GeneralPanelInterface) frame;
                     frameInterface.imprimir();
+                    limpiarCamposValidacion(frameInterface);
                 }
                 catch (UnsupportedOperationException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -376,6 +379,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     */
                     cargarAyuda();
                     cargarPublicidad();
+                    //limpiarCamposValidacion(frameInterface);
                 }
             });
         
@@ -412,6 +416,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private void agregarListenerMenu(GeneralPanelInterface panel)
     {
         try {
+            panel.estadoFormulario= GeneralPanelInterface.ESTADO_GRABAR;
             panel.panelPadre=generalPanelModel;
             panel.addInternalFrameListener(listenerFrame);
             String tituloOriginal=getTituloOriginal(panel.getTitle());
@@ -486,6 +491,33 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 try {
                     JTextComponent componente=(JTextComponent) metodo.invoke(panel);
                     componente.setText("");
+                    
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalArgumentException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InvocationTargetException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+
+    }
+    
+    private void limpiarCamposValidacion(GeneralPanelInterface panel)
+    {
+       ConsolaGeneral consola=new ConsolaGeneral();
+       
+       Class classVentana=panel.getClass();
+        Method[] metodos=classVentana.getMethods();
+        for (Method metodo : metodos) {
+            LimpiarAnotacion validacion=metodo.getAnnotation(LimpiarAnotacion.class);
+            //System.out.println(metodo.getName());
+            if(validacion!=null)
+            {
+                try {
+                    JTextComponent componente=(JTextComponent) metodo.invoke(panel);
+                    componente.setBackground(Color.WHITE);
                     
                 } catch (IllegalAccessException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
