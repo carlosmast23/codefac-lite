@@ -52,6 +52,7 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 import javax.swing.Action;
+import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -671,6 +672,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             {
                 try {
                     JTextComponent componente=(JTextComponent) metodo.invoke(panel);
+                    componente.setBorder(BorderFactory.createMatteBorder(
+                                    1, 5, 1, 1, new Color(122, 138, 153)));
+
                     componente.addFocusListener(new FocusListener() {
                         @Override
                         public void focusGained(FocusEvent e) {
