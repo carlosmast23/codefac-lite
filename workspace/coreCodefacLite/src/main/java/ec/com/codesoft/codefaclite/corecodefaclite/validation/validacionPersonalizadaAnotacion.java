@@ -16,12 +16,6 @@ import java.lang.annotation.Target;
  */
 @Target(value={ElementType.METHOD} )
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ValidacionCodefacAnotacion {
-    boolean requerido() default true;
-    int min() default 0;
-    int max() default 100;
-    String expresionRegular() default "";
-    String nombre() default "campo";
-    String[] personalizado() default "";
-    
+public @interface validacionPersonalizadaAnotacion {
+    String errorTitulo() default "";
 }

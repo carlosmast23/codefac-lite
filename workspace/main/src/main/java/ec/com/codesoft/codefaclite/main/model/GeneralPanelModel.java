@@ -10,6 +10,7 @@ package ec.com.codesoft.codefaclite.main.model;
 import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.validacionPersonalizadaAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
@@ -135,7 +136,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     {
             browserPublicidad = new SwingBrowser();
             //browserPublicidad.loadURL(panel.getURLAyuda());
-            browserPublicidad.loadURL("http://www.vm.codesoft-ec.com/general/publicidad");
+            browserPublicidad.loadURL("http://www.vm.codesoft-ec.com/general/publicidad/b");
             //System.out.println("creando panel:"+getJPanelPublicidadContenidoContenido().getWidth()+":"+getJPanelPublicidadContenido().getHeight());
             browserPublicidad.setBounds(1, 1, getjPanelPublicidadContenido().getWidth() - 1, getjPanelPublicidadContenido().getHeight() - 1);
             getjPanelPublicidadContenido().removeAll();
@@ -160,39 +161,14 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         getjMenuItem1().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                /*
-                try {
-                    //seleccionaPanel(new OtraVentana2());
-                    OtraVentanaModel ayuda=new OtraVentanaModel();
-                    ayuda.addInternalFrameListener(listenerFrame);
-                    
-                    getjDesktopPane1().add(ayuda);
-                    ayuda.setMaximum(true);
-                    ayuda.show();
-                } catch (PropertyVetoException ex) {
-                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                */
+
             }
         });
         
        getjMenuItem1().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                /*
-                try {
-                    
-                    //seleccionaPanel(new OtraVentana2());
-                    OtraVentanaModel ayuda=new OtraVentanaModel();
-                    ayuda.addInternalFrameListener(listenerFrame);
-                    
-                    getjDesktopPane1().add(ayuda);
-                    ayuda.setMaximum(true);
-                    ayuda.show();
-                } catch (PropertyVetoException ex) {
-                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                }*/
-                
+
             }
         });
         getjMenuCliente().addActionListener(new ActionListener() {
@@ -234,6 +210,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 
                 try
                 {
+                    boolean procesoTerminado=false;
                     JInternalFrame frame= getjDesktopPane1().getSelectedFrame();
                     GeneralPanelInterface frameInterface=(GeneralPanelInterface) frame;
                     
@@ -242,6 +219,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         if(validarFormulario(frameInterface))
                         {
                             frameInterface.grabar();
+                            procesoTerminado=true;
                         }
                         else
                         {
@@ -253,6 +231,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         if(validarFormulario(frameInterface))
                         {
                             frameInterface.editar();
+                            procesoTerminado=true;
                         }
                         else
                         {
@@ -261,11 +240,14 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     
                     }
                     
-                    String tituloOriginal=getTituloOriginal(frame.getTitle());
-                    frame.setTitle(tituloOriginal+" [Nuevo]");
-                    frameInterface.estadoFormulario=GeneralPanelInterface.ESTADO_GRABAR;
-                    limpiar(frameInterface);
-                    limpiarCamposValidacion(frameInterface);
+                    if(procesoTerminado)
+                    {
+                        String tituloOriginal=getTituloOriginal(frame.getTitle());
+                        frame.setTitle(tituloOriginal+" [Nuevo]");
+                        frameInterface.estadoFormulario=GeneralPanelInterface.ESTADO_GRABAR;
+                        limpiar(frameInterface);
+                        limpiarCamposValidacion(frameInterface);
+                    }
                 }
                 catch (UnsupportedOperationException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -553,6 +535,36 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         validado=false;
                     }
                     
+                    //Validacion personalizada
+                    String[] personalizados=validacion.personalizado();
+                    for (String personalizado : personalizados) {
+                        if(!personalizado.equals(""))
+                        {
+                            Method[] metodosValidar=classVentana.getMethods();
+                            for (Method method : metodosValidar) 
+                            {
+                                ///System.out.println(method.getName());
+                                validacionPersonalizadaAnotacion validacionPersonalizada=method.getAnnotation(validacionPersonalizadaAnotacion.class);
+
+                                if(validacionPersonalizada!=null)
+                                {
+                                    if(personalizado.equals(method.getName()))
+                                    {
+                                        boolean resultado=(boolean) method.invoke(panel);                                        
+                                        if(!resultado)
+                                        {
+                                            consola.agregarDatos(validacion.nombre(),validacionPersonalizada.errorTitulo(),componente);
+                                            validado=false;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                                        
+                    
+                    
                     
                     //JTextField
                     
@@ -617,6 +629,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
            public void mouseClicked(MouseEvent e) {
                int fila=getjTablaConsola().getSelectedRow();
                consola.seleccionarFila(fila);
+               
            }
 
            @Override

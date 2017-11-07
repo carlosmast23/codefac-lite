@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.main.model;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +54,7 @@ public class ConsolaGeneral {
     {
         DatoTabla dato=modeloDatos.get(fila);
         dato.componente.requestFocus();
+        dato.componente.setBackground(new Color(255,255,102));
     }
     
     

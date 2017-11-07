@@ -108,6 +108,8 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
         JPanelPublicidad.setBackground(new java.awt.Color(255, 255, 255));
         JPanelPublicidad.setLayout(new java.awt.BorderLayout());
+
+        jPanelPublicidadContenido.setLayout(new javax.swing.BoxLayout(jPanelPublicidadContenido, javax.swing.BoxLayout.LINE_AXIS));
         JPanelPublicidad.add(jPanelPublicidadContenido, java.awt.BorderLayout.CENTER);
 
         jPanelPublicidadBorde.setBackground(new java.awt.Color(62, 93, 162));
