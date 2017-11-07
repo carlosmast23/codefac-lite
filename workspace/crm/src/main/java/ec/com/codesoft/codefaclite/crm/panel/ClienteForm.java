@@ -298,7 +298,7 @@ public abstract class ClienteForm extends GeneralPanelInterface {
     // End of variables declaration//GEN-END:variables
     @LimpiarAnotacion
     @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
-    @ValidacionCodefacAnotacion(requerido=true , min=0 ,max = 15,expresionRegular = "",nombre = "Nombre Social")
+    @ValidacionCodefacAnotacion(personalizado ={"validarCedula","validarOtro"}  ,requerido=true , min=0 ,max = 15,expresionRegular = "",nombre = "Nombre Social")
     public JTextField getjTextField1() {
         return jTextNombreSocial;
     }

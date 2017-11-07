@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.crm.model;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.validacionPersonalizadaAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.crm.busqueda.ClienteBusquedaDialogo;
@@ -52,7 +53,7 @@ public class ClienteModel extends ClienteForm
     public void grabar() 
     {
         Persona p = new Persona();
-        p.setIdcliente(2);
+        //p.setIdcliente(3);
         p.setNombreSocial(getjTextNombreSocial().getText());
         p.setTipoIdentificacion((String) getjComboIdentificacion().getSelectedItem());
         p.setCedula(Integer.parseInt(getjTextIdentificacion().getText()));
@@ -135,5 +136,26 @@ public class ClienteModel extends ClienteForm
         System.out.println(persona.getNombreSocial());
     }
     
+    @validacionPersonalizadaAnotacion(errorTitulo = "formato cedula incorrecto")
+    public boolean validarCedula()
+    {
+        /*
+        if(getjTextField1().getText().equals("hola"))
+        {
+            return true;
+        }*/
+        return true;
+    }
+    
+    @validacionPersonalizadaAnotacion(errorTitulo = "formato otra validacion incorrecto")
+    public boolean validarOtro()
+    {
+        /*
+        if(getjTextField1().getText().equals("holas"))
+        {
+            return true;
+        }*/
+        return true;
+    }
     
 }
