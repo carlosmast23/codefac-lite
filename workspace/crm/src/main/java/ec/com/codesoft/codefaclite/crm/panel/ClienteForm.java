@@ -323,7 +323,7 @@ public abstract class ClienteForm extends GeneralPanelInterface {
     
     @LimpiarAnotacion
     @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
-    @ValidacionCodefacAnotacion(requerido=true , min=0 ,max = 1024,expresionRegular = "^[A-Za-z0-9\\s]*$",nombre = "Direccion")
+    @ValidacionCodefacAnotacion(requerido=true , min=5 ,max = 1024,expresionRegular = "^[A-Za-z0-9\\s]*$",nombre = "Direccion")
     public JTextArea getjTextAreaDireccion() {
         return jTextAreaDireccion;
     }

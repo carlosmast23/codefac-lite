@@ -38,30 +38,36 @@ public class ConsolaGeneral {
     
     public void agregarDatos(String titulo,String observacion,Component componente)
     {
-        quitarDato(componente);
-        Vector<String> fila= new Vector<String>();
-        fila.add(titulo);
-        fila.add(observacion);    
-        this.modeloDatos.add( new DatoTabla(fila, (JTextComponent) componente));
+        if(!verificarExiste(titulo,observacion,componente))
+        {
+            Vector<String> fila= new Vector<String>();
+            fila.add(titulo);
+            fila.add(observacion);    
+            this.modeloDatos.add( new DatoTabla(fila, (JTextComponent) componente));
+        }
         
     }
     
     public void quitarDato(Component componente)
     {
-        for (DatoTabla dato : modeloDatos) {
+        for (int i = 0; i < modeloDatos.size();) {
+            DatoTabla dato=modeloDatos.get(i);
             if(dato.componente.equals(componente))
             {
                 modeloDatos.remove(dato);
-                break;
+            }
+            else
+            {
+                i++;
             }
         }
-              
+  
     }
     
-    private boolean verificarExiste(Component componente)
+    private boolean verificarExiste(String titulo,String observacion,Component componente)
     {
         for (DatoTabla dato : modeloDatos) {
-            if(dato.componente.equals(componente))
+            if(dato.componente.equals(componente) && dato.fila.get(0).equals(titulo) && dato.fila.get(1).equals(observacion))
             {
                 return true;
             }
@@ -79,7 +85,7 @@ public class ConsolaGeneral {
         dato.componente.requestFocus();
         dato.componente.setBackground(new Color(255,255,102));
     }
-    
+
     
     private class DatoTabla
     {

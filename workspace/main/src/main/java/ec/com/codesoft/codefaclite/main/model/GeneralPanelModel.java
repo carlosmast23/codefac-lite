@@ -273,8 +273,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         getjMenuCliente().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                agregarListenerMenu(new ClienteModel());
-                
+                agregarListenerMenu(new ClienteModel());                
             }
         });
     }
@@ -420,6 +419,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     limpiarAnotaciones(frameInterface);
                     frameInterface.limpiar();
                     limpiarCamposValidacion(frameInterface);
+                    
+                    frameInterface.consola=new ConsolaGeneral();
+                    mostrarConsola(frameInterface.consola);
                 }
                 catch (UnsupportedOperationException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -789,6 +791,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         @Override
                         public void focusLost(FocusEvent e) {
                             Vector<String> errores = validarComponente(validacion, componente, panel);
+                            panel.consola.quitarDato(componente);
                             for (String error : errores) {
                                 panel.consola.agregarDatos(validacion.nombre(), error, componente);
                             }
