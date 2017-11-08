@@ -13,6 +13,7 @@
         <module>../servidor</module>
         <module>../ws-client-iess</module>
         <module>../coreCodefacLite</module>
+        <module>../utilidades</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
