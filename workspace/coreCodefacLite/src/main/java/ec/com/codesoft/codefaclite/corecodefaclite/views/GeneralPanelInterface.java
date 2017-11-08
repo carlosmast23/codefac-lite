@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.corecodefaclite.views;
 
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ConsolaGeneral;
 import java.util.Map;
 import javax.swing.JPanel;
 
@@ -23,6 +24,7 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
     public static final int BOTON_BUSCAR = 7;
     
     public InterfazComunicacionPanel panelPadre;
+    public ConsolaGeneral consola=new ConsolaGeneral();
     
     public static final String ESTADO_GRABAR="G";
     public static final String ESTADO_EDITAR="E";

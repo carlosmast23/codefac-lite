@@ -12,6 +12,7 @@ public class SwingBrowser extends JFXPanel {
 //Variable encargada de renderizar el website
 
     private WebEngine engine;
+    private String urlActivo;
 
     //Constructor de la clase
     public SwingBrowser() {
@@ -36,6 +37,7 @@ public class SwingBrowser extends JFXPanel {
                     tmp = toURL(url);
                 }
                 engine.load(tmp);
+                urlActivo=url;
 
             }
         });
@@ -48,4 +50,10 @@ public class SwingBrowser extends JFXPanel {
             return null;
         }
     }
+
+    public String getUrl() {
+        return urlActivo;
+    }
+
+    
 }

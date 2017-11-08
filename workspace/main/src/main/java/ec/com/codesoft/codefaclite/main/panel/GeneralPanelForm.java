@@ -29,7 +29,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
      */
     public GeneralPanelForm() {
         initComponents();
-        jSplitPanel.setDividerLocation(2000);
     }
     
     
@@ -78,7 +77,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jPanel3 = new javax.swing.JPanel();
         jSplitPanel = new javax.swing.JSplitPane();
         jDesktopPane1 = new javax.swing.JDesktopPane();
-        jPanel1 = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -137,7 +135,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
         JPanelAuxiliarInterno.setLayout(new java.awt.BorderLayout());
 
-        JPanelContenidoAuxiliar.setBackground(new java.awt.Color(51, 0, 153));
+        JPanelContenidoAuxiliar.setBackground(new java.awt.Color(255, 255, 255));
         JPanelContenidoAuxiliar.setLayout(new javax.swing.BoxLayout(JPanelContenidoAuxiliar, javax.swing.BoxLayout.LINE_AXIS));
         JPanelAuxiliarInterno.add(JPanelContenidoAuxiliar, java.awt.BorderLayout.CENTER);
 
@@ -262,10 +260,9 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         getContentPane().add(jPanel3, java.awt.BorderLayout.LINE_START);
 
         jSplitPanel.setDividerLocation(800);
+        jSplitPanel.setDividerSize(3);
+        jSplitPanel.setDoubleBuffered(true);
         jSplitPanel.setLeftComponent(jDesktopPane1);
-
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jSplitPanel.setRightComponent(jPanel1);
 
         getContentPane().add(jSplitPanel, java.awt.BorderLayout.CENTER);
 
@@ -417,7 +414,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanelPublicidadBorde;

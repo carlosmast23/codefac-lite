@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.main.model;
+package ec.com.codesoft.codefaclite.corecodefaclite.validation;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -18,37 +18,60 @@ import javax.swing.text.JTextComponent;
  * @author Carlos
  */
 public class ConsolaGeneral {
-    private DefaultTableModel modeloTabla;
     private String[] titulo={"Componente","Observacion"};
     private List<DatoTabla> modeloDatos;
 
     public ConsolaGeneral() {
-        crearTabla();
-        modeloDatos=new ArrayList<DatoTabla>();
+       modeloDatos=new ArrayList<DatoTabla>();
     }
     
-    public void crearTabla()
-    {
-        this.modeloTabla=new DefaultTableModel(titulo,0);
+    
+    public DefaultTableModel getModeloTabla()
+    {       
+        DefaultTableModel modeloTabla = new DefaultTableModel(titulo, 0);
+        for (DatoTabla dato : modeloDatos) {
+            modeloTabla.addRow(dato.fila);
+        }
+        return modeloTabla;
+       
     }
     
     public void agregarDatos(String titulo,String observacion,Component componente)
     {
-        Vector<String> fila=new Vector<>();
+        quitarDato(componente);
+        Vector<String> fila= new Vector<String>();
         fila.add(titulo);
-        fila.add(observacion);
-        this.modeloTabla.addRow(fila);
+        fila.add(observacion);    
         this.modeloDatos.add( new DatoTabla(fila, (JTextComponent) componente));
         
     }
-
-    public DefaultTableModel getModeloTabla() {
-        return modeloTabla;
+    
+    public void quitarDato(Component componente)
+    {
+        for (DatoTabla dato : modeloDatos) {
+            if(dato.componente.equals(componente))
+            {
+                modeloDatos.remove(dato);
+                break;
+            }
+        }
+              
     }
-
-    public void setModeloTabla(DefaultTableModel modeloTabla) {
-        this.modeloTabla = modeloTabla;
+    
+    private boolean verificarExiste(Component componente)
+    {
+        for (DatoTabla dato : modeloDatos) {
+            if(dato.componente.equals(componente))
+            {
+                return true;
+            }
+        }
+        return false;
+              
     }
+    
+    
+    
     
     public void seleccionarFila(int fila)
     {
@@ -67,6 +90,7 @@ public class ConsolaGeneral {
             this.fila = fila;
             this.componente = componente;
         }
+        
         
         
     }

@@ -9,6 +9,7 @@ package ec.com.codesoft.codefaclite.main.model;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ConsolaGeneral;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.validacionPersonalizadaAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
@@ -31,6 +32,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -75,6 +77,8 @@ import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.plaf.SplitPaneUI;
+import javax.swing.plaf.basic.BasicSplitPaneUI;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.StyledEditorKit;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -90,74 +94,168 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private SwingBrowser browser ;
     private SwingBrowser browserPublicidad ;
     DefaultListModel modelo;
+    
+    private static double PROPORCION_HORIZONTAL=0.75d;
+    private static double PROPORCION_VERTICAL=0.7d;
+    
+    private static double PROPORCION_HORIZONTAL_DEFAULT=0.75d;
+    private static double PROPORCION_VERTICAL_DEFAULT=0.7d;
+    
+    private static double PROPORCION_HORIZONTAL_MIN=0.95d;
+    private static double PROPORCION_VERTICAL_MIN=0.95d;
+    
+    
+    private static double PROPORCION_HORIZONTAL_INICIAL=0.999999999d;
+    private static double PROPORCION_VERTICAL_INICIAL=0.7d;
 
     public GeneralPanelModel() 
     {
         iniciarComponentes();
-        agregarListener();
+        agregarListenerBotones();
         agregarListenerMenu();
+        agregarListenerSplit();
+        agregarListenerGraphics();
+       
         habilitarBotones(false);
-        //getjSplitPanel().setRightComponent(getJpanelAuxiliar());
-               
-        Component componente=getjSplitPanel().getLeftComponent();
-        getjSplitPanel().setLeftComponent(getJpanelAuxiliar());
-        getjSplitPanel().setRightComponent(componente);
-        getjSplitPanel().setDividerLocation(0.0d);
         
-        //Image IMG=new ImageIcon(getClass().getResource("/imagenes/casalibertad.jpg")).getImage();
-        //BufferedImage image=ImageIO.read(IMG);
-        Image fondoImg=new javax.swing.ImageIcon(getClass().getResource("/img.general/fondoGeneral.png")).getImage();
-        getjDesktopPane1().setBorder(new Fondo(fondoImg));
-        
+
+        /*
         getjDesktopPane1().addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                revalidate();
-                repaint();
+                //System.out.println("resi");
+                //revalidate();
+                //repaint();
+                //getjSplitPanel().getDividerLocation();
+               // getjSplitPanel().setDividerLocation(DIVISION_GENERAL);
+               // getjSplitPanelVerticalSecundario().setDividerLocation(DIVISION_SECUNDARIA);                
             }
-        });
+            
+        });*/
         
     }
     
+    private void agregarListenerGraphics()
+    {
+                
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                Image fondoImg=new javax.swing.ImageIcon(getClass().getResource("/img.general/fondoGeneral.png")).getImage();
+                getjDesktopPane1().setBorder(new Fondo(fondoImg));
+                
+                getjSplitPanel().setDividerLocation(PROPORCION_HORIZONTAL);
+                getjSplitPanelVerticalSecundario().setDividerLocation(PROPORCION_VERTICAL);
+            }
+           
+            
+        
+        });
+    }
+    
+    private void agregarListenerSplit()
+    {
+        SplitPaneUI spui = this.getjSplitPanel().getUI();
+        if (spui instanceof BasicSplitPaneUI) {
+          // Setting a mouse listener directly on split pane does not work, because no events are being received.
+          ((BasicSplitPaneUI) spui).getDivider().addMouseListener(new MouseAdapter() {
+              @Override
+              public void mouseReleased(MouseEvent e) {
+                  //System.out.println("mouseReleasedE");
+                  int division=getjSplitPanel().getDividerLocation();
+                  int ancho=getWidth();
+                  PROPORCION_HORIZONTAL=(double)division/(double)ancho;
+                  System.out.println("division:"+division+"ancho:"+ancho+"p1:"+PROPORCION_HORIZONTAL+">"+PROPORCION_HORIZONTAL_MIN);
+                  //if(PROPORCION_HORIZONTAL>PROPORCION_HORIZONTAL_MIN)
+                 //{
+                      //PROPORCION_HORIZONTAL=PROPORCION_HORIZONTAL_INICIAL;
+                  //}
+                  getjSplitPanel().setDividerLocation(PROPORCION_HORIZONTAL);
+                  
+                  //System.out.println("division: "+division+"ancho: "+ancho+"proporcionos: "+proporcion);
+              }
+             
+            });
+        }
+        
+        SplitPaneUI spui2 = this.getjSplitPanelVerticalSecundario().getUI();
+        if (spui2 instanceof BasicSplitPaneUI) {
+          // Setting a mouse listener directly on split pane does not work, because no events are being received.
+          ((BasicSplitPaneUI) spui2).getDivider().addMouseListener(new MouseAdapter() {
+              @Override
+              public void mouseReleased(MouseEvent e) {
+                  //System.out.println("mouseReleasedE");
+                  /*
+                  int division=getjSplitPanelVerticalSecundario().getDividerLocation();
+                  int ancho=getHeight();
+                  PROPORCION_VERTICAL=(double)division/(double)ancho;
+                  if(PROPORCION_VERTICAL>PROPORCION_VERTICAL_MIN)
+                  {
+                      PROPORCION_VERTICAL=PROPORCION_VERTICAL_INICIAL;
+                  }
+                  getjSplitPanel().setDividerLocation(PROPORCION_VERTICAL);
+                  */
+                  //System.out.println("division: "+division+"ancho: "+ancho+"proporcionos: "+proporcion);
+              }             
+            });
+        }
+        
+    
+    }
+    
+    
     private void cargarAyuda()
     {
+        GeneralPanelInterface panel=(GeneralPanelInterface) getjDesktopPane1().getSelectedFrame();
+        if(browser!=null)
+        {
+            //Verifacar si la url cargada es la misma no volver a cargar
+            if(!browser.getUrl().equals(panel.getURLAyuda()))
+            {
+                browser = new SwingBrowser();
+                browser.loadURL(panel.getURLAyuda());
+                browser.setBounds(1, 1, getJPanelContenidoAuxiliar().getWidth() - 1, getJPanelContenidoAuxiliar().getHeight() - 1);
+                getJPanelContenidoAuxiliar().removeAll();
+                getJPanelContenidoAuxiliar().add(browser);
+            }
+        }
+        else
+        {
             browser = new SwingBrowser();
-            GeneralPanelInterface panel=(GeneralPanelInterface) getjDesktopPane1().getSelectedFrame();
             browser.loadURL(panel.getURLAyuda());
-            //browser.loadURL("https://es.wikipedia.org/wiki/Vlad%C3%ADmir_Makanin");
-            System.out.println("creando panel:"+getJPanelContenidoAuxiliar().getWidth()+":"+getJPanelContenidoAuxiliar().getHeight());
             browser.setBounds(1, 1, getJPanelContenidoAuxiliar().getWidth() - 1, getJPanelContenidoAuxiliar().getHeight() - 1);
             getJPanelContenidoAuxiliar().removeAll();
             getJPanelContenidoAuxiliar().add(browser);
-            getjSplitPanel().setDividerLocation(0.25);
-            //getjSplitPanelVerticalSecundario().setDividerLocation(0.75);
+        }
+            
     }
     
     private void cargarPublicidad()
     {
             browserPublicidad = new SwingBrowser();
-            //browserPublicidad.loadURL(panel.getURLAyuda());
             browserPublicidad.loadURL("http://www.vm.codesoft-ec.com/general/publicidad/b");
-            //System.out.println("creando panel:"+getJPanelPublicidadContenidoContenido().getWidth()+":"+getJPanelPublicidadContenido().getHeight());
             browserPublicidad.setBounds(1, 1, getjPanelPublicidadContenido().getWidth() - 1, getjPanelPublicidadContenido().getHeight() - 1);
             getjPanelPublicidadContenido().removeAll();
-            getjPanelPublicidadContenido().add(browserPublicidad);
-            //getjSplitPanel().setDividerLocation(0.75);
-            getjSplitPanelVerticalSecundario().setDividerLocation(0.70);
+            getjPanelPublicidadContenido().add(browserPublicidad);            
+            //PROPORCION_VERTICAL=PROPORCION_VERTICAL_DEFAULT;
+            //getjSplitPanelVerticalSecundario().setDividerLocation(PROPORCION_VERTICAL);
+
     }
   
     private void agregarListenerMenu()
     {
+        /*
         getjDesktopPane1().addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(final ComponentEvent e) {
-                super.componentResized(e);
-                System.out.println("Resizing");
+                //Redimensionar tamaño a las proporciones de la pantalla
+                //super.componentResized(e);                
                 Image fondoImg=new javax.swing.ImageIcon(getClass().getResource("/img.general/fondoGeneral.png")).getImage();
                 getjDesktopPane1().setBorder(new Fondo(fondoImg));
+                
         }       
             
-    });
+    });*/
         
         getjMenuItem1().addActionListener(new ActionListener() {
             @Override
@@ -190,7 +288,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             return titulo.substring(0,inicio-1);
     }
     
-    private void agregarListener()
+    private void agregarListenerBotones()
     {
         getBtnNuevo().addActionListener(new ActionListener() {
             @Override
@@ -224,6 +322,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         }
                         else
                         {
+                            mostrarConsola(frameInterface.consola);
                             JOptionPane.showMessageDialog(null,"Error de validacion Nuevo");
                         }
                     }
@@ -236,6 +335,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         }
                         else
                         {
+                            mostrarConsola(frameInterface.consola);
                             JOptionPane.showMessageDialog(null,"Error de validacion Editar");
                         }
                     
@@ -346,60 +446,55 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         getBtnAyuda().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    /*
-                    String pagina = "http://www.google.com";
-                    JEditorPane pane = new JEditorPane();
-                    pane.setSize(400,400);
-                    JScrollPane scroll = new JScrollPane(pane);
-                    scroll.setSize(400,400);
-                    JPanel panelPagina=new JPanel();
-                    panelPagina.add(scroll);
-                    panelPagina.setSize(400, 400);
-                    generalPanelModel.add(panelPagina,java.awt.BorderLayout.LINE_END);
-                    generalPanelModel.invalidate();
-                    generalPanelModel.validate();
-                    generalPanelModel.repaint();
-                    */
                     cargarAyuda();
-                    cargarPublicidad();
-                    //limpiarCamposValidacion(frameInterface);
+                    mostrarPanelSecundario(true);
+                    
                 }
             });
-        
-         getjSplitPanel().addPropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY, new PropertyChangeListener() {
-
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                if(browser!=null)
-                {
-                    //System.out.println("redimensionando panel:"+getJPanelContenidoAuxiliar().getWidth()+":"+getJPanelContenidoAuxiliar().getHeight());
-                    browser.setBounds(1, 1, getJPanelContenidoAuxiliar().getWidth() - 1, getJPanelContenidoAuxiliar().getHeight() - 1);
-                }
-            }
-        });
         
          getBtnSalirPantallAuxiliar().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    getjSplitPanel().setDividerLocation(0d);
-                    browser=null;
+                    getjSplitPanel().setDividerLocation(PROPORCION_HORIZONTAL_INICIAL);
+                    PROPORCION_HORIZONTAL=PROPORCION_HORIZONTAL_INICIAL;
+                    //browser=null;
                 }
             });
          
          getBtnSalirPantallaPublicidad().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    getjSplitPanelVerticalSecundario().setDividerLocation(0.999999999999d);
-                    browser=null;
+                    getjSplitPanelVerticalSecundario().setDividerLocation(0.9999999999d);
+                    PROPORCION_VERTICAL=0.9999999999d;
+                    //browser=null;
                 }
             });
         
     }   
     
+    private void mostrarPanelSecundario(boolean  opcion)
+    {
+        if(opcion)
+        {
+            //Valores para mostrar en la pantalla secundaria
+            PROPORCION_HORIZONTAL = PROPORCION_HORIZONTAL_DEFAULT;
+            PROPORCION_VERTICAL = PROPORCION_VERTICAL_DEFAULT;
+        }
+        else
+        {
+            PROPORCION_HORIZONTAL = PROPORCION_HORIZONTAL_INICIAL;
+            PROPORCION_VERTICAL = 0.9999999999999999d;
+
+        }
+
+        getjSplitPanel().setDividerLocation(PROPORCION_HORIZONTAL);
+        getjSplitPanelVerticalSecundario().setDividerLocation(PROPORCION_VERTICAL);
+
+    }
+    
     private void agregarListenerMenu(GeneralPanelInterface panel)
     {
         try {
-            panel.estadoFormulario= GeneralPanelInterface.ESTADO_GRABAR;
             panel.panelPadre=generalPanelModel;
             panel.addInternalFrameListener(listenerFrame);
             String tituloOriginal=getTituloOriginal(panel.getTitle());
@@ -409,6 +504,10 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             panel.show();
             agregarValidadores(panel);
             agregarAyudas(panel);
+            
+            panel.estadoFormulario= GeneralPanelInterface.ESTADO_GRABAR;
+            mostrarConsola(panel.consola);
+                        
         } catch (PropertyVetoException ex) {
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -460,7 +559,6 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     
     private void limpiar(GeneralPanelInterface panel)
     {
-       ConsolaGeneral consola=new ConsolaGeneral();
        boolean validado=true;
        
        Class classVentana=panel.getClass();
@@ -516,9 +614,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     
     private boolean validarFormulario(GeneralPanelInterface panel)
     {
-       ConsolaGeneral consola=new ConsolaGeneral();
-       boolean validado=true;
-       
+       //Volver a crear los errores pendientes
+       panel.consola=new ConsolaGeneral();
+       boolean validado=true;       
        Class classVentana=panel.getClass();
         Method[] metodos=classVentana.getMethods();
         for (Method metodo : metodos) {
@@ -529,48 +627,21 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 
                 try {
                     JTextComponent componente=(JTextComponent) metodo.invoke(panel);
-                    componente.setBackground(new Color(255,255,102));
-                    Vector<String> errores=validar(validacion,componente);
+                    Vector<String> errores=validarComponente(validacion,componente,panel);
+                    
+                    if(errores.size()>0)
+                    {
+                        //Si Existe errores pinto de colo amarillo
+                        componente.setBackground(new Color(255,255,102));
+                    }
+                    
                     for (String error : errores) {
-                        consola.agregarDatos(validacion.nombre(),error,componente);
+                        panel.consola.agregarDatos(validacion.nombre(),error,componente);
                         validado=false;
                     }
                     
-                    //Validacion personalizada
-                    String[] personalizados=validacion.personalizado();
-                    for (String personalizado : personalizados) {
-                        if(!personalizado.equals(""))
-                        {
-                            Method[] metodosValidar=classVentana.getMethods();
-                            for (Method method : metodosValidar) 
-                            {
-                                ///System.out.println(method.getName());
-                                validacionPersonalizadaAnotacion validacionPersonalizada=method.getAnnotation(validacionPersonalizadaAnotacion.class);
-
-                                if(validacionPersonalizada!=null)
-                                {
-                                    if(personalizado.equals(method.getName()))
-                                    {
-                                        boolean resultado=(boolean) method.invoke(panel);                                        
-                                        if(!resultado)
-                                        {
-                                            consola.agregarDatos(validacion.nombre(),validacionPersonalizada.errorTitulo(),componente);
-                                            validado=false;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
                     
-                                        
-                    
-                    
-                    
-                    //JTextField
-                    
-                    
-                    
+               
                 } catch (IllegalAccessException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IllegalArgumentException ex) {
@@ -580,16 +651,12 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 }
             }
         }
-        
-        if(!validado)
-        {
-            mostrarConsola(consola);
-        }
-        
         return validado;
     }
     
-    private Vector<String> validar(ValidacionCodefacAnotacion validacion,JTextComponent componente)
+
+    
+    private Vector<String> validarComponente(ValidacionCodefacAnotacion validacion,JTextComponent componente,GeneralPanelInterface panel)
     {
         Vector<String> validar=new Vector<String>();
         if(validacion.requerido())
@@ -614,6 +681,34 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             if(!Pattern.matches(validacion.expresionRegular(),componente.getText()))
             {
                 validar.add("expresion regular fallo");
+            }
+        }
+        
+        String[] personalizados = validacion.personalizado();
+        for (String personalizado : personalizados) {
+            if (!personalizado.equals("")) {
+                Method[] metodosValidar = panel.getClass().getMethods();
+                for (Method method : metodosValidar) {
+                    ///System.out.println(method.getName());
+                    validacionPersonalizadaAnotacion validacionPersonalizada = method.getAnnotation(validacionPersonalizadaAnotacion.class);
+
+                    if (validacionPersonalizada != null) {
+                        if (personalizado.equals(method.getName())) {
+                            try {
+                                boolean resultado = (boolean) method.invoke(panel);
+                                if (!resultado) {
+                                    validar.add(validacionPersonalizada.errorTitulo());
+                                }
+                            } catch (IllegalAccessException ex) {
+                                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (IllegalArgumentException ex) {
+                                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (InvocationTargetException ex) {
+                                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                    }
+                }
             }
         }
         
@@ -657,8 +752,16 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
        getjTablaConsola().setModel(consola.getModeloTabla());
        getJPanelContenidoAuxiliar().removeAll();
        getJPanelContenidoAuxiliar().add(getJPanelConsola());
-       getjSplitPanel().setDividerLocation(0.25d);
        
+       if(consola.getModeloTabla().getRowCount()>0)
+       {
+           mostrarPanelSecundario(true);
+       }
+       else
+       {
+           mostrarPanelSecundario(false);
+       }
+      
     }
     
     private void agregarValidadores(GeneralPanelInterface panel)
@@ -667,14 +770,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         Method[] metodos=classVentana.getMethods();
         for (Method metodo : metodos) {
             ValidacionCodefacAnotacion validacion=metodo.getAnnotation(ValidacionCodefacAnotacion.class);
-            //System.out.println(metodo.getName());
             if(validacion!=null)
             {
                 try {
                     JTextComponent componente=(JTextComponent) metodo.invoke(panel);
-                    componente.setBorder(BorderFactory.createMatteBorder(
-                                    1, 5, 1, 1, new Color(122, 138, 153)));
-
+                    componente.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(122, 138, 153)));
                     componente.addFocusListener(new FocusListener() {
                         @Override
                         public void focusGained(FocusEvent e) {
@@ -683,24 +783,24 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
                         @Override
                         public void focusLost(FocusEvent e) {
-                            if(componente.getText().equals(""))
+                            Vector<String> errores = validarComponente(validacion, componente, panel);
+                            for (String error : errores) {
+                                panel.consola.agregarDatos(validacion.nombre(), error, componente);
+                            }
+                            
+                            if(errores.size()>0)
                             {
-                                //componente.setText("ingrese datos");
-                                //componente.requestFocus();
                                 componente.setBackground(new Color(255,255,102));
-                                //omponent[] componentes=componente.getComponents();
-                                //Container c=componente.getParent();
-                                //JLabel myLabel = new JLabel("Team 1");
-                                //c.add(myLabel);
-                                //for (Component componente1 : componentes) {
-                                //    System.out.println(componente1);
-                                //}
-                                
+                                mostrarConsola(panel.consola);                                
                             }
                             else
                             {
-                                componente.setBackground(Color.WHITE);
+                                panel.consola.quitarDato(componente);
+                                componente.setBackground(Color.white);
+                                mostrarConsola(panel.consola);   
+                                
                             }
+                            
                         }
                     });
 
@@ -816,6 +916,24 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private void iniciarComponentes()
     {
         controladorVista=new ControladorVista();
+        
+        //Cargar configuraciones de los divisores
+        PROPORCION_HORIZONTAL=PROPORCION_HORIZONTAL_INICIAL;
+        PROPORCION_VERTICAL=PROPORCION_VERTICAL_INICIAL;
+        
+        getjSplitPanel().setDividerLocation(PROPORCION_HORIZONTAL);
+        getjSplitPanelVerticalSecundario().setDividerLocation(PROPORCION_VERTICAL);
+        
+        //Cargar el fondo de la pantalla
+        Image fondoImg=new javax.swing.ImageIcon(getClass().getResource("/img.general/fondoGeneral.png")).getImage();
+        getjDesktopPane1().setBorder(new Fondo(fondoImg));
+        
+        //Setear el segundo componente de la ventana auxliar
+        getjSplitPanel().setRightComponent(getJpanelAuxiliar());
+        
+        //Cargar el componente de publicidad para que siempre exista
+        cargarPublicidad();
+        
     }
     
     private void seleccionaPanel(GeneralPanelInterface panelInterface)
@@ -823,56 +941,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         
         this.panelActual=panelInterface;
         this.controladorVista.agregarVista(panelInterface);
-        
-        //JPanel panel=(JPanel)panelInterface;
-       // panel.setPreferredSize(getjPanel4().getSize());
-        /*
-        this.getjPanel4().removeAll();
-        this.getjPanel4().add(panel,BorderLayout.BEFORE_FIRST_LINE);
-        this.getjPanel4().revalidate();
-        this.getjPanel4().repaint();
-        
-        actualizarVistasActivas();*/
     }
-    
-    private void mostrarVista(GeneralPanelInterface panelInterface)
-    {
-        //JPanel panel=(JPanel)panelInterface;
-        //panel.setPreferredSize(getjPanel4().getSize());
-        
-        /**
-        this.getjPanel4().removeAll();
-        this.getjPanel4().add(panel,BorderLayout.BEFORE_FIRST_LINE);
-        this.getjPanel4().revalidate();
-        this.getjPanel4().repaint();
-    }
-    
-    private void actualizarVistasActivas()
-    {
-        DefaultListModel modelo = new DefaultListModel();
-        for (GeneralPanelInterface panel :controladorVista.getListaPaneles() ) {
-            modelo.addElement(panel.getNombre());
-            
-        }
-        getjList2().setModel(modelo);
-        //getjList2().setCellRenderer(new CountryRenderer());
-        /*getjList2().setCellRenderer(new DefaultListCellRenderer() {
-            @Override
-        public Component getListCellRendererComponent(JList<? extends Country> list, Country country, int index,
-            boolean isSelected, boolean cellHasFocus) {
-
-            String code = country.getCode();
-            ImageIcon imageIcon = new ImageIcon(getClass().getResource("/images/" + code + ".png"));
-
-            setIcon(imageIcon);
-            setText(country.getName());
-
-            return this;
-        }
-        });*/
-
-    }
-    
     
     public void agregarReportePantalla()
     {
