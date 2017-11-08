@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Vector;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -53,15 +55,31 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
     
     private void crearModeloTabla()
     {
-        this.modeloTablaBuscar=new DefaultTableModel(this.model.getColumnas(),0){
+        Vector<ColumnaDialogo> columnas=this.model.getColumnas();
+        Vector<String> titulos=new Vector<String>();
+        Vector<Double> tamanios=new Vector<Double>();
+        for (ColumnaDialogo columna : columnas) {
+            titulos.add(columna.getNombre());
+            tamanios.add(columna.getPorcentaje());
+        }
+
+        this.modeloTablaBuscar=new DefaultTableModel(titulos,0){
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
             
         };
-        
+       
         this.getTblTabla().setModel(this.modeloTablaBuscar);
+        //Establecer el ancho de las tablas
+        TableColumnModel columnasTabla=this.getTblTabla().getColumnModel();
+        
+        for (int i = 0; i < columnasTabla.getColumnCount(); i++) {
+            double tamanio=(double)tamanios.get(i)*(double)getTblTabla().getWidth();
+            columnasTabla.getColumn(i).setPreferredWidth((int)tamanio);
+        }
+        
         
     }
     

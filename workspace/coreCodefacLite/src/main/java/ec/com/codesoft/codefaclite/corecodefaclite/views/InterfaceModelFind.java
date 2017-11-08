@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.corecodefaclite.views;
 
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -15,7 +16,7 @@ import java.util.Vector;
  */
 public interface InterfaceModelFind<T>
 {
-    public abstract Vector<String> getColumnas();
+    public abstract Vector<ColumnaDialogo> getColumnas();
     public abstract List<T> getConsulta();
     public abstract void agregarObjeto(T t,Vector dato);
     public abstract Boolean buscarObjeto(T t,Object valor);

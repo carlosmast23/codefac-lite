@@ -218,6 +218,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 getJPanelContenidoAuxiliar().removeAll();
                 getJPanelContenidoAuxiliar().add(browser);
             }
+            else
+            {
+                getJPanelContenidoAuxiliar().removeAll();
+                getJPanelContenidoAuxiliar().add(browser);
+            }
         }
         else
         {
@@ -227,6 +232,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             getJPanelContenidoAuxiliar().removeAll();
             getJPanelContenidoAuxiliar().add(browser);
         }
+        //getjSplitPanelVerticalSecundario().setLeftComponent(getJPanelContenidoAuxiliar());
             
     }
     
@@ -376,6 +382,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     frameInterface.buscar();
                     frameInterface.estadoFormulario= GeneralPanelInterface.ESTADO_EDITAR;
                     limpiarCamposValidacion(frameInterface);
+                    mostrarPanelSecundario(false);
                 }
                 catch (UnsupportedOperationException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);

@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.crm.busqueda;
 
 
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
@@ -21,15 +22,16 @@ public class ClienteBusquedaDialogo implements InterfaceModelFind<Persona>
 {
 
     @Override
-    public Vector<String> getColumnas() 
+    public Vector<ColumnaDialogo> getColumnas() 
     {
-        Vector<String> titulo=new Vector<String>();
-        titulo.add("Nombre");
-        titulo.add("Identificacion");
-        titulo.add("Telefono");
-        titulo.add("Extension");
-        titulo.add("Celular");
-        titulo.add("Correo");
+        Vector<ColumnaDialogo> titulo=new Vector<ColumnaDialogo>();
+        titulo.add(new ColumnaDialogo("Nombre",0.3d));
+        titulo.add(new ColumnaDialogo("Identificacion",0.2d));
+        titulo.add(new ColumnaDialogo("Telefono",0.15d));
+        titulo.add(new ColumnaDialogo("Extension",0.10d));
+        titulo.add(new ColumnaDialogo("Celular",0.10d));
+        titulo.add(new ColumnaDialogo("Correo",0.15d));
+        
         return titulo;
       
     }
