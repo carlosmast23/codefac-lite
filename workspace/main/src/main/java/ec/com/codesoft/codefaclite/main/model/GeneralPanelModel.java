@@ -227,10 +227,20 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         else
         {
             browser = new SwingBrowser();
-            browser.loadURL(panel.getURLAyuda());
-            browser.setBounds(1, 1, getJPanelContenidoAuxiliar().getWidth() - 1, getJPanelContenidoAuxiliar().getHeight() - 1);
-            getJPanelContenidoAuxiliar().removeAll();
-            getJPanelContenidoAuxiliar().add(browser);
+            if(panel!=null)
+            {
+                browser.loadURL(panel.getURLAyuda());
+                browser.setBounds(1, 1, getJPanelContenidoAuxiliar().getWidth() - 1, getJPanelContenidoAuxiliar().getHeight() - 1);
+                getJPanelContenidoAuxiliar().removeAll();
+                getJPanelContenidoAuxiliar().add(browser);
+            }
+            else
+            {
+                browser.loadURL("https://www.google.com.ec/");
+                browser.setBounds(1, 1, getJPanelContenidoAuxiliar().getWidth() - 1, getJPanelContenidoAuxiliar().getHeight() - 1);
+                getJPanelContenidoAuxiliar().removeAll();
+                getJPanelContenidoAuxiliar().add(browser);
+            }
         }
         //getjSplitPanelVerticalSecundario().setLeftComponent(getJPanelContenidoAuxiliar());
             
@@ -500,9 +510,10 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             PROPORCION_VERTICAL = 0.9999999999999999d;
 
         }
-
+        
         getjSplitPanel().setDividerLocation(PROPORCION_HORIZONTAL);
         getjSplitPanelVerticalSecundario().setDividerLocation(PROPORCION_VERTICAL);
+
 
     }
     
@@ -516,11 +527,15 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             getjDesktopPane1().add(panel);
             panel.setMaximum(true);
             panel.show();
+            getBtnNuevo().requestFocus();
             agregarValidadores(panel);
             agregarAyudas(panel);
             
             panel.estadoFormulario= GeneralPanelInterface.ESTADO_GRABAR;
+            
+            panel.consola=new ConsolaGeneral();
             mostrarConsola(panel.consola);
+            
                         
         } catch (PropertyVetoException ex) {
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -546,7 +561,6 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     String htmlText="";
                     while ( (line = br.readLine()) != null)
                     {
-                        System.out.println(line);
                         htmlText+=line;
                     }
                     
@@ -579,7 +593,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         Method[] metodos=classVentana.getMethods();
         for (Method metodo : metodos) {
             LimpiarAnotacion validacion=metodo.getAnnotation(LimpiarAnotacion.class);
-            //System.out.println(metodo.getName());
+
             if(validacion!=null)
             {
                 validado=false;
@@ -797,6 +811,18 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
                         @Override
                         public void focusLost(FocusEvent e) {
+                            System.out.println("focusLost");
+                            if (panel.sinAcciones) {
+                                panel.sinAcciones = false;
+                                return;
+                            }
+                            
+                            if(panel.formularioCerrando)
+                            {
+                                return;
+                            }
+
+                            
                             Vector<String> errores = validarComponente(validacion, componente, panel);
                             panel.consola.quitarDato(componente);
                             for (String error : errores) {
@@ -834,28 +860,32 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     InternalFrameListener listenerFrame=new InternalFrameListener() {
                         @Override
                         public void internalFrameOpened(InternalFrameEvent e) {
-
                         }
 
                         @Override
                         public void internalFrameClosing(InternalFrameEvent e) {
-
+                            // System.out.println("internalFrameClosing");
+                            GeneralPanelInterface panel=(GeneralPanelInterface) getjDesktopPane1().getSelectedFrame();
+                            panel.formularioCerrando=true;
+                            cargarAyuda();                            
+                            mostrarPanelSecundario(false);
                         }
 
                         @Override
                         public void internalFrameClosed(InternalFrameEvent e) {
-                            //habilitarBotones(false);
+                               //System.err.println("internalFrameClosed");
                         }
 
                         @Override
                         public void internalFrameIconified(InternalFrameEvent e) {
-
+                            //mostrarPanelSecundario(false);
                         }
 
                         @Override
                         public void internalFrameDeiconified(InternalFrameEvent e) {
                             //JOptionPane.showMessageDialog(null,"internalFrameDeiconified");
                             habilitarConfiguracioneBotones();
+                            //mostrarPanelSecundario(true);
                         }
 
                         @Override
@@ -868,6 +898,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         @Override
                         public void internalFrameDeactivated(InternalFrameEvent e) {
                              habilitarBotones(false);
+                             //System.err.println("internalFrameDeactivated");
                             //habilitarConfiguracioneBotones();
                             //JOptionPane.showMessageDialog(null,"internalFrameDeactivated");
                         }

@@ -24,7 +24,13 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
     public static final int BOTON_BUSCAR = 7;
     
     public InterfazComunicacionPanel panelPadre;
-    public ConsolaGeneral consola=new ConsolaGeneral();
+    public ConsolaGeneral consola;
+    
+    /**
+     * Variables para corregir bugs de los internal frames
+     */
+    public boolean sinAcciones=true;
+    public boolean formularioCerrando=false;
     
     public static final String ESTADO_GRABAR="G";
     public static final String ESTADO_EDITAR="E";
