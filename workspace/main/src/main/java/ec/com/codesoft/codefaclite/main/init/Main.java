@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.main.init;
 
 import ec.com.codesoft.codefaclite.main.model.GeneralPanelModel;
 import ec.com.codesoft.codefaclite.main.panel.LoginForm;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
@@ -22,6 +23,8 @@ public class Main {
     public static void main(String[] args) {
         componentesIniciales();        
         GeneralPanelModel panel=new GeneralPanelModel();
+        panel.setIconImage(new javax.swing.ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourcePath("logoCodefac-ico.png")).getImage()); // NOI18N
+        
         panel.setVisible(true);
         panel.setExtendedState(MAXIMIZED_BOTH);
         
