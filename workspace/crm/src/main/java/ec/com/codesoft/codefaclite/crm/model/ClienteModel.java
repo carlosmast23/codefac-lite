@@ -42,6 +42,8 @@ public class ClienteModel extends ClienteForm
 {
     private PersonaService personaService;
     private Persona persona;
+    private String comboIdentificacion [] = {"CEDULA","RUC","PASAPORTE","IDENTIFICACION DEL EXTERIOR","PLACA"};
+    private String comboTipoCliente [] = {"CLIENTE","SUJETO RETENIDO","DESTINATARIO"};
 
     public ClienteModel()
     {
@@ -52,35 +54,42 @@ public class ClienteModel extends ClienteForm
     @Override
     public void grabar() 
     {
-        Persona p = new Persona();
-        //p.setIdcliente(3);
-        p.setNombreSocial(getjTextNombreSocial().getText());
-        p.setTipoIdentificacion((String) getjComboIdentificacion().getSelectedItem());
-        p.setCedula(Integer.parseInt(getjTextIdentificacion().getText()));
-        p.setTipCliente((String) getjComboTipoCliente().getSelectedItem());
-        p.setDireccion(getjTextAreaDireccion().getText());
-        p.setTelefonoConvencional(getjTextTelefono().getText());
-        p.setExtensionTelefono(getjTextExtension().getText());
-        p.setTelefonoCelular(getjTextCelular().getText());
-        p.setCorreoElectronico(getjTextCorreo().getText());
+        persona = new Persona();
+        persona.setNombreSocial(getjTextNombreSocial().getText());
+        persona.setTipoIdentificacion((String) getjComboIdentificacion().getSelectedItem());
+        persona.setIdentificacion(getjTextIdentificacion().getText());
+        persona.setTipCliente((String) getjComboTipoCliente().getSelectedItem());
+        persona.setDireccion(getjTextAreaDireccion().getText());
+        persona.setTelefonoConvencional(getjTextTelefono().getText());
+        persona.setExtensionTelefono(getjTextExtension().getText());
+        persona.setTelefonoCelular(getjTextCelular().getText());
+        persona.setCorreoElectronico(getjTextCorreo().getText());
+        personaService.grabar(persona);
         
-        personaService.grabar(p);
-        System.err.println("GRABADO");
-       
+        System.err.println("Se grabo correctamente");
     }
 
     @Override
     public void editar() 
     {
-        persona.setCedula(Integer.parseInt(getjTextIdentificacion().getText()));
         persona.setNombreSocial(getjTextNombreSocial().getText());
+        persona.setTipoIdentificacion((String) getjComboIdentificacion().getSelectedItem());
+        persona.setIdentificacion(getjTextIdentificacion().getText());
+        persona.setTipCliente((String)getjComboTipoCliente().getSelectedItem());
+        persona.setDireccion(getjTextAreaDireccion().getText());
+        persona.setTelefonoConvencional(getjTextTelefono().getText());
+        persona.setExtensionTelefono(getjTextExtension().getText());
+        persona.setTelefonoCelular(getjTextCelular().getText());
+        persona.setCorreoElectronico(getjTextCorreo().getText());
+   
         personaService.editar(persona);
         System.out.println("Se edito correctamente");
     }
 
     @Override
-    public void eliminar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void eliminar() 
+    {
+        
     }
 
     @Override
@@ -131,31 +140,110 @@ public class ClienteModel extends ClienteForm
         buscarDialogoModel.setVisible(true);
         persona=(Persona) buscarDialogoModel.getResultado();
         getjTextNombreSocial().setText(persona.getNombreSocial());
-        getjTextIdentificacion().setText(""+persona.getCedula());
-        System.out.println(persona.getCedula());
-        System.out.println(persona.getNombreSocial());
+        getjTextIdentificacion().setText(""+persona.getIdentificacion());
+        persona.setNombreSocial(getjTextNombreSocial().getText());
+        getjComboIdentificacion().setSelectedIndex(comboIdentificacion(persona.getIdentificacion()));
+        getjTextIdentificacion().setText(persona.getIdentificacion());
+        getjComboTipoCliente().setSelectedItem(persona.getTipCliente());
+        getjTextAreaDireccion().setText(persona.getDireccion());
+        getjTextTelefono().setText(persona.getTelefonoConvencional());
+        getjTextExtension().setText(persona.getExtensionTelefono());
+        getjTextCelular().setText(persona.getTelefonoCelular());
+        getjTextCorreo().setText(persona.getCorreoElectronico());
+       
+        System.out.println("Datos cargados ");
     }
     
     @validacionPersonalizadaAnotacion(errorTitulo = "formato cedula incorrecto")
     public boolean validarCedula()
     {
-        /*
-        if(getjTextField1().getText().equals("hola"))
+        System.out.println("Ingreso a la validacion --> cedula");
+                
+        String cedula=getjTextIdentificacion().getText();
+        boolean cedulaCorrecta = false;
+        try 
         {
-            return true;
-        }*/
-        return true;
+            if (cedula.length() == 10) // ConstantesApp.LongitudCedula
+            {
+            int tercerDigito = Integer.parseInt(cedula.substring(2, 3));
+            if (tercerDigito < 6) 
+            {
+                // Coeficientes de validación cédula
+                // El decimo digito se lo considera dígito verificador
+                int[] coefValCedula = { 2, 1, 2, 1, 2, 1, 2, 1, 2 };
+                int verificador = Integer.parseInt(cedula.substring(9,10));
+                int suma = 0;
+                int digito = 0;
+                for (int i = 0; i < (cedula.length() - 1); i++)
+                {
+                    digito = Integer.parseInt(cedula.substring(i, i + 1))* coefValCedula[i];
+                    suma += ((digito % 10) + (digito / 10));
+                }
+
+                if ((suma % 10 == 0) && (suma % 10 == verificador)) 
+                {
+                    cedulaCorrecta = true;
+                }
+                else if ((10 - (suma % 10)) == verificador) 
+                {
+                    cedulaCorrecta = true;
+                } 
+                else 
+                {
+                    cedulaCorrecta = false;
+                }
+            } else 
+            {
+                cedulaCorrecta = false;
+            }
+            } else 
+            {
+                cedulaCorrecta = false;
+            }
+        } catch (NumberFormatException nfe) 
+        {
+            cedulaCorrecta = false;
+        } catch (Exception err) 
+        {
+            System.out.println("Una excepcion ocurrio en el proceso de validadcion");
+            cedulaCorrecta = false;
+        }
+
+        if (!cedulaCorrecta) 
+        {
+            System.out.println("La Cédula ingresada es Incorrecta");
+        }
+        return cedulaCorrecta;
+
     }
     
     @validacionPersonalizadaAnotacion(errorTitulo = "formato otra validacion incorrecto")
     public boolean validarOtro()
     {
-        /*
-        if(getjTextField1().getText().equals("holas"))
-        {
-            return true;
-        }*/
         return true;
     }
     
+    public int comboIdentificacion(String op)
+    {
+        for(int i=0; i<comboIdentificacion.length; i++)
+        {
+                if(op.equals(comboIdentificacion[i]))
+                {
+                    return i;
+                }
+        }
+        return 0;
+    }
+    public int comboTipoCliente(String op)
+    {
+        for(int i=0; i<comboTipoCliente.length; i++)
+        {
+                if(op.equals(comboTipoCliente[i]))
+                {
+                    return i;
+                }
+        }
+        return 0;
+    }
+            
 }

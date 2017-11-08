@@ -28,8 +28,8 @@ public class CrearBaseDatos
             if (conn!=null)
             {
                 JOptionPane.showMessageDialog(null,"OK base de datos listo");
-                String creartabla="create table CLIENTE( ID_CLIENTE integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1) , NOMBRE_SOCIAL varchar(256),TIPO_IDENTIFICACION varchar(64), CEDULA int, TIPO_CLIENTE varchar(12),DIRECCION varchar(1024), TELEFONO_CONVENCIONAL varchar(12),EXTENSION_TELEFONO varchar(256), TELEFONO_CELULAR varchar(12), CORREO_ELECTRONICO varchar(60),  primary key (ID_CLIENTE))";
-                //String creartabla="DROP TABLE CLIENTE";
+                //String creartabla="create table CLIENTE( ID_CLIENTE integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1) , NOMBRE_SOCIAL varchar(256),TIPO_IDENTIFICACION varchar(30), IDENTIFICACION varchar(13), TIPO_CLIENTE varchar(15),DIRECCION varchar(1024), TELEFONO_CONVENCIONAL varchar(9),EXTENSION_TELEFONO varchar(4), TELEFONO_CELULAR varchar(10), CORREO_ELECTRONICO varchar(60),  primary key (ID_CLIENTE))";
+                String creartabla="DROP TABLE CLIENTE";
                 //String desc="disconnect;";
                 PreparedStatement pstm = conn.prepareStatement(creartabla);
                 pstm.execute();

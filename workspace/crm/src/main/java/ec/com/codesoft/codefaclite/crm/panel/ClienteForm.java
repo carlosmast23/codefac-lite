@@ -296,32 +296,11 @@ public abstract class ClienteForm extends GeneralPanelInterface {
     private javax.swing.JTextField jTextNombreSocial;
     private javax.swing.JTextField jTextTelefono;
     // End of variables declaration//GEN-END:variables
-    @LimpiarAnotacion
-    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
-    @ValidacionCodefacAnotacion(personalizado ={"validarCedula","validarOtro"}  ,requerido=true , min=0 ,max = 15,expresionRegular = "",nombre = "Nombre Social")
-    public JTextField getjTextField1() {
-        return jTextNombreSocial;
-    }
-
     
-    public void setjTextField1(JTextField jTextField1) {
-        this.jTextNombreSocial = jTextField1;
-    }
-
-    @LimpiarAnotacion
-    @ValidacionCodefacAnotacion()
-    public JTextField getjTextField2() {
-        return jTextIdentificacion;
-    }
-
-    public void setjTextField2(JTextField jTextField2) {
-        this.jTextIdentificacion = jTextField2;
-    }
-
     public JComboBox<String> getjComboIdentificacion() {
         return jComboIdentificacion;
     }
-
+    
     public void setjComboIdentificacion(JComboBox<String> jComboIdentificacion) {
         this.jComboIdentificacion = jComboIdentificacion;
     }
@@ -341,7 +320,10 @@ public abstract class ClienteForm extends GeneralPanelInterface {
     public void setjPanelCaracteristicasGenerales(JPanel jPanelCaracteristicasGenerales) {
         this.jPanelCaracteristicasGenerales = jPanelCaracteristicasGenerales;
     }
-
+    
+    @LimpiarAnotacion
+    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
+    @ValidacionCodefacAnotacion(requerido=true , min=0 ,max = 1024,expresionRegular = "^[A-Za-z0-9\\s]*$",nombre = "Direccion")
     public JTextArea getjTextAreaDireccion() {
         return jTextAreaDireccion;
     }
@@ -349,7 +331,10 @@ public abstract class ClienteForm extends GeneralPanelInterface {
     public void setjTextAreaDireccion(JTextArea jTextAreaDireccion) {
         this.jTextAreaDireccion = jTextAreaDireccion;
     }
-
+    
+    @LimpiarAnotacion
+    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0][0-9]{9}$",nombre = "Celular")
     public JTextField getjTextCelular() {
         return jTextCelular;
     }
@@ -357,7 +342,10 @@ public abstract class ClienteForm extends GeneralPanelInterface {
     public void setjTextCelular(JTextField jTextCelular) {
         this.jTextCelular = jTextCelular;
     }
-
+    
+    @LimpiarAnotacion
+    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$",nombre = "Correo Electronico")
     public JTextField getjTextCorreo() {
         return jTextCorreo;
     }
@@ -366,6 +354,9 @@ public abstract class ClienteForm extends GeneralPanelInterface {
         this.jTextCorreo = jTextCorreo;
     }
 
+    @LimpiarAnotacion
+    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
+    @ValidacionCodefacAnotacion(requerido=true , min=0 ,max = 4,expresionRegular = "^[0-9]*$",nombre = "Extension")
     public JTextField getjTextExtension() {
         return jTextExtension;
     }
@@ -373,7 +364,10 @@ public abstract class ClienteForm extends GeneralPanelInterface {
     public void setjTextExtension(JTextField jTextExtension) {
         this.jTextExtension = jTextExtension;
     }
-
+    
+    @LimpiarAnotacion
+    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
+    @ValidacionCodefacAnotacion(personalizado ={"validarCedula"}  ,requerido=true , min=0 ,max = 10,expresionRegular = "",nombre = "Identificacion")
     public JTextField getjTextIdentificacion() {
         return jTextIdentificacion;
     }
@@ -381,7 +375,10 @@ public abstract class ClienteForm extends GeneralPanelInterface {
     public void setjTextIdentificacion(JTextField jTextIdentificacion) {
         this.jTextIdentificacion = jTextIdentificacion;
     }
-
+    
+    @LimpiarAnotacion
+    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
+    @ValidacionCodefacAnotacion(requerido=true , min=5 ,max = 100,expresionRegular = "",nombre = "Nombre Social")
     public JTextField getjTextNombreSocial() {
         return jTextNombreSocial;
     }
@@ -389,7 +386,10 @@ public abstract class ClienteForm extends GeneralPanelInterface {
     public void setjTextNombreSocial(JTextField jTextNombre) {
         this.jTextNombreSocial = jTextNombre;
     }
-
+    
+    @LimpiarAnotacion
+    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0][0-9]{8}$",nombre = "Telefono")
     public JTextField getjTextTelefono() {
         return jTextTelefono;
     }

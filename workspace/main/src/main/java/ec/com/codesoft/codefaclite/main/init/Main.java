@@ -27,7 +27,8 @@ public class Main {
         
         panel.setVisible(true);
         panel.setExtendedState(MAXIMIZED_BOTH);
-        
+        String dato="Identificacion del Exterior";
+        System.out.println("----------------->"+dato.length());
         //JOptionPane.showMessageDialog(null,"jemplo ");
         /*
         UsuarioModeloBusqueda modelo=new UsuarioModeloBusqueda();

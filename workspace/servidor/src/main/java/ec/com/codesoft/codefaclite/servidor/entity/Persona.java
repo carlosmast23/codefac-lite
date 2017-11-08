@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Persona.findAll", query = "SELECT p FROM Persona p"),
-    @NamedQuery(name = "Persona.findByCedula", query = "SELECT p FROM Persona p WHERE p.cedula = :cedula"),
+    @NamedQuery(name = "Persona.findByIdentificacion", query = "SELECT p FROM Persona p WHERE p.identificacion = :identificacion"),
     @NamedQuery(name = "Persona.findByNombre", query = "SELECT p FROM Persona p WHERE p.nombreSocial = :nombre")})
 public class Persona implements Serializable {
 
@@ -35,9 +35,9 @@ public class Persona implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column (name = "ID_CLIENTE")
-    private Integer  idcliente;
-    @Column(name = "CEDULA")
-    private Integer cedula;
+    private Integer  idCliente;
+    @Column(name = "IDENTIFICACION")
+    private String identificacion;
     @Column(name = "TIPO_IDENTIFICACION")
     private String tipoIdentificacion;
     @Column(name = "NOMBRE_SOCIAL")
@@ -55,23 +55,22 @@ public class Persona implements Serializable {
     @Column(name = "CORREO_ELECTRONICO")
     private String correoElectronico;
 
-    public Integer getIdcliente() {
-        return idcliente;
+    public Integer getIdCliente() {
+        return idCliente;
     }
 
-    public void setIdcliente(Integer idcliente) {
-        this.idcliente = idcliente;
+    public void setIdCliente(Integer idcliente) {
+        this.idCliente = idcliente;
+    }
+
+    public String getIdentificacion() {
+        return identificacion;
+    }
+
+    public void setIdentificacion(String identificacion) {
+        this.identificacion = identificacion;
     }
     
-    
-    public Integer getCedula() {
-        return cedula;
-    }
-
-    public void setCedula(Integer cedula) {
-        this.cedula = cedula;
-    }
-
     public String getTipoIdentificacion() {
         return tipoIdentificacion;
     }
@@ -140,7 +139,7 @@ public class Persona implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (cedula != null ? cedula.hashCode() : 0);
+        hash += (identificacion != null ? identificacion.hashCode() : 0);
         return hash;
     }
 
@@ -151,7 +150,7 @@ public class Persona implements Serializable {
             return false;
         }
         Persona other = (Persona) object;
-        if ((this.cedula == null && other.cedula != null) || (this.cedula != null && !this.cedula.equals(other.cedula))) {
+        if ((this.identificacion == null && other.identificacion != null) || (this.identificacion != null && !this.identificacion.equals(other.identificacion))) {
             return false;
         }
         return true;
@@ -159,7 +158,7 @@ public class Persona implements Serializable {
 
     @Override
     public String toString() {
-        return "ec.com.codesoft.codefaclite.servidor.entity.Persona[ cedula=" + cedula + " ]";
+        return "ec.com.codesoft.codefaclite.servidor.entity.Persona[ cedula=" + identificacion + " ]";
     }
     
 }

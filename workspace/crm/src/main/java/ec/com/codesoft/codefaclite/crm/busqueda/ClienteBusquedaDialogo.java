@@ -24,9 +24,12 @@ public class ClienteBusquedaDialogo implements InterfaceModelFind<Persona>
     public Vector<String> getColumnas() 
     {
         Vector<String> titulo=new Vector<String>();
-        titulo.add("cedula");
-        titulo.add("nombre");
-        
+        titulo.add("Nombre");
+        titulo.add("Identificacion");
+        titulo.add("Telefono");
+        titulo.add("Extension");
+        titulo.add("Celular");
+        titulo.add("Correo");
         return titulo;
       
     }
@@ -35,22 +38,25 @@ public class ClienteBusquedaDialogo implements InterfaceModelFind<Persona>
     public List<Persona> getConsulta() 
     {
         ArrayList<Persona> personas = new ArrayList<Persona>();
-        PersonaService personaservice = new PersonaService();
-        
+        PersonaService personaservice = new PersonaService();       
         return personaservice.buscar();
     }
 
     @Override
     public void agregarObjeto(Persona t, Vector dato) 
     {
-        dato.add(t.getCedula());
         dato.add(t.getNombreSocial());
+        dato.add(t.getIdentificacion());
+        dato.add(t.getTelefonoConvencional());
+        dato.add(t.getExtensionTelefono());
+        dato.add(t.getTelefonoCelular());
+        dato.add(t.getCorreoElectronico());
    
     }
     @Override
     public Boolean buscarObjeto(Persona t, Object valor) 
     {
-        if(t.getCedula().equals(valor.toString()))
+        if(t.getIdentificacion().equals(valor.toString()))
         {
             return true;
         }   

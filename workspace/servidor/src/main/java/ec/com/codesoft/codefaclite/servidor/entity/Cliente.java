@@ -19,19 +19,19 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author PC
  */
-@Entity
-@Table(name = "CLIENTE")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Persona.findAll", query = "SELECT p FROM Persona p"),
-    @NamedQuery(name = "Persona.findByCedula", query = "SELECT p FROM Persona p WHERE p.cedula = :cedula"),
-    @NamedQuery(name = "Persona.findByNombre", query = "SELECT p FROM Persona p WHERE p.nombreSocial = :nombre")
-})
+//@Entity
+//@Table(name = "CLIENTE")
+//@XmlRootElement
+//@NamedQueries({
+//    @NamedQuery(name = "Persona.findAll", query = "SELECT p FROM Persona p"),
+//    @NamedQuery(name = "Persona.findByCedula", query = "SELECT p FROM Persona p WHERE p.cedula = :cedula"),
+//    @NamedQuery(name = "Persona.findByNombre", query = "SELECT p FROM Persona p WHERE p.nombreSocial = :nombre")
+//})
 public class Cliente implements Serializable
 {
-      @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column (name = "ID_CLIENTE")
-    private Integer id_cliente; 
+//      @Id
+//    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Basic(optional = false)
+//    @Column (name = "ID_CLIENTE")
+//    private Integer id_cliente; 
 }

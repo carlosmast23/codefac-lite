@@ -33,7 +33,7 @@ public class Main2 {
     public static void grabar()
     {
         Persona p=new Persona();
-        p.setCedula(148331837);
+        p.setIdentificacion("148331837");
         //p.setNombre("JUAN");
         
         //Persona p2=new Persona();
