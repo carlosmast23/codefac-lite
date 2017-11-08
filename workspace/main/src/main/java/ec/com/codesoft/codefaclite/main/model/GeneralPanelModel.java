@@ -298,8 +298,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 frame.setTitle(tituloOriginal+" [Nuevo]");
                 GeneralPanelInterface frameInterface=(GeneralPanelInterface) frame;
                 frameInterface.estadoFormulario= GeneralPanelInterface.ESTADO_GRABAR;
-                limpiar(frameInterface);
+                limpiarAnotaciones(frameInterface);
+                frameInterface.limpiar();
                 limpiarCamposValidacion(frameInterface);
+                frameInterface.consola=new ConsolaGeneral();
+                mostrarConsola(frameInterface.consola);
             }
         });
         
@@ -346,7 +349,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         String tituloOriginal=getTituloOriginal(frame.getTitle());
                         frame.setTitle(tituloOriginal+" [Nuevo]");
                         frameInterface.estadoFormulario=GeneralPanelInterface.ESTADO_GRABAR;
-                        limpiar(frameInterface);
+                        limpiarAnotaciones(frameInterface);
+                        frameInterface.limpiar();
                         limpiarCamposValidacion(frameInterface);
                     }
                 }
@@ -413,7 +417,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     frame.setTitle(tituloOriginal+" [Nuevo]");
                     frameInterface.eliminar();
                     frameInterface.estadoFormulario= GeneralPanelInterface.ESTADO_GRABAR;
-                    limpiar(frameInterface);
+                    limpiarAnotaciones(frameInterface);
+                    frameInterface.limpiar();
                     limpiarCamposValidacion(frameInterface);
                 }
                 catch (UnsupportedOperationException ex) {
@@ -557,7 +562,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         }
     }
     
-    private void limpiar(GeneralPanelInterface panel)
+    private void limpiarAnotaciones(GeneralPanelInterface panel)
     {
        boolean validado=true;
        

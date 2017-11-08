@@ -245,5 +245,16 @@ public class ClienteModel extends ClienteForm
         }
         return 0;
     }
+
+    @Override
+    public void limpiar() {
+        /**
+         * Seleccionando valores por defecto que se deben seleccionar
+         * despues de limpiar
+         * @author carlos
+         */
+        getjComboIdentificacion().setSelectedIndex(0);
+        getjComboTipoCliente().setSelectedIndex(0);
+    }
             
 }

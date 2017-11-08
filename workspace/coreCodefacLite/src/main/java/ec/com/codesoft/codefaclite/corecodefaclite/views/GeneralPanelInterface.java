@@ -35,10 +35,51 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
     public abstract void eliminar();
     public abstract void imprimir();
     public abstract void actualizar();
+    
+    /**
+     * Metodo que se ejecuta despues de presionar el boton de buscar     * 
+     * Es recomendable usar este metodo solo para buscar datos de la propia clase
+     */
     public abstract void buscar();
+    
+    /**
+     * Este metodo se ejecutara despues de grabar o borrar los datos
+     * Se deben programar solo metodos personalizados que no se puedan
+     * programar con las etiquetas de validacion.
+     * Ejemplo:
+     *  - Seleccionar ele valor por defecto de un combo box
+     *  - Limpiar una tabla de valor agregados
+     * 
+     * Nota: Este campo tambien sirve para limpiar las variables que se usaron
+     * para dejar en blanco los valores
+     */
+    public abstract void limpiar();
+    
+    /**
+     * Nombre del formulario 
+     * @return nombre del formulario
+     */
     public abstract String getNombre();
+    
+    /**
+     * URL de la ayuda que se mostrara en la pantalla auxiliar cuando presionesn
+     * el boton de ayuda
+     * @return Link de la pagina que contiene las ayudas
+     */
     public abstract String getURLAyuda();
     
+    /**
+     * Habilitar los botones que van a estar disponibles para la pantalla
+     * Ejemplo:
+    * <pre>
+    * <code>
+    * Map<Integer,Boolean> permisos=new HashMap<Integer,Boolean>();
+    * permisos.put(GeneralPanelInterface.BOTON_NUEVO,true);
+    * return permisos;
+    * </code>
+    * </pre>
+     * @return 
+     */
     public abstract Map<Integer,Boolean> permisosFormulario();
     
     
