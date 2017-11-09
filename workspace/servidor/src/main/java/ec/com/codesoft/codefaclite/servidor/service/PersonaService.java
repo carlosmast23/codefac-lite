@@ -32,6 +32,11 @@ public class PersonaService
         personaFacade.edit(p);
     }
     
+    public void eliminar(Persona p)
+    {
+        personaFacade.remove(p);
+    }
+    
     public List<Persona> buscar()
     {
         return personaFacade.findAll();

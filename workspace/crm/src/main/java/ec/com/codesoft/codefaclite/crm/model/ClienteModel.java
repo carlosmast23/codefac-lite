@@ -89,7 +89,8 @@ public class ClienteModel extends ClienteForm
     @Override
     public void eliminar() 
     {
-        
+        personaService.eliminar(persona);
+        System.out.println("Se elimino correctamente");
     }
 
     @Override
