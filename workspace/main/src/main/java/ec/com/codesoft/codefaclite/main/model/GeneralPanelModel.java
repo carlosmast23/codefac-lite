@@ -289,7 +289,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         getjMenuCliente().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                agregarListenerMenu(new ClienteModel());                
+                agregarListenerMenu(new ClienteModel(),true);                
             }
         });
     }
@@ -534,7 +534,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
     }
     
-    private void agregarListenerMenu(GeneralPanelInterface panel)
+    private void agregarListenerMenu(GeneralPanelInterface panel,boolean maximisado)
     {
         try {
             panel.panelPadre=generalPanelModel;
@@ -542,7 +542,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             String tituloOriginal=getTituloOriginal(panel.getTitle());
             panel.setTitle(tituloOriginal+" [Nuevo]");
             getjDesktopPane1().add(panel);
-            panel.setMaximum(true);
+            panel.setMaximum(maximisado);
             panel.show();
             getBtnNuevo().requestFocus();
             agregarValidadores(panel);
@@ -1055,6 +1055,15 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         internal.add(viewer);
         getjDesktopPane1().add(internal);
         internal.show();
+    }
+
+    /**
+     * Metodo para poder abrir una ventana desde otra ventana
+     * @param panel 
+     */
+    @Override
+    public void crearVentanaCodefac(GeneralPanelInterface panel,boolean maximizado) {
+        agregarListenerMenu(panel,maximizado);
     }
     
    
