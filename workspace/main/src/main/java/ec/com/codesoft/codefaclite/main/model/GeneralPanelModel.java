@@ -16,7 +16,6 @@ import ec.com.codesoft.codefaclite.corecodefaclite.validation.validacionPersonal
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
-import ec.com.codesoft.codefaclite.crm.model.ProductoModel;
 import ec.com.codesoft.codefaclite.main.panel.GeneralPanelForm;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import java.awt.BorderLayout;
@@ -48,6 +47,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Vector;
@@ -95,7 +95,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private GeneralPanelInterface panelActual;
     private SwingBrowser browser ;
     private SwingBrowser browserPublicidad ;
-    DefaultListModel modelo;
+    private List<MenuControlador> ventanasMenuList;
     
     private static double PROPORCION_HORIZONTAL=0.75d;
     private static double PROPORCION_VERTICAL=0.7d;
@@ -114,7 +114,6 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     {
         iniciarComponentes();
         agregarListenerBotones();
-        agregarListenerMenu();
         agregarListenerSplit();
         agregarListenerGraphics();
        
@@ -261,46 +260,15 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
   
     private void agregarListenerMenu()
     {
-        /*
-        getjDesktopPane1().addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(final ComponentEvent e) {
-                //Redimensionar tamaño a las proporciones de la pantalla
-                //super.componentResized(e);                
-                Image fondoImg=new javax.swing.ImageIcon(getClass().getResource("/img.general/fondoGeneral.png")).getImage();
-                getjDesktopPane1().setBorder(new Fondo(fondoImg));
-                
-        }       
-            
-    });*/
-        
-        getjMenuItem1().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        for (MenuControlador menuControlador : ventanasMenuList) {
+            menuControlador.getMenuItem().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    agregarListenerMenu(menuControlador.getVentana(),true);     
+                }
+            });
+        }
 
-            }
-        });
-        
-       getjMenuItem1().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        getjMenuCliente().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                agregarListenerMenu(new ClienteModel());                
-            }
-        });
-       getjMenuProducto().addActionListener(new ActionListener()
-       {
-            @Override
-            public void actionPerformed(ActionEvent e) 
-            {
-                agregarListenerMenu(new ProductoModel());
-            }
-       });
     }
     
     private String getTituloOriginal(String titulo)
@@ -543,7 +511,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
     }
     
-    private void agregarListenerMenu(GeneralPanelInterface panel)
+    private void agregarListenerMenu(GeneralPanelInterface panel,boolean maximisado)
     {
         try {
             panel.panelPadre=generalPanelModel;
@@ -551,7 +519,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             String tituloOriginal=getTituloOriginal(panel.getTitle());
             panel.setTitle(tituloOriginal+" [Nuevo]");
             getjDesktopPane1().add(panel);
-            panel.setMaximum(true);
+            panel.setMaximum(maximisado);
             panel.show();
             getBtnNuevo().requestFocus();
             agregarValidadores(panel);
@@ -1065,8 +1033,25 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         getjDesktopPane1().add(internal);
         internal.show();
     }
+
+    /**
+     * Metodo para poder abrir una ventana desde otra ventana
+     * @param panel 
+     */
+    @Override
+    public void crearVentanaCodefac(GeneralPanelInterface panel,boolean maximizado) {
+        agregarListenerMenu(panel,maximizado);
+    }
+
+    public List<MenuControlador> getVentanasMenuList() {
+        return ventanasMenuList;
+    }
+
+    public void setVentanasMenuList(List<MenuControlador> ventanasMenuList) {
+        this.ventanasMenuList = ventanasMenuList;
+        agregarListenerMenu();
+    }
+    
     
    
 }
-    
-

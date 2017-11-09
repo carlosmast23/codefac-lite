@@ -14,4 +14,5 @@ import net.sf.jasperreports.engine.JasperPrint;
 public interface InterfazComunicacionPanel 
 {
     public void crearReportePantalla(JasperPrint jasperPrint,String nombrePantalla);
+    public void crearVentanaCodefac(GeneralPanelInterface panel,boolean maximizado);
 }
