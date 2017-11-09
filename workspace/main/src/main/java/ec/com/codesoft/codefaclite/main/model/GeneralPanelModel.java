@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.validation.validacionPersonal
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
+import ec.com.codesoft.codefaclite.crm.model.ProductoModel;
 import ec.com.codesoft.codefaclite.main.panel.GeneralPanelForm;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import java.awt.BorderLayout;
@@ -292,6 +293,14 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 agregarListenerMenu(new ClienteModel());                
             }
         });
+       getjMenuProducto().addActionListener(new ActionListener()
+       {
+            @Override
+            public void actionPerformed(ActionEvent e) 
+            {
+                agregarListenerMenu(new ProductoModel());
+            }
+       });
     }
     
     private String getTituloOriginal(String titulo)

@@ -83,6 +83,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuCliente = new javax.swing.JMenuItem();
+        jMenuProducto = new javax.swing.JMenuItem();
         jMenu7 = new javax.swing.JMenu();
         jMenu8 = new javax.swing.JMenu();
 
@@ -291,6 +292,9 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         });
         jMenu2.add(jMenuCliente);
 
+        jMenuProducto.setText("Productos");
+        jMenu2.add(jMenuProducto);
+
         jMenuBar1.add(jMenu2);
 
         jMenu7.setText("Facturacion");
@@ -414,6 +418,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuProducto;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanelPublicidadBorde;
@@ -471,6 +476,14 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         this.jMenuCliente = jMenuCliente;
     }
 
+    public JMenuItem getjMenuProducto() {
+        return jMenuProducto;
+    }
+
+    public void setjMenuProducto(JMenuItem jMenuProducto) {
+        this.jMenuProducto = jMenuProducto;
+    }
+    
     public void setBtnActualizar(JButton btnActualizar) {
         this.btnActualizar = btnActualizar;
     }
