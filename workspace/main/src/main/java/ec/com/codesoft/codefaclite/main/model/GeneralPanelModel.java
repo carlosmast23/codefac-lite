@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.main.model;
 
 
 import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ConsolaGeneral;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
@@ -255,7 +256,6 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             getjPanelPublicidadContenido().add(browserPublicidad);            
             //PROPORCION_VERTICAL=PROPORCION_VERTICAL_DEFAULT;
             //getjSplitPanelVerticalSecundario().setDividerLocation(PROPORCION_VERTICAL);
-
     }
   
     private void agregarListenerMenu()
@@ -321,7 +321,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             }
         });
         
-         getBtnGuardar().addActionListener(new ActionListener() {
+        getBtnGuardar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 
@@ -332,11 +332,17 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     GeneralPanelInterface frameInterface=(GeneralPanelInterface) frame;
                     
                     if(frameInterface.estadoFormulario.equals(GeneralPanelInterface.ESTADO_GRABAR))
-                    {                    
+                    {
+                        
                         if(validarFormulario(frameInterface))
                         {
-                            frameInterface.grabar();
-                            procesoTerminado=true;
+                            try {
+                                frameInterface.grabar();
+                                procesoTerminado=true;
+                            } catch (ExcepcionCodefacLite ex) {
+                                JOptionPane.showMessageDialog(null,ex.getMessage());
+                            }
+                            
                         }
                         else
                         {
@@ -348,8 +354,13 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     {
                         if(validarFormulario(frameInterface))
                         {
-                            frameInterface.editar();
-                            procesoTerminado=true;
+                            try {
+                                frameInterface.editar();
+                                procesoTerminado=true;
+                            } catch (ExcepcionCodefacLite ex) {
+                                JOptionPane.showMessageDialog(null,ex.getMessage());
+                            }
+                            
                         }
                         else
                         {
@@ -388,11 +399,17 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     JInternalFrame frame= getjDesktopPane1().getSelectedFrame();
                     GeneralPanelInterface frameInterface=(GeneralPanelInterface) frame;
                     String tituloOriginal = getTituloOriginal(frame.getTitle());
-                    frame.setTitle(tituloOriginal + " [Editar]");                    
-                    frameInterface.buscar();
-                    frameInterface.estadoFormulario= GeneralPanelInterface.ESTADO_EDITAR;
-                    limpiarCamposValidacion(frameInterface);
-                    mostrarPanelSecundario(false);
+                    frame.setTitle(tituloOriginal + " [Editar]"); 
+                    
+                    try {
+                        frameInterface.buscar();
+                        frameInterface.estadoFormulario= GeneralPanelInterface.ESTADO_EDITAR;
+                        limpiarCamposValidacion(frameInterface);
+                        mostrarPanelSecundario(false);
+                    } catch (ExcepcionCodefacLite ex) {
+                        JOptionPane.showMessageDialog(null,ex.getMessage());
+                    }
+
                 }
                 catch (UnsupportedOperationException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);

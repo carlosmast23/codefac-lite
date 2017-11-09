@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.crm.model;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.validacionPersonalizadaAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
@@ -52,7 +53,7 @@ public class ClienteModel extends ClienteForm
     
     
     @Override
-    public void grabar() 
+    public void grabar() throws ExcepcionCodefacLite
     {
         persona = new Persona();
         persona.setNombreSocial(getjTextNombreSocial().getText());
@@ -67,10 +68,12 @@ public class ClienteModel extends ClienteForm
         personaService.grabar(persona);
         
         System.err.println("Se grabo correctamente");
+        
+        throw new ExcepcionCodefacLite("Excepcion lanzada desde grabar");
     }
 
     @Override
-    public void editar() 
+    public void editar() throws ExcepcionCodefacLite
     {
         persona.setNombreSocial(getjTextNombreSocial().getText());
         persona.setTipoIdentificacion((String) getjComboIdentificacion().getSelectedItem());
@@ -135,11 +138,17 @@ public class ClienteModel extends ClienteForm
     }
 
     @Override
-    public void buscar() {
+    public void buscar() throws ExcepcionCodefacLite {
         ClienteBusquedaDialogo clienteBusquedaDialogo= new ClienteBusquedaDialogo();
         BuscarDialogoModel buscarDialogoModel=new BuscarDialogoModel(clienteBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
         persona=(Persona) buscarDialogoModel.getResultado();
+        
+        if(persona==null)
+        {
+            throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar");
+        }
+        
         getjTextNombreSocial().setText(persona.getNombreSocial());
         getjTextIdentificacion().setText(""+persona.getIdentificacion());
         persona.setNombreSocial(getjTextNombreSocial().getText());
