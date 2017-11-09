@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.corecodefaclite.views;
 
+import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ConsolaGeneral;
 import java.util.Map;
 import javax.swing.JPanel;
@@ -36,8 +37,8 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
     public static final String ESTADO_EDITAR="E";
     
     public String estadoFormulario;
-    public abstract void grabar();
-    public abstract void editar();
+    public abstract void grabar() throws ExcepcionCodefacLite;
+    public abstract void editar() throws ExcepcionCodefacLite;
     public abstract void eliminar();
     public abstract void imprimir();
     public abstract void actualizar();
@@ -46,7 +47,7 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
      * Metodo que se ejecuta despues de presionar el boton de buscar     * 
      * Es recomendable usar este metodo solo para buscar datos de la propia clase
      */
-    public abstract void buscar();
+    public abstract void buscar() throws ExcepcionCodefacLite;
     
     /**
      * Este metodo se ejecutara despues de grabar o borrar los datos
