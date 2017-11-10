@@ -56,6 +56,7 @@ public class Main {
         List<MenuControlador> ventanas=new ArrayList<MenuControlador>();
         ventanas.add(new MenuControlador(panel.getjMenuCliente(),new ClienteModel()));
         ventanas.add(new MenuControlador(panel.getjMenuProducto(),new ProductoModel()));
+        //ventanas.add(new MenuControlador(panel.getj(), new EmisorModel()));
         return ventanas;
     
     }
