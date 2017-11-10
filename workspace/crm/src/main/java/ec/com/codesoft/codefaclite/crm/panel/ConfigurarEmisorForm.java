@@ -61,9 +61,8 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
         jComboBox1 = new javax.swing.JComboBox<>();
         jLabel14 = new javax.swing.JLabel();
         jComboBox2 = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jPanelConfiguracionEmisor.setBorder(javax.swing.BorderFactory.createTitledBorder("Características Generales"));
@@ -71,7 +70,10 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
         jPanelConfiguracionEmisor.setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setText("RUC:");
-        jPanelConfiguracionEmisor.add(jLabel1, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
+        jPanelConfiguracionEmisor.add(jLabel1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -84,6 +86,8 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelConfiguracionEmisor.add(jLabel2, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -97,6 +101,8 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelConfiguracionEmisor.add(jLabel3, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -110,6 +116,8 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelConfiguracionEmisor.add(jLabel4, gridBagConstraints);
 
         jTextArea1.setColumns(20);
@@ -122,12 +130,15 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(8, 0, 8, 0);
         jPanelConfiguracionEmisor.add(jScrollPane1, gridBagConstraints);
 
         jLabel5.setText("Dirección Establecimiento:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelConfiguracionEmisor.add(jLabel5, gridBagConstraints);
 
         jTextArea2.setColumns(20);
@@ -140,12 +151,15 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(8, 0, 8, 0);
         jPanelConfiguracionEmisor.add(jScrollPane2, gridBagConstraints);
 
         jLabel6.setText("Código Establecimiento:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelConfiguracionEmisor.add(jLabel6, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -158,6 +172,7 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 5;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelConfiguracionEmisor.add(jLabel7, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -170,6 +185,8 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelConfiguracionEmisor.add(jLabel8, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -182,6 +199,8 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelConfiguracionEmisor.add(jLabel9, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -194,6 +213,8 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelConfiguracionEmisor.add(jLabel10, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -207,6 +228,8 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelConfiguracionEmisor.add(jLabel11, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -221,12 +244,15 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelConfiguracionEmisor.add(jLabel12, gridBagConstraints);
 
         jLabel13.setText("Tipo de ambiente:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelConfiguracionEmisor.add(jLabel13, gridBagConstraints);
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "PRODUCCIÓN", "PRUEBAS" }));
@@ -247,6 +273,8 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 11;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelConfiguracionEmisor.add(jLabel14, gridBagConstraints);
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ANF - Certificado Exportado", "ANF - Plug & Sign", "BCE - iKey2032", "BCE - Aladdin eToken Pro", "SD - ePass3003 auto", "SD - BioPass3000", "KEY4 - Consejo Judicatura" }));
@@ -258,20 +286,12 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
         gridBagConstraints.weightx = 0.1;
         jPanelConfiguracionEmisor.add(jComboBox2, gridBagConstraints);
 
-        jButton1.setText("Guardar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 12;
-        jPanelConfiguracionEmisor.add(jButton1, gridBagConstraints);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jPanelConfiguracionEmisor, gridBagConstraints);
 
         pack();
@@ -280,10 +300,6 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
 
     @Override
     public void grabar() {
@@ -316,7 +332,6 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;

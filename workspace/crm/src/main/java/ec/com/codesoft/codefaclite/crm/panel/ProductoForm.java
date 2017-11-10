@@ -12,7 +12,7 @@ import java.util.Map;
  *
  * @author PC
  */
-public class ProductoForm extends GeneralPanelInterface{
+public abstract class ProductoForm extends GeneralPanelInterface{
 
     /**
      * Creates new form ProductoForm
@@ -45,9 +45,34 @@ public class ProductoForm extends GeneralPanelInterface{
         jTextField4 = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
+        jLabel10 = new javax.swing.JLabel();
+        jComboBox2 = new javax.swing.JComboBox<>();
+        jLabel11 = new javax.swing.JLabel();
+        jComboBox3 = new javax.swing.JComboBox<>();
+        jLabel12 = new javax.swing.JLabel();
+        jComboBox4 = new javax.swing.JComboBox<>();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        jTextField5 = new javax.swing.JTextField();
+        jTextField6 = new javax.swing.JTextField();
+        jTextField7 = new javax.swing.JTextField();
+        jLabel20 = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        jTextField8 = new javax.swing.JTextField();
+        jTextField9 = new javax.swing.JTextField();
+        jTextField10 = new javax.swing.JTextField();
+        jLabel23 = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
 
+        setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
@@ -56,7 +81,11 @@ public class ProductoForm extends GeneralPanelInterface{
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setText("Detalle del producto /  servicio");
-        getContentPane().add(jLabel1, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(jLabel1, gridBagConstraints);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Características Generales"));
         jPanel1.setLayout(new java.awt.GridBagLayout());
@@ -65,6 +94,7 @@ public class ProductoForm extends GeneralPanelInterface{
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanel1.add(jLabel2, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -77,6 +107,7 @@ public class ProductoForm extends GeneralPanelInterface{
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanel1.add(jLabel3, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -89,9 +120,10 @@ public class ProductoForm extends GeneralPanelInterface{
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanel1.add(jLabel4, gridBagConstraints);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BIEN", "SERVICIO" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
@@ -103,6 +135,7 @@ public class ProductoForm extends GeneralPanelInterface{
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanel1.add(jLabel5, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -116,6 +149,7 @@ public class ProductoForm extends GeneralPanelInterface{
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanel1.add(jLabel6, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -128,131 +162,260 @@ public class ProductoForm extends GeneralPanelInterface{
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.weightx = 0.2;
+        gridBagConstraints.weightx = 0.1;
         jPanel1.add(jLabel7, gridBagConstraints);
 
         jLabel8.setText(" ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.weightx = 0.1;
         jPanel1.add(jLabel8, gridBagConstraints);
+
+        jLabel9.setText("                                           ");
+        jPanel1.add(jLabel9, new java.awt.GridBagConstraints());
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
         gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jPanel1, gridBagConstraints);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Impuestos Aplicables"));
+        jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 426, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        jLabel10.setText("IVA");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
+        jPanel2.add(jLabel10, gridBagConstraints);
+
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "0 - 0% ", "2 - GRAVA IVA", "6 - NO OBJETO DE IMPUESTO", "7 -  EXENTO" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.1;
+        jPanel2.add(jComboBox2, gridBagConstraints);
+
+        jLabel11.setText("ICE");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
+        jPanel2.add(jLabel11, gridBagConstraints);
+
+        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "3011 - ICE - CIGARILLOS RUBIOS", " " }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.1;
+        jPanel2.add(jComboBox3, gridBagConstraints);
+
+        jLabel12.setText("IRBPNR");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
+        jPanel2.add(jLabel12, gridBagConstraints);
+
+        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "5001 - BOTELLAS PLASTICAS NO RETORNABLES" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.1;
+        jPanel2.add(jComboBox4, gridBagConstraints);
+
+        jLabel13.setText("                              ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.weightx = 0.1;
+        jPanel2.add(jLabel13, gridBagConstraints);
+
+        jLabel14.setText("                              ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.weightx = 0.1;
+        jPanel2.add(jLabel14, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
         gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jPanel2, gridBagConstraints);
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Información Adicional"));
+        jPanel3.setLayout(new java.awt.GridBagLayout());
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 426, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        jLabel15.setText("1. Atributo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
+        jPanel3.add(jLabel15, gridBagConstraints);
+
+        jLabel16.setText("2. Atributo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
+        jPanel3.add(jLabel16, gridBagConstraints);
+
+        jLabel17.setText("3. Atributo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
+        jPanel3.add(jLabel17, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        jPanel3.add(jTextField5, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        jPanel3.add(jTextField6, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        jPanel3.add(jTextField7, gridBagConstraints);
+
+        jLabel20.setText("Descripciòn:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
+        jPanel3.add(jLabel20, gridBagConstraints);
+
+        jLabel21.setText("Descripciòn:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
+        jPanel3.add(jLabel21, gridBagConstraints);
+
+        jLabel22.setText("Descripciòn:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
+        jPanel3.add(jLabel22, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        jPanel3.add(jTextField8, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        jPanel3.add(jTextField9, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        jPanel3.add(jTextField10, gridBagConstraints);
+
+        jLabel23.setText("             ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        jPanel3.add(jLabel23, gridBagConstraints);
+
+        jLabel24.setText(" ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.weightx = 0.1;
+        jPanel3.add(jLabel24, gridBagConstraints);
+
+        jLabel25.setText(" ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.weightx = 0.1;
+        jPanel3.add(jLabel25, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
         gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jPanel3, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    @Override
-    public void grabar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void editar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void eliminar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void imprimir() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void actualizar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void buscar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void limpiar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public String getNombre() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public String getURLAyuda() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Map<Integer, Boolean> permisosFormulario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JComboBox<String> jComboBox3;
+    private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField10;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField jTextField5;
+    private javax.swing.JTextField jTextField6;
+    private javax.swing.JTextField jTextField7;
+    private javax.swing.JTextField jTextField8;
+    private javax.swing.JTextField jTextField9;
     // End of variables declaration//GEN-END:variables
 }
