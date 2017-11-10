@@ -120,11 +120,12 @@ public class ClienteModel extends ClienteForm
             
             Map parameters = new HashMap();
             parameters.put("nombre","carlos");
+            parameters.put("subreporte","C:\\Users\\Carlos\\Documents\\GitHub\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\crm\\");
           
             List<DataEjemploReporte> data= new ArrayList<DataEjemploReporte>();
             data.add(new DataEjemploReporte("carlos","1"));
             data.add(new DataEjemploReporte("pedro","2"));
-            ReporteCodefac.generarReporteInternalFrame(path, parameters, data, panelPadre, "Reporte Nuevos ");    
+            ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Nuevos ");    
     }
 
     @Override
@@ -139,6 +140,7 @@ public class ClienteModel extends ClienteForm
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
+        this.panelPadre.crearVentanaCodefac(new ClienteModel(),true);
         ClienteBusquedaDialogo clienteBusquedaDialogo= new ClienteBusquedaDialogo();
         BuscarDialogoModel buscarDialogoModel=new BuscarDialogoModel(clienteBusquedaDialogo);
         buscarDialogoModel.setVisible(true);

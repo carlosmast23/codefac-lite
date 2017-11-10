@@ -47,6 +47,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -1050,6 +1053,29 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     public void setVentanasMenuList(List<MenuControlador> ventanasMenuList) {
         this.ventanasMenuList = ventanasMenuList;
         agregarListenerMenu();
+    }
+
+    @Override
+    public Map<String, Object> mapReportePlantilla() {
+        SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+        Map<String,Object> parametros=new HashMap<String,Object>();
+        parametros.put("pl_fecha_hora",formateador.format(new Date()));
+        parametros.put("pl_usuario","Carlosmast23");
+        parametros.put("pl_direccion","Sangolqui,Av.Calderon y Eespejo");
+        parametros.put("pl_nombre_empresa","CODEPEPITO");
+        parametros.put("pl_telefonos","2333167/0987651233");
+        parametros.put("pl_titulo","INFORME CLIENTES");
+        parametros.put("pl_url_img1",RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("codefac-logotipo.png"));
+        parametros.put("pl_img_facebook",RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("facebook.png"));
+        parametros.put("pl_img_whatsapp",RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("whatsapp.png"));
+        parametros.put("pl_img_telefono",RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("telefono.png"));
+        parametros.put("pl_img_logo_pie",RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("codesoft-logo.png"));
+       
+        parametros.put("pl_url_cabecera",RecursoCodefac.JASPER.getResourcePath("encabezado.jasper"));
+        parametros.put("pl_url_piepagina",RecursoCodefac.JASPER.getResourcePath("pie_pagina.jasper"));
+        
+        //System.out.println(parametros.get("SUBREPORT_DIR"));
+        return parametros;
     }
     
     
