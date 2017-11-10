@@ -117,7 +117,7 @@ public class ClienteModel extends ClienteForm
     @Override
     public void imprimir() {
             String path=RecursoCodefac.JASPER_CRM.getResourcePath("reporteEjemplo.jrxml");
-            
+            System.out.println(session.getUsuario().getClave());
             Map parameters = new HashMap();
             parameters.put("nombre","carlos");
             parameters.put("subreporte","C:\\Users\\Carlos\\Documents\\GitHub\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\crm\\");

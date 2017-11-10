@@ -21,3 +21,4 @@ nb-configuration.xml
 /workspace/main/DB/
 /workspace/servidor/DB/
 derby.log
+/workspace/controlador/target/

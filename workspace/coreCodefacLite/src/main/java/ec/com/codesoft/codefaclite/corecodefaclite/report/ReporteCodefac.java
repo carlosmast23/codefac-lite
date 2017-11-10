@@ -77,6 +77,7 @@ public class ReporteCodefac {
     {
         try {
             Map<String,Object> mapCompleto=new HashMap<String,Object>(panelPadre.mapReportePlantilla());
+            mapCompleto.put("pl_titulo",tituloReporte);
             JasperReport report =JasperCompileManager.compileReport(pathReporte);
             JRBeanCollectionDataSource dataReport= new JRBeanCollectionDataSource(datos);
             JasperPrint print =JasperFillManager.fillReport(report, mapCompleto,dataReport);

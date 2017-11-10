@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.main.model;
 
 
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
@@ -17,6 +18,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
 import ec.com.codesoft.codefaclite.main.panel.GeneralPanelForm;
+import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -95,10 +97,11 @@ import net.sf.jasperreports.swing.JRViewer;
 public class GeneralPanelModel extends GeneralPanelForm implements InterfazComunicacionPanel{
     private GeneralPanelModel generalPanelModel=this;
     private ControladorVista controladorVista;
-    private GeneralPanelInterface panelActual;
+    private ControladorCodefacInterface panelActual;
     private SwingBrowser browser ;
     private SwingBrowser browserPublicidad ;
     private List<MenuControlador> ventanasMenuList;
+    private SessionCodefac sessionCodefac;
     
     private static double PROPORCION_HORIZONTAL=0.75d;
     private static double PROPORCION_VERTICAL=0.7d;
@@ -210,7 +213,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     
     private void cargarAyuda()
     {
-        GeneralPanelInterface panel=(GeneralPanelInterface) getjDesktopPane1().getSelectedFrame();
+        ControladorCodefacInterface panel=(ControladorCodefacInterface) getjDesktopPane1().getSelectedFrame();
         if(browser!=null)
         {
             //Verifacar si la url cargada es la misma no volver a cargar
@@ -291,8 +294,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 JInternalFrame frame= getjDesktopPane1().getSelectedFrame();
                 String tituloOriginal=getTituloOriginal(frame.getTitle());
                 frame.setTitle(tituloOriginal+" [Nuevo]");
-                GeneralPanelInterface frameInterface=(GeneralPanelInterface) frame;
-                frameInterface.estadoFormulario= GeneralPanelInterface.ESTADO_GRABAR;
+                ControladorCodefacInterface frameInterface=(ControladorCodefacInterface) frame;
+                frameInterface.estadoFormulario= ControladorCodefacInterface.ESTADO_GRABAR;
                 limpiarAnotaciones(frameInterface);
                 frameInterface.limpiar();
                 limpiarCamposValidacion(frameInterface);
@@ -309,9 +312,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 {
                     boolean procesoTerminado=false;
                     JInternalFrame frame= getjDesktopPane1().getSelectedFrame();
-                    GeneralPanelInterface frameInterface=(GeneralPanelInterface) frame;
+                    ControladorCodefacInterface frameInterface=(ControladorCodefacInterface) frame;
                     
-                    if(frameInterface.estadoFormulario.equals(GeneralPanelInterface.ESTADO_GRABAR))
+                    if(frameInterface.estadoFormulario.equals(ControladorCodefacInterface.ESTADO_GRABAR))
                     {
                         
                         if(validarFormulario(frameInterface))
@@ -354,7 +357,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     {
                         String tituloOriginal=getTituloOriginal(frame.getTitle());
                         frame.setTitle(tituloOriginal+" [Nuevo]");
-                        frameInterface.estadoFormulario=GeneralPanelInterface.ESTADO_GRABAR;
+                        frameInterface.estadoFormulario=ControladorCodefacInterface.ESTADO_GRABAR;
                         limpiarAnotaciones(frameInterface);
                         frameInterface.limpiar();
                         limpiarCamposValidacion(frameInterface);
@@ -377,13 +380,13 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 try
                 {
                     JInternalFrame frame= getjDesktopPane1().getSelectedFrame();
-                    GeneralPanelInterface frameInterface=(GeneralPanelInterface) frame;
+                    ControladorCodefacInterface frameInterface=(ControladorCodefacInterface) frame;
                     String tituloOriginal = getTituloOriginal(frame.getTitle());
                     frame.setTitle(tituloOriginal + " [Editar]"); 
                     
                     try {
                         frameInterface.buscar();
-                        frameInterface.estadoFormulario= GeneralPanelInterface.ESTADO_EDITAR;
+                        frameInterface.estadoFormulario= ControladorCodefacInterface.ESTADO_EDITAR;
                         limpiarCamposValidacion(frameInterface);
                         mostrarPanelSecundario(false);
                     } catch (ExcepcionCodefacLite ex) {
@@ -406,7 +409,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 try
                 {
                     JInternalFrame frame= getjDesktopPane1().getSelectedFrame();
-                    GeneralPanelInterface frameInterface=(GeneralPanelInterface) frame;
+                    ControladorCodefacInterface frameInterface=(ControladorCodefacInterface) frame;
                     frameInterface.actualizar();
                     limpiarCamposValidacion(frameInterface);
                 }
@@ -425,11 +428,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 try
                 {
                     JInternalFrame frame= getjDesktopPane1().getSelectedFrame();
-                    GeneralPanelInterface frameInterface=(GeneralPanelInterface) frame;
+                    ControladorCodefacInterface frameInterface=(ControladorCodefacInterface) frame;
                     String tituloOriginal=getTituloOriginal(frame.getTitle());
                     frame.setTitle(tituloOriginal+" [Nuevo]");
                     frameInterface.eliminar();
-                    frameInterface.estadoFormulario= GeneralPanelInterface.ESTADO_GRABAR;
+                    frameInterface.estadoFormulario= ControladorCodefacInterface.ESTADO_GRABAR;
                     limpiarAnotaciones(frameInterface);
                     frameInterface.limpiar();
                     limpiarCamposValidacion(frameInterface);
@@ -452,7 +455,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 try
                 {
                     JInternalFrame frame= getjDesktopPane1().getSelectedFrame();
-                    GeneralPanelInterface frameInterface=(GeneralPanelInterface) frame;
+                    ControladorCodefacInterface frameInterface=(ControladorCodefacInterface) frame;
                     frameInterface.imprimir();
                     limpiarCamposValidacion(frameInterface);
                 }
@@ -514,10 +517,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
     }
     
-    private void agregarListenerMenu(GeneralPanelInterface panel,boolean maximisado)
+    private void agregarListenerMenu(ControladorCodefacInterface panel,boolean maximisado)
     {
         try {
             panel.panelPadre=generalPanelModel;
+            panel.session=sessionCodefac;
             panel.addInternalFrameListener(listenerFrame);
             String tituloOriginal=getTituloOriginal(panel.getTitle());
             panel.setTitle(tituloOriginal+" [Nuevo]");
@@ -528,7 +532,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             agregarValidadores(panel);
             agregarAyudas(panel);
             
-            panel.estadoFormulario= GeneralPanelInterface.ESTADO_GRABAR;
+            panel.estadoFormulario= ControladorCodefacInterface.ESTADO_GRABAR;
             
             panel.consola=new ConsolaGeneral();
             mostrarConsola(panel.consola);
@@ -539,7 +543,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         }
     }
     
-    private void agregarAyudas(GeneralPanelInterface panel)
+    private void agregarAyudas(ControladorCodefacInterface panel)
     {
         Class classVentana=panel.getClass();
         Method[] metodos=classVentana.getMethods();
@@ -582,7 +586,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         }
     }
     
-    private void limpiarAnotaciones(GeneralPanelInterface panel)
+    private void limpiarAnotaciones(ControladorCodefacInterface panel)
     {
        boolean validado=true;
        
@@ -610,7 +614,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
     }
     
-    private void limpiarCamposValidacion(GeneralPanelInterface panel)
+    private void limpiarCamposValidacion(ControladorCodefacInterface panel)
     {
        ConsolaGeneral consola=new ConsolaGeneral();
        
@@ -637,7 +641,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
     }
     
-    private boolean validarFormulario(GeneralPanelInterface panel)
+    private boolean validarFormulario(ControladorCodefacInterface panel)
     {
        //Volver a crear los errores pendientes
        panel.consola=new ConsolaGeneral();
@@ -681,7 +685,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     
 
     
-    private Vector<String> validarComponente(ValidacionCodefacAnotacion validacion,JTextComponent componente,GeneralPanelInterface panel)
+    private Vector<String> validarComponente(ValidacionCodefacAnotacion validacion,JTextComponent componente,ControladorCodefacInterface panel)
     {
         Vector<String> validar=new Vector<String>();
         if(validacion.requerido())
@@ -789,7 +793,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
       
     }
     
-    private void agregarValidadores(GeneralPanelInterface panel)
+    private void agregarValidadores(ControladorCodefacInterface panel)
     {
        Class classVentana=panel.getClass();
         Method[] metodos=classVentana.getMethods();
@@ -862,7 +866,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         @Override
                         public void internalFrameClosing(InternalFrameEvent e) {
                             // System.out.println("internalFrameClosing");
-                            GeneralPanelInterface panel=(GeneralPanelInterface) getjDesktopPane1().getSelectedFrame();
+                            ControladorCodefacInterface panel=(ControladorCodefacInterface) getjDesktopPane1().getSelectedFrame();
                             panel.formularioCerrando=true;
                             cargarAyuda();                            
                             mostrarPanelSecundario(false);
@@ -917,38 +921,38 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private void habilitarConfiguracioneBotones()
     {
         JInternalFrame frame = getjDesktopPane1().getSelectedFrame();
-        GeneralPanelInterface frameInterface = (GeneralPanelInterface) frame;
+        ControladorCodefacInterface frameInterface = (ControladorCodefacInterface) frame;
         Map<Integer, Boolean> mapPermisos = frameInterface.permisosFormulario();
         for (Map.Entry<Integer, Boolean> entry : mapPermisos.entrySet()) {
             Integer key = entry.getKey();
             Boolean value = entry.getValue();
 
             switch (key) {
-                case GeneralPanelInterface.BOTON_GRABAR:
+                case ControladorCodefacInterface.BOTON_GRABAR:
                     getBtnGuardar().setEnabled(value);
                     break;
 
-                case GeneralPanelInterface.BOTON_ELIMINAR:
+                case ControladorCodefacInterface.BOTON_ELIMINAR:
                     getBtnEliminar().setEnabled(value);
                     break;
                     
-                case GeneralPanelInterface.BOTON_IMPRIMIR:
+                case ControladorCodefacInterface.BOTON_IMPRIMIR:
                     getBtnImprimir().setEnabled(value);
                     break;
                     
-                case GeneralPanelInterface.BOTON_AYUDA:
+                case ControladorCodefacInterface.BOTON_AYUDA:
                     getBtnAyuda().setEnabled(value);
                     break;
                     
-                case GeneralPanelInterface.BOTON_NUEVO:
+                case ControladorCodefacInterface.BOTON_NUEVO:
                     getBtnNuevo().setEnabled(value);
                     break;
                     
-                case GeneralPanelInterface.BOTON_REFRESCAR:
+                case ControladorCodefacInterface.BOTON_REFRESCAR:
                     getBtnActualizar().setEnabled(value);
                     break;
                 
-                case GeneralPanelInterface.BOTON_BUSCAR:
+                case ControladorCodefacInterface.BOTON_BUSCAR:
                     getBtnBuscar().setEnabled(value);
                     break;
             }
@@ -979,7 +983,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         
     }
     
-    private void seleccionaPanel(GeneralPanelInterface panelInterface)
+    private void seleccionaPanel(ControladorCodefacInterface panelInterface)
     {
         
         this.panelActual=panelInterface;
@@ -1043,7 +1047,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
      */
     @Override
     public void crearVentanaCodefac(GeneralPanelInterface panel,boolean maximizado) {
-        agregarListenerMenu(panel,maximizado);
+        agregarListenerMenu((ControladorCodefacInterface) panel,maximizado);
     }
 
     public List<MenuControlador> getVentanasMenuList() {
@@ -1060,11 +1064,10 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
         Map<String,Object> parametros=new HashMap<String,Object>();
         parametros.put("pl_fecha_hora",formateador.format(new Date()));
-        parametros.put("pl_usuario","Carlosmast23");
-        parametros.put("pl_direccion","Sangolqui,Av.Calderon y Eespejo");
-        parametros.put("pl_nombre_empresa","CODEPEPITO");
-        parametros.put("pl_telefonos","2333167/0987651233");
-        parametros.put("pl_titulo","INFORME CLIENTES");
+        parametros.put("pl_usuario",sessionCodefac.getUsuario().getNick());
+        parametros.put("pl_direccion",sessionCodefac.getEmpresa().getDireccion());
+        parametros.put("pl_nombre_empresa",sessionCodefac.getEmpresa().getNombre());
+        parametros.put("pl_telefonos",sessionCodefac.getEmpresa().getTelefonos());
         parametros.put("pl_url_img1",RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("codefac-logotipo.png"));
         parametros.put("pl_img_facebook",RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("facebook.png"));
         parametros.put("pl_img_whatsapp",RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("whatsapp.png"));
@@ -1077,6 +1080,15 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         //System.out.println(parametros.get("SUBREPORT_DIR"));
         return parametros;
     }
+
+    public SessionCodefac getSessionCodefac() {
+        return sessionCodefac;
+    }
+
+    public void setSessionCodefac(SessionCodefac sessionCodefac) {
+        this.sessionCodefac = sessionCodefac;
+    }
+    
     
     
    

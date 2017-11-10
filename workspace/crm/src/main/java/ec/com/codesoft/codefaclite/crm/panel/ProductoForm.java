@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.crm.panel;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import java.util.Map;
 
@@ -12,7 +13,7 @@ import java.util.Map;
  *
  * @author PC
  */
-public abstract class ProductoForm extends GeneralPanelInterface{
+public abstract class ProductoForm extends ControladorCodefacInterface{
 
     /**
      * Creates new form ProductoForm

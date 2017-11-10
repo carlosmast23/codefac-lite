@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.main.model;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -17,9 +18,9 @@ import javax.swing.JMenuItem;
 public class MenuControlador 
 {
    private JMenuItem menuItem;
-   private GeneralPanelInterface ventana;
+   private ControladorCodefacInterface ventana;
 
-    public MenuControlador(JMenuItem menuItem, GeneralPanelInterface ventana) {
+    public MenuControlador(JMenuItem menuItem, ControladorCodefacInterface ventana) {
         this.menuItem = menuItem;
         this.ventana = ventana;
     }
@@ -32,11 +33,11 @@ public class MenuControlador
         this.menuItem = menuItem;
     }
 
-    public GeneralPanelInterface getVentana() {
+    public ControladorCodefacInterface getVentana() {
         return ventana;
     }
 
-    public void setVentana(GeneralPanelInterface ventana) {
+    public void setVentana(ControladorCodefacInterface ventana) {
         this.ventana = ventana;
     }
    

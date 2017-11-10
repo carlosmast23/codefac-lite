@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.crm.panel;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
@@ -34,7 +35,7 @@ import net.sf.jasperreports.view.JasperViewer;
  *
  * @author PC
  */
-public abstract class ClienteForm extends GeneralPanelInterface {
+public abstract class ClienteForm extends ControladorCodefacInterface {
 
     /**
      * Creates new form clienteForm

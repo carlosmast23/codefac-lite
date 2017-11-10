@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ConsolaGeneral;
 import java.util.Map;
 import javax.swing.JPanel;
+import org.bouncycastle.crypto.tls.SessionParameters;
 
 /**
  *
@@ -88,6 +89,6 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
      * @return 
      */
     public abstract Map<Integer,Boolean> permisosFormulario();
-    
+
     
 }

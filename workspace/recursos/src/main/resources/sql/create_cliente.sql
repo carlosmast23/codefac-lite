@@ -5,7 +5,7 @@
  */
 /**
  * Author:  Carlos
- * Created: 7/11/2017
+ * Created: 10/11/2017
  */
 
 create table 
@@ -19,16 +19,4 @@ create table
     EXTENSION_TELEFONO varchar(4), 
     TELEFONO_CELULAR varchar(10), 
     CORREO_ELECTRONICO varchar(60),  
-    primary key (ID_CLIENTE));
-
---create table 
---    USUARIO( NICK varchar(120) ,
---    CLAVE varchar(120), 
---    TIPO varchar(1), 
---    primary key (USUARIO))
-
--- Insertar valores por defecto de los usuarios
--- INSERT INTO COUNTRIES
---      VALUES ('admin', 'admin', 'A')
-
-
+    primary key (ID_CLIENTE))
