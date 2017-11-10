@@ -84,6 +84,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenu2 = new javax.swing.JMenu();
         jMenuCliente = new javax.swing.JMenuItem();
         jMenuProducto = new javax.swing.JMenuItem();
+        jMenuEmisor = new javax.swing.JMenuItem();
         jMenu7 = new javax.swing.JMenu();
         jMenu8 = new javax.swing.JMenu();
 
@@ -295,6 +296,9 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuProducto.setText("Productos");
         jMenu2.add(jMenuProducto);
 
+        jMenuEmisor.setText("Emisor");
+        jMenu2.add(jMenuEmisor);
+
         jMenuBar1.add(jMenu2);
 
         jMenu7.setText("Facturacion");
@@ -415,6 +419,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuBar jMenuBar3;
     private javax.swing.JMenuItem jMenuCliente;
+    private javax.swing.JMenuItem jMenuEmisor;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;

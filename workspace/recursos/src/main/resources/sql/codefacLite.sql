@@ -21,14 +21,24 @@ create table
     CORREO_ELECTRONICO varchar(60),  
     primary key (ID_CLIENTE));
 
---create table 
---    USUARIO( NICK varchar(120) ,
---    CLAVE varchar(120), 
---    TIPO varchar(1), 
---    primary key (USUARIO))
-
--- Insertar valores por defecto de los usuarios
--- INSERT INTO COUNTRIES
---      VALUES ('admin', 'admin', 'A')
+create table
+    EMISOR( ID_EMISOR integer not null GENERATED AYWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    RAZON_SOCIAL varchar(70),
+    RUC varchar(15),
+    NOM_COMERCIAL varchar(100),
+    DIR_ESTABLECIMIENTO varchar(250),
+    COD_ESTABLECIMIENTO varchar(50),
+    RESOLUSION varchar(25),
+    CONTRIBUYENTE_ESPECIAL varchar(255),
+    COD_PUNTO_EMISION varchar(25),
+    LLEVA_CONTABILIDAD varchar(1),
+    LOGO_IMAGEN varchar(255),
+    TIPO_EMISION varchar(1),
+    TIEMPO_ESPERA varchar,
+    CLAVE_INTERNA varchar(25),
+    TIPO_AMBIENTE varchar(1),
+    DIRECCION_MATRIZ varchar(255),
+    TOKEN varchar(30),
+    primary key (ID_EMISOR));
 
 
