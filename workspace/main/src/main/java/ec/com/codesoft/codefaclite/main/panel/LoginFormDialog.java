@@ -26,7 +26,7 @@ public class LoginFormDialog extends javax.swing.JDialog {
         setUndecorated(true);
         setLocationRelativeTo(null);
         //setPreferredSize(new Dimension(571, 210));
-        setSize(575,260);
+        setSize(580,260);
     }
 
     /**
