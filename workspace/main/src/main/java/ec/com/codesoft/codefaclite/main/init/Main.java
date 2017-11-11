@@ -6,8 +6,11 @@
 package ec.com.codesoft.codefaclite.main.init;
 
 
+import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
 import ec.com.codesoft.codefaclite.crm.model.ProductoModel;
+import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
+import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
 import ec.com.codesoft.codefaclite.main.model.GeneralPanelModel;
 import ec.com.codesoft.codefaclite.main.model.LoginModel;
 import ec.com.codesoft.codefaclite.main.model.MenuControlador;
@@ -22,6 +25,7 @@ import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JOptionPane;
 
 /**
@@ -91,6 +95,7 @@ public class Main {
         List<MenuControlador> ventanas=new ArrayList<MenuControlador>();
         ventanas.add(new MenuControlador(panel.getjMenuCliente(),new ClienteModel()));
         ventanas.add(new MenuControlador(panel.getjMenuProducto(),new ProductoModel()));
+        ventanas.add(new MenuControlador(panel.getjMenuFactura(),new FacturacionModel()));
         //ventanas.add(new MenuControlador(panel.getj(), new EmisorModel()));
         return ventanas;
     

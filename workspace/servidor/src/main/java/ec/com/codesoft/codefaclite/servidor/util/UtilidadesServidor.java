@@ -25,7 +25,9 @@ public class UtilidadesServidor {
     public static InputStream[] querys={
         RecursoCodefac.SQL.getResourceInputStream("create_cliente.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_usuario.sql"),
-        RecursoCodefac.SQL.getResourceInputStream("insert_usuario.sql")
+        RecursoCodefac.SQL.getResourceInputStream("insert_usuario.sql"),
+        RecursoCodefac.SQL.getResourceInputStream("create_sri_forma_pago.sql"),
+        RecursoCodefac.SQL.getResourceInputStream("insert_default.sql"),
         
     };
     
@@ -38,14 +40,18 @@ public class UtilidadesServidor {
             
             if (conn!=null)
             {
+                
                 /**
                  * Busca todos los querys disponibles para ejecutar
                  */
                 for (InputStream query : querys) {
                     String sql=UtilidadesTextos.getStringURLFile(query);
-                    PreparedStatement pstm =conn.prepareStatement(sql);
-                    pstm.execute();
-                    pstm.close();
+                    String[] sentencias= sql.split(";");
+                    for (String sentencia : sentencias) {
+                        PreparedStatement pstm = conn.prepareStatement(sentencia);
+                        pstm.execute();
+                        pstm.close();
+                    }
                 }
 
             }

@@ -15,6 +15,7 @@
         <module>../coreCodefacLite</module>
         <module>../utilidades</module>
         <module>../controlador</module>
+        <module>../facturacion</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

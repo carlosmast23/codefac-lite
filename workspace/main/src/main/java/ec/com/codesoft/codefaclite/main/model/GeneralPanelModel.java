@@ -531,6 +531,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             getBtnNuevo().requestFocus();
             agregarValidadores(panel);
             agregarAyudas(panel);
+            panel.limpiar();
             
             panel.estadoFormulario= ControladorCodefacInterface.ESTADO_GRABAR;
             

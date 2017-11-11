@@ -86,6 +86,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuProducto = new javax.swing.JMenuItem();
         jMenuEmisor = new javax.swing.JMenuItem();
         jMenu7 = new javax.swing.JMenu();
+        jMenuFactura = new javax.swing.JMenuItem();
         jMenu8 = new javax.swing.JMenu();
 
         jMenu3.setText("File");
@@ -302,6 +303,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuBar1.add(jMenu2);
 
         jMenu7.setText("Facturacion");
+
+        jMenuFactura.setText("Factura");
+        jMenu7.add(jMenuFactura);
+
         jMenuBar1.add(jMenu7);
 
         jMenu8.setText("Ayuda");
@@ -420,6 +425,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JMenuBar jMenuBar3;
     private javax.swing.JMenuItem jMenuCliente;
     private javax.swing.JMenuItem jMenuEmisor;
+    private javax.swing.JMenuItem jMenuFactura;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
@@ -615,6 +621,14 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
     public void setBtnNuevo(JButton btnNuevo) {
         this.btnNuevo = btnNuevo;
+    }
+
+    public JMenuItem getjMenuFactura() {
+        return jMenuFactura;
+    }
+
+    public void setjMenuFactura(JMenuItem jMenuFactura) {
+        this.jMenuFactura = jMenuFactura;
     }
     
     
