@@ -88,7 +88,7 @@ public class Main {
     /**
      * Metodo donde se van a ligar las ventanas con los menus correspondientes
      * @param panel
-     * @return 
+     * @return                                             
      */
     public static List<MenuControlador> agregarMenuVentana(GeneralPanelModel panel)
     {

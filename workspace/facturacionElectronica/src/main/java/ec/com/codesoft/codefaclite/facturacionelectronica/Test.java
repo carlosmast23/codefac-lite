@@ -4,8 +4,8 @@
  * and open the template in the editor.
  */
 package ec.com.codesoft.codefaclite.facturacionelectronica;
-
-import ec.com.codesoft.codefaclite.ws.recepcion.RecepcionComprobantesOfflineService;
+   
+//import ec.com.codesoft.codefaclite.ws.recepcion.RecepcionComprobantesOfflineService;
 import ec.com.codesoft.codefaclite.ws.test.AutorizacionTest;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -23,7 +23,7 @@ public class Test {
         try {
             URL url = new URL(uri);
              QName qname = new QName("http://ec.gob.sri.ws.recepcion", "RecepcionComprobantesOfflineService");
-             RecepcionComprobantesOfflineService servicio=new RecepcionComprobantesOfflineService(url,qname);
+             //RecepcionComprobantesOfflineService servicio=new RecepcionComprobantesOfflineService(url,qname);
              System.out.println("si existe servicio con sri");
         } catch (MalformedURLException ex) {
             Logger.getLogger(AutorizacionTest.class.getName()).log(Level.SEVERE, null, ex);

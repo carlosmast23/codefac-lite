@@ -5,21 +5,131 @@
  */
 package ec.com.codesoft.codefaclite.crm.panel;
 
-import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import java.util.Map;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 /**
  *
  * @author Robert
  */
-public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
-
+public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
     /**
      * Creates new form ConfigurarEmisor
      */
     public ConfigurarEmisorForm() {
         initComponents();
     }
+
+    public JCheckBox getjCheckBLlevaContabilidad() {
+        return jCheckBLlevaContabilidad;
+    }
+
+    public void setjCheckBLlevaContabilidad(JCheckBox jCheckBLlevaContabilidad) {
+        this.jCheckBLlevaContabilidad = jCheckBLlevaContabilidad;
+    }
+
+    public JComboBox<String> getjComboTipoAmbiente() {
+        return jComboTipoAmbiente;
+    }
+
+    public void setjComboTipoAmbiente(JComboBox<String> jComboTipoAmbiente) {
+        this.jComboTipoAmbiente = jComboTipoAmbiente;
+    }
+
+    public JComboBox<String> getjComboToken() {
+        return jComboToken;
+    }
+
+    public void setjComboToken(JComboBox<String> jComboToken) {
+        this.jComboToken = jComboToken;
+    }
+
+    public JPanel getjPanelConfiguracionEmisor() {
+        return jPanelConfiguracionEmisor;
+    }
+
+    public void setjPanelConfiguracionEmisor(JPanel jPanelConfiguracionEmisor) {
+        this.jPanelConfiguracionEmisor = jPanelConfiguracionEmisor;
+    }
+
+    public JSpinner getjSpinnerTiempoEspera() {
+        return jSpinnerTiempoEspera;
+    }
+
+    public void setjSpinnerTiempoEspera(JSpinner jSpinnerTiempoEspera) {
+        this.jSpinnerTiempoEspera = jSpinnerTiempoEspera;
+    }
+
+    public JTextArea getjTextADirEstablecimiento() {
+        return jTextADirEstablecimiento;
+    }
+
+    public void setjTextADirEstablecimiento(JTextArea jTextADirEstablecimiento) {
+        this.jTextADirEstablecimiento = jTextADirEstablecimiento;
+    }
+
+    public JTextArea getjTextADirMatriz() {
+        return jTextADirMatriz;
+    }
+
+    public void setjTextADirMatriz(JTextArea jTextADirMatriz) {
+        this.jTextADirMatriz = jTextADirMatriz;
+    }
+
+    public JTextField getjTextCodEstablecimiento() {
+        return jTextCodEstablecimiento;
+    }
+
+    public void setjTextCodEstablecimiento(JTextField jTextCodEstablecimiento) {
+        this.jTextCodEstablecimiento = jTextCodEstablecimiento;
+    }
+
+    public JTextField getjTextCodPuntoEmision() {
+        return jTextCodPuntoEmision;
+    }
+
+    public void setjTextCodPuntoEmision(JTextField jTextCodPuntoEmision) {
+        this.jTextCodPuntoEmision = jTextCodPuntoEmision;
+    }
+
+    public JTextField getjTextNombreComercial() {
+        return jTextNombreComercial;
+    }
+
+    public void setjTextNombreComercial(JTextField jTextNombreComercial) {
+        this.jTextNombreComercial = jTextNombreComercial;
+    }
+
+    public JTextField getjTextNombreSocial() {
+        return jTextNombreSocial;
+    }
+
+    public void setjTextNombreSocial(JTextField jTextNombreSocial) {
+        this.jTextNombreSocial = jTextNombreSocial;
+    }
+
+    public JTextField getjTextNumContribuyente() {
+        return jTextNumContribuyente;
+    }
+
+    public void setjTextNumContribuyente(JTextField jTextNumContribuyente) {
+        this.jTextNumContribuyente = jTextNumContribuyente;
+    }
+
+    public JTextField getjTextRuc() {
+        return jTextRuc;
+    }
+
+    public void setjTextRuc(JTextField jTextRuc) {
+        this.jTextRuc = jTextRuc;
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -33,34 +143,34 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
 
         jPanelConfiguracionEmisor = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        jTextRuc = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        jTextNombreSocial = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        jTextNombreComercial = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        jTextADirMatriz = new javax.swing.JTextArea();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        jTextADirEstablecimiento = new javax.swing.JTextArea();
         jLabel6 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        jTextCodEstablecimiento = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        jTextCodPuntoEmision = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
+        jTextNumContribuyente = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        jCheckBLlevaContabilidad = new javax.swing.JCheckBox();
         jLabel10 = new javax.swing.JLabel();
         jTextField7 = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
-        jSpinner1 = new javax.swing.JSpinner();
+        jSpinnerTiempoEspera = new javax.swing.JSpinner();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        jComboTipoAmbiente = new javax.swing.JComboBox<>();
         jLabel14 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        jComboToken = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridBagLayout());
@@ -80,7 +190,7 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        jPanelConfiguracionEmisor.add(jTextField1, gridBagConstraints);
+        jPanelConfiguracionEmisor.add(jTextRuc, gridBagConstraints);
 
         jLabel2.setText("Apellidos y Nombres | Razón Social:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -95,7 +205,7 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        jPanelConfiguracionEmisor.add(jTextField2, gridBagConstraints);
+        jPanelConfiguracionEmisor.add(jTextNombreSocial, gridBagConstraints);
 
         jLabel3.setText("Nombre Comercial:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -110,7 +220,7 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        jPanelConfiguracionEmisor.add(jTextField3, gridBagConstraints);
+        jPanelConfiguracionEmisor.add(jTextNombreComercial, gridBagConstraints);
 
         jLabel4.setText("Dirección Matríz:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -120,9 +230,9 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelConfiguracionEmisor.add(jLabel4, gridBagConstraints);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        jTextADirMatriz.setColumns(20);
+        jTextADirMatriz.setRows(5);
+        jScrollPane1.setViewportView(jTextADirMatriz);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -141,9 +251,9 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelConfiguracionEmisor.add(jLabel5, gridBagConstraints);
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane2.setViewportView(jTextArea2);
+        jTextADirEstablecimiento.setColumns(20);
+        jTextADirEstablecimiento.setRows(5);
+        jScrollPane2.setViewportView(jTextADirEstablecimiento);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -166,7 +276,7 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        jPanelConfiguracionEmisor.add(jTextField4, gridBagConstraints);
+        jPanelConfiguracionEmisor.add(jTextCodEstablecimiento, gridBagConstraints);
 
         jLabel7.setText("Código del punto de Emisión:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -179,7 +289,7 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        jPanelConfiguracionEmisor.add(jTextField5, gridBagConstraints);
+        jPanelConfiguracionEmisor.add(jTextCodPuntoEmision, gridBagConstraints);
 
         jLabel8.setText("Contribuyente Especial | Nro. Resolución:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -193,7 +303,7 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
         gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        jPanelConfiguracionEmisor.add(jTextField6, gridBagConstraints);
+        jPanelConfiguracionEmisor.add(jTextNumContribuyente, gridBagConstraints);
 
         jLabel9.setText("Obligado a llevar contabilidad:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -207,7 +317,7 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
         gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        jPanelConfiguracionEmisor.add(jCheckBox1, gridBagConstraints);
+        jPanelConfiguracionEmisor.add(jCheckBLlevaContabilidad, gridBagConstraints);
 
         jLabel10.setText("Logo(Imagen):");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -237,7 +347,7 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        jPanelConfiguracionEmisor.add(jSpinner1, gridBagConstraints);
+        jPanelConfiguracionEmisor.add(jSpinnerTiempoEspera, gridBagConstraints);
 
         jLabel12.setText("Segundos");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -255,10 +365,10 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelConfiguracionEmisor.add(jLabel13, gridBagConstraints);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "PRODUCCIÓN", "PRUEBAS" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        jComboTipoAmbiente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "PRODUCCIÓN", "PRUEBAS" }));
+        jComboTipoAmbiente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                jComboTipoAmbienteActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -267,7 +377,7 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        jPanelConfiguracionEmisor.add(jComboBox1, gridBagConstraints);
+        jPanelConfiguracionEmisor.add(jComboTipoAmbiente, gridBagConstraints);
 
         jLabel14.setText("Token para firmar:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -277,14 +387,14 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelConfiguracionEmisor.add(jLabel14, gridBagConstraints);
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ANF - Certificado Exportado", "ANF - Plug & Sign", "BCE - iKey2032", "BCE - Aladdin eToken Pro", "SD - ePass3003 auto", "SD - BioPass3000", "KEY4 - Consejo Judicatura" }));
+        jComboToken.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ANF - Certificado Exportado", "ANF - Plug & Sign", "BCE - iKey2032", "BCE - Aladdin eToken Pro", "SD - ePass3003 auto", "SD - BioPass3000", "KEY4 - Consejo Judicatura" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 11;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        jPanelConfiguracionEmisor.add(jComboBox2, gridBagConstraints);
+        jPanelConfiguracionEmisor.add(jComboToken, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -297,44 +407,14 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void jComboTipoAmbienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboTipoAmbienteActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
-
-    @Override
-    public void grabar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void editar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void eliminar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void imprimir() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public String getNombre() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Map<Integer, Boolean> permisosFormulario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    }//GEN-LAST:event_jComboTipoAmbienteActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JCheckBox jCheckBLlevaContabilidad;
+    private javax.swing.JComboBox<String> jComboTipoAmbiente;
+    private javax.swing.JComboBox<String> jComboToken;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -352,15 +432,15 @@ public abstract class ConfigurarEmisorForm extends GeneralPanelInterface {
     private javax.swing.JPanel jPanelConfiguracionEmisor;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
+    private javax.swing.JSpinner jSpinnerTiempoEspera;
+    private javax.swing.JTextArea jTextADirEstablecimiento;
+    private javax.swing.JTextArea jTextADirMatriz;
+    private javax.swing.JTextField jTextCodEstablecimiento;
+    private javax.swing.JTextField jTextCodPuntoEmision;
     private javax.swing.JTextField jTextField7;
+    private javax.swing.JTextField jTextNombreComercial;
+    private javax.swing.JTextField jTextNombreSocial;
+    private javax.swing.JTextField jTextNumContribuyente;
+    private javax.swing.JTextField jTextRuc;
     // End of variables declaration//GEN-END:variables
 }
