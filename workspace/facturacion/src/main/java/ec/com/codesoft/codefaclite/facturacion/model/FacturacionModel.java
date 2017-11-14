@@ -9,7 +9,9 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.ClienteFacturacionBusqueda;
+import ec.com.codesoft.codefaclite.facturacion.other.FacturacionElectronica;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
+import ec.com.codesoft.codefaclite.servidor.entity.Factura;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,6 +25,7 @@ import java.util.Map;
 public class FacturacionModel extends FacturacionPanel{
 
     private Persona persona;
+    private Factura factura;
     
     public FacturacionModel() {
         addListenerButtons();
@@ -50,7 +53,9 @@ public class FacturacionModel extends FacturacionPanel{
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //Despues de implemetar todo el metodo de grabar
+        FacturacionElectronica facturaElectronica=new FacturacionElectronica(factura, session);
+        facturaElectronica.procesarComprobante();//listo se encarga de procesar el comprobante
     }
 
     @Override
@@ -83,7 +88,7 @@ public class FacturacionModel extends FacturacionPanel{
         getLblRuc().setText(session.getEmpresa().getIdentificacion());
         getLblDireccion().setText(session.getEmpresa().getDireccion());
         getLblTelefonos().setText(session.getEmpresa().getTelefonos());
-        getLblNombreComercial().setText(session.getEmpresa().getNombre());
+        getLblNombreComercial().setText(session.getEmpresa().getNombreLegal());
     }
 
     @Override

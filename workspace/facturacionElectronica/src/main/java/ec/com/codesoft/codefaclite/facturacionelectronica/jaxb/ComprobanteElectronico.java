@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 public abstract class ComprobanteElectronico {    
     public static final String FACTURA="factura";
     public static final String NOTA_CREDITO="notaCredito";
+    public static final String MODO_FACTURACION_NORMAL="1";
 
     
     private InformacionTributaria informacionTributaria;

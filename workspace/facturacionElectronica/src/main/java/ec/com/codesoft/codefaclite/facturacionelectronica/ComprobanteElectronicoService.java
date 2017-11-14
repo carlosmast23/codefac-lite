@@ -42,7 +42,7 @@ public class ComprobanteElectronicoService {
     
     public static final String MODO_PRODUCCION="produccion";
     public static final String MODO_PRUEBAS="pruebas";
-    public static final String MODO_FACTURACION_NORMAL="1";
+    
     
     public static final Integer ETAPA_GENERAR=1;
     public static final Integer ETAPA_PRE_VALIDAR=2;
@@ -254,7 +254,7 @@ public class ComprobanteElectronicoService {
          * Clave del tipo de emision, para el metodo offline solo existe el modo 1
          * que significa modo normal antes existia el modo contingencia
          */
-        claveAcceso.add(MODO_FACTURACION_NORMAL);
+        claveAcceso.add(ComprobanteElectronico.MODO_FACTURACION_NORMAL);
         
                 
         

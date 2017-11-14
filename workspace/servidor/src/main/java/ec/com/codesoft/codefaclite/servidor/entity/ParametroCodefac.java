@@ -23,6 +23,8 @@ public class ParametroCodefac {
     public static final String SRI_WS_RECEPCION_PRUEBA= "sri_ws_recepcion_prueba";
     public static final String SRI_WS_AUTORIZACION_PRUEBA= "sri_ws_autorizacion_prueba";
     
+    public static final String SECUENCIAL_FACTURA= "secuencial_factura";
+    
     public long id;
     public String nombre;
     public String valor;
