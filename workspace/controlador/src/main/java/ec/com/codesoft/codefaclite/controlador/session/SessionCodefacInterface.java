@@ -6,7 +6,9 @@
 package ec.com.codesoft.codefaclite.controlador.session;
 
 import ec.com.codesoft.codefaclite.servidor.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Usuario;
+import java.util.List;
 
 /**
  *
@@ -15,4 +17,5 @@ import ec.com.codesoft.codefaclite.servidor.entity.Usuario;
 public interface SessionCodefacInterface {
     public Usuario getUsuario();
     public Empresa getEmpresa();
+    public List<ParametroCodefac> getParametrosCodefac();
 }

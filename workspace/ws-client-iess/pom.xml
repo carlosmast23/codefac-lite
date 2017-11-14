@@ -43,6 +43,24 @@
                         <id>wsimport-generate-RecepcionComprobantesOffline</id>
                         <phase>generate-sources</phase>
                     </execution>
+                    <execution>
+                        <goals>
+                            <goal>wsimport</goal>
+                        </goals>
+                        <configuration>
+                            <wsdlFiles>
+                                <wsdlFile>AutorizacionComprobantesOffline.wsdl</wsdlFile>
+                            </wsdlFiles>
+                            <packageName></packageName>
+                            <vmArgs>
+                                <vmArg>-Djavax.xml.accessExternalSchema=all</vmArg>
+                            </vmArgs>
+                            <wsdlLocation>file:/C:/Users/Carlos/Documents/GitHub/codefac-lite/recursos/sri/wsdl/offline/AutorizacionComprobantesOffline.wsdl</wsdlLocation>
+                            <staleFile>${project.build.directory}/jaxws/stale/AutorizacionComprobantesOffline.stale</staleFile>
+                        </configuration>
+                        <id>wsimport-generate-AutorizacionComprobantesOffline</id>
+                        <phase>generate-sources</phase>
+                    </execution>
                 </executions>
                 <dependencies>
                     <dependency>
