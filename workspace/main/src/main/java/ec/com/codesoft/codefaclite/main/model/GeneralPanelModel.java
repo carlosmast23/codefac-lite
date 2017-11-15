@@ -1067,7 +1067,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         parametros.put("pl_fecha_hora",formateador.format(new Date()));
         parametros.put("pl_usuario",sessionCodefac.getUsuario().getNick());
         parametros.put("pl_direccion",sessionCodefac.getEmpresa().getDireccion());
-        parametros.put("pl_nombre_empresa",sessionCodefac.getEmpresa().getNombre());
+        parametros.put("pl_nombre_empresa",sessionCodefac.getEmpresa().getNombreLegal());
         parametros.put("pl_telefonos",sessionCodefac.getEmpresa().getTelefonos());
         parametros.put("pl_url_img1",RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("codefac-logotipo.png"));
         parametros.put("pl_img_facebook",RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("facebook.png"));
