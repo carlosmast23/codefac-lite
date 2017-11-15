@@ -11,7 +11,8 @@ package ec.com.codesoft.codefaclite.servidor.entity;
  */
 public class Empresa {
     private String telefonos;
-    private String nombre;
+    private String razonSocial;
+    private String nombreLegal;
     private String direccion;
     private String identificacion;    
 
@@ -23,15 +24,7 @@ public class Empresa {
         this.telefonos = telefonos;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getDireccion() {
+     public String getDireccion() {
         return direccion;
     }
 
@@ -46,6 +39,24 @@ public class Empresa {
     public void setIdentificacion(String identificacion) {
         this.identificacion = identificacion;
     }
+
+    public String getRazonSocial() {
+        return razonSocial;
+    }
+
+    public void setRazonSocial(String razonSocial) {
+        this.razonSocial = razonSocial;
+    }
+
+    public String getNombreLegal() {
+        return nombreLegal;
+    }
+
+    public void setNombreLegal(String nombreLegal) {
+        this.nombreLegal = nombreLegal;
+    }
+    
+    
     
     
 }

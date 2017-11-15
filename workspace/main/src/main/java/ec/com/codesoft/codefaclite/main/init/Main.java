@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.main.panel.LoginForm;
 import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
@@ -62,7 +63,60 @@ public class Main {
         empresa.setIdentificacion("17782823123");
         empresa.setNombre("CORECOMPU");
         session.setEmpresa(empresa);
+        List<ParametroCodefac> parametros=new ArrayList<ParametroCodefac>();
+        ParametroCodefac param=new ParametroCodefac();
         
+        param.id=1;
+        param.nombre=ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA;
+        param.valor="carlos_alfonso_sanchez_coyago.p12";        
+        parametros.add(param);
+        
+        param=new ParametroCodefac();
+        param.id=2;
+        param.nombre=ParametroCodefac.CLAVE_FIRMA_ELECTRONICA;
+        param.valor="Code17bwbtj";        
+        parametros.add(param);
+        
+        
+        param=new ParametroCodefac();
+        param.id=3;
+        param.nombre=ParametroCodefac.DIRECTORIO_RECURSOS;
+        param.valor="E:/FacturacionOffline";        
+        parametros.add(param);
+        
+        param=new ParametroCodefac();
+        param.id=4;
+        param.nombre=ParametroCodefac.MODO_FACTURACION;
+        param.valor="pruebas";        
+        parametros.add(param);
+        
+        param=new ParametroCodefac();
+        param.id=5;
+        param.nombre=ParametroCodefac.SRI_WS_RECEPCION;
+        param.valor="https://cel.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl";        
+        parametros.add(param);
+
+        param=new ParametroCodefac();
+        param.id=6;
+        param.nombre=ParametroCodefac.SRI_WS_RECEPCION_PRUEBA;
+        param.valor="https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl";        
+        parametros.add(param);
+
+        param=new ParametroCodefac();
+        param.id=7;
+        param.nombre=ParametroCodefac.SRI_WS_AUTORIZACION;
+        param.valor="https://cel.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl";        
+        parametros.add(param);
+
+        param=new ParametroCodefac();
+        param.id=8;
+        param.nombre=ParametroCodefac.SRI_WS_AUTORIZACION_PRUEBA;
+        param.valor="https://celcer.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl";        
+        parametros.add(param);
+
+        
+        
+        session.setParametrosCodefac(parametros);
         session.setUsuario(usuarioLogin);
         
         /**
@@ -116,3 +170,4 @@ public class Main {
         
     }
 }
+

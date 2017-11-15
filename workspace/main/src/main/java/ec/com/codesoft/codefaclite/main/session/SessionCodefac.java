@@ -7,7 +7,9 @@ package ec.com.codesoft.codefaclite.main.session;
 
 import ec.com.codesoft.codefaclite.controlador.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.servidor.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Usuario;
+import java.util.List;
 
 /**
  *
@@ -16,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidor.entity.Usuario;
 public class SessionCodefac implements SessionCodefacInterface{
     private Usuario usuario;
     private Empresa empresa;
+    private List<ParametroCodefac> parametrosCodefac;
 
     public SessionCodefac() {
     }
@@ -42,6 +45,17 @@ public class SessionCodefac implements SessionCodefacInterface{
     public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;
     }
+
+    @Override
+    public List<ParametroCodefac> getParametrosCodefac() {
+        return parametrosCodefac;
+    }
+
+    public void setParametrosCodefac(List<ParametroCodefac> parametrosCodefac) {
+        this.parametrosCodefac = parametrosCodefac;
+    }
+    
+    
     
     
     
