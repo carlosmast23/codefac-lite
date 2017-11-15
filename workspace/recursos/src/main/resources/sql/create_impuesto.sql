@@ -10,8 +10,9 @@
 create table IMPUESTO 
 (
     ID_IMPUESTO integer not null GENERATED ALWAYS AS IDENTITY( START WITH 1, INCREMENT BY 1),
-    IVA VARCHAR(1) DEFAULT '0',
-    ICE VARCHAR(4) DEFAULT '4',
-    IRBPNR  VARCHAR(1) DEFAULT '0',
+    NOMBRE varchar(10),
+    CODIGO_SRI varchar(4),
+    ESTADO varchar(1),
+    DESCRIPCION varchar(30),
     primary key(ID_IMPUESTO)
 )
