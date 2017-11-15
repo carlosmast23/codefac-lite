@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.main.model;
 
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.main.panel.LoginForm;
 import ec.com.codesoft.codefaclite.main.panel.LoginFormDialog;
 import ec.com.codesoft.codefaclite.servidor.entity.Usuario;
@@ -52,13 +53,13 @@ public class LoginModel extends LoginFormDialog{
                     }
                     else
                     {
-                        JOptionPane.showMessageDialog(null,"Usuario incorrecto");
+                        DialogoCodefac.mensaje("Error Login","Datos Incorrectos",DialogoCodefac.MENSAJE_INCORRECTO);
                     }
                     
                 }
                 else
                 {
-                    JOptionPane.showMessageDialog(null,"Ingrese todos los campos");
+                    DialogoCodefac.mensaje("Advertencia Login","Ingrese todos los campos",DialogoCodefac.MENSAJE_ADVERTENCIA);
                 }
             }
         });
