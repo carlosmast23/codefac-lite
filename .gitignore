@@ -9,7 +9,7 @@
 #excluir arhivos de compilacion
 
 *.class
-*.jar
+/workspace/*.jar
 /workspace/mavenCodefacLite/target/
 
 #Configuraciones del netbeans
