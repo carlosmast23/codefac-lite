@@ -16,7 +16,9 @@ import ec.com.codesoft.codefaclite.crm.reportdata.DataEjemploReporte;
 import ec.com.codesoft.codefaclite.crm.test.EjemploCrm;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
+import ec.com.codesoft.codefaclite.servidor.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
+import ec.com.codesoft.codefaclite.servidor.service.SriService;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -25,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -40,6 +43,12 @@ import net.sf.jasperreports.view.JasperViewer;
  */
 public class ClienteModel extends ClienteForm
 {
+     /**
+     * Modelo para manejar las identificaciones del sri
+     */
+    private DefaultComboBoxModel<SriIdentificacion> modelComboIdentificacion;
+    List<SriIdentificacion> identificaciones;
+    
     private PersonaService personaService;
     private Persona persona;
     private String comboIdentificacion [] = {"CEDULA","RUC","PASAPORTE","IDENTIFICACION DEL EXTERIOR","PLACA"};
@@ -48,6 +57,7 @@ public class ClienteModel extends ClienteForm
     public ClienteModel()
     {
         this.personaService = new PersonaService();
+        cargarClientes();
     }
     
     
@@ -56,7 +66,7 @@ public class ClienteModel extends ClienteForm
     {
         persona = new Persona();
         persona.setNombreSocial(getjTextNombreSocial().getText());
-        persona.setTipoIdentificacion((String) getjComboIdentificacion().getSelectedItem());
+        persona.setTipoIdentificacion(((SriIdentificacion)getjComboIdentificacion().getSelectedItem()).getCodigo());
         persona.setIdentificacion(getjTextIdentificacion().getText());
         persona.setTipCliente((String) getjComboTipoCliente().getSelectedItem());
         persona.setDireccion(getjTextAreaDireccion().getText());
@@ -68,14 +78,14 @@ public class ClienteModel extends ClienteForm
         
         System.err.println("Se grabo correctamente");
         
-        throw new ExcepcionCodefacLite("Excepcion lanzada desde grabar");
+        //throw new ExcepcionCodefacLite("Excepcion lanzada desde grabar");
     }
 
     @Override
     public void editar() throws ExcepcionCodefacLite
     {
         persona.setNombreSocial(getjTextNombreSocial().getText());
-        persona.setTipoIdentificacion((String) getjComboIdentificacion().getSelectedItem());
+        persona.setTipoIdentificacion(((SriIdentificacion)getjComboIdentificacion().getSelectedItem()).getCodigo());
         persona.setIdentificacion(getjTextIdentificacion().getText());
         persona.setTipCliente((String)getjComboTipoCliente().getSelectedItem());
         persona.setDireccion(getjTextAreaDireccion().getText());
@@ -134,12 +144,12 @@ public class ClienteModel extends ClienteForm
 
     @Override
     public void actualizar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        cargarClientes();
     }
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
-        this.panelPadre.crearVentanaCodefac(new ClienteModel(),true);
+        //this.panelPadre.crearVentanaCodefac(new ClienteModel(),true);
         ClienteBusquedaDialogo clienteBusquedaDialogo= new ClienteBusquedaDialogo();
         BuscarDialogoModel buscarDialogoModel=new BuscarDialogoModel(clienteBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
@@ -266,6 +276,24 @@ public class ClienteModel extends ClienteForm
          */
         getjComboIdentificacion().setSelectedIndex(0);
         getjComboTipoCliente().setSelectedIndex(0);
+        
+    }
+    
+    /**
+     * Cargar los tipos de clientes de la base de datos
+     */
+    private void cargarClientes()
+    {
+        /**
+         * Cargar los valores por defecto de las identificaciones
+         */
+        SriService servicioSri=new SriService();
+        identificaciones=servicioSri.obtenerIdentificaciones(SriIdentificacion.CLIENTE);
+        getjComboIdentificacion().removeAllItems();
+        for (SriIdentificacion identificacion : identificaciones) {
+            getjComboIdentificacion().addItem(identificacion);
+        }
+        
     }
             
 }

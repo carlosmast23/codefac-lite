@@ -11,12 +11,14 @@ import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.crm.test.EjemploCrm;
+import ec.com.codesoft.codefaclite.servidor.entity.SriIdentificacion;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -145,8 +147,6 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelCaracteristicasGenerales.add(jLabel3, gridBagConstraints);
-
-        jComboIdentificacion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CEDULA", "RUC", "PASAPORTE", "IDENTIFICACION DEL EXTERIOR", "PLACA" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -274,7 +274,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboIdentificacion;
+    private javax.swing.JComboBox<SriIdentificacion> jComboIdentificacion;
     private javax.swing.JComboBox<String> jComboTipoCliente;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -298,13 +298,8 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JTextField jTextTelefono;
     // End of variables declaration//GEN-END:variables
     
-    public JComboBox<String> getjComboIdentificacion() {
-        return jComboIdentificacion;
-    }
     
-    public void setjComboIdentificacion(JComboBox<String> jComboIdentificacion) {
-        this.jComboIdentificacion = jComboIdentificacion;
-    }
+    
 
     public JComboBox<String> getjComboTipoCliente() {
         return jComboTipoCliente;
@@ -398,6 +393,15 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     public void setjTextTelefono(JTextField jTextTelefono) {
         this.jTextTelefono = jTextTelefono;
     }
+
+    public JComboBox<SriIdentificacion> getjComboIdentificacion() {
+        return jComboIdentificacion;
+    }
+
+    public void setjComboIdentificacion(JComboBox<SriIdentificacion> jComboIdentificacion) {
+        this.jComboIdentificacion = jComboIdentificacion;
+    }
+    
     
     
 }

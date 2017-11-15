@@ -27,6 +27,7 @@ public class UtilidadesServidor {
         RecursoCodefac.SQL.getResourceInputStream("create_usuario.sql"),
         RecursoCodefac.SQL.getResourceInputStream("insert_usuario.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_sri_forma_pago.sql"),
+        RecursoCodefac.SQL.getResourceInputStream("create_sri_identificacion.sql"),
         RecursoCodefac.SQL.getResourceInputStream("insert_default.sql"),
         
     };
