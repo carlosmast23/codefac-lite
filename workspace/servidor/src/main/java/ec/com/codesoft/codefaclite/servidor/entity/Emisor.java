@@ -25,12 +25,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "EMISOR")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Persona.findAll", query = "SELECT p FROM Persona p"),
-    @NamedQuery(name = "Persona.findByIdentificacion", query = "SELECT p FROM Persona p WHERE p.identificacion = :identificacion"),
-    @NamedQuery(name = "Persona.findByNombre", query = "SELECT p FROM Persona p WHERE p.nombreSocial = :nombre")})
+    @NamedQuery(name = "Emisor.findAll", query = "SELECT e FROM Emisor e"),
+    @NamedQuery(name = "Emisor.findByRuc", query = "SELECT e FROM Emisor e WHERE e.ruc = :ruc"),
+    @NamedQuery(name = "Emisor.findByNomComercial", query = "SELECT e FROM Emisor e WHERE e.nomComercial = :nomComercial")})
 public class Emisor implements Serializable
 {
-     private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -68,4 +68,143 @@ public class Emisor implements Serializable
     private String direccionMatriz;
     @Column (name = "TOKEN")
     private String token;
+
+    public Integer getIdCliente() {
+        return idCliente;
+    }
+
+    public void setIdCliente(Integer idCliente) {
+        this.idCliente = idCliente;
+    }
+
+    public String getRazonSocial() {
+        return razonSocial;
+    }
+
+    public void setRazonSocial(String razonSocial) {
+        this.razonSocial = razonSocial;
+    }
+
+    public String getRuc() {
+        return ruc;
+    }
+
+    public void setRuc(String ruc) {
+        this.ruc = ruc;
+    }
+
+    public String getNomComercial() {
+        return nomComercial;
+    }
+
+    public void setNomComercial(String nomComercial) {
+        this.nomComercial = nomComercial;
+    }
+
+    public String getDirEstablecimiento() {
+        return dirEstablecimiento;
+    }
+
+    public void setDirEstablecimiento(String dirEstablecimiento) {
+        this.dirEstablecimiento = dirEstablecimiento;
+    }
+
+    public String getCodEstablecimiento() {
+        return codEstablecimiento;
+    }
+
+    public void setCodEstablecimiento(String codEstablecimiento) {
+        this.codEstablecimiento = codEstablecimiento;
+    }
+
+    public String getResolucion() {
+        return resolucion;
+    }
+
+    public void setResolucion(String resolucion) {
+        this.resolucion = resolucion;
+    }
+
+    public String getContribuyenteEspecial() {
+        return contribuyenteEspecial;
+    }
+
+    public void setContribuyenteEspecial(String contribuyenteEspecial) {
+        this.contribuyenteEspecial = contribuyenteEspecial;
+    }
+
+    public String getCodPuntoEmision() {
+        return codPuntoEmision;
+    }
+
+    public void setCodPuntoEmision(String codPuntoEmision) {
+        this.codPuntoEmision = codPuntoEmision;
+    }
+
+    public String getLlevaContabilidad() {
+        return llevaContabilidad;
+    }
+
+    public void setLlevaContabilidad(String llevaContabilidad) {
+        this.llevaContabilidad = llevaContabilidad;
+    }
+
+    public String getLogoImagen() {
+        return logoImagen;
+    }
+
+    public void setLogoImagen(String logoImagen) {
+        this.logoImagen = logoImagen;
+    }
+
+    public String getTipoEmision() {
+        return tipoEmision;
+    }
+
+    public void setTipoEmision(String tipoEmision) {
+        this.tipoEmision = tipoEmision;
+    }
+
+    public String getTiempoEspera() {
+        return tiempoEspera;
+    }
+
+    public void setTiempoEspera(String tiempoEspera) {
+        this.tiempoEspera = tiempoEspera;
+    }
+
+    public String getClaveInterna() {
+        return claveInterna;
+    }
+
+    public void setClaveInterna(String claveInterna) {
+        this.claveInterna = claveInterna;
+    }
+
+    public String getTipoAmbiente() {
+        return tipoAmbiente;
+    }
+
+    public void setTipoAmbiente(String tipoAmbiente) {
+        this.tipoAmbiente = tipoAmbiente;
+    }
+
+    public String getDireccionMatriz() {
+        return direccionMatriz;
+    }
+
+    public void setDireccionMatriz(String direccionMatriz) {
+        this.direccionMatriz = direccionMatriz;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    
+    
 }

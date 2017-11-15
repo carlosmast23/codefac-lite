@@ -630,7 +630,13 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     public void setjMenuFactura(JMenuItem jMenuFactura) {
         this.jMenuFactura = jMenuFactura;
     }
-    
-    
+
+    public JMenuItem getjMenuEmisor() {
+        return jMenuEmisor;
+    }
+
+    public void setjMenuEmisor(JMenuItem jMenuEmisor) {
+        this.jMenuEmisor = jMenuEmisor;
+    }
     
 }

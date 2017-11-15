@@ -5,19 +5,18 @@
  */
 package ec.com.codesoft.codefaclite.servidor.facade;
 
-import ec.com.codesoft.codefaclite.servidor.entity.Producto;
+import ec.com.codesoft.codefaclite.servidor.entity.Emisor;
 
 /**
  *
  * @author PC
  */
-public class ProductoFacade extends AbstractFacade<Producto>
+public class EmisorFacade extends AbstractFacade<Emisor>
 {
     
-    public ProductoFacade() 
+    public EmisorFacade() 
     {
-        super(Producto.class);
+        super(Emisor.class);
     }
-    
     
 }

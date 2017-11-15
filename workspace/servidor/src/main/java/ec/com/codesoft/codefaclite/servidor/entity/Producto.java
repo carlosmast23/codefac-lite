@@ -19,10 +19,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "PRODUCTO")
 @XmlRootElement
-//@NamedQueries({
-//    @NamedQuery(name = "Producto.findAll", query = "SELECT p FROM Producto p"),
-//    @NamedQuery(name = "Producto.findByIdentificacion", query = "SELECT p FROM Producto p WHERE p.identificacion = :identificacion"),
-//    @NamedQuery(name = "Producto.findByNombre", query = "SELECT p FROM Persona p WHERE p.nombreSocial = :nombre")})
+@NamedQueries({
+    @NamedQuery(name = "Producto.findAll", query = "SELECT p FROM Producto p"),
+    @NamedQuery(name = "Producto.findByCodigoPrincipal", query = "SELECT p FROM Producto p WHERE p.codigoPrincipal = :codigoPrincipal")})
 /**
  *
  * @author PC
@@ -33,25 +32,66 @@ public class Producto implements Serializable
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column (name = "ID_CLIENTE")
-    private Integer  idCliente;
-    @Column(name = "IDENTIFICACION")
-    private String identificacion;
-    @Column(name = "TIPO_IDENTIFICACION")
-    private String tipoIdentificacion;
-    @Column(name = "NOMBRE_SOCIAL")
-    private String nombreSocial;
-    @Column(name = "TIPO_CLIENTE")
-    private String tipCliente;
-    @Column(name = "DIRECCION")
-    private String direccion;
-    @Column(name = "TELEFONO_CONVENCIONAL")
-    private String telefonoConvencional;
-    @Column(name = "EXTENSION_TELEFONO")
-    private String extensionTelefono;
-    @Column(name = "TELEFONO_CELULAR")
-    private String telefonoCelular;
-    @Column(name = "CORREO_ELECTRONICO")
-    private String correoElectronico;
+    @Column (name = "ID_PRODUCTO")
+    private Integer  idProducto;
+    @Column(name = "CODIGO_PRINCIPAL")
+    private String codigoPrincipal;
+    @Column(name = "CODIGO_AUXILIAR")
+    private String codigoAuxiliar;
+    @Column(name = "TIPO_PRODUCTO")
+    private String tipoProducto;
+    @Column(name = "NOMBRE")
+    private String nombre;
+    @Column(name = "VALOR_UNITARIO")
+    private String valorUnitario;
+
+    public Integer getIdProducto() {
+        return idProducto;
+    }
+
+    public void setIdProducto(Integer idProducto) {
+        this.idProducto = idProducto;
+    }
+
+    public String getCodigoPrincipal() {
+        return codigoPrincipal;
+    }
+
+    public void setCodigoPrincipal(String codigoPrincipal) {
+        this.codigoPrincipal = codigoPrincipal;
+    }
+
+    public String getCodigoAuxiliar() {
+        return codigoAuxiliar;
+    }
+
+    public void setCodigoAuxiliar(String codigoAuxiliar) {
+        this.codigoAuxiliar = codigoAuxiliar;
+    }
+
+    public String getTipoProducto() {
+        return tipoProducto;
+    }
+
+    public void setTipoProducto(String tipoProducto) {
+        this.tipoProducto = tipoProducto;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getValorUnitario() {
+        return valorUnitario;
+    }
+
+    public void setValorUnitario(String valorUnitario) {
+        this.valorUnitario = valorUnitario;
+    }
+    
     
 }

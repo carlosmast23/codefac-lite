@@ -6,6 +6,9 @@
 package ec.com.codesoft.codefaclite.crm.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import java.util.Map;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -25,7 +28,7 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
     public ConfigurarEmisorForm() {
         initComponents();
     }
-
+    
     public JCheckBox getjCheckBLlevaContabilidad() {
         return jCheckBLlevaContabilidad;
     }
@@ -57,7 +60,8 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
     public void setjPanelConfiguracionEmisor(JPanel jPanelConfiguracionEmisor) {
         this.jPanelConfiguracionEmisor = jPanelConfiguracionEmisor;
     }
-
+    
+    @LimpiarAnotacion
     public JSpinner getjSpinnerTiempoEspera() {
         return jSpinnerTiempoEspera;
     }
@@ -65,7 +69,10 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
     public void setjSpinnerTiempoEspera(JSpinner jSpinnerTiempoEspera) {
         this.jSpinnerTiempoEspera = jSpinnerTiempoEspera;
     }
-
+    
+    @LimpiarAnotacion
+    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
+    @ValidacionCodefacAnotacion(requerido=true , min=5 ,max = 1024,expresionRegular = "^[A-Za-z0-9\\s]*$",nombre = "Direccion Establecimento")
     public JTextArea getjTextADirEstablecimiento() {
         return jTextADirEstablecimiento;
     }
@@ -73,7 +80,10 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
     public void setjTextADirEstablecimiento(JTextArea jTextADirEstablecimiento) {
         this.jTextADirEstablecimiento = jTextADirEstablecimiento;
     }
-
+    
+    @LimpiarAnotacion
+    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
+    @ValidacionCodefacAnotacion(requerido=true , min=5 ,max = 1024,expresionRegular = "^[A-Za-z0-9\\s]*$",nombre = "Direccion Matriz")
     public JTextArea getjTextADirMatriz() {
         return jTextADirMatriz;
     }
@@ -81,7 +91,10 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
     public void setjTextADirMatriz(JTextArea jTextADirMatriz) {
         this.jTextADirMatriz = jTextADirMatriz;
     }
-
+    
+    @LimpiarAnotacion
+    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
+    @ValidacionCodefacAnotacion(requerido=true , min=5 ,max = 1024,expresionRegular = "^[A-Za-z0-9\\s]*$",nombre = "Codigo Estableciento")
     public JTextField getjTextCodEstablecimiento() {
         return jTextCodEstablecimiento;
     }
@@ -89,7 +102,10 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
     public void setjTextCodEstablecimiento(JTextField jTextCodEstablecimiento) {
         this.jTextCodEstablecimiento = jTextCodEstablecimiento;
     }
-
+    
+    @LimpiarAnotacion
+    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
+    @ValidacionCodefacAnotacion(requerido=true , min=5 ,max = 1024,expresionRegular = "^[A-Za-z0-9\\s]*$",nombre = "Codigo del punto de Emision")
     public JTextField getjTextCodPuntoEmision() {
         return jTextCodPuntoEmision;
     }
@@ -97,7 +113,10 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
     public void setjTextCodPuntoEmision(JTextField jTextCodPuntoEmision) {
         this.jTextCodPuntoEmision = jTextCodPuntoEmision;
     }
-
+    
+    @LimpiarAnotacion
+    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
+    @ValidacionCodefacAnotacion(requerido=true , min=5 ,max = 1024,expresionRegular = "^[A-Za-z0-9\\s]*$",nombre = "Nombre Comercial")
     public JTextField getjTextNombreComercial() {
         return jTextNombreComercial;
     }
@@ -105,7 +124,10 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
     public void setjTextNombreComercial(JTextField jTextNombreComercial) {
         this.jTextNombreComercial = jTextNombreComercial;
     }
-
+    
+    @LimpiarAnotacion
+    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
+    @ValidacionCodefacAnotacion(requerido=true , min=5 ,max = 1024,expresionRegular = "^[A-Za-z0-9\\s]*$",nombre = "Apellidos y Nombres | Razon Social")
     public JTextField getjTextNombreSocial() {
         return jTextNombreSocial;
     }
@@ -113,7 +135,10 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
     public void setjTextNombreSocial(JTextField jTextNombreSocial) {
         this.jTextNombreSocial = jTextNombreSocial;
     }
-
+    
+    @LimpiarAnotacion
+    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
+    @ValidacionCodefacAnotacion(requerido=true , min=5 ,max = 1024,expresionRegular = "^[A-Za-z0-9\\s]*$",nombre = "Contribuyente especial Nro. Resolucion")
     public JTextField getjTextNumContribuyente() {
         return jTextNumContribuyente;
     }
@@ -121,7 +146,10 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
     public void setjTextNumContribuyente(JTextField jTextNumContribuyente) {
         this.jTextNumContribuyente = jTextNumContribuyente;
     }
-
+    
+    @LimpiarAnotacion
+    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
+    @ValidacionCodefacAnotacion(requerido=true , min=5 ,max = 1024,expresionRegular = "^[A-Za-z0-9\\s]*$",nombre = "RUC")
     public JTextField getjTextRuc() {
         return jTextRuc;
     }
@@ -172,7 +200,14 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
         jLabel14 = new javax.swing.JLabel();
         jComboToken = new javax.swing.JComboBox<>();
 
+        setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
+        setTitle("Emisor");
+        setToolTipText("");
+        setFrameIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/edit-icon.png"))); // NOI18N
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jPanelConfiguracionEmisor.setBorder(javax.swing.BorderFactory.createTitledBorder("Características Generales"));
