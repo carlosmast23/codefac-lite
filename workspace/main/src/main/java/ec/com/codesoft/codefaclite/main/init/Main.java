@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.main.init;
 
 
+import ec.com.codesoft.codefaclite.configuraciones.model.ComprobantesConfiguracionModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
@@ -158,6 +159,7 @@ public class Main {
         ventanas.add(new MenuControlador(panel.getjMenuProducto(),new ProductoModel()));
         ventanas.add(new MenuControlador(panel.getjMenuFactura(),new FacturacionModel()));
         ventanas.add(new MenuControlador(panel.getjMenuEmisor(), new EmisorModel()));
+        ventanas.add(new MenuControlador(panel.getjMenuComprobanteConfig(), new ComprobantesConfiguracionModel()));
         return ventanas;
     
     }

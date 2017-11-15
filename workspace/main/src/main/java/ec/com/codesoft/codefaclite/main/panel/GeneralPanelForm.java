@@ -13,6 +13,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDesktopPane;
 import javax.swing.JList;
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
@@ -78,14 +79,16 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jSplitPanel = new javax.swing.JSplitPane();
         jDesktopPane1 = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        menuInicio = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        menuConfiguracion = new javax.swing.JMenu();
+        jMenuComprobanteConfig = new javax.swing.JMenuItem();
+        menuCrm = new javax.swing.JMenu();
         jMenuCliente = new javax.swing.JMenuItem();
         jMenuProducto = new javax.swing.JMenuItem();
         jMenuEmisor = new javax.swing.JMenuItem();
-        jMenu7 = new javax.swing.JMenu();
+        menuFacturacion = new javax.swing.JMenu();
         jMenuFactura = new javax.swing.JMenuItem();
         jMenu8 = new javax.swing.JMenu();
 
@@ -185,7 +188,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         JPanelConsola.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(800, 600));
         setSize(new java.awt.Dimension(800, 600));
 
         JPanelMenu.setBackground(new java.awt.Color(255, 255, 255));
@@ -269,7 +271,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
         getContentPane().add(jSplitPanel, java.awt.BorderLayout.CENTER);
 
-        jMenu1.setText("Inicio");
+        menuInicio.setText("Inicio");
 
         jMenuItem1.setText("Iinicio");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
@@ -277,14 +279,26 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
                 jMenuItem1ActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        menuInicio.add(jMenuItem1);
 
         jMenuItem2.setText("Salir");
-        jMenu1.add(jMenuItem2);
+        menuInicio.add(jMenuItem2);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(menuInicio);
 
-        jMenu2.setText("Crm");
+        menuConfiguracion.setText("Configuraciones");
+
+        jMenuComprobanteConfig.setText("Comprobante");
+        jMenuComprobanteConfig.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuComprobanteConfigActionPerformed(evt);
+            }
+        });
+        menuConfiguracion.add(jMenuComprobanteConfig);
+
+        jMenuBar1.add(menuConfiguracion);
+
+        menuCrm.setText("Crm");
 
         jMenuCliente.setText("Clientes");
         jMenuCliente.addActionListener(new java.awt.event.ActionListener() {
@@ -292,22 +306,22 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
                 jMenuClienteActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuCliente);
+        menuCrm.add(jMenuCliente);
 
         jMenuProducto.setText("Productos");
-        jMenu2.add(jMenuProducto);
+        menuCrm.add(jMenuProducto);
 
         jMenuEmisor.setText("Emisor");
-        jMenu2.add(jMenuEmisor);
+        menuCrm.add(jMenuEmisor);
 
-        jMenuBar1.add(jMenu2);
+        jMenuBar1.add(menuCrm);
 
-        jMenu7.setText("Facturacion");
+        menuFacturacion.setText("Facturacion");
 
         jMenuFactura.setText("Factura");
-        jMenu7.add(jMenuFactura);
+        menuFacturacion.add(jMenuFactura);
 
-        jMenuBar1.add(jMenu7);
+        jMenuBar1.add(menuFacturacion);
 
         jMenu8.setText("Ayuda");
         jMenuBar1.add(jMenu8);
@@ -352,6 +366,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private void btnSalirPantallaPublicidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirPantallaPublicidadActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnSalirPantallaPublicidadActionPerformed
+
+    private void jMenuComprobanteConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuComprobanteConfigActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuComprobanteConfigActionPerformed
 
     /**
      * @param args the command line arguments
@@ -412,18 +430,16 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenu jMenu6;
-    private javax.swing.JMenu jMenu7;
     private javax.swing.JMenu jMenu8;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuBar jMenuBar3;
     private javax.swing.JMenuItem jMenuCliente;
+    private javax.swing.JMenuItem jMenuComprobanteConfig;
     private javax.swing.JMenuItem jMenuEmisor;
     private javax.swing.JMenuItem jMenuFactura;
     private javax.swing.JMenuItem jMenuItem1;
@@ -439,6 +455,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JSplitPane jSplitPanelVerticalSecundario;
     private javax.swing.JTable jTablaConsola;
     private javax.swing.JLabel lblTituloContenedorAuxiliar;
+    private javax.swing.JMenu menuConfiguracion;
+    private javax.swing.JMenu menuCrm;
+    private javax.swing.JMenu menuFacturacion;
+    private javax.swing.JMenu menuInicio;
     // End of variables declaration//GEN-END:variables
 
     public JMenuItem getjMenuItem1() {
@@ -638,5 +658,17 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     public void setjMenuEmisor(JMenuItem jMenuEmisor) {
         this.jMenuEmisor = jMenuEmisor;
     }
+
+    public JMenuItem getjMenuComprobanteConfig() {
+        return jMenuComprobanteConfig;
+    }
+
+    public void setjMenuComprobanteConfig(JMenuItem jMenuComprobanteConfig) {
+        this.jMenuComprobanteConfig = jMenuComprobanteConfig;
+    }
+
+    
+    
+    
     
 }
