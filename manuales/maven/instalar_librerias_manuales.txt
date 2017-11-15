@@ -1,0 +1,13 @@
+mvn install:install-file -Dfile=C:\Users\Carlos\Documents\GitHub\codefac-lite\recursos\lib\facturacionElectronica\MITyCLibXADES-1.1.7.jar -DgroupId=ec.com.codesoft.codefaclite.facturacionelectronica -DartifactId=MITyCLibXADES -Dversion=1.1.7 -Dpackaging=jar
+
+mvn install:install-file -Dfile=C:\Users\Carlos\Documents\GitHub\codefac-lite\recursos\lib\facturacionElectronica\MITyCLibAPI-1.1.7.jar -DgroupId=ec.com.codesoft.codefaclite.facturacionelectronica -DartifactId=MITyCLibAPI -Dversion=1.1.7 -Dpackaging=jar
+
+mvn install:install-file -Dfile=C:\Users\Carlos\Documents\GitHub\codefac-lite\recursos\lib\facturacionElectronica\MITyCLibTSA-1.1.7.jar -DgroupId=ec.com.codesoft.codefaclite.facturacionelectronica -DartifactId=MITyCLibTSA -Dversion=1.1.7 -Dpackaging=jar
+
+mvn install:install-file -Dfile=C:\Users\Carlos\Documents\GitHub\codefac-lite\recursos\lib\facturacionElectronica\MITyCLibOCSP-1.1.7.jar -DgroupId=ec.com.codesoft.codefaclite.facturacionelectronica -DartifactId=MITyCLibOCSP -Dversion=1.1.7 -Dpackaging=jar
+
+mvn install:install-file -Dfile=C:\Users\Carlos\Documents\GitHub\codefac-lite\recursos\lib\facturacionElectronica\MITyCLibTrust-1.1.7.jar -DgroupId=ec.com.codesoft.codefaclite.facturacionelectronica -DartifactId=MITyCLibTrust -Dversion=1.1.7 -Dpackaging=jar
+
+mvn install:install-file -Dfile=C:\Users\Carlos\Documents\GitHub\codefac-lite\recursos\lib\facturacionElectronica\xmlsec-1.4.2-ADSI-1.1-1.0.jar -DgroupId=ec.com.codesoft.codefaclite.facturacionelectronica -DartifactId=xmlsec -Dversion=1.4.2 -Dpackaging=jar
+
+Abrir una consola y pegar uno por uno los comandos y copiar las librerias en la ubicacion de maven
