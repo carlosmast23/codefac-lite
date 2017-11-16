@@ -42,7 +42,7 @@ public class CorreoElectronico {
         this.subject = subject;
     }
 
-    public void SendMail() {
+    public void sendMail() {
         Properties props = new Properties();
         
         props.put("mail.smtp.auth", "true");

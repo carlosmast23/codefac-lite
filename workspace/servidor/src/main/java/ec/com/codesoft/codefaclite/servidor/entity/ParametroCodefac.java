@@ -25,6 +25,9 @@ public class ParametroCodefac {
     
     public static final String SECUENCIAL_FACTURA= "secuencial_factura";
     
+    public static final String CORREO_USUARIO= "correo_usuario";
+    public static final String CORREO_CLAVE= "correo_clave";
+    
     public long id;
     public String nombre;
     public String valor;
