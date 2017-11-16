@@ -70,6 +70,34 @@ public class Main {
         empresa.setIdentificacion("17782823123");
         empresa.setNombreLegal("CORECOMPU");
         session.setEmpresa(empresa);
+               
+        
+        session.setParametrosCodefac(getParametros());
+        session.setUsuario(usuarioLogin);
+        
+        /**
+         * Seteando la session de los datos a utilizar en el aplicativo
+         */
+        GeneralPanelModel panel=new GeneralPanelModel();
+        panel.setSessionCodefac(session);
+        
+        
+        /**
+         * Añadir menus y ventanas a la aplicacion principal
+         */        
+        panel.setVentanasMenuList(agregarMenuVentana(panel));
+        /**
+         * Establecer propiedades del formulario principal
+         */
+        panel.setIconImage(new javax.swing.ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourcePath("logoCodefac-ico.png")).getImage()); // NOI18N        
+        panel.setVisible(true);
+        panel.setExtendedState(MAXIMIZED_BOTH);
+
+
+    }
+    
+    public static Map<String,ParametroCodefac> getParametros()
+    {
         Map<String,ParametroCodefac> parametros=new HashMap<String,ParametroCodefac>();
         ParametroCodefac param=new ParametroCodefac();
         
@@ -120,31 +148,38 @@ public class Main {
         param.nombre=ParametroCodefac.SRI_WS_AUTORIZACION_PRUEBA;
         param.valor="https://celcer.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl";        
         parametros.put(param.nombre,param);
-
         
+        param=new ParametroCodefac();
+        param.id=9;
+        param.nombre=ParametroCodefac.SECUENCIAL_FACTURA;
+        param.valor="1";        
+        parametros.put(param.nombre,param);
         
-        session.setParametrosCodefac(parametros);
-        session.setUsuario(usuarioLogin);
+        param=new ParametroCodefac();
+        param.id=10;
+        param.nombre=ParametroCodefac.SECUENCIAL_GUIA_REMISION;
+        param.valor="1";        
+        parametros.put(param.nombre,param);
         
-        /**
-         * Seteando la session de los datos a utilizar en el aplicativo
-         */
-        GeneralPanelModel panel=new GeneralPanelModel();
-        panel.setSessionCodefac(session);
+        param=new ParametroCodefac();
+        param.id=11;
+        param.nombre=ParametroCodefac.SECUENCIAL_NOTA_CREDITO;
+        param.valor="1";        
+        parametros.put(param.nombre,param);
         
+        param=new ParametroCodefac();
+        param.id=12;
+        param.nombre=ParametroCodefac.SECUENCIAL_NOTA_DEBITO;
+        param.valor="1";        
+        parametros.put(param.nombre,param);
         
-        /**
-         * Añadir menus y ventanas a la aplicacion principal
-         */        
-        panel.setVentanasMenuList(agregarMenuVentana(panel));
-        /**
-         * Establecer propiedades del formulario principal
-         */
-        panel.setIconImage(new javax.swing.ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourcePath("logoCodefac-ico.png")).getImage()); // NOI18N        
-        panel.setVisible(true);
-        panel.setExtendedState(MAXIMIZED_BOTH);
-
-
+        param=new ParametroCodefac();
+        param.id=13;
+        param.nombre=ParametroCodefac.SECUENCIAL_RETENCION;
+        param.valor="1";        
+        parametros.put(param.nombre,param);
+        
+        return parametros;
     }
     
     /**

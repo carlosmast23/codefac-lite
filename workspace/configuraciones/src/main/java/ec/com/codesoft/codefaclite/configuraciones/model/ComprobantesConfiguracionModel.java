@@ -7,6 +7,11 @@ package ec.com.codesoft.codefaclite.configuraciones.model;
 
 import ec.com.codesoft.codefaclite.configuraciones.panel.ComprobantesConfiguracionPanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,10 +20,20 @@ import java.util.Map;
  */
 public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPanel
 {
+    private Map<String,ParametroCodefac> parametros ;
+    private ParametroCodefacService servicio;
+
+    public ComprobantesConfiguracionModel() {
+        this.servicio=new ParametroCodefacService();
+        cargarDatosConfiguraciones();
+        
+    }
+    
+    
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.servicio.editarParametros(parametros);
     }
 
     @Override
@@ -48,7 +63,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
 
     @Override
     public void limpiar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        super.estadoFormulario=GeneralPanelInterface.ESTADO_EDITAR;
     }
 
     @Override
@@ -63,7 +78,17 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Integer,Boolean> permisos=new HashMap<Integer,Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_GRABAR,true);
+        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
+        return permisos;
+    }
+    
+    private void cargarDatosConfiguraciones()
+    {        
+        parametros=servicio.getParametrosMap();
+        getTxtFacturaSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_FACTURA).getValor());
+       
     }
     
 }

@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.configuraciones.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import javax.swing.JTextField;
 
 /**
  *
@@ -114,8 +115,6 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 15, 15);
         panelSecuenciales.add(jLabel5, gridBagConstraints);
-
-        txtFacturaSecuencial.setText("jTextField1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 0;
@@ -125,8 +124,6 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.1;
         panelSecuenciales.add(txtFacturaSecuencial, gridBagConstraints);
-
-        txtNotaCreditoSecuencial.setText("jTextField2");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 2;
@@ -136,8 +133,6 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.1;
         panelSecuenciales.add(txtNotaCreditoSecuencial, gridBagConstraints);
-
-        txtNotaDebitoSecuencial.setText("jTextField3");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 3;
@@ -147,8 +142,6 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.1;
         panelSecuenciales.add(txtNotaDebitoSecuencial, gridBagConstraints);
-
-        txtGuiaRemisionSecuencial.setText("jTextField4");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 4;
@@ -157,8 +150,6 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.1;
         panelSecuenciales.add(txtGuiaRemisionSecuencial, gridBagConstraints);
-
-        txtRetencionesSecuencial.setText("jTextField5");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 5;
@@ -375,4 +366,26 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
     private javax.swing.JTextField txtNotaDebitoSecuencial;
     private javax.swing.JTextField txtRetencionesSecuencial;
     // End of variables declaration//GEN-END:variables
+
+    public JTextField getTxtFacturaSecuencial() {
+        return txtFacturaSecuencial;
+    }
+
+    public JTextField getTxtGuiaRemisionSecuencial() {
+        return txtGuiaRemisionSecuencial;
+    }
+
+    public JTextField getTxtNotaCreditoSecuencial() {
+        return txtNotaCreditoSecuencial;
+    }
+
+    public JTextField getTxtNotaDebitoSecuencial() {
+        return txtNotaDebitoSecuencial;
+    }
+
+    public JTextField getTxtRetencionesSecuencial() {
+        return txtRetencionesSecuencial;
+    }
+
+    
 }

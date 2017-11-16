@@ -24,6 +24,10 @@ public class ParametroCodefac {
     public static final String SRI_WS_AUTORIZACION_PRUEBA= "sri_ws_autorizacion_prueba";
     
     public static final String SECUENCIAL_FACTURA= "secuencial_factura";
+    public static final String SECUENCIAL_NOTA_CREDITO= "secuencial_nota_credito";
+    public static final String SECUENCIAL_NOTA_DEBITO= "secuencial_nota_debito";
+    public static final String SECUENCIAL_GUIA_REMISION= "secuencial_guia_remision";
+    public static final String SECUENCIAL_RETENCION= "secuencial_retencion";
     
     public static final String CORREO_USUARIO= "correo_usuario";
     public static final String CORREO_CLAVE= "correo_clave";
