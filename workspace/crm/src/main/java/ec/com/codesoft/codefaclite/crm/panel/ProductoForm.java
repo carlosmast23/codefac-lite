@@ -8,6 +8,8 @@ package ec.com.codesoft.codefaclite.crm.panel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import java.util.Map;
+import javax.swing.JComboBox;
+import javax.swing.JTextField;
 
 /**
  *
@@ -15,13 +17,53 @@ import java.util.Map;
  */
 public abstract class ProductoForm extends ControladorCodefacInterface{
 
+    public JComboBox<String> getjComboTipoProducto() {
+        return jComboTipoProducto;
+    }
+
+    public void setjComboTipoProducto(JComboBox<String> jComboTipoProducto) {
+        this.jComboTipoProducto = jComboTipoProducto;
+    }
+
+    public JTextField getjTextCodigoAuxiliar() {
+        return jTextCodigoAuxiliar;
+    }
+
+    public void setjTextCodigoAuxiliar(JTextField jTextCodigoAuxiliar) {
+        this.jTextCodigoAuxiliar = jTextCodigoAuxiliar;
+    }
+
+    public JTextField getjTextCodigoPrincipal() {
+        return jTextCodigoPrincipal;
+    }
+
+    public void setjTextCodigoPrincipal(JTextField jTextCodigoPrincipal) {
+        this.jTextCodigoPrincipal = jTextCodigoPrincipal;
+    }
+
+    public JTextField getjTextNombre() {
+        return jTextNombre;
+    }
+
+    public void setjTextNombre(JTextField jTextNombre) {
+        this.jTextNombre = jTextNombre;
+    }
+
+    public JTextField getjTextValorUnitario() {
+        return jTextValorUnitario;
+    }
+
+    public void setjTextValorUnitario(JTextField jTextValorUnitario) {
+        this.jTextValorUnitario = jTextValorUnitario;
+    }
+
     /**
      * Creates new form ProductoForm
      */
     public ProductoForm() {
         initComponents();
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -35,15 +77,15 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        jTextCodigoPrincipal = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        jTextCodigoAuxiliar = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        jComboTipoProducto = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        jTextNombre = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        jTextValorUnitario = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -102,7 +144,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        jPanel1.add(jTextField1, gridBagConstraints);
+        jPanel1.add(jTextCodigoPrincipal, gridBagConstraints);
 
         jLabel3.setText("Código Auxiliar: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -115,7 +157,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        jPanel1.add(jTextField2, gridBagConstraints);
+        jPanel1.add(jTextCodigoAuxiliar, gridBagConstraints);
 
         jLabel4.setText("Tipo de Producto: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -124,13 +166,13 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanel1.add(jLabel4, gridBagConstraints);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BIEN", "SERVICIO" }));
+        jComboTipoProducto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BIEN", "SERVICIO" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        jPanel1.add(jComboBox1, gridBagConstraints);
+        jPanel1.add(jComboTipoProducto, gridBagConstraints);
 
         jLabel5.setText("Nombre: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -144,7 +186,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        jPanel1.add(jTextField3, gridBagConstraints);
+        jPanel1.add(jTextNombre, gridBagConstraints);
 
         jLabel6.setText("Valor Unitario: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -157,7 +199,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        jPanel1.add(jTextField4, gridBagConstraints);
+        jPanel1.add(jTextValorUnitario, gridBagConstraints);
 
         jLabel7.setText(" ");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -378,10 +420,10 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         pack();
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JComboBox<String> jComboBox4;
+    private javax.swing.JComboBox<String> jComboTipoProducto;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -408,15 +450,15 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextCodigoAuxiliar;
+    private javax.swing.JTextField jTextCodigoPrincipal;
     private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField jTextField8;
     private javax.swing.JTextField jTextField9;
+    private javax.swing.JTextField jTextNombre;
+    private javax.swing.JTextField jTextValorUnitario;
     // End of variables declaration//GEN-END:variables
 }

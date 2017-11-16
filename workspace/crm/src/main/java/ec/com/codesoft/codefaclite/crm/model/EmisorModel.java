@@ -38,7 +38,7 @@ public class EmisorModel extends ConfigurarEmisorForm
     @Override
     public void editar() throws ExcepcionCodefacLite 
     {
-        emisorService.editar(setDatosEmisor());   
+        emisorService.editar(setDatosEmisor());
     }
 
     @Override

@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidor.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -43,8 +44,8 @@ public class Producto implements Serializable
     @Column(name = "NOMBRE")
     private String nombre;
     @Column(name = "VALOR_UNITARIO")
-    private String valorUnitario;
-
+    private BigDecimal valorUnitario;
+    
     public Integer getIdProducto() {
         return idProducto;
     }
@@ -85,13 +86,12 @@ public class Producto implements Serializable
         this.nombre = nombre;
     }
 
-    public String getValorUnitario() {
+    public BigDecimal getValorUnitario() {
         return valorUnitario;
     }
 
-    public void setValorUnitario(String valorUnitario) {
+    public void setValorUnitario(BigDecimal valorUnitario) {
         this.valorUnitario = valorUnitario;
     }
-    
     
 }

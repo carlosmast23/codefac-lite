@@ -12,7 +12,6 @@ create table IMPUESTO
     ID_IMPUESTO integer not null GENERATED ALWAYS AS IDENTITY( START WITH 1, INCREMENT BY 1),
     NOMBRE varchar(10),
     CODIGO_SRI varchar(4),
-    ESTADO varchar(1),
-    DESCRIPCION varchar(30),
+    DESCRIPCION varchar(60),
     primary key(ID_IMPUESTO)
 )

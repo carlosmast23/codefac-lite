@@ -12,12 +12,10 @@ import ec.com.codesoft.codefaclite.servidor.entity.Producto;
  * @author PC
  */
 public class ProductoFacade extends AbstractFacade<Producto>
-{
-    
+{ 
     public ProductoFacade() 
     {
         super(Producto.class);
     }
-    
-    
+      
 }

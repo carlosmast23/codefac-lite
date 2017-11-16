@@ -29,7 +29,10 @@ public class UtilidadesServidor {
         RecursoCodefac.SQL.getResourceInputStream("create_sri_forma_pago.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_sri_identificacion.sql"),
         RecursoCodefac.SQL.getResourceInputStream("insert_default.sql"),
-        
+        RecursoCodefac.SQL.getResourceInputStream("create_impuesto.sql"),
+        RecursoCodefac.SQL.getResourceInputStream("create_impuesto_detalle.sql"),
+        RecursoCodefac.SQL.getResourceInputStream("insert_impuesto.sql"),
+            
     };
     
     public static void crearBaseDatos()
