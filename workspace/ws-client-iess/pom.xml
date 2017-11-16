@@ -23,7 +23,7 @@
             <plugin>
                 <groupId>org.jvnet.jax-ws-commons</groupId>
                 <artifactId>jaxws-maven-plugin</artifactId>
-                <version>2.3</version>
+                <version>2.2</version>
                 <executions>
                     <execution>
                         <goals>
@@ -39,6 +39,7 @@
                             </vmArgs>
                             <wsdlLocation>file:/C:/Users/Carlos/Documents/GitHub/codefac-lite/recursos/wsdl/offline/RecepcionComprobantesOffline.wsdl</wsdlLocation>
                             <staleFile>${project.build.directory}/jaxws/stale/RecepcionComprobantesOffline.stale</staleFile>
+                            <target>2.1</target>
                         </configuration>
                         <id>wsimport-generate-RecepcionComprobantesOffline</id>
                         <phase>generate-sources</phase>
