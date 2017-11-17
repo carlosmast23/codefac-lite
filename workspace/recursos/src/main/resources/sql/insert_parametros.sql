@@ -8,18 +8,18 @@
  * Created: 16/11/2017
  */
 
-INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('NOMBRE_FIRMA_ELECTRONICA','carlos_alfonso_sanchez_coyago.p12');
-INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('CLAVE_FIRMA_ELECTRONICA','Code17bwbtj');
-INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('DIRECTORIO_RECURSOS','C:/FacturacionOffline');
-INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('MODO_FACTURACION','pruebas');
-INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('SRI_WS_RECEPCION','https://cel.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl');
-INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('SRI_WS_RECEPCION_PRUEBA','https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl');
-INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('SRI_WS_AUTORIZACION','https://cel.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl');
-INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('SRI_WS_AUTORIZACION_PRUEBA','https://celcer.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl');
-INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('SECUENCIAL_FACTURA','1');
-INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('SECUENCIAL_GUIA_REMISION','1');
-INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('SECUENCIAL_NOTA_CREDITO','1');
-INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('SECUENCIAL_NOTA_DEBITO','1');
-INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('SECUENCIAL_RETENCION','1');
+INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('firma_electronica','carlos_alfonso_sanchez_coyago.p12');
+INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('clave_firma_electronica','Code17bwbtj');
+INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('directorio_recursos','C:/FacturacionOffline');
+INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('modo_facturacion','pruebas');
+INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('sri_ws_recepcion','https://cel.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl');
+INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('sri_ws_recepcion_prueba','https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl');
+INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('sri_ws_autorizacion','https://cel.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl');
+INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('sri_ws_autorizacion_prueba','https://celcer.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl');
+INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('secuencial_factura','1');
+INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('secuencial_guia_remision','1');
+INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('secuencial_nota_credito','1');
+INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('secuencial_nota_debito','1');
+INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('secuencial_retencion','1');
 
 
