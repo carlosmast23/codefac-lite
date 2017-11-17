@@ -6,11 +6,17 @@
 package ec.com.codesoft.codefaclite.servidor.entity;
 
 import ec.com.codesoft.codefaclite.servidor.facade.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  *
  * @author Carlos
  */
+@Entity
+@Table(name = "PARAMETRO")
 public class ParametroCodefac {
     
     public static final String NOMBRE_FIRMA_ELECTRONICA= "firma_electronica";
@@ -32,8 +38,14 @@ public class ParametroCodefac {
     public static final String CORREO_USUARIO= "correo_usuario";
     public static final String CORREO_CLAVE= "correo_clave";
     
+    @Id
+    @Column(name = "ID")
     public long id;
+    
+    @Column(name = "NOMBRE")
     public String nombre;
+    
+    @Column(name = "VALOR")    
     public String valor;
 
     public ParametroCodefac() {
