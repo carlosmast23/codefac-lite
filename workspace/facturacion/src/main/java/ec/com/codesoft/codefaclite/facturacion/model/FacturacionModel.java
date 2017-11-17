@@ -12,11 +12,14 @@ import ec.com.codesoft.codefaclite.facturacion.busqueda.ClienteFacturacionBusque
 import ec.com.codesoft.codefaclite.facturacion.other.FacturacionElectronica;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
 import ec.com.codesoft.codefaclite.servidor.entity.Factura;
+import ec.com.codesoft.codefaclite.servidor.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -26,9 +29,11 @@ public class FacturacionModel extends FacturacionPanel{
 
     private Persona persona;
     private Factura factura;
+    private DefaultTableModel modeloTablaFormasPago;
     
     public FacturacionModel() {
         addListenerButtons();
+        initModelTablaFormaPago();
     }
     
     private void addListenerButtons() {
@@ -47,6 +52,17 @@ public class FacturacionModel extends FacturacionPanel{
                     getLblDireccionCliente().setText(persona.getDireccion());
                     getLblTelefonoCliente().setText(persona.getTelefonoConvencional());                
                 }
+            }
+        });
+        
+        getBtnAgregarFormaPago().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FormaPagoDialogModel dialog=new FormaPagoDialogModel(null,true);
+                dialog.setLocationRelativeTo(null);
+                dialog.setVisible(true);
+                FormaPago formaPago=dialog.getFormaPago();
+                agregarFormaPagoTabla(formaPago);
             }
         });
     }
@@ -111,6 +127,29 @@ public class FacturacionModel extends FacturacionPanel{
         permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
         permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
         return permisos;
+    }
+    
+    private void agregarFormaPagoTabla(FormaPago formaPago)
+    {
+        Vector<String> fila=new Vector<>();
+        fila.add(formaPago.getSriFormaPago().getNombre());
+        fila.add(formaPago.getTotal().toString());
+        fila.add(formaPago.getUnidadTiempo());
+        fila.add(formaPago.getPlazo()+"");
+        System.out.println(formaPago);
+        this.modeloTablaFormasPago.addRow(fila);
+    }
+    
+    private void initModelTablaFormaPago()
+    {
+        Vector<String> titulo=new Vector<>();
+        titulo.add("forma pago");
+        titulo.add("Valor");
+        titulo.add("Tipo");
+        titulo.add("Tiempo");
+        
+        this.modeloTablaFormasPago=new DefaultTableModel(titulo,0);
+        getTblFormasPago().setModel(modeloTablaFormasPago);
     }
 
     

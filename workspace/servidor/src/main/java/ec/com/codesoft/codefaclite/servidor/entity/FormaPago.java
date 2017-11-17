@@ -9,6 +9,8 @@ import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -19,38 +21,36 @@ import javax.persistence.Table;
 @Table(name = "FORMA_PAGO_FACTURA")
 public class FormaPago {
     
-    private Long id;
-    private Long formaPagoId;
+    @Id
+    @Column(name = "ID")
+    private Long id;    
+    @Column(name = "TOTAL")
     private BigDecimal total;
+    @Column(name = "PLAZO")
     private Integer plazo;
-    private String unidadTiempo;
+    @Column(name = "UNIDAD_TIEMPO")
+    private String unidadTiempo;    
+    
+    @JoinColumn(name = "FORMA_PAGO_ID")
+    @ManyToOne
+    private SriFormaPago sriFormaPago;
 
     public FormaPago() {
     }
     
     
-    @Id
-    @Column(name = "ID")        
     public Long getId() {
         return id;
     }
-    
-    @Column(name = "FORMA_PAGO_ID")  
-    public Long getFormaPagoId() {
-        return formaPagoId;
-    }
 
-    @Column(name = "TOTAL")      
     public BigDecimal getTotal() {
         return total;
     }
 
-    @Column(name = "PLAZO")      
     public Integer getPlazo() {
         return plazo;
     }
 
-    @Column(name = "UNIDAD_TIEMPO")      
     public String getUnidadTiempo() {
         return unidadTiempo;
     }
@@ -59,9 +59,6 @@ public class FormaPago {
         this.id = id;
     }
 
-    public void setFormaPagoId(Long formaPagoId) {
-        this.formaPagoId = formaPagoId;
-    }
 
     public void setTotal(BigDecimal total) {
         this.total = total;
@@ -75,5 +72,15 @@ public class FormaPago {
         this.unidadTiempo = unidadTiempo;
     }
 
+    public SriFormaPago getSriFormaPago() {
+        return sriFormaPago;
+    }
+
+    public void setSriFormaPago(SriFormaPago sriFormaPago) {
+        this.sriFormaPago = sriFormaPago;
+    }
+
+    
+    
     
 }

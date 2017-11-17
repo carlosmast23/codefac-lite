@@ -29,7 +29,8 @@ public class SriService {
     {
         java.util.Date fechaActual=new java.util.Date();
         
-        return sriFormaPagoFacade.getFormaPagoByDate(new Date(fechaActual.getTime()));
+        //return sriFormaPagoFacade.getFormaPagoByDate(new Date(fechaActual.getTime()));
+        return sriFormaPagoFacade.findAll();
     }
     
     /**
@@ -47,3 +48,4 @@ public class SriService {
     }
     
 }
+

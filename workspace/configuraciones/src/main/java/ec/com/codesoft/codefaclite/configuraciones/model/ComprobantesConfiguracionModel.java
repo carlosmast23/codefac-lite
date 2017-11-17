@@ -90,6 +90,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     private void cargarDatosConfiguraciones()
     {        
         parametros=servicio.getParametrosMap();
+        ParametroCodefac param=parametros.get(ParametroCodefac.SECUENCIAL_FACTURA);
         getTxtFacturaSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_FACTURA).getValor());
         getTxtGuiaRemisionSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION).getValor());
     }

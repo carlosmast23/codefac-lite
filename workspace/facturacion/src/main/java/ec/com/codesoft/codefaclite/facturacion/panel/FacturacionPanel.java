@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.facturacion.panel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 
 /**
@@ -65,9 +66,9 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
         PanelFormasPago = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
+        btnAgregarFormaPago = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        tblFormasPago = new javax.swing.JTable();
         PanelDatosAdicionales = new javax.swing.JPanel();
         jButton3 = new javax.swing.JButton();
         jScrollPane5 = new javax.swing.JScrollPane();
@@ -350,12 +351,17 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         PanelFormasPago.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder("Formas de Pago"), "Formas de Pago"));
         PanelFormasPago.setLayout(new java.awt.GridBagLayout());
 
-        jButton2.setText("Nuevo Dato");
+        btnAgregarFormaPago.setText("Agregar");
+        btnAgregarFormaPago.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarFormaPagoActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        PanelFormasPago.add(jButton2, gridBagConstraints);
+        PanelFormasPago.add(btnAgregarFormaPago, gridBagConstraints);
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+        tblFormasPago.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -366,7 +372,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane3.setViewportView(jTable3);
+        jScrollPane3.setViewportView(tblFormasPago);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -588,6 +594,10 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnAgregarFormaPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarFormaPagoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAgregarFormaPagoActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PanelCliente;
@@ -596,9 +606,9 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JPanel PanelFormasPago;
     private javax.swing.JPanel PanelValores;
     private javax.swing.JButton bntAgregarCliente;
+    private javax.swing.JButton btnAgregarFormaPago;
     private javax.swing.JButton btnBuscarCliente;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
@@ -641,7 +651,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable3;
     private javax.swing.JTable jTable5;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblDireccion;
@@ -652,6 +661,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblTelefonoCliente;
     private javax.swing.JLabel lblTelefonos;
     private javax.swing.JPanel panelDatosEmpresa;
+    private javax.swing.JTable tblFormasPago;
     private javax.swing.JTextField txtCliente;
     // End of variables declaration//GEN-END:variables
 
@@ -701,6 +711,22 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
     public JLabel getLblTelefonos() {
         return lblTelefonos;
+    }
+
+    public JButton getBtnAgregarFormaPago() {
+        return btnAgregarFormaPago;
+    }
+
+    public void setBtnAgregarFormaPago(JButton btnAgregarFormaPago) {
+        this.btnAgregarFormaPago = btnAgregarFormaPago;
+    }
+
+    public JTable getTblFormasPago() {
+        return tblFormasPago;
+    }
+
+    public void setTblFormasPago(JTable tblFormasPago) {
+        this.tblFormasPago = tblFormasPago;
     }
     
     
