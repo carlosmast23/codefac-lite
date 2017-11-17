@@ -19,6 +19,7 @@ public class ParametroCodefacService {
     private ParametroCodefacFacade parametroCodefacFacade;
 
     public ParametroCodefacService() {
+        parametroCodefacFacade=new ParametroCodefacFacade();
     }
     
     public Map<String ,ParametroCodefac> getParametrosMap()

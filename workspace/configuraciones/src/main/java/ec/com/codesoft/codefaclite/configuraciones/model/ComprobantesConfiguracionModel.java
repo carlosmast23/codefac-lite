@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.configuraciones.model;
 
 import ec.com.codesoft.codefaclite.configuraciones.panel.ComprobantesConfiguracionPanel;
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
@@ -34,6 +35,8 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     @Override
     public void grabar() throws ExcepcionCodefacLite {
         this.servicio.editarParametros(parametros);
+        DialogoCodefac.mensaje("Actualizado datos","Los datos de los parametros fueron actualizados",DialogoCodefac.MENSAJE_CORRECTO);
+        
     }
 
     @Override
@@ -88,7 +91,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     {        
         parametros=servicio.getParametrosMap();
         getTxtFacturaSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_FACTURA).getValor());
-       
+        getTxtGuiaRemisionSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION).getValor());
     }
     
 }
