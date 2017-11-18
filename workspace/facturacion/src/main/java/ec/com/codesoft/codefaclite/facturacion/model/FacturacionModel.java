@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
+
 /**
  *
  * @author Carlos
@@ -34,6 +35,7 @@ public class FacturacionModel extends FacturacionPanel{
     public FacturacionModel() {
         addListenerButtons();
         initModelTablaFormaPago();
+        agregarFechaEmision();
     }
     
     private void addListenerButtons() {
@@ -65,6 +67,7 @@ public class FacturacionModel extends FacturacionPanel{
                 agregarFormaPagoTabla(formaPago);
             }
         });
+        
     }
 
     @Override
@@ -150,6 +153,10 @@ public class FacturacionModel extends FacturacionPanel{
         
         this.modeloTablaFormasPago=new DefaultTableModel(titulo,0);
         getTblFormasPago().setModel(modeloTablaFormasPago);
+    }
+
+    private void agregarFechaEmision() {
+
     }
 
     

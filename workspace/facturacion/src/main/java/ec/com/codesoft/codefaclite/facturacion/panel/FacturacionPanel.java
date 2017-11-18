@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.facturacion.panel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
@@ -97,6 +98,12 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         jLabel31 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jCheckBox1 = new javax.swing.JCheckBox();
+        panelDatosFactura = new javax.swing.JPanel();
+        jLabel35 = new javax.swing.JLabel();
+        jLabel36 = new javax.swing.JLabel();
+        jLabel37 = new javax.swing.JLabel();
+        panelFechaEmision = new javax.swing.JPanel();
+        jDateChooser1 = new com.toedter.calendar.JDateChooser();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -209,7 +216,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
@@ -308,7 +315,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
@@ -343,7 +350,8 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         PanelDetalleFactura.add(jScrollPane2, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         getContentPane().add(PanelDetalleFactura, gridBagConstraints);
@@ -383,7 +391,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         getContentPane().add(PanelFormasPago, gridBagConstraints);
@@ -418,7 +426,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         getContentPane().add(PanelDatosAdicionales, gridBagConstraints);
@@ -587,9 +595,40 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridheight = 2;
         getContentPane().add(PanelValores, gridBagConstraints);
+
+        panelDatosFactura.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos Factura"));
+        panelDatosFactura.setLayout(new java.awt.GridBagLayout());
+
+        jLabel35.setText("Secuencial:");
+        panelDatosFactura.add(jLabel35, new java.awt.GridBagConstraints());
+
+        jLabel36.setText("Fecha Emision:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        panelDatosFactura.add(jLabel36, gridBagConstraints);
+
+        jLabel37.setText("001-002-9213912939");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        panelDatosFactura.add(jLabel37, gridBagConstraints);
+
+        panelFechaEmision.setBackground(new java.awt.Color(255, 255, 255));
+        panelDatosFactura.add(panelFechaEmision, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 4;
+        panelDatosFactura.add(jDateChooser1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        getContentPane().add(panelDatosFactura, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -611,6 +650,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JCheckBox jCheckBox1;
+    private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -639,6 +679,9 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel37;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -661,6 +704,8 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblTelefonoCliente;
     private javax.swing.JLabel lblTelefonos;
     private javax.swing.JPanel panelDatosEmpresa;
+    private javax.swing.JPanel panelDatosFactura;
+    private javax.swing.JPanel panelFechaEmision;
     private javax.swing.JTable tblFormasPago;
     private javax.swing.JTextField txtCliente;
     // End of variables declaration//GEN-END:variables
@@ -727,6 +772,11 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
     public void setTblFormasPago(JTable tblFormasPago) {
         this.tblFormasPago = tblFormasPago;
+    }
+
+
+    public JPanel getPanelFechaEmision() {
+        return panelFechaEmision;
     }
     
     
