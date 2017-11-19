@@ -30,7 +30,7 @@ public class Main {
         
         Persona p=new Persona();
         p.setIdentificacion("1282872");
-        p.setNombreSocial("PEPEMUENTES" );
+        p.setNombreLegal("PEPEMUENTES" );
         
         entityManager.getTransaction().begin();
         entityManager.persist(p);
@@ -40,7 +40,7 @@ public class Main {
         cq.select(cq.from(Persona.class));
         List<Persona> lista=entityManager.createQuery(cq).getResultList();
         for (Persona persona : lista) {
-            System.out.println(persona.getIdentificacion()+" - "+persona.getNombreSocial());
+            System.out.println(persona.getIdentificacion()+" - "+persona.getNombreLegal());
             
         }
         

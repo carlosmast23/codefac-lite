@@ -11,6 +11,8 @@ import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -21,125 +23,129 @@ import javax.persistence.Table;
 @Table(name = "FACTURA")
 public class Factura {
     
+    @Id
+    @Column(name = "ID")
     private Long id;
+    @Column(name = "CLAVE_ACCESO")
     private String claveAcceso;
+    @Column(name = "EMPRESA_ID")
     private Long empresaId;
-    private Long clienteId;
+    @Column(name = "TIPO_IDENTIFICACION_ID")
     private Long tipoClienteId;
+    @Column(name = "SECUENCIAL")
     private Integer secuencial;
+    @Column(name = "PUNTO_ESTABLECIMIENTO")
     private String puntoEstablecimiento;
+    @Column(name = "PUNTO_EMISION")
     private String puntoEmision;
+    @Column(name = "FECHA_EMISION")
     private Timestamp fechaEmision;
+    @Column(name = "FECHA_CREACION")
     private Date fechaCreacion;
+    @Column(name = "SUBTOTAL_SIN_IMPUESTOS")
     private BigDecimal subtotalSinImpuesto;
+    @Column(name = "SUBTOTAL_DOCE")
     private BigDecimal subtotalDoce;
+    @Column(name = "SUBTOTAL_CERO")
     private BigDecimal subtotalCero;
+    @Column(name = "VALOR_IVA_DOCE")
     private BigDecimal valorIvaDoce;
+    @Column(name = "VALOR_IVA_CERO")
     private BigDecimal valorIvaCero;
+    @Column(name = "IVA_SRI_ID")
     private Long ivaSriId;
+    @Column(name = "TOTAL")
     private BigDecimal total;
+    @Column(name = "USUARIO_ID")
     private Long usuarioId;
+    @Column(name = "ESTADO")
     private String estado;
+
+    @JoinColumn(name = "CLIENTE_ID")
+    @ManyToOne    
+    private Persona cliente;
 
     public Factura() {
     }
     
-    @Id
-    @Column(name = "ID")
     public Long getId() {
         return id;
     }
 
-    @Column(name = "CLAVE_ACCESO")
     public String getClaveAcceso() {
         return claveAcceso;
     }
 
-    @Column(name = "EMPRESA_ID")
     public Long getEmpresaId() {
         return empresaId;
     }
 
-    @Column(name = "CLIENTE_ID")
-    public Long getClienteId() {
-        return clienteId;
-    }
-
-    @Column(name = "TIPO_IDENTIFICACION_ID")
     public Long getTipoClienteId() {
         return tipoClienteId;
     }
     
-    @Column(name = "SECUENCIAL")
     public Integer getSecuencial() {
         return secuencial;
     }
 
-    @Column(name = "PUNTO_ESTABLECIMIENTO")    
     public String getPuntoEstablecimiento() {
         return puntoEstablecimiento;
     }
     
-    @Column(name = "PUNTO_EMISION")    
     public String getPuntoEmision() {
         return puntoEmision;
     }
 
-    @Column(name = "FECHA_EMISION")       
     public Timestamp getFechaEmision() {
         return fechaEmision;
     }
 
-    @Column(name = "FECHA_CREACION")       
     public Date getFechaCreacion() {
         return fechaCreacion;
     }
 
-    @Column(name = "SUBTOTAL_SIN_IMPUESTOS")          
     public BigDecimal getSubtotalSinImpuesto() {
         return subtotalSinImpuesto;
     }
 
-    @Column(name = "SUBTOTAL_DOCE")        
     public BigDecimal getSubtotalDoce() {
         return subtotalDoce;
     }
 
-    @Column(name = "SUBTOTAL_CERO")        
     public BigDecimal getSubtotalCero() {
         return subtotalCero;
     }
 
-    @Column(name = "VALOR_IVA_DOCE")     
     public BigDecimal getValorIvaDoce() {
         return valorIvaDoce;
         
     }
     
-    @Column(name = "VALOR_IVA_CERO")    
     public BigDecimal getValorIvaCero() {
         return valorIvaCero;
     }
 
-    @Column(name = "IVA_SRI_ID")    
     public Long getIvaSriId() {
         return ivaSriId;
     }
 
-    @Column(name = "TOTAL")        
     public BigDecimal getTotal() {
         return total;
     }
 
-    @Column(name = "USUARIO_ID")         
     public Long getUsuarioId() {
         return usuarioId;
     }
 
-    @Column(name = "ESTADO")           
     public String getEstado() {
         return estado;
     }
+
+    public Persona getCliente() {
+        return cliente;
+    }
+    
+    
 
     public void setId(Long id) {
         this.id = id;
@@ -151,10 +157,6 @@ public class Factura {
 
     public void setEmpresaId(Long empresaId) {
         this.empresaId = empresaId;
-    }
-
-    public void setClienteId(Long clienteId) {
-        this.clienteId = clienteId;
     }
 
     public void setTipoClienteId(Long tipoClienteId) {
@@ -216,5 +218,11 @@ public class Factura {
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
+    public void setCliente(Persona cliente) {
+        this.cliente = cliente;
+    }
+    
+    
     
 }

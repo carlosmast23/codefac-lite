@@ -37,7 +37,7 @@ public class NotaCreditoComprobante extends ComprobanteElectronico {
     }
 
     @Override
-    public Date getFechaEmision() {
+    public String getFechaEmision() {
         return null;
     }
 

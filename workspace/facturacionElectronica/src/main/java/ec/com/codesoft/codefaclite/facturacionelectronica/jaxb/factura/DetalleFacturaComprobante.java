@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.ImpuestoComprobante;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -16,10 +17,10 @@ import javax.xml.bind.annotation.XmlElementWrapper;
  */
 public class DetalleFacturaComprobante {
     private String descripcion;
-    private String cantidad;
-    private String precioUnitario;
-    private String descuento;
-    private String precioTotalSinImpuesto;
+    private BigDecimal cantidad;
+    private BigDecimal precioUnitario;
+    private BigDecimal descuento;
+    private BigDecimal precioTotalSinImpuesto;
     
     private List<ImpuestoComprobante> comprobantes; 
 
@@ -36,38 +37,38 @@ public class DetalleFacturaComprobante {
     }
 
     @XmlElement(name="cantidad")
-    public String getCantidad() {
+    public BigDecimal getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(String cantidad) {
+    public void setCantidad(BigDecimal cantidad) {
         this.cantidad = cantidad;
     }
 
     @XmlElement(name="precioUnitario")
-    public String getPrecioUnitario() {
+    public BigDecimal getPrecioUnitario() {
         return precioUnitario;
     }
 
-    public void setPrecioUnitario(String precioUnitario) {
+    public void setPrecioUnitario(BigDecimal precioUnitario) {
         this.precioUnitario = precioUnitario;
     }
 
     @XmlElement(name="descuento")
-    public String getDescuento() {
+    public BigDecimal getDescuento() {
         return descuento;
     }
 
-    public void setDescuento(String descuento) {
+    public void setDescuento(BigDecimal descuento) {
         this.descuento = descuento;
     }
 
     @XmlElement(name="precioTotalSinImpuesto")
-    public String getPrecioTotalSinImpuesto() {
+    public BigDecimal getPrecioTotalSinImpuesto() {
         return precioTotalSinImpuesto;
     }
 
-    public void setPrecioTotalSinImpuesto(String precioTotalSinImpuesto) {
+    public void setPrecioTotalSinImpuesto(BigDecimal precioTotalSinImpuesto) {
         this.precioTotalSinImpuesto = precioTotalSinImpuesto;
     }
 

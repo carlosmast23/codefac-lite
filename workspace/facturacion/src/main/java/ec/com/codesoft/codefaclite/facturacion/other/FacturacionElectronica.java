@@ -11,8 +11,14 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronico
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.InformacionFactura;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionTributaria;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.TotalImpuesto;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
 import ec.com.codesoft.codefaclite.servidor.entity.Factura;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -47,7 +53,20 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
     @Override
     public FacturaComprobante getComprobante() {
         FacturaComprobante facturaComprobante=new FacturaComprobante();
-        //setear todos los campos exepto la informacion tributaria que sa la iplementa sola
+        
+        InformacionFactura informacionFactura=new InformacionFactura();
+        
+        informacionFactura.setFechaEmision(ComprobantesElectronicosUtil.dateToString(factura.getFechaEmision()));
+        informacionFactura.setIdentificacionComprador(factura.getCliente().getIdentificacion());
+        informacionFactura.setImporteTotal(BigDecimal.ZERO);
+        informacionFactura.setRazonSocialComprador(factura.getCliente().getRazonSocial());
+        informacionFactura.setTipoIdentificacionComprador(factura.getCliente().getIdentificacion());
+        informacionFactura.setTotalDescuento(BigDecimal.ZERO);
+        informacionFactura.setTotalSinImpuestos(BigDecimal.ZERO);
+        
+        List<TotalImpuesto> totalImpuestos=new ArrayList<TotalImpuesto>();
+        informacionFactura.setTotalImpuestos(totalImpuestos);
+        
         return facturaComprobante;
     }
 

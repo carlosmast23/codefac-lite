@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general;
 
+import java.math.BigDecimal;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
@@ -14,9 +15,9 @@ import javax.xml.bind.annotation.XmlElement;
 public class ImpuestoComprobante {
     private String codigo;
     private String codigoPorcentaje;
-    private String tarifa;
-    private String baseImponible;
-    private String valor;
+    private BigDecimal tarifa;
+    private BigDecimal baseImponible;
+    private BigDecimal valor;
 
     public ImpuestoComprobante() {
     }
@@ -40,29 +41,29 @@ public class ImpuestoComprobante {
     }
 
     @XmlElement(name="tarifa")
-    public String getTarifa() {
+    public BigDecimal getTarifa() {
         return tarifa;
     }
 
-    public void setTarifa(String tarifa) {
+    public void setTarifa(BigDecimal tarifa) {
         this.tarifa = tarifa;
     }
 
     @XmlElement(name="baseImponible")
-    public String getBaseImponible() {
+    public BigDecimal getBaseImponible() {
         return baseImponible;
     }
 
-    public void setBaseImponible(String baseImponible) {
+    public void setBaseImponible(BigDecimal baseImponible) {
         this.baseImponible = baseImponible;
     }
 
     @XmlElement(name="valor")
-    public String getValor() {
+    public BigDecimal getValor() {
         return valor;
     }
 
-    public void setValor(String valor) {
+    public void setValor(BigDecimal valor) {
         this.valor = valor;
     }
     

@@ -50,7 +50,7 @@ public class FacturacionModel extends FacturacionPanel{
                 if(persona!=null)
                 {
                     getTxtCliente().setText(persona.getIdentificacion());
-                    getLblNombreCliente().setText(persona.getNombreSocial());
+                    getLblNombreCliente().setText(persona.getNombreLegal());
                     getLblDireccionCliente().setText(persona.getDireccion());
                     getLblTelefonoCliente().setText(persona.getTelefonoConvencional());                
                 }
