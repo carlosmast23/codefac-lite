@@ -81,6 +81,11 @@ public class SriFormaPago implements Serializable{
     public void setFechaFin(Date fechaFin) {
         this.fechaFin = fechaFin;
     }
+
+    @Override
+    public String toString() {
+        return codigo+" - "+nombre ;
+    }
     
     
     

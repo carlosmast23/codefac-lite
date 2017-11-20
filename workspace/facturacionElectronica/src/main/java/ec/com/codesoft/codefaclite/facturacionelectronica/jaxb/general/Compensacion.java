@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general;
 
+import java.math.BigDecimal;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
@@ -13,8 +14,8 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class Compensacion {
     private String codigo;
-    private String tarifa;
-    private String valor;
+    private BigDecimal tarifa;
+    private BigDecimal valor;
     
     public Compensacion() {
     }
@@ -29,20 +30,20 @@ public class Compensacion {
     }
 
     @XmlElement(name = "tarifa")
-    public String getTarifa() {
+    public BigDecimal getTarifa() {
         return tarifa;
     }
 
-    public void setTarifa(String tarifa) {
+    public void setTarifa(BigDecimal tarifa) {
         this.tarifa = tarifa;
     }
 
     @XmlElement(name = "valor")
-    public String getValor() {
+    public BigDecimal getValor() {
         return valor;
     }
 
-    public void setValor(String valor) {
+    public void setValor(BigDecimal valor) {
         this.valor = valor;
     }
 

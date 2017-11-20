@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.main.model;
 
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
@@ -38,6 +39,8 @@ import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -79,6 +82,7 @@ import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.ToolTipManager;
+import javax.swing.WindowConstants;
 import javax.swing.border.Border;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
@@ -121,6 +125,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         iniciarComponentes();
         agregarListenerBotones();
         agregarListenerSplit();
+        agregarListenerFrame();
         agregarListenerGraphics();
        
         habilitarBotones(false);
@@ -140,6 +145,53 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             
         });*/
         
+    }
+    private void agregarListenerFrame()
+    {
+        
+        addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+                
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                Integer respuesta=DialogoCodefac.dialogoPregunta("Alerta","Estas seguro que deseas salir?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                if(respuesta.equals(JOptionPane.YES_OPTION))
+                {
+                    dispose();
+                }
+                
+                
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+                
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+                
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+                
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+                
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+                
+                
+            }
+        });
     }
     
     private void agregarListenerGraphics()
@@ -968,6 +1020,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         //Cargar configuraciones de los divisores
         PROPORCION_HORIZONTAL=PROPORCION_HORIZONTAL_INICIAL;
         PROPORCION_VERTICAL=PROPORCION_VERTICAL_INICIAL;
+        
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         
         getjSplitPanel().setDividerLocation(PROPORCION_HORIZONTAL);
         getjSplitPanelVerticalSecundario().setDividerLocation(PROPORCION_VERTICAL);

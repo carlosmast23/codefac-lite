@@ -3,40 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.configuraciones.model;
+package ec.com.codesoft.codefaclite.controlador.dialog;
 
-import ec.com.codesoft.codefaclite.configuraciones.panel.ComprobantesConfiguracionPanel;
-import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
-import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
-import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
  *
  * @author Carlos
  */
-public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPanel
-{
-    private Map<String,ParametroCodefac> parametros ;
-    private ParametroCodefacService servicio;
-
-    public ComprobantesConfiguracionModel() {
-        this.servicio=new ParametroCodefacService();
-        cargarDatosConfiguraciones();
-        
-    }
-    
-    
+public class GeneralDialog extends ControladorCodefacInterface{
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
-        this.servicio.editarParametros(parametros);
-        DialogoCodefac.mensaje("Actualizado datos","Los datos de los parametros fueron actualizados",DialogoCodefac.MENSAJE_CORRECTO);
-        
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -66,7 +49,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
 
     @Override
     public void limpiar() {
-        super.estadoFormulario=GeneralPanelInterface.ESTADO_EDITAR;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -82,17 +65,12 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
         Map<Integer,Boolean> permisos=new HashMap<Integer,Boolean>();
-        permisos.put(GeneralPanelInterface.BOTON_GRABAR,true);
-        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
         return permisos;
     }
     
-    private void cargarDatosConfiguraciones()
-    {        
-        parametros=servicio.getParametrosMap();
-        ParametroCodefac param=parametros.get(ParametroCodefac.SECUENCIAL_FACTURA);
-        getTxtFacturaSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_FACTURA).getValor());
-        getTxtGuiaRemisionSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION).getValor());
+    public boolean validar()
+    {
+        return false;
     }
     
 }

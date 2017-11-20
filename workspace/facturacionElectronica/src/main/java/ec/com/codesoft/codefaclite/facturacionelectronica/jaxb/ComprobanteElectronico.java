@@ -25,7 +25,7 @@ public abstract class ComprobanteElectronico {
     private InformacionTributaria informacionTributaria;
     private List<InformacionAdicional> informacionAdicional;
     public abstract String getTipoDocumento();
-    public abstract Date getFechaEmision();
+    public abstract String getFechaEmision();
     public abstract String getIdentificacion();
 
     public ComprobanteElectronico() {

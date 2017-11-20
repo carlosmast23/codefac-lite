@@ -17,7 +17,7 @@ import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
 import ec.com.codesoft.codefaclite.main.model.GeneralPanelModel;
 import ec.com.codesoft.codefaclite.main.model.LoginModel;
 import ec.com.codesoft.codefaclite.main.model.MenuControlador;
-import ec.com.codesoft.codefaclite.main.panel.LoginForm;
+import ec.com.codesoft.codefaclite.main.model.SplashScreenModel;
 import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Empresa;
@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -43,24 +45,21 @@ public class Main {
     
     public static void main(String[] args) {
         
+        SplashScreenModel splashScren=new SplashScreenModel();
+        splashScren.agregarPorcentaje(40,"Cargando base de datos");
+        splashScren.agregarPorcentaje(60,"Cargando datos session");
+        splashScren.agregarPorcentaje(80,"Creando controlador codefac");
+        splashScren.agregarPorcentaje(100,"Cargando ventanas");
+        splashScren.setVisible(true);
+        splashScren.iniciar();
+
         //DialogoCodefac.mensaje("uno mas","otro mas",DialogoCodefac.MENSAJE_CORRECTO);
         
-        componentesIniciales();   
+        componentesIniciales();
+        splashScren.siguiente();
         
-        LoginModel loginModel=new LoginModel();
-        loginModel.setVisible(true);
-        
-        /**
-         * Si el usuario devuuelto es incorrecto terminar el aplicativo
-         */
-        Usuario usuarioLogin=loginModel.getUsuarioLogin();
-        if(usuarioLogin==null)
-        {
-            System.out.println("aplicacion terminada");
-            return ;
-        }
-        
-        /**
+       
+                /**
          * Crear la session y cargar otro datos de la empresa
          */
         SessionCodefac session=new SessionCodefac();
@@ -70,17 +69,15 @@ public class Main {
         empresa.setIdentificacion("17782823123");
         empresa.setNombreLegal("CORECOMPU");
         session.setEmpresa(empresa);
-               
-        
         session.setParametrosCodefac(getParametros());
-        session.setUsuario(usuarioLogin);
+        splashScren.siguiente();
         
-        /**
+                /**
          * Seteando la session de los datos a utilizar en el aplicativo
          */
         GeneralPanelModel panel=new GeneralPanelModel();
         panel.setSessionCodefac(session);
-        
+        splashScren.siguiente();
         
         /**
          * Añadir menus y ventanas a la aplicacion principal
@@ -90,10 +87,35 @@ public class Main {
          * Establecer propiedades del formulario principal
          */
         panel.setIconImage(new javax.swing.ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourcePath("logoCodefac-ico.png")).getImage()); // NOI18N        
-        panel.setVisible(true);
         panel.setExtendedState(MAXIMIZED_BOTH);
+        splashScren.siguiente();
+        splashScren.termino();
+        
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        /**
+         * Si el usuario devuuelto es incorrecto terminar el aplicativo
+         */
+        LoginModel loginModel=new LoginModel();
+        loginModel.setVisible(true);
+        Usuario usuarioLogin=loginModel.getUsuarioLogin();
+        if(usuarioLogin==null)
+        {
+            System.out.println("aplicacion terminada");
+            return ;
+        }
+        
+        session.setUsuario(usuarioLogin);
+        
+        panel.setVisible(true);
 
-
+        
+        
     }
     
     public static Map<String,ParametroCodefac> getParametros()

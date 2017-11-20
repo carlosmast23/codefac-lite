@@ -46,7 +46,7 @@ public class FacturaComprobante extends ComprobanteElectronico{
     }
 
     @Override
-    public Date getFechaEmision() {
+    public String getFechaEmision() {
         return this.informacionFactura.getFechaEmision();
     }
 

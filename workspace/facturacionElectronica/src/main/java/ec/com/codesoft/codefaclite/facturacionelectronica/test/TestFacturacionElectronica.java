@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectr
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.InformacionFactura;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionTributaria;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
 import ec.com.codesoft.codefaclite.ws.recepcion.Mensaje;
 import es.mityc.firmaJava.libreria.xades.FirmaXML;
 import java.sql.Date;
@@ -67,7 +68,7 @@ public class TestFacturacionElectronica {
         
         InformacionFactura informacionFactura=new InformacionFactura();
         java.util.Date fechaHoy=new java.util.Date();
-        informacionFactura.setFechaEmision(new Date(fechaHoy.getTime()));
+        informacionFactura.setFechaEmision(ComprobantesElectronicosUtil.dateToString(new Date(fechaHoy.getTime())));
         
         informacionFactura.setIdentificacionComprador("17242131515");
         factura.setInformacionFactura(informacionFactura);

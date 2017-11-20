@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.notacredito;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.Compensacion;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.TotalImpuesto;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -29,7 +30,7 @@ public class InformacionNotaCredito {
     private String codDocModificado;
     private String numDocModificado;
     private String fechaEmisionDocSustento;
-    private String totalSinImpuestos;
+    private BigDecimal totalSinImpuestos;
     private String valorModificacion;
     private String moneda;
     private String motivo;
@@ -141,11 +142,11 @@ public class InformacionNotaCredito {
     }
 
     @XmlElement(name = "totalSinImpuestos")
-    public String getTotalSinImpuestos() {
+    public BigDecimal getTotalSinImpuestos() {
         return totalSinImpuestos;
     }
 
-    public void setTotalSinImpuestos(String totalSinImpuestos) {
+    public void setTotalSinImpuestos(BigDecimal totalSinImpuestos) {
         this.totalSinImpuestos = totalSinImpuestos;
     }
 

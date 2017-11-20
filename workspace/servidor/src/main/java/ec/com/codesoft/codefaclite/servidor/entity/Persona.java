@@ -24,24 +24,22 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "CLIENTE")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Persona.findAll", query = "SELECT p FROM Persona p"),
-    @NamedQuery(name = "Persona.findByIdentificacion", query = "SELECT p FROM Persona p WHERE p.identificacion = :identificacion"),
-    @NamedQuery(name = "Persona.findByNombre", query = "SELECT p FROM Persona p WHERE p.nombreSocial = :nombre")})
 public class Persona implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column (name = "ID_CLIENTE")
-    private Integer  idCliente;
+    @Column(name = "ID_CLIENTE")
+    private Integer idCliente;
     @Column(name = "IDENTIFICACION")
     private String identificacion;
     @Column(name = "TIPO_IDENTIFICACION")
     private String tipoIdentificacion;
-    @Column(name = "NOMBRE_SOCIAL")
-    private String nombreSocial;
+    @Column(name = "RAZON_SOCIAL")
+    private String razonSocial;
+    @Column(name = "NOMBRE_LEGAL")
+    private String nombreLegal;
     @Column(name = "TIPO_CLIENTE")
     private String tipCliente;
     @Column(name = "DIRECCION")
@@ -70,7 +68,7 @@ public class Persona implements Serializable {
     public void setIdentificacion(String identificacion) {
         this.identificacion = identificacion;
     }
-    
+
     public String getTipoIdentificacion() {
         return tipoIdentificacion;
     }
@@ -79,13 +77,23 @@ public class Persona implements Serializable {
         this.tipoIdentificacion = tipoIdentificacion;
     }
 
-    public String getNombreSocial() {
-        return nombreSocial;
+    public String getRazonSocial() {
+        return razonSocial;
     }
 
-    public void setNombreSocial(String nombreSocial) {
-        this.nombreSocial = nombreSocial;
+    public void setRazonSocial(String razonSocial) {
+        this.razonSocial = razonSocial;
     }
+
+    public String getNombreLegal() {
+        return nombreLegal;
+    }
+
+    public void setNombreLegal(String nombreLegal) {
+        this.nombreLegal = nombreLegal;
+    }
+
+    
 
     public String getTipCliente() {
         return tipCliente;
@@ -135,7 +143,6 @@ public class Persona implements Serializable {
         this.correoElectronico = correoElectronico;
     }
 
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -160,5 +167,5 @@ public class Persona implements Serializable {
     public String toString() {
         return "ec.com.codesoft.codefaclite.servidor.entity.Persona[ cedula=" + identificacion + " ]";
     }
-    
+
 }
