@@ -266,6 +266,16 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private void cargarAyuda()
     {
         ControladorCodefacInterface panel=(ControladorCodefacInterface) getjDesktopPane1().getSelectedFrame();
+        String url="";
+        try
+        {
+            url=panel.getURLAyuda();
+        }
+        catch (UnsupportedOperationException exception) {
+            System.out.println("metodo no implementado");
+            return ;
+        }
+
         if(browser!=null)
         {
             //Verifacar si la url cargada es la misma no volver a cargar
@@ -349,7 +359,16 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 ControladorCodefacInterface frameInterface=(ControladorCodefacInterface) frame;
                 frameInterface.estadoFormulario= ControladorCodefacInterface.ESTADO_GRABAR;
                 limpiarAnotaciones(frameInterface);
-                frameInterface.limpiar();
+                
+                try
+                {
+                    frameInterface.limpiar();
+                }
+                catch(UnsupportedOperationException exception)
+                {
+                    System.out.println("metodo no implementado"); 
+                }
+                    
                 limpiarCamposValidacion(frameInterface);
                 frameInterface.consola=new ConsolaGeneral();
                 mostrarConsola(frameInterface.consola);
