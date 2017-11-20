@@ -14,6 +14,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.w3c.dom.Document;
@@ -134,6 +137,18 @@ public abstract class ComprobantesElectronicosUtil {
 
             }
         }
+    }
+    
+    public static String dateToString(Date fecha)
+    {
+        SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy");
+        return format.format(fecha);
+    }
+    
+    public static String dateToString(Timestamp fecha)
+    {
+        SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy");
+        return format.format(fecha);
     }
     
     

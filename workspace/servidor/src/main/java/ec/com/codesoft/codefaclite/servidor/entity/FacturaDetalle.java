@@ -20,7 +20,7 @@ import javax.persistence.Table;
 public class FacturaDetalle {
     private Long id;
     private Long productoId;
-    private Integer cantidad;
+    private BigDecimal cantidad;
     private BigDecimal precioUnitario;
     private BigDecimal descuento;
     private BigDecimal valorIce;
@@ -40,7 +40,7 @@ public class FacturaDetalle {
     }
 
     @Column(name = "CANTIDAD")    
-    public Integer getCantidad() {
+    public BigDecimal getCantidad() {
         return cantidad;
     }
 
@@ -67,7 +67,7 @@ public class FacturaDetalle {
         this.productoId = productoId;
     }
 
-    public void setCantidad(Integer cantidad) {
+    public void setCantidad(BigDecimal cantidad) {
         this.cantidad = cantidad;
     }
 

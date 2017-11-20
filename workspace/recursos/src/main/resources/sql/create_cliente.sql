@@ -10,7 +10,8 @@
 
 create table 
     CLIENTE( ID_CLIENTE integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1) , 
-    NOMBRE_SOCIAL varchar(256),
+    RAZON_SOCIAL varchar(256),
+    NOMBRE_LEGAL varchar(256),
     TIPO_IDENTIFICACION varchar(30), 
     IDENTIFICACION varchar(13), 
     TIPO_CLIENTE varchar(12),

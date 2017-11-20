@@ -49,4 +49,30 @@ public abstract class DialogoCodefac {
                 JOptionPane.WARNING_MESSAGE,
                 icono);
     }
+    
+    public static int dialogoPregunta(String titulo, String mensaje, Integer tipoMensaje) {
+        ImageIcon icono=null;
+       
+        if(tipoMensaje.equals(MENSAJE_CORRECTO))
+        {
+            icono=new ImageIcon(RecursoCodefac.IMAGENES_ICONOS_DIALOGOS.getResourceURL("icono-correcto.png"));
+        }
+        else
+        {
+            if(tipoMensaje.equals(MENSAJE_INCORRECTO))
+            {
+                icono=new ImageIcon(RecursoCodefac.IMAGENES_ICONOS_DIALOGOS.getResourceURL("icono-error.png"));
+            }
+            else
+            {
+                if (tipoMensaje.equals(MENSAJE_ADVERTENCIA)) {
+                    icono = new ImageIcon(RecursoCodefac.IMAGENES_ICONOS_DIALOGOS.getResourceURL("icono-informacion.png"));
+                }
+            }
+        }
+        
+        int resp = JOptionPane.showConfirmDialog(null, mensaje, titulo, JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, icono);
+        return resp;
+    }
+
 }

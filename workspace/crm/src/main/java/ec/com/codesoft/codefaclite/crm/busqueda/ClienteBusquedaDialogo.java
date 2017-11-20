@@ -47,7 +47,7 @@ public class ClienteBusquedaDialogo implements InterfaceModelFind<Persona>
     @Override
     public void agregarObjeto(Persona t, Vector dato) 
     {
-        dato.add(t.getNombreSocial());
+        dato.add(t.getNombreLegal());
         dato.add(t.getIdentificacion());
         dato.add(t.getTelefonoConvencional());
         dato.add(t.getExtensionTelefono());

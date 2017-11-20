@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.TotalImpuesto;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
@@ -18,13 +19,13 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlType
 public class InformacionFactura {
-    private Date fechaEmision;
+    private String fechaEmision;
     private String tipoIdentificacionComprador;
     private String razonSocialComprador;
     private String identificacionComprador;
-    private String totalSinImpuestos;
-    private String totalDescuento;
-    private String importeTotal;
+    private BigDecimal totalSinImpuestos;
+    private BigDecimal totalDescuento;
+    private BigDecimal importeTotal;
     
     private List<TotalImpuesto> totalImpuestos;
 
@@ -32,11 +33,11 @@ public class InformacionFactura {
     }
 
     @XmlElement(name = "fechaEmision")
-    public Date getFechaEmision() {
+    public String getFechaEmision() {
         return fechaEmision;
     }
 
-    public void setFechaEmision(Date fechaEmision) {
+    public void setFechaEmision(String fechaEmision) {
         this.fechaEmision = fechaEmision;
     }
     
@@ -68,30 +69,30 @@ public class InformacionFactura {
     }
 
     @XmlElement(name = "totalSinImpuestos")
-    public String getTotalSinImpuestos() {
+    public BigDecimal getTotalSinImpuestos() {
         return totalSinImpuestos;
     }
 
 
-    public void setTotalSinImpuestos(String totalSinImpuestos) {
+    public void setTotalSinImpuestos(BigDecimal totalSinImpuestos) {
         this.totalSinImpuestos = totalSinImpuestos;
     }
 
     @XmlElement(name = "totalDescuento")
-    public String getTotalDescuento() {
+    public BigDecimal getTotalDescuento() {
         return totalDescuento;
     }
 
-    public void setTotalDescuento(String totalDescuento) {
+    public void setTotalDescuento(BigDecimal totalDescuento) {
         this.totalDescuento = totalDescuento;
     }
 
     @XmlElement(name = "importeTotal")
-    public String getImporteTotal() {
+    public BigDecimal getImporteTotal() {
         return importeTotal;
     }
 
-    public void setImporteTotal(String importeTotal) {
+    public void setImporteTotal(BigDecimal importeTotal) {
         this.importeTotal = importeTotal;
     }
     

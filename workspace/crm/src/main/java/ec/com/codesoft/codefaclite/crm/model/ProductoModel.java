@@ -10,8 +10,12 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.crm.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.crm.panel.ProductoForm;
+import ec.com.codesoft.codefaclite.servidor.entity.Impuesto;
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
+import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoService;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -24,21 +28,37 @@ import java.util.Map;
 public class ProductoModel extends ProductoForm
 {
     private Producto producto;
+    private Impuesto impuesto;
+            
     private ProductoService productoService;
+    private ImpuestoService impuestoService;
+    
     private BigDecimal d;
     
     public ProductoModel()
     {
         productoService = new ProductoService();
+        cargarCombos();
+    }
+    
+    public void cargarCombos()
+    {
+//        
+// SriService servicioSri=new SriService();
+//        identificaciones=servicioSri.obtenerIdentificaciones(SriIdentificacion.CLIENTE);
+//        getjComboIdentificacion().removeAllItems();
+//        for (SriIdentificacion identificacion : identificaciones) {
+//            getjComboIdentificacion().addItem(identificacion);
+    
     }
     
     @Override
     public void grabar() throws ExcepcionCodefacLite 
     {
         producto = new Producto();
-        producto.setCodigoPrincipal(getjTextCodigoPrincipal().getText());
-        producto.setCodigoAuxiliar(getjTextCodigoAuxiliar().getText());
-        if(getjComboTipoProducto().getSelectedItem().equals("Bien"))
+        producto.setCodigoPrincipal(getTextCodigoPrincipal().getText());
+        producto.setCodigoAuxiliar(getTextCodigoAuxiliar().getText());
+        if(getComboTipoProducto().getSelectedItem().equals("Bien"))
         {
             producto.setTipoProducto("B");
         }
@@ -47,8 +67,8 @@ public class ProductoModel extends ProductoForm
             producto.setTipoProducto("S");
         }
         
-        producto.setNombre(getjTextNombre().getText()); 
-        d = new BigDecimal(getjTextValorUnitario().getText());
+        producto.setNombre(getTextNombre().getText()); 
+        d = new BigDecimal(getTextValorUnitario().getText());
         producto.setValorUnitario(d);
         productoService.grabar(producto);
     }
@@ -56,9 +76,9 @@ public class ProductoModel extends ProductoForm
     @Override
     public void editar() throws ExcepcionCodefacLite {
         producto = new Producto();
-        producto.setCodigoPrincipal(getjTextCodigoPrincipal().getText());
-        producto.setCodigoAuxiliar(getjTextCodigoAuxiliar().getText());
-        if(getjComboTipoProducto().getSelectedItem().equals("Bien"))
+        producto.setCodigoPrincipal(getTextCodigoPrincipal().getText());
+        producto.setCodigoAuxiliar(getTextCodigoAuxiliar().getText());
+        if(getComboTipoProducto().getSelectedItem().equals("Bien"))
         {
             producto.setTipoProducto("B");
         }
@@ -67,8 +87,8 @@ public class ProductoModel extends ProductoForm
             producto.setTipoProducto("S");
         }
         
-        producto.setNombre(getjTextNombre().getText()); 
-        d = new BigDecimal(getjTextValorUnitario().getText());
+        producto.setNombre(getTextNombre().getText()); 
+        d = new BigDecimal(getTextValorUnitario().getText());
         producto.setValorUnitario(d);
         
         productoService.grabar(producto);
@@ -101,13 +121,13 @@ public class ProductoModel extends ProductoForm
             throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar producto vacio");
         }
         
-        getjTextCodigoPrincipal().setText(producto.getCodigoPrincipal());
-        getjTextCodigoAuxiliar().setText(producto.getCodigoAuxiliar());
+        getTextCodigoPrincipal().setText(producto.getCodigoPrincipal());
+        getTextCodigoAuxiliar().setText(producto.getCodigoAuxiliar());
         if(producto.getTipoProducto().equals('B')){
-            getjComboTipoProducto().setSelectedItem("Bien");
+            getComboTipoProducto().setSelectedItem("Bien");
         }
         else{
-            getjComboTipoProducto().setSelectedItem("Servicio");
+            getComboTipoProducto().setSelectedItem("Servicio");
         }
     }
 

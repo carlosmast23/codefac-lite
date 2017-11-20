@@ -6,11 +6,11 @@
 package ec.com.codesoft.codefaclite.main.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
-import ec.com.codesoft.codefaclite.main.panel.LoginForm;
 import ec.com.codesoft.codefaclite.main.panel.LoginFormDialog;
 import ec.com.codesoft.codefaclite.servidor.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
 import java.awt.Frame;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
@@ -28,6 +28,9 @@ public class LoginModel extends LoginFormDialog{
         super(null,true);
         initListenerBotones();
         this.usuarioServicio=new UsuarioServicio();
+        
+        Image fondoImg = new javax.swing.ImageIcon(getClass().getResource("/img/general/fondoInicial.jpg")).getImage();
+        getPanelPrincipal().setBorder(new Fondo2(fondoImg));
     }
 
     private void initListenerBotones() {

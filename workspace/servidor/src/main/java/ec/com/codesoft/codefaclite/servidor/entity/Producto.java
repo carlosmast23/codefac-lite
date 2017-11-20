@@ -45,6 +45,36 @@ public class Producto implements Serializable
     private String nombre;
     @Column(name = "VALOR_UNITARIO")
     private BigDecimal valorUnitario;
+    @Column(name = "IVA")
+    private Integer iva;
+    @Column(name = "ICE")
+    private Integer ice;
+    @Column(name = "IRBPNR")
+    private Integer irbpnr;
+
+    public Integer getIva() {
+        return iva;
+    }
+
+    public void setIva(Integer iva) {
+        this.iva = iva;
+    }
+
+    public Integer getIce() {
+        return ice;
+    }
+
+    public void setIce(Integer ice) {
+        this.ice = ice;
+    }
+
+    public Integer getIrbpnr() {
+        return irbpnr;
+    }
+
+    public void setIrbpnr(Integer irbpnr) {
+        this.irbpnr = irbpnr;
+    }
     
     public Integer getIdProducto() {
         return idProducto;
