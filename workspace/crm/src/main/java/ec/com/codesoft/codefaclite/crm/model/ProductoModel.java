@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.crm.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.crm.panel.ProductoForm;
 import ec.com.codesoft.codefaclite.servidor.entity.Impuesto;
+import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoService;
@@ -19,6 +20,7 @@ import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,6 +40,7 @@ public class ProductoModel extends ProductoForm
     public ProductoModel()
     {
         productoService = new ProductoService();
+        impuestoService=new ImpuestoService();
         cargarCombos();
     }
     
@@ -70,6 +73,10 @@ public class ProductoModel extends ProductoForm
         producto.setNombre(getTextNombre().getText()); 
         d = new BigDecimal(getTextValorUnitario().getText());
         producto.setValorUnitario(d);
+        producto.setIce((ImpuestoDetalle) getComboIce().getSelectedItem());
+        producto.setIva((ImpuestoDetalle) getComboIva().getSelectedItem());
+        producto.setIrbpnr((ImpuestoDetalle) getComboIrbpnr().getSelectedItem());
+        
         productoService.grabar(producto);
     }
 
@@ -133,7 +140,23 @@ public class ProductoModel extends ProductoForm
 
     @Override
     public void limpiar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        getComboIva().removeAllItems();
+        Impuesto iva=impuestoService.obtenerImpuestoPorCodigo(Impuesto.IVA);
+        for (ImpuestoDetalle impuesto : iva.getDetalleImpuestos()) {
+            getComboIva().addItem(impuesto);
+        }
+        
+        Impuesto ice=impuestoService.obtenerImpuestoPorCodigo(Impuesto.ICE);
+        for (ImpuestoDetalle impuesto : ice.getDetalleImpuestos()) {
+            getComboIce().addItem(impuesto);
+        }
+        
+        Impuesto irbpnr=impuestoService.obtenerImpuestoPorCodigo(Impuesto.IRBPNR);
+        for (ImpuestoDetalle impuesto : irbpnr.getDetalleImpuestos()) {
+            getComboIrbpnr().addItem(impuesto);
+        }
+
+        
     }
 
     @Override

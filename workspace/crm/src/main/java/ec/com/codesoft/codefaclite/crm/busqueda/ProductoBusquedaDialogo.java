@@ -8,6 +8,9 @@ package ec.com.codesoft.codefaclite.crm.busqueda;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
+import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
+import ec.com.codesoft.codefaclite.servidor.service.ProductoService;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -21,25 +24,37 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto>
     @Override
     public Vector<ColumnaDialogo> getColumnas() 
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Vector<ColumnaDialogo> titulo = new Vector<>();
+        titulo.add(new ColumnaDialogo("Codigo", 0.2d));
+        titulo.add(new ColumnaDialogo("Nombre", 0.3d));
+        titulo.add(new ColumnaDialogo("Precio Unit", 0.3d));
+        titulo.add(new ColumnaDialogo("IVA", 0.1d));        
+        titulo.add(new ColumnaDialogo("ICE", 0.1d));        
+        return titulo;
     }
 
     @Override
     public List<Producto> getConsulta() 
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         ArrayList<Producto> productos = new ArrayList<Producto>();
+        ProductoService servicio=new ProductoService();
+        return servicio.buscar();
     }
 
     @Override
     public void agregarObjeto(Producto t, Vector dato) 
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        dato.add(t.getCodigoPrincipal());
+        dato.add(t.getNombre());
+        dato.add(t.getValorUnitario());
+        dato.add(t.getIva().toString());
+        dato.add(t.getIce().toString());
     }
 
     @Override
     public Boolean buscarObjeto(Producto t, Object valor) 
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return t.getNombre().equals(valor.toString());   
     }
     
 }

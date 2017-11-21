@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.crm.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
 import java.util.Map;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
@@ -19,30 +20,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
 
     public JComboBox<String> getComboTipoProducto() {
         return comboTipoProducto;
-    }
-
-    public JComboBox<String> getComboIce() {
-        return comboIce;
-    }
-
-    public void setComboIce(JComboBox<String> comboIce) {
-        this.comboIce = comboIce;
-    }
-
-    public JComboBox<String> getComboIrbpnr() {
-        return comboIrbpnr;
-    }
-
-    public void setComboIrbpnr(JComboBox<String> comboIrbpnr) {
-        this.comboIrbpnr = comboIrbpnr;
-    }
-
-    public JComboBox<String> getComboIva() {
-        return comboIva;
-    }
-
-    public void setComboIva(JComboBox<String> comboIva) {
-        this.comboIva = comboIva;
     }
 
     public void setComboTipoProducto(JComboBox<String> jComboTipoProducto) {
@@ -81,12 +58,40 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         this.textValorUnitario = jTextValorUnitario;
     }
 
+    public JComboBox<ImpuestoDetalle> getComboIce() {
+        return comboIce;
+    }
+
+    public void setComboIce(JComboBox<ImpuestoDetalle> comboIce) {
+        this.comboIce = comboIce;
+    }
+
+    public JComboBox<ImpuestoDetalle> getComboIrbpnr() {
+        return comboIrbpnr;
+    }
+
+    public void setComboIrbpnr(JComboBox<ImpuestoDetalle> comboIrbpnr) {
+        this.comboIrbpnr = comboIrbpnr;
+    }
+
+    public JComboBox<ImpuestoDetalle> getComboIva() {
+        return comboIva;
+    }
+
+    public void setComboIva(JComboBox<ImpuestoDetalle> comboIva) {
+        this.comboIva = comboIva;
+    }
+    
+    
+
     /**
      * Creates new form ProductoForm
      */
     public ProductoForm() {
         initComponents();
     }
+    
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -263,7 +268,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanel2.add(jLabel10, gridBagConstraints);
 
-        comboIva.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "0 - 0% ", "2 - GRAVA IVA", "6 - NO OBJETO DE IMPUESTO", "7 -  EXENTO" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -280,7 +284,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanel2.add(jLabel11, gridBagConstraints);
 
-        comboIce.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "3011 - ICE - CIGARILLOS RUBIOS", " " }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -297,7 +300,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanel2.add(jLabel12, gridBagConstraints);
 
-        comboIrbpnr.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "5001 - BOTELLAS PLASTICAS NO RETORNABLES" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
@@ -444,9 +446,9 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         pack();
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> comboIce;
-    private javax.swing.JComboBox<String> comboIrbpnr;
-    private javax.swing.JComboBox<String> comboIva;
+    private javax.swing.JComboBox<ImpuestoDetalle> comboIce;
+    private javax.swing.JComboBox<ImpuestoDetalle> comboIrbpnr;
+    private javax.swing.JComboBox<ImpuestoDetalle> comboIva;
     private javax.swing.JComboBox<String> comboTipoProducto;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -485,4 +487,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
     private javax.swing.JTextField textNombre;
     private javax.swing.JTextField textValorUnitario;
     // End of variables declaration//GEN-END:variables
+
+    
 }

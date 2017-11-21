@@ -389,6 +389,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         return txtRetencionesSecuencial;
     }
 
+
     public JComboBox<String> getCmbIvaDefault() {
         return cmbIvaDefault;
     }
@@ -397,29 +398,60 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         return cmbModoFacturacion;
     }
 
+
     public JPasswordField getTxtClaveFirma() {
         return txtClaveFirma;
     }
 
+
     public JPasswordField getTxtClaveFirmaRepetir() {
         return txtClaveFirmaRepetir;
+    }
+
+    public void setTxtClaveFirma(JPasswordField txtClaveFirma) {
+        this.txtClaveFirma = txtClaveFirma;
     }
 
     public JTextField getTxtCorreoElectronico() {
         return txtCorreoElectronico;
     }
 
+
+    public void setTxtCorreoElectronico(JTextField txtCorreoElectronico) {
+        this.txtCorreoElectronico = txtCorreoElectronico;
+    }
+
+
     public JTextField getTxtDirectorioRecurso() {
         return txtDirectorioRecurso;
     }
+
+
+    public void setTxtDirectorioRecurso(JTextField txtDirectorioRecurso) {
+        this.txtDirectorioRecurso = txtDirectorioRecurso;
+    }
+
 
     public JTextField getTxtNombreFirma() {
         return txtNombreFirma;
     }
 
+
+    public void setTxtNombreFirma(JTextField txtNombreFirma) {
+        this.txtNombreFirma = txtNombreFirma;
+    }
+
+
     public JPasswordField getTxtPasswordCorreo() {
         return txtPasswordCorreo;
     }
+
+
+    public void setTxtPasswordCorreo(JPasswordField txtPasswordCorreo) {
+        this.txtPasswordCorreo = txtPasswordCorreo;
+    }
+
+    
 
     
 }

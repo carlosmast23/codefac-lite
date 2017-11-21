@@ -432,13 +432,14 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
         PanelDatosAdicionales.add(jScrollPane5, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -608,8 +609,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.gridy = 3;
         getContentPane().add(PanelValores, gridBagConstraints);
 
         panelDatosFactura.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos Factura"));
