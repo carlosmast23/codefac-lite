@@ -13,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -20,13 +22,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "PRODUCTO")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Producto.findAll", query = "SELECT p FROM Producto p"),
-    @NamedQuery(name = "Producto.findByCodigoPrincipal", query = "SELECT p FROM Producto p WHERE p.codigoPrincipal = :codigoPrincipal")})
-/**
- *
- * @author PC
- */
 public class Producto implements Serializable
 {
     private static final long serialVersionUID = 1L;
@@ -45,36 +40,46 @@ public class Producto implements Serializable
     private String nombre;
     @Column(name = "VALOR_UNITARIO")
     private BigDecimal valorUnitario;
-    @Column(name = "IVA")
-    private Integer iva;
-    @Column(name = "ICE")
-    private Integer ice;
-    @Column(name = "IRBPNR")
-    private Integer irbpnr;
+    
+    //@Column(name = "IVA")
+    @JoinColumn(name = "IVA_ID")
+    @ManyToOne
+    private ImpuestoDetalle iva;
+    
+    @JoinColumn(name = "ICE_ID")
+    @ManyToOne
+    //@Column(name = "ICE")
+    private ImpuestoDetalle ice;
+    
+    @JoinColumn(name = "IRBPNR_ID")
+    @ManyToOne
+    //@Column(name = "IRBPNR")
+    private ImpuestoDetalle irbpnr;
 
-    public Integer getIva() {
+    public ImpuestoDetalle getIva() {
         return iva;
     }
 
-    public void setIva(Integer iva) {
+    public void setIva(ImpuestoDetalle iva) {
         this.iva = iva;
     }
 
-    public Integer getIce() {
+    public ImpuestoDetalle getIce() {
         return ice;
     }
 
-    public void setIce(Integer ice) {
+    public void setIce(ImpuestoDetalle ice) {
         this.ice = ice;
     }
 
-    public Integer getIrbpnr() {
+    public ImpuestoDetalle getIrbpnr() {
         return irbpnr;
     }
 
-    public void setIrbpnr(Integer irbpnr) {
+    public void setIrbpnr(ImpuestoDetalle irbpnr) {
         this.irbpnr = irbpnr;
     }
+
     
     public Integer getIdProducto() {
         return idProducto;

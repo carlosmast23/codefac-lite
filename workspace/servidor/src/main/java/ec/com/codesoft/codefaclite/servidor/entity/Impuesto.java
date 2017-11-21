@@ -6,12 +6,16 @@
 package ec.com.codesoft.codefaclite.servidor.entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -24,6 +28,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Impuesto implements Serializable
 {
+    public static final String IVA="IVA";
+    public static final String ICE="ICE";
+    public static final String IRBPNR="IRBPNR";
+    
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -35,6 +44,11 @@ public class Impuesto implements Serializable
     private String codigoSri;
     @Column(name = "DESCRIPCION")
     private String descripcion;
+    
+    //@OneToMany(cascade= CascadeType.ALL)
+    //@JoinColumn(name="ID_IMPUESTO")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "impuesto")
+    private List<ImpuestoDetalle> detalleImpuestos;
 
     public Integer getIdImpuesto() {
         return idImpuesto;
@@ -67,6 +81,16 @@ public class Impuesto implements Serializable
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+
+    public List<ImpuestoDetalle> getDetalleImpuestos() {
+        return detalleImpuestos;
+    }
+
+    public void setDetalleImpuestos(List<ImpuestoDetalle> detalleImpuestos) {
+        this.detalleImpuestos = detalleImpuestos;
+    }
+    
+    
     
 }
 

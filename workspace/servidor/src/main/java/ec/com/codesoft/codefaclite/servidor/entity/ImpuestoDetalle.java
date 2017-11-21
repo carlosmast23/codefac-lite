@@ -15,6 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.sql.Date;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -30,9 +32,6 @@ public class ImpuestoDetalle implements Serializable
     @Column (name = "ID_IMPUESTO_DETALLE")
     private Integer idImpuestoDetalle;
     
-    @Column (name = "ID_IMPUESTO")
-    private Integer idImpuesto;
-    
     @Column (name= "CODIGO")
     private Integer codigo;
     
@@ -42,8 +41,8 @@ public class ImpuestoDetalle implements Serializable
     @Column (name= "PORCENTAJE")
     private BigDecimal porcentaje;
     
-    @Column (name = "TARIFA")
-    private BigDecimal tarifa;
+    //@Column (name = "TARIFA")
+    //private BigDecimal tarifa;
     
     @Column (name= "DESCRIPCION")
     private String descripcion;
@@ -53,6 +52,11 @@ public class ImpuestoDetalle implements Serializable
     
     @Column (name= "FECHA_FIN")
     private Date fechaFin;
+        
+    //@ManyToOne
+    @JoinColumn(name="ID_IMPUESTO")
+    @ManyToOne(optional = false)
+    private Impuesto impuesto;
     
     
     public Integer getIdImpuestoDetalle() {
@@ -63,13 +67,15 @@ public class ImpuestoDetalle implements Serializable
         this.idImpuestoDetalle = idImpuestoDetalle;
     }
 
-    public Integer getIdImpuesto() {
-        return idImpuesto;
+    public Impuesto getImpuesto() {
+        return impuesto;
     }
 
-    public void setIdImpuesto(Integer idImpuesto) {
-        this.idImpuesto = idImpuesto;
+    public void setImpuesto(Impuesto impuesto) {
+        this.impuesto = impuesto;
     }
+
+    
 
     public Integer getCodigo() {
         return codigo;
@@ -95,13 +101,14 @@ public class ImpuestoDetalle implements Serializable
         this.porcentaje = porcentaje;
     }
 
+    /*
     public BigDecimal getTarifa() {
         return tarifa;
     }
 
     public void setTarifa(BigDecimal tarifa) {
         this.tarifa = tarifa;
-    }
+    }*/
 
     public String getDescripcion() {
         return descripcion;
@@ -126,6 +133,13 @@ public class ImpuestoDetalle implements Serializable
     public void setFechaFin(Date fechaFin) {
         this.fechaFin = fechaFin;
     }
-   
+
+    @Override
+    public String toString() {
+        return codigo+" - "+nombre;
+    }
+    
+    
+    
     
 }

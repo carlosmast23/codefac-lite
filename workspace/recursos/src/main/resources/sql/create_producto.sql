@@ -15,5 +15,8 @@ create table PRODUCTO
     TIPO_PRODUCTO varchar(1),
     NOMBRE varchar(100),
     VALOR_UNITARIO decimal,
-    primary key (ID_CLIENTE)
+    IVA_ID integer,
+    ICE_ID integer,
+    IRBPNR_ID integer,
+    primary key (ID_PRODUCTO)
 )
