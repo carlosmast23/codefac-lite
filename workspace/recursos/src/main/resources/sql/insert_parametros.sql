@@ -21,5 +21,6 @@ INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('secuencial_guia_remision','1');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('secuencial_nota_credito','1');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('secuencial_nota_debito','1');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('secuencial_retencion','1');
-
+INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('correo_usuario','patricio_sanchez10@hotmail.com');
+INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('correo_clave','danielitamatias');
 

@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.configuraciones.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import javax.swing.JComboBox;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
@@ -174,7 +175,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints.insets = new java.awt.Insets(47, 64, 0, 0);
         panelFacturacionElectronica.add(jLabel6, gridBagConstraints);
 
-        cmbModoFacturacion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbModoFacturacion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Prueba", "Producción" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -388,8 +389,23 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         return txtRetencionesSecuencial;
     }
 
+
+    public JComboBox<String> getCmbIvaDefault() {
+        return cmbIvaDefault;
+    }
+
+    public JComboBox<String> getCmbModoFacturacion() {
+        return cmbModoFacturacion;
+    }
+
+
     public JPasswordField getTxtClaveFirma() {
         return txtClaveFirma;
+    }
+
+
+    public JPasswordField getTxtClaveFirmaRepetir() {
+        return txtClaveFirmaRepetir;
     }
 
     public void setTxtClaveFirma(JPasswordField txtClaveFirma) {
@@ -400,34 +416,42 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         return txtCorreoElectronico;
     }
 
+
     public void setTxtCorreoElectronico(JTextField txtCorreoElectronico) {
         this.txtCorreoElectronico = txtCorreoElectronico;
     }
+
 
     public JTextField getTxtDirectorioRecurso() {
         return txtDirectorioRecurso;
     }
 
+
     public void setTxtDirectorioRecurso(JTextField txtDirectorioRecurso) {
         this.txtDirectorioRecurso = txtDirectorioRecurso;
     }
+
 
     public JTextField getTxtNombreFirma() {
         return txtNombreFirma;
     }
 
+
     public void setTxtNombreFirma(JTextField txtNombreFirma) {
         this.txtNombreFirma = txtNombreFirma;
     }
 
+
     public JPasswordField getTxtPasswordCorreo() {
         return txtPasswordCorreo;
     }
+
 
     public void setTxtPasswordCorreo(JPasswordField txtPasswordCorreo) {
         this.txtPasswordCorreo = txtPasswordCorreo;
     }
 
     
+
     
 }
