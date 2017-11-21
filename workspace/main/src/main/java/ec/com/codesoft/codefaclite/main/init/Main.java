@@ -69,7 +69,7 @@ public class Main {
         empresa.setIdentificacion("17782823123");
         empresa.setNombreLegal("CORECOMPU");
         session.setEmpresa(empresa);
-        session.setParametrosCodefac(getParametros());
+        //session.setParametrosCodefac(getParametros());
         splashScren.siguiente();
         
                 /**
