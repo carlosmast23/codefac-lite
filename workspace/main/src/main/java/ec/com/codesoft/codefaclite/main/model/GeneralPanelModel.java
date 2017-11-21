@@ -354,9 +354,19 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             @Override
             public void actionPerformed(ActionEvent e) {
                 JInternalFrame frame= getjDesktopPane1().getSelectedFrame();
+                ControladorCodefacInterface frameInterface=(ControladorCodefacInterface) frame;
+                
+                /**
+                 * Si ciclo de vida esta desactivado controlo manualmente el ciclo de vida
+                 */
+                if(!frameInterface.cicloVida)
+                {
+                    frameInterface.limpiar();
+                    return;
+                }
+                
                 String tituloOriginal=getTituloOriginal(frame.getTitle());
                 frame.setTitle(tituloOriginal+" [Nuevo]");
-                ControladorCodefacInterface frameInterface=(ControladorCodefacInterface) frame;
                 frameInterface.estadoFormulario= ControladorCodefacInterface.ESTADO_GRABAR;
                 limpiarAnotaciones(frameInterface);
                 
@@ -384,6 +394,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     boolean procesoTerminado=false;
                     JInternalFrame frame= getjDesktopPane1().getSelectedFrame();
                     ControladorCodefacInterface frameInterface=(ControladorCodefacInterface) frame;
+                    
                     
                     if(frameInterface.estadoFormulario.equals(ControladorCodefacInterface.ESTADO_GRABAR))
                     {
@@ -423,6 +434,15 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         }
                     
                     }
+
+                    /**
+                     * Si ciclo de vida esta desactivado controlo manualmente el
+                     * ciclo de vida
+                     */
+                    if (!frameInterface.cicloVida) {
+                        //frameInterface.limpiar();
+                        return;
+                    }
                     
                     if(procesoTerminado)
                     {
@@ -452,6 +472,20 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 {
                     JInternalFrame frame= getjDesktopPane1().getSelectedFrame();
                     ControladorCodefacInterface frameInterface=(ControladorCodefacInterface) frame;
+                    
+                    /**
+                     * Si ciclo de vida esta desactivado controlo manualmente el
+                     * ciclo de vida
+                     */
+                    if (!frameInterface.cicloVida) {
+                        try {
+                            frameInterface.buscar();
+                        } catch (ExcepcionCodefacLite ex) {
+                            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        return;
+                    }
+                    
                     String tituloOriginal = getTituloOriginal(frame.getTitle());
                     frame.setTitle(tituloOriginal + " [Editar]"); 
                     
@@ -481,6 +515,16 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 {
                     JInternalFrame frame= getjDesktopPane1().getSelectedFrame();
                     ControladorCodefacInterface frameInterface=(ControladorCodefacInterface) frame;
+                    
+                    /**
+                     * Si ciclo de vida esta desactivado controlo manualmente el
+                     * ciclo de vida
+                     */
+                    if (!frameInterface.cicloVida) {
+                        frameInterface.actualizar();
+                        return;
+                    }
+                    
                     frameInterface.actualizar();
                     limpiarCamposValidacion(frameInterface);
                 }
@@ -500,6 +544,16 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 {
                     JInternalFrame frame= getjDesktopPane1().getSelectedFrame();
                     ControladorCodefacInterface frameInterface=(ControladorCodefacInterface) frame;
+                    
+                    /**
+                     * Si ciclo de vida esta desactivado controlo manualmente el
+                     * ciclo de vida
+                     */
+                    if (!frameInterface.cicloVida) {
+                        frameInterface.eliminar();
+                        return;
+                    }
+                    
                     String tituloOriginal=getTituloOriginal(frame.getTitle());
                     frame.setTitle(tituloOriginal+" [Nuevo]");
                     frameInterface.eliminar();
@@ -527,6 +581,16 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 {
                     JInternalFrame frame= getjDesktopPane1().getSelectedFrame();
                     ControladorCodefacInterface frameInterface=(ControladorCodefacInterface) frame;
+                    
+                    /**
+                     * Si ciclo de vida esta desactivado controlo manualmente el
+                     * ciclo de vida
+                     */
+                    if (!frameInterface.cicloVida) {
+                        frameInterface.imprimir();
+                        return;
+                    }
+                    
                     frameInterface.imprimir();
                     limpiarCamposValidacion(frameInterface);
                 }

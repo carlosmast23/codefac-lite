@@ -141,6 +141,9 @@ public class ProductoModel extends ProductoForm
     @Override
     public void limpiar() {
         getComboIva().removeAllItems();
+        getComboIce().removeAllItems();
+        getComboIrbpnr().removeAllItems();
+        
         Impuesto iva=impuestoService.obtenerImpuestoPorCodigo(Impuesto.IVA);
         for (ImpuestoDetalle impuesto : iva.getDetalleImpuestos()) {
             getComboIva().addItem(impuesto);

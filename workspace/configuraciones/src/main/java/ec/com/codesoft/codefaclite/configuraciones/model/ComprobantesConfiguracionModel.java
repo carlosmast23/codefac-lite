@@ -9,7 +9,10 @@ import ec.com.codesoft.codefaclite.configuraciones.panel.ComprobantesConfiguraci
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.servidor.entity.Impuesto;
+import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +30,11 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     public ComprobantesConfiguracionModel() {
         this.servicio=new ParametroCodefacService();
         cargarDatosConfiguraciones();
+        cargarDatosIva();
+        /**
+         * Desactivo el ciclo de vida para controlar manualmente
+         */
+        super.cicloVida=false;
         
     }
     
@@ -35,6 +43,10 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     @Override
     public void grabar() throws ExcepcionCodefacLite {
         this.servicio.editarParametros(parametros);
+        /**
+         * Establesco el ciclo de vida en el cual me encuentro
+         */
+        this.estadoFormulario=GeneralPanelInterface.ESTADO_GRABAR;
         DialogoCodefac.mensaje("Actualizado datos","Los datos de los parametros fueron actualizados",DialogoCodefac.MENSAJE_CORRECTO);
         
     }
@@ -98,6 +110,8 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         getTxtGuiaRemisionSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION).getValor());
         getTxtRetencionesSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_RETENCION).getValor());
         getTxtDirectorioRecurso().setText(parametros.get(ParametroCodefac.DIRECTORIO_RECURSOS).getValor());
+        
+        
         /*
         getTxtCorreoElectronico().setText(parametros.get(ParametroCodefac.CORREO_USUARIO).getValor());
         getTxtPasswordCorreo().setText(parametros.get(ParametroCodefac.CORREO_CLAVE).getValor());
@@ -105,6 +119,15 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         getTxtClaveFirma().setText(parametros.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).getValor());
         */
         
+    }
+    
+    private void cargarDatosIva()
+    {
+        ImpuestoService impuestoService=new ImpuestoService();
+        Impuesto iva=impuestoService.obtenerImpuestoPorCodigo(Impuesto.IVA);
+        for (ImpuestoDetalle impuesto : iva.getDetalleImpuestos()) {
+            getCmbIvaDefault().addItem(impuesto);
+        }
     }
     
 }

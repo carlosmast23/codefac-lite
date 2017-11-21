@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.configuraciones.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
 import javax.swing.JComboBox;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -263,7 +264,6 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints.insets = new java.awt.Insets(59, 55, 0, 0);
         panelConfiguracionesGenerales.add(jLabel7, gridBagConstraints);
 
-        cmbIvaDefault.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -338,7 +338,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> cmbIvaDefault;
+    private javax.swing.JComboBox<ImpuestoDetalle> cmbIvaDefault;
     private javax.swing.JComboBox<String> cmbModoFacturacion;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -390,9 +390,6 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
     }
 
 
-    public JComboBox<String> getCmbIvaDefault() {
-        return cmbIvaDefault;
-    }
 
     public JComboBox<String> getCmbModoFacturacion() {
         return cmbModoFacturacion;
@@ -449,6 +446,14 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
 
     public void setTxtPasswordCorreo(JPasswordField txtPasswordCorreo) {
         this.txtPasswordCorreo = txtPasswordCorreo;
+    }
+
+    public JComboBox<ImpuestoDetalle> getCmbIvaDefault() {
+        return cmbIvaDefault;
+    }
+
+    public void setCmbIvaDefault(JComboBox<ImpuestoDetalle> cmbIvaDefault) {
+        this.cmbIvaDefault = cmbIvaDefault;
     }
 
     

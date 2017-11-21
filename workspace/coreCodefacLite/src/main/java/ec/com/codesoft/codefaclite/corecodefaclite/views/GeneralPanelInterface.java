@@ -89,6 +89,12 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
      * @return 
      */
     public abstract Map<Integer,Boolean> permisosFormulario();
-
+    
+    /**
+     * Metodo que establece si deseas controlar el ciclo de vida de la pantalla
+     * o que se controle automaticamente.
+     * Ejemplo: Despues de guardar se limpian automaticamentes los datos
+     */
+    public Boolean cicloVida=true;
     
 }
