@@ -13,7 +13,7 @@ create table FACTURA
     ID integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
     CLAVE_ACCESO varchar(70),
     EMPRESA_ID varchar(70),
-    CLIENTE_ID varchar(70),
+    CLIENTE_ID integer,
     TIPO_IDENTIFICACION_ID varchar(1),
     SECUENCIAL varchar(100),
     PUNTO_ESTABLECIMIENTO decimal,
@@ -26,40 +26,23 @@ create table FACTURA
     VALOR_IVA_DOCE decimal,
     VALOR_IVA_CERO decimal,
     IVA_SRI_ID decimal,
-    TOTAL decimal,primary key (ID_CLIENTE),
+    TOTAL decimal,
     USUARIO_ID decimal,
-    ESTADO,
-)
+    ESTADO varchar(1),
+    primary key (ID),
+    CONSTRAINT id_cliente_fk FOREIGN KEY (CLIENTE_ID) REFERENCES CLIENTE(CLIENTE_ID)
+
+);
 
 create table DETALLE_FACTURA
 (
     ID integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
-    PRODUCTO_ID,
-    CANTIDAD ,
-    PRECIO_UNITARIO,
-    DESCUENTO,
-    VALOR_ICE
+    PRODUCTO_ID INTEGER,
+    FACTURA_ID INTEGER,
+    CANTIDAD integer ,
+    PRECIO_UNITARIO decimal,
+    DESCUENTO decimal,
+    VALOR_ICE decimal,
+    DESCRIPCION varchar(150),
+    primary key (ID)
 )
-
-create table FORMA_PAGO_FACTURA
-(
-    ID integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
-    FORMA_PAGO_ID,
-    TOTAL,
-    PLAZO,
-    UNIDAD_TIEMPO
-)
-
-create table FORMA_PAGO_FACTURA
-(
-    ID integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
-    FORMA_PAGO_ID,
-    TOTAL,
-    PLAZO,
-    UNIDAD_TIEMPO
-)
-
-
-
-
-

@@ -9,7 +9,8 @@
  */
 
 create table 
-    CLIENTE( ID_CLIENTE integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1) , 
+    CLIENTE( 
+    CLIENTE_ID integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1) , 
     RAZON_SOCIAL varchar(256),
     NOMBRE_LEGAL varchar(256),
     TIPO_IDENTIFICACION varchar(30), 
@@ -20,4 +21,4 @@ create table
     EXTENSION_TELEFONO varchar(4), 
     TELEFONO_CELULAR varchar(10), 
     CORREO_ELECTRONICO varchar(60),  
-    primary key (ID_CLIENTE))
+    primary key (CLIENTE_ID))

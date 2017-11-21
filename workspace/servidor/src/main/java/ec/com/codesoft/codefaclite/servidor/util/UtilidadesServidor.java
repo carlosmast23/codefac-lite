@@ -36,6 +36,7 @@ public class UtilidadesServidor {
         RecursoCodefac.SQL.getResourceInputStream("insert_parametros.sql"),
         RecursoCodefac.SQL.getResourceInputStream("insert_impuesto_detalle.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_producto.sql"),
+        RecursoCodefac.SQL.getResourceInputStream("create_factura.sql"),
     };
     
     public static void crearBaseDatos()

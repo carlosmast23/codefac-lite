@@ -63,9 +63,18 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         jLabel33 = new javax.swing.JLabel();
         jLabel34 = new javax.swing.JLabel();
         PanelDetalleFactura = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        btnAgregarDetalleFactura = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tblDetalleFactura = new javax.swing.JTable();
+        jLabel40 = new javax.swing.JLabel();
+        txtValorUnitario = new javax.swing.JTextField();
+        jLabel41 = new javax.swing.JLabel();
+        txtCantidad = new javax.swing.JTextField();
+        jLabel42 = new javax.swing.JLabel();
+        txtDescripcion = new javax.swing.JTextField();
+        btnEditarDetalle = new javax.swing.JButton();
+        btnQuitarDetalle = new javax.swing.JButton();
+        btnAgregarProducto = new javax.swing.JButton();
         PanelFormasPago = new javax.swing.JPanel();
         btnAgregarFormaPago = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -73,7 +82,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         PanelDatosAdicionales = new javax.swing.JPanel();
         jButton3 = new javax.swing.JButton();
         jScrollPane5 = new javax.swing.JScrollPane();
-        jTable5 = new javax.swing.JTable();
+        tblDatosAdicionales = new javax.swing.JTable();
         PanelValores = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
@@ -332,12 +341,14 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         PanelDetalleFactura.setBorder(javax.swing.BorderFactory.createTitledBorder("Detalle Factura"));
         PanelDetalleFactura.setLayout(new java.awt.GridBagLayout());
 
-        jButton1.setText("Nuevo Detalle");
+        btnAgregarDetalleFactura.setText("+");
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        PanelDetalleFactura.add(jButton1, gridBagConstraints);
+        PanelDetalleFactura.add(btnAgregarDetalleFactura, gridBagConstraints);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tblDetalleFactura.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -348,15 +359,71 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(tblDetalleFactura);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         PanelDetalleFactura.add(jScrollPane2, gridBagConstraints);
+
+        jLabel40.setText("Valor Unitario:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        PanelDetalleFactura.add(jLabel40, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        PanelDetalleFactura.add(txtValorUnitario, gridBagConstraints);
+
+        jLabel41.setText("Cantidad");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        PanelDetalleFactura.add(jLabel41, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        PanelDetalleFactura.add(txtCantidad, gridBagConstraints);
+
+        jLabel42.setText("Descripcion");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
+        PanelDetalleFactura.add(jLabel42, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        PanelDetalleFactura.add(txtDescripcion, gridBagConstraints);
+
+        btnEditarDetalle.setText("Edit");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 0;
+        PanelDetalleFactura.add(btnEditarDetalle, gridBagConstraints);
+
+        btnQuitarDetalle.setText("X");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridy = 0;
+        PanelDetalleFactura.add(btnQuitarDetalle, gridBagConstraints);
+
+        btnAgregarProducto.setText("Producto");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        PanelDetalleFactura.add(btnAgregarProducto, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -416,7 +483,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         PanelDatosAdicionales.add(jButton3, gridBagConstraints);
 
-        jTable5.setModel(new javax.swing.table.DefaultTableModel(
+        tblDatosAdicionales.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -427,7 +494,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane5.setViewportView(jTable5);
+        jScrollPane5.setViewportView(tblDatosAdicionales);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -679,9 +746,12 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JPanel PanelFormasPago;
     private javax.swing.JPanel PanelValores;
     private javax.swing.JButton bntAgregarCliente;
+    private javax.swing.JButton btnAgregarDetalleFactura;
     private javax.swing.JButton btnAgregarFormaPago;
+    private javax.swing.JButton btnAgregarProducto;
     private javax.swing.JButton btnBuscarCliente;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnEditarDetalle;
+    private javax.swing.JButton btnQuitarDetalle;
     private javax.swing.JButton jButton3;
     private javax.swing.JCheckBox jCheckBox1;
     private com.toedter.calendar.JDateChooser jDateChooser1;
@@ -719,6 +789,9 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel40;
+    private javax.swing.JLabel jLabel41;
+    private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -729,8 +802,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable5;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblDireccion;
     private javax.swing.JLabel lblDireccionCliente;
@@ -742,8 +813,13 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JPanel panelDatosEmpresa;
     private javax.swing.JPanel panelDatosFactura;
     private javax.swing.JPanel panelFechaEmision;
+    private javax.swing.JTable tblDatosAdicionales;
+    private javax.swing.JTable tblDetalleFactura;
     private javax.swing.JTable tblFormasPago;
+    private javax.swing.JTextField txtCantidad;
     private javax.swing.JTextField txtCliente;
+    private javax.swing.JTextField txtDescripcion;
+    private javax.swing.JTextField txtValorUnitario;
     // End of variables declaration//GEN-END:variables
 
     public JButton getBntAgregarCliente() {
@@ -814,6 +890,79 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     public JPanel getPanelFechaEmision() {
         return panelFechaEmision;
     }
+
+    public JButton getBtnAgregarDetalleFactura() {
+        return btnAgregarDetalleFactura;
+    }
+
+    public void setBtnAgregarDetalleFactura(JButton btnAgregarDetalleFactura) {
+        this.btnAgregarDetalleFactura = btnAgregarDetalleFactura;
+    }
+
+    public JTable getTblDetalleFactura() {
+        return tblDetalleFactura;
+    }
+
+    public void setTblDetalleFactura(JTable tblDetalleFactura) {
+        this.tblDetalleFactura = tblDetalleFactura;
+    }
+
+    public JButton getBtnAgregarProducto() {
+        return btnAgregarProducto;
+    }
+
+    public void setBtnAgregarProducto(JButton btnAgregarProducto) {
+        this.btnAgregarProducto = btnAgregarProducto;
+    }
+
+    public JButton getBtnEditarDetalle() {
+        return btnEditarDetalle;
+    }
+
+    public void setBtnEditarDetalle(JButton btnEditarDetalle) {
+        this.btnEditarDetalle = btnEditarDetalle;
+    }
+
+    public JButton getBtnQuitarDetalle() {
+        return btnQuitarDetalle;
+    }
+
+    public void setBtnQuitarDetalle(JButton btnQuitarDetalle) {
+        this.btnQuitarDetalle = btnQuitarDetalle;
+    }
+
+    public JTextField getTxtCantidad() {
+        return txtCantidad;
+    }
+
+    public void setTxtCantidad(JTextField txtCantidad) {
+        this.txtCantidad = txtCantidad;
+    }
+
+    public JTextField getTxtDescripcion() {
+        return txtDescripcion;
+    }
+
+    public void setTxtDescripcion(JTextField txtDescripcion) {
+        this.txtDescripcion = txtDescripcion;
+    }
+
+    public JTextField getTxtValorUnitario() {
+        return txtValorUnitario;
+    }
+
+    public void setTxtValorUnitario(JTextField txtValorUnitario) {
+        this.txtValorUnitario = txtValorUnitario;
+    }
+
+    public JTable getTblDatosAdicionales() {
+        return tblDatosAdicionales;
+    }
+
+    public void setTblDatosAdicionales(JTable tblDatosAdicionales) {
+        this.tblDatosAdicionales = tblDatosAdicionales;
+    }
+    
     
     
     

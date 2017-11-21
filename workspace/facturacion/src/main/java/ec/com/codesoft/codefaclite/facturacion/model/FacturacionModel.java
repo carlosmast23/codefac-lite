@@ -9,14 +9,20 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.ClienteFacturacionBusqueda;
+import ec.com.codesoft.codefaclite.facturacion.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.facturacion.other.FacturacionElectronica;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
 import ec.com.codesoft.codefaclite.servidor.entity.Factura;
+import ec.com.codesoft.codefaclite.servidor.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
+import ec.com.codesoft.codefaclite.servidor.entity.Producto;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
@@ -31,6 +37,9 @@ public class FacturacionModel extends FacturacionPanel{
     private Persona persona;
     private Factura factura;
     private DefaultTableModel modeloTablaFormasPago;
+    private DefaultTableModel modeloTablaDetallesProductos;
+    private Producto productoSeleccionado;
+   
     
     public FacturacionModel() {
         addListenerButtons();
@@ -65,6 +74,39 @@ public class FacturacionModel extends FacturacionPanel{
                 dialog.setVisible(true);
                 FormaPago formaPago=dialog.getFormaPago();
                 agregarFormaPagoTabla(formaPago);
+            }
+        });
+        
+        getBtnAgregarProducto().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo();
+                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
+                buscarDialogoModel.setVisible(true);
+                productoSeleccionado = (Producto) buscarDialogoModel.getResultado();
+
+                if (productoSeleccionado == null) {
+                    return ;
+                    //throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar producto vacio");
+                }
+                
+                getTxtValorUnitario().setText(productoSeleccionado.getValorUnitario().toString());
+                getTxtDescripcion().setText(productoSeleccionado.getNombre());
+            }
+        });
+        
+        getBtnAgregarDetalleFactura().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FacturaDetalle facturaDetalle=new FacturaDetalle();
+                facturaDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
+                facturaDetalle.setDescripcion(getTxtDescripcion().getText());
+                facturaDetalle.setPrecioUnitario(new BigDecimal(getTxtValorUnitario().getText()));
+                facturaDetalle.setProducto(productoSeleccionado);
+                facturaDetalle.setTotal(facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()));
+                facturaDetalle.setValorIce(BigDecimal.ZERO);
+                factura.getDetalles().add(facturaDetalle);
+                cargarDatosDetalles();
             }
         });
         
@@ -104,6 +146,9 @@ public class FacturacionModel extends FacturacionPanel{
 
     @Override
     public void limpiar() {
+        this.factura=new Factura();
+        this.factura.setDetalles(new ArrayList<FacturaDetalle>());
+        
         getLblRuc().setText(session.getEmpresa().getIdentificacion());
         getLblDireccion().setText(session.getEmpresa().getDireccion());
         getLblTelefonos().setText(session.getEmpresa().getTelefonos());
@@ -153,6 +198,36 @@ public class FacturacionModel extends FacturacionPanel{
         
         this.modeloTablaFormasPago=new DefaultTableModel(titulo,0);
         getTblFormasPago().setModel(modeloTablaFormasPago);
+    }
+    
+    private void cargarDatosAdicionales()
+    {
+        
+    }
+    
+    private void cargarDatosDetalles()
+    {
+        Vector<String> titulo=new Vector<>();
+        titulo.add("Codigo");
+        titulo.add("ValorUni");
+        titulo.add("Cantidad");
+        titulo.add("Descripcion");
+        titulo.add("Valor Total");        
+        
+        this.modeloTablaDetallesProductos=new DefaultTableModel(titulo,0);
+        
+        List<FacturaDetalle> detalles= factura.getDetalles();
+        for (FacturaDetalle detalle : detalles) {
+            Vector<String> fila=new Vector<String>();
+            fila.add(detalle.getProducto().getCodigoPrincipal());
+            fila.add(detalle.getProducto().getValorUnitario().toString());
+            fila.add(detalle.getCantidad().toString());
+            fila.add(detalle.getDescripcion());
+            fila.add(detalle.getTotal().toString());
+            modeloTablaDetallesProductos.addRow(fila);
+            
+        }
+        getTblDetalleFactura().setModel(this.modeloTablaDetallesProductos);
     }
 
     private void agregarFechaEmision() {

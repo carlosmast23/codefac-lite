@@ -9,6 +9,8 @@ import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -18,43 +20,53 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "FACTURA_DETALLE")
 public class FacturaDetalle {
+    @Id
+    @Column(name = "ID")
     private Long id;
-    private Long productoId;
+    //@Column(name = "PRODUCTO_ID")
+    //private Long productoId;
+    @Column(name = "CANTIDAD")
     private BigDecimal cantidad;
+    @Column(name = "PRECIO_UNITARIO")
     private BigDecimal precioUnitario;
+    @Column(name = "DESCUENTO")
     private BigDecimal descuento;
+    @Column(name = "VALOR_ICE")
     private BigDecimal valorIce;
+    @Column(name = "DESCRIPCION")
+    private String descripcion;
+    @Column(name = "TOTAL")
+    private BigDecimal total;
+    
+    @JoinColumn(name="FACTURA_ID")
+    @ManyToOne(optional = false)
+    private Factura factura;
+    
+    @JoinColumn(name = "PRODUCTO_ID")
+    @ManyToOne
+    private Producto producto;
 
     public FacturaDetalle() {
     }
     
-    @Id
-    @Column(name = "ID")    
     public Long getId() {
         return id;
     }
 
-    @Column(name = "PRODUCTO_ID")    
-    public Long getProductoId() {
-        return productoId;
-    }
 
-    @Column(name = "CANTIDAD")    
+
     public BigDecimal getCantidad() {
         return cantidad;
     }
 
-    @Column(name = "PRECIO_UNITARIO")   
     public BigDecimal getPrecioUnitario() {
         return precioUnitario;
     }
 
-    @Column(name = "DESCUENTO")       
     public BigDecimal getDescuento() {
         return descuento;
     }
 
-    @Column(name = "VALOR_ICE")           
     public BigDecimal getValorIce() {
         return valorIce;
     }
@@ -63,9 +75,7 @@ public class FacturaDetalle {
         this.id = id;
     }
 
-    public void setProductoId(Long productoId) {
-        this.productoId = productoId;
-    }
+
 
     public void setCantidad(BigDecimal cantidad) {
         this.cantidad = cantidad;
@@ -82,5 +92,40 @@ public class FacturaDetalle {
     public void setValorIce(BigDecimal valorIce) {
         this.valorIce = valorIce;
     }
+
+    public Factura getFactura() {
+        return factura;
+    }
+
+    public void setFactura(Factura factura) {
+        this.factura = factura;
+    }
+
+    public Producto getProducto() {
+        return producto;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public BigDecimal getTotal() {
+        return total;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
+    }
+    
+    
+    
     
 }

@@ -8,11 +8,14 @@ package ec.com.codesoft.codefaclite.servidor.entity;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -64,6 +67,9 @@ public class Factura {
     @JoinColumn(name = "CLIENTE_ID")
     @ManyToOne    
     private Persona cliente;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura")
+    private List<FacturaDetalle> detalles;
 
     public Factura() {
     }
@@ -222,6 +228,15 @@ public class Factura {
     public void setCliente(Persona cliente) {
         this.cliente = cliente;
     }
+
+    public List<FacturaDetalle> getDetalles() {
+        return detalles;
+    }
+
+    public void setDetalles(List<FacturaDetalle> detalles) {
+        this.detalles = detalles;
+    }
+    
     
     
     
