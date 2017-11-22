@@ -65,7 +65,12 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         PanelDetalleFactura = new javax.swing.JPanel();
         btnAgregarDetalleFactura = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tblDetalleFactura = new javax.swing.JTable();
+        tblDetalleFactura = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex)
+            {
+                return colIndex != 0 && colIndex != 3 && colIndex != 4;
+            }
+        };
         jLabel40 = new javax.swing.JLabel();
         txtValorUnitario = new javax.swing.JTextField();
         jLabel41 = new javax.swing.JLabel();
