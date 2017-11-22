@@ -23,6 +23,7 @@ public class ParametroCodefac {
     public static final String CLAVE_FIRMA_ELECTRONICA= "clave_firma_electronica";
     public static final String DIRECTORIO_RECURSOS= "directorio_recursos";
     public static final String MODO_FACTURACION= "modo_facturacion";
+    public static final String IVA_DEFECTO= "iva_defecto";
     
     public static final String SRI_WS_RECEPCION= "sri_ws_recepcion";
     public static final String SRI_WS_AUTORIZACION= "sri_ws_autorizacion";

@@ -7,6 +7,8 @@ package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidor.facade.ImpuestoDetalleFacade;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -34,5 +36,10 @@ public class ImpuestoDetalleService
     public void eliminar(ImpuestoDetalle i)
     {
         impuestoDetalleFacade.remove(i);
+    }
+    
+    public List<ImpuestoDetalle> buscarImpuestoDetallePorMap(Map<String,Object> map)
+    {
+        return impuestoDetalleFacade.findByMap(map);        
     }
 }

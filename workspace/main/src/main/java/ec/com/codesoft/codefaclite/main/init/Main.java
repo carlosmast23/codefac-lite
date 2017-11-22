@@ -212,11 +212,11 @@ public class Main {
     public static List<MenuControlador> agregarMenuVentana(GeneralPanelModel panel)
     {
         List<MenuControlador> ventanas=new ArrayList<MenuControlador>();
-        ventanas.add(new MenuControlador(panel.getjMenuCliente(),new ClienteModel()));
-        ventanas.add(new MenuControlador(panel.getjMenuProducto(),new ProductoModel()));
-        ventanas.add(new MenuControlador(panel.getjMenuFactura(),new FacturacionModel()));
-        ventanas.add(new MenuControlador(panel.getjMenuEmisor(), new EmisorModel()));
-        ventanas.add(new MenuControlador(panel.getjMenuComprobanteConfig(), new ComprobantesConfiguracionModel()));
+        ventanas.add(new MenuControlador(panel.getjMenuCliente(),ClienteModel.class));
+        ventanas.add(new MenuControlador(panel.getjMenuProducto(),ProductoModel.class));
+        ventanas.add(new MenuControlador(panel.getjMenuFactura(),FacturacionModel.class));
+        ventanas.add(new MenuControlador(panel.getjMenuEmisor(),EmisorModel.class));
+        ventanas.add(new MenuControlador(panel.getjMenuComprobanteConfig(),ComprobantesConfiguracionModel.class));
         return ventanas;
     
     }

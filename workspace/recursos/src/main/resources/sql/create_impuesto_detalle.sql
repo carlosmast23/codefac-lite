@@ -15,7 +15,7 @@ create table IMPUESTO_DETALLE
     CODIGO integer,
     NOMBRE varchar(100),
     PORCENTAJE decimal,
-    TARIFA decimal,
+    TARIFA integer,
     DESCRIPCION varchar(100),
     FECHA_INICIO date,
     FECHA_FIN date,

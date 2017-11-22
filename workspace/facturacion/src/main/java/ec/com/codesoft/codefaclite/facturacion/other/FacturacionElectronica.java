@@ -103,7 +103,7 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
             ImpuestoComprobante impuesto=new ImpuestoComprobante();
             impuesto.setCodigo(facturaDetalle.getProducto().getIva().getImpuesto().getCodigoSri());
             impuesto.setCodigoPorcentaje(facturaDetalle.getProducto().getIva().getCodigo()+"");
-            impuesto.setTarifa(facturaDetalle.getProducto().getIva().getTarifa());
+            //impuesto.setTarifa(facturaDetalle.getProducto().getIva().getTarifa());
             impuesto.setBaseImponible(facturaDetalle.getTotal());
             impuesto.setValor(facturaDetalle.getIva());
             

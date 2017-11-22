@@ -50,6 +50,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
@@ -332,7 +333,23 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             menuControlador.getMenuItem().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    agregarListenerMenu(menuControlador.getVentana(),true);     
+                    try {
+                        Constructor contructor=menuControlador.getVentana().getConstructor();
+                        ControladorCodefacInterface ventana= (ControladorCodefacInterface) contructor.newInstance();
+                        agregarListenerMenu(ventana,true);
+                    } catch (NoSuchMethodException ex) {
+                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (SecurityException ex) {
+                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (InstantiationException ex) {
+                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IllegalAccessException ex) {
+                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IllegalArgumentException ex) {
+                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (InvocationTargetException ex) {
+                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             });
         }

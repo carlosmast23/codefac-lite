@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.servidor.entity.Impuesto;
 import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
 import java.util.HashMap;
@@ -29,8 +30,9 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
 
     public ComprobantesConfiguracionModel() {
         this.servicio=new ParametroCodefacService();
-        cargarDatosConfiguraciones();
         cargarDatosIva();
+        cargarDatosConfiguraciones();
+        
         /**
          * Desactivo el ciclo de vida para controlar manualmente
          */
@@ -42,6 +44,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
+        actualizarDatosVista();
         this.servicio.editarParametros(parametros);
         /**
          * Establesco el ciclo de vida en el cual me encuentro
@@ -99,6 +102,23 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         return permisos;
     }
     
+    private void actualizarDatosVista()
+    {
+        //parametros.put(ParametroCodefac.SECUENCIAL_FACTURA,getTxtFacturaSecuencial().getText());
+        ParametroCodefac param=null;
+        parametros.get(ParametroCodefac.SECUENCIAL_FACTURA).setValor(getTxtFacturaSecuencial().getText());
+        parametros.get(ParametroCodefac.SECUENCIAL_NOTA_CREDITO).setValor(getTxtNotaCreditoSecuencial().getText());
+        parametros.get(ParametroCodefac.SECUENCIAL_NOTA_DEBITO).setValor(getTxtNotaDebitoSecuencial().getText());
+        parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION).setValor(getTxtGuiaRemisionSecuencial().getText());
+        parametros.get(ParametroCodefac.SECUENCIAL_RETENCION).setValor(getTxtRetencionesSecuencial().getText());
+        
+        String ivaDefacto=((ImpuestoDetalle)getCmbIvaDefault().getSelectedItem()).getTarifa().toString();
+        
+        parametros.get(ParametroCodefac.IVA_DEFECTO).setValor(ivaDefacto);
+        
+        
+    }
+    
     private void cargarDatosConfiguraciones()
     {        
         parametros=servicio.getParametrosMap();
@@ -110,6 +130,16 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         getTxtGuiaRemisionSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION).getValor());
         getTxtRetencionesSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_RETENCION).getValor());
         getTxtDirectorioRecurso().setText(parametros.get(ParametroCodefac.DIRECTORIO_RECURSOS).getValor());
+        
+        //ImpuestoDetalle id=new ImpuestoDetalle();
+        //id.getImpuesto().getIdImpuesto();
+        
+        ImpuestoDetalleService servicioImpuesto=new ImpuestoDetalleService();
+        Map<String,Object> map=new HashMap<String,Object>();
+        map.put("tarifa",Integer.parseInt(parametros.get(ParametroCodefac.IVA_DEFECTO).getValor()));
+        //map.put("tarifa",12);
+        List<ImpuestoDetalle> lista= servicioImpuesto.buscarImpuestoDetallePorMap(map);
+        getCmbIvaDefault().getModel().setSelectedItem(lista.get(0));
         
         
         /*

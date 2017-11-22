@@ -42,7 +42,7 @@ public class ImpuestoDetalle implements Serializable
     private BigDecimal porcentaje;
     
     @Column (name = "TARIFA")
-    private BigDecimal tarifa;
+    private Integer tarifa;
     
     @Column (name= "DESCRIPCION")
     private String descripcion;
@@ -102,11 +102,11 @@ public class ImpuestoDetalle implements Serializable
     }
 
     
-    public BigDecimal getTarifa() {
+    public Integer getTarifa() {
         return tarifa;
     }
 
-    public void setTarifa(BigDecimal tarifa) {
+    public void setTarifa(Integer tarifa) {
         this.tarifa = tarifa;
     }
 

@@ -52,6 +52,9 @@ public class ParametroCodefacService {
         parametroCodefacFacade.create(parametro);
     }
     
-    
+    public List<ParametroCodefac> buscarParametrosPorMap(Map<String,Object> map)
+    {
+        return parametroCodefacFacade.findByMap(map);
+    }
     
 }

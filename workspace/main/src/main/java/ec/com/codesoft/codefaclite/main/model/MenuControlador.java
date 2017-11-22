@@ -18,9 +18,9 @@ import javax.swing.JMenuItem;
 public class MenuControlador 
 {
    private JMenuItem menuItem;
-   private ControladorCodefacInterface ventana;
+   private Class ventana;
 
-    public MenuControlador(JMenuItem menuItem, ControladorCodefacInterface ventana) {
+    public MenuControlador(JMenuItem menuItem, Class ventana) {
         this.menuItem = menuItem;
         this.ventana = ventana;
     }
@@ -33,13 +33,15 @@ public class MenuControlador
         this.menuItem = menuItem;
     }
 
-    public ControladorCodefacInterface getVentana() {
+    public Class getVentana() {
         return ventana;
     }
 
-    public void setVentana(ControladorCodefacInterface ventana) {
+    public void setVentana(Class ventana) {
         this.ventana = ventana;
     }
+
+    
    
    
 }
