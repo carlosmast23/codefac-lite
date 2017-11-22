@@ -19,6 +19,8 @@ import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseListener;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,12 +41,18 @@ public class FacturacionModel extends FacturacionPanel{
     private DefaultTableModel modeloTablaFormasPago;
     private DefaultTableModel modeloTablaDetallesProductos;
     private Producto productoSeleccionado;
-   
+    private int fila;
+    private boolean bandera;
+    private boolean banderaEditar;
+    
     
     public FacturacionModel() {
         addListenerButtons();
         initModelTablaFormaPago();
+        initModelTablaDetalleFactura();
         agregarFechaEmision();
+        bandera = false;
+        //banderaEditar = false;
     }
     
     private void addListenerButtons() {
@@ -95,6 +103,15 @@ public class FacturacionModel extends FacturacionPanel{
             }
         });
         
+        getTblDetalleFactura().addMouseListener( new MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                fila=getTblDetalleFactura().getSelectedRow();
+                System.out.println(fila);
+                bandera=true;
+            }
+        });
+        
         getBtnAgregarDetalleFactura().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -103,11 +120,45 @@ public class FacturacionModel extends FacturacionPanel{
                 facturaDetalle.setDescripcion(getTxtDescripcion().getText());
                 facturaDetalle.setPrecioUnitario(new BigDecimal(getTxtValorUnitario().getText()));
                 facturaDetalle.setProducto(productoSeleccionado);
+                System.out.println(productoSeleccionado);
                 facturaDetalle.setTotal(facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()));
                 facturaDetalle.setValorIce(BigDecimal.ZERO);
-                factura.getDetalles().add(facturaDetalle);
-                cargarDatosDetalles();
+                if(!getTxtValorUnitario().getText().equals(""))
+                {
+                    factura.getDetalles().add(facturaDetalle);
+                    cargarDatosDetalles();
+                    limpiarCampos();
+                }
             }
+        });
+        
+        getBtnQuitarDetalle().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) 
+            {
+                if(bandera)
+                {
+                    bandera=false;
+                    modeloTablaDetallesProductos.removeRow(fila);
+                    factura.getDetalles().remove(fila);
+                }
+            }
+        });
+        
+        getBtnEditarDetalle().addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(bandera)
+                {
+                    BigDecimal valorUnitario = new BigDecimal(String.valueOf(modeloTablaDetallesProductos.getValueAt(getTblDetalleFactura().getSelectedRow(),1)));
+                    BigDecimal cantidad = new BigDecimal (String.valueOf(modeloTablaDetallesProductos.getValueAt(getTblDetalleFactura().getSelectedRow(),2)));
+                    factura.getDetalles().get(fila).setPrecioUnitario(valorUnitario);
+                    factura.getDetalles().get(fila).setCantidad(cantidad);
+                    factura.getDetalles().get(fila).setTotal(valorUnitario.multiply(cantidad));
+                    cargarDatosDetalles();
+                }
+            }
+                    
         });
         
     }
@@ -190,7 +241,7 @@ public class FacturacionModel extends FacturacionPanel{
     
     private void initModelTablaFormaPago()
     {
-        Vector<String> titulo=new Vector<>();
+        Vector<String> titulo = new Vector<>();
         titulo.add("forma pago");
         titulo.add("Valor");
         titulo.add("Tipo");
@@ -200,6 +251,19 @@ public class FacturacionModel extends FacturacionPanel{
         getTblFormasPago().setModel(modeloTablaFormasPago);
     }
     
+    private void initModelTablaDetalleFactura()
+    {
+        Vector<String> titulo = new Vector<>();
+        titulo.add("Codigo");
+        titulo.add("Valor Uni");
+        titulo.add("Cantidad");
+        titulo.add("Descripcion");
+        titulo.add("Valor Total");
+        
+        this.modeloTablaDetallesProductos = new DefaultTableModel(titulo,0);
+        //this.modeloTablaDetallesProductos.isCellEditable
+        getTblDetalleFactura().setModel(modeloTablaDetallesProductos);
+    }
     private void cargarDatosAdicionales()
     {
         
@@ -233,6 +297,12 @@ public class FacturacionModel extends FacturacionPanel{
     private void agregarFechaEmision() {
 
     }
-
     
+    private void limpiarCampos()
+    {
+        getTxtCantidad().setText("");
+        getTxtCliente().setText("");
+        getTxtDescripcion().setText("");
+        getTxtValorUnitario().setText("");
+    }
 }
