@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class FacturaComprobante extends ComprobanteElectronico{
 
     private InformacionFactura informacionFactura;
-    private List<DetalleNotaCreditoComprobante> detalles;
+    private List<DetalleFacturaComprobante> detalles;
     
     @Override
     public String getTipoDocumento() {
@@ -32,11 +32,11 @@ public class FacturaComprobante extends ComprobanteElectronico{
 
     @XmlElementWrapper(name = "detalles")
     @XmlElement(name = "detalle")
-    public List<DetalleNotaCreditoComprobante> getDetalles() {
+    public List<DetalleFacturaComprobante> getDetalles() {
         return detalles;
     }
 
-    public void setDetalles(List<DetalleNotaCreditoComprobante> detalles) {
+    public void setDetalles(List<DetalleFacturaComprobante> detalles) {
         this.detalles = detalles;
     }
 

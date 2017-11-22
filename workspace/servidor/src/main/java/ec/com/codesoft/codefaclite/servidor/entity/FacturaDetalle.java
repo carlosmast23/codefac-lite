@@ -125,7 +125,13 @@ public class FacturaDetalle {
         this.total = total;
     }
     
+    /**
+     * Metodos adicionales
+     */
     
-    
+    public BigDecimal getIva()
+    {
+        return total.multiply(producto.getIva().getPorcentaje());
+    }
     
 }

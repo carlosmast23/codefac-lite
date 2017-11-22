@@ -41,8 +41,8 @@ public class ImpuestoDetalle implements Serializable
     @Column (name= "PORCENTAJE")
     private BigDecimal porcentaje;
     
-    //@Column (name = "TARIFA")
-    //private BigDecimal tarifa;
+    @Column (name = "TARIFA")
+    private BigDecimal tarifa;
     
     @Column (name= "DESCRIPCION")
     private String descripcion;
@@ -101,14 +101,14 @@ public class ImpuestoDetalle implements Serializable
         this.porcentaje = porcentaje;
     }
 
-    /*
+    
     public BigDecimal getTarifa() {
         return tarifa;
     }
 
     public void setTarifa(BigDecimal tarifa) {
         this.tarifa = tarifa;
-    }*/
+    }
 
     public String getDescripcion() {
         return descripcion;

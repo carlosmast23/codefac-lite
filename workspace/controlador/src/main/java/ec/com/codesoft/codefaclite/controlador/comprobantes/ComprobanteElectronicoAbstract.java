@@ -12,7 +12,9 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectr
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionTributaria;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -24,6 +26,7 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
     
     public abstract String getCodigoComprobante();
     public abstract String getSecuencial();
+    public abstract Map<String,String> getMapAdicional();
     //public abstract List<InformacionAdicional> getInformacionAdicional();
     /**
      * Implementar el modelo del comprobante exeptuando
@@ -60,6 +63,7 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
          */
         T comprobante=getComprobante();
         comprobante.setInformacionTributaria(getInfoInformacionTributaria());
+        comprobante.setInformacionAdicional(getInformacionAdicional());
         servicio = new ComprobanteElectronicoService(
                 session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor,
                 session.getParametrosCodefac().get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).valor,
@@ -69,6 +73,22 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
         
         servicio.procesarComprobante();
         
+    }
+    
+    private List<InformacionAdicional> getInformacionAdicional()
+    {
+        List<InformacionAdicional> listaInfoAdicional = new ArrayList<InformacionAdicional>();
+        
+        Map<String,String> map=getMapAdicional();
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();            
+            InformacionAdicional info=new InformacionAdicional();
+            info.setNombre(key);
+            info.setValor(value);
+            listaInfoAdicional.add(info);
+        }
+        return listaInfoAdicional;        
     }
     
     
