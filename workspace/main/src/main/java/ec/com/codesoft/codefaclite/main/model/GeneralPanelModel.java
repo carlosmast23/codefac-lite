@@ -340,7 +340,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     try {
                         Constructor contructor=menuControlador.getVentana().getConstructor();
                         ControladorCodefacInterface ventana= (ControladorCodefacInterface) contructor.newInstance();
-                        agregarListenerMenu(ventana,true);
+                        agregarListenerMenu(ventana,menuControlador.isMaximizado());
                     } catch (NoSuchMethodException ex) {
                         Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (SecurityException ex) {

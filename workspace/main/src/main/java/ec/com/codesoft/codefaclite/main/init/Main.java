@@ -224,7 +224,7 @@ public class Main {
         ventanas.add(new MenuControlador(panel.getjMenuEmisor(),EmisorModel.class));
         ventanas.add(new MenuControlador(panel.getjMenuComprobanteConfig(),ComprobantesConfiguracionModel.class));
         ventanas.add(new MenuControlador(panel.getjMenuComprobanteConfig(),ComprobantesConfiguracionModel.class));
-        ventanas.add(new MenuControlador(panel.getjMenuCalculadora(),CalculadoraModel.class));
+        ventanas.add(new MenuControlador(panel.getjMenuCalculadora(),CalculadoraModel.class,false));
         return ventanas;
     
     }

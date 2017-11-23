@@ -14,7 +14,7 @@ import java.util.Map;
  * @author Carlos
  */
 public class CalculadoraModel extends CalculadoraPanel{
-/*
+
     public CalculadoraModel() {
         this.cicloVida=false;
     }
@@ -68,6 +68,6 @@ public class CalculadoraModel extends CalculadoraPanel{
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }*/
+    }
     
 }
