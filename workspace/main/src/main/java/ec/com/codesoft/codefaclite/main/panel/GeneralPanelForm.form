@@ -322,6 +322,21 @@
             </MenuItem>
           </SubComponents>
         </Menu>
+        <Menu class="javax.swing.JMenu" name="jMenuUtilidades">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Utilidades"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuCalculadora">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Calculadora"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuCalculadoraActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu8">
           <Properties>
             <Property name="text" type="java.lang.String" value="Ayuda"/>

@@ -10,6 +10,8 @@ package ec.com.codesoft.codefaclite.main.model;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ConsolaGeneral;
@@ -120,6 +122,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     
     private static double PROPORCION_HORIZONTAL_INICIAL=0.999999999d;
     private static double PROPORCION_VERTICAL_INICIAL=0.7d;
+    
+    private List<Class> dialogosList;
 
     public GeneralPanelModel() 
     {
@@ -405,13 +409,26 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         getBtnGuardar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                JInternalFrame frame = getjDesktopPane1().getSelectedFrame();
+                ControladorCodefacInterface frameInterface = (ControladorCodefacInterface) frame;
+                /**
+                 * Verificar si el proceso es normal o la ventan funciona como dialogo
+                 */
+                DialogInterfacePanel interfaz = (DialogInterfacePanel) frame;
+                if(frameInterface.modoDialogo)
+                {
+                    Object resultado = interfaz.getResult();
+                    frameInterface.formOwner.updateInterface(resultado);
+                    frame.dispose();
+                    mostrarPanelSecundario(false);
+                    return;
+                    
+                }
+                
                 
                 try
                 {
                     boolean procesoTerminado=false;
-                    JInternalFrame frame= getjDesktopPane1().getSelectedFrame();
-                    ControladorCodefacInterface frameInterface=(ControladorCodefacInterface) frame;
-                    
                     
                     if(frameInterface.estadoFormulario.equals(ControladorCodefacInterface.ESTADO_GRABAR))
                     {
@@ -1023,6 +1040,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             panel.formularioCerrando=true;
                             cargarAyuda();                            
                             mostrarPanelSecundario(false);
+                            
                         }
 
                         @Override
@@ -1243,6 +1261,62 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     public void setSessionCodefac(SessionCodefac sessionCodefac) {
         this.sessionCodefac = sessionCodefac;
     }
+
+    public List<Class> getDialogosList() {
+        return dialogosList;
+    }
+
+    public void setDialogosList(List<Class> dialogosList) {
+        this.dialogosList = dialogosList;
+    }
+
+    @Override
+    public void crearDialogoCodefac(ObserverUpdateInterface panel,String namePanel, boolean maximizado) {
+        
+        Class clase=buscarPanelDialog(namePanel);
+        if(clase!=null)
+        {
+            try {
+                Constructor constructor=clase.getConstructor();
+                Object ventanaGeneral=constructor.newInstance();
+                ControladorCodefacInterface ventana=(ControladorCodefacInterface) ventanaGeneral;
+                ventana.modoDialogo=true;
+                ventana.formOwner=panel;
+                agregarListenerMenu(ventana,maximizado);
+                habilitarBotones(false);
+                getBtnGuardar().setEnabled(true);
+                
+            } catch (NoSuchMethodException ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SecurityException ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InstantiationException ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalArgumentException ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InvocationTargetException ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+    }
+
+    /**
+     * Buscar los panes que se pueden usar como dialogos
+     */
+    private Class buscarPanelDialog(String nombre)
+    {
+        for (Class clase : dialogosList) {
+            if(clase.getName().equals(nombre))
+            {
+                return clase;
+            }
+        }
+        return null;
+    }
+
     
     
     

@@ -6,6 +6,8 @@
 package ec.com.codesoft.codefaclite.facturacion.model;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.ClienteFacturacionBusqueda;
@@ -27,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -159,6 +162,20 @@ public class FacturacionModel extends FacturacionPanel{
                 }
             }
                     
+        });
+        
+        getBtnAgregarCliente().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<Persona>() {
+                    @Override
+                    public void updateInterface(Persona entity) {
+                        getLblNombreCliente().setText(entity.getNombreLegal());
+                        getLblDireccion().setText(entity.getDireccion());
+                    }
+                },DialogInterfacePanel.CLIENTE_PANEL, false);
+                
+            }
         });
         
     }
@@ -305,4 +322,7 @@ public class FacturacionModel extends FacturacionPanel{
         getTxtDescripcion().setText("");
         getTxtValorUnitario().setText("");
     }
+
+
+
 }

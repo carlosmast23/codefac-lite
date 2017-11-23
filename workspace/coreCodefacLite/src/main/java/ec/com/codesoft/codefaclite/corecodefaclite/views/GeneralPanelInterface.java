@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.corecodefaclite.views;
 
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ConsolaGeneral;
 import java.util.Map;
@@ -25,6 +26,7 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
     public static final int BOTON_REFRESCAR = 6;
     public static final int BOTON_BUSCAR = 7;
     
+    
     public InterfazComunicacionPanel panelPadre;
     public ConsolaGeneral consola;
     
@@ -33,6 +35,11 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
      */
     public boolean sinAcciones=true;
     public boolean formularioCerrando=false;
+    public boolean modoDialogo=false;
+    /**
+     * Fomulario propietari
+     */
+    public ObserverUpdateInterface formOwner;
     
     public static final String ESTADO_GRABAR="G";
     public static final String ESTADO_EDITAR="E";

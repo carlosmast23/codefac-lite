@@ -7,6 +7,8 @@ package ec.com.codesoft.codefaclite.crm.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.validacionPersonalizadaAnotacion;
@@ -43,7 +45,7 @@ import net.sf.jasperreports.view.JasperViewer;
  *
  * @author PC
  */
-public class ClienteModel extends ClienteForm
+public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Persona>
 {
      /**
      * Modelo para manejar las identificaciones del sri
@@ -298,5 +300,17 @@ public class ClienteModel extends ClienteForm
         }
         
     }
+
+    @Override
+    public Persona getResult() {
+       
+        Persona p=new Persona();
+        p.setNombreLegal("Ejemplo Nombre");
+        p.setDireccion("Quito / Sangolqui");
+        return p;
+    }
+
+
+
             
 }

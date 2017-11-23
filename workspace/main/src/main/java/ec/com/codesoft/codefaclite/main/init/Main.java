@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.main.init;
 
 
+import ec.com.codesoft.codefaclite.configuraciones.model.CalculadoraModel;
 import ec.com.codesoft.codefaclite.configuraciones.model.ComprobantesConfiguracionModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
@@ -83,6 +84,11 @@ public class Main {
          * Añadir menus y ventanas a la aplicacion principal
          */        
         panel.setVentanasMenuList(agregarMenuVentana(panel));
+        /**
+         * Añadir menus que se pueden usar como ventanas
+         */
+        panel.setDialogosList(agregarDialogosCodefac());
+        
         /**
          * Establecer propiedades del formulario principal
          */
@@ -217,8 +223,18 @@ public class Main {
         ventanas.add(new MenuControlador(panel.getjMenuFactura(),FacturacionModel.class));
         ventanas.add(new MenuControlador(panel.getjMenuEmisor(),EmisorModel.class));
         ventanas.add(new MenuControlador(panel.getjMenuComprobanteConfig(),ComprobantesConfiguracionModel.class));
+        ventanas.add(new MenuControlador(panel.getjMenuComprobanteConfig(),ComprobantesConfiguracionModel.class));
+        ventanas.add(new MenuControlador(panel.getjMenuCalculadora(),CalculadoraModel.class));
         return ventanas;
     
+    }
+    
+    public static List<Class> agregarDialogosCodefac()
+    {
+        List<Class> ventanas=new ArrayList<Class>();
+        ventanas.add(ClienteModel.class);
+        return ventanas;
+        
     }
     
     public static void componentesIniciales()

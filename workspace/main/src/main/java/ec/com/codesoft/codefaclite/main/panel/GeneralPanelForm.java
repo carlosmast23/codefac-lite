@@ -90,6 +90,8 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuEmisor = new javax.swing.JMenuItem();
         menuFacturacion = new javax.swing.JMenu();
         jMenuFactura = new javax.swing.JMenuItem();
+        jMenuUtilidades = new javax.swing.JMenu();
+        jMenuCalculadora = new javax.swing.JMenuItem();
         jMenu8 = new javax.swing.JMenu();
 
         jMenu3.setText("File");
@@ -323,6 +325,18 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
         jMenuBar1.add(menuFacturacion);
 
+        jMenuUtilidades.setText("Utilidades");
+
+        jMenuCalculadora.setText("Calculadora");
+        jMenuCalculadora.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuCalculadoraActionPerformed(evt);
+            }
+        });
+        jMenuUtilidades.add(jMenuCalculadora);
+
+        jMenuBar1.add(jMenuUtilidades);
+
         jMenu8.setText("Ayuda");
         jMenuBar1.add(jMenu8);
 
@@ -370,6 +384,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private void jMenuComprobanteConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuComprobanteConfigActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuComprobanteConfigActionPerformed
+
+    private void jMenuCalculadoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCalculadoraActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuCalculadoraActionPerformed
 
     /**
      * @param args the command line arguments
@@ -438,6 +456,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuBar jMenuBar3;
+    private javax.swing.JMenuItem jMenuCalculadora;
     private javax.swing.JMenuItem jMenuCliente;
     private javax.swing.JMenuItem jMenuComprobanteConfig;
     private javax.swing.JMenuItem jMenuEmisor;
@@ -446,6 +465,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuProducto;
+    private javax.swing.JMenu jMenuUtilidades;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanelPublicidadBorde;
@@ -665,6 +685,14 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
     public void setjMenuComprobanteConfig(JMenuItem jMenuComprobanteConfig) {
         this.jMenuComprobanteConfig = jMenuComprobanteConfig;
+    }
+
+    public JMenuItem getjMenuCalculadora() {
+        return jMenuCalculadora;
+    }
+
+    public void setjMenuCalculadora(JMenuItem jMenuCalculadora) {
+        this.jMenuCalculadora = jMenuCalculadora;
     }
 
     

@@ -53,7 +53,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         jLabel4 = new javax.swing.JLabel();
         txtCliente = new javax.swing.JTextField();
         btnBuscarCliente = new javax.swing.JButton();
-        bntAgregarCliente = new javax.swing.JButton();
+        btnAgregarCliente = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -268,12 +268,17 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 0;
         PanelCliente.add(btnBuscarCliente, gridBagConstraints);
 
-        bntAgregarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/mas-ico.png"))); // NOI18N
-        bntAgregarCliente.setText("Agregar");
+        btnAgregarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/mas-ico.png"))); // NOI18N
+        btnAgregarCliente.setText("Agregar");
+        btnAgregarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarClienteActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
-        PanelCliente.add(bntAgregarCliente, gridBagConstraints);
+        PanelCliente.add(btnAgregarCliente, gridBagConstraints);
 
         jLabel6.setText("Nombres:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -743,6 +748,10 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAgregarFormaPagoActionPerformed
 
+    private void btnAgregarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarClienteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAgregarClienteActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PanelCliente;
@@ -750,7 +759,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JPanel PanelDetalleFactura;
     private javax.swing.JPanel PanelFormasPago;
     private javax.swing.JPanel PanelValores;
-    private javax.swing.JButton bntAgregarCliente;
+    private javax.swing.JButton btnAgregarCliente;
     private javax.swing.JButton btnAgregarDetalleFactura;
     private javax.swing.JButton btnAgregarFormaPago;
     private javax.swing.JButton btnAgregarProducto;
@@ -827,12 +836,12 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtValorUnitario;
     // End of variables declaration//GEN-END:variables
 
-    public JButton getBntAgregarCliente() {
-        return bntAgregarCliente;
+    public JButton getBtnAgregarCliente() {
+        return btnAgregarCliente;
     }
 
-    public void setBntAgregarCliente(JButton bntAgregarCliente) {
-        this.bntAgregarCliente = bntAgregarCliente;
+    public void setBtnAgregarCliente(JButton bntAgregarCliente) {
+        this.btnAgregarCliente = bntAgregarCliente;
     }
 
     public JButton getBtnBuscarCliente() {
