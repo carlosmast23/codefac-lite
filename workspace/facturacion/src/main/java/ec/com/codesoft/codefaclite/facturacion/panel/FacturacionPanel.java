@@ -25,6 +25,14 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         initComponents();
     }
 
+    public JTextField getTxtValorTotal() {
+        return txtValorTotal;
+    }
+
+    public void setTxtValorTotal(JTextField txtValorTotal) {
+        this.txtValorTotal = txtValorTotal;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -111,7 +119,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         lblIva12 = new javax.swing.JLabel();
         lblValorIRBPNR = new javax.swing.JLabel();
         lblPropina10 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtValorTotal = new javax.swing.JTextField();
         jCheckBox1 = new javax.swing.JCheckBox();
         panelDatosFactura = new javax.swing.JPanel();
         jLabel35 = new javax.swing.JLabel();
@@ -679,13 +687,15 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         PanelValores.add(lblPropina10, gridBagConstraints);
 
-        jTextField1.setText("0.00");
-        jTextField1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 51, 255)));
+        txtValorTotal.setText("0.00");
+        txtValorTotal.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 51, 255)));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 10;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        PanelValores.add(jTextField1, gridBagConstraints);
+        gridBagConstraints.weightx = 0.1;
+        PanelValores.add(txtValorTotal, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 9;
@@ -813,7 +823,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblDireccion;
     private javax.swing.JLabel lblDireccionCliente;
     private javax.swing.JLabel lblIva12;
@@ -841,6 +850,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtCantidad;
     private javax.swing.JTextField txtCliente;
     private javax.swing.JTextField txtDescripcion;
+    private javax.swing.JTextField txtValorTotal;
     private javax.swing.JTextField txtValorUnitario;
     // End of variables declaration//GEN-END:variables
 

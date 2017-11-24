@@ -27,7 +27,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseListener;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -141,7 +141,9 @@ public class FacturacionModel extends FacturacionPanel{
                     facturaDetalle.setPrecioUnitario(new BigDecimal(getTxtValorUnitario().getText()));
                     facturaDetalle.setProducto(productoSeleccionado);
                     System.out.println(productoSeleccionado);
-                    facturaDetalle.setTotal(facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()));
+                    BigDecimal setTotal = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario());
+                    //facturaDetalle.setTotal(facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()));
+                    facturaDetalle.setTotal(setTotal.setScale(2, BigDecimal.ROUND_HALF_UP));
                     facturaDetalle.setValorIce(BigDecimal.ZERO);
                     factura.getDetalles().add(facturaDetalle);
                     cargarDatosDetalles();
@@ -209,6 +211,7 @@ public class FacturacionModel extends FacturacionPanel{
                         if (entity != null) {
                             productoSeleccionado=entity;
                             setearValoresProducto();
+                            banderaAgregar = true;
                         }
                     }
                 };
@@ -367,21 +370,31 @@ public class FacturacionModel extends FacturacionPanel{
     
     public void calcularSubtotalSinImpuestos(List<FacturaDetalle> facturaDetalles)
     {
+        this.subtotalSinImpuestos = new BigDecimal(0);
         facturaDetalles.forEach((facturaDetalle) -> {
             this.subtotalSinImpuestos = this.subtotalSinImpuestos.add(facturaDetalle.getTotal());
         });
+        this.subtotalSinImpuestos = this.subtotalSinImpuestos.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
     
     public void calcularSubtotal12(List<FacturaDetalle> facturaDetalles)
     {
+        this.subtotal12 = new BigDecimal(0);
         facturaDetalles.forEach((facturaDetalle) -> {
             this.subtotal12 = this.subtotal12.add(facturaDetalle.getTotal());
         });
-    }        
+        this.subtotal12 = this.subtotal12.setScale(2, BigDecimal.ROUND_HALF_UP);
+    }
     
     public void calcularIva12()
     {
         this.iva = this.subtotal12.multiply(obtenerValorIva());
+        this.iva = iva.setScale(2, BigDecimal.ROUND_HALF_UP);
+    }
+    
+    public void calcularValorTotal()
+    {
+        this.valorTotal = this.subtotalSinImpuestos.add(this.iva);
     }
     
     public BigDecimal obtenerValorIva()
@@ -393,7 +406,8 @@ public class FacturacionModel extends FacturacionPanel{
         listaImpuestoDetalles.forEach((iD) -> {
             BigDecimal iva = iD.getPorcentaje();
         });
-        return iva;
+        System.out.println("Iva es: ->>> " + iva);
+        return new BigDecimal(0.12);
     }
     
     public void cargarTotales()
@@ -401,9 +415,11 @@ public class FacturacionModel extends FacturacionPanel{
         calcularSubtotalSinImpuestos(factura.getDetalles());
         calcularSubtotal12(factura.getDetalles());
         calcularIva12();
+        calcularValorTotal();
         getLblSubtotalSinImpuesto().setText(""+this.subtotalSinImpuestos);
         getLblSubtotal12().setText(""+this.subtotal12);
         getLblIva12().setText(""+this.iva);
+        getTxtValorTotal().setText(""+this.valorTotal);
     }
     
     private void setearValoresCliente()
