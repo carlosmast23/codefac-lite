@@ -19,11 +19,21 @@ public class MenuControlador
 {
    private JMenuItem menuItem;
    private Class ventana;
+   private boolean maximizado;
 
     public MenuControlador(JMenuItem menuItem, Class ventana) {
         this.menuItem = menuItem;
         this.ventana = ventana;
+        this.maximizado=true;
     }
+
+    public MenuControlador(JMenuItem menuItem, Class ventana, boolean maximizado) {
+        this.menuItem = menuItem;
+        this.ventana = ventana;
+        this.maximizado = maximizado;
+    }
+    
+    
 
     public JMenuItem getMenuItem() {
         return menuItem;
@@ -39,6 +49,14 @@ public class MenuControlador
 
     public void setVentana(Class ventana) {
         this.ventana = ventana;
+    }
+
+    public boolean isMaximizado() {
+        return maximizado;
+    }
+
+    public void setMaximizado(boolean maximizado) {
+        this.maximizado = maximizado;
     }
 
     

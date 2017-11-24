@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.corecodefaclite.views;
 
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import java.util.Map;
 import net.sf.jasperreports.engine.JasperPrint;
 
@@ -16,5 +17,15 @@ public interface InterfazComunicacionPanel
 {
     public void crearReportePantalla(JasperPrint jasperPrint,String nombrePantalla);
     public void crearVentanaCodefac(GeneralPanelInterface panel,boolean maximizado);
+    /**
+     * 
+     * @param panel formulario que se va a actualizar los datos
+     * @param namePanel nombre del panel que se quiere abrir para obtener el dato
+     * @param maximizado opcion para saber si quieres que se abra maximizado o mimimizado
+     */
+    public void crearDialogoCodefac(ObserverUpdateInterface panel,String namePanel,boolean maximizado);
+    
     public Map<String,Object> mapReportePlantilla();
+
+
 }
