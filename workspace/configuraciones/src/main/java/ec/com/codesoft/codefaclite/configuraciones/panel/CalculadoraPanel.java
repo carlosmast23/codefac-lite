@@ -7,6 +7,8 @@ package ec.com.codesoft.codefaclite.configuraciones.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import javax.swing.JButton;
+import javax.swing.JTextArea;
 
 /**
  *
@@ -32,7 +34,7 @@ public abstract class CalculadoraPanel extends ControladorCodefacInterface {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        jtxtAreaCalculadora = new javax.swing.JTextArea();
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -48,7 +50,7 @@ public abstract class CalculadoraPanel extends ControladorCodefacInterface {
         jButton7 = new javax.swing.JButton();
         jButton13 = new javax.swing.JButton();
         jButton14 = new javax.swing.JButton();
-        jButton15 = new javax.swing.JButton();
+        btnIgual = new javax.swing.JButton();
         jButton16 = new javax.swing.JButton();
 
         setClosable(true);
@@ -56,9 +58,10 @@ public abstract class CalculadoraPanel extends ControladorCodefacInterface {
         setMaximizable(true);
         setResizable(true);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        jtxtAreaCalculadora.setColumns(20);
+        jtxtAreaCalculadora.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
+        jtxtAreaCalculadora.setRows(5);
+        jScrollPane1.setViewportView(jtxtAreaCalculadora);
 
         getContentPane().add(jScrollPane1, java.awt.BorderLayout.PAGE_START);
 
@@ -195,17 +198,17 @@ public abstract class CalculadoraPanel extends ControladorCodefacInterface {
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(jButton14, gridBagConstraints);
 
-        jButton15.setBackground(new java.awt.Color(0, 102, 102));
-        jButton15.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jButton15.setForeground(new java.awt.Color(255, 255, 255));
-        jButton15.setText("=");
+        btnIgual.setBackground(new java.awt.Color(0, 102, 102));
+        btnIgual.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        btnIgual.setForeground(new java.awt.Color(255, 255, 255));
+        btnIgual.setText("=");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
-        jPanel1.add(jButton15, gridBagConstraints);
+        jPanel1.add(btnIgual, gridBagConstraints);
 
         jButton16.setText("+");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -223,13 +226,13 @@ public abstract class CalculadoraPanel extends ControladorCodefacInterface {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnIgual;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton14;
-    private javax.swing.JButton jButton15;
     private javax.swing.JButton jButton16;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -241,6 +244,25 @@ public abstract class CalculadoraPanel extends ControladorCodefacInterface {
     private javax.swing.JButton jButton9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jtxtAreaCalculadora;
     // End of variables declaration//GEN-END:variables
+
+    public JTextArea getJtxtAreaCalculadora() {
+        return jtxtAreaCalculadora;
+    }
+
+    public void setJtxtAreaCalculadora(JTextArea jtxtAreaCalculadora) {
+        this.jtxtAreaCalculadora = jtxtAreaCalculadora;
+    }
+
+    public JButton getBtnIgual() {
+        return btnIgual;
+    }
+
+    public void setBtnIgual(JButton btnIgual) {
+        this.btnIgual = btnIgual;
+    }
+
+    
+
 }
