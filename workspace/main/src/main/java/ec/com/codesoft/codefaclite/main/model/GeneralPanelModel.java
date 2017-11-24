@@ -122,8 +122,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     
     private static double PROPORCION_HORIZONTAL_INICIAL=0.999999999d;
     private static double PROPORCION_VERTICAL_INICIAL=0.7d;
-    
-    private List<Class> dialogosList;
+
 
     public GeneralPanelModel() 
     {
@@ -1262,14 +1261,6 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         this.sessionCodefac = sessionCodefac;
     }
 
-    public List<Class> getDialogosList() {
-        return dialogosList;
-    }
-
-    public void setDialogosList(List<Class> dialogosList) {
-        this.dialogosList = dialogosList;
-    }
-
     @Override
     public void crearDialogoCodefac(ObserverUpdateInterface panel,String namePanel, boolean maximizado) {
         
@@ -1280,11 +1271,19 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 Constructor constructor=clase.getConstructor();
                 Object ventanaGeneral=constructor.newInstance();
                 ControladorCodefacInterface ventana=(ControladorCodefacInterface) ventanaGeneral;
-                ventana.modoDialogo=true;
-                ventana.formOwner=panel;
-                agregarListenerMenu(ventana,maximizado);
-                habilitarBotones(false);
-                getBtnGuardar().setEnabled(true);
+                //Verificar si el objeto implementa el metodo para comportarse como dialogo
+                if(ventana instanceof  DialogInterfacePanel)
+                {
+                    ventana.modoDialogo=true;
+                    ventana.formOwner=panel;
+                    agregarListenerMenu(ventana,maximizado);
+                    habilitarBotones(false);
+                    getBtnGuardar().setEnabled(true);
+                }
+                else
+                {
+                    System.err.println("La clase que desea abrir no implementa la interfaz DialogInterfacePanel");
+                }
                 
             } catch (NoSuchMethodException ex) {
                 Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -1308,10 +1307,10 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
      */
     private Class buscarPanelDialog(String nombre)
     {
-        for (Class clase : dialogosList) {
-            if(clase.getName().equals(nombre))
+        for (MenuControlador menuControlador : ventanasMenuList) {
+            if(menuControlador.getVentana().getName().equals(nombre))
             {
-                return clase;
+                 return menuControlador.getVentana();
             }
         }
         return null;

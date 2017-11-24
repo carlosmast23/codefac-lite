@@ -85,11 +85,6 @@ public class Main {
          */        
         panel.setVentanasMenuList(agregarMenuVentana(panel));
         /**
-         * Añadir menus que se pueden usar como ventanas
-         */
-        panel.setDialogosList(agregarDialogosCodefac());
-        
-        /**
          * Establecer propiedades del formulario principal
          */
         panel.setIconImage(new javax.swing.ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourcePath("logoCodefac-ico.png")).getImage()); // NOI18N        
@@ -229,14 +224,7 @@ public class Main {
     
     }
     
-    public static List<Class> agregarDialogosCodefac()
-    {
-        List<Class> ventanas=new ArrayList<Class>();
-        ventanas.add(ClienteModel.class);
-        return ventanas;
-        
-    }
-    
+ 
     public static void componentesIniciales()
     {
         try {
