@@ -304,10 +304,13 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     @Override
     public Persona getResult() {
        
-        Persona p=new Persona();
-        p.setNombreLegal("Ejemplo Nombre");
-        p.setDireccion("Quito / Sangolqui");
-        return p;
+        try {
+            grabar();
+            return persona;
+        } catch (ExcepcionCodefacLite ex) {
+            Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
 

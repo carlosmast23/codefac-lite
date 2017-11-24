@@ -170,8 +170,11 @@ public class FacturacionModel extends FacturacionPanel{
                 panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<Persona>() {
                     @Override
                     public void updateInterface(Persona entity) {
-                        getLblNombreCliente().setText(entity.getNombreLegal());
-                        getLblDireccion().setText(entity.getDireccion());
+                        persona=entity;
+                        if(persona!=null)
+                        {
+                            setearValoresCliente();
+                        }
                     }
                 },DialogInterfacePanel.CLIENTE_PANEL, false);
                 
@@ -321,6 +324,14 @@ public class FacturacionModel extends FacturacionPanel{
         getTxtCliente().setText("");
         getTxtDescripcion().setText("");
         getTxtValorUnitario().setText("");
+    }
+    
+    private void setearValoresCliente()
+    {
+        getTxtCliente().setText(persona.getIdentificacion());
+        getLblNombreCliente().setText(persona.getNombreLegal());
+        getLblDireccionCliente().setText(persona.getDireccion());
+        getLblTelefonoCliente().setText(persona.getTelefonoConvencional());  
     }
 
 
