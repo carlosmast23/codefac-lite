@@ -12,6 +12,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -28,6 +30,7 @@ public class Factura {
     
     @Id
     @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "CLAVE_ACCESO")
     private String claveAcceso;
@@ -41,8 +44,8 @@ public class Factura {
     private String puntoEstablecimiento;
     @Column(name = "PUNTO_EMISION")
     private String puntoEmision;
-    @Column(name = "FECHA_EMISION")
-    private Timestamp fechaEmision;
+    @Column(name = "FECHA_FACTURA")
+    private Timestamp fechaFactura;
     @Column(name = "FECHA_CREACION")
     private Date fechaCreacion;
     @Column(name = "SUBTOTAL_SIN_IMPUESTOS")
@@ -102,8 +105,8 @@ public class Factura {
         return puntoEmision;
     }
 
-    public Timestamp getFechaEmision() {
-        return fechaEmision;
+    public Timestamp getFechaFactura() {
+        return fechaFactura;
     }
 
     public Date getFechaCreacion() {
@@ -181,8 +184,8 @@ public class Factura {
         this.puntoEmision = puntoEmision;
     }
 
-    public void setFechaEmision(Timestamp fechaEmision) {
-        this.fechaEmision = fechaEmision;
+    public void setFechaFactura(Timestamp fechaFactura) {
+        this.fechaFactura = fechaFactura;
     }
 
     public void setFechaCreacion(Date fechaCreacion) {

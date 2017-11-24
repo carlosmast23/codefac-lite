@@ -5,12 +5,14 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.model;
 
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.ClienteFacturacionBusqueda;
+import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.facturacion.other.FacturacionElectronica;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
@@ -21,6 +23,7 @@ import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
+import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -73,6 +76,7 @@ public class FacturacionModel extends FacturacionPanel{
     }
     
     private void addListenerButtons() {
+        
         getBtnBuscarCliente().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -227,9 +231,12 @@ public class FacturacionModel extends FacturacionPanel{
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
+        FacturacionService servicio=new FacturacionService();
+        servicio.grabar(factura);
+        DialogoCodefac.mensaje("Correcto", "La factura se grabo correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         //Despues de implemetar todo el metodo de grabar
-        FacturacionElectronica facturaElectronica=new FacturacionElectronica(factura, session);
-        facturaElectronica.procesarComprobante();//listo se encarga de procesar el comprobante
+        //FacturacionElectronica facturaElectronica=new FacturacionElectronica(factura, session);
+        //facturaElectronica.procesarComprobante();//listo se encarga de procesar el comprobante
     }
 
     @Override
@@ -254,7 +261,14 @@ public class FacturacionModel extends FacturacionPanel{
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        FacturaBusqueda facturaBusqueda = new FacturaBusqueda();
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(facturaBusqueda);
+        buscarDialogoModel.setVisible(true);
+        Factura factura=(Factura) buscarDialogoModel.getResultado();
+        if(factura!=null)
+        {
+            
+        }
     }
 
     @Override

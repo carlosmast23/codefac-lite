@@ -34,7 +34,7 @@ create table FACTURA
 
 );
 
-create table DETALLE_FACTURA
+create table FACTURA_DETALLE
 (
     ID integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
     PRODUCTO_ID INTEGER,
@@ -43,6 +43,7 @@ create table DETALLE_FACTURA
     PRECIO_UNITARIO decimal,
     DESCUENTO decimal,
     VALOR_ICE decimal,
+    TOTAL decimal,
     DESCRIPCION varchar(150),
     primary key (ID)
 )

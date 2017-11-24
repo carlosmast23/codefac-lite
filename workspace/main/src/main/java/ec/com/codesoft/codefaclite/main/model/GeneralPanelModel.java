@@ -413,9 +413,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 /**
                  * Verificar si el proceso es normal o la ventan funciona como dialogo
                  */
-                DialogInterfacePanel interfaz = (DialogInterfacePanel) frame;
                 if(frameInterface.modoDialogo)
                 {
+                    DialogInterfacePanel interfaz = (DialogInterfacePanel) frame;
                     Object resultado = interfaz.getResult();
                     frameInterface.formOwner.updateInterface(resultado);
                     frame.dispose();

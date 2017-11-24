@@ -67,7 +67,7 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
         
         InformacionFactura informacionFactura=new InformacionFactura();
         
-        informacionFactura.setFechaEmision(ComprobantesElectronicosUtil.dateToString(factura.getFechaEmision()));
+        informacionFactura.setFechaEmision(ComprobantesElectronicosUtil.dateToString(factura.getFechaFactura()));
         informacionFactura.setIdentificacionComprador(factura.getCliente().getIdentificacion());
         informacionFactura.setImporteTotal(BigDecimal.ZERO);
         informacionFactura.setRazonSocialComprador(factura.getCliente().getRazonSocial());
