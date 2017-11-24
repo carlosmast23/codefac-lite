@@ -144,9 +144,9 @@ public class FacturacionModel extends FacturacionPanel{
                     facturaDetalle.setValorIce(BigDecimal.ZERO);
                     factura.getDetalles().add(facturaDetalle);
                     cargarDatosDetalles();
-                    limpiarCampos();
+                    setearDetalleFactura();
+                    cargarTotales();
                     banderaAgregar = false;
-                    //getLblSubtotalSinImpuesto().setText();
                 }
             }
         });
@@ -160,6 +160,7 @@ public class FacturacionModel extends FacturacionPanel{
                     bandera=false;
                     modeloTablaDetallesProductos.removeRow(fila);
                     factura.getDetalles().remove(fila);
+                    cargarTotales();
                 }
             }
         });
@@ -175,6 +176,7 @@ public class FacturacionModel extends FacturacionPanel{
                     factura.getDetalles().get(fila).setCantidad(cantidad);
                     factura.getDetalles().get(fila).setTotal(valorUnitario.multiply(cantidad));
                     cargarDatosDetalles();
+                    cargarTotales();
                     
                 }
             }
@@ -335,7 +337,7 @@ public class FacturacionModel extends FacturacionPanel{
 
     }
     
-    private void limpiarCampos()
+    private void setearDetalleFactura()
     {
         getTxtCantidad().setText("");
         getTxtCliente().setText("");
@@ -359,26 +361,31 @@ public class FacturacionModel extends FacturacionPanel{
     
     public void calcularIva12()
     {
-        Map<String,Object> map = new HashMap<String, Object>();
+        this.iva = this.subtotal12.multiply(obtenerValorIva());
+    }
+    
+    public BigDecimal obtenerValorIva()
+    {
+        Map<String,Object> map = new HashMap<>();
         ImpuestoDetalleService impuestoDetalleService = new ImpuestoDetalleService();
-        //map.put("tarifa", Integer.parseInt(this.session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).getValor()));
         map.put("tarifa", 12);
         List<ImpuestoDetalle> listaImpuestoDetalles = impuestoDetalleService.buscarImpuestoDetallePorMap(map);
         listaImpuestoDetalles.forEach((iD) -> {
-            BigDecimal ivaa = iD.getPorcentaje();
-            System.out.println("Porcentaje a usar->" + ivaa);
-            System.out.println(iD.getDescripcion());
-            
-        });               
+            BigDecimal iva = iD.getPorcentaje();
+        });
+        return iva;
     }
+    
     public void cargarTotales()
     {
         calcularSubtotalSinImpuestos(factura.getDetalles());
         calcularSubtotal12(factura.getDetalles());
+        calcularIva12();
         getLblSubtotalSinImpuesto().setText(""+this.subtotalSinImpuestos);
         getLblSubtotal12().setText(""+this.subtotal12);
-        
+        getLblIva12().setText(""+this.iva);
     }
+    
     private void setearValoresCliente()
     {
         getTxtCliente().setText(persona.getIdentificacion());
