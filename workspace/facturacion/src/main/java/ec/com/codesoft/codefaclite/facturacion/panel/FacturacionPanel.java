@@ -100,17 +100,17 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
-        jLabel19 = new javax.swing.JLabel();
-        jLabel21 = new javax.swing.JLabel();
-        jLabel22 = new javax.swing.JLabel();
-        jLabel23 = new javax.swing.JLabel();
-        jLabel24 = new javax.swing.JLabel();
-        jLabel25 = new javax.swing.JLabel();
-        jLabel27 = new javax.swing.JLabel();
-        jLabel28 = new javax.swing.JLabel();
-        jLabel29 = new javax.swing.JLabel();
-        jLabel30 = new javax.swing.JLabel();
-        jLabel31 = new javax.swing.JLabel();
+        lblValorTotal = new javax.swing.JLabel();
+        lblSubtotal12 = new javax.swing.JLabel();
+        lblSubtotal0 = new javax.swing.JLabel();
+        lblSubtotalNoObjetoDeIva = new javax.swing.JLabel();
+        lblSubtotalExentoDeIva = new javax.swing.JLabel();
+        lblSubtotalSinImpuesto = new javax.swing.JLabel();
+        lblTotalDescuento = new javax.swing.JLabel();
+        lblValorIce = new javax.swing.JLabel();
+        lblIva12 = new javax.swing.JLabel();
+        lblValorIRBPNR = new javax.swing.JLabel();
+        lblPropina10 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jCheckBox1 = new javax.swing.JCheckBox();
         panelDatosFactura = new javax.swing.JPanel();
@@ -600,84 +600,84 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         PanelValores.add(jLabel18, gridBagConstraints);
 
-        jLabel19.setText("VALOR TOTAL");
+        lblValorTotal.setText("VALOR TOTAL");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        PanelValores.add(jLabel19, gridBagConstraints);
+        PanelValores.add(lblValorTotal, gridBagConstraints);
 
-        jLabel21.setText("0.00");
+        lblSubtotal12.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        PanelValores.add(jLabel21, gridBagConstraints);
+        PanelValores.add(lblSubtotal12, gridBagConstraints);
 
-        jLabel22.setText("0.00");
+        lblSubtotal0.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        PanelValores.add(jLabel22, gridBagConstraints);
+        PanelValores.add(lblSubtotal0, gridBagConstraints);
 
-        jLabel23.setText("0.00");
+        lblSubtotalNoObjetoDeIva.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        PanelValores.add(jLabel23, gridBagConstraints);
+        PanelValores.add(lblSubtotalNoObjetoDeIva, gridBagConstraints);
 
-        jLabel24.setText("0.00");
+        lblSubtotalExentoDeIva.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        PanelValores.add(jLabel24, gridBagConstraints);
+        PanelValores.add(lblSubtotalExentoDeIva, gridBagConstraints);
 
-        jLabel25.setText("0.00");
+        lblSubtotalSinImpuesto.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        PanelValores.add(jLabel25, gridBagConstraints);
+        PanelValores.add(lblSubtotalSinImpuesto, gridBagConstraints);
 
-        jLabel27.setText("0.00");
-        jLabel27.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(0, 51, 255), null));
+        lblTotalDescuento.setText("0.00");
+        lblTotalDescuento.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(0, 51, 255), null));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        PanelValores.add(jLabel27, gridBagConstraints);
+        PanelValores.add(lblTotalDescuento, gridBagConstraints);
 
-        jLabel28.setText("0.00");
+        lblValorIce.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        PanelValores.add(jLabel28, gridBagConstraints);
+        PanelValores.add(lblValorIce, gridBagConstraints);
 
-        jLabel29.setText("0.00");
+        lblIva12.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        PanelValores.add(jLabel29, gridBagConstraints);
+        PanelValores.add(lblIva12, gridBagConstraints);
 
-        jLabel30.setText("0.00");
+        lblValorIRBPNR.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        PanelValores.add(jLabel30, gridBagConstraints);
+        PanelValores.add(lblValorIRBPNR, gridBagConstraints);
 
-        jLabel31.setText("0.00");
-        jLabel31.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 51, 255)));
+        lblPropina10.setText("0.00");
+        lblPropina10.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 51, 255)));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        PanelValores.add(jLabel31, gridBagConstraints);
+        PanelValores.add(lblPropina10, gridBagConstraints);
 
         jTextField1.setText("0.00");
         jTextField1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 51, 255)));
@@ -787,21 +787,10 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
-    private javax.swing.JLabel jLabel24;
-    private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
-    private javax.swing.JLabel jLabel27;
-    private javax.swing.JLabel jLabel28;
-    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel30;
-    private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel34;
@@ -827,11 +816,22 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblDireccion;
     private javax.swing.JLabel lblDireccionCliente;
+    private javax.swing.JLabel lblIva12;
     private javax.swing.JLabel lblNombreCliente;
     private javax.swing.JLabel lblNombreComercial;
+    private javax.swing.JLabel lblPropina10;
     private javax.swing.JLabel lblRuc;
+    private javax.swing.JLabel lblSubtotal0;
+    private javax.swing.JLabel lblSubtotal12;
+    private javax.swing.JLabel lblSubtotalExentoDeIva;
+    private javax.swing.JLabel lblSubtotalNoObjetoDeIva;
+    private javax.swing.JLabel lblSubtotalSinImpuesto;
     private javax.swing.JLabel lblTelefonoCliente;
     private javax.swing.JLabel lblTelefonos;
+    private javax.swing.JLabel lblTotalDescuento;
+    private javax.swing.JLabel lblValorIRBPNR;
+    private javax.swing.JLabel lblValorIce;
+    private javax.swing.JLabel lblValorTotal;
     private javax.swing.JPanel panelDatosEmpresa;
     private javax.swing.JPanel panelDatosFactura;
     private javax.swing.JPanel panelFechaEmision;
@@ -973,8 +973,96 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         return txtValorUnitario;
     }
 
+    public JLabel getLblSubtotalExentoDeIva() {
+        return lblSubtotalExentoDeIva;
+    }
+
+    public void setLblSubtotalExentoDeIva(JLabel lblSubtotalExentoDeIva) {
+        this.lblSubtotalExentoDeIva = lblSubtotalExentoDeIva;
+    }
+
     public void setTxtValorUnitario(JTextField txtValorUnitario) {
         this.txtValorUnitario = txtValorUnitario;
+    }
+
+    public JLabel getLblIva12() {
+        return lblIva12;
+    }
+
+    public void setLblIva12(JLabel lblIva12) {
+        this.lblIva12 = lblIva12;
+    }
+
+    public JLabel getLblPropina10() {
+        return lblPropina10;
+    }
+
+    public void setLblPropina10(JLabel lblPropina10) {
+        this.lblPropina10 = lblPropina10;
+    }
+
+    public JLabel getLblSubtotal0() {
+        return lblSubtotal0;
+    }
+
+    public void setLblSubtotal0(JLabel lblSubtotal0) {
+        this.lblSubtotal0 = lblSubtotal0;
+    }
+
+    public JLabel getLblSubtotal12() {
+        return lblSubtotal12;
+    }
+
+    public void setLblSubtotal12(JLabel lblSubtotal12) {
+        this.lblSubtotal12 = lblSubtotal12;
+    }
+
+    public JLabel getLblSubtotalNoObjetoDeIva() {
+        return lblSubtotalNoObjetoDeIva;
+    }
+
+    public void setLblSubtotalNoObjetoDeIva(JLabel lblSubtotalNoObjetoDeIva) {
+        this.lblSubtotalNoObjetoDeIva = lblSubtotalNoObjetoDeIva;
+    }
+
+    public JLabel getLblSubtotalSinImpuesto() {
+        return lblSubtotalSinImpuesto;
+    }
+
+    public void setLblSubtotalSinImpuesto(JLabel lblSubtotalSinImpuesto) {
+        this.lblSubtotalSinImpuesto = lblSubtotalSinImpuesto;
+    }
+
+    public JLabel getLblTotalDescuento() {
+        return lblTotalDescuento;
+    }
+
+    public void setLblTotalDescuento(JLabel lblTotalDescuento) {
+        this.lblTotalDescuento = lblTotalDescuento;
+    }
+
+    public JLabel getLblValorIRBPNR() {
+        return lblValorIRBPNR;
+    }
+
+    public void setLblValorIRBPNR(JLabel lblValorIRBPNR) {
+        this.lblValorIRBPNR = lblValorIRBPNR;
+    }
+
+    public JLabel getLblValorIce() {
+        return lblValorIce;
+    }
+
+    public void setLblValorIce(JLabel lblValorIce) {
+        this.lblValorIce = lblValorIce;
+    }
+
+    public JLabel getLblValorTotal() {
+        return lblValorTotal;
+    }
+
+    public void setLblValorTotal(JLabel lblValorTotal) {
+        this.lblValorTotal = lblValorTotal;
     }
 
     public JTable getTblDatosAdicionales() {
