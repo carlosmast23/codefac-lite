@@ -100,9 +100,7 @@ public class FacturacionModel extends FacturacionPanel{
                     return ;
                     //throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar producto vacio");
                 }
-                
-                getTxtValorUnitario().setText(productoSeleccionado.getValorUnitario().toString());
-                getTxtDescripcion().setText(productoSeleccionado.getNombre());
+                setearValoresProducto();
             }
         });
         
@@ -177,9 +175,28 @@ public class FacturacionModel extends FacturacionPanel{
                         }
                     }
                 },DialogInterfacePanel.CLIENTE_PANEL, false);
+            }
+        });
+        
+        getBtnCrearProducto().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ObserverUpdateInterface observer = new ObserverUpdateInterface<Producto>() {
+                    @Override
+                    public void updateInterface(Producto entity) {
+                        if (entity != null) {
+                            productoSeleccionado=entity;
+                            setearValoresProducto();
+                        }
+                    }
+                };
+                
+                panelPadre.crearDialogoCodefac(observer, DialogInterfacePanel.PRODUCTO_PANEL, false);
                 
             }
         });
+        
+       
         
     }
 
@@ -332,6 +349,12 @@ public class FacturacionModel extends FacturacionPanel{
         getLblNombreCliente().setText(persona.getNombreLegal());
         getLblDireccionCliente().setText(persona.getDireccion());
         getLblTelefonoCliente().setText(persona.getTelefonoConvencional());  
+    }
+    
+    private void setearValoresProducto()
+    {
+        getTxtValorUnitario().setText(productoSeleccionado.getValorUnitario().toString());
+        getTxtDescripcion().setText(productoSeleccionado.getNombre());
     }
 
 

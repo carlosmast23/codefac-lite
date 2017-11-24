@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.crm.model;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.crm.busqueda.ProductoBusquedaDialogo;
@@ -22,12 +23,14 @@ import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author PC
  */
-public class ProductoModel extends ProductoForm
+public class ProductoModel extends ProductoForm implements DialogInterfacePanel<Producto>
 {
     private Producto producto;
     private Impuesto impuesto;
@@ -72,12 +75,14 @@ public class ProductoModel extends ProductoForm
         
         producto.setNombre(getTextNombre().getText()); 
         d = new BigDecimal(getTextValorUnitario().getText());
+        
         producto.setValorUnitario(d);
         producto.setIce((ImpuestoDetalle) getComboIce().getSelectedItem());
         producto.setIva((ImpuestoDetalle) getComboIva().getSelectedItem());
-        producto.setIrbpnr((ImpuestoDetalle) getComboIrbpnr().getSelectedItem());
+        producto.setIrbpnr((ImpuestoDetalle) getComboIrbpnr().getSelectedItem()); 
         
         productoService.grabar(producto);
+        
     }
 
     @Override
@@ -183,6 +188,17 @@ public class ProductoModel extends ProductoForm
         permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
         permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
         return permisos;
+    }
+    
+    @Override
+    public Producto getResult() {
+        try {
+            grabar();
+            return producto;
+        } catch (ExcepcionCodefacLite ex) {
+            Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
 }
