@@ -63,6 +63,10 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         txtCorreoElectronico = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         txtPasswordCorreo = new javax.swing.JPasswordField();
+        lblEstablecimiento = new javax.swing.JLabel();
+        txtEstablecimiento = new javax.swing.JTextField();
+        lblPuntoEmision = new javax.swing.JLabel();
+        txtPuntoEmision = new javax.swing.JTextField();
 
         setClosable(true);
         setIconifiable(true);
@@ -259,25 +263,27 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         jLabel7.setText("Iva defecto:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(59, 55, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(15, 55, 0, 0);
         panelConfiguracionesGenerales.add(jLabel7, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 247;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(56, 4, 0, 16);
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(15, 4, 0, 16);
         panelConfiguracionesGenerales.add(cmbIvaDefault, gridBagConstraints);
 
         jLabel11.setText("Directorio Recurso:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(21, 55, 0, 0);
         panelConfiguracionesGenerales.add(jLabel11, gridBagConstraints);
@@ -285,17 +291,20 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         txtDirectorioRecurso.setText("jTextField1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 297;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(18, 4, 0, 16);
         panelConfiguracionesGenerales.add(txtDirectorioRecurso, gridBagConstraints);
 
         jLabel12.setText("Correo Electronico:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(21, 55, 0, 0);
@@ -304,17 +313,20 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         txtCorreoElectronico.setText("jTextField1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 297;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(18, 4, 0, 16);
         panelConfiguracionesGenerales.add(txtCorreoElectronico, gridBagConstraints);
 
         jLabel13.setText("Password Correo:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -324,12 +336,39 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         txtPasswordCorreo.setText("jPasswordField1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 297;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(18, 4, 35, 16);
         panelConfiguracionesGenerales.add(txtPasswordCorreo, gridBagConstraints);
+
+        lblEstablecimiento.setText("Establecimiento:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        panelConfiguracionesGenerales.add(lblEstablecimiento, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        panelConfiguracionesGenerales.add(txtEstablecimiento, gridBagConstraints);
+
+        lblPuntoEmision.setText("Punto Emision:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        panelConfiguracionesGenerales.add(lblPuntoEmision, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        panelConfiguracionesGenerales.add(txtPuntoEmision, gridBagConstraints);
 
         getContentPane().add(panelConfiguracionesGenerales, new java.awt.GridBagConstraints());
 
@@ -353,6 +392,8 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel lblEstablecimiento;
+    private javax.swing.JLabel lblPuntoEmision;
     private javax.swing.JPanel panelConfiguracionesGenerales;
     private javax.swing.JPanel panelFacturacionElectronica;
     private javax.swing.JPanel panelSecuenciales;
@@ -360,12 +401,14 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
     private javax.swing.JPasswordField txtClaveFirmaRepetir;
     private javax.swing.JTextField txtCorreoElectronico;
     private javax.swing.JTextField txtDirectorioRecurso;
+    private javax.swing.JTextField txtEstablecimiento;
     private javax.swing.JTextField txtFacturaSecuencial;
     private javax.swing.JTextField txtGuiaRemisionSecuencial;
     private javax.swing.JTextField txtNombreFirma;
     private javax.swing.JTextField txtNotaCreditoSecuencial;
     private javax.swing.JTextField txtNotaDebitoSecuencial;
     private javax.swing.JPasswordField txtPasswordCorreo;
+    private javax.swing.JTextField txtPuntoEmision;
     private javax.swing.JTextField txtRetencionesSecuencial;
     // End of variables declaration//GEN-END:variables
 
@@ -456,6 +499,23 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         this.cmbIvaDefault = cmbIvaDefault;
     }
 
+    public JTextField getTxtEstablecimiento() {
+        return txtEstablecimiento;
+    }
+
+    public void setTxtEstablecimiento(JTextField txtEstablecimiento) {
+        this.txtEstablecimiento = txtEstablecimiento;
+    }
+
+    public JTextField getTxtPuntoEmision() {
+        return txtPuntoEmision;
+    }
+
+    public void setTxtPuntoEmision(JTextField txtPuntoEmision) {
+        this.txtPuntoEmision = txtPuntoEmision;
+    }
+
+    
     
 
     

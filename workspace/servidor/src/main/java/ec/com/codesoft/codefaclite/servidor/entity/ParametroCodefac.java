@@ -39,6 +39,9 @@ public class ParametroCodefac {
     public static final String CORREO_USUARIO= "correo_usuario";
     public static final String CORREO_CLAVE= "correo_clave";
     
+    public static final String ESTABLECIMIENTO= "establecimiento";
+    public static final String PUNTO_EMISION= "punto_emision";
+    
     @Id
     @Column(name = "ID")
     public long id;

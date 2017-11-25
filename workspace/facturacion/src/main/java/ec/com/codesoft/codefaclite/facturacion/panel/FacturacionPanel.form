@@ -918,7 +918,7 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel37">
+        <Component class="javax.swing.JLabel" name="lblSecuencial">
           <Properties>
             <Property name="text" type="java.lang.String" value="001-002-9213912939"/>
           </Properties>

@@ -17,7 +17,7 @@ import java.net.URLConnection;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static org.codehaus.plexus.util.FileUtils.filename;
+
 
 /**
  *

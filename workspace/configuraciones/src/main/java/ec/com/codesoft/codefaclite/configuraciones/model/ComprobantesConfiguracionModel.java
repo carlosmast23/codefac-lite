@@ -111,6 +111,8 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         parametros.get(ParametroCodefac.SECUENCIAL_NOTA_DEBITO).setValor(getTxtNotaDebitoSecuencial().getText());
         parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION).setValor(getTxtGuiaRemisionSecuencial().getText());
         parametros.get(ParametroCodefac.SECUENCIAL_RETENCION).setValor(getTxtRetencionesSecuencial().getText());
+        parametros.get(ParametroCodefac.ESTABLECIMIENTO).setValor(getTxtEstablecimiento().getText());
+        parametros.get(ParametroCodefac.PUNTO_EMISION).setValor(getTxtPuntoEmision().getText());
         
         String ivaDefacto=((ImpuestoDetalle)getCmbIvaDefault().getSelectedItem()).getTarifa().toString();
         
@@ -130,6 +132,8 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         getTxtGuiaRemisionSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION).getValor());
         getTxtRetencionesSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_RETENCION).getValor());
         getTxtDirectorioRecurso().setText(parametros.get(ParametroCodefac.DIRECTORIO_RECURSOS).getValor());
+        getTxtEstablecimiento().setText(parametros.get(ParametroCodefac.ESTABLECIMIENTO).getValor());
+        getTxtPuntoEmision().setText(parametros.get(ParametroCodefac.PUNTO_EMISION).getValor());
         
         //ImpuestoDetalle id=new ImpuestoDetalle();
         //id.getImpuesto().getIdImpuesto();

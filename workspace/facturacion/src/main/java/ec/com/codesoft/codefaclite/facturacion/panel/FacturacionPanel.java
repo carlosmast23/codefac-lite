@@ -124,7 +124,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         panelDatosFactura = new javax.swing.JPanel();
         jLabel35 = new javax.swing.JLabel();
         jLabel36 = new javax.swing.JLabel();
-        jLabel37 = new javax.swing.JLabel();
+        lblSecuencial = new javax.swing.JLabel();
         panelFechaEmision = new javax.swing.JPanel();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jLabel38 = new javax.swing.JLabel();
@@ -721,11 +721,11 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 1;
         panelDatosFactura.add(jLabel36, gridBagConstraints);
 
-        jLabel37.setText("001-002-9213912939");
+        lblSecuencial.setText("001-002-9213912939");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
-        panelDatosFactura.add(jLabel37, gridBagConstraints);
+        panelDatosFactura.add(lblSecuencial, gridBagConstraints);
 
         panelFechaEmision.setBackground(new java.awt.Color(255, 255, 255));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -806,7 +806,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
-    private javax.swing.JLabel jLabel37;
     private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
@@ -830,6 +829,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblNombreComercial;
     private javax.swing.JLabel lblPropina10;
     private javax.swing.JLabel lblRuc;
+    private javax.swing.JLabel lblSecuencial;
     private javax.swing.JLabel lblSubtotal0;
     private javax.swing.JLabel lblSubtotal12;
     private javax.swing.JLabel lblSubtotalExentoDeIva;
@@ -1090,5 +1090,14 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     public void setBtnCrearProducto(JButton btnCrearProducto) {
         this.btnCrearProducto = btnCrearProducto;
     }
+
+    public JLabel getLblSecuencial() {
+        return lblSecuencial;
+    }
+
+    public void setLblSecuencial(JLabel lblSecuencial) {
+        this.lblSecuencial = lblSecuencial;
+    }
+    
     
 }

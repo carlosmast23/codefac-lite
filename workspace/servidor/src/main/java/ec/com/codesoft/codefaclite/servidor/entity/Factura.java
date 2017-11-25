@@ -26,7 +26,10 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "FACTURA")
-public class Factura {
+public class Factura {    
+    public static final String ESTADO_FACTURADO="F";
+    public static final String ESTADO_ANULADO="A";
+    
     
     @Id
     @Column(name = "ID")
@@ -45,7 +48,7 @@ public class Factura {
     @Column(name = "PUNTO_EMISION")
     private String puntoEmision;
     @Column(name = "FECHA_FACTURA")
-    private Timestamp fechaFactura;
+    private Date fechaFactura;
     @Column(name = "FECHA_CREACION")
     private Date fechaCreacion;
     @Column(name = "SUBTOTAL_SIN_IMPUESTOS")
@@ -105,7 +108,7 @@ public class Factura {
         return puntoEmision;
     }
 
-    public Timestamp getFechaFactura() {
+    public Date getFechaFactura() {
         return fechaFactura;
     }
 
@@ -184,7 +187,7 @@ public class Factura {
         this.puntoEmision = puntoEmision;
     }
 
-    public void setFechaFactura(Timestamp fechaFactura) {
+    public void setFechaFactura(Date fechaFactura) {
         this.fechaFactura = fechaFactura;
     }
 

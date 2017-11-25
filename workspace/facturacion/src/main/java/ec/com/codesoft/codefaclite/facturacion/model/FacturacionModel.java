@@ -25,12 +25,15 @@ import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
 import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
+import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
+import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseListener;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.Date;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -239,11 +242,12 @@ public class FacturacionModel extends FacturacionPanel{
     @Override
     public void grabar() throws ExcepcionCodefacLite {
         FacturacionService servicio=new FacturacionService();
+        setearValoresDefaultFactura();
         servicio.grabar(factura);
         DialogoCodefac.mensaje("Correcto", "La factura se grabo correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         //Despues de implemetar todo el metodo de grabar
-        //FacturacionElectronica facturaElectronica=new FacturacionElectronica(factura, session);
-        //facturaElectronica.procesarComprobante();//listo se encarga de procesar el comprobante
+        FacturacionElectronica facturaElectronica=new FacturacionElectronica(factura, session);
+        facturaElectronica.procesarComprobante();//listo se encarga de procesar el comprobante
     }
 
     @Override
@@ -312,6 +316,7 @@ public class FacturacionModel extends FacturacionPanel{
         permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
         return permisos;
     }
+    
     
     private void agregarFormaPagoTabla(FormaPago formaPago)
     {
@@ -475,6 +480,7 @@ public class FacturacionModel extends FacturacionPanel{
         getLblDireccionCliente().setText(persona.getDireccion());
         getLblTelefonoCliente().setText(persona.getTelefonoConvencional());  
         datosAdicionales.put("email",persona.getCorreoElectronico());
+        factura.setCliente(persona);
         //Actualiza la tabla de los datos adicionales
         cargarDatosAdicionales();
     }
@@ -485,5 +491,18 @@ public class FacturacionModel extends FacturacionPanel{
         getTxtDescripcion().setText(productoSeleccionado.getNombre());
     }
     
+    private void setearValoresDefaultFactura()
+    {
+        factura.setCliente(persona);
+        factura.setEmpresaId(0l);
+        factura.setEstado(Factura.ESTADO_FACTURADO);
+        factura.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+        factura.setFechaFactura(UtilidadesFecha.getFechaHoy());
+        //factura.setIvaSriId(iva);
+        factura.setPuntoEmision(session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor);
+        factura.setPuntoEstablecimiento(session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor);
+        factura.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_FACTURA).valor));
+        factura.setSubtotalCero(BigDecimal.ZERO);
+    }
 
 }
