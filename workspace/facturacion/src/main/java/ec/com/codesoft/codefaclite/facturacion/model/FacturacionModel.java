@@ -51,6 +51,7 @@ public class FacturacionModel extends FacturacionPanel{
     private Factura factura;
     private DefaultTableModel modeloTablaFormasPago;
     private DefaultTableModel modeloTablaDetallesProductos;
+    private DefaultTableModel modeloTablaDatosAdicionales;
     private Producto productoSeleccionado;
     private int fila;
     private boolean bandera;
@@ -60,11 +61,18 @@ public class FacturacionModel extends FacturacionPanel{
     private BigDecimal iva;
     private BigDecimal valorTotal;
     
+    /**
+     * Mapa de datos adicionales que se almacenan temporalmente y sirven para
+     * la facturacion electronica como por ejemplo el correo
+     */
+    private Map<String,String> datosAdicionales;
+    
     
     public FacturacionModel() {
         addListenerButtons();
         initModelTablaFormaPago();
         initModelTablaDetalleFactura();
+        initModelTablaDatoAdicional();
         agregarFechaEmision();
         subtotalSinImpuestos = new BigDecimal(0);
         subtotal12 = new BigDecimal(0);
@@ -73,6 +81,8 @@ public class FacturacionModel extends FacturacionPanel{
         bandera = false;
         banderaAgregar = true;
         calcularIva12();
+        
+        datosAdicionales=new HashMap<String,String>();
     }
     
     private void addListenerButtons() {
@@ -87,10 +97,7 @@ public class FacturacionModel extends FacturacionPanel{
                 persona=(Persona) buscarDialogoModel.getResultado();
                 if(persona!=null)
                 {
-                    getTxtCliente().setText(persona.getIdentificacion());
-                    getLblNombreCliente().setText(persona.getNombreLegal());
-                    getLblDireccionCliente().setText(persona.getDireccion());
-                    getLblTelefonoCliente().setText(persona.getTelefonoConvencional());                
+                   setearValoresCliente();
                 };
             }
         });
@@ -280,6 +287,8 @@ public class FacturacionModel extends FacturacionPanel{
         getLblDireccion().setText(session.getEmpresa().getDireccion());
         getLblTelefonos().setText(session.getEmpresa().getTelefonos());
         getLblNombreComercial().setText(session.getEmpresa().getNombreLegal());
+        
+        datosAdicionales=new HashMap<String,String>();
     }
 
     @Override
@@ -340,8 +349,31 @@ public class FacturacionModel extends FacturacionPanel{
         //this.modeloTablaDetallesProductos.isCellEditable
         getTblDetalleFactura().setModel(modeloTablaDetallesProductos);
     }
+    
+    private void initModelTablaDatoAdicional()
+    {
+        Vector<String> titulo = new Vector<>();
+        titulo.add("Nombre");
+        titulo.add("Valor");
+        
+        this.modeloTablaDatosAdicionales=new DefaultTableModel(titulo,0);
+        getTblDatosAdicionales().setModel(modeloTablaDatosAdicionales);
+    }
+    
+    /**
+     * Metodo que actualiza los valores en la tabla
+     */
     private void cargarDatosAdicionales()
     {
+        initModelTablaDatoAdicional();
+        for (Map.Entry<String, String> entry : datosAdicionales.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            Vector dato=new Vector();
+            dato.add(key);
+            dato.add(value);
+            this.modeloTablaDatosAdicionales.addRow(dato);
+        }
         
     }
     
@@ -442,6 +474,9 @@ public class FacturacionModel extends FacturacionPanel{
         getLblNombreCliente().setText(persona.getNombreLegal());
         getLblDireccionCliente().setText(persona.getDireccion());
         getLblTelefonoCliente().setText(persona.getTelefonoConvencional());  
+        datosAdicionales.put("email",persona.getCorreoElectronico());
+        //Actualiza la tabla de los datos adicionales
+        cargarDatosAdicionales();
     }
     
     private void setearValoresProducto()
@@ -449,5 +484,6 @@ public class FacturacionModel extends FacturacionPanel{
         getTxtValorUnitario().setText(productoSeleccionado.getValorUnitario().toString());
         getTxtDescripcion().setText(productoSeleccionado.getNombre());
     }
+    
 
 }
