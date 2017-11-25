@@ -694,12 +694,24 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             String tituloOriginal=getTituloOriginal(panel.getTitle());
             panel.setTitle(tituloOriginal+" [Nuevo]");
             getjDesktopPane1().add(panel);
+            
             panel.setMaximum(maximisado);
             panel.show();
             getBtnNuevo().requestFocus();
             agregarValidadores(panel);
             agregarAyudas(panel);
             panel.limpiar();
+            
+            /**
+             * Mostrar la pantalla centrada cuando no se muestra maximisado
+             */
+            if(!maximisado)
+            {
+                Dimension desktopSize = getSize();
+                Dimension jInternalFrameSize = panel.getSize();
+                panel.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
+                        (desktopSize.height - jInternalFrameSize.height) / 2);
+            }
             
             panel.estadoFormulario= ControladorCodefacInterface.ESTADO_GRABAR;
             

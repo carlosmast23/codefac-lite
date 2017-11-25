@@ -111,6 +111,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         setResizable(true);
         setTitle("Cliente");
         setFrameIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/persona-ico.png"))); // NOI18N
+        setPreferredSize(new java.awt.Dimension(950, 387));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
