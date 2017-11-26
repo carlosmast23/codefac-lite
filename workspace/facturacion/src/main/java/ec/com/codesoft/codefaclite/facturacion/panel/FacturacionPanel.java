@@ -689,6 +689,11 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
         txtValorTotal.setText("0.00");
         txtValorTotal.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 51, 255)));
+        txtValorTotal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtValorTotalActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 10;
@@ -768,6 +773,10 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private void btnAgregarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarClienteActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAgregarClienteActionPerformed
+
+    private void txtValorTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtValorTotalActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtValorTotalActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

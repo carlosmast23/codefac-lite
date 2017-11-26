@@ -159,7 +159,7 @@ public class FacturacionModel extends FacturacionPanel{
                     //facturaDetalle.setTotal(facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()));
                     facturaDetalle.setTotal(setTotal.setScale(2, BigDecimal.ROUND_HALF_UP));
                     facturaDetalle.setValorIce(BigDecimal.ZERO);
-                    factura.getDetalles().add(facturaDetalle);
+                    factura.addDetalle(facturaDetalle);
                     cargarDatosDetalles();
                     setearDetalleFactura();
                     cargarTotales();
@@ -503,6 +503,15 @@ public class FacturacionModel extends FacturacionPanel{
         factura.setPuntoEstablecimiento(session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor);
         factura.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_FACTURA).valor));
         factura.setSubtotalCero(BigDecimal.ZERO);
+        
+        /**
+         * Seteado los valores temporales pero toca cambiar esta parte y setear los valores directamente en la factura
+         */
+        factura.setTotal(new BigDecimal(getTxtValorTotal().getText()));
+        factura.setSubtotalCero(new BigDecimal(getLblSubtotal0().getText()));
+        factura.setSubtotalDoce(new BigDecimal(getLblSubtotal12().getText()));
+        factura.setValorIvaDoce(new BigDecimal(getLblIva12().getText()));
+     
     }
 
 }

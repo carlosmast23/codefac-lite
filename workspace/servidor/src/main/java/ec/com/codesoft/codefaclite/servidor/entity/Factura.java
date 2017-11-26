@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.entity;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -243,7 +244,19 @@ public class Factura {
         this.detalles = detalles;
     }
     
-    
+    /**
+     * Informacion adicional
+     */
+    public void addDetalle(FacturaDetalle detalle)
+    {
+        if(this.detalles==null)
+        {
+            this.detalles=new ArrayList<FacturaDetalle>();
+        }
+        detalle.setFactura(this);
+        this.detalles.add(detalle);
+        
+    }
     
     
 }
