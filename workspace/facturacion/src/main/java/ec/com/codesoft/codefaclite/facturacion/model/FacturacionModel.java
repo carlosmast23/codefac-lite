@@ -246,8 +246,8 @@ public class FacturacionModel extends FacturacionPanel{
         servicio.grabar(factura);
         DialogoCodefac.mensaje("Correcto", "La factura se grabo correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         //Despues de implemetar todo el metodo de grabar
-        FacturacionElectronica facturaElectronica=new FacturacionElectronica(factura, session);
-        facturaElectronica.procesarComprobante();//listo se encarga de procesar el comprobante
+//        FacturacionElectronica facturaElectronica=new FacturacionElectronica(factura, session);
+//        facturaElectronica.procesarComprobante();//listo se encarga de procesar el comprobante
     }
 
     @Override

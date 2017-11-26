@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
 import ec.com.codesoft.codefaclite.main.panel.GeneralPanelForm;
 import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -717,6 +718,12 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             
             panel.consola=new ConsolaGeneral();
             mostrarConsola(panel.consola);
+            
+            /**
+             * Agregar variables de session a la pantalla
+             */
+            ParametroCodefacService servicio=new ParametroCodefacService();
+            sessionCodefac.setParametrosCodefac(servicio.getParametrosMap());
             
                         
         } catch (PropertyVetoException ex) {
