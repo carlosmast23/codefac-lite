@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionTributaria;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +86,7 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
          */
         String modoFacturacion=session.getParametrosCodefac().get(ParametroCodefac.MODO_FACTURACION).valor;
         servicio.setModoFacturacion(modoFacturacion);
+        servicio.setPathFacturaJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourcePath("facturaReporte.jrxml"));
         
         if(ComprobanteElectronicoService.MODO_PRODUCCION.equals(modoFacturacion))
         {

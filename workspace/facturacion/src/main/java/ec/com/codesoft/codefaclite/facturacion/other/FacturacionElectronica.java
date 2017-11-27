@@ -61,7 +61,7 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
     
         @Override
     public String getSecuencial() {
-       return UtilidadesTextos.llenarCarateresIzquierda("12",9,"0");
+       return UtilidadesTextos.llenarCarateresIzquierda("21",9,"0");
     }
 
     @Override

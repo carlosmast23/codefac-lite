@@ -6,24 +6,34 @@
 package ec.com.codesoft.codefaclite.facturacionelectronica;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.UtilidadesComprobantes;
+import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.ComprobanteElectronicoReporte;
+import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.DetalleReporteData;
+import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.FacturaElectronicaReporte;
 import ec.com.codesoft.codefaclite.ws.recepcion.Mensaje;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import org.w3c.dom.Document;
 
 /**
@@ -91,6 +101,9 @@ public class ComprobanteElectronicoService {
     private String uriAutorizacion;
     
     private ServicioSri servicioSri;
+    
+    private String pathFacturaJasper;
+    private String pathParentJasper;
 
     public ComprobanteElectronicoService(String pathBase, String nombreFirma, String claveFirma, String modoFacturacion, ComprobanteElectronico comprobante) {
         this.pathBase = pathBase;
@@ -134,20 +147,39 @@ public class ComprobanteElectronicoService {
         if(etapaActual==ETAPA_AUTORIZAR)  
         {
             autorizarSri();
-            etapaActual++;
+            System.out.println("autorizarSri()");
             etapaActual++;
         }
         
         if(etapaActual==ETAPA_RIDE)  
         {
             generarRide();
+            System.out.println("generarRide()");
         }
         
     }
     
     private void generarRide()
     {
-    
+        try {
+            Map<String,String> mapComprobante=UtilidadesComprobantes.decodificarArchivoBase64Offline(getPathComprobante(CARPETA_AUTORIZADOS),null,null);
+            JAXBContext jaxbContext = JAXBContext.newInstance(FacturaComprobante.class);            
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+            StringReader reader = new StringReader(mapComprobante.get("comprobante"));            
+            FacturaComprobante comprobante= (FacturaComprobante) jaxbUnmarshaller.unmarshal(reader);
+            FacturaElectronicaReporte reporte=new FacturaElectronicaReporte(comprobante);
+            List<DetalleReporteData> informacionAdiciona=reporte.getDetalles();
+            Map<String,Object> datosMap=reporte.getMapReporte();
+            datosMap.put("SUBREPORT_DIR",pathParentJasper);
+            UtilidadesComprobantes.generarReporteJasper(pathFacturaJasper, datosMap, informacionAdiciona, getPathComprobante(CARPETA_RIDE,comprobante.getInformacionTributaria().getSecuencial()+".pdf"));
+           
+            
+            
+        } catch (JAXBException ex) {
+            Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
     }
     
     private void preValidacion()
@@ -345,6 +377,11 @@ public class ComprobanteElectronicoService {
         return pathBase+"/"+carpeta+"/"+claveAcceso+".xml";
     }
     
+        private String getPathComprobante(String carpeta,String archivo)            
+    {
+        return pathBase+"/"+carpeta+"/"+archivo;
+    }
+    
     private String getPathFirma()            
     {
         return pathBase+"/"+CARPETA_CONFIGURACION+"/"+nombreFirma;
@@ -373,6 +410,24 @@ public class ComprobanteElectronicoService {
     public void setModoFacturacion(String modoFacturacion) {
         this.modoFacturacion = modoFacturacion;
     }
+
+    public String getPathFacturaJasper() {
+        return pathFacturaJasper;
+    }
+
+    public void setPathFacturaJasper(String pathFacturaJasper) {
+        this.pathFacturaJasper = pathFacturaJasper;
+    }
+
+    public String getPathParentJasper() {
+        return pathParentJasper;
+    }
+
+    public void setPathParentJasper(String pathParentJasper) {
+        this.pathParentJasper = pathParentJasper;
+    }
+
+    
     
     
     

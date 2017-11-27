@@ -20,6 +20,7 @@ public enum RecursoCodefac {
     IMAGENES_REDES_SOCIALES("img/redes_sociales"),
     SQL("sql"),
     JASPER_CRM("reportes/crm"),
+    JASPER_COMPROBANTES_ELECTRONICOS("reportes/comprobantes_electronicos"),
     JASPER("reportes"),
     AYUDA("ayuda");
     

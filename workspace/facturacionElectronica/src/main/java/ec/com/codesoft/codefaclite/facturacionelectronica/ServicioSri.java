@@ -183,6 +183,7 @@ public class ServicioSri {
     {
         try {
             Autorizacion item=autorizacion.get(0);
+            item.setComprobante("<![CDATA[" + item.getComprobante() + "]]>");            
             XStream xstream = XStreamUtil.getRespuestaXStream();
             Writer writer = null;
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
