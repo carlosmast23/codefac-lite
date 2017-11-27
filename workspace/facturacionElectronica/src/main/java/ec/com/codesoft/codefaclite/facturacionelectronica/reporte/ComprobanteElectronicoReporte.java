@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.facturacionelectronica.reporte;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.Map;
 public abstract class ComprobanteElectronicoReporte 
 {
     public ComprobanteElectronico comprobante;
+    public InputStream imagenEmpresa;
     
     public abstract List<DetalleReporteData> getDetalles();
     protected abstract Map<String,Object> getMapTotales();
@@ -36,6 +38,7 @@ public abstract class ComprobanteElectronicoReporte
         Map<String,Object> map=new HashMap<String,Object>();
         map.put("ruc",comprobante.getInformacionTributaria().getRuc());
         String secuencial=comprobante.getInformacionTributaria().getPuntoEmision()+"-"+comprobante.getInformacionTributaria().getEstablecimiento()+"-"+comprobante.getInformacionTributaria().getSecuencial();
+        map.put("secuencial",comprobante.getInformacionTributaria().getClaveAcceso());
         map.put("autorizacion",comprobante.getInformacionTributaria().getClaveAcceso());
         map.put("estado","");
         map.put("fecha_hora_autorizacion","");
@@ -74,6 +77,7 @@ public abstract class ComprobanteElectronicoReporte
         map.putAll(getMapTotales());
         map.putAll(getMapInfoCliente());
         
+        map.put("imagen_logo",imagenEmpresa);
         map.put("formaPagoList", getListFormasPago());
         map.put("informacionAdicionalList", getListInfoAdifional());
         return map;

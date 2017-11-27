@@ -21,6 +21,9 @@ public class SriIdentificacion {
     
     public static final String CLIENTE="VENTA"; 
     public static final String PROVEEDOR="COMPRA"; 
+    
+    public static String RUC_IDENTIFICACION="04";
+    public static String CEDULA_IDENTIFICACION="05";
 
     @Id
     @Column(name = "ID")

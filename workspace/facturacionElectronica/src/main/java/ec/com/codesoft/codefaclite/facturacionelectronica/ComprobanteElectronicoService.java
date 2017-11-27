@@ -15,9 +15,14 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.DetalleReporte
 import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.FacturaElectronicaReporte;
 import ec.com.codesoft.codefaclite.ws.recepcion.Mensaje;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.security.KeyStore;
@@ -30,6 +35,7 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -104,6 +110,7 @@ public class ComprobanteElectronicoService {
     
     private String pathFacturaJasper;
     private String pathParentJasper;
+    private BufferedImage logoImagen;
 
     public ComprobanteElectronicoService(String pathBase, String nombreFirma, String claveFirma, String modoFacturacion, ComprobanteElectronico comprobante) {
         this.pathBase = pathBase;
@@ -171,11 +178,19 @@ public class ComprobanteElectronicoService {
             List<DetalleReporteData> informacionAdiciona=reporte.getDetalles();
             Map<String,Object> datosMap=reporte.getMapReporte();
             datosMap.put("SUBREPORT_DIR",pathParentJasper);
+            
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            ImageIO.write(logoImagen, "jpg", os);
+            InputStream is = new ByteArrayInputStream(os.toByteArray());
+            
+            datosMap.put("imagen_logo",is);
             UtilidadesComprobantes.generarReporteJasper(pathFacturaJasper, datosMap, informacionAdiciona, getPathComprobante(CARPETA_RIDE,comprobante.getInformacionTributaria().getSecuencial()+".pdf"));
            
             
             
         } catch (JAXBException ex) {
+            Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
             Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -427,6 +442,15 @@ public class ComprobanteElectronicoService {
         this.pathParentJasper = pathParentJasper;
     }
 
+    public BufferedImage getLogoImagen() {
+        return logoImagen;
+    }
+
+    public void setLogoImagen(BufferedImage logoImagen) {
+        this.logoImagen = logoImagen;
+    }
+
+    
     
     
     

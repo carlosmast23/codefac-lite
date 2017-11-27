@@ -43,7 +43,7 @@ public class FacturaElectronicaReporte extends ComprobanteElectronicoReporte{
         map.put("subtotal_cero","0");
         map.put("subtotal",facturaComprobante.getInformacionFactura().getTotalSinImpuestos().toString());
         map.put("descuento","0");
-        map.put("iva",facturaComprobante.getInformacionFactura().getTotalImpuestos()+"");
+        map.put("iva",facturaComprobante.getInformacionFactura().getImporteTotal().subtract(facturaComprobante.getInformacionFactura().getTotalSinImpuestos())+"");
         map.put("total",facturaComprobante.getInformacionFactura().getImporteTotal()+"");
         map.put("iva_porcentaje","14");
         return map;

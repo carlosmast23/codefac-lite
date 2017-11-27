@@ -73,10 +73,13 @@ public class Main {
         session.setEmpresa(empresa);
         //session.setParametrosCodefac(getParametros());
         splashScren.siguiente();
+
+        
         
                 /**
          * Seteando la session de los datos a utilizar en el aplicativo
          */
+        
         GeneralPanelModel panel=new GeneralPanelModel();
         panel.setSessionCodefac(session);
         splashScren.siguiente();

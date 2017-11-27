@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.Comprobantes
 import ec.com.codesoft.codefaclite.servidor.entity.Factura;
 import ec.com.codesoft.codefaclite.servidor.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
+import ec.com.codesoft.codefaclite.servidor.entity.SriIdentificacion;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -61,7 +62,7 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
     
         @Override
     public String getSecuencial() {
-       return UtilidadesTextos.llenarCarateresIzquierda("21",9,"0");
+       return UtilidadesTextos.llenarCarateresIzquierda("35",9,"0");
     }
 
     @Override
@@ -71,7 +72,12 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
         InformacionFactura informacionFactura=new InformacionFactura();
         
         informacionFactura.setFechaEmision(ComprobantesElectronicosUtil.dateToString(factura.getFechaFactura()));
-        informacionFactura.setIdentificacionComprador(UtilidadesTextos.llenarCarateresDerecha(factura.getCliente().getIdentificacion(), 13, "0"));
+        
+        if(factura.getCliente().getTipoIdentificacion().equals(SriIdentificacion.CEDULA_IDENTIFICACION))
+            informacionFactura.setIdentificacionComprador(factura.getCliente().getIdentificacion());
+        else
+            informacionFactura.setIdentificacionComprador(UtilidadesTextos.llenarCarateresDerecha(factura.getCliente().getIdentificacion(), 13, "0"));
+            
         informacionFactura.setImporteTotal(factura.getTotal());
         //Falta manejar este campo al momento de guardar
         informacionFactura.setRazonSocialComprador("JORGE NAUNAI");

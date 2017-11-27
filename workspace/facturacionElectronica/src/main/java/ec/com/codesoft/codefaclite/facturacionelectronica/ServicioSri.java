@@ -164,11 +164,26 @@ public class ServicioSri {
                    autorizacion=respuesta.getAutorizaciones().getAutorizacion();
                    if(autorizacion.size()==0)
                    {
-                    Thread.sleep(TIEMPO_ESPERA_AUTORIZACION);
+                        Thread.sleep(TIEMPO_ESPERA_AUTORIZACION);                        
                    }
                    else
                    {
-                    return true;
+                       if(autorizacion.get(0).getEstado().equals("AUTORIZADO"))
+                       {
+                            return true;
+                       }
+                       else
+                       {
+                           Autorizacion.Mensajes mensajes=autorizacion.get(0).getMensajes();
+                           for (autorizacion.ws.sri.gob.ec.Mensaje mensaje : mensajes.getMensaje()) {
+                               System.out.println(mensaje.getIdentificador());
+                               System.out.println(mensaje.getInformacionAdicional());
+                               System.out.println(mensaje.getMensaje());
+                               System.out.println(mensaje.getTipo());
+                           }
+                           return false;
+                           //for
+                       }
                    }
                } catch (InterruptedException ex) {
                    Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);

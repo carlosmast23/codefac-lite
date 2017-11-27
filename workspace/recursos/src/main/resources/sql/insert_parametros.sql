@@ -26,4 +26,4 @@ INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('correo_clave','danielitamatias');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('iva_defecto','12');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('establecimiento','001');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('punto_emision','001');
-
+INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('logo_empresa','logotipo_codesoft.png');

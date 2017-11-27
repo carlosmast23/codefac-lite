@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.controlador.comprobantes;
 
+import ec.com.codesoft.codefaclite.controlador.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.controlador.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
@@ -87,6 +88,9 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
         String modoFacturacion=session.getParametrosCodefac().get(ParametroCodefac.MODO_FACTURACION).valor;
         servicio.setModoFacturacion(modoFacturacion);
         servicio.setPathFacturaJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourcePath("facturaReporte.jrxml"));
+        String imagenLogo=session.getParametrosCodefac().get(ParametroCodefac.LOGO_EMPRESA).getValor();
+        servicio.setLogoImagen(DirectorioCodefac.IMAGENES.getArchivoStream(session,imagenLogo));
+        //servicio.setLogoImagen(RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("logoCodefac.png"));
         
         if(ComprobanteElectronicoService.MODO_PRODUCCION.equals(modoFacturacion))
         {
