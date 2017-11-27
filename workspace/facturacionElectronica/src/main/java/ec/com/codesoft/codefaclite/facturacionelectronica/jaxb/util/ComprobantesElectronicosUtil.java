@@ -145,6 +145,12 @@ public abstract class ComprobantesElectronicosUtil {
         return format.format(fecha);
     }
     
+    public static String formatSimpleDate(String fechaStr)
+    {
+        fechaStr=fechaStr.replace("/","");
+        return fechaStr;
+    }
+    
     public static String dateToString(Timestamp fecha)
     {
         SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy");

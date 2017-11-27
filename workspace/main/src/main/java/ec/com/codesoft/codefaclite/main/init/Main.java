@@ -65,10 +65,11 @@ public class Main {
          */
         SessionCodefac session=new SessionCodefac();
         Empresa empresa=new Empresa();
-        empresa.setDireccion("Quito, Av amazonas y America 214");
-        empresa.setTelefonos("2671232/0918123213");
-        empresa.setIdentificacion("17782823123");
-        empresa.setNombreLegal("CORECOMPU");
+        empresa.setDireccion("Sangolqui,Av.Calderon y Espejo");
+        empresa.setTelefonos("022333167");
+        empresa.setIdentificacion("1724218951001");
+        empresa.setRazonSocial("Carlos Alfonso Sanchez Coyago");
+        empresa.setNombreLegal("Codesoft");
         session.setEmpresa(empresa);
         //session.setParametrosCodefac(getParametros());
         splashScren.siguiente();

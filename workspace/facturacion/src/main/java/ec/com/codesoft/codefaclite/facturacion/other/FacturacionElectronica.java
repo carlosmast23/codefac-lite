@@ -19,8 +19,11 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.TotalImpu
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
 import ec.com.codesoft.codefaclite.servidor.entity.Factura;
 import ec.com.codesoft.codefaclite.servidor.entity.FacturaDetalle;
+import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
+import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -58,7 +61,7 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
     
         @Override
     public String getSecuencial() {
-       return "01";
+       return UtilidadesTextos.llenarCarateresIzquierda("12",9,"0");
     }
 
     @Override
@@ -68,15 +71,21 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
         InformacionFactura informacionFactura=new InformacionFactura();
         
         informacionFactura.setFechaEmision(ComprobantesElectronicosUtil.dateToString(factura.getFechaFactura()));
-        informacionFactura.setIdentificacionComprador(factura.getCliente().getIdentificacion());
-        informacionFactura.setImporteTotal(BigDecimal.ZERO);
-        informacionFactura.setRazonSocialComprador(factura.getCliente().getRazonSocial());
-        informacionFactura.setTipoIdentificacionComprador(factura.getCliente().getIdentificacion());
+        informacionFactura.setIdentificacionComprador(UtilidadesTextos.llenarCarateresDerecha(factura.getCliente().getIdentificacion(), 13, "0"));
+        informacionFactura.setImporteTotal(factura.getTotal());
+        //Falta manejar este campo al momento de guardar
+        informacionFactura.setRazonSocialComprador("JORGE NAUNAI");
+        informacionFactura.setTipoIdentificacionComprador(factura.getCliente().getTipoIdentificacion());
         informacionFactura.setTotalDescuento(BigDecimal.ZERO);
-        informacionFactura.setTotalSinImpuestos(BigDecimal.ZERO);
+        informacionFactura.setTotalSinImpuestos(factura.getSubtotalDoce().add(factura.getSubtotalCero()));
         
-        List<TotalImpuesto> totalImpuestos=new ArrayList<TotalImpuesto>();
-        informacionFactura.setTotalImpuestos(totalImpuestos);
+        //informacionFactura.setTotalImpuestos(totalImpuestos);
+        
+        /**
+         * Total con impuestos
+         */
+        Map<ImpuestoDetalle,TotalImpuesto> mapTotalImpuestos=new HashMap<ImpuestoDetalle,TotalImpuesto>();
+        
         
         /**
          * Informacion de los detalles
@@ -88,9 +97,10 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
             DetalleFacturaComprobante detalle=new DetalleFacturaComprobante();
             detalle.setCantidad(facturaDetalle.getCantidad());
             detalle.setDescripcion(facturaDetalle.getDescripcion());
-            detalle.setDescuento(facturaDetalle.getDescuento());
+            //Establecer el descuento en el aplicativo
+            detalle.setDescuento(BigDecimal.ZERO);
             detalle.setPrecioTotalSinImpuesto(facturaDetalle.getTotal());
-            detalle.setPrecioUnitario(facturaDetalle.getPrecioUnitario());
+            detalle.setPrecioUnitario(facturaDetalle.getPrecioUnitario());  
             
             
             //facturaDetalle.getProducto().get
@@ -103,18 +113,52 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
             ImpuestoComprobante impuesto=new ImpuestoComprobante();
             impuesto.setCodigo(facturaDetalle.getProducto().getIva().getImpuesto().getCodigoSri());
             impuesto.setCodigoPorcentaje(facturaDetalle.getProducto().getIva().getCodigo()+"");
-            //impuesto.setTarifa(facturaDetalle.getProducto().getIva().getTarifa());
+            impuesto.setTarifa(new BigDecimal(facturaDetalle.getProducto().getIva().getTarifa()+""));
             impuesto.setBaseImponible(facturaDetalle.getTotal());
             impuesto.setValor(facturaDetalle.getIva());
             
+            /**
+             * Verificar valores para el total de impuesto
+             */
+            if(mapTotalImpuestos.get(facturaDetalle.getProducto().getIva())==null)
+            {
+                TotalImpuesto totalImpuesto=new TotalImpuesto();
+                totalImpuesto.setBaseImponible(impuesto.getBaseImponible());
+                totalImpuesto.setCodigo(impuesto.getCodigo());
+                totalImpuesto.setCodigoPorcentaje(impuesto.getCodigoPorcentaje());
+                totalImpuesto.setValor(impuesto.getValor());
+                mapTotalImpuestos.put(facturaDetalle.getProducto().getIva(), totalImpuesto);
+            }
+            else
+            {
+                TotalImpuesto totalImpuesto=mapTotalImpuestos.get(facturaDetalle.getProducto().getIva());
+                totalImpuesto.setBaseImponible(totalImpuesto.getBaseImponible().add(impuesto.getBaseImponible()));
+                totalImpuesto.setValor(totalImpuesto.getValor().add(impuesto.getValor()));
+                mapTotalImpuestos.put(facturaDetalle.getProducto().getIva(), totalImpuesto);
+                
+            }
+            
+            //-------------> FIN <----------------
             listaComprobantes.add(impuesto);
             
-            detalle.setComprobantes(listaComprobantes);
+            detalle.setImpuestos(listaComprobantes);
             
             detallesComprobante.add(detalle);
         }
         
         facturaComprobante.setDetalles(detallesComprobante);
+        facturaComprobante.setInformacionFactura(informacionFactura);
+        
+        /**
+         * Crear los impuestos totales
+         */
+        List<TotalImpuesto> totalImpuestos = new ArrayList<TotalImpuesto>();
+        for (Map.Entry<ImpuestoDetalle, TotalImpuesto> entry : mapTotalImpuestos.entrySet()) {
+            ImpuestoDetalle key = entry.getKey();
+            TotalImpuesto value = entry.getValue();
+            totalImpuestos.add(value);
+        }
+        facturaComprobante.getInformacionFactura().setTotalImpuestos(totalImpuestos);
         
         /**
          * Informacion adicional
@@ -128,6 +172,12 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
     public Map<String, String> getMapAdicional() {
         return mapInfoAdicional;
     }
+
+    public void setMapInfoAdicional(Map<String, String> mapInfoAdicional) {
+        this.mapInfoAdicional = mapInfoAdicional;
+    }
+    
+    
 
 
 

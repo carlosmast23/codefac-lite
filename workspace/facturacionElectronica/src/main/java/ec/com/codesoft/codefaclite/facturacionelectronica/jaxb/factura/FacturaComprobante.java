@@ -6,12 +6,15 @@
 package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionTributaria;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.notacredito.DetalleNotaCreditoComprobante;
 import java.sql.Date;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 
 
@@ -20,6 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Carlos
  */
 @XmlRootElement(name = ComprobanteElectronico.FACTURA)
+@XmlType(propOrder = {"informacionTributaria","informacionFactura","detalles","informacionAdicional"})
 public class FacturaComprobante extends ComprobanteElectronico{
 
     private InformacionFactura informacionFactura;
@@ -29,6 +33,7 @@ public class FacturaComprobante extends ComprobanteElectronico{
     public String getTipoDocumento() {
         return ComprobanteElectronico.FACTURA;
     }
+    
 
     @XmlElementWrapper(name = "detalles")
     @XmlElement(name = "detalle")
@@ -52,13 +57,24 @@ public class FacturaComprobante extends ComprobanteElectronico{
 
     @Override
     public String getIdentificacion() {
-        return this.informacionFactura.getIdentificacionComprador();
+        return this.informacionTributaria.getRuc();
     }
 
     public void setInformacionFactura(InformacionFactura informacionFactura) {
         this.informacionFactura = informacionFactura;
     }
-
+/*
+    @XmlElement(name="infoTributaria")
+    public InformacionTributaria getInformacionTributaria() {
+        return informacionTributaria;
+    }
+    
+    @XmlElementWrapper(name = "infoAdicional")
+    @XmlElement(name = "campoAdicional")
+    public List<InformacionAdicional> getInformacionAdicional() {
+        return informacionAdicional;
+    }
+*/
     
     
 }

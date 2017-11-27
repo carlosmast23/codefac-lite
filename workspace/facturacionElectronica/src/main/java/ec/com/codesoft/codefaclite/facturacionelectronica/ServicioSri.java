@@ -38,7 +38,9 @@ import javax.xml.namespace.QName;
 public class ServicioSri {
  
     private static final String namespaceURI="http://ec.gob.sri.ws.recepcion";
-    private static final String localPart="RecepcionComprobantesOfflineService";
+    private static final String namespaceAutorizarURI="http://ec.gob.sri.ws.autorizacion";
+    private static final String localPort="RecepcionComprobantesOfflineService";
+    private static final String localPortAutorizacion="AutorizacionComprobantesOfflineService";
     
     private static final Long TIEMPO_ESPERA_AUTORIZACION =400L;
     private static final Long INTENTOS_AUTORIZACION =400L; 
@@ -56,6 +58,16 @@ public class ServicioSri {
      * El modo con el que va a trabajar el web service
      */
     private String modo;
+    
+    /**
+     * Path donde se encuentra el archivo para enviar o recibir
+     */
+    private String urlFile;
+
+    public ServicioSri() {
+    }
+    
+    
 
     public ServicioSri(String uri_recepcion,String modo) {
         this.uri_recepcion = uri_recepcion;
@@ -88,7 +100,7 @@ public class ServicioSri {
     public boolean verificarConexionRecepcion() {
         try {
             URL url = new URL(uri_recepcion);
-            QName qname = new QName(namespaceURI,localPart);
+            QName qname = new QName(namespaceURI,localPort);
             servicio = new RecepcionComprobantesOfflineService(url, qname);
             System.out.println("si existe servicio con sri");
             return true;
@@ -104,7 +116,7 @@ public class ServicioSri {
     {
         try {
             URL url = new URL(uri_autorizacion);
-            QName qname = new QName(namespaceURI,localPart);
+            QName qname = new QName(namespaceAutorizarURI,localPortAutorizacion);
             servicioAutorizacion=new AutorizacionComprobantesOfflineService(url,qname);
             System.out.println("si existe servicio con sri autorizacion");
             return true;
@@ -118,7 +130,8 @@ public class ServicioSri {
     public Boolean enviar()
     {
         try {
-            File archivoXMLFirmado = new File("C:\\e-spirit-pruebas\\firmados\\2609201701179053733100110010020000072070000000011.xml");
+            //File archivoXMLFirmado = new File("C:\\e-spirit-pruebas\\firmados\\2609201701179053733100110010020000072070000000011.xml");
+            File archivoXMLFirmado = new File(urlFile);
             RecepcionComprobantesOffline port= servicio.getRecepcionComprobantesOfflinePort();
             RespuestaSolicitud respuestaSolicitud = port.validarComprobante(archivoToByte(archivoXMLFirmado));
             //System.out.println(respuestaSolicitud.getEstado()); //RECIBIDA DEVUELTA           
@@ -149,8 +162,14 @@ public class ServicioSri {
                    AutorizacionComprobantesOffline port= servicioAutorizacion.getAutorizacionComprobantesOfflinePort();
                    RespuestaComprobante respuesta=port.autorizacionComprobante(claveAcceso);
                    autorizacion=respuesta.getAutorizaciones().getAutorizacion();
-                   Thread.sleep(TIEMPO_ESPERA_AUTORIZACION);
-                   return true;
+                   if(autorizacion.size()==0)
+                   {
+                    Thread.sleep(TIEMPO_ESPERA_AUTORIZACION);
+                   }
+                   else
+                   {
+                    return true;
+                   }
                } catch (InterruptedException ex) {
                    Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);
                }
@@ -191,6 +210,15 @@ public class ServicioSri {
     public List<Mensaje> getMensajes() {
         return mensajes;
     }
+
+    public String getUrlFile() {
+        return urlFile;
+    }
+
+    public void setUrlFile(String urlFile) {
+        this.urlFile = urlFile;
+    }
+    
     
     
 }

@@ -51,6 +51,9 @@ public class ComprobanteElectronicoService {
     public static final Integer ETAPA_AUTORIZAR=5;
     public static final Integer ETAPA_RIDE=6;
     
+    public static final Integer CODIGO_SRI_MODO_PRUEBAS=1;
+    public static final Integer CODIGO_SRI_MODO_PRODUCCION=2;
+    
     /**
      * Etapa en la que se encuentra la facturacion
      */
@@ -84,6 +87,9 @@ public class ComprobanteElectronicoService {
      */
     private String claveAcceso;
     
+    private String uriRecepcion;
+    private String uriAutorizacion;
+    
     private ServicioSri servicioSri;
 
     public ComprobanteElectronicoService(String pathBase, String nombreFirma, String claveFirma, String modoFacturacion, ComprobanteElectronico comprobante) {
@@ -92,6 +98,7 @@ public class ComprobanteElectronicoService {
         this.claveFirma = claveFirma;
         this.modoFacturacion = modoFacturacion;
         this.comprobante = comprobante;
+        this.etapaActual=ETAPA_GENERAR;
     }
     
     public void procesarComprobante()
@@ -99,26 +106,36 @@ public class ComprobanteElectronicoService {
         if(etapaActual==ETAPA_GENERAR)
         {
             generar();
+            System.out.println("generar()");
+            etapaActual++;
         }
         
         if(etapaActual==ETAPA_PRE_VALIDAR)        
         {
             preValidacion();
+            System.out.println("preValidacion()");
+            etapaActual++;
         }
         
         if(etapaActual==ETAPA_FIRMAR)   
         {
             firmar();
+            System.out.println("firmar()");
+            etapaActual++;
         }
         
         if(etapaActual==ETAPA_ENVIAR)        
         {
             enviarSri();
+            System.out.println("enviarSri()");
+            etapaActual++;
         }
         
-        if(etapaActual==ETAPA_ENVIAR)  
+        if(etapaActual==ETAPA_AUTORIZAR)  
         {
             autorizarSri();
+            etapaActual++;
+            etapaActual++;
         }
         
         if(etapaActual==ETAPA_RIDE)  
@@ -140,8 +157,9 @@ public class ComprobanteElectronicoService {
     
     private void generar()
     {
-        StringWriter stringWriter= generarXml(comprobante);
         claveAcceso=obtenerClaveAcceso();
+        comprobante.getInformacionTributaria().setClaveAcceso(claveAcceso);
+        StringWriter stringWriter= generarXml(comprobante);
         ComprobantesElectronicosUtil.generarArchivoXml(stringWriter,getPathComprobante(CARPETA_GENERADOS));
   
     }
@@ -166,7 +184,11 @@ public class ComprobanteElectronicoService {
     
     private void enviarSri()
     {
-        servicioSri=new ServicioSri("","");
+        servicioSri=new ServicioSri();
+        servicioSri.setUri_autorizacion(uriAutorizacion);
+        servicioSri.setUri_recepcion(uriRecepcion);
+        servicioSri.setUrlFile(getPathComprobante(CARPETA_FIRMADOS));
+        
         if(servicioSri.verificarConexionRecepcion())
         {
             System.out.println("Existe conexion");
@@ -185,11 +207,14 @@ public class ComprobanteElectronicoService {
     
     private void autorizarSri()
     {
-        servicioSri=new ServicioSri("");
+        servicioSri=new ServicioSri();
+        servicioSri.setUri_autorizacion(uriAutorizacion);
+        servicioSri.setUri_recepcion(uriRecepcion);
+        servicioSri.setUrlFile(getPathComprobante(CARPETA_FIRMADOS));
          /**
          * Recogiendo autorizacion SRI
          */
-        if(servicioSri.autorizar("ejemplo"))
+        if(servicioSri.autorizar(claveAcceso))
         {
             String xmlAutorizado=servicioSri.obtenerRespuestaAutorizacion();
             ComprobantesElectronicosUtil.generarArchivoXml(xmlAutorizado,getPathComprobante(CARPETA_AUTORIZADOS));
@@ -223,13 +248,14 @@ public class ComprobanteElectronicoService {
     public String obtenerClaveAcceso()
     {
         Vector<String> claveAcceso=new Vector<>();
-        SimpleDateFormat formateador = new SimpleDateFormat("ddmmyyyy");
-        claveAcceso.add(formateador.format(comprobante.getFechaEmision()));
+        //SimpleDateFormat formateador = new SimpleDateFormat("ddmmyyyy");
+        String fechaFormat=ComprobantesElectronicosUtil.formatSimpleDate(comprobante.getFechaEmision());
+        claveAcceso.add(fechaFormat);
              
         claveAcceso.add(getTipoComprobante());
         
-        String identificacionFormat=UtilidadesTextos.llenarCarateresDerecha(comprobante.getIdentificacion(),13, "0");
-        claveAcceso.add(identificacionFormat);
+        //String identificacionFormat=UtilidadesTextos.llenarCarateresDerecha(comprobante.getIdentificacion(),12, "0");
+        claveAcceso.add(comprobante.getIdentificacion());
         
         claveAcceso.add(getTipoCodigoAmbiente());
         
@@ -271,10 +297,10 @@ public class ComprobanteElectronicoService {
     {
         switch (this.modoFacturacion) {
             case ComprobanteElectronicoService.MODO_PRODUCCION:
-                return "02";
+                return "2";
 
             case ComprobanteElectronicoService.MODO_PRUEBAS:
-                return "01";
+                return "1";
                 
             default: 
                 return "00";
@@ -316,13 +342,38 @@ public class ComprobanteElectronicoService {
     {
         //return pathBase+"/"+carpeta+"/"+claveAcceso+".xml";
         //14502017011724213151500010010010000000010000000011.xml
-        return pathBase+"/"+carpeta+"/14502017011724213151500010010010000000010000000011.xml";
+        return pathBase+"/"+carpeta+"/"+claveAcceso+".xml";
     }
     
     private String getPathFirma()            
     {
         return pathBase+"/"+CARPETA_CONFIGURACION+"/"+nombreFirma;
     }
+
+    public String getUriRecepcion() {
+        return uriRecepcion;
+    }
+
+    public void setUriRecepcion(String uriRecepcion) {
+        this.uriRecepcion = uriRecepcion;
+    }
+
+    public String getUriAutorizacion() {
+        return uriAutorizacion;
+    }
+
+    public void setUriAutorizacion(String uriAutorizacion) {
+        this.uriAutorizacion = uriAutorizacion;
+    }
+
+    public String getModoFacturacion() {
+        return modoFacturacion;
+    }
+
+    public void setModoFacturacion(String modoFacturacion) {
+        this.modoFacturacion = modoFacturacion;
+    }
+    
     
     
     

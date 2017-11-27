@@ -17,7 +17,14 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Carlos
  */
-@XmlType
+@XmlType(propOrder = {"fechaEmision",
+    "tipoIdentificacionComprador",
+    "razonSocialComprador",
+    "identificacionComprador",
+    "totalSinImpuestos",
+    "totalDescuento",
+    "totalImpuestos",
+    "importeTotal"})
 public class InformacionFactura {
     private String fechaEmision;
     private String tipoIdentificacionComprador;

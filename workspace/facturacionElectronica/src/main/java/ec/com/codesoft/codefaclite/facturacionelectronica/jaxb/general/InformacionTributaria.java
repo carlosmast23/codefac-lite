@@ -6,11 +6,13 @@
 package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  *
  * @author Carlos
  */
+@XmlType(propOrder = {"ambiente","tipoEmision","razonSocial","nombreComercial","ruc","claveAcceso","codigoDocumento","establecimiento","puntoEmision","secuencial","direcionMatriz"})
 public class InformacionTributaria {
     private String ambiente;
     private String tipoEmision;

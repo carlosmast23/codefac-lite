@@ -5,7 +5,9 @@
  */
 package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlValue;
 
 /**
  *
@@ -15,6 +17,7 @@ public class InformacionAdicional {
    private String nombre;
    private String valor;
 
+    @XmlAttribute(name = "nombre")
     public String getNombre() {
         return nombre;
     }
@@ -23,6 +26,7 @@ public class InformacionAdicional {
         this.nombre = nombre;
     }
 
+    @XmlValue()
     public String getValor() {
         return valor;
     }

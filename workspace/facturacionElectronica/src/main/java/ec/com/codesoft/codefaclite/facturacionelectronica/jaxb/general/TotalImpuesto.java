@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Carlos
  */
-@XmlType
+@XmlType(propOrder = {"codigo","codigoPorcentaje","baseImponible","valor"})
 public class TotalImpuesto {
     
     private String codigo;

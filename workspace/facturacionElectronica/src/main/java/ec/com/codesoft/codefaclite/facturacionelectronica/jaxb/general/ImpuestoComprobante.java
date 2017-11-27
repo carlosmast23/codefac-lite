@@ -7,11 +7,13 @@ package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general;
 
 import java.math.BigDecimal;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  *
  * @author Carlos
  */
+@XmlType(propOrder = {"codigo","codigoPorcentaje","tarifa","baseImponible","valor"})
 public class ImpuestoComprobante {
     private String codigo;
     private String codigoPorcentaje;

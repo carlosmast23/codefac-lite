@@ -10,11 +10,13 @@ import java.math.BigDecimal;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  *
  * @author Carlos
  */
+@XmlType(propOrder = {"descripcion","cantidad","precioUnitario","descuento","precioTotalSinImpuesto","impuestos"})
 public class DetalleFacturaComprobante {
     private String descripcion;
     private BigDecimal cantidad;
@@ -22,7 +24,7 @@ public class DetalleFacturaComprobante {
     private BigDecimal descuento;
     private BigDecimal precioTotalSinImpuesto;
     
-    private List<ImpuestoComprobante> comprobantes; 
+    private List<ImpuestoComprobante> impuestos; 
 
     public DetalleFacturaComprobante() {
     }
@@ -74,12 +76,12 @@ public class DetalleFacturaComprobante {
 
     @XmlElementWrapper(name = "impuestos")
     @XmlElement(name = "impuesto")
-    public List<ImpuestoComprobante> getComprobantes() {
-        return comprobantes;
+    public List<ImpuestoComprobante> getImpuestos() {
+        return impuestos;
     }
 
-    public void setComprobantes(List<ImpuestoComprobante> comprobantes) {
-        this.comprobantes = comprobantes;
+    public void setImpuestos(List<ImpuestoComprobante> impuestos) {
+        this.impuestos = impuestos;
     }
     
     
