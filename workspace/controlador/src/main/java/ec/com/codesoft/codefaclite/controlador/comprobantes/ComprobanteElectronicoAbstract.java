@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.controlador.comprobantes;
 
 import ec.com.codesoft.codefaclite.controlador.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.controlador.session.SessionCodefacInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
@@ -23,8 +24,9 @@ import java.util.Map;
  * @author Carlos
  */
 public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElectronico> {
-    private SessionCodefacInterface session;
+    protected SessionCodefacInterface session;
     private ComprobanteElectronicoService servicio;
+    private InterfazComunicacionPanel interfazPadre;
     
     public abstract String getCodigoComprobante();
     public abstract String getSecuencial();
@@ -40,6 +42,14 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
     public ComprobanteElectronicoAbstract(SessionCodefacInterface session) {
         this.session = session;
     }
+
+    public ComprobanteElectronicoAbstract(SessionCodefacInterface session, InterfazComunicacionPanel interfazPadre) {
+        this.session = session;
+        this.interfazPadre = interfazPadre;
+    }
+    
+    
+    
     
     public InformacionTributaria getInfoInformacionTributaria()
     {
@@ -90,6 +100,9 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
         servicio.setPathFacturaJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourcePath("facturaReporte.jrxml"));
         String imagenLogo=session.getParametrosCodefac().get(ParametroCodefac.LOGO_EMPRESA).getValor();
         servicio.setLogoImagen(DirectorioCodefac.IMAGENES.getArchivoStream(session,imagenLogo));
+        servicio.setPathParentJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourcesParentPath("facturaReporte.jrxml"));
+        servicio.setMapAdicionalReporte(interfazPadre.mapReportePlantilla());
+        servicio.pathLogoImagen=DirectorioCodefac.IMAGENES.getArchivo(session,imagenLogo);
         //servicio.setLogoImagen(RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("logoCodefac.png"));
         
         if(ComprobanteElectronicoService.MODO_PRODUCCION.equals(modoFacturacion))

@@ -6,8 +6,10 @@
 package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.entity.Factura;
+import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaFacade;
+import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.util.List;
 
 /**
@@ -17,21 +19,39 @@ import java.util.List;
 public class FacturacionService {
     FacturaFacade facturaFacade;
     FacturaDetalleFacade facturaDetalleFacade;
+    ParametroCodefacService parametroService;
 
     public FacturacionService() {
         this.facturaFacade=new FacturaFacade();
         this.facturaDetalleFacade=new FacturaDetalleFacade();
+        this.parametroService=new ParametroCodefacService();
         
     }
     
     public void grabar(Factura factura)
     {
         facturaFacade.create(factura);
+        /**
+         * Aumentar el codigo de la numeracion en los parametros
+         */
+        ParametroCodefac parametro=parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA);
+        parametro.valor=(Integer.parseInt(parametro.valor)+1)+"";
+        parametroService.grabar(parametro);
+        
     }
     
     public List<Factura> obtenerTodos()
     {
         return facturaFacade.findAll();
+    }
+    
+    public String getPreimpresoSiguiente()
+    {
+        Integer secuencialSiguiente=Integer.parseInt(parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA).valor)+1;
+        String secuencial=UtilidadesTextos.llenarCarateresIzquierda(secuencialSiguiente.toString(),8,"0");
+        String establecimiento=parametroService.getParametroByNombre(ParametroCodefac.PUNTO_EMISION).valor;
+        String puntoEmision=parametroService.getParametroByNombre(ParametroCodefac.PUNTO_EMISION).valor;
+        return puntoEmision+"-"+establecimiento+"-"+secuencial;
     }
     
 }

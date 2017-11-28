@@ -7,13 +7,21 @@ package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilder;
@@ -119,6 +127,23 @@ public abstract class UtilidadesComprobantes {
         } catch (JRException ex) {
             Logger.getLogger(UtilidadesComprobantes.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public static InputStream getStreamByPath(String pathLogoImagen)
+    {
+        try {
+            File file = new File(pathLogoImagen);
+            BufferedImage image = ImageIO.read(file); 
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            ImageIO.write(image, "jpg", os);            
+            //return new ByteArrayInputStream(os.toByteArray());
+            return new FileInputStream(file);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(UtilidadesComprobantes.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(UtilidadesComprobantes.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
 

@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.facturacion.other;
 
 import ec.com.codesoft.codefaclite.controlador.comprobantes.ComprobanteElectronicoAbstract;
 import ec.com.codesoft.codefaclite.controlador.session.SessionCodefacInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
@@ -20,6 +21,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.Comprobantes
 import ec.com.codesoft.codefaclite.servidor.entity.Factura;
 import ec.com.codesoft.codefaclite.servidor.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
+import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.SriIdentificacion;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.math.BigDecimal;
@@ -41,16 +43,12 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
         super(session);
     }
 
-    public FacturacionElectronica(Factura factura, SessionCodefacInterface session) {
-        super(session);
+    public FacturacionElectronica(Factura factura, SessionCodefacInterface session, InterfazComunicacionPanel interfazPadre) {
+        super(session, interfazPadre);
         this.factura = factura;
     }
 
-    public FacturacionElectronica(Factura factura, Map<String, String> mapInfoAdicional, SessionCodefacInterface session) {
-        super(session);
-        this.factura = factura;
-        this.mapInfoAdicional = mapInfoAdicional;
-    }
+    
     
     
     
@@ -62,7 +60,8 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
     
         @Override
     public String getSecuencial() {
-       return UtilidadesTextos.llenarCarateresIzquierda("35",9,"0");
+       String secuencial= this.session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_FACTURA).getValor();
+       return UtilidadesTextos.llenarCarateresIzquierda(secuencial,9,"0");
     }
 
     @Override

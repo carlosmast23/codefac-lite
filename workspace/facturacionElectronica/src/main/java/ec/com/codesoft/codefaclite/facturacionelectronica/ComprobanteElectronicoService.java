@@ -19,6 +19,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -111,6 +112,9 @@ public class ComprobanteElectronicoService {
     private String pathFacturaJasper;
     private String pathParentJasper;
     private BufferedImage logoImagen;
+    public String pathLogoImagen;
+    
+    private Map<String,Object> mapAdicionalReporte;
 
     public ComprobanteElectronicoService(String pathBase, String nombreFirma, String claveFirma, String modoFacturacion, ComprobanteElectronico comprobante) {
         this.pathBase = pathBase;
@@ -179,11 +183,24 @@ public class ComprobanteElectronicoService {
             Map<String,Object> datosMap=reporte.getMapReporte();
             datosMap.put("SUBREPORT_DIR",pathParentJasper);
             
+            /**
+             * Agregar datos adicionales como por ejemplo los datos del pide de pagina
+             */
+            datosMap.putAll(mapAdicionalReporte);
+            
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             ImageIO.write(logoImagen, "jpg", os);
             InputStream is = new ByteArrayInputStream(os.toByteArray());
             
-            datosMap.put("imagen_logo",is);
+            //datosMap.put("imagen_logo",is);
+            datosMap.put("imagen_logo",UtilidadesComprobantes.getStreamByPath(pathLogoImagen));
+            /*
+            datosMap.put("pl_url_imgl",UtilidadesComprobantes.getStreamByPath(mapAdicionalReporte.get("pl_url_img1_url").toString()));
+            datosMap.put("pl_img_facebook",UtilidadesComprobantes.getStreamByPath(mapAdicionalReporte.get("pl_img_facebook_url").toString()));
+            datosMap.put("pl_img_whatsapp",UtilidadesComprobantes.getStreamByPath(mapAdicionalReporte.get("pl_img_whatsapp_url").toString()));
+            datosMap.put("pl_img_telefono",UtilidadesComprobantes.getStreamByPath(mapAdicionalReporte.get("pl_img_telefono_url").toString()));
+            datosMap.put("pl_img_logo_pie",UtilidadesComprobantes.getStreamByPath(mapAdicionalReporte.get("pl_img_logo_pie_url").toString()));
+            */
             UtilidadesComprobantes.generarReporteJasper(pathFacturaJasper, datosMap, informacionAdiciona, getPathComprobante(CARPETA_RIDE,comprobante.getInformacionTributaria().getSecuencial()+".pdf"));
            
             
@@ -450,6 +467,16 @@ public class ComprobanteElectronicoService {
         this.logoImagen = logoImagen;
     }
 
+    public Map<String, Object> getMapAdicionalReporte() {
+        return mapAdicionalReporte;
+    }
+
+    public void setMapAdicionalReporte(Map<String, Object> mapAdicionalReporte) {
+        this.mapAdicionalReporte = mapAdicionalReporte;
+    }
+
+
+    
     
     
     

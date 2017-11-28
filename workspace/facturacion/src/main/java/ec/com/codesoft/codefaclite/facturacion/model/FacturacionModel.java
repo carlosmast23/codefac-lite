@@ -25,6 +25,7 @@ import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
 import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
+import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.awt.event.ActionEvent;
@@ -246,7 +247,7 @@ public class FacturacionModel extends FacturacionPanel{
         servicio.grabar(factura);
         DialogoCodefac.mensaje("Correcto", "La factura se grabo correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         //Despues de implemetar todo el metodo de grabar
-        FacturacionElectronica facturaElectronica=new FacturacionElectronica(factura, session);
+        FacturacionElectronica facturaElectronica=new FacturacionElectronica(factura, session,this.panelPadre);
         facturaElectronica.setMapInfoAdicional(datosAdicionales);
         facturaElectronica.procesarComprobante();//listo se encarga de procesar el comprobante
         
@@ -293,6 +294,8 @@ public class FacturacionModel extends FacturacionPanel{
         getLblDireccion().setText(session.getEmpresa().getDireccion());
         getLblTelefonos().setText(session.getEmpresa().getTelefonos());
         getLblNombreComercial().setText(session.getEmpresa().getNombreLegal());
+        FacturacionService servicio=new FacturacionService();
+        getLblSecuencial().setText(servicio.getPreimpresoSiguiente());
         
         datosAdicionales=new HashMap<String,String>();
     }

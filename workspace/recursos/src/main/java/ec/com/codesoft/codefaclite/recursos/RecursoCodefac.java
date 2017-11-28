@@ -23,45 +23,39 @@ public enum RecursoCodefac {
     JASPER_COMPROBANTES_ELECTRONICOS("reportes/comprobantes_electronicos"),
     JASPER("reportes"),
     AYUDA("ayuda");
-    
+
     private String subPathResource;
 
     private RecursoCodefac(String subPathResource) {
         this.subPathResource = subPathResource;
     }
-    
-    public URL getURL()
-    {
+
+    public URL getURL() {
         return getClass().getResource(subPathResource);
     }
-    
-    public String getPath()
-    {
+
+    public String getPath() {
         return getClass().getResource(subPathResource).getPath();
     }
-    
-    public URL getResourceURL(String file)
-    {
-        return getClass().getResource("/"+subPathResource+"/"+file);
+
+    public URL getResourceURL(String file) {
+        return getClass().getResource("/" + subPathResource + "/" + file);
     }
-    
-    public String getResourcePath(String file)
-    {
-        return getClass().getResource("/"+subPathResource+"/"+file).getPath();
+
+    public String getResourcePath(String file) {
+        return getClass().getResource("/" + subPathResource + "/" + file).getPath();
     }
-    
-    public String getResourcesParentPath(String file)
-    {
-        String path=getResourcePath(file);
+
+    public String getResourcesParentPath(String file) {
+        String path = getResourcePath(file);
         File archivo = new File(path);
-                    //File file = new File(getClass().getResource("/pagina/ayudaHtml.html").toURI());
-                    
+        //File file = new File(getClass().getResource("/pagina/ayudaHtml.html").toURI());
+
         return archivo.getParentFile().toURI().getPath();
     }
-    
-     public InputStream getResourceInputStream(String file)
-    {
-        return getClass().getResourceAsStream("/"+subPathResource+"/"+file);
+
+    public InputStream getResourceInputStream(String file) {
+        return getClass().getResourceAsStream("/" + subPathResource + "/" + file);
     }
-    
+
 }

@@ -24,6 +24,7 @@ import ec.com.codesoft.codefaclite.main.panel.GeneralPanelForm;
 import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
+import ec.com.codesoft.ejemplo.utilidades.imagen.UtilidadImagen;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -1259,12 +1260,13 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         parametros.put("pl_direccion",sessionCodefac.getEmpresa().getDireccion());
         parametros.put("pl_nombre_empresa",sessionCodefac.getEmpresa().getNombreLegal());
         parametros.put("pl_telefonos",sessionCodefac.getEmpresa().getTelefonos());
-        parametros.put("pl_url_img1",RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("codefac-logotipo.png"));
-        parametros.put("pl_img_facebook",RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("facebook.png"));
-        parametros.put("pl_img_whatsapp",RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("whatsapp.png"));
-        parametros.put("pl_img_telefono",RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("telefono.png"));
-        parametros.put("pl_img_logo_pie",RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("codesoft-logo.png"));
-       
+        
+        parametros.put("pl_url_img1",(RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("codefac-logotipo.png")));
+        parametros.put("pl_img_facebook",(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("facebook.png")));
+        parametros.put("pl_img_whatsapp",(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("whatsapp.png")));
+        parametros.put("pl_img_telefono",(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("telefono.png")));
+        parametros.put("pl_img_logo_pie",(RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("codesoft-logo.png")));
+        
         parametros.put("pl_url_cabecera",RecursoCodefac.JASPER.getResourcePath("encabezado.jasper"));
         parametros.put("pl_url_piepagina",RecursoCodefac.JASPER.getResourcePath("pie_pagina.jasper"));
         

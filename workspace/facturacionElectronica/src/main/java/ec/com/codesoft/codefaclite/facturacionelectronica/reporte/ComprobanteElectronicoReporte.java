@@ -38,7 +38,7 @@ public abstract class ComprobanteElectronicoReporte
         Map<String,Object> map=new HashMap<String,Object>();
         map.put("ruc",comprobante.getInformacionTributaria().getRuc());
         String secuencial=comprobante.getInformacionTributaria().getPuntoEmision()+"-"+comprobante.getInformacionTributaria().getEstablecimiento()+"-"+comprobante.getInformacionTributaria().getSecuencial();
-        map.put("secuencial",comprobante.getInformacionTributaria().getClaveAcceso());
+        map.put("secuencial",secuencial);
         map.put("autorizacion",comprobante.getInformacionTributaria().getClaveAcceso());
         map.put("estado","");
         map.put("fecha_hora_autorizacion","");

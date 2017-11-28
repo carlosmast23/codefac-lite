@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d9c21352-f760-4e3a-b774-88dde93e1e8b">
 	<property name="ireport.zoom" value="1.3310000000000064"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="431"/>
+	<property name="ireport.y" value="543"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -47,10 +47,24 @@
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\Carlos\\Documents\\Ejemplos\\"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="informacionAdicionalList" class="java.util.List"/>
-	<parameter name="formaPagoList" class="java.util.List"/>
+	<parameter name="informacionAdicionalList" class="java.util.Collection"/>
+	<parameter name="formaPagoList" class="java.util.Collection"/>
 	<parameter name="direccion_sucursal" class="java.lang.String"/>
 	<parameter name="imagen_logo" class="java.io.InputStream"/>
+	<parameter name="pl_url_piepagina" class="java.lang.String"/>
+	<parameter name="pl_fecha_hora" class="java.lang.String"/>
+	<parameter name="pl_direccion" class="java.lang.String"/>
+	<parameter name="pl_nombre_empresa" class="java.lang.String"/>
+	<parameter name="pl_telefonos" class="java.lang.String"/>
+	<parameter name="pl_usuario" class="java.lang.String"/>
+	<parameter name="pl_titulo" class="java.lang.String"/>
+	<parameter name="pl_url_img1" class="java.io.InputStream"/>
+	<parameter name="pl_img_facebook" class="java.io.InputStream"/>
+	<parameter name="pl_img_whatsapp" class="java.io.InputStream"/>
+	<parameter name="pl_img_telefono" class="java.io.InputStream"/>
+	<parameter name="pl_img_logo_pie" class="java.io.InputStream"/>
+	<parameter name="pl_url_cabecera" class="java.lang.String"/>
+	<parameter name="pl_url_piepagina_1" class="java.lang.String"/>
 	<field name="codigo" class="java.lang.String"/>
 	<field name="descripcion" class="java.lang.String"/>
 	<field name="precio_unitario" class="java.lang.String"/>
@@ -150,14 +164,14 @@
 			<textField>
 				<reportElement x="5" y="188" width="303" height="20" uuid="6e491e25-7c7e-4daf-ab1c-7340453eb3ed"/>
 				<textElement textAlignment="Center">
-					<font isBold="true"/>
+					<font size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{razon_social}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="5" y="212" width="303" height="20" uuid="20edfeb2-f06d-4a3b-a278-010049807845"/>
 				<textElement textAlignment="Center">
-					<font isItalic="true"/>
+					<font size="11" isItalic="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{nombre_legal}]]></textFieldExpression>
 			</textField>
@@ -335,6 +349,9 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -345,6 +362,9 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -355,6 +375,9 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{precio_unitario}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -365,6 +388,9 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{descuento}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -375,6 +401,9 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{precio_total}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -385,12 +414,15 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="106" splitType="Stretch">
+		<band height="134" splitType="Stretch">
 			<staticText>
 				<reportElement x="333" y="1" width="144" height="20" uuid="82f68c07-46f1-4809-92fb-69540f081706"/>
 				<box>
@@ -527,7 +559,7 @@
 				<textFieldExpression><![CDATA[$P{total}]]></textFieldExpression>
 			</textField>
 			<rectangle radius="10">
-				<reportElement x="0" y="1" width="323" height="100" uuid="4c480e46-a4e3-400a-b74b-706a025f3078"/>
+				<reportElement x="0" y="1" width="323" height="127" uuid="4c480e46-a4e3-400a-b74b-706a025f3078"/>
 			</rectangle>
 			<staticText>
 				<reportElement x="133" y="9" width="175" height="20" backcolor="#999999" uuid="65f96240-7058-4342-91f3-d9c9700bef7d"/>
@@ -543,22 +575,22 @@
 				<text><![CDATA[FORMA DE PAGO]]></text>
 			</staticText>
 			<subreport>
-				<reportElement x="133" y="29" width="175" height="65" uuid="ebd202b3-6874-41a9-9c99-ea4c4aad56c5">
+				<reportElement stretchType="RelativeToTallestObject" x="133" y="29" width="175" height="89" uuid="ebd202b3-6874-41a9-9c99-ea4c4aad56c5">
 					<printWhenExpression><![CDATA[$P{formaPagoList}!=null]]></printWhenExpression>
 				</reportElement>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{formaPagoList})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "forma_pago.jasper"]]></subreportExpression>
 			</subreport>
 			<staticText>
-				<reportElement x="15" y="9" width="110" height="20" uuid="72acdd4c-a8e5-4703-9a75-cddfeb3b5ef8"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<reportElement x="5" y="9" width="120" height="20" uuid="72acdd4c-a8e5-4703-9a75-cddfeb3b5ef8"/>
+				<textElement verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Información Adicional]]></text>
 			</staticText>
 			<subreport>
-				<reportElement x="15" y="29" width="110" height="65" uuid="78a52071-cfc2-461a-a6c3-299d9151537a">
-					<printWhenExpression><![CDATA[$P{formaPagoList}!=null]]></printWhenExpression>
+				<reportElement stretchType="RelativeToTallestObject" x="5" y="29" width="120" height="89" uuid="78a52071-cfc2-461a-a6c3-299d9151537a">
+					<printWhenExpression><![CDATA[$P{informacionAdicionalList}!=null]]></printWhenExpression>
 				</reportElement>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{informacionAdicionalList})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "datos_adicionales.jasper"]]></subreportExpression>
@@ -566,6 +598,24 @@
 		</band>
 	</columnFooter>
 	<pageFooter>
-		<band height="54" splitType="Stretch"/>
+		<band height="54" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="555" height="54" uuid="d9f98cfb-fec9-488b-be52-471b067a0280"/>
+				<subreportParameter name="pl_img_whatsapp">
+					<subreportParameterExpression><![CDATA[$P{pl_img_whatsapp}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_img_logo_pie">
+					<subreportParameterExpression><![CDATA[$P{pl_img_logo_pie}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_img_telefono">
+					<subreportParameterExpression><![CDATA[$P{pl_img_telefono}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_img_facebook">
+					<subreportParameterExpression><![CDATA[$P{pl_img_facebook}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{pl_url_piepagina}]]></subreportExpression>
+			</subreport>
+		</band>
 	</pageFooter>
 </jasperReport>

@@ -24,7 +24,7 @@ public class ParametroCodefacService {
     
     public Map<String ,ParametroCodefac> getParametrosMap()
     {
-        Map<String ,ParametroCodefac> parametrosCodefacMap=new HashMap<String,ParametroCodefac>();
+            Map<String ,ParametroCodefac> parametrosCodefacMap=new HashMap<String,ParametroCodefac>();
         
         List<ParametroCodefac> parametros=parametroCodefacFacade.findAll();
         for (ParametroCodefac parametro : parametros) {
@@ -32,6 +32,13 @@ public class ParametroCodefacService {
         }
         
         return parametrosCodefacMap;
+    }
+    
+    public ParametroCodefac getParametroByNombre(String nombre)
+    {
+        Map<String,Object> map=new HashMap<String, Object>();
+        map.put("nombre",nombre);
+        return ((List<ParametroCodefac>) (parametroCodefacFacade.findByMap(map))).get(0);
     }
     
     /**
@@ -56,5 +63,7 @@ public class ParametroCodefacService {
     {
         return parametroCodefacFacade.findByMap(map);
     }
+    
+    
     
 }
