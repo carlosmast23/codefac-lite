@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.ClienteFacturacionBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusqueda;
@@ -27,6 +28,7 @@ import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -43,6 +45,7 @@ import java.util.Map;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JasperPrint;
 
 
 /**
@@ -250,6 +253,10 @@ public class FacturacionModel extends FacturacionPanel{
         FacturacionElectronica facturaElectronica=new FacturacionElectronica(factura, session,this.panelPadre);
         facturaElectronica.setMapInfoAdicional(datosAdicionales);
         facturaElectronica.procesarComprobante();//listo se encarga de procesar el comprobante
+        String path=facturaElectronica.getServicio().getPathRide();
+        JasperPrint print=facturaElectronica.getServicio().getPrintJasper();
+        panelPadre.crearReportePantalla(print,factura.getPreimpreso());
+        //UtilidadVarios.abrirArchivo(path);
         
     }
 

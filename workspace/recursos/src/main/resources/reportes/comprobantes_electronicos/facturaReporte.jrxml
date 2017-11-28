@@ -599,8 +599,8 @@
 	</columnFooter>
 	<pageFooter>
 		<band height="54" splitType="Stretch">
-			<subreport>
-				<reportElement x="0" y="0" width="555" height="54" uuid="d9f98cfb-fec9-488b-be52-471b067a0280"/>
+			<subreport isUsingCache="true">
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="555" height="54" uuid="d9f98cfb-fec9-488b-be52-471b067a0280"/>
 				<subreportParameter name="pl_img_whatsapp">
 					<subreportParameterExpression><![CDATA[$P{pl_img_whatsapp}]]></subreportParameterExpression>
 				</subreportParameter>

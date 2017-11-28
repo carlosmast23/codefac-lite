@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="pie_pagina" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="f53d2141-f2f6-49f7-92d8-b84d6335680c">
 	<property name="ireport.zoom" value="2.3579476910000072"/>
-	<property name="ireport.x" value="548"/>
+	<property name="ireport.x" value="731"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="pl_img_facebook" class="java.io.InputStream"/>
 	<parameter name="pl_img_whatsapp" class="java.io.InputStream"/>
@@ -9,7 +9,7 @@
 	<parameter name="pl_img_logo_pie" class="java.io.InputStream"/>
 	<pageFooter>
 		<band height="49" splitType="Stretch">
-			<image>
+			<image isLazy="true">
 				<reportElement x="0" y="23" width="90" height="25" uuid="16aef6e5-330e-474c-baeb-1f2d83947753"/>
 				<imageExpression><![CDATA[$P{pl_img_logo_pie}]]></imageExpression>
 			</image>
@@ -42,15 +42,15 @@
 				</textElement>
 				<text><![CDATA[Todos los derechos reservados @ Codesoft  2017]]></text>
 			</staticText>
-			<image>
+			<image isLazy="true">
 				<reportElement x="114" y="28" width="23" height="21" uuid="2f5a8d90-0aac-44a5-b6a6-2c9036ede6c2"/>
 				<imageExpression><![CDATA[$P{pl_img_facebook}]]></imageExpression>
 			</image>
-			<image>
+			<image isLazy="true">
 				<reportElement x="238" y="28" width="24" height="21" uuid="75a5bd20-b40b-41c3-80a4-62828962a647"/>
 				<imageExpression><![CDATA[$P{pl_img_whatsapp}]]></imageExpression>
 			</image>
-			<image>
+			<image isLazy="true">
 				<reportElement x="370" y="28" width="27" height="21" uuid="15089e08-f78b-43be-84a9-1954807aadab"/>
 				<imageExpression><![CDATA[$P{pl_img_telefono}]]></imageExpression>
 			</image>

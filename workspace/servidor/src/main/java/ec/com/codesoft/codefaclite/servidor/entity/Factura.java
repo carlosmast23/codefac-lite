@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidor.entity;
 
+import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -256,6 +257,11 @@ public class Factura {
         detalle.setFactura(this);
         this.detalles.add(detalle);
         
+    }
+    
+    public String getPreimpreso()
+    {
+       return this.puntoEmision+"-"+this.puntoEstablecimiento+"-"+UtilidadesTextos.llenarCarateresIzquierda(secuencial+"",8,"0");
     }
     
     

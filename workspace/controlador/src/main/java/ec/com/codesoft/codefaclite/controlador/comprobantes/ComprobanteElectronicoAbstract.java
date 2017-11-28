@@ -142,6 +142,15 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
         }
         return listaInfoAdicional;        
     }
+
+    public ComprobanteElectronicoService getServicio() {
+        return servicio;
+    }
+
+    public void setServicio(ComprobanteElectronicoService servicio) {
+        this.servicio = servicio;
+    }
+    
     
     
     

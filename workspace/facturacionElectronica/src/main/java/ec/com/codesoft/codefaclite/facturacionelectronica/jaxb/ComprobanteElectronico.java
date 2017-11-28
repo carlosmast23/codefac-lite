@@ -83,8 +83,6 @@ public abstract class ComprobanteElectronico {
         this.informacionAdicional = informacionAdicional;
     }
     
-    
-    
-    
+   
     
 }

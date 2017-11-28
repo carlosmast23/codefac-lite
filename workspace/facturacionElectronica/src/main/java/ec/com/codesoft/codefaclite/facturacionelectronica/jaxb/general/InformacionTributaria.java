@@ -127,5 +127,11 @@ public class InformacionTributaria {
     public void setDirecionMatriz(String direcionMatriz) {
         this.direcionMatriz = direcionMatriz;
     }
+    
+    public String getPreimpreso()
+    {
+        return this.puntoEmision+"-"+this.establecimiento+"-"+this.secuencial;
+    }
+    
 
 }

@@ -129,6 +129,20 @@ public abstract class UtilidadesComprobantes {
         }
     }
     
+   public static JasperPrint generarReporteJasperPrint(String pathReporte, Map parametros, Collection datos) {
+        try {
+            JasperReport report = JasperCompileManager.compileReport(pathReporte);
+            JRBeanCollectionDataSource dataReport = new JRBeanCollectionDataSource(datos);
+            JasperPrint print = JasperFillManager.fillReport(report, parametros, dataReport);
+            return print;
+            //JasperViewer.viewReport(print,false);
+        } catch (JRException ex) {
+            Logger.getLogger(UtilidadesComprobantes.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+   
+    
     public static InputStream getStreamByPath(String pathLogoImagen)
     {
         try {
@@ -138,6 +152,23 @@ public abstract class UtilidadesComprobantes {
             ImageIO.write(image, "jpg", os);            
             //return new ByteArrayInputStream(os.toByteArray());
             return new FileInputStream(file);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(UtilidadesComprobantes.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(UtilidadesComprobantes.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+        public static InputStream getStreamByPath(InputStream input)
+    {
+        try {
+
+            BufferedImage image = ImageIO.read(input); 
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            ImageIO.write(image, "png", os);            
+            return new ByteArrayInputStream(os.toByteArray());
+            //return new FileInputStream(file);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(UtilidadesComprobantes.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {

@@ -41,6 +41,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import net.sf.jasperreports.engine.JasperPrint;
 import org.w3c.dom.Document;
 
 /**
@@ -165,6 +166,7 @@ public class ComprobanteElectronicoService {
         if(etapaActual==ETAPA_RIDE)  
         {
             generarRide();
+            //generarRide();
             System.out.println("generarRide()");
         }
         
@@ -182,6 +184,8 @@ public class ComprobanteElectronicoService {
             List<DetalleReporteData> informacionAdiciona=reporte.getDetalles();
             Map<String,Object> datosMap=reporte.getMapReporte();
             datosMap.put("SUBREPORT_DIR",pathParentJasper);
+            datosMap.put("fecha_hora_autorizacion",mapComprobante.get("fechaAutorizacion"));
+            datosMap.put("estado",mapComprobante.get("Autorizado"));
             
             /**
              * Agregar datos adicionales como por ejemplo los datos del pide de pagina
@@ -194,14 +198,14 @@ public class ComprobanteElectronicoService {
             
             //datosMap.put("imagen_logo",is);
             datosMap.put("imagen_logo",UtilidadesComprobantes.getStreamByPath(pathLogoImagen));
-            /*
+            
             datosMap.put("pl_url_imgl",UtilidadesComprobantes.getStreamByPath(mapAdicionalReporte.get("pl_url_img1_url").toString()));
             datosMap.put("pl_img_facebook",UtilidadesComprobantes.getStreamByPath(mapAdicionalReporte.get("pl_img_facebook_url").toString()));
             datosMap.put("pl_img_whatsapp",UtilidadesComprobantes.getStreamByPath(mapAdicionalReporte.get("pl_img_whatsapp_url").toString()));
             datosMap.put("pl_img_telefono",UtilidadesComprobantes.getStreamByPath(mapAdicionalReporte.get("pl_img_telefono_url").toString()));
             datosMap.put("pl_img_logo_pie",UtilidadesComprobantes.getStreamByPath(mapAdicionalReporte.get("pl_img_logo_pie_url").toString()));
-            */
-            UtilidadesComprobantes.generarReporteJasper(pathFacturaJasper, datosMap, informacionAdiciona, getPathComprobante(CARPETA_RIDE,comprobante.getInformacionTributaria().getSecuencial()+".pdf"));
+            
+            UtilidadesComprobantes.generarReporteJasper(pathFacturaJasper, datosMap, informacionAdiciona, getPathComprobante(CARPETA_RIDE,getNameRide()));
            
             
             
@@ -217,6 +221,39 @@ public class ComprobanteElectronicoService {
     private void preValidacion()
     {
     
+    }
+    
+    public JasperPrint getPrintJasper()
+    {
+        try {
+            Map<String, String> mapComprobante = UtilidadesComprobantes.decodificarArchivoBase64Offline(getPathComprobante(CARPETA_AUTORIZADOS), null, null);
+            JAXBContext jaxbContext = JAXBContext.newInstance(FacturaComprobante.class);
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+            StringReader reader = new StringReader(mapComprobante.get("comprobante"));
+            FacturaComprobante comprobante = (FacturaComprobante) jaxbUnmarshaller.unmarshal(reader);
+            FacturaElectronicaReporte reporte = new FacturaElectronicaReporte(comprobante);
+            List<DetalleReporteData> informacionAdiciona = reporte.getDetalles();
+            
+            Map<String, Object> datosMap = reporte.getMapReporte();
+            datosMap.put("SUBREPORT_DIR", pathParentJasper);
+            datosMap.put("fecha_hora_autorizacion", mapComprobante.get("fechaAutorizacion"));
+            datosMap.put("estado", mapComprobante.get("Autorizado"));
+            
+          
+                        /**
+             * Agregar datos adicionales como por ejemplo los datos del pide de pagina
+             */
+            datosMap.putAll(mapAdicionalReporte);
+            
+            //datosMap.put("imagen_logo",is);
+            datosMap.put("imagen_logo",UtilidadesComprobantes.getStreamByPath(pathLogoImagen));
+            
+           return UtilidadesComprobantes.generarReporteJasperPrint(pathFacturaJasper, datosMap, informacionAdiciona);
+            
+        } catch (JAXBException ex) {
+            Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     private void generar()
@@ -418,18 +455,28 @@ public class ComprobanteElectronicoService {
     {
         return pathBase+"/"+CARPETA_CONFIGURACION+"/"+nombreFirma;
     }
-
-    public String getUriRecepcion() {
-        return uriRecepcion;
+    
+    private String getNameRide()
+    {
+        String prefijo="";
+        if(ComprobanteEnum.FACTURA.getCodigo().equals(comprobante.getTipoDocumento()))
+        {
+            prefijo="FAC";
+        }
+        comprobante.getTipoDocumento();
+        return prefijo+"-"+comprobante.getInformacionTributaria().getPreimpreso()+".pdf";
+    }
+    
+    public String getPathRide()
+    {
+        String nombreArchivo=getNameRide();
+        return pathBase+"/"+CARPETA_RIDE+"/"+nombreArchivo;
     }
 
     public void setUriRecepcion(String uriRecepcion) {
         this.uriRecepcion = uriRecepcion;
     }
 
-    public String getUriAutorizacion() {
-        return uriAutorizacion;
-    }
 
     public void setUriAutorizacion(String uriAutorizacion) {
         this.uriAutorizacion = uriAutorizacion;
@@ -459,9 +506,6 @@ public class ComprobanteElectronicoService {
         this.pathParentJasper = pathParentJasper;
     }
 
-    public BufferedImage getLogoImagen() {
-        return logoImagen;
-    }
 
     public void setLogoImagen(BufferedImage logoImagen) {
         this.logoImagen = logoImagen;

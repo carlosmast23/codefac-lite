@@ -1205,6 +1205,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     @Override
     public void crearReportePantalla(JasperPrint jasperPrint,String nombrePantalla) {
         JRViewer viewer=new JRViewer(jasperPrint);
+        viewer.setZoomRatio(0.6f);
         JInternalFrame internal = new JInternalFrame("Un Internal Frame");
         internal.setClosable(true);
         internal.setIconifiable(true);
@@ -1266,6 +1267,12 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         parametros.put("pl_img_whatsapp",(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("whatsapp.png")));
         parametros.put("pl_img_telefono",(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("telefono.png")));
         parametros.put("pl_img_logo_pie",(RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("codesoft-logo.png")));
+        
+        parametros.put("pl_url_img1_url",(RecursoCodefac.IMAGENES_GENERAL.getResourcePath("codefac-logotipo.png")));
+        parametros.put("pl_img_facebook_url",(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourcePath("facebook.png")));
+        parametros.put("pl_img_whatsapp_url",(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourcePath("whatsapp.png")));
+        parametros.put("pl_img_telefono_url",(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourcePath("telefono.png")));
+        parametros.put("pl_img_logo_pie_url",(RecursoCodefac.IMAGENES_GENERAL.getResourcePath("codesoft-logo.png")));
         
         parametros.put("pl_url_cabecera",RecursoCodefac.JASPER.getResourcePath("encabezado.jasper"));
         parametros.put("pl_url_piepagina",RecursoCodefac.JASPER.getResourcePath("pie_pagina.jasper"));
