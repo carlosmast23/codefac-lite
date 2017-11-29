@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacionelectronica;
 
+import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
@@ -116,7 +117,12 @@ public class ComprobanteElectronicoService {
     public String pathLogoImagen;
     
     private Map<String,Object> mapAdicionalReporte;
+    private ListenerComprobanteElectronico escucha;
 
+    public ComprobanteElectronicoService() {
+    }
+
+    
     public ComprobanteElectronicoService(String pathBase, String nombreFirma, String claveFirma, String modoFacturacion, ComprobanteElectronico comprobante) {
         this.pathBase = pathBase;
         this.nombreFirma = nombreFirma;
@@ -128,9 +134,11 @@ public class ComprobanteElectronicoService {
     
     public void procesarComprobante()
     {
+        escucha.iniciado();
         if(etapaActual==ETAPA_GENERAR)
         {
             generar();
+            escucha.procesando(etapaActual);
             System.out.println("generar()");
             etapaActual++;
         }
@@ -138,6 +146,7 @@ public class ComprobanteElectronicoService {
         if(etapaActual==ETAPA_PRE_VALIDAR)        
         {
             preValidacion();
+            escucha.procesando(etapaActual);
             System.out.println("preValidacion()");
             etapaActual++;
         }
@@ -145,6 +154,7 @@ public class ComprobanteElectronicoService {
         if(etapaActual==ETAPA_FIRMAR)   
         {
             firmar();
+            escucha.procesando(etapaActual);
             System.out.println("firmar()");
             etapaActual++;
         }
@@ -152,6 +162,7 @@ public class ComprobanteElectronicoService {
         if(etapaActual==ETAPA_ENVIAR)        
         {
             enviarSri();
+            escucha.procesando(etapaActual);
             System.out.println("enviarSri()");
             etapaActual++;
         }
@@ -159,6 +170,7 @@ public class ComprobanteElectronicoService {
         if(etapaActual==ETAPA_AUTORIZAR)  
         {
             autorizarSri();
+            escucha.procesando(etapaActual);
             System.out.println("autorizarSri()");
             etapaActual++;
         }
@@ -166,9 +178,12 @@ public class ComprobanteElectronicoService {
         if(etapaActual==ETAPA_RIDE)  
         {
             generarRide();
+            escucha.procesando(etapaActual);
             //generarRide();
             System.out.println("generarRide()");
         }
+        
+        escucha.termino();
         
     }
     
@@ -520,9 +535,53 @@ public class ComprobanteElectronicoService {
     }
 
 
+    public void addActionListerComprobanteElectronico(ListenerComprobanteElectronico e)
+    {
+        this.escucha=e;
+    }
     
     
     
+    public Integer getEtapaActual() {
+        return etapaActual;
+    }
+
+    public String getPathBase() {
+        return pathBase;
+    }
+
+    public String getNombreFirma() {
+        return nombreFirma;
+    }
+
+    public String getClaveFirma() {
+        return claveFirma;
+    }
+
+    public ComprobanteElectronico getComprobante() {
+        return comprobante;
+    }
+
+    public void setEtapaActual(Integer etapaActual) {
+        this.etapaActual = etapaActual;
+    }
+
+    public void setPathBase(String pathBase) {
+        this.pathBase = pathBase;
+    }
+
+    public void setNombreFirma(String nombreFirma) {
+        this.nombreFirma = nombreFirma;
+    }
+
+    public void setClaveFirma(String claveFirma) {
+        this.claveFirma = claveFirma;
+    }
+
+    public void setComprobante(ComprobanteElectronico comprobante) {
+        this.comprobante = comprobante;
+    }
+
     
     
     

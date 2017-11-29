@@ -34,7 +34,7 @@ import java.util.Map;
  *
  * @author Carlos
  */
-public class FacturacionElectronica extends ComprobanteElectronicoAbstract<FacturaComprobante>{
+public class FacturacionElectronica extends ComprobanteElectronicoAbstract<FacturaComprobante> {
 
     private Factura factura;
     private Map<String,String> mapInfoAdicional;

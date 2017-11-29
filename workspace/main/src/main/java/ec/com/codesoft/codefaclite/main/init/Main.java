@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.main.init;
 
 import ec.com.codesoft.codefaclite.configuraciones.model.CalculadoraModel;
 import ec.com.codesoft.codefaclite.configuraciones.model.ComprobantesConfiguracionModel;
+import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
@@ -88,6 +89,8 @@ public class Main {
          * Añadir menus y ventanas a la aplicacion principal
          */        
         panel.setVentanasMenuList(agregarMenuVentana(panel));
+        panel.setMonitorComprobanteModel(MonitorComprobanteModel.getInstance());
+        panel.agregarListenerVentanasSecundarias();
         /**
          * Establecer propiedades del formulario principal
          */

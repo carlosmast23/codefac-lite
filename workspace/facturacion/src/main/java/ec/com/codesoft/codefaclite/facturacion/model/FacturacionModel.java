@@ -5,6 +5,9 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.model;
 
+import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
+import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteInterface;
+import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
@@ -17,6 +20,13 @@ import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.facturacion.other.FacturacionElectronica;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
+import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.ETAPA_AUTORIZAR;
+import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.ETAPA_ENVIAR;
+import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.ETAPA_FIRMAR;
+import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.ETAPA_PRE_VALIDAR;
+import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.ETAPA_RIDE;
+import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
 import ec.com.codesoft.codefaclite.servidor.entity.Factura;
 import ec.com.codesoft.codefaclite.servidor.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.FormaPago;
@@ -30,6 +40,7 @@ import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -252,10 +263,85 @@ public class FacturacionModel extends FacturacionPanel{
         //Despues de implemetar todo el metodo de grabar
         FacturacionElectronica facturaElectronica=new FacturacionElectronica(factura, session,this.panelPadre);
         facturaElectronica.setMapInfoAdicional(datosAdicionales);
-        facturaElectronica.procesarComprobante();//listo se encarga de procesar el comprobante
-        String path=facturaElectronica.getServicio().getPathRide();
-        JasperPrint print=facturaElectronica.getServicio().getPrintJasper();
-        panelPadre.crearReportePantalla(print,factura.getPreimpreso());
+        /*
+        ListenerComprobanteElectronico listener=new ListenerComprobanteElectronico() {
+            @Override
+            public void termino() {
+                MonitorComprobanteModel.getInstance().agregarComprobante(new MonitorComprobanteInterface() {
+                    @Override
+                    public void eventBtnAbrir() {
+                        //String path = facturaElectronica.getServicio().getPathRide();
+                        //JasperPrint print = facturaElectronica.getServicio().getPrintJasper();
+                        //panelPadre.crearReportePantalla(print, factura.getPreimpreso());
+                    }
+
+                    @Override
+                    public void eventBtnInforme() {
+                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                    }
+                });
+            }
+        };*/
+        
+        ComprobanteElectronicoService servicioElectronico=facturaElectronica.getServicio();       
+        servicioElectronico.addActionListerComprobanteElectronico(new ListenerComprobanteElectronico() {
+            
+            private MonitorComprobanteData monitorData;
+            
+            @Override
+            public void termino() 
+            {
+                
+                monitorData.getBarraProgreso().setForeground(Color.GREEN);
+                monitorData.getBtnAbrir().setEnabled(true);
+                monitorData.getBtnAbrir().addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String path = facturaElectronica.getServicio().getPathRide();
+                        JasperPrint print = facturaElectronica.getServicio().getPrintJasper();
+                        panelPadre.crearReportePantalla(print, factura.getPreimpreso());
+                    }
+                });
+                MonitorComprobanteModel.mostrar();
+
+            }
+
+            @Override
+            public void procesando(int etapa) {
+                if(etapa==ComprobanteElectronicoService.ETAPA_GENERAR)
+                    monitorData.getBarraProgreso().setValue(20);
+                
+                if(etapa==ComprobanteElectronicoService.ETAPA_PRE_VALIDAR)
+                    monitorData.getBarraProgreso().setValue(30);
+                
+                if (etapa == ComprobanteElectronicoService.ETAPA_FIRMAR) {
+                    monitorData.getBarraProgreso().setValue(50);
+                }
+                
+                if (etapa == ComprobanteElectronicoService.ETAPA_ENVIAR) {
+                    monitorData.getBarraProgreso().setValue(70);
+                }
+                
+                if (etapa == ComprobanteElectronicoService.ETAPA_AUTORIZAR) {
+                    monitorData.getBarraProgreso().setValue(90);
+                }
+                
+                if (etapa == ComprobanteElectronicoService.ETAPA_RIDE) {
+                    monitorData.getBarraProgreso().setValue(100);
+                }
+            }
+
+            @Override
+            public void iniciado() {
+                monitorData=MonitorComprobanteModel.getInstance().agregarComprobante();
+                monitorData.getLblPreimpreso().setText(factura.getPreimpreso()+" ");
+                MonitorComprobanteModel.mostrar();
+                monitorData.getBtnAbrir().setEnabled(false);
+            }
+        });
+        //facturaElectronica.getServicio().addActionListerComprobanteElectronico(listener);
+        facturaElectronica.procesar();//listo se encarga de procesar el comprobante
+        
         //UtilidadVarios.abrirArchivo(path);
         
     }

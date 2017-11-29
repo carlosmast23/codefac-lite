@@ -8,7 +8,10 @@ package ec.com.codesoft.codefaclite.main.model;
 
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteListener;
+import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.panel.MonitorComprobantePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
@@ -124,6 +127,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     
     private static double PROPORCION_HORIZONTAL_INICIAL=0.999999999d;
     private static double PROPORCION_VERTICAL_INICIAL=0.7d;
+    
+    private MonitorComprobanteModel monitorComprobanteModel;
 
 
     public GeneralPanelModel() 
@@ -358,7 +363,15 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 }
             });
         }
-
+        
+        getjMenuItemMonitor().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getjDesktopPane1().add(monitorComprobanteModel);
+                monitorComprobanteModel.show();
+            }
+        });
+        
     }
     
     private String getTituloOriginal(String titulo)
@@ -1344,6 +1357,27 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         return null;
     }
 
+    public MonitorComprobanteModel getMonitorComprobanteModel() {
+        return monitorComprobanteModel;
+    }
+
+    public void setMonitorComprobanteModel(MonitorComprobanteModel monitorComprobanteModel) {
+        this.monitorComprobanteModel = monitorComprobanteModel;
+    }
+
+    public void agregarListenerVentanasSecundarias() {
+        monitorComprobanteModel.addListener(new MonitorComprobanteListener() {
+            @Override
+            public void mostrar() {
+                getjDesktopPane1().add(monitorComprobanteModel);
+                monitorComprobanteModel.show();
+                monitorComprobanteModel.setInterfazPadre(generalPanelModel);
+            }
+        });
+
+    }
+
+    
     
     
     

@@ -23,7 +23,7 @@ import java.util.Map;
  *
  * @author Carlos
  */
-public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElectronico> {
+public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElectronico> implements Runnable{
     protected SessionCodefacInterface session;
     private ComprobanteElectronicoService servicio;
     private InterfazComunicacionPanel interfazPadre;
@@ -46,6 +46,7 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
     public ComprobanteElectronicoAbstract(SessionCodefacInterface session, InterfazComunicacionPanel interfazPadre) {
         this.session = session;
         this.interfazPadre = interfazPadre;
+        this.servicio=new ComprobanteElectronicoService();
     }
     
     
@@ -76,7 +77,14 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
         return infoTributaria;
     }
     
-    public void procesarComprobante()
+    public void procesar()
+    {
+        Thread hiloProceso=new Thread(this);
+        hiloProceso.start();
+        
+    }
+    
+    private void procesarComprobante()
     {
         /**
          * Crear el servicio para facturar
@@ -84,12 +92,20 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
         T comprobante=getComprobante();
         comprobante.setInformacionTributaria(getInfoInformacionTributaria());
         comprobante.setInformacionAdicional(getInformacionAdicional());
+        
+        servicio.setPathBase(session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor);
+        servicio.setNombreFirma(session.getParametrosCodefac().get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).valor);
+        servicio.setClaveFirma(session.getParametrosCodefac().get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).valor);
+        servicio.setModoFacturacion(session.getParametrosCodefac().get(ParametroCodefac.MODO_FACTURACION).valor);
+        servicio.setComprobante(comprobante);
+        servicio.setEtapaActual(ComprobanteElectronicoService.ETAPA_GENERAR);
+        /*
         servicio = new ComprobanteElectronicoService(
                 session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor,
                 session.getParametrosCodefac().get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).valor,
                 session.getParametrosCodefac().get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).valor,
                 session.getParametrosCodefac().get(ParametroCodefac.MODO_FACTURACION).valor,
-                comprobante);
+                comprobante);*/
         
        
         /**
@@ -149,6 +165,12 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
 
     public void setServicio(ComprobanteElectronicoService servicio) {
         this.servicio = servicio;
+    }
+
+    @Override
+    public void run()
+    {
+        procesarComprobante();
     }
     
     

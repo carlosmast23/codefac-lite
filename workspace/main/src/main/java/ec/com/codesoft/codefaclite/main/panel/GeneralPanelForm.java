@@ -90,6 +90,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuEmisor = new javax.swing.JMenuItem();
         menuFacturacion = new javax.swing.JMenu();
         jMenuFactura = new javax.swing.JMenuItem();
+        jMenuItemMonitor = new javax.swing.JMenuItem();
         jMenuUtilidades = new javax.swing.JMenu();
         jMenuCalculadora = new javax.swing.JMenuItem();
         jMenu8 = new javax.swing.JMenu();
@@ -323,6 +324,9 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuFactura.setText("Factura");
         menuFacturacion.add(jMenuFactura);
 
+        jMenuItemMonitor.setText("Monitor");
+        menuFacturacion.add(jMenuItemMonitor);
+
         jMenuBar1.add(menuFacturacion);
 
         jMenuUtilidades.setText("Utilidades");
@@ -464,6 +468,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItemMonitor;
     private javax.swing.JMenuItem jMenuProducto;
     private javax.swing.JMenu jMenuUtilidades;
     private javax.swing.JPanel jPanel2;
@@ -693,6 +698,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
     public void setjMenuCalculadora(JMenuItem jMenuCalculadora) {
         this.jMenuCalculadora = jMenuCalculadora;
+    }
+
+    public JMenuItem getjMenuItemMonitor() {
+        return jMenuItemMonitor;
     }
 
     
