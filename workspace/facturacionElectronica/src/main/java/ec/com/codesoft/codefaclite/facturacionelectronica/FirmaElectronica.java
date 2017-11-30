@@ -105,7 +105,7 @@ public class FirmaElectronica {
             //guardarDocumento(documentoFirmado,"dir");
         } catch (Exception ex) {
             Logger.getLogger(FirmaElectronica.class.getName()).log(Level.SEVERE, null, ex);
-            throw new ComprobanteElectronicoException(ex.getMessage(),"Firma");
+            throw new ComprobanteElectronicoException(ex.getMessage(),"Firma",ComprobanteElectronicoException.ERROR_COMPROBANTE);
         }
         //return null;
     }

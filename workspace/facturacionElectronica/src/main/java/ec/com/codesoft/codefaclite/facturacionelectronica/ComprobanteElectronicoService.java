@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.ComprobanteEle
 import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.DetalleReporteData;
 import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.FacturaElectronicaReporte;
 import ec.com.codesoft.codefaclite.ws.recepcion.Mensaje;
+import ec.com.codesoft.ejemplo.utilidades.email.CorreoElectronico;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
@@ -70,6 +71,7 @@ public class ComprobanteElectronicoService {
     public static final Integer ETAPA_ENVIAR=4;
     public static final Integer ETAPA_AUTORIZAR=5;
     public static final Integer ETAPA_RIDE=6;
+    public static final Integer ETAPA_ENVIO_COMPROBANTE=7;
     
     public static final Integer CODIGO_SRI_MODO_PRUEBAS=1;
     public static final Integer CODIGO_SRI_MODO_PRODUCCION=2;
@@ -119,6 +121,8 @@ public class ComprobanteElectronicoService {
     
     private Map<String,Object> mapAdicionalReporte;
     private ListenerComprobanteElectronico escucha;
+    private MetodosEnvioInterface metodoEnvioInterface;
+    private List<String> correosElectronicos;
 
     public ComprobanteElectronicoService() {
     }
@@ -184,6 +188,15 @@ public class ComprobanteElectronicoService {
                 escucha.procesando(etapaActual);
                 //generarRide();
                 System.out.println("generarRide()");
+                etapaActual++;
+            }
+            
+            if(etapaActual==ETAPA_ENVIO_COMPROBANTE)  
+            {
+                enviarComprobante();
+                escucha.procesando(etapaActual);
+                //generarRide();
+                System.out.println("enviarCorreo()");
             }
 
             escucha.termino();
@@ -191,6 +204,21 @@ public class ComprobanteElectronicoService {
         catch(ComprobanteElectronicoException cee)
         {
             escucha.error(cee);
+        }
+        
+    }
+    
+    private void enviarComprobante() throws ComprobanteElectronicoException
+    {
+        String pathFile=getPathComprobante(CARPETA_RIDE,getNameRide());
+        try {
+            metodoEnvioInterface.enviarCorreo("Estimado usuario la factura 001-002-00000012 fue generada correctamente","Factura emitida", correosElectronicos, pathFile);
+            
+            //metodoEnvioInterface.enviarCorreo(pathBase, pathBase, destinatorios, pathBase);
+        } catch (Exception ex) {
+            Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+            throw new ComprobanteElectronicoException("El comprobante se genero correctamente pero no se envio al cliente,\n Revise el correo y envie manualmente el RIDE","Enviado correo",ComprobanteElectronicoException.ERROR_ENVIO_CLIENTE);
         }
         
     }
@@ -234,10 +262,10 @@ public class ComprobanteElectronicoService {
             
         } catch (JAXBException ex) {
             Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
-            throw new  ComprobanteElectronicoException(ex.getMessage(),"Generando RIDE");
+            throw new  ComprobanteElectronicoException(ex.getMessage(),"Generando RIDE",ComprobanteElectronicoException.ERROR_COMPROBANTE);
         } catch (IOException ex) {
             Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
-            throw new  ComprobanteElectronicoException(ex.getMessage(),"Generando RIDE");
+            throw new  ComprobanteElectronicoException(ex.getMessage(),"Generando RIDE",ComprobanteElectronicoException.ERROR_COMPROBANTE);
         }
         
         
@@ -293,7 +321,7 @@ public class ComprobanteElectronicoService {
         catch(Exception e)
         {
             e.printStackTrace();
-            throw new ComprobanteElectronicoException(e.getMessage(),"Generando XML");
+            throw new ComprobanteElectronicoException(e.getMessage(),"Generando XML",ComprobanteElectronicoException.ERROR_COMPROBANTE);
         }
   
     }
@@ -337,7 +365,7 @@ public class ComprobanteElectronicoService {
                     System.out.println(mensaje.getIdentificador()+"-"+mensaje.getMensaje()+"-"+mensaje.getInformacionAdicional());
                     mensajeError+=mensaje.getMensaje()+"\n"+mensaje.getInformacionAdicional();
                 }
-                throw new ComprobanteElectronicoException(mensajeError, "Enviar comprobante");
+                throw new ComprobanteElectronicoException(mensajeError, "Enviar comprobante",ComprobanteElectronicoException.ERROR_COMPROBANTE);
             }
         }
     }
@@ -603,8 +631,21 @@ public class ComprobanteElectronicoService {
         this.comprobante = comprobante;
     }
 
-    
+    public MetodosEnvioInterface getMetodoEnvioInterface() {
+        return metodoEnvioInterface;
+    }
+
+    public void setMetodoEnvioInterface(MetodosEnvioInterface metodoEnvioInterface) {
+        this.metodoEnvioInterface = metodoEnvioInterface;
+    }
+
+    public void setCorreosElectronicos(List<String> correosElectronicos) {
+        this.correosElectronicos = correosElectronicos;
+    }
+
+     
     
     
     
 }
+

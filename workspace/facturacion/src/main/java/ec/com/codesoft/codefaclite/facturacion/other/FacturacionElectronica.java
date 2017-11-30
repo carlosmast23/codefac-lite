@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.servidor.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.SriIdentificacion;
+import ec.com.codesoft.ejemplo.utilidades.email.CorreoElectronico;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -180,6 +181,13 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
 
     public void setMapInfoAdicional(Map<String, String> mapInfoAdicional) {
         this.mapInfoAdicional = mapInfoAdicional;
+    }
+
+    @Override
+    public List<String> getCorreos() {
+        List<String> correos=new ArrayList<String>();
+        correos.add(factura.getCliente().getCorreoElectronico());
+        return correos;
     }
     
     

@@ -16,7 +16,8 @@ import net.sf.jasperreports.engine.JasperPrint;
  * @author Carlos
  */
 public class MonitorComprobanteData {
-    private static final Color COLOR_BARRA_CARGA=Color.yellow; 
+    private static final Color COLOR_BARRA_CARGA=new Color(128, 223, 255); 
+    private static final Color COLOR_BARRA_CARGA_FONDO=Color.white; 
             
     private JLabel lblPreimpreso;
     private JProgressBar barraProgreso;
@@ -30,6 +31,7 @@ public class MonitorComprobanteData {
         lblPreimpreso = new JLabel("001-002-01232132");
         barraProgreso = new JProgressBar();
         barraProgreso.setForeground(COLOR_BARRA_CARGA);
+        barraProgreso.setBackground(COLOR_BARRA_CARGA_FONDO);
         btnReporte = new JButton("R");
         btnAbrir = new JButton("A");
         btnCerrar = new JButton("Xs");

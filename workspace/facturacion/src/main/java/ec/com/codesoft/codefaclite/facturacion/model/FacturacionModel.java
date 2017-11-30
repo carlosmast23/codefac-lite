@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.model;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.mail.CorreoCodefac;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteInterface;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
@@ -26,6 +27,7 @@ import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElec
 import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.ETAPA_FIRMAR;
 import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.ETAPA_PRE_VALIDAR;
 import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.ETAPA_RIDE;
+import ec.com.codesoft.codefaclite.facturacionelectronica.MetodosEnvioInterface;
 import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
 import ec.com.codesoft.codefaclite.servidor.entity.Factura;
@@ -284,7 +286,8 @@ public class FacturacionModel extends FacturacionPanel{
             }
         };*/
         
-        ComprobanteElectronicoService servicioElectronico=facturaElectronica.getServicio();       
+        ComprobanteElectronicoService servicioElectronico=facturaElectronica.getServicio();  
+        
         servicioElectronico.addActionListerComprobanteElectronico(new ListenerComprobanteElectronico() {
             
             private MonitorComprobanteData monitorData;
@@ -328,6 +331,10 @@ public class FacturacionModel extends FacturacionPanel{
                 }
                 
                 if (etapa == ComprobanteElectronicoService.ETAPA_RIDE) {
+                    monitorData.getBarraProgreso().setValue(95);
+                }
+                
+                if (etapa == ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE) {
                     monitorData.getBarraProgreso().setValue(100);
                 }
             }
@@ -353,10 +360,27 @@ public class FacturacionModel extends FacturacionPanel{
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         JOptionPane.showMessageDialog(null,"Etapa: "+ cee.getEtapa()+"\n"+cee.getMessage());
+                         monitorData.getBtnAbrir().addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                String path = facturaElectronica.getServicio().getPathRide();
+                                JasperPrint print = facturaElectronica.getServicio().getPrintJasper();
+                                panelPadre.crearReportePantalla(print, factura.getPreimpreso());
+                            }
+                        });
                     }
                 });
                 
-                monitorData.getBarraProgreso().setForeground(Color.orange);
+                if(cee.getTipoError().equals(ComprobanteElectronicoException.ERROR_ENVIO_CLIENTE))
+                {
+                    monitorData.getBtnAbrir().setEnabled(true);
+                    monitorData.getBarraProgreso().setForeground(Color.YELLOW);
+                }
+                else
+                {
+                    monitorData.getBarraProgreso().setForeground(Color.ORANGE);
+                }
+                
             }
         });
         //facturaElectronica.getServicio().addActionListerComprobanteElectronico(listener);

@@ -184,7 +184,7 @@ public class ServicioSri {
                                System.out.println(mensaje.getTipo());
                                mensajeError+=mensaje.getMensaje()+"\n"+mensaje.getInformacionAdicional();
                            }
-                           throw new ComprobanteElectronicoException(mensajeError," Autorizando");
+                           throw new ComprobanteElectronicoException(mensajeError," Autorizando",ComprobanteElectronicoException.ERROR_COMPROBANTE);
                            //for
                        }
                    }
@@ -215,16 +215,16 @@ public class ServicioSri {
             }
             else
             {
-                throw  new ComprobanteElectronicoException("Documeto no autorizado","Leyendo respuesta autorizado");
+                throw  new ComprobanteElectronicoException("Documeto no autorizado","Leyendo respuesta autorizado",ComprobanteElectronicoException.ERROR_COMPROBANTE);
                 //implementar cuando esta autorizado
             }
             
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);
-            throw  new ComprobanteElectronicoException(ex.getMessage(),"Leyendo respuesta autorizado");
+            throw  new ComprobanteElectronicoException(ex.getMessage(),"Leyendo respuesta autorizado",ComprobanteElectronicoException.ERROR_COMPROBANTE);
         } catch (IOException ex) {
             Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);
-            throw  new ComprobanteElectronicoException(ex.getMessage(),"Leyendo respuesta autorizado");
+            throw  new ComprobanteElectronicoException(ex.getMessage(),"Leyendo respuesta autorizado",ComprobanteElectronicoException.ERROR_COMPROBANTE);
         }
 
     }

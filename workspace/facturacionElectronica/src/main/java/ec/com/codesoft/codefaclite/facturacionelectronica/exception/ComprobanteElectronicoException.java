@@ -11,17 +11,28 @@ package ec.com.codesoft.codefaclite.facturacionelectronica.exception;
  */
 public class ComprobanteElectronicoException extends Exception {
     
-    private String etapa;
+    public static final int ERROR_COMPROBANTE=1;
+    public static final int ERROR_ENVIO_CLIENTE=2;
     
-    public ComprobanteElectronicoException(String msg,String etapa) 
+    private String etapa;
+    private Integer tipoError;
+    
+    public ComprobanteElectronicoException(String msg,String etapa,int error) 
     {
         super(msg);
         this.etapa=etapa;
+        this.tipoError=error;
     }
 
     public String getEtapa() {
         return etapa;
     }
+
+    public Integer getTipoError() {
+        return tipoError;
+    }
+    
+    
 
     
     
