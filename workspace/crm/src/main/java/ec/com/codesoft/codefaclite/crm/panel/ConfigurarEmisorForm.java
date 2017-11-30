@@ -9,9 +9,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInte
 import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
-import java.util.Map;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
@@ -37,22 +35,6 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
         this.jCheckBLlevaContabilidad = jCheckBLlevaContabilidad;
     }
 
-    public JComboBox<String> getjComboTipoAmbiente() {
-        return jComboTipoAmbiente;
-    }
-
-    public void setjComboTipoAmbiente(JComboBox<String> jComboTipoAmbiente) {
-        this.jComboTipoAmbiente = jComboTipoAmbiente;
-    }
-
-    public JComboBox<String> getjComboToken() {
-        return jComboToken;
-    }
-
-    public void setjComboToken(JComboBox<String> jComboToken) {
-        this.jComboToken = jComboToken;
-    }
-
     public JPanel getjPanelConfiguracionEmisor() {
         return jPanelConfiguracionEmisor;
     }
@@ -68,6 +50,14 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
 
     public void setjSpinnerTiempoEspera(JSpinner jSpinnerTiempoEspera) {
         this.jSpinnerTiempoEspera = jSpinnerTiempoEspera;
+    }
+
+    public JTextField getjTextActividadComercial() {
+        return jTextActividadComercial;
+    }
+
+    public void setjTextActividadComercial(JTextField jTextActividadComercial) {
+        this.jTextActividadComercial = jTextActividadComercial;
     }
     
     @LimpiarAnotacion
@@ -101,17 +91,6 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
 
     public void setjTextCodEstablecimiento(JTextField jTextCodEstablecimiento) {
         this.jTextCodEstablecimiento = jTextCodEstablecimiento;
-    }
-    
-    @LimpiarAnotacion
-    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
-    @ValidacionCodefacAnotacion(requerido=true , min=5 ,max = 1024,expresionRegular = "^[A-Za-z0-9\\s]*$",nombre = "Codigo del punto de Emision")
-    public JTextField getjTextCodPuntoEmision() {
-        return jTextCodPuntoEmision;
-    }
-
-    public void setjTextCodPuntoEmision(JTextField jTextCodPuntoEmision) {
-        this.jTextCodPuntoEmision = jTextCodPuntoEmision;
     }
     
     @LimpiarAnotacion
@@ -184,8 +163,6 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
         jTextADirEstablecimiento = new javax.swing.JTextArea();
         jLabel6 = new javax.swing.JLabel();
         jTextCodEstablecimiento = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        jTextCodPuntoEmision = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         jTextNumContribuyente = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
@@ -195,10 +172,8 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
         jLabel11 = new javax.swing.JLabel();
         jSpinnerTiempoEspera = new javax.swing.JSpinner();
         jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
-        jComboTipoAmbiente = new javax.swing.JComboBox<>();
-        jLabel14 = new javax.swing.JLabel();
-        jComboToken = new javax.swing.JComboBox<>();
+        jLabel7 = new javax.swing.JLabel();
+        jTextActividadComercial = new javax.swing.JTextField();
 
         setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -260,7 +235,7 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
         jLabel4.setText("Dirección Matríz:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelConfiguracionEmisor.add(jLabel4, gridBagConstraints);
@@ -271,7 +246,7 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
@@ -281,7 +256,7 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
         jLabel5.setText("Dirección Establecimiento:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelConfiguracionEmisor.add(jLabel5, gridBagConstraints);
@@ -292,7 +267,7 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
@@ -302,40 +277,27 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
         jLabel6.setText("Código Establecimiento:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelConfiguracionEmisor.add(jLabel6, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanelConfiguracionEmisor.add(jTextCodEstablecimiento, gridBagConstraints);
 
-        jLabel7.setText("Código del punto de Emisión:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
-        jPanelConfiguracionEmisor.add(jLabel7, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        jPanelConfiguracionEmisor.add(jTextCodPuntoEmision, gridBagConstraints);
-
         jLabel8.setText("Contribuyente Especial | Nro. Resolución:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelConfiguracionEmisor.add(jLabel8, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanelConfiguracionEmisor.add(jTextNumContribuyente, gridBagConstraints);
@@ -343,13 +305,13 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
         jLabel9.setText("Obligado a llevar contabilidad:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelConfiguracionEmisor.add(jLabel9, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         jPanelConfiguracionEmisor.add(jCheckBLlevaContabilidad, gridBagConstraints);
@@ -357,13 +319,13 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
         jLabel10.setText("Logo(Imagen):");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelConfiguracionEmisor.add(jLabel10, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
@@ -372,13 +334,13 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
         jLabel11.setText("Tiempo máximo de espera para respuesta de Autorización:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelConfiguracionEmisor.add(jLabel11, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
@@ -387,49 +349,26 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
         jLabel12.setText("Segundos");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelConfiguracionEmisor.add(jLabel12, gridBagConstraints);
 
-        jLabel13.setText("Tipo de ambiente:");
+        jLabel7.setText("Actividad Comerial:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
-        jPanelConfiguracionEmisor.add(jLabel13, gridBagConstraints);
-
-        jComboTipoAmbiente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "PRODUCCIÓN", "PRUEBAS" }));
-        jComboTipoAmbiente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboTipoAmbienteActionPerformed(evt);
-            }
-        });
+        jPanelConfiguracionEmisor.add(jLabel7, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        jPanelConfiguracionEmisor.add(jComboTipoAmbiente, gridBagConstraints);
-
-        jLabel14.setText("Token para firmar:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
-        jPanelConfiguracionEmisor.add(jLabel14, gridBagConstraints);
-
-        jComboToken.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ANF - Certificado Exportado", "ANF - Plug & Sign", "BCE - iKey2032", "BCE - Aladdin eToken Pro", "SD - ePass3003 auto", "SD - BioPass3000", "KEY4 - Consejo Judicatura" }));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 11;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        jPanelConfiguracionEmisor.add(jComboToken, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(8, 0, 8, 0);
+        jPanelConfiguracionEmisor.add(jTextActividadComercial, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -442,20 +381,12 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jComboTipoAmbienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboTipoAmbienteActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboTipoAmbienteActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox jCheckBLlevaContabilidad;
-    private javax.swing.JComboBox<String> jComboTipoAmbiente;
-    private javax.swing.JComboBox<String> jComboToken;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -470,8 +401,8 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
     private javax.swing.JSpinner jSpinnerTiempoEspera;
     private javax.swing.JTextArea jTextADirEstablecimiento;
     private javax.swing.JTextArea jTextADirMatriz;
+    private javax.swing.JTextField jTextActividadComercial;
     private javax.swing.JTextField jTextCodEstablecimiento;
-    private javax.swing.JTextField jTextCodPuntoEmision;
     private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField jTextNombreComercial;
     private javax.swing.JTextField jTextNombreSocial;

@@ -16,12 +16,8 @@ import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoService;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,20 +40,10 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     {
         productoService = new ProductoService();
         impuestoService=new ImpuestoService();
-        cargarCombos();
+        getComboIce().setEnabled(false);
+        getComboIrbpnr().setEnabled(false);
     }
-    
-    public void cargarCombos()
-    {
-//        
-// SriService servicioSri=new SriService();
-//        identificaciones=servicioSri.obtenerIdentificaciones(SriIdentificacion.CLIENTE);
-//        getjComboIdentificacion().removeAllItems();
-//        for (SriIdentificacion identificacion : identificaciones) {
-//            getjComboIdentificacion().addItem(identificacion);
-    
-    }
-    
+ 
     @Override
     public void grabar() throws ExcepcionCodefacLite 
     {
@@ -77,9 +63,17 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         d = new BigDecimal(getTextValorUnitario().getText());
         
         producto.setValorUnitario(d);
-        producto.setIce((ImpuestoDetalle) getComboIce().getSelectedItem());
+        if(getComboIce().getSelectedItem() instanceof ImpuestoDetalle){
+            producto.setIce((ImpuestoDetalle) getComboIce().getSelectedItem());
+        }else{
+            System.out.println("No se puede hacer una grabacion ICE");
+        }
         producto.setIva((ImpuestoDetalle) getComboIva().getSelectedItem());
-        producto.setIrbpnr((ImpuestoDetalle) getComboIrbpnr().getSelectedItem()); 
+        if(getComboIrbpnr().getSelectedItem() instanceof ImpuestoDetalle){
+            producto.setIrbpnr((ImpuestoDetalle) getComboIrbpnr().getSelectedItem()); 
+        }else{
+            System.out.println("No se puede hacer una grabacion IRBPNR");
+        }
         
         productoService.grabar(producto);
         
@@ -149,8 +143,14 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getComboIce().removeAllItems();
         getComboIrbpnr().removeAllItems();
         
-        Impuesto iva=impuestoService.obtenerImpuestoPorCodigo(Impuesto.IVA);
-        for (ImpuestoDetalle impuesto : iva.getDetalleImpuestos()) {
+//        Impuesto iva=impuestoService.obtenerImpuestoPorCodigo(Impuesto.IVA);     
+//        for (ImpuestoDetalle impuesto : iva.getDetalleImpuestos()) {
+//            getComboIva().addItem(impuesto);
+//        }
+        
+        Impuesto iva = impuestoService.obtenerImpuestoPorVigencia(Impuesto.IVA);
+        for(ImpuestoDetalle impuesto: iva.getDetalleImpuestos())
+        {
             getComboIva().addItem(impuesto);
         }
         
@@ -158,12 +158,16 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         for (ImpuestoDetalle impuesto : ice.getDetalleImpuestos()) {
             getComboIce().addItem(impuesto);
         }
+        getComboIce().setEditable(true);
+        getComboIce().setSelectedItem("Seleccione : ");
         
         Impuesto irbpnr=impuestoService.obtenerImpuestoPorCodigo(Impuesto.IRBPNR);
         for (ImpuestoDetalle impuesto : irbpnr.getDetalleImpuestos()) {
             getComboIrbpnr().addItem(impuesto);
         }
-
+        getComboIrbpnr().setEditable(true);
+        getComboIrbpnr().setSelectedItem("Seleccione: ");
+        
         
     }
 

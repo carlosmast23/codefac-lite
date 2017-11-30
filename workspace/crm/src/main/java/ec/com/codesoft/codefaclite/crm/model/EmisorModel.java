@@ -76,8 +76,8 @@ public class EmisorModel extends ConfigurarEmisorForm
         getjTextADirMatriz().setText(emisor.getDireccionMatriz());
         getjTextADirEstablecimiento().setText(emisor.getDirEstablecimiento());
         getjTextCodEstablecimiento().setText(emisor.getCodEstablecimiento());
-        getjTextCodPuntoEmision().setText(emisor.getCodPuntoEmision());
         getjTextNumContribuyente().setText(emisor.getContribuyenteEspecial());
+        getjTextActividadComercial().setText(emisor.getActividadComercial());
         if(emisor.getLlevaContabilidad().equals("S"))
         {
             getjCheckBLlevaContabilidad().setSelected(true);
@@ -86,10 +86,7 @@ public class EmisorModel extends ConfigurarEmisorForm
         {
             getjCheckBLlevaContabilidad().setSelected(false);
         }
-        getjSpinnerTiempoEspera().setValue(emisor.getTiempoEspera());
-        getjComboTipoAmbiente().setSelectedItem(emisor.getTipoAmbiente());
-        getjComboToken().setSelectedItem(emisor.getToken());
-      
+        getjSpinnerTiempoEspera().setValue(emisor.getTiempoEspera());      
         System.out.println("Datos cargados ");
     }
 
@@ -131,7 +128,6 @@ public class EmisorModel extends ConfigurarEmisorForm
         emisor.setDireccionMatriz(getjTextADirMatriz().getText());
         emisor.setDirEstablecimiento(getjTextADirEstablecimiento().getText());
         emisor.setCodEstablecimiento(getjTextCodEstablecimiento().getText());
-        emisor.setCodPuntoEmision(getjTextCodPuntoEmision().getText());
         emisor.setContribuyenteEspecial(getjTextNumContribuyente().getText());
         if(getjCheckBLlevaContabilidad().isSelected()==true)
         {
@@ -142,9 +138,8 @@ public class EmisorModel extends ConfigurarEmisorForm
             emisor.setLlevaContabilidad("N");
         }
         emisor.setTiempoEspera(""+getjSpinnerTiempoEspera().getValue());
-        emisor.setTipoAmbiente((String)getjComboTipoAmbiente().getSelectedItem());
-        emisor.setToken((String)getjComboToken().getSelectedItem());
-        
+        emisor.setActividadComercial(""+getjTextActividadComercial().getText());
+       
         return emisor;
     }
 

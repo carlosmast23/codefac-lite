@@ -89,8 +89,6 @@ public class Impuesto implements Serializable
     public void setDetalleImpuestos(List<ImpuestoDetalle> detalleImpuestos) {
         this.detalleImpuestos = detalleImpuestos;
     }
-    
-    
-    
+
 }
 

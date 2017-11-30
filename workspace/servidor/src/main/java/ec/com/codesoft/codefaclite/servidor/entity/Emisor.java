@@ -50,8 +50,6 @@ public class Emisor implements Serializable
     private String resolucion;
     @Column (name = "CONTRIBUYENTE_ESPECIAL")
     private String contribuyenteEspecial;
-    @Column (name = "COD_PUNTO_EMISION")
-    private String codPuntoEmision;
     @Column (name = "LLEVA_CONTABILIDAD")
     private String llevaContabilidad;
     @Column (name = "LOGO_IMAGEN")
@@ -62,13 +60,19 @@ public class Emisor implements Serializable
     private String tiempoEspera;
     @Column (name = "CLAVE_INTERNA")
     private String claveInterna;
-    @Column (name = "TIPO_AMBIENTE")
-    private String tipoAmbiente;
     @Column (name = "DIRECCION_MATRIZ")
     private String direccionMatriz;
-    @Column (name = "TOKEN")
-    private String token;
+    @Column (name = "ACTIVIDAD_COMERCIAL")
+    private String actividadComercial;
 
+    public String getActividadComercial() {
+        return actividadComercial;
+    }
+
+    public void setActividadComercial(String actividadComercial) {
+        this.actividadComercial = actividadComercial;
+    }
+    
     public Integer getIdCliente() {
         return idCliente;
     }
@@ -133,14 +137,6 @@ public class Emisor implements Serializable
         this.contribuyenteEspecial = contribuyenteEspecial;
     }
 
-    public String getCodPuntoEmision() {
-        return codPuntoEmision;
-    }
-
-    public void setCodPuntoEmision(String codPuntoEmision) {
-        this.codPuntoEmision = codPuntoEmision;
-    }
-
     public String getLlevaContabilidad() {
         return llevaContabilidad;
     }
@@ -181,30 +177,12 @@ public class Emisor implements Serializable
         this.claveInterna = claveInterna;
     }
 
-    public String getTipoAmbiente() {
-        return tipoAmbiente;
-    }
-
-    public void setTipoAmbiente(String tipoAmbiente) {
-        this.tipoAmbiente = tipoAmbiente;
-    }
-
     public String getDireccionMatriz() {
         return direccionMatriz;
     }
 
     public void setDireccionMatriz(String direccionMatriz) {
         this.direccionMatriz = direccionMatriz;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    
-    
+    }    
+   
 }

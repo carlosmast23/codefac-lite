@@ -72,6 +72,11 @@ public class Producto implements Serializable
         this.ice = ice;
     }
 
+    public static final Producto getDEFECTO() {
+        Producto p = new Producto();
+        return new Producto();
+    }
+
     public ImpuestoDetalle getIrbpnr() {
         return irbpnr;
     }

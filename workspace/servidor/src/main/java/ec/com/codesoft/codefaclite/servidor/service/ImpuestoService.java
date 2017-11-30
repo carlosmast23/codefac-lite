@@ -46,6 +46,11 @@ public class ImpuestoService
         return impuestoFacade.getByName(nombre);
     }
     
+    public Impuesto obtenerImpuestoPorVigencia(String nombre)
+    {
+        return impuestoFacade.getByImpuestoVigente(nombre);
+    }
+    
     public List<Impuesto> obtenerTodos()
     {
         return impuestoFacade.findAll();
