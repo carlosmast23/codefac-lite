@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.facturacionelectronica;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
+import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
@@ -134,60 +135,67 @@ public class ComprobanteElectronicoService {
     
     public void procesarComprobante()
     {
-        escucha.iniciado();
-        if(etapaActual==ETAPA_GENERAR)
+        try
         {
-            generar();
-            escucha.procesando(etapaActual);
-            System.out.println("generar()");
-            etapaActual++;
+            escucha.iniciado();
+            if(etapaActual==ETAPA_GENERAR)
+            {
+                generar();
+                escucha.procesando(etapaActual);
+                System.out.println("generar()");
+                etapaActual++;
+            }
+
+            if(etapaActual==ETAPA_PRE_VALIDAR)        
+            {
+                preValidacion();
+                escucha.procesando(etapaActual);
+                System.out.println("preValidacion()");
+                etapaActual++;
+            }
+
+            if(etapaActual==ETAPA_FIRMAR)   
+            {
+                firmar();
+                escucha.procesando(etapaActual);
+                System.out.println("firmar()");
+                etapaActual++;
+            }
+
+            if(etapaActual==ETAPA_ENVIAR)        
+            {
+                enviarSri();
+                escucha.procesando(etapaActual);
+                System.out.println("enviarSri()");
+                etapaActual++;
+            }
+
+            if(etapaActual==ETAPA_AUTORIZAR)  
+            {
+                autorizarSri();
+                escucha.procesando(etapaActual);
+                System.out.println("autorizarSri()");
+                etapaActual++;
+            }
+
+            if(etapaActual==ETAPA_RIDE)  
+            {
+                generarRide();
+                escucha.procesando(etapaActual);
+                //generarRide();
+                System.out.println("generarRide()");
+            }
+
+            escucha.termino();
         }
-        
-        if(etapaActual==ETAPA_PRE_VALIDAR)        
+        catch(ComprobanteElectronicoException cee)
         {
-            preValidacion();
-            escucha.procesando(etapaActual);
-            System.out.println("preValidacion()");
-            etapaActual++;
+            escucha.error(cee);
         }
-        
-        if(etapaActual==ETAPA_FIRMAR)   
-        {
-            firmar();
-            escucha.procesando(etapaActual);
-            System.out.println("firmar()");
-            etapaActual++;
-        }
-        
-        if(etapaActual==ETAPA_ENVIAR)        
-        {
-            enviarSri();
-            escucha.procesando(etapaActual);
-            System.out.println("enviarSri()");
-            etapaActual++;
-        }
-        
-        if(etapaActual==ETAPA_AUTORIZAR)  
-        {
-            autorizarSri();
-            escucha.procesando(etapaActual);
-            System.out.println("autorizarSri()");
-            etapaActual++;
-        }
-        
-        if(etapaActual==ETAPA_RIDE)  
-        {
-            generarRide();
-            escucha.procesando(etapaActual);
-            //generarRide();
-            System.out.println("generarRide()");
-        }
-        
-        escucha.termino();
         
     }
     
-    private void generarRide()
+    private void generarRide() throws ComprobanteElectronicoException
     {
         try {
             Map<String,String> mapComprobante=UtilidadesComprobantes.decodificarArchivoBase64Offline(getPathComprobante(CARPETA_AUTORIZADOS),null,null);
@@ -226,8 +234,10 @@ public class ComprobanteElectronicoService {
             
         } catch (JAXBException ex) {
             Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
+            throw new  ComprobanteElectronicoException(ex.getMessage(),"Generando RIDE");
         } catch (IOException ex) {
             Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
+            throw new  ComprobanteElectronicoException(ex.getMessage(),"Generando RIDE");
         }
         
         
@@ -271,16 +281,24 @@ public class ComprobanteElectronicoService {
         return null;
     }
     
-    private void generar()
+    private void generar() throws ComprobanteElectronicoException
     {
-        claveAcceso=obtenerClaveAcceso();
-        comprobante.getInformacionTributaria().setClaveAcceso(claveAcceso);
-        StringWriter stringWriter= generarXml(comprobante);
-        ComprobantesElectronicosUtil.generarArchivoXml(stringWriter,getPathComprobante(CARPETA_GENERADOS));
+        try
+        {
+            claveAcceso=obtenerClaveAcceso();
+            comprobante.getInformacionTributaria().setClaveAcceso(claveAcceso);
+            StringWriter stringWriter= generarXml(comprobante);
+            ComprobantesElectronicosUtil.generarArchivoXml(stringWriter,getPathComprobante(CARPETA_GENERADOS));
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            throw new ComprobanteElectronicoException(e.getMessage(),"Generando XML");
+        }
   
     }
     
-    private void firmar()
+    private void firmar() throws ComprobanteElectronicoException
     {
                 /**
          * Firmando el documento
@@ -298,7 +316,7 @@ public class ComprobanteElectronicoService {
         
     }
     
-    private void enviarSri()
+    private void enviarSri() throws ComprobanteElectronicoException
     {
         servicioSri=new ServicioSri();
         servicioSri.setUri_autorizacion(uriAutorizacion);
@@ -314,14 +332,17 @@ public class ComprobanteElectronicoService {
             }
             else
             {
+                String mensajeError="";
                 for (Mensaje mensaje : servicioSri.getMensajes()) {
                     System.out.println(mensaje.getIdentificador()+"-"+mensaje.getMensaje()+"-"+mensaje.getInformacionAdicional());
+                    mensajeError+=mensaje.getMensaje()+"\n"+mensaje.getInformacionAdicional();
                 }
+                throw new ComprobanteElectronicoException(mensajeError, "Enviar comprobante");
             }
         }
     }
     
-    private void autorizarSri()
+    private void autorizarSri() throws ComprobanteElectronicoException
     {
         servicioSri=new ServicioSri();
         servicioSri.setUri_autorizacion(uriAutorizacion);

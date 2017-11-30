@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacionelectronica;
 
+import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadTratarNodo;
 import es.mityc.firmaJava.libreria.xades.DataToSign;
 import es.mityc.firmaJava.libreria.xades.FirmaXML;
@@ -53,7 +54,7 @@ public class FirmaElectronica {
     
     
     
-    public Document firmar(String recursoParaFirmar)
+    public Document firmar(String recursoParaFirmar)throws ComprobanteElectronicoException
     {
         try {
             KeyStore keyStore= obtenerAlmacenFirma(almacenCertificadoClave, claveFirma);
@@ -104,8 +105,9 @@ public class FirmaElectronica {
             //guardarDocumento(documentoFirmado,"dir");
         } catch (Exception ex) {
             Logger.getLogger(FirmaElectronica.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ComprobanteElectronicoException(ex.getMessage(),"Firma");
         }
-        return null;
+        //return null;
     }
     
     private void guardarDocumento(Document documento, String rutaArchivo)
@@ -143,7 +145,7 @@ public class FirmaElectronica {
         try {
             Document documentoParaFirmar = obtenerDocumento(recursoParaFirmar);
             datosParaFirmar.setDocument(documentoParaFirmar);
-        } catch (Exception e) {
+        } catch (Exception e) {            
             throw new Exception(e.toString());
         }
         return datosParaFirmar;

@@ -11,6 +11,7 @@ import autorizacion.ws.sri.gob.ec.AutorizacionComprobantesOffline;
 import autorizacion.ws.sri.gob.ec.AutorizacionComprobantesOfflineService;
 import autorizacion.ws.sri.gob.ec.RespuestaComprobante;
 import com.thoughtworks.xstream.XStream;
+import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
 import static ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil.archivoToByte;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.XStreamUtil;
@@ -151,7 +152,7 @@ public class ServicioSri {
         return false;
     }
     
-    public boolean autorizar(String claveAcceso)
+    public boolean autorizar(String claveAcceso) throws ComprobanteElectronicoException
     {
        if(verificarConexionAutorizar())
        {
@@ -175,13 +176,15 @@ public class ServicioSri {
                        else
                        {
                            Autorizacion.Mensajes mensajes=autorizacion.get(0).getMensajes();
+                           String mensajeError="";
                            for (autorizacion.ws.sri.gob.ec.Mensaje mensaje : mensajes.getMensaje()) {
                                System.out.println(mensaje.getIdentificador());
                                System.out.println(mensaje.getInformacionAdicional());
                                System.out.println(mensaje.getMensaje());
                                System.out.println(mensaje.getTipo());
+                               mensajeError+=mensaje.getMensaje()+"\n"+mensaje.getInformacionAdicional();
                            }
-                           return false;
+                           throw new ComprobanteElectronicoException(mensajeError," Autorizando");
                            //for
                        }
                    }
@@ -194,7 +197,7 @@ public class ServicioSri {
        
     }
     
-    public String obtenerRespuestaAutorizacion()
+    public String obtenerRespuestaAutorizacion() throws ComprobanteElectronicoException
     {
         try {
             Autorizacion item=autorizacion.get(0);
@@ -212,15 +215,18 @@ public class ServicioSri {
             }
             else
             {
+                throw  new ComprobanteElectronicoException("Documeto no autorizado","Leyendo respuesta autorizado");
                 //implementar cuando esta autorizado
             }
             
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);
+            throw  new ComprobanteElectronicoException(ex.getMessage(),"Leyendo respuesta autorizado");
         } catch (IOException ex) {
             Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);
+            throw  new ComprobanteElectronicoException(ex.getMessage(),"Leyendo respuesta autorizado");
         }
-        return null;
+
     }
 
     public List<Mensaje> getMensajes() {

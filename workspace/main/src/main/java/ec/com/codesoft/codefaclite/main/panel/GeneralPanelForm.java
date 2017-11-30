@@ -17,6 +17,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 
 /**
@@ -43,13 +44,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jMenuBar2 = new javax.swing.JMenuBar();
-        jMenu3 = new javax.swing.JMenu();
-        jMenu4 = new javax.swing.JMenu();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuBar3 = new javax.swing.JMenuBar();
-        jMenu5 = new javax.swing.JMenu();
-        jMenu6 = new javax.swing.JMenu();
         JpanelAuxiliar = new javax.swing.JPanel();
         jSplitPanelVerticalSecundario = new javax.swing.JSplitPane();
         JPanelPublicidad = new javax.swing.JPanel();
@@ -58,10 +52,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         btnSalirPantallaPublicidad = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         JPanelAuxiliarInterno = new javax.swing.JPanel();
-        JPanelContenidoAuxiliar = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        btnSalirPantallAuxiliar = new javax.swing.JButton();
-        lblTituloContenedorAuxiliar = new javax.swing.JLabel();
+        jPanelSeleccion = new javax.swing.JTabbedPane();
         JPanelConsola = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTablaConsola = new javax.swing.JTable();
@@ -94,20 +85,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuUtilidades = new javax.swing.JMenu();
         jMenuCalculadora = new javax.swing.JMenuItem();
         jMenu8 = new javax.swing.JMenu();
-
-        jMenu3.setText("File");
-        jMenuBar2.add(jMenu3);
-
-        jMenu4.setText("Edit");
-        jMenuBar2.add(jMenu4);
-
-        jMenuItem3.setText("jMenuItem3");
-
-        jMenu5.setText("File");
-        jMenuBar3.add(jMenu5);
-
-        jMenu6.setText("Edit");
-        jMenuBar3.add(jMenu6);
 
         JpanelAuxiliar.setLayout(new javax.swing.BoxLayout(JpanelAuxiliar, javax.swing.BoxLayout.LINE_AXIS));
 
@@ -143,31 +120,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jSplitPanelVerticalSecundario.setBottomComponent(JPanelPublicidad);
 
         JPanelAuxiliarInterno.setLayout(new java.awt.BorderLayout());
-
-        JPanelContenidoAuxiliar.setBackground(new java.awt.Color(255, 255, 255));
-        JPanelContenidoAuxiliar.setLayout(new javax.swing.BoxLayout(JPanelContenidoAuxiliar, javax.swing.BoxLayout.LINE_AXIS));
-        JPanelAuxiliarInterno.add(JPanelContenidoAuxiliar, java.awt.BorderLayout.CENTER);
-
-        jPanel2.setBackground(new java.awt.Color(62, 93, 162));
-        jPanel2.setLayout(new java.awt.BorderLayout());
-
-        btnSalirPantallAuxiliar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/salir-ico.png"))); // NOI18N
-        btnSalirPantallAuxiliar.setMargin(new java.awt.Insets(2, 5, 2, 5));
-        btnSalirPantallAuxiliar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSalirPantallAuxiliarActionPerformed(evt);
-            }
-        });
-        jPanel2.add(btnSalirPantallAuxiliar, java.awt.BorderLayout.LINE_END);
-
-        lblTituloContenedorAuxiliar.setBackground(new java.awt.Color(255, 255, 255));
-        lblTituloContenedorAuxiliar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lblTituloContenedorAuxiliar.setForeground(new java.awt.Color(255, 255, 255));
-        lblTituloContenedorAuxiliar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblTituloContenedorAuxiliar.setText("Pantalla de Ayuda");
-        jPanel2.add(lblTituloContenedorAuxiliar, java.awt.BorderLayout.CENTER);
-
-        JPanelAuxiliarInterno.add(jPanel2, java.awt.BorderLayout.PAGE_START);
+        JPanelAuxiliarInterno.add(jPanelSeleccion, java.awt.BorderLayout.CENTER);
 
         jSplitPanelVerticalSecundario.setLeftComponent(JPanelAuxiliarInterno);
 
@@ -377,14 +330,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
        
     }//GEN-LAST:event_jMenuClienteActionPerformed
 
-    private void btnSalirPantallAuxiliarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirPantallAuxiliarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSalirPantallAuxiliarActionPerformed
-
-    private void btnSalirPantallaPublicidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirPantallaPublicidadActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSalirPantallaPublicidadActionPerformed
-
     private void jMenuComprobanteConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuComprobanteConfigActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuComprobanteConfigActionPerformed
@@ -392,6 +337,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private void jMenuCalculadoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCalculadoraActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuCalculadoraActionPerformed
+
+    private void btnSalirPantallaPublicidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirPantallaPublicidadActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSalirPantallaPublicidadActionPerformed
 
     /**
      * @param args the command line arguments
@@ -435,7 +384,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel JPanelAuxiliarInterno;
     private javax.swing.JPanel JPanelConsola;
-    private javax.swing.JPanel JPanelContenidoAuxiliar;
     private javax.swing.JPanel JPanelMenu;
     private javax.swing.JPanel JPanelPiePagina;
     private javax.swing.JPanel JPanelPublicidad;
@@ -447,19 +395,12 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnImprimir;
     private javax.swing.JButton btnNuevo;
-    private javax.swing.JButton btnSalirPantallAuxiliar;
     private javax.swing.JButton btnSalirPantallaPublicidad;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenu jMenu5;
-    private javax.swing.JMenu jMenu6;
     private javax.swing.JMenu jMenu8;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuBar jMenuBar2;
-    private javax.swing.JMenuBar jMenuBar3;
     private javax.swing.JMenuItem jMenuCalculadora;
     private javax.swing.JMenuItem jMenuCliente;
     private javax.swing.JMenuItem jMenuComprobanteConfig;
@@ -467,19 +408,17 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JMenuItem jMenuFactura;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItemMonitor;
     private javax.swing.JMenuItem jMenuProducto;
     private javax.swing.JMenu jMenuUtilidades;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanelPublicidadBorde;
     private javax.swing.JPanel jPanelPublicidadContenido;
+    private javax.swing.JTabbedPane jPanelSeleccion;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSplitPane jSplitPanel;
     private javax.swing.JSplitPane jSplitPanelVerticalSecundario;
     private javax.swing.JTable jTablaConsola;
-    private javax.swing.JLabel lblTituloContenedorAuxiliar;
     private javax.swing.JMenu menuConfiguracion;
     private javax.swing.JMenu menuCrm;
     private javax.swing.JMenu menuFacturacion;
@@ -500,14 +439,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
     public void setjMenuItem2(JMenuItem jMenuItem2) {
         this.jMenuItem2 = jMenuItem2;
-    }
-
-    public JMenuItem getjMenuItem3() {
-        return jMenuItem3;
-    }
-
-    public void setjMenuItem3(JMenuItem jMenuItem3) {
-        this.jMenuItem3 = jMenuItem3;
     }
 
 
@@ -600,21 +531,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         this.JpanelAuxiliar = JpanelAuxiliar;
     }
 
-    public JPanel getJPanelContenidoAuxiliar() {
-        return JPanelContenidoAuxiliar;
-    }
-
-    public void setJPanelContenidoAuxiliar(JPanel JPanelContenidoAuxiliar) {
-        this.JPanelContenidoAuxiliar = JPanelContenidoAuxiliar;
-    }
-
-    public JButton getBtnSalirPantallAuxiliar() {
-        return btnSalirPantallAuxiliar;
-    }
-
-    public void setBtnSalirPantallAuxiliar(JButton btnSalirPantallAuxiliar) {
-        this.btnSalirPantallAuxiliar = btnSalirPantallAuxiliar;
-    }
 
     public JSplitPane getjSplitPanelVerticalSecundario() {
         return jSplitPanelVerticalSecundario;
@@ -704,8 +620,8 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         return jMenuItemMonitor;
     }
 
-    
-    
-    
-    
+    public JTabbedPane getjPanelSeleccion() {
+        return jPanelSeleccion;
+    }
+
 }

@@ -5,6 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.facturacionelectronica.evento;
 
+import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
+
 /**
  *
  * @author Carlos
@@ -13,4 +15,5 @@ public interface ListenerComprobanteElectronico {
     public abstract void termino();
     public abstract void iniciado();
     public abstract void procesando(int etapa);
+    public abstract void error(ComprobanteElectronicoException cee);
 }

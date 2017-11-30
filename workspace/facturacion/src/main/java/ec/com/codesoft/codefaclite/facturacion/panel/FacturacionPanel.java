@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.panel;
 
+import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -126,7 +127,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         jLabel36 = new javax.swing.JLabel();
         lblSecuencial = new javax.swing.JLabel();
         panelFechaEmision = new javax.swing.JPanel();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        jDateFechaEmision = new com.toedter.calendar.JDateChooser();
         jLabel38 = new javax.swing.JLabel();
         jLabel39 = new javax.swing.JLabel();
 
@@ -741,7 +742,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 4;
-        panelDatosFactura.add(jDateChooser1, gridBagConstraints);
+        panelDatosFactura.add(jDateFechaEmision, gridBagConstraints);
 
         jLabel38.setText("             ");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -795,7 +796,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnQuitarDetalle;
     private javax.swing.JButton jButton3;
     private javax.swing.JCheckBox jCheckBox1;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
+    private com.toedter.calendar.JDateChooser jDateFechaEmision;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1107,6 +1108,15 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     public void setLblSecuencial(JLabel lblSecuencial) {
         this.lblSecuencial = lblSecuencial;
     }
+
+    public JDateChooser getjDateFechaEmision() {
+        return jDateFechaEmision;
+    }
+
+    public void setjDateFechaEmision(JDateChooser jDateFechaEmision) {
+        this.jDateFechaEmision = jDateFechaEmision;
+    }
+    
     
     
 }

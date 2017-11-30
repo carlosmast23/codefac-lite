@@ -10,6 +10,8 @@ import ec.com.codesoft.codefaclite.configuraciones.model.CalculadoraModel;
 import ec.com.codesoft.codefaclite.configuraciones.model.ComprobantesConfiguracionModel;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecundarioInterface;
+import ec.com.codesoft.codefaclite.controlador.panelsecundario.AyudaCodefacPanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
 import ec.com.codesoft.codefaclite.crm.model.EmisorModel;
@@ -89,8 +91,8 @@ public class Main {
          * Añadir menus y ventanas a la aplicacion principal
          */        
         panel.setVentanasMenuList(agregarMenuVentana(panel));
-        panel.setMonitorComprobanteModel(MonitorComprobanteModel.getInstance());
-        panel.agregarListenerVentanasSecundarias();
+        panel.setPanelesSecundarios(agregarPanelesSecundarios());
+        panel.agregarPanelesSecundarios();
         /**
          * Establecer propiedades del formulario principal
          */
@@ -229,6 +231,14 @@ public class Main {
         ventanas.add(new MenuControlador(panel.getjMenuCalculadora(),CalculadoraModel.class,false));
         return ventanas;
     
+    }
+    
+    public static Map<String,PanelSecundarioInterface> agregarPanelesSecundarios()
+    {
+        Map<String,PanelSecundarioInterface> paneles=new HashMap<String,PanelSecundarioInterface>();
+        paneles.put(PanelSecundarioInterface.PANEL_AYUDA,new AyudaCodefacPanel());
+        paneles.put(PanelSecundarioInterface.PANEL_MONITOR,MonitorComprobanteModel.getInstance());
+        return paneles;
     }
     
  

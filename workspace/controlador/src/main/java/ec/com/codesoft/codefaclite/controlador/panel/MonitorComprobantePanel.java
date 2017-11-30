@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.controlador.panel;
+package ec.com.codesoft.codefaclite.controlador.panelsecundario;
 
+import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecundarioInterface;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -12,7 +13,7 @@ import javax.swing.JPanel;
  *
  * @author Carlos
  */
-public class MonitorComprobantePanel extends javax.swing.JInternalFrame {
+public class MonitorComprobantePanel extends javax.swing.JInternalFrame implements PanelSecundarioInterface{
 
     /**
      * Creates new form monitorComprobantes
@@ -86,6 +87,11 @@ public class MonitorComprobantePanel extends javax.swing.JInternalFrame {
 
     public void setjPanelComponentes(JPanel jPanelComponentes) {
         this.jPanelComponentes = jPanelComponentes;
+    }
+
+    @Override
+    public String getNombrePanel() {
+        return PANEL_MONITOR;
     }
 
     
