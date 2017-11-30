@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteMo
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.AyudaCodefacModel;
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecundarioAbstract;
+import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.ValidadorCodefacModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
 import ec.com.codesoft.codefaclite.crm.model.EmisorModel;
@@ -238,6 +239,7 @@ public class Main {
         Map<String,PanelSecundarioAbstract> paneles=new HashMap<String,PanelSecundarioAbstract>();
         paneles.put(PanelSecundarioAbstract.PANEL_AYUDA,new AyudaCodefacModel() );
         paneles.put(PanelSecundarioAbstract.PANEL_MONITOR,MonitorComprobanteModel.getInstance());
+        paneles.put(PanelSecundarioAbstract.PANEL_VALIDACION,new ValidadorCodefacModel());
         return paneles;
     }
     

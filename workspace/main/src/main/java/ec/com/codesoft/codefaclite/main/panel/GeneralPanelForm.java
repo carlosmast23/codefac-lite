@@ -53,9 +53,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jLabel3 = new javax.swing.JLabel();
         JPanelAuxiliarInterno = new javax.swing.JPanel();
         jPanelSeleccion = new javax.swing.JTabbedPane();
-        JPanelConsola = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTablaConsola = new javax.swing.JTable();
         JPanelMenu = new javax.swing.JPanel();
         btnNuevo = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
@@ -125,23 +122,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jSplitPanelVerticalSecundario.setLeftComponent(JPanelAuxiliarInterno);
 
         JpanelAuxiliar.add(jSplitPanelVerticalSecundario);
-
-        JPanelConsola.setLayout(new java.awt.BorderLayout());
-
-        jTablaConsola.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(jTablaConsola);
-
-        JPanelConsola.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setSize(new java.awt.Dimension(800, 600));
@@ -383,7 +363,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel JPanelAuxiliarInterno;
-    private javax.swing.JPanel JPanelConsola;
     private javax.swing.JPanel JPanelMenu;
     private javax.swing.JPanel JPanelPiePagina;
     private javax.swing.JPanel JPanelPublicidad;
@@ -415,10 +394,8 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JPanel jPanelPublicidadBorde;
     private javax.swing.JPanel jPanelPublicidadContenido;
     private javax.swing.JTabbedPane jPanelSeleccion;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSplitPane jSplitPanel;
     private javax.swing.JSplitPane jSplitPanelVerticalSecundario;
-    private javax.swing.JTable jTablaConsola;
     private javax.swing.JMenu menuConfiguracion;
     private javax.swing.JMenu menuCrm;
     private javax.swing.JMenu menuFacturacion;
@@ -564,17 +541,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         this.jPanelPublicidadContenido = jPanelPublicidadContenido;
     }
 
-    public JTable getjTablaConsola() {
-        return jTablaConsola;
-    }
-
-    public void setjTablaConsola(JTable jTablaConsola) {
-        this.jTablaConsola = jTablaConsola;
-    }
-
-    public JPanel getJPanelConsola() {
-        return JPanelConsola;
-    }
 
     public JButton getBtnNuevo() {
         return btnNuevo;

@@ -114,5 +114,10 @@ public class MonitorComprobanteModel extends MonitorComprobantesPanel {
         
     }
 
+    @Override
+    public void actualizar(Object obj) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 
 }

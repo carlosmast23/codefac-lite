@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.main.model;
 
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.comprobantes.ComprobanteElectronicoAbstract;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteListener;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
@@ -24,6 +25,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.validation.validacionPersonal
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.main.panel.GeneralPanelForm;
 import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
@@ -166,7 +168,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             value.addListenerPanelSecundario(new PanelSecundarioListener() {
                 @Override
                 public void mostrar() {
-                    mostrarPanelSecundario(true);
+                    mostrarPanelSecundario(true,key);
                 }
             });
         }
@@ -209,7 +211,6 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
             @Override
             public void windowActivated(WindowEvent e) {
-                
             }
 
             @Override
@@ -428,7 +429,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     
                 limpiarCamposValidacion(frameInterface);
                 frameInterface.consola=new ConsolaGeneral();
-                mostrarConsola(frameInterface.consola);
+                mostrarConsola(frameInterface.consola,true);
             }
         });
         
@@ -471,7 +472,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         }
                         else
                         {
-                            mostrarConsola(frameInterface.consola);
+                            mostrarConsola(frameInterface.consola,true);
                             JOptionPane.showMessageDialog(null,"Error de validacion Nuevo");
                         }
                     }
@@ -489,7 +490,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         }
                         else
                         {
-                            mostrarConsola(frameInterface.consola);
+                            mostrarConsola(frameInterface.consola,true);
                             JOptionPane.showMessageDialog(null,"Error de validacion Editar");
                         }
                     
@@ -623,7 +624,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     limpiarCamposValidacion(frameInterface);
                     
                     frameInterface.consola=new ConsolaGeneral();
-                    mostrarConsola(frameInterface.consola);
+                    mostrarConsola(frameInterface.consola,true);
                 }
                 catch (UnsupportedOperationException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -666,7 +667,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     cargarAyuda();
-                    mostrarPanelSecundario(true);
+                    mostrarPanelSecundario(true,PanelSecundarioAbstract.PANEL_AYUDA);
                     
                 }
             });
@@ -705,6 +706,27 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
     }
     
+    private void mostrarPanelSecundario(boolean  opcion,String panelSecundario)
+    {
+        if(opcion)
+        {
+            //Valores para mostrar en la pantalla secundaria
+            PROPORCION_HORIZONTAL = PROPORCION_HORIZONTAL_DEFAULT;
+            PROPORCION_VERTICAL = PROPORCION_VERTICAL_DEFAULT;
+        }
+        else
+        {
+            PROPORCION_HORIZONTAL = PROPORCION_HORIZONTAL_INICIAL;
+            PROPORCION_VERTICAL = 0.9999999999999999d;
+
+        }
+        
+        getjSplitPanel().setDividerLocation(PROPORCION_HORIZONTAL);
+        getjSplitPanelVerticalSecundario().setDividerLocation(PROPORCION_VERTICAL);
+        getjPanelSeleccion().setSelectedComponent(panelesSecundariosMap.get(panelSecundario));
+
+    }
+    
     private void agregarListenerMenu(ControladorCodefacInterface panel,boolean maximisado)
     {
         try {
@@ -736,7 +758,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             panel.estadoFormulario= ControladorCodefacInterface.ESTADO_GRABAR;
             
             panel.consola=new ConsolaGeneral();
-            mostrarConsola(panel.consola);
+            mostrarConsola(panel.consola,true);
             
             /**
              * Agregar variables de session a la pantalla
@@ -953,14 +975,14 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         return validar;
     }
     
-    private void mostrarConsola(ConsolaGeneral consola)
+    private void mostrarConsola(ConsolaGeneral consola,Boolean actualizarVista)
     {
-        
+        /*
        getjTablaConsola().addMouseListener(new MouseListener() {
            @Override
            public void mouseClicked(MouseEvent e) {
-               int fila=getjTablaConsola().getSelectedRow();
-               consola.seleccionarFila(fila);
+               //int fila=getjTablaConsola().getSelectedRow();
+               //consola.seleccionarFila(fila);
                
            }
 
@@ -984,14 +1006,17 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                
            }
        });
-       
-       getjTablaConsola().setModel(consola.getModeloTabla());
+       */
+       PanelSecundarioAbstract panel=panelesSecundariosMap.get(PanelSecundarioAbstract.PANEL_VALIDACION);
+       panel.actualizar(consola.getModeloTabla());
        //getJPanelContenidoAuxiliar().removeAll();
        //getJPanelContenidoAuxiliar().add(getJPanelConsola());
-       
+       //if(!actualizarVista)
+        //   return;
+               
        if(consola.getModeloTabla().getRowCount()>0)
        {
-           mostrarPanelSecundario(true);
+           mostrarPanelSecundario(true,PanelSecundarioAbstract.PANEL_VALIDACION);
        }
        else
        {
@@ -1020,6 +1045,15 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         @Override
                         public void focusLost(FocusEvent e) {
                             System.out.println("focusLost");
+                            
+                            //Este codigo se pone porque despues de cambiar de pantalla se ejecuta el evento de focus de la anterior
+                            //y eso me genera problemas cuando quiero manejar los eventos de las jinternalFrame
+                            if(!panel.equals(getPanelActivo()))
+                            {
+                                //System.out.println("no validar porque cambio de pantalla");
+                                return;
+                            }
+                            
                             if (panel.sinAcciones) {
                                 panel.sinAcciones = false;
                                 return;
@@ -1040,13 +1074,13 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             if(errores.size()>0)
                             {
                                 componente.setBackground(new Color(255,255,102));
-                                mostrarConsola(panel.consola);                                
+                                mostrarConsola(panel.consola,true);                                
                             }
                             else
                             {
                                 panel.consola.quitarDato(componente);
                                 componente.setBackground(Color.white);
-                                mostrarConsola(panel.consola);   
+                                mostrarConsola(panel.consola,true);   
                                 
                             }
                             
@@ -1101,6 +1135,28 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         public void internalFrameActivated(InternalFrameEvent e) {
                             //JOptionPane.showMessageDialog(null,"internalFrameActivated");
                             habilitarConfiguracioneBotones();
+                            
+                            System.out.println("pantalla activida");
+                            //mostrarPanelSecundario(true,PanelSecundarioAbstract.PANEL_MONITOR);
+                            ControladorCodefacInterface panel = getPanelActivo();
+                            if (panel != null) {
+                                System.out.println("Panel Activo: "+panel.getTitle());
+                                if (panel.consola != null) {
+                                    mostrarConsola(getPanelActivo().consola, false);
+                                    System.out.println(getPanelActivo().consola.getModeloTabla().getRowCount());
+                                    //revalidate();
+                                    //repaint();
+                                    //revalidate();
+                                    //repaint();
+                                    System.out.println("consola seteado a otra pantalla");
+
+                                }
+                                else
+                                    System.out.println("consola null");
+                            }else
+                                System.out.println("panel null");
+
+                            //s
                            
                         }
 
@@ -1124,6 +1180,13 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         getBtnGuardar().setEnabled(opcion);
         getBtnImprimir().setEnabled(opcion);
         getBtnNuevo().setEnabled(opcion);
+    }
+    
+    private ControladorCodefacInterface getPanelActivo()
+    {
+        JInternalFrame frame = getjDesktopPane1().getSelectedFrame();
+        ControladorCodefacInterface frameInterface = (ControladorCodefacInterface) frame;
+        return frameInterface;
     }
  
     private void habilitarConfiguracioneBotones()
