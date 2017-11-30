@@ -11,7 +11,8 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInte
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteListener;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
-import ec.com.codesoft.codefaclite.controlador.panel.MonitorComprobantePanel;
+import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecundarioAbstract;
+import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecundarioListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
@@ -114,6 +115,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private SwingBrowser browserPublicidad ;
     private List<MenuControlador> ventanasMenuList;
     private SessionCodefac sessionCodefac;
+    private Map<String,PanelSecundarioAbstract> panelesSecundariosMap;
     
     private static double PROPORCION_HORIZONTAL=0.75d;
     private static double PROPORCION_VERTICAL=0.7d;
@@ -127,8 +129,6 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     
     private static double PROPORCION_HORIZONTAL_INICIAL=0.999999999d;
     private static double PROPORCION_VERTICAL_INICIAL=0.7d;
-    
-    private MonitorComprobanteModel monitorComprobanteModel;
 
 
     public GeneralPanelModel() 
@@ -138,7 +138,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         agregarListenerSplit();
         agregarListenerFrame();
         agregarListenerGraphics();
-       
+               
         habilitarBotones(false);
         
 
@@ -157,6 +157,21 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         });*/
         
     }
+    public void agregarPanelesSecundarios()
+    {
+        for (Map.Entry<String, PanelSecundarioAbstract> entry : panelesSecundariosMap.entrySet()) {
+            String key = entry.getKey();
+            PanelSecundarioAbstract value = entry.getValue();
+            getjPanelSeleccion().addTab(value.getNombrePanel(), (Component) value);
+            value.addListenerPanelSecundario(new PanelSecundarioListener() {
+                @Override
+                public void mostrar() {
+                    mostrarPanelSecundario(true);
+                }
+            });
+        }
+    }
+        
     private void agregarListenerFrame()
     {
         
@@ -286,6 +301,10 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             System.out.println("metodo no implementado");
             return ;
         }
+        
+        
+        PanelSecundarioAbstract panelSecundario = panelesSecundariosMap.get(PanelSecundarioAbstract.PANEL_AYUDA);
+        JPanel jpanel = (JPanel) panelSecundario;
 
         if(browser!=null)
         {
@@ -294,14 +313,14 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             {
                 browser = new SwingBrowser();
                 browser.loadURL(panel.getURLAyuda());
-                browser.setBounds(1, 1, getJPanelContenidoAuxiliar().getWidth() - 1, getJPanelContenidoAuxiliar().getHeight() - 1);
-                getJPanelContenidoAuxiliar().removeAll();
-                getJPanelContenidoAuxiliar().add(browser);
+                browser.setBounds(1, 1, jpanel.getWidth() - 1, jpanel.getHeight() - 1);
+                jpanel.removeAll();
+                jpanel.add(browser);
             }
             else
             {
-                getJPanelContenidoAuxiliar().removeAll();
-                getJPanelContenidoAuxiliar().add(browser);
+                jpanel.removeAll();
+                jpanel.add(browser);
             }
         }
         else
@@ -310,16 +329,16 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             if(panel!=null)
             {
                 browser.loadURL(panel.getURLAyuda());
-                browser.setBounds(1, 1, getJPanelContenidoAuxiliar().getWidth() - 1, getJPanelContenidoAuxiliar().getHeight() - 1);
-                getJPanelContenidoAuxiliar().removeAll();
-                getJPanelContenidoAuxiliar().add(browser);
+                browser.setBounds(1, 1, jpanel.getWidth() - 1, jpanel.getHeight() - 1);
+                jpanel.removeAll();
+                jpanel.add(browser);
             }
             else
             {
                 browser.loadURL("https://www.google.com.ec/");
-                browser.setBounds(1, 1, getJPanelContenidoAuxiliar().getWidth() - 1, getJPanelContenidoAuxiliar().getHeight() - 1);
-                getJPanelContenidoAuxiliar().removeAll();
-                getJPanelContenidoAuxiliar().add(browser);
+                browser.setBounds(1, 1, jpanel.getWidth() - 1, jpanel.getHeight() - 1);
+                jpanel.removeAll();
+                jpanel.add(browser);
             }
         }
         //getjSplitPanelVerticalSecundario().setLeftComponent(getJPanelContenidoAuxiliar());
@@ -364,14 +383,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             });
         }
         
-        getjMenuItemMonitor().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                getjDesktopPane1().add(monitorComprobanteModel);
-                monitorComprobanteModel.show();
-            }
-        });
-        
+
     }
     
     private String getTituloOriginal(String titulo)
@@ -659,14 +671,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 }
             });
         
-         getBtnSalirPantallAuxiliar().addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    getjSplitPanel().setDividerLocation(PROPORCION_HORIZONTAL_INICIAL);
-                    PROPORCION_HORIZONTAL=PROPORCION_HORIZONTAL_INICIAL;
-                    //browser=null;
-                }
-            });
+        
          
          getBtnSalirPantallaPublicidad().addActionListener(new ActionListener() {
                 @Override
@@ -981,8 +986,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
        });
        
        getjTablaConsola().setModel(consola.getModeloTabla());
-       getJPanelContenidoAuxiliar().removeAll();
-       getJPanelContenidoAuxiliar().add(getJPanelConsola());
+       //getJPanelContenidoAuxiliar().removeAll();
+       //getJPanelContenidoAuxiliar().add(getJPanelConsola());
        
        if(consola.getModeloTabla().getRowCount()>0)
        {
@@ -1357,25 +1362,17 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         return null;
     }
 
-    public MonitorComprobanteModel getMonitorComprobanteModel() {
-        return monitorComprobanteModel;
+
+    public Map<String,PanelSecundarioAbstract> getPanelesSecundarios() {
+        return panelesSecundariosMap;
     }
 
-    public void setMonitorComprobanteModel(MonitorComprobanteModel monitorComprobanteModel) {
-        this.monitorComprobanteModel = monitorComprobanteModel;
+    public void setPanelesSecundarios(Map<String,PanelSecundarioAbstract> panelesSecundariosMap) {
+        this.panelesSecundariosMap = panelesSecundariosMap;
     }
 
-    public void agregarListenerVentanasSecundarias() {
-        monitorComprobanteModel.addListener(new MonitorComprobanteListener() {
-            @Override
-            public void mostrar() {
-                getjDesktopPane1().add(monitorComprobanteModel);
-                monitorComprobanteModel.show();
-                monitorComprobanteModel.setInterfazPadre(generalPanelModel);
-            }
-        });
-
-    }
+    
+    
 
     
     

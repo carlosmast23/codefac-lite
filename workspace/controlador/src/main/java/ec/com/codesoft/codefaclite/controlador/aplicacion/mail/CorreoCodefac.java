@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.controlador.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.ejemplo.utilidades.email.CorreoElectronico;
 import java.util.List;
+import javax.mail.MessagingException;
 
 /**
  *
@@ -20,6 +21,7 @@ public abstract class CorreoCodefac {
     
     public abstract String getMensaje();
     public abstract String getTitulo();
+    public abstract String getPathFile();
     public abstract List<String> getDestinatorios();
     
 
@@ -28,10 +30,24 @@ public abstract class CorreoCodefac {
         this.session=session;
     }
     
-    public void enviarCorreo()
+    public void enviarCorreo() throws RuntimeException
     {
-        correoElectronico=new CorreoElectronico(ParametroCodefac.CORREO_USUARIO,ParametroCodefac.CORREO_CLAVE, getMensaje(), getDestinatorios().get(0), getTitulo());
-        correoElectronico.sendMail();
+        String correo=session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor();
+        String clave=session.getParametrosCodefac().get(ParametroCodefac.CORREO_CLAVE).getValor();
+        
+        correoElectronico=new CorreoElectronico(correo,clave, getMensaje(), getDestinatorios().get(0), getTitulo());
+        correoElectronico.setPathFile(getPathFile());
+        
+        try
+        {
+            correoElectronico.sendMail();
+        }catch(RuntimeException e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException(e);            
+        }
+
+        
     }
     
 }

@@ -3,17 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.facturacionelectronica.evento;
+package ec.com.codesoft.codefaclite.facturacionelectronica;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
+import java.util.List;
 
 /**
  *
  * @author Carlos
  */
-public interface ListenerComprobanteElectronico {
-    public abstract void termino();
-    public abstract void iniciado();
-    public abstract void procesando(int etapa);
-    public abstract void error(ComprobanteElectronicoException cee);
+public interface MetodosEnvioInterface { 
+    public abstract void enviarCorreo(String mensaje,String subject,List<String> destinatorios,String pathFile) throws Exception;
 }

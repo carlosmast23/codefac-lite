@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.model;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.mail.CorreoCodefac;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteInterface;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
@@ -26,7 +27,9 @@ import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElec
 import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.ETAPA_FIRMAR;
 import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.ETAPA_PRE_VALIDAR;
 import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.ETAPA_RIDE;
+import ec.com.codesoft.codefaclite.facturacionelectronica.MetodosEnvioInterface;
 import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
+import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
 import ec.com.codesoft.codefaclite.servidor.entity.Factura;
 import ec.com.codesoft.codefaclite.servidor.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.FormaPago;
@@ -285,7 +288,8 @@ public class FacturacionModel extends FacturacionPanel{
             }
         };*/
         
-        ComprobanteElectronicoService servicioElectronico=facturaElectronica.getServicio();       
+        ComprobanteElectronicoService servicioElectronico=facturaElectronica.getServicio();  
+        
         servicioElectronico.addActionListerComprobanteElectronico(new ListenerComprobanteElectronico() {
             
             private MonitorComprobanteData monitorData;
@@ -296,6 +300,7 @@ public class FacturacionModel extends FacturacionPanel{
                 
                 monitorData.getBarraProgreso().setForeground(Color.GREEN);
                 monitorData.getBtnAbrir().setEnabled(true);
+                monitorData.getBtnCerrar().setEnabled(true);
                 monitorData.getBtnAbrir().addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -304,7 +309,6 @@ public class FacturacionModel extends FacturacionPanel{
                         panelPadre.crearReportePantalla(print, factura.getPreimpreso());
                     }
                 });
-                MonitorComprobanteModel.mostrar();
 
             }
 
@@ -329,6 +333,10 @@ public class FacturacionModel extends FacturacionPanel{
                 }
                 
                 if (etapa == ComprobanteElectronicoService.ETAPA_RIDE) {
+                    monitorData.getBarraProgreso().setValue(95);
+                }
+                
+                if (etapa == ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE) {
                     monitorData.getBarraProgreso().setValue(100);
                 }
             }
@@ -337,8 +345,44 @@ public class FacturacionModel extends FacturacionPanel{
             public void iniciado() {
                 monitorData=MonitorComprobanteModel.getInstance().agregarComprobante();
                 monitorData.getLblPreimpreso().setText(factura.getPreimpreso()+" ");
-                MonitorComprobanteModel.mostrar();
                 monitorData.getBtnAbrir().setEnabled(false);
+                monitorData.getBtnReporte().setEnabled(false);
+                monitorData.getBtnCerrar().setEnabled(false);
+                monitorData.getBarraProgreso().setString("001-002-000000233");
+                monitorData.getBarraProgreso().setStringPainted(true);
+                MonitorComprobanteModel.getInstance().mostrar();
+                
+            }
+
+            @Override
+            public void error(ComprobanteElectronicoException cee) {
+                monitorData.getBtnReporte().setEnabled(true);
+                monitorData.getBtnCerrar().setEnabled(true);
+                monitorData.getBtnReporte().addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        JOptionPane.showMessageDialog(null,"Etapa: "+ cee.getEtapa()+"\n"+cee.getMessage());
+                         monitorData.getBtnAbrir().addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                String path = facturaElectronica.getServicio().getPathRide();
+                                JasperPrint print = facturaElectronica.getServicio().getPrintJasper();
+                                panelPadre.crearReportePantalla(print, factura.getPreimpreso());
+                            }
+                        });
+                    }
+                });
+                
+                if(cee.getTipoError().equals(ComprobanteElectronicoException.ERROR_ENVIO_CLIENTE))
+                {
+                    monitorData.getBtnAbrir().setEnabled(true);
+                    monitorData.getBarraProgreso().setForeground(Color.YELLOW);
+                }
+                else
+                {
+                    monitorData.getBarraProgreso().setForeground(Color.ORANGE);
+                }
+                
             }
         });
         //facturaElectronica.getServicio().addActionListerComprobanteElectronico(listener);
@@ -612,7 +656,7 @@ public class FacturacionModel extends FacturacionPanel{
         factura.setEmpresaId(0l);
         factura.setEstado(Factura.ESTADO_FACTURADO);
         factura.setFechaCreacion(UtilidadesFecha.getFechaHoy());
-        factura.setFechaFactura(UtilidadesFecha.getFechaHoy());
+        factura.setFechaFactura(new Date(getjDateFechaEmision().getDate().getTime()));
         //factura.setIvaSriId(iva);
         factura.setPuntoEmision(session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor);
         factura.setPuntoEstablecimiento(session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor);

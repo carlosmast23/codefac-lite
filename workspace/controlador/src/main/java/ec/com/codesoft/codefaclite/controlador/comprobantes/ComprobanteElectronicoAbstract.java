@@ -5,16 +5,20 @@
  */
 package ec.com.codesoft.codefaclite.controlador.comprobantes;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.mail.CorreoCodefac;
 import ec.com.codesoft.codefaclite.controlador.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.controlador.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
+import ec.com.codesoft.codefaclite.facturacionelectronica.MetodosEnvioInterface;
+import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionTributaria;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
+import ec.com.codesoft.ejemplo.utilidades.email.CorreoElectronico;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +35,7 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
     public abstract String getCodigoComprobante();
     public abstract String getSecuencial();
     public abstract Map<String,String> getMapAdicional();
+    public abstract List<String> getCorreos();
     //public abstract List<InformacionAdicional> getInformacionAdicional();
     /**
      * Implementar el modelo del comprobante exeptuando
@@ -138,7 +143,9 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
             String recepcion = session.getParametrosCodefac().get(ParametroCodefac.SRI_WS_RECEPCION_PRUEBA).valor;
             servicio.setUriRecepcion(recepcion);
         }
-        
+        //Carga las configuraciones basicas e enlaza la interfaz de correo con la interfaz de correo de la facturacion electronica
+        cargarConfiguracionesCorreo();
+        servicio.setCorreosElectronicos(getCorreos());
         servicio.procesarComprobante();
         
     }
@@ -166,6 +173,47 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
     public void setServicio(ComprobanteElectronicoService servicio) {
         this.servicio = servicio;
     }
+    
+    
+    public void cargarConfiguracionesCorreo()
+    {
+        this.servicio.setMetodoEnvioInterface(new MetodosEnvioInterface()  {
+            @Override
+            public void enviarCorreo(String mensaje, String subject, List<String> destinatorios,String pathFile) throws ComprobanteElectronicoException{
+                CorreoCodefac correo=new CorreoCodefac(session) {
+                    @Override
+                    public String getMensaje() {
+                        return mensaje;
+                    }
+                    
+                    @Override
+                    public String getTitulo() {
+                        return subject;
+                    }
+                    
+                    @Override
+                    public String getPathFile() {
+                        return pathFile;
+                    }
+                    
+                    @Override
+                    public List<String> getDestinatorios() {
+                        return destinatorios;
+                    }
+                };
+                
+                try
+                {
+                    correo.enviarCorreo();
+                }catch(RuntimeException e)
+                {
+                    e.printStackTrace();
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+    }
+    
 
     @Override
     public void run()

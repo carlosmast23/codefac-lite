@@ -33,6 +33,7 @@ public class CorreoElectronico {
     private String mensaje;
     private String to;
     private String subject;
+    private String pathFile;
 
     public CorreoElectronico(String usuario, String clave, String mensaje, String to, String subject) {
         this.usuario = usuario;
@@ -42,7 +43,7 @@ public class CorreoElectronico {
         this.subject = subject;
     }
 
-    public void sendMail() {
+    public void sendMail() throws RuntimeException{
         Properties props = new Properties();
         
         props.put("mail.smtp.auth", "true");
@@ -58,7 +59,7 @@ public class CorreoElectronico {
                 return new PasswordAuthentication(usuario, clave);
             }
         });
-        session.setDebug(true);
+        //session.setDebug(true);
 
         try {
 
@@ -86,10 +87,10 @@ public class CorreoElectronico {
 
          // Part two is attachment
          messageBodyPart = new MimeBodyPart();
-         String filename = "E:\\ejemplo3.xml";
-         DataSource source = new FileDataSource(filename);
+         //String filename = "E:\\ejemplo3.xml";
+         DataSource source = new FileDataSource(pathFile);
          messageBodyPart.setDataHandler(new DataHandler(source));
-         messageBodyPart.setFileName(filename);
+         messageBodyPart.setFileName(pathFile);
          multipart.addBodyPart(messageBodyPart);
          
         message.setContent(multipart);
@@ -102,5 +103,15 @@ public class CorreoElectronico {
             throw new RuntimeException(e);
         }
     }
+
+    public String getPathFile() {
+        return pathFile;
+    }
+
+    public void setPathFile(String pathFile) {
+        this.pathFile = pathFile;
+    }
+    
+    
 
 }
