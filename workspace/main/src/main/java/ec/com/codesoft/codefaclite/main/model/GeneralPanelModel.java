@@ -11,8 +11,8 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInte
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteListener;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
-import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecundarioInterface;
-import ec.com.codesoft.codefaclite.controlador.panelsecundario.MonitorComprobantePanel;
+import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecundarioAbstract;
+import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecundarioListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
@@ -115,7 +115,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private SwingBrowser browserPublicidad ;
     private List<MenuControlador> ventanasMenuList;
     private SessionCodefac sessionCodefac;
-    private Map<String,PanelSecundarioInterface> panelesSecundariosMap;
+    private Map<String,PanelSecundarioAbstract> panelesSecundariosMap;
     
     private static double PROPORCION_HORIZONTAL=0.75d;
     private static double PROPORCION_VERTICAL=0.7d;
@@ -159,11 +159,16 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     }
     public void agregarPanelesSecundarios()
     {
-        for (Map.Entry<String, PanelSecundarioInterface> entry : panelesSecundariosMap.entrySet()) {
+        for (Map.Entry<String, PanelSecundarioAbstract> entry : panelesSecundariosMap.entrySet()) {
             String key = entry.getKey();
-            PanelSecundarioInterface value = entry.getValue();
+            PanelSecundarioAbstract value = entry.getValue();
             getjPanelSeleccion().addTab(value.getNombrePanel(), (Component) value);
-            
+            value.addListenerPanelSecundario(new PanelSecundarioListener() {
+                @Override
+                public void mostrar() {
+                    mostrarPanelSecundario(true);
+                }
+            });
         }
     }
         
@@ -298,7 +303,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         }
         
         
-        PanelSecundarioInterface panelSecundario = panelesSecundariosMap.get(PanelSecundarioInterface.PANEL_AYUDA);
+        PanelSecundarioAbstract panelSecundario = panelesSecundariosMap.get(PanelSecundarioAbstract.PANEL_AYUDA);
         JPanel jpanel = (JPanel) panelSecundario;
 
         if(browser!=null)
@@ -1358,11 +1363,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     }
 
 
-    public Map<String,PanelSecundarioInterface> getPanelesSecundarios() {
+    public Map<String,PanelSecundarioAbstract> getPanelesSecundarios() {
         return panelesSecundariosMap;
     }
 
-    public void setPanelesSecundarios(Map<String,PanelSecundarioInterface> panelesSecundariosMap) {
+    public void setPanelesSecundarios(Map<String,PanelSecundarioAbstract> panelesSecundariosMap) {
         this.panelesSecundariosMap = panelesSecundariosMap;
     }
 

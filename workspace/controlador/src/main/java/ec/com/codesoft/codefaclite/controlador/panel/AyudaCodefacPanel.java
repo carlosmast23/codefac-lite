@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.controlador.panelsecundario;
+package ec.com.codesoft.codefaclite.controlador.panel;
 
-import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecundarioInterface;
+import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecundarioAbstract;
 
 /**
  *
  * @author Carlos
  */
-public class AyudaCodefacPanel extends javax.swing.JPanel implements PanelSecundarioInterface{
+public abstract class AyudaCodefacPanel extends PanelSecundarioAbstract{
 
     /**
      * Creates new form AyudaCodefacPanel

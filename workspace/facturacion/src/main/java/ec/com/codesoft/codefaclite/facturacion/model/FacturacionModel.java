@@ -341,6 +341,7 @@ public class FacturacionModel extends FacturacionPanel{
                 monitorData.getBtnCerrar().setEnabled(false);
                 monitorData.getBarraProgreso().setString("001-002-000000233");
                 monitorData.getBarraProgreso().setStringPainted(true);
+                MonitorComprobanteModel.getInstance().mostrar();
                 
             }
 

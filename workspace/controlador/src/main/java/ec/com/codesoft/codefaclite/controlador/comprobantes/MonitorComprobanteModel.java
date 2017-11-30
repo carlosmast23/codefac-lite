@@ -6,7 +6,7 @@
 package ec.com.codesoft.codefaclite.controlador.comprobantes;
 
 import com.sun.org.apache.bcel.internal.generic.D2F;
-import ec.com.codesoft.codefaclite.controlador.panelsecundario.MonitorComprobantePanel;
+import ec.com.codesoft.codefaclite.controlador.panel.MonitorComprobantesPanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import java.awt.BorderLayout;
@@ -28,7 +28,7 @@ import net.sf.jasperreports.engine.JasperPrint;
  *
  * @author Carlos
  */
-public class MonitorComprobanteModel extends MonitorComprobantePanel {
+public class MonitorComprobanteModel extends MonitorComprobantesPanel {
 
     private static MonitorComprobanteModel monitorComprobanteModel;
     private GridLayout experimentLayout = new GridLayout(15, 2);
@@ -45,7 +45,7 @@ public class MonitorComprobanteModel extends MonitorComprobantePanel {
     }
 
     public MonitorComprobanteModel() {
-        getjPanelComponentes().setLayout(experimentLayout);
+        getjPanelComponentesCarga().setLayout(experimentLayout);
 
     }
 
@@ -67,20 +67,20 @@ public class MonitorComprobanteModel extends MonitorComprobantePanel {
         panelFinal.add(monitorComprobanteData.getBtnCerrar());
 
         panelComprobante.add(panelFinal, BorderLayout.LINE_END);
-        getjPanelComponentes().add(panelComprobante);
+        getjPanelComponentesCarga().add(panelComprobante);
 
         setproperties(monitorComprobanteData);
 
-        getjPanelComponentes().revalidate();
-        getjPanelComponentes().repaint();
+        getjPanelComponentesCarga().revalidate();
+        getjPanelComponentesCarga().repaint();
         
         monitorComprobanteData.getBtnCerrar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                getjPanelComponentes().remove(monitorComprobanteData.getPosicion());
+                getjPanelComponentesCarga().remove(monitorComprobanteData.getPosicion());
                 numeroVentanas--;
-                getjPanelComponentes().revalidate();
-                getjPanelComponentes().repaint();
+                getjPanelComponentesCarga().revalidate();
+                getjPanelComponentesCarga().repaint();
                 System.out.println("eliminar la pantalla");
             }
         });
@@ -113,5 +113,6 @@ public class MonitorComprobanteModel extends MonitorComprobantePanel {
         
         
     }
+
 
 }

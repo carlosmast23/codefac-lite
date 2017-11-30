@@ -5,13 +5,12 @@
  */
 package ec.com.codesoft.codefaclite.controlador.panelessecundariomodel;
 
+import ec.com.codesoft.codefaclite.controlador.panel.AyudaCodefacPanel;
+
 /**
  *
  * @author Carlos
  */
-public interface PanelSecundarioInterface {
-    public static final String PANEL_AYUDA="Ayuda";
-    public static final String PANEL_MONITOR="Monitor";
+public class AyudaCodefacModel extends AyudaCodefacPanel{
     
-    public abstract String getNombrePanel();
 }
