@@ -12,6 +12,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.Query;
 
 /**
@@ -32,24 +34,25 @@ public class ImpuestoFacade extends AbstractFacade<Impuesto> {
         return (Impuesto) query.getSingleResult();
     }
     
-    public Impuesto getByImpuestoVigente(String nombre) throws ParseException
+    public Impuesto getByImpuestoVigente(String nombre)
     {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String fechaControl = "2017-06-01";
-        Date fecha = sdf.parse(fechaControl);
-        List<ImpuestoDetalle> impuestoDetallesAEliminar = new ArrayList<>();
-        
-        String queryString = "SELECT i FROM Impuesto i WHERE i.nombre=?1";
-        Query query = getEntityManager().createQuery(queryString);
-        query.setParameter(1,nombre); 
-        Impuesto impuestos = (Impuesto) query.getSingleResult();
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String fechaControl = "2017-06-01";
+            Date fecha = sdf.parse(fechaControl);
+            List<ImpuestoDetalle> impuestoDetallesAEliminar = new ArrayList<>();
+            
+            String queryString = "SELECT i FROM Impuesto i WHERE i.nombre=?1";
+            Query query = getEntityManager().createQuery(queryString);
+            query.setParameter(1,nombre);
+            Impuesto impuestos = (Impuesto) query.getSingleResult();
             for(ImpuestoDetalle id : impuestos.getDetalleImpuestos())
             {
                 if(id.getFechaFin() == null)
                 {
                     if(!(id.getFechaInicio().before(fecha) || id.getFechaInicio().equals(fecha)))
                     {
-                       impuestoDetallesAEliminar.add(id);
+                        impuestoDetallesAEliminar.add(id);
                     }
                 }
                 else
@@ -63,7 +66,11 @@ public class ImpuestoFacade extends AbstractFacade<Impuesto> {
                 impuestos.getDetalleImpuestos().remove(id);
             }
             
-        return (Impuesto) impuestos;
+            return (Impuesto) impuestos;
+        } catch (ParseException ex) {
+            Logger.getLogger(ImpuestoFacade.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
 }
