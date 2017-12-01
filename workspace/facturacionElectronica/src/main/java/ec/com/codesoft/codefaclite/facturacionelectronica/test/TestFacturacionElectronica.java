@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.facturacionelectronica.test;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ServicioSri;
+import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.InformacionFactura;
@@ -15,6 +16,8 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.Comprobantes
 import ec.com.codesoft.codefaclite.ws.recepcion.Mensaje;
 import es.mityc.firmaJava.libreria.xades.FirmaXML;
 import java.sql.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -22,27 +25,31 @@ import java.sql.Date;
  */
 public class TestFacturacionElectronica {
     public static void main(String[] args) {
-        //ComprobanteElectronico comprobante=crearFactura();
-        //ComprobanteElectronicoService servicio=new ComprobanteElectronicoService("E:/codefac", "carlos_alfonso_sanchez_coyago.p12", "Code17bwbtj","pruebas", comprobante);
-        //servicio.procesarComprobante();
-        
-        /**
-         * Enviando documento al SRI
-         */
-        ServicioSri servicioSri=new ServicioSri("","");
-        if(servicioSri.verificarConexionRecepcion())
-        {
-            System.out.println("Existe conexion");
-            if(servicioSri.enviar())
+        try {
+            //ComprobanteElectronico comprobante=crearFactura();
+            //ComprobanteElectronicoService servicio=new ComprobanteElectronicoService("E:/codefac", "carlos_alfonso_sanchez_coyago.p12", "Code17bwbtj","pruebas", comprobante);
+            //servicio.procesarComprobante();
+            
+            /**
+             * Enviando documento al SRI
+             */
+            ServicioSri servicioSri=new ServicioSri("","");
+            if(servicioSri.verificarConexionRecepcion())
             {
-                System.out.println("Documento enviados");
-            }
-            else
-            {
-                for (Mensaje mensaje : servicioSri.getMensajes()) {
-                    System.out.println(mensaje.getIdentificador()+"-"+mensaje.getMensaje()+"-"+mensaje.getInformacionAdicional());
+                System.out.println("Existe conexion");
+                if(servicioSri.enviar())
+                {
+                    System.out.println("Documento enviados");
+                }
+                else
+                {
+                    for (Mensaje mensaje : servicioSri.getMensajes()) {
+                        System.out.println(mensaje.getIdentificador()+"-"+mensaje.getMensaje()+"-"+mensaje.getInformacionAdicional());
+                    }
                 }
             }
+        } catch (ComprobanteElectronicoException ex) {
+            Logger.getLogger(TestFacturacionElectronica.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         
