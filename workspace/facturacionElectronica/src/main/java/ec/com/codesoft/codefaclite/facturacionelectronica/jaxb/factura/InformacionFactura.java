@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author Carlos
  */
 @XmlType(propOrder = {"fechaEmision",
+    "obligadoContabilidad",
     "tipoIdentificacionComprador",
     "razonSocialComprador",
     "identificacionComprador",
@@ -33,6 +34,8 @@ public class InformacionFactura {
     private BigDecimal totalSinImpuestos;
     private BigDecimal totalDescuento;
     private BigDecimal importeTotal;
+    
+    private String obligadoContabilidad;
     
     private List<TotalImpuesto> totalImpuestos;
 
@@ -114,6 +117,17 @@ public class InformacionFactura {
     public void setTotalImpuestos(List<TotalImpuesto> totalImpuestos) {
         this.totalImpuestos = totalImpuestos;
     }
+
+    @XmlElement(name = "obligadoContabilidad")    
+    public String getObligadoContabilidad() {
+        return obligadoContabilidad;
+    }
+
+    public void setObligadoContabilidad(String obligadoContabilidad) {
+        this.obligadoContabilidad = obligadoContabilidad;
+    }
+    
+    
     
     
 

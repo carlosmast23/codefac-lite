@@ -31,6 +31,7 @@ import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
 import ec.com.codesoft.ejemplo.utilidades.imagen.UtilidadImagen;
+import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -784,16 +785,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 try {
                     JTextComponent componente=(JTextComponent) metodo.invoke(panel);
                     InputStream input=RecursoCodefac.AYUDA.getResourceInputStream(validacion.recurso());
-                    
-                    InputStreamReader reader=new InputStreamReader(input);
-                    BufferedReader br = new BufferedReader(reader);
-                    String line = null;
-                    String htmlText="";
-                    while ( (line = br.readLine()) != null)
-                    {
-                        htmlText+=line;
-                    }
-                    
+                    String htmlText=UtilidadVarios.getStringHtmltoUrl(input);
                     File file = new File(RecursoCodefac.AYUDA.getResourcePath(validacion.recurso()));
                     //File file = new File(getClass().getResource("/pagina/ayudaHtml.html").toURI());
                     
@@ -807,8 +799,6 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 } catch (IllegalArgumentException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (InvocationTargetException ex) {
-                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }

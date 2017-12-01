@@ -68,7 +68,7 @@ public class CorreoElectronico {
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(to));
             message.setSubject(subject);
-            message.setText(mensaje);
+            //message.setText(mensaje);
             
             
             
@@ -77,13 +77,13 @@ public class CorreoElectronico {
          BodyPart messageBodyPart = new MimeBodyPart();
 
          // Now set the actual message
-         messageBodyPart.setText(mensaje);
+         //messageBodyPart.setText(mensaje);
             
          // Create a multipar message
          Multipart multipart = new MimeMultipart();
 
          // Set text message part
-         multipart.addBodyPart(messageBodyPart);
+         //multipart.addBodyPart(messageBodyPart);
 
          // Part two is attachment
          messageBodyPart = new MimeBodyPart();
@@ -91,10 +91,22 @@ public class CorreoElectronico {
          DataSource source = new FileDataSource(pathFile);
          messageBodyPart.setDataHandler(new DataHandler(source));
          messageBodyPart.setFileName(pathFile);
-         multipart.addBodyPart(messageBodyPart);
+         //multipart.addBodyPart(messageBodyPart);
+        
+         /**
+          * Contenido del texto html
+          */
+         MimeBodyPart htmlPart = new MimeBodyPart();
+         htmlPart.setContent(mensaje, "text/html; charset=utf-8");
          
-        message.setContent(multipart);
+         multipart.addBodyPart(messageBodyPart);
+         multipart.addBodyPart(htmlPart);
 
+         
+        //message.setContent(multipart);
+        message.setContent(multipart);
+        
+        
         
          
          Transport.send(message);

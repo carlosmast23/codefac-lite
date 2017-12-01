@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.Informaci
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.ejemplo.utilidades.email.CorreoElectronico;
+import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -146,6 +147,13 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
         //Carga las configuraciones basicas e enlaza la interfaz de correo con la interfaz de correo de la facturacion electronica
         cargarConfiguracionesCorreo();
         servicio.setCorreosElectronicos(getCorreos());
+        
+        /**
+         * Setear la pagina web del footer para enviar al correo
+         */
+        String footer=UtilidadVarios.getStringHtmltoUrl(RecursoCodefac.HTML.getResourceInputStream("footer_codefac.html"));
+        servicio.setFooterMensajeCorreo(footer);
+        
         servicio.procesarComprobante();
         
     }

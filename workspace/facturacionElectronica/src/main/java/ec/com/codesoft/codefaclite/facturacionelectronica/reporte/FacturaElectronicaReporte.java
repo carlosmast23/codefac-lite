@@ -33,6 +33,7 @@ public class FacturaElectronicaReporte extends ComprobanteElectronicoReporte{
         map.put("cliente_nombres",facturaComprobante.getInformacionFactura().getRazonSocialComprador());
         map.put("cliente_identificacion",facturaComprobante.getInformacionFactura().getIdentificacionComprador());
         map.put("fecha_emision", facturaComprobante.getInformacionFactura().getFechaEmision());
+        map.put("obligado_contabilidad",facturaComprobante.getInformacionFactura().getObligadoContabilidad());
         return map;
     }
     
@@ -45,7 +46,10 @@ public class FacturaElectronicaReporte extends ComprobanteElectronicoReporte{
         map.put("descuento","0");
         map.put("iva",facturaComprobante.getInformacionFactura().getImporteTotal().subtract(facturaComprobante.getInformacionFactura().getTotalSinImpuestos())+"");
         map.put("total",facturaComprobante.getInformacionFactura().getImporteTotal()+"");
-        map.put("iva_porcentaje","14");
+        /**
+         * Falta setear el iva que se esta usando en el sistema
+         */
+        map.put("iva_porcentaje","12");
         return map;
     }
     
@@ -57,7 +61,7 @@ public class FacturaElectronicaReporte extends ComprobanteElectronicoReporte{
         for (DetalleFacturaComprobante detalleFacturaComprobante : detalleComprobante) {
             DetalleReporteData data=new DetalleReporteData();
             data.setCantidad(detalleFacturaComprobante.getCantidad()+"");
-            //data.setCodigo(detalleFacturaComprobante.get);
+            data.setCodigo(detalleFacturaComprobante.getCodigoPrincipal());
             data.setDescripcion(detalleFacturaComprobante.getDescripcion());
             data.setDescuento(detalleFacturaComprobante.getDescuento()+"");
             data.setPrecio_total(detalleFacturaComprobante.getPrecioTotalSinImpuesto()+"");

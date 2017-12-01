@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d9c21352-f760-4e3a-b774-88dde93e1e8b">
 	<property name="ireport.zoom" value="1.3310000000000064"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="543"/>
+	<property name="ireport.y" value="240"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -122,15 +122,11 @@
 				<textFieldExpression><![CDATA[$P{secuencial}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="334" y="118" width="211" height="20" uuid="8ce84796-bd04-40a2-b9d4-6aed40d2bb70"/>
+				<reportElement x="334" y="118" width="221" height="20" uuid="8ce84796-bd04-40a2-b9d4-6aed40d2bb70"/>
 				<textElement>
-					<font size="9" isItalic="true"/>
+					<font size="7" isItalic="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{autorizacion}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="333" y="144" width="100" height="20" uuid="2c9a1707-ad2f-49cd-9759-5eec20fba9c9"/>
-				<textFieldExpression><![CDATA["estado: "+$P{estado}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="417" y="170" width="99" height="39" uuid="5d51df03-6d2e-46b5-9415-fd96bc8f1c98"/>
@@ -162,14 +158,14 @@
 				<text><![CDATA[CLAVE DE ACCESO]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="5" y="188" width="303" height="20" uuid="6e491e25-7c7e-4daf-ab1c-7340453eb3ed"/>
+				<reportElement x="5" y="188" width="303" height="18" uuid="6e491e25-7c7e-4daf-ab1c-7340453eb3ed"/>
 				<textElement textAlignment="Center">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{razon_social}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="5" y="212" width="303" height="20" uuid="20edfeb2-f06d-4a3b-a278-010049807845"/>
+				<reportElement x="5" y="206" width="303" height="18" uuid="20edfeb2-f06d-4a3b-a278-010049807845"/>
 				<textElement textAlignment="Center">
 					<font size="11" isItalic="true"/>
 				</textElement>
@@ -266,6 +262,17 @@
 			<textField>
 				<reportElement x="287" y="365" width="207" height="20" uuid="d61cbadd-18a1-4550-8c49-921ba009ddae"/>
 				<textFieldExpression><![CDATA[$P{fecha_emision}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="334" y="144" width="83" height="20" uuid="fd41bd82-26d4-4f4e-9aa8-58cc11d97023"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estado:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="416" y="144" width="100" height="20" uuid="046fb76e-13e3-4af6-9acd-409374600c26"/>
+				<textFieldExpression><![CDATA[$P{estado}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

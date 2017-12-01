@@ -85,7 +85,10 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
         informacionFactura.setTipoIdentificacionComprador(factura.getCliente().getTipoIdentificacion());
         informacionFactura.setTotalDescuento(BigDecimal.ZERO);
         informacionFactura.setTotalSinImpuestos(factura.getSubtotalDoce().add(factura.getSubtotalCero()));
-        
+        /**
+         * Aqui hay que setear los valores de la base de datos
+         */
+        informacionFactura.setObligadoContabilidad("NO");
         //informacionFactura.setTotalImpuestos(totalImpuestos);
         
         /**
@@ -102,6 +105,7 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
         
         for (FacturaDetalle facturaDetalle : detallesFactura) {
             DetalleFacturaComprobante detalle=new DetalleFacturaComprobante();
+            detalle.setCodigoPrincipal(facturaDetalle.getProducto().getCodigoPrincipal());
             detalle.setCantidad(facturaDetalle.getCantidad());
             detalle.setDescripcion(facturaDetalle.getDescripcion());
             //Establecer el descuento en el aplicativo

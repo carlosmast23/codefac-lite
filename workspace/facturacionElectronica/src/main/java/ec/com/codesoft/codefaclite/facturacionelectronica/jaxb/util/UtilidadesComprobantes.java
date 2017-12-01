@@ -86,6 +86,7 @@ public abstract class UtilidadesComprobantes {
                     map.put("comprobante", comprobante);
                     map.put("numeroAutorizacion", numeroAutorizacion);
                     map.put("fechaAutorizacion", fechaAutorizacion);
+                    map.put("estado",estadoComprobante);
                     //generarReporteComprobante(comprobante, numeroAutorizacion, fechaAutorizacion);
                     return map;
                 }

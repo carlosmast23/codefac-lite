@@ -10,11 +10,16 @@ package ec.com.codesoft.codefaclite.servidor.entity;
  * @author Carlos
  */
 public class Empresa {
+    public static final String NO_LLEVA_CONTABILIDAD="NO";
+    public static final String SI_LLEVA_CONTABILIDAD="SI";
+    
     private String telefonos;
     private String razonSocial;
     private String nombreLegal;
     private String direccion;
     private String identificacion;    
+    private String obligadoLlevarContabilidad;
+    private String contribuyenteEspecial;
 
     public String getTelefonos() {
         return telefonos;
@@ -54,6 +59,22 @@ public class Empresa {
 
     public void setNombreLegal(String nombreLegal) {
         this.nombreLegal = nombreLegal;
+    }
+
+    public String getObligadoLlevarContabilidad() {
+        return obligadoLlevarContabilidad;
+    }
+
+    public void setObligadoLlevarContabilidad(String obligadoLlevarContabilidad) {
+        this.obligadoLlevarContabilidad = obligadoLlevarContabilidad;
+    }
+
+    public String getContribuyenteEspecial() {
+        return contribuyenteEspecial;
+    }
+
+    public void setContribuyenteEspecial(String contribuyenteEspecial) {
+        this.contribuyenteEspecial = contribuyenteEspecial;
     }
     
     

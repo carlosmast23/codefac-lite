@@ -73,7 +73,9 @@ public class Main {
         empresa.setTelefonos("022333167");
         empresa.setIdentificacion("1724218951001");
         empresa.setRazonSocial("Carlos Alfonso Sanchez Coyago");
-        empresa.setNombreLegal("Codesoft");
+        empresa.setNombreLegal("Codesoft Desarrollo");
+        empresa.setContribuyenteEspecial("");
+        empresa.setObligadoLlevarContabilidad(Empresa.NO_LLEVA_CONTABILIDAD);
         session.setEmpresa(empresa);
         //session.setParametrosCodefac(getParametros());
         splashScren.siguiente();

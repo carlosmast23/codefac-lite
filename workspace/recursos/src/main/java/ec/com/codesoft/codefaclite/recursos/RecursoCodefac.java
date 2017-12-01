@@ -22,6 +22,7 @@ public enum RecursoCodefac {
     JASPER_CRM("reportes/crm"),
     JASPER_COMPROBANTES_ELECTRONICOS("reportes/comprobantes_electronicos"),
     JASPER("reportes"),
+    HTML("html/factura_electronica"),
     AYUDA("ayuda");
 
     private String subPathResource;

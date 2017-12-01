@@ -16,13 +16,16 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Carlos
  */
-@XmlType(propOrder = {"descripcion","cantidad","precioUnitario","descuento","precioTotalSinImpuesto","impuestos"})
+@XmlType(propOrder = {"codigoPrincipal","descripcion","cantidad","precioUnitario","descuento","precioTotalSinImpuesto","impuestos"})
 public class DetalleFacturaComprobante {
     private String descripcion;
     private BigDecimal cantidad;
     private BigDecimal precioUnitario;
     private BigDecimal descuento;
     private BigDecimal precioTotalSinImpuesto;
+    
+    private String codigoPrincipal;
+    
     
     private List<ImpuestoComprobante> impuestos; 
 
@@ -83,6 +86,17 @@ public class DetalleFacturaComprobante {
     public void setImpuestos(List<ImpuestoComprobante> impuestos) {
         this.impuestos = impuestos;
     }
+
+    @XmlElement(name="codigoPrincipal")
+    public String getCodigoPrincipal() {
+        return codigoPrincipal;
+    }
+
+    public void setCodigoPrincipal(String codigoPrincipal) {
+        this.codigoPrincipal = codigoPrincipal;
+    }
+    
+    
     
     
 }

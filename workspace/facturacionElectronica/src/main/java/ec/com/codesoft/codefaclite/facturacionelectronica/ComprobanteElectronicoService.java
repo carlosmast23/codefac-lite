@@ -123,6 +123,8 @@ public class ComprobanteElectronicoService {
     private ListenerComprobanteElectronico escucha;
     private MetodosEnvioInterface metodoEnvioInterface;
     private List<String> correosElectronicos;
+    
+    private String footerMensajeCorreo;
 
     public ComprobanteElectronicoService() {
     }
@@ -210,15 +212,32 @@ public class ComprobanteElectronicoService {
     
     private void enviarComprobante() throws ComprobanteElectronicoException
     {
-        String pathFile=getPathComprobante(CARPETA_RIDE,getNameRide());
         try {
-            metodoEnvioInterface.enviarCorreo("Estimado usuario la factura 001-002-00000012 fue generada correctamente","Factura emitida", correosElectronicos, pathFile);
+            JAXBContext jaxbContext = JAXBContext.newInstance(FacturaComprobante.class);
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+            Map<String,String> mapComprobante=UtilidadesComprobantes.decodificarArchivoBase64Offline(getPathComprobante(CARPETA_AUTORIZADOS),null,null);
+            StringReader reader = new StringReader(mapComprobante.get("comprobante"));
+            FacturaComprobante comprobante= (FacturaComprobante) jaxbUnmarshaller.unmarshal(reader);
             
-            //metodoEnvioInterface.enviarCorreo(pathBase, pathBase, destinatorios, pathBase);
-        } catch (Exception ex) {
+            String pathFile=getPathComprobante(CARPETA_RIDE,getNameRide());
+            try {
+                String mensajeGenerado="Estimado "+
+                        "<b>"+comprobante.getInformacionFactura().getRazonSocialComprador() + "</b> ,<br><br>"+
+                        "<b>"+comprobante.getInformacionTributaria().getNombreComercial() +"</b>"+
+                        " le informa que su factura  electrónica "+comprobante.getInformacionTributaria().getPreimpreso()+" se generó correctamente. <br><br>";
+                mensajeGenerado="<p>"+mensajeGenerado+"</p>"+footerMensajeCorreo;
+                
+                metodoEnvioInterface.enviarCorreo(mensajeGenerado,"FACTURA:"+comprobante.getInformacionTributaria().getPreimpreso(), correosElectronicos, pathFile);
+                
+                //metodoEnvioInterface.enviarCorreo(pathBase, pathBase, destinatorios, pathBase);
+            } catch (Exception ex) {
+                Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
+                throw new ComprobanteElectronicoException("El comprobante se genero correctamente pero no se envio al cliente,\n Revise el correo y envie manualmente el RIDE","Enviado correo",ComprobanteElectronicoException.ERROR_ENVIO_CLIENTE);
+            }
+            
+        } catch (JAXBException ex) {
             Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
-            ex.printStackTrace();
-            throw new ComprobanteElectronicoException("El comprobante se genero correctamente pero no se envio al cliente,\n Revise el correo y envie manualmente el RIDE","Enviado correo",ComprobanteElectronicoException.ERROR_ENVIO_CLIENTE);
         }
         
     }
@@ -236,7 +255,8 @@ public class ComprobanteElectronicoService {
             Map<String,Object> datosMap=reporte.getMapReporte();
             datosMap.put("SUBREPORT_DIR",pathParentJasper);
             datosMap.put("fecha_hora_autorizacion",mapComprobante.get("fechaAutorizacion"));
-            datosMap.put("estado",mapComprobante.get("Autorizado"));
+            datosMap.put("estado",mapComprobante.get("estado"));
+            datosMap.put("estado",mapComprobante.get("estado"));
             
             /**
              * Agregar datos adicionales como por ejemplo los datos del pide de pagina
@@ -290,7 +310,7 @@ public class ComprobanteElectronicoService {
             Map<String, Object> datosMap = reporte.getMapReporte();
             datosMap.put("SUBREPORT_DIR", pathParentJasper);
             datosMap.put("fecha_hora_autorizacion", mapComprobante.get("fechaAutorizacion"));
-            datosMap.put("estado", mapComprobante.get("Autorizado"));
+            datosMap.put("estado", mapComprobante.get("estado"));
             
           
                         /**
@@ -651,7 +671,15 @@ public class ComprobanteElectronicoService {
         this.correosElectronicos = correosElectronicos;
     }
 
-     
+    public String getFooterMensajeCorreo() {
+        return footerMensajeCorreo;
+    }
+
+    public void setFooterMensajeCorreo(String footerMensajeCorreo) {
+        this.footerMensajeCorreo = footerMensajeCorreo;
+    }
+
+    
     
     
     

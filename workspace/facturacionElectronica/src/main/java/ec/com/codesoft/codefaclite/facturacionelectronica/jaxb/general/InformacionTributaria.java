@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general;
 
+import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -130,7 +131,7 @@ public class InformacionTributaria {
     
     public String getPreimpreso()
     {
-        return this.puntoEmision+"-"+this.establecimiento+"-"+this.secuencial;
+        return this.puntoEmision+"-"+this.establecimiento+"-"+UtilidadesTextos.llenarCarateresIzquierda(this.secuencial,8,"0");
     }
     
 
