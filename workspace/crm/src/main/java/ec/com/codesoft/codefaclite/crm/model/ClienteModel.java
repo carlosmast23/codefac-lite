@@ -69,7 +69,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     public void grabar() throws ExcepcionCodefacLite
     {
         persona = new Persona();
-        persona.setNombreLegal(getjTextNombreSocial().getText());
+        persona.setRazonSocial(getjTextNombreSocial().getText());
         persona.setTipoIdentificacion(((SriIdentificacion)getjComboIdentificacion().getSelectedItem()).getCodigo());
         persona.setIdentificacion(getjTextIdentificacion().getText());
         persona.setTipCliente((String) getjComboTipoCliente().getSelectedItem());
@@ -88,7 +88,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     @Override
     public void editar() throws ExcepcionCodefacLite
     {
-        persona.setNombreLegal(getjTextNombreSocial().getText());
+        persona.setRazonSocial(getjTextNombreSocial().getText());
         persona.setTipoIdentificacion(((SriIdentificacion)getjComboIdentificacion().getSelectedItem()).getCodigo());
         persona.setIdentificacion(getjTextIdentificacion().getText());
         persona.setTipCliente((String)getjComboTipoCliente().getSelectedItem());
@@ -165,7 +165,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar");
         }
         
-        getjTextNombreSocial().setText(persona.getNombreLegal());
+        getjTextNombreSocial().setText(persona.getRazonSocial());
         getjTextIdentificacion().setText(""+persona.getIdentificacion());
         persona.setNombreLegal(getjTextNombreSocial().getText());
         getjComboIdentificacion().setSelectedIndex(comboIdentificacion(persona.getIdentificacion()));

@@ -432,7 +432,7 @@ public class FacturacionModel extends FacturacionPanel{
         getLblRuc().setText(session.getEmpresa().getIdentificacion());
         getLblDireccion().setText(session.getEmpresa().getDireccion());
         getLblTelefonos().setText(session.getEmpresa().getTelefonos());
-        getLblNombreComercial().setText(session.getEmpresa().getNombreLegal());
+        getLblNombreComercial().setText(session.getEmpresa().getRazonSocial());
         FacturacionService servicio=new FacturacionService();
         getLblSecuencial().setText(servicio.getPreimpresoSiguiente());
         
@@ -635,7 +635,7 @@ public class FacturacionModel extends FacturacionPanel{
     private void setearValoresCliente()
     {
         getTxtCliente().setText(persona.getIdentificacion());
-        getLblNombreCliente().setText(persona.getNombreLegal());
+        getLblNombreCliente().setText(persona.getRazonSocial());
         getLblDireccionCliente().setText(persona.getDireccion());
         getLblTelefonoCliente().setText(persona.getTelefonoConvencional());  
         datosAdicionales.put("email",persona.getCorreoElectronico());

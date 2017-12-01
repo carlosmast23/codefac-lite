@@ -80,7 +80,8 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
             
         informacionFactura.setImporteTotal(factura.getTotal());
         //Falta manejar este campo al momento de guardar
-        informacionFactura.setRazonSocialComprador("JORGE NAUNAI");
+        informacionFactura.setRazonSocialComprador(factura.getCliente().getRazonSocial());
+        //informacionFactura.setRazonSocialComprador(factura.getCliente().getRazonSocial());
         informacionFactura.setTipoIdentificacionComprador(factura.getCliente().getTipoIdentificacion());
         informacionFactura.setTotalDescuento(BigDecimal.ZERO);
         informacionFactura.setTotalSinImpuestos(factura.getSubtotalDoce().add(factura.getSubtotalCero()));
