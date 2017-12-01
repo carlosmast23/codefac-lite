@@ -17,6 +17,13 @@ public class ComprobanteElectronicoException extends Exception {
     private String etapa;
     private Integer tipoError;
     
+    public ComprobanteElectronicoException(ComprobanteElectronicoException cee)
+    {
+        super(cee.getMessage());
+        this.etapa=cee.etapa;
+        this.tipoError=cee.tipoError;
+    }
+    
     public ComprobanteElectronicoException(String msg,String etapa,int error) 
     {
         super(msg);

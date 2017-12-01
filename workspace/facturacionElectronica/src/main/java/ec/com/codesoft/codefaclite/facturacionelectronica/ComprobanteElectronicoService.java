@@ -346,27 +346,35 @@ public class ComprobanteElectronicoService {
     
     private void enviarSri() throws ComprobanteElectronicoException
     {
-        servicioSri=new ServicioSri();
-        servicioSri.setUri_autorizacion(uriAutorizacion);
-        servicioSri.setUri_recepcion(uriRecepcion);
-        servicioSri.setUrlFile(getPathComprobante(CARPETA_FIRMADOS));
-        
-        if(servicioSri.verificarConexionRecepcion())
+        try
         {
-            System.out.println("Existe conexion");
-            if(servicioSri.enviar())
+            servicioSri=new ServicioSri();
+            servicioSri.setUri_autorizacion(uriAutorizacion);
+            servicioSri.setUri_recepcion(uriRecepcion);
+            servicioSri.setUrlFile(getPathComprobante(CARPETA_FIRMADOS));
+
+            if(servicioSri.verificarConexionRecepcion())
             {
-                System.out.println("Documento enviados");
-            }
-            else
-            {
-                String mensajeError="";
-                for (Mensaje mensaje : servicioSri.getMensajes()) {
-                    System.out.println(mensaje.getIdentificador()+"-"+mensaje.getMensaje()+"-"+mensaje.getInformacionAdicional());
-                    mensajeError+=mensaje.getMensaje()+"\n"+mensaje.getInformacionAdicional();
+                System.out.println("Existe conexion");
+                if(servicioSri.enviar())
+                {
+                    System.out.println("Documento enviados");
                 }
-                throw new ComprobanteElectronicoException(mensajeError, "Enviar comprobante",ComprobanteElectronicoException.ERROR_COMPROBANTE);
+                else
+                {
+                    String mensajeError="";
+                    for (Mensaje mensaje : servicioSri.getMensajes()) {
+                        System.out.println(mensaje.getIdentificador()+"-"+mensaje.getMensaje()+"-"+mensaje.getInformacionAdicional());
+                        mensajeError+=mensaje.getMensaje()+"\n"+mensaje.getInformacionAdicional();
+                    }
+                    throw new ComprobanteElectronicoException(mensajeError, "Enviar comprobante",ComprobanteElectronicoException.ERROR_COMPROBANTE);
+                }
             }
+        }
+        catch(ComprobanteElectronicoException cee)
+        {
+            cee.printStackTrace();
+            throw  new ComprobanteElectronicoException(cee);
         }
     }
     

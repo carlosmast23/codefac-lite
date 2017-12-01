@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.namespace.QName;
+import javax.xml.ws.WebServiceException;
 
 /**
  *
@@ -98,7 +99,7 @@ public class ServicioSri {
     
     
             
-    public boolean verificarConexionRecepcion() {
+    public boolean verificarConexionRecepcion() throws ComprobanteElectronicoException{
         try {
             URL url = new URL(uri_recepcion);
             QName qname = new QName(namespaceURI,localPort);
@@ -109,7 +110,14 @@ public class ServicioSri {
             ex.printStackTrace();
             Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("no existe servicio");
-            return false;
+            throw new ComprobanteElectronicoException("Error de formato de la url"+"\n"+ex.getMessage(),"Verificar conexion recibir documentos SRI",ComprobanteElectronicoException.ERROR_COMPROBANTE);
+            
+        } catch(javax.xml.ws.WebServiceException wse)
+        {
+            wse.printStackTrace();
+            System.out.println("No se puede acceder al web servicio");
+            throw new ComprobanteElectronicoException("No existe conexion con el SRI para enviar documentos"+"\n"+wse.getMessage(),"Verificar conexion recibir documentos SRI",ComprobanteElectronicoException.ERROR_COMPROBANTE);
+            
         }
     }
 

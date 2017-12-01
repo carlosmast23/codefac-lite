@@ -12,9 +12,12 @@ package ec.com.codesoft.codefaclite.controlador.panelessecundariomodel;
 public abstract class PanelSecundarioAbstract extends javax.swing.JPanel {
     public static final String PANEL_AYUDA="Ayuda";
     public static final String PANEL_MONITOR="Monitor";
+    public static final String PANEL_VALIDACION="Validacion";
+    
     private PanelSecundarioListener listener;
     
     public abstract String getNombrePanel();
+    public abstract void actualizar(Object obj);
     
     public void addListenerPanelSecundario(PanelSecundarioListener listener)
     {
