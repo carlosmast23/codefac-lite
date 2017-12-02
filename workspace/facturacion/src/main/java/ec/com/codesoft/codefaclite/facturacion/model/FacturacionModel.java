@@ -180,16 +180,17 @@ public class FacturacionModel extends FacturacionPanel{
                     facturaDetalle.setTotal(setTotal.setScale(2, BigDecimal.ROUND_HALF_UP));
                     facturaDetalle.setValorIce(BigDecimal.ZERO);
                     
-                    /**
-                     * Revisar este calculo del iva para no calcular 2 veces al mostrar
-                     */
-                                       
-                    facturaDetalle.setIva(iva.setScale(2, BigDecimal.ROUND_HALF_UP));
                     factura.addDetalle(facturaDetalle);
                     cargarDatosDetalles();
                     setearDetalleFactura();
                     cargarTotales();
                     banderaAgregar = false;
+                    
+                                        /**
+                     * Revisar este calculo del iva para no calcular 2 veces al mostrar
+                     */
+                                       
+                    facturaDetalle.setIva(iva.setScale(2, BigDecimal.ROUND_HALF_UP));
                 }
             }
         });

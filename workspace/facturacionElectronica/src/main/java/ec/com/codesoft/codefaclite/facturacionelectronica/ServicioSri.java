@@ -209,6 +209,7 @@ public class ServicioSri {
     {
         try {
             Autorizacion item=autorizacion.get(0);
+            System.out.println(item.getFechaAutorizacion());
             item.setComprobante("<![CDATA[" + item.getComprobante() + "]]>");            
             XStream xstream = XStreamUtil.getRespuestaXStream();
             Writer writer = null;
@@ -217,6 +218,15 @@ public class ServicioSri {
             writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
             xstream.toXML(item, writer);
             String xmlAutorizacion = outputStream.toString("UTF-8");
+            
+            /**
+             * Solucion temporal para obtener la fecha con el tiempo 
+             */
+            int posicionInicial=xmlAutorizacion.indexOf("<fechaAutorizacion class=\"fechaAutorizacion\">");
+            int posicionFinal=xmlAutorizacion.indexOf("</fechaAutorizacion>");
+            xmlAutorizacion=xmlAutorizacion.substring(0,posicionInicial)+"<fechaAutorizacion>"+item.getFechaAutorizacion()+xmlAutorizacion.substring(posicionFinal,xmlAutorizacion.length());
+            
+            System.out.println(xmlAutorizacion);
             
             if (item.getEstado().equals("AUTORIZADO")) {
                 return xmlAutorizacion;

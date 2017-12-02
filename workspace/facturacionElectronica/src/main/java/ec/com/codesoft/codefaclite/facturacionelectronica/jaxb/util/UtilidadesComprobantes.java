@@ -16,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +25,9 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -85,7 +89,7 @@ public abstract class UtilidadesComprobantes {
                     Map<String,String> map=new HashMap<String,String>();
                     map.put("comprobante", comprobante);
                     map.put("numeroAutorizacion", numeroAutorizacion);
-                    map.put("fechaAutorizacion", fechaAutorizacion);
+                    map.put("fechaAutorizacion",UtilidadesComprobantes.getFormatXmlGregorianCalendarToSimpleFormat(fechaAutorizacion));
                     map.put("estado",estadoComprobante);
                     //generarReporteComprobante(comprobante, numeroAutorizacion, fechaAutorizacion);
                     return map;
@@ -176,6 +180,20 @@ public abstract class UtilidadesComprobantes {
             Logger.getLogger(UtilidadesComprobantes.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    
+    public static String getFormatXmlGregorianCalendarToSimpleFormat(String date)
+    {
+        String dateString = "";
+        try {
+            XMLGregorianCalendar result = DatatypeFactory.newInstance().newXMLGregorianCalendar(date);
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+            dateString = formatter.format(result.toGregorianCalendar().getTime());
+
+        } catch (DatatypeConfigurationException ex) {
+            Logger.getLogger(UtilidadesComprobantes.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return dateString;
     }
     
 
