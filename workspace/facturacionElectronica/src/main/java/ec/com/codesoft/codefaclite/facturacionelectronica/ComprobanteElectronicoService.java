@@ -221,7 +221,7 @@ public class ComprobanteElectronicoService {
             
             String pathFile=getPathComprobante(CARPETA_RIDE,getNameRide());
             try {
-                String mensajeGenerado="Estimado "+
+                String mensajeGenerado="Estimado/a "+
                         "<b>"+comprobante.getInformacionFactura().getRazonSocialComprador() + "</b> ,<br><br>"+
                         "<b>"+comprobante.getInformacionTributaria().getNombreComercial() +"</b>"+
                         " le informa que su factura  electrónica "+comprobante.getInformacionTributaria().getPreimpreso()+" se generó correctamente. <br><br>";

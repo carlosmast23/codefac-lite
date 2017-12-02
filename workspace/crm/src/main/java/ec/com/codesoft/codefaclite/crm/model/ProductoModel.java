@@ -14,10 +14,12 @@ import ec.com.codesoft.codefaclite.crm.panel.ProductoForm;
 import ec.com.codesoft.codefaclite.servidor.entity.Impuesto;
 import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
+import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoService;
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,6 +35,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
             
     private ProductoService productoService;
     private ImpuestoService impuestoService;
+    private ImpuestoDetalleService impuestoDetalleService;
     
     private BigDecimal d;
     
@@ -40,6 +43,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     {
         productoService = new ProductoService();
         impuestoService=new ImpuestoService();
+        impuestoDetalleService=new ImpuestoDetalleService();
         getComboIce().setEnabled(false);
         getComboIrbpnr().setEnabled(false);
     }
@@ -129,6 +133,11 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         
         getTextCodigoPrincipal().setText(producto.getCodigoPrincipal());
         getTextCodigoAuxiliar().setText(producto.getCodigoAuxiliar());
+        getTextNombre().setText(producto.getNombre());
+        getTextValorUnitario().setText(producto.getValorUnitario().toString());
+        
+        getComboIva().setSelectedItem(producto.getIva());
+        
         if(producto.getTipoProducto().equals('B')){
             getComboTipoProducto().setSelectedItem("Bien");
         }
@@ -147,9 +156,9 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
 //        for (ImpuestoDetalle impuesto : iva.getDetalleImpuestos()) {
 //            getComboIva().addItem(impuesto);
 //        }
-        
-        Impuesto iva = impuestoService.obtenerImpuestoPorVigencia(Impuesto.IVA);
-        for(ImpuestoDetalle impuesto: iva.getDetalleImpuestos())
+
+        List<ImpuestoDetalle> impuestoDetalleList= impuestoDetalleService.obtenerIvaVigente();
+        for(ImpuestoDetalle impuesto: impuestoDetalleList)
         {
             getComboIva().addItem(impuesto);
         }

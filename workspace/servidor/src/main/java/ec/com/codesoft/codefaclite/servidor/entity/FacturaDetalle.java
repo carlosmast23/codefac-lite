@@ -40,6 +40,8 @@ public class FacturaDetalle {
     private String descripcion;
     @Column(name = "TOTAL")
     private BigDecimal total;
+    @Column(name = "IVA")
+    private BigDecimal iva;
     
     @JoinColumn(name="FACTURA_ID")
     @ManyToOne(optional = false)
@@ -127,14 +129,24 @@ public class FacturaDetalle {
     public void setTotal(BigDecimal total) {
         this.total = total;
     }
+
+    public BigDecimal getIva() {
+        return iva;
+    }
+
+    public void setIva(BigDecimal iva) {
+        this.iva = iva;
+    }
     
     /**
      * Metodos adicionales
      */
-    
+    /*
     public BigDecimal getIva()
     {
         return total.multiply(producto.getIva().getPorcentaje());
-    }
+    }*/
+    
+    
     
 }

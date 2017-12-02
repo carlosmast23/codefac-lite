@@ -43,6 +43,7 @@ create table FACTURA_DETALLE
     PRECIO_UNITARIO decimal,
     DESCUENTO decimal,
     VALOR_ICE decimal,
+    IVA decimal,
     TOTAL decimal,
     DESCRIPCION varchar(150),
     primary key (ID)

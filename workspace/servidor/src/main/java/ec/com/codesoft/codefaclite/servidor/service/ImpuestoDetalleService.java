@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
+import ec.com.codesoft.codefaclite.servidor.entity.Impuesto;
 import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidor.facade.ImpuestoDetalleFacade;
 import java.util.List;
@@ -41,5 +42,10 @@ public class ImpuestoDetalleService
     public List<ImpuestoDetalle> buscarImpuestoDetallePorMap(Map<String,Object> map)
     {
         return impuestoDetalleFacade.findByMap(map);        
+    }
+    
+    public List<ImpuestoDetalle> obtenerIvaVigente()
+    {
+        return impuestoDetalleFacade.getImpuestoVigenteByName(Impuesto.IVA);
     }
 }
