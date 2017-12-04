@@ -89,6 +89,11 @@ public class FacturacionModel extends FacturacionPanel{
      */
     private Map<String,String> datosAdicionales;
     
+    /**
+     * Objeto que permite interactuar con los servicio de la facturacion Electronica
+     */
+    private FacturacionElectronica facturaElectronica;
+    
     
     public FacturacionModel() {
         addListenerButtons();
@@ -105,7 +110,7 @@ public class FacturacionModel extends FacturacionPanel{
         this.banderaAgregar = true;
         calcularIva12();
         
-        datosAdicionales=new HashMap<String,String>();
+        datosAdicionales=new HashMap<String,String>();        
     }
     
     private void addListenerButtons() {
@@ -273,7 +278,7 @@ public class FacturacionModel extends FacturacionPanel{
         servicio.grabar(factura);
         DialogoCodefac.mensaje("Correcto", "La factura se grabo correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         //Despues de implemetar todo el metodo de grabar
-        FacturacionElectronica facturaElectronica=new FacturacionElectronica(factura, session,this.panelPadre);
+        //facturaElectronica=new FacturacionElectronica(factura, session,this.panelPadre);
         facturaElectronica.setMapInfoAdicional(datosAdicionales);
         /*
         ListenerComprobanteElectronico listener=new ListenerComprobanteElectronico() {
@@ -316,6 +321,14 @@ public class FacturacionModel extends FacturacionPanel{
                         panelPadre.crearReportePantalla(print, factura.getPreimpreso());
                     }
                 });
+                
+                /**
+                 * Seteando datos adicionales de la factura
+                 */
+                factura.setClaveAcceso(facturaElectronica.getServicio().getClaveAcceso());
+                factura.setEstado(Factura.ESTADO_FACTURADO);
+                servicio.editar(factura);
+                
 
             }
 
@@ -392,10 +405,10 @@ public class FacturacionModel extends FacturacionPanel{
                 
             }
         });
-        //facturaElectronica.getServicio().addActionListerComprobanteElectronico(listener);
-        facturaElectronica.procesar();//listo se encarga de procesar el comprobante
+
+        facturaElectronica.procesarComprobante();//listo se encarga de procesar el comprobante
         
-        //UtilidadVarios.abrirArchivo(path);
+
         
     }
 
@@ -411,7 +424,16 @@ public class FacturacionModel extends FacturacionPanel{
 
     @Override
     public void imprimir() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(this.factura!=null)
+        {
+           String claveAceeso=this.factura.getClaveAcceso();
+           facturaElectronica.setClaveAcceso(claveAceeso);
+           facturaElectronica.setFactura(factura);
+           //facturaElectronica.procesarComprobanteEtapa(ComprobanteElectronicoService.ETAPA_RIDE,false);
+           //facturaElectronica.procesarComprobante();
+           //JasperPrint print = facturaElectronica.getServicio().getPrintJasper();
+           panelPadre.crearReportePantalla(facturaElectronica.obtenerRide(), factura.getPreimpreso());
+        }
     }
 
     @Override
@@ -427,7 +449,7 @@ public class FacturacionModel extends FacturacionPanel{
         Factura factura=(Factura) buscarDialogoModel.getResultado();
         if(factura!=null)
         {
-            
+            this.factura=factura;
         }
     }
 
@@ -444,6 +466,7 @@ public class FacturacionModel extends FacturacionPanel{
         getLblSecuencial().setText(servicio.getPreimpresoSiguiente());
         
         datosAdicionales=new HashMap<String,String>();
+        facturaElectronica=new FacturacionElectronica(session,this.panelPadre);
     }
 
     @Override

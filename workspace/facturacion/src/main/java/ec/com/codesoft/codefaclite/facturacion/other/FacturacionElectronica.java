@@ -43,14 +43,20 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
     public FacturacionElectronica(SessionCodefacInterface session) {
         super(session);
     }
+    
+     public FacturacionElectronica(SessionCodefacInterface session, InterfazComunicacionPanel interfazPadre) {
+        super(session, interfazPadre);
+    }
+    
 
     public FacturacionElectronica(Factura factura, SessionCodefacInterface session, InterfazComunicacionPanel interfazPadre) {
         super(session, interfazPadre);
         this.factura = factura;
     }
-
     
-    
+    public FacturacionElectronica(String claveAcceso, SessionCodefacInterface session, InterfazComunicacionPanel interfazPadre) {
+        super(session, interfazPadre,claveAcceso);
+    }
     
     
 
@@ -191,9 +197,20 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
     @Override
     public List<String> getCorreos() {
         List<String> correos=new ArrayList<String>();
-        correos.add(factura.getCliente().getCorreoElectronico());
+        if(factura.getCliente()!=null)
+            correos.add(factura.getCliente().getCorreoElectronico());
+        
         return correos;
     }
+
+    public Factura getFactura() {
+        return factura;
+    }
+
+    public void setFactura(Factura factura) {
+        this.factura = factura;        
+    }
+    
     
     
 

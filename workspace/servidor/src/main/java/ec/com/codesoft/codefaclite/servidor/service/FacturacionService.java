@@ -40,6 +40,12 @@ public class FacturacionService {
         
     }
     
+    public void editar(Factura factura)
+    {
+        facturaFacade.edit(factura);
+        
+    }
+    
     public List<Factura> obtenerTodos()
     {
         return facturaFacade.findAll();

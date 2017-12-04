@@ -19,6 +19,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 
 /**
@@ -55,27 +56,34 @@ public abstract class ComprobantesElectronicosUtil {
     
     public static void generarArchivoXml(String xml,String path)
     {
-        File file = new File(path);
-        //crear toda la ruta si no existe
-        if (!file.exists()) {
-            file.getParentFile().mkdirs();
-            //file.mkdir();
-        }
-
-        FileWriter fw = null;
-        try {       
-            //file.createNewFile();
-            fw = new FileWriter(file);
-            fw.write(xml);
-            fw.close();
-        } catch (IOException ex) {
-            Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
+        try {
+            File file = new File(path);
+            //crear toda la ruta si no existe
+            if (!file.exists()) {
+                file.getParentFile().mkdirs();
+                //file.mkdir();
+            }
+            
+            FileUtils.writeStringToFile(file,xml, "UTF-8");
+            /*
+            FileWriter fw = null;
             try {
+                //file.createNewFile();
+                fw = new FileWriter(file);
+                fw.write(xml);
                 fw.close();
             } catch (IOException ex) {
                 Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                try {
+                    fw.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
+*/
+        } catch (IOException ex) {
+            Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
