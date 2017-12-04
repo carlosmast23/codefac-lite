@@ -5,6 +5,11 @@
  */
 package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util;
 
+import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.CARPETA_AUTORIZADOS;
+import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.CARPETA_CONFIGURACION;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
+import ec.com.codesoft.codefaclite.ws.recepcion.Comprobante;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadTratarNodo;
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,12 +18,19 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 
@@ -165,5 +177,37 @@ public abstract class ComprobantesElectronicosUtil {
         return format.format(fecha);
     }
     
+    public static  File[] getComprobantesByFolder(String pathBase,String carpetaConfiguracion)
+    {
+        String pathDirectorio = pathBase + "/" + carpetaConfiguracion;
+        File f = new File(pathDirectorio);
+        //List<File> autorizaciones=new ArrayList<String>();
+        if (f.exists()) { // Directorio existe 
+            File[] ficheros = f.listFiles();
+            /*
+            for (File fichero : ficheros) {
+                autorizaciones.add(fichero.getName());
+            }*/
+            return ficheros;
+        }
+        return null;
+    }
     
+    public static ComprobanteElectronico obtenerComprobante(String path)
+    {
+        try {
+            JAXBContext jaxbContext = JAXBContext.newInstance(FacturaComprobante.class);
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+            
+            Map<String, String> mapComprobante = UtilidadesComprobantes.decodificarArchivoBase64Offline(path, null, null);
+            StringReader reader = new StringReader(mapComprobante.get("comprobante"));
+            FacturaComprobante comprobante = (FacturaComprobante) jaxbUnmarshaller.unmarshal(reader);
+            return comprobante;
+        } catch (JAXBException ex) {
+            Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 }

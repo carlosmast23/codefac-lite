@@ -81,6 +81,8 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuItemMonitor = new javax.swing.JMenuItem();
         jMenuUtilidades = new javax.swing.JMenu();
         jMenuCalculadora = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItemUtilidades = new javax.swing.JMenuItem();
         jMenu8 = new javax.swing.JMenu();
 
         JpanelAuxiliar.setLayout(new javax.swing.BoxLayout(JpanelAuxiliar, javax.swing.BoxLayout.LINE_AXIS));
@@ -274,6 +276,13 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
         jMenuBar1.add(jMenuUtilidades);
 
+        jMenu1.setText("Comprobantes");
+
+        jMenuItemUtilidades.setText("Utilidades");
+        jMenu1.add(jMenuItemUtilidades);
+
+        jMenuBar1.add(jMenu1);
+
         jMenu8.setText("Ayuda");
         jMenuBar1.add(jMenu8);
 
@@ -378,6 +387,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu8;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuCalculadora;
@@ -388,6 +398,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItemMonitor;
+    private javax.swing.JMenuItem jMenuItemUtilidades;
     private javax.swing.JMenuItem jMenuProducto;
     private javax.swing.JMenu jMenuUtilidades;
     private javax.swing.JPanel jPanel3;
@@ -590,4 +601,12 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         return jPanelSeleccion;
     }
 
+    public JMenuItem getjMenuItemUtilidades() {
+        return jMenuItemUtilidades;
+    }
+
+    public void setjMenuItemUtilidades(JMenuItem jMenuItemUtilidades) {
+        this.jMenuItemUtilidades = jMenuItemUtilidades;
+    }
+        
 }

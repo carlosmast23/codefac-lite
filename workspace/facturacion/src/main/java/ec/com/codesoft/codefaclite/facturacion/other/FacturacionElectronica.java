@@ -197,7 +197,7 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
     @Override
     public List<String> getCorreos() {
         List<String> correos=new ArrayList<String>();
-        if(factura.getCliente()!=null)
+        if(factura!=null && factura.getCliente()!=null)
             correos.add(factura.getCliente().getCorreoElectronico());
         
         return correos;

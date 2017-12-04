@@ -386,7 +386,6 @@ public class FacturacionModel extends FacturacionPanel{
                          monitorData.getBtnAbrir().addActionListener(new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
-                                String path = facturaElectronica.getServicio().getPathRide();
                                 JasperPrint print = facturaElectronica.getServicio().getPrintJasper();
                                 panelPadre.crearReportePantalla(print, factura.getPreimpreso());
                             }

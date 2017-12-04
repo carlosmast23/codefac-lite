@@ -8,7 +8,21 @@ package ec.com.codesoft.codefaclite.corecodefaclite.views;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ConsolaGeneral;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Cursor;
+import java.awt.Image;
+import java.awt.Point;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import org.bouncycastle.crypto.tls.SessionParameters;
 
@@ -103,5 +117,74 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
      * Ejemplo: Despues de guardar se limpian automaticamentes los datos
      */
     public Boolean cicloVida=true;
+    
+    
+    /**
+     * Variable que permite grabar los componentes que estaban desactivos
+     * para cuando se vuelvan a activar el formulario conserver el estado
+     * de los que estaban desactivados antes de desactivar todo
+     */
+    private List<Component> componentesTemporales;
+    
+    /**
+     * Metodo para establecer un icono por defecto cuando este cargando la pantalla
+     */
+    
+        
+    public void estadoCargando()
+    {
+        try {
+            componentesTemporales=new ArrayList<Component>();
+            java.awt.Toolkit toolkit = java.awt.Toolkit.getDefaultToolkit();
+            InputStream is=RecursoCodefac.IMAGENES_ICONOS.getResourceInputStream("gif/cargando.gif");
+            Image image = ImageIO.read(is);
+            ImageIcon imageIcon=new ImageIcon(image);
+            int width=imageIcon.getIconWidth()/2;
+            int height=imageIcon.getIconHeight()/2;
+            Cursor cursor=toolkit.createCustomCursor(image, new Point(0,0),"");
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            setEnableRec(this,false);
+            //toolkit.createCustomCursor(image , new Point(width,height), "");
+        } catch (IOException ex) {
+            Logger.getLogger(GeneralPanelInterface.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    private void setEnableRec(Component container, boolean enable){
+        
+        if (!enable) {
+            if (!container.isEnabled()) {
+                componentesTemporales.add(container);
+            }
+            container.setEnabled(enable);
+        }
+        else
+        {
+            if(!componentesTemporales.contains(container))
+                container.setEnabled(enable);
+        }
+        
+
+
+    try {
+        Component[] components= ((Container) container).getComponents();
+        for (int i = 0; i < components.length; i++) {
+           
+            setEnableRec(components[i], enable);
+        }
+    } catch (ClassCastException e) {
+
+    }
+}
+
+    public void estadoNormal()
+    {
+        setEnableRec(this,true);
+        this.setCursor(Cursor.getDefaultCursor());
+        //this.setVisible(true);
+    }
+    
+    
     
 }

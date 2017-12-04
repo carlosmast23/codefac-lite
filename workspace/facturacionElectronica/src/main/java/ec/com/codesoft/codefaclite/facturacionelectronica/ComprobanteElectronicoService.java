@@ -152,6 +152,7 @@ public class ComprobanteElectronicoService implements Runnable {
                 System.out.println("generar()");
 
                 if (!procesarTodasEtapas) {
+                    escucha.termino();
                     return;
                 }
 
@@ -163,6 +164,7 @@ public class ComprobanteElectronicoService implements Runnable {
                 escucha.procesando(etapaActual);
                 System.out.println("preValidacion()");
                 if (!procesarTodasEtapas) {
+                    escucha.termino();
                     return;
                 }
                 etapaActual++;
@@ -173,6 +175,7 @@ public class ComprobanteElectronicoService implements Runnable {
                 escucha.procesando(etapaActual);
                 System.out.println("firmar()");
                 if (!procesarTodasEtapas) {
+                    escucha.termino();
                     return;
                 }
                 etapaActual++;
@@ -183,6 +186,7 @@ public class ComprobanteElectronicoService implements Runnable {
                 escucha.procesando(etapaActual);
                 System.out.println("enviarSri()");
                 if (!procesarTodasEtapas) {
+                    escucha.termino();
                     return;
                 }
                 etapaActual++;
@@ -193,6 +197,7 @@ public class ComprobanteElectronicoService implements Runnable {
                 escucha.procesando(etapaActual);
                 System.out.println("autorizarSri()");
                 if (!procesarTodasEtapas) {
+                    escucha.termino();
                     return;
                 }
                 etapaActual++;
@@ -204,6 +209,7 @@ public class ComprobanteElectronicoService implements Runnable {
                 //generarRide();
                 System.out.println("generarRide()");
                 if (!procesarTodasEtapas) {
+                    escucha.termino();
                     return;
                 }
                 etapaActual++;
@@ -213,6 +219,7 @@ public class ComprobanteElectronicoService implements Runnable {
                 enviarComprobante();
                 escucha.procesando(etapaActual);
                 if (!procesarTodasEtapas) {
+                    escucha.termino();
                     return;
                 }
                 //generarRide();
@@ -234,7 +241,7 @@ public class ComprobanteElectronicoService implements Runnable {
             StringReader reader = new StringReader(mapComprobante.get("comprobante"));
             FacturaComprobante comprobante = (FacturaComprobante) jaxbUnmarshaller.unmarshal(reader);
 
-            String pathFile = getPathComprobante(CARPETA_RIDE, getNameRide());
+            String pathFile = getPathComprobante(CARPETA_RIDE, getNameRide(comprobante));
             try {
                 String mensajeGenerado = "Estimado/a "
                         + "<b>" + comprobante.getInformacionFactura().getRazonSocialComprador() + "</b> ,<br><br>"
@@ -294,7 +301,7 @@ public class ComprobanteElectronicoService implements Runnable {
             datosMap.put("pl_img_telefono", UtilidadesComprobantes.getStreamByPath(mapAdicionalReporte.get("pl_img_telefono_url").toString()));
             datosMap.put("pl_img_logo_pie", UtilidadesComprobantes.getStreamByPath(mapAdicionalReporte.get("pl_img_logo_pie_url").toString()));
 
-            UtilidadesComprobantes.generarReporteJasper(pathFacturaJasper, datosMap, informacionAdiciona, getPathComprobante(CARPETA_RIDE, getNameRide()));
+            UtilidadesComprobantes.generarReporteJasper(pathFacturaJasper, datosMap, informacionAdiciona, getPathComprobante(CARPETA_RIDE, getNameRide(comprobante)));
 
         } catch (JAXBException ex) {
             Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
@@ -540,7 +547,7 @@ public class ComprobanteElectronicoService implements Runnable {
         return pathBase + "/" + CARPETA_CONFIGURACION + "/" + nombreFirma;
     }
 
-    private String getNameRide() {
+    private String getNameRide(FacturaComprobante comprobante) {
         String prefijo = "";
         if (ComprobanteEnum.FACTURA.getCodigo().equals(comprobante.getTipoDocumento())) {
             prefijo = "FAC";
@@ -548,12 +555,12 @@ public class ComprobanteElectronicoService implements Runnable {
         comprobante.getTipoDocumento();
         return prefijo + "-" + comprobante.getInformacionTributaria().getPreimpreso() + ".pdf";
     }
-
+/*
     public String getPathRide() {
         String nombreArchivo = getNameRide();
         return pathBase + "/" + CARPETA_RIDE + "/" + nombreArchivo;
     }
-
+*/
     public void setUriRecepcion(String uriRecepcion) {
         this.uriRecepcion = uriRecepcion;
     }

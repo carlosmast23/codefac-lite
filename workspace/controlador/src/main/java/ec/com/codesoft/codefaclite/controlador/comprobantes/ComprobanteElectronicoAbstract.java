@@ -154,6 +154,7 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
      */
     public void procesarComprobanteEtapa(Integer etapa,Boolean completarTodasEtapas)
     {
+        servicio.setEtapaActual(etapa);
         servicio.setClaveAcceso(claveAcceso);
         servicio.setProcesarTodasEtapas(completarTodasEtapas);
         cargarConfiguraciones();
