@@ -178,6 +178,7 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
         servicio.setComprobante(comprobante);
         servicio.setEtapaActual(ComprobanteElectronicoService.ETAPA_GENERAR);
         cargarConfiguraciones();
+        servicio.setProcesarTodasEtapas(true);
         
         servicio.procesar();
         

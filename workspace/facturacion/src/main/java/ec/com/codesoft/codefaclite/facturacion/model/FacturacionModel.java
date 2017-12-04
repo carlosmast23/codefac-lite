@@ -278,7 +278,8 @@ public class FacturacionModel extends FacturacionPanel{
         servicio.grabar(factura);
         DialogoCodefac.mensaje("Correcto", "La factura se grabo correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         //Despues de implemetar todo el metodo de grabar
-        //facturaElectronica=new FacturacionElectronica(factura, session,this.panelPadre);
+        FacturacionElectronica facturaElectronica=new FacturacionElectronica(factura, session,this.panelPadre);
+        facturaElectronica.setFactura(factura);
         facturaElectronica.setMapInfoAdicional(datosAdicionales);
         /*
         ListenerComprobanteElectronico listener=new ListenerComprobanteElectronico() {
@@ -316,7 +317,7 @@ public class FacturacionModel extends FacturacionPanel{
                 monitorData.getBtnAbrir().addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        String path = facturaElectronica.getServicio().getPathRide();
+                        //String path = facturaElectronica.getServicio().getPathRide();
                         JasperPrint print = facturaElectronica.getServicio().getPrintJasper();
                         panelPadre.crearReportePantalla(print, factura.getPreimpreso());
                     }
