@@ -133,36 +133,39 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
         
     public void estadoCargando()
     {
-        try {
             componentesTemporales=new ArrayList<Component>();
+            /*
             java.awt.Toolkit toolkit = java.awt.Toolkit.getDefaultToolkit();
             InputStream is=RecursoCodefac.IMAGENES_ICONOS.getResourceInputStream("gif/cargando.gif");
             Image image = ImageIO.read(is);
             ImageIcon imageIcon=new ImageIcon(image);
             int width=imageIcon.getIconWidth()/2;
             int height=imageIcon.getIconHeight()/2;
-            Cursor cursor=toolkit.createCustomCursor(image, new Point(0,0),"");
-            this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            Cursor cursor=toolkit.createCustomCursor(image, new Point(0,0),"");*/
+            
             setEnableRec(this,false);
+            setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            //this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             //toolkit.createCustomCursor(image , new Point(width,height), "");
-        } catch (IOException ex) {
-            Logger.getLogger(GeneralPanelInterface.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+
     }
     
     private void setEnableRec(Component container, boolean enable){
         
-        if (!enable) {
-            if (!container.isEnabled()) {
-                componentesTemporales.add(container);
-            }
-            container.setEnabled(enable);
-        }
-        else
+        if(!container.equals(this)) //para que no desactive el panel padre
         {
-            if(!componentesTemporales.contains(container))
+
+            if (!enable) {
+                if (!container.isEnabled()) {
+                    componentesTemporales.add(container);
+                }
                 container.setEnabled(enable);
+            }
+            else
+            {
+                if(!componentesTemporales.contains(container))
+                    container.setEnabled(enable);
+            }
         }
         
 

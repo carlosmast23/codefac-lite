@@ -146,9 +146,9 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 FacturacionElectronica servicio = new FacturacionElectronica(session, panelPadre);
-                frame.setEnabled(false);
                 
                 estadoCargando();
+                
                 servicio.getServicio().addActionListerComprobanteElectronico(new ListenerComprobanteElectronico() {
                     @Override
                     public void termino() {
