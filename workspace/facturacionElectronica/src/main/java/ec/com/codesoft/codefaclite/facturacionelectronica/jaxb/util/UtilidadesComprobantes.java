@@ -114,6 +114,63 @@ public abstract class UtilidadesComprobantes {
         return null;
 
     }
+    
+     public static Map<String,String> decodificarArchivoAutorizado(String nombreArchivo) throws Exception{
+        try {
+            File archivo = new File(nombreArchivo);
+            if (archivo.exists()) {
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder builder = factory.newDocumentBuilder();
+                Document documento = builder.parse(archivo);
+                NodeList listaNodos = documento.getElementsByTagName("*");
+                String comprobante = null;
+                String numeroAutorizacionComprobante = "";
+                String fechaAutorizacionComprobante = "";
+                String estadoComprobante = "";
+                for (int i = 0; i < listaNodos.getLength(); i++) {
+                    Element elemento = (Element) listaNodos.item(i);
+                    if (elemento.getNodeName().equals("comprobante")) {
+                        comprobante = elemento.getChildNodes().item(0).getNodeValue();
+                    }
+                    if (elemento.getNodeName().equals("estado")) {
+                        estadoComprobante = elemento.getChildNodes().item(0).getNodeValue();
+                    }
+
+                    if (elemento.getNodeName().equals("numeroAutorizacion")) {
+                        numeroAutorizacionComprobante = elemento.getChildNodes().item(0).getNodeValue();
+                    }
+                    if (elemento.getNodeName().equals("fechaAutorizacion")) {
+                        fechaAutorizacionComprobante = fechaAutorizacionComprobante + elemento.getChildNodes().item(0).getNodeValue();
+                    }
+                }
+                
+
+                if ("AUTORIZADO".equalsIgnoreCase(estadoComprobante)) {
+                    Map<String,String> map=new HashMap<String,String>();
+                    map.put("comprobante", comprobante);
+                    map.put("numeroAutorizacion", numeroAutorizacionComprobante);
+                    map.put("fechaAutorizacion",UtilidadesComprobantes.getFormatXmlGregorianCalendarToSimpleFormat(fechaAutorizacionComprobante));
+                    map.put("estado",estadoComprobante);
+                    //generarReporteComprobante(comprobante, numeroAutorizacion, fechaAutorizacion);
+                    return map;
+                }
+            }
+        } catch (MalformedByteSequenceException e) {
+            e.printStackTrace();
+            throw new Exception(e.getMessage());
+        } catch (SAXException ex) {
+            Logger.getLogger(UtilidadesComprobantes.class.getName()).log(Level.SEVERE, null, ex);
+            throw new Exception(ex.getMessage());
+        } catch (IOException ex) {
+            Logger.getLogger(UtilidadesComprobantes.class.getName()).log(Level.SEVERE, null, ex);
+            throw new Exception(ex.getMessage());
+        } catch (ParserConfigurationException ex) {
+            Logger.getLogger(UtilidadesComprobantes.class.getName()).log(Level.SEVERE, null, ex);
+            throw new Exception(ex.getMessage());
+        }
+        return null;
+
+    }
  
     /*
     private static void generarReporteComprobante(String documento, String numeroAutorizacion, String fechaAutorizacion) {

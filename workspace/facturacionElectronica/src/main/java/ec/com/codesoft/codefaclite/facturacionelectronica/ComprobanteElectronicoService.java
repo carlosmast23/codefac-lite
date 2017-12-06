@@ -34,6 +34,8 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -58,8 +60,10 @@ public class ComprobanteElectronicoService implements Runnable {
     public static final String CARPETA_ENVIADOS = "enviados";
     public static final String CARPETA_AUTORIZADOS = "autorizados";
     public static final String CARPETA_NO_AUTORIZADOS = "no_autorizados";
-    public static final String CARPETA_CONFIGURACION = "configuracion";
     public static final String CARPETA_RIDE = "ride";
+    
+    public static final String CARPETA_CONFIGURACION = "configuracion";
+
 
     public static final String MODO_PRODUCCION = "produccion";
     public static final String MODO_PRUEBAS = "pruebas";
@@ -123,9 +127,11 @@ public class ComprobanteElectronicoService implements Runnable {
     private List<String> correosElectronicos;
 
     private String footerMensajeCorreo;
-    private boolean procesarTodasEtapas;
+    private Integer etapaLimiteProcesar;
 
     public ComprobanteElectronicoService() {
+        this.etapaLimiteProcesar = 100;
+        this.etapaActual = ETAPA_GENERAR;
     }
 
     public ComprobanteElectronicoService(String pathBase, String nombreFirma, String claveFirma, String modoFacturacion, ComprobanteElectronico comprobante) {
@@ -135,7 +141,7 @@ public class ComprobanteElectronicoService implements Runnable {
         this.modoFacturacion = modoFacturacion;
         this.comprobante = comprobante;
         this.etapaActual = ETAPA_GENERAR;
-        this.procesarTodasEtapas = true;
+        this.etapaLimiteProcesar = 100;
     }
 
     public void procesar() {
@@ -145,13 +151,13 @@ public class ComprobanteElectronicoService implements Runnable {
 
     private void procesarComprobante() {
         try {
-            escucha.iniciado();
+            escucha.iniciado(comprobante);
             if (etapaActual == ETAPA_GENERAR) {
                 generar();
                 escucha.procesando(etapaActual);
                 System.out.println("generar()");
 
-                if (!procesarTodasEtapas) {
+                if (etapaLimiteProcesar<=ETAPA_GENERAR) {
                     escucha.termino();
                     return;
                 }
@@ -163,7 +169,7 @@ public class ComprobanteElectronicoService implements Runnable {
                 preValidacion();
                 escucha.procesando(etapaActual);
                 System.out.println("preValidacion()");
-                if (!procesarTodasEtapas) {
+                if (etapaLimiteProcesar<=ETAPA_PRE_VALIDAR) {
                     escucha.termino();
                     return;
                 }
@@ -174,7 +180,7 @@ public class ComprobanteElectronicoService implements Runnable {
                 firmar();
                 escucha.procesando(etapaActual);
                 System.out.println("firmar()");
-                if (!procesarTodasEtapas) {
+                if(etapaLimiteProcesar<=ETAPA_FIRMAR) {
                     escucha.termino();
                     return;
                 }
@@ -185,7 +191,7 @@ public class ComprobanteElectronicoService implements Runnable {
                 enviarSri();
                 escucha.procesando(etapaActual);
                 System.out.println("enviarSri()");
-                if (!procesarTodasEtapas) {
+                if(etapaLimiteProcesar<=ETAPA_ENVIAR) {
                     escucha.termino();
                     return;
                 }
@@ -196,7 +202,7 @@ public class ComprobanteElectronicoService implements Runnable {
                 autorizarSri();
                 escucha.procesando(etapaActual);
                 System.out.println("autorizarSri()");
-                if (!procesarTodasEtapas) {
+                if(etapaLimiteProcesar<=ETAPA_AUTORIZAR) {
                     escucha.termino();
                     return;
                 }
@@ -208,7 +214,7 @@ public class ComprobanteElectronicoService implements Runnable {
                 escucha.procesando(etapaActual);
                 //generarRide();
                 System.out.println("generarRide()");
-                if (!procesarTodasEtapas) {
+                if(etapaLimiteProcesar<=ETAPA_RIDE) {
                     escucha.termino();
                     return;
                 }
@@ -218,7 +224,7 @@ public class ComprobanteElectronicoService implements Runnable {
             if (etapaActual == ETAPA_ENVIO_COMPROBANTE) {
                 enviarComprobante();
                 escucha.procesando(etapaActual);
-                if (!procesarTodasEtapas) {
+                if(etapaLimiteProcesar<=ETAPA_ENVIO_COMPROBANTE) {
                     escucha.termino();
                     return;
                 }
@@ -242,14 +248,18 @@ public class ComprobanteElectronicoService implements Runnable {
             FacturaComprobante comprobante = (FacturaComprobante) jaxbUnmarshaller.unmarshal(reader);
 
             String pathFile = getPathComprobante(CARPETA_RIDE, getNameRide(comprobante));
+            Map<String,String> archivosPath=new HashMap<String,String>();
+            archivosPath.put(ComprobanteEnum.FACTURA.getPrefijo()+"-"+comprobante.getInformacionTributaria().getPreimpreso(),pathFile);
+            archivosPath.put(comprobante.getInformacionTributaria().getPreimpreso(),getPathComprobante(CARPETA_AUTORIZADOS));
+            
             try {
                 String mensajeGenerado = "Estimado/a "
                         + "<b>" + comprobante.getInformacionFactura().getRazonSocialComprador() + "</b> ,<br><br>"
                         + "<b>" + comprobante.getInformacionTributaria().getNombreComercial() + "</b>"
                         + " le informa que su factura  electrónica " + comprobante.getInformacionTributaria().getPreimpreso() + " se generó correctamente. <br><br>";
                 mensajeGenerado = "<p>" + mensajeGenerado + "</p>" + footerMensajeCorreo;
-
-                metodoEnvioInterface.enviarCorreo(mensajeGenerado, "FACTURA:" + comprobante.getInformacionTributaria().getPreimpreso(), correosElectronicos, pathFile);
+                
+                metodoEnvioInterface.enviarCorreo(mensajeGenerado, "FACTURA:" + comprobante.getInformacionTributaria().getPreimpreso(), correosElectronicos, archivosPath);
 
                 //metodoEnvioInterface.enviarCorreo(pathBase, pathBase, destinatorios, pathBase);
             } catch (Exception ex) {
@@ -376,6 +386,7 @@ public class ComprobanteElectronicoService implements Runnable {
         if (documentoFirmado != null) {
             try {
                 ComprobantesElectronicosUtil.generarArchivoXml(documentoFirmado, getPathComprobante(CARPETA_FIRMADOS));
+                ComprobantesElectronicosUtil.eliminarArchivo(getPathComprobante(CARPETA_GENERADOS));
             } catch (Exception ex) {
                 Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -393,7 +404,11 @@ public class ComprobanteElectronicoService implements Runnable {
             if (servicioSri.verificarConexionRecepcion()) {
                 System.out.println("Existe conexion");
                 if (servicioSri.enviar()) {
+                    
                     System.out.println("Documento enviados");
+                    ComprobantesElectronicosUtil.copiarArchivoXml(getPathComprobante(CARPETA_FIRMADOS),getPathComprobante(CARPETA_ENVIADOS));
+                    ComprobantesElectronicosUtil.eliminarArchivo(getPathComprobante(CARPETA_FIRMADOS));
+                    
                 } else {
                     String mensajeError = "";
                     for (Mensaje mensaje : servicioSri.getMensajes()) {
@@ -420,6 +435,7 @@ public class ComprobanteElectronicoService implements Runnable {
         if (servicioSri.autorizar(claveAcceso)) {
             String xmlAutorizado = servicioSri.obtenerRespuestaAutorizacion();
             ComprobantesElectronicosUtil.generarArchivoXml(xmlAutorizado, getPathComprobante(CARPETA_AUTORIZADOS));
+            ComprobantesElectronicosUtil.eliminarArchivo(getPathComprobante(CARPETA_ENVIADOS));
         }
 
     }
@@ -549,11 +565,11 @@ public class ComprobanteElectronicoService implements Runnable {
 
     private String getNameRide(FacturaComprobante comprobante) {
         String prefijo = "";
-        if (ComprobanteEnum.FACTURA.getCodigo().equals(comprobante.getTipoDocumento())) {
-            prefijo = "FAC";
+        if (ComprobanteEnum.FACTURA.getCodigo().equals(comprobante.getInformacionTributaria().getCodigoDocumento())) {
+            prefijo = ComprobanteEnum.FACTURA.getPrefijo();
         }
         comprobante.getTipoDocumento();
-        return prefijo + "-" + comprobante.getInformacionTributaria().getPreimpreso() + ".pdf";
+        return prefijo + "-" + comprobante.getInformacionTributaria().getPreimpreso() +"_"+claveAcceso+ ".pdf";
     }
 /*
     public String getPathRide() {
@@ -677,13 +693,15 @@ public class ComprobanteElectronicoService implements Runnable {
         this.claveAcceso = claveAcceso;
     }
 
-    public boolean isProcesarTodasEtapas() {
-        return procesarTodasEtapas;
+    public Integer getEtapaLimiteProcesar() {
+        return etapaLimiteProcesar;
     }
 
-    public void setProcesarTodasEtapas(boolean procesarTodasEtapas) {
-        this.procesarTodasEtapas = procesarTodasEtapas;
+    public void setEtapaLimiteProcesar(Integer etapaLimiteProcesar) {
+        this.etapaLimiteProcesar = etapaLimiteProcesar;
     }
+
+    
     
     
 

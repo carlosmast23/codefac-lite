@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.facturacion.panel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JList;
 import javax.swing.JTable;
 
 /**
@@ -33,18 +34,23 @@ public abstract class UtilidadComprobantePanel extends ControladorCodefacInterfa
     private void initComponents() {
 
         jProgressBar1 = new javax.swing.JProgressBar();
-        btnCompletarProceso = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblComprobantes = new javax.swing.JTable();
         btnSiguienteEtapa = new javax.swing.JButton();
         cmbCarpetaComprobante = new javax.swing.JComboBox<>();
+        cmbEstadoLimiteProcesar = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jListCorreos = new javax.swing.JList<>();
+        btnAgregarCorreo = new javax.swing.JButton();
+        btnEliminarCorreo = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
-
-        btnCompletarProceso.setText("Completar Proceso");
 
         tblComprobantes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -59,59 +65,111 @@ public abstract class UtilidadComprobantePanel extends ControladorCodefacInterfa
         ));
         jScrollPane2.setViewportView(tblComprobantes);
 
-        btnSiguienteEtapa.setText("Siguiente Etapa");
+        btnSiguienteEtapa.setText("Procesar");
+        btnSiguienteEtapa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSiguienteEtapaActionPerformed(evt);
+            }
+        });
 
         cmbCarpetaComprobante.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        cmbEstadoLimiteProcesar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jLabel1.setText("Carpetas Comprobantes");
+
+        jLabel2.setText("Etapa final procesar");
+
+        jScrollPane1.setViewportView(jListCorreos);
+
+        btnAgregarCorreo.setText("+");
+
+        btnEliminarCorreo.setText("X");
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel3.setText("Correos Electronicos");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 546, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnCompletarProceso)
+                        .addGap(20, 20, 20)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1))
                         .addGap(18, 18, 18)
-                        .addComponent(cmbCarpetaComprobante, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 295, Short.MAX_VALUE)
-                        .addComponent(btnSiguienteEtapa, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(cmbEstadoLimiteProcesar, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbCarpetaComprobante, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnSiguienteEtapa, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnAgregarCorreo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnEliminarCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cmbCarpetaComprobante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cmbEstadoLimiteProcesar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSiguienteEtapa)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCompletarProceso)
-                    .addComponent(btnSiguienteEtapa)
-                    .addComponent(cmbCarpetaComprobante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
-                .addContainerGap())
+                    .addComponent(btnAgregarCorreo)
+                    .addComponent(btnEliminarCorreo))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGap(20, 20, 20))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnSiguienteEtapaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteEtapaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSiguienteEtapaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCompletarProceso;
+    private javax.swing.JButton btnAgregarCorreo;
+    private javax.swing.JButton btnEliminarCorreo;
     private javax.swing.JButton btnSiguienteEtapa;
     private javax.swing.JComboBox<String> cmbCarpetaComprobante;
+    private javax.swing.JComboBox<String> cmbEstadoLimiteProcesar;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JList<String> jListCorreos;
     private javax.swing.JProgressBar jProgressBar1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tblComprobantes;
     // End of variables declaration//GEN-END:variables
 
-    public JButton getBtnCompletarProceso() {
-        return btnCompletarProceso;
-    }
-
-    public void setBtnCompletarProceso(JButton btnCompletarProceso) {
-        this.btnCompletarProceso = btnCompletarProceso;
-    }
 
     public JButton getBtnSiguienteEtapa() {
         return btnSiguienteEtapa;
@@ -136,6 +194,33 @@ public abstract class UtilidadComprobantePanel extends ControladorCodefacInterfa
     public void setTblComprobantes(JTable tblComprobantes) {
         this.tblComprobantes = tblComprobantes;
     }
+
+    public JComboBox<String> getCmbEstadoLimiteProcesar() {
+        return cmbEstadoLimiteProcesar;
+    }
+
+    public void setCmbEstadoLimiteProcesar(JComboBox<String> cmbEstadoLimiteProcesar) {
+        this.cmbEstadoLimiteProcesar = cmbEstadoLimiteProcesar;
+    }
+
+    public JList<String> getjListCorreos() {
+        return jListCorreos;
+    }
+
+    public void setjListCorreos(JList<String> jListCorreos) {
+        this.jListCorreos = jListCorreos;
+    }
+
+    public JButton getBtnAgregarCorreo() {
+        return btnAgregarCorreo;
+    }
+
+    public JButton getBtnEliminarCorreo() {
+        return btnEliminarCorreo;
+    }
+    
+    
+    
     
 
 }

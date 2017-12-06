@@ -24,8 +24,8 @@ public class TestCorreo {
 
     public static void main(String[] args) {
 
-        CorreoElectronico correo=new CorreoElectronico("carlosmast2302@gmail.com","especodesoft2301","Esto es un ejemplo","carlosmast2301@hotmail.es","ejemplo");
-        correo.sendMail();
+       // CorreoElectronico correo=new CorreoElectronico("carlosmast2302@gmail.com","especodesoft2301","Esto es un ejemplo","carlosmast2301@hotmail.es","ejemplo");
+        //correo.sendMail();
     }
 
     public static void enviar2() {

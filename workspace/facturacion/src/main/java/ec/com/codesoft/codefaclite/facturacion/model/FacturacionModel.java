@@ -30,6 +30,7 @@ import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElec
 import ec.com.codesoft.codefaclite.facturacionelectronica.MetodosEnvioInterface;
 import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.servidor.entity.Factura;
 import ec.com.codesoft.codefaclite.servidor.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.FormaPago;
@@ -363,13 +364,13 @@ public class FacturacionModel extends FacturacionPanel{
             }
 
             @Override
-            public void iniciado() {
+            public void iniciado(ComprobanteElectronico comprobante) {
                 monitorData=MonitorComprobanteModel.getInstance().agregarComprobante();
                 monitorData.getLblPreimpreso().setText(factura.getPreimpreso()+" ");
                 monitorData.getBtnAbrir().setEnabled(false);
                 monitorData.getBtnReporte().setEnabled(false);
                 monitorData.getBtnCerrar().setEnabled(false);
-                monitorData.getBarraProgreso().setString("001-002-000000233");
+                monitorData.getBarraProgreso().setString(comprobante.getInformacionTributaria().getPreimpreso());
                 monitorData.getBarraProgreso().setStringPainted(true);
                 MonitorComprobanteModel.getInstance().mostrar();
                 

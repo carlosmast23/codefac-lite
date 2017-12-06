@@ -23,9 +23,9 @@ import javax.xml.bind.annotation.XmlTransient;
 public abstract class ComprobanteElectronico {    
     public static final String FACTURA="factura";
     public static final String NOTA_CREDITO="notaCredito";
-    public static final String MODO_FACTURACION_NORMAL="1";
-
     
+    
+    public static final String MODO_FACTURACION_NORMAL="1";
     protected InformacionTributaria informacionTributaria;
     protected List<InformacionAdicional> informacionAdicional;
     public abstract String getTipoDocumento();

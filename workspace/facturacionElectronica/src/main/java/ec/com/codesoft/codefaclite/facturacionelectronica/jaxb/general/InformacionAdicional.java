@@ -14,6 +14,8 @@ import javax.xml.bind.annotation.XmlValue;
  * @author Carlos
  */
 public class InformacionAdicional {
+    public static final String EMAIL="email";
+    
    private String nombre;
    private String valor;
 

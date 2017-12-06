@@ -209,7 +209,7 @@ public class ServicioSri {
     {
         try {
             Autorizacion item=autorizacion.get(0);
-            System.out.println(item.getFechaAutorizacion());
+            //System.out.println(item.getFechaAutorizacion());
             item.setComprobante("<![CDATA[" + item.getComprobante() + "]]>");            
             XStream xstream = XStreamUtil.getRespuestaXStream();
             Writer writer = null;
@@ -226,7 +226,7 @@ public class ServicioSri {
             int posicionFinal=xmlAutorizacion.indexOf("</fechaAutorizacion>");
             xmlAutorizacion=xmlAutorizacion.substring(0,posicionInicial)+"<fechaAutorizacion>"+item.getFechaAutorizacion()+xmlAutorizacion.substring(posicionFinal,xmlAutorizacion.length());
             
-            System.out.println(xmlAutorizacion);
+            //System.out.println(xmlAutorizacion);
             
             if (item.getEstado().equals("AUTORIZADO")) {
                 return xmlAutorizacion;

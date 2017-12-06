@@ -152,11 +152,11 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
         /**
      * Procesa el comprobante desde una determinada etapa
      */
-    public void procesarComprobanteEtapa(Integer etapa,Boolean completarTodasEtapas)
+    public void procesarComprobanteEtapa(Integer etapa,Integer etapaLimite)
     {
         servicio.setEtapaActual(etapa);
         servicio.setClaveAcceso(claveAcceso);
-        servicio.setProcesarTodasEtapas(completarTodasEtapas);
+        servicio.setEtapaLimiteProcesar(etapaLimite);
         cargarConfiguraciones();
         servicio.procesar();
     }
@@ -179,7 +179,7 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
         servicio.setComprobante(comprobante);
         servicio.setEtapaActual(ComprobanteElectronicoService.ETAPA_GENERAR);
         cargarConfiguraciones();
-        servicio.setProcesarTodasEtapas(true);
+        //servicio.setEtapaLimiteProcesar(etapaLimite);
         
         servicio.procesar();
         
@@ -212,9 +212,9 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
     
     public void cargarConfiguracionesCorreo()
     {
-        this.servicio.setMetodoEnvioInterface(new MetodosEnvioInterface()  {
+        this.servicio.setMetodoEnvioInterface(new MetodosEnvioInterface() {
             @Override
-            public void enviarCorreo(String mensaje, String subject, List<String> destinatorios,String pathFile) throws ComprobanteElectronicoException{
+            public void enviarCorreo(String mensaje, String subject, List<String> destinatorios, Map<String,String> pathFiles) throws Exception {
                 CorreoCodefac correo=new CorreoCodefac(session) {
                     @Override
                     public String getMensaje() {
@@ -227,8 +227,8 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
                     }
                     
                     @Override
-                    public String getPathFile() {
-                        return pathFile;
+                    public Map<String,String> getPathFiles() {
+                        return pathFiles;
                     }
                     
                     @Override

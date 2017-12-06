@@ -39,6 +39,7 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
 
     private Factura factura;
     private Map<String,String> mapInfoAdicional;
+    private List<String> correosAdicionales;
     
     public FacturacionElectronica(SessionCodefacInterface session) {
         super(session);
@@ -200,6 +201,16 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
         if(factura!=null && factura.getCliente()!=null)
             correos.add(factura.getCliente().getCorreoElectronico());
         
+        //Agregar correos adicionales
+        
+        for (String correo : this.correosAdicionales) {
+            if(!correos.contains(correo))
+            {
+                correos.add(correo);
+            }
+        }
+        
+        
         return correos;
     }
 
@@ -210,10 +221,18 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
     public void setFactura(Factura factura) {
         this.factura = factura;        
     }
-    
-    
-    
 
+    public List<String> getCorreosAdicionales() {
+        return correosAdicionales;
+    }
+
+    public void setCorreosAdicionales(List<String> correosAdicionales) {
+        this.correosAdicionales = correosAdicionales;
+    }
+    
+    
+    
+    
 
 
 }
