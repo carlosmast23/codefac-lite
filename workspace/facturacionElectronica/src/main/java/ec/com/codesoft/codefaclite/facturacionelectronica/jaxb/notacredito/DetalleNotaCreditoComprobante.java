@@ -5,16 +5,28 @@
  */
 package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.notacredito;
 
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.DetalleAdicional;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.ImpuestoComprobante;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  *
  * @author Carlos
  */
+@XmlType(propOrder = 
+        {"codigoInterno",
+            "codigoAdicional",
+            "descripcion",
+            "cantidad",
+            "precioUnitario",
+            "descuento",
+            "precioTotalSinImpuesto",
+            "detallesAdicionales",
+            "impuestos"})
 public class DetalleNotaCreditoComprobante {
     private String codigoInterno;
     private String codigoAdicional;
@@ -23,8 +35,11 @@ public class DetalleNotaCreditoComprobante {
     private BigDecimal precioUnitario;
     private BigDecimal descuento;
     private BigDecimal precioTotalSinImpuesto;
+
+        
+    private List<DetalleAdicional> detallesAdicionales;
     
-    private List<ImpuestoComprobante> comprobantes; 
+    private List<ImpuestoComprobante> impuestos;
 
     public DetalleNotaCreditoComprobante() {
     }
@@ -94,13 +109,24 @@ public class DetalleNotaCreditoComprobante {
     
     @XmlElementWrapper(name = "impuestos")
     @XmlElement(name = "impuesto")
-    public List<ImpuestoComprobante> getComprobantes() {
-        return comprobantes;
+    public List<ImpuestoComprobante> getImpuestos() {
+        return impuestos;
     }
 
-    public void setComprobantes(List<ImpuestoComprobante> comprobantes) {
-        this.comprobantes = comprobantes;
+    public void setImpuestos(List<ImpuestoComprobante> impuestos) {
+        this.impuestos = impuestos;
+    }
+    
+    @XmlElementWrapper(name = "detallesAdicionales")
+    @XmlElement(name = "detAdicional")
+    public List<DetalleAdicional> getDetallesAdicionales() {
+        return detallesAdicionales;
+    }
+
+    public void setDetallesAdicionales(List<DetalleAdicional> detallesAdicionales) {
+        this.detallesAdicionales = detallesAdicionales;
     }
     
 
+    
 }
