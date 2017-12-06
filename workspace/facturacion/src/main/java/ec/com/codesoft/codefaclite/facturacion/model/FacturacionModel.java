@@ -274,9 +274,13 @@ public class FacturacionModel extends FacturacionPanel{
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
+        Factura facturaProcesando; //referencia que va a tener la factura procesada para que los listener no pierdan la referencia a la variable del metodo. 
+        
         FacturacionService servicio=new FacturacionService();
         setearValoresDefaultFactura();
         servicio.grabar(factura);
+        facturaProcesando=factura;
+        
         DialogoCodefac.mensaje("Correcto", "La factura se grabo correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         //Despues de implemetar todo el metodo de grabar
         FacturacionElectronica facturaElectronica=new FacturacionElectronica(factura, session,this.panelPadre);
@@ -327,9 +331,9 @@ public class FacturacionModel extends FacturacionPanel{
                 /**
                  * Seteando datos adicionales de la factura
                  */
-                factura.setClaveAcceso(facturaElectronica.getServicio().getClaveAcceso());
-                factura.setEstado(Factura.ESTADO_FACTURADO);
-                servicio.editar(factura);
+                facturaProcesando.setClaveAcceso(facturaElectronica.getServicio().getClaveAcceso());
+                facturaProcesando.setEstado(Factura.ESTADO_FACTURADO);
+                servicio.editar(facturaProcesando);
                 
 
             }

@@ -201,12 +201,14 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
         if(factura!=null && factura.getCliente()!=null)
             correos.add(factura.getCliente().getCorreoElectronico());
         
-        //Agregar correos adicionales
-        
-        for (String correo : this.correosAdicionales) {
-            if(!correos.contains(correo))
-            {
-                correos.add(correo);
+        //Agregar correos adicionales , solo si estan seteados los valores de los correos       
+        if(this.correosAdicionales!=null)
+        {
+            for (String correo : this.correosAdicionales) {
+                if(!correos.contains(correo))
+                {
+                    correos.add(correo);
+                }
             }
         }
         

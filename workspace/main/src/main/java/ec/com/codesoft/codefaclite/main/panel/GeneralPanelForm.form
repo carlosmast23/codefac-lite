@@ -193,6 +193,11 @@
                 <Property name="text" type="java.lang.String" value="Monitor"/>
               </Properties>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemNotaCredito">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Nota Credito"/>
+              </Properties>
+            </MenuItem>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenuUtilidades">

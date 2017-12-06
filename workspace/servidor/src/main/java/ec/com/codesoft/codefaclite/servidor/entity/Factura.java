@@ -31,6 +31,7 @@ import javax.persistence.Table;
 public class Factura {    
     public static final String ESTADO_FACTURADO="F";
     public static final String ESTADO_ANULADO="A";
+    public static final String ESTADO_PENDIENTE_FACTURA_ELECTRONICA="P";
     
     
     @Id
@@ -261,7 +262,7 @@ public class Factura {
     
     public String getPreimpreso()
     {
-       return this.puntoEmision+"-"+this.puntoEstablecimiento+"-"+UtilidadesTextos.llenarCarateresIzquierda(secuencial+"",8,"0");
+       return UtilidadesTextos.llenarCarateresIzquierda(puntoEmision,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(puntoEstablecimiento,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(secuencial+"",8,"0");
     }
     
     

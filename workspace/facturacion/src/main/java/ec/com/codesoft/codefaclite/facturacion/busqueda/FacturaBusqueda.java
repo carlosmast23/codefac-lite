@@ -25,8 +25,9 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura> {
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<>();
         titulo.add(new ColumnaDialogo("Id", 0.2d));
+        titulo.add(new ColumnaDialogo("preimpreso", 0.2d));
         titulo.add(new ColumnaDialogo("cliente", 0.3d));
-        titulo.add(new ColumnaDialogo("fecha", 0.3d));
+        titulo.add(new ColumnaDialogo("fecha", 0.2d));
         titulo.add(new ColumnaDialogo("total", 0.1d));        
         return titulo;
     }
@@ -41,9 +42,10 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura> {
     @Override
     public void agregarObjeto(Factura t, Vector dato) {
         dato.add(t.getId());
-        dato.add("");
-        dato.add("");
-        dato.add("");
+        dato.add(t.getPreimpreso());
+        dato.add(t.getCliente().getRazonSocial());
+        dato.add(t.getFechaFactura());
+        dato.add(t.getTotal());
     }
 
     @Override
