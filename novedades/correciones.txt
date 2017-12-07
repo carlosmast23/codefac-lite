@@ -1,8 +1,3 @@
-Pantalla: Factura
-Evento: Al momento de guardar la factura
-Problema: En la observacion del detalle se grabo el nombre del cliente
-------------------------------------------
-
 Pantalla: Nota Credito y Factura
 Evento: Estructura
 Problema Esta de grabar la referencia del codigo del documento proporciando por el SRI , porque al momento de generar los comprobantes
@@ -14,7 +9,7 @@ Consultar que tipo de monedas acepta el SRI porque solo queda seteado el valor
 Consultar para que sirve el rise porque queda comentado en la nota de credito
 
 --------------------------------------------
-En los comprobantes electronicos los impuestos no se estan considerando toca implementar esta parte
+En los comprobantes electronicos los descuentos no se estan considerando toca implementar esta parte
 
 ---------------------------------------------
 
