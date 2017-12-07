@@ -5,22 +5,39 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.model;
 
+import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
+import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusqueda;
+import ec.com.codesoft.codefaclite.facturacion.other.NotaCreditoElectronico;
 import ec.com.codesoft.codefaclite.facturacion.panel.NotaCreditoPanel;
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
+import ec.com.codesoft.codefaclite.facturacionelectronica.ServicioSri;
+import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
+import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.servidor.entity.Factura;
 import ec.com.codesoft.codefaclite.servidor.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidor.entity.NotaCreditoDetalle;
+import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidor.service.NotaCreditoService;
+import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JasperPrint;
 
 /**
  *
@@ -34,10 +51,140 @@ public class NotaCreditoModel extends NotaCreditoPanel {
     public NotaCreditoModel() {
         addListenerButtons();
     }
+    
+    private void setearValoresNotaCredito()
+    {
+         notaCredito.setEmpresaId(0l);
+        notaCredito.setEstado(Factura.ESTADO_FACTURADO);
+        notaCredito.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+        notaCredito.setRazonModificado(getTxtMotivoAnulacion().getText());
+        notaCredito.setFechaNotaCredito(new Date(getjDateFechaEmision().getDate().getTime()));
+        
+        notaCredito.setPuntoEmision(session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor);
+        notaCredito.setPuntoEstablecimiento(session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor);
+        notaCredito.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_NOTA_CREDITO).valor));
+        notaCredito.setSubtotalCero(BigDecimal.ZERO);
+    }
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        NotaCredito notaCreditoGrabada;
+        NotaCreditoService servicio=new NotaCreditoService();
+        setearValoresNotaCredito();
+        servicio.grabar(notaCredito);
+        notaCreditoGrabada=notaCredito;//graba una referencia con ambiento del metodo para los listener
+        
+        NotaCreditoElectronico notaCreditoElectronico=new NotaCreditoElectronico(session, panelPadre);
+        notaCreditoElectronico.setNotaCredito(notaCredito);
+        Map<String,String> datosAdicionales=new HashMap<String,String>();
+        datosAdicionales.put("correo",notaCredito.getCliente().getCorreoElectronico());
+        notaCreditoElectronico.setMapInfoAdicional(datosAdicionales);
+        notaCreditoElectronico.setCorreosAdicionales(new ArrayList<String>());
+        
+        notaCreditoElectronico.getServicio().addActionListerComprobanteElectronico(new ListenerComprobanteElectronico() {
+           
+            private MonitorComprobanteData monitorData;
+            
+            @Override
+            public void termino() 
+            {
+                
+                monitorData.getBarraProgreso().setForeground(Color.GREEN);
+                monitorData.getBtnAbrir().setEnabled(true);
+                monitorData.getBtnCerrar().setEnabled(true);
+                monitorData.getBtnAbrir().addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        //String path = facturaElectronica.getServicio().getPathRide();
+                        JasperPrint print = notaCreditoElectronico.getServicio().getPrintJasper();
+                        panelPadre.crearReportePantalla(print, notaCredito.getPreimpreso());
+                    }
+                });
+                
+                /**
+                 * Seteando datos adicionales de la factura
+                 */
+                notaCreditoGrabada.setClaveAcceso(notaCreditoElectronico.getServicio().getClaveAcceso());
+                notaCreditoGrabada.setEstado(Factura.ESTADO_FACTURADO);
+                servicio.editar(notaCreditoGrabada);
+                
+
+            }
+
+            @Override
+            public void procesando(int etapa) {
+                if(etapa==ComprobanteElectronicoService.ETAPA_GENERAR)
+                    monitorData.getBarraProgreso().setValue(20);
+                
+                if(etapa==ComprobanteElectronicoService.ETAPA_PRE_VALIDAR)
+                    monitorData.getBarraProgreso().setValue(30);
+                
+                if (etapa == ComprobanteElectronicoService.ETAPA_FIRMAR) {
+                    monitorData.getBarraProgreso().setValue(50);
+                }
+                
+                if (etapa == ComprobanteElectronicoService.ETAPA_ENVIAR) {
+                    monitorData.getBarraProgreso().setValue(70);
+                }
+                
+                if (etapa == ComprobanteElectronicoService.ETAPA_AUTORIZAR) {
+                    monitorData.getBarraProgreso().setValue(90);
+                }
+                
+                if (etapa == ComprobanteElectronicoService.ETAPA_RIDE) {
+                    monitorData.getBarraProgreso().setValue(95);
+                }
+                
+                if (etapa == ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE) {
+                    monitorData.getBarraProgreso().setValue(100);
+                }
+            }
+
+            @Override
+            public void iniciado(ComprobanteElectronico comprobante) {
+                monitorData=MonitorComprobanteModel.getInstance().agregarComprobante();
+                monitorData.getLblPreimpreso().setText(notaCredito.getPreimpreso()+" ");
+                monitorData.getBtnAbrir().setEnabled(false);
+                monitorData.getBtnReporte().setEnabled(false);
+                monitorData.getBtnCerrar().setEnabled(false);
+                monitorData.getBarraProgreso().setString(comprobante.getInformacionTributaria().getPreimpreso());
+                monitorData.getBarraProgreso().setStringPainted(true);
+                MonitorComprobanteModel.getInstance().mostrar();
+                
+            }
+
+            @Override
+            public void error(ComprobanteElectronicoException cee) {
+                monitorData.getBtnReporte().setEnabled(true);
+                monitorData.getBtnCerrar().setEnabled(true);
+                monitorData.getBtnReporte().addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        JOptionPane.showMessageDialog(null,"Etapa: "+ cee.getEtapa()+"\n"+cee.getMessage());
+                         monitorData.getBtnAbrir().addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                JasperPrint print = notaCreditoElectronico.getServicio().getPrintJasper();
+                                panelPadre.crearReportePantalla(print, notaCredito.getPreimpreso());
+                            }
+                        });
+                    }
+                });
+                
+                if(cee.getTipoError().equals(ComprobanteElectronicoException.ERROR_ENVIO_CLIENTE))
+                {
+                    monitorData.getBtnAbrir().setEnabled(true);
+                    monitorData.getBarraProgreso().setForeground(Color.YELLOW);
+                }
+                else
+                {
+                    monitorData.getBarraProgreso().setForeground(Color.ORANGE);
+                }
+                
+            }
+        });
+        
+        notaCreditoElectronico.procesarComprobante();
     }
 
     @Override
@@ -126,6 +273,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         notaCredito.setValorIvaDoce(notaCredito.getFactura().getValorIvaDoce());
         notaCredito.setSubtotalCero(notaCredito.getFactura().getSubtotalCero());
         notaCredito.setSubtotalDoce(notaCredito.getFactura().getSubtotalDoce());
+        notaCredito.setCliente(notaCredito.getFactura().getCliente());
         
         
         /**

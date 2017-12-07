@@ -33,39 +33,40 @@ import javax.xml.bind.annotation.XmlType;
     "valorModificacion",
     "moneda",
     "totalModificacion",
+    "totalImpuestos",
     "motivo",})
 public class InformacionNotaCredito {
-    @XmlElement(name = "fechaEmision")
+
     private String fechaEmision;
-    @XmlElement(name = "dirEstablecimiento")
+
     private String dirEstablecimiento;
-    @XmlElement(name = "tipoIdentificacionComprador")
+
     private String tipoIdentificacionComprador;
-    @XmlElement(name = "razonSocialComprador")
+
     private String razonSocialComprador;
-    @XmlElement(name = "identificacionComprador")
+
     private String identificacionComprador;
-    @XmlElement(name = "contribuyenteEspecial")
+
     private String contribuyenteEspecial;
-    @XmlElement(name = "obligadoContabilidad")
+
     private String obligadoContabilidad;
-    @XmlElement(name = "rise")
+
     private String rise;
-    @XmlElement(name = "codDocModificado")
+
     private String codDocModificado;
-    @XmlElement(name = "numDocModificado")
+
     private String numDocModificado;
-    @XmlElement(name = "fechaEmisionDocSustento")
+
     private String fechaEmisionDocSustento;
-    @XmlElement(name = "totalSinImpuestos")
+
     private BigDecimal totalSinImpuestos;
-    @XmlElement(name = "valorModificacion")
-    private String valorModificacion;
-    @XmlElement(name = "moneda")
+
+    private BigDecimal valorModificacion;
+
     private String moneda;
-    @XmlElement(name = "totalModificacion")
+
     private BigDecimal totalModificacion;
-    @XmlElement(name = "motivo")
+
     private String motivo;
     
     private List<TotalImpuesto> totalImpuestos;
@@ -74,7 +75,7 @@ public class InformacionNotaCredito {
     public InformacionNotaCredito() {
     }
     
-    
+     @XmlElement(name = "fechaEmision")   
     public String getFechaEmision() {
         return fechaEmision;
     }
@@ -82,7 +83,7 @@ public class InformacionNotaCredito {
     public void setFechaEmision(String fechaEmision) {
         this.fechaEmision = fechaEmision;
     }
-
+    @XmlElement(name = "dirEstablecimiento")
     public String getDirEstablecimiento() {
         return dirEstablecimiento;
     }
@@ -90,7 +91,7 @@ public class InformacionNotaCredito {
     public void setDirEstablecimiento(String dirEstablecimiento) {
         this.dirEstablecimiento = dirEstablecimiento;
     }
-
+    @XmlElement(name = "tipoIdentificacionComprador")
     public String getTipoIdentificacionComprador() {
         return tipoIdentificacionComprador;
     }
@@ -98,7 +99,7 @@ public class InformacionNotaCredito {
     public void setTipoIdentificacionComprador(String tipoIdentificacionComprador) {
         this.tipoIdentificacionComprador = tipoIdentificacionComprador;
     }
-
+    @XmlElement(name = "razonSocialComprador")
     public String getRazonSocialComprador() {
         return razonSocialComprador;
     }
@@ -106,7 +107,7 @@ public class InformacionNotaCredito {
     public void setRazonSocialComprador(String razonSocialComprador) {
         this.razonSocialComprador = razonSocialComprador;
     }
-
+    @XmlElement(name = "identificacionComprador")
     public String getIdentificacionComprador() {
         return identificacionComprador;
     }
@@ -114,7 +115,7 @@ public class InformacionNotaCredito {
     public void setIdentificacionComprador(String identificacionComprador) {
         this.identificacionComprador = identificacionComprador;
     }
-
+    @XmlElement(name = "contribuyenteEspecial")
     public String getContribuyenteEspecial() {
         return contribuyenteEspecial;
     }
@@ -122,7 +123,7 @@ public class InformacionNotaCredito {
     public void setContribuyenteEspecial(String contribuyenteEspecial) {
         this.contribuyenteEspecial = contribuyenteEspecial;
     }
-
+    @XmlElement(name = "obligadoContabilidad")
     public String getObligadoContabilidad() {
         return obligadoContabilidad;
     }
@@ -130,7 +131,7 @@ public class InformacionNotaCredito {
     public void setObligadoContabilidad(String obligadoContabilidad) {
         this.obligadoContabilidad = obligadoContabilidad;
     }
-
+    @XmlElement(name = "rise")
     public String getRise() {
         return rise;
     }
@@ -138,7 +139,7 @@ public class InformacionNotaCredito {
     public void setRise(String rise) {
         this.rise = rise;
     }
-
+    @XmlElement(name = "codDocModificado")
     public String getCodDocModificado() {
         return codDocModificado;
     }
@@ -146,7 +147,7 @@ public class InformacionNotaCredito {
     public void setCodDocModificado(String codDocModificado) {
         this.codDocModificado = codDocModificado;
     }
-
+    @XmlElement(name = "numDocModificado")
     public String getNumDocModificado() {
         return numDocModificado;
     }
@@ -154,7 +155,7 @@ public class InformacionNotaCredito {
     public void setNumDocModificado(String numDocModificado) {
         this.numDocModificado = numDocModificado;
     }
-
+    @XmlElement(name = "fechaEmisionDocSustento")
     public String getFechaEmisionDocSustento() {
         return fechaEmisionDocSustento;
     }
@@ -162,7 +163,7 @@ public class InformacionNotaCredito {
     public void setFechaEmisionDocSustento(String fechaEmisionDocSustento) {
         this.fechaEmisionDocSustento = fechaEmisionDocSustento;
     }
-
+    @XmlElement(name = "totalSinImpuestos")
     public BigDecimal getTotalSinImpuestos() {
         return totalSinImpuestos;
     }
@@ -170,15 +171,15 @@ public class InformacionNotaCredito {
     public void setTotalSinImpuestos(BigDecimal totalSinImpuestos) {
         this.totalSinImpuestos = totalSinImpuestos;
     }
-
-    public String getValorModificacion() {
+    @XmlElement(name = "valorModificacion")
+    public BigDecimal getValorModificacion() {
         return valorModificacion;
     }
 
-    public void setValorModificacion(String valorModificacion) {
+    public void setValorModificacion(BigDecimal valorModificacion) {
         this.valorModificacion = valorModificacion;
     }
-
+    @XmlElement(name = "moneda")
     public String getMoneda() {
         return moneda;
     }
@@ -186,7 +187,7 @@ public class InformacionNotaCredito {
     public void setMoneda(String moneda) {
         this.moneda = moneda;
     }
-
+    @XmlElement(name = "motivo")
     public String getMotivo() {
         return motivo;
     }
@@ -194,7 +195,18 @@ public class InformacionNotaCredito {
     public void setMotivo(String motivo) {
         this.motivo = motivo;
     }
+    
+    @XmlElement(name = "totalModificacion")
+    public BigDecimal getTotalModificacion() {
+        return totalModificacion;
+    }
 
+    public void setTotalModificacion(BigDecimal totalModificacion) {
+        this.totalModificacion = totalModificacion;
+    }
+
+    
+    
     @XmlElementWrapper(name = "totalConImpuestos")
     @XmlElement(name = "totalImpuesto")
     public List<TotalImpuesto> getTotalImpuestos() {
@@ -214,6 +226,7 @@ public class InformacionNotaCredito {
     public void setCompensaciones(List<Compensacion> compensaciones) {
         this.compensaciones = compensaciones;
     }
+    
 
 
     

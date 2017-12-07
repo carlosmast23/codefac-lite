@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.Informaci
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.notacredito.DetalleNotaCreditoComprobante;
 import java.sql.Date;
 import java.util.List;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -55,11 +56,6 @@ public class FacturaComprobante extends ComprobanteElectronico{
         return this.informacionFactura.getFechaEmision();
     }
 
-    @Override
-    public String getIdentificacion() {
-        return this.informacionTributaria.getRuc();
-    }
-
     public void setInformacionFactura(InformacionFactura informacionFactura) {
         this.informacionFactura = informacionFactura;
     }
@@ -75,6 +71,17 @@ public class FacturaComprobante extends ComprobanteElectronico{
         return informacionAdicional;
     }
 */
+
+    @XmlAttribute(name = "version")
+    //@Override
+    public String getVersionAttribute() {
+        return "1.0.0";
+    }
+
+    @Override
+    public String getRazonSocialComprador() {
+        return getInformacionFactura().getRazonSocialComprador();
+    }
     
     
 }

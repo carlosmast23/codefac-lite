@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.notacredito;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import java.sql.Date;
 import java.util.List;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -20,7 +21,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name = ComprobanteElectronico.NOTA_CREDITO)
 @XmlType(propOrder = {
     "informacionTributaria",
-    "informacionFactura",
+    "infoNotaCredito",
     "detalles",
     "informacionAdicional"})
 public class NotaCreditoComprobante extends ComprobanteElectronico {
@@ -33,8 +34,7 @@ public class NotaCreditoComprobante extends ComprobanteElectronico {
         return ComprobanteElectronico.NOTA_CREDITO;
     }
 
-    @XmlElementWrapper(name = "infoNotaCredito")
-    @XmlElement(name = "infoNotaCredito")   
+    @XmlElement(name = "infoNotaCredito")
     public InformacionNotaCredito getInfoNotaCredito() {
         return infoNotaCredito;
     }
@@ -58,14 +58,20 @@ public class NotaCreditoComprobante extends ComprobanteElectronico {
 
     @Override
     public String getFechaEmision() {
-        return null;
+        return this.infoNotaCredito.getFechaEmision();
+    }
+
+    @XmlAttribute(name = "version")
+    //@Override
+    public String getVersionAttribute() {
+        return "1.1.0";
     }
 
     @Override
-    public String getIdentificacion() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String getRazonSocialComprador() {
+        return this.infoNotaCredito.getRazonSocialComprador();
     }
-    
+
     
 
     

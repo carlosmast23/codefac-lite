@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidor.entity;
 
+import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class NotaCredito {
     private String puntoEstablecimiento;
     @Column(name = "PUNTO_EMISION")
     private String puntoEmision;
-    @Column(name = "FECHA_FACTURA")
+    @Column(name = "FECHA_NOTA_CREDITO")
     private Date fechaNotaCredito;
     @Column(name = "FECHA_CREACION")
     private Date fechaCreacion;
@@ -276,6 +277,10 @@ public class NotaCredito {
         
     }
     
+    public String getPreimpreso()
+    {
+       return UtilidadesTextos.llenarCarateresIzquierda(puntoEmision,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(puntoEstablecimiento,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(secuencial+"",8,"0");
+    }
     
     
 }

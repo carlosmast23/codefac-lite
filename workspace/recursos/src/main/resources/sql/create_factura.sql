@@ -30,7 +30,7 @@ create table FACTURA
     USUARIO_ID decimal,
     ESTADO varchar(1),
     primary key (ID),
-    CONSTRAINT id_cliente_fk FOREIGN KEY (CLIENTE_ID) REFERENCES CLIENTE(CLIENTE_ID)
+    CONSTRAINT id_cliente_factura_fk FOREIGN KEY (CLIENTE_ID) REFERENCES CLIENTE(CLIENTE_ID)
 
 );
 
