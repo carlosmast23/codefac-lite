@@ -10,11 +10,14 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteE
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.notacredito.NotaCreditoComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.UtilidadesComprobantes;
 import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.ComprobanteElectronicoReporte;
 import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.DetalleReporteData;
 import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.FacturaElectronicaReporte;
+import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.NotaCreditoReporte;
+import ec.com.codesoft.codefaclite.ws.recepcion.Comprobante;
 import ec.com.codesoft.codefaclite.ws.recepcion.Mensaje;
 import ec.com.codesoft.ejemplo.utilidades.email.CorreoElectronico;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
@@ -117,6 +120,9 @@ public class ComprobanteElectronicoService implements Runnable {
     private ServicioSri servicioSri;
 
     private String pathFacturaJasper;
+
+    private String pathNotaCreditoJasper;
+        
     private String pathParentJasper;
     private BufferedImage logoImagen;
     public String pathLogoImagen;
@@ -241,11 +247,12 @@ public class ComprobanteElectronicoService implements Runnable {
 
     private void enviarComprobante() throws ComprobanteElectronicoException {
         try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(FacturaComprobante.class);
+            ClaveAcceso claveAcceso=new ClaveAcceso(this.claveAcceso);
+            JAXBContext jaxbContext = JAXBContext.newInstance(claveAcceso.getClassTipoComprobante());
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             Map<String, String> mapComprobante = UtilidadesComprobantes.decodificarArchivoBase64Offline(getPathComprobante(CARPETA_AUTORIZADOS), null, null);
             StringReader reader = new StringReader(mapComprobante.get("comprobante"));
-            FacturaComprobante comprobante = (FacturaComprobante) jaxbUnmarshaller.unmarshal(reader);
+            ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(reader);
 
             String pathFile = getPathComprobante(CARPETA_RIDE, getNameRide(comprobante));
             Map<String,String> archivosPath=new HashMap<String,String>();
@@ -254,7 +261,7 @@ public class ComprobanteElectronicoService implements Runnable {
             
             try {
                 String mensajeGenerado = "Estimado/a "
-                        + "<b>" + comprobante.getInformacionFactura().getRazonSocialComprador() + "</b> ,<br><br>"
+                        + "<b>" + comprobante.getRazonSocialComprador() + "</b> ,<br><br>"
                         + "<b>" + comprobante.getInformacionTributaria().getNombreComercial() + "</b>"
                         + " le informa que su factura  electrónica " + comprobante.getInformacionTributaria().getPreimpreso() + " se generó correctamente. <br><br>";
                 mensajeGenerado = "<p>" + mensajeGenerado + "</p>" + footerMensajeCorreo;
@@ -281,11 +288,19 @@ public class ComprobanteElectronicoService implements Runnable {
     private void generarRide() throws ComprobanteElectronicoException {
         try {
             Map<String, String> mapComprobante = UtilidadesComprobantes.decodificarArchivoBase64Offline(getPathComprobante(CARPETA_AUTORIZADOS), null, null);
-            JAXBContext jaxbContext = JAXBContext.newInstance(FacturaComprobante.class);
+            ClaveAcceso claveAcceso=new ClaveAcceso(this.claveAcceso);
+            
+            JAXBContext jaxbContext = JAXBContext.newInstance(claveAcceso.getClassTipoComprobante());
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             StringReader reader = new StringReader(mapComprobante.get("comprobante"));
-            FacturaComprobante comprobante = (FacturaComprobante) jaxbUnmarshaller.unmarshal(reader);
-            FacturaElectronicaReporte reporte = new FacturaElectronicaReporte(comprobante);
+            
+            //FacturaComprobante comprobante = (FacturaComprobante) jaxbUnmarshaller.unmarshal(reader);
+            //FacturaElectronicaReporte reporte = new FacturaElectronicaReporte(comprobante);
+            
+            ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(reader);
+            //FacturaElectronicaReporte reporte = new FacturaElectronicaReporte(comprobante);
+            ComprobanteElectronicoReporte reporte =getComprobanteReporte(comprobante);
+            
             List<DetalleReporteData> informacionAdiciona = reporte.getDetalles();
             Map<String, Object> datosMap = reporte.getMapReporte();
             datosMap.put("SUBREPORT_DIR", pathParentJasper);
@@ -310,8 +325,8 @@ public class ComprobanteElectronicoService implements Runnable {
             datosMap.put("pl_img_whatsapp", UtilidadesComprobantes.getStreamByPath(mapAdicionalReporte.get("pl_img_whatsapp_url").toString()));
             datosMap.put("pl_img_telefono", UtilidadesComprobantes.getStreamByPath(mapAdicionalReporte.get("pl_img_telefono_url").toString()));
             datosMap.put("pl_img_logo_pie", UtilidadesComprobantes.getStreamByPath(mapAdicionalReporte.get("pl_img_logo_pie_url").toString()));
-
-            UtilidadesComprobantes.generarReporteJasper(pathFacturaJasper, datosMap, informacionAdiciona, getPathComprobante(CARPETA_RIDE, getNameRide(comprobante)));
+            
+            UtilidadesComprobantes.generarReporteJasper(getPathJasper(comprobante), datosMap, informacionAdiciona, getPathComprobante(CARPETA_RIDE, getNameRide(comprobante)));
 
         } catch (JAXBException ex) {
             Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
@@ -325,6 +340,20 @@ public class ComprobanteElectronicoService implements Runnable {
         }
 
     }
+    
+    private ComprobanteElectronicoReporte getComprobanteReporte(ComprobanteElectronico comprobante)
+    {
+        if(comprobante.getClass().equals(FacturaComprobante.class))
+            return new FacturaElectronicaReporte(comprobante);
+        else
+            if(comprobante.getClass().equals(NotaCreditoComprobante.class))
+                return new NotaCreditoReporte(comprobante);
+            else
+            {
+                System.out.println("no esta comparando clases");
+                return null;
+            }
+    }
 
     private void preValidacion() {
 
@@ -333,11 +362,12 @@ public class ComprobanteElectronicoService implements Runnable {
     public JasperPrint getPrintJasper() {
         try {
             Map<String, String> mapComprobante = UtilidadesComprobantes.decodificarArchivoBase64Offline(getPathComprobante(CARPETA_AUTORIZADOS), null, null);
-            JAXBContext jaxbContext = JAXBContext.newInstance(FacturaComprobante.class);
+            ClaveAcceso claveAcceso=new ClaveAcceso(this.claveAcceso);
+            JAXBContext jaxbContext = JAXBContext.newInstance(claveAcceso.getClassTipoComprobante());
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             StringReader reader = new StringReader(mapComprobante.get("comprobante"));
-            FacturaComprobante comprobante = (FacturaComprobante) jaxbUnmarshaller.unmarshal(reader);
-            FacturaElectronicaReporte reporte = new FacturaElectronicaReporte(comprobante);
+            ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(reader);
+            ComprobanteElectronicoReporte reporte = getComprobanteReporte(comprobante);
             List<DetalleReporteData> informacionAdiciona = reporte.getDetalles();
 
             Map<String, Object> datosMap = reporte.getMapReporte();
@@ -354,7 +384,7 @@ public class ComprobanteElectronicoService implements Runnable {
             //datosMap.put("imagen_logo",is);
             datosMap.put("imagen_logo", UtilidadesComprobantes.getStreamByPath(pathLogoImagen));
 
-            return UtilidadesComprobantes.generarReporteJasperPrint(pathFacturaJasper, datosMap, informacionAdiciona);
+            return UtilidadesComprobantes.generarReporteJasperPrint(getPathJasper(comprobante), datosMap, informacionAdiciona);
 
         } catch (JAXBException ex) {
             Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
@@ -535,7 +565,8 @@ public class ComprobanteElectronicoService implements Runnable {
 
     private StringWriter generarXml(ComprobanteElectronico comprobante) {
         try {
-            JAXBContext contexto = JAXBContext.newInstance(comprobante.getClass());
+            ClaveAcceso claveAcceso=new ClaveAcceso(this.claveAcceso);
+            JAXBContext contexto = JAXBContext.newInstance(claveAcceso.getClassTipoComprobante());
             Marshaller marshaller = contexto.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             //marshaller.setProperty(Marshaller.JAXB_NO_NAMESPACE_SCHEMA_LOCATION, "libro.xsd");
@@ -563,10 +594,16 @@ public class ComprobanteElectronicoService implements Runnable {
         return pathBase + "/" + CARPETA_CONFIGURACION + "/" + nombreFirma;
     }
 
-    private String getNameRide(FacturaComprobante comprobante) {
+    private String getNameRide(ComprobanteElectronico comprobante) {
         String prefijo = "";
         if (ComprobanteEnum.FACTURA.getCodigo().equals(comprobante.getInformacionTributaria().getCodigoDocumento())) {
             prefijo = ComprobanteEnum.FACTURA.getPrefijo();
+        }
+        else
+        {
+            if (ComprobanteEnum.NOTA_CREDITO.getCodigo().equals(comprobante.getInformacionTributaria().getCodigoDocumento())) {
+                prefijo = ComprobanteEnum.NOTA_CREDITO.getPrefijo();
+            }
         }
         comprobante.getTipoDocumento();
         return prefijo + "-" + comprobante.getInformacionTributaria().getPreimpreso() +"_"+claveAcceso+ ".pdf";
@@ -701,6 +738,32 @@ public class ComprobanteElectronicoService implements Runnable {
         this.etapaLimiteProcesar = etapaLimiteProcesar;
     }
 
+    public String getPathNotaCreditoJasper() {
+        return pathNotaCreditoJasper;
+    }
+
+    public void setPathNotaCreditoJasper(String pathNotaCreditoJasper) {
+        this.pathNotaCreditoJasper = pathNotaCreditoJasper;
+    }
+    
+    
+
+    public String getPathJasper(ComprobanteElectronico comprobanteElectronico)
+    {
+        String path = "";
+        if (ComprobanteEnum.FACTURA.getCodigo().equals(comprobante.getInformacionTributaria().getCodigoDocumento())) {
+            path = pathFacturaJasper;
+        }
+        else
+        {
+            if (ComprobanteEnum.NOTA_CREDITO.getCodigo().equals(comprobante.getInformacionTributaria().getCodigoDocumento())) {
+                path = pathNotaCreditoJasper;
+            }
+        }
+        //comprobante.getTipoDocumento();
+        //return path + "-" + comprobante.getInformacionTributaria().getPreimpreso() +"_"+claveAcceso+ ".pdf";
+        return path;
+    }
     
     
     

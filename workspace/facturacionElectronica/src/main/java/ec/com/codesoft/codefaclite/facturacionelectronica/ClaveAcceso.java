@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.facturacionelectronica;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.util.Vector;
@@ -28,19 +29,25 @@ public class ClaveAcceso {
 
     public ClaveAcceso(String clave) {
         this.clave = clave;
+        this.construirDatos();
     }
     
    private void construirDatos()
    {
        String claveTemporal=this.clave;
        this.fecha=claveTemporal.substring(0,8);
-       this.tipoComprobante=claveTemporal.substring(0,2);
-       this.identificacion=claveTemporal.substring(0,13);
-       this.tipoAmbiente=claveTemporal.substring(0,1);
-       this.valorDefecto=claveTemporal.substring(0,6);
-       this.secuencial=claveTemporal.substring(0,9);
-       this.codigoBatch=claveTemporal.substring(0,8);
+       this.tipoComprobante=claveTemporal.substring(8,10);
+       //this.identificacion=claveTemporal.substring(0,13);
+       //this.tipoAmbiente=claveTemporal.substring(0,1);
+       //this.valorDefecto=claveTemporal.substring(0,6);
+       //this.secuencial=claveTemporal.substring(0,9);
+       //this.codigoBatch=claveTemporal.substring(0,8);
        
+   }
+   
+   public Class getClassTipoComprobante()
+   {    
+       return ComprobanteEnum.getEnumByCodigo(tipoComprobante).getClase();
    }
     
     

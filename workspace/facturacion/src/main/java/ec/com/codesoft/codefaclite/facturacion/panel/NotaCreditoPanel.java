@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.panel;
 
+import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -95,6 +96,8 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         lblPropina10 = new javax.swing.JLabel();
         txtValorTotal = new javax.swing.JTextField();
         jCheckBox1 = new javax.swing.JCheckBox();
+        jLabel19 = new javax.swing.JLabel();
+        txtMotivoAnulacion = new javax.swing.JTextField();
 
         setClosable(true);
         setIconifiable(true);
@@ -346,7 +349,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
             panelDetallesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDetallesLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         PanelValores.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -518,6 +521,8 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 9;
         PanelValores.add(jCheckBox1, gridBagConstraints);
 
+        jLabel19.setText("Motivo Anulacion:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -535,9 +540,14 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
                             .addComponent(panelDatosGenerales, javax.swing.GroupLayout.PREFERRED_SIZE, 688, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(PanelDatosNotaCredito, javax.swing.GroupLayout.PREFERRED_SIZE, 688, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(panelDatosEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 688, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                    .addComponent(panelDatosEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 688, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel19)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(txtMotivoAnulacion)
+                                        .addGap(135, 135, 135)))))))
                 .addContainerGap(172, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -549,13 +559,18 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
                 .addComponent(panelDatosEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(PanelDatosNotaCredito, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelDetalles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(63, 63, 63)
                         .addComponent(PanelValores, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel19)
+                            .addComponent(txtMotivoAnulacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                        .addComponent(panelDetalles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
 
         pack();
@@ -582,6 +597,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel3;
@@ -623,6 +639,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
     private javax.swing.JPanel panelDetalles;
     private javax.swing.JPanel panelFechaEmision;
     private javax.swing.JTable tblDetalleNotaCredito;
+    private javax.swing.JTextField txtMotivoAnulacion;
     private javax.swing.JTextField txtReferenciaFactura;
     private javax.swing.JTextField txtValorTotal;
     // End of variables declaration//GEN-END:variables
@@ -738,6 +755,23 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
     public JTextField getTxtValorTotal() {
         return txtValorTotal;
     }
+
+    public JTextField getTxtMotivoAnulacion() {
+        return txtMotivoAnulacion;
+    }
+
+    public void setTxtMotivoAnulacion(JTextField txtMotivoAnulacion) {
+        this.txtMotivoAnulacion = txtMotivoAnulacion;
+    }
+
+    public JDateChooser getjDateFechaEmision() {
+        return jDateFechaEmision;
+    }
+
+    public void setjDateFechaEmision(JDateChooser jDateFechaEmision) {
+        this.jDateFechaEmision = jDateFechaEmision;
+    }
+    
     
     
     

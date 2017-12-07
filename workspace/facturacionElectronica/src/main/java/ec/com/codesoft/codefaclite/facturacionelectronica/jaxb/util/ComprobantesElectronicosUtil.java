@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util;
 
+import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.CARPETA_AUTORIZADOS;
 import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.CARPETA_CONFIGURACION;
@@ -232,23 +233,25 @@ public abstract class ComprobantesElectronicosUtil {
     public static ComprobanteElectronico getComprobanteElectronico(String carpetaConfiguracion,File archivo)
     {
         try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(FacturaComprobante.class);
+            String nombreRide = archivo.getName();
+            nombreRide = nombreRide.split("_")[1]; //obtener solo el nombre de la firma
+            nombreRide = nombreRide.replace(".pdf", ".xml");
+                    
+            ClaveAcceso claveAcceso=new ClaveAcceso(nombreRide.replace(".xml",""));
+            JAXBContext jaxbContext = JAXBContext.newInstance(claveAcceso.getClassTipoComprobante());
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             
             if(carpetaConfiguracion.equals(ComprobanteElectronicoService.CARPETA_AUTORIZADOS))
             {
                 Map<String, String> map = UtilidadesComprobantes.decodificarArchivoAutorizado(archivo.getPath());
                 StringReader reader = new StringReader(map.get("comprobante"));
-                FacturaComprobante comprobante = (FacturaComprobante) jaxbUnmarshaller.unmarshal(reader);
+                ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(reader);
                 return comprobante;
             }
             else
             {
                 if(carpetaConfiguracion.equals(ComprobanteElectronicoService.CARPETA_RIDE))
-                {
-                    String nombreRide=archivo.getName();
-                    nombreRide=nombreRide.split("_")[1]; //obtener solo el nombre de la firma
-                    nombreRide=nombreRide.replace(".pdf",".xml");
+                {                    
                     String nombreXmlAutorizado=archivo.getParentFile().getParent()+"\\"+ComprobanteElectronicoService.CARPETA_AUTORIZADOS+"\\"+nombreRide;
                     Map<String,String> map=UtilidadesComprobantes.decodificarArchivoAutorizado(nombreXmlAutorizado);
                     if(map==null)
@@ -260,7 +263,7 @@ public abstract class ComprobantesElectronicosUtil {
                     else
                     {
                         StringReader reader = new StringReader(map.get("comprobante"));
-                        FacturaComprobante comprobante = (FacturaComprobante) jaxbUnmarshaller.unmarshal(reader);
+                        ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(reader);
                         return comprobante;
                     }
                     
@@ -268,7 +271,7 @@ public abstract class ComprobantesElectronicosUtil {
                 }
                 else
                 {
-                    FacturaComprobante comprobante = (FacturaComprobante) jaxbUnmarshaller.unmarshal(archivo);
+                    ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(archivo);
                     return comprobante;
                 }
             }
@@ -283,12 +286,13 @@ public abstract class ComprobantesElectronicosUtil {
 
     public static ComprobanteElectronico obtenerComprobante(String path) {
         try {
+            
             JAXBContext jaxbContext = JAXBContext.newInstance(FacturaComprobante.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
             Map<String, String> mapComprobante = UtilidadesComprobantes.decodificarArchivoBase64Offline(path, null, null);
             StringReader reader = new StringReader(mapComprobante.get("comprobante"));
-            FacturaComprobante comprobante = (FacturaComprobante) jaxbUnmarshaller.unmarshal(reader);
+            ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(reader);
             return comprobante;
         } catch (JAXBException ex) {
             Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);

@@ -41,5 +41,4 @@ public class NotaCreditoService
     {
         return notaCreditoFacade.findAll();
     }
-     
 }
