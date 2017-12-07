@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.crm.model;
 
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
@@ -80,7 +81,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         }
         
         productoService.grabar(producto);
-        
+        DialogoCodefac.mensaje("Datos correctos", "El Producto se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO); 
     }
 
     @Override
@@ -101,12 +102,15 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         d = new BigDecimal(getTextValorUnitario().getText());
         producto.setValorUnitario(d);
         
-        productoService.grabar(producto);
+        productoService.editar(producto);
+        DialogoCodefac.mensaje("Datos correctos", "El producto se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
     }
 
     @Override
-    public void eliminar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void eliminar() 
+    {
+        productoService.eliminar(producto);
+        DialogoCodefac.mensaje("Datos correctos", "El producto se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
     }
 
     @Override
@@ -151,11 +155,6 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getComboIva().removeAllItems();
         getComboIce().removeAllItems();
         getComboIrbpnr().removeAllItems();
-        
-//        Impuesto iva=impuestoService.obtenerImpuestoPorCodigo(Impuesto.IVA);     
-//        for (ImpuestoDetalle impuesto : iva.getDetalleImpuestos()) {
-//            getComboIva().addItem(impuesto);
-//        }
 
         List<ImpuestoDetalle> impuestoDetalleList= impuestoDetalleService.obtenerIvaVigente();
         for(ImpuestoDetalle impuesto: impuestoDetalleList)

@@ -6,6 +6,9 @@
 package ec.com.codesoft.codefaclite.crm.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
 import java.util.Map;
@@ -25,7 +28,10 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
     public void setComboTipoProducto(JComboBox<String> jComboTipoProducto) {
         this.comboTipoProducto = jComboTipoProducto;
     }
-
+    
+    @LimpiarAnotacion
+    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[A-Za-z0-9.\\_\\-\\\\s]*$",nombre = "Codigo Auxiliar")
     public JTextField getTextCodigoAuxiliar() {
         return textCodigoAuxiliar;
     }
@@ -33,7 +39,10 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
     public void setTextCodigoAuxiliar(JTextField jTextCodigoAuxiliar) {
         this.textCodigoAuxiliar = jTextCodigoAuxiliar;
     }
-
+    
+    @LimpiarAnotacion
+    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[A-Za-z0-9.\\_\\-\\\\s]*$",nombre = "Codigo Principal")
     public JTextField getTextCodigoPrincipal() {
         return textCodigoPrincipal;
     }
@@ -41,7 +50,10 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
     public void setTextCodigoPrincipal(JTextField jTextCodigoPrincipal) {
         this.textCodigoPrincipal = jTextCodigoPrincipal;
     }
-
+    
+    @LimpiarAnotacion
+    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
+    @ValidacionCodefacAnotacion(requerido=true, expresionRegular = "^[A-Za-z0-9.\\_\\-\\\\s]*$",nombre = "Nombre")
     public JTextField getTextNombre() {
         return textNombre;
     }
@@ -49,7 +61,10 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
     public void setTextNombre(JTextField jTextNombre) {
         this.textNombre = jTextNombre;
     }
-
+    
+    @LimpiarAnotacion
+    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
+    @ValidacionCodefacAnotacion(requerido=true, expresionRegular = "^[0-9]+([.][0-9]+)?$")
     public JTextField getTextValorUnitario() {
         return textValorUnitario;
     }

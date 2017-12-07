@@ -12,6 +12,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 
 /**
  *
@@ -24,6 +27,16 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
      */
     public FacturacionPanel() {
         initComponents();
+        lblPropina10.setBorder(new EmptyBorder(1,20,1,2));
+        //lblPropina10.setBorder(new EmptyBorder(1,20,1,2));
+        Border borde1 = lblTotalDescuento.getBorder();
+        //Border borde2 = lblPropina10.getBorder();
+        Border borde3 = txtValorTotal.getBorder();
+        Border margen = new EmptyBorder(1,20,1,2);
+        lblTotalDescuento.setBorder(new CompoundBorder(borde1,margen));
+        //lblPropina10.setBorder(new CompoundBorder(borde2,margen));
+        //txtValorTotal.setBorder(new CompoundBorder(borde3, margen));
+        txtValorTotal.setBorder(new EmptyBorder(1,20,1,2));
         java.util.Date fecha = new java.util.Date();
         jDateFechaEmision.setDate(fecha);
     }
@@ -121,9 +134,9 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         lblValorIce = new javax.swing.JLabel();
         lblIva12 = new javax.swing.JLabel();
         lblValorIRBPNR = new javax.swing.JLabel();
+        jCheckBox1 = new javax.swing.JCheckBox();
         lblPropina10 = new javax.swing.JLabel();
         txtValorTotal = new javax.swing.JTextField();
-        jCheckBox1 = new javax.swing.JCheckBox();
         panelDatosFactura = new javax.swing.JPanel();
         jLabel35 = new javax.swing.JLabel();
         jLabel36 = new javax.swing.JLabel();
@@ -658,7 +671,9 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.weightx = 0.1;
         PanelValores.add(lblTotalDescuento, gridBagConstraints);
 
         lblValorIce.setText("0.00");
@@ -681,33 +696,30 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         PanelValores.add(lblValorIRBPNR, gridBagConstraints);
-
-        lblPropina10.setText("0.00");
-        lblPropina10.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 51, 255)));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        PanelValores.add(lblPropina10, gridBagConstraints);
-
-        txtValorTotal.setText("0.00");
-        txtValorTotal.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 51, 255)));
-        txtValorTotal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtValorTotalActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.weightx = 0.1;
-        PanelValores.add(txtValorTotal, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 9;
         PanelValores.add(jCheckBox1, gridBagConstraints);
+
+        lblPropina10.setText("0.00");
+        lblPropina10.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(0, 51, 255), null));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.weightx = 0.1;
+        PanelValores.add(lblPropina10, gridBagConstraints);
+
+        txtValorTotal.setText("0.00");
+        txtValorTotal.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(255, 0, 0), null));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.weightx = 0.1;
+        PanelValores.add(txtValorTotal, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -776,10 +788,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private void btnAgregarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarClienteActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAgregarClienteActionPerformed
-
-    private void txtValorTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtValorTotalActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtValorTotalActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

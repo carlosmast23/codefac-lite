@@ -61,6 +61,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     public ClienteModel()
     {
         this.personaService = new PersonaService();
+        getjTextExtension().setText("0");
         cargarClientes();
     }
     
@@ -81,8 +82,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         personaService.grabar(persona);
         DialogoCodefac.mensaje("Datos correctos", "El cliente se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         System.err.println("Se grabo correctamente");
-        
-        //throw new ExcepcionCodefacLite("Excepcion lanzada desde grabar");
+
     }
 
     @Override
@@ -182,9 +182,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     
     @validacionPersonalizadaAnotacion(errorTitulo = "formato cedula incorrecto")
     public boolean validarCedula()
-    {
-        System.out.println("Ingreso a la validacion --> cedula");
-                
+    {          
         String cedula=getjTextIdentificacion().getText();
         boolean cedulaCorrecta = false;
         try 
@@ -231,7 +229,6 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             cedulaCorrecta = false;
         } catch (Exception err) 
         {
-            System.out.println("Una excepcion ocurrio en el proceso de validadcion");
             cedulaCorrecta = false;
         }
 
@@ -281,6 +278,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
          */
         getjComboIdentificacion().setSelectedIndex(0);
         getjComboTipoCliente().setSelectedIndex(0);
+        getjTextExtension().setText("0");
         
     }
     

@@ -56,8 +56,6 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
             InputStream input=EjemploCrm.class.getResource("/reportes/crm/reporteEjemplo.jrxml").openStream();
             //JasperReport report=(JasperReport) JRLoader.loadObject(input);
             
-            System.out.println(path);
-            
             Map parameters = new HashMap();
             parameters.put("nombre","carlos");
             JasperReport report =JasperCompileManager.compileReport(input);
@@ -300,7 +298,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     // End of variables declaration//GEN-END:variables
     
     
-    
+
 
     public JComboBox<String> getjComboTipoCliente() {
         return jComboTipoCliente;
@@ -320,7 +318,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     
     @LimpiarAnotacion
     @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
-    @ValidacionCodefacAnotacion(requerido=true , min=5 ,max = 1024,expresionRegular = "^[A-Za-z0-9\\s]*$",nombre = "Direccion")
+    @ValidacionCodefacAnotacion(requerido=true ,min=0, expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\]*$",nombre = "Direccion")
     public JTextArea getjTextAreaDireccion() {
         return jTextAreaDireccion;
     }
@@ -353,7 +351,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
 
     @LimpiarAnotacion
     @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
-    @ValidacionCodefacAnotacion(requerido=true , min=0 ,max = 4,expresionRegular = "^[0-9]*$",nombre = "Extension")
+    @ValidacionCodefacAnotacion(requerido=true , min=0 ,expresionRegular = "^[0-9]*$",nombre = "Extension")
     public JTextField getjTextExtension() {
         return jTextExtension;
     }
@@ -375,7 +373,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     
     @LimpiarAnotacion
     @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
-    @ValidacionCodefacAnotacion(requerido=true , min=5 ,max = 100,expresionRegular = "",nombre = "Nombre Social")
+    @ValidacionCodefacAnotacion(requerido=true , min=5 ,max = 100,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\]*$",nombre = "Nombre Social")
     public JTextField getjTextNombreSocial() {
         return jTextNombreSocial;
     }

@@ -20,8 +20,11 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
     /**
      * Creates new form NotaCreditoPanel
      */
-    public NotaCreditoPanel() {
+    public NotaCreditoPanel() 
+    {
         initComponents();
+        java.util.Date fecha = new java.util.Date();
+        jDateFechaEmision.setDate(fecha);
     }
 
     /**
