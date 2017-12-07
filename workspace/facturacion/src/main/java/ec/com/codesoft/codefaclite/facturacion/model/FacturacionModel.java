@@ -47,9 +47,7 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
-import java.awt.event.MouseListener;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.sql.Date;
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -104,7 +102,8 @@ public class FacturacionModel extends FacturacionPanel{
         this.bandera = false;
         this.banderaAgregar = true;
         calcularIva12();
-        
+        //new Date(getjDateFechaEmision().getDate().getTime())
+        //getjDateFechaEmision().setDate();
         datosAdicionales=new HashMap<String,String>();
     }
     
@@ -168,7 +167,8 @@ public class FacturacionModel extends FacturacionPanel{
         getBtnAgregarDetalleFactura().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if( banderaAgregar ){   
+                if( banderaAgregar )
+                {   
                     FacturaDetalle facturaDetalle=new FacturaDetalle();
                     facturaDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
                     facturaDetalle.setDescripcion(getTxtDescripcion().getText());
@@ -179,7 +179,6 @@ public class FacturacionModel extends FacturacionPanel{
                     //facturaDetalle.setTotal(facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()));
                     facturaDetalle.setTotal(setTotal.setScale(2, BigDecimal.ROUND_HALF_UP));
                     facturaDetalle.setValorIce(BigDecimal.ZERO);
-                    
                     factura.addDetalle(facturaDetalle);
                     cargarDatosDetalles();
                     setearDetalleFactura();
@@ -190,7 +189,7 @@ public class FacturacionModel extends FacturacionPanel{
                      * Revisar este calculo del iva para no calcular 2 veces al mostrar
                      */
                                        
-                    facturaDetalle.setIva(iva.setScale(2, BigDecimal.ROUND_HALF_UP));
+                    //facturaDetalle.setIva(iva.setScale(2, BigDecimal.ROUND_HALF_UP));
                 }
             }
         });
@@ -221,7 +220,7 @@ public class FacturacionModel extends FacturacionPanel{
                     factura.getDetalles().get(fila).setTotal(valorUnitario.multiply(cantidad));
                     cargarDatosDetalles();
                     cargarTotales();
-                    
+                    bandera = false;
                 }
             }
                     
