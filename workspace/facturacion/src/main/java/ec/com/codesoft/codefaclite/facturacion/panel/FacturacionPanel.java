@@ -24,6 +24,8 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
      */
     public FacturacionPanel() {
         initComponents();
+        java.util.Date fecha = new java.util.Date();
+        jDateFechaEmision.setDate(fecha);
     }
 
     public JTextField getTxtValorTotal() {
