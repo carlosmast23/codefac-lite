@@ -1,0 +1,4 @@
+Pantalla: Factura
+Evento: Al momento de guardar la factura
+Problema: En la observacion del detalle se grabo el nombre del cliente
+------------------------------------------

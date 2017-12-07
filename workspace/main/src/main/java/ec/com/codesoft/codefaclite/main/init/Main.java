@@ -18,6 +18,8 @@ import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
 import ec.com.codesoft.codefaclite.crm.model.EmisorModel;
 import ec.com.codesoft.codefaclite.crm.model.ProductoModel;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
+import ec.com.codesoft.codefaclite.facturacion.model.NotaCreditoModel;
+import ec.com.codesoft.codefaclite.facturacion.model.UtilidadComprobanteModel;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
 import ec.com.codesoft.codefaclite.main.model.GeneralPanelModel;
 import ec.com.codesoft.codefaclite.main.model.LoginModel;
@@ -231,6 +233,8 @@ public class Main {
         ventanas.add(new MenuControlador(panel.getjMenuEmisor(),EmisorModel.class));
         ventanas.add(new MenuControlador(panel.getjMenuComprobanteConfig(),ComprobantesConfiguracionModel.class));
         ventanas.add(new MenuControlador(panel.getjMenuCalculadora(),CalculadoraModel.class,false));
+        ventanas.add(new MenuControlador(panel.getjMenuItemUtilidades(),UtilidadComprobanteModel.class,false));
+        ventanas.add(new MenuControlador(panel.getjMenuItemNotaCredito(),NotaCreditoModel.class,true));
         return ventanas;
     
     }

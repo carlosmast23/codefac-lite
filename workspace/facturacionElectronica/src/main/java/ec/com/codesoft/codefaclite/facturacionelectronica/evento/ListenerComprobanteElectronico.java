@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.facturacionelectronica.evento;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 
 /**
  *
@@ -13,7 +14,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteE
  */
 public interface ListenerComprobanteElectronico {
     public abstract void termino();
-    public abstract void iniciado();
+    public abstract void iniciado(ComprobanteElectronico comprobante);
     public abstract void procesando(int etapa);
     public abstract void error(ComprobanteElectronicoException cee);
 }

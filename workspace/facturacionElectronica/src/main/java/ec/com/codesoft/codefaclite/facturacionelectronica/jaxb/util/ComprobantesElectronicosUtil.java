@@ -5,6 +5,13 @@
  */
 package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util;
 
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
+import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.CARPETA_AUTORIZADOS;
+import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.CARPETA_CONFIGURACION;
+import ec.com.codesoft.codefaclite.facturacionelectronica.ServicioSri;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
+import ec.com.codesoft.codefaclite.ws.recepcion.Comprobante;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadTratarNodo;
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,12 +20,24 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.io.StringWriter;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 
 /**
@@ -26,9 +45,8 @@ import org.w3c.dom.Document;
  * @author Carlos
  */
 public abstract class ComprobantesElectronicosUtil {
-    
-    public static void generarArchivoXml(StringWriter xml,String path)
-    {
+
+    public static void generarArchivoXml(StringWriter xml, String path) {
         File file = new File(path);
         //crear toda la ruta si no existe
         if (!file.exists()) {
@@ -37,7 +55,7 @@ public abstract class ComprobantesElectronicosUtil {
         }
 
         FileWriter fw = null;
-        try {       
+        try {
             //file.createNewFile();
             fw = new FileWriter(file);
             fw.write(xml.toString());
@@ -52,33 +70,50 @@ public abstract class ComprobantesElectronicosUtil {
             }
         }
     }
-    
-    public static void generarArchivoXml(String xml,String path)
-    {
-        File file = new File(path);
-        //crear toda la ruta si no existe
-        if (!file.exists()) {
-            file.getParentFile().mkdirs();
-            //file.mkdir();
-        }
 
-        FileWriter fw = null;
-        try {       
-            //file.createNewFile();
-            fw = new FileWriter(file);
-            fw.write(xml);
-            fw.close();
+    public static void copiarArchivoXml(String pathOrigen, String pathDestino) {
+        try {
+            Path origenPath = FileSystems.getDefault().getPath(pathOrigen);
+            Path destinoPath = FileSystems.getDefault().getPath(pathDestino);
+            Files.move(origenPath, destinoPath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ex) {
             Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                fw.close();
-            } catch (IOException ex) {
-                Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
     }
     
+
+    public static void generarArchivoXml(String xml, String path) {
+        try {
+            File file = new File(path);
+            //crear toda la ruta si no existe
+            if (!file.exists()) {
+                file.getParentFile().mkdirs();
+                //file.mkdir();
+            }
+
+            FileUtils.writeStringToFile(file, xml, "UTF-8");
+            /*
+            FileWriter fw = null;
+            try {
+                //file.createNewFile();
+                fw = new FileWriter(file);
+                fw.write(xml);
+                fw.close();
+            } catch (IOException ex) {
+                Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                try {
+                    fw.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+             */
+        } catch (IOException ex) {
+            Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     public static void generarArchivoXml(Document documento, String path)
             throws Exception {
         File file = new File(path);
@@ -87,8 +122,7 @@ public abstract class ComprobantesElectronicosUtil {
             file.getParentFile().mkdirs();
             //file.mkdir();
         }
-        
-        
+
         FileOutputStream flujoSalida = null;
         try {
             try {
@@ -102,22 +136,26 @@ public abstract class ComprobantesElectronicosUtil {
             throw new Exception("Error al salvar el documento");
         }
     }
-    
+
     public static boolean eliminarArchivo(String rutaArchivo) {
         File archivo = new File(rutaArchivo);
-
+        archivo.delete();
+        System.out.println(archivo.exists());
+        System.out.println(archivo.canWrite());
+        System.out.println(archivo.isDirectory());
+         
         if (archivo.exists() && archivo.canWrite() && !archivo.isDirectory()) {
             archivo.delete();
+            return true;
         }
 
         return false;
     }
-    
-    public static String getPathXml(String path,String carpeta)
-    {
-        return path+"/"+carpeta;
+
+    public static String getPathXml(String path, String carpeta) {
+        return path + "/" + carpeta;
     }
-    
+
     public static byte[] archivoToByte(File file) throws IOException {
         byte[] buffer = new byte[(int) file.length()];
         InputStream ios = null;
@@ -138,24 +176,125 @@ public abstract class ComprobantesElectronicosUtil {
             }
         }
     }
-    
-    public static String dateToString(Date fecha)
-    {
-        SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy");
+
+    public static String dateToString(Date fecha) {
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         return format.format(fecha);
     }
-    
-    public static String formatSimpleDate(String fechaStr)
-    {
-        fechaStr=fechaStr.replace("/","");
+
+    public static String formatSimpleDate(String fechaStr) {
+        fechaStr = fechaStr.replace("/", "");
         return fechaStr;
     }
-    
-    public static String dateToString(Timestamp fecha)
-    {
-        SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy");
+
+    public static String dateToString(Timestamp fecha) {
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         return format.format(fecha);
     }
+
+    public static File[] getComprobantesByFolder(String pathBase, String carpetaConfiguracion) {
+        String pathDirectorio = pathBase + "/" + carpetaConfiguracion;
+        File f = new File(pathDirectorio);
+        //List<File> autorizaciones=new ArrayList<String>();
+        if (f.exists()) { // Directorio existe 
+            File[] ficheros = f.listFiles();
+            /*
+            for (File fichero : ficheros) {
+                autorizaciones.add(fichero.getName());
+            }*/
+            return ficheros;
+        }
+        return null;
+    }
     
+    public static List<ComprobanteElectronico> getComprobantesObjectByFolder(String pathBase, String carpetaConfiguracion) {
+        List<ComprobanteElectronico> comprobantes=new ArrayList<ComprobanteElectronico>();
+        
+        String pathDirectorio = pathBase + "/" + carpetaConfiguracion;
+        File f = new File(pathDirectorio);
+        //List<File> autorizaciones=new ArrayList<String>();
+        if (f.exists()) { // Directorio existe 
+            File[] ficheros = f.listFiles();
+            for (File fichero : ficheros) {
+                ComprobanteElectronico comprobante = getComprobanteElectronico(carpetaConfiguracion, fichero);
+                if(comprobante!=null)
+                    comprobantes.add(comprobante);
+            }
+            /*
+            for (File fichero : ficheros) {
+                autorizaciones.add(fichero.getName());
+            }*/
+            return comprobantes;
+        }
+        return null;
+    }
     
+    public static ComprobanteElectronico getComprobanteElectronico(String carpetaConfiguracion,File archivo)
+    {
+        try {
+            JAXBContext jaxbContext = JAXBContext.newInstance(FacturaComprobante.class);
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+            
+            if(carpetaConfiguracion.equals(ComprobanteElectronicoService.CARPETA_AUTORIZADOS))
+            {
+                Map<String, String> map = UtilidadesComprobantes.decodificarArchivoAutorizado(archivo.getPath());
+                StringReader reader = new StringReader(map.get("comprobante"));
+                FacturaComprobante comprobante = (FacturaComprobante) jaxbUnmarshaller.unmarshal(reader);
+                return comprobante;
+            }
+            else
+            {
+                if(carpetaConfiguracion.equals(ComprobanteElectronicoService.CARPETA_RIDE))
+                {
+                    String nombreRide=archivo.getName();
+                    nombreRide=nombreRide.split("_")[1]; //obtener solo el nombre de la firma
+                    nombreRide=nombreRide.replace(".pdf",".xml");
+                    String nombreXmlAutorizado=archivo.getParentFile().getParent()+"\\"+ComprobanteElectronicoService.CARPETA_AUTORIZADOS+"\\"+nombreRide;
+                    Map<String,String> map=UtilidadesComprobantes.decodificarArchivoAutorizado(nombreXmlAutorizado);
+                    if(map==null)
+                    {
+                        System.out.println("No existe xml autorizado para el ride:"+archivo.getName());
+                        System.out.println("Xml faltante:"+nombreXmlAutorizado);
+                        return null;
+                    }
+                    else
+                    {
+                        StringReader reader = new StringReader(map.get("comprobante"));
+                        FacturaComprobante comprobante = (FacturaComprobante) jaxbUnmarshaller.unmarshal(reader);
+                        return comprobante;
+                    }
+                    
+                    
+                }
+                else
+                {
+                    FacturaComprobante comprobante = (FacturaComprobante) jaxbUnmarshaller.unmarshal(archivo);
+                    return comprobante;
+                }
+            }
+            
+        } catch (JAXBException ex) {
+            Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public static ComprobanteElectronico obtenerComprobante(String path) {
+        try {
+            JAXBContext jaxbContext = JAXBContext.newInstance(FacturaComprobante.class);
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+            Map<String, String> mapComprobante = UtilidadesComprobantes.decodificarArchivoBase64Offline(path, null, null);
+            StringReader reader = new StringReader(mapComprobante.get("comprobante"));
+            FacturaComprobante comprobante = (FacturaComprobante) jaxbUnmarshaller.unmarshal(reader);
+            return comprobante;
+        } catch (JAXBException ex) {
+            Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 }

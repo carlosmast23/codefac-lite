@@ -30,6 +30,7 @@ import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElec
 import ec.com.codesoft.codefaclite.facturacionelectronica.MetodosEnvioInterface;
 import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.servidor.entity.Factura;
 import ec.com.codesoft.codefaclite.servidor.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.FormaPago;
@@ -87,6 +88,11 @@ public class FacturacionModel extends FacturacionPanel{
      */
     private Map<String,String> datosAdicionales;
     
+    /**
+     * Objeto que permite interactuar con los servicio de la facturacion Electronica
+     */
+    private FacturacionElectronica facturaElectronica;
+    
     
     public FacturacionModel() {
         addListenerButtons();
@@ -102,9 +108,7 @@ public class FacturacionModel extends FacturacionPanel{
         this.bandera = false;
         this.banderaAgregar = true;
         calcularIva12();
-        //new Date(getjDateFechaEmision().getDate().getTime())
-        //getjDateFechaEmision().setDate();
-        datosAdicionales=new HashMap<String,String>();
+        datosAdicionales=new HashMap<String,String>();        
     }
     
     private void addListenerButtons() {
@@ -267,12 +271,17 @@ public class FacturacionModel extends FacturacionPanel{
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
+        Factura facturaProcesando; //referencia que va a tener la factura procesada para que los listener no pierdan la referencia a la variable del metodo. 
+        
         FacturacionService servicio=new FacturacionService();
         setearValoresDefaultFactura();
         servicio.grabar(factura);
+        facturaProcesando=factura;
+        
         DialogoCodefac.mensaje("Correcto", "La factura se grabo correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         //Despues de implemetar todo el metodo de grabar
         FacturacionElectronica facturaElectronica=new FacturacionElectronica(factura, session,this.panelPadre);
+        facturaElectronica.setFactura(factura);
         facturaElectronica.setMapInfoAdicional(datosAdicionales);
         /*
         ListenerComprobanteElectronico listener=new ListenerComprobanteElectronico() {
@@ -310,11 +319,19 @@ public class FacturacionModel extends FacturacionPanel{
                 monitorData.getBtnAbrir().addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        String path = facturaElectronica.getServicio().getPathRide();
+                        //String path = facturaElectronica.getServicio().getPathRide();
                         JasperPrint print = facturaElectronica.getServicio().getPrintJasper();
                         panelPadre.crearReportePantalla(print, factura.getPreimpreso());
                     }
                 });
+                
+                /**
+                 * Seteando datos adicionales de la factura
+                 */
+                facturaProcesando.setClaveAcceso(facturaElectronica.getServicio().getClaveAcceso());
+                facturaProcesando.setEstado(Factura.ESTADO_FACTURADO);
+                servicio.editar(facturaProcesando);
+                
 
             }
 
@@ -348,13 +365,13 @@ public class FacturacionModel extends FacturacionPanel{
             }
 
             @Override
-            public void iniciado() {
+            public void iniciado(ComprobanteElectronico comprobante) {
                 monitorData=MonitorComprobanteModel.getInstance().agregarComprobante();
                 monitorData.getLblPreimpreso().setText(factura.getPreimpreso()+" ");
                 monitorData.getBtnAbrir().setEnabled(false);
                 monitorData.getBtnReporte().setEnabled(false);
                 monitorData.getBtnCerrar().setEnabled(false);
-                monitorData.getBarraProgreso().setString("001-002-000000233");
+                monitorData.getBarraProgreso().setString(comprobante.getInformacionTributaria().getPreimpreso());
                 monitorData.getBarraProgreso().setStringPainted(true);
                 MonitorComprobanteModel.getInstance().mostrar();
                 
@@ -371,7 +388,6 @@ public class FacturacionModel extends FacturacionPanel{
                          monitorData.getBtnAbrir().addActionListener(new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
-                                String path = facturaElectronica.getServicio().getPathRide();
                                 JasperPrint print = facturaElectronica.getServicio().getPrintJasper();
                                 panelPadre.crearReportePantalla(print, factura.getPreimpreso());
                             }
@@ -391,10 +407,10 @@ public class FacturacionModel extends FacturacionPanel{
                 
             }
         });
-        //facturaElectronica.getServicio().addActionListerComprobanteElectronico(listener);
-        facturaElectronica.procesar();//listo se encarga de procesar el comprobante
+
+        facturaElectronica.procesarComprobante();//listo se encarga de procesar el comprobante
         
-        //UtilidadVarios.abrirArchivo(path);
+
         
     }
 
@@ -410,7 +426,16 @@ public class FacturacionModel extends FacturacionPanel{
 
     @Override
     public void imprimir() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(this.factura!=null)
+        {
+           String claveAceeso=this.factura.getClaveAcceso();
+           facturaElectronica.setClaveAcceso(claveAceeso);
+           facturaElectronica.setFactura(factura);
+           //facturaElectronica.procesarComprobanteEtapa(ComprobanteElectronicoService.ETAPA_RIDE,false);
+           //facturaElectronica.procesarComprobante();
+           //JasperPrint print = facturaElectronica.getServicio().getPrintJasper();
+           panelPadre.crearReportePantalla(facturaElectronica.obtenerRide(), factura.getPreimpreso());
+        }
     }
 
     @Override
@@ -426,7 +451,7 @@ public class FacturacionModel extends FacturacionPanel{
         Factura factura=(Factura) buscarDialogoModel.getResultado();
         if(factura!=null)
         {
-            
+            this.factura=factura;
         }
     }
 
@@ -443,6 +468,7 @@ public class FacturacionModel extends FacturacionPanel{
         getLblSecuencial().setText(servicio.getPreimpresoSiguiente());
         
         datosAdicionales=new HashMap<String,String>();
+        facturaElectronica=new FacturacionElectronica(session,this.panelPadre);
     }
 
     @Override

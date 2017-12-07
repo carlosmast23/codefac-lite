@@ -5,21 +5,18 @@
  */
 package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlValue;
 
 /**
  *
  * @author Carlos
  */
-public class InformacionAdicional {
-    public static final String EMAIL="email";
-    
-   private String nombre;
-   private String valor;
+public class DetalleAdicional {
+    @XmlValue()
+    private String nombre;
+    @XmlValue()
+    private String valor;
 
-    @XmlAttribute(name = "nombre")
     public String getNombre() {
         return nombre;
     }
@@ -28,7 +25,6 @@ public class InformacionAdicional {
         this.nombre = nombre;
     }
 
-    @XmlValue()
     public String getValor() {
         return valor;
     }
@@ -36,7 +32,6 @@ public class InformacionAdicional {
     public void setValor(String valor) {
         this.valor = valor;
     }
-   
-   
-   
+    
+    
 }

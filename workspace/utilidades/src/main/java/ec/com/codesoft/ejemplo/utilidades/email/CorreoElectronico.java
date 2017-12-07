@@ -5,6 +5,10 @@
  */
 package ec.com.codesoft.ejemplo.utilidades.email;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -31,16 +35,26 @@ public class CorreoElectronico {
     private String clave;
 
     private String mensaje;
-    private String to;
+    private List<String> to;
     private String subject;
-    private String pathFile;
+    private Map<String,String> pathFiles;
 
-    public CorreoElectronico(String usuario, String clave, String mensaje, String to, String subject) {
+    public CorreoElectronico(String usuario, String clave, String mensaje, List<String> to, String subject) {
         this.usuario = usuario;
         this.clave = clave;
         this.mensaje = mensaje;
         this.to = to;
         this.subject = subject;
+        this.pathFiles=new HashMap<>();
+    }
+    
+    public CorreoElectronico(String usuario, String clave, String mensaje, List<String> to, String subject,Map<String,String> pathFiles) {
+        this.usuario = usuario;
+        this.clave = clave;
+        this.mensaje = mensaje;
+        this.to = to;
+        this.subject = subject;
+        this.pathFiles=pathFiles;
     }
 
     public void sendMail() throws RuntimeException{
@@ -65,16 +79,34 @@ public class CorreoElectronico {
 
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(usuario));
-            message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse(to));
+            
+            /**
+             * Agregar varios destinatarios
+             */
+            for(int i=0;i<to.size();i++)
+            {
+                if(i==0)
+                {
+                    message.setRecipients(Message.RecipientType.TO,
+                            InternetAddress.parse(to.get(i)));
+                    System.out.println("Correo 1:"+to.get(i));
+                }
+                else
+                {
+                    message.setRecipients(Message.RecipientType.CC,
+                        InternetAddress.parse(to.get(i)));
+                    System.out.println("Correo 2:"+to.get(i));
+                }
+            }
+            
+            
             message.setSubject(subject);
             //message.setText(mensaje);
             
             
             
-            
         // Create the message part
-         BodyPart messageBodyPart = new MimeBodyPart();
+         //BodyPart messageBodyPart = new MimeBodyPart();
 
          // Now set the actual message
          //messageBodyPart.setText(mensaje);
@@ -86,11 +118,17 @@ public class CorreoElectronico {
          //multipart.addBodyPart(messageBodyPart);
 
          // Part two is attachment
-         messageBodyPart = new MimeBodyPart();
-         //String filename = "E:\\ejemplo3.xml";
-         DataSource source = new FileDataSource(pathFile);
-         messageBodyPart.setDataHandler(new DataHandler(source));
-         messageBodyPart.setFileName(pathFile);
+        for (Map.Entry<String, String> entry : pathFiles.entrySet())
+        {
+             BodyPart messageBodyPart = new MimeBodyPart();
+             //String filename = "E:\\ejemplo3.xml";
+             DataSource source = new FileDataSource(entry.getValue());
+             messageBodyPart.setDataHandler(new DataHandler(source));
+             messageBodyPart.setFileName(entry.getKey());
+             multipart.addBodyPart(messageBodyPart);
+        }
+
+         
          //multipart.addBodyPart(messageBodyPart);
         
          /**
@@ -99,7 +137,7 @@ public class CorreoElectronico {
          MimeBodyPart htmlPart = new MimeBodyPart();
          htmlPart.setContent(mensaje, "text/html; charset=utf-8");
          
-         multipart.addBodyPart(messageBodyPart);
+
          multipart.addBodyPart(htmlPart);
 
          
@@ -116,13 +154,15 @@ public class CorreoElectronico {
         }
     }
 
-    public String getPathFile() {
-        return pathFile;
+    public Map<String, String> getPathFiles() {
+        return pathFiles;
     }
 
-    public void setPathFile(String pathFile) {
-        this.pathFile = pathFile;
+    public void setPathFiles(Map<String, String> pathFiles) {
+        this.pathFiles = pathFiles;
     }
+
+    
     
     
 

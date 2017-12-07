@@ -40,11 +40,11 @@ public abstract class ComprobanteElectronicoReporte
         String secuencial=comprobante.getInformacionTributaria().getPuntoEmision()+"-"+comprobante.getInformacionTributaria().getEstablecimiento()+"-"+comprobante.getInformacionTributaria().getSecuencial();
         map.put("secuencial",secuencial);
         map.put("autorizacion",comprobante.getInformacionTributaria().getClaveAcceso());
-        map.put("estado","");
+        //map.put("estado","");
         map.put("fecha_hora_autorizacion","");
         String codAmbiente=comprobante.getInformacionTributaria().getAmbiente();
-        if(codAmbiente.equals(ComprobanteElectronicoService.CODIGO_SRI_MODO_PRODUCCION))
-             map.put("ambiente",ComprobanteElectronicoService.MODO_PRODUCCION);
+        if(codAmbiente.equals(ComprobanteElectronicoService.CODIGO_SRI_MODO_PRODUCCION.toString()))
+             map.put("ambiente","producción");
         else
             map.put("ambiente",ComprobanteElectronicoService.MODO_PRUEBAS);
         

@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util;
 
+import com.sun.org.apache.xerces.internal.impl.io.MalformedByteSequenceException;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
 import java.awt.image.BufferedImage;
@@ -30,6 +31,7 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -44,6 +46,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -51,7 +54,7 @@ import org.w3c.dom.NodeList;
  */
 public abstract class UtilidadesComprobantes {
 
-    public static Map<String,String> decodificarArchivoBase64Offline(String nombreArchivo, String numeroAutorizacion, String fechaAutorizacion) {
+    public static Map<String,String> decodificarArchivoBase64Offline(String nombreArchivo, String numeroAutorizacion, String fechaAutorizacion) throws Exception{
         try {
             File archivo = new File(nombreArchivo);
             if (archivo.exists()) {
@@ -95,10 +98,78 @@ public abstract class UtilidadesComprobantes {
                     return map;
                 }
             }
-        } catch (Exception e) {
+        } catch (MalformedByteSequenceException e) {
             e.printStackTrace();
+            throw new Exception(e.getMessage());
+        } catch (SAXException ex) {
+            Logger.getLogger(UtilidadesComprobantes.class.getName()).log(Level.SEVERE, null, ex);
+            throw new Exception(ex.getMessage());
+        } catch (IOException ex) {
+            Logger.getLogger(UtilidadesComprobantes.class.getName()).log(Level.SEVERE, null, ex);
+            throw new Exception(ex.getMessage());
+        } catch (ParserConfigurationException ex) {
+            Logger.getLogger(UtilidadesComprobantes.class.getName()).log(Level.SEVERE, null, ex);
+            throw new Exception(ex.getMessage());
         }
         return null;
+
+    }
+    
+     public static Map<String,String> decodificarArchivoAutorizado(String nombreArchivo) throws Exception{
+        try {
+            File archivo = new File(nombreArchivo);
+            if (archivo.exists()) {
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder builder = factory.newDocumentBuilder();
+                Document documento = builder.parse(archivo);
+                NodeList listaNodos = documento.getElementsByTagName("*");
+                String comprobante = null;
+                String numeroAutorizacionComprobante = "";
+                String fechaAutorizacionComprobante = "";
+                String estadoComprobante = "";
+                for (int i = 0; i < listaNodos.getLength(); i++) {
+                    Element elemento = (Element) listaNodos.item(i);
+                    if (elemento.getNodeName().equals("comprobante")) {
+                        comprobante = elemento.getChildNodes().item(0).getNodeValue();
+                    }
+                    if (elemento.getNodeName().equals("estado")) {
+                        estadoComprobante = elemento.getChildNodes().item(0).getNodeValue();
+                    }
+
+                    if (elemento.getNodeName().equals("numeroAutorizacion")) {
+                        numeroAutorizacionComprobante = elemento.getChildNodes().item(0).getNodeValue();
+                    }
+                    if (elemento.getNodeName().equals("fechaAutorizacion")) {
+                        fechaAutorizacionComprobante = fechaAutorizacionComprobante + elemento.getChildNodes().item(0).getNodeValue();
+                    }
+                }
+                
+
+                if ("AUTORIZADO".equalsIgnoreCase(estadoComprobante)) {
+                    Map<String,String> map=new HashMap<String,String>();
+                    map.put("comprobante", comprobante);
+                    map.put("numeroAutorizacion", numeroAutorizacionComprobante);
+                    map.put("fechaAutorizacion",UtilidadesComprobantes.getFormatXmlGregorianCalendarToSimpleFormat(fechaAutorizacionComprobante));
+                    map.put("estado",estadoComprobante);
+                    //generarReporteComprobante(comprobante, numeroAutorizacion, fechaAutorizacion);
+                    return map;
+                }
+            }
+        } catch (MalformedByteSequenceException e) {
+            e.printStackTrace();
+            throw new Exception(e.getMessage());
+        } catch (SAXException ex) {
+            Logger.getLogger(UtilidadesComprobantes.class.getName()).log(Level.SEVERE, null, ex);
+            throw new Exception(ex.getMessage());
+        } catch (IOException ex) {
+            Logger.getLogger(UtilidadesComprobantes.class.getName()).log(Level.SEVERE, null, ex);
+            throw new Exception(ex.getMessage());
+        } catch (ParserConfigurationException ex) {
+            Logger.getLogger(UtilidadesComprobantes.class.getName()).log(Level.SEVERE, null, ex);
+            throw new Exception(ex.getMessage());
+        }
+        return null;
+
     }
  
     /*

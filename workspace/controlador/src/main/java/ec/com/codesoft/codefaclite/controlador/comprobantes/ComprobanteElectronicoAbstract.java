@@ -23,15 +23,21 @@ import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import net.sf.jasperreports.engine.JasperPrint;
 
 /**
  *
  * @author Carlos
  */
-public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElectronico> implements Runnable{
+public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElectronico>{
     protected SessionCodefacInterface session;
     private ComprobanteElectronicoService servicio;
     private InterfazComunicacionPanel interfazPadre;
+    
+    /**
+     * varibale que me permite setear la clave de acceso para procesar por etapas
+     */
+    protected String claveAcceso;
     
     public abstract String getCodigoComprobante();
     public abstract String getSecuencial();
@@ -44,6 +50,8 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
      * @return 
      */
     public abstract T getComprobante();
+    
+    
 
     public ComprobanteElectronicoAbstract(SessionCodefacInterface session) {
         this.session = session;
@@ -53,6 +61,14 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
         this.session = session;
         this.interfazPadre = interfazPadre;
         this.servicio=new ComprobanteElectronicoService();
+    }
+
+    public ComprobanteElectronicoAbstract(SessionCodefacInterface session, InterfazComunicacionPanel interfazPadre, String claveAcceso) {
+        this.session = session;
+        this.interfazPadre = interfazPadre;
+        this.claveAcceso = claveAcceso;
+        this.servicio=new ComprobanteElectronicoService();
+        cargarConfiguraciones();
     }
     
     
@@ -82,51 +98,29 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
         infoTributaria.setTipoEmision(ComprobanteElectronico.MODO_FACTURACION_NORMAL);
         return infoTributaria;
     }
+
     
-    public void procesar()
+    private void cargarConfiguraciones()
     {
-        Thread hiloProceso=new Thread(this);
-        hiloProceso.start();
-        
-    }
-    
-    private void procesarComprobante()
-    {
-        /**
-         * Crear el servicio para facturar
-         */
-        T comprobante=getComprobante();
-        comprobante.setInformacionTributaria(getInfoInformacionTributaria());
-        comprobante.setInformacionAdicional(getInformacionAdicional());
-        
         servicio.setPathBase(session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor);
         servicio.setNombreFirma(session.getParametrosCodefac().get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).valor);
         servicio.setClaveFirma(session.getParametrosCodefac().get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).valor);
-        servicio.setModoFacturacion(session.getParametrosCodefac().get(ParametroCodefac.MODO_FACTURACION).valor);
-        servicio.setComprobante(comprobante);
-        servicio.setEtapaActual(ComprobanteElectronicoService.ETAPA_GENERAR);
-        /*
-        servicio = new ComprobanteElectronicoService(
-                session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor,
-                session.getParametrosCodefac().get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).valor,
-                session.getParametrosCodefac().get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).valor,
-                session.getParametrosCodefac().get(ParametroCodefac.MODO_FACTURACION).valor,
-                comprobante);*/
-        
-       
-        /**
-         * Setear variables de configuracion de los comprobantes electronicos
-         */
         String modoFacturacion=session.getParametrosCodefac().get(ParametroCodefac.MODO_FACTURACION).valor;
         servicio.setModoFacturacion(modoFacturacion);
+        
+                /**
+         * Setear variables de configuracion para los reportes
+         */
         servicio.setPathFacturaJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourcePath("facturaReporte.jrxml"));
         String imagenLogo=session.getParametrosCodefac().get(ParametroCodefac.LOGO_EMPRESA).getValor();
         servicio.setLogoImagen(DirectorioCodefac.IMAGENES.getArchivoStream(session,imagenLogo));
         servicio.setPathParentJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourcesParentPath("facturaReporte.jrxml"));
         servicio.setMapAdicionalReporte(interfazPadre.mapReportePlantilla());
         servicio.pathLogoImagen=DirectorioCodefac.IMAGENES.getArchivo(session,imagenLogo);
-        //servicio.setLogoImagen(RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("logoCodefac.png"));
         
+        /**
+         * Cargar los web services dependiendo el modo de facturacion
+         */
         if(ComprobanteElectronicoService.MODO_PRODUCCION.equals(modoFacturacion))
         {
             String autorizacion=session.getParametrosCodefac().get(ParametroCodefac.SRI_WS_AUTORIZACION).valor;
@@ -144,17 +138,50 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
             String recepcion = session.getParametrosCodefac().get(ParametroCodefac.SRI_WS_RECEPCION_PRUEBA).valor;
             servicio.setUriRecepcion(recepcion);
         }
-        //Carga las configuraciones basicas e enlaza la interfaz de correo con la interfaz de correo de la facturacion electronica
-        cargarConfiguracionesCorreo();
-        servicio.setCorreosElectronicos(getCorreos());
         
         /**
-         * Setear la pagina web del footer para enviar al correo
+         * Cargar variables para el envio del correo
          */
+        cargarConfiguracionesCorreo();
+        servicio.setCorreosElectronicos(getCorreos());
         String footer=UtilidadVarios.getStringHtmltoUrl(RecursoCodefac.HTML.getResourceInputStream("footer_codefac.html"));
         servicio.setFooterMensajeCorreo(footer);
+    
+    }
+    
+        /**
+     * Procesa el comprobante desde una determinada etapa
+     */
+    public void procesarComprobanteEtapa(Integer etapa,Integer etapaLimite)
+    {
+        servicio.setEtapaActual(etapa);
+        servicio.setClaveAcceso(claveAcceso);
+        servicio.setEtapaLimiteProcesar(etapaLimite);
+        cargarConfiguraciones();
+        servicio.procesar();
+    }
+    
+    public JasperPrint obtenerRide()
+    {
+        cargarConfiguraciones();
+        JasperPrint print = servicio.getPrintJasper();
+        return print;
+    }
+    
+    public void procesarComprobante()
+    {
+        /**
+         * Crear el servicio para facturar
+         */
+        T comprobante=getComprobante();
+        comprobante.setInformacionTributaria(getInfoInformacionTributaria());
+        comprobante.setInformacionAdicional(getInformacionAdicional());        
+        servicio.setComprobante(comprobante);
+        servicio.setEtapaActual(ComprobanteElectronicoService.ETAPA_GENERAR);
+        cargarConfiguraciones();
+        //servicio.setEtapaLimiteProcesar(etapaLimite);
         
-        servicio.procesarComprobante();
+        servicio.procesar();
         
     }
     
@@ -185,9 +212,9 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
     
     public void cargarConfiguracionesCorreo()
     {
-        this.servicio.setMetodoEnvioInterface(new MetodosEnvioInterface()  {
+        this.servicio.setMetodoEnvioInterface(new MetodosEnvioInterface() {
             @Override
-            public void enviarCorreo(String mensaje, String subject, List<String> destinatorios,String pathFile) throws ComprobanteElectronicoException{
+            public void enviarCorreo(String mensaje, String subject, List<String> destinatorios, Map<String,String> pathFiles) throws Exception {
                 CorreoCodefac correo=new CorreoCodefac(session) {
                     @Override
                     public String getMensaje() {
@@ -200,8 +227,8 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
                     }
                     
                     @Override
-                    public String getPathFile() {
-                        return pathFile;
+                    public Map<String,String> getPathFiles() {
+                        return pathFiles;
                     }
                     
                     @Override
@@ -221,14 +248,18 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
             }
         });
     }
-    
 
-    @Override
-    public void run()
-    {
-        procesarComprobante();
+    public String getClaveAcceso() {
+        return claveAcceso;
+    }
+
+    public void setClaveAcceso(String claveAcceso) {
+        this.claveAcceso = claveAcceso;
+        this.servicio.setClaveAcceso(claveAcceso);
     }
     
+    
+
     
     
     

@@ -39,18 +39,25 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
 
     private Factura factura;
     private Map<String,String> mapInfoAdicional;
+    private List<String> correosAdicionales;
     
     public FacturacionElectronica(SessionCodefacInterface session) {
         super(session);
     }
+    
+     public FacturacionElectronica(SessionCodefacInterface session, InterfazComunicacionPanel interfazPadre) {
+        super(session, interfazPadre);
+    }
+    
 
     public FacturacionElectronica(Factura factura, SessionCodefacInterface session, InterfazComunicacionPanel interfazPadre) {
         super(session, interfazPadre);
         this.factura = factura;
     }
-
     
-    
+    public FacturacionElectronica(String claveAcceso, SessionCodefacInterface session, InterfazComunicacionPanel interfazPadre) {
+        super(session, interfazPadre,claveAcceso);
+    }
     
     
 
@@ -191,12 +198,43 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
     @Override
     public List<String> getCorreos() {
         List<String> correos=new ArrayList<String>();
-        correos.add(factura.getCliente().getCorreoElectronico());
+        if(factura!=null && factura.getCliente()!=null)
+            correos.add(factura.getCliente().getCorreoElectronico());
+        
+        //Agregar correos adicionales , solo si estan seteados los valores de los correos       
+        if(this.correosAdicionales!=null)
+        {
+            for (String correo : this.correosAdicionales) {
+                if(!correos.contains(correo))
+                {
+                    correos.add(correo);
+                }
+            }
+        }
+        
+        
         return correos;
+    }
+
+    public Factura getFactura() {
+        return factura;
+    }
+
+    public void setFactura(Factura factura) {
+        this.factura = factura;        
+    }
+
+    public List<String> getCorreosAdicionales() {
+        return correosAdicionales;
+    }
+
+    public void setCorreosAdicionales(List<String> correosAdicionales) {
+        this.correosAdicionales = correosAdicionales;
     }
     
     
-
+    
+    
 
 
 }

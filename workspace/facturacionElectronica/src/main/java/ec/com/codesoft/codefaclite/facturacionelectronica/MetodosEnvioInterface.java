@@ -7,11 +7,12 @@ package ec.com.codesoft.codefaclite.facturacionelectronica;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
  * @author Carlos
  */
 public interface MetodosEnvioInterface { 
-    public abstract void enviarCorreo(String mensaje,String subject,List<String> destinatorios,String pathFile) throws Exception;
+    public abstract void enviarCorreo(String mensaje,String subject,List<String> destinatorios,Map<String,String> pathFiles) throws Exception;
 }

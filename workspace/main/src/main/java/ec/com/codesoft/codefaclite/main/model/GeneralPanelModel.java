@@ -731,8 +731,17 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private void agregarListenerMenu(ControladorCodefacInterface panel,boolean maximisado)
     {
         try {
+                                    /**
+             * Agregar variables de session a la pantalla
+             */
+            ParametroCodefacService servicio=new ParametroCodefacService();
+            sessionCodefac.setParametrosCodefac(servicio.getParametrosMap());
+            
+            
             panel.panelPadre=generalPanelModel;
             panel.session=sessionCodefac;
+
+            
             panel.addInternalFrameListener(listenerFrame);
             String tituloOriginal=getTituloOriginal(panel.getTitle());
             panel.setTitle(tituloOriginal+" [Nuevo]");
@@ -761,11 +770,6 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             panel.consola=new ConsolaGeneral();
             mostrarConsola(panel.consola,true);
             
-            /**
-             * Agregar variables de session a la pantalla
-             */
-            ParametroCodefacService servicio=new ParametroCodefacService();
-            sessionCodefac.setParametrosCodefac(servicio.getParametrosMap());
             
                         
         } catch (PropertyVetoException ex) {
