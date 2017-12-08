@@ -66,7 +66,7 @@ public class UtilidadesServidor {
                     }
                     catch(NullPointerException cpe)
                     {
-                        cpe.printStackTrace();
+                        System.out.println("Alerta al crear el sql, porfavor revise que los sql no tengan espacios en blanco al final, apesar de esta advertencia el proceso puede continuar sin ningun problema");
                     }
                 }
 
