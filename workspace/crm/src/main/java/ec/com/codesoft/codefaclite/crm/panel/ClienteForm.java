@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacA
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.crm.test.EjemploCrm;
 import ec.com.codesoft.codefaclite.servidor.entity.SriIdentificacion;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.ClienteEnumEstado;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -102,6 +103,8 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jLabel10 = new javax.swing.JLabel();
         jTextCorreo = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        cmbEstado = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -155,6 +158,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanelCaracteristicasGenerales.add(jTextIdentificacion, gridBagConstraints);
@@ -218,6 +222,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanelCaracteristicasGenerales.add(jTextExtension, gridBagConstraints);
@@ -258,6 +263,27 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelCaracteristicasGenerales.add(jLabel4, gridBagConstraints);
 
+        jLabel11.setText("Estado:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
+        jPanelCaracteristicasGenerales.add(jLabel11, gridBagConstraints);
+
+        cmbEstado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbEstadoActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        jPanelCaracteristicasGenerales.add(cmbEstado, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -271,12 +297,18 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void cmbEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbEstadoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbEstadoActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<ClienteEnumEstado> cmbEstado;
     private javax.swing.JComboBox<SriIdentificacion> jComboIdentificacion;
     private javax.swing.JComboBox<String> jComboTipoCliente;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -399,6 +431,10 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
 
     public void setjComboIdentificacion(JComboBox<SriIdentificacion> jComboIdentificacion) {
         this.jComboIdentificacion = jComboIdentificacion;
+    }
+
+    public JComboBox<ClienteEnumEstado> getCmbEstado() {
+        return cmbEstado;
     }
     
     

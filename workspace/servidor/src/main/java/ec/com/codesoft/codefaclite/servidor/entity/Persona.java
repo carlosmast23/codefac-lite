@@ -52,6 +52,8 @@ public class Persona implements Serializable {
     private String telefonoCelular;
     @Column(name = "CORREO_ELECTRONICO")
     private String correoElectronico;
+    @Column(name = "ESTADO")
+    private String estado;
 
     public Integer getIdCliente() {
         return idCliente;
@@ -142,6 +144,16 @@ public class Persona implements Serializable {
     public void setCorreoElectronico(String correoElectronico) {
         this.correoElectronico = correoElectronico;
     }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+    
+    
 
     @Override
     public int hashCode() {

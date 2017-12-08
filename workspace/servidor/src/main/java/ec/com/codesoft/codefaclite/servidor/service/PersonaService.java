@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.ClienteEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.facade.PersonaFacade;
 import java.util.List;
 
@@ -34,7 +35,9 @@ public class PersonaService
     
     public void eliminar(Persona p)
     {
-        personaFacade.remove(p);
+        //personaFacade.remove(p);
+        p.setEstado(ClienteEnumEstado.ELIMINADO.getEstado());
+        editar(p);
     }
     
     public List<Persona> buscar()
