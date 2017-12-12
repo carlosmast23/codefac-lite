@@ -30,7 +30,7 @@ public enum FacturaEnumEstado {
     /**
      * Estado eliminado solo permitido si el comprobante no fue autorizado
      */
-    ELIMINADO("F");
+    ELIMINADO("E");
     
     
     private FacturaEnumEstado(String estado) {
@@ -51,5 +51,15 @@ public enum FacturaEnumEstado {
         }
         return null;
     }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+    
+    
     
 }
