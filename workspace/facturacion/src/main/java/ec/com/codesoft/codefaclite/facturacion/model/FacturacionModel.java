@@ -193,7 +193,7 @@ public class FacturacionModel extends FacturacionPanel{
                      * Revisar este calculo del iva para no calcular 2 veces al mostrar
                      */
                                        
-                    //facturaDetalle.setIva(iva.setScale(2, BigDecimal.ROUND_HALF_UP));
+                    facturaDetalle.setIva(iva.setScale(2, BigDecimal.ROUND_HALF_UP));
                 }
             }
         });
