@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.ClienteEnumEstado;
+import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.PersonaFacade;
 import java.util.List;
 
@@ -14,14 +15,18 @@ import java.util.List;
  *
  * @author PC
  */
-public class PersonaService 
+public class PersonaService extends ServiceAbstract<PersonaFacade>
 {
     private PersonaFacade personaFacade;
 
     public PersonaService() 
     {
-        this.personaFacade = new PersonaFacade();
+        super(PersonaFacade.class);
+       
     }
+
+   
+    
     
     public void grabar(Persona p)
     {
