@@ -234,9 +234,12 @@ public abstract class ComprobantesElectronicosUtil {
     {
         try {
             String nombreRide = archivo.getName();
-            nombreRide = nombreRide.split("_")[1]; //obtener solo el nombre de la firma
-            nombreRide = nombreRide.replace(".pdf", ".xml");
-                    
+            if(carpetaConfiguracion.equals(ComprobanteElectronicoService.CARPETA_RIDE))
+            {
+                nombreRide = nombreRide.split("_")[1]; //obtener solo el nombre de la firma
+                nombreRide = nombreRide.replace(".pdf", ".xml");
+            }
+           
             ClaveAcceso claveAcceso=new ClaveAcceso(nombreRide.replace(".xml",""));
             JAXBContext jaxbContext = JAXBContext.newInstance(claveAcceso.getClassTipoComprobante());
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();

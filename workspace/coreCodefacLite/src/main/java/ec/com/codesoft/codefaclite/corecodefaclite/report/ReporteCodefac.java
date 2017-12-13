@@ -73,11 +73,20 @@ public class ReporteCodefac {
         }
     }
     
-    public static void generarReporteInternalFramePlantilla(String pathReporte,Map parametros,Collection datos,InterfazComunicacionPanel panelPadre,String tituloReporte)
+    public static void generarReporteInternalFramePlantilla(String pathReporte,Map<String,Object> parametros,Collection datos,InterfazComunicacionPanel panelPadre,String tituloReporte)
     {
         try {
             Map<String,Object> mapCompleto=new HashMap<String,Object>(panelPadre.mapReportePlantilla());
+            
+            //Agregado parametros adicionales
+            for (Map.Entry<String, Object> entry : parametros.entrySet()) {
+                String key = entry.getKey();
+                Object value = entry.getValue();
+                mapCompleto.put(key, value);
+            }
+            
             mapCompleto.put("pl_titulo",tituloReporte);
+            //mapCompleto.putAll(parametros);
             JasperReport report =JasperCompileManager.compileReport(pathReporte);
             JRBeanCollectionDataSource dataReport= new JRBeanCollectionDataSource(datos);
             JasperPrint print =JasperFillManager.fillReport(report, mapCompleto,dataReport);

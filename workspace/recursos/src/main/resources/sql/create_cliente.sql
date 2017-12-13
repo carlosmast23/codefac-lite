@@ -21,5 +21,6 @@ create table CLIENTE(
     TELEFONO_CELULAR varchar(10), 
     CORREO_ELECTRONICO varchar(60),
     ACTIVIDAD_COMERCIAL varchar(100),
+    ESTADO varchar(1),
     primary key (CLIENTE_ID)
 )

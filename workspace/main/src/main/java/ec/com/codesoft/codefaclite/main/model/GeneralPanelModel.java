@@ -467,14 +467,15 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                                 frameInterface.grabar();
                                 procesoTerminado=true;
                             } catch (ExcepcionCodefacLite ex) {
-                                JOptionPane.showMessageDialog(null,ex.getMessage());
+                                ex.printStackTrace();
+                                //JOptionPane.showMessageDialog(null,ex.getMessage());
                             }
                             
                         }
                         else
                         {
                             mostrarConsola(frameInterface.consola,true);
-                            JOptionPane.showMessageDialog(null,"Error de validacion Nuevo");
+                            //JOptionPane.showMessageDialog(null,"Error de validacion Nuevo");
                         }
                     }
                     else
@@ -485,14 +486,15 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                                 frameInterface.editar();
                                 procesoTerminado=true;
                             } catch (ExcepcionCodefacLite ex) {
-                                JOptionPane.showMessageDialog(null,ex.getMessage());
+                                 ex.printStackTrace();
+                                //JOptionPane.showMessageDialog(null,ex.getMessage());
                             }
                             
                         }
                         else
                         {
                             mostrarConsola(frameInterface.consola,true);
-                            JOptionPane.showMessageDialog(null,"Error de validacion Editar");
+                            //JOptionPane.showMessageDialog(null,"Error de validacion Editar");
                         }
                     
                     }
@@ -557,7 +559,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         limpiarCamposValidacion(frameInterface);
                         mostrarPanelSecundario(false);
                     } catch (ExcepcionCodefacLite ex) {
-                        JOptionPane.showMessageDialog(null,ex.getMessage());
+                        ex.printStackTrace();
+                        //JOptionPane.showMessageDialog(null,ex.getMessage());
                     }
 
                 }

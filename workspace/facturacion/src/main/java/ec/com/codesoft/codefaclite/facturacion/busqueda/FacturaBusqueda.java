@@ -36,7 +36,7 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura> {
     public List<Factura> getConsulta() {
         ArrayList<Producto> productos = new ArrayList<Producto>();
         FacturacionService servicio=new FacturacionService();
-        return servicio.obtenerTodos();
+        return servicio.obtenerFacturasActivas();
     }
 
     @Override

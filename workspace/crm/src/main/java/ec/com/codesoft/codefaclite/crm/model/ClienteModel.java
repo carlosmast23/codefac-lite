@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.crm.test.EjemploCrm;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.entity.SriIdentificacion;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.ClienteEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
 import ec.com.codesoft.codefaclite.servidor.service.SriService;
 import java.io.IOException;
@@ -63,12 +64,19 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         this.personaService = new PersonaService();
         getjTextExtension().setText("0");
         cargarClientes();
+        cargarDatosIniciales();
     }
     
     
     @Override
     public void grabar() throws ExcepcionCodefacLite
     {
+        if(!prevalidar())
+        {
+            //Cancela el evento guardar porque no prevalido
+            throw new ExcepcionCodefacLite("Error al prevalidar");
+        }
+        
         persona = new Persona();
         persona.setRazonSocial(getjTextNombreSocial().getText());
         persona.setTipoIdentificacion(((SriIdentificacion)getjComboIdentificacion().getSelectedItem()).getCodigo());
@@ -79,6 +87,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         persona.setExtensionTelefono(getjTextExtension().getText());
         persona.setTelefonoCelular(getjTextCelular().getText());
         persona.setCorreoElectronico(getjTextCorreo().getText());
+        persona.setEstado(((ClienteEnumEstado)getCmbEstado().getSelectedItem()).getEstado());
         personaService.grabar(persona);
         DialogoCodefac.mensaje("Datos correctos", "El cliente se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         System.err.println("Se grabo correctamente");
@@ -176,6 +185,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         getjTextExtension().setText(persona.getExtensionTelefono());
         getjTextCelular().setText(persona.getTelefonoCelular());
         getjTextCorreo().setText(persona.getCorreoElectronico());
+        getCmbEstado().setSelectedItem(ClienteEnumEstado.getEnum(persona.getEstado()));
        
         System.out.println("Datos cargados ");
     }
@@ -280,6 +290,9 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         getjComboTipoCliente().setSelectedIndex(0);
         getjTextExtension().setText("0");
         
+        //Setear el valor por defecto
+        getCmbEstado().setSelectedItem(ClienteEnumEstado.ACTIVO);
+        
     }
     
     /**
@@ -309,6 +322,27 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    private void cargarDatosIniciales() {
+                /**
+         * Cargando los estados por defecto
+         */
+        getCmbEstado().removeAllItems();
+        for(ClienteEnumEstado enumerador: ClienteEnumEstado.values())
+        {
+            getCmbEstado().addItem(enumerador);
+        }
+    }
+
+    private boolean prevalidar() {
+        if(getCmbEstado().getSelectedItem().equals(ClienteEnumEstado.ELIMINADO))
+        {
+            DialogoCodefac.mensaje("Advertencia","Si desea eliminar el cliente seleccione el boton de eliminar,seleccione otro estado", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            return false;
+        }
+        
+        return true;
     }
 
 

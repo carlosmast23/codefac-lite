@@ -51,6 +51,11 @@ public class FacturacionService {
         return facturaFacade.findAll();
     }
     
+    public List<Factura> obtenerFacturasActivas()
+    {
+        return facturaFacade.getFacturaEnable();
+    }
+    
     public String getPreimpresoSiguiente()
     {
         Integer secuencialSiguiente=Integer.parseInt(parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA).valor)+1;

@@ -54,12 +54,19 @@ public class UtilidadesServidor {
                  * Busca todos los querys disponibles para ejecutar
                  */
                 for (InputStream query : querys) {
-                    String sql=UtilidadesTextos.getStringURLFile(query);
-                    String[] sentencias= sql.split(";");
-                    for (String sentencia : sentencias) {
-                        PreparedStatement pstm = conn.prepareStatement(sentencia);
-                        pstm.execute();
-                        pstm.close();
+                    try
+                    {
+                        String sql=UtilidadesTextos.getStringURLFile(query);
+                        String[] sentencias= sql.split(";");
+                        for (String sentencia : sentencias) {
+                            PreparedStatement pstm = conn.prepareStatement(sentencia);
+                            pstm.execute();
+                            pstm.close();
+                        }
+                    }
+                    catch(NullPointerException cpe)
+                    {
+                        System.out.println("Alerta al crear el sql, porfavor revise que los sql no tengan espacios en blanco al final, apesar de esta advertencia el proceso puede continuar sin ningun problema");
                     }
                 }
 
