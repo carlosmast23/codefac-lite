@@ -39,8 +39,7 @@ public enum FacturaEnumEstado {
     
     private String estado;
     
-    public static FacturaEnumEstado getEnum(String estado)
-    {
+    public static FacturaEnumEstado getEnum(String estado){
 
         for (FacturaEnumEstado enumerador : FacturaEnumEstado.values())
         {

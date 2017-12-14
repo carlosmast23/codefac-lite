@@ -52,8 +52,8 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
     }
     
     @LimpiarAnotacion
-    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
-    @ValidacionCodefacAnotacion(requerido=true, expresionRegular = "^[A-Za-z0-9.\\_\\-\\\\s]*$",nombre = "Nombre")
+    //@AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
+    @ValidacionCodefacAnotacion(requerido=true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$",nombre = "Nombre")
     public JTextField getTextNombre() {
         return textNombre;
     }
@@ -208,6 +208,12 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         gridBagConstraints.gridy = 3;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanel1.add(jLabel5, gridBagConstraints);
+
+        textNombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textNombreActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
@@ -333,6 +339,10 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void textNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textNombreActionPerformed
+    }//GEN-LAST:event_textNombreActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<ImpuestoDetalle> comboIce;
     private javax.swing.JComboBox<ImpuestoDetalle> comboIrbpnr;

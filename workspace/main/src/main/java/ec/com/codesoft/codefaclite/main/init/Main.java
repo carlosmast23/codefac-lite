@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
 import ec.com.codesoft.codefaclite.crm.model.EmisorModel;
 import ec.com.codesoft.codefaclite.crm.model.ProductoModel;
+import ec.com.codesoft.codefaclite.facturacion.model.FacturaReporteModel;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
 import ec.com.codesoft.codefaclite.facturacion.model.NotaCreditoModel;
 import ec.com.codesoft.codefaclite.facturacion.model.UtilidadComprobanteModel;
@@ -235,6 +236,7 @@ public class Main {
         ventanas.add(new MenuControlador(panel.getjMenuCalculadora(),CalculadoraModel.class,false));
         ventanas.add(new MenuControlador(panel.getjMenuItemUtilidades(),UtilidadComprobanteModel.class,false));
         ventanas.add(new MenuControlador(panel.getjMenuItemNotaCredito(),NotaCreditoModel.class,true));
+        ventanas.add(new MenuControlador(panel.getjMenuItemFacturaReporte(),FacturaReporteModel.class,true));
         return ventanas;
     
     }

@@ -60,12 +60,11 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JasperPrint;
 
-
 /**
  *
  * @author Carlos
  */
-public class FacturacionModel extends FacturacionPanel{
+public class FacturacionModel extends FacturacionPanel {
 
     private Persona persona;
     private Factura factura;
@@ -81,19 +80,19 @@ public class FacturacionModel extends FacturacionPanel{
     private BigDecimal subtotal0;
     private BigDecimal iva;
     private BigDecimal valorTotal;
-    
+
     /**
-     * Mapa de datos adicionales que se almacenan temporalmente y sirven para
-     * la facturacion electronica como por ejemplo el correo
+     * Mapa de datos adicionales que se almacenan temporalmente y sirven para la
+     * facturacion electronica como por ejemplo el correo
      */
-    private Map<String,String> datosAdicionales;
-    
+    private Map<String, String> datosAdicionales;
+
     /**
-     * Objeto que permite interactuar con los servicio de la facturacion Electronica
+     * Objeto que permite interactuar con los servicio de la facturacion
+     * Electronica
      */
     private FacturacionElectronica facturaElectronica;
-    
-    
+
     public FacturacionModel() {
         addListenerButtons();
         initModelTablaFormaPago();
@@ -108,37 +107,35 @@ public class FacturacionModel extends FacturacionPanel{
         this.bandera = false;
         this.banderaAgregar = true;
         calcularIva12();
-        datosAdicionales=new HashMap<String,String>();        
+        datosAdicionales = new HashMap<String, String>();
     }
-    
+
     private void addListenerButtons() {
-        
+
         getBtnBuscarCliente().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                ClienteFacturacionBusqueda clienteBusquedaDialogo= new ClienteFacturacionBusqueda();
-                BuscarDialogoModel buscarDialogoModel=new BuscarDialogoModel(clienteBusquedaDialogo);
+                ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda();
+                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
                 buscarDialogoModel.setVisible(true);
-                persona=(Persona) buscarDialogoModel.getResultado();
-                if(persona!=null)
-                {
-                   setearValoresCliente();
+                persona = (Persona) buscarDialogoModel.getResultado();
+                if (persona != null) {
+                    setearValoresCliente();
                 };
             }
         });
-        
+
         getBtnAgregarFormaPago().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                FormaPagoDialogModel dialog=new FormaPagoDialogModel(null,true);
+                FormaPagoDialogModel dialog = new FormaPagoDialogModel(null, true);
                 dialog.setLocationRelativeTo(null);
                 dialog.setVisible(true);
-                FormaPago formaPago=dialog.getFormaPago();
+                FormaPago formaPago = dialog.getFormaPago();
                 agregarFormaPagoTabla(formaPago);
             }
         });
-        
+
         getBtnAgregarProducto().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -146,34 +143,29 @@ public class FacturacionModel extends FacturacionPanel{
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
                 buscarDialogoModel.setVisible(true);
                 productoSeleccionado = (Producto) buscarDialogoModel.getResultado();
-
                 if (productoSeleccionado == null) {
-                    return ;
+                    return;
                     //throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar producto vacio");
                 }
-
                 setearValoresProducto();
-
                 banderaAgregar = true;
-
             }
         });
-        
-        getTblDetalleFactura().addMouseListener( new MouseAdapter() {
+
+        getTblDetalleFactura().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                fila=getTblDetalleFactura().getSelectedRow();
+                fila = getTblDetalleFactura().getSelectedRow();
                 System.out.println(fila);
-                bandera=true;
+                bandera = true;
             }
         });
-        
+
         getBtnAgregarDetalleFactura().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if( banderaAgregar )
-                {   
-                    FacturaDetalle facturaDetalle=new FacturaDetalle();
+                if (banderaAgregar) {
+                    FacturaDetalle facturaDetalle = new FacturaDetalle();
                     facturaDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
                     facturaDetalle.setDescripcion(getTxtDescripcion().getText());
                     facturaDetalle.setPrecioUnitario(new BigDecimal(getTxtValorUnitario().getText()));
@@ -188,37 +180,34 @@ public class FacturacionModel extends FacturacionPanel{
                     setearDetalleFactura();
                     cargarTotales();
                     banderaAgregar = false;
-                    
-                                        /**
-                     * Revisar este calculo del iva para no calcular 2 veces al mostrar
+
+                    /**
+                     * Revisar este calculo del iva para no calcular 2 veces al
+                     * mostrar
                      */
-                                       
                     //facturaDetalle.setIva(iva.setScale(2, BigDecimal.ROUND_HALF_UP));
                 }
             }
         });
-        
+
         getBtnQuitarDetalle().addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) 
-            {
-                if(bandera)
-                {
-                    bandera=false;
+            public void actionPerformed(ActionEvent e) {
+                if (bandera) {
+                    bandera = false;
                     modeloTablaDetallesProductos.removeRow(fila);
                     factura.getDetalles().remove(fila);
                     cargarTotales();
                 }
             }
         });
-        
-        getBtnEditarDetalle().addActionListener(new ActionListener(){
+
+        getBtnEditarDetalle().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(bandera)
-                {
-                    BigDecimal valorUnitario = new BigDecimal(String.valueOf(modeloTablaDetallesProductos.getValueAt(getTblDetalleFactura().getSelectedRow(),1)));
-                    BigDecimal cantidad = new BigDecimal (String.valueOf(modeloTablaDetallesProductos.getValueAt(getTblDetalleFactura().getSelectedRow(),2)));
+                if (bandera) {
+                    BigDecimal valorUnitario = new BigDecimal(String.valueOf(modeloTablaDetallesProductos.getValueAt(getTblDetalleFactura().getSelectedRow(), 1)));
+                    BigDecimal cantidad = new BigDecimal(String.valueOf(modeloTablaDetallesProductos.getValueAt(getTblDetalleFactura().getSelectedRow(), 2)));
                     factura.getDetalles().get(fila).setPrecioUnitario(valorUnitario);
                     factura.getDetalles().get(fila).setCantidad(cantidad);
                     factura.getDetalles().get(fila).setTotal(valorUnitario.multiply(cantidad));
@@ -227,25 +216,24 @@ public class FacturacionModel extends FacturacionPanel{
                     bandera = false;
                 }
             }
-                    
+
         });
-        
+
         getBtnAgregarCliente().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<Persona>() {
                     @Override
                     public void updateInterface(Persona entity) {
-                        persona=entity;
-                        if(persona!=null)
-                        {
+                        persona = entity;
+                        if (persona != null) {
                             setearValoresCliente();
                         }
                     }
-                },DialogInterfacePanel.CLIENTE_PANEL, false);
+                }, DialogInterfacePanel.CLIENTE_PANEL, false);
             }
         });
-        
+
         getBtnCrearProducto().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -253,34 +241,32 @@ public class FacturacionModel extends FacturacionPanel{
                     @Override
                     public void updateInterface(Producto entity) {
                         if (entity != null) {
-                            productoSeleccionado=entity;
+                            productoSeleccionado = entity;
                             setearValoresProducto();
                             banderaAgregar = true;
                         }
                     }
                 };
-                
+
                 panelPadre.crearDialogoCodefac(observer, DialogInterfacePanel.PRODUCTO_PANEL, false);
-                
+
             }
         });
-        
-       
-        
+
     }
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
         Factura facturaProcesando; //referencia que va a tener la factura procesada para que los listener no pierdan la referencia a la variable del metodo. 
-        
-        FacturacionService servicio=new FacturacionService();
+
+        FacturacionService servicio = new FacturacionService();
         setearValoresDefaultFactura();
         servicio.grabar(factura);
-        facturaProcesando=factura;
-        
-        DialogoCodefac.mensaje("Correcto", "La factura se grabo correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+        facturaProcesando = factura;
+
+        DialogoCodefac.mensaje("Correcto", "La factura se grabo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         //Despues de implemetar todo el metodo de grabar
-        FacturacionElectronica facturaElectronica=new FacturacionElectronica(factura, session,this.panelPadre);
+        FacturacionElectronica facturaElectronica = new FacturacionElectronica(factura, session, this.panelPadre);
         facturaElectronica.setFactura(factura);
         facturaElectronica.setMapInfoAdicional(datosAdicionales);
         /*
@@ -302,17 +288,15 @@ public class FacturacionModel extends FacturacionPanel{
                 });
             }
         };*/
-        
-        ComprobanteElectronicoService servicioElectronico=facturaElectronica.getServicio();  
-        
+
+        ComprobanteElectronicoService servicioElectronico = facturaElectronica.getServicio();
+
         servicioElectronico.addActionListerComprobanteElectronico(new ListenerComprobanteElectronico() {
-            
+
             private MonitorComprobanteData monitorData;
-            
+
             @Override
-            public void termino() 
-            {
-                
+            public void termino() {
                 monitorData.getBarraProgreso().setForeground(Color.GREEN);
                 monitorData.getBtnAbrir().setEnabled(true);
                 monitorData.getBtnCerrar().setEnabled(true);
@@ -324,41 +308,42 @@ public class FacturacionModel extends FacturacionPanel{
                         panelPadre.crearReportePantalla(print, factura.getPreimpreso());
                     }
                 });
-                
+
                 /**
                  * Seteando datos adicionales de la factura
                  */
                 facturaProcesando.setClaveAcceso(facturaElectronica.getServicio().getClaveAcceso());
                 facturaProcesando.setEstado(Factura.ESTADO_FACTURADO);
                 servicio.editar(facturaProcesando);
-                
 
             }
 
             @Override
             public void procesando(int etapa) {
-                if(etapa==ComprobanteElectronicoService.ETAPA_GENERAR)
+                if (etapa == ComprobanteElectronicoService.ETAPA_GENERAR) {
                     monitorData.getBarraProgreso().setValue(20);
-                
-                if(etapa==ComprobanteElectronicoService.ETAPA_PRE_VALIDAR)
+                }
+
+                if (etapa == ComprobanteElectronicoService.ETAPA_PRE_VALIDAR) {
                     monitorData.getBarraProgreso().setValue(30);
-                
+                }
+
                 if (etapa == ComprobanteElectronicoService.ETAPA_FIRMAR) {
                     monitorData.getBarraProgreso().setValue(50);
                 }
-                
+
                 if (etapa == ComprobanteElectronicoService.ETAPA_ENVIAR) {
                     monitorData.getBarraProgreso().setValue(70);
                 }
-                
+
                 if (etapa == ComprobanteElectronicoService.ETAPA_AUTORIZAR) {
                     monitorData.getBarraProgreso().setValue(90);
                 }
-                
+
                 if (etapa == ComprobanteElectronicoService.ETAPA_RIDE) {
                     monitorData.getBarraProgreso().setValue(95);
                 }
-                
+
                 if (etapa == ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE) {
                     monitorData.getBarraProgreso().setValue(100);
                 }
@@ -366,15 +351,15 @@ public class FacturacionModel extends FacturacionPanel{
 
             @Override
             public void iniciado(ComprobanteElectronico comprobante) {
-                monitorData=MonitorComprobanteModel.getInstance().agregarComprobante();
-                monitorData.getLblPreimpreso().setText(factura.getPreimpreso()+" ");
+                monitorData = MonitorComprobanteModel.getInstance().agregarComprobante();
+                monitorData.getLblPreimpreso().setText(factura.getPreimpreso() + " ");
                 monitorData.getBtnAbrir().setEnabled(false);
                 monitorData.getBtnReporte().setEnabled(false);
                 monitorData.getBtnCerrar().setEnabled(false);
                 monitorData.getBarraProgreso().setString(comprobante.getInformacionTributaria().getPreimpreso());
                 monitorData.getBarraProgreso().setStringPainted(true);
                 MonitorComprobanteModel.getInstance().mostrar();
-                
+
             }
 
             @Override
@@ -384,8 +369,8 @@ public class FacturacionModel extends FacturacionPanel{
                 monitorData.getBtnReporte().addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        JOptionPane.showMessageDialog(null,"Etapa: "+ cee.getEtapa()+"\n"+cee.getMessage());
-                         monitorData.getBtnAbrir().addActionListener(new ActionListener() {
+                        JOptionPane.showMessageDialog(null, "Etapa: " + cee.getEtapa() + "\n" + cee.getMessage());
+                        monitorData.getBtnAbrir().addActionListener(new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
                                 JasperPrint print = facturaElectronica.getServicio().getPrintJasper();
@@ -394,24 +379,18 @@ public class FacturacionModel extends FacturacionPanel{
                         });
                     }
                 });
-                
-                if(cee.getTipoError().equals(ComprobanteElectronicoException.ERROR_ENVIO_CLIENTE))
-                {
+
+                if (cee.getTipoError().equals(ComprobanteElectronicoException.ERROR_ENVIO_CLIENTE)) {
                     monitorData.getBtnAbrir().setEnabled(true);
                     monitorData.getBarraProgreso().setForeground(Color.YELLOW);
-                }
-                else
-                {
+                } else {
                     monitorData.getBarraProgreso().setForeground(Color.ORANGE);
                 }
-                
+
             }
         });
 
         facturaElectronica.procesarComprobante();//listo se encarga de procesar el comprobante
-        
-
-        
     }
 
     @Override
@@ -426,15 +405,14 @@ public class FacturacionModel extends FacturacionPanel{
 
     @Override
     public void imprimir() {
-        if(this.factura!=null)
-        {
-           String claveAceeso=this.factura.getClaveAcceso();
-           facturaElectronica.setClaveAcceso(claveAceeso);
-           facturaElectronica.setFactura(factura);
-           //facturaElectronica.procesarComprobanteEtapa(ComprobanteElectronicoService.ETAPA_RIDE,false);
-           //facturaElectronica.procesarComprobante();
-           //JasperPrint print = facturaElectronica.getServicio().getPrintJasper();
-           panelPadre.crearReportePantalla(facturaElectronica.obtenerRide(), factura.getPreimpreso());
+        if (this.factura != null) {
+            String claveAceeso = this.factura.getClaveAcceso();
+            facturaElectronica.setClaveAcceso(claveAceeso);
+            facturaElectronica.setFactura(factura);
+            //facturaElectronica.procesarComprobanteEtapa(ComprobanteElectronicoService.ETAPA_RIDE,false);
+            //facturaElectronica.procesarComprobante();
+            //JasperPrint print = facturaElectronica.getServicio().getPrintJasper();
+            panelPadre.crearReportePantalla(facturaElectronica.obtenerRide(), factura.getPreimpreso());
         }
     }
 
@@ -448,27 +426,26 @@ public class FacturacionModel extends FacturacionPanel{
         FacturaBusqueda facturaBusqueda = new FacturaBusqueda();
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(facturaBusqueda);
         buscarDialogoModel.setVisible(true);
-        Factura factura=(Factura) buscarDialogoModel.getResultado();
-        if(factura!=null)
-        {
-            this.factura=factura;
+        Factura factura = (Factura) buscarDialogoModel.getResultado();
+        if (factura != null) {
+            this.factura = factura;
         }
     }
 
     @Override
     public void limpiar() {
-        this.factura=new Factura();
+        this.factura = new Factura();
         this.factura.setDetalles(new ArrayList<FacturaDetalle>());
-        
+
         getLblRuc().setText(session.getEmpresa().getIdentificacion());
         getLblDireccion().setText(session.getEmpresa().getDireccion());
         getLblTelefonos().setText(session.getEmpresa().getTelefonos());
         getLblNombreComercial().setText(session.getEmpresa().getRazonSocial());
-        FacturacionService servicio=new FacturacionService();
+        FacturacionService servicio = new FacturacionService();
         getLblSecuencial().setText(servicio.getPreimpresoSiguiente());
-        
-        datosAdicionales=new HashMap<String,String>();
-        facturaElectronica=new FacturacionElectronica(session,this.panelPadre);
+
+        datosAdicionales = new HashMap<String, String>();
+        facturaElectronica = new FacturacionElectronica(session, this.panelPadre);
     }
 
     @Override
@@ -483,102 +460,93 @@ public class FacturacionModel extends FacturacionPanel{
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
-        Map<Integer,Boolean> permisos=new HashMap<Integer,Boolean>();
-        permisos.put(GeneralPanelInterface.BOTON_NUEVO,true);
-        permisos.put(GeneralPanelInterface.BOTON_GRABAR,true);
+        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
+        permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
         permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
         permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
         permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
         permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
         return permisos;
     }
-    
-    
-    private void agregarFormaPagoTabla(FormaPago formaPago)
-    {
-        Vector<String> fila=new Vector<>();
+
+    private void agregarFormaPagoTabla(FormaPago formaPago) {
+        Vector<String> fila = new Vector<>();
         fila.add(formaPago.getSriFormaPago().getNombre());
         fila.add(formaPago.getTotal().toString());
         fila.add(formaPago.getUnidadTiempo());
-        fila.add(formaPago.getPlazo()+"");
+        fila.add(formaPago.getPlazo() + "");
         System.out.println(formaPago);
         this.modeloTablaFormasPago.addRow(fila);
     }
-    
-    private void initModelTablaFormaPago()
-    {
+
+    private void initModelTablaFormaPago() {
         Vector<String> titulo = new Vector<>();
         titulo.add("forma pago");
         titulo.add("Valor");
         titulo.add("Tipo");
         titulo.add("Tiempo");
-        
-        this.modeloTablaFormasPago=new DefaultTableModel(titulo,0);
+
+        this.modeloTablaFormasPago = new DefaultTableModel(titulo, 0);
         getTblFormasPago().setModel(modeloTablaFormasPago);
     }
-    
-    private void initModelTablaDetalleFactura()
-    {
+
+    private void initModelTablaDetalleFactura() {
         Vector<String> titulo = new Vector<>();
         titulo.add("Codigo");
         titulo.add("Valor Uni");
         titulo.add("Cantidad");
         titulo.add("Descripcion");
         titulo.add("Valor Total");
-        
-        this.modeloTablaDetallesProductos = new DefaultTableModel(titulo,0);
+
+        this.modeloTablaDetallesProductos = new DefaultTableModel(titulo, 0);
         //this.modeloTablaDetallesProductos.isCellEditable
         getTblDetalleFactura().setModel(modeloTablaDetallesProductos);
     }
-    
-    private void initModelTablaDatoAdicional()
-    {
+
+    private void initModelTablaDatoAdicional() {
         Vector<String> titulo = new Vector<>();
         titulo.add("Nombre");
         titulo.add("Valor");
-        
-        this.modeloTablaDatosAdicionales=new DefaultTableModel(titulo,0);
+
+        this.modeloTablaDatosAdicionales = new DefaultTableModel(titulo, 0);
         getTblDatosAdicionales().setModel(modeloTablaDatosAdicionales);
     }
-    
+
     /**
      * Metodo que actualiza los valores en la tabla
      */
-    private void cargarDatosAdicionales()
-    {
+    private void cargarDatosAdicionales() {
         initModelTablaDatoAdicional();
         for (Map.Entry<String, String> entry : datosAdicionales.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
-            Vector dato=new Vector();
+            Vector dato = new Vector();
             dato.add(key);
             dato.add(value);
             this.modeloTablaDatosAdicionales.addRow(dato);
         }
-        
     }
-    
-    private void cargarDatosDetalles()
-    {
-        Vector<String> titulo=new Vector<>();
+
+    private void cargarDatosDetalles() {
+        Vector<String> titulo = new Vector<>();
         titulo.add("Codigo");
         titulo.add("ValorUni");
         titulo.add("Cantidad");
         titulo.add("Descripcion");
-        titulo.add("Valor Total");        
-        
-        this.modeloTablaDetallesProductos=new DefaultTableModel(titulo,0);
-        
-        List<FacturaDetalle> detalles= factura.getDetalles();
+        titulo.add("Valor Total");
+
+        this.modeloTablaDetallesProductos = new DefaultTableModel(titulo, 0);
+
+        List<FacturaDetalle> detalles = factura.getDetalles();
         for (FacturaDetalle detalle : detalles) {
-            Vector<String> fila=new Vector<String>();
+            Vector<String> fila = new Vector<String>();
             fila.add(detalle.getProducto().getCodigoPrincipal());
             fila.add(detalle.getProducto().getValorUnitario().toString());
             fila.add(detalle.getCantidad().toString());
             fila.add(detalle.getDescripcion());
             fila.add(detalle.getTotal().toString());
             modeloTablaDetallesProductos.addRow(fila);
-            
         }
         getTblDetalleFactura().setModel(this.modeloTablaDetallesProductos);
     }
@@ -586,60 +554,52 @@ public class FacturacionModel extends FacturacionPanel{
     private void agregarFechaEmision() {
 
     }
-    
-    private void setearDetalleFactura()
-    {
+
+    private void setearDetalleFactura() {
         getTxtCantidad().setText("");
         getTxtCliente().setText("");
         getTxtDescripcion().setText("");
         getTxtValorUnitario().setText("");
     }
-    
-    public void calcularSubtotalSinImpuestos(List<FacturaDetalle> facturaDetalles)
-    {
+
+    public void calcularSubtotalSinImpuestos(List<FacturaDetalle> facturaDetalles) {
         this.subtotalSinImpuestos = new BigDecimal(0);
-        facturaDetalles.forEach((facturaDetalle) -> 
-        {   
-                this.subtotalSinImpuestos = this.subtotalSinImpuestos.add(facturaDetalle.getTotal());
+        facturaDetalles.forEach((facturaDetalle)
+                -> {
+            this.subtotalSinImpuestos = this.subtotalSinImpuestos.add(facturaDetalle.getTotal());
         });
         this.subtotalSinImpuestos = this.subtotalSinImpuestos.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
-    
-    public void calcularSubtotal12(List<FacturaDetalle> facturaDetalles)
-    {
+
+    public void calcularSubtotal12(List<FacturaDetalle> facturaDetalles) {
         this.subtotal12 = new BigDecimal(0);
         facturaDetalles.forEach((facturaDetalle) -> {
-            System.out.println("Tarifas del iva por producto: "+facturaDetalle.getProducto().getIva().getTarifa());
-            if(facturaDetalle.getProducto().getIva().getTarifa()==12)
-            {
+            System.out.println("Tarifas del iva por producto: " + facturaDetalle.getProducto().getIva().getTarifa());
+            if (facturaDetalle.getProducto().getIva().getTarifa() == 12) {
                 System.out.println("");
                 this.subtotal12 = this.subtotal12.add(facturaDetalle.getTotal());
             }
         });
         this.subtotal12 = this.subtotal12.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
-    
-    public void calcularSubtotal0()
-    {
+
+    public void calcularSubtotal0() {
         this.subtotal0 = this.subtotalSinImpuestos.subtract(this.subtotal12);
     }
-    
-    public void calcularIva12()
-    {
+
+    public void calcularIva12() {
         this.iva = this.subtotal12.multiply(obtenerValorIva());
         System.out.println("Valor obtenido de iva" + obtenerValorIva());
         this.iva = iva.setScale(2, BigDecimal.ROUND_HALF_UP);
-        System.out.println("Valor calculado iva: "+ this.iva);
+        System.out.println("Valor calculado iva: " + this.iva);
     }
-    
-    public void calcularValorTotal()
-    {
+
+    public void calcularValorTotal() {
         this.valorTotal = this.subtotalSinImpuestos.add(this.iva);
     }
-    
-    public BigDecimal obtenerValorIva()
-    {
-        Map<String,Object> map = new HashMap<>();
+
+    public BigDecimal obtenerValorIva() {
+        Map<String, Object> map = new HashMap<>();
         ImpuestoDetalleService impuestoDetalleService = new ImpuestoDetalleService();
         map.put("tarifa", 12);
         List<ImpuestoDetalle> listaImpuestoDetalles = impuestoDetalleService.buscarImpuestoDetallePorMap(map);
@@ -649,41 +609,37 @@ public class FacturacionModel extends FacturacionPanel{
         System.out.println("Iva es: ->>> " + iva);
         return new BigDecimal(0.120);
     }
-    
-    public void cargarTotales()
-    {
+
+    public void cargarTotales() {
         calcularSubtotalSinImpuestos(factura.getDetalles());
         calcularSubtotal12(factura.getDetalles());
         calcularSubtotal0();
         calcularIva12();
         calcularValorTotal();
-        getLblSubtotalSinImpuesto().setText(""+this.subtotalSinImpuestos);
-        getLblSubtotal12().setText(""+this.subtotal12);
-        getLblSubtotal0().setText(""+this.subtotal0);
-        getLblIva12().setText(""+this.iva);
-        getTxtValorTotal().setText(""+this.valorTotal);
+        getLblSubtotalSinImpuesto().setText("" + this.subtotalSinImpuestos);
+        getLblSubtotal12().setText("" + this.subtotal12);
+        getLblSubtotal0().setText("" + this.subtotal0);
+        getLblIva12().setText("" + this.iva);
+        getTxtValorTotal().setText("" + this.valorTotal);
     }
-    
-    private void setearValoresCliente()
-    {
+
+    private void setearValoresCliente() {
         getTxtCliente().setText(persona.getIdentificacion());
         getLblNombreCliente().setText(persona.getRazonSocial());
         getLblDireccionCliente().setText(persona.getDireccion());
-        getLblTelefonoCliente().setText(persona.getTelefonoConvencional());  
-        datosAdicionales.put("email",persona.getCorreoElectronico());
+        getLblTelefonoCliente().setText(persona.getTelefonoConvencional());
+        datosAdicionales.put("email", persona.getCorreoElectronico());
         factura.setCliente(persona);
         //Actualiza la tabla de los datos adicionales
         cargarDatosAdicionales();
     }
-    
-    private void setearValoresProducto()
-    {
+
+    private void setearValoresProducto() {
         getTxtValorUnitario().setText(productoSeleccionado.getValorUnitario().toString());
         getTxtDescripcion().setText(productoSeleccionado.getNombre());
     }
-    
-    private void setearValoresDefaultFactura()
-    {
+
+    private void setearValoresDefaultFactura() {
         factura.setCliente(persona);
         factura.setEmpresaId(0l);
         factura.setEstado(Factura.ESTADO_FACTURADO);
@@ -694,15 +650,16 @@ public class FacturacionModel extends FacturacionPanel{
         factura.setPuntoEstablecimiento(session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor);
         factura.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_FACTURA).valor));
         factura.setSubtotalCero(BigDecimal.ZERO);
-        
+
         /**
-         * Seteado los valores temporales pero toca cambiar esta parte y setear los valores directamente en la factura
+         * Seteado los valores temporales pero toca cambiar esta parte y setear
+         * los valores directamente en la factura
          */
         factura.setTotal(new BigDecimal(getTxtValorTotal().getText()));
         factura.setSubtotalCero(new BigDecimal(getLblSubtotal0().getText()));
         factura.setSubtotalDoce(new BigDecimal(getLblSubtotal12().getText()));
         factura.setValorIvaDoce(new BigDecimal(getLblIva12().getText()));
-     
+
     }
 
 }

@@ -80,6 +80,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuFactura = new javax.swing.JMenuItem();
         jMenuItemMonitor = new javax.swing.JMenuItem();
         jMenuItemNotaCredito = new javax.swing.JMenuItem();
+        jMenuItemFacturaReporte = new javax.swing.JMenuItem();
         jMenuUtilidades = new javax.swing.JMenu();
         jMenuCalculadora = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
@@ -266,6 +267,14 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuItemNotaCredito.setText("Nota Credito");
         menuFacturacion.add(jMenuItemNotaCredito);
 
+        jMenuItemFacturaReporte.setText("Reporte");
+        jMenuItemFacturaReporte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemFacturaReporteActionPerformed(evt);
+            }
+        });
+        menuFacturacion.add(jMenuItemFacturaReporte);
+
         jMenuBar1.add(menuFacturacion);
 
         jMenuUtilidades.setText("Utilidades");
@@ -335,6 +344,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnSalirPantallaPublicidadActionPerformed
 
+    private void jMenuItemFacturaReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFacturaReporteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItemFacturaReporteActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -401,6 +414,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JMenuItem jMenuFactura;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItemFacturaReporte;
     private javax.swing.JMenuItem jMenuItemMonitor;
     private javax.swing.JMenuItem jMenuItemNotaCredito;
     private javax.swing.JMenuItem jMenuItemUtilidades;
@@ -616,6 +630,14 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
     public JMenuItem getjMenuItemNotaCredito() {
         return jMenuItemNotaCredito;
+    }
+
+    public JMenuItem getjMenuItemFacturaReporte() {
+        return jMenuItemFacturaReporte;
+    }
+
+    public void setjMenuItemFacturaReporte(JMenuItem jMenuItemFacturaReporte) {
+        this.jMenuItemFacturaReporte = jMenuItemFacturaReporte;
     }
     
     

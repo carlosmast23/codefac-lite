@@ -46,30 +46,9 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     public ClienteForm() {
         initComponents();
       
-       // imprimirJasper();
     }
     
-    private void imprimirJasper()
-    {
-        try {
-            //String path=EjemploCrm.class.getResource("/img/iconos/edit-icon.png").getPath().toString();
-            String path=EjemploCrm.class.getResource("/reportes/crm/reporteEjemplo.jrxml").getPath();
-            InputStream input=EjemploCrm.class.getResource("/reportes/crm/reporteEjemplo.jrxml").openStream();
-            //JasperReport report=(JasperReport) JRLoader.loadObject(input);
-            
-            Map parameters = new HashMap();
-            parameters.put("nombre","carlos");
-            JasperReport report =JasperCompileManager.compileReport(input);
-            JasperPrint print =JasperFillManager.fillReport(report, parameters,new JREmptyDataSource());
-            JasperViewer.viewReport(print,false);
-            //JasperPrintManager.printReport(print, false);
-            System.out.println("abriendo jasperreport");
-        } catch (JRException ex) {
-            Logger.getLogger(EjemploCrm.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(EjemploCrm.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+  
 
     /**
      * This method is called from within the constructor to initialize the form.
