@@ -38,6 +38,7 @@ import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
@@ -185,7 +186,10 @@ public class FacturacionModel extends FacturacionPanel {
                      * Revisar este calculo del iva para no calcular 2 veces al
                      * mostrar
                      */
-                    //facturaDetalle.setIva(iva.setScale(2, BigDecimal.ROUND_HALF_UP));
+
+                                       
+                    facturaDetalle.setIva(iva.setScale(2, BigDecimal.ROUND_HALF_UP));
+
                 }
             }
         });
@@ -313,7 +317,7 @@ public class FacturacionModel extends FacturacionPanel {
                  * Seteando datos adicionales de la factura
                  */
                 facturaProcesando.setClaveAcceso(facturaElectronica.getServicio().getClaveAcceso());
-                facturaProcesando.setEstado(Factura.ESTADO_FACTURADO);
+                facturaProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
                 servicio.editar(facturaProcesando);
 
             }
@@ -329,7 +333,7 @@ public class FacturacionModel extends FacturacionPanel {
                 }
 
                 if (etapa == ComprobanteElectronicoService.ETAPA_FIRMAR) {
-                    monitorData.getBarraProgreso().setValue(50);
+                    monitorData.getBarraProgreso().setValue(50);                   
                 }
 
                 if (etapa == ComprobanteElectronicoService.ETAPA_ENVIAR) {
@@ -338,14 +342,17 @@ public class FacturacionModel extends FacturacionPanel {
 
                 if (etapa == ComprobanteElectronicoService.ETAPA_AUTORIZAR) {
                     monitorData.getBarraProgreso().setValue(90);
+                    facturaProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
                 }
 
                 if (etapa == ComprobanteElectronicoService.ETAPA_RIDE) {
                     monitorData.getBarraProgreso().setValue(95);
+                    facturaProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
                 }
 
                 if (etapa == ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE) {
                     monitorData.getBarraProgreso().setValue(100);
+                    facturaProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
                 }
             }
 
@@ -359,6 +366,8 @@ public class FacturacionModel extends FacturacionPanel {
                 monitorData.getBarraProgreso().setString(comprobante.getInformacionTributaria().getPreimpreso());
                 monitorData.getBarraProgreso().setStringPainted(true);
                 MonitorComprobanteModel.getInstance().mostrar();
+
+                facturaProcesando.setEstado(FacturaEnumEstado.SIN_AUTORIZAR.getEstado());
 
             }
 
@@ -386,6 +395,9 @@ public class FacturacionModel extends FacturacionPanel {
                 } else {
                     monitorData.getBarraProgreso().setForeground(Color.ORANGE);
                 }
+
+                
+                servicio.editar(facturaProcesando);
 
             }
         });
@@ -648,7 +660,7 @@ public class FacturacionModel extends FacturacionPanel {
         //factura.setIvaSriId(iva);
         factura.setPuntoEmision(session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor);
         factura.setPuntoEstablecimiento(session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor);
-        factura.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_FACTURA).valor));
+        factura.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_FACTURA).valor)+1);
         factura.setSubtotalCero(BigDecimal.ZERO);
 
         /**
