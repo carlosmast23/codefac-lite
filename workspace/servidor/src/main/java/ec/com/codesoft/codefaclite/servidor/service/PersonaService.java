@@ -22,7 +22,7 @@ public class PersonaService extends ServiceAbstract<PersonaFacade>
     public PersonaService() 
     {
         super(PersonaFacade.class);
-       
+        this.personaFacade=new PersonaFacade();
     }
 
    
