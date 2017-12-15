@@ -329,7 +329,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     
     @LimpiarAnotacion
     @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
-    @ValidacionCodefacAnotacion(requerido=true ,min=0, expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\]*$",nombre = "Direccion")
+    @ValidacionCodefacAnotacion(requerido=true ,min=0, expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Direccion")
     public JTextArea getjTextAreaDireccion() {
         return jTextAreaDireccion;
     }
@@ -384,7 +384,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     
     @LimpiarAnotacion
     @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
-    @ValidacionCodefacAnotacion(requerido=true , min=5 ,max = 100,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\]*$",nombre = "Nombre Social")
+    @ValidacionCodefacAnotacion(requerido=true , min=5 ,max = 100,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Nombre Social")
     public JTextField getjTextNombreSocial() {
         return jTextNombreSocial;
     }
