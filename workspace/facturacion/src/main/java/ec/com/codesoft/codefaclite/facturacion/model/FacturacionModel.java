@@ -31,6 +31,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.MetodosEnvioInterface;
 import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Factura;
 import ec.com.codesoft.codefaclite.servidor.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.FormaPago;
@@ -57,6 +58,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -96,6 +99,7 @@ public class FacturacionModel extends FacturacionPanel {
 
     public FacturacionModel() {
         addListenerButtons();
+        initComponenesGraficos();
         initModelTablaFormaPago();
         initModelTablaDetalleFactura();
         initModelTablaDatoAdicional();
@@ -672,6 +676,23 @@ public class FacturacionModel extends FacturacionPanel {
         factura.setSubtotalDoce(new BigDecimal(getLblSubtotal12().getText()));
         factura.setValorIvaDoce(new BigDecimal(getLblIva12().getText()));
 
+    }
+
+    private void initComponenesGraficos() {
+        String path=RecursoCodefac.IMAGENES_ICONOS.getResourcePath("pequenos/mas-ico.png");
+        getBtnAgregarDetalleFactura().setIcon(new ImageIcon(path));
+        getBtnAgregarDetalleFactura().setText("");
+        getBtnAgregarDetalleFactura().setToolTipText("Agregar detalle factura");
+        
+        getBtnEditarDetalle().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourcePath("pequenos/edit_icon.png")));
+        getBtnEditarDetalle().setText("");
+        getBtnEditarDetalle().setToolTipText("Editar detalle factura");
+        
+        getBtnQuitarDetalle().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourcePath("pequenos/cerrar-ico.png")));
+        getBtnQuitarDetalle().setText("");
+        getBtnQuitarDetalle().setToolTipText("Eliminar detalle factura");
+        
+        
     }
 
 }
