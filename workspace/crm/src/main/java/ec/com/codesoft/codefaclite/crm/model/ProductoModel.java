@@ -86,7 +86,6 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
 
     @Override
     public void editar() throws ExcepcionCodefacLite {
-        producto = new Producto();
         producto.setCodigoPrincipal(getTextCodigoPrincipal().getText());
         producto.setCodigoAuxiliar(getTextCodigoAuxiliar().getText());
         if(getComboTipoProducto().getSelectedItem().equals("Bien"))
