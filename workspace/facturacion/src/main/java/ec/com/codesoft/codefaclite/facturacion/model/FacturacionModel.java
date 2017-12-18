@@ -82,7 +82,14 @@ public class FacturacionModel extends FacturacionPanel{
     private BigDecimal subtotal0;
     private BigDecimal iva;
     private BigDecimal valorTotal;
-    
+    private BigDecimal descuento;
+    //Datos informativos del descuento
+    private BigDecimal subTotalDescuentoConImpuesto;
+    private BigDecimal subTotalDescuentoSinImpuesto;
+    //Da
+    private BigDecimal subtotal12Descuento;
+    private BigDecimal subtotal0Descuento;
+    private BigDecimal subtotalSinImpuestosDescuento;
     /**
      * Mapa de datos adicionales que se almacenan temporalmente y sirven para
      * la facturacion electronica como por ejemplo el correo
@@ -106,10 +113,13 @@ public class FacturacionModel extends FacturacionPanel{
         this.subtotal0 = new BigDecimal(0);
         this.iva = new BigDecimal(0);
         this.valorTotal = new BigDecimal(0);
+        this.subTotalDescuentoConImpuesto = new BigDecimal(0);
+        this.subTotalDescuentoSinImpuesto = new BigDecimal(0);
         this.bandera = false;
         this.banderaAgregar = true;
+        subtotal12Descuento = new BigDecimal(0);
         calcularIva12();
-        datosAdicionales=new HashMap<String,String>();        
+        datosAdicionales = new HashMap<String,String>();        
     }
     
     private void addListenerButtons() {
@@ -181,9 +191,21 @@ public class FacturacionModel extends FacturacionPanel{
                     facturaDetalle.setProducto(productoSeleccionado);
                     System.out.println(productoSeleccionado);
                     BigDecimal setTotal = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario());
-                    //facturaDetalle.setTotal(facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()));
                     facturaDetalle.setTotal(setTotal.setScale(2, BigDecimal.ROUND_HALF_UP));
                     facturaDetalle.setValorIce(BigDecimal.ZERO);
+                    BigDecimal descuento;
+                    if(!getCheckPorcentaje().isSelected())
+                    {
+                       
+                        descuento = new BigDecimal(getTxtDescuento().getText());
+                        facturaDetalle.setDescuento(descuento);
+                    }
+                    else{
+                            BigDecimal porcentajeDescuento = new BigDecimal(getTxtDescuento().getText());
+                            porcentajeDescuento = porcentajeDescuento.divide(new BigDecimal(100));
+                            descuento = facturaDetalle.getTotal().multiply(porcentajeDescuento);
+                            facturaDetalle.setDescuento(descuento.setScale(2, BigDecimal.ROUND_HALF_UP));
+                    }
                     factura.addDetalle(facturaDetalle);
                     cargarDatosDetalles();
                     setearDetalleFactura();
@@ -531,8 +553,8 @@ public class FacturacionModel extends FacturacionPanel{
         titulo.add("Valor Uni");
         titulo.add("Cantidad");
         titulo.add("Descripcion");
-        titulo.add("Valor Total");
-        
+        titulo.add("Descuento");
+        titulo.add("Valor Total");        
         this.modeloTablaDetallesProductos = new DefaultTableModel(titulo,0);
         //this.modeloTablaDetallesProductos.isCellEditable
         getTblDetalleFactura().setModel(modeloTablaDetallesProductos);
@@ -572,6 +594,7 @@ public class FacturacionModel extends FacturacionPanel{
         titulo.add("ValorUni");
         titulo.add("Cantidad");
         titulo.add("Descripcion");
+        titulo.add("Descuento");
         titulo.add("Valor Total");        
         
         this.modeloTablaDetallesProductos=new DefaultTableModel(titulo,0);
@@ -583,6 +606,7 @@ public class FacturacionModel extends FacturacionPanel{
             fila.add(detalle.getProducto().getValorUnitario().toString());
             fila.add(detalle.getCantidad().toString());
             fila.add(detalle.getDescripcion());
+            fila.add(detalle.getDescuento().toString());
             fila.add(detalle.getTotal().toString());
             modeloTablaDetallesProductos.addRow(fila);
             
@@ -600,48 +624,81 @@ public class FacturacionModel extends FacturacionPanel{
         getTxtCliente().setText("");
         getTxtDescripcion().setText("");
         getTxtValorUnitario().setText("");
+        getTxtDescuento().setText("0");
     }
     
     public void calcularSubtotalSinImpuestos(List<FacturaDetalle> facturaDetalles)
     {
         this.subtotalSinImpuestos = new BigDecimal(0);
+        this.subtotalSinImpuestosDescuento = new BigDecimal(0);
         facturaDetalles.forEach((facturaDetalle) -> 
         {   
                 this.subtotalSinImpuestos = this.subtotalSinImpuestos.add(facturaDetalle.getTotal());
+                this.subtotalSinImpuestosDescuento = this.subtotalSinImpuestos;
+                this.subtotalSinImpuestosDescuento = this.subtotalSinImpuestosDescuento.subtract(facturaDetalle.getDescuento());
         });
         this.subtotalSinImpuestos = this.subtotalSinImpuestos.setScale(2, BigDecimal.ROUND_HALF_UP);
+        this.subtotalSinImpuestosDescuento = this.subtotalSinImpuestosDescuento.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
     
+    public void calcularTotalDescuento(List<FacturaDetalle> facturaDetalles)
+    {
+        this.descuento = new BigDecimal(0);
+        this.subTotalDescuentoConImpuesto = new BigDecimal(0);
+        this.subTotalDescuentoSinImpuesto = new BigDecimal(0);       
+        //this.subtotalSinImpuestosDescuento = new BigDecimal(0);
+        facturaDetalles.forEach((facturaDetalle) ->
+        {           
+                    this.descuento = this.descuento.add(facturaDetalle.getDescuento());
+                    if(facturaDetalle.getProducto().getIva().getTarifa() == 12)
+                    {
+                        this.subTotalDescuentoConImpuesto = this.subTotalDescuentoConImpuesto.add(facturaDetalle.getDescuento());
+                    }    
+                    else
+                    {
+                        this.subTotalDescuentoSinImpuesto = this.subTotalDescuentoSinImpuesto.add(facturaDetalle.getDescuento());
+                    }    
+        });
+        this.descuento = this.descuento.setScale(2,BigDecimal.ROUND_HALF_UP);
+        this.subTotalDescuentoConImpuesto = this.subTotalDescuentoConImpuesto.setScale(2, BigDecimal.ROUND_HALF_UP);
+        this.subTotalDescuentoSinImpuesto = this.subTotalDescuentoSinImpuesto.setScale(2, BigDecimal.ROUND_HALF_UP);        
+    }
     public void calcularSubtotal12(List<FacturaDetalle> facturaDetalles)
     {
         this.subtotal12 = new BigDecimal(0);
+        this.subtotal12Descuento = new BigDecimal(0);
         facturaDetalles.forEach((facturaDetalle) -> {
-            System.out.println("Tarifas del iva por producto: "+facturaDetalle.getProducto().getIva().getTarifa());
-            if(facturaDetalle.getProducto().getIva().getTarifa()==12)
+            System.out.println("------------------->" + facturaDetalle.getProducto().getIva().getTarifa());
+            if(facturaDetalle.getProducto().getIva().getTarifa() == 12)
             {
-                System.out.println("");
                 this.subtotal12 = this.subtotal12.add(facturaDetalle.getTotal());
+                this.subtotal12Descuento = this.subtotal12Descuento.add(facturaDetalle.getTotal());
+                this.subtotal12Descuento = this.subtotal12Descuento.subtract(facturaDetalle.getDescuento());
             }
         });
         this.subtotal12 = this.subtotal12.setScale(2, BigDecimal.ROUND_HALF_UP);
+        this.subtotal12Descuento = this.subtotal12Descuento.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
     
     public void calcularSubtotal0()
     {
         this.subtotal0 = this.subtotalSinImpuestos.subtract(this.subtotal12);
+        this.subtotal0Descuento = this.subtotalSinImpuestosDescuento.subtract(this.subtotal12Descuento);
     }
     
     public void calcularIva12()
     {
-        this.iva = this.subtotal12.multiply(obtenerValorIva());
-        System.out.println("Valor obtenido de iva" + obtenerValorIva());
+        //this.iva = this.subtotal12.multiply(obtenerValorIva());
+        this.iva = this.subtotal12Descuento.multiply(obtenerValorIva());
+        //System.out.println("Valor de iva: "+ this.iva);
+        //System.out.println("Valor de subtotal12DEscuento"+ this.subtotal12Descuento);
         this.iva = iva.setScale(2, BigDecimal.ROUND_HALF_UP);
-        System.out.println("Valor calculado iva: "+ this.iva);
     }
     
     public void calcularValorTotal()
     {
-        this.valorTotal = this.subtotalSinImpuestos.add(this.iva);
+        //this.valorTotal = this.subtotalSinImpuestos.add(this.iva);
+        this.valorTotal = this.subtotalSinImpuestosDescuento.add(this.iva);
     }
     
     public BigDecimal obtenerValorIva()
@@ -653,7 +710,6 @@ public class FacturacionModel extends FacturacionPanel{
         listaImpuestoDetalles.forEach((iD) -> {
             BigDecimal iva = iD.getPorcentaje();
         });
-        System.out.println("Iva es: ->>> " + iva);
         return new BigDecimal(0.120);
     }
     
@@ -661,6 +717,7 @@ public class FacturacionModel extends FacturacionPanel{
     {
         calcularSubtotalSinImpuestos(factura.getDetalles());
         calcularSubtotal12(factura.getDetalles());
+        calcularTotalDescuento(factura.getDetalles());
         calcularSubtotal0();
         calcularIva12();
         calcularValorTotal();
@@ -668,7 +725,11 @@ public class FacturacionModel extends FacturacionPanel{
         getLblSubtotal12().setText(""+this.subtotal12);
         getLblSubtotal0().setText(""+this.subtotal0);
         getLblIva12().setText(""+this.iva);
-        getTxtValorTotal().setText(""+this.valorTotal);
+        getTxtValorTotal().setText( "" + this.valorTotal);
+        getLblSubTotalDescuentoConImpuesto().setText("" + this.subTotalDescuentoConImpuesto);
+        getLblSubTotalDescuentoSinImpuesto().setText("" + this.subTotalDescuentoSinImpuesto);
+        getLblTotalDescuento().setText("" + this.descuento);
+                
     }
     
     private void setearValoresCliente()
@@ -687,6 +748,8 @@ public class FacturacionModel extends FacturacionPanel{
     {
         getTxtValorUnitario().setText(productoSeleccionado.getValorUnitario().toString());
         getTxtDescripcion().setText(productoSeleccionado.getNombre());
+        //Dar foco a la cantidad a ingresar
+        getTxtCantidad().requestFocus();
     }
     
     private void setearValoresDefaultFactura()
@@ -711,5 +774,5 @@ public class FacturacionModel extends FacturacionPanel{
         factura.setValorIvaDoce(new BigDecimal(getLblIva12().getText()));
      
     }
-
+    
 }
