@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.entity.Factura;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaFacade;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
@@ -43,15 +44,14 @@ public class FacturacionService {
 
     public void editar(Factura factura) {
         facturaFacade.edit(factura);
-
     }
 
     public List<Factura> obtenerTodos() {
         return facturaFacade.findAll();
     }
 
-    public List<Factura> obtenerFacturasReporte(Integer cli_id, String estado,Date fi,Date ff) {
-        return facturaFacade.lista(cli_id,estado,fi,ff);
+    public List<Factura> obtenerFacturasReporte(Persona persona,Date fi,Date ff) {
+        return facturaFacade.lista(persona,fi,ff);
     }
 
     public List<Factura> obtenerFacturasActivas()

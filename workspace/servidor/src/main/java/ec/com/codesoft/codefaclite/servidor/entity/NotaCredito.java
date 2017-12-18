@@ -85,8 +85,6 @@ public class NotaCredito {
     public NotaCredito() {
     }
     
-    
-
     public Long getId() {
         return id;
     }

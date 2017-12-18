@@ -6,11 +6,8 @@
 package ec.com.codesoft.codefaclite.servidor.facade;
 
 import ec.com.codesoft.codefaclite.servidor.entity.Factura;
+import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import java.sql.Date;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import ec.com.codesoft.codefaclite.servidor.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.FacturaEnumEstado;
 import java.util.List;
 import javax.persistence.NoResultException;
@@ -28,57 +25,40 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         super(Factura.class);
     }
 
-    public List<Factura> lista(Integer cli_id, String estado, Date fi, Date ff) {
-        //System.out.println("CLIENTE "+cli_id);
-       // System.out.println("ESTADO "+estado);
-        String cliente = "", tipo = "";
-        if (cli_id != null) {
-            cliente = "u.cliente.idCliente=?1";
+    public List<Factura> lista(Persona persona, Date fi, Date ff) {
+
+        String cliente = "";
+        if (persona != null) {
+            cliente = "u.cliente=?1";
         } else {
             cliente = "1=1";
         }
-        if (estado == "T") {
-            tipo = "1=1";
-        } else {
-            tipo = "u.estado=?2";
-        }
 
         try {
-            String queryString = "SELECT u FROM Factura u WHERE " + cliente + " AND (u.fechaFactura BETWEEN ?3 AND ?4) AND " + tipo;
+            String queryString = "SELECT u FROM Factura u WHERE " + cliente + " AND (u.fechaFactura BETWEEN ?2 AND ?3)";
             Query query = getEntityManager().createQuery(queryString);
-            if (cli_id != 0) {
-                query.setParameter(1, cli_id);
+            if (persona != null) {
+                query.setParameter(1, persona);
             }
-            if (estado != "T") {
-                query.setParameter(2, estado);
-            }
-            query.setParameter(3, fi);
-            query.setParameter(4, ff);
-
-            Logger.getLogger(getClass().getName()).log(Level.INFO, "Mensaje informativo..." + queryString);
+            query.setParameter(2, fi);
+            query.setParameter(3, ff);
 
             return query.getResultList();
         } catch (NoResultException e) {
             return null;
         }
     }
-    
-    public List<Factura> getFacturaEnable()
-    {
-        try
-        {
 
+    public List<Factura> getFacturaEnable() {
+        try {
             String queryString = "SELECT u FROM Factura u WHERE u.estado<>?1 AND u.estado<>?2 AND u.estado<>?3";
             Query query = getEntityManager().createQuery(queryString);
-            query.setParameter(1,FacturaEnumEstado.ELIMINADO.getEstado());
-            query.setParameter(2,FacturaEnumEstado.ANULADO_TOTAL.getEstado());
-            query.setParameter(3,FacturaEnumEstado.SIN_AUTORIZAR.getEstado());
+            query.setParameter(1, FacturaEnumEstado.ELIMINADO.getEstado());
+            query.setParameter(2, FacturaEnumEstado.ANULADO_TOTAL.getEstado());
+            query.setParameter(3, FacturaEnumEstado.SIN_AUTORIZAR.getEstado());
             return (List<Factura>) query.getResultList();
-        }
-        catch(NoResultException e)
-        {
+        } catch (NoResultException e) {
             return null;
         }
     }
 }
-

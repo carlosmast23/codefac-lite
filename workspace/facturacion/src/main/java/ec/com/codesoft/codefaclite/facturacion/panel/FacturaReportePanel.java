@@ -50,6 +50,14 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         cmbTipo = new javax.swing.JComboBox<>();
         lblNombreCliente = new javax.swing.JLabel();
         btnBuscar = new javax.swing.JButton();
+        lblTxtSubtotal = new javax.swing.JLabel();
+        lblTxtSubtotalIva = new javax.swing.JLabel();
+        lblSubtotal = new javax.swing.JLabel();
+        lblSubtotalIva = new javax.swing.JLabel();
+        lblTxtIva = new javax.swing.JLabel();
+        lblIva = new javax.swing.JLabel();
+        lblTxtTotal = new javax.swing.JLabel();
+        lblTotal = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -98,6 +106,23 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         btnBuscar.setText("Buscar");
 
+        lblTxtSubtotal.setText("Total sin impuestos:");
+
+        lblTxtSubtotalIva.setText("Total impuestos (IVA) 12%");
+
+        lblSubtotal.setText("---");
+
+        lblSubtotalIva.setText("---");
+
+        lblTxtIva.setText("IVA Total:");
+
+        lblIva.setText("---");
+
+        lblTxtTotal.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblTxtTotal.setText("TOTAL:");
+
+        lblTotal.setText("---");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -134,6 +159,20 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 522, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblDocumentos))))
                 .addGap(40, 40, 40))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblTxtTotal)
+                    .addComponent(lblTxtIva)
+                    .addComponent(lblTxtSubtotalIva)
+                    .addComponent(lblTxtSubtotal))
+                .addGap(36, 36, 36)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblSubtotal)
+                    .addComponent(lblSubtotalIva)
+                    .addComponent(lblIva)
+                    .addComponent(lblTotal))
+                .addGap(113, 113, 113))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -159,7 +198,23 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
                     .addComponent(lblDocumentos))
                 .addGap(34, 34, 34)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(101, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblTxtSubtotal)
+                    .addComponent(lblSubtotal))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblTxtSubtotalIva)
+                    .addComponent(lblSubtotalIva))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblTxtIva)
+                    .addComponent(lblIva))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblTxtTotal)
+                    .addComponent(lblTotal))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         pack();
@@ -180,7 +235,15 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblDocumentos;
     private javax.swing.JLabel lblFechaFin;
     private javax.swing.JLabel lblFechaInicio;
+    private javax.swing.JLabel lblIva;
     private javax.swing.JLabel lblNombreCliente;
+    private javax.swing.JLabel lblSubtotal;
+    private javax.swing.JLabel lblSubtotalIva;
+    private javax.swing.JLabel lblTotal;
+    private javax.swing.JLabel lblTxtIva;
+    private javax.swing.JLabel lblTxtSubtotal;
+    private javax.swing.JLabel lblTxtSubtotalIva;
+    private javax.swing.JLabel lblTxtTotal;
     private javax.swing.JTable tblDocumentos;
     private javax.swing.JTextField txtCliente;
     // End of variables declaration//GEN-END:variables
@@ -248,6 +311,39 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
     public void setBtnBuscar(JButton btnBuscar) {
         this.btnBuscar = btnBuscar;
     }
+
+    public JLabel getLblSubtotal() {
+        return lblSubtotal;
+    }
+
+    public void setLblSubtotal(JLabel lblSubtotal) {
+        this.lblSubtotal = lblSubtotal;
+    }
+
+    public JLabel getLblSubtotalIva() {
+        return lblSubtotalIva;
+    }
+
+    public void setLblSubtotalIva(JLabel lblSubtotalIva) {
+        this.lblSubtotalIva = lblSubtotalIva;
+    }
+
+    public JLabel getLblIva() {
+        return lblIva;
+    }
+
+    public void setLblIva(JLabel lblIva) {
+        this.lblIva = lblIva;
+    }
+
+    public JLabel getLblTotal() {
+        return lblTotal;
+    }
+
+    public void setLblTotal(JLabel lblTotal) {
+        this.lblTotal = lblTotal;
+    }
+    
     
 
 }
