@@ -109,5 +109,10 @@ public class ProductoReporte extends ControladorCodefacInterface{
     public void iniciar() {
         imprimirReporte();
     }
+
+    @Override
+    public void nuevo() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

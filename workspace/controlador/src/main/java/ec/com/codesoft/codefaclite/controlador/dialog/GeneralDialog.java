@@ -77,5 +77,10 @@ public class GeneralDialog extends ControladorCodefacInterface{
     public void iniciar() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public void nuevo() throws ExcepcionCodefacLite {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

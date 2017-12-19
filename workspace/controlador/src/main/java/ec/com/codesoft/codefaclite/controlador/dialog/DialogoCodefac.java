@@ -50,7 +50,7 @@ public abstract class DialogoCodefac {
                 icono);
     }
     
-    public static int dialogoPregunta(String titulo, String mensaje, Integer tipoMensaje) {
+    public static boolean dialogoPregunta(String titulo, String mensaje, Integer tipoMensaje) {
         ImageIcon icono=null;
        
         if(tipoMensaje.equals(MENSAJE_CORRECTO))
@@ -72,7 +72,11 @@ public abstract class DialogoCodefac {
         }
         
         int resp = JOptionPane.showConfirmDialog(null, mensaje, titulo, JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, icono);
-        return resp;
+        if(resp == JOptionPane.YES_OPTION) {
+          return true;
+        } else {
+          return false;
+        } 
     }
 
 }

@@ -299,6 +299,13 @@ public class FacturacionModel extends FacturacionPanel {
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
+        
+        Boolean respuesta=DialogoCodefac.dialogoPregunta("Alerta","Estas seguro que desea facturar?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+        if(!respuesta)
+        {
+            throw  new ExcepcionCodefacLite("Cancelacion usuario");
+        }
+        
         Factura facturaProcesando; //referencia que va a tener la factura procesada para que los listener no pierdan la referencia a la variable del metodo. 
 
         FacturacionService servicio = new FacturacionService();
@@ -831,6 +838,15 @@ public class FacturacionModel extends FacturacionPanel {
     @Override
     public void iniciar() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void nuevo() throws ExcepcionCodefacLite {
+        Boolean respuesta=DialogoCodefac.dialogoPregunta("Alerta","Si desea continuar se perderan los datos sin guardar?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+        if(!respuesta)
+        {
+            throw  new ExcepcionCodefacLite("Cancelacion usuario");
+        }
     }
     
 }

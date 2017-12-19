@@ -186,8 +186,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
             @Override
             public void windowClosing(WindowEvent e) {
-                Integer respuesta=DialogoCodefac.dialogoPregunta("Alerta","Estas seguro que deseas salir?",DialogoCodefac.MENSAJE_ADVERTENCIA);
-                if(respuesta.equals(JOptionPane.YES_OPTION))
+                Boolean respuesta=DialogoCodefac.dialogoPregunta("Alerta","Estas seguro que deseas salir?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                if(respuesta)
                 {
                     dispose();
                 }
@@ -414,10 +414,24 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     return;
                 }
                 
+                try
+                {
+                    frameInterface.nuevo();
+                }
+                catch(UnsupportedOperationException exception)
+                {
+                    System.out.println("metodo no implementado"); 
+                } catch (ExcepcionCodefacLite ex) {
+                    //Cancela el ciclo de vida normal si manda una excecion
+                    ex.printStackTrace();
+                    return;
+                }
+                
                 String tituloOriginal=getTituloOriginal(frame.getTitle());
                 frame.setTitle(tituloOriginal+" [Nuevo]");
                 frameInterface.estadoFormulario= ControladorCodefacInterface.ESTADO_GRABAR;
                 limpiarAnotaciones(frameInterface);
+                
                 
                 try
                 {
@@ -596,6 +610,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 catch (UnsupportedOperationException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     //getjButton4().setEnabled(false);
+                } catch (ExcepcionCodefacLite ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
                                
             }
@@ -633,6 +649,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 catch (UnsupportedOperationException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     //getjButton4().setEnabled(false);
+                } catch (ExcepcionCodefacLite ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
                                
             }
