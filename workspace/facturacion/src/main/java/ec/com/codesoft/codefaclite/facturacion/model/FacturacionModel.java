@@ -811,6 +811,20 @@ public class FacturacionModel extends FacturacionPanel {
         getBtnQuitarDetalle().setText("");
         getBtnQuitarDetalle().setToolTipText("Eliminar detalle factura");
         
+        getBtnAgregarCliente().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourcePath("pequenos/usuario.png")));
+        getBtnAgregarCliente().setText("");
+        getBtnAgregarCliente().setToolTipText("Crear nuevo cliente");
+        
+        getBtnAgregarProducto().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourcePath("pequenos/list.png")));
+        getBtnAgregarProducto().setText("");
+        getBtnAgregarProducto().setToolTipText("Agregar producto a la factura");
+        
+        getBtnCrearProducto().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourcePath("pequenos/add2.png")));
+        getBtnCrearProducto().setText("");
+        getBtnCrearProducto().setToolTipText("Crear nuevo producto");
+        
+        
+        
         
     }
     
