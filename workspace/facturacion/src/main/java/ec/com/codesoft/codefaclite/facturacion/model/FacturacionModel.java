@@ -111,6 +111,12 @@ public class FacturacionModel extends FacturacionPanel {
         initModelTablaFormaPago();
         initModelTablaDetalleFactura();
         initModelTablaDatoAdicional();
+        setearVariablesIniciales();
+
+    }
+    
+    private void setearVariablesIniciales()
+    {
         agregarFechaEmision();
         this.subtotalSinImpuestos = new BigDecimal(0);
         this.subtotal12 = new BigDecimal(0);
@@ -123,8 +129,8 @@ public class FacturacionModel extends FacturacionPanel {
         this.banderaAgregar = true;
         subtotal12Descuento = new BigDecimal(0);
         calcularIva12();
-        datosAdicionales = new HashMap<String,String>();        
-
+        datosAdicionales = new HashMap<String,String>();    
+        
     }
 
     private void addListenerButtons() {
@@ -194,8 +200,12 @@ public class FacturacionModel extends FacturacionPanel {
                     BigDecimal descuento;
                     if(!getCheckPorcentaje().isSelected())
                     {
-                       
-                        descuento = new BigDecimal(getTxtDescuento().getText());
+                        if(!getTxtDescuento().getText().equals(""))
+                            descuento = new BigDecimal(getTxtDescuento().getText());
+                        else
+                            descuento = BigDecimal.ZERO;
+                                    
+                        
                         facturaDetalle.setDescuento(descuento);
                     }
                     else{
@@ -477,6 +487,7 @@ public class FacturacionModel extends FacturacionPanel {
         this.factura = new Factura();
         this.factura.setDetalles(new ArrayList<FacturaDetalle>());
 
+        //Setear los valores de la empresa 
         getLblRuc().setText(session.getEmpresa().getIdentificacion());
         getLblDireccion().setText(session.getEmpresa().getDireccion());
         getLblTelefonos().setText(session.getEmpresa().getTelefonos());
@@ -486,6 +497,45 @@ public class FacturacionModel extends FacturacionPanel {
 
         datosAdicionales = new HashMap<String, String>();
         facturaElectronica = new FacturacionElectronica(session, this.panelPadre);
+        
+        //Limpiar los campos del cliente
+        getLblNombreCliente().setText("");
+        getLblTelefonoCliente().setText("");
+        getLblDireccionCliente().setText("");
+        getTxtCliente().setText("");
+        
+        //Limpiar campos de los detalles de la factura
+        getTxtValorUnitario().setText("");
+        getTxtCantidad().setText("");
+        getTxtDescripcion().setText("");
+        getTxtDescuento().setText("");
+        getCheckPorcentaje().setSelected(false);
+        
+        //Limpiar los datos de la tabla factura
+        initModelTablaDetalleFactura();
+        //Limpiar los datos forma pago
+        initModelTablaFormaPago();
+        //Limpiar los datos adicional
+        initModelTablaDatoAdicional();
+        
+       //Limpiar los labels de los calculos
+       getLblSubtotalSinImpuesto().setText("0.00");
+       getLblSubtotal12().setText("0.00");
+       getLblSubtotal0().setText("0.00");
+       getLblSubtotalNoObjetoDeIva().setText("0.00");
+       getLblSubTotalDescuentoConImpuesto().setText("0.00");
+       getLblSubTotalDescuentoSinImpuesto().setText("0.00");
+       getLblSubtotalExentoDeIva().setText("0.00");
+       getLblTotalDescuento().setText("0.00");
+       getLblValorIce().setText("0.00");
+       getLblIva12().setText("0.00");
+       getLblValorIRBPNR().setText("0.00");
+       getLblPropina10().setText("0.00");
+       getTxtValorTotal().setText("0.00");
+       
+       //Limpiar las variables de la facturacion
+       setearVariablesIniciales();
+       
     }
 
     @Override
