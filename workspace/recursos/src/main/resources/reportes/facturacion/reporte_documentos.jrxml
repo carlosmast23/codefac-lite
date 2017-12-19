@@ -109,39 +109,108 @@
 	<columnHeader>
 		<band height="20" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="100" height="20" uuid="c5ce4063-b8df-4b07-94ea-5a20cff58816"/>
-				<text><![CDATA[numeroFactura]]></text>
+				<reportElement x="0" y="0" width="145" height="20" uuid="c5ce4063-b8df-4b07-94ea-5a20cff58816"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Preimpreso]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="100" y="0" width="100" height="20" uuid="e8623cbd-b626-424b-b211-5020ae9a712a"/>
-				<text><![CDATA[fechaFactura]]></text>
+				<reportElement x="145" y="0" width="100" height="20" uuid="e8623cbd-b626-424b-b211-5020ae9a712a"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="345" y="0" width="100" height="20" uuid="7636d980-838a-44ed-81a1-7a0d750ce832"/>
-				<text><![CDATA[totalFactura]]></text>
+				<reportElement x="455" y="0" width="100" height="20" uuid="7636d980-838a-44ed-81a1-7a0d750ce832"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="200" y="0" width="145" height="20" uuid="32df994c-5f54-4c05-b80e-f53cd01a0413"/>
-				<text><![CDATA[clienteFactura]]></text>
+				<reportElement x="245" y="0" width="210" height="20" uuid="32df994c-5f54-4c05-b80e-f53cd01a0413"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cliente / Razon Social]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="100" height="20" uuid="8068aa64-dcd3-4647-9789-ad0aeea034d6"/>
+				<reportElement x="0" y="0" width="145" height="20" uuid="8068aa64-dcd3-4647-9789-ad0aeea034d6"/>
+				<box topPadding="1" leftPadding="0">
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
 				<textFieldExpression><![CDATA[$F{numeroFactura}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="100" y="0" width="100" height="20" uuid="e1bb3e61-2b1a-462b-b1cf-0be21d5737ba"/>
+				<reportElement x="145" y="0" width="100" height="20" uuid="e1bb3e61-2b1a-462b-b1cf-0be21d5737ba"/>
+				<box topPadding="1" leftPadding="0">
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
 				<textFieldExpression><![CDATA[$F{fechaFactura}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="345" y="0" width="100" height="20" uuid="251e6c9b-7a17-48b4-8124-49e7ad3a15c0"/>
+				<reportElement x="455" y="0" width="100" height="20" uuid="251e6c9b-7a17-48b4-8124-49e7ad3a15c0"/>
+				<box topPadding="1" leftPadding="0">
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{totalFactura}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="200" y="0" width="145" height="20" uuid="35e14b07-d7ec-4b95-9df6-627803408608"/>
+				<reportElement x="245" y="0" width="210" height="20" uuid="35e14b07-d7ec-4b95-9df6-627803408608"/>
+				<box topPadding="1" leftPadding="0">
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
 				<textFieldExpression><![CDATA[$F{clienteFactura}]]></textFieldExpression>
 			</textField>
 		</band>
@@ -150,34 +219,106 @@
 		<band height="89" splitType="Stretch">
 			<textField>
 				<reportElement x="452" y="3" width="100" height="20" uuid="38e3ed34-ff56-44b6-bcc7-3ce8b3e52195"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$P{subtotal}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="452" y="23" width="100" height="20" uuid="033af6ac-f081-4def-8f0c-95daa2ab3c6d"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$P{subtotaliva}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="352" y="23" width="100" height="20" uuid="6814f09f-5495-417d-8e96-0cb08adecc43"/>
-				<text><![CDATA[Subtotal IVA:]]></text>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Subtotal IVA (12%):]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="352" y="3" width="100" height="20" uuid="2b58f7c5-ccf9-4046-9e76-ab81a614520c"/>
-				<text><![CDATA[Subtotal:]]></text>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Subtotal sin IVA:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="352" y="66" width="100" height="20" uuid="377d72bc-85cb-4fc0-8c14-78b653c32189"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
 				<text><![CDATA[TOTAL:]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="452" y="44" width="100" height="20" uuid="62319f0a-bdcb-4ae9-9f7b-2317126aea64"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$P{valoriva}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="352" y="44" width="100" height="20" uuid="0bf99f51-0c80-4dc5-a48c-9d8c3489c4e9"/>
-				<text><![CDATA[Static text]]></text>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[IVA Total:]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="452" y="66" width="100" height="20" uuid="fdbae02b-6629-4be5-a1ea-1a5a577609c1"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$P{total}]]></textFieldExpression>
 			</textField>
 		</band>
