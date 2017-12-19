@@ -13,12 +13,13 @@ import java.util.List;
  *
  * @author PC
  */
-public class ProductoService 
+public class ProductoService extends ServiceAbstract<Producto,ProductoFacade>
 {
     private ProductoFacade productoFacade;
     
     public ProductoService()
     {
+        super(ProductoFacade.class);
         this.productoFacade = new ProductoFacade();
     }
         

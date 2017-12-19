@@ -73,9 +73,13 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         menuConfiguracion = new javax.swing.JMenu();
         jMenuComprobanteConfig = new javax.swing.JMenuItem();
         menuCrm = new javax.swing.JMenu();
-        jMenuCliente = new javax.swing.JMenuItem();
-        jMenuProducto = new javax.swing.JMenuItem();
         jMenuEmisor = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuCliente = new javax.swing.JMenuItem();
+        jMenuItemReporteCliente = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuProducto = new javax.swing.JMenuItem();
+        jMenuItemReporteProducto = new javax.swing.JMenuItem();
         menuFacturacion = new javax.swing.JMenu();
         jMenuFactura = new javax.swing.JMenuItem();
         jMenuItemMonitor = new javax.swing.JMenuItem();
@@ -240,19 +244,33 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
         menuCrm.setText("Crm");
 
-        jMenuCliente.setText("Clientes");
+        jMenuEmisor.setText("Emisor");
+        menuCrm.add(jMenuEmisor);
+
+        jMenu2.setText("Clientes");
+
+        jMenuCliente.setText("Gestionar");
         jMenuCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuClienteActionPerformed(evt);
             }
         });
-        menuCrm.add(jMenuCliente);
+        jMenu2.add(jMenuCliente);
 
-        jMenuProducto.setText("Productos");
-        menuCrm.add(jMenuProducto);
+        jMenuItemReporteCliente.setText("Reporte");
+        jMenu2.add(jMenuItemReporteCliente);
 
-        jMenuEmisor.setText("Emisor");
-        menuCrm.add(jMenuEmisor);
+        menuCrm.add(jMenu2);
+
+        jMenu3.setText("Productos");
+
+        jMenuProducto.setText("Gestionar");
+        jMenu3.add(jMenuProducto);
+
+        jMenuItemReporteProducto.setText("Reporte");
+        jMenu3.add(jMenuItemReporteProducto);
+
+        menuCrm.add(jMenu3);
 
         jMenuBar1.add(menuCrm);
 
@@ -405,6 +423,8 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu8;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuCalculadora;
@@ -417,6 +437,8 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JMenuItem jMenuItemFacturaReporte;
     private javax.swing.JMenuItem jMenuItemMonitor;
     private javax.swing.JMenuItem jMenuItemNotaCredito;
+    private javax.swing.JMenuItem jMenuItemReporteCliente;
+    private javax.swing.JMenuItem jMenuItemReporteProducto;
     private javax.swing.JMenuItem jMenuItemUtilidades;
     private javax.swing.JMenuItem jMenuProducto;
     private javax.swing.JMenu jMenuUtilidades;
@@ -639,6 +661,23 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     public void setjMenuItemFacturaReporte(JMenuItem jMenuItemFacturaReporte) {
         this.jMenuItemFacturaReporte = jMenuItemFacturaReporte;
     }
+
+    public JMenuItem getjMenuItemReporteCliente() {
+        return jMenuItemReporteCliente;
+    }
+
+    public void setjMenuItemReporteCliente(JMenuItem jMenuItemReporteCliente) {
+        this.jMenuItemReporteCliente = jMenuItemReporteCliente;
+    }
+
+    public JMenuItem getjMenuItemReporteProducto() {
+        return jMenuItemReporteProducto;
+    }
+
+    public void setjMenuItemReporteProducto(JMenuItem jMenuItemReporteProducto) {
+        this.jMenuItemReporteProducto = jMenuItemReporteProducto;
+    }
+    
     
     
         

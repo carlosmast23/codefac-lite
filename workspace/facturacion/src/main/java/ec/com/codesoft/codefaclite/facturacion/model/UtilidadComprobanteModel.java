@@ -442,4 +442,9 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
 
     }
 
+    @Override
+    public void iniciar() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

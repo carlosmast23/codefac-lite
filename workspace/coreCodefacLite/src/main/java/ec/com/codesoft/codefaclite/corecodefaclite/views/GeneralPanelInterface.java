@@ -59,6 +59,11 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
     public static final String ESTADO_EDITAR="E";
     
     public String estadoFormulario;
+    /**
+     * Este metodo tiene el objetivo de funcionar despues de construir el objeto para interactuar con las variables inyectadas en el formulario
+     * por ejemplo con las variables de session , o con funcionalidades del formulario padre
+     */
+    public abstract void iniciar();
     public abstract void grabar() throws ExcepcionCodefacLite;
     public abstract void editar() throws ExcepcionCodefacLite;
     public abstract void eliminar();

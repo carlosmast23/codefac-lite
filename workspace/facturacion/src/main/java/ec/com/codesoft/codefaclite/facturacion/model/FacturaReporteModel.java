@@ -298,4 +298,9 @@ public class FacturaReporteModel extends FacturaReportePanel {
         //cargarDatosAdicionales();
     }
 
+    @Override
+    public void iniciar() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

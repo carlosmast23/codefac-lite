@@ -6,7 +6,6 @@
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\Carlos\\Documents\\GitHub\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\crm\\"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="nombre" class="java.lang.String"/>
 	<parameter name="pl_fecha_hora" class="java.lang.String"/>
 	<parameter name="pl_direccion" class="java.lang.String"/>
 	<parameter name="pl_nombre_empresa" class="java.lang.String"/>
@@ -23,8 +22,6 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="nombre" class="java.lang.String"/>
-	<field name="valor" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -56,36 +53,13 @@
 		</band>
 	</title>
 	<pageHeader>
-		<band height="64" splitType="Stretch">
-			<textField>
-				<reportElement x="27" y="15" width="100" height="20" uuid="822ac9cb-2e1c-4366-b355-e540a6f8ec39"/>
-				<textFieldExpression><![CDATA[$P{nombre}]]></textFieldExpression>
-			</textField>
-		</band>
+		<band height="64" splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="168" splitType="Stretch">
-			<staticText>
-				<reportElement x="111" y="2" width="100" height="20" uuid="ed4856e8-1c32-47d0-be99-7bf968f65290"/>
-				<text><![CDATA[nombre]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="285" y="2" width="100" height="20" uuid="0034dcfb-a76a-4d38-9670-5b75a1b35c11"/>
-				<text><![CDATA[valor]]></text>
-			</staticText>
-		</band>
+		<band height="168" splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="34" splitType="Stretch">
-			<textField>
-				<reportElement x="0" y="0" width="100" height="20" uuid="ca9774ed-0afb-4cb9-8920-39cd5935d1a4"/>
-				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="100" y="0" width="100" height="20" uuid="3a5da09b-d4f8-42bd-b492-0e9c1fa2b00f"/>
-				<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
-			</textField>
-		</band>
+		<band height="34" splitType="Stretch"/>
 	</detail>
 	<columnFooter>
 		<band height="45" splitType="Stretch"/>

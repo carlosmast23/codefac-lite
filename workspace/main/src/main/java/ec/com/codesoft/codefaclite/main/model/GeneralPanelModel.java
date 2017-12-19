@@ -755,7 +755,13 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             getBtnNuevo().requestFocus();
             agregarValidadores(panel);
             agregarAyudas(panel);
-            panel.limpiar();
+            
+            try
+            {
+                panel.limpiar();
+            }catch(java.lang.UnsupportedOperationException uoe)
+            {
+            }
             
             /**
              * Mostrar la pantalla centrada cuando no se muestra maximisado
@@ -773,6 +779,12 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             panel.consola=new ConsolaGeneral();
             mostrarConsola(panel.consola,true);
             
+            try
+            {
+                panel.iniciar();//Metodo que se ejecuta despues de construir el objeto
+            }
+            catch(java.lang.UnsupportedOperationException uoe)
+            {}
             
                         
         } catch (PropertyVetoException ex) {
@@ -1190,41 +1202,50 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     {
         JInternalFrame frame = getjDesktopPane1().getSelectedFrame();
         ControladorCodefacInterface frameInterface = (ControladorCodefacInterface) frame;
-        Map<Integer, Boolean> mapPermisos = frameInterface.permisosFormulario();
-        for (Map.Entry<Integer, Boolean> entry : mapPermisos.entrySet()) {
-            Integer key = entry.getKey();
-            Boolean value = entry.getValue();
+        
+        try
+        {
+            Map<Integer, Boolean> mapPermisos = frameInterface.permisosFormulario();
+            for (Map.Entry<Integer, Boolean> entry : mapPermisos.entrySet()) {
+                Integer key = entry.getKey();
+                Boolean value = entry.getValue();
 
-            switch (key) {
-                case ControladorCodefacInterface.BOTON_GRABAR:
-                    getBtnGuardar().setEnabled(value);
-                    break;
+                switch (key) {
+                    case ControladorCodefacInterface.BOTON_GRABAR:
+                        getBtnGuardar().setEnabled(value);
+                        break;
 
-                case ControladorCodefacInterface.BOTON_ELIMINAR:
-                    getBtnEliminar().setEnabled(value);
-                    break;
-                    
-                case ControladorCodefacInterface.BOTON_IMPRIMIR:
-                    getBtnImprimir().setEnabled(value);
-                    break;
-                    
-                case ControladorCodefacInterface.BOTON_AYUDA:
-                    getBtnAyuda().setEnabled(value);
-                    break;
-                    
-                case ControladorCodefacInterface.BOTON_NUEVO:
-                    getBtnNuevo().setEnabled(value);
-                    break;
-                    
-                case ControladorCodefacInterface.BOTON_REFRESCAR:
-                    getBtnActualizar().setEnabled(value);
-                    break;
-                
-                case ControladorCodefacInterface.BOTON_BUSCAR:
-                    getBtnBuscar().setEnabled(value);
-                    break;
+                    case ControladorCodefacInterface.BOTON_ELIMINAR:
+                        getBtnEliminar().setEnabled(value);
+                        break;
+
+                    case ControladorCodefacInterface.BOTON_IMPRIMIR:
+                        getBtnImprimir().setEnabled(value);
+                        break;
+
+                    case ControladorCodefacInterface.BOTON_AYUDA:
+                        getBtnAyuda().setEnabled(value);
+                        break;
+
+                    case ControladorCodefacInterface.BOTON_NUEVO:
+                        getBtnNuevo().setEnabled(value);
+                        break;
+
+                    case ControladorCodefacInterface.BOTON_REFRESCAR:
+                        getBtnActualizar().setEnabled(value);
+                        break;
+
+                    case ControladorCodefacInterface.BOTON_BUSCAR:
+                        getBtnBuscar().setEnabled(value);
+                        break;
+                }
+
             }
-
+        }
+        catch(java.lang.UnsupportedOperationException uoe)
+        {
+            //Si no esta implementado el metodo poner todos los botones en falso
+            habilitarBotones(false);
         }
     }
     

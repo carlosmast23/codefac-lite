@@ -143,5 +143,10 @@ public class EmisorModel extends ConfigurarEmisorForm
         return emisor;
     }
 
+    @Override
+    public void iniciar() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     
 }

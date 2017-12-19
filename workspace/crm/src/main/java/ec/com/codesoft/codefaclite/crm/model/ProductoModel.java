@@ -211,5 +211,10 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         }
         return null;
     }
+
+    @Override
+    public void iniciar() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

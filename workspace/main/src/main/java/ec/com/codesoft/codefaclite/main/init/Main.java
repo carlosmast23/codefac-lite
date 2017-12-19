@@ -15,8 +15,10 @@ import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecun
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.ValidadorCodefacModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
+import ec.com.codesoft.codefaclite.crm.model.ClienteReporte;
 import ec.com.codesoft.codefaclite.crm.model.EmisorModel;
 import ec.com.codesoft.codefaclite.crm.model.ProductoModel;
+import ec.com.codesoft.codefaclite.crm.model.ProductoReporte;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturaReporteModel;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
 import ec.com.codesoft.codefaclite.facturacion.model.NotaCreditoModel;
@@ -237,6 +239,8 @@ public class Main {
         ventanas.add(new MenuControlador(panel.getjMenuItemUtilidades(),UtilidadComprobanteModel.class,false));
         ventanas.add(new MenuControlador(panel.getjMenuItemNotaCredito(),NotaCreditoModel.class,true));
         ventanas.add(new MenuControlador(panel.getjMenuItemFacturaReporte(),FacturaReporteModel.class,true));
+        ventanas.add(new MenuControlador(panel.getjMenuItemReporteCliente(),ClienteReporte.class,true));
+        ventanas.add(new MenuControlador(panel.getjMenuItemReporteProducto(),ProductoReporte.class,true));
         return ventanas;
     
     }
