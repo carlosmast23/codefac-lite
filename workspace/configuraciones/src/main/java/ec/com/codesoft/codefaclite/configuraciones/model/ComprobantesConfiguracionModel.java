@@ -189,6 +189,12 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     
     public void moverArchivo()
     {
+        //Verifica que solo cuando exista un origen y destino exista se copien los datos
+        if(origen==null || destino==null)
+        {
+            return ;
+        }
+        
         try 
         {
             Files.copy(origen, destino, StandardCopyOption.REPLACE_EXISTING);
