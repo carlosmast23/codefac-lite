@@ -18,13 +18,14 @@ import java.util.List;
  *
  * @author Carlos
  */
-public class FacturacionService {
+public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade>{
 
     FacturaFacade facturaFacade;
     FacturaDetalleFacade facturaDetalleFacade;
     ParametroCodefacService parametroService;
 
     public FacturacionService() {
+        super(FacturaFacade.class);
         this.facturaFacade = new FacturaFacade();
         this.facturaDetalleFacade = new FacturaDetalleFacade();
         this.parametroService = new ParametroCodefacService();
@@ -66,5 +67,6 @@ public class FacturacionService {
         String puntoEmision = parametroService.getParametroByNombre(ParametroCodefac.PUNTO_EMISION).valor;
         return puntoEmision + "-" + establecimiento + "-" + secuencial;
     }
+    
 
 }

@@ -11,7 +11,10 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacion.other.FacturacionElectronica;
 import ec.com.codesoft.codefaclite.facturacion.panel.UtilidadComprobantePanel;
+import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
+import ec.com.codesoft.codefaclite.facturacionelectronica.FirmaElectronica;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ServicioSri;
 import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
@@ -19,7 +22,13 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectr
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
+import ec.com.codesoft.codefaclite.servidor.entity.Factura;
+import ec.com.codesoft.codefaclite.servidor.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.FacturaEnumEstado;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.NotaCreditoEnumEstado;
+import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
+import ec.com.codesoft.codefaclite.servidor.service.NotaCreditoService;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -293,12 +302,37 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
 
         @Override
         public void iniciado(ComprobanteElectronico comprobante) {
-
+            
         }
 
         @Override
-        public void procesando(int etapa) {
-
+        public void procesando(int etapa,ClaveAcceso clave) {
+            if(etapa == ComprobanteElectronicoService.ETAPA_AUTORIZAR) //Si ya cumple la etapa de autorizar cambio el estado de los comprobantes
+            {
+                ComprobanteEnum comprobante = ComprobanteEnum.getEnumByCodigo(clave.tipoComprobante);
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("claveAcceso", clave.clave);
+                switch(comprobante)
+                {
+                    case FACTURA:
+                        FacturacionService servicio=new FacturacionService();                        
+                        List<Factura> facturas=servicio.obtenerPorMap(map);
+                        for (Factura factura : facturas) {
+                            factura.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
+                            servicio.editar(factura);
+                        }
+                        break;
+                        
+                    case NOTA_CREDITO:
+                        NotaCreditoService servicioNotaCredito=new NotaCreditoService();
+                        List<NotaCredito> notasCredito=servicioNotaCredito.obtenerPorMap(map);
+                        for (NotaCredito notaCredito : notasCredito) {
+                            notaCredito.setClaveAcceso(NotaCreditoEnumEstado.TERMINADO.getEstado());
+                            servicioNotaCredito.editar(notaCredito);
+                        }
+                        break;
+                }
+            }
         }
 
         @Override
@@ -337,72 +371,6 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
         String claveAcceso = tableModel.getValueAt(getTblComprobantes().getSelectedRow(), 0).toString().replace(".xml", "");
         servicio.setClaveAcceso(claveAcceso);
         //servicio.procesarComprobanteEtapa(ComprobanteElectronicoService.ETAPA_GENERAR + 1, completarTodasEtapas);
-    }
-
-    private void etapaFirma(Boolean completarTodasEtapas) {
-        FacturacionElectronica servicio = new FacturacionElectronica(session, panelPadre);
-        estadoCargando();
-        servicio.getServicio().addActionListerComprobanteElectronico(new ListenerComprobanteElectronico() {
-            @Override
-            public void termino() {
-                estadoNormal();
-                DialogoCodefac.mensaje("Dialogo", "Proceso Terminado", 1);
-
-            }
-
-            @Override
-            public void iniciado(ComprobanteElectronico comprobante) {
-
-            }
-
-            @Override
-            public void procesando(int etapa) {
-
-            }
-
-            @Override
-            public void error(ComprobanteElectronicoException cee) {
-                estadoNormal();
-                DialogoCodefac.mensaje("Dialogo", cee.getMessage(), 1);
-            }
-        });
-        String claveAcceso = tableModel.getValueAt(getTblComprobantes().getSelectedRow(), 0).toString().replace(".xml", "");
-        servicio.setClaveAcceso(claveAcceso);
-        //servicio.procesarComprobanteEtapa(ComprobanteElectronicoService.ETAPA_FIRMAR + 1, completarTodasEtapas);
-
-    }
-
-    private void etapaAutorizado() {
-        FacturacionElectronica servicio = new FacturacionElectronica(session, panelPadre);
-
-        estadoCargando();
-
-        servicio.getServicio().addActionListerComprobanteElectronico(new ListenerComprobanteElectronico() {
-            @Override
-            public void termino() {
-                estadoNormal();
-                DialogoCodefac.mensaje("Dialogo", "RIDE generado correctamente", 1);
-                //frame.setEnabled(true);
-            }
-
-            @Override
-            public void iniciado(ComprobanteElectronico comprobante) {
-                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public void procesando(int etapa) {
-                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public void error(ComprobanteElectronicoException cee) {
-                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-        });
-        String claveAcceso = tableModel.getValueAt(getTblComprobantes().getSelectedRow(), 0).toString().replace(".xml", "");
-        servicio.setClaveAcceso(claveAcceso);
-        //servicio.procesarComprobanteEtapa(ComprobanteElectronicoService.ETAPA_RIDE, false);
     }
 
     private void iniciarComponentes() {

@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.other.NotaCreditoElectronico;
 import ec.com.codesoft.codefaclite.facturacion.panel.NotaCreditoPanel;
+import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ServicioSri;
 import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
@@ -112,7 +113,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
             }
 
             @Override
-            public void procesando(int etapa) {
+            public void procesando(int etapa,ClaveAcceso clave) {
                 if(etapa==ComprobanteElectronicoService.ETAPA_GENERAR)
                     monitorData.getBarraProgreso().setValue(20);
                 
