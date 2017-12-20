@@ -158,9 +158,10 @@ public class ComprobanteElectronicoService implements Runnable {
     private void procesarComprobante() {
         try {
             escucha.iniciado(comprobante);
+            
             if (etapaActual == ETAPA_GENERAR) {
                 generar();
-                escucha.procesando(etapaActual);
+                escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
                 System.out.println("generar()");
 
                 if (etapaLimiteProcesar<=ETAPA_GENERAR) {
@@ -173,7 +174,7 @@ public class ComprobanteElectronicoService implements Runnable {
 
             if (etapaActual == ETAPA_PRE_VALIDAR) {
                 preValidacion();
-                escucha.procesando(etapaActual);
+                escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
                 System.out.println("preValidacion()");
                 if (etapaLimiteProcesar<=ETAPA_PRE_VALIDAR) {
                     escucha.termino();
@@ -184,7 +185,7 @@ public class ComprobanteElectronicoService implements Runnable {
 
             if (etapaActual == ETAPA_FIRMAR) {
                 firmar();
-                escucha.procesando(etapaActual);
+                escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
                 System.out.println("firmar()");
                 if(etapaLimiteProcesar<=ETAPA_FIRMAR) {
                     escucha.termino();
@@ -195,7 +196,7 @@ public class ComprobanteElectronicoService implements Runnable {
 
             if (etapaActual == ETAPA_ENVIAR) {
                 enviarSri();
-                escucha.procesando(etapaActual);
+                escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
                 System.out.println("enviarSri()");
                 if(etapaLimiteProcesar<=ETAPA_ENVIAR) {
                     escucha.termino();
@@ -206,7 +207,7 @@ public class ComprobanteElectronicoService implements Runnable {
 
             if (etapaActual == ETAPA_AUTORIZAR) {
                 autorizarSri();
-                escucha.procesando(etapaActual);
+                escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
                 System.out.println("autorizarSri()");
                 if(etapaLimiteProcesar<=ETAPA_AUTORIZAR) {
                     escucha.termino();
@@ -217,7 +218,7 @@ public class ComprobanteElectronicoService implements Runnable {
 
             if (etapaActual == ETAPA_RIDE) {
                 generarRide();
-                escucha.procesando(etapaActual);
+                escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
                 //generarRide();
                 System.out.println("generarRide()");
                 if(etapaLimiteProcesar<=ETAPA_RIDE) {
@@ -229,7 +230,7 @@ public class ComprobanteElectronicoService implements Runnable {
 
             if (etapaActual == ETAPA_ENVIO_COMPROBANTE) {
                 enviarComprobante();
-                escucha.procesando(etapaActual);
+                escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
                 if(etapaLimiteProcesar<=ETAPA_ENVIO_COMPROBANTE) {
                     escucha.termino();
                     return;
@@ -751,12 +752,13 @@ public class ComprobanteElectronicoService implements Runnable {
     public String getPathJasper(ComprobanteElectronico comprobanteElectronico)
     {
         String path = "";
-        if (ComprobanteEnum.FACTURA.getCodigo().equals(comprobante.getInformacionTributaria().getCodigoDocumento())) {
+        ClaveAcceso clave=new ClaveAcceso(claveAcceso);
+        if (ComprobanteEnum.FACTURA.getCodigo().equals(clave.tipoComprobante)) {
             path = pathFacturaJasper;
         }
         else
         {
-            if (ComprobanteEnum.NOTA_CREDITO.getCodigo().equals(comprobante.getInformacionTributaria().getCodigoDocumento())) {
+            if (ComprobanteEnum.NOTA_CREDITO.getCodigo().equals(clave.tipoComprobante)) {
                 path = pathNotaCreditoJasper;
             }
         }

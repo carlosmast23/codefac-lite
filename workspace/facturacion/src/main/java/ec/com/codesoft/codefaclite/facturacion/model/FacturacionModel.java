@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.facturacion.other.FacturacionElectronica;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
+import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.ETAPA_AUTORIZAR;
 import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.ETAPA_ENVIAR;
@@ -407,9 +408,10 @@ public class FacturacionModel extends FacturacionPanel {
             }
 
             @Override
-            public void procesando(int etapa) {
+            public void procesando(int etapa,ClaveAcceso clave) {
                 if (etapa == ComprobanteElectronicoService.ETAPA_GENERAR) {
                     monitorData.getBarraProgreso().setValue(20);
+                    facturaProcesando.setClaveAcceso(clave.clave);
                 }
 
                 if (etapa == ComprobanteElectronicoService.ETAPA_PRE_VALIDAR) {

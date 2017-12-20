@@ -16,13 +16,14 @@ import java.util.List;
  *
  * @author PC
  */
-public class NotaCreditoService {
+public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoFacade>{
 
     NotaCreditoFacade notaCreditoFacade;
     NotaCreditoDetalleFacade notaCreditoDetalleFacade;
     ParametroCodefacService parametroCodefacService;
 
     public NotaCreditoService() {
+        super(NotaCreditoFacade.class);
         this.notaCreditoFacade = new NotaCreditoFacade();
         this.notaCreditoDetalleFacade = new NotaCreditoDetalleFacade();
         parametroCodefacService = new ParametroCodefacService();
