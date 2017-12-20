@@ -25,6 +25,8 @@ import ec.com.codesoft.codefaclite.test.TipoBusquedaEnum;
 import static ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.sql.Date;
@@ -49,6 +51,10 @@ public class FacturaReporteModel extends FacturaReportePanel {
     private DefaultTableModel modeloTablaFacturas;
     private List<Factura> datafact;
     private List<NotaCredito> datafact2;
+    Date fechaInicio = null;
+    Date fechaFin = null;
+    String fechainicio = "";
+    String fechafin = "";
 
     public FacturaReporteModel() {
         initListener();
@@ -56,13 +62,34 @@ public class FacturaReporteModel extends FacturaReportePanel {
 
     private void initListener() {
         //String texto= session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).valor;
-        getDateFechaInicio().setDate(hoy());
-        getDateFechaFin().setDate(fechaFinMes(hoy()));
+        getDateFechaInicio().setDate(fechaInicioMes(hoy()));
+        getDateFechaFin().setDate(hoy());
 
         getCmbTipo().addItem(TipoBusquedaEnum.TODOS);
         getCmbTipo().addItem(TipoBusquedaEnum.ANULADOS);
         getCmbTipo().addItem(TipoBusquedaEnum.FACTURAS);
 
+        getChkTodos().setSelected(true);
+        if (getChkTodos().isSelected()) {
+            persona = null;
+            getTxtCliente().setText("...");
+            getLblNombreCliente().setText("..");
+            getBtnBuscarCliente().setEnabled(false);
+        }
+
+        getChkTodos().addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
+                    persona = null;
+                    getTxtCliente().setText("...");
+                    getLblNombreCliente().setText("..");
+                    getBtnBuscarCliente().setEnabled(false);
+                } else {
+                    getBtnBuscarCliente().setEnabled(true);
+                }
+            }
+        });
         getBtnBuscarCliente().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -83,27 +110,42 @@ public class FacturaReporteModel extends FacturaReportePanel {
                 BigDecimal acum = BigDecimal.ZERO, acumdoce = BigDecimal.ZERO, acumiva = BigDecimal.ZERO;
 
                 TipoBusquedaEnum estadoSeleccionado = (TipoBusquedaEnum) getCmbTipo().getSelectedItem();
-                Date sqlDate = new Date(getDateFechaInicio().getDate().getTime());
-                Date sqlDate2 = new Date(getDateFechaFin().getDate().getTime());
+                if (getDateFechaInicio().getDate() != null) {
+                    fechaInicio = new Date(getDateFechaInicio().getDate().getTime());
+                }
+                if (getDateFechaFin().getDate() != null) {
+                    fechaFin = new Date(getDateFechaFin().getDate().getTime());
+                }
 
                 Vector<String> titulo = new Vector<>();
                 titulo.add("Preimpreso");
                 titulo.add("Fecha");
-                titulo.add("Cliente");
-                titulo.add("Valor");
+                titulo.add("Identificación");
+                titulo.add("Razón social");
+                titulo.add("Nombre legal");
+                titulo.add("Subtotal 12%");
+                titulo.add("Subtotal 0% ");
+                titulo.add("IVA 12%");
+                titulo.add("Total");
 
                 modeloTablaFacturas = new DefaultTableModel(titulo, 0);
 
                 FacturacionService fs = new FacturacionService();
-                datafact = fs.obtenerFacturasReporte(persona, sqlDate, sqlDate2);
+                datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin);
                 NotaCreditoService nc = new NotaCreditoService();
-                datafact2 = nc.obtenerNotasReporte(persona, sqlDate, sqlDate2);
+                datafact2 = nc.obtenerNotasReporte(persona, fechaInicio, fechaFin);
                 if (estadoSeleccionado.getTipo() == "T" || estadoSeleccionado.getTipo() == "F") {
                     for (Factura factura : datafact) {
                         Vector<String> fila = new Vector<String>();
                         fila.add(factura.getPreimpreso());
                         fila.add(dateFormat.format(factura.getFechaFactura()));
+                        fila.add(factura.getCliente().getIdentificacion());
                         fila.add(factura.getCliente().getRazonSocial());
+                        fila.add(factura.getCliente().getNombreLegal());
+                        fila.add(factura.getSubtotalDoce().toString());
+                        fila.add(factura.getSubtotalCero().toString());
+                        fila.add(factura.getValorIvaDoce().toString());
+
                         if (estadoSeleccionado.getTipo() == "T") {
                             NotaCredito notaCredito = verificarPorFactura(factura);
                             if (notaCredito != null) {
@@ -132,8 +174,13 @@ public class FacturaReporteModel extends FacturaReportePanel {
                         Vector<String> fila = new Vector<String>();
                         fila.add(factura.getPreimpreso());
                         fila.add(dateFormat.format(factura.getFechaNotaCredito()));
+                        fila.add(factura.getCliente().getIdentificacion());
                         fila.add(factura.getCliente().getRazonSocial());
-                        fila.add(String.valueOf(factura.getTotal()));
+                        fila.add(factura.getCliente().getNombreLegal());
+                        fila.add(factura.getSubtotalDoce().toString());
+                        fila.add(factura.getSubtotalCero().toString());
+                        fila.add(factura.getValorIvaDoce().toString());
+                        fila.add(factura.getTotal().toString());
 
                         acum = acum.add(factura.getSubtotalCero());
                         acumdoce = acumdoce.add(factura.getSubtotalDoce());
@@ -149,6 +196,13 @@ public class FacturaReporteModel extends FacturaReportePanel {
                 getLblIva().setText(acumiva.toString());
                 BigDecimal total = acum.add(acumdoce).add(acumiva);
                 getLblTotal().setText(total.toString());
+            }
+        });
+        getBtnLimpiarFecha().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getDateFechaInicio().setDate(null);
+                getDateFechaFin().setDate(null);
             }
         });
     }
@@ -182,17 +236,22 @@ public class FacturaReporteModel extends FacturaReportePanel {
         BigDecimal d = null;
         BigDecimal acum = BigDecimal.ZERO, acumdoce = BigDecimal.ZERO, acumiva = BigDecimal.ZERO;
 
-        String fechainicio = dateFormat.format(getDateFechaInicio().getDate());
-        String fechafin = dateFormat.format(getDateFechaFin().getDate());
         TipoBusquedaEnum estadoSeleccionado = (TipoBusquedaEnum) getCmbTipo().getSelectedItem();
-        Date sqlDate = new Date(getDateFechaInicio().getDate().getTime());
-        Date sqlDate2 = new Date(getDateFechaFin().getDate().getTime());
+        if (getDateFechaInicio().getDate() != null) {
+            fechaInicio = new Date(getDateFechaInicio().getDate().getTime());
+            fechainicio = dateFormat.format(getDateFechaInicio().getDate());
+
+        }
+        if (getDateFechaFin().getDate() != null) {
+            fechaFin = new Date(getDateFechaFin().getDate().getTime());
+            fechafin = dateFormat.format(getDateFechaFin().getDate());
+        }
 
         String path = RecursoCodefac.JASPER_FACTURACION.getResourcePath("reporte_documentos.jrxml");
         FacturacionService fs = new FacturacionService();
-        datafact = fs.obtenerFacturasReporte(persona, sqlDate, sqlDate2);
+        datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin);
         NotaCreditoService nc = new NotaCreditoService();
-        datafact2 = nc.obtenerNotasReporte(persona, sqlDate, sqlDate2);
+        datafact2 = nc.obtenerNotasReporte(persona, fechaInicio, fechaFin);
         List<ReporteFacturaData> data = new ArrayList<ReporteFacturaData>();
         if (estadoSeleccionado.getTipo() == "T" || estadoSeleccionado.getTipo() == "F") {
             for (Factura factura : datafact) {
@@ -216,7 +275,17 @@ public class FacturaReporteModel extends FacturaReportePanel {
                     acumdoce = acumdoce.add(factura.getSubtotalDoce());
                     acumiva = acumiva.add(factura.getValorIvaDoce());
                 }
-                data.add(new ReporteFacturaData(factura.getPreimpreso(), dateFormat.format(factura.getFechaFactura()), factura.getCliente().getRazonSocial(), String.valueOf(d)));
+                data.add(new ReporteFacturaData(
+                        factura.getPreimpreso(),
+                        dateFormat.format(factura.getFechaFactura()),
+                        factura.getCliente().getIdentificacion(),
+                        factura.getCliente().getRazonSocial(),
+                        factura.getCliente().getNombreLegal(),
+                        factura.getSubtotalDoce().toString(),
+                        factura.getSubtotalCero().toString(),
+                        factura.getValorIvaDoce().toString(),
+                        d.toString()
+                ));
             }
         } else {
             for (NotaCredito factura : datafact2) {
@@ -224,7 +293,17 @@ public class FacturaReporteModel extends FacturaReportePanel {
                 acumdoce = acumdoce.add(factura.getSubtotalDoce());
                 acumiva = acumiva.add(factura.getValorIvaDoce());
 
-                data.add(new ReporteFacturaData(factura.getPreimpreso(), dateFormat.format(factura.getFechaNotaCredito()), factura.getCliente().getRazonSocial(), String.valueOf(factura.getTotal())));
+                data.add(new ReporteFacturaData(
+                        factura.getPreimpreso(),
+                        dateFormat.format(factura.getFechaNotaCredito()),
+                        factura.getCliente().getIdentificacion(),
+                        factura.getCliente().getRazonSocial(),
+                        factura.getCliente().getNombreLegal(),
+                        factura.getSubtotalDoce().toString(),
+                        factura.getSubtotalCero().toString(),
+                        factura.getValorIvaDoce().toString(),
+                        factura.getTotal().toString()
+                ));
             }
         }
 
@@ -239,7 +318,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
         parameters.put("fechafin", fechafin);
         parameters.put("tipodocumento", String.valueOf(estadoSeleccionado));
         parameters.put("cliente", cliente);
-       
+
         parameters.put("subtotal", acum.toString());
         parameters.put("subtotaliva", acumdoce.toString());
         parameters.put("valoriva", acumiva.toString());

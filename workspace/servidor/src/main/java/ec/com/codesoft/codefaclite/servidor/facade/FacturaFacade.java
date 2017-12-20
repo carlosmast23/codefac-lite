@@ -27,22 +27,35 @@ public class FacturaFacade extends AbstractFacade<Factura> {
 
     public List<Factura> lista(Persona persona, Date fi, Date ff) {
 
-        String cliente = "";
+        String cliente = "", fecha = "";
         if (persona != null) {
             cliente = "u.cliente=?1";
         } else {
             cliente = "1=1";
         }
+        if (fi == null && ff != null) {
+            fecha = " AND u.fechaFactura <= ?3";
+        } else if (fi != null && ff == null) {
+            fecha = " AND u.fechaFactura <= ?2";
+        } else if (fi == null && ff == null) {
+            fecha = "";
+        } else {
+            fecha = " AND (u.fechaFactura BETWEEN ?2 AND ?3)";
+        }
 
         try {
-            String queryString = "SELECT u FROM Factura u WHERE " + cliente + " AND (u.fechaFactura BETWEEN ?2 AND ?3)";
+            String queryString = "SELECT u FROM Factura u WHERE " + cliente + fecha;
             Query query = getEntityManager().createQuery(queryString);
+            //System.err.println("QUERY--->"+query.toString());
             if (persona != null) {
                 query.setParameter(1, persona);
             }
-            query.setParameter(2, fi);
-            query.setParameter(3, ff);
-
+            if (fi != null) {
+                query.setParameter(2, fi);
+            }
+            if (ff != null) {
+                query.setParameter(3, ff);
+            }
             return query.getResultList();
         } catch (NoResultException e) {
             return null;

@@ -24,21 +24,35 @@ public class NotaCreditoFacade extends AbstractFacade<NotaCredito> {
 
     public List<NotaCredito> lista(Persona persona, Date fi, Date ff) {
 
-        String cliente = "";
+        String cliente = "", fecha = "";
         if (persona != null) {
             cliente = "u.cliente=?1";
         } else {
             cliente = "1=1";
         }
 
+        if (fi == null && ff != null) {
+            fecha = " AND u.fechaNotaCredito <= ?3";
+        } else if (fi != null && ff == null) {
+            fecha = " AND u.fechaNotaCredito <= ?2";
+        } else if (fi == null && ff == null) {
+            fecha = "";
+        } else {
+            fecha = " AND (u.fechaNotaCredito BETWEEN ?2 AND ?3)";
+        }
+
         try {
-            String queryString = "SELECT u FROM NotaCredito u WHERE " + cliente + " AND (u.fechaNotaCredito BETWEEN ?2 AND ?3)";
+            String queryString = "SELECT u FROM NotaCredito u WHERE " + cliente + fecha;
             Query query = getEntityManager().createQuery(queryString);
             if (persona != null) {
                 query.setParameter(1, persona);
             }
-            query.setParameter(2, fi);
-            query.setParameter(3, ff);
+            if (fi != null) {
+                query.setParameter(2, fi);
+            }
+            if (ff != null) {
+                query.setParameter(3, ff);
+            }
 
             return query.getResultList();
         } catch (NoResultException e) {

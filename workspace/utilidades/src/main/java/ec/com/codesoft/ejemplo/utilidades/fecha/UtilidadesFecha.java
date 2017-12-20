@@ -30,6 +30,14 @@ public class UtilidadesFecha {
         return calendar.getTime(); // Devuelve el objeto Date con los nuevos días añadidos
     }
 
+    public static java.util.Date fechaInicioMes(java.util.Date fecha) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(fecha); // Configuramos la fecha que se recibe
+        calendar.set(Calendar.DATE, calendar.getActualMinimum(Calendar.DATE));
+
+        return calendar.getTime(); // Devuelve el objeto Date con los nuevos días añadidos
+    }
+
     public static java.util.Date hoy() {
         java.util.Date fecha = new java.util.Date();
         return fecha;

@@ -16,13 +16,23 @@ public class ReporteFacturaData {
 
     private String numeroFactura;
     private String fechaFactura;
-    private String clienteFactura;
+    private String identificacionCliente;
+    private String razonSocialCliente;
+    private String nombreLegalCliente;
+    private String subtotalDoceFactura;
+    private String subtotalCeroFactura;
+    private String ivaDoceFactura;
     private String totalFactura;
 
-    public ReporteFacturaData(String numeroFactura, String fechaFactura, String clienteFactura, String totalFactura) {
+    public ReporteFacturaData(String numeroFactura, String fechaFactura, String identificacionCliente, String razonSocialCliente, String nombreLegalCliente, String subtotalDoceFactura, String subtotalCeroFactura, String ivaDoceFactura, String totalFactura) {
         this.numeroFactura = numeroFactura;
         this.fechaFactura = fechaFactura;
-        this.clienteFactura = clienteFactura;
+        this.identificacionCliente = identificacionCliente;
+        this.razonSocialCliente = razonSocialCliente;
+        this.nombreLegalCliente = nombreLegalCliente;
+        this.subtotalDoceFactura = subtotalDoceFactura;
+        this.subtotalCeroFactura = subtotalCeroFactura;
+        this.ivaDoceFactura = ivaDoceFactura;
         this.totalFactura = totalFactura;
     }
 
@@ -42,12 +52,52 @@ public class ReporteFacturaData {
         this.fechaFactura = fechaFactura;
     }
 
-    public String getClienteFactura() {
-        return clienteFactura;
+    public String getIdentificacionCliente() {
+        return identificacionCliente;
     }
 
-    public void setClienteFactura(String clienteFactura) {
-        this.clienteFactura = clienteFactura;
+    public void setIdentificacionCliente(String identificacionCliente) {
+        this.identificacionCliente = identificacionCliente;
+    }
+
+    public String getRazonSocialCliente() {
+        return razonSocialCliente;
+    }
+
+    public void setRazonSocialCliente(String razonSocialCliente) {
+        this.razonSocialCliente = razonSocialCliente;
+    }
+
+    public String getNombreLegalCliente() {
+        return nombreLegalCliente;
+    }
+
+    public void setNombreLegalCliente(String nombreLegalCliente) {
+        this.nombreLegalCliente = nombreLegalCliente;
+    }
+
+    public String getSubtotalDoceFactura() {
+        return subtotalDoceFactura;
+    }
+
+    public void setSubtotalDoceFactura(String subtotalDoceFactura) {
+        this.subtotalDoceFactura = subtotalDoceFactura;
+    }
+
+    public String getSubtotalCeroFactura() {
+        return subtotalCeroFactura;
+    }
+
+    public void setSubtotalCeroFactura(String subtotalCeroFactura) {
+        this.subtotalCeroFactura = subtotalCeroFactura;
+    }
+
+    public String getIvaDoceFactura() {
+        return ivaDoceFactura;
+    }
+
+    public void setIvaDoceFactura(String ivaDoceFactura) {
+        this.ivaDoceFactura = ivaDoceFactura;
     }
 
     public String getTotalFactura() {
@@ -57,5 +107,7 @@ public class ReporteFacturaData {
     public void setTotalFactura(String totalFactura) {
         this.totalFactura = totalFactura;
     }
+
+   
        
 }
