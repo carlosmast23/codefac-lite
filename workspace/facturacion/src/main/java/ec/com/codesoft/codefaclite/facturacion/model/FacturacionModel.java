@@ -50,7 +50,10 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Date;
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -61,6 +64,7 @@ import java.util.Vector;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JasperPrint;
 
@@ -112,7 +116,6 @@ public class FacturacionModel extends FacturacionPanel {
         initModelTablaDetalleFactura();
         initModelTablaDatoAdicional();
         setearVariablesIniciales();
-
     }
     
     private void setearVariablesIniciales()
@@ -125,14 +128,35 @@ public class FacturacionModel extends FacturacionPanel {
         this.valorTotal = new BigDecimal(0);
         this.subTotalDescuentoConImpuesto = new BigDecimal(0);
         this.subTotalDescuentoSinImpuesto = new BigDecimal(0);
+        this.subtotal0Descuento = new BigDecimal(0);
         this.bandera = false;
         this.banderaAgregar = true;
         subtotal12Descuento = new BigDecimal(0);
         calcularIva12();
-        datosAdicionales = new HashMap<String,String>();    
-        
+        datosAdicionales = new HashMap<String,String>();
     }
-
+    
+    private boolean verificarCamposValidados()
+    {
+        //bandera para comprobar que todos los campos esten validados
+        boolean b = true;
+        List <JTextField> camposValidar = new ArrayList<JTextField>();
+        //Ingresar los campos para validar 
+        camposValidar.add(getTxtValorUnitario());
+        camposValidar.add(getTxtCantidad());
+        camposValidar.add(getTxtDescripcion());
+        camposValidar.add(getTxtDescuento());
+        //Obtener el estado de validacion de los campos
+        for (JTextField campo : camposValidar) 
+        {
+            if(!campo.getBackground().equals(Color.white))
+            {
+                b = false;
+            }    
+        }
+        return b;
+    }        
+            
     private void addListenerButtons() {
 
         getBtnBuscarCliente().addActionListener(new ActionListener() {
@@ -179,7 +203,6 @@ public class FacturacionModel extends FacturacionPanel {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 fila = getTblDetalleFactura().getSelectedRow();
-                System.out.println(fila);
                 bandera = true;
             }
         });
@@ -187,13 +210,12 @@ public class FacturacionModel extends FacturacionPanel {
         getBtnAgregarDetalleFactura().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (banderaAgregar) {
+                if (banderaAgregar && verificarCamposValidados()) {
                     FacturaDetalle facturaDetalle = new FacturaDetalle();
                     facturaDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
                     facturaDetalle.setDescripcion(getTxtDescripcion().getText());
                     facturaDetalle.setPrecioUnitario(new BigDecimal(getTxtValorUnitario().getText()));
                     facturaDetalle.setProducto(productoSeleccionado);
-                    System.out.println(productoSeleccionado);
                     BigDecimal setTotal = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario());
                     facturaDetalle.setTotal(setTotal.setScale(2, BigDecimal.ROUND_HALF_UP));
                     facturaDetalle.setValorIce(BigDecimal.ZERO);
@@ -294,7 +316,24 @@ public class FacturacionModel extends FacturacionPanel {
 
             }
         });
-
+                       
+        getjDateFechaEmision().addPropertyChangeListener(new PropertyChangeListener(){ 
+        public void propertyChange(PropertyChangeEvent e) {
+            System.out.println("Fecha : ------->" + e.getNewValue());
+            java.util.Date fecha = getjDateFechaEmision().getDate();
+            if(getB())
+            {
+                if(!ComprobarRangoDeFechaPermitido(fecha))
+                {
+                    DialogoCodefac.mensaje("Advertencia fecha","La fecha seleccionada esta fuera del rango de autorizaciòn del SRI",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                }
+            }
+            else{
+                setB(true);
+            }
+        }
+        });
+        
     }
 
     @Override
@@ -573,7 +612,6 @@ public class FacturacionModel extends FacturacionPanel {
         fila.add(formaPago.getTotal().toString());
         fila.add(formaPago.getUnidadTiempo());
         fila.add(formaPago.getPlazo() + "");
-        System.out.println(formaPago);
         this.modeloTablaFormasPago.addRow(fila);
     }
 
@@ -668,7 +706,7 @@ public class FacturacionModel extends FacturacionPanel {
         facturaDetalles.forEach((facturaDetalle) -> 
         {   
                 this.subtotalSinImpuestos = this.subtotalSinImpuestos.add(facturaDetalle.getTotal());
-                this.subtotalSinImpuestosDescuento = this.subtotalSinImpuestos;
+                this.subtotalSinImpuestosDescuento = this.subtotalSinImpuestosDescuento.add(facturaDetalle.getTotal());
                 this.subtotalSinImpuestosDescuento = this.subtotalSinImpuestosDescuento.subtract(facturaDetalle.getDescuento());
 
         });
@@ -721,16 +759,12 @@ public class FacturacionModel extends FacturacionPanel {
     
     public void calcularIva12()
     {
-        //this.iva = this.subtotal12.multiply(obtenerValorIva());
         this.iva = this.subtotal12Descuento.multiply(obtenerValorIva());
-        //System.out.println("Valor de iva: "+ this.iva);
-        //System.out.println("Valor de subtotal12DEscuento"+ this.subtotal12Descuento);
         this.iva = iva.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
     
     public void calcularValorTotal()
     {
-        //this.valorTotal = this.subtotalSinImpuestos.add(this.iva);
         this.valorTotal = this.subtotalSinImpuestosDescuento.add(this.iva);
     }
     
@@ -834,10 +868,20 @@ public class FacturacionModel extends FacturacionPanel {
         
         
     }
-
+    
+    public boolean ComprobarRangoDeFechaPermitido(java.util.Date fecha)
+    {
+        if(fecha.after(getFechaMin()) && fecha.before(getFechaMax()))
+        {
+            return true;
+        }
+        return false;
+    }        
+            
     @Override
     public void iniciar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //getjDateFechaEmision().setDate(getFechaMax());
+        //((JTextField) this.getjDateFechaEmision().getDateEditor()).setEditable(false);
     }
 
     @Override
