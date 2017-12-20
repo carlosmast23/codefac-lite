@@ -123,6 +123,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
                 titulo.add("Identificación");
                 titulo.add("Razón social");
                 titulo.add("Nombre legal");
+                titulo.add("Estado");
                 titulo.add("Subtotal 12%");
                 titulo.add("Subtotal 0% ");
                 titulo.add("IVA 12%");
@@ -134,14 +135,17 @@ public class FacturaReporteModel extends FacturaReportePanel {
                 datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin);
                 NotaCreditoService nc = new NotaCreditoService();
                 datafact2 = nc.obtenerNotasReporte(persona, fechaInicio, fechaFin);
+
                 if (estadoSeleccionado.getTipo() == "T" || estadoSeleccionado.getTipo() == "F") {
                     for (Factura factura : datafact) {
                         Vector<String> fila = new Vector<String>();
+                        FacturaEnumEstado ef = FacturaEnumEstado.getEnum(factura.getEstado());
                         fila.add(factura.getPreimpreso());
                         fila.add(dateFormat.format(factura.getFechaFactura()));
                         fila.add(factura.getCliente().getIdentificacion());
                         fila.add(factura.getCliente().getRazonSocial());
                         fila.add(factura.getCliente().getNombreLegal());
+                        fila.add(ef.getNombre());
                         fila.add(factura.getSubtotalDoce().toString());
                         fila.add(factura.getSubtotalCero().toString());
                         fila.add(factura.getValorIvaDoce().toString());
@@ -172,11 +176,14 @@ public class FacturaReporteModel extends FacturaReportePanel {
                 } else {
                     for (NotaCredito factura : datafact2) {
                         Vector<String> fila = new Vector<String>();
+                        FacturaEnumEstado ef = FacturaEnumEstado.getEnum(factura.getEstado());
+
                         fila.add(factura.getPreimpreso());
                         fila.add(dateFormat.format(factura.getFechaNotaCredito()));
                         fila.add(factura.getCliente().getIdentificacion());
                         fila.add(factura.getCliente().getRazonSocial());
                         fila.add(factura.getCliente().getNombreLegal());
+                        fila.add(ef.getNombre());
                         fila.add(factura.getSubtotalDoce().toString());
                         fila.add(factura.getSubtotalCero().toString());
                         fila.add(factura.getValorIvaDoce().toString());
@@ -252,11 +259,11 @@ public class FacturaReporteModel extends FacturaReportePanel {
         datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin);
         NotaCreditoService nc = new NotaCreditoService();
         datafact2 = nc.obtenerNotasReporte(persona, fechaInicio, fechaFin);
+
         List<ReporteFacturaData> data = new ArrayList<ReporteFacturaData>();
         if (estadoSeleccionado.getTipo() == "T" || estadoSeleccionado.getTipo() == "F") {
             for (Factura factura : datafact) {
                 if (estadoSeleccionado.getTipo() == "T") {
-
                     NotaCredito notaCredito = verificarPorFactura(factura);
                     if (notaCredito != null) {
                         d = factura.getTotal().subtract(notaCredito.getTotal());
@@ -275,12 +282,15 @@ public class FacturaReporteModel extends FacturaReportePanel {
                     acumdoce = acumdoce.add(factura.getSubtotalDoce());
                     acumiva = acumiva.add(factura.getValorIvaDoce());
                 }
+                FacturaEnumEstado ef = FacturaEnumEstado.getEnum(factura.getEstado());
+
                 data.add(new ReporteFacturaData(
                         factura.getPreimpreso(),
                         dateFormat.format(factura.getFechaFactura()),
                         factura.getCliente().getIdentificacion(),
                         factura.getCliente().getRazonSocial(),
                         factura.getCliente().getNombreLegal(),
+                        ef.getNombre(),
                         factura.getSubtotalDoce().toString(),
                         factura.getSubtotalCero().toString(),
                         factura.getValorIvaDoce().toString(),
@@ -292,13 +302,14 @@ public class FacturaReporteModel extends FacturaReportePanel {
                 acum = acum.add(factura.getSubtotalCero());
                 acumdoce = acumdoce.add(factura.getSubtotalDoce());
                 acumiva = acumiva.add(factura.getValorIvaDoce());
-
+                FacturaEnumEstado ef = FacturaEnumEstado.getEnum(factura.getEstado());
                 data.add(new ReporteFacturaData(
                         factura.getPreimpreso(),
                         dateFormat.format(factura.getFechaNotaCredito()),
                         factura.getCliente().getIdentificacion(),
                         factura.getCliente().getRazonSocial(),
                         factura.getCliente().getNombreLegal(),
+                        ef.getNombre(),
                         factura.getSubtotalDoce().toString(),
                         factura.getSubtotalCero().toString(),
                         factura.getValorIvaDoce().toString(),

@@ -19,17 +19,19 @@ public class ReporteFacturaData {
     private String identificacionCliente;
     private String razonSocialCliente;
     private String nombreLegalCliente;
+    private String estadoFactura;
     private String subtotalDoceFactura;
     private String subtotalCeroFactura;
     private String ivaDoceFactura;
     private String totalFactura;
 
-    public ReporteFacturaData(String numeroFactura, String fechaFactura, String identificacionCliente, String razonSocialCliente, String nombreLegalCliente, String subtotalDoceFactura, String subtotalCeroFactura, String ivaDoceFactura, String totalFactura) {
+    public ReporteFacturaData(String numeroFactura, String fechaFactura, String identificacionCliente, String razonSocialCliente, String nombreLegalCliente, String estadoFactura, String subtotalDoceFactura, String subtotalCeroFactura, String ivaDoceFactura, String totalFactura) {
         this.numeroFactura = numeroFactura;
         this.fechaFactura = fechaFactura;
         this.identificacionCliente = identificacionCliente;
         this.razonSocialCliente = razonSocialCliente;
         this.nombreLegalCliente = nombreLegalCliente;
+        this.estadoFactura = estadoFactura;
         this.subtotalDoceFactura = subtotalDoceFactura;
         this.subtotalCeroFactura = subtotalCeroFactura;
         this.ivaDoceFactura = ivaDoceFactura;
@@ -76,6 +78,14 @@ public class ReporteFacturaData {
         this.nombreLegalCliente = nombreLegalCliente;
     }
 
+    public String getEstadoFactura() {
+        return estadoFactura;
+    }
+
+    public void setEstadoFactura(String estadoFactura) {
+        this.estadoFactura = estadoFactura;
+    }
+
     public String getSubtotalDoceFactura() {
         return subtotalDoceFactura;
     }
@@ -108,6 +118,6 @@ public class ReporteFacturaData {
         this.totalFactura = totalFactura;
     }
 
-   
-       
+    
+
 }

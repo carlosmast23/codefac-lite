@@ -91,17 +91,17 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
 
         tblDocumentos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Preimpreso", "Fecha", "Identificación", "Razón social", "Nombre legal", "Subtotal 12%", "Subtotal 0%", "IVA 12%", "Total"
+                "Preimpreso", "Fecha", "Identificación", "Razón social", "Nombre legal", "Estado", "Subtotal 12%", "Subtotal 0%", "IVA 12%", "Total"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                true, true, true, true, true, true, false, true, true
+                true, true, true, true, true, true, true, false, true, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -179,26 +179,25 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
                                 .addComponent(btnBuscarCliente)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(chkTodos)))
-                        .addGap(0, 188, Short.MAX_VALUE))))
+                        .addGap(0, 341, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(23, Short.MAX_VALUE)
+                .addContainerGap(562, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblTxtTotal)
+                    .addComponent(lblTxtIva)
+                    .addComponent(lblTxtSubtotalIva)
+                    .addComponent(lblTxtSubtotal))
+                .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblTxtTotal)
-                            .addComponent(lblTxtIva)
-                            .addComponent(lblTxtSubtotalIva)
-                            .addComponent(lblTxtSubtotal))
-                        .addGap(36, 36, 36)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblSubtotal)
-                            .addComponent(lblSubtotalIva)
-                            .addComponent(lblIva)
-                            .addComponent(lblTotal))
-                        .addGap(113, 113, 113))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 656, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20))))
+                    .addComponent(lblSubtotal)
+                    .addComponent(lblSubtotalIva)
+                    .addComponent(lblIva)
+                    .addComponent(lblTotal))
+                .addGap(113, 113, 113))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1)
+                .addGap(20, 20, 20))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
