@@ -24,6 +24,8 @@ import ec.com.codesoft.codefaclite.servidor.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidor.entity.NotaCreditoDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.FacturaEnumEstado;
+import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
 import ec.com.codesoft.codefaclite.servidor.service.NotaCreditoService;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
 import java.awt.Color;
@@ -65,6 +67,16 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         notaCredito.setPuntoEstablecimiento(session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor);
         notaCredito.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_NOTA_CREDITO).valor));
         notaCredito.setSubtotalCero(BigDecimal.ZERO);
+        
+        //Verificacion para cambiar el estado de la factura
+        if(notaCredito.getTotal().compareTo(notaCredito.getFactura().getTotal())<0)
+        {
+            notaCredito.getFactura().setEstado(FacturaEnumEstado.ANULADO_PARCIAL.getEstado());
+        }
+        else
+        {
+            notaCredito.getFactura().setEstado(FacturaEnumEstado.ANULADO_TOTAL.getEstado());
+        }
     }
 
     @Override
