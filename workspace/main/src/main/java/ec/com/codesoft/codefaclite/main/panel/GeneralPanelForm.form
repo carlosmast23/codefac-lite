@@ -176,6 +176,11 @@
                 <Property name="text" type="java.lang.String" value="Emisor"/>
               </Properties>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="menuReporteClientes">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Reporte Clientes"/>
+              </Properties>
+            </MenuItem>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="menuFacturacion">

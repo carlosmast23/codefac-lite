@@ -76,6 +76,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuCliente = new javax.swing.JMenuItem();
         jMenuProducto = new javax.swing.JMenuItem();
         jMenuEmisor = new javax.swing.JMenuItem();
+        menuReporteClientes = new javax.swing.JMenuItem();
         menuFacturacion = new javax.swing.JMenu();
         jMenuFactura = new javax.swing.JMenuItem();
         jMenuItemMonitor = new javax.swing.JMenuItem();
@@ -254,6 +255,9 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuEmisor.setText("Emisor");
         menuCrm.add(jMenuEmisor);
 
+        menuReporteClientes.setText("Reporte Clientes");
+        menuCrm.add(menuReporteClientes);
+
         jMenuBar1.add(menuCrm);
 
         menuFacturacion.setText("Facturacion");
@@ -430,6 +434,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JMenu menuCrm;
     private javax.swing.JMenu menuFacturacion;
     private javax.swing.JMenu menuInicio;
+    private javax.swing.JMenuItem menuReporteClientes;
     // End of variables declaration//GEN-END:variables
 
     public JMenuItem getjMenuItem1() {
@@ -639,7 +644,14 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     public void setjMenuItemFacturaReporte(JMenuItem jMenuItemFacturaReporte) {
         this.jMenuItemFacturaReporte = jMenuItemFacturaReporte;
     }
-    
+
+    public JMenuItem getMenuReporteClientes() {
+        return menuReporteClientes;
+    }
+
+    public void setMenuReporteClientes(JMenuItem menuReporteClientes) {
+        this.menuReporteClientes = menuReporteClientes;
+    }       
     
         
 }

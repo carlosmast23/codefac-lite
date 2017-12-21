@@ -163,9 +163,9 @@ public class FacturaReporteModel extends FacturaReportePanel {
                                 acumdoce = acumdoce.add(factura.getSubtotalDoce());
                                 acumiva = acumiva.add(factura.getValorIvaDoce());
                             }
-                            fila.add(String.valueOf(d));
+                            fila.add(d.toString());
                         } else {
-                            fila.add(String.valueOf(factura.getTotal()));
+                            fila.add(factura.getTotal().toString());
                             acum = acum.add(factura.getSubtotalCero());
                             acumdoce = acumdoce.add(factura.getSubtotalDoce());
                             acumiva = acumiva.add(factura.getValorIvaDoce());
