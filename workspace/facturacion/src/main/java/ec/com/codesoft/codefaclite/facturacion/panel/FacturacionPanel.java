@@ -31,27 +31,11 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     /**
      * Creates new form FacturacionPanel
      */
-    private Date fechaMax;
-    private Date fechaMin;
-    private boolean b=false;
-
     public FacturacionPanel() {
-        initComponents();
-        this.fechaMax = new Date();
-        definirFechaMinFacturacion();
-        txtDescuento.setText("0");
-        jDateFechaEmision.setDate(getFechaMax());
-        ((JTextField) this.jDateFechaEmision.getDateEditor()).setEditable(false);
+        initComponents();       
     }
     
-    public boolean getB() {
-        return b;
-    }
-
-    public void setB(boolean b) {
-        this.b = b;
-    }
-    
+   
     public JTextField getTxtValorTotal() {
         return txtValorTotal;
     }
@@ -1350,27 +1334,5 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         this.jDateFechaEmision = jDateFechaEmision;
     }
     
-    public void definirFechaMinFacturacion()
-    {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(this.fechaMax);
-        calendar.add(Calendar.DAY_OF_MONTH, -30);
-        this.fechaMin = calendar.getTime();
-    }
     
-    public Date getFechaMax() {
-        return fechaMax;
-    }
-
-    public void setFechaMax(Date fechaMax) {
-        this.fechaMax = fechaMax;
-    }
-
-    public Date getFechaMin() {
-        return fechaMin;
-    }
-
-    public void setFechaMin(Date fechaMin) {
-        this.fechaMin = fechaMin;
-    }
 }
