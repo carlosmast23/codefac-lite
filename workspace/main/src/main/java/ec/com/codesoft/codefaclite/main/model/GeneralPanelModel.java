@@ -475,7 +475,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     if(frameInterface.estadoFormulario.equals(ControladorCodefacInterface.ESTADO_GRABAR))
                     {
                         
-                        if(validarFormulario(frameInterface))
+                        if(validarFormulario(frameInterface,ValidacionCodefacAnotacion.GRUPO_FORMULARIO))
                         {
                             try {
                                 frameInterface.grabar();
@@ -494,7 +494,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     }
                     else
                     {
-                        if(validarFormulario(frameInterface))
+                        if(validarFormulario(frameInterface,ValidacionCodefacAnotacion.GRUPO_FORMULARIO))
                         {
                             try {
                                 frameInterface.editar();
@@ -897,7 +897,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
     }
     
-    private boolean validarFormulario(ControladorCodefacInterface panel)
+    private boolean validarFormulario(ControladorCodefacInterface panel,String grupo)
     {
        //Volver a crear los errores pendientes
        panel.consola=new ConsolaGeneral();
@@ -909,30 +909,37 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             //System.out.println(metodo.getName());
             if(validacion!=null)
             {
-                
-                try {
-                    JTextComponent componente=(JTextComponent) metodo.invoke(panel);
-                    Vector<String> errores=validarComponente(validacion,componente,panel);
-                    
-                    if(errores.size()>0)
-                    {
-                        //Si Existe errores pinto de colo amarillo
-                        componente.setBackground(new Color(255,255,102));
+                if(validacion.grupo().equals(grupo))
+                {
+                    try {
+                        JTextComponent componente=(JTextComponent) metodo.invoke(panel);
+                        Vector<String> errores=validarComponente(validacion,componente,panel);
+
+                        if(errores.size()>0)
+                        {
+                            //Si Existe errores pinto de colo amarillo
+                            componente.setBackground(new Color(255,255,102));
+                        }
+                        else
+                        {
+                            //Si no existe error pinto de blanco
+                            componente.setBackground(Color.white);
+                        }
+
+                        for (String error : errores) {
+                            panel.consola.agregarDatos(validacion.nombre(),error,componente);
+                            validado=false;
+                        }
+
+
+
+                    } catch (IllegalAccessException ex) {
+                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IllegalArgumentException ex) {
+                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (InvocationTargetException ex) {
+                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    
-                    for (String error : errores) {
-                        panel.consola.agregarDatos(validacion.nombre(),error,componente);
-                        validado=false;
-                    }
-                    
-                    
-               
-                } catch (IllegalAccessException ex) {
-                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IllegalArgumentException ex) {
-                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InvocationTargetException ex) {
-                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -1060,66 +1067,69 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             ValidacionCodefacAnotacion validacion=metodo.getAnnotation(ValidacionCodefacAnotacion.class);
             if(validacion!=null)
             {
-                try {
-                    JTextComponent componente=(JTextComponent) metodo.invoke(panel);
-                    componente.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(122, 138, 153)));
-                    componente.addFocusListener(new FocusListener() {
-                        @Override
-                        public void focusGained(FocusEvent e) {
-                            
-                        }
+                if(validacion.grupo().equals(ValidacionCodefacAnotacion.GRUPO_FORMULARIO))
+                {                    
+                    try {
+                        JTextComponent componente=(JTextComponent) metodo.invoke(panel);
+                        componente.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(122, 138, 153)));
+                        componente.addFocusListener(new FocusListener() {
+                            @Override
+                            public void focusGained(FocusEvent e) {
 
-                        @Override
-                        public void focusLost(FocusEvent e) {
-                            System.out.println("focusLost");
-                            
-                            //Este codigo se pone porque despues de cambiar de pantalla se ejecuta el evento de focus de la anterior
-                            //y eso me genera problemas cuando quiero manejar los eventos de las jinternalFrame
-                            if(!panel.equals(getPanelActivo()))
-                            {
-                                //System.out.println("no validar porque cambio de pantalla");
-                                return;
-                            }
-                            
-                            if (panel.sinAcciones) {
-                                panel.sinAcciones = false;
-                                return;
-                            }
-                            
-                            if(panel.formularioCerrando)
-                            {
-                                return;
                             }
 
-                            
-                            Vector<String> errores = validarComponente(validacion, componente, panel);
-                            panel.consola.quitarDato(componente);
-                            for (String error : errores) {
-                                panel.consola.agregarDatos(validacion.nombre(), error, componente);
-                            }
-                            
-                            if(errores.size()>0)
-                            {
-                                componente.setBackground(new Color(255,255,102));
-                                mostrarConsola(panel.consola,true);                                
-                            }
-                            else
-                            {
+                            @Override
+                            public void focusLost(FocusEvent e) {
+                                System.out.println("focusLost");
+
+                                //Este codigo se pone porque despues de cambiar de pantalla se ejecuta el evento de focus de la anterior
+                                //y eso me genera problemas cuando quiero manejar los eventos de las jinternalFrame
+                                if(!panel.equals(getPanelActivo()))
+                                {
+                                    //System.out.println("no validar porque cambio de pantalla");
+                                    return;
+                                }
+
+                                if (panel.sinAcciones) {
+                                    panel.sinAcciones = false;
+                                    return;
+                                }
+
+                                if(panel.formularioCerrando)
+                                {
+                                    return;
+                                }
+
+
+                                Vector<String> errores = validarComponente(validacion, componente, panel);
                                 panel.consola.quitarDato(componente);
-                                componente.setBackground(Color.white);
-                                mostrarConsola(panel.consola,true);   
-                                
-                            }
-                            
-                        }
-                    });
+                                for (String error : errores) {
+                                    panel.consola.agregarDatos(validacion.nombre(), error, componente);
+                                }
 
-                } catch (IllegalAccessException ex) {
-                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IllegalArgumentException ex) {
-                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InvocationTargetException ex) {
-                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                                if(errores.size()>0)
+                                {
+                                    componente.setBackground(new Color(255,255,102));
+                                    mostrarConsola(panel.consola,true);                                
+                                }
+                                else
+                                {
+                                    panel.consola.quitarDato(componente);
+                                    componente.setBackground(Color.white);
+                                    mostrarConsola(panel.consola,true);   
+
+                                }
+
+                            }
+                        });
+
+                    } catch (IllegalAccessException ex) {
+                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IllegalArgumentException ex) {
+                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (InvocationTargetException ex) {
+                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             }
         }
@@ -1468,6 +1478,12 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
     public void setPanelesSecundarios(Map<String,PanelSecundarioAbstract> panelesSecundariosMap) {
         this.panelesSecundariosMap = panelesSecundariosMap;
+    }
+
+    @Override
+    public boolean validarPorGrupo(String nombre) {
+        ControladorCodefacInterface panel=getPanelActivo();
+        return validarFormulario(panel,nombre);
     }
 
     

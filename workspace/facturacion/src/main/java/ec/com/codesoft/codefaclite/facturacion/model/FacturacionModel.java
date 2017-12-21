@@ -219,6 +219,12 @@ public class FacturacionModel extends FacturacionPanel {
         getBtnAgregarDetalleFactura().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //System.out.println(panelPadre.validarPorGrupo("detalles"));
+                if(!panelPadre.validarPorGrupo("detalles"))
+                {
+                    return;
+                }
+                
                 if (banderaAgregar && verificarCamposValidados()) {
                     FacturaDetalle facturaDetalle = new FacturaDetalle();
                     facturaDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
@@ -809,7 +815,7 @@ public class FacturacionModel extends FacturacionPanel {
         factura.setEmpresaId(0l);
         factura.setEstado(Factura.ESTADO_FACTURADO);
         factura.setFechaCreacion(UtilidadesFecha.getFechaHoy());
-        //factura.setFechaFactura(new Date(getjDateFechaEmision().getDate().getTime()));
+        factura.setFechaFactura(new Date(getjDateFechaEmision().getDate().getTime()));
         //factura.setIvaSriId(iva);
         factura.setPuntoEmision(session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor);
         factura.setPuntoEstablecimiento(session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor);
