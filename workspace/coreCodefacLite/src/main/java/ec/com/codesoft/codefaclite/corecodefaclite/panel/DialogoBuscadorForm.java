@@ -38,6 +38,9 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
         btnAceptar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         lblPiePagina = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        btnAtras = new javax.swing.JButton();
+        btnSiguiente = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         lblTextoBuscar = new javax.swing.JLabel();
         btnFiltrar = new javax.swing.JButton();
@@ -63,9 +66,19 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
 
         jPanel1.add(jPanel2, java.awt.BorderLayout.LINE_END);
 
-        lblPiePagina.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
-        lblPiePagina.setText(" Selecciones una fila y presione aceptar");
+        lblPiePagina.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblPiePagina.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblPiePagina.setToolTipText("");
+        lblPiePagina.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jPanel1.add(lblPiePagina, java.awt.BorderLayout.CENTER);
+
+        btnAtras.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/flechaIzq.png"))); // NOI18N
+        jPanel4.add(btnAtras);
+
+        btnSiguiente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/flechaDer.png"))); // NOI18N
+        jPanel4.add(btnSiguiente);
+
+        jPanel1.add(jPanel4, java.awt.BorderLayout.LINE_START);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_END);
 
@@ -77,6 +90,11 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
 
         btnFiltrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         btnFiltrar.setText("Filtrar");
+        btnFiltrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFiltrarActionPerformed(evt);
+            }
+        });
         jPanel3.add(btnFiltrar, java.awt.BorderLayout.LINE_END);
         jPanel3.add(txtBuscar, java.awt.BorderLayout.CENTER);
 
@@ -102,6 +120,10 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
 
     pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnFiltrarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -148,11 +170,14 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
+    private javax.swing.JButton btnAtras;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnFiltrar;
+    private javax.swing.JButton btnSiguiente;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblPiePagina;
     private javax.swing.JLabel lblTextoBuscar;
@@ -222,6 +247,22 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
 
     public void setBtnFiltrar(JButton btnFiltrar) {
         this.btnFiltrar = btnFiltrar;
+    }
+
+    public JButton getBtnAtras() {
+        return btnAtras;
+    }
+
+    public void setBtnAtras(JButton btnAtras) {
+        this.btnAtras = btnAtras;
+    }
+
+    public JButton getBtnSiguiente() {
+        return btnSiguiente;
+    }
+
+    public void setBtnSiguiente(JButton btnSiguiente) {
+        this.btnSiguiente = btnSiguiente;
     }
     
     

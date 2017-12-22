@@ -74,4 +74,17 @@ public class FacturaFacade extends AbstractFacade<Factura> {
             return null;
         }
     }
+    
+    public List<Factura> queryDialog(String param,int limiteMinimo,int limiteMaximo)
+    {
+        String queryString = "SELECT u FROM Factura u WHERE u.estado<>?1 AND u.estado<>?2 AND u.estado<>?3 ";
+        queryString+="AND ( f.cliente.razonSocial like ?1 )";
+        
+        Query query = getEntityManager().createQuery(queryString);
+        query.setParameter(1, param);
+        query.setMaxResults(limiteMaximo);
+        query.setFirstResult(limiteMinimo);
+        return query.getResultList();        
+        
+    }
 }

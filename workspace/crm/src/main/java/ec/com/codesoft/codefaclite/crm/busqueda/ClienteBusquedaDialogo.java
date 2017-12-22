@@ -7,8 +7,10 @@ package ec.com.codesoft.codefaclite.crm.busqueda;
 
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,14 +39,6 @@ public class ClienteBusquedaDialogo implements InterfaceModelFind<Persona>
     }
 
     @Override
-    public List<Persona> getConsulta() 
-    {
-        ArrayList<Persona> personas = new ArrayList<Persona>();
-        PersonaService personaservice = new PersonaService();       
-        return personaservice.buscar();
-    }
-
-    @Override
     public void agregarObjeto(Persona t, Vector dato) 
     {
         dato.add(t.getRazonSocial());
@@ -66,6 +60,16 @@ public class ClienteBusquedaDialogo implements InterfaceModelFind<Persona>
         {
             return false;
         }       
+    }
+
+    @Override
+    public QueryDialog getConsulta(String filter) {
+        //Persona p;
+        //p.getRazonSocial();
+        String queryString = "SELECT u FROM Persona u WHERE ";
+        queryString+=" ( LOWER(u.razonSocial) like "+filter+" )";
+        QueryDialog queryDialog=new QueryDialog(queryString);
+        return queryDialog;
     }
     
 }

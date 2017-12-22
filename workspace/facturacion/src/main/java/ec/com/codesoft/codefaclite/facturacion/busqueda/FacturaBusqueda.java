@@ -6,14 +6,18 @@
 package ec.com.codesoft.codefaclite.facturacion.busqueda;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidor.entity.Factura;
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 /**
  *
@@ -33,10 +37,14 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura> {
     }
 
     @Override
-    public List<Factura> getConsulta() {
-        ArrayList<Producto> productos = new ArrayList<Producto>();
-        FacturacionService servicio=new FacturacionService();
-        return servicio.obtenerFacturasActivas();
+    public QueryDialog getConsulta(String filter) {
+        String queryString = "SELECT u FROM Factura u WHERE u.estado<>?1 AND u.estado<>?2 AND u.estado<>?3 ";
+        queryString+="AND ( u.cliente.razonSocial like "+filter+" )";
+        QueryDialog queryDialog=new QueryDialog(queryString);
+        queryDialog.agregarParametro(1,FacturaEnumEstado.ELIMINADO.getEstado());
+        queryDialog.agregarParametro(2,FacturaEnumEstado.ANULADO_TOTAL.getEstado());
+        queryDialog.agregarParametro(3,FacturaEnumEstado.SIN_AUTORIZAR.getEstado());
+        return queryDialog;
     }
 
     @Override

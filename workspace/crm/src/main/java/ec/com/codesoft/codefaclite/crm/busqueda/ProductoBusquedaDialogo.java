@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.crm.busqueda;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
@@ -34,14 +35,6 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto>
     }
 
     @Override
-    public List<Producto> getConsulta() 
-    {
-         ArrayList<Producto> productos = new ArrayList<Producto>();
-        ProductoService servicio=new ProductoService();
-        return servicio.buscar();
-    }
-
-    @Override
     public void agregarObjeto(Producto t, Vector dato) 
     {
         dato.add(t.getCodigoPrincipal());
@@ -58,5 +51,12 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto>
     {
         return t.getNombre().equals(valor.toString());   
     }
-    
+
+    @Override
+    public QueryDialog getConsulta(String filter) {
+        String queryString = "SELECT u FROM Producto u WHERE ";
+        queryString+=" ( LOWER(u.nombre) like "+filter+" )";
+        QueryDialog queryDialog=new QueryDialog(queryString);
+        return queryDialog;
+    }
 }

@@ -39,4 +39,14 @@ public abstract class ServiceAbstract<Entity,Facade>
     {
         return this.facade.findByMap(parametros);
     }
+    
+    public static List<Object> consultaGeneralDialogos(String query,Map<Integer,Object> map,int limiteMinimo,int limiteMaximo)
+    {
+       return AbstractFacade.findStaticDialog(query,map, limiteMinimo, limiteMaximo);
+    }
+    
+    public static Long consultaTamanioGeneralDialogos(String query,Map<Integer,Object> map)
+    {
+       return AbstractFacade.findCountStaticDialog(query,map);
+    }
 }

@@ -6,8 +6,10 @@
 package ec.com.codesoft.codefaclite.crm.busqueda;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidor.entity.Emisor;
+import ec.com.codesoft.codefaclite.servidor.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidor.service.EmisorService;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,13 +37,6 @@ public class EmisorBusquedaDialogo implements InterfaceModelFind<Emisor>
         
     }
 
-    @Override
-    public List<Emisor> getConsulta() 
-    {
-        ArrayList<Emisor> emisores = new ArrayList<>();
-        EmisorService emisorService = new EmisorService();       
-        return emisorService.buscar();
-    }
 
     @Override
     public void agregarObjeto(Emisor t, Vector dato) 
@@ -58,6 +53,14 @@ public class EmisorBusquedaDialogo implements InterfaceModelFind<Emisor>
     public Boolean buscarObjeto(Emisor t, Object valor) 
     {
         return t.getRuc().equals(valor.toString());   
+    }
+
+    @Override
+    public QueryDialog getConsulta(String filter) {       
+        String queryString = "SELECT u FROM Emisor u WHERE ";
+        queryString+=" ( LOWER(u.razonSocial) like "+filter+" )";
+        QueryDialog queryDialog=new QueryDialog(queryString);
+        return queryDialog;
     }
     
 }

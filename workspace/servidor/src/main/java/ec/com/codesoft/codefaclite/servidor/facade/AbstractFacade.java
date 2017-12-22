@@ -174,5 +174,31 @@ public abstract class AbstractFacade<T>
     {
         entityManager=Persistence.createEntityManagerFactory(namePersistence).createEntityManager();
     }
+    
+    public static List<Object> findStaticDialog(String queryStr,Map<Integer,Object> map,int limiteMinimo,int limiteMaximo) {
+        Query query = entityManager.createQuery(queryStr);
+        //Agregar los parametros del map al query
+        for (Map.Entry<Integer, Object> entry : map.entrySet()) {
+            Integer key = entry.getKey();
+            Object value = entry.getValue();
+            query.setParameter(key, value);
+        }
+        
+        query.setMaxResults(limiteMaximo);
+        query.setFirstResult(limiteMinimo);
+        return query.getResultList();
+    }
+    
+    public static Long findCountStaticDialog(String queryStr,Map<Integer,Object> map) {
+        Query query = entityManager.createQuery(queryStr);
+        //Agregar los parametros del map al query
+        for (Map.Entry<Integer, Object> entry : map.entrySet()) {
+            Integer key = entry.getKey();
+            Object value = entry.getValue();
+            query.setParameter(key, value);
+        }
+        
+        return (Long) query.getSingleResult();
+    }
 
 }

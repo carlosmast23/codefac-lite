@@ -42,6 +42,11 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade>{
         parametroService.grabar(parametro);
 
     }
+    
+    public List<Factura> consultaDialogo(String param,int limiteMinimo,int limiteMaximo)
+    {
+        return facturaFacade.queryDialog(param,limiteMinimo,limiteMaximo);        
+    }
 
     public void editar(Factura factura) {
         facturaFacade.edit(factura);

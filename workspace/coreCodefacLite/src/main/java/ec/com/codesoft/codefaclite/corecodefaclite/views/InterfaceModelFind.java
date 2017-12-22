@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.corecodefaclite.views;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -17,7 +18,15 @@ import java.util.Vector;
 public interface InterfaceModelFind<T>
 {
     public abstract Vector<ColumnaDialogo> getColumnas();
-    public abstract List<T> getConsulta();
+    /**
+     * Obtiene la consulta segun el parametro pasado a la funcion que correspone
+     * al campo de texto del dialogo
+     * @param AliasParam parametro de busqueda del dialogo para armar el query
+     * @return 
+     */
+    public abstract QueryDialog getConsulta(String filter);
+    
+    
     public abstract void agregarObjeto(T t,Vector dato);
     public abstract Boolean buscarObjeto(T t,Object valor);
     
