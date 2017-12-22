@@ -26,6 +26,12 @@ public interface InterfazComunicacionPanel
     public void crearDialogoCodefac(ObserverUpdateInterface panel,String namePanel,boolean maximizado);
     
     public Map<String,Object> mapReportePlantilla();
+    /**
+     * Metodo que permite validar todos los componentes del formulario
+     * @param nombre
+     * @return 
+     */
+    public boolean validarPorGrupo(String nombre);
 
 
 }

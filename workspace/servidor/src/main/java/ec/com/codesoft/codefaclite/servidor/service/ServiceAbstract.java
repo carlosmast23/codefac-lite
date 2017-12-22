@@ -15,14 +15,13 @@ import java.util.logging.Logger;
  *
  * @author Carlos
  */
-public abstract class ServiceAbstract<T>
+public abstract class ServiceAbstract<Entity,Facade>
 {
-    private AbstractFacade<T> facade;
-    private Class<T> clase;
-
-    public ServiceAbstract(Class<T> clase) {
+    private AbstractFacade<Entity> facade;
+ 
+    public ServiceAbstract(Class<Facade> clase) {
         try {
-            this.facade = (AbstractFacade<T>) clase.newInstance();
+            this.facade =(AbstractFacade<Entity>) clase.newInstance();
         } catch (InstantiationException ex) {
             Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
@@ -31,12 +30,12 @@ public abstract class ServiceAbstract<T>
     }
     
     //private T t;
-    public List<T> obtenerTodos()
+    public List<Entity> obtenerTodos()
     {
         return this.facade.findAll();
     }
     
-    public List<T> obtenerPorMap(Map<String,Object> parametros)
+    public List<Entity> obtenerPorMap(Map<String,Object> parametros)
     {
         return this.facade.findByMap(parametros);
     }

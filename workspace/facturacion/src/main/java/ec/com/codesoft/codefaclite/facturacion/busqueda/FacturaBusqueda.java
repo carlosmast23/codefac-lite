@@ -43,6 +43,7 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura> {
     public void agregarObjeto(Factura t, Vector dato) {
         dato.add(t.getId());
         dato.add(t.getPreimpreso());
+        System.out.println(t.getPreimpreso());
         dato.add(t.getCliente().getRazonSocial());
         dato.add(t.getFechaFactura());
         dato.add(t.getTotal());

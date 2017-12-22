@@ -3,20 +3,56 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.controlador.dialog;
+package ec.com.codesoft.codefaclite.crm.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
+import ec.com.codesoft.codefaclite.crm.data.ClienteData;
+import ec.com.codesoft.codefaclite.crm.reportdata.DataEjemploReporte;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import ec.com.codesoft.codefaclite.servidor.entity.Persona;
+import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  *
  * @author Carlos
  */
-public class GeneralDialog extends ControladorCodefacInterface{
+public class ClienteReporte extends ControladorCodefacInterface{
 
+    public ClienteReporte() {        
+        
+    }
+    
+    private void imprimirReporte()
+    {
+        String path = RecursoCodefac.JASPER_CRM.getResourcePath("reporteClientes.jrxml");
+        Map parameters = new HashMap();
+        List<ClienteData> data = new ArrayList<ClienteData>();
+        PersonaService service=new PersonaService();
+        List<Persona> clientes=service.obtenerTodos();
+        
+        for (Persona cliente : clientes) {
+            ClienteData clienteData=new ClienteData();
+            clienteData.setDireccion(cliente.getDireccion());
+            clienteData.setEmail(cliente.getCorreoElectronico());
+            clienteData.setIdentificacion(cliente.getIdentificacion());
+            clienteData.setNombresCompletos(cliente.getRazonSocial());
+            clienteData.setTelefono(cliente.getTelefonoCelular());
+            data.add(clienteData);
+        }
+        
+        ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Clientes ");
+        this.dispose();
+        this.setVisible(false);
+    }
+
+    
+    
     @Override
     public void grabar() throws ExcepcionCodefacLite {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -64,22 +100,16 @@ public class GeneralDialog extends ControladorCodefacInterface{
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
-        Map<Integer,Boolean> permisos=new HashMap<Integer,Boolean>();
-        return permisos;
-    }
-    
-    public boolean validar()
-    {
-        return false;
-    }
-
-    @Override
-    public void iniciar() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void nuevo() throws ExcepcionCodefacLite {
+    public void iniciar() {
+        imprimirReporte();
+    }
+
+    @Override
+    public void nuevo() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

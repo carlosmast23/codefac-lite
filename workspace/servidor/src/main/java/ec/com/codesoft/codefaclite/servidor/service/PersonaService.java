@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author PC
  */
-public class PersonaService extends ServiceAbstract<PersonaFacade>
+public class PersonaService extends ServiceAbstract<Persona,PersonaFacade>
 {
     private PersonaFacade personaFacade;
 

@@ -7,6 +7,11 @@ package ec.com.codesoft.codefaclite.facturacion.panel;
 
 import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
+import java.util.Calendar;
+import java.util.Date;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -27,12 +32,10 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
      * Creates new form FacturacionPanel
      */
     public FacturacionPanel() {
-        initComponents();
-        java.util.Date fecha = new java.util.Date();
-        jDateFechaEmision.setDate(fecha);
-        txtDescuento.setText("0");
+        initComponents();       
     }
-
+    
+   
     public JTextField getTxtValorTotal() {
         return txtValorTotal;
     }
@@ -953,6 +956,9 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         this.checkPorcentaje = checkPorcentaje;
     }
 
+    @LimpiarAnotacion
+    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0-9]+([.][0-9]+)?$",nombre = "Descuento")
     public JTextField getTxtDescuento() {
         return txtDescuento;
     }
@@ -1174,7 +1180,10 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     public void setBtnQuitarDetalle(JButton btnQuitarDetalle) {
         this.btnQuitarDetalle = btnQuitarDetalle;
     }
-
+    
+    @LimpiarAnotacion
+    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0-9]+$",nombre = "Cantidad",grupo = "detalles")
     public JTextField getTxtCantidad() {
         return txtCantidad;
     }
@@ -1182,7 +1191,10 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     public void setTxtCantidad(JTextField txtCantidad) {
         this.txtCantidad = txtCantidad;
     }
-
+    
+    @LimpiarAnotacion
+    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Descripcion",grupo = "detalles")
     public JTextField getTxtDescripcion() {
         return txtDescripcion;
     }
@@ -1190,7 +1202,10 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     public void setTxtDescripcion(JTextField txtDescripcion) {
         this.txtDescripcion = txtDescripcion;
     }
-
+    
+    @LimpiarAnotacion
+    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "",nombre = "Valor Unitario",grupo = "detalles")
     public JTextField getTxtValorUnitario() {
         return txtValorUnitario;
     }
@@ -1254,7 +1269,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     public void setLblSubtotalSinImpuesto(JLabel lblSubtotalSinImpuesto) {
         this.lblSubtotalSinImpuesto = lblSubtotalSinImpuesto;
     }
-
+    
     public JLabel getLblTotalDescuento() {
         return lblTotalDescuento;
     }
@@ -1318,7 +1333,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     public void setjDateFechaEmision(JDateChooser jDateFechaEmision) {
         this.jDateFechaEmision = jDateFechaEmision;
     }
-    
     
     
 }

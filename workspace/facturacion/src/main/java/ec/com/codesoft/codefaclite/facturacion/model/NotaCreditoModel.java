@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.other.NotaCreditoElectronico;
 import ec.com.codesoft.codefaclite.facturacion.panel.NotaCreditoPanel;
+import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ServicioSri;
 import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
@@ -23,6 +24,8 @@ import ec.com.codesoft.codefaclite.servidor.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidor.entity.NotaCreditoDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.FacturaEnumEstado;
+import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
 import ec.com.codesoft.codefaclite.servidor.service.NotaCreditoService;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
 import java.awt.Color;
@@ -64,6 +67,16 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         notaCredito.setPuntoEstablecimiento(session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor);
         notaCredito.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_NOTA_CREDITO).valor));
         notaCredito.setSubtotalCero(BigDecimal.ZERO);
+        
+        //Verificacion para cambiar el estado de la factura
+        if(notaCredito.getTotal().compareTo(notaCredito.getFactura().getTotal())<0)
+        {
+            notaCredito.getFactura().setEstado(FacturaEnumEstado.ANULADO_PARCIAL.getEstado());
+        }
+        else
+        {
+            notaCredito.getFactura().setEstado(FacturaEnumEstado.ANULADO_TOTAL.getEstado());
+        }
     }
 
     @Override
@@ -112,7 +125,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
             }
 
             @Override
-            public void procesando(int etapa) {
+            public void procesando(int etapa,ClaveAcceso clave) {
                 if(etapa==ComprobanteElectronicoService.ETAPA_GENERAR)
                     monitorData.getBarraProgreso().setValue(20);
                 
@@ -339,6 +352,16 @@ public class NotaCreditoModel extends NotaCreditoPanel {
             this.modeloTablaDetalle.addRow(fila);
         }
 
+    }
+
+    @Override
+    public void iniciar() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void nuevo() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
