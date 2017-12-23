@@ -25,6 +25,7 @@ import ec.com.codesoft.codefaclite.facturacion.model.NotaCreditoModel;
 import ec.com.codesoft.codefaclite.facturacion.model.UtilidadComprobanteModel;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
 import ec.com.codesoft.codefaclite.main.model.GeneralPanelModel;
+import ec.com.codesoft.codefaclite.main.model.HiloPublicidadCodefac;
 import ec.com.codesoft.codefaclite.main.model.LoginModel;
 import ec.com.codesoft.codefaclite.main.model.MenuControlador;
 import ec.com.codesoft.codefaclite.main.model.SplashScreenModel;
@@ -129,6 +130,13 @@ public class Main {
         }
         
         session.setUsuario(usuarioLogin);
+        
+        /**
+         * Agregando Hilo de Publicidad
+         */
+        HiloPublicidadCodefac hiloPublicidad=new HiloPublicidadCodefac();
+        hiloPublicidad.start();
+        panel.setHiloPublicidadCodefac(hiloPublicidad);
         
         panel.setVisible(true);
 

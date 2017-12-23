@@ -132,6 +132,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     
     private static double PROPORCION_HORIZONTAL_INICIAL=0.999999999d;
     private static double PROPORCION_VERTICAL_INICIAL=0.7d;
+    
+    /**
+     * Variable que va a controlar cada que tiempo se va a mostrar publicidad
+     */
+    private HiloPublicidadCodefac hiloPublicidadCodefac;
 
 
     public GeneralPanelModel() 
@@ -143,6 +148,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         agregarListenerGraphics();
                
         habilitarBotones(false);
+        
         
 
         /*
@@ -189,6 +195,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 Boolean respuesta=DialogoCodefac.dialogoPregunta("Alerta","Estas seguro que deseas salir?",DialogoCodefac.MENSAJE_ADVERTENCIA);
                 if(respuesta)
                 {
+                    hiloPublicidadCodefac.hiloPublicidad=false;
                     dispose();
                 }
                 
@@ -1480,6 +1487,14 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     public boolean validarPorGrupo(String nombre) {
         ControladorCodefacInterface panel=getPanelActivo();
         return validarFormulario(panel,nombre);
+    }
+
+    public HiloPublicidadCodefac getHiloPublicidadCodefac() {
+        return hiloPublicidadCodefac;
+    }
+
+    public void setHiloPublicidadCodefac(HiloPublicidadCodefac hiloPublicidadCodefac) {
+        this.hiloPublicidadCodefac = hiloPublicidadCodefac;
     }
 
     
