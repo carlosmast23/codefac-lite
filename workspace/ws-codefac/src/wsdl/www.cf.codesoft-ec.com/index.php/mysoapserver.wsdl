@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<definitions xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://www.cf.codesoft-ec.com/mysoapserver" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://www.cf.codesoft-ec.com/mysoapserver">
+<types>
+<xsd:schema elementFormDefault="qualified" targetNamespace="http://www.cf.codesoft-ec.com/mysoapserver"
+>
+ <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+ <xsd:import namespace="http://schemas.xmlsoap.org/wsdl/" />
+ <xsd:complexType name="addnumbersRequestType">
+  <xsd:all>
+   <xsd:element name="a" type="xsd:string"/>
+   <xsd:element name="b" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="addnumbersResponseType">
+  <xsd:all>
+   <xsd:element name="return" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="actualizarlicenciaRequestType">
+  <xsd:all>
+   <xsd:element name="email" type="xsd:string"/>
+   <xsd:element name="licencia" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="actualizarlicenciaResponseType">
+  <xsd:all>
+   <xsd:element name="return" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="comprobarRequestType">
+  <xsd:all>
+   <xsd:element name="u" type="xsd:string"/>
+   <xsd:element name="c" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="comprobarResponseType">
+  <xsd:all>
+   <xsd:element name="return" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="obtenerlicenciaRequestType">
+  <xsd:all>
+   <xsd:element name="email" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="obtenerlicenciaResponseType">
+  <xsd:all>
+   <xsd:element name="return" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:element name="addnumbers" type="tns:addnumbersRequestType"/>
+ <xsd:element name="addnumbersResponse" type="tns:addnumbersResponseType"/>
+ <xsd:element name="actualizarlicencia" type="tns:actualizarlicenciaRequestType"/>
+ <xsd:element name="actualizarlicenciaResponse" type="tns:actualizarlicenciaResponseType"/>
+ <xsd:element name="comprobar" type="tns:comprobarRequestType"/>
+ <xsd:element name="comprobarResponse" type="tns:comprobarResponseType"/>
+ <xsd:element name="obtenerlicencia" type="tns:obtenerlicenciaRequestType"/>
+ <xsd:element name="obtenerlicenciaResponse" type="tns:obtenerlicenciaResponseType"/>
+</xsd:schema>
+</types>
+<message name="addnumbersRequest">
+  <part name="parameters" element="tns:addnumbers" /></message>
+<message name="addnumbersResponse">
+  <part name="parameters" element="tns:addnumbersResponse" /></message>
+<message name="actualizarlicenciaRequest">
+  <part name="parameters" element="tns:actualizarlicencia" /></message>
+<message name="actualizarlicenciaResponse">
+  <part name="parameters" element="tns:actualizarlicenciaResponse" /></message>
+<message name="comprobarRequest">
+  <part name="parameters" element="tns:comprobar" /></message>
+<message name="comprobarResponse">
+  <part name="parameters" element="tns:comprobarResponse" /></message>
+<message name="obtenerlicenciaRequest">
+  <part name="parameters" element="tns:obtenerlicencia" /></message>
+<message name="obtenerlicenciaResponse">
+  <part name="parameters" element="tns:obtenerlicenciaResponse" /></message>
+<portType name="SOAPServerPortType">
+  <operation name="addnumbers">
+    <documentation>Addition Of Two Numbers</documentation>
+    <input message="tns:addnumbersRequest"/>
+    <output message="tns:addnumbersResponse"/>
+  </operation>
+  <operation name="actualizarlicencia">
+    <documentation>Actualizar Licencia Codefac</documentation>
+    <input message="tns:actualizarlicenciaRequest"/>
+    <output message="tns:actualizarlicenciaResponse"/>
+  </operation>
+  <operation name="comprobar">
+    <documentation>Comprobar Usuario</documentation>
+    <input message="tns:comprobarRequest"/>
+    <output message="tns:comprobarResponse"/>
+  </operation>
+  <operation name="obtenerlicencia">
+    <documentation>Obtener Licencia</documentation>
+    <input message="tns:obtenerlicenciaRequest"/>
+    <output message="tns:obtenerlicenciaResponse"/>
+  </operation>
+</portType>
+<binding name="SOAPServerBinding" type="tns:SOAPServerPortType">
+  <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+  <operation name="addnumbers">
+    <soap:operation soapAction="urn:http://www.cf.codesoft-ec.com/mysoapserver/addnumbers" style="document"/>
+    <input><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></input>
+    <output><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></output>
+  </operation>
+  <operation name="actualizarlicencia">
+    <soap:operation soapAction="urn:http://www.cf.codesoft-ec.com/mysoapserver/actualizarlicencia" style="document"/>
+    <input><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></input>
+    <output><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></output>
+  </operation>
+  <operation name="comprobar">
+    <soap:operation soapAction="urn:http://www.cf.codesoft-ec.com/mysoapserver/comprobar" style="document"/>
+    <input><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></input>
+    <output><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></output>
+  </operation>
+  <operation name="obtenerlicencia">
+    <soap:operation soapAction="urn:http://www.cf.codesoft-ec.com/mysoapserver/obtenerlicencia" style="document"/>
+    <input><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></input>
+    <output><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></output>
+  </operation>
+</binding>
+<service name="SOAPServer">
+  <port name="SOAPServerPort" binding="tns:SOAPServerBinding">
+    <soap:address location="http://www.cf.codesoft-ec.com/index.php/mysoapserver"/>
+  </port>
+</service>
+</definitions>

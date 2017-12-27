@@ -12,10 +12,11 @@ import ec.com.codesoft.codefaclite.servidor.facade.UsuarioFacade;
  *
  * @author Carlos
  */
-public class UsuarioServicio {
+public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade>{
     UsuarioFacade usuarioFacade=new UsuarioFacade();
 
     public UsuarioServicio() {
+        super(UsuarioFacade.class);
         this.usuarioFacade=new UsuarioFacade();
     }    
     

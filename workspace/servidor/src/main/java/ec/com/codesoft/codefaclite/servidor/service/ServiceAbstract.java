@@ -35,6 +35,11 @@ public abstract class ServiceAbstract<Entity,Facade>
         return this.facade.findAll();
     }
     
+    public void grabar(Entity entity)
+    {
+       this.facade.create(entity);
+    }
+    
     public List<Entity> obtenerPorMap(Map<String,Object> parametros)
     {
         return this.facade.findByMap(parametros);
@@ -49,4 +54,5 @@ public abstract class ServiceAbstract<Entity,Facade>
     {
        return AbstractFacade.findCountStaticDialog(query,map);
     }
+    
 }

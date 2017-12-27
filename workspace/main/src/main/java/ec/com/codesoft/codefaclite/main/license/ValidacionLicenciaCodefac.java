@@ -5,9 +5,14 @@
  */
 package ec.com.codesoft.codefaclite.main.license;
 
+import ec.com.codesoft.codefaclite.main.license.excepcion.NoExisteLicenciaException;
+import ec.com.codesoft.codefaclite.main.license.excepcion.ValidacionLicenciaExcepcion;
 import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
+import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import javax.mail.Session;
@@ -23,14 +28,19 @@ import java.util.logging.Logger;
  *
  * @author Carlos
  */
-public class ValidacionLicenciaCodefac {
-    private static final String NOMBRE_LICENCIA="licence.codefac";
+public class ValidacionLicenciaCodefac{
+    private static final String NOMBRE_LICENCIA="/licencia/licence.codefac";
     
     private Licencia licencia;
     private SessionCodefac sesion;
     private String path;
 
-    public void validar() {
+    public boolean validar() throws ValidacionLicenciaExcepcion,NoExisteLicenciaException{
+        /*                    
+        if (!verificarConexionInternet()) {
+            throw new ValidacionLicenciaExcepcion("No existe comunicacion con el servidor");
+        }*/
+        
         if(verificarExisteLicencia())
         {
             Properties p = obtenerLicencia();
@@ -38,26 +48,20 @@ public class ValidacionLicenciaCodefac {
             
             if(licencia.validarLicencia())
             {
-                System.out.println("Licencia correcta");
+                return true;
             }
             else
             {
-                System.out.println("Licencia incorrecta");
+                return false;
             }
             
         }
         else
         {
+            throw new NoExisteLicenciaException("No existe licencia");
+        }
+            
 
-        }
-            
-            
-        if (verificarConexionInternet()) {
-            System.out.println("si existe comunicacion con el servidor");
-        } else {
-            System.out.println("no existe comunicacion con el servidor");
-            return;
-        }
 
     }
 
@@ -99,10 +103,10 @@ public class ValidacionLicenciaCodefac {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    private boolean verificarConexionInternet() {
+    public boolean verificarConexionInternet() {
         try {
-
-            URL ruta = new URL("http://www.google.es");
+            //Pagina Web de la pagina de Codefac
+            URL ruta = new URL("http://www.cf.codesoft-ec.com/");
             URLConnection rutaC = ruta.openConnection();
             rutaC.connect();
             return true;
@@ -111,6 +115,86 @@ public class ValidacionLicenciaCodefac {
             return false;
         }
     }
+    
+    public Properties crearLicencia(String usuario)
+    {
+        FileOutputStream fr=null;
+        try {
+            String licencia=usuario+":"+UtilidadVarios.obtenerMac();            
+            licencia=BCrypt.hashpw(licencia,BCrypt.gensalt(12));
+            Properties prop = new Properties();
+            prop.setProperty("usuario",usuario);
+            prop.setProperty("licencia",licencia);
+            File file=new File(path+NOMBRE_LICENCIA);
+            
+             //crear toda la ruta si no existe
+            if (!file.exists()) {
+                file.getParentFile().mkdirs();
+                //file.mkdir();
+            }
+            
+            fr = new FileOutputStream(file);
+            prop.store(fr,"Properties");
+            fr.close();
+            return prop;
+            //saveProperties(prop);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ValidacionLicenciaCodefac.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ValidacionLicenciaCodefac.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                fr.close();
+            } catch (IOException ex) {
+                Logger.getLogger(ValidacionLicenciaCodefac.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+    
+    public Properties crearLicencia(String usuario,String licencia)
+    {
+        FileOutputStream fr=null;
+        try {
+            //String licencia=usuario+":"+UtilidadVarios.obtenerMac();            
+            //licencia=BCrypt.hashpw(licencia,BCrypt.gensalt(12));
+            Properties prop = new Properties();
+            prop.setProperty("usuario",usuario);
+            prop.setProperty("licencia",licencia);
+            File file=new File(path+NOMBRE_LICENCIA);
+            
+            //crear toda la ruta si no existe
+            if (!file.exists()) {
+                file.getParentFile().mkdirs();
+                //file.mkdir();
+            }
+            
+            fr = new FileOutputStream(file);
+            prop.store(fr,"Properties");
+            fr.close();
+            return prop;
+            //saveProperties(prop);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ValidacionLicenciaCodefac.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ValidacionLicenciaCodefac.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                fr.close();
+            } catch (IOException ex) {
+                Logger.getLogger(ValidacionLicenciaCodefac.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+   /* 
+    static void saveProperties(Properties p)throws IOException
+    {
+            FileOutputStream fr=new FileOutputStream(file);
+            p.store(fr,"Properties");
+            fr.close();
+            System.out.println("After saving properties:"+p);
+    }*/
 
     public String getPath() {
         return path;

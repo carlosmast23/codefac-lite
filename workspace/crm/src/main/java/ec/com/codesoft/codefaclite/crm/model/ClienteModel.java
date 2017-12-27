@@ -153,7 +153,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
 
     @Override
     public String getURLAyuda() {
-        return "https://support.office.com/es-es";
+        return "http://www.cf.codesoft-ec.com/ayuda";
     }
 
     @Override

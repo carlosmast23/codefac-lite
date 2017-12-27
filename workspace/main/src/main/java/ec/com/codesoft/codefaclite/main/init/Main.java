@@ -24,11 +24,16 @@ import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
 import ec.com.codesoft.codefaclite.facturacion.model.NotaCreditoModel;
 import ec.com.codesoft.codefaclite.facturacion.model.UtilidadComprobanteModel;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
+import ec.com.codesoft.codefaclite.main.license.ValidacionLicenciaCodefac;
+import ec.com.codesoft.codefaclite.main.license.excepcion.NoExisteLicenciaException;
+import ec.com.codesoft.codefaclite.main.license.excepcion.ValidacionLicenciaExcepcion;
 import ec.com.codesoft.codefaclite.main.model.GeneralPanelModel;
 import ec.com.codesoft.codefaclite.main.model.HiloPublicidadCodefac;
 import ec.com.codesoft.codefaclite.main.model.LoginModel;
 import ec.com.codesoft.codefaclite.main.model.MenuControlador;
 import ec.com.codesoft.codefaclite.main.model.SplashScreenModel;
+import ec.com.codesoft.codefaclite.main.model.ValidarLicenciaModel;
+import ec.com.codesoft.codefaclite.main.panel.ValidarLicenciaDialog;
 import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Empresa;
@@ -36,6 +41,7 @@ import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
+import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 import java.util.ArrayList;
@@ -115,6 +121,15 @@ public class Main {
         } catch (InterruptedException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        /**
+         * Realizar Analisis para verificar si existe la licencia instalada
+         */
+        if(!comprobarLicencia())
+        {
+            System.exit(0);
+        }
+        
         
         
         /**
@@ -274,6 +289,59 @@ public class Main {
             AbstractFacade.cargarEntityManager();
             
         }
+        
+    }
+    
+    private static boolean comprobarLicencia()
+    {
+        ParametroCodefacService servicio=new ParametroCodefacService();
+        String pathBase=servicio.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS).valor;
+        ValidacionLicenciaCodefac validacion = new ValidacionLicenciaCodefac();
+        validacion.setPath(pathBase);
+        
+        //Crear un dialogo si no existe la licencia
+        ValidarLicenciaModel licenciaDialog = new ValidarLicenciaModel(null, true);
+        licenciaDialog.setValidacionLicenciaCodefac(validacion);
+        
+        if (validacion.verificarExisteLicencia()) 
+        {
+            try {
+                if(validacion.validar())
+                {
+                    return true;
+                }
+                else
+                {//Si la licencia es incorrecta abre el dialogo de verificacion
+                    DialogoCodefac.mensaje("Error","La licencia es incorrecta para esta maquina",DialogoCodefac.MENSAJE_INCORRECTO);
+                    return false;
+                }
+            } catch (ValidacionLicenciaExcepcion ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NoExisteLicenciaException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } 
+        else //Cuando no existe la licencia
+        {
+            if(validacion.verificarConexionInternet())
+            {            
+                licenciaDialog.setVisible(true);
+                if(licenciaDialog.licenciaCreada)
+                {
+                    return comprobarLicencia(); //volver a verificar la licencia
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                DialogoCodefac.mensaje("Error","Para activar su producto conéctese a Internet",DialogoCodefac.MENSAJE_INCORRECTO);
+                return false;
+            }
+        }
+        return false;
         
     }
 }

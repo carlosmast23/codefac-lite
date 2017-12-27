@@ -5,7 +5,17 @@
  */
 package ec.com.codesoft.codefaclite.main.panel;
 
+import ec.com.codesoft.codefaclite.main.license.ValidacionLicenciaCodefac;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.ComprobarRequestType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.ComprobarResponseType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.SOAPServer;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.SOAPServerPortType;
 import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 
 /**
  *
@@ -13,6 +23,7 @@ import javax.swing.JButton;
  */
 public class ValidarLicenciaDialog extends javax.swing.JDialog {
 
+    public ValidacionLicenciaCodefac validacionLicenciaCodefac;
     /**
      * Creates new form ValidarLicenciaDialog
      */
@@ -44,6 +55,8 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
         btnSalirVerificar = new javax.swing.JButton();
         btnAyudaVerificar = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        lblRegistro = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
@@ -69,13 +82,9 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setText("Usuario:");
+        jLabel1.setText("Email");
 
         jLabel2.setText("Clave:");
-
-        txtUsuarioVerificar.setText("jTextField1");
-
-        txtClaveVerificar.setText("jPasswordField1");
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel3.setText("Nota:");
@@ -83,6 +92,11 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
         jLabel4.setText("Los datos que debe ingresar son los regstrados en la pagina web de Virtual Mall");
 
         btnVerificar.setText("Verificar");
+        btnVerificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVerificarActionPerformed(evt);
+            }
+        });
 
         btnSalirVerificar.setText("Salir");
         btnSalirVerificar.addActionListener(new java.awt.event.ActionListener() {
@@ -95,6 +109,13 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/general/codefac-logotipo-2.png"))); // NOI18N
         jLabel5.setText("jLabel5");
+
+        jLabel16.setText("Si no tienes cuenta registrate");
+
+        lblRegistro.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblRegistro.setForeground(new java.awt.Color(204, 0, 0));
+        lblRegistro.setText("AQUÍ");
+        lblRegistro.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -119,15 +140,19 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
                             .addComponent(jLabel1)
                             .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(txtUsuarioVerificar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(txtClaveVerificar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(btnVerificar, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnSalirVerificar, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addGap(103, 103, 103))
+                                .addComponent(btnSalirVerificar, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel16)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(lblRegistro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                .addGap(94, 94, 94))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -143,10 +168,14 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
                     .addComponent(jLabel2)
                     .addComponent(txtClaveVerificar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnVerificar)
                     .addComponent(btnSalirVerificar))
-                .addGap(46, 46, 46)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel16)
+                    .addComponent(lblRegistro))
+                .addGap(14, 14, 14)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -327,7 +356,7 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
         pack();
@@ -338,12 +367,16 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_btnAyudaRegistrarActionPerformed
 
     private void btnSalirVerificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirVerificarActionPerformed
-        
+        System.exit(0);
     }//GEN-LAST:event_btnSalirVerificarActionPerformed
 
     private void btnSalirRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirRegistroActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnSalirRegistroActionPerformed
+
+    private void btnVerificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerificarActionPerformed
+        
+    }//GEN-LAST:event_btnVerificarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -401,6 +434,7 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -414,6 +448,7 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JLabel lblRegistro;
     private javax.swing.JPasswordField txtClaveRegistrar;
     private javax.swing.JPasswordField txtClaveVerificar;
     private javax.swing.JTextField txtUsuarioRegistrar;
@@ -467,6 +502,65 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
     public void setBtnVerificar(JButton btnVerificar) {
         this.btnVerificar = btnVerificar;
     }
+
+    public JPasswordField getTxtClaveRegistrar() {
+        return txtClaveRegistrar;
+    }
+
+    public void setTxtClaveRegistrar(JPasswordField txtClaveRegistrar) {
+        this.txtClaveRegistrar = txtClaveRegistrar;
+    }
+
+    public JPasswordField getTxtClaveVerificar() {
+        return txtClaveVerificar;
+    }
+
+    public void setTxtClaveVerificar(JPasswordField txtClaveVerificar) {
+        this.txtClaveVerificar = txtClaveVerificar;
+    }
+
+    public JTextField getTxtUsuarioRegistrar() {
+        return txtUsuarioRegistrar;
+    }
+
+    public void setTxtUsuarioRegistrar(JTextField txtUsuarioRegistrar) {
+        this.txtUsuarioRegistrar = txtUsuarioRegistrar;
+    }
+
+    public JTextField getTxtUsuarioVerificar() {
+        return txtUsuarioVerificar;
+    }
+
+    public void setTxtUsuarioVerificar(JTextField txtUsuarioVerificar) {
+        this.txtUsuarioVerificar = txtUsuarioVerificar;
+    }
+
+    public JLabel getLblRegistro() {
+        return lblRegistro;
+    }
+
+    public void setLblRegistro(JLabel lblRegistro) {
+        this.lblRegistro = lblRegistro;
+    }
+
+    public JTabbedPane getjTabbedPane1() {
+        return jTabbedPane1;
+    }
+
+    public void setjTabbedPane1(JTabbedPane jTabbedPane1) {
+        this.jTabbedPane1 = jTabbedPane1;
+    }
+
+    public ValidacionLicenciaCodefac getValidacionLicenciaCodefac() {
+        return validacionLicenciaCodefac;
+    }
+
+    public void setValidacionLicenciaCodefac(ValidacionLicenciaCodefac validacionLicenciaCodefac) {
+        this.validacionLicenciaCodefac = validacionLicenciaCodefac;
+    }
+    
+    
+    
     
     
 

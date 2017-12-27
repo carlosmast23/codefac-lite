@@ -7,6 +7,10 @@ package ec.com.codesoft.codefaclite.main.test;
 
 import ec.com.codesoft.codefaclite.main.license.BCrypt;
 import ec.com.codesoft.codefaclite.main.license.ValidacionLicenciaCodefac;
+import ec.com.codesoft.codefaclite.main.license.excepcion.NoExisteLicenciaException;
+import ec.com.codesoft.codefaclite.main.license.excepcion.ValidacionLicenciaExcepcion;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -14,15 +18,30 @@ import ec.com.codesoft.codefaclite.main.license.ValidacionLicenciaCodefac;
  */
 public class LicenciaTest {
     public static void main(String[] args) {
-        ValidacionLicenciaCodefac validacion=new ValidacionLicenciaCodefac();
-        validacion.setPath("E:\\codefac\\licencia\\");
-        validacion.validar();
-        
-        String  originalPassword = "carlos:9C-AD-97-81-A7-BE";
-		String generatedSecuredPasswordHash = BCrypt.hashpw(originalPassword, BCrypt.gensalt(12));
-		System.out.println(generatedSecuredPasswordHash);
-		
-		boolean matched = BCrypt.checkpw(originalPassword, generatedSecuredPasswordHash);
-		System.out.println(matched);
+        try {
+            ValidacionLicenciaCodefac validacion=new ValidacionLicenciaCodefac();
+            validacion.setPath("E:\\codefac\\licencia\\");
+            if(validacion.verificarExisteLicencia())
+            {
+                System.out.println(validacion.validar());
+            }
+            else
+            {
+                validacion.crearLicencia("pato");
+                System.out.println("No existe la licencia");
+            }
+            
+            /*
+            String  originalPassword = "carlos:9C-AD-97-81-A7-BE";
+            String generatedSecuredPasswordHash = BCrypt.hashpw(originalPassword, BCrypt.gensalt(12));
+            System.out.println(generatedSecuredPasswordHash);
+            
+            boolean matched = BCrypt.checkpw(originalPassword, generatedSecuredPasswordHash);
+            System.out.println(matched);*/
+        } catch (ValidacionLicenciaExcepcion ex) {
+            Logger.getLogger(LicenciaTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoExisteLicenciaException ex) {
+            Logger.getLogger(LicenciaTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

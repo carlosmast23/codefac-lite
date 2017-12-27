@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.main.license;
 
+import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
 import java.io.FileWriter;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -27,33 +28,26 @@ public class Licencia {
     }
     
     
-    private String obtenerMac()
+    public String obtenerMac()
     {
-        NetworkInterface a;
-        String linea;
-        try {
-            a = NetworkInterface.getByInetAddress(InetAddress.getLocalHost());
-            byte[] mac = a.getHardwareAddress();
-
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < mac.length; i++) {
-                sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : ""));
-            }
-            System.out.println(sb.toString());
-            return sb.toString();
-
-        } 
-        catch (Exception e) 
-        {
-            e.printStackTrace();
-        }
-        return "";
+        //UtilidadVarios.obtenerMac();
+        return UtilidadVarios.obtenerMacSinInternet();
     }
     
     public boolean validarLicencia()
     {
-        return BCrypt.checkpw(propiedades.getProperty(PROPIEDAD_USUARIO)+":"+mac,propiedades.getProperty(PROPIEDAD_LICENCIA));
+        String usuario=propiedades.getProperty(PROPIEDAD_USUARIO);
+        String licencia=propiedades.getProperty(PROPIEDAD_LICENCIA);
+        try
+        {
+            return BCrypt.checkpw(usuario+":"+mac,licencia);
+        }
+        catch(java.lang.IllegalArgumentException iae)
+        {
+            return false;
+        }
     }
+    
     
     
 }
