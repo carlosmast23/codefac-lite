@@ -329,7 +329,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     
     @LimpiarAnotacion
     @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
-    @ValidacionCodefacAnotacion(requerido=true ,min=0, expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Direccion")
+    @ValidacionCodefacAnotacion(requerido=false ,min=0, expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Direccion")
     public JTextArea getjTextAreaDireccion() {
         return jTextAreaDireccion;
     }
@@ -340,7 +340,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     
     @LimpiarAnotacion
     @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
-    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0][0-9]{9}$",nombre = "Celular")
+    @ValidacionCodefacAnotacion(requerido=false ,expresionRegular = "^[0][0-9]{9}$",nombre = "Celular")
     public JTextField getjTextCelular() {
         return jTextCelular;
     }
@@ -362,7 +362,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
 
     @LimpiarAnotacion
     @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
-    @ValidacionCodefacAnotacion(requerido=true , min=0 ,expresionRegular = "^[0-9]*$",nombre = "Extension")
+    @ValidacionCodefacAnotacion(requerido=false , min=0 ,expresionRegular = "^[0-9]*$",nombre = "Extension")
     public JTextField getjTextExtension() {
         return jTextExtension;
     }
@@ -373,7 +373,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     
     @LimpiarAnotacion
     @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
-    @ValidacionCodefacAnotacion(personalizado ={"validarCedula"}  ,requerido=true , min=0 ,max = 10,expresionRegular = "",nombre = "Identificacion")
+    @ValidacionCodefacAnotacion(personalizado ={"validarIdentificacionSegunOpcionEstablecida"}  ,requerido=true , min=0 ,max = 13,expresionRegular = "",nombre = "Identificacion")
     public JTextField getjTextIdentificacion() {
         return jTextIdentificacion;
     }
@@ -384,7 +384,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     
     @LimpiarAnotacion
     @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
-    @ValidacionCodefacAnotacion(requerido=true , min=5 ,max = 100,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Nombre Social")
+    @ValidacionCodefacAnotacion(requerido=true , min=0 ,max = 100,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Nombre Social")
     public JTextField getjTextNombreSocial() {
         return jTextNombreSocial;
     }
@@ -395,7 +395,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     
     @LimpiarAnotacion
     @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
-    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0][0-9]{8}$",nombre = "Telefono")
+    @ValidacionCodefacAnotacion(requerido=false ,expresionRegular = "^[0][0-9]{8}$",nombre = "Telefono")
     public JTextField getjTextTelefono() {
         return jTextTelefono;
     }

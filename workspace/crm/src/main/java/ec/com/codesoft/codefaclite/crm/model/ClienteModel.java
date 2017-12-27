@@ -23,6 +23,8 @@ import ec.com.codesoft.codefaclite.servidor.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.ClienteEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
 import ec.com.codesoft.codefaclite.servidor.service.SriService;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -58,6 +60,8 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     private Persona persona;
     private String comboIdentificacion [] = {"CEDULA","RUC","PASAPORTE","IDENTIFICACION DEL EXTERIOR","PLACA"};
     private String comboTipoCliente [] = {"CLIENTE","SUJETO RETENIDO","DESTINATARIO"};
+    
+    private int opcionIdentificacion = 4;
 
     public ClienteModel()
     {
@@ -65,6 +69,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         getjTextExtension().setText("0");
         cargarClientes();
         cargarDatosIniciales();
+        addListenerCombos();
     }
     
     
@@ -190,10 +195,30 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         System.out.println("Datos cargados ");
     }
     
-    @validacionPersonalizadaAnotacion(errorTitulo = "formato cedula incorrecto")
-    public boolean validarCedula()
+    @validacionPersonalizadaAnotacion(errorTitulo = "Formato de identificacion")
+    public boolean validarIdentificacionSegunOpcionEstablecida()
+    {
+        boolean verificador = false;
+        switch(this.opcionIdentificacion)
+        {
+            case 4:
+                verificador = validarRUC(getjTextIdentificacion().getText());
+            break;
+            case 5:
+                verificador = validarCedula(getjTextIdentificacion().getText());
+            break;
+            case 6:
+                verificador = true;
+            break;
+            default:
+                 verificador = false;
+            break;
+        }
+        return verificador;
+    }        
+            
+    public boolean validarCedula(String cedula)
     {          
-        String cedula=getjTextIdentificacion().getText();
         boolean cedulaCorrecta = false;
         try 
         {
@@ -307,7 +332,10 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         identificaciones=servicioSri.obtenerIdentificaciones(SriIdentificacion.CLIENTE);
         getjComboIdentificacion().removeAllItems();
         for (SriIdentificacion identificacion : identificaciones) {
-            getjComboIdentificacion().addItem(identificacion);
+            if(!(identificacion.getCodigo().equals("07") || identificacion.getCodigo().equals("19")))
+            {
+                getjComboIdentificacion().addItem(identificacion);
+            }
         }
         
     }
@@ -355,7 +383,49 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    public void addListenerCombos()
+    {
+        getjComboIdentificacion().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                opcionIdentificacion = Integer.parseInt(((SriIdentificacion)getjComboIdentificacion().getSelectedItem()).getCodigo());
+                System.out.println("Info combo: " +((SriIdentificacion)getjComboIdentificacion().getSelectedItem()).getCodigo());
+            }
+        });
+    }       
 
-
-            
+    private boolean validarRUC(String RUC) 
+    {
+        System.out.println("Longitud de RUC" + RUC.length());
+        if(RUC.length() == 13)
+        {
+            String cedula = RUC.substring(0,10);
+            System.out.println("CEDULA: " + cedula);
+            String ruc = RUC.substring(10,13);
+            System.out.println("RUC: " + ruc);
+            System.out.println("VALor cedula " +  validarCedula(cedula));
+            System.out.println("VALor ruc " +  isNumeric(ruc));
+            if(validarCedula(cedula) && isNumeric(ruc))
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    public boolean isNumeric(String cadena) 
+    {
+        boolean resultado;
+        try
+        {
+            Integer.parseInt(cadena);
+            resultado = true;
+        } catch (NumberFormatException excepcion) {
+            resultado = false;
+        }
+        return resultado;
+    }
+           
+          
 }

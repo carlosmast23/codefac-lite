@@ -29,6 +29,10 @@ create table FACTURA
     TOTAL decimal(7,2),
     USUARIO_ID decimal,
     ESTADO varchar(1),
+    RAZON_SOCIAL varchar(256),
+    IDENTIFICACION varchar(15),
+    DIRECCION varchar(1024),
+    TELEFONO varchar(10),
     primary key (ID),
     CONSTRAINT id_cliente_factura_fk FOREIGN KEY (CLIENTE_ID) REFERENCES CLIENTE(CLIENTE_ID)
 
