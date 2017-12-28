@@ -387,7 +387,7 @@ public class FacturacionModel extends FacturacionPanel {
         facturaProcesando = factura;
 
         DialogoCodefac.mensaje("Correcto", "La factura se grabo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-        //Despues de implemetar todo el metodo de grabar
+        //Despues de implemetar el metodo de grabar
         FacturacionElectronica facturaElectronica = new FacturacionElectronica(factura, session, this.panelPadre);
         facturaElectronica.setFactura(factura);
         facturaElectronica.setMapInfoAdicional(datosAdicionales);
@@ -825,7 +825,7 @@ public class FacturacionModel extends FacturacionPanel {
     public BigDecimal obtenerValorIva() {
         Map<String, Object> map = new HashMap<>();
         ImpuestoDetalleService impuestoDetalleService = new ImpuestoDetalleService();
-        map.put("tarifa", 12);
+        map.put("tarifa", 12); // TODO Parametrizar el iva con la variable del sistema
         List<ImpuestoDetalle> listaImpuestoDetalles = impuestoDetalleService.buscarImpuestoDetallePorMap(map);
         listaImpuestoDetalles.forEach((iD) -> {
             BigDecimal iva = iD.getPorcentaje();
