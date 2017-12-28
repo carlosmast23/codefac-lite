@@ -299,9 +299,6 @@ public class Main {
         ValidacionLicenciaCodefac validacion = new ValidacionLicenciaCodefac();
         validacion.setPath(pathBase);
         
-        //Crear un dialogo si no existe la licencia
-        ValidarLicenciaModel licenciaDialog = new ValidarLicenciaModel(null, true);
-        licenciaDialog.setValidacionLicenciaCodefac(validacion);
         
         if (validacion.verificarExisteLicencia()) 
         {
@@ -323,6 +320,9 @@ public class Main {
         } 
         else //Cuando no existe la licencia
         {
+            //Crear un dialogo si no existe la licencia
+            ValidarLicenciaModel licenciaDialog = new ValidarLicenciaModel(null, true);
+            licenciaDialog.setValidacionLicenciaCodefac(validacion);
             if(validacion.verificarConexionInternet())
             {            
                 licenciaDialog.setVisible(true);
