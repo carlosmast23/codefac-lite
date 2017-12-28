@@ -146,29 +146,29 @@ public class FacturaReporteModel extends FacturaReportePanel {
                         fila.add(factura.getCliente().getRazonSocial());
                         fila.add(factura.getCliente().getNombreLegal());
                         fila.add(ef.getNombre());
-                        fila.add(factura.getSubtotalDoce().toString());
-                        fila.add(factura.getSubtotalCero().toString());
-                        fila.add(factura.getValorIvaDoce().toString());
+                        fila.add(factura.getSubtotalImpuestos().toString());
+                        fila.add(factura.getSubtotalSinImpuestos().toString());
+                        fila.add(factura.getIva().toString());
 
                         if (estadoSeleccionado.getTipo() == "T") {
                             NotaCredito notaCredito = verificarPorFactura(factura);
                             if (notaCredito != null) {
                                 d = factura.getTotal().subtract(notaCredito.getTotal());
-                                acum = acum.add(factura.getSubtotalCero().subtract(notaCredito.getSubtotalCero()));
-                                acumdoce = acumdoce.add(factura.getSubtotalDoce().subtract(notaCredito.getSubtotalDoce()));
-                                acumiva = acumiva.add(factura.getValorIvaDoce().subtract(notaCredito.getValorIvaDoce()));
+                                acum = acum.add(factura.getSubtotalSinImpuestos().subtract(notaCredito.getSubtotalCero()));
+                                acumdoce = acumdoce.add(factura.getSubtotalImpuestos().subtract(notaCredito.getSubtotalDoce()));
+                                acumiva = acumiva.add(factura.getIva().subtract(notaCredito.getValorIvaDoce()));
                             } else {
                                 d = factura.getTotal();
-                                acum = acum.add(factura.getSubtotalCero());
-                                acumdoce = acumdoce.add(factura.getSubtotalDoce());
-                                acumiva = acumiva.add(factura.getValorIvaDoce());
+                                acum = acum.add(factura.getSubtotalSinImpuestos());
+                                acumdoce = acumdoce.add(factura.getSubtotalImpuestos());
+                                acumiva = acumiva.add(factura.getIva());
                             }
                             fila.add(d.toString());
                         } else {
                             fila.add(factura.getTotal().toString());
-                            acum = acum.add(factura.getSubtotalCero());
-                            acumdoce = acumdoce.add(factura.getSubtotalDoce());
-                            acumiva = acumiva.add(factura.getValorIvaDoce());
+                            acum = acum.add(factura.getSubtotalSinImpuestos());
+                            acumdoce = acumdoce.add(factura.getSubtotalImpuestos());
+                            acumiva = acumiva.add(factura.getIva());
                         }
                         modeloTablaFacturas.addRow(fila);
                     }
@@ -267,20 +267,20 @@ public class FacturaReporteModel extends FacturaReportePanel {
                     NotaCredito notaCredito = verificarPorFactura(factura);
                     if (notaCredito != null) {
                         d = factura.getTotal().subtract(notaCredito.getTotal());
-                        acum = acum.add(factura.getSubtotalCero().subtract(notaCredito.getSubtotalCero()));
-                        acumdoce = acumdoce.add(factura.getSubtotalDoce().subtract(notaCredito.getSubtotalDoce()));
-                        acumiva = acumiva.add(factura.getValorIvaDoce().subtract(notaCredito.getValorIvaDoce()));
+                        acum = acum.add(factura.getSubtotalSinImpuestos().subtract(notaCredito.getSubtotalCero()));
+                        acumdoce = acumdoce.add(factura.getSubtotalImpuestos().subtract(notaCredito.getSubtotalDoce()));
+                        acumiva = acumiva.add(factura.getIva().subtract(notaCredito.getValorIvaDoce()));
                     } else {
                         d = factura.getTotal();
-                        acum = acum.add(factura.getSubtotalCero());
-                        acumdoce = acumdoce.add(factura.getSubtotalDoce());
-                        acumiva = acumiva.add(factura.getValorIvaDoce());
+                        acum = acum.add(factura.getSubtotalSinImpuestos());
+                        acumdoce = acumdoce.add(factura.getSubtotalImpuestos());
+                        acumiva = acumiva.add(factura.getIva());
                     }
                 } else {
                     d = factura.getTotal();
-                    acum = acum.add(factura.getSubtotalCero());
-                    acumdoce = acumdoce.add(factura.getSubtotalDoce());
-                    acumiva = acumiva.add(factura.getValorIvaDoce());
+                    acum = acum.add(factura.getSubtotalSinImpuestos());
+                    acumdoce = acumdoce.add(factura.getSubtotalImpuestos());
+                    acumiva = acumiva.add(factura.getIva());
                 }
                 FacturaEnumEstado ef = FacturaEnumEstado.getEnum(factura.getEstado());
 
@@ -291,9 +291,9 @@ public class FacturaReporteModel extends FacturaReportePanel {
                         factura.getCliente().getRazonSocial(),
                         factura.getCliente().getNombreLegal(),
                         ef.getNombre(),
-                        factura.getSubtotalDoce().toString(),
-                        factura.getSubtotalCero().toString(),
-                        factura.getValorIvaDoce().toString(),
+                        factura.getSubtotalImpuestos().toString(),
+                        factura.getSubtotalSinImpuestos().toString(),
+                        factura.getIva().toString(),
                         d.toString()
                 ));
             }
