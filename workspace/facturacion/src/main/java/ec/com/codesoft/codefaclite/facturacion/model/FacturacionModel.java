@@ -825,7 +825,7 @@ public class FacturacionModel extends FacturacionPanel {
     public BigDecimal obtenerValorIva() {
         Map<String, Object> map = new HashMap<>();
         ImpuestoDetalleService impuestoDetalleService = new ImpuestoDetalleService();
-        map.put("tarifa", 12); // TODO Parametrizar el iva con la variable del sistema
+        map.put("tarifa", 12); //TODO Parametrizar el iva con la variable del sistema
         List<ImpuestoDetalle> listaImpuestoDetalles = impuestoDetalleService.buscarImpuestoDetallePorMap(map);
         listaImpuestoDetalles.forEach((iD) -> {
             BigDecimal iva = iD.getPorcentaje();

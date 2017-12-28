@@ -142,6 +142,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     public GeneralPanelModel() 
     {
         iniciarComponentes();
+        agregarListenerBotonesDefecto();
         agregarListenerBotones();
         agregarListenerSplit();
         agregarListenerFrame();
@@ -1499,12 +1500,18 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         this.hiloPublicidadCodefac = hiloPublicidadCodefac;
     }
 
-    
-    
-
-    
-    
-    
-    
+    private void agregarListenerBotonesDefecto() {
+        getjMenuItemSalir().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Boolean respuesta=DialogoCodefac.dialogoPregunta("Alerta","Estas seguro que deseas salir?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                if(respuesta)
+                {
+                    hiloPublicidadCodefac.hiloPublicidad=false;
+                    dispose();
+                }
+            }
+        });
+    }
    
 }
