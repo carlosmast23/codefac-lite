@@ -314,6 +314,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         
         PanelSecundarioAbstract panelSecundario = panelesSecundariosMap.get(PanelSecundarioAbstract.PANEL_AYUDA);
         JPanel jpanel = (JPanel) panelSecundario;
+        int ancho=getjPanelSeleccion().getWidth()-1;
+        int alto=getjPanelSeleccion().getHeight()-1;
 
         if(browser!=null)
         {
@@ -322,7 +324,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             {
                 browser = new SwingBrowser();
                 browser.loadURL(panel.getURLAyuda());
-                browser.setBounds(1, 1, jpanel.getWidth() - 1, jpanel.getHeight() - 1);
+                browser.setBounds(1, 1,ancho,alto);
                 jpanel.removeAll();
                 jpanel.add(browser);
             }
@@ -338,14 +340,14 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             if(panel!=null)
             {
                 browser.loadURL(panel.getURLAyuda());
-                browser.setBounds(1, 1, jpanel.getWidth() - 1, jpanel.getHeight() - 1);
+                browser.setBounds(1, 1,ancho,alto);
                 jpanel.removeAll();
                 jpanel.add(browser);
             }
             else
             {
                 browser.loadURL("https://www.google.com.ec/");
-                browser.setBounds(1, 1, jpanel.getWidth() - 1, jpanel.getHeight() - 1);
+                browser.setBounds(1, 1,ancho,alto);
                 jpanel.removeAll();
                 jpanel.add(browser);
             }
