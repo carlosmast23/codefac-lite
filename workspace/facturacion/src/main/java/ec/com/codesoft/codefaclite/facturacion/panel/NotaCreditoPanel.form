@@ -304,7 +304,9 @@
         </Component>
         <Component class="javax.swing.JTextField" name="txtReferenciaFactura">
           <Properties>
-            <Property name="text" type="java.lang.String" value="                                       ..."/>
+            <Property name="horizontalAlignment" type="int" value="0"/>
+            <Property name="text" type="java.lang.String" value="..."/>
+            <Property name="toolTipText" type="java.lang.String" value=""/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Constraints>
@@ -367,7 +369,8 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblDireccionCliente">
           <Properties>
-            <Property name="text" type="java.lang.String" value="                                       ..."/>
+            <Property name="horizontalAlignment" type="int" value="0"/>
+            <Property name="text" type="java.lang.String" value="..."/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -377,7 +380,8 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblNombreCliente">
           <Properties>
-            <Property name="text" type="java.lang.String" value="                                       ..."/>
+            <Property name="horizontalAlignment" type="int" value="0"/>
+            <Property name="text" type="java.lang.String" value="..."/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -387,7 +391,8 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblTelefonoCliente">
           <Properties>
-            <Property name="text" type="java.lang.String" value="                                       ..."/>
+            <Property name="horizontalAlignment" type="int" value="0"/>
+            <Property name="text" type="java.lang.String" value="..."/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

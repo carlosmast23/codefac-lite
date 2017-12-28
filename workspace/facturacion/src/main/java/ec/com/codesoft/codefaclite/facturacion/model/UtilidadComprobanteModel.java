@@ -108,7 +108,7 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
 
     @Override
     public String getURLAyuda() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "http://www.cf.codesoft-ec.com/ayuda#eutilidad";
     }
 
     @Override

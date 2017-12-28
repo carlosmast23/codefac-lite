@@ -92,8 +92,8 @@ public class FacturacionModel extends FacturacionPanel {
     //private BigDecimal valorTotal;
     //private BigDecimal descuento;
     //Datos informativos del descuento
-    private BigDecimal subTotalDescuentoConImpuesto;
-    private BigDecimal subTotalDescuentoSinImpuesto;
+    //private BigDecimal subTotalDescuentoConImpuesto;
+    //private BigDecimal subTotalDescuentoSinImpuesto;
     //Da
     //private BigDecimal subtotal12Descuento;
     //private BigDecimal subtotal0Descuento;
@@ -152,8 +152,8 @@ public class FacturacionModel extends FacturacionPanel {
         this.factura.setSubtotalSinImpuestos(BigDecimal.ZERO);
         this.factura.setIva(BigDecimal.ZERO);
         this.factura.setTotal(BigDecimal.ZERO);
-        this.subTotalDescuentoConImpuesto = new BigDecimal(0);
-        this.subTotalDescuentoSinImpuesto = new BigDecimal(0);
+       //this.subTotalDescuentoConImpuesto = new BigDecimal(0);
+        //this.subTotalDescuentoSinImpuesto = new BigDecimal(0);
         this.factura.setDescuentoImpuestos(new BigDecimal(0));
         //this.subtotalSinImpuestosDescuento=BigDecimal.ZERO;
         this.bandera = false;
@@ -637,7 +637,7 @@ public class FacturacionModel extends FacturacionPanel {
 
     @Override
     public String getURLAyuda() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "http://www.cf.codesoft-ec.com/ayuda#efactura";
     }
 
     @Override
@@ -765,6 +765,7 @@ public class FacturacionModel extends FacturacionPanel {
     }
 
     public void calcularTotalDescuento(List<FacturaDetalle> facturaDetalles) {
+        /*
         //this.descuento = new BigDecimal(0);
         this.subTotalDescuentoConImpuesto = new BigDecimal(0);
         this.subTotalDescuentoSinImpuesto = new BigDecimal(0);
@@ -780,7 +781,7 @@ public class FacturacionModel extends FacturacionPanel {
         });
         //this.descuento = this.descuento.setScale(2, BigDecimal.ROUND_HALF_UP);
         this.subTotalDescuentoConImpuesto = this.subTotalDescuentoConImpuesto.setScale(2, BigDecimal.ROUND_HALF_UP);
-        this.subTotalDescuentoSinImpuesto = this.subTotalDescuentoSinImpuesto.setScale(2, BigDecimal.ROUND_HALF_UP);
+        this.subTotalDescuentoSinImpuesto = this.subTotalDescuentoSinImpuesto.setScale(2, BigDecimal.ROUND_HALF_UP);*/
     }
 
     public void calcularSubtotal12(List<FacturaDetalle> facturaDetalles) {
@@ -792,12 +793,14 @@ public class FacturacionModel extends FacturacionPanel {
                 this.factura.setSubtotalImpuestos (factura.getSubtotalImpuestos().add(facturaDetalle.getTotal()));
                 //this.factura.setDescuentoImpuestos(this.factura.getDescuentoImpuestos().add(facturaDetalle.getTotal()));
                 this.factura.setDescuentoImpuestos(this.factura.getDescuentoImpuestos().add(facturaDetalle.getDescuento()));
+                System.out.println(facturaDetalle.getDescuento());
             }
         }
         
         //Escalar valores
         this.factura.setSubtotalImpuestos(factura.getSubtotalImpuestos().setScale(2, BigDecimal.ROUND_HALF_UP));
         this.factura.setDescuentoImpuestos(this.factura.getDescuentoImpuestos().setScale(2, BigDecimal.ROUND_HALF_UP));
+        System.out.println(this.factura.getDescuentoImpuestos());
     }
 
     public void calcularSubtotales() {
@@ -840,14 +843,14 @@ public class FacturacionModel extends FacturacionPanel {
         /**
          * Setear los componentes graficos despues de los calculos
          */
-        getLblSubtotalSinImpuesto().setText("" + factura.getSubtotalSinImpuestos());
+        getLblSubtotalSinImpuesto().setText("" + factura.getSubtotalSinImpuestos().add(factura.getSubtotalImpuestos()));
         getLblSubtotal12().setText("" + factura.getSubtotalImpuestos());
         getLblSubtotal0().setText("" + factura.getSubtotalSinImpuestos());
         getLblIva12().setText("" + factura.getIva());
         getTxtValorTotal().setText("" + this.factura.getTotal());
-        getLblSubTotalDescuentoConImpuesto().setText("" + this.subTotalDescuentoConImpuesto);
-        getLblSubTotalDescuentoSinImpuesto().setText("" + this.subTotalDescuentoSinImpuesto);
-        getLblTotalDescuento().setText("" + this.subTotalDescuentoConImpuesto.add(this.subTotalDescuentoSinImpuesto));
+        getLblSubTotalDescuentoConImpuesto().setText("" + factura.getDescuentoImpuestos());
+        getLblSubTotalDescuentoSinImpuesto().setText("" + factura.getDescuentoSinImpuestos());
+        getLblTotalDescuento().setText("" + factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()));
     }
 
     private void setearValoresCliente() {

@@ -284,7 +284,9 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         PanelDatosNotaCredito.add(jLabel4, gridBagConstraints);
 
-        txtReferenciaFactura.setText("                                       ...");
+        txtReferenciaFactura.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtReferenciaFactura.setText("...");
+        txtReferenciaFactura.setToolTipText("");
         txtReferenciaFactura.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -326,7 +328,8 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         PanelDatosNotaCredito.add(jLabel8, gridBagConstraints);
 
-        lblDireccionCliente.setText("                                       ...");
+        lblDireccionCliente.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblDireccionCliente.setText("...");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 1;
@@ -335,7 +338,8 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         PanelDatosNotaCredito.add(lblDireccionCliente, gridBagConstraints);
 
-        lblNombreCliente.setText("                                       ...");
+        lblNombreCliente.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblNombreCliente.setText("...");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
@@ -344,7 +348,8 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         PanelDatosNotaCredito.add(lblNombreCliente, gridBagConstraints);
 
-        lblTelefonoCliente.setText("                                       ...");
+        lblTelefonoCliente.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTelefonoCliente.setText("...");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;

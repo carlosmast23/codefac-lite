@@ -48,43 +48,41 @@ import net.sf.jasperreports.view.JasperViewer;
  *
  * @author PC
  */
-public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Persona>
-{
-     /**
+public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Persona> {
+
+    /**
      * Modelo para manejar las identificaciones del sri
      */
     private DefaultComboBoxModel<SriIdentificacion> modelComboIdentificacion;
     List<SriIdentificacion> identificaciones;
-    
+
     private PersonaService personaService;
     private Persona persona;
     private String comboIdentificacion [] = {"CEDULA","RUC","PASAPORTE","IDENTIFICACION DEL EXTERIOR","PLACA"};
     private String comboTipoCliente [] = {"CLIENTE","SUJETO RETENIDO","DESTINATARIO"};
-    
+   
     private int opcionIdentificacion = 4;
 
-    public ClienteModel()
-    {
+    public ClienteModel() {
         this.personaService = new PersonaService();
         getjTextExtension().setText("0");
         cargarClientes();
         cargarDatosIniciales();
         addListenerCombos();
     }
-    
-    
+
     @Override
-    public void grabar() throws ExcepcionCodefacLite
-    {
-        if(!prevalidar())
-        {
+    public void grabar() throws ExcepcionCodefacLite {
+        if (!prevalidar()) {
             //Cancela el evento guardar porque no prevalido
             throw new ExcepcionCodefacLite("Error al prevalidar");
         }
-        
+
         persona = new Persona();
+        persona.setNombres(getjTextNombres().getText());
+        persona.setApellidos(getjTextApellidos().getText());
         persona.setRazonSocial(getjTextNombreSocial().getText());
-        persona.setTipoIdentificacion(((SriIdentificacion)getjComboIdentificacion().getSelectedItem()).getCodigo());
+        persona.setTipoIdentificacion(((SriIdentificacion) getjComboIdentificacion().getSelectedItem()).getCodigo());
         persona.setIdentificacion(getjTextIdentificacion().getText());
         persona.setTipCliente((String) getjComboTipoCliente().getSelectedItem());
         persona.setDireccion(getjTextAreaDireccion().getText());
@@ -92,7 +90,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         persona.setExtensionTelefono(getjTextExtension().getText());
         persona.setTelefonoCelular(getjTextCelular().getText());
         persona.setCorreoElectronico(getjTextCorreo().getText());
-        persona.setEstado(((ClienteEnumEstado)getCmbEstado().getSelectedItem()).getEstado());
+        persona.setEstado(((ClienteEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
         personaService.grabar(persona);
         DialogoCodefac.mensaje("Datos correctos", "El cliente se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         System.err.println("Se grabo correctamente");
@@ -100,26 +98,26 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite
-    {
+    public void editar() throws ExcepcionCodefacLite {
+        persona.setNombres(getjTextNombres().getText());
+        persona.setApellidos(getjTextApellidos().getText());
         persona.setRazonSocial(getjTextNombreSocial().getText());
-        persona.setTipoIdentificacion(((SriIdentificacion)getjComboIdentificacion().getSelectedItem()).getCodigo());
+        persona.setTipoIdentificacion(((SriIdentificacion) getjComboIdentificacion().getSelectedItem()).getCodigo());
         persona.setIdentificacion(getjTextIdentificacion().getText());
-        persona.setTipCliente((String)getjComboTipoCliente().getSelectedItem());
+        persona.setTipCliente((String) getjComboTipoCliente().getSelectedItem());
         persona.setDireccion(getjTextAreaDireccion().getText());
         persona.setTelefonoConvencional(getjTextTelefono().getText());
         persona.setExtensionTelefono(getjTextExtension().getText());
         persona.setTelefonoCelular(getjTextCelular().getText());
         persona.setCorreoElectronico(getjTextCorreo().getText());
-   
+
         personaService.editar(persona);
-        
+
         System.out.println("Se edito correctamente");
     }
 
     @Override
-    public void eliminar() 
-    {
+    public void eliminar() {
         personaService.eliminar(persona);
         System.out.println("Se elimino correctamente");
     }
@@ -131,9 +129,9 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
-        Map<Integer,Boolean> permisos=new HashMap<Integer,Boolean>();
-        permisos.put(GeneralPanelInterface.BOTON_NUEVO,true);
-        permisos.put(GeneralPanelInterface.BOTON_GRABAR,true);
+        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
+        permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
         permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
         permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
         permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
@@ -141,24 +139,23 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         return permisos;
     }
 
-
     @Override
     public void imprimir() {
-            String path=RecursoCodefac.JASPER_CRM.getResourcePath("reporteEjemplo.jrxml");
-            System.out.println(session.getUsuario().getClave());
-            Map parameters = new HashMap();
-            parameters.put("nombre","carlos");
-            parameters.put("subreporte","C:\\Users\\Carlos\\Documents\\GitHub\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\crm\\");
-          
-            List<DataEjemploReporte> data= new ArrayList<DataEjemploReporte>();
-            data.add(new DataEjemploReporte("carlos","1"));
-            data.add(new DataEjemploReporte("pedro","2"));
-            ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Nuevos ");    
+        String path = RecursoCodefac.JASPER_CRM.getResourcePath("reporteEjemplo.jrxml");
+        System.out.println(session.getUsuario().getClave());
+        Map parameters = new HashMap();
+        parameters.put("nombre", "carlos");
+        parameters.put("subreporte", "C:\\Users\\Carlos\\Documents\\GitHub\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\crm\\");
+
+        List<DataEjemploReporte> data = new ArrayList<DataEjemploReporte>();
+        data.add(new DataEjemploReporte("carlos", "1"));
+        data.add(new DataEjemploReporte("pedro", "2"));
+        ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Nuevos ");
     }
 
     @Override
     public String getURLAyuda() {
-        return "http://www.cf.codesoft-ec.com/ayuda";
+        return "http://www.cf.codesoft-ec.com/ayuda#eclientes";
     }
 
     @Override
@@ -169,18 +166,18 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     @Override
     public void buscar() throws ExcepcionCodefacLite {
         //this.panelPadre.crearVentanaCodefac(new ClienteModel(),true);
-        ClienteBusquedaDialogo clienteBusquedaDialogo= new ClienteBusquedaDialogo();
-        BuscarDialogoModel buscarDialogoModel=new BuscarDialogoModel(clienteBusquedaDialogo);
+        ClienteBusquedaDialogo clienteBusquedaDialogo = new ClienteBusquedaDialogo();
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
-        persona=(Persona) buscarDialogoModel.getResultado();
-        
-        if(persona==null)
-        {
+        persona = (Persona) buscarDialogoModel.getResultado();
+
+        if (persona == null) {
             throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar");
         }
-        
+        getjTextNombres().setText(persona.getNombres());
+        getjTextApellidos().setText(persona.getApellidos());
         getjTextNombreSocial().setText(persona.getRazonSocial());
-        getjTextIdentificacion().setText(""+persona.getIdentificacion());
+        getjTextIdentificacion().setText("" + persona.getIdentificacion());
         persona.setNombreLegal(getjTextNombreSocial().getText());
         getjComboIdentificacion().setSelectedIndex(comboIdentificacion(persona.getIdentificacion()));
         getjTextIdentificacion().setText(persona.getIdentificacion());
@@ -191,10 +188,10 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         getjTextCelular().setText(persona.getTelefonoCelular());
         getjTextCorreo().setText(persona.getCorreoElectronico());
         getCmbEstado().setSelectedItem(ClienteEnumEstado.getEnum(persona.getEstado()));
-       
+
         System.out.println("Datos cargados ");
     }
-    
+
     @validacionPersonalizadaAnotacion(errorTitulo = "Formato de identificacion")
     public boolean validarIdentificacionSegunOpcionEstablecida()
     {
@@ -220,86 +217,67 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     public boolean validarCedula(String cedula)
     {          
         boolean cedulaCorrecta = false;
-        try 
-        {
+        try {
             if (cedula.length() == 10) // ConstantesApp.LongitudCedula
             {
-            int tercerDigito = Integer.parseInt(cedula.substring(2, 3));
-            if (tercerDigito < 6) 
-            {
-                // Coeficientes de validación cédula
-                // El decimo digito se lo considera dígito verificador
-                int[] coefValCedula = { 2, 1, 2, 1, 2, 1, 2, 1, 2 };
-                int verificador = Integer.parseInt(cedula.substring(9,10));
-                int suma = 0;
-                int digito = 0;
-                for (int i = 0; i < (cedula.length() - 1); i++)
-                {
-                    digito = Integer.parseInt(cedula.substring(i, i + 1))* coefValCedula[i];
-                    suma += ((digito % 10) + (digito / 10));
-                }
+                int tercerDigito = Integer.parseInt(cedula.substring(2, 3));
+                if (tercerDigito < 6) {
+                    // Coeficientes de validación cédula
+                    // El decimo digito se lo considera dígito verificador
+                    int[] coefValCedula = {2, 1, 2, 1, 2, 1, 2, 1, 2};
+                    int verificador = Integer.parseInt(cedula.substring(9, 10));
+                    int suma = 0;
+                    int digito = 0;
+                    for (int i = 0; i < (cedula.length() - 1); i++) {
+                        digito = Integer.parseInt(cedula.substring(i, i + 1)) * coefValCedula[i];
+                        suma += ((digito % 10) + (digito / 10));
+                    }
 
-                if ((suma % 10 == 0) && (suma % 10 == verificador)) 
-                {
-                    cedulaCorrecta = true;
-                }
-                else if ((10 - (suma % 10)) == verificador) 
-                {
-                    cedulaCorrecta = true;
-                } 
-                else 
-                {
+                    if ((suma % 10 == 0) && (suma % 10 == verificador)) {
+                        cedulaCorrecta = true;
+                    } else if ((10 - (suma % 10)) == verificador) {
+                        cedulaCorrecta = true;
+                    } else {
+                        cedulaCorrecta = false;
+                    }
+                } else {
                     cedulaCorrecta = false;
                 }
-            } else 
-            {
+            } else {
                 cedulaCorrecta = false;
             }
-            } else 
-            {
-                cedulaCorrecta = false;
-            }
-        } catch (NumberFormatException nfe) 
-        {
+        } catch (NumberFormatException nfe) {
             cedulaCorrecta = false;
-        } catch (Exception err) 
-        {
+        } catch (Exception err) {
             cedulaCorrecta = false;
         }
 
-        if (!cedulaCorrecta) 
-        {
+        if (!cedulaCorrecta) {
             System.out.println("La Cédula ingresada es Incorrecta");
         }
         return cedulaCorrecta;
 
     }
-    
+
     @validacionPersonalizadaAnotacion(errorTitulo = "formato otra validacion incorrecto")
-    public boolean validarOtro()
-    {
+    public boolean validarOtro() {
         return true;
     }
-    
-    public int comboIdentificacion(String op)
-    {
-        for(int i=0; i<comboIdentificacion.length; i++)
-        {
-                if(op.equals(comboIdentificacion[i]))
-                {
-                    return i;
-                }
+
+    public int comboIdentificacion(String op) {
+        for (int i = 0; i < comboIdentificacion.length; i++) {
+            if (op.equals(comboIdentificacion[i])) {
+                return i;
+            }
         }
         return 0;
     }
-    public int comboTipoCliente(String op)
-    {
-        for(int i=0; i<comboTipoCliente.length; i++)
-        {
-                if(op.equals(comboTipoCliente[i]))
-                {
-                    return i;
-                }
+
+    public int comboTipoCliente(String op) {
+        for (int i = 0; i < comboTipoCliente.length; i++) {
+            if (op.equals(comboTipoCliente[i])) {
+                return i;
+            }
         }
         return 0;
     }
@@ -307,29 +285,29 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     @Override
     public void limpiar() {
         /**
-         * Seleccionando valores por defecto que se deben seleccionar
-         * despues de limpiar
+         * Seleccionando valores por defecto que se deben seleccionar despues de
+         * limpiar
+         *
          * @author carlos
          */
         getjComboIdentificacion().setSelectedIndex(0);
         getjComboTipoCliente().setSelectedIndex(0);
         getjTextExtension().setText("0");
-        
+
         //Setear el valor por defecto
         getCmbEstado().setSelectedItem(ClienteEnumEstado.ACTIVO);
-        
+
     }
-    
+
     /**
      * Cargar los tipos de clientes de la base de datos
      */
-    private void cargarClientes()
-    {
+    private void cargarClientes() {
         /**
          * Cargar los valores por defecto de las identificaciones
          */
-        SriService servicioSri=new SriService();
-        identificaciones=servicioSri.obtenerIdentificaciones(SriIdentificacion.CLIENTE);
+        SriService servicioSri = new SriService();
+        identificaciones = servicioSri.obtenerIdentificaciones(SriIdentificacion.CLIENTE);
         getjComboIdentificacion().removeAllItems();
         for (SriIdentificacion identificacion : identificaciones) {
             if(!(identificacion.getCodigo().equals("07") || identificacion.getCodigo().equals("19")))
@@ -337,12 +315,12 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
                 getjComboIdentificacion().addItem(identificacion);
             }
         }
-        
+
     }
 
     @Override
     public Persona getResult() {
-       
+
         try {
             grabar();
             return persona;
@@ -353,23 +331,21 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     }
 
     private void cargarDatosIniciales() {
-                /**
+        /**
          * Cargando los estados por defecto
          */
         getCmbEstado().removeAllItems();
-        for(ClienteEnumEstado enumerador: ClienteEnumEstado.values())
-        {
+        for (ClienteEnumEstado enumerador : ClienteEnumEstado.values()) {
             getCmbEstado().addItem(enumerador);
         }
     }
 
     private boolean prevalidar() {
-        if(getCmbEstado().getSelectedItem().equals(ClienteEnumEstado.ELIMINADO))
-        {
-            DialogoCodefac.mensaje("Advertencia","Si desea eliminar el cliente seleccione el boton de eliminar,seleccione otro estado", DialogoCodefac.MENSAJE_ADVERTENCIA);
+        if (getCmbEstado().getSelectedItem().equals(ClienteEnumEstado.ELIMINADO)) {
+            DialogoCodefac.mensaje("Advertencia", "Si desea eliminar el cliente seleccione el boton de eliminar,seleccione otro estado", DialogoCodefac.MENSAJE_ADVERTENCIA);
             return false;
         }
-        
+
         return true;
     }
 
@@ -382,6 +358,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     public void nuevo() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
 
     public void addListenerCombos()
     {

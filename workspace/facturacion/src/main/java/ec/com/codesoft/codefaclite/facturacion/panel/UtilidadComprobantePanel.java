@@ -101,6 +101,7 @@ public abstract class UtilidadComprobantePanel extends ControladorCodefacInterfa
         getContentPane().add(cmbCarpetaComprobante, gridBagConstraints);
 
         cmbEstadoLimiteProcesar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -117,7 +118,7 @@ public abstract class UtilidadComprobantePanel extends ControladorCodefacInterfa
         getContentPane().add(jLabel1, gridBagConstraints);
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel2.setText("Etapa final procesar:");
+        jLabel2.setText("Etapa Final Procesar:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;

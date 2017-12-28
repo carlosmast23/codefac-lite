@@ -109,9 +109,12 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
+<<<<<<< HEAD
+=======
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="11" style="1"/>
         </Property>
+>>>>>>> 4b4aaba4ea13576fb31bed7e18bad357513b34ef
         <Property name="text" type="java.lang.String" value="Carpetas Comprobantes:"/>
       </Properties>
       <Constraints>
@@ -122,10 +125,14 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
+<<<<<<< HEAD
+        <Property name="text" type="java.lang.String" value="Etapa Final Procesar:"/>
+=======
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="11" style="1"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Etapa final procesar:"/>
+>>>>>>> 4b4aaba4ea13576fb31bed7e18bad357513b34ef
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
