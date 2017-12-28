@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.crm.panel.ProductoForm;
 import ec.com.codesoft.codefaclite.servidor.entity.Impuesto;
 import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.ProductoEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoService;
@@ -55,6 +56,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         producto = new Producto();
         producto.setCodigoPrincipal(getTextCodigoPrincipal().getText());
         producto.setCodigoAuxiliar(getTextCodigoAuxiliar().getText());
+        producto.setEstado(ProductoEnumEstado.ACTIVO.getEstado());
         if(getComboTipoProducto().getSelectedItem().equals("Bien"))
         {
             producto.setTipoProducto("B");
@@ -106,10 +108,17 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     }
 
     @Override
-    public void eliminar() 
+    public void eliminar() throws ExcepcionCodefacLite 
     {
-        productoService.eliminar(producto);
-        DialogoCodefac.mensaje("Datos correctos", "El producto se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+        if (estadoFormulario.equals(GeneralPanelInterface.ESTADO_EDITAR)) {
+            Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea eliminar el producto?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            if (!respuesta) {
+                throw new ExcepcionCodefacLite("Cancelacion usuario");
+            }
+            productoService.eliminar(producto);
+            DialogoCodefac.mensaje("Datos correctos", "El producto se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+        }
+        
     }
 
     @Override

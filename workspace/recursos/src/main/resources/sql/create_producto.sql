@@ -18,5 +18,6 @@ create table PRODUCTO
     IVA_ID integer,
     ICE_ID integer,
     IRBPNR_ID integer,
+    ESTADO varchar(1),
     primary key (ID_PRODUCTO)
 )
