@@ -302,7 +302,7 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
         gridBagConstraints.weightx = 0.1;
         jPanelConfiguracionEmisor.add(jTextNumContribuyente, gridBagConstraints);
 
-        jLabel9.setText("Obligado a llevar contabilidad:");
+        jLabel9.setText("Obligado a Llevar Contabilidad:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
@@ -331,7 +331,7 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
         gridBagConstraints.weightx = 0.1;
         jPanelConfiguracionEmisor.add(jTextField7, gridBagConstraints);
 
-        jLabel11.setText("Tiempo máximo de espera para respuesta de Autorización:");
+        jLabel11.setText("Tiempo máximo de Espera Respuesta Autorización:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 10;

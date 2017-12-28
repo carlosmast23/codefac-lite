@@ -70,25 +70,23 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         menuInicio = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
-        menuConfiguracion = new javax.swing.JMenu();
-        jMenuComprobanteConfig = new javax.swing.JMenuItem();
-        menuCrm = new javax.swing.JMenu();
-        jMenuEmisor = new javax.swing.JMenuItem();
+        menuFacturacion = new javax.swing.JMenu();
+        jMenuFactura = new javax.swing.JMenuItem();
+        jMenuItemMonitor = new javax.swing.JMenuItem();
+        jMenuItemNotaCredito = new javax.swing.JMenuItem();
+        jMenuItemFacturaReporte = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuCliente = new javax.swing.JMenuItem();
         jMenuItemReporteCliente = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuProducto = new javax.swing.JMenuItem();
         jMenuItemReporteProducto = new javax.swing.JMenuItem();
-        menuFacturacion = new javax.swing.JMenu();
-        jMenuFactura = new javax.swing.JMenuItem();
-        jMenuItemMonitor = new javax.swing.JMenuItem();
-        jMenuItemNotaCredito = new javax.swing.JMenuItem();
-        jMenuItemFacturaReporte = new javax.swing.JMenuItem();
+        menuConfiguracion = new javax.swing.JMenu();
+        jMenuComprobanteConfig = new javax.swing.JMenuItem();
+        jMenuEmisor = new javax.swing.JMenuItem();
+        jMenuItemUtilidades = new javax.swing.JMenuItem();
         jMenuUtilidades = new javax.swing.JMenu();
         jMenuCalculadora = new javax.swing.JMenuItem();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItemUtilidades = new javax.swing.JMenuItem();
         jMenu8 = new javax.swing.JMenu();
 
         JpanelAuxiliar.setLayout(new javax.swing.BoxLayout(JpanelAuxiliar, javax.swing.BoxLayout.LINE_AXIS));
@@ -230,50 +228,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
         jMenuBar1.add(menuInicio);
 
-        menuConfiguracion.setText("Configuraciones");
-
-        jMenuComprobanteConfig.setText("Comprobante");
-        jMenuComprobanteConfig.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuComprobanteConfigActionPerformed(evt);
-            }
-        });
-        menuConfiguracion.add(jMenuComprobanteConfig);
-
-        jMenuBar1.add(menuConfiguracion);
-
-        menuCrm.setText("Crm");
-
-        jMenuEmisor.setText("Emisor");
-        menuCrm.add(jMenuEmisor);
-
-        jMenu2.setText("Clientes");
-
-        jMenuCliente.setText("Gestionar");
-        jMenuCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuClienteActionPerformed(evt);
-            }
-        });
-        jMenu2.add(jMenuCliente);
-
-        jMenuItemReporteCliente.setText("Reporte");
-        jMenu2.add(jMenuItemReporteCliente);
-
-        menuCrm.add(jMenu2);
-
-        jMenu3.setText("Productos");
-
-        jMenuProducto.setText("Gestionar");
-        jMenu3.add(jMenuProducto);
-
-        jMenuItemReporteProducto.setText("Reporte");
-        jMenu3.add(jMenuItemReporteProducto);
-
-        menuCrm.add(jMenu3);
-
-        jMenuBar1.add(menuCrm);
-
         menuFacturacion.setText("Facturacion");
 
         jMenuFactura.setText("Factura");
@@ -295,6 +249,49 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
         jMenuBar1.add(menuFacturacion);
 
+        jMenu2.setText("Clientes");
+
+        jMenuCliente.setText("Gestionar");
+        jMenuCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuClienteActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuCliente);
+
+        jMenuItemReporteCliente.setText("Reporte");
+        jMenu2.add(jMenuItemReporteCliente);
+
+        jMenuBar1.add(jMenu2);
+
+        jMenu3.setText("Productos");
+
+        jMenuProducto.setText("Gestionar");
+        jMenu3.add(jMenuProducto);
+
+        jMenuItemReporteProducto.setText("Reporte");
+        jMenu3.add(jMenuItemReporteProducto);
+
+        jMenuBar1.add(jMenu3);
+
+        menuConfiguracion.setText("Configuraciones");
+
+        jMenuComprobanteConfig.setText("Comprobante");
+        jMenuComprobanteConfig.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuComprobanteConfigActionPerformed(evt);
+            }
+        });
+        menuConfiguracion.add(jMenuComprobanteConfig);
+
+        jMenuEmisor.setText("Emisor");
+        menuConfiguracion.add(jMenuEmisor);
+
+        jMenuItemUtilidades.setText("Utilidades");
+        menuConfiguracion.add(jMenuItemUtilidades);
+
+        jMenuBar1.add(menuConfiguracion);
+
         jMenuUtilidades.setText("Utilidades");
 
         jMenuCalculadora.setText("Calculadora");
@@ -306,13 +303,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuUtilidades.add(jMenuCalculadora);
 
         jMenuBar1.add(jMenuUtilidades);
-
-        jMenu1.setText("Comprobantes");
-
-        jMenuItemUtilidades.setText("Utilidades");
-        jMenu1.add(jMenuItemUtilidades);
-
-        jMenuBar1.add(jMenu1);
 
         jMenu8.setText("Ayuda");
         jMenuBar1.add(jMenu8);
@@ -422,7 +412,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu8;
@@ -449,7 +438,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JSplitPane jSplitPanel;
     private javax.swing.JSplitPane jSplitPanelVerticalSecundario;
     private javax.swing.JMenu menuConfiguracion;
-    private javax.swing.JMenu menuCrm;
     private javax.swing.JMenu menuFacturacion;
     private javax.swing.JMenu menuInicio;
     // End of variables declaration//GEN-END:variables

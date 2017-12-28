@@ -138,70 +138,6 @@
             </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="menuConfiguracion">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Configuraciones"/>
-          </Properties>
-          <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuComprobanteConfig">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Comprobante"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuComprobanteConfigActionPerformed"/>
-              </Events>
-            </MenuItem>
-          </SubComponents>
-        </Menu>
-        <Menu class="javax.swing.JMenu" name="menuCrm">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Crm"/>
-          </Properties>
-          <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuEmisor">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Emisor"/>
-              </Properties>
-            </MenuItem>
-            <Menu class="javax.swing.JMenu" name="jMenu2">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Clientes"/>
-              </Properties>
-              <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuCliente">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Gestionar"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuClienteActionPerformed"/>
-                  </Events>
-                </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItemReporteCliente">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Reporte"/>
-                  </Properties>
-                </MenuItem>
-              </SubComponents>
-            </Menu>
-            <Menu class="javax.swing.JMenu" name="jMenu3">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Productos"/>
-              </Properties>
-            <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuProducto">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Gestionar"/>
-                  </Properties>
-                </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItemReporteProducto">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Reporte"/>
-                  </Properties>
-                </MenuItem>
-              </SubComponents>
-            </Menu>
-          </SubComponents>
-        </Menu>
         <Menu class="javax.swing.JMenu" name="menuFacturacion">
           <Properties>
             <Property name="text" type="java.lang.String" value="Facturacion"/>
@@ -232,6 +168,68 @@
             </MenuItem>
           </SubComponents>
         </Menu>
+        <Menu class="javax.swing.JMenu" name="jMenu2">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Clientes"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuCliente">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Gestionar"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuClienteActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemReporteCliente">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Reporte"/>
+              </Properties>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="jMenu3">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Productos"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuProducto">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Gestionar"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemReporteProducto">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Reporte"/>
+              </Properties>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="menuConfiguracion">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Configuraciones"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuComprobanteConfig">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Comprobante"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuComprobanteConfigActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuEmisor">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Emisor"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemUtilidades">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Utilidades"/>
+              </Properties>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
         <Menu class="javax.swing.JMenu" name="jMenuUtilidades">
           <Properties>
             <Property name="text" type="java.lang.String" value="Utilidades"/>
@@ -244,18 +242,6 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuCalculadoraActionPerformed"/>
               </Events>
-            </MenuItem>
-          </SubComponents>
-        </Menu>
-        <Menu class="javax.swing.JMenu" name="jMenu1">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Comprobantes"/>
-          </Properties>
-          <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemUtilidades">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Utilidades"/>
-              </Properties>
             </MenuItem>
           </SubComponents>
         </Menu>

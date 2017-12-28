@@ -76,9 +76,9 @@ public abstract class UtilidadComprobantePanel extends ControladorCodefacInterfa
 
         cmbEstadoLimiteProcesar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jLabel1.setText("Carpetas Comprobantes");
+        jLabel1.setText("Carpetas Comprobantes:");
 
-        jLabel2.setText("Etapa final procesar");
+        jLabel2.setText("Etapa Final Procesar:");
 
         jScrollPane1.setViewportView(jListCorreos);
 

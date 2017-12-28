@@ -185,7 +185,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
 
     @Override
     public String getURLAyuda() {
-        return "https://support.office.com/es-es";
+        return "http://www.cf.codesoft-ec.com/ayuda#eproductos";
     }
 
     @Override

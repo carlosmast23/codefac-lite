@@ -32,8 +32,6 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.view.JasperViewer;
 
-
-
 /**
  *
  * @author PC
@@ -45,10 +43,8 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
      */
     public ClienteForm() {
         initComponents();
-      
+
     }
-    
-  
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -64,7 +60,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jLabel1 = new javax.swing.JLabel();
         jPanelCaracteristicasGenerales = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jTextNombreSocial = new javax.swing.JTextField();
+        jTextNombres = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jComboIdentificacion = new javax.swing.JComboBox<>();
         jTextIdentificacion = new javax.swing.JTextField();
@@ -84,6 +80,10 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jLabel4 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         cmbEstado = new javax.swing.JComboBox<>();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jTextApellidos = new javax.swing.JTextField();
+        jTextNombreSocial = new javax.swing.JTextField();
 
         setClosable(true);
         setIconifiable(true);
@@ -108,35 +108,36 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jPanelCaracteristicasGenerales.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos Clientes"));
         jPanelCaracteristicasGenerales.setLayout(new java.awt.GridBagLayout());
 
-        jLabel2.setText("Apellidos y Nombres | Razòn Social:");
+        jLabel2.setText("Nombres:");
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelCaracteristicasGenerales.add(jLabel2, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        jPanelCaracteristicasGenerales.add(jTextNombreSocial, gridBagConstraints);
+        jPanelCaracteristicasGenerales.add(jTextNombres, gridBagConstraints);
 
-        jLabel3.setText("Tipo Identificacion:");
+        jLabel3.setText("Tipo Identificación:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelCaracteristicasGenerales.add(jLabel3, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanelCaracteristicasGenerales.add(jComboIdentificacion, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
@@ -145,7 +146,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jLabel5.setText("Tipo Cliente:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelCaracteristicasGenerales.add(jLabel5, gridBagConstraints);
@@ -153,15 +154,15 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jComboTipoCliente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CLIENTE", "SUJETO RETENIDO", "DESTINATARIO" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanelCaracteristicasGenerales.add(jComboTipoCliente, gridBagConstraints);
 
-        jLabel6.setText("Direcciòn:");
+        jLabel6.setText("Dirección:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelCaracteristicasGenerales.add(jLabel6, gridBagConstraints);
@@ -172,72 +173,72 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanelCaracteristicasGenerales.add(jScrollPane1, gridBagConstraints);
 
-        jLabel7.setText("Telèfono Convencional:");
+        jLabel7.setText("Teléfono Convencional:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelCaracteristicasGenerales.add(jLabel7, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanelCaracteristicasGenerales.add(jTextTelefono, gridBagConstraints);
 
-        jLabel8.setText("Extensiòn:");
+        jLabel8.setText("Extensión:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelCaracteristicasGenerales.add(jLabel8, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanelCaracteristicasGenerales.add(jTextExtension, gridBagConstraints);
 
-        jLabel9.setText("Telèfono Celular:");
+        jLabel9.setText("Teléfono Celular:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelCaracteristicasGenerales.add(jLabel9, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanelCaracteristicasGenerales.add(jTextCelular, gridBagConstraints);
 
-        jLabel10.setText("Correo Electrònico:");
+        jLabel10.setText("Correo Electrónico:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelCaracteristicasGenerales.add(jLabel10, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanelCaracteristicasGenerales.add(jTextCorreo, gridBagConstraints);
 
-        jLabel4.setText("Identificaciòn:");
+        jLabel4.setText("Identificación:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelCaracteristicasGenerales.add(jLabel4, gridBagConstraints);
@@ -245,7 +246,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jLabel11.setText("Estado:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelCaracteristicasGenerales.add(jLabel11, gridBagConstraints);
@@ -257,11 +258,37 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanelCaracteristicasGenerales.add(cmbEstado, gridBagConstraints);
+
+        jLabel13.setText("Apellidos:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
+        jPanelCaracteristicasGenerales.add(jLabel13, gridBagConstraints);
+
+        jLabel14.setText("Razón Social:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
+        jPanelCaracteristicasGenerales.add(jLabel14, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        jPanelCaracteristicasGenerales.add(jTextApellidos, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        jPanelCaracteristicasGenerales.add(jTextNombreSocial, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -288,6 +315,8 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -299,17 +328,16 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanelCaracteristicasGenerales;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField jTextApellidos;
     private javax.swing.JTextArea jTextAreaDireccion;
     private javax.swing.JTextField jTextCelular;
     private javax.swing.JTextField jTextCorreo;
     private javax.swing.JTextField jTextExtension;
     private javax.swing.JTextField jTextIdentificacion;
     private javax.swing.JTextField jTextNombreSocial;
+    private javax.swing.JTextField jTextNombres;
     private javax.swing.JTextField jTextTelefono;
     // End of variables declaration//GEN-END:variables
-    
-    
-
 
     public JComboBox<String> getjComboTipoCliente() {
         return jComboTipoCliente;
@@ -326,10 +354,9 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     public void setjPanelCaracteristicasGenerales(JPanel jPanelCaracteristicasGenerales) {
         this.jPanelCaracteristicasGenerales = jPanelCaracteristicasGenerales;
     }
-    
+
     @LimpiarAnotacion
-    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
-    @ValidacionCodefacAnotacion(requerido=true ,min=0, expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Direccion")
+    @ValidacionCodefacAnotacion(requerido = true, min = 0, expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$", nombre = "Direccion")
     public JTextArea getjTextAreaDireccion() {
         return jTextAreaDireccion;
     }
@@ -337,10 +364,9 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     public void setjTextAreaDireccion(JTextArea jTextAreaDireccion) {
         this.jTextAreaDireccion = jTextAreaDireccion;
     }
-    
+
     @LimpiarAnotacion
-    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
-    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0][0-9]{9}$",nombre = "Celular")
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[0][0-9]{9}$", nombre = "Celular")
     public JTextField getjTextCelular() {
         return jTextCelular;
     }
@@ -348,10 +374,9 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     public void setjTextCelular(JTextField jTextCelular) {
         this.jTextCelular = jTextCelular;
     }
-    
+
     @LimpiarAnotacion
-    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
-    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$",nombre = "Correo Electronico")
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$", nombre = "Correo Electronico")
     public JTextField getjTextCorreo() {
         return jTextCorreo;
     }
@@ -361,8 +386,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
-    @ValidacionCodefacAnotacion(requerido=true , min=0 ,expresionRegular = "^[0-9]*$",nombre = "Extension")
+    @ValidacionCodefacAnotacion(requerido = true, min = 0, expresionRegular = "^[0-9]*$", nombre = "Extension")
     public JTextField getjTextExtension() {
         return jTextExtension;
     }
@@ -370,10 +394,9 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     public void setjTextExtension(JTextField jTextExtension) {
         this.jTextExtension = jTextExtension;
     }
-    
+
     @LimpiarAnotacion
-    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
-    @ValidacionCodefacAnotacion(personalizado ={"validarCedula"}  ,requerido=true , min=0 ,max = 10,expresionRegular = "",nombre = "Identificacion")
+    @ValidacionCodefacAnotacion(personalizado = {"validarCedula"}, requerido = true, min = 0, max = 10, expresionRegular = "", nombre = "Identificacion")
     public JTextField getjTextIdentificacion() {
         return jTextIdentificacion;
     }
@@ -381,21 +404,19 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     public void setjTextIdentificacion(JTextField jTextIdentificacion) {
         this.jTextIdentificacion = jTextIdentificacion;
     }
-    
+
     @LimpiarAnotacion
-    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
-    @ValidacionCodefacAnotacion(requerido=true , min=5 ,max = 100,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Nombre Social")
+    @ValidacionCodefacAnotacion(requerido = true, min = 5, max = 100, expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$", nombre = "Nombre Social")
     public JTextField getjTextNombreSocial() {
-        return jTextNombreSocial;
+        return jTextNombres;
     }
 
     public void setjTextNombreSocial(JTextField jTextNombre) {
-        this.jTextNombreSocial = jTextNombre;
+        this.jTextNombres = jTextNombre;
     }
-    
+
     @LimpiarAnotacion
-    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
-    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0][0-9]{8}$",nombre = "Telefono")
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[0][0-9]{8}$", nombre = "Telefono")
     public JTextField getjTextTelefono() {
         return jTextTelefono;
     }
@@ -415,7 +436,25 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     public JComboBox<ClienteEnumEstado> getCmbEstado() {
         return cmbEstado;
     }
-    
- 
-    
+
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, min = 5, max = 200, expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$", nombre = "Apellidos")
+    public JTextField getjTextApellidos() {
+        return jTextApellidos;
+    }
+
+    public void setjTextApellidos(JTextField jTextApellidos) {
+        this.jTextApellidos = jTextApellidos;
+    }
+
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, min = 5, max = 200, expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$", nombre = "Nombres")
+    public JTextField getjTextNombres() {
+        return jTextNombres;
+    }
+
+    public void setjTextNombres(JTextField jTextNombres) {
+        this.jTextNombres = jTextNombres;
+    }
+
 }

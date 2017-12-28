@@ -130,8 +130,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         textNombre = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         textValorUnitario = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
@@ -140,7 +138,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         comboIce = new javax.swing.JComboBox<>();
         jLabel12 = new javax.swing.JLabel();
         comboIrbpnr = new javax.swing.JComboBox<>();
-        jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
 
         setClosable(true);
@@ -151,7 +148,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setText("Detalle del producto /  servicio");
+        jLabel1.setText("DETALLE DEL PRODUCTO / SERVICIO");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
         gridBagConstraints.weighty = 0.1;
@@ -164,12 +161,13 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         jLabel2.setText("Código Principal: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanel1.add(jLabel2, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(textCodigoPrincipal, gridBagConstraints);
@@ -177,12 +175,13 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         jLabel3.setText("Código Auxiliar: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanel1.add(jLabel3, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(textCodigoAuxiliar, gridBagConstraints);
@@ -190,14 +189,15 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         jLabel4.setText("Tipo de Producto: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanel1.add(jLabel4, gridBagConstraints);
 
         comboTipoProducto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BIEN", "SERVICIO" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(comboTipoProducto, gridBagConstraints);
@@ -206,6 +206,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanel1.add(jLabel5, gridBagConstraints);
 
@@ -217,7 +218,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(textNombre, gridBagConstraints);
@@ -226,6 +227,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanel1.add(jLabel6, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -235,22 +237,11 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(textValorUnitario, gridBagConstraints);
 
-        jLabel7.setText(" ");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.weightx = 0.1;
-        jPanel1.add(jLabel7, gridBagConstraints);
-
-        jLabel8.setText(" ");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.weightx = 0.1;
-        jPanel1.add(jLabel8, gridBagConstraints);
-
         jLabel9.setText("                                           ");
-        jPanel1.add(jLabel9, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        jPanel1.add(jLabel9, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -265,66 +256,60 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Impuestos Aplicables"));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        jLabel10.setText("IVA");
+        jLabel10.setText("IVA:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanel2.add(jLabel10, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.ipadx = 339;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         jPanel2.add(comboIva, gridBagConstraints);
 
-        jLabel11.setText("ICE");
+        jLabel11.setText("ICE:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanel2.add(jLabel11, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.ipadx = 339;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         jPanel2.add(comboIce, gridBagConstraints);
 
-        jLabel12.setText("IRBPNR");
+        jLabel12.setText("IRBPNR:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanel2.add(jLabel12, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 0.1;
-        jPanel2.add(comboIrbpnr, gridBagConstraints);
-
-        jLabel13.setText("                              ");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.weightx = 0.1;
-        jPanel2.add(jLabel13, gridBagConstraints);
+        gridBagConstraints.ipadx = 339;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        jPanel2.add(comboIrbpnr, gridBagConstraints);
 
         jLabel14.setText("                              ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(13, 158, 0, 0);
         jPanel2.add(jLabel14, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -352,15 +337,12 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

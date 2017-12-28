@@ -32,6 +32,10 @@ public class Persona implements Serializable {
     @Basic(optional = false)
     @Column(name = "CLIENTE_ID")
     private Integer idCliente;
+    @Column(name = "NOMBRES")
+    private String nombres;
+    @Column(name = "APELLIDOS")
+    private String apellidos;
     @Column(name = "IDENTIFICACION")
     private String identificacion;
     @Column(name = "TIPO_IDENTIFICACION")
@@ -152,8 +156,23 @@ public class Persona implements Serializable {
     public void setEstado(String estado) {
         this.estado = estado;
     }
-    
-    
+
+    public String getNombres() {
+        return nombres;
+    }
+
+    public void setNombres(String nombres) {
+        this.nombres = nombres;
+    }
+
+    public String getApellidos() {
+        return apellidos;
+    }
+
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
+    }
+       
 
     @Override
     public int hashCode() {

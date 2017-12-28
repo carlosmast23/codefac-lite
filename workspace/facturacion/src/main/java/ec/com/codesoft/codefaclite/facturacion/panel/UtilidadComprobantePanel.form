@@ -161,12 +161,12 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Carpetas Comprobantes"/>
+        <Property name="text" type="java.lang.String" value="Carpetas Comprobantes:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Etapa final procesar"/>
+        <Property name="text" type="java.lang.String" value="Etapa Final Procesar:"/>
       </Properties>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">

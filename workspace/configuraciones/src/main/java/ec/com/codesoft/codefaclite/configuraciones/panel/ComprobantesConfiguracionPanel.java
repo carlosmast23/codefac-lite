@@ -92,65 +92,77 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         setResizable(true);
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        panelSecuenciales.setBorder(javax.swing.BorderFactory.createTitledBorder("Secuenciales comprobantes"));
+        panelSecuenciales.setBorder(javax.swing.BorderFactory.createTitledBorder("Secuenciales Comprobantes"));
         panelSecuenciales.setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setText("Factura:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(24, 62, 0, 0);
         panelSecuenciales.add(jLabel1, gridBagConstraints);
 
-        jLabel2.setText("Nota Credito:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
-        panelSecuenciales.add(jLabel2, gridBagConstraints);
-
-        jLabel3.setText("Nota de Debito:");
+        jLabel2.setText("Nota  de Crédito:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
-        panelSecuenciales.add(jLabel3, gridBagConstraints);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(13, 22, 0, 0);
+        panelSecuenciales.add(jLabel2, gridBagConstraints);
 
-        jLabel4.setText("Guia Remision:");
+        jLabel3.setText("Nota de Débito:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(13, 27, 0, 0);
+        panelSecuenciales.add(jLabel3, gridBagConstraints);
+
+        jLabel4.setText("Guia Remisión:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(13, 33, 0, 0);
         panelSecuenciales.add(jLabel4, gridBagConstraints);
 
         jLabel5.setText("Retenciones:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(13, 40, 0, 0);
         panelSecuenciales.add(jLabel5, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 331;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(21, 20, 0, 0);
         panelSecuenciales.add(txtFacturaSecuencial, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 331;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 17, 0, 0);
         panelSecuenciales.add(txtNotaCreditoSecuencial, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 331;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 20, 0, 0);
         panelSecuenciales.add(txtNotaDebitoSecuencial, gridBagConstraints);
 
         txtGuiaRemisionSecuencial.addActionListener(new java.awt.event.ActionListener() {
@@ -159,28 +171,38 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 331;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 20, 0, 0);
         panelSecuenciales.add(txtGuiaRemisionSecuencial, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 331;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 20, 7, 0);
         panelSecuenciales.add(txtRetencionesSecuencial, gridBagConstraints);
 
         jLabel14.setText("                                                            ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(13, 0, 0, 6);
         panelSecuenciales.add(jLabel14, gridBagConstraints);
 
         jLabel15.setText("                                                            ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(13, 6, 0, 0);
         panelSecuenciales.add(jLabel15, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -190,11 +212,13 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(panelSecuenciales, gridBagConstraints);
+        panelSecuenciales.getAccessibleContext().setAccessibleName("Secuenciales Comprobantes");
+        panelSecuenciales.getAccessibleContext().setAccessibleDescription("");
 
-        panelFacturacionElectronica.setBorder(javax.swing.BorderFactory.createTitledBorder("Comprobantes Electronicas"));
+        panelFacturacionElectronica.setBorder(javax.swing.BorderFactory.createTitledBorder("Comprobantes Electrónicos"));
         panelFacturacionElectronica.setLayout(new java.awt.GridBagLayout());
 
-        jLabel6.setText("Modo facturacion: ");
+        jLabel6.setText("Modo Facturación: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -289,7 +313,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(panelFacturacionElectronica, gridBagConstraints);
 
-        panelConfiguracionesGenerales.setBorder(javax.swing.BorderFactory.createTitledBorder("Configuraciones generales"));
+        panelConfiguracionesGenerales.setBorder(javax.swing.BorderFactory.createTitledBorder("Configuraciones Generales"));
         panelConfiguracionesGenerales.setLayout(new java.awt.GridBagLayout());
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -335,7 +359,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints.weightx = 0.1;
         panelConfiguracionesGenerales.add(txtEstablecimiento, gridBagConstraints);
 
-        lblPuntoEmision.setText("Punto Emision:");
+        lblPuntoEmision.setText("Punto Emisión:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
@@ -360,27 +384,31 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         panelConfiguracionesGenerales.add(jLabel7, gridBagConstraints);
 
-        jLabel11.setText("Iva defecto:");
+        jLabel11.setText("IVA Defecto:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         panelConfiguracionesGenerales.add(jLabel11, gridBagConstraints);
 
-        jLabel12.setText("Directorio recurso:");
+        jLabel12.setText("Directorio Recurso:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         panelConfiguracionesGenerales.add(jLabel12, gridBagConstraints);
 
-        jLabel13.setText("Correo Electronico: ");
+        jLabel13.setText("Correo Electrónico: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         panelConfiguracionesGenerales.add(jLabel13, gridBagConstraints);
 
@@ -388,6 +416,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         panelConfiguracionesGenerales.add(jLabel23, gridBagConstraints);
 

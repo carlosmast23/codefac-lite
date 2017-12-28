@@ -103,7 +103,7 @@ public class EmisorModel extends ConfigurarEmisorForm
     @Override
     public String getURLAyuda() 
     {
-        return "https://support.office.com/es-es";
+        return "http://www.cf.codesoft-ec.com/ayuda#eemisor";
     }
 
     @Override
