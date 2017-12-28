@@ -357,6 +357,46 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             
     }
     
+    /**
+     * Carga toda la ayuda por defecto sin importar el panel
+     */
+    private void cargarAyudaTodo()
+    {
+
+        PanelSecundarioAbstract panelSecundario = panelesSecundariosMap.get(PanelSecundarioAbstract.PANEL_AYUDA);
+        JPanel jpanel = (JPanel) panelSecundario;
+        int ancho=getjPanelSeleccion().getWidth()-1;
+        int alto=getjPanelSeleccion().getHeight()-1;
+
+        if(browser!=null)
+        {
+            //Verifacar si la url cargada es la misma no volver a cargar
+            if(!browser.getUrl().equals("http://www.cf.codesoft-ec.com/ayuda"))
+            {
+                browser = new SwingBrowser();
+                browser.loadURL("http://www.cf.codesoft-ec.com/ayuda");
+                browser.setBounds(1, 1,ancho,alto);
+                jpanel.removeAll();
+                jpanel.add(browser);
+            }
+            else
+            {
+                jpanel.removeAll();
+                jpanel.add(browser);
+            }
+        }
+        else
+        {
+            browser = new SwingBrowser();
+            browser.loadURL("http://www.cf.codesoft-ec.com/ayuda");
+            browser.setBounds(1, 1,ancho,alto);
+            jpanel.removeAll();
+            jpanel.add(browser);
+        }
+        //getjSplitPanelVerticalSecundario().setLeftComponent(getJPanelContenidoAuxiliar());
+            
+    }
+    
     private void cargarPublicidad()
     {
             browserPublicidad = new SwingBrowser();
@@ -1510,6 +1550,21 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     hiloPublicidadCodefac.hiloPublicidad=false;
                     dispose();
                 }
+            }
+        });
+        
+        getjMenuItemContenido().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cargarAyudaTodo();
+                mostrarPanelSecundario(true,PanelSecundarioAbstract.PANEL_AYUDA);
+            }
+        });
+        
+        getjMenuItemAcerca().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AcercaModel.getInstance().setVisible(true);
             }
         });
     }
