@@ -13,7 +13,7 @@ create table CLIENTE(
     RAZON_SOCIAL varchar(256),
     NOMBRE_LEGAL varchar(256),
     TIPO_IDENTIFICACION varchar(30), 
-    IDENTIFICACION varchar(13), 
+    IDENTIFICACION varchar(15), 
     TIPO_CLIENTE varchar(12),
     DIRECCION varchar(1024), 
     TELEFONO_CONVENCIONAL varchar(9),

@@ -222,7 +222,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
@@ -287,7 +287,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         notaCredito.setSubtotalCero(notaCredito.getFactura().getSubtotalSinImpuestos());
         notaCredito.setSubtotalDoce(notaCredito.getFactura().getSubtotalImpuestos());
         notaCredito.setCliente(notaCredito.getFactura().getCliente());
-        
+ 
         
         /**
          * CargarDetallesNotaCredito
