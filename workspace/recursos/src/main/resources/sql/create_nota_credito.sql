@@ -32,6 +32,10 @@ create table NOTA_CREDITO
     USUARIO_ID decimal,
     ESTADO varchar(1),
     RAZON_MODIFICADO varchar(128),
+    RAZON_SOCIAL varchar(256),
+    IDENTIFICACION varchar(15),
+    DIRECCION varchar(1024),
+    TELEFONO varchar(10),
     primary key (ID),
     CONSTRAINT id_cliente_nota_credito_fk FOREIGN KEY (CLIENTE_ID) REFERENCES CLIENTE(CLIENTE_ID),
     CONSTRAINT id_factura_fk FOREIGN KEY (FACTURA_ID) REFERENCES FACTURA(ID)

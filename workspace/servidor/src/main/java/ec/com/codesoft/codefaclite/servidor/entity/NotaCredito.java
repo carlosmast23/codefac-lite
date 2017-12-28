@@ -69,6 +69,14 @@ public class NotaCredito {
     private String estado;
     @Column(name = "RAZON_MODIFICADO")
     private String razonModificado;
+    @Column(name = "RAZON_SOCIAL")
+    private String razonSocial;
+    @Column(name = "IDENTIFICACION")
+    private String identificacion;
+    @Column(name = "DIRECCION")
+    private String direccion;
+    @Column(name = "telefono")
+    private String telefono;
     
     @JoinColumn(name = "FACTURA_ID")
     @ManyToOne    
@@ -259,6 +267,38 @@ public class NotaCredito {
 
     public void setRazonModificado(String razonModificado) {
         this.razonModificado = razonModificado;
+    }
+    
+    public String getRazonSocial() {
+        return razonSocial;
+    }
+
+    public void setRazonSocial(String razonSocial) {
+        this.razonSocial = razonSocial;
+    }
+
+    public String getIdentificacion() {
+        return identificacion;
+    }
+
+    public void setIdentificacion(String identificacion) {
+        this.identificacion = identificacion;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
     
         /**

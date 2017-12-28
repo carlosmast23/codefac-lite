@@ -91,7 +91,7 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
         //informacionFactura.setRazonSocialComprador(factura.getCliente().getRazonSocial());
         informacionFactura.setTipoIdentificacionComprador(factura.getCliente().getTipoIdentificacion());
         informacionFactura.setTotalDescuento(BigDecimal.ZERO);
-        informacionFactura.setTotalSinImpuestos(factura.getSubtotalDoce().add(factura.getSubtotalCero()));
+        informacionFactura.setTotalSinImpuestos(factura.getSubtotalImpuestos().add(factura.getSubtotalSinImpuestos()));
         /**
          * Aqui hay que setear los valores de la base de datos
          */

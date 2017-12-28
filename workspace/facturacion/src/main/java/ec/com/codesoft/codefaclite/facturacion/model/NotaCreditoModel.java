@@ -283,9 +283,9 @@ public class NotaCreditoModel extends NotaCreditoPanel {
          * Setear datos de la factura a la nota de credito
          */
         notaCredito.setTotal(notaCredito.getFactura().getTotal());
-        notaCredito.setValorIvaDoce(notaCredito.getFactura().getValorIvaDoce());
-        notaCredito.setSubtotalCero(notaCredito.getFactura().getSubtotalCero());
-        notaCredito.setSubtotalDoce(notaCredito.getFactura().getSubtotalDoce());
+        notaCredito.setValorIvaDoce(notaCredito.getFactura().getIva());
+        notaCredito.setSubtotalCero(notaCredito.getFactura().getSubtotalSinImpuestos());
+        notaCredito.setSubtotalDoce(notaCredito.getFactura().getSubtotalImpuestos());
         notaCredito.setCliente(notaCredito.getFactura().getCliente());
         
         

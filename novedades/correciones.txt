@@ -18,9 +18,14 @@ Implementar el metodo de prevalidacion en la facturacion electronica
 -----------------------------------------------
 Agregar metodo que de formato a los campos ingresados para que no causen conflicto al momento de facturar
 
-------------------------------------------------
+-----------------------------------------------
 Revisar el campo de dETALLE COMPROBATE en las notas de credito
 porque no se esta generando correctamente
 
-------------------------------------------------
+-----------------------------------------------
+
 Preguntar si una nota de credito puede anular una nota de credito o que se hace cuando quiero eliminar una nota de credito
+
+-----------------------------------------------
+
+Verificar el campo requerido de las validaciones

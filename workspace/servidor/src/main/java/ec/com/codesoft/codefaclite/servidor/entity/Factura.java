@@ -54,16 +54,30 @@ public class Factura {
     private Date fechaFactura;
     @Column(name = "FECHA_CREACION")
     private Date fechaCreacion;
-    @Column(name = "SUBTOTAL_SIN_IMPUESTOS")
-    private BigDecimal subtotalSinImpuesto;
-    @Column(name = "SUBTOTAL_DOCE")
-    private BigDecimal subtotalDoce;
-    @Column(name = "SUBTOTAL_CERO")
-    private BigDecimal subtotalCero;
-    @Column(name = "VALOR_IVA_DOCE")
-    private BigDecimal valorIvaDoce;
-    @Column(name = "VALOR_IVA_CERO")
-    private BigDecimal valorIvaCero;
+    
+    /**
+     * Valor del descuento de los productos que cobran iva
+     */
+    @Column(name = "DESCUENTO_IVA")
+    private BigDecimal descuentoImpuestos;
+    /**
+     * Valor del descuento de los productos que no cobran iva
+     */    
+    @Column(name = "DESCUENTO_IVA_CERO")
+    private BigDecimal descuentoSinImpuestos;
+    
+    
+    @Column(name = "SUBTOTAL_IVA")
+    private BigDecimal subtotalImpuestos;
+    @Column(name = "SUBTOTAL_IVA_CERO")
+    private BigDecimal subtotalSinImpuestos;
+    
+    /**
+     * Valor del iva cobrado
+     */
+    @Column(name = "IVA")
+    private BigDecimal iva;
+
     @Column(name = "IVA_SRI_ID")
     private Long ivaSriId;
     @Column(name = "TOTAL")
@@ -72,7 +86,16 @@ public class Factura {
     private Long usuarioId;
     @Column(name = "ESTADO")
     private String estado;
-
+   
+    @Column(name = "RAZON_SOCIAL")
+    private String razonSocial;
+    @Column(name = "IDENTIFICACION")
+    private String identificacion;
+    @Column(name = "DIRECCION")
+    private String direccion;
+    @Column(name = "telefono")
+    private String telefono;
+    
     @JoinColumn(name = "CLIENTE_ID")
     @ManyToOne    
     private Persona cliente;
@@ -119,26 +142,6 @@ public class Factura {
         return fechaCreacion;
     }
 
-    public BigDecimal getSubtotalSinImpuesto() {
-        return subtotalSinImpuesto;
-    }
-
-    public BigDecimal getSubtotalDoce() {
-        return subtotalDoce;
-    }
-
-    public BigDecimal getSubtotalCero() {
-        return subtotalCero;
-    }
-
-    public BigDecimal getValorIvaDoce() {
-        return valorIvaDoce;
-        
-    }
-    
-    public BigDecimal getValorIvaCero() {
-        return valorIvaCero;
-    }
 
     public Long getIvaSriId() {
         return ivaSriId;
@@ -198,25 +201,6 @@ public class Factura {
         this.fechaCreacion = fechaCreacion;
     }
 
-    public void setSubtotalSinImpuesto(BigDecimal subtotalSinImpuesto) {
-        this.subtotalSinImpuesto = subtotalSinImpuesto;
-    }
-
-    public void setSubtotalDoce(BigDecimal subtotalDoce) {
-        this.subtotalDoce = subtotalDoce;
-    }
-
-    public void setSubtotalCero(BigDecimal subtotalCero) {
-        this.subtotalCero = subtotalCero;
-    }
-
-    public void setValorIvaDoce(BigDecimal valorIvaDoce) {
-        this.valorIvaDoce = valorIvaDoce;
-    }
-
-    public void setValorIvaCero(BigDecimal valorIvaCero) {
-        this.valorIvaCero = valorIvaCero;
-    }
 
     public void setIvaSriId(Long ivaSriId) {
         this.ivaSriId = ivaSriId;
@@ -245,6 +229,80 @@ public class Factura {
     public void setDetalles(List<FacturaDetalle> detalles) {
         this.detalles = detalles;
     }
+    
+    public String getRazonSocial() {
+        return razonSocial;
+    }
+
+    public void setRazonSocial(String razonSocial) {
+        this.razonSocial = razonSocial;
+    }
+
+    public String getIdentificacion() {
+        return identificacion;
+    }
+
+    public void setIdentificacion(String identificacion) {
+        this.identificacion = identificacion;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public BigDecimal getDescuentoImpuestos() {
+        return descuentoImpuestos;
+    }
+
+    public void setDescuentoImpuestos(BigDecimal descuentoImpuestos) {
+        this.descuentoImpuestos = descuentoImpuestos;
+    }
+
+    public BigDecimal getDescuentoSinImpuestos() {
+        return descuentoSinImpuestos;
+    }
+
+    public void setDescuentoSinImpuestos(BigDecimal descuentoSinImpuestos) {
+        this.descuentoSinImpuestos = descuentoSinImpuestos;
+    }
+
+    public BigDecimal getSubtotalImpuestos() {
+        return subtotalImpuestos;
+    }
+
+    public void setSubtotalImpuestos(BigDecimal subtotalImpuestos) {
+        this.subtotalImpuestos = subtotalImpuestos;
+    }
+
+    public BigDecimal getSubtotalSinImpuestos() {
+        return subtotalSinImpuestos;
+    }
+
+    public void setSubtotalSinImpuestos(BigDecimal subtotalSinImpuestos) {
+        this.subtotalSinImpuestos = subtotalSinImpuestos;
+    }
+
+    public BigDecimal getIva() {
+        return iva;
+    }
+
+    public void setIva(BigDecimal iva) {
+        this.iva = iva;
+    }
+    
+    
     
     /**
      * Informacion adicional
