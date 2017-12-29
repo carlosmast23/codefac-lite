@@ -40,6 +40,8 @@ public class Producto implements Serializable
     private String nombre;
     @Column(name = "VALOR_UNITARIO")
     private BigDecimal valorUnitario;
+    @Column(name = "ESTADO")
+    private String estado;
     
     //@Column(name = "IVA")
     @JoinColumn(name = "IVA_ID")
@@ -55,6 +57,8 @@ public class Producto implements Serializable
     @ManyToOne
     //@Column(name = "IRBPNR")
     private ImpuestoDetalle irbpnr;
+    
+
 
     public ImpuestoDetalle getIva() {
         return iva;
@@ -133,5 +137,15 @@ public class Producto implements Serializable
     public void setValorUnitario(BigDecimal valorUnitario) {
         this.valorUnitario = valorUnitario;
     }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+    
+    
     
 }

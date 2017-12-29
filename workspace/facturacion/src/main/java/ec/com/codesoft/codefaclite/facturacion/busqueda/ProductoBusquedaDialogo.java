@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.ProductoEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoService;
 import java.util.ArrayList;
@@ -68,9 +69,10 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto>
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        String queryString = "SELECT u FROM Producto u WHERE ";
+        String queryString = "SELECT u FROM Producto u WHERE (u.estado=?1) and";
         queryString+=" ( LOWER(u.nombre) like "+filter+" )";
         QueryDialog queryDialog=new QueryDialog(queryString);
+        queryDialog.agregarParametro(1,ProductoEnumEstado.ACTIVO.getEstado());
         return queryDialog;
     }
     

@@ -122,7 +122,7 @@ public class FacturacionModel extends FacturacionPanel {
         initComponenesGraficos();
         initModelTablaFormaPago();
         initModelTablaDetalleFactura();
-        initModelTablaDatoAdicional();
+        initModelTablaDatoAdicional();        
         //setearVariablesIniciales();
 
     }
@@ -387,7 +387,7 @@ public class FacturacionModel extends FacturacionPanel {
         facturaProcesando = factura;
 
         DialogoCodefac.mensaje("Correcto", "La factura se grabo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-        //Despues de implemetar todo el metodo de grabar
+        //Despues de implemetar el metodo de grabar
         FacturacionElectronica facturaElectronica = new FacturacionElectronica(factura, session, this.panelPadre);
         facturaElectronica.setFactura(factura);
         facturaElectronica.setMapInfoAdicional(datosAdicionales);
@@ -825,7 +825,7 @@ public class FacturacionModel extends FacturacionPanel {
     public BigDecimal obtenerValorIva() {
         Map<String, Object> map = new HashMap<>();
         ImpuestoDetalleService impuestoDetalleService = new ImpuestoDetalleService();
-        map.put("tarifa", 12);
+        map.put("tarifa", 12); //TODO Parametrizar el iva con la variable del sistema
         List<ImpuestoDetalle> listaImpuestoDetalles = impuestoDetalleService.buscarImpuestoDetallePorMap(map);
         listaImpuestoDetalles.forEach((iD) -> {
             BigDecimal iva = iD.getPorcentaje();
@@ -938,6 +938,10 @@ public class FacturacionModel extends FacturacionPanel {
 
     @Override
     public void iniciar() {
+        if(!validacionParametrosCodefac())
+        {
+            dispose();
+        }
     }
 
     @Override
@@ -966,6 +970,45 @@ public class FacturacionModel extends FacturacionPanel {
     {
         getLblSecuencial().setText(factura.getPreimpreso());
         getjDateFechaEmision().setDate(factura.getFechaFactura());
+    }
+
+    private boolean validacionParametrosCodefac() {
+        String mensajeValidacion="Esta pantalla requiere : \n";
+        boolean validado=true;
+        if(session.getParametrosCodefac().get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor().equals(""))
+        { 
+            mensajeValidacion+=" - Archivo Firma\n";
+            validado= false;
+        }
+        
+        if(session.getParametrosCodefac().get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).getValor().equals(""))
+        { 
+            mensajeValidacion+=" - Clave Firma\n";
+            validado= false;
+        }
+        
+        if(session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals(""))
+        { 
+            mensajeValidacion+=" - Correo\n";
+            validado= false;
+        }
+        
+        if(session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals(""))
+        { 
+            mensajeValidacion+=" - Clave Correo \n";
+            validado= false;
+        }
+        
+        if(!validado)
+        {
+            //mensajeValidacion=mensajeValidacion.substring(0,mensajeValidacion.length()-2);
+            DialogoCodefac.mensaje("Acceso no permitido", mensajeValidacion+"\nPofavor complete estos datos en configuración para usar esta pantalla",DialogoCodefac.MENSAJE_ADVERTENCIA);
+        }
+        
+        
+        
+        return validado;
+        
     }
 
 }

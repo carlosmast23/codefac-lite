@@ -68,8 +68,8 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jDesktopPane1 = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuInicio = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItemInicio = new javax.swing.JMenuItem();
+        jMenuItemSalir = new javax.swing.JMenuItem();
         menuFacturacion = new javax.swing.JMenu();
         jMenuFactura = new javax.swing.JMenuItem();
         jMenuItemMonitor = new javax.swing.JMenuItem();
@@ -88,6 +88,8 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuUtilidades = new javax.swing.JMenu();
         jMenuCalculadora = new javax.swing.JMenuItem();
         jMenu8 = new javax.swing.JMenu();
+        jMenuItemContenido = new javax.swing.JMenuItem();
+        jMenuItemAcerca = new javax.swing.JMenuItem();
 
         JpanelAuxiliar.setLayout(new javax.swing.BoxLayout(JpanelAuxiliar, javax.swing.BoxLayout.LINE_AXIS));
 
@@ -215,16 +217,16 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
         menuInicio.setText("Inicio");
 
-        jMenuItem1.setText("Iinicio");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemInicio.setText("Iinicio");
+        jMenuItemInicio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                jMenuItemInicioActionPerformed(evt);
             }
         });
-        menuInicio.add(jMenuItem1);
+        menuInicio.add(jMenuItemInicio);
 
-        jMenuItem2.setText("Salir");
-        menuInicio.add(jMenuItem2);
+        jMenuItemSalir.setText("Salir");
+        menuInicio.add(jMenuItemSalir);
 
         jMenuBar1.add(menuInicio);
 
@@ -305,6 +307,18 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuBar1.add(jMenuUtilidades);
 
         jMenu8.setText("Ayuda");
+
+        jMenuItemContenido.setText("Contenido");
+        jMenuItemContenido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemContenidoActionPerformed(evt);
+            }
+        });
+        jMenu8.add(jMenuItemContenido);
+
+        jMenuItemAcerca.setText("Acerca");
+        jMenu8.add(jMenuItemAcerca);
+
         jMenuBar1.add(jMenu8);
 
         setJMenuBar(jMenuBar1);
@@ -319,9 +333,9 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
        
     }//GEN-LAST:event_btnBuscarActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void jMenuItemInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemInicioActionPerformed
         
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_jMenuItemInicioActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         
@@ -355,6 +369,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private void jMenuItemFacturaReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFacturaReporteActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItemFacturaReporteActionPerformed
+
+    private void jMenuItemContenidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemContenidoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItemContenidoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -421,13 +439,15 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JMenuItem jMenuComprobanteConfig;
     private javax.swing.JMenuItem jMenuEmisor;
     private javax.swing.JMenuItem jMenuFactura;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItemAcerca;
+    private javax.swing.JMenuItem jMenuItemContenido;
     private javax.swing.JMenuItem jMenuItemFacturaReporte;
+    private javax.swing.JMenuItem jMenuItemInicio;
     private javax.swing.JMenuItem jMenuItemMonitor;
     private javax.swing.JMenuItem jMenuItemNotaCredito;
     private javax.swing.JMenuItem jMenuItemReporteCliente;
     private javax.swing.JMenuItem jMenuItemReporteProducto;
+    private javax.swing.JMenuItem jMenuItemSalir;
     private javax.swing.JMenuItem jMenuItemUtilidades;
     private javax.swing.JMenuItem jMenuProducto;
     private javax.swing.JMenu jMenuUtilidades;
@@ -443,19 +463,19 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     // End of variables declaration//GEN-END:variables
 
     public JMenuItem getjMenuItem1() {
-        return jMenuItem1;
+        return jMenuItemInicio;
     }
 
     public void setjMenuItem1(JMenuItem jMenuItem1) {
-        this.jMenuItem1 = jMenuItem1;
+        this.jMenuItemInicio = jMenuItem1;
     }
 
     public JMenuItem getjMenuItem2() {
-        return jMenuItem2;
+        return jMenuItemSalir;
     }
 
     public void setjMenuItem2(JMenuItem jMenuItem2) {
-        this.jMenuItem2 = jMenuItem2;
+        this.jMenuItemSalir = jMenuItem2;
     }
 
 
@@ -665,6 +685,39 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     public void setjMenuItemReporteProducto(JMenuItem jMenuItemReporteProducto) {
         this.jMenuItemReporteProducto = jMenuItemReporteProducto;
     }
+
+    public JMenuItem getjMenuItemInicio() {
+        return jMenuItemInicio;
+    }
+
+    public void setjMenuItemInicio(JMenuItem jMenuItemInicio) {
+        this.jMenuItemInicio = jMenuItemInicio;
+    }
+
+    public JMenuItem getjMenuItemSalir() {
+        return jMenuItemSalir;
+    }
+
+    public void setjMenuItemSalir(JMenuItem jMenuItemSalir) {
+        this.jMenuItemSalir = jMenuItemSalir;
+    }
+
+    public JMenuItem getjMenuItemAcerca() {
+        return jMenuItemAcerca;
+    }
+
+    public void setjMenuItemAcerca(JMenuItem jMenuItemAcerca) {
+        this.jMenuItemAcerca = jMenuItemAcerca;
+    }
+
+    public JMenuItem getjMenuItemContenido() {
+        return jMenuItemContenido;
+    }
+
+    public void setjMenuItemContenido(JMenuItem jMenuItemContenido) {
+        this.jMenuItemContenido = jMenuItemContenido;
+    }
+    
     
     
     

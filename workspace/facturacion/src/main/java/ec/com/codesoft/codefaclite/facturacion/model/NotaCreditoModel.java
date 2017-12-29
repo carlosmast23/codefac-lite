@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.facturacion.model;
 
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
@@ -356,12 +357,54 @@ public class NotaCreditoModel extends NotaCreditoPanel {
 
     @Override
     public void iniciar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(!validacionParametrosCodefac())
+        {
+            dispose();
+        }
     }
 
     @Override
     public void nuevo() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    private boolean validacionParametrosCodefac() {
+        String mensajeValidacion="Esta pantalla requiere : \n";
+        boolean validado=true;
+        if(session.getParametrosCodefac().get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor().equals(""))
+        { 
+            mensajeValidacion+=" - Archivo Firma\n";
+            validado= false;
+        }
+        
+        if(session.getParametrosCodefac().get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).getValor().equals(""))
+        { 
+            mensajeValidacion+=" - Clave Firma\n";
+            validado= false;
+        }
+        
+        if(session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals(""))
+        { 
+            mensajeValidacion+=" - Correo\n";
+            validado= false;
+        }
+        
+        if(session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals(""))
+        { 
+            mensajeValidacion+=" - Clave Correo \n";
+            validado= false;
+        }
+        
+        if(!validado)
+        {
+            //mensajeValidacion=mensajeValidacion.substring(0,mensajeValidacion.length()-2);
+            DialogoCodefac.mensaje("Acceso no permitido", mensajeValidacion+"\nPofavor complete estos datos en configuración para usar esta pantalla",DialogoCodefac.MENSAJE_ADVERTENCIA);
+        }
+        
+        
+        
+        return validado;
+        
     }
 
 }

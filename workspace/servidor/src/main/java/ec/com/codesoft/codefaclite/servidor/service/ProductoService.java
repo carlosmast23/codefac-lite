@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.ProductoEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.facade.ProductoFacade;
 import java.util.List;
 
@@ -35,7 +36,8 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade>
     
     public void eliminar(Producto p)
     {
-        productoFacade.remove(p);
+        p.setEstado(ProductoEnumEstado.ELIMINADO.getEstado());
+        productoFacade.edit(p);
     }
     
     public List<Producto> buscar()

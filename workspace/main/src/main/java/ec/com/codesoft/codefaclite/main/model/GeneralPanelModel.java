@@ -142,6 +142,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     public GeneralPanelModel() 
     {
         iniciarComponentes();
+        agregarListenerBotonesDefecto();
         agregarListenerBotones();
         agregarListenerSplit();
         agregarListenerFrame();
@@ -314,6 +315,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         
         PanelSecundarioAbstract panelSecundario = panelesSecundariosMap.get(PanelSecundarioAbstract.PANEL_AYUDA);
         JPanel jpanel = (JPanel) panelSecundario;
+        int ancho=getjPanelSeleccion().getWidth()-1;
+        int alto=getjPanelSeleccion().getHeight()-1;
 
         if(browser!=null)
         {
@@ -322,7 +325,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             {
                 browser = new SwingBrowser();
                 browser.loadURL(panel.getURLAyuda());
-                browser.setBounds(1, 1, jpanel.getWidth() - 1, jpanel.getHeight() - 1);
+                browser.setBounds(1, 1,ancho,alto);
                 jpanel.removeAll();
                 jpanel.add(browser);
             }
@@ -338,17 +341,57 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             if(panel!=null)
             {
                 browser.loadURL(panel.getURLAyuda());
-                browser.setBounds(1, 1, jpanel.getWidth() - 1, jpanel.getHeight() - 1);
+                browser.setBounds(1, 1,ancho,alto);
                 jpanel.removeAll();
                 jpanel.add(browser);
             }
             else
             {
                 browser.loadURL("https://www.google.com.ec/");
-                browser.setBounds(1, 1, jpanel.getWidth() - 1, jpanel.getHeight() - 1);
+                browser.setBounds(1, 1,ancho,alto);
                 jpanel.removeAll();
                 jpanel.add(browser);
             }
+        }
+        //getjSplitPanelVerticalSecundario().setLeftComponent(getJPanelContenidoAuxiliar());
+            
+    }
+    
+    /**
+     * Carga toda la ayuda por defecto sin importar el panel
+     */
+    private void cargarAyudaTodo()
+    {
+
+        PanelSecundarioAbstract panelSecundario = panelesSecundariosMap.get(PanelSecundarioAbstract.PANEL_AYUDA);
+        JPanel jpanel = (JPanel) panelSecundario;
+        int ancho=getjPanelSeleccion().getWidth()-1;
+        int alto=getjPanelSeleccion().getHeight()-1;
+
+        if(browser!=null)
+        {
+            //Verifacar si la url cargada es la misma no volver a cargar
+            if(!browser.getUrl().equals("http://www.cf.codesoft-ec.com/ayuda"))
+            {
+                browser = new SwingBrowser();
+                browser.loadURL("http://www.cf.codesoft-ec.com/ayuda");
+                browser.setBounds(1, 1,ancho,alto);
+                jpanel.removeAll();
+                jpanel.add(browser);
+            }
+            else
+            {
+                jpanel.removeAll();
+                jpanel.add(browser);
+            }
+        }
+        else
+        {
+            browser = new SwingBrowser();
+            browser.loadURL("http://www.cf.codesoft-ec.com/ayuda");
+            browser.setBounds(1, 1,ancho,alto);
+            jpanel.removeAll();
+            jpanel.add(browser);
         }
         //getjSplitPanelVerticalSecundario().setLeftComponent(getJPanelContenidoAuxiliar());
             
@@ -1497,12 +1540,33 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         this.hiloPublicidadCodefac = hiloPublicidadCodefac;
     }
 
-    
-    
-
-    
-    
-    
-    
+    private void agregarListenerBotonesDefecto() {
+        getjMenuItemSalir().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Boolean respuesta=DialogoCodefac.dialogoPregunta("Alerta","Estas seguro que deseas salir?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                if(respuesta)
+                {
+                    hiloPublicidadCodefac.hiloPublicidad=false;
+                    dispose();
+                }
+            }
+        });
+        
+        getjMenuItemContenido().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cargarAyudaTodo();
+                mostrarPanelSecundario(true,PanelSecundarioAbstract.PANEL_AYUDA);
+            }
+        });
+        
+        getjMenuItemAcerca().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AcercaModel.getInstance().setVisible(true);
+            }
+        });
+    }
    
 }
