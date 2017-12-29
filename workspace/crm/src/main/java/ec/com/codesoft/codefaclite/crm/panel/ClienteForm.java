@@ -408,11 +408,11 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     @LimpiarAnotacion
     @ValidacionCodefacAnotacion(requerido=true , min=0 ,max = 100,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Nombre Social")
     public JTextField getjTextNombreSocial() {
-        return jTextNombres;
+        return jTextNombreSocial;
     }
 
     public void setjTextNombreSocial(JTextField jTextNombre) {
-        this.jTextNombres = jTextNombre;
+        this.jTextNombreSocial = jTextNombre;
     }
 
     @LimpiarAnotacion

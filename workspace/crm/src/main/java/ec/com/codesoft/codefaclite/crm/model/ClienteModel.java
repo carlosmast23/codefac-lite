@@ -25,6 +25,11 @@ import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
 import ec.com.codesoft.codefaclite.servidor.service.SriService;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -58,6 +63,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
 
     private PersonaService personaService;
     private Persona persona;
+    private String razonSocial;
     private String comboIdentificacion [] = {"CEDULA","RUC","PASAPORTE","IDENTIFICACION DEL EXTERIOR","PLACA"};
     private String comboTipoCliente [] = {"CLIENTE","SUJETO RETENIDO","DESTINATARIO"};
    
@@ -66,9 +72,11 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     public ClienteModel() {
         this.personaService = new PersonaService();
         getjTextExtension().setText("0");
+        this.razonSocial = "";
         cargarClientes();
         cargarDatosIniciales();
         addListenerCombos();
+        addListenerTexts();
     }
 
     @Override
@@ -296,6 +304,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
 
         //Setear el valor por defecto
         getCmbEstado().setSelectedItem(ClienteEnumEstado.ACTIVO);
+        this.razonSocial = "";
 
     }
 
@@ -404,5 +413,30 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         return resultado;
     }
            
-          
+    public void addListenerTexts()
+    {      
+        getjTextNombres().addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent evt) {
+                    
+            }
+            @Override
+            public void focusLost(FocusEvent evt)
+            {
+                getjTextNombreSocial().setText(getjTextNombres().getText() + " " + getjTextApellidos().getText());
+            }
+        });
+        
+        getjTextApellidos().addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent evt) {
+                
+            }
+            @Override
+            public void focusLost(FocusEvent evt)
+            {
+                getjTextNombreSocial().setText(getjTextNombres().getText() + " " + getjTextApellidos().getText());
+            }
+        });
+    }
 }

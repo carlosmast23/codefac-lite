@@ -1,0 +1,59 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package ec.com.codesoft.codefaclite.facturacion.busqueda;
+
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.servidor.entity.NotaCredito;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.FacturaEnumEstado;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.NotaCreditoEnumEstado;
+import java.util.Vector;
+
+/**
+ *
+ * @author PC
+ */
+public class NotaCreditoBusqueda implements InterfaceModelFind <NotaCredito>
+{
+
+    @Override
+    public Vector<ColumnaDialogo> getColumnas() {
+        Vector<ColumnaDialogo> titulo = new Vector<>();
+        titulo.add(new ColumnaDialogo("Id", 0.2d));
+        titulo.add(new ColumnaDialogo("preimpreso", 0.2d));
+        titulo.add(new ColumnaDialogo("cliente", 0.3d));
+        titulo.add(new ColumnaDialogo("fecha", 0.2d));
+        titulo.add(new ColumnaDialogo("total", 0.1d));        
+        return titulo;
+    }
+
+    @Override
+    public QueryDialog getConsulta(String filter) {
+        String queryString = "SELECT u FROM NotaCredito u WHERE u.estado<>?1 AND u.estado<>?2 AND u.estado<>?3 ";
+        queryString+="AND ( u.cliente.razonSocial like "+filter+" )";
+        QueryDialog queryDialog=new QueryDialog(queryString);
+        queryDialog.agregarParametro(1,NotaCreditoEnumEstado.TERMINADO.getEstado());
+        queryDialog.agregarParametro(2,NotaCreditoEnumEstado.ANULADO.getEstado());
+        queryDialog.agregarParametro(3,NotaCreditoEnumEstado.SIN_AUTORIZAR.getEstado());
+        return queryDialog;
+    }
+
+    @Override
+    public void agregarObjeto(NotaCredito t, Vector dato) {
+        dato.add(t.getId());
+        dato.add(t.getPreimpreso());
+        dato.add(t.getCliente().getRazonSocial());
+        dato.add(t.getFechaNotaCredito());
+        dato.add(t.getTotal());
+    }
+
+    @Override
+    public Boolean buscarObjeto(NotaCredito t, Object valor) {
+        return true;
+    }
+    
+}
