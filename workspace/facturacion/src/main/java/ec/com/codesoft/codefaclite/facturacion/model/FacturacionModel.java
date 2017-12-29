@@ -122,7 +122,7 @@ public class FacturacionModel extends FacturacionPanel {
         initComponenesGraficos();
         initModelTablaFormaPago();
         initModelTablaDetalleFactura();
-        initModelTablaDatoAdicional();
+        initModelTablaDatoAdicional();        
         //setearVariablesIniciales();
 
     }
@@ -938,6 +938,10 @@ public class FacturacionModel extends FacturacionPanel {
 
     @Override
     public void iniciar() {
+        if(!validacionParametrosCodefac())
+        {
+            dispose();
+        }
     }
 
     @Override
@@ -966,6 +970,45 @@ public class FacturacionModel extends FacturacionPanel {
     {
         getLblSecuencial().setText(factura.getPreimpreso());
         getjDateFechaEmision().setDate(factura.getFechaFactura());
+    }
+
+    private boolean validacionParametrosCodefac() {
+        String mensajeValidacion="Esta pantalla requiere : \n";
+        boolean validado=true;
+        if(session.getParametrosCodefac().get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor().equals(""))
+        { 
+            mensajeValidacion+=" - Archivo Firma\n";
+            validado= false;
+        }
+        
+        if(session.getParametrosCodefac().get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).getValor().equals(""))
+        { 
+            mensajeValidacion+=" - Clave Firma\n";
+            validado= false;
+        }
+        
+        if(session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals(""))
+        { 
+            mensajeValidacion+=" - Correo\n";
+            validado= false;
+        }
+        
+        if(session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals(""))
+        { 
+            mensajeValidacion+=" - Clave Correo \n";
+            validado= false;
+        }
+        
+        if(!validado)
+        {
+            //mensajeValidacion=mensajeValidacion.substring(0,mensajeValidacion.length()-2);
+            DialogoCodefac.mensaje("Acceso no permitido", mensajeValidacion+"\nPofavor complete estos datos en configuración para usar esta pantalla",DialogoCodefac.MENSAJE_ADVERTENCIA);
+        }
+        
+        
+        
+        return validado;
+        
     }
 
 }
