@@ -51,7 +51,33 @@ public class FirmaElectronica {
         this.claveFirma = claveFirma;
     }
 
-    
+    public static boolean FirmaVerificar(String rutaAlmacenCertificado,String passwordAlmacenCertificado)
+    {
+         try {
+            KeyStore clave=null;
+            clave=KeyStore.getInstance("PKCS12");
+            FileInputStream file=new FileInputStream(rutaAlmacenCertificado);
+            clave.load(new FileInputStream(rutaAlmacenCertificado),
+                    passwordAlmacenCertificado.toCharArray());            
+            return true;
+        } catch (KeyStoreException ex) {
+            Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            if(ex.getMessage().equals("keystore password was incorrect"))
+            {
+               return false;
+            }
+            
+            Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CertificateException ex) {
+            Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
+    }
     
     
     public Document firmar(String recursoParaFirmar)throws ComprobanteElectronicoException

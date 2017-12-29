@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
+import ec.com.codesoft.codefaclite.facturacionelectronica.FirmaElectronica;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.servidor.entity.Impuesto;
 import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
@@ -20,6 +21,8 @@ import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -135,9 +138,12 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         parametros.get(ParametroCodefac.IVA_DEFECTO).setValor(ivaDefacto);
         parametros.get(ParametroCodefac.CORREO_USUARIO).setValor(getTxtCorreoElectronico().getText());
         parametros.get(ParametroCodefac.CORREO_CLAVE).setValor(new String(getTxtPasswordCorreo().getPassword()));
-        parametros.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).setValor(new String(getTxtClaveFirma().getPassword()));
         
+        parametros.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).setValor(new String(getTxtClaveFirma().getPassword()));
+        //verificarFirmaElectronica();
     }
+
+
 
     private void cargarDatosConfiguraciones() {
         parametros = parametroCodefacService.getParametrosMap();
@@ -227,6 +233,37 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
 
             }
         });
+        
+        getTxtClaveFirma().addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+              //  throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                verificarFirmaElectronica();
+            }
+        });
+    }
+    
+    private void verificarFirmaElectronica()
+    {
+        String claveFirma=new String(getTxtClaveFirma().getPassword());
+        String nombreArchivo=getTxtNombreFirma().getText();
+        String rutaDestino = session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + ComprobanteElectronicoService.CARPETA_CONFIGURACION + "/";
+        String pathFirma=rutaDestino+nombreArchivo;
+        
+        if(!claveFirma.equals("") && !pathFirma.equals(""))
+        {
+            if(!FirmaElectronica.FirmaVerificar(pathFirma,claveFirma))
+            {
+                DialogoCodefac.mensaje("Error Clave","La Clave de la firma es incorrecta",DialogoCodefac.MENSAJE_INCORRECTO);
+                getTxtClaveFirma().setText("");
+            }
+        }    
+
+
     }
 
     @Override
