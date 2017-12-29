@@ -52,6 +52,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         impuestoDetalleService = new ImpuestoDetalleService();
         this.parametroCodefacService = new ParametroCodefacService();
         cargarDatosIva();
+        cargarModosFacturacion();
         cargarDatosConfiguraciones();
         jFileChooser = new JFileChooser();
         jFileChooser.setDialogTitle("Elegir archivo");
@@ -140,6 +141,8 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         parametros.get(ParametroCodefac.CORREO_CLAVE).setValor(new String(getTxtPasswordCorreo().getPassword()));
         
         parametros.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).setValor(new String(getTxtClaveFirma().getPassword()));
+        
+        parametros.get(ParametroCodefac.MODO_FACTURACION).setValor(getCmbModoFacturacion().getSelectedItem().toString());
         //verificarFirmaElectronica();
     }
 
@@ -165,6 +168,12 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         map.put("tarifa", Integer.parseInt(parametros.get(ParametroCodefac.IVA_DEFECTO).getValor()));
         List<ImpuestoDetalle> lista = impuestoDetalleService.buscarImpuestoDetallePorMap(map);
         getCmbIvaDefault().getModel().setSelectedItem(lista.get(0));
+        /**
+         * Cargar el modo de facturacion por defecto
+         */
+        String modoProduccion=parametros.get(ParametroCodefac.MODO_FACTURACION).getValor();
+        getCmbModoFacturacion().setSelectedItem(modoProduccion);
+        
 
     }
 
@@ -175,6 +184,12 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             getCmbIvaDefault().addItem(impuesto);
         }
     }
+    
+    private void cargarModosFacturacion() {
+        getCmbModoFacturacion().addItem(ComprobanteElectronicoService.MODO_PRODUCCION);
+        getCmbModoFacturacion().addItem(ComprobanteElectronicoService.MODO_PRUEBAS);
+    }
+
 
     public void cargarDatosArchivos(File archivoEscogido) {
         File archivo = archivoEscogido;
@@ -268,7 +283,6 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
 
     @Override
     public void iniciar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

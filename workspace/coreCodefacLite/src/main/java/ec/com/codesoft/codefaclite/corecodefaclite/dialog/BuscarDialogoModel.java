@@ -105,6 +105,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
     
     private void setearBotonesSiguienteAtras()
     {
+        
         if(paginaActual==1)
         {
             getBtnAtras().setEnabled(false);
@@ -121,6 +122,12 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         else
         {
             getBtnSiguiente().setEnabled(true);
+        }
+        
+        if(cantidadPaginas==0)
+        {
+            getBtnAtras().setEnabled(false);
+            getBtnSiguiente().setEnabled(false);
         }
     }
     

@@ -223,7 +223,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         panelFacturacionElectronica.add(jLabel6, gridBagConstraints);
 
-        cmbModoFacturacion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Prueba", "Producción" }));
+        cmbModoFacturacion.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
