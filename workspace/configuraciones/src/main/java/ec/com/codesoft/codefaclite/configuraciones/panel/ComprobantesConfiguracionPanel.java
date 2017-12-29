@@ -56,10 +56,8 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         cmbModoFacturacion = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
         txtNombreFirma = new javax.swing.JTextField();
         txtClaveFirma = new javax.swing.JPasswordField();
-        txtClaveFirmaRepetir = new javax.swing.JPasswordField();
         btnFirmaElectronica = new javax.swing.JButton();
         jLabel28 = new javax.swing.JLabel();
         jLabel29 = new javax.swing.JLabel();
@@ -248,14 +246,6 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         panelFacturacionElectronica.add(jLabel9, gridBagConstraints);
-
-        jLabel10.setText("Repetir Clave Firma:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
-        panelFacturacionElectronica.add(jLabel10, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
@@ -271,13 +261,6 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         panelFacturacionElectronica.add(txtClaveFirma, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 105;
-        gridBagConstraints.weightx = 0.1;
-        panelFacturacionElectronica.add(txtClaveFirmaRepetir, gridBagConstraints);
 
         btnFirmaElectronica.setText("Cargar Firma");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -476,7 +459,6 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
     private javax.swing.JComboBox<ImpuestoDetalle> cmbIvaDefault;
     private javax.swing.JComboBox<String> cmbModoFacturacion;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
@@ -507,7 +489,6 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
     private javax.swing.JPanel panelFacturacionElectronica;
     private javax.swing.JPanel panelSecuenciales;
     private javax.swing.JPasswordField txtClaveFirma;
-    private javax.swing.JPasswordField txtClaveFirmaRepetir;
     private javax.swing.JTextField txtCorreoElectronico;
     private javax.swing.JTextField txtDirectorioRecurso;
     private javax.swing.JTextField txtEstablecimiento;
@@ -553,9 +534,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
     }
 
 
-    public JPasswordField getTxtClaveFirmaRepetir() {
-        return txtClaveFirmaRepetir;
-    }
+
 
     public void setTxtClaveFirma(JPasswordField txtClaveFirma) {
         this.txtClaveFirma = txtClaveFirma;

@@ -134,7 +134,9 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         String ivaDefacto = ((ImpuestoDetalle) getCmbIvaDefault().getSelectedItem()).getTarifa().toString();
         parametros.get(ParametroCodefac.IVA_DEFECTO).setValor(ivaDefacto);
         parametros.get(ParametroCodefac.CORREO_USUARIO).setValor(getTxtCorreoElectronico().getText());
-        parametros.get(ParametroCodefac.CORREO_CLAVE).setValor(getTxtPasswordCorreo().getText());
+        parametros.get(ParametroCodefac.CORREO_CLAVE).setValor(new String(getTxtPasswordCorreo().getPassword()));
+        parametros.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).setValor(new String(getTxtClaveFirma().getPassword()));
+        
     }
 
     private void cargarDatosConfiguraciones() {
@@ -152,6 +154,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         getTxtCorreoElectronico().setText(parametros.get(ParametroCodefac.CORREO_USUARIO).getValor());
         getTxtPasswordCorreo().setText(parametros.get(ParametroCodefac.CORREO_CLAVE).getValor());
         getTxtNombreFirma().setText(parametros.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor());
+        getTxtClaveFirma().setText(parametros.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).getValor());
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("tarifa", Integer.parseInt(parametros.get(ParametroCodefac.IVA_DEFECTO).getValor()));
         List<ImpuestoDetalle> lista = impuestoDetalleService.buscarImpuestoDetallePorMap(map);
