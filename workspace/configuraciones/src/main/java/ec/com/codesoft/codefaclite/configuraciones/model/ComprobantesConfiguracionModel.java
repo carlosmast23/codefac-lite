@@ -64,8 +64,9 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     @Override
     public void grabar() throws ExcepcionCodefacLite {
         actualizarDatosVista();
-        this.parametroCodefacService.editarParametros(parametros);
         moverArchivo();
+        this.parametroCodefacService.editarParametros(parametros);
+        
         /**
          * Establesco el ciclo de vida en el cual me encuentro
          */
@@ -170,6 +171,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         File archivo = archivoEscogido;
         String rutaArchivo = archivo.getPath();
         String nombreArchivo = archivo.getName();
+        getTxtNombreFirma().setText(nombreArchivo);
         String rutaDestino = session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + ComprobanteElectronicoService.CARPETA_CONFIGURACION + "/";
         rutaDestino += nombreArchivo;
         establecerDondeMoverArchivo(rutaArchivo, rutaDestino);
@@ -185,10 +187,19 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         if (origen == null || destino == null) {
             return;
         }
+        
+        File file=destino.toFile();
+        //crear toda la ruta si no existe
+        if (!file.exists()) {
+            file.getParentFile().mkdirs();
+            //file.mkdir();
+        }
 
         try {
             Files.copy(origen, destino, StandardCopyOption.REPLACE_EXISTING);
             getTxtNombreFirma().setText("" + destino.getFileName());
+            ParametroCodefac parametro=parametros.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA);
+            parametro.setValor(destino.getFileName().toString());
         } catch (IOException ex) {
             DialogoCodefac.mensaje("Firma", "Problema en guardar firma", DialogoCodefac.MENSAJE_INCORRECTO);
         }
