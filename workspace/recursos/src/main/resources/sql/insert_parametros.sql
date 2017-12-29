@@ -8,10 +8,10 @@
  * Created: 16/11/2017
  */
 
-INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('firma_electronica','carlos_alfonso_sanchez_coyago.p12');
-INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('clave_firma_electronica','Code17bwbtj');
-INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('directorio_recursos','C:/FacturacionOffline');
-INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('modo_facturacion','pruebas');
+INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('firma_electronica','');
+INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('clave_firma_electronica','');
+INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('directorio_recursos','C:/CodefacRecursos');
+INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('modo_facturacion','produccion');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('sri_ws_recepcion','https://cel.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('sri_ws_recepcion_prueba','https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('sri_ws_autorizacion','https://cel.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl');
@@ -21,9 +21,9 @@ INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('secuencial_guia_remision','1');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('secuencial_nota_credito','1');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('secuencial_nota_debito','1');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('secuencial_retencion','1');
-INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('correo_usuario','carlosmast2302@gmail.com');
-INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('correo_clave','especodesoft2301');
+INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('correo_usuario','');
+INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('correo_clave','');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('iva_defecto','12');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('establecimiento','001');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('punto_emision','001');
-INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('logo_empresa','logotipo_codesoft.png');
+INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('logo_empresa','');

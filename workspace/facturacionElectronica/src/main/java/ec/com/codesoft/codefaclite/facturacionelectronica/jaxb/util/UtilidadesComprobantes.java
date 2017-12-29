@@ -198,6 +198,14 @@ public abstract class UtilidadesComprobantes {
             JasperReport report = JasperCompileManager.compileReport(pathReporte);
             JRBeanCollectionDataSource dataReport = new JRBeanCollectionDataSource(datos);
             JasperPrint print = JasperFillManager.fillReport(report, parametros, dataReport);
+            
+            File file = new File(pathGrabar);
+            //crear toda la ruta si no existe
+            if (!file.exists()) {
+                file.getParentFile().mkdirs();
+                //file.mkdir();
+            }
+            
             JasperExportManager.exportReportToPdfFile(print, pathGrabar);
             //JasperViewer.viewReport(print,false);
         } catch (JRException ex) {
@@ -222,6 +230,7 @@ public abstract class UtilidadesComprobantes {
     public static InputStream getStreamByPath(String pathLogoImagen)
     {
         try {
+            System.out.println(pathLogoImagen);
             File file = new File(pathLogoImagen);
             BufferedImage image = ImageIO.read(file); 
             ByteArrayOutputStream os = new ByteArrayOutputStream();

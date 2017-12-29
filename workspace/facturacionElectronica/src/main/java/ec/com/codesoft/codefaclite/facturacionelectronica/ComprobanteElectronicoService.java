@@ -124,7 +124,6 @@ public class ComprobanteElectronicoService implements Runnable {
     private String pathNotaCreditoJasper;
         
     private String pathParentJasper;
-    private BufferedImage logoImagen;
     public String pathLogoImagen;
 
     private Map<String, Object> mapAdicionalReporte;
@@ -313,10 +312,11 @@ public class ComprobanteElectronicoService implements Runnable {
              * pagina
              */
             datosMap.putAll(mapAdicionalReporte);
-
+            
+            /*
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             ImageIO.write(logoImagen, "jpg", os);
-            InputStream is = new ByteArrayInputStream(os.toByteArray());
+            InputStream is = new ByteArrayInputStream(os.toByteArray());*/
 
             //datosMap.put("imagen_logo",is);
             datosMap.put("imagen_logo", UtilidadesComprobantes.getStreamByPath(pathLogoImagen));
@@ -647,10 +647,7 @@ public class ComprobanteElectronicoService implements Runnable {
         this.pathParentJasper = pathParentJasper;
     }
 
-    public void setLogoImagen(BufferedImage logoImagen) {
-        this.logoImagen = logoImagen;
-    }
-
+    
     public Map<String, Object> getMapAdicionalReporte() {
         return mapAdicionalReporte;
     }
