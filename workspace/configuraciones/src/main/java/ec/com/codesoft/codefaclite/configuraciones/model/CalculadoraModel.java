@@ -25,10 +25,12 @@ public class CalculadoraModel extends CalculadoraPanel{
     public CalculadoraModel() {
         this.cicloVida=false;
         addListenerBotones();
+        
     }
     
     private void addListenerBotones() {
         
+              
         getBtnIgual().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -38,7 +40,30 @@ public class CalculadoraModel extends CalculadoraPanel{
             }
         });
         
-        addKeyListener(new KeyListener() {
+        getBtn0().addActionListener(new ListenerBotones("0"));
+        getBtn1().addActionListener(new ListenerBotones("1"));
+        getBtn2().addActionListener(new ListenerBotones("2"));
+        getBtn3().addActionListener(new ListenerBotones("3"));
+        getBtn4().addActionListener(new ListenerBotones("4"));
+        getBtn5().addActionListener(new ListenerBotones("5"));
+        getBtn6().addActionListener(new ListenerBotones("6"));
+        getBtn7().addActionListener(new ListenerBotones("7"));
+        getBtn8().addActionListener(new ListenerBotones("8"));
+        getBtn9().addActionListener(new ListenerBotones("9"));
+        
+        getBtnSumar().addActionListener(new ListenerBotones("+"));
+        getBtnRestar().addActionListener(new ListenerBotones("-"));
+        getBtnMultiplicar().addActionListener(new ListenerBotones("*"));
+        getBtnDividir().addActionListener(new ListenerBotones("/"));
+        getBtnDecimal().addActionListener(new ListenerBotones("."));
+        
+        
+        
+        
+        
+        
+        
+        this.getJtxtAreaCalculadora().addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -64,6 +89,28 @@ public class CalculadoraModel extends CalculadoraPanel{
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
         });
+    }
+    
+           
+    private class ListenerBotones implements ActionListener
+    {
+        String letra;
+
+        public ListenerBotones(String letra) {
+            this.letra = letra;
+        }
+        
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            agregarTexto(letra);
+        }
+    
+    }
+    
+    private void agregarTexto(String texto)
+    {
+        textoCalculadora+=texto;
+        actulizarTexto();
     }
     private void actulizarTexto()
     {
@@ -109,7 +156,7 @@ public class CalculadoraModel extends CalculadoraPanel{
 
     @Override
     public String getNombre() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "Calculadora";
     }
 
     @Override
@@ -124,7 +171,7 @@ public class CalculadoraModel extends CalculadoraPanel{
 
     @Override
     public void iniciar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.getJtxtAreaCalculadora().requestFocusInWindow();
     }
 
     @Override

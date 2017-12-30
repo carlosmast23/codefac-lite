@@ -36,27 +36,28 @@ public abstract class CalculadoraPanel extends ControladorCodefacInterface {
         jScrollPane1 = new javax.swing.JScrollPane();
         jtxtAreaCalculadora = new javax.swing.JTextArea();
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton12 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
-        jButton11 = new javax.swing.JButton();
-        jButton9 = new javax.swing.JButton();
-        jButton10 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
-        jButton13 = new javax.swing.JButton();
-        jButton14 = new javax.swing.JButton();
+        btn4 = new javax.swing.JButton();
+        btn1 = new javax.swing.JButton();
+        btn7 = new javax.swing.JButton();
+        btn3 = new javax.swing.JButton();
+        btnMultiplicar = new javax.swing.JButton();
+        btn2 = new javax.swing.JButton();
+        btn8 = new javax.swing.JButton();
+        btn9 = new javax.swing.JButton();
+        btn5 = new javax.swing.JButton();
+        btn6 = new javax.swing.JButton();
+        btnRestar = new javax.swing.JButton();
+        btnDividir = new javax.swing.JButton();
+        btn0 = new javax.swing.JButton();
+        btnDecimal = new javax.swing.JButton();
         btnIgual = new javax.swing.JButton();
-        jButton16 = new javax.swing.JButton();
+        btnSumar = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
+        setTitle("Calculadora");
 
         jtxtAreaCalculadora.setColumns(20);
         jtxtAreaCalculadora.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
@@ -67,7 +68,7 @@ public abstract class CalculadoraPanel extends ControladorCodefacInterface {
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jButton1.setText("4");
+        btn4.setText("4");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -75,9 +76,9 @@ public abstract class CalculadoraPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
-        jPanel1.add(jButton1, gridBagConstraints);
+        jPanel1.add(btn4, gridBagConstraints);
 
-        jButton2.setText("1");
+        btn1.setText("1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -85,9 +86,9 @@ public abstract class CalculadoraPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
-        jPanel1.add(jButton2, gridBagConstraints);
+        jPanel1.add(btn1, gridBagConstraints);
 
-        jButton3.setText("7");
+        btn7.setText("7");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -95,9 +96,9 @@ public abstract class CalculadoraPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
-        jPanel1.add(jButton3, gridBagConstraints);
+        jPanel1.add(btn7, gridBagConstraints);
 
-        jButton4.setText("3");
+        btn3.setText("3");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
@@ -105,9 +106,9 @@ public abstract class CalculadoraPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
-        jPanel1.add(jButton4, gridBagConstraints);
+        jPanel1.add(btn3, gridBagConstraints);
 
-        jButton5.setText("X");
+        btnMultiplicar.setText("X");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
@@ -115,9 +116,9 @@ public abstract class CalculadoraPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
-        jPanel1.add(jButton5, gridBagConstraints);
+        jPanel1.add(btnMultiplicar, gridBagConstraints);
 
-        jButton6.setText("2");
+        btn2.setText("2");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -125,52 +126,52 @@ public abstract class CalculadoraPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
-        jPanel1.add(jButton6, gridBagConstraints);
+        jPanel1.add(btn2, gridBagConstraints);
 
-        jButton12.setText("8");
+        btn8.setText("8");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
-        jPanel1.add(jButton12, gridBagConstraints);
+        jPanel1.add(btn8, gridBagConstraints);
 
-        jButton8.setText("9");
+        btn9.setText("9");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
-        jPanel1.add(jButton8, gridBagConstraints);
+        jPanel1.add(btn9, gridBagConstraints);
 
-        jButton11.setText("5");
+        btn5.setText("5");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
-        jPanel1.add(jButton11, gridBagConstraints);
+        jPanel1.add(btn5, gridBagConstraints);
 
-        jButton9.setText("6");
+        btn6.setText("6");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
-        jPanel1.add(jButton9, gridBagConstraints);
+        jPanel1.add(btn6, gridBagConstraints);
 
-        jButton10.setText("-");
+        btnRestar.setText("-");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
-        jPanel1.add(jButton10, gridBagConstraints);
+        jPanel1.add(btnRestar, gridBagConstraints);
 
-        jButton7.setText("/");
+        btnDividir.setText("/");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
@@ -178,25 +179,25 @@ public abstract class CalculadoraPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
-        jPanel1.add(jButton7, gridBagConstraints);
+        jPanel1.add(btnDividir, gridBagConstraints);
 
-        jButton13.setText("0");
+        btn0.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
-        jPanel1.add(jButton13, gridBagConstraints);
+        jPanel1.add(btn0, gridBagConstraints);
 
-        jButton14.setText(".");
+        btnDecimal.setText(".");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
-        jPanel1.add(jButton14, gridBagConstraints);
+        jPanel1.add(btnDecimal, gridBagConstraints);
 
         btnIgual.setBackground(new java.awt.Color(0, 102, 102));
         btnIgual.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -210,14 +211,14 @@ public abstract class CalculadoraPanel extends ControladorCodefacInterface {
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(btnIgual, gridBagConstraints);
 
-        jButton16.setText("+");
+        btnSumar.setText("+");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
-        jPanel1.add(jButton16, gridBagConstraints);
+        jPanel1.add(btnSumar, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -226,22 +227,22 @@ public abstract class CalculadoraPanel extends ControladorCodefacInterface {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn0;
+    private javax.swing.JButton btn1;
+    private javax.swing.JButton btn2;
+    private javax.swing.JButton btn3;
+    private javax.swing.JButton btn4;
+    private javax.swing.JButton btn5;
+    private javax.swing.JButton btn6;
+    private javax.swing.JButton btn7;
+    private javax.swing.JButton btn8;
+    private javax.swing.JButton btn9;
+    private javax.swing.JButton btnDecimal;
+    private javax.swing.JButton btnDividir;
     private javax.swing.JButton btnIgual;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton11;
-    private javax.swing.JButton jButton12;
-    private javax.swing.JButton jButton13;
-    private javax.swing.JButton jButton14;
-    private javax.swing.JButton jButton16;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
+    private javax.swing.JButton btnMultiplicar;
+    private javax.swing.JButton btnRestar;
+    private javax.swing.JButton btnSumar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jtxtAreaCalculadora;
@@ -261,6 +262,126 @@ public abstract class CalculadoraPanel extends ControladorCodefacInterface {
 
     public void setBtnIgual(JButton btnIgual) {
         this.btnIgual = btnIgual;
+    }
+
+    public JButton getBtn0() {
+        return btn0;
+    }
+
+    public void setBtn0(JButton btn0) {
+        this.btn0 = btn0;
+    }
+
+    public JButton getBtn1() {
+        return btn1;
+    }
+
+    public void setBtn1(JButton btn1) {
+        this.btn1 = btn1;
+    }
+
+    public JButton getBtn2() {
+        return btn2;
+    }
+
+    public void setBtn2(JButton btn2) {
+        this.btn2 = btn2;
+    }
+
+    public JButton getBtn3() {
+        return btn3;
+    }
+
+    public void setBtn3(JButton btn3) {
+        this.btn3 = btn3;
+    }
+
+    public JButton getBtn4() {
+        return btn4;
+    }
+
+    public void setBtn4(JButton btn4) {
+        this.btn4 = btn4;
+    }
+
+    public JButton getBtn5() {
+        return btn5;
+    }
+
+    public void setBtn5(JButton btn5) {
+        this.btn5 = btn5;
+    }
+
+    public JButton getBtn6() {
+        return btn6;
+    }
+
+    public void setBtn6(JButton btn6) {
+        this.btn6 = btn6;
+    }
+
+    public JButton getBtn7() {
+        return btn7;
+    }
+
+    public void setBtn7(JButton btn7) {
+        this.btn7 = btn7;
+    }
+
+    public JButton getBtn8() {
+        return btn8;
+    }
+
+    public void setBtn8(JButton btn8) {
+        this.btn8 = btn8;
+    }
+
+    public JButton getBtn9() {
+        return btn9;
+    }
+
+    public void setBtn9(JButton btn9) {
+        this.btn9 = btn9;
+    }
+
+    public JButton getBtnDecimal() {
+        return btnDecimal;
+    }
+
+    public void setBtnDecimal(JButton btnDecimal) {
+        this.btnDecimal = btnDecimal;
+    }
+
+    public JButton getBtnDividir() {
+        return btnDividir;
+    }
+
+    public void setBtnDividir(JButton btnDividir) {
+        this.btnDividir = btnDividir;
+    }
+
+    public JButton getBtnMultiplicar() {
+        return btnMultiplicar;
+    }
+
+    public void setBtnMultiplicar(JButton btnMultiplicar) {
+        this.btnMultiplicar = btnMultiplicar;
+    }
+
+    public JButton getBtnRestar() {
+        return btnRestar;
+    }
+
+    public void setBtnRestar(JButton btnRestar) {
+        this.btnRestar = btnRestar;
+    }
+
+    public JButton getBtnSumar() {
+        return btnSumar;
+    }
+
+    public void setBtnSumar(JButton btnSumar) {
+        this.btnSumar = btnSumar;
     }
 
     
