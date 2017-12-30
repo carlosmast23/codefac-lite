@@ -1567,6 +1567,14 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 AcercaModel.getInstance().setVisible(true);
             }
         });
+        
+        getjMenuItemMonitor().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MonitorComprobanteModel.getInstance().mostrar();
+            }
+        });
+        
     }
    
 }
