@@ -27,7 +27,8 @@ import javax.imageio.ImageIO;
 public enum DirectorioCodefac {
     IMAGENES("imagenes"),
     LICENCIA("licencia"),
-    COMPROBANTES("comprobantes"),
+    COMPROBANTES_PRUEBAS("comprobantes/pruebas"),
+    COMPROBANTES_PRODUCCION("comprobantes/produccion"),
     FIRMA("firma"),
     TEMP("temporal");
     

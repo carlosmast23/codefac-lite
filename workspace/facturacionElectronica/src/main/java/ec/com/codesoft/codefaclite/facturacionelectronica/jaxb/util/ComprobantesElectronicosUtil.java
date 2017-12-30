@@ -220,7 +220,7 @@ public abstract class ComprobantesElectronicosUtil {
     public static List<ComprobanteElectronico> getComprobantesObjectByFolder(String pathBase, String carpetaConfiguracion) {
         List<ComprobanteElectronico> comprobantes=new ArrayList<ComprobanteElectronico>();
         
-        String pathDirectorio = pathBase + "/" + carpetaConfiguracion;
+        String pathDirectorio = pathBase +"/" + carpetaConfiguracion;
         File f = new File(pathDirectorio);
         //List<File> autorizaciones=new ArrayList<String>();
         if (f.exists()) { // Directorio existe 

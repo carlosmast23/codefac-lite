@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.facturacion.model;
 
 import com.sun.glass.ui.Cursor;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacion.other.FacturacionElectronica;
@@ -237,8 +238,16 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String path = session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor;
+                String modoFacturacion=session.getParametrosCodefac().get(ParametroCodefac.MODO_FACTURACION).valor;
+                String pathComprobantes="";
+                if(modoFacturacion.equals(ComprobanteElectronicoService.MODO_PRODUCCION))
+                   pathComprobantes=DirectorioCodefac.COMPROBANTES_PRODUCCION.getDirectorio(session);
+                else
+                   pathComprobantes=DirectorioCodefac.COMPROBANTES_PRUEBAS.getDirectorio(session);
+                
+                
                 //File[] archivos = ComprobantesElectronicosUtil.getComprobantesByFolder(path, getCmbCarpetaComprobante().getSelectedItem().toString());
-                comprobantes= ComprobantesElectronicosUtil.getComprobantesObjectByFolder(path,getCmbCarpetaComprobante().getSelectedItem().toString());
+                comprobantes= ComprobantesElectronicosUtil.getComprobantesObjectByFolder(pathComprobantes,getCmbCarpetaComprobante().getSelectedItem().toString());
                 cargarDatosComprobantesTabla(comprobantes);
                 cargarSiguienteEtapaPorCarpeta(getCmbCarpetaComprobante().getSelectedItem().toString());
             }

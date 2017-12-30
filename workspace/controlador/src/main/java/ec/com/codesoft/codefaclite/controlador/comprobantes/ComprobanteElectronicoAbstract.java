@@ -107,55 +107,54 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
     
     private void cargarConfiguraciones()
     {
-            servicio.setPathBase(session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor);
-            servicio.setNombreFirma(session.getParametrosCodefac().get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).valor);
-            servicio.setClaveFirma(session.getParametrosCodefac().get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).valor);
-            String modoFacturacion=session.getParametrosCodefac().get(ParametroCodefac.MODO_FACTURACION).valor;
-            servicio.setModoFacturacion(modoFacturacion);
-            
-            /**
-             * Setear variables de configuracion para los reportes
-             */
-            servicio.setPathFacturaJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourcePath("facturaReporte.jrxml"));
-            servicio.setPathNotaCreditoJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourcePath("notaCreditoReporte.jrxml"));
-            //String imagenLogo=session.getParametrosCodefac().get(ParametroCodefac.LOGO_EMPRESA).getValor();
-            //TODO Este parametro debe ser configurable cuando se la version de pago para que permita seleccionar la imagen del cliente
-            //servicio.setLogoImagen(DirectorioCodefac.IMAGENES.getArchivoStream(session,imagenLogo));
-            //BufferedImage image = ImageIO.read(RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg"));
-            //servicio.setLogoImagen(image);
-            servicio.setPathParentJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourcesParentPath("facturaReporte.jrxml"));
-            servicio.setMapAdicionalReporte(interfazPadre.mapReportePlantilla());
-            servicio.pathLogoImagen=RecursoCodefac.IMAGENES_GENERAL.getResourcePath("sin_imagen.jpg");
-            
-            /**
-             * Cargar los web services dependiendo el modo de facturacion
-             */
-            if(ComprobanteElectronicoService.MODO_PRODUCCION.equals(modoFacturacion))
-            {
-                String autorizacion=session.getParametrosCodefac().get(ParametroCodefac.SRI_WS_AUTORIZACION).valor;
-                servicio.setUriAutorizacion(autorizacion);
-                
-                String recepcion=session.getParametrosCodefac().get(ParametroCodefac.SRI_WS_RECEPCION).valor;
-                servicio.setUriRecepcion(recepcion);
-                
-            }
-            else
-            {
-                String autorizacion = session.getParametrosCodefac().get(ParametroCodefac.SRI_WS_AUTORIZACION_PRUEBA).valor;
-                servicio.setUriAutorizacion(autorizacion);
-                
-                String recepcion = session.getParametrosCodefac().get(ParametroCodefac.SRI_WS_RECEPCION_PRUEBA).valor;
-                servicio.setUriRecepcion(recepcion);
-            }
-            
-            /**
-             * Cargar variables para el envio del correo
-             */
-            cargarConfiguracionesCorreo();
-            servicio.setCorreosElectronicos(getCorreos());
-            String footer=UtilidadVarios.getStringHtmltoUrl(RecursoCodefac.HTML.getResourceInputStream("footer_codefac.html"));
-            servicio.setFooterMensajeCorreo(footer);
-    
+        //String pathBase de los directorios
+
+        servicio.setPathBase(session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor);
+        servicio.setNombreFirma(session.getParametrosCodefac().get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).valor);
+        servicio.setClaveFirma(session.getParametrosCodefac().get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).valor);
+        String modoFacturacion = session.getParametrosCodefac().get(ParametroCodefac.MODO_FACTURACION).valor;
+        servicio.setModoFacturacion(modoFacturacion);
+
+        /**
+         * Setear variables de configuracion para los reportes
+         */
+        servicio.setPathFacturaJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourcePath("facturaReporte.jrxml"));
+        servicio.setPathNotaCreditoJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourcePath("notaCreditoReporte.jrxml"));
+        //String imagenLogo=session.getParametrosCodefac().get(ParametroCodefac.LOGO_EMPRESA).getValor();
+        //TODO Este parametro debe ser configurable cuando se la version de pago para que permita seleccionar la imagen del cliente
+        //servicio.setLogoImagen(DirectorioCodefac.IMAGENES.getArchivoStream(session,imagenLogo));
+        //BufferedImage image = ImageIO.read(RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg"));
+        //servicio.setLogoImagen(image);
+        servicio.setPathParentJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourcesParentPath("facturaReporte.jrxml"));
+        servicio.setMapAdicionalReporte(interfazPadre.mapReportePlantilla());
+        servicio.pathLogoImagen = RecursoCodefac.IMAGENES_GENERAL.getResourcePath("sin_imagen.jpg");
+
+        /**
+         * Cargar los web services dependiendo el modo de facturacion
+         */
+        if (ComprobanteElectronicoService.MODO_PRODUCCION.equals(modoFacturacion)) {
+            String autorizacion = session.getParametrosCodefac().get(ParametroCodefac.SRI_WS_AUTORIZACION).valor;
+            servicio.setUriAutorizacion(autorizacion);
+
+            String recepcion = session.getParametrosCodefac().get(ParametroCodefac.SRI_WS_RECEPCION).valor;
+            servicio.setUriRecepcion(recepcion);
+
+        } else {
+            String autorizacion = session.getParametrosCodefac().get(ParametroCodefac.SRI_WS_AUTORIZACION_PRUEBA).valor;
+            servicio.setUriAutorizacion(autorizacion);
+
+            String recepcion = session.getParametrosCodefac().get(ParametroCodefac.SRI_WS_RECEPCION_PRUEBA).valor;
+            servicio.setUriRecepcion(recepcion);
+        }
+
+        /**
+         * Cargar variables para el envio del correo
+         */
+        cargarConfiguracionesCorreo();
+        servicio.setCorreosElectronicos(getCorreos());
+        String footer = UtilidadVarios.getStringHtmltoUrl(RecursoCodefac.HTML.getResourceInputStream("footer_codefac.html"));
+        servicio.setFooterMensajeCorreo(footer);
+
     }
     
         /**

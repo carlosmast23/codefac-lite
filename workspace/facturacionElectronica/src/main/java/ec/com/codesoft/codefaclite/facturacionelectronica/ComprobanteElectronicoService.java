@@ -268,7 +268,6 @@ public class ComprobanteElectronicoService implements Runnable {
                 
                 metodoEnvioInterface.enviarCorreo(mensajeGenerado, "FACTURA:" + comprobante.getInformacionTributaria().getPreimpreso(), correosElectronicos, archivosPath);
 
-                //metodoEnvioInterface.enviarCorreo(pathBase, pathBase, destinatorios, pathBase);
             } catch (Exception ex) {
                 Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
                 ex.printStackTrace();
@@ -582,13 +581,11 @@ public class ComprobanteElectronicoService implements Runnable {
     }
 
     private String getPathComprobante(String carpeta) {
-        //return pathBase+"/"+carpeta+"/"+claveAcceso+".xml";
-        //14502017011724213151500010010010000000010000000011.xml
-        return pathBase + "/" + carpeta + "/" + claveAcceso + ".xml";
+        return pathBase + "/comprobantes/"+modoFacturacion+"/" + carpeta + "/" + claveAcceso + ".xml";
     }
 
     private String getPathComprobante(String carpeta, String archivo) {
-        return pathBase + "/" + carpeta + "/" + archivo;
+        return pathBase + "/comprobantes/"+modoFacturacion+"/" + carpeta + "/" + archivo;
     }
 
     private String getPathFirma() {
@@ -609,12 +606,7 @@ public class ComprobanteElectronicoService implements Runnable {
         comprobante.getTipoDocumento();
         return prefijo + "-" + comprobante.getInformacionTributaria().getPreimpreso() +"_"+claveAcceso+ ".pdf";
     }
-/*
-    public String getPathRide() {
-        String nombreArchivo = getNameRide();
-        return pathBase + "/" + CARPETA_RIDE + "/" + nombreArchivo;
-    }
-*/
+
     public void setUriRecepcion(String uriRecepcion) {
         this.uriRecepcion = uriRecepcion;
     }
