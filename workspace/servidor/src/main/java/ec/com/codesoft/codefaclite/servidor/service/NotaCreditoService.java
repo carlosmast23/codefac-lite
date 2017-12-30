@@ -7,10 +7,14 @@ package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
+import ec.com.codesoft.codefaclite.servidor.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.NotaCreditoDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.NotaCreditoFacade;
 import java.sql.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
  *
@@ -30,7 +34,13 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
     }
 
     public void grabar(NotaCredito notaCredito) {
-        notaCreditoFacade.create(notaCredito);
+        try {
+            notaCreditoFacade.create(notaCredito);
+        } catch (ConstrainViolationExceptionSQL ex) {
+            Logger.getLogger(NotaCreditoService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DatabaseException ex) {
+            Logger.getLogger(NotaCreditoService.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void editar(NotaCredito notaCredito) {

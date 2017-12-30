@@ -7,8 +7,12 @@ package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.ProductoEnumEstado;
+import ec.com.codesoft.codefaclite.servidor.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.ProductoFacade;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
  *
@@ -26,7 +30,13 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade>
         
     public void grabar(Producto p)
     {
-        productoFacade.create(p);
+        try {
+            productoFacade.create(p);
+        } catch (ConstrainViolationExceptionSQL ex) {
+            Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DatabaseException ex) {
+            Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void editar(Producto p)

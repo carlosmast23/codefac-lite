@@ -41,7 +41,7 @@ public class Main2 {
         //p2.setNombre("IORI3");
         
         PersonaFacade personaFacade=new PersonaFacade();
-        personaFacade.create(p);
+        //personaFacade.create(p);
         //personaFacade.create(p2);
     }
     

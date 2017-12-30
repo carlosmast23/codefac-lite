@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.main.license.Licencia;
 import ec.com.codesoft.codefaclite.main.license.ValidacionLicenciaCodefac;
 import ec.com.codesoft.codefaclite.main.panel.ValidarLicenciaDialog;
 import ec.com.codesoft.codefaclite.servidor.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ActualizarlicenciaRequestType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ActualizarlicenciaResponseType;
@@ -90,7 +91,12 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
                 String clave=new String(getTxtClaveRegistrar().getPassword());
                 usuario.setClave(clave);
                 usuario.setNick(getTxtUsuarioRegistrar().getText());                
-                servicio.grabar(usuario);
+                try {
+                    servicio.grabar(usuario);
+                } catch (ServicioCodefacException ex) {
+                    DialogoCodefac.mensaje("Error", ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+                    return;
+                }
                 
                 licenciaCreada=true;
                 

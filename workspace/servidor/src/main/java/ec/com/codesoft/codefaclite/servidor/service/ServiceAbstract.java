@@ -5,11 +5,14 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
+import ec.com.codesoft.codefaclite.servidor.excepciones.ConstrainViolationExceptionSQL;
+import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
  *
@@ -35,9 +38,15 @@ public abstract class ServiceAbstract<Entity,Facade>
         return this.facade.findAll();
     }
     
-    public void grabar(Entity entity)
+    public void grabar(Entity entity) throws ServicioCodefacException
     {
-       this.facade.create(entity);
+        try {
+            this.facade.create(entity);
+        } catch (ConstrainViolationExceptionSQL ex) {
+            Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DatabaseException ex) {
+            Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public List<Entity> obtenerPorMap(Map<String,Object> parametros)

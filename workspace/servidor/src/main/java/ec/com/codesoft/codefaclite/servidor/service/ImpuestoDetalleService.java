@@ -7,9 +7,13 @@ package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.entity.Impuesto;
 import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
+import ec.com.codesoft.codefaclite.servidor.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.ImpuestoDetalleFacade;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
  *
@@ -26,7 +30,13 @@ public class ImpuestoDetalleService
     
     public void grabar(ImpuestoDetalle i)
     {
-        impuestoDetalleFacade.create(i);
+        try {
+            impuestoDetalleFacade.create(i);
+        } catch (ConstrainViolationExceptionSQL ex) {
+            Logger.getLogger(ImpuestoDetalleService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DatabaseException ex) {
+            Logger.getLogger(ImpuestoDetalleService.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void editar(ImpuestoDetalle i)

@@ -11,7 +11,7 @@
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('firma_electronica','');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('clave_firma_electronica','');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('directorio_recursos','C:/CodefacRecursos');
-INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('modo_facturacion','produccion');
+INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('modo_facturacion','pruebas');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('sri_ws_recepcion','https://cel.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('sri_ws_recepcion_prueba','https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('sri_ws_autorizacion','https://cel.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl');

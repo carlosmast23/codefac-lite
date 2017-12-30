@@ -5,6 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.servidor.facade;
 
+import com.sun.org.apache.bcel.internal.generic.INSTANCEOF;
+import ec.com.codesoft.codefaclite.servidor.excepciones.ConstrainViolationExceptionSQL;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +15,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
+import javax.persistence.RollbackException;
+import org.apache.derby.shared.common.error.DerbySQLIntegrityConstraintViolationException;
+import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
  *
@@ -38,12 +44,33 @@ public abstract class AbstractFacade<T>
         return entityManager;
     }
 
-    public void create(T entity) {
-        EntityTransaction tx= getEntityManager().getTransaction();
-        tx.begin();
-        //getEntityManager().getTransaction().begin();
-        getEntityManager().persist(entity);
-        tx.commit();
+    public void create(T entity) throws ConstrainViolationExceptionSQL,DatabaseException{
+        try
+        {
+            EntityTransaction tx= getEntityManager().getTransaction();
+            tx.begin();
+            //getEntityManager().getTransaction().begin();
+            getEntityManager().persist(entity);
+            tx.commit();
+        }catch(PersistenceException e)
+        {
+
+            if(e.getCause()!=null && e.getCause().getClass().equals(DatabaseException.class) )
+            {
+                DatabaseException dbe=(DatabaseException) e.getCause();
+                //TODO: Esta valifacion de la claves primarias es solo para la base de datos derby
+                if(dbe.getCause()!=null && dbe.getCause().getClass().equals(DerbySQLIntegrityConstraintViolationException.class))
+                {
+                    DerbySQLIntegrityConstraintViolationException constrainViolation = (DerbySQLIntegrityConstraintViolationException) dbe.getCause();
+                    System.out.println(constrainViolation.getMessage());
+                    throw new ConstrainViolationExceptionSQL("Ya existe un registro registrado con la clave primaria");
+                }
+                throw dbe;
+            }
+
+            
+        }
+
         //getEntityManager().getTransaction().commit();
     }
 

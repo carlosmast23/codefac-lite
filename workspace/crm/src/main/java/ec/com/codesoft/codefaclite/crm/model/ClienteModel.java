@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.ClienteEnumEstado;
+import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
 import ec.com.codesoft.codefaclite.servidor.service.SriService;
 import java.awt.event.ActionEvent;
@@ -81,27 +82,32 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
-        if (!prevalidar()) {
-            //Cancela el evento guardar porque no prevalido
+        try {
+            if (!prevalidar()) {
+                //Cancela el evento guardar porque no prevalido
+                throw new ExcepcionCodefacLite("Error al prevalidar");
+            }
+            
+            persona = new Persona();
+            persona.setNombres(getjTextNombres().getText());
+            persona.setApellidos(getjTextApellidos().getText());
+            persona.setRazonSocial(getjTextNombreSocial().getText());
+            persona.setTipoIdentificacion(((SriIdentificacion) getjComboIdentificacion().getSelectedItem()).getCodigo());
+            persona.setIdentificacion(getjTextIdentificacion().getText());
+            persona.setTipCliente((String) getjComboTipoCliente().getSelectedItem());
+            persona.setDireccion(getjTextAreaDireccion().getText());
+            persona.setTelefonoConvencional(getjTextTelefono().getText());
+            persona.setExtensionTelefono(getjTextExtension().getText());
+            persona.setTelefonoCelular(getjTextCelular().getText());
+            persona.setCorreoElectronico(getjTextCorreo().getText());
+            persona.setEstado(((ClienteEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
+            personaService.grabar(persona);
+            DialogoCodefac.mensaje("Datos correctos", "El cliente se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+            System.err.println("Se grabo correctamente");
+        } catch (ServicioCodefacException ex) {
+            DialogoCodefac.mensaje("Error", ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite("Error al prevalidar");
         }
-
-        persona = new Persona();
-        persona.setNombres(getjTextNombres().getText());
-        persona.setApellidos(getjTextApellidos().getText());
-        persona.setRazonSocial(getjTextNombreSocial().getText());
-        persona.setTipoIdentificacion(((SriIdentificacion) getjComboIdentificacion().getSelectedItem()).getCodigo());
-        persona.setIdentificacion(getjTextIdentificacion().getText());
-        persona.setTipCliente((String) getjComboTipoCliente().getSelectedItem());
-        persona.setDireccion(getjTextAreaDireccion().getText());
-        persona.setTelefonoConvencional(getjTextTelefono().getText());
-        persona.setExtensionTelefono(getjTextExtension().getText());
-        persona.setTelefonoCelular(getjTextCelular().getText());
-        persona.setCorreoElectronico(getjTextCorreo().getText());
-        persona.setEstado(((ClienteEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
-        personaService.grabar(persona);
-        DialogoCodefac.mensaje("Datos correctos", "El cliente se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-        System.err.println("Se grabo correctamente");
 
     }
 

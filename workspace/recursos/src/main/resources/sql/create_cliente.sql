@@ -15,7 +15,7 @@ create table CLIENTE(
     RAZON_SOCIAL varchar(256),
     NOMBRE_LEGAL varchar(256),
     TIPO_IDENTIFICACION varchar(30), 
-    IDENTIFICACION varchar(15), 
+    IDENTIFICACION varchar(15) not null, 
     TIPO_CLIENTE varchar(12),
     DIRECCION varchar(1024), 
     TELEFONO_CONVENCIONAL varchar(9),
@@ -24,5 +24,6 @@ create table CLIENTE(
     CORREO_ELECTRONICO varchar(60),
     ACTIVIDAD_COMERCIAL varchar(100),
     ESTADO varchar(1),
-    primary key (CLIENTE_ID)
+    primary key (CLIENTE_ID),
+    UNIQUE(IDENTIFICACION)
 )
