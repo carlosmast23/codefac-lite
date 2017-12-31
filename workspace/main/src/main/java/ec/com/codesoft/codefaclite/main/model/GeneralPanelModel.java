@@ -996,6 +996,58 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         return validado;
     }
     
+    //TODO optimizar metodo porque existen varios con codigo simila
+    private boolean validarFormulario(ControladorCodefacInterface panel,String grupo,String nombreComponente)
+    {
+       //Volver a crear los errores pendientes
+       panel.consola=new ConsolaGeneral();
+       boolean validado=true;       
+       Class classVentana=panel.getClass();
+        Method[] metodos=classVentana.getMethods();
+        for (Method metodo : metodos) {
+            ValidacionCodefacAnotacion validacion=metodo.getAnnotation(ValidacionCodefacAnotacion.class);
+            //System.out.println(metodo.getName());
+            if(validacion!=null)
+            {
+                if(validacion.grupo().equals(grupo))
+                {
+                    if(validacion.nombre().equals(nombreComponente))
+                    {
+                        try {
+                            JTextComponent componente = (JTextComponent) metodo.invoke(panel);
+                            Vector<String> errores = validarComponente(validacion, componente, panel);
+
+                            if (errores.size() > 0) {
+                                //Si Existe errores pinto de colo amarillo
+                                componente.setBackground(new Color(255, 255, 102));
+                            } else {
+                                //Si no existe error pinto de blanco
+                                componente.setBackground(Color.white);
+                            }
+
+                            for (String error : errores) {
+                                panel.consola.agregarDatos(validacion.nombre(), error, componente);
+                                validado = false;
+                            }
+
+                        } catch (IllegalAccessException ex) {
+                            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (IllegalArgumentException ex) {
+                            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (InvocationTargetException ex) {
+                            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    
+                    }
+                    
+                }
+            }
+        }
+        return validado;
+    }
+    
+    
+    
 
     
     private Vector<String> validarComponente(ValidacionCodefacAnotacion validacion,JTextComponent componente,ControladorCodefacInterface panel)
@@ -1575,6 +1627,12 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             }
         });
         
+    }
+
+    @Override
+    public boolean validarPorGrupo(String nombre, String componente) {
+        ControladorCodefacInterface panel=getPanelActivo();
+        return validarFormulario(panel,nombre,componente);
     }
    
 }

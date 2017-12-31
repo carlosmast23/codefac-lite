@@ -32,6 +32,13 @@ public interface InterfazComunicacionPanel
      * @return 
      */
     public boolean validarPorGrupo(String nombre);
+    /**
+     * Si solo se desea validar un solo componente
+     * @param nombre nombre del grupo de componentes a validar
+     * @param componente nombre del componente a validar
+     * @return 
+     */
+    public boolean validarPorGrupo(String nombre,String componente);
 
 
 }

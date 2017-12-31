@@ -37,7 +37,7 @@ import net.sf.jasperreports.view.JasperViewer;
  * @author PC
  */
 public abstract class ClienteForm extends ControladorCodefacInterface {
-
+    public static final String NOMBRE_VALIDADOR_IDENTIFICACION="Identificacion";
     /**
      * Creates new form clienteForm
      */
@@ -396,7 +396,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(personalizado ={"validarIdentificacionSegunOpcionEstablecida"}  ,requerido=true , min=0 ,max = 13,expresionRegular = "",nombre = "Identificacion")
+    @ValidacionCodefacAnotacion(personalizado ={"validarIdentificacionSegunOpcionEstablecida"}  ,requerido=true , min=0 ,max = 13,expresionRegular = "",nombre = NOMBRE_VALIDADOR_IDENTIFICACION)
     public JTextField getjTextIdentificacion() {
         return jTextIdentificacion;
     }

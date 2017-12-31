@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.validacionPersonalizadaAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.crm.busqueda.ClienteBusquedaDialogo;
@@ -75,9 +76,9 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         getjTextExtension().setText("0");
         this.razonSocial = "";
         cargarClientes();
-        cargarDatosIniciales();
-        addListenerCombos();
+        cargarDatosIniciales();        
         addListenerTexts();
+        addListenerCombos();
     }
 
     @Override
@@ -366,7 +367,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
 
     @Override
     public void iniciar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
@@ -382,8 +383,12 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             public void actionPerformed(ActionEvent e) {
                 opcionIdentificacion = Integer.parseInt(((SriIdentificacion)getjComboIdentificacion().getSelectedItem()).getCodigo());
                 System.out.println("Info combo: " +((SriIdentificacion)getjComboIdentificacion().getSelectedItem()).getCodigo());
+                //Validario comonente cuando sea diferente de vacio dependiendo la opcion de identificacion
+                if(!getjTextIdentificacion().getText().equals(""))
+                    panelPadre.validarPorGrupo(ValidacionCodefacAnotacion.GRUPO_FORMULARIO,NOMBRE_VALIDADOR_IDENTIFICACION);
             }
         });
+        
     }       
 
     private boolean validarRUC(String RUC) 
