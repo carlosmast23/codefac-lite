@@ -38,10 +38,12 @@ import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidor.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
+import ec.com.codesoft.codefaclite.servidor.service.PerfilServicio;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 import java.util.ArrayList;
@@ -145,6 +147,7 @@ public class Main {
         }
         
         session.setUsuario(usuarioLogin);
+        session.setPerfiles(obtenerPerfilesUsuario(usuarioLogin));
         
         /**
          * Agregando Hilo de Publicidad
@@ -343,6 +346,12 @@ public class Main {
         }
         return false;
         
+    }
+    
+    private static List<Perfil> obtenerPerfilesUsuario(Usuario usuario)
+    {
+        PerfilServicio servicio=new PerfilServicio();
+        return servicio.obtenerPerfilesPorUsuario(usuario);
     }
 }
 

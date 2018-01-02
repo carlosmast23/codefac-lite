@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectr
 import ec.com.codesoft.codefaclite.servidor.entity.Impuesto;
 import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidor.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
@@ -29,6 +30,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -107,6 +109,13 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     @Override
     public void limpiar() {
         super.estadoFormulario = GeneralPanelInterface.ESTADO_EDITAR;
+        
+        //Validaciones adicionales para validar segun el tipo de usuario Logueado
+        if(!session.verificarExistePerfil(Perfil.PERFIl_ADMINISTRADOR))
+        {
+            getCmbModoFacturacion().setEnabled(false);
+            getCmbIvaDefault().setEnabled(false);
+        }
     }
 
     @Override
@@ -288,6 +297,14 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     @Override
     public void nuevo() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<String> getPerfilesPermisos() {
+        List<String> permisosPerfil=new ArrayList<String>();
+        permisosPerfil.add(Perfil.PERFIl_OPERADOR);
+        permisosPerfil.add(Perfil.PERFIl_ADMINISTRADOR);
+        return permisosPerfil;
     }
 
 }

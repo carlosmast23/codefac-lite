@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.crm.panel.ConfigurarEmisorForm;
 import ec.com.codesoft.codefaclite.servidor.entity.Emisor;
 import ec.com.codesoft.codefaclite.servidor.service.EmisorService;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -150,6 +151,11 @@ public class EmisorModel extends ConfigurarEmisorForm
 
     @Override
     public void nuevo() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<String> getPerfilesPermisos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

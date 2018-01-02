@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.main.session;
 import ec.com.codesoft.codefaclite.controlador.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.servidor.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidor.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidor.entity.Usuario;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ public class SessionCodefac implements SessionCodefacInterface{
     private Usuario usuario;
     private Empresa empresa;
     private Map<String,ParametroCodefac>  parametrosCodefac;
+    private List<Perfil> perfiles;
 
     public SessionCodefac() {
     }
@@ -55,6 +57,29 @@ public class SessionCodefac implements SessionCodefacInterface{
     public void setParametrosCodefac(Map<String,ParametroCodefac> parametrosCodefac) {
         this.parametrosCodefac = parametrosCodefac;
     }
+
+    public void setPerfiles(List<Perfil> perfiles) {
+        this.perfiles = perfiles;
+    }
+    
+    
+
+    @Override
+    public List<Perfil> getPerfiles() {
+        return perfiles;
+    }
+
+    @Override
+    public boolean verificarExistePerfil(String nombre) {
+        for (Perfil perfil : perfiles) {
+            if(perfil.getNombre().equals(nombre))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     
     
     

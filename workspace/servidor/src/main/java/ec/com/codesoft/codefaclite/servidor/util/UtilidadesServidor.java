@@ -26,8 +26,7 @@ public class UtilidadesServidor {
         RecursoCodefac.SQL.getResourceInputStream("create_usuario.sql"),
         RecursoCodefac.SQL.getResourceInputStream("insert_usuario.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_sri_forma_pago.sql"),
-        RecursoCodefac.SQL.getResourceInputStream("create_sri_identificacion.sql"),
-        RecursoCodefac.SQL.getResourceInputStream("insert_default.sql"),
+        RecursoCodefac.SQL.getResourceInputStream("create_sri_identificacion.sql"),        
         RecursoCodefac.SQL.getResourceInputStream("create_impuesto.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_impuesto_detalle.sql"),
         RecursoCodefac.SQL.getResourceInputStream("insert_impuesto.sql"),
@@ -38,6 +37,9 @@ public class UtilidadesServidor {
         RecursoCodefac.SQL.getResourceInputStream("create_factura.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_nota_credito.sql"),
         RecursoCodefac.SQL.getResourceInputStream("insert_cliente.sql"),
+        RecursoCodefac.SQL.getResourceInputStream("create_perfil.sql"),
+        RecursoCodefac.SQL.getResourceInputStream("insert_default.sql"),
+        
     };
     
     public static void crearBaseDatos()

@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.crm.panel.ClienteForm;
 import ec.com.codesoft.codefaclite.crm.reportdata.DataEjemploReporte;
 import ec.com.codesoft.codefaclite.crm.test.EjemploCrm;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import ec.com.codesoft.codefaclite.servidor.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.ClienteEnumEstado;
@@ -449,5 +450,13 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
                 getjTextNombreSocial().setText(getjTextNombres().getText() + " " + getjTextApellidos().getText());
             }
         });
+    }
+
+    @Override
+    public List<String> getPerfilesPermisos() {
+        List<String> permisos=new ArrayList<String>();
+        permisos.add(Perfil.PERFIl_ADMINISTRADOR);
+        permisos.add(Perfil.PERFIl_OPERADOR);
+        return permisos;
     }
 }
