@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.main.license.Licencia;
 import ec.com.codesoft.codefaclite.main.license.ValidacionLicenciaCodefac;
 import ec.com.codesoft.codefaclite.main.panel.ValidarLicenciaDialog;
+import ec.com.codesoft.codefaclite.servidor.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidor.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
@@ -76,7 +77,7 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
                 Properties propiedad=validacionLicenciaCodefac.crearLicencia(getTxtUsuarioVerificar().getText());
                 
                 //Actualizar la licencia en la maquina
-                 SOAPServer soapServer = new SOAPServer();
+                SOAPServer soapServer = new SOAPServer();
                 SOAPServerPortType soapServerPort = soapServer.getSOAPServerPort();
 
                 ActualizarlicenciaRequestType parametros = new ActualizarlicenciaRequestType();
@@ -85,6 +86,14 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
 
                 ActualizarlicenciaResponseType respuesta = soapServerPort.actualizarlicencia(parametros);
                 
+                //Verificar que no exista el usuario admin
+                if(getTxtUsuarioRegistrar().getText().equals("admin"))
+                {
+                    DialogoCodefac.mensaje("Error","No se puede crear un usuario con la palabra admin",DialogoCodefac.MENSAJE_INCORRECTO);
+                    return;
+                }
+                
+                
                 //Genera un nuevo usuario con los datos ingresados
                 UsuarioServicio servicio=new UsuarioServicio();
                 Usuario usuario=new Usuario();
@@ -92,7 +101,7 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
                 usuario.setClave(clave);
                 usuario.setNick(getTxtUsuarioRegistrar().getText());                
                 try {
-                    servicio.grabar(usuario);
+                    servicio.grabarUsuario(usuario,Perfil.PERFIl_OPERADOR);
                 } catch (ServicioCodefacException ex) {
                     DialogoCodefac.mensaje("Error", ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
                     return;
