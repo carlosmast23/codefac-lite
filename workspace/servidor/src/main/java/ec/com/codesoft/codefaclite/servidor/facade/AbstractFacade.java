@@ -7,6 +7,8 @@ package ec.com.codesoft.codefaclite.servidor.facade;
 
 import com.sun.org.apache.bcel.internal.generic.INSTANCEOF;
 import ec.com.codesoft.codefaclite.servidor.excepciones.ConstrainViolationExceptionSQL;
+import ec.com.codesoft.codefaclite.servidor.excepciones.PersistenciaDuplicadaException;
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -197,10 +199,45 @@ public abstract class AbstractFacade<T>
 		return query;
 	}
     
-    public static void cargarEntityManager()
+    public static void cargarEntityManager() throws PersistenceException,PersistenciaDuplicadaException
     {
-        entityManager=Persistence.createEntityManagerFactory(namePersistence).createEntityManager();
+        try 
+        {
+            entityManager=Persistence.createEntityManagerFactory(namePersistence).createEntityManager();
+        }
+        catch(PersistenceException e)
+        {
+            e.printStackTrace();
+            DatabaseException dbe=(DatabaseException) e.getCause();
+            
+            SQLException sqlException= (SQLException) dbe.getCause();
+
+            while(sqlException!=null)
+            {
+                System.out.println(sqlException.getCause());
+                System.out.println(sqlException.getErrorCode());
+                System.out.println(sqlException.getMessage());
+                System.out.println(sqlException.getSQLState());
+                System.out.println("---------------------------------");
+
+                if(sqlException.getErrorCode()==45000)
+                {
+                    throw new PersistenciaDuplicadaException("Ya existe una versión de Codefac abierto");
+                }
+                /*
+                if(sqlException.getErrorCode()==40000)
+                {
+                    throw new PersistenceException("No existe base de datos");
+                }*/
+
+                sqlException=sqlException.getNextException();
+
+            }
+ 
+            throw new PersistenceException("No existe base de datos");
+        }
     }
+    
     
     public static List<Object> findStaticDialog(String queryStr,Map<Integer,Object> map,int limiteMinimo,int limiteMaximo) {
         Query query = entityManager.createQuery(queryStr);
