@@ -1113,7 +1113,14 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         if(!validacion.expresionRegular().equals("")){
             if(!Pattern.matches(validacion.expresionRegular(),componente.getText()))
             {
-                validar.add("expresion regular fallo");
+                if(!validacion.expresionRegularMensaje().equals(""))
+                {
+                    validar.add(validacion.expresionRegularMensaje());
+                }
+                else
+                {
+                    validar.add("expresion regular fallo");
+                }
             }
         }
         
