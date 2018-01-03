@@ -29,6 +29,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectr
 import ec.com.codesoft.codefaclite.main.panel.GeneralPanelForm;
 import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import ec.com.codesoft.codefaclite.servidor.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
 import ec.com.codesoft.ejemplo.utilidades.imagen.UtilidadImagen;
 import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
@@ -798,10 +799,48 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         getjPanelSeleccion().setSelectedComponent(panelesSecundariosMap.get(panelSecundario));
 
     }
+    private boolean verificarPermisosVentana(List<String> permisosVentana,List<Perfil> rolesUsuario)
+    {
+        //Si la ventana no tiene permisos o no esta implementado puede acceder
+        if(permisosVentana==null)
+            return true;
+        
+        for (Perfil rolUsuario : rolesUsuario) {
+            for (String permisoVentana : permisosVentana) {
+                if(rolUsuario.getNombre().equals(permisoVentana))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    
+    }
     
     private void agregarListenerMenu(ControladorCodefacInterface panel,boolean maximisado)
     {
         try {
+            
+            List<String> perfilesPermisos=null;
+            try
+            {
+               perfilesPermisos=panel.getPerfilesPermisos();
+            }catch(java.lang.UnsupportedOperationException uoe)
+            {
+                uoe.printStackTrace();
+            }
+            
+            //Si no existe ningun perfil del usuario que coincida con la pantalla se cierra la aplicacion
+            if(!verificarPermisosVentana(perfilesPermisos,sessionCodefac.getPerfiles()))
+            {
+                DialogoCodefac.mensaje("Error Permisos","El usuario actual no tiene permisos para ver esta pantalla",DialogoCodefac.MENSAJE_INCORRECTO);
+                panel.dispose();
+                return;
+            }
+                    
+            //sessionCodefac.getPerfiles()
+            //        panel.getPerfilesPermisos()
+            
                                     /**
              * Agregar variables de session a la pantalla
              */

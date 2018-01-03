@@ -5,8 +5,21 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
+import ec.com.codesoft.codefaclite.servidor.entity.Perfil;
+import ec.com.codesoft.codefaclite.servidor.entity.PerfilUsuario;
 import ec.com.codesoft.codefaclite.servidor.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidor.excepciones.ConstrainViolationExceptionSQL;
+import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidor.facade.PerfilFacade;
+import ec.com.codesoft.codefaclite.servidor.facade.PerfilUsuarioFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.UsuarioFacade;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
  *
@@ -14,6 +27,9 @@ import ec.com.codesoft.codefaclite.servidor.facade.UsuarioFacade;
  */
 public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade>{
     UsuarioFacade usuarioFacade=new UsuarioFacade();
+    PerfilUsuarioFacade perfilUsuarioFacade=new PerfilUsuarioFacade();
+    PerfilFacade perfilFacade=new PerfilFacade();
+    
 
     public UsuarioServicio() {
         super(UsuarioFacade.class);
@@ -25,5 +41,39 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade>{
     {
         Usuario usuario=usuarioFacade.login(nick, clave);
         return usuario;
+    }
+    
+    public void grabarUsuario(Usuario usuario,String nombrePerfil) throws ServicioCodefacException
+    {
+        try {
+            this.usuarioFacade.create(usuario);            
+            Map<String,Object> parametros=new HashMap<String, Object>();
+            parametros.put("nombre",nombrePerfil);
+            List<Perfil> perfilesList= this.perfilFacade.findByMap(parametros);
+            Perfil perfil=null;
+            
+            if(perfilesList.size()>0)
+            {
+                perfil=perfilesList.get(0);
+            }
+            else
+            {
+               throw new ServicioCodefacException("No existe el perfil para guardar");
+            }
+            
+            PerfilUsuario perfilUsuario=new PerfilUsuario();
+            
+            
+            perfilUsuario.setUsuario(usuario);
+            perfilUsuario.setPerfil(perfil);
+            perfilUsuario.setFechaCreacion(new java.sql.Date(new Date().getTime()));
+            this.perfilUsuarioFacade.create(perfilUsuario);
+                    
+        } catch (ConstrainViolationExceptionSQL ex) {
+            Logger.getLogger(UsuarioServicio.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DatabaseException ex) {
+            Logger.getLogger(UsuarioServicio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 }

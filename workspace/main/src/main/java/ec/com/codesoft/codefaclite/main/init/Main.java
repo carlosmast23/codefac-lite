@@ -38,10 +38,13 @@ import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidor.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidor.excepciones.PersistenciaDuplicadaException;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
+import ec.com.codesoft.codefaclite.servidor.service.PerfilServicio;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 import java.util.ArrayList;
@@ -50,6 +53,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.PersistenceException;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -145,6 +149,7 @@ public class Main {
         }
         
         session.setUsuario(usuarioLogin);
+        session.setPerfiles(obtenerPerfilesUsuario(usuarioLogin));
         
         /**
          * Agregando Hilo de Publicidad
@@ -282,12 +287,21 @@ public class Main {
     {
         try {
             AbstractFacade.cargarEntityManager();
-        } catch (Exception e) {
-            //e.p
-            UtilidadesServidor.crearBaseDatos();
-            JOptionPane.showMessageDialog(null,"Creada base de datos");
-            AbstractFacade.cargarEntityManager();
+        } catch (PersistenceException e) {
+            try {
+                System.out.println(e.getMessage());
+                UtilidadesServidor.crearBaseDatos();
+                JOptionPane.showMessageDialog(null,"Creada base de datos");
+                AbstractFacade.cargarEntityManager();
+            } catch (PersistenceException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (PersistenciaDuplicadaException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
             
+        } catch (PersistenciaDuplicadaException ex) {
+            DialogoCodefac.mensaje("Error",ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
+            System.exit(0);//Salir si existe otra instancia abierta
         }
         
     }
@@ -343,6 +357,12 @@ public class Main {
         }
         return false;
         
+    }
+    
+    private static List<Perfil> obtenerPerfilesUsuario(Usuario usuario)
+    {
+        PerfilServicio servicio=new PerfilServicio();
+        return servicio.obtenerPerfilesPorUsuario(usuario);
     }
 }
 

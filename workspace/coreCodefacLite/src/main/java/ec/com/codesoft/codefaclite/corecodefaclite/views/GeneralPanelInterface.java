@@ -121,6 +121,14 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
     public abstract Map<Integer,Boolean> permisosFormulario();
     
     /**
+     * Implementa una lista de los permisos de esa pantalla para cada tipo de perfil
+     * existentes , si la ventana no implementa ningun metodo o recibe null , automaticamente
+     * habilita la ventana para todos los tipos de perfiles
+     * @return 
+     */
+    public abstract List<String> getPerfilesPermisos();
+    
+    /**
      * Metodo que establece si deseas controlar el ciclo de vida de la pantalla
      * o que se controle automaticamente.
      * Ejemplo: Despues de guardar se limpian automaticamentes los datos

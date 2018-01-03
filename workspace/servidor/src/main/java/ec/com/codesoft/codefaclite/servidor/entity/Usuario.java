@@ -25,8 +25,6 @@ public class Usuario implements Serializable{
     @Column (name = "CLAVE")
     private String clave;
     
-    @Column (name = "TIPO")
-    private String tipo;
 
     public Usuario(String nick, String clave) {
         this.nick = nick;
@@ -54,13 +52,5 @@ public class Usuario implements Serializable{
         this.clave = clave;
     }
 
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-    
     
 }

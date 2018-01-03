@@ -8,7 +8,7 @@
  * Created: 10/11/2017
  */
 create table 
-    USUARIO( NICK varchar(120) ,
+    USUARIO( 
+    NICK varchar(120) ,
     CLAVE varchar(120), 
-    TIPO varchar(1), 
     primary key (NICK))
