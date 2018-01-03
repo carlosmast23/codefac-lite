@@ -11,6 +11,7 @@ package ec.com.codesoft.ejemplo.utilidades.email;
  */
 public enum PropiedadesCorreoEnum {
     GMAIL("smtp.gmail.com","587"),
+    YAHOO("smtp.mail.yahoo.com","587"),
     HOTMAIL("smtp-mail.outlook.com","587");
 
     private String host;

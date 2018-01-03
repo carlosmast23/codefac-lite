@@ -181,7 +181,22 @@ public class CorreoElectronico {
         {
             if(email.indexOf("@hotmail")>=0)
             {
-                return PropiedadesCorreoEnum.GMAIL;
+                return PropiedadesCorreoEnum.HOTMAIL;
+            }
+            else
+            {
+                if(email.indexOf("@outlook")>=0)
+                {
+                    return PropiedadesCorreoEnum.HOTMAIL;
+                }
+                else
+                {
+                    if(email.indexOf("@yahoo")>=0)
+                    {
+                        return PropiedadesCorreoEnum.YAHOO;
+                    }
+                
+                }
             }
         }
         

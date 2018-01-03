@@ -923,6 +923,13 @@ public class FacturacionModel extends FacturacionPanel {
         getBtnCrearProducto().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourcePath("pequenos/add2.png")));
         getBtnCrearProducto().setText("");
         getBtnCrearProducto().setToolTipText("Crear nuevo producto");
+        
+        getBtnAgregarFormaPago().setText("");
+        getBtnAgregarFormaPago().setToolTipText("Agregar formas e pago");
+        
+        
+        
+        
 
     }
 
