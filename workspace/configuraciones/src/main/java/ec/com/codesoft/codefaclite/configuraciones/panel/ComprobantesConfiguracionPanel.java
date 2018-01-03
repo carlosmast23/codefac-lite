@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.configuraciones.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -502,22 +503,27 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
     private javax.swing.JTextField txtRetencionesSecuencial;
     // End of variables declaration//GEN-END:variables
 
+    @ValidacionCodefacAnotacion(requerido = true, min = 0, expresionRegular = "^[0-9]*$", nombre = "Factura Secuencial")
     public JTextField getTxtFacturaSecuencial() {
         return txtFacturaSecuencial;
     }
-
+    
+    @ValidacionCodefacAnotacion(requerido = true, min = 0, expresionRegular = "^[0-9]*$", nombre = "Guia remisión" )
     public JTextField getTxtGuiaRemisionSecuencial() {
         return txtGuiaRemisionSecuencial;
     }
 
+    @ValidacionCodefacAnotacion(requerido = true, min = 0, expresionRegular = "^[0-9]*$", nombre = "Nota Credito")
     public JTextField getTxtNotaCreditoSecuencial() {
         return txtNotaCreditoSecuencial;
     }
 
+    @ValidacionCodefacAnotacion(requerido = true, min = 0, expresionRegular = "^[0-9]*$", nombre = "Nota Debito")
     public JTextField getTxtNotaDebitoSecuencial() {
         return txtNotaDebitoSecuencial;
     }
 
+    @ValidacionCodefacAnotacion(requerido = true, min = 0, expresionRegular = "^[0-9]*$)", nombre = "Retencion Secuencial")
     public JTextField getTxtRetencionesSecuencial() {
         return txtRetencionesSecuencial;
     }
@@ -534,12 +540,13 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
     }
 
 
-
-
+    
+    
     public void setTxtClaveFirma(JPasswordField txtClaveFirma) {
         this.txtClaveFirma = txtClaveFirma;
     }
 
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$", nombre = "Correo Electronico")
     public JTextField getTxtCorreoElectronico() {
         return txtCorreoElectronico;
     }
@@ -549,7 +556,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         this.txtCorreoElectronico = txtCorreoElectronico;
     }
 
-
+    
     public JTextField getTxtDirectorioRecurso() {
         return txtDirectorioRecurso;
     }
@@ -586,7 +593,8 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
     public void setCmbIvaDefault(JComboBox<ImpuestoDetalle> cmbIvaDefault) {
         this.cmbIvaDefault = cmbIvaDefault;
     }
-
+    
+    @ValidacionCodefacAnotacion(requerido = true, min = 0, expresionRegular = "^[0-9]*$", nombre = " Establecimiento" )
     public JTextField getTxtEstablecimiento() {
         return txtEstablecimiento;
     }
@@ -595,6 +603,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         this.txtEstablecimiento = txtEstablecimiento;
     }
 
+    @ValidacionCodefacAnotacion(requerido = true, min = 0, expresionRegular = "^[0-9]*$" , nombre = "Punto Emisión")
     public JTextField getTxtPuntoEmision() {
         return txtPuntoEmision;
     }

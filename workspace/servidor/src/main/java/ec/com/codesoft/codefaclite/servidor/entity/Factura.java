@@ -93,7 +93,7 @@ public class Factura {
     private String identificacion;
     @Column(name = "DIRECCION")
     private String direccion;
-    @Column(name = "telefono")
+    @Column(name = "TELEFONO")
     private String telefono;
     
     @JoinColumn(name = "CLIENTE_ID")

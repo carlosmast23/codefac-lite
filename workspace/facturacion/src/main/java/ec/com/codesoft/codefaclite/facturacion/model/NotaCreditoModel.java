@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusqueda;
+import ec.com.codesoft.codefaclite.facturacion.busqueda.NotaCreditoBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.other.NotaCreditoElectronico;
 import ec.com.codesoft.codefaclite.facturacion.panel.NotaCreditoPanel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
@@ -223,6 +224,19 @@ public class NotaCreditoModel extends NotaCreditoPanel {
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
+        NotaCreditoBusqueda notaCreditoBusqueda = new NotaCreditoBusqueda();
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(notaCreditoBusqueda);
+        buscarDialogoModel.setVisible(true);
+        NotaCredito notaCredito = (NotaCredito) buscarDialogoModel.getResultado();
+        if(notaCredito != null)
+        {
+            this.notaCredito = notaCredito;
+            mostrarDatosNotaCredito();
+            setearDatosEmpresa();
+
+        }
+        
+        
         
     }
 
@@ -406,6 +420,13 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         return validado;
         
     }
+
+    private void setearDatosEmpresa()
+    {
+        getLblRuc().setText(notaCredito.getIdentificacion());
+        getLblDireccion().setText(notaCredito.getDireccion());
+        getLblNombreComercial().setText(notaCredito.getRazonSocial());
+        getLblTelefonos().setText(notaCredito.getTelefono());
 
     @Override
     public List<String> getPerfilesPermisos() {

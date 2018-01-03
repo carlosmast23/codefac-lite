@@ -438,7 +438,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true, min = 5, max = 200, expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$", nombre = "Apellidos")
+    @ValidacionCodefacAnotacion(requerido = true, min = 3, max = 200, expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$", nombre = "Apellidos")
     public JTextField getjTextApellidos() {
         return jTextApellidos;
     }
@@ -448,7 +448,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true, min = 5, max = 200, expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$", nombre = "Nombres")
+    @ValidacionCodefacAnotacion(requerido = true, min = 3, max = 200, expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$", nombre = "Nombres")
     public JTextField getjTextNombres() {
         return jTextNombres;
     }
