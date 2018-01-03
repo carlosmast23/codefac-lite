@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.ProductoEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.excepciones.ConstrainViolationExceptionSQL;
+import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.ProductoFacade;
 import java.util.List;
 import java.util.logging.Level;
@@ -28,14 +29,16 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade>
         this.productoFacade = new ProductoFacade();
     }
         
-    public void grabar(Producto p)
+    public void grabar(Producto p) throws ServicioCodefacException
     {
         try {
             productoFacade.create(p);
         } catch (ConstrainViolationExceptionSQL ex) {
             Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ServicioCodefacException("La clave principal ya existe en el sistema");
         } catch (DatabaseException ex) {
             Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ServicioCodefacException("Error con la base de datos");
         }
     }
     

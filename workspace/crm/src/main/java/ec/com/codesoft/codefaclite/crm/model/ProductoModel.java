@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidor.entity.Impuesto;
 import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.ProductoEnumEstado;
+import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoService;
@@ -53,37 +54,42 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     @Override
     public void grabar() throws ExcepcionCodefacLite 
     {
-        producto = new Producto();
-        producto.setCodigoPrincipal(getTextCodigoPrincipal().getText());
-        producto.setCodigoAuxiliar(getTextCodigoAuxiliar().getText());
-        producto.setEstado(ProductoEnumEstado.ACTIVO.getEstado());
-        if(getComboTipoProducto().getSelectedItem().equals("Bien"))
-        {
-            producto.setTipoProducto("B");
+        try {
+            producto = new Producto();
+            producto.setCodigoPrincipal(getTextCodigoPrincipal().getText());
+            producto.setCodigoAuxiliar(getTextCodigoAuxiliar().getText());
+            producto.setEstado(ProductoEnumEstado.ACTIVO.getEstado());
+            if(getComboTipoProducto().getSelectedItem().equals("Bien"))
+            {
+                producto.setTipoProducto("B");
+            }
+            else
+            {
+                producto.setTipoProducto("S");
+            }
+            
+            producto.setNombre(getTextNombre().getText());
+            d = new BigDecimal(getTextValorUnitario().getText());
+            
+            producto.setValorUnitario(d);
+            if(getComboIce().getSelectedItem() instanceof ImpuestoDetalle){
+                producto.setIce((ImpuestoDetalle) getComboIce().getSelectedItem());
+            }else{
+                System.out.println("No se puede hacer una grabacion ICE");
+            }
+            producto.setIva((ImpuestoDetalle) getComboIva().getSelectedItem());
+            if(getComboIrbpnr().getSelectedItem() instanceof ImpuestoDetalle){
+                producto.setIrbpnr((ImpuestoDetalle) getComboIrbpnr().getSelectedItem());
+            }else{
+                System.out.println("No se puede hacer una grabacion IRBPNR");
+            }
+            
+            productoService.grabar(producto);
+            DialogoCodefac.mensaje("Datos correctos", "El Producto se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+        } catch (ServicioCodefacException ex) {
+            DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+            throw new ExcepcionCodefacLite("Error al grabar");
         }
-        else
-        {
-            producto.setTipoProducto("S");
-        }
-        
-        producto.setNombre(getTextNombre().getText()); 
-        d = new BigDecimal(getTextValorUnitario().getText());
-        
-        producto.setValorUnitario(d);
-        if(getComboIce().getSelectedItem() instanceof ImpuestoDetalle){
-            producto.setIce((ImpuestoDetalle) getComboIce().getSelectedItem());
-        }else{
-            System.out.println("No se puede hacer una grabacion ICE");
-        }
-        producto.setIva((ImpuestoDetalle) getComboIva().getSelectedItem());
-        if(getComboIrbpnr().getSelectedItem() instanceof ImpuestoDetalle){
-            producto.setIrbpnr((ImpuestoDetalle) getComboIrbpnr().getSelectedItem()); 
-        }else{
-            System.out.println("No se puede hacer una grabacion IRBPNR");
-        }
-        
-        productoService.grabar(producto);
-        DialogoCodefac.mensaje("Datos correctos", "El Producto se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO); 
     }
 
     @Override

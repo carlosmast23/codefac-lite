@@ -427,6 +427,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         getLblDireccion().setText(notaCredito.getDireccion());
         getLblNombreComercial().setText(notaCredito.getRazonSocial());
         getLblTelefonos().setText(notaCredito.getTelefono());
+    }
 
     @Override
     public List<String> getPerfilesPermisos() {
