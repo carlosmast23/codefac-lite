@@ -38,6 +38,7 @@ public class CorreoElectronico {
     private List<String> to;
     private String subject;
     private Map<String,String> pathFiles;
+    PropiedadesCorreoEnum propiedadCorreo;
 
     public CorreoElectronico(String usuario, String clave, String mensaje, List<String> to, String subject) {
         this.usuario = usuario;
@@ -46,6 +47,7 @@ public class CorreoElectronico {
         this.to = to;
         this.subject = subject;
         this.pathFiles=new HashMap<>();
+        this.propiedadCorreo=obtenenerPropiedad(usuario);
     }
     
     public CorreoElectronico(String usuario, String clave, String mensaje, List<String> to, String subject,Map<String,String> pathFiles) {
@@ -55,6 +57,7 @@ public class CorreoElectronico {
         this.to = to;
         this.subject = subject;
         this.pathFiles=pathFiles;
+        this.propiedadCorreo=obtenenerPropiedad(usuario);
     }
 
     public void sendMail() throws RuntimeException{
@@ -62,8 +65,8 @@ public class CorreoElectronico {
         
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.host",propiedadCorreo.getHost());
+        props.put("mail.smtp.port",propiedadCorreo.getPort() );
         props.put("mail.transport.protocol", "smtp");
         //props.put("mail.smtp.from", bounceAddr);
 
@@ -162,8 +165,28 @@ public class CorreoElectronico {
         this.pathFiles = pathFiles;
     }
 
-    
-    
+    /**
+     * Obtiene las propiedades de configuracion segun el dominio del email
+     * @param email
+     * @return 
+     */
+    public PropiedadesCorreoEnum obtenenerPropiedad(String email)
+    {
+        String emailFormat=email.toLowerCase();
+        if(emailFormat.indexOf("@gmail")>=0)
+        {
+            return PropiedadesCorreoEnum.GMAIL;
+        }
+        else
+        {
+            if(email.indexOf("@hotmail")>=0)
+            {
+                return PropiedadesCorreoEnum.GMAIL;
+            }
+        }
+        
+        return null;
+    }
     
 
 }
