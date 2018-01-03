@@ -9,5 +9,5 @@
  */
 
 INSERT INTO USUARIO
-     VALUES ('admin', 'admin')
+     VALUES ('admin', 'Code17bwbtj')
 

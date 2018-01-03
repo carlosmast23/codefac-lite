@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -47,8 +48,13 @@ public class UtilidadesServidor {
          try {
             Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
             //obtenemos la conexión si no existe crea la base
-            Connection conn = DriverManager.getConnection("jdbc:derby:.\\DB\\Derby2.DB;create=true");
-            
+            Connection conn = DriverManager.getConnection("jdbc:derby:.\\DB\\Derby2.DB;databaseName=codefac;create=true;user=root");
+            //Establecer autentificacion en derby
+            Statement s = conn.createStatement();
+             s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.connection.requireAuthentication', 'true')");
+             s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.authentication.provider', 'BUILTIN')");
+             s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.user.root', 'Code17bwbtj')");
+             s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.database.propertiesOnly', 'true')");
             if (conn!=null)
             {
                 

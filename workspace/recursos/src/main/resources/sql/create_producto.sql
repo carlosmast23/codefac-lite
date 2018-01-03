@@ -19,5 +19,6 @@ create table PRODUCTO
     ICE_ID integer,
     IRBPNR_ID integer,
     ESTADO varchar(1),
-    primary key (ID_PRODUCTO)
+    primary key (ID_PRODUCTO),
+    UNIQUE(CODIGO_PRINCIPAL)
 )

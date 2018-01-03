@@ -428,7 +428,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         getLblNombreComercial().setText(notaCredito.getRazonSocial());
         getLblTelefonos().setText(notaCredito.getTelefono());
     }
-    
+
     @Override
     public List<String> getPerfilesPermisos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
