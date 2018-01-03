@@ -19,11 +19,35 @@ import java.lang.annotation.Target;
 public @interface ValidacionCodefacAnotacion {
     public static final String GRUPO_FORMULARIO="form"; 
     
-    
-    boolean requerido() default true;
+    /***
+     *Campo que especifica si el campo es necesario ingresar 
+     * sin no especifica por defecto es false
+     * @return 
+     */
+    boolean requerido() default false;
+    /**
+     * Tamanio minimo que debe cumplir la cadena para validar
+     * por defecto es 0
+     * @return 
+     */
     int min() default 0;
-    int max() default 100;
+    /**
+     * Tamaniomaximo que debe tener la cadena
+     * por defecto es 10000
+     * @return 
+     */
+    int max() default 10000;
+    /**
+     * Validacion para expresiones regulares
+     * por defecto es vacio
+     * @return 
+     */
     String expresionRegular() default "";
+    /**
+     * Nombre del campo para que aparesca en la pantalla de errores
+     * por defecto solo aparece con el nombre campo
+     * @return 
+     */
     String nombre() default "campo";
     /**
      * Conjunto de nombres de metodos que tienen que estar implementado en la misma
@@ -39,5 +63,11 @@ public @interface ValidacionCodefacAnotacion {
      * @return  nombre del grupo
      */
     String grupo() default GRUPO_FORMULARIO;
+    
+    /**
+     * Mensaje que va a aparecer cuando falla la expresion regular
+     * @return 
+     */
+    String expresionRegularMensaje() default "";
     
 }
