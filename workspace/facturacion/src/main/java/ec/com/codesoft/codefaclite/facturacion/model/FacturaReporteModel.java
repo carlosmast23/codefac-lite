@@ -205,10 +205,25 @@ public class FacturaReporteModel extends FacturaReportePanel {
                 getLblTotal().setText(total.toString());
             }
         });
+        /*
         getBtnLimpiarFecha().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 getDateFechaInicio().setDate(null);
+                //getDateFechaFin().setDate(null);
+            }
+        });*/
+        
+        getBtnLimpiarFechaInicio().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getDateFechaInicio().setDate(null);
+            }
+        });
+        
+        getBtnLimpiarFechaFin().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 getDateFechaFin().setDate(null);
             }
         });

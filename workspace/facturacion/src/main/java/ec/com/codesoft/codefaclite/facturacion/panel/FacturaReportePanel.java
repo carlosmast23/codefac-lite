@@ -521,6 +521,24 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
     public void setBtnLimpiarFecha(JButton btnLimpiarFecha) {
         this.btnLimpiarFechaInicio = btnLimpiarFecha;
     }
+
+    public JButton getBtnLimpiarFechaFin() {
+        return btnLimpiarFechaFin;
+    }
+
+    public void setBtnLimpiarFechaFin(JButton btnLimpiarFechaFin) {
+        this.btnLimpiarFechaFin = btnLimpiarFechaFin;
+    }
+
+    public JButton getBtnLimpiarFechaInicio() {
+        return btnLimpiarFechaInicio;
+    }
+
+    public void setBtnLimpiarFechaInicio(JButton btnLimpiarFechaInicio) {
+        this.btnLimpiarFechaInicio = btnLimpiarFechaInicio;
+    }
+    
+    
     
     
 
