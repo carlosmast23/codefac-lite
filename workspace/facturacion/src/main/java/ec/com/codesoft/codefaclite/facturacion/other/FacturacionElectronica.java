@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.DetalleFacturaComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FormaPagoComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.InformacionFactura;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.ImpuestoComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionTributaria;
@@ -20,12 +21,14 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.TotalImpu
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
 import ec.com.codesoft.codefaclite.servidor.entity.Factura;
 import ec.com.codesoft.codefaclite.servidor.entity.FacturaDetalle;
+import ec.com.codesoft.codefaclite.servidor.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.SriIdentificacion;
 import ec.com.codesoft.ejemplo.utilidades.email.CorreoElectronico;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,7 +42,8 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
 
     private Factura factura;
     private Map<String,String> mapInfoAdicional;
-    private List<String> correosAdicionales;
+    private List<String> correosAdicionales;    
+    private List<FormaPago> formaPagos;
     
     public FacturacionElectronica(SessionCodefacInterface session) {
         super(session);
@@ -97,6 +101,24 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
          */
         informacionFactura.setObligadoContabilidad("NO");
         //informacionFactura.setTotalImpuestos(totalImpuestos);
+        
+        /**
+         * Grabar las formas de pago si la variable exise y es distinto de vacio
+         */
+        if(formaPagos!=null && formaPagos.size()>=0)
+        {
+            List<FormaPagoComprobante> formaPagosFactura=new ArrayList<FormaPagoComprobante>();
+            for (FormaPago formaPago : formaPagos) {
+               FormaPagoComprobante formaPagoComprobante=new FormaPagoComprobante();
+               formaPagoComprobante.setFormaPago(formaPago.getSriFormaPago().getCodigo());
+               formaPagoComprobante.setPlazo(new BigDecimal(formaPago.getPlazo()+""));
+               formaPagoComprobante.setTotal(formaPago.getTotal());
+               formaPagoComprobante.setUnidadTiempo(formaPago.getUnidadTiempo());
+               formaPagosFactura.add(formaPagoComprobante);
+            }
+            informacionFactura.setFormaPagos(formaPagosFactura);
+        }
+        
         
         /**
          * Total con impuestos
@@ -231,6 +253,15 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
     public void setCorreosAdicionales(List<String> correosAdicionales) {
         this.correosAdicionales = correosAdicionales;
     }
+
+    public List<FormaPago> getFormaPagos() {
+        return formaPagos;
+    }
+
+    public void setFormaPagos(List<FormaPago> formaPagos) {
+        this.formaPagos = formaPagos;
+    }
+    
     
     
     

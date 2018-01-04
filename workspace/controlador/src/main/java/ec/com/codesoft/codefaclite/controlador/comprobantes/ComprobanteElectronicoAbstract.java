@@ -18,11 +18,14 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.Informaci
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionTributaria;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidor.entity.SriFormaPago;
+import ec.com.codesoft.codefaclite.servidor.service.SriService;
 import ec.com.codesoft.ejemplo.utilidades.email.CorreoElectronico;
 import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -154,6 +157,17 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
         servicio.setCorreosElectronicos(getCorreos());
         String footer = UtilidadVarios.getStringHtmltoUrl(RecursoCodefac.HTML.getResourceInputStream("footer_codefac.html"));
         servicio.setFooterMensajeCorreo(footer);
+        
+        /**
+         * Cargar datos de las formas de pago
+         */
+        SriService service=new SriService();
+        List<SriFormaPago> formasPagoSri=service.obtenerFormasPagoActivo();
+        Map<String,String> mapFormasPago=new HashMap<String,String>();
+        for (SriFormaPago sriFormaPago : formasPagoSri) {
+            mapFormasPago.put(sriFormaPago.getCodigo(),sriFormaPago.getNombre());
+        }
+        servicio.setMapCodeAndNameFormaPago(mapFormasPago);
 
     }
     
