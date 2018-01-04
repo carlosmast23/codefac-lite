@@ -56,7 +56,8 @@ public class FormaPagoDialogModel extends FormaPagoDialog{
             @Override
             public void actionPerformed(ActionEvent e) {
                 formaPago=new FormaPago();
-                formaPago.setPlazo(Integer.parseInt(getTxtPlazo().getText()));
+                String plazoStr=(getTxtPlazo().getText().equals(""))?"0":getTxtPlazo().getText();
+                formaPago.setPlazo(Integer.parseInt(plazoStr));
                 formaPago.setSriFormaPago((SriFormaPago) getCmbFormaPagoSri().getSelectedItem());
                 formaPago.setUnidadTiempo(getCmbTiempo().getSelectedItem().toString());
                 formaPago.setTotal(new BigDecimal(getTxtValor().getText())); 
