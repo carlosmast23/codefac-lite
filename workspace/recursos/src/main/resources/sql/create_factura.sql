@@ -51,4 +51,15 @@ create table FACTURA_DETALLE
     TOTAL decimal(7,2),
     DESCRIPCION varchar(150),
     primary key (ID)
+);
+
+create table FACTURA_FORMA_PAGO
+(
+    ID integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    SRI_FORMA_PAGO_ID INTEGER,
+    FACTURA_ID INTEGER,
+    PLAZO integer ,
+    TOTAL decimal(7,2),
+    UNIDAD_TIEMPO varchar(150),
+    primary key (ID)
 )

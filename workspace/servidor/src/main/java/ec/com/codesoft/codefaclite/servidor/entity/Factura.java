@@ -102,6 +102,9 @@ public class Factura {
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura")
     private List<FacturaDetalle> detalles;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura")
+    private List<FormaPago> formaPagos;
 
     public Factura() {
     }
@@ -301,6 +304,16 @@ public class Factura {
     public void setIva(BigDecimal iva) {
         this.iva = iva;
     }
+
+    public List<FormaPago> getFormaPagos() {
+        return formaPagos;
+    }
+
+    public void setFormaPagos(List<FormaPago> formaPagos) {
+        this.formaPagos = formaPagos;
+    }
+    
+    
     
     
     
@@ -315,6 +328,20 @@ public class Factura {
         }
         detalle.setFactura(this);
         this.detalles.add(detalle);
+        
+    }
+    
+     /**
+     * Formas de pago adicional
+     */
+    public void addFormaPago(FormaPago formaPago)
+    {
+        if(this.formaPagos==null)
+        {
+            this.formaPagos=new ArrayList<FormaPago>();
+        }
+        formaPago.setFactura(this);
+        this.formaPagos.add(formaPago);
         
     }
     

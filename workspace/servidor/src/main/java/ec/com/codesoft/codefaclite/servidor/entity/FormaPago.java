@@ -8,6 +8,8 @@ package ec.com.codesoft.codefaclite.servidor.entity;
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -18,11 +20,12 @@ import javax.persistence.Table;
  * @author Carlos
  */
 @Entity
-@Table(name = "FORMA_PAGO_FACTURA")
+@Table(name = "FACTURA_FORMA_PAGO")
 public class FormaPago {
     
     @Id
     @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;    
     @Column(name = "TOTAL")
     private BigDecimal total;
@@ -31,9 +34,13 @@ public class FormaPago {
     @Column(name = "UNIDAD_TIEMPO")
     private String unidadTiempo;    
     
-    @JoinColumn(name = "FORMA_PAGO_ID")
+    @JoinColumn(name = "SRI_FORMA_PAGO_ID")
     @ManyToOne
     private SriFormaPago sriFormaPago;
+    
+    @JoinColumn(name = "FACTURA_ID")
+    @ManyToOne
+    private Factura factura;
 
     public FormaPago() {
     }
@@ -78,6 +85,14 @@ public class FormaPago {
 
     public void setSriFormaPago(SriFormaPago sriFormaPago) {
         this.sriFormaPago = sriFormaPago;
+    }
+
+    public Factura getFactura() {
+        return factura;
+    }
+
+    public void setFactura(Factura factura) {
+        this.factura = factura;
     }
 
     

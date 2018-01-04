@@ -43,7 +43,7 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
     private Factura factura;
     private Map<String,String> mapInfoAdicional;
     private List<String> correosAdicionales;    
-    private List<FormaPago> formaPagos;
+    //private List<FormaPago> formaPagos;
     
     public FacturacionElectronica(SessionCodefacInterface session) {
         super(session);
@@ -105,10 +105,10 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
         /**
          * Grabar las formas de pago si la variable exise y es distinto de vacio
          */
-        if(formaPagos!=null && formaPagos.size()>=0)
+        if(factura.getFormaPagos()!=null && factura.getFormaPagos().size()>=0)
         {
             List<FormaPagoComprobante> formaPagosFactura=new ArrayList<FormaPagoComprobante>();
-            for (FormaPago formaPago : formaPagos) {
+            for (FormaPago formaPago : factura.getFormaPagos()) {
                FormaPagoComprobante formaPagoComprobante=new FormaPagoComprobante();
                formaPagoComprobante.setFormaPago(formaPago.getSriFormaPago().getCodigo());
                formaPagoComprobante.setPlazo(new BigDecimal(formaPago.getPlazo()+""));
@@ -253,15 +253,6 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
     public void setCorreosAdicionales(List<String> correosAdicionales) {
         this.correosAdicionales = correosAdicionales;
     }
-
-    public List<FormaPago> getFormaPagos() {
-        return formaPagos;
-    }
-
-    public void setFormaPagos(List<FormaPago> formaPagos) {
-        this.formaPagos = formaPagos;
-    }
-    
     
     
     
