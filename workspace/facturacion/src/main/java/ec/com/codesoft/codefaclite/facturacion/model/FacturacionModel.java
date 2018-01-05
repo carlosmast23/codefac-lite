@@ -78,6 +78,7 @@ public class FacturacionModel extends FacturacionPanel {
 
     //private Persona persona;
     private Factura factura;
+    //private List<FormaPago> formaPagos;
     private DefaultTableModel modeloTablaFormasPago;
     private DefaultTableModel modeloTablaDetallesProductos;
     private DefaultTableModel modeloTablaDatosAdicionales;
@@ -85,19 +86,6 @@ public class FacturacionModel extends FacturacionPanel {
     private int fila;
     private boolean bandera;
     private boolean banderaAgregar;
-    //private BigDecimal subtotalSinImpuestos;
-    //private BigDecimal subtotal12;
-    //private BigDecimal subtotal0;
-    //private BigDecimal iva;
-    //private BigDecimal valorTotal;
-    //private BigDecimal descuento;
-    //Datos informativos del descuento
-    //private BigDecimal subTotalDescuentoConImpuesto;
-    //private BigDecimal subTotalDescuentoSinImpuesto;
-    //Da
-    //private BigDecimal subtotal12Descuento;
-    //private BigDecimal subtotal0Descuento;
-    //private BigDecimal subtotalSinImpuestosDescuento;
 
     private java.util.Date fechaMax;
     private java.util.Date fechaMin;
@@ -203,7 +191,8 @@ public class FacturacionModel extends FacturacionPanel {
                 dialog.setLocationRelativeTo(null);
                 dialog.setVisible(true);
                 FormaPago formaPago = dialog.getFormaPago();
-                agregarFormaPagoTabla(formaPago);
+                factura.addFormaPago(formaPago);
+                cargarFormasPagoTabla();
             }
         });
 
@@ -391,6 +380,7 @@ public class FacturacionModel extends FacturacionPanel {
         FacturacionElectronica facturaElectronica = new FacturacionElectronica(factura, session, this.panelPadre);
         facturaElectronica.setFactura(factura);
         facturaElectronica.setMapInfoAdicional(datosAdicionales);
+        //facturaElectronica.setFormaPagos();
         /*
         ListenerComprobanteElectronico listener=new ListenerComprobanteElectronico() {
             @Override
@@ -565,6 +555,7 @@ public class FacturacionModel extends FacturacionPanel {
             setearDetalleFactura();            
             cargarTotales();
             cargarValoresAdicionales();
+            cargarFormasPagoTabla();
         }
         else
         {
@@ -577,6 +568,7 @@ public class FacturacionModel extends FacturacionPanel {
     @Override
     public void limpiar() {
         this.factura = new Factura();
+        //this.for=new ArrayList<FormaPago>();
         this.factura.setDetalles(new ArrayList<FacturaDetalle>());
 
         //Setear los valores de la empresa 
@@ -652,13 +644,22 @@ public class FacturacionModel extends FacturacionPanel {
         return permisos;
     }
 
-    private void agregarFormaPagoTabla(FormaPago formaPago) {
-        Vector<String> fila = new Vector<>();
-        fila.add(formaPago.getSriFormaPago().getNombre());
-        fila.add(formaPago.getTotal().toString());
-        fila.add(formaPago.getUnidadTiempo());
-        fila.add(formaPago.getPlazo() + "");
-        this.modeloTablaFormasPago.addRow(fila);
+    private void cargarFormasPagoTabla() {
+
+        //this.modeloTablaFormasPago=new DefaultTableModel(fila,0);
+        //this.modeloTablaFormasPago.initModelTablaFormaPago();
+        initModelTablaFormaPago();
+        
+        List<FormaPago> formasPago=factura.getFormaPagos();
+        for (FormaPago formaPago : formasPago) {
+            Vector<String> fila = new Vector<>();
+            fila.add(formaPago.getSriFormaPago().getNombre());
+            fila.add(formaPago.getTotal().toString());
+            fila.add(formaPago.getUnidadTiempo());
+            fila.add(formaPago.getPlazo() + "");
+            this.modeloTablaFormasPago.addRow(fila);
+        }
+       
     }
 
     private void initModelTablaFormaPago() {
@@ -923,6 +924,13 @@ public class FacturacionModel extends FacturacionPanel {
         getBtnCrearProducto().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourcePath("pequenos/add2.png")));
         getBtnCrearProducto().setText("");
         getBtnCrearProducto().setToolTipText("Crear nuevo producto");
+        
+        getBtnAgregarFormaPago().setText("");
+        getBtnAgregarFormaPago().setToolTipText("Agregar formas e pago");
+        
+        
+        
+        
 
     }
 

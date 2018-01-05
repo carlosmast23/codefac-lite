@@ -25,7 +25,8 @@ import javax.xml.bind.annotation.XmlType;
     "totalSinImpuestos",
     "totalDescuento",
     "totalImpuestos",
-    "importeTotal"})
+    "importeTotal",
+    "formaPagos"})
 public class InformacionFactura {
     private String fechaEmision;
     private String tipoIdentificacionComprador;
@@ -38,6 +39,7 @@ public class InformacionFactura {
     private String obligadoContabilidad;
     
     private List<TotalImpuesto> totalImpuestos;
+    private List<FormaPagoComprobante> formaPagos;
 
     public InformacionFactura() {
     }
@@ -113,6 +115,18 @@ public class InformacionFactura {
     public List<TotalImpuesto> getTotalImpuestos() {
         return totalImpuestos;
     }
+
+    @XmlElementWrapper(name = "pagos")
+    @XmlElement(name = "pago")
+    public List<FormaPagoComprobante> getFormaPagos() {
+        return formaPagos;
+    }
+
+    public void setFormaPagos(List<FormaPagoComprobante> formaPagos) {
+        this.formaPagos = formaPagos;
+    }
+    
+    
 
     public void setTotalImpuestos(List<TotalImpuesto> totalImpuestos) {
         this.totalImpuestos = totalImpuestos;

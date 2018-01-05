@@ -133,6 +133,14 @@ public class ComprobanteElectronicoService implements Runnable {
 
     private String footerMensajeCorreo;
     private Integer etapaLimiteProcesar;
+    
+    /**
+     * Map que establece el diccionario de los codigos
+     * y los nombres de las formas de pago para poder generar el ride
+     * con los valores proporicinados.
+     * @return 
+     */
+    private Map<String,String> mapCodeAndNameFormaPago;
 
     public ComprobanteElectronicoService() {
         this.etapaLimiteProcesar = 100;
@@ -344,7 +352,11 @@ public class ComprobanteElectronicoService implements Runnable {
     private ComprobanteElectronicoReporte getComprobanteReporte(ComprobanteElectronico comprobante)
     {
         if(comprobante.getClass().equals(FacturaComprobante.class))
-            return new FacturaElectronicaReporte(comprobante);
+        {
+            FacturaElectronicaReporte factElectReport=new FacturaElectronicaReporte(comprobante);
+            factElectReport.setMapCodeAndNameFormaPago(mapCodeAndNameFormaPago);
+            return factElectReport;
+        }
         else
             if(comprobante.getClass().equals(NotaCreditoComprobante.class))
                 return new NotaCreditoReporte(comprobante);
@@ -735,6 +747,12 @@ public class ComprobanteElectronicoService implements Runnable {
     public void setPathNotaCreditoJasper(String pathNotaCreditoJasper) {
         this.pathNotaCreditoJasper = pathNotaCreditoJasper;
     }
+
+    public void setMapCodeAndNameFormaPago(Map<String, String> mapCodeAndNameFormaPago) {
+        this.mapCodeAndNameFormaPago = mapCodeAndNameFormaPago;
+    }
+    
+    
     
     
 

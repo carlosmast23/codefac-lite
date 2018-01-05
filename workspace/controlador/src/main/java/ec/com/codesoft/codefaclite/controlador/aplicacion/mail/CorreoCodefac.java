@@ -34,7 +34,7 @@ public abstract class CorreoCodefac {
     public void enviarCorreo() throws RuntimeException
     {
         String correo=session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor();
-        String clave=session.getParametrosCodefac().get(ParametroCodefac.CORREO_CLAVE).getValor();
+        String clave=session.getParametrosCodefac().get(ParametroCodefac.CORREO_CLAVE).getValor();        
         
         correoElectronico=new CorreoElectronico(correo,clave, getMensaje(), getDestinatorios(), getTitulo());
         correoElectronico.setPathFiles(getPathFiles());
@@ -50,5 +50,6 @@ public abstract class CorreoCodefac {
 
         
     }
+    
     
 }

@@ -523,7 +523,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         return txtNotaDebitoSecuencial;
     }
 
-    @ValidacionCodefacAnotacion(requerido = true, min = 0, expresionRegular = "^[0-9]*$)", nombre = "Retencion Secuencial")
+    @ValidacionCodefacAnotacion(requerido = true, min = 0, expresionRegular = "^[0-9]*$", nombre = "Retencion Secuencial")
     public JTextField getTxtRetencionesSecuencial() {
         return txtRetencionesSecuencial;
     }

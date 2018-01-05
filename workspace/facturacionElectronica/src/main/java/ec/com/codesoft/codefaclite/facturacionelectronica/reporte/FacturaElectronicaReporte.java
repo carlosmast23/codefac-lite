@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.facturacionelectronica.reporte;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.DetalleFacturaComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FormaPagoComprobante;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,11 +21,14 @@ import java.util.Map;
 public class FacturaElectronicaReporte extends ComprobanteElectronicoReporte{
     
     private FacturaComprobante facturaComprobante;
+    private Map<String,String> mapCodeAndNameFormaPago;
 
     public FacturaElectronicaReporte(ComprobanteElectronico comprobante) {
         super(comprobante);
         this.facturaComprobante = (FacturaComprobante) comprobante;
     }
+    
+    
     
     @Override
     public Map<String,Object> getMapInfoCliente()
@@ -74,8 +78,35 @@ public class FacturaElectronicaReporte extends ComprobanteElectronicoReporte{
 
     @Override
     public List getListFormasPago() {
-        return null;
+        List<FormaPagoComprobante> formasPago=facturaComprobante.getInformacionFactura().getFormaPagos();
+        List<FormaPagoData> formaPagosData=new ArrayList<FormaPagoData>();
+        if(formasPago!=null)
+        {
+            for (FormaPagoComprobante formaPagoComprobante : formasPago) {
+                FormaPagoData formaPagoData=new FormaPagoData();
+                if(mapCodeAndNameFormaPago!=null)
+                {
+                    String nombreFormaPago=mapCodeAndNameFormaPago.get(formaPagoComprobante.getFormaPago());
+                    formaPagoData.setNombre((nombreFormaPago!=null)?nombreFormaPago:"Sin Nombre");
+                }
+                else
+                {
+                    formaPagoData.setNombre("Sin Nombre");
+                }
+                formaPagoData.setValor(formaPagoComprobante.getTotal().toString());            
+                formaPagosData.add(formaPagoData);
+            }
+        }
+        return formaPagosData;
     }
+
+    public void setMapCodeAndNameFormaPago(Map<String, String> mapCodeAndNameFormaPago) {
+        this.mapCodeAndNameFormaPago = mapCodeAndNameFormaPago;
+    }
+    
+    
+    
+    
 
    
 }

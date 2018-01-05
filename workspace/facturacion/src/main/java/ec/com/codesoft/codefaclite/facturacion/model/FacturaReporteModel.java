@@ -73,7 +73,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
         if (getChkTodos().isSelected()) {
             persona = null;
             getTxtCliente().setText("...");
-            getLblNombreCliente().setText("..");
+            //getLblNombreCliente().setText("..");
             getBtnBuscarCliente().setEnabled(false);
         }
 
@@ -83,7 +83,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
                 if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
                     persona = null;
                     getTxtCliente().setText("...");
-                    getLblNombreCliente().setText("..");
+                    //getLblNombreCliente().setText("..");
                     getBtnBuscarCliente().setEnabled(false);
                 } else {
                     getBtnBuscarCliente().setEnabled(true);
@@ -205,10 +205,25 @@ public class FacturaReporteModel extends FacturaReportePanel {
                 getLblTotal().setText(total.toString());
             }
         });
+        /*
         getBtnLimpiarFecha().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 getDateFechaInicio().setDate(null);
+                //getDateFechaFin().setDate(null);
+            }
+        });*/
+        
+        getBtnLimpiarFechaInicio().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getDateFechaInicio().setDate(null);
+            }
+        });
+        
+        getBtnLimpiarFechaFin().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 getDateFechaFin().setDate(null);
             }
         });
@@ -378,7 +393,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
     private void setearValoresCliente() {
 
         getTxtCliente().setText(persona.getIdentificacion());
-        getLblNombreCliente().setText(persona.getRazonSocial());
+        //getLblNombreCliente().setText(persona.getRazonSocial());
 
         //getLblDireccionCliente().setText(persona.getDireccion());
         //getLblTelefonoCliente().setText(persona.getTelefonoConvencional());  

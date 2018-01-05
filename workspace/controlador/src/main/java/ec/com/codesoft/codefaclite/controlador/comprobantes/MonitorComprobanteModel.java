@@ -5,7 +5,6 @@
  */
 package ec.com.codesoft.codefaclite.controlador.comprobantes;
 
-import com.sun.org.apache.bcel.internal.generic.D2F;
 import ec.com.codesoft.codefaclite.controlador.panel.MonitorComprobantesPanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
