@@ -33,7 +33,9 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectr
 import ec.com.codesoft.codefaclite.main.panel.GeneralPanelForm;
 import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import ec.com.codesoft.codefaclite.servidor.entity.AccesoDirecto;
 import ec.com.codesoft.codefaclite.servidor.entity.Perfil;
+import ec.com.codesoft.codefaclite.servidor.service.AccesoDirectoService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
 import ec.com.codesoft.ejemplo.utilidades.imagen.UtilidadImagen;
 import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
@@ -45,6 +47,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Image;
 import java.awt.Panel;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
@@ -1434,36 +1437,45 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         //Cargar el componente de publicidad para que siempre exista
         cargarPublicidad();
         
-        //JLabel jLabel4=new JLabel("EJEMPLO DE JLABEL AGREGADO EN LA PANTALLA");
-        //jLabel4.setBounds(40, 60, 90, 80);
-        //jLabel4.setBounds(100,100,200,200);
+        Map<String,Object> mapBuscar;
+        AccesoDirectoService servicio=new AccesoDirectoService();
+        
+        mapBuscar=new HashMap<>();
+        mapBuscar.put("nombre",ProductoModel.class.getName());
         URL url=RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL("producto.png");
-        IconoPanel iconoPanel=new IconoPanel("Producto",url,getjDesktopPane1(),30,50);                
+        IconoPanel iconoPanel=new IconoPanel("Producto",url,getjDesktopPane1(),servicio.obtenerPorMap(mapBuscar).get(0).x,servicio.obtenerPorMap(mapBuscar).get(0).y);                
         iconoPanel.addListenerIcono(new ListenerIcono(ProductoModel.class, true));
         getjDesktopPane1().add(iconoPanel);
         
         
-        
+        mapBuscar = new HashMap<>();
+        mapBuscar.put("nombre", CalculadoraModel.class.getName());
         url=RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL("calculadora.png");
-        IconoPanel iconoCalcu=new IconoPanel("Calculadora",url,getjDesktopPane1(),30,150);                
+        IconoPanel iconoCalcu=new IconoPanel("Calculadora",url,getjDesktopPane1(),servicio.obtenerPorMap(mapBuscar).get(0).x,servicio.obtenerPorMap(mapBuscar).get(0).y);                
         iconoCalcu.addListenerIcono(new ListenerIcono(CalculadoraModel.class,false));
         getjDesktopPane1().add(iconoCalcu);
         
         
+        mapBuscar = new HashMap<>();
+        mapBuscar.put("nombre", FacturacionModel.class.getName());
         url=RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL("factura.png");
-        IconoPanel iconoFactura=new IconoPanel("Factura",url,getjDesktopPane1(),30,250);                
+        IconoPanel iconoFactura=new IconoPanel("Factura",url,getjDesktopPane1(),servicio.obtenerPorMap(mapBuscar).get(0).x,servicio.obtenerPorMap(mapBuscar).get(0).y);                
         iconoFactura.addListenerIcono(new ListenerIcono(FacturacionModel.class,true));
         getjDesktopPane1().add(iconoFactura);
         
         
+        mapBuscar = new HashMap<>();
+        mapBuscar.put("nombre", ClienteModel.class.getName());
         url=RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL("cliente.png");
-        IconoPanel iconoCliente=new IconoPanel("Cliente",url,getjDesktopPane1(),30,350);                
+        IconoPanel iconoCliente=new IconoPanel("Cliente",url,getjDesktopPane1(),servicio.obtenerPorMap(mapBuscar).get(0).x,servicio.obtenerPorMap(mapBuscar).get(0).y);                
         iconoCliente.addListenerIcono(new ListenerIcono(ClienteModel.class,true));
         getjDesktopPane1().add(iconoCliente);
         
         
+        mapBuscar = new HashMap<>();
+        mapBuscar.put("nombre", ComprobantesConfiguracionModel.class.getName());
         url=RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL("configuracion.png");
-        IconoPanel iconoConfig=new IconoPanel("Configurar",url,getjDesktopPane1(),30,450);                
+        IconoPanel iconoConfig=new IconoPanel("Configurar",url,getjDesktopPane1(),servicio.obtenerPorMap(mapBuscar).get(0).x,servicio.obtenerPorMap(mapBuscar).get(0).y);                
         iconoConfig.addListenerIcono(new ListenerIcono(ComprobantesConfiguracionModel.class,true));
         getjDesktopPane1().add(iconoConfig);
         
@@ -1720,6 +1732,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         @Override
         public void doubleClick() {
             try {
+                System.out.println("Ejemplo:"+ventanaClase.getName());
                 Constructor contructor = ventanaClase.getConstructor();
                 ControladorCodefacInterface ventana = (ControladorCodefacInterface) contructor.newInstance();
                 agregarListenerMenu(ventana,maximizado);
@@ -1736,6 +1749,19 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             } catch (InvocationTargetException ex) {
                 Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+
+        @Override
+        public void grabarNuevaPosicion(Point nuevaPosicion) {
+            Map<String, Object> mapBuscar;
+            AccesoDirectoService servicio = new AccesoDirectoService();
+
+            mapBuscar = new HashMap<>();
+            mapBuscar.put("nombre", ventanaClase.getName());
+            AccesoDirecto acceso=servicio.obtenerPorMap(mapBuscar).get(0);
+            acceso.setX((int)nuevaPosicion.getX());
+            acceso.setY((int)nuevaPosicion.getY());
+            servicio.editar(acceso);
         }
         
     }

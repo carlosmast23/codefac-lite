@@ -5,11 +5,14 @@
  */
 package ec.com.codesoft.codefaclite.main.model;
 
+import java.awt.Point;
+
 /**
  *
  * @author Carlos
  */
 public interface IconoInterfaz {
     public abstract void doubleClick();
+    public abstract void grabarNuevaPosicion(Point nuevaPosicion);
     
 }

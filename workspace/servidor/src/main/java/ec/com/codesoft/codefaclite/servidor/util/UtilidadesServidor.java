@@ -39,7 +39,9 @@ public class UtilidadesServidor {
         RecursoCodefac.SQL.getResourceInputStream("create_nota_credito.sql"),
         RecursoCodefac.SQL.getResourceInputStream("insert_cliente.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_perfil.sql"),
+        RecursoCodefac.SQL.getResourceInputStream("create_acceso_directo.sql"),
         RecursoCodefac.SQL.getResourceInputStream("insert_default.sql"),
+        
         
     };
     

@@ -49,6 +49,11 @@ public abstract class ServiceAbstract<Entity,Facade>
         }
     }
     
+    public void editar(Entity entity)
+    {
+        this.facade.edit(entity);
+    }
+    
     public List<Entity> obtenerPorMap(Map<String,Object> parametros)
     {
         return this.facade.findByMap(parametros);

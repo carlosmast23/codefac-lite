@@ -48,4 +48,11 @@ INSERT INTO PERFIL(NOMBRE,DESCRIPCION,ESTADO)
     VALUES('OPERADOR','Perfil normal','A');
 
 INSERT INTO PERFIL_USUARIO(NICK,PERFIL_ID,FECHA_CREACION)
-    VALUES('admin',1,CURRENT_DATE)
+    VALUES('admin',1,CURRENT_DATE);
+
+INSERT INTO ACCESO_DIRECTO (NOMBRE, X,Y)
+    VALUES  ('ec.com.codesoft.codefaclite.crm.model.ProductoModel', 30, 50),
+            ('ec.com.codesoft.codefaclite.configuraciones.model.CalculadoraModel', 30, 150),
+            ('ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel', 30, 250),
+            ('ec.com.codesoft.codefaclite.crm.model.ClienteModel', 30, 350),
+            ('ec.com.codesoft.codefaclite.configuraciones.model.ComprobantesConfiguracionModel', 30, 450);

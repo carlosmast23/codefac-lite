@@ -83,13 +83,16 @@ public class IconoPanel extends JPanel{
             public void mousePressed(MouseEvent e) {
                 presionando=true;
                 ubicacionRelativaMouse=e.getPoint();
-                System.out.println("presionado");
+                //System.out.println("presionado");
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 presionando=false;
-                System.out.println("soltado");
+                if (iconoInterfaz != null) {
+                    iconoInterfaz.grabarNuevaPosicion(getLocation());
+                }             
+
             }
 
             @Override
@@ -118,17 +121,7 @@ public class IconoPanel extends JPanel{
                 Point rectanguloPadre= parentPanel.getLocationOnScreen();
                 int x=e.getXOnScreen()-rectanguloPadre.x-ubicacionRelativaMouse.x;
                 int y=e.getYOnScreen()-rectanguloPadre.y-ubicacionRelativaMouse.y;
-                //rectanguloPadre.getLocation();
-                
-                System.out.println("x="+x+",y="+y+",x1="+rectanguloPadre.x+",y1="+rectanguloPadre.y+",x3="+e.getX()+",y3="+e.getY());
-                                
-                //System.out.println("x="+e.getX()+",y="+e.getY()+"->x1="+e.getXOnScreen()+",y1="+e.getYOnScreen());
-                //Rectangle iconoBounds=getBounds();
-                //    iconoBounds.x=e.getX();
-                //    iconoBounds.y=e.getY();
-                    setBounds(new Rectangle(x, y,lblTitulo.getText().length()*8, 94));
-                    //lblImagen.get
-                //System.out.println("icono dibujando:"+e.ge);
+                setBounds(new Rectangle(x, y,lblTitulo.getText().length()*8, 94));
             }
 
             @Override
