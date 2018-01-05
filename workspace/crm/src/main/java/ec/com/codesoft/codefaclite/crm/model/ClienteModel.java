@@ -312,8 +312,8 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         SriIdentificacion id;
         Map<String,Object> parametros=new HashMap<String,Object>();
         parametros.put("codigo","05");
-        SriIdentificacion dentificacion=service.obtenerPorMap(parametros).get(0);
-        getjComboIdentificacion().setSelectedItem(dentificacion);
+        SriIdentificacion identificacion=service.obtenerPorMap(parametros).get(0);
+        getjComboIdentificacion().setSelectedItem(identificacion);
         
         
         getjComboTipoCliente().setSelectedIndex(0);

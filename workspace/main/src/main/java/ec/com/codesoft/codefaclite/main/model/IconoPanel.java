@@ -90,7 +90,10 @@ public class IconoPanel extends JPanel{
             public void mouseReleased(MouseEvent e) {
                 presionando=false;
                 if (iconoInterfaz != null) {
-                    iconoInterfaz.grabarNuevaPosicion(getLocation());
+                    int tamanioX=(int)((double)(lblTitulo.getText().length()*8-64)/(double)2);
+                    Point point=getLocation();
+                    point.x+=tamanioX;
+                    iconoInterfaz.grabarNuevaPosicion(point);
                 }             
 
             }
