@@ -17,6 +17,7 @@ public enum RecursoCodefac {
     IMAGENES_ICONOS("img/iconos"),
     IMAGENES_ICONOS_DIALOGOS("img/iconos/dialogos"),
     IMAGENES_GENERAL("img/general"),
+    IMAGENES_ACCESO_DIRECTO("img/accesoDirecto"),
     IMAGENES_REDES_SOCIALES("img/redes_sociales"),
     SQL("sql"),
     JASPER_CRM("reportes/crm"),

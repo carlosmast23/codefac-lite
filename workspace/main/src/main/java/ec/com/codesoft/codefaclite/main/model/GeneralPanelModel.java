@@ -7,6 +7,8 @@ package ec.com.codesoft.codefaclite.main.model;
 
 
 
+import ec.com.codesoft.codefaclite.configuraciones.model.CalculadoraModel;
+import ec.com.codesoft.codefaclite.configuraciones.model.ComprobantesConfiguracionModel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.ComprobanteElectronicoAbstract;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteListener;
@@ -25,6 +27,8 @@ import ec.com.codesoft.codefaclite.corecodefaclite.validation.validacionPersonal
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
+import ec.com.codesoft.codefaclite.crm.model.ProductoModel;
+import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.main.panel.GeneralPanelForm;
 import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
@@ -41,6 +45,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Image;
 import java.awt.Panel;
+import java.awt.Rectangle;
 import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -51,6 +56,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
@@ -65,6 +71,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -152,22 +159,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         habilitarBotones(false);
         
         
-
-        /*
-        getjDesktopPane1().addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                //System.out.println("resi");
-                //revalidate();
-                //repaint();
-                //getjSplitPanel().getDividerLocation();
-               // getjSplitPanel().setDividerLocation(DIVISION_GENERAL);
-               // getjSplitPanelVerticalSecundario().setDividerLocation(DIVISION_SECUNDARIA);                
-            }
-            
-        });*/
-        
     }
+    
     public void agregarPanelesSecundarios()
     {
         for (Map.Entry<String, PanelSecundarioAbstract> entry : panelesSecundariosMap.entrySet()) {
@@ -837,11 +830,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 panel.dispose();
                 return;
             }
-                    
-            //sessionCodefac.getPerfiles()
-            //        panel.getPerfilesPermisos()
             
-                                    /**
+            /**
              * Agregar variables de session a la pantalla
              */
             ParametroCodefacService servicio=new ParametroCodefacService();
@@ -1444,6 +1434,41 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         //Cargar el componente de publicidad para que siempre exista
         cargarPublicidad();
         
+        //JLabel jLabel4=new JLabel("EJEMPLO DE JLABEL AGREGADO EN LA PANTALLA");
+        //jLabel4.setBounds(40, 60, 90, 80);
+        //jLabel4.setBounds(100,100,200,200);
+        URL url=RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL("producto.png");
+        IconoPanel iconoPanel=new IconoPanel("Producto",url,getjDesktopPane1(),30,50);                
+        iconoPanel.addListenerIcono(new ListenerIcono(ProductoModel.class, true));
+        getjDesktopPane1().add(iconoPanel);
+        
+        
+        
+        url=RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL("calculadora.png");
+        IconoPanel iconoCalcu=new IconoPanel("Calculadora",url,getjDesktopPane1(),30,150);                
+        iconoCalcu.addListenerIcono(new ListenerIcono(CalculadoraModel.class,false));
+        getjDesktopPane1().add(iconoCalcu);
+        
+        
+        url=RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL("factura.png");
+        IconoPanel iconoFactura=new IconoPanel("Factura",url,getjDesktopPane1(),30,250);                
+        iconoFactura.addListenerIcono(new ListenerIcono(FacturacionModel.class,true));
+        getjDesktopPane1().add(iconoFactura);
+        
+        
+        url=RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL("cliente.png");
+        IconoPanel iconoCliente=new IconoPanel("Cliente",url,getjDesktopPane1(),30,350);                
+        iconoCliente.addListenerIcono(new ListenerIcono(ClienteModel.class,true));
+        getjDesktopPane1().add(iconoCliente);
+        
+        
+        url=RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL("configuracion.png");
+        IconoPanel iconoConfig=new IconoPanel("Configurar",url,getjDesktopPane1(),30,450);                
+        iconoConfig.addListenerIcono(new ListenerIcono(ComprobantesConfiguracionModel.class,true));
+        getjDesktopPane1().add(iconoConfig);
+        
+        
+        
     }
     
     private void seleccionaPanel(ControladorCodefacInterface panelInterface)
@@ -1679,6 +1704,40 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     public boolean validarPorGrupo(String nombre, String componente) {
         ControladorCodefacInterface panel=getPanelActivo();
         return validarFormulario(panel,nombre,componente);
+    }
+    
+    public class ListenerIcono implements IconoInterfaz 
+    {
+        private Class ventanaClase;
+        private Boolean maximizado;
+
+        public ListenerIcono(Class ventanaClase, Boolean maximizado) {
+            this.ventanaClase = ventanaClase;
+            this.maximizado = maximizado;
+        }
+
+        
+        @Override
+        public void doubleClick() {
+            try {
+                Constructor contructor = ventanaClase.getConstructor();
+                ControladorCodefacInterface ventana = (ControladorCodefacInterface) contructor.newInstance();
+                agregarListenerMenu(ventana,maximizado);
+            } catch (NoSuchMethodException ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SecurityException ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InstantiationException ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalArgumentException ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InvocationTargetException ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
     }
    
 }

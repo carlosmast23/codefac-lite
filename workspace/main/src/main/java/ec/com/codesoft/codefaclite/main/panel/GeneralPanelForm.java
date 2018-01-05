@@ -62,8 +62,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         btnImprimir = new javax.swing.JButton();
         btnAyuda = new javax.swing.JButton();
         JPanelPiePagina = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
+        lblPiePagina = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         jSplitPanel = new javax.swing.JSplitPane();
         jDesktopPane1 = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -196,17 +198,29 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         JPanelPiePagina.setBackground(new java.awt.Color(62, 93, 162));
         JPanelPiePagina.setForeground(new java.awt.Color(62, 93, 162));
         JPanelPiePagina.setToolTipText("");
+        JPanelPiePagina.setLayout(new java.awt.BorderLayout());
+
+        jPanel1.setBackground(new java.awt.Color(62, 93, 162));
 
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img.general/letraCodefac.png"))); // NOI18N
-        jLabel1.setText("Todos los derechos reservador por @Codesoft 2017");
-        JPanelPiePagina.add(jLabel1);
+        jLabel1.setText("Licencia:Gratis");
+        jPanel1.add(jLabel1);
+
+        JPanelPiePagina.add(jPanel1, java.awt.BorderLayout.LINE_END);
+
+        lblPiePagina.setForeground(new java.awt.Color(255, 255, 255));
+        lblPiePagina.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblPiePagina.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img.general/letraCodefac.png"))); // NOI18N
+        lblPiePagina.setText("Todos los derechos reservador por @Codesoft 2017       ");
+        JPanelPiePagina.add(lblPiePagina, java.awt.BorderLayout.CENTER);
+
+        jLabel2.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("   Empresa: Codesoft");
+        JPanelPiePagina.add(jLabel2, java.awt.BorderLayout.LINE_START);
 
         getContentPane().add(JPanelPiePagina, java.awt.BorderLayout.PAGE_END);
-
-        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel3.setLayout(new java.awt.BorderLayout());
-        getContentPane().add(jPanel3, java.awt.BorderLayout.LINE_START);
 
         jSplitPanel.setDividerLocation(800);
         jSplitPanel.setDividerSize(3);
@@ -429,6 +443,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JButton btnSalirPantallaPublicidad;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -451,12 +466,13 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JMenuItem jMenuItemUtilidades;
     private javax.swing.JMenuItem jMenuProducto;
     private javax.swing.JMenu jMenuUtilidades;
-    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanelPublicidadBorde;
     private javax.swing.JPanel jPanelPublicidadContenido;
     private javax.swing.JTabbedPane jPanelSeleccion;
     private javax.swing.JSplitPane jSplitPanel;
     private javax.swing.JSplitPane jSplitPanelVerticalSecundario;
+    private javax.swing.JLabel lblPiePagina;
     private javax.swing.JMenu menuConfiguracion;
     private javax.swing.JMenu menuFacturacion;
     private javax.swing.JMenu menuInicio;
