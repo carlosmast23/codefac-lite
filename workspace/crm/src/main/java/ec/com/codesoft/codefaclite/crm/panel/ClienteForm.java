@@ -356,7 +356,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=false ,min=0, expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Direccion")
+    @ValidacionCodefacAnotacion(requerido=false ,min=0, expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Direccion", expresionRegularMensaje = "No se permite la letra ñ, ni tildes")
     public JTextArea getjTextAreaDireccion() {
         return jTextAreaDireccion;
     }
@@ -366,7 +366,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=false ,expresionRegular = "^[0][0-9]{9}$",nombre = "Celular")
+    @ValidacionCodefacAnotacion(requerido=false ,expresionRegular = "^[0][0-9]{9}$",nombre = "Celular", expresionRegularMensaje = "Ingrese un número de celular valido" )
     public JTextField getjTextCelular() {
         return jTextCelular;
     }
@@ -376,7 +376,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$", nombre = "Correo Electronico")
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$", nombre = "Correo Electronico", expresionRegularMensaje = "Ingrese una dirección de correo valida" )
     public JTextField getjTextCorreo() {
         return jTextCorreo;
     }
@@ -406,7 +406,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true , min=0 ,max = 100,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Nombre Social")
+    @ValidacionCodefacAnotacion(requerido=true , min=0 ,max = 100,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Nombre Social", expresionRegularMensaje = "No se permite la letra ñ, ni tildes")
     public JTextField getjTextNombreSocial() {
         return jTextNombreSocial;
     }
@@ -416,7 +416,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=false ,expresionRegular = "^[0][0-9]{8}$",nombre = "Telefono")
+    @ValidacionCodefacAnotacion(requerido=false ,expresionRegular = "^[0][0-9]{8}$",nombre = "Telefono", expresionRegularMensaje = "Anteponga el código provincial")
     public JTextField getjTextTelefono() {
         return jTextTelefono;
     }
@@ -438,7 +438,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true, min = 3, max = 200, expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$", nombre = "Apellidos")
+    @ValidacionCodefacAnotacion(requerido = true, min = 3, max = 200, expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$", nombre = "Apellidos", expresionRegularMensaje = "No se permite la letra ñ, ni tildes")
     public JTextField getjTextApellidos() {
         return jTextApellidos;
     }
@@ -448,7 +448,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true, min = 3, max = 200, expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$", nombre = "Nombres")
+    @ValidacionCodefacAnotacion(requerido = true, min = 3, max = 200, expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$", nombre = "Nombres", expresionRegularMensaje = "No se permite la letra ñ, ni tildes")
     public JTextField getjTextNombres() {
         return jTextNombres;
     }

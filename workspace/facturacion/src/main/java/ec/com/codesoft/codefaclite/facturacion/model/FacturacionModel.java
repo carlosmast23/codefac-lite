@@ -78,15 +78,16 @@ public class FacturacionModel extends FacturacionPanel {
 
     //private Persona persona;
     private Factura factura;
-    //private List<FormaPago> formaPagos;
     private DefaultTableModel modeloTablaFormasPago;
     private DefaultTableModel modeloTablaDetallesProductos;
     private DefaultTableModel modeloTablaDatosAdicionales;
     private Producto productoSeleccionado;
     private int fila;
+    private int filaFP;
     private boolean bandera;
+    private boolean banderaFP;
     private boolean banderaAgregar;
-
+    private boolean banderaFormaPago;
     private java.util.Date fechaMax;
     private java.util.Date fechaMin;
     
@@ -146,6 +147,7 @@ public class FacturacionModel extends FacturacionPanel {
         //this.subtotalSinImpuestosDescuento=BigDecimal.ZERO;
         this.bandera = false;
         this.banderaAgregar = true;
+        this.banderaFormaPago = false;
         this.factura.setDescuentoImpuestos(new BigDecimal(0));
         calcularIva12();
         datosAdicionales = new HashMap<String, String>();
@@ -187,15 +189,33 @@ public class FacturacionModel extends FacturacionPanel {
         getBtnAgregarFormaPago().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                FormaPagoDialogModel dialog = new FormaPagoDialogModel(null, true);
-                dialog.setLocationRelativeTo(null);
-                dialog.setVisible(true);
-                FormaPago formaPago = dialog.getFormaPago();
-                factura.addFormaPago(formaPago);
-                cargarFormasPagoTabla();
+                if(!factura.getDetalles().isEmpty())
+                {
+                    FormaPagoDialogModel dialog = new FormaPagoDialogModel(null, true);
+                    dialog.setLocationRelativeTo(null);
+                    dialog.setVisible(true);
+                    FormaPago formaPago = dialog.getFormaPago();
+                    factura.addFormaPago(formaPago);
+                    verificarSumaFormaPago();                  
+                    cargarFormasPagoTabla();
+                }      
             }
         });
-
+        
+        getBtnQuitarDetalleFormaPago().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(banderaFP)
+                {
+                    modeloTablaFormasPago.removeRow(filaFP);
+                    factura.getFormaPagos().remove(filaFP);
+                    verificarSumaFormaPago();
+                    cargarFormasPagoTabla();                  
+                    banderaFP = false;
+                }
+            }
+        });
+        
         getBtnAgregarProducto().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -219,7 +239,7 @@ public class FacturacionModel extends FacturacionPanel {
                 bandera = true;
             }
         });
-
+        
         getBtnAgregarDetalleFactura().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -296,7 +316,7 @@ public class FacturacionModel extends FacturacionPanel {
                 }
             }
         });
-
+                
         getBtnEditarDetalle().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -357,17 +377,30 @@ public class FacturacionModel extends FacturacionPanel {
                 }
             }
         });
-
+             
+        getTblFormasPago().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                filaFP = getTblFormasPago().getSelectedRow();
+                banderaFP = true;
+            }
+        });
+        
     }
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
 
+        if(!banderaFormaPago)
+        {
+            throw new ExcepcionCodefacLite("Formas de pago erroneas");
+        }
+        
         Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea facturar?", DialogoCodefac.MENSAJE_ADVERTENCIA);
         if (!respuesta) {
             throw new ExcepcionCodefacLite("Cancelacion usuario");
         }
-
+        
         Factura facturaProcesando; //referencia que va a tener la factura procesada para que los listener no pierdan la referencia a la variable del metodo. 
 
         FacturacionService servicio = new FacturacionService();
@@ -1022,6 +1055,26 @@ public class FacturacionModel extends FacturacionPanel {
     @Override
     public List<String> getPerfilesPermisos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public void verificarSumaFormaPago()
+    {
+        BigDecimal totalFormasPago = new BigDecimal("0");
+        int res;
+        for(FormaPago fp : factura.getFormaPagos())
+        {
+            totalFormasPago = totalFormasPago.add(fp.getTotal());
+        }
+        res = factura.getTotal().compareTo(totalFormasPago);
+        if(res == -1)
+        {
+            DialogoCodefac.mensaje("Advertencia", "Las formas de pago sobrepasan el valor a Facturar", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            banderaFormaPago = false;
+        }
+        else
+        {
+            banderaFormaPago = true;
+        }
     }
 
 }

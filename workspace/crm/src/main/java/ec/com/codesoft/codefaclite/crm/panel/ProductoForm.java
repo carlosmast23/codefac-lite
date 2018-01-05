@@ -31,7 +31,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
     
     @LimpiarAnotacion
     @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
-    @ValidacionCodefacAnotacion(requerido=false ,expresionRegular = "^[A-Za-z0-9.\\_\\-\\\\s]*$",nombre = "Codigo Auxiliar")
+    @ValidacionCodefacAnotacion(requerido=false ,expresionRegular = "^[A-Za-z0-9.\\_\\-\\\\s]*$",nombre = "Codigo Auxiliar", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextField getTextCodigoAuxiliar() {
         return textCodigoAuxiliar;
     }
@@ -42,7 +42,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
     
     @LimpiarAnotacion
     @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
-    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[A-Za-z0-9.\\_\\-\\\\s]*$",nombre = "Codigo Principal")
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[A-Za-z0-9.\\_\\-\\\\s]*$",nombre = "Codigo Principal", expresionRegularMensaje = "No se permiten caracteres esperciales")
     public JTextField getTextCodigoPrincipal() {
         return textCodigoPrincipal;
     }
@@ -53,7 +53,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
     
     @LimpiarAnotacion
     //@AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
-    @ValidacionCodefacAnotacion(requerido=true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$",nombre = "Nombre")
+    @ValidacionCodefacAnotacion(requerido=true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$",nombre = "Nombre", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextField getTextNombre() {
         return textNombre;
     }
@@ -64,7 +64,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
     
     @LimpiarAnotacion
     @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
-    @ValidacionCodefacAnotacion(requerido=true, expresionRegular = "^[0-9]+([.][0-9]+)?$")
+    @ValidacionCodefacAnotacion(requerido=true, expresionRegular = "^[0-9]+([.][0-9]+)?$", expresionRegularMensaje = "Solo se permite numeros enteros y decimales")
     public JTextField getTextValorUnitario() {
         return textValorUnitario;
     }
