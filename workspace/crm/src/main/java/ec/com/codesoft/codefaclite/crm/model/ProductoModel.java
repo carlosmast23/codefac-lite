@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.crm.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.crm.panel.ProductoForm;
 import ec.com.codesoft.codefaclite.servidor.entity.Impuesto;
 import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
+import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.ProductoEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
@@ -171,10 +172,18 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getComboIrbpnr().removeAllItems();
 
         List<ImpuestoDetalle> impuestoDetalleList= impuestoDetalleService.obtenerIvaVigente();
+        ImpuestoDetalle impuestoDefault=null;
+        String ivaDefecto=session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).valor;
         for(ImpuestoDetalle impuesto: impuestoDetalleList)
         {
+            if(impuesto.getTarifa().toString().equals(ivaDefecto))
+            {
+                impuestoDefault=impuesto;
+            }
             getComboIva().addItem(impuesto);
         }
+        getComboIva().setSelectedItem(impuestoDefault);
+        
         
         Impuesto ice=impuestoService.obtenerImpuestoPorCodigo(Impuesto.ICE);
         for (ImpuestoDetalle impuesto : ice.getDetalleImpuestos()) {

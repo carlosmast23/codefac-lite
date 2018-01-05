@@ -25,6 +25,7 @@ import ec.com.codesoft.codefaclite.servidor.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.ClienteEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
+import ec.com.codesoft.codefaclite.servidor.service.SriIdentificacionService;
 import ec.com.codesoft.codefaclite.servidor.service.SriService;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -306,7 +307,15 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
          *
          * @author carlos
          */
-        getjComboIdentificacion().setSelectedIndex(0);
+        
+        SriIdentificacionService service=new SriIdentificacionService();
+        SriIdentificacion id;
+        Map<String,Object> parametros=new HashMap<String,Object>();
+        parametros.put("codigo","05");
+        SriIdentificacion dentificacion=service.obtenerPorMap(parametros).get(0);
+        getjComboIdentificacion().setSelectedItem(dentificacion);
+        
+        
         getjComboTipoCliente().setSelectedIndex(0);
         getjTextExtension().setText("0");
 
@@ -332,6 +341,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
                 getjComboIdentificacion().addItem(identificacion);
             }
         }
+        
 
     }
 

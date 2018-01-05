@@ -97,7 +97,7 @@ public class SriIdentificacion {
 
     @Override
     public String toString() {
-        return codigo + " - " + tipoIdentificacion;
+        return tipoIdentificacion;
     }
     
     

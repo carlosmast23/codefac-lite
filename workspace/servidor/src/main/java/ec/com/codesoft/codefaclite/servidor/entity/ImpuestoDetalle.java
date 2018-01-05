@@ -136,7 +136,7 @@ public class ImpuestoDetalle implements Serializable
 
     @Override
     public String toString() {
-        return codigo+" - "+nombre;
+        return nombre;
     }
     
     

@@ -823,7 +823,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                perfilesPermisos=panel.getPerfilesPermisos();
             }catch(java.lang.UnsupportedOperationException uoe)
             {
-                uoe.printStackTrace();
+               // uoe.printStackTrace();
             }
             
             //Si no existe ningun perfil del usuario que coincida con la pantalla se cierra la aplicacion
