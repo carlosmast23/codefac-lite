@@ -7,6 +7,8 @@ package ec.com.codesoft.codefaclite.facturacion.panel;
 
 import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -21,8 +23,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
     /**
      * Creates new form NotaCreditoPanel
      */
-    public NotaCreditoPanel() 
-    {
+    public NotaCreditoPanel() {
         initComponents();
         java.util.Date fecha = new java.util.Date();
         jDateFechaEmision.setDate(fecha);
@@ -810,6 +811,8 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         return txtValorTotal;
     }
 
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true)
     public JTextField getTxtMotivoAnulacion() {
         return txtMotivoAnulacion;
     }
@@ -825,10 +828,5 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
     public void setjDateFechaEmision(JDateChooser jDateFechaEmision) {
         this.jDateFechaEmision = jDateFechaEmision;
     }
-    
-    
-    
-    
 
-    
 }

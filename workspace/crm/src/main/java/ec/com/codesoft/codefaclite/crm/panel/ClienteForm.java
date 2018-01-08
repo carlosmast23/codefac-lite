@@ -168,7 +168,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jPanelCaracteristicasGenerales.add(jLabel6, gridBagConstraints);
 
         jTextAreaDireccion.setColumns(20);
-        jTextAreaDireccion.setRows(5);
+        jTextAreaDireccion.setRows(3);
         jScrollPane1.setViewportView(jTextAreaDireccion);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -356,7 +356,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=false ,min=0, expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Direccion", expresionRegularMensaje = "No se permite la letra ñ, ni tildes")
+    @ValidacionCodefacAnotacion(requerido=false ,min=0, expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\,\\ ]*$",nombre = "Direccion", expresionRegularMensaje = "No se permite la letra ñ, ni tildes")
     public JTextArea getjTextAreaDireccion() {
         return jTextAreaDireccion;
     }

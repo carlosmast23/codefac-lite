@@ -61,8 +61,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     }
     
     @LimpiarAnotacion
-    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
-    @ValidacionCodefacAnotacion(requerido=true , min=5 ,max = 1024,expresionRegular = "^[A-Za-z0-9\\s]*$",nombre = "Direccion Establecimento")
+    @ValidacionCodefacAnotacion(requerido=true , min=5 ,max = 1024,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\,\\ ]*$",nombre = "Direccion Establecimento")
     public JTextArea getjTextADirEstablecimiento() {
         return jTextADirEstablecimiento;
     }
@@ -72,8 +71,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     }
     
     @LimpiarAnotacion
-    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
-    @ValidacionCodefacAnotacion(requerido=true , min=5 ,max = 1024,expresionRegular = "^[A-Za-z0-9\\s]*$",nombre = "Direccion Matriz")
+    @ValidacionCodefacAnotacion(requerido=true , min=5 ,max = 1024,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\,\\ ]*$",nombre = "Direccion Matriz")
     public JTextArea getjTextADirMatriz() {
         return jTextADirMatriz;
     }
@@ -83,7 +81,6 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     }
     
     @LimpiarAnotacion
-    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
     @ValidacionCodefacAnotacion(requerido=true , min=5 ,max = 1024,expresionRegular = "^[A-Za-z0-9\\s]*$",nombre = "Codigo Estableciento")
     public JTextField getjTextCodEstablecimiento() {
         return jTextCodEstablecimiento;
@@ -94,7 +91,6 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     }
     
     @LimpiarAnotacion
-    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
     @ValidacionCodefacAnotacion(requerido=true , min=5 ,max = 1024,expresionRegular = "^[A-Za-z0-9\\s]*$",nombre = "Nombre Comercial")
     public JTextField getjTextNombreComercial() {
         return jTextNombreComercial;
@@ -105,7 +101,6 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     }
     
     @LimpiarAnotacion
-    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
     @ValidacionCodefacAnotacion(requerido=true , min=5 ,max = 1024,expresionRegular = "^[A-Za-z0-9\\s]*$",nombre = "Apellidos y Nombres | Razon Social")
     public JTextField getjTextNombreSocial() {
         return jTextNombreSocial;
@@ -116,7 +111,6 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     }
     
     @LimpiarAnotacion
-    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
     @ValidacionCodefacAnotacion(requerido=true , min=5 ,max = 1024,expresionRegular = "^[A-Za-z0-9\\s]*$",nombre = "Contribuyente especial Nro. Resolucion")
     public JTextField getjTextNumContribuyente() {
         return jTextNumContribuyente;
@@ -127,7 +121,6 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     }
     
     @LimpiarAnotacion
-    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
     @ValidacionCodefacAnotacion(requerido=true , min=5 ,max = 1024,expresionRegular = "^[A-Za-z0-9\\s]*$",nombre = "RUC")
     public JTextField getjTextRuc() {
         return jTextRuc;
@@ -238,7 +231,8 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         jPanelConfiguracionEmisor.add(jLabel4, gridBagConstraints);
 
         jTextADirMatriz.setColumns(20);
-        jTextADirMatriz.setRows(5);
+        jTextADirMatriz.setLineWrap(true);
+        jTextADirMatriz.setRows(3);
         jScrollPane1.setViewportView(jTextADirMatriz);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -259,7 +253,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         jPanelConfiguracionEmisor.add(jLabel5, gridBagConstraints);
 
         jTextADirEstablecimiento.setColumns(20);
-        jTextADirEstablecimiento.setRows(5);
+        jTextADirEstablecimiento.setRows(3);
         jScrollPane2.setViewportView(jTextADirEstablecimiento);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
