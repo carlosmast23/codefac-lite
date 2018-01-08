@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.configuraciones.model;
 
 import ec.com.codesoft.codefaclite.configuraciones.panel.ComprobantesConfiguracionPanel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.dialog.ProcesoSegundoPlano;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
@@ -20,6 +21,8 @@ import ec.com.codesoft.codefaclite.servidor.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
+import ec.com.codesoft.ejemplo.utilidades.email.CorreoElectronico;
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -34,6 +37,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.mail.AuthenticationFailedException;
+import javax.mail.MessagingException;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -269,6 +276,47 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
                 verificarFirmaElectronica();
             }
         });
+        
+        getTxtPasswordCorreo().addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                DialogoCodefac.mostrarDialogoCargando(new ProcesoSegundoPlano() {
+                    @Override
+                    public void procesar() {
+                        verificarCredencialesCorreo();
+                    }
+
+                    @Override
+                    public String getMensaje() {
+                        return "Validando Correo";
+                    }
+                });
+                
+            }
+        });
+    }
+    
+    private void verificarCredencialesCorreo()
+    {
+        try {
+            List<String> correos=new ArrayList<String>();
+            correos.add(getTxtCorreoElectronico().getText());
+            CorreoElectronico correoElectronico=new CorreoElectronico(getTxtCorreoElectronico().getText(),new String(getTxtPasswordCorreo().getPassword()),"Este correo es de prueba para configurar el sistema de Codefac",correos, "Prueba Codefac");
+            correoElectronico.sendMail();
+            //DialogoCodefac.mensaje("Exito","El correo y la clave son correctos",DialogoCodefac.MENSAJE_CORRECTO);
+        }catch (AuthenticationFailedException ex) {
+            System.out.println("Fallo al autentificar el usuario");
+            getTxtPasswordCorreo().setText("");
+            DialogoCodefac.mensaje("Error Correo","Las credenciales de su correo son incorrectas",DialogoCodefac.MENSAJE_INCORRECTO);
+                        
+        } catch (MessagingException ex) {
+            Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void verificarFirmaElectronica()

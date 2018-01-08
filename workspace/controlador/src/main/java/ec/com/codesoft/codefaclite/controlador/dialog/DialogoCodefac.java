@@ -5,6 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.controlador.dialog;
 
+import ec.com.codesoft.codefaclite.controlador.panel.DialogoCargando;
+import ec.com.codesoft.codefaclite.controlador.panel.PanelCargando;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -49,6 +51,19 @@ public abstract class DialogoCodefac {
                 JOptionPane.WARNING_MESSAGE,
                 icono);
     }
+    
+    public static void mostrarDialogoCargando(ProcesoSegundoPlano proceso)
+    {        
+        DialogoCargando dialogo= DialogoCargando.getInstance();
+        HiloSegundoPlano hilo=new HiloSegundoPlano(proceso,dialogo);
+        hilo.start();
+        dialogo.getLblMensaje().setText(proceso.getMensaje());
+        dialogo.setVisible(true);
+        //dialogo.getLblMensaje().setText(proceso.getMensaje());
+        
+        //dialogo.setVisible(true);
+    }
+    
     
     public static boolean dialogoPregunta(String titulo, String mensaje, Integer tipoMensaje) {
         ImageIcon icono=null;

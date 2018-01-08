@@ -843,6 +843,15 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             
             panel.panelPadre=generalPanelModel;
             panel.session=sessionCodefac;
+            
+            try
+            {
+                panel.iniciar();//Metodo que se ejecuta despues de construir el objeto
+            }
+            catch(java.lang.UnsupportedOperationException uoe)
+            {
+            }
+            
 
             
             panel.addInternalFrameListener(listenerFrame);
@@ -879,13 +888,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             panel.consola=new ConsolaGeneral();
             mostrarConsola(panel.consola,true);
             
-            try
-            {
-                panel.iniciar();//Metodo que se ejecuta despues de construir el objeto
-            }
-            catch(java.lang.UnsupportedOperationException uoe)
-            {}
-            
+
                         
         } catch (PropertyVetoException ex) {
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);

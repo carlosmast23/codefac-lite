@@ -10,9 +10,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
+import javax.mail.AuthenticationFailedException;
 import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -60,7 +63,7 @@ public class CorreoElectronico {
         this.propiedadCorreo=obtenenerPropiedad(usuario);
     }
 
-    public void sendMail() throws RuntimeException{
+    public void sendMail() throws AuthenticationFailedException,MessagingException{
         Properties props = new Properties();
         
         props.put("mail.smtp.auth", "true");
@@ -149,14 +152,15 @@ public class CorreoElectronico {
         
         
         
-         
          Transport.send(message);
 
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        }
+        } catch (AuthenticationFailedException  e) {
+            throw e;
+        } catch (MessagingException ex) {
+            throw ex;
+        } 
     }
-
+    
     public Map<String, String> getPathFiles() {
         return pathFiles;
     }

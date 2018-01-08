@@ -10,6 +10,8 @@ import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.ejemplo.utilidades.email.CorreoElectronico;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.mail.MessagingException;
 
 /**
@@ -46,6 +48,8 @@ public abstract class CorreoCodefac {
         {
             e.printStackTrace();
             throw new RuntimeException(e);            
+        } catch (MessagingException ex) {
+            Logger.getLogger(CorreoCodefac.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         
