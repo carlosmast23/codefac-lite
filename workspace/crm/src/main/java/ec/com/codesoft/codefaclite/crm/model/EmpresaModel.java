@@ -71,7 +71,8 @@ public class EmpresaModel extends EmpresaForm
     @Override
     public void grabar() throws ExcepcionCodefacLite 
     {
-        empresaService.grabar(setDatosEmisor()); 
+        empresaService.grabar(setDatosEmisor());
+        session.setEmpresa(empresa);
     }
 
     @Override

@@ -147,7 +147,7 @@ public class FacturacionModel extends FacturacionPanel {
         //this.subtotalSinImpuestosDescuento=BigDecimal.ZERO;
         this.bandera = false;
         this.banderaAgregar = true;
-        this.banderaFormaPago = false;
+        this.banderaFormaPago = true;
         this.factura.setDescuentoImpuestos(new BigDecimal(0));
         calcularIva12();
         datosAdicionales = new HashMap<String, String>();
@@ -979,6 +979,7 @@ public class FacturacionModel extends FacturacionPanel {
 
     @Override
     public void iniciar() {
+        System.out.println("Ingresando a iniciar");
         if(!validacionParametrosCodefac())
         {
             dispose();
@@ -1014,6 +1015,7 @@ public class FacturacionModel extends FacturacionPanel {
     }
 
     private boolean validacionParametrosCodefac() {
+        System.out.println("Ingreso a la validacion de Paremtros Codefac");
         String mensajeValidacion="Esta pantalla requiere : \n";
         boolean validado=true;
         if(session.getParametrosCodefac().get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor().equals(""))
@@ -1040,13 +1042,17 @@ public class FacturacionModel extends FacturacionPanel {
             validado= false;
         }
         
+        if(session.getEmpresa() == null)
+        {
+            mensajeValidacion+=" - Información de Empresa \n";
+            validado= false;
+        }
+        
         if(!validado)
         {
             //mensajeValidacion=mensajeValidacion.substring(0,mensajeValidacion.length()-2);
             DialogoCodefac.mensaje("Acceso no permitido", mensajeValidacion+"\nPofavor complete estos datos en configuración para usar esta pantalla",DialogoCodefac.MENSAJE_ADVERTENCIA);
         }
-        
-        
         
         return validado;
         
