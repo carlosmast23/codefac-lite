@@ -43,6 +43,7 @@ public class PublicidadCodefacDialogo extends javax.swing.JDialog {
         setTitle("Publicidad Codefac");
 
         lblImagenPublicidad.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/publicidad/publicidadPaquete.png"))); // NOI18N
+        lblImagenPublicidad.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

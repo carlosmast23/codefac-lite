@@ -34,6 +34,7 @@ import ec.com.codesoft.codefaclite.main.model.MenuControlador;
 import ec.com.codesoft.codefaclite.main.model.SplashScreenModel;
 import ec.com.codesoft.codefaclite.main.model.ValidarLicenciaModel;
 import ec.com.codesoft.codefaclite.main.panel.ValidarLicenciaDialog;
+import ec.com.codesoft.codefaclite.main.panel.publicidad.Publicidad;
 import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Empresa;
@@ -155,6 +156,7 @@ public class Main {
          * Agregando Hilo de Publicidad
          */
         HiloPublicidadCodefac hiloPublicidad=new HiloPublicidadCodefac();
+        hiloPublicidad.setPublicidades(obtenerPublicidades());
         hiloPublicidad.start();
         panel.setHiloPublicidadCodefac(hiloPublicidad);
         
@@ -281,6 +283,21 @@ public class Main {
         paneles.put(PanelSecundarioAbstract.PANEL_VALIDACION,new ValidadorCodefacModel());
         return paneles;
     }
+    
+    public static List<Publicidad> obtenerPublicidades()
+    {
+        List<Publicidad> publicidades=new ArrayList<Publicidad>();
+        publicidades.add(new Publicidad(RecursoCodefac.IMAGENES_PUBLICIDAD.getResourceURL("angelicaPerfumes.png"),"https://www.facebook.com/avonbellezacosmeticos/",3,"Dale click a la imagen para mas información"));
+        publicidades.add(new Publicidad(RecursoCodefac.IMAGENES_PUBLICIDAD.getResourceURL("anunciateConNosotros.png"),"https://www.facebook.com/codefac.ec/",6,"Dale click a la imagen para mas información"));
+        publicidades.add(new Publicidad(RecursoCodefac.IMAGENES_PUBLICIDAD.getResourceURL("desarrolloSoftware.png"),"https://www.facebook.com/codesoft.ec/",3,"Dale click a la imagen para mas información"));
+        publicidades.add(new Publicidad(RecursoCodefac.IMAGENES_PUBLICIDAD.getResourceURL("publicidadCodesoft.png"),"https://www.facebook.com/codesoft.ec/",3,"Dale click a la imagen para mas información"));
+        publicidades.add(new Publicidad(RecursoCodefac.IMAGENES_PUBLICIDAD.getResourceURL("publicidadPaquete.png"),"https://www.facebook.com/codefac.ec/",10,"Dale click a la imagen para mas información"));
+        publicidades.add(new Publicidad(RecursoCodefac.IMAGENES_PUBLICIDAD.getResourceURL("publicidadVirtualMall.png"),"https://www.facebook.com/vmquito/",5,"Dale click a la imagen para mas información"));
+        publicidades.add(new Publicidad(RecursoCodefac.IMAGENES_PUBLICIDAD.getResourceURL("tol2dox.png"),"https://www.facebook.com/toldos.max.5",2,"Dale click a la imagen para mas información"));
+        publicidades.add(new Publicidad(RecursoCodefac.IMAGENES_PUBLICIDAD.getResourceURL("virtuallMallMensajeria.png"),"https://www.facebook.com/vmquito/",4,"Dale click a la imagen para mas información"));
+        return publicidades;
+    }
+    
     
  
     public static void componentesIniciales()
