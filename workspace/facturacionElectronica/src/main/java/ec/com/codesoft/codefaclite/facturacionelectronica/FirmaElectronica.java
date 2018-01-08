@@ -53,13 +53,16 @@ public class FirmaElectronica {
 
     public static boolean FirmaVerificar(String rutaAlmacenCertificado,String passwordAlmacenCertificado)
     {
+        boolean resultado=false;
+        FileInputStream file=null;
          try {
             KeyStore clave=null;
             clave=KeyStore.getInstance("PKCS12");
-            FileInputStream file=new FileInputStream(rutaAlmacenCertificado);
-            clave.load(new FileInputStream(rutaAlmacenCertificado),
-                    passwordAlmacenCertificado.toCharArray());            
-            return true;
+            file=new FileInputStream(rutaAlmacenCertificado);
+            clave.load(file,
+                    passwordAlmacenCertificado.toCharArray());       
+            //file.close();
+            resultado= true;
         } catch (KeyStoreException ex) {
             Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FileNotFoundException ex) {
@@ -67,7 +70,7 @@ public class FirmaElectronica {
         } catch (IOException ex) {
             if(ex.getMessage().equals("keystore password was incorrect"))
             {
-               return false;
+               resultado= false;
             }
             
             Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
@@ -76,7 +79,19 @@ public class FirmaElectronica {
         } catch (CertificateException ex) {
             Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return true;
+        
+         /**
+          * Cerrar el archivo si esta abierto
+          */
+        if (file != null) {
+            try {
+                file.close();
+            } catch (IOException ex) {
+                Logger.getLogger(FirmaElectronica.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return resultado;
     }
     
     

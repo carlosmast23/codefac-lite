@@ -241,6 +241,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             ParametroCodefac parametro=parametros.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA);
             parametro.setValor(destino.getFileName().toString());
         } catch (IOException ex) {
+            ex.printStackTrace();
             DialogoCodefac.mensaje("Firma", "Problema en guardar firma", DialogoCodefac.MENSAJE_INCORRECTO);
         }
     }
@@ -285,6 +286,10 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
 
             @Override
             public void focusLost(FocusEvent e) {
+                //No validar cuando el password esta vacio
+                if((new String(getTxtPasswordCorreo().getPassword())).length()==0)
+                return ;
+        
                 DialogoCodefac.mostrarDialogoCargando(new ProcesoSegundoPlano() {
                     @Override
                     public void procesar() {
@@ -303,6 +308,8 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     
     private void verificarCredencialesCorreo()
     {
+
+        
         try {
             List<String> correos=new ArrayList<String>();
             correos.add(getTxtCorreoElectronico().getText());
@@ -324,7 +331,17 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         String claveFirma=new String(getTxtClaveFirma().getPassword());
         String nombreArchivo=getTxtNombreFirma().getText();
         String rutaDestino = session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + ComprobanteElectronicoService.CARPETA_CONFIGURACION + "/";
-        String pathFirma=rutaDestino+nombreArchivo;
+        
+        String pathFirma="";
+        
+        if(origen!=null)
+        {
+            pathFirma=origen.toString();
+        }
+        else
+        {
+            pathFirma=rutaDestino+nombreArchivo;
+        }
         
         if(!claveFirma.equals("") && !pathFirma.equals(""))
         {
