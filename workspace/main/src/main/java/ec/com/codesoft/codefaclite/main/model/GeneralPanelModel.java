@@ -850,6 +850,10 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             }
             catch(java.lang.UnsupportedOperationException uoe)
             {
+                System.err.println("Metodo no implementado");
+            } catch (ExcepcionCodefacLite ex) {
+                System.err.println("Cancelado metodo iniciar");
+                return;
             }
             
 

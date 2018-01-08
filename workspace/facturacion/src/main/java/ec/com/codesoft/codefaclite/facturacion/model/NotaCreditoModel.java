@@ -370,10 +370,11 @@ public class NotaCreditoModel extends NotaCreditoPanel {
     }
 
     @Override
-    public void iniciar() {
+    public void iniciar() throws ExcepcionCodefacLite {
         if(!validacionParametrosCodefac())
         {
             dispose();
+            throw new ExcepcionCodefacLite("No cumple validacion inicial");
         }
     }
 
@@ -409,11 +410,18 @@ public class NotaCreditoModel extends NotaCreditoPanel {
             validado= false;
         }
         
+        if(session.getEmpresa() == null)
+        {
+            mensajeValidacion+=" - Información de Empresa \n";
+            validado= false;
+        }
+        
         if(!validado)
         {
             //mensajeValidacion=mensajeValidacion.substring(0,mensajeValidacion.length()-2);
             DialogoCodefac.mensaje("Acceso no permitido", mensajeValidacion+"\nPofavor complete estos datos en configuración para usar esta pantalla",DialogoCodefac.MENSAJE_ADVERTENCIA);
         }
+        
         
         
         

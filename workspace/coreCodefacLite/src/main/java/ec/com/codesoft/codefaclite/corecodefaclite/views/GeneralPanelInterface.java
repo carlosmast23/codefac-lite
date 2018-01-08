@@ -63,7 +63,7 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
      * Este metodo tiene el objetivo de funcionar despues de construir el objeto para interactuar con las variables inyectadas en el formulario
      * por ejemplo con las variables de session , o con funcionalidades del formulario padre
      */
-    public abstract void iniciar();
+    public abstract void iniciar() throws ExcepcionCodefacLite;
     /**
      * Metodo que se debe implementar si se desea controlar el proceso del boton nuevo
      */

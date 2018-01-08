@@ -978,11 +978,13 @@ public class FacturacionModel extends FacturacionPanel {
     }
 
     @Override
-    public void iniciar() {
+    public void iniciar() throws ExcepcionCodefacLite{
         System.out.println("Ingresando a iniciar");
         if(!validacionParametrosCodefac())
         {
             dispose();
+            throw new ExcepcionCodefacLite("No cumple validacion inicial");
+            
         }
     }
 
