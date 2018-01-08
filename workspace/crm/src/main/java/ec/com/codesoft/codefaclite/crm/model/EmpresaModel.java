@@ -8,10 +8,10 @@ package ec.com.codesoft.codefaclite.crm.model;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
-import ec.com.codesoft.codefaclite.crm.busqueda.EmisorBusquedaDialogo;
-import ec.com.codesoft.codefaclite.crm.panel.ConfigurarEmisorForm;
-import ec.com.codesoft.codefaclite.servidor.entity.Emisor;
-import ec.com.codesoft.codefaclite.servidor.service.EmisorService;
+import ec.com.codesoft.codefaclite.crm.busqueda.EmpresaBusquedaDialogo;
+import ec.com.codesoft.codefaclite.crm.panel.EmpresaForm;
+import ec.com.codesoft.codefaclite.servidor.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidor.service.EmpresaService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,32 +20,70 @@ import java.util.Map;
  *
  * @author PC
  */
-public class EmisorModel extends ConfigurarEmisorForm
+public class EmpresaModel extends EmpresaForm
 {
-    private Emisor emisor;
-    private EmisorService emisorService;
+    private Empresa empresa;
+    private EmpresaService empresaService;
 
-    public EmisorModel() 
+    public EmpresaModel() 
     {
-        this.emisorService = new EmisorService();
+        this.empresa = new Empresa();
+        this.empresaService = new EmpresaService();
+        cargarDatosEmpresa();
+    }
+    
+    public Empresa obtenerDatosEmpresa()
+    {
+       try{
+           for(Empresa e: empresaService.buscar())
+           {
+                return e;
+           }
+       }
+       catch(Exception e)
+       {
+           System.out.println("No se encontro datos en emisor");
+       }
+       return null;
+    }
+    
+    public void cargarDatosEmpresa()
+    {
+        Empresa e = obtenerDatosEmpresa();
+        if(e != null)
+        {
+            getjTextRuc().setText(e.getIdentificacion());
+            getjTextNombreSocial().setText(e.getRazonSocial());
+            getjTextNombreComercial().setText(e.getNombreLegal());
+            getjTextADirEstablecimiento().setText(e.getDireccion());
+            getjTextTelefono().setText(e.getTelefonos());
+            if(e.getContribuyenteEspecial().equals("SI"))
+            {
+                getjCheckBLlevaContabilidad().setSelected(true);
+            }else
+            {
+                getjCheckBLlevaContabilidad().setSelected(false);
+            }
+            getjTextLogo().setText("Valor establecido por defecto");
+        }  
     }
     
     @Override
     public void grabar() throws ExcepcionCodefacLite 
     {
-        emisorService.grabar(setDatosEmisor());   
+        empresaService.grabar(setDatosEmisor()); 
     }
 
     @Override
     public void editar() throws ExcepcionCodefacLite 
     {
-        emisorService.editar(setDatosEmisor());
+        empresaService.editar(setDatosEmisor());
     }
 
     @Override
     public void eliminar() 
     {
-        emisorService.eliminar(emisor);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -60,35 +98,7 @@ public class EmisorModel extends ConfigurarEmisorForm
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
-        this.panelPadre.crearVentanaCodefac(new EmisorModel(),true);
-        EmisorBusquedaDialogo emisorBusquedaDialogo = new EmisorBusquedaDialogo();
-        BuscarDialogoModel buscarDialogoModel=new BuscarDialogoModel(emisorBusquedaDialogo);
-        buscarDialogoModel.setVisible(true);
-        emisor = (Emisor) buscarDialogoModel.getResultado();
-        
-        if(emisor == null)
-        {
-            throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar");
-        }
-        
-        getjTextRuc().setText(emisor.getRuc());
-        getjTextNombreSocial().setText(emisor.getRazonSocial());
-        getjTextNombreComercial().setText(emisor.getNomComercial());
-        getjTextADirMatriz().setText(emisor.getDireccionMatriz());
-        getjTextADirEstablecimiento().setText(emisor.getDirEstablecimiento());
-        getjTextCodEstablecimiento().setText(emisor.getCodEstablecimiento());
-        getjTextNumContribuyente().setText(emisor.getContribuyenteEspecial());
-        getjTextActividadComercial().setText(emisor.getActividadComercial());
-        if(emisor.getLlevaContabilidad().equals("S"))
-        {
-            getjCheckBLlevaContabilidad().setSelected(true);
-        }
-        else
-        {
-            getjCheckBLlevaContabilidad().setSelected(false);
-        }
-        getjSpinnerTiempoEspera().setValue(emisor.getTiempoEspera());      
-        System.out.println("Datos cargados ");
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -120,28 +130,23 @@ public class EmisorModel extends ConfigurarEmisorForm
         return permisos;
     }
     
-    public Emisor setDatosEmisor()
+    public Empresa setDatosEmisor()
     {
-        emisor = new Emisor();
-        emisor.setRuc(getjTextRuc().getText());
-        emisor.setRazonSocial(getjTextNombreSocial().getText());
-        emisor.setNomComercial(getjTextNombreComercial().getText());
-        emisor.setDireccionMatriz(getjTextADirMatriz().getText());
-        emisor.setDirEstablecimiento(getjTextADirEstablecimiento().getText());
-        emisor.setCodEstablecimiento(getjTextCodEstablecimiento().getText());
-        emisor.setContribuyenteEspecial(getjTextNumContribuyente().getText());
-        if(getjCheckBLlevaContabilidad().isSelected()==true)
+        empresa = new Empresa();
+        empresa.setTelefonos(getjTextTelefono().getText());
+        empresa.setRazonSocial(getjTextNombreSocial().getText());
+        empresa.setNombreLegal(getjTextNombreComercial().getText());
+        empresa.setDireccion(getjTextADirEstablecimiento().getText());
+        empresa.setIdentificacion(getjTextRuc().getText());
+        if(getjCheckBLlevaContabilidad().isSelected())
         {
-            emisor.setLlevaContabilidad("S");
-        }
-        else
+            empresa.setObligadoLlevarContabilidad(Empresa.SI_LLEVA_CONTABILIDAD);
+        }else
         {
-            emisor.setLlevaContabilidad("N");
+            empresa.setObligadoLlevarContabilidad(Empresa.NO_LLEVA_CONTABILIDAD);
         }
-        emisor.setTiempoEspera(""+getjSpinnerTiempoEspera().getValue());
-        emisor.setActividadComercial(""+getjTextActividadComercial().getText());
-       
-        return emisor;
+        empresa.setContribuyenteEspecial("");
+        return empresa;
     }
 
     @Override

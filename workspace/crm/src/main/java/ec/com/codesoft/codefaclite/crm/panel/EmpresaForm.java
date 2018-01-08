@@ -19,12 +19,21 @@ import javax.swing.JTextField;
  *
  * @author Robert
  */
-public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
+public abstract class EmpresaForm extends ControladorCodefacInterface{
     /**
      * Creates new form ConfigurarEmisor
      */
-    public ConfigurarEmisorForm() {
+    public EmpresaForm() {
         initComponents();
+        this.jTextLogo.setEnabled(false);
+    }
+
+    public JTextField getjTextTelefono() {
+        return jTextTelefono;
+    }
+
+    public void setjTextTelefono(JTextField jTextTelefono) {
+        this.jTextTelefono = jTextTelefono;
     }
     
     public JCheckBox getjCheckBLlevaContabilidad() {
@@ -42,22 +51,13 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
     public void setjPanelConfiguracionEmisor(JPanel jPanelConfiguracionEmisor) {
         this.jPanelConfiguracionEmisor = jPanelConfiguracionEmisor;
     }
-    
-    @LimpiarAnotacion
-    public JSpinner getjSpinnerTiempoEspera() {
-        return jSpinnerTiempoEspera;
-    }
-
-    public void setjSpinnerTiempoEspera(JSpinner jSpinnerTiempoEspera) {
-        this.jSpinnerTiempoEspera = jSpinnerTiempoEspera;
-    }
 
     public JTextField getjTextActividadComercial() {
-        return jTextActividadComercial;
+        return jTextTelefono;
     }
 
     public void setjTextActividadComercial(JTextField jTextActividadComercial) {
-        this.jTextActividadComercial = jTextActividadComercial;
+        this.jTextTelefono = jTextActividadComercial;
     }
     
     @LimpiarAnotacion
@@ -168,19 +168,16 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
         jLabel9 = new javax.swing.JLabel();
         jCheckBLlevaContabilidad = new javax.swing.JCheckBox();
         jLabel10 = new javax.swing.JLabel();
-        jTextField7 = new javax.swing.JTextField();
-        jLabel11 = new javax.swing.JLabel();
-        jSpinnerTiempoEspera = new javax.swing.JSpinner();
-        jLabel12 = new javax.swing.JLabel();
+        jTextLogo = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jTextActividadComercial = new javax.swing.JTextField();
+        jTextTelefono = new javax.swing.JTextField();
 
         setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
-        setTitle("Emisor");
+        setTitle("Empresa");
         setToolTipText("");
         setFrameIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/edit-icon.png"))); // NOI18N
         getContentPane().setLayout(new java.awt.GridBagLayout());
@@ -329,32 +326,9 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        jPanelConfiguracionEmisor.add(jTextField7, gridBagConstraints);
+        jPanelConfiguracionEmisor.add(jTextLogo, gridBagConstraints);
 
-        jLabel11.setText("Tiempo máximo de Espera Respuesta Autorización:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
-        jPanelConfiguracionEmisor.add(jLabel11, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        jPanelConfiguracionEmisor.add(jSpinnerTiempoEspera, gridBagConstraints);
-
-        jLabel12.setText("Segundos");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
-        jPanelConfiguracionEmisor.add(jLabel12, gridBagConstraints);
-
-        jLabel7.setText("Actividad Comerial:");
+        jLabel7.setText("Telefono:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -368,7 +342,7 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(8, 0, 8, 0);
-        jPanelConfiguracionEmisor.add(jTextActividadComercial, gridBagConstraints);
+        jPanelConfiguracionEmisor.add(jTextTelefono, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -381,12 +355,18 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public JTextField getjTextLogo() {
+        return jTextLogo;
+    }
+
+    public void setjTextLogo(JTextField jTextLogo) {
+        this.jTextLogo = jTextLogo;
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox jCheckBLlevaContabilidad;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -398,15 +378,14 @@ public abstract class ConfigurarEmisorForm extends ControladorCodefacInterface{
     private javax.swing.JPanel jPanelConfiguracionEmisor;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JSpinner jSpinnerTiempoEspera;
     private javax.swing.JTextArea jTextADirEstablecimiento;
     private javax.swing.JTextArea jTextADirMatriz;
-    private javax.swing.JTextField jTextActividadComercial;
     private javax.swing.JTextField jTextCodEstablecimiento;
-    private javax.swing.JTextField jTextField7;
+    private javax.swing.JTextField jTextLogo;
     private javax.swing.JTextField jTextNombreComercial;
     private javax.swing.JTextField jTextNombreSocial;
     private javax.swing.JTextField jTextNumContribuyente;
     private javax.swing.JTextField jTextRuc;
+    private javax.swing.JTextField jTextTelefono;
     // End of variables declaration//GEN-END:variables
 }

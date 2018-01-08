@@ -8,9 +8,8 @@ package ec.com.codesoft.codefaclite.crm.busqueda;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
-import ec.com.codesoft.codefaclite.servidor.entity.Emisor;
 import ec.com.codesoft.codefaclite.servidor.entity.Empresa;
-import ec.com.codesoft.codefaclite.servidor.service.EmisorService;
+import ec.com.codesoft.codefaclite.servidor.service.EmpresaService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -19,7 +18,7 @@ import java.util.Vector;
  *
  * @author PC
  */
-public class EmisorBusquedaDialogo implements InterfaceModelFind<Emisor>
+public class EmpresaBusquedaDialogo implements InterfaceModelFind<Empresa>
 {
 
     @Override
@@ -39,25 +38,25 @@ public class EmisorBusquedaDialogo implements InterfaceModelFind<Emisor>
 
 
     @Override
-    public void agregarObjeto(Emisor t, Vector dato) 
+    public void agregarObjeto(Empresa t, Vector dato) 
     {
-        dato.add(t.getRuc());
+        dato.add(t.getIdentificacion());
         dato.add(t.getRazonSocial());
-        dato.add(t.getNomComercial());
-        dato.add(t.getDireccionMatriz());
-        dato.add(t.getDirEstablecimiento());
-        dato.add(t.getCodEstablecimiento());
+        dato.add(t.getDireccion());
+        dato.add(t.getContribuyenteEspecial());
+        dato.add(t.getObligadoLlevarContabilidad());
+        dato.add(t.getNombreLegal());
     }
 
     @Override
-    public Boolean buscarObjeto(Emisor t, Object valor) 
+    public Boolean buscarObjeto(Empresa t, Object valor) 
     {
-        return t.getRuc().equals(valor.toString());   
+        return t.getIdentificacion().equals(valor.toString());   
     }
 
     @Override
     public QueryDialog getConsulta(String filter) {       
-        String queryString = "SELECT u FROM Emisor u WHERE ";
+        String queryString = "SELECT u FROM Empresa u WHERE ";
         queryString+=" ( LOWER(u.razonSocial) like "+filter+" )";
         QueryDialog queryDialog=new QueryDialog(queryString);
         return queryDialog;

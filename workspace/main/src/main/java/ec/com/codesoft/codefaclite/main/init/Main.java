@@ -16,7 +16,7 @@ import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.ValidadorC
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
 import ec.com.codesoft.codefaclite.crm.model.ClienteReporte;
-import ec.com.codesoft.codefaclite.crm.model.EmisorModel;
+import ec.com.codesoft.codefaclite.crm.model.EmpresaModel;
 import ec.com.codesoft.codefaclite.crm.model.ProductoModel;
 import ec.com.codesoft.codefaclite.crm.model.ProductoReporte;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturaReporteModel;
@@ -44,6 +44,7 @@ import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidor.excepciones.PersistenciaDuplicadaException;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
+import ec.com.codesoft.codefaclite.servidor.service.EmpresaService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
 import ec.com.codesoft.codefaclite.servidor.service.PerfilServicio;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
@@ -84,16 +85,28 @@ public class Main {
                 /**
          * Crear la session y cargar otro datos de la empresa
          */
-        SessionCodefac session=new SessionCodefac();
+        SessionCodefac session=new SessionCodefac();        
         Empresa empresa=new Empresa();
-        empresa.setDireccion("Sangolqui,Av.Calderon y Espejo");
-        empresa.setTelefonos("022333167");
-        empresa.setIdentificacion("1724218951001");
-        empresa.setRazonSocial("Carlos Alfonso Sanchez Coyago");
-        empresa.setNombreLegal("Codesoft Desarrollo");
-        empresa.setContribuyenteEspecial("");
-        empresa.setObligadoLlevarContabilidad(Empresa.NO_LLEVA_CONTABILIDAD);
-        session.setEmpresa(empresa);
+        EmpresaService empresaService = new EmpresaService();
+        try{
+            for(Empresa e: empresaService.buscar())
+            {
+                empresa = e;
+            }
+            session.setEmpresa(empresa);
+        }
+        catch(Exception e)
+        {
+            System.out.println("No se encontro ninguna empresa creada");
+        }
+//        empresa.setDireccion("Sangolqui,Av.Calderon y Espejo");
+//        empresa.setTelefonos("022333167");
+//        empresa.setIdentificacion("1724218951001");
+//        empresa.setRazonSocial("Carlos Alfonso Sanchez Coyago");
+//        empresa.setNombreLegal("Codesoft Desarrollo");
+//        empresa.setContribuyenteEspecial("");
+//        empresa.setObligadoLlevarContabilidad(Empresa.NO_LLEVA_CONTABILIDAD);
+        
         //session.setParametrosCodefac(getParametros());
         splashScren.siguiente();
 
@@ -263,7 +276,7 @@ public class Main {
         ventanas.add(new MenuControlador(panel.getjMenuCliente(),ClienteModel.class));
         ventanas.add(new MenuControlador(panel.getjMenuProducto(),ProductoModel.class));
         ventanas.add(new MenuControlador(panel.getjMenuFactura(),FacturacionModel.class));
-        ventanas.add(new MenuControlador(panel.getjMenuEmisor(),EmisorModel.class));
+        ventanas.add(new MenuControlador(panel.getjMenuEmisor(),EmpresaModel.class));
         ventanas.add(new MenuControlador(panel.getjMenuComprobanteConfig(),ComprobantesConfiguracionModel.class));
         ventanas.add(new MenuControlador(panel.getjMenuCalculadora(),CalculadoraModel.class,false));
         ventanas.add(new MenuControlador(panel.getjMenuItemUtilidades(),UtilidadComprobanteModel.class,false));

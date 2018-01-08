@@ -41,7 +41,7 @@ public class UtilidadesServidor {
         RecursoCodefac.SQL.getResourceInputStream("create_perfil.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_acceso_directo.sql"),
         RecursoCodefac.SQL.getResourceInputStream("insert_default.sql"),
-        
+        RecursoCodefac.SQL.getResourceInputStream("create_empresa.sql"),
         
     };
     

@@ -5,20 +5,45 @@
  */
 package ec.com.codesoft.codefaclite.servidor.entity;
 
+import java.io.Serializable;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  *
  * @author Carlos
  */
-public class Empresa {
+
+@Entity
+@Table(name = "EMPRESA")
+public class Empresa implements Serializable{
+    
     public static final String NO_LLEVA_CONTABILIDAD="NO";
     public static final String SI_LLEVA_CONTABILIDAD="SI";
     
+    @Id
+    @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    public long id;
+    @Column (name = "TELEFONOS")
     private String telefonos;
+    @Column (name = "RAZON_SOCIAL")
     private String razonSocial;
+    @Column (name = "NOMBRE_LEGAL")
     private String nombreLegal;
+    @Column (name = "DIRECCION")
     private String direccion;
-    private String identificacion;    
+    @Column (name = "IDENTIFICACION")
+    private String identificacion;
+    @Column (name = "OBLIGADO_LLEVAR_CONTABILIDAD")
     private String obligadoLlevarContabilidad;
+    @Column (name = "CONTRIBUYENTE_ESPECIAL")
     private String contribuyenteEspecial;
 
     public String getTelefonos() {
