@@ -41,10 +41,12 @@ public class SessionCodefac implements SessionCodefacInterface{
         return this.empresa;
     }
 
+    @Override
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
 
+    @Override
     public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;
     }

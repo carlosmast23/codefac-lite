@@ -31,6 +31,9 @@ public interface SessionCodefacInterface {
      * Metodo que devuelve todos los permisos habilitados para ese usuario
      * @return 
      */
+    public void setUsuario(Usuario usuario);
+    public void setEmpresa(Empresa empresa);
+    
     public List<Perfil> getPerfiles();
     /**
      * Obtiene los parametros de configuracion de codefac como variables de session
