@@ -300,7 +300,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         });
         menuConfiguracion.add(jMenuComprobanteConfig);
 
-        jMenuEmisor.setText("Emisor");
+        jMenuEmisor.setText("Empresa");
         menuConfiguracion.add(jMenuEmisor);
 
         jMenuItemUtilidades.setText("Utilidades");

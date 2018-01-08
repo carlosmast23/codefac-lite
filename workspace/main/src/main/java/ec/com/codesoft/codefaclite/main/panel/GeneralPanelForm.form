@@ -220,7 +220,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuEmisor">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Emisor"/>
+                <Property name="text" type="java.lang.String" value="Empresa"/>
               </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemUtilidades">

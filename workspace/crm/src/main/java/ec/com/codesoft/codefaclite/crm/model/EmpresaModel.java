@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.crm.model;
 
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
@@ -12,6 +13,9 @@ import ec.com.codesoft.codefaclite.crm.busqueda.EmpresaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.crm.panel.EmpresaForm;
 import ec.com.codesoft.codefaclite.servidor.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidor.service.EmpresaService;
+import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,9 +31,14 @@ public class EmpresaModel extends EmpresaForm
 
     public EmpresaModel() 
     {
-        this.empresa = new Empresa();
+        //this.empresa = new Empresa();
         this.empresaService = new EmpresaService();
-        cargarDatosEmpresa();
+        agregarListener();
+         /**
+         * Desactivo el ciclo de vida para controlar manualmente
+         */
+        super.cicloVida = false;
+        
     }
     
     public Empresa obtenerDatosEmpresa()
@@ -55,9 +64,10 @@ public class EmpresaModel extends EmpresaForm
             getjTextRuc().setText(e.getIdentificacion());
             getjTextNombreSocial().setText(e.getRazonSocial());
             getjTextNombreComercial().setText(e.getNombreLegal());
-            getjTextADirEstablecimiento().setText(e.getDireccion());
+            getTxtDireccion().setText(e.getDireccion());
             getjTextTelefono().setText(e.getTelefonos());
-            if(e.getContribuyenteEspecial().equals("SI"))
+            getjTextNumContribuyente().setText(e.getContribuyenteEspecial());
+            if(e.getObligadoLlevarContabilidad().equals(Empresa.SI_LLEVA_CONTABILIDAD))
             {
                 getjCheckBLlevaContabilidad().setSelected(true);
             }else
@@ -71,8 +81,18 @@ public class EmpresaModel extends EmpresaForm
     @Override
     public void grabar() throws ExcepcionCodefacLite 
     {
-        empresaService.grabar(setDatosEmisor());
-        session.setEmpresa(empresa);
+        if(session.getEmpresa()==null)
+        {
+            empresaService.grabar(setDatosEmisor());
+            session.setEmpresa(empresa);
+            DialogoCodefac.mensaje("Exito","Empresa grabada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+        }
+        else
+        {
+            empresaService.editar(setDatosEmisor());
+            session.setEmpresa(empresa);
+            DialogoCodefac.mensaje("Exito","Empresa editada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+        }
     }
 
     @Override
@@ -121,24 +141,22 @@ public class EmpresaModel extends EmpresaForm
     @Override
     public Map<Integer, Boolean> permisosFormulario() 
     {
-        Map<Integer,Boolean> permisos=new HashMap<Integer,Boolean>();
-        permisos.put(GeneralPanelInterface.BOTON_NUEVO,true);
-        permisos.put(GeneralPanelInterface.BOTON_GRABAR,true);
-        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
-        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
-        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
         permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
         return permisos;
     }
     
     public Empresa setDatosEmisor()
     {
-        empresa = new Empresa();
+        //empresa = new Empresa();
         empresa.setTelefonos(getjTextTelefono().getText());
         empresa.setRazonSocial(getjTextNombreSocial().getText());
         empresa.setNombreLegal(getjTextNombreComercial().getText());
-        empresa.setDireccion(getjTextADirEstablecimiento().getText());
+        empresa.setDireccion(getTxtDireccion().getText());
         empresa.setIdentificacion(getjTextRuc().getText());
+        empresa.setContribuyenteEspecial(getjTextNumContribuyente().getText());
+        
         if(getjCheckBLlevaContabilidad().isSelected())
         {
             empresa.setObligadoLlevarContabilidad(Empresa.SI_LLEVA_CONTABILIDAD);
@@ -146,13 +164,22 @@ public class EmpresaModel extends EmpresaForm
         {
             empresa.setObligadoLlevarContabilidad(Empresa.NO_LLEVA_CONTABILIDAD);
         }
-        empresa.setContribuyenteEspecial("");
+        //empresa.setContribuyenteEspecial("");
         return empresa;
     }
 
     @Override
     public void iniciar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(session.getEmpresa()!=null)
+        {
+            empresa=session.getEmpresa();
+            cargarDatosEmpresa();
+        }
+        else
+        {
+            this.empresa=new Empresa();
+        }
+        
     }
 
     @Override
@@ -163,6 +190,20 @@ public class EmpresaModel extends EmpresaForm
     @Override
     public List<String> getPerfilesPermisos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void agregarListener() {
+        getTxtDireccion().addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {}
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                String texto=getTxtDireccion().getText();
+                String textoNuevo=UtilidadesTextos.llenarCarateresIzquierda(texto,3,"0");
+                getTxtDireccion().setText(textoNuevo);
+           }
+        });
     }
 
     

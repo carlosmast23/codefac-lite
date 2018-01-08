@@ -86,19 +86,12 @@ public class Main {
          * Crear la session y cargar otro datos de la empresa
          */
         SessionCodefac session=new SessionCodefac();        
-        Empresa empresa=new Empresa();
         EmpresaService empresaService = new EmpresaService();
-        try{
-            for(Empresa e: empresaService.buscar())
-            {
-                empresa = e;
-            }
-            session.setEmpresa(empresa);
-        }
-        catch(Exception e)
-        {
-            System.out.println("No se encontro ninguna empresa creada");
-        }
+        List<Empresa> empresaList=empresaService.obtenerTodos();
+        
+        if(empresaList!=null && empresaList.size()>0)
+            session.setEmpresa(empresaList.get(0));
+
 //        empresa.setDireccion("Sangolqui,Av.Calderon y Espejo");
 //        empresa.setTelefonos("022333167");
 //        empresa.setIdentificacion("1724218951001");

@@ -1097,6 +1097,14 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             if(componente.getText().equals(""))
             {
                 validar.add("campo requerido");
+                
+            }
+        }
+        else
+        {
+            //Si el campo no es requerido y no tiene valor no hago ninguna otra validacion
+            if (componente.getText().equals("")) {
+                return validar;
             }
         }
         

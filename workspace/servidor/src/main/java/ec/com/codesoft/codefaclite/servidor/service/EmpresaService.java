@@ -17,12 +17,13 @@ import org.eclipse.persistence.exceptions.DatabaseException;
  *
  * @author PC
  */
-public class EmpresaService 
+public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade>
 {
     private EmpresaFacade empresaFacade;
     
     public EmpresaService() 
-    {
+    {        
+        super(EmpresaFacade.class);
         this.empresaFacade = new EmpresaFacade();
     }
     

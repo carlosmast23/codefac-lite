@@ -10,7 +10,7 @@
 
 create table EMPRESA
 (
-    ID_EMPRESA integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    ID integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
     TELEFONOS varchar(10),
     RAZON_SOCIAL varchar(50),
     NOMBRE_LEGAL varchar(50),
@@ -18,5 +18,5 @@ create table EMPRESA
     IDENTIFICACION varchar(50),
     OBLIGADO_LLEVAR_CONTABILIDAD varchar(3),
     CONTRIBUYENTE_ESPECIAL varchar(50),
-    primary key (ID_EMPRESA)
+    primary key (ID)
 )
