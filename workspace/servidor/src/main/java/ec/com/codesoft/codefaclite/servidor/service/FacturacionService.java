@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 import ec.com.codesoft.codefaclite.servidor.entity.Factura;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaFacade;
@@ -81,6 +82,12 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade>{
         String establecimiento = parametroService.getParametroByNombre(ParametroCodefac.PUNTO_EMISION).valor;
         String puntoEmision = parametroService.getParametroByNombre(ParametroCodefac.PUNTO_EMISION).valor;
         return puntoEmision + "-" + establecimiento + "-" + secuencial;
+    }
+    
+    public void eliminarFactura(Factura factura)
+    {
+        factura.setEstado(FacturaEnumEstado.ELIMINADO.getEstado());
+        facturaFacade.edit(factura);
     }
     
 

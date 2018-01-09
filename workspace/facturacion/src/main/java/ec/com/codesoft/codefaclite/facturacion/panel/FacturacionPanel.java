@@ -164,6 +164,8 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         lblDireccion = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         lblTelefonos = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        lblEstadoFactura = new javax.swing.JLabel();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -938,6 +940,26 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         panelDatosFactura.add(lblTelefonos, gridBagConstraints);
 
+        jLabel25.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel25.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel25.setText("Estado:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 12;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 10);
+        panelDatosFactura.add(jLabel25, gridBagConstraints);
+
+        lblEstadoFactura.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblEstadoFactura.setText("Procesando");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 13;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
+        panelDatosFactura.add(lblEstadoFactura, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -1016,6 +1038,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel35;
@@ -1041,6 +1064,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JTextPane jTextPane1;
     private javax.swing.JLabel lblDireccion;
     private javax.swing.JLabel lblDireccionCliente;
+    private javax.swing.JLabel lblEstadoFactura;
     private javax.swing.JLabel lblIva12;
     private javax.swing.JLabel lblNombreCliente;
     private javax.swing.JLabel lblNombreComercial;
@@ -1334,6 +1358,16 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     public void setjDateFechaEmision(JDateChooser jDateFechaEmision) {
         this.jDateFechaEmision = jDateFechaEmision;
     }
+
+    public JLabel getLblEstadoFactura() {
+        return lblEstadoFactura;
+    }
+
+    public void setLblEstadoFactura(JLabel lblEstadoFactura) {
+        this.lblEstadoFactura = lblEstadoFactura;
+    }
+    
+    
     
     
 }

@@ -31,19 +31,20 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura> {
         titulo.add(new ColumnaDialogo("Id", 0.2d));
         titulo.add(new ColumnaDialogo("preimpreso", 0.2d));
         titulo.add(new ColumnaDialogo("cliente", 0.3d));
-        titulo.add(new ColumnaDialogo("fecha", 0.2d));
+        titulo.add(new ColumnaDialogo("estado", 0.15d));
+        titulo.add(new ColumnaDialogo("fecha", 0.15d));
         titulo.add(new ColumnaDialogo("total", 0.1d));        
         return titulo;
     }
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        String queryString = "SELECT u FROM Factura u WHERE u.estado<>?1 AND u.estado<>?2 AND u.estado<>?3 ";
-        queryString+="AND ( u.cliente.razonSocial like "+filter+" )";
+        String queryString = "SELECT u FROM Factura u WHERE u.estado<>?1 ";
+        queryString+="AND ( LOWER(u.cliente.razonSocial) like "+filter+" OR CONCAT(u.secuencial, '') like "+filter+" )";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,FacturaEnumEstado.ELIMINADO.getEstado());
-        queryDialog.agregarParametro(2,FacturaEnumEstado.ANULADO_TOTAL.getEstado());
-        queryDialog.agregarParametro(3,FacturaEnumEstado.SIN_AUTORIZAR.getEstado());
+        //queryDialog.agregarParametro(2,FacturaEnumEstado.ANULADO_TOTAL.getEstado());
+        //queryDialog.agregarParametro(3,FacturaEnumEstado.SIN_AUTORIZAR.getEstado());
         return queryDialog;
     }
 
@@ -53,13 +54,26 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura> {
         dato.add(t.getPreimpreso());
         System.out.println(t.getPreimpreso());
         dato.add(t.getCliente().getRazonSocial());
+        FacturaEnumEstado estadoEnum= FacturaEnumEstado.getEnum(t.getEstado());
+        dato.add(estadoEnum.getNombre());
         dato.add(t.getFechaFactura());
         dato.add(t.getTotal());
     }
 
     @Override
     public Boolean buscarObjeto(Factura t, Object valor) {
-        return true;
+        //if(t.getCliente().getIdentificacion().indexOf(valor.toString())>=0 || t.getPreimpreso().indexOf(valor.toString())>=0)
+        String preimpreso=t.getPreimpreso().toLowerCase();
+        String valorBuscar=valor.toString().toLowerCase();
+        if(preimpreso.indexOf(valorBuscar)>=0)
+        {
+            return true;
+        }   
+        else
+        {
+            return false;
+        }  
+        //return true;
     }
     
 }

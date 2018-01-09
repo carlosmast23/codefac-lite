@@ -574,7 +574,28 @@ public class FacturacionModel extends FacturacionPanel {
 
     @Override
     public void eliminar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //Eliminar solo si ha cargado un dato para editar
+        if(estadoFormulario.equals(ESTADO_EDITAR))
+        {
+            if(factura!=null)
+            {
+                if(factura.getEstado().equals(FacturaEnumEstado.SIN_AUTORIZAR.getEstado()))
+                {                    
+                    boolean respuesta=DialogoCodefac.dialogoPregunta("Advertencia","Esta seguro que desea eliminar la factura? ", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    if(respuesta)
+                    {
+                        FacturacionService servicio = new FacturacionService();
+                        servicio.eliminarFactura(factura);
+                        DialogoCodefac.mensaje("Exitoso","La factura se elimino correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+                        getLblEstadoFactura().setText(FacturaEnumEstado.ELIMINADO.getNombre());
+                    }
+                }
+                else
+                {
+                    DialogoCodefac.mensaje("Alerta","Solo se pueden eliminar facturas no autorizadas",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                }
+            }
+        }
     }
 
     @Override
@@ -632,6 +653,7 @@ public class FacturacionModel extends FacturacionPanel {
         getLblNombreComercial().setText(session.getEmpresa().getNombreLegal());
         FacturacionService servicio = new FacturacionService();
         getLblSecuencial().setText(servicio.getPreimpresoSiguiente());
+        getLblEstadoFactura().setText("Procesando");
 
         datosAdicionales = new HashMap<String, String>();
         facturaElectronica = new FacturacionElectronica(session, this.panelPadre);
@@ -913,6 +935,13 @@ public class FacturacionModel extends FacturacionPanel {
         getLblNombreCliente().setText(factura.getCliente().getRazonSocial());
         getLblDireccionCliente().setText(factura.getCliente().getDireccion());
         getLblTelefonoCliente().setText(factura.getCliente().getTelefonoConvencional());
+        
+        /**
+         * Cargar el estado de la factura
+         */
+        FacturaEnumEstado estadoEnum=FacturaEnumEstado.getEnum(factura.getEstado());
+        getLblEstadoFactura().setText(estadoEnum.getNombre());
+        
         datosAdicionales.put("email", factura.getCliente().getCorreoElectronico());
         factura.setCliente(factura.getCliente());
         factura.setRazonSocial(factura.getCliente().getRazonSocial());
