@@ -505,11 +505,18 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                  */
                 if(frameInterface.modoDialogo)
                 {
-                    DialogInterfacePanel interfaz = (DialogInterfacePanel) frame;
-                    Object resultado = interfaz.getResult();
-                    frameInterface.formOwner.updateInterface(resultado);
-                    frame.dispose();
-                    mostrarPanelSecundario(false);
+                    if(validarFormulario(frameInterface,ValidacionCodefacAnotacion.GRUPO_FORMULARIO))
+                    {
+                        DialogInterfacePanel interfaz = (DialogInterfacePanel) frame;
+                        Object resultado = interfaz.getResult();
+                        frameInterface.formOwner.updateInterface(resultado);
+                        frame.dispose();
+                        mostrarPanelSecundario(false);
+                    }
+                    else
+                    {
+                        mostrarPanelSecundario(true);
+                    }
                     return;
                     
                 }
