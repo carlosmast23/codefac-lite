@@ -187,6 +187,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         setMaximizable(true);
         setResizable(true);
         setTitle("Factura");
+        setFrameIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/FacturaCeleste.png"))); // NOI18N
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         panelDatosEmpresa.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos Cliente", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 11))); // NOI18N
@@ -591,7 +592,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         PanelValores.add(jLabel15, gridBagConstraints);
 
         jLabel16.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
-        jLabel16.setText("IVA 12.0");
+        jLabel16.setText("IVA 12%");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 9;

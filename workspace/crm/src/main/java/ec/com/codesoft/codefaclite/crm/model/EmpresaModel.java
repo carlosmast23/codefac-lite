@@ -94,6 +94,7 @@ public class EmpresaModel extends EmpresaForm
             session.setEmpresa(empresa);
             DialogoCodefac.mensaje("Exito","Empresa editada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         }
+        dispose();
     }
 
     @Override
