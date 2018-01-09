@@ -30,7 +30,7 @@ public class ImpuestoDetalle implements Serializable
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column (name = "ID_IMPUESTO_DETALLE")
-    private Integer idImpuestoDetalle;
+    private Long idImpuestoDetalle;
     
     @Column (name= "CODIGO")
     private Integer codigo;
@@ -59,11 +59,11 @@ public class ImpuestoDetalle implements Serializable
     private Impuesto impuesto;
     
     
-    public Integer getIdImpuestoDetalle() {
+    public Long getIdImpuestoDetalle() {
         return idImpuestoDetalle;
     }
 
-    public void setIdImpuestoDetalle(Integer idImpuestoDetalle) {
+    public void setIdImpuestoDetalle(Long idImpuestoDetalle) {
         this.idImpuestoDetalle = idImpuestoDetalle;
     }
 

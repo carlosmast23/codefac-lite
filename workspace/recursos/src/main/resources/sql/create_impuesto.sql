@@ -9,7 +9,7 @@
  */
 create table IMPUESTO 
 (
-    ID_IMPUESTO integer not null GENERATED ALWAYS AS IDENTITY( START WITH 1, INCREMENT BY 1),
+    ID_IMPUESTO BIGINT not null GENERATED ALWAYS AS IDENTITY( START WITH 1),
     NOMBRE varchar(10),
     CODIGO_SRI varchar(4),
     DESCRIPCION varchar(60),

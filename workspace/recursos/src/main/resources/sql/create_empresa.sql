@@ -10,7 +10,7 @@
 
 create table EMPRESA
 (
-    ID integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1),
     TELEFONOS varchar(10),
     RAZON_SOCIAL varchar(50),
     NOMBRE_LEGAL varchar(50),

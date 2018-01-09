@@ -1458,13 +1458,20 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         
         //Cargar el componente de publicidad para que siempre exista
         cargarPublicidad();
-        
+        URL url=null;
         Map<String,Object> mapBuscar;
         AccesoDirectoService servicio=new AccesoDirectoService();
         
+        mapBuscar = new HashMap<>();
+        mapBuscar.put("nombre", FacturacionModel.class.getName());
+        url=RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL("factura.png");
+        IconoPanel iconoFactura=new IconoPanel("Factura",url,getjDesktopPane1(),servicio.obtenerPorMap(mapBuscar).get(0).x,servicio.obtenerPorMap(mapBuscar).get(0).y);                
+        iconoFactura.addListenerIcono(new ListenerIcono(FacturacionModel.class,true));
+        getjDesktopPane1().add(iconoFactura);
+        
         mapBuscar=new HashMap<>();
         mapBuscar.put("nombre",ProductoModel.class.getName());
-        URL url=RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL("producto.png");
+        url=RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL("producto.png");
         IconoPanel iconoPanel=new IconoPanel("Producto",url,getjDesktopPane1(),servicio.obtenerPorMap(mapBuscar).get(0).x,servicio.obtenerPorMap(mapBuscar).get(0).y);                
         iconoPanel.addListenerIcono(new ListenerIcono(ProductoModel.class, true));
         getjDesktopPane1().add(iconoPanel);
@@ -1477,14 +1484,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         iconoCalcu.addListenerIcono(new ListenerIcono(CalculadoraModel.class,false));
         getjDesktopPane1().add(iconoCalcu);
         
-        
-        mapBuscar = new HashMap<>();
-        mapBuscar.put("nombre", FacturacionModel.class.getName());
-        url=RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL("factura.png");
-        IconoPanel iconoFactura=new IconoPanel("Factura",url,getjDesktopPane1(),servicio.obtenerPorMap(mapBuscar).get(0).x,servicio.obtenerPorMap(mapBuscar).get(0).y);                
-        iconoFactura.addListenerIcono(new ListenerIcono(FacturacionModel.class,true));
-        getjDesktopPane1().add(iconoFactura);
-        
+     
         
         mapBuscar = new HashMap<>();
         mapBuscar.put("nombre", ClienteModel.class.getName());

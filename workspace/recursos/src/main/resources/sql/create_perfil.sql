@@ -9,7 +9,7 @@
  */
 create table PERFIL
 (
-    ID integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1),
     NOMBRE VARCHAR(70),
     DESCRIPCION VARCHAR(150),
     ESTADO varchar(1),
@@ -18,9 +18,9 @@ create table PERFIL
 
 create table PERFIL_USUARIO
 (
-    ID integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1),
     NICK  varchar(120),
-    PERFIL_ID integer,
+    PERFIL_ID BIGINT,
     FECHA_CREACION date,
     primary key (ID),
     CONSTRAINT id_usuario_perfil_fk FOREIGN KEY (NICK) REFERENCES USUARIO(NICK),

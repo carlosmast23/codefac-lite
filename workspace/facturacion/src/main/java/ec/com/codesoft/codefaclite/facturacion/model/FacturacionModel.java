@@ -407,13 +407,13 @@ public class FacturacionModel extends FacturacionPanel {
         
         if(factura.getCliente() == null)
         {
-            DialogoCodefac.dialogoPregunta("Alerta", "Necesita seleccionar un cliente", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            DialogoCodefac.mensaje("Alerta", "Necesita seleccionar un cliente", DialogoCodefac.MENSAJE_ADVERTENCIA);
             throw new ExcepcionCodefacLite("Necesita seleccionar un Cliente");
         }
         
         if(factura.getDetalles().isEmpty())
         {
-            DialogoCodefac.dialogoPregunta("Alerta", "No se puede facturar sin detalles", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            DialogoCodefac.mensaje("Alerta", "No se puede facturar sin detalles", DialogoCodefac.MENSAJE_ADVERTENCIA);
             throw new ExcepcionCodefacLite("Necesita seleccionar detalles ");
         }
         

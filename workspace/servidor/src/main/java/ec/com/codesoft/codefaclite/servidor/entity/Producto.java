@@ -29,7 +29,7 @@ public class Producto implements Serializable
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column (name = "ID_PRODUCTO")
-    private Integer  idProducto;
+    private Long  idProducto;
     @Column(name = "CODIGO_PRINCIPAL")
     private String codigoPrincipal;
     @Column(name = "CODIGO_AUXILIAR")
@@ -90,11 +90,11 @@ public class Producto implements Serializable
     }
 
     
-    public Integer getIdProducto() {
+    public Long getIdProducto() {
         return idProducto;
     }
 
-    public void setIdProducto(Integer idProducto) {
+    public void setIdProducto(Long idProducto) {
         this.idProducto = idProducto;
     }
 
