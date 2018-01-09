@@ -959,7 +959,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
     @ValidacionCodefacAnotacion(requerido=false ,expresionRegular = "^[0-9]+([.][0-9]+)?$",nombre = "Descuento")
     public JTextField getTxtDescuento() {
         return txtDescuento;
@@ -1179,7 +1178,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     }
     
     @LimpiarAnotacion
-    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
     @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0-9]+$",nombre = "Cantidad",grupo = "detalles")
     public JTextField getTxtCantidad() {
         return txtCantidad;
@@ -1190,7 +1188,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     }
     
     @LimpiarAnotacion
-    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
     @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Descripcion",grupo = "detalles")
     public JTextField getTxtDescripcion() {
         return txtDescripcion;
@@ -1209,7 +1206,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     }
     
     @LimpiarAnotacion
-    @AyudaCodefacAnotacion(recurso = "ayudaHtml.html")
     @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "",nombre = "Valor Unitario",grupo = "detalles")
     public JTextField getTxtValorUnitario() {
         return txtValorUnitario;
