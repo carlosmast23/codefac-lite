@@ -105,7 +105,7 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
         /**
          * Grabar las formas de pago si la variable exise y es distinto de vacio
          */
-        if(factura.getFormaPagos()!=null && factura.getFormaPagos().size()>=0)
+        if(factura.getFormaPagos()!=null && factura.getFormaPagos().size()>0)
         {
             List<FormaPagoComprobante> formaPagosFactura=new ArrayList<FormaPagoComprobante>();
             for (FormaPago formaPago : factura.getFormaPagos()) {

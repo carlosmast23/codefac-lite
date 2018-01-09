@@ -608,7 +608,7 @@ public class FacturacionModel extends FacturacionPanel {
         getLblRuc().setText(session.getEmpresa().getIdentificacion());
         getLblDireccion().setText(session.getEmpresa().getDireccion());
         getLblTelefonos().setText(session.getEmpresa().getTelefonos());
-        getLblNombreComercial().setText(session.getEmpresa().getRazonSocial());
+        getLblNombreComercial().setText(session.getEmpresa().getNombreLegal());
         FacturacionService servicio = new FacturacionService();
         getLblSecuencial().setText(servicio.getPreimpresoSiguiente());
 
