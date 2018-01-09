@@ -639,7 +639,6 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         getContentPane().add(jLabel19, gridBagConstraints);
 
         txtMotivoAnulacion.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        txtMotivoAnulacion.setText("                                                         ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
