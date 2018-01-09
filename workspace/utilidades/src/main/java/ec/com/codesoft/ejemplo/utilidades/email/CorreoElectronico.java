@@ -63,7 +63,12 @@ public class CorreoElectronico {
         this.propiedadCorreo=obtenenerPropiedad(usuario);
     }
 
-    public void sendMail() throws AuthenticationFailedException,MessagingException{
+    public void sendMail() throws AuthenticationFailedException,MessagingException,SmtpNoExisteException{
+        
+        //Verificar si existe un servidor smtp registrado
+        if(propiedadCorreo==null)
+            throw new SmtpNoExisteException("No existe servidor smtp");
+        
         Properties props = new Properties();
         
         props.put("mail.smtp.auth", "true");

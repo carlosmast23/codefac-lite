@@ -8,10 +8,12 @@ package ec.com.codesoft.codefaclite.controlador.aplicacion.mail;
 import ec.com.codesoft.codefaclite.controlador.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.ejemplo.utilidades.email.CorreoElectronico;
+import ec.com.codesoft.ejemplo.utilidades.email.SmtpNoExisteException;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.mail.AuthenticationFailedException;
 import javax.mail.MessagingException;
 
 /**
@@ -49,6 +51,8 @@ public abstract class CorreoCodefac {
             e.printStackTrace();
             throw new RuntimeException(e);            
         } catch (MessagingException ex) {
+            Logger.getLogger(CorreoCodefac.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SmtpNoExisteException ex) {
             Logger.getLogger(CorreoCodefac.class.getName()).log(Level.SEVERE, null, ex);
         }
 
