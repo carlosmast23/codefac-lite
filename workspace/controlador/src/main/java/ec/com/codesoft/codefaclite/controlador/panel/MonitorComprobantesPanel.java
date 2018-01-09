@@ -34,12 +34,12 @@ public abstract class MonitorComprobantesPanel extends PanelSecundarioAbstract{
 
         jPanel2 = new javax.swing.JPanel();
         btnLimpiarTodo = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnQuitarTerminados = new javax.swing.JButton();
         jPanelComponentesCarga = new javax.swing.JPanel();
 
         setLayout(new java.awt.BorderLayout());
 
-        jPanel2.setLayout(new java.awt.GridLayout());
+        jPanel2.setLayout(new java.awt.GridLayout(1, 0));
 
         btnLimpiarTodo.setText("Quitar Todos");
         btnLimpiarTodo.addActionListener(new java.awt.event.ActionListener() {
@@ -49,8 +49,8 @@ public abstract class MonitorComprobantesPanel extends PanelSecundarioAbstract{
         });
         jPanel2.add(btnLimpiarTodo);
 
-        jButton2.setText("Quitar Terminados");
-        jPanel2.add(jButton2);
+        btnQuitarTerminados.setText("Quitar Terminados");
+        jPanel2.add(btnQuitarTerminados);
 
         add(jPanel2, java.awt.BorderLayout.PAGE_END);
 
@@ -75,10 +75,8 @@ public abstract class MonitorComprobantesPanel extends PanelSecundarioAbstract{
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLimpiarTodo;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton btnQuitarTerminados;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanelComponentes;
-    private javax.swing.JPanel jPanelComponentes1;
     private javax.swing.JPanel jPanelComponentesCarga;
     // End of variables declaration//GEN-END:variables
         
@@ -105,4 +103,13 @@ public abstract class MonitorComprobantesPanel extends PanelSecundarioAbstract{
         return PANEL_MONITOR;
     }
 
+    public JButton getBtnQuitarTerminados() {
+        return btnQuitarTerminados;
+    }
+
+    public void setBtnQuitarTerminados(JButton btnQuitarTerminados) {
+        this.btnQuitarTerminados = btnQuitarTerminados;
+    }
+
+    
 }

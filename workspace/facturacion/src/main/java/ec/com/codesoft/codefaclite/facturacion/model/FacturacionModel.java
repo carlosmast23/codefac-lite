@@ -132,7 +132,7 @@ public class FacturacionModel extends FacturacionPanel {
     private void setearFechas() {
         //this.fechaMax = new java.util.Date();
         definirFechaMinFacturacion();
-
+        
     }
 
     private void setearVariablesIniciales() {
@@ -195,9 +195,18 @@ public class FacturacionModel extends FacturacionPanel {
                     dialog.setLocationRelativeTo(null);
                     dialog.setVisible(true);
                     FormaPago formaPago = dialog.getFormaPago();
-                    factura.addFormaPago(formaPago);
-                    verificarSumaFormaPago();                  
-                    cargarFormasPagoTabla();
+                    try{
+                        verificarSumaFormaPago();
+                        if(banderaFormaPago)
+                        {
+                            factura.addFormaPago(formaPago);
+                        }                 
+                        cargarFormasPagoTabla();
+                    }catch(Exception ex)
+                    {
+                        System.out.println("No existe forma de pago");
+                    }
+                            
                 }      
             }
         });
@@ -396,6 +405,18 @@ public class FacturacionModel extends FacturacionPanel {
             throw new ExcepcionCodefacLite("Formas de pago erroneas");
         }
         
+        if(factura.getCliente() == null)
+        {
+            DialogoCodefac.dialogoPregunta("Alerta", "Necesita seleccionar un cliente", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            throw new ExcepcionCodefacLite("Necesita seleccionar un Cliente");
+        }
+        
+        if(factura.getDetalles().isEmpty())
+        {
+            DialogoCodefac.dialogoPregunta("Alerta", "No se puede facturar sin detalles", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            throw new ExcepcionCodefacLite("Necesita seleccionar detalles ");
+        }
+        
         Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea facturar?", DialogoCodefac.MENSAJE_ADVERTENCIA);
         if (!respuesta) {
             throw new ExcepcionCodefacLite("Cancelacion usuario");
@@ -450,7 +471,7 @@ public class FacturacionModel extends FacturacionPanel {
                     public void actionPerformed(ActionEvent e) {
                         //String path = facturaElectronica.getServicio().getPathRide();
                         JasperPrint print = facturaElectronica.getServicio().getPrintJasper();
-                        panelPadre.crearReportePantalla(print, factura.getPreimpreso());
+                        panelPadre.crearReportePantalla(print, facturaProcesando.getPreimpreso());
                     }
                 });
 
@@ -525,7 +546,7 @@ public class FacturacionModel extends FacturacionPanel {
                             @Override
                             public void actionPerformed(ActionEvent e) {
                                 JasperPrint print = facturaElectronica.getServicio().getPrintJasper();
-                                panelPadre.crearReportePantalla(print, factura.getPreimpreso());
+                                panelPadre.crearReportePantalla(print, facturaProcesando.getPreimpreso());
                             }
                         });
                     }
@@ -1076,7 +1097,7 @@ public class FacturacionModel extends FacturacionPanel {
         res = factura.getTotal().compareTo(totalFormasPago);
         if(res == -1)
         {
-            DialogoCodefac.mensaje("Advertencia", "Las formas de pago sobrepasan el valor a Facturar", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            DialogoCodefac.mensaje("Advertencia", "La forma de pago sobrepasa el valor a Facturar", DialogoCodefac.MENSAJE_ADVERTENCIA);
             banderaFormaPago = false;
         }
         else

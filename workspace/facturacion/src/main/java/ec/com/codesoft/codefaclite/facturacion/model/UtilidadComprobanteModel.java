@@ -237,6 +237,13 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
         getCmbCarpetaComprobante().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                
+                //TODO: Revisar esta validacion temporal porque no existe la carpeta de no autorizado
+                if(getCmbCarpetaComprobante().getSelectedItem().equals(ComprobanteElectronicoService.CARPETA_NO_AUTORIZADOS))
+                {
+                    return ;
+                }
+                
                 String path = session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor;
                 String modoFacturacion=session.getParametrosCodefac().get(ParametroCodefac.MODO_FACTURACION).valor;
                 String pathComprobantes="";
@@ -401,7 +408,7 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
     private void cargarEtapas() {
         getCmbEstadoLimiteProcesar().removeAllItems();
 
-        getCmbEstadoLimiteProcesar().addItem("peocesar todo");
+        getCmbEstadoLimiteProcesar().addItem("procesar todo");
 
         getCmbEstadoLimiteProcesar().addItem("generar");
 

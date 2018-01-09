@@ -27,11 +27,13 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         initComponents();
         this.jTextLogo.setEnabled(false);
     }
-
+    
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido= false, min=7, max=10,expresionRegularMensaje = "Ingrese un numero valido", expresionRegular = "\\d+")
     public JTextField getjTextTelefono() {
         return jTextTelefono;
     }
-
+    
     public void setjTextTelefono(JTextField jTextTelefono) {
         this.jTextTelefono = jTextTelefono;
     }
@@ -103,7 +105,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     }
     
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true , min=5 ,max = 1024,expresionRegular = "^[A-Za-z0-9\\s]*$",nombre = "RUC")
+    @ValidacionCodefacAnotacion(personalizado = {"validarRuc"} , requerido=true , min=0 ,max = 13, nombre = "RUC")
     public JTextField getjTextRuc() {
         return jTextRuc;
     }

@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.main.test;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.mail.CorreoCodefac;
 import ec.com.codesoft.ejemplo.utilidades.email.CorreoElectronico;
+import ec.com.codesoft.ejemplo.utilidades.email.SmtpNoExisteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -30,6 +31,8 @@ public class TestCorreo {
             System.out.println("Fallo al autentificar el usuario");
             Logger.getLogger(TestCorreo.class.getName()).log(Level.SEVERE, null, ex);
         } catch (MessagingException ex) {
+            Logger.getLogger(TestCorreo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SmtpNoExisteException ex) {
             Logger.getLogger(TestCorreo.class.getName()).log(Level.SEVERE, null, ex);
         }
 

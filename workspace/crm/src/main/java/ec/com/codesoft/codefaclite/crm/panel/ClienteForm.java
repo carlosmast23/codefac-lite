@@ -396,7 +396,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(personalizado ={"validarIdentificacionSegunOpcionEstablecida"}  ,requerido=true , min=0 ,max = 13,expresionRegular = "",nombre = NOMBRE_VALIDADOR_IDENTIFICACION)
+    @ValidacionCodefacAnotacion(requerido=true, personalizado ={"validarIdentificacionSegunOpcionEstablecida"} , min=0 ,max = 13,expresionRegular = "",nombre = NOMBRE_VALIDADOR_IDENTIFICACION)
     public JTextField getjTextIdentificacion() {
         return jTextIdentificacion;
     }

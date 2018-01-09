@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.crm.model;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.validacionPersonalizadaAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.crm.busqueda.EmpresaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.crm.panel.EmpresaForm;
@@ -93,6 +94,7 @@ public class EmpresaModel extends EmpresaForm
             session.setEmpresa(empresa);
             DialogoCodefac.mensaje("Exito","Empresa editada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         }
+        dispose();
     }
 
     @Override
@@ -204,6 +206,90 @@ public class EmpresaModel extends EmpresaForm
                 getTxtDireccion().setText(textoNuevo);
            }
         });
+    }
+    
+    @validacionPersonalizadaAnotacion(errorTitulo = "Formato de ruc")
+    public boolean validarRuc()
+    {
+        return validarRUC(getjTextRuc().getText());
+    }        
+            
+    private boolean validarRUC(String RUC) 
+    {
+        System.out.println("Longitud de RUC" + RUC.length());
+        if(RUC.length() == 13)
+        {
+            String cedula = RUC.substring(0,10);
+            System.out.println("CEDULA: " + cedula);
+            String ruc = RUC.substring(10,13);
+            System.out.println("RUC: " + ruc);
+            System.out.println("VALor cedula " +  validarCedula(cedula));
+            System.out.println("VALor ruc " +  isNumeric(ruc));
+            if(validarCedula(cedula) && isNumeric(ruc))
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    public boolean validarCedula(String cedula)
+    {          
+        boolean cedulaCorrecta = false;
+        try {
+            if (cedula.length() == 10) // ConstantesApp.LongitudCedula
+            {
+                int tercerDigito = Integer.parseInt(cedula.substring(2, 3));
+                if (tercerDigito < 6) {
+                    // Coeficientes de validación cédula
+                    // El decimo digito se lo considera dígito verificador
+                    int[] coefValCedula = {2, 1, 2, 1, 2, 1, 2, 1, 2};
+                    int verificador = Integer.parseInt(cedula.substring(9, 10));
+                    int suma = 0;
+                    int digito = 0;
+                    for (int i = 0; i < (cedula.length() - 1); i++) {
+                        digito = Integer.parseInt(cedula.substring(i, i + 1)) * coefValCedula[i];
+                        suma += ((digito % 10) + (digito / 10));
+                    }
+
+                    if ((suma % 10 == 0) && (suma % 10 == verificador)) {
+                        cedulaCorrecta = true;
+                    } else if ((10 - (suma % 10)) == verificador) {
+                        cedulaCorrecta = true;
+                    } else {
+                        cedulaCorrecta = false;
+                    }
+                } else {
+                    cedulaCorrecta = false;
+                }
+            } else {
+                cedulaCorrecta = false;
+            }
+        } catch (NumberFormatException nfe) {
+            cedulaCorrecta = false;
+        } catch (Exception err) {
+            cedulaCorrecta = false;
+        }
+
+        if (!cedulaCorrecta) {
+            System.out.println("La Cédula ingresada es Incorrecta");
+        }
+        return cedulaCorrecta;
+
+    }
+    
+    public boolean isNumeric(String cadena) 
+    {
+        boolean resultado;
+        try
+        {
+            Integer.parseInt(cadena);
+            resultado = true;
+        } catch (NumberFormatException excepcion) {
+            resultado = false;
+        }
+        return resultado;
     }
 
     
