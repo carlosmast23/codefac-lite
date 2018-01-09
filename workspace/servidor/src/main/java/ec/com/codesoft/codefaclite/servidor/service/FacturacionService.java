@@ -66,8 +66,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade>{
         return facturaFacade.findAll();
     }
 
-    public List<Factura> obtenerFacturasReporte(Persona persona,Date fi,Date ff) {
-        return facturaFacade.lista(persona,fi,ff);
+    public List<Factura> obtenerFacturasReporte(Persona persona,Date fi,Date ff,String estado) {
+        return facturaFacade.lista(persona,fi,ff,estado);
     }
 
     public List<Factura> obtenerFacturasActivas()

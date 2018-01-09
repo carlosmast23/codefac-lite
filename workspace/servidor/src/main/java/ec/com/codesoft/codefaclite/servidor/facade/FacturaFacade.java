@@ -25,9 +25,8 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         super(Factura.class);
     }
 
-    public List<Factura> lista(Persona persona, Date fi, Date ff) {
-
-        String cliente = "", fecha = "";
+    public List<Factura> lista(Persona persona, Date fi, Date ff, String estado) {
+        String cliente = "", fecha = "", estadoFactura = "";
         if (persona != null) {
             cliente = "u.cliente=?1";
         } else {
@@ -42,9 +41,12 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         } else {
             fecha = " AND (u.fechaFactura BETWEEN ?2 AND ?3)";
         }
+        if (estado != null) {
+            estadoFactura = " AND u.estado=?4";
+        }
 
         try {
-            String queryString = "SELECT u FROM Factura u WHERE " + cliente + fecha;
+            String queryString = "SELECT u FROM Factura u WHERE " + cliente + fecha + estadoFactura;
             Query query = getEntityManager().createQuery(queryString);
             //System.err.println("QUERY--->"+query.toString());
             if (persona != null) {
@@ -55,6 +57,9 @@ public class FacturaFacade extends AbstractFacade<Factura> {
             }
             if (ff != null) {
                 query.setParameter(3, ff);
+            }
+            if (estado != null) {
+                query.setParameter(4, estado);
             }
             return query.getResultList();
         } catch (NoResultException e) {
@@ -74,17 +79,16 @@ public class FacturaFacade extends AbstractFacade<Factura> {
             return null;
         }
     }
-    
-    public List<Factura> queryDialog(String param,int limiteMinimo,int limiteMaximo)
-    {
+
+    public List<Factura> queryDialog(String param, int limiteMinimo, int limiteMaximo) {
         String queryString = "SELECT u FROM Factura u WHERE u.estado<>?1 AND u.estado<>?2 AND u.estado<>?3 ";
-        queryString+="AND ( f.cliente.razonSocial like ?1 )";
-        
+        queryString += "AND ( f.cliente.razonSocial like ?1 )";
+
         Query query = getEntityManager().createQuery(queryString);
         query.setParameter(1, param);
         query.setMaxResults(limiteMaximo);
         query.setFirstResult(limiteMinimo);
-        return query.getResultList();        
-        
+        return query.getResultList();
+
     }
 }

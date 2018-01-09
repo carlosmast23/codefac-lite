@@ -22,10 +22,11 @@ public class ReporteFacturaData {
     private String estadoFactura;
     private String subtotalDoceFactura;
     private String subtotalCeroFactura;
+    private String descFactura;
     private String ivaDoceFactura;
     private String totalFactura;
 
-    public ReporteFacturaData(String numeroFactura, String fechaFactura, String identificacionCliente, String razonSocialCliente, String nombreLegalCliente, String estadoFactura, String subtotalDoceFactura, String subtotalCeroFactura, String ivaDoceFactura, String totalFactura) {
+    public ReporteFacturaData(String numeroFactura, String fechaFactura, String identificacionCliente, String razonSocialCliente, String nombreLegalCliente, String estadoFactura, String subtotalDoceFactura, String subtotalCeroFactura, String descFactura, String ivaDoceFactura, String totalFactura) {
         this.numeroFactura = numeroFactura;
         this.fechaFactura = fechaFactura;
         this.identificacionCliente = identificacionCliente;
@@ -34,10 +35,12 @@ public class ReporteFacturaData {
         this.estadoFactura = estadoFactura;
         this.subtotalDoceFactura = subtotalDoceFactura;
         this.subtotalCeroFactura = subtotalCeroFactura;
+        this.descFactura = descFactura;
         this.ivaDoceFactura = ivaDoceFactura;
         this.totalFactura = totalFactura;
     }
 
+        
     public String getNumeroFactura() {
         return numeroFactura;
     }
@@ -102,6 +105,14 @@ public class ReporteFacturaData {
         this.subtotalCeroFactura = subtotalCeroFactura;
     }
 
+    public String getDescFactura() {
+        return descFactura;
+    }
+
+    public void setDescFactura(String descFactura) {
+        this.descFactura = descFactura;
+    }
+
     public String getIvaDoceFactura() {
         return ivaDoceFactura;
     }
@@ -118,6 +129,7 @@ public class ReporteFacturaData {
         this.totalFactura = totalFactura;
     }
 
+   
     
 
 }
