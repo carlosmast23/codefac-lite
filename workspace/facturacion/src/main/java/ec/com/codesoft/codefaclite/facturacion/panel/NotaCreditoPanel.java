@@ -310,6 +310,11 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
 
         btnBuscarFactura.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         btnBuscarFactura.setText("Buscar");
+        btnBuscarFactura.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarFacturaActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 0;
@@ -683,6 +688,10 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
     private void txtValorTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtValorTotalActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtValorTotalActionPerformed
+
+    private void btnBuscarFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarFacturaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnBuscarFacturaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

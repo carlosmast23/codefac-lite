@@ -351,7 +351,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
 
         this.modeloTablaDetalle = new DefaultTableModel(titulo, 0);
         //this.modeloTablaDetallesProductos.isCellEditable
-        getTblDetalleNotaCredito().setModel(modeloTablaDetalle);
+        getTblDetalleNotaCredito().setModel(this.modeloTablaDetalle);
     }
 
     private void actualizarDatosTablaDetalle() {
