@@ -391,7 +391,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 2);
         PanelValores.add(jLabel9, gridBagConstraints);
 
-        jLabel10.setText("SUBTOTAL 12.0");
+        jLabel10.setText("SUBTOTAL 12%");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
