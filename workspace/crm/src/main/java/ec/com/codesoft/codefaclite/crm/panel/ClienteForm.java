@@ -84,6 +84,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jLabel14 = new javax.swing.JLabel();
         jTextApellidos = new javax.swing.JTextField();
         jTextNombreSocial = new javax.swing.JTextField();
+        lblEspacio = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -91,7 +92,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         setResizable(true);
         setTitle("Cliente");
         setFrameIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/persona-ico.png"))); // NOI18N
-        setPreferredSize(new java.awt.Dimension(950, 387));
+        setPreferredSize(new java.awt.Dimension(850, 387));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -140,7 +141,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weightx = 0.2;
         jPanelCaracteristicasGenerales.add(jTextIdentificacion, gridBagConstraints);
 
         jLabel5.setText("Tipo Cliente:");
@@ -204,7 +205,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weightx = 0.2;
         jPanelCaracteristicasGenerales.add(jTextExtension, gridBagConstraints);
 
         jLabel9.setText("Teléfono Celular:");
@@ -261,7 +262,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weightx = 0.2;
         jPanelCaracteristicasGenerales.add(cmbEstado, gridBagConstraints);
 
         jLabel13.setText("Apellidos:");
@@ -289,6 +290,12 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         jPanelCaracteristicasGenerales.add(jTextNombreSocial, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        jPanelCaracteristicasGenerales.add(lblEspacio, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -337,6 +344,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JTextField jTextNombreSocial;
     private javax.swing.JTextField jTextNombres;
     private javax.swing.JTextField jTextTelefono;
+    private javax.swing.JLabel lblEspacio;
     // End of variables declaration//GEN-END:variables
 
     public JComboBox<String> getjComboTipoCliente() {
