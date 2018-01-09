@@ -9,7 +9,7 @@
  */
 
 create table 
-    CLIENTE( ID_CLIENTE integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1) , 
+    CLIENTE( ID_CLIENTE BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
     NOMBRE_SOCIAL varchar(256),
     TIPO_IDENTIFICACION varchar(30), 
     IDENTIFICACION varchar(13), 
@@ -22,7 +22,7 @@ create table
     primary key (ID_CLIENTE));
 
 create table
-    EMISOR( ID_EMISOR integer not null GENERATED AYWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    EMISOR( ID_EMISOR BIGINT not null GENERATED AYWAYS AS IDENTITY (START WITH 1),
     RAZON_SOCIAL varchar(70),
     RUC varchar(15),
     NOM_COMERCIAL varchar(100),

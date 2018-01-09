@@ -9,7 +9,7 @@
  */
 create table 
     SRI_IDENTIFICACION( 
-    ID integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1) , 
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
     CODIGO varchar(256),
     TIPO_TRANSACCION varchar(60), 
     TIPO_IDENTIFICACION varchar(60), 

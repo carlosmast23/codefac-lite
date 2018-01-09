@@ -9,7 +9,7 @@
  */
 create table 
     SRI_FORMA_PAGO( 
-    ID integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1) , 
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
     NOMBRE varchar(256),
     CODIGO varchar(30), 
     FECHA_INICIO date, 

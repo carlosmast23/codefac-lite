@@ -9,7 +9,7 @@
  */
 create table ACCESO_DIRECTO
 ( 
-    ID integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1) , 
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
     NOMBRE varchar(200),
     X integer, 
     Y integer, 

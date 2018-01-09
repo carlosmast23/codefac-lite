@@ -9,7 +9,7 @@
  */
 
 create table CLIENTE( 
-    CLIENTE_ID integer not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1) , 
+    CLIENTE_ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
     NOMBRES varchar(256),
     APELLIDOS varchar(256),      
     RAZON_SOCIAL varchar(256),

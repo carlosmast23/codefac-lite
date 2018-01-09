@@ -31,7 +31,7 @@ public class Persona implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "CLIENTE_ID")
-    private Integer idCliente;
+    private Long idCliente;
     @Column(name = "NOMBRES")
     private String nombres;
     @Column(name = "APELLIDOS")
@@ -59,11 +59,11 @@ public class Persona implements Serializable {
     @Column(name = "ESTADO")
     private String estado;
 
-    public Integer getIdCliente() {
+    public Long getIdCliente() {
         return idCliente;
     }
 
-    public void setIdCliente(Integer idcliente) {
+    public void setIdCliente(Long idcliente) {
         this.idCliente = idcliente;
     }
 
