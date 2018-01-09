@@ -18,9 +18,11 @@ import ec.com.codesoft.codefaclite.servidor.entity.Impuesto;
 import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Perfil;
+import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
+import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
 import ec.com.codesoft.ejemplo.utilidades.email.CorreoElectronico;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
@@ -56,6 +58,8 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     private JFileChooser jFileChooser;
     private Path origen = null;
     private Path destino = null;
+    private Persona cliente;
+    private PersonaService clienteService;
 
     public ComprobantesConfiguracionModel() {
         impuestoDetalleService = new ImpuestoDetalleService();
@@ -315,6 +319,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             correos.add(getTxtCorreoElectronico().getText());
             CorreoElectronico correoElectronico=new CorreoElectronico(getTxtCorreoElectronico().getText(),new String(getTxtPasswordCorreo().getPassword()),"Este correo es de prueba para configurar el sistema de Codefac",correos, "Prueba Codefac");
             correoElectronico.sendMail();
+            configurarCorreoDeConsumidorFinal();
             //DialogoCodefac.mensaje("Exito","El correo y la clave son correctos",DialogoCodefac.MENSAJE_CORRECTO);
         }catch (AuthenticationFailedException ex) {
             System.out.println("Fallo al autentificar el usuario");
@@ -372,4 +377,16 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         return permisosPerfil;
     }
 
+    public void configurarCorreoDeConsumidorFinal()
+    {
+        clienteService = new PersonaService();
+        for(Persona c :clienteService.buscar())
+        {
+            if(c.getRazonSocial().equals("Cliente Final")){
+                cliente = c;
+            }
+        }
+        cliente.setCorreoElectronico(getTxtCorreoElectronico().getText());
+        clienteService.editar(cliente);
+    }
 }
