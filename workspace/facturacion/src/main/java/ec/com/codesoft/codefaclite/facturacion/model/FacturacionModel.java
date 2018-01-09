@@ -471,7 +471,7 @@ public class FacturacionModel extends FacturacionPanel {
                     public void actionPerformed(ActionEvent e) {
                         //String path = facturaElectronica.getServicio().getPathRide();
                         JasperPrint print = facturaElectronica.getServicio().getPrintJasper();
-                        panelPadre.crearReportePantalla(print, factura.getPreimpreso());
+                        panelPadre.crearReportePantalla(print, facturaProcesando.getPreimpreso());
                     }
                 });
 
@@ -546,7 +546,7 @@ public class FacturacionModel extends FacturacionPanel {
                             @Override
                             public void actionPerformed(ActionEvent e) {
                                 JasperPrint print = facturaElectronica.getServicio().getPrintJasper();
-                                panelPadre.crearReportePantalla(print, factura.getPreimpreso());
+                                panelPadre.crearReportePantalla(print, facturaProcesando.getPreimpreso());
                             }
                         });
                     }

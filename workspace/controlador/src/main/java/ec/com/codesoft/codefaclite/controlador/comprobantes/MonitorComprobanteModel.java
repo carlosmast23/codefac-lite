@@ -10,10 +10,12 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPan
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -30,6 +32,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 public class MonitorComprobanteModel extends MonitorComprobantesPanel {
 
     private static MonitorComprobanteModel monitorComprobanteModel;
+    
     private GridLayout experimentLayout = new GridLayout(15, 2);
     private MonitorComprobanteListener listener;
     private static  Integer numeroVentanas=0;
@@ -45,6 +48,8 @@ public class MonitorComprobanteModel extends MonitorComprobantesPanel {
 
     public MonitorComprobanteModel() {
         getjPanelComponentesCarga().setLayout(experimentLayout);
+        agregarListener();
+        
 
     }
 
@@ -116,6 +121,38 @@ public class MonitorComprobanteModel extends MonitorComprobantesPanel {
     @Override
     public void actualizar(Object obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void agregarListener() {
+        getBtnLimpiarTodo().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getjPanelComponentesCarga().removeAll();
+                getjPanelComponentesCarga().repaint();
+            }
+        });
+        
+        getBtnQuitarTerminados().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Component[] componentes=getjPanelComponentesCarga().getComponents();
+                for (Component componente : componentes) {
+                    JPanel panel=(JPanel) componente;
+                    
+                    Component[] componentesMonitor= panel.getComponents();
+                    JProgressBar barraProgreso=(JProgressBar) componentesMonitor[0];
+                    
+                    if(barraProgreso.getPercentComplete()==1d)
+                    {
+                        getjPanelComponentesCarga().remove(componente);
+                        getjPanelComponentesCarga().revalidate();
+                        getjPanelComponentesCarga().repaint();
+                    }
+                    
+                }
+                
+            }
+        });
     }
 
 

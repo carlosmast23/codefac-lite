@@ -24,6 +24,7 @@ import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
 import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
 import ec.com.codesoft.ejemplo.utilidades.email.CorreoElectronico;
+import ec.com.codesoft.ejemplo.utilidades.email.SmtpNoExisteException;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -328,6 +329,10 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
                         
         } catch (MessagingException ex) {
             Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SmtpNoExisteException ex) {
+            System.out.println("Fallo al autentificar el usuario");
+            getTxtPasswordCorreo().setText("");
+            DialogoCodefac.mensaje("Error Correo","Ingrese un correo valido",DialogoCodefac.MENSAJE_INCORRECTO);
         }
     }
     

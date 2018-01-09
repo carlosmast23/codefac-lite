@@ -36,7 +36,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLimpiarTodoActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton2">
+        <Component class="javax.swing.JButton" name="btnQuitarTerminados">
           <Properties>
             <Property name="text" type="java.lang.String" value="Quitar Terminados"/>
           </Properties>
