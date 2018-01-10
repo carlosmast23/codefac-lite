@@ -7,7 +7,10 @@ package ec.com.codesoft.codefaclite.recursos;
 
 import java.io.File;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -46,15 +49,13 @@ public enum RecursoCodefac {
         return getClass().getResource("/" + subPathResource + "/" + file);
     }
 
-    public String getResourcePath(String file) {
-        return getClass().getResource("/" + subPathResource + "/" + file).getPath();
-    }
+    //public String getResourcePath(String file) {
+    //    return getClass().getResource("/" + subPathResource + "/" + file).getPath();
+    //}
 
     public String getResourcesParentPath(String file) {
-        String path = getResourcePath(file);
-        File archivo = new File(path);
-        //File file = new File(getClass().getResource("/pagina/ayudaHtml.html").toURI());
-
+        URL path = getResourceURL(file);
+        File archivo = new File(path.toExternalForm());
         return archivo.getParentFile().toURI().getPath();
     }
 

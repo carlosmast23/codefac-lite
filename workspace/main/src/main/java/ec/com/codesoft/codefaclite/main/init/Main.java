@@ -122,7 +122,7 @@ public class Main {
         /**
          * Establecer propiedades del formulario principal
          */
-        panel.setIconImage(new javax.swing.ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourcePath("logoCodefac-ico.png")).getImage()); // NOI18N        
+        panel.setIconImage(new javax.swing.ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("logoCodefac-ico.png")).getImage()); // NOI18N        
         panel.setExtendedState(MAXIMIZED_BOTH);
         splashScren.siguiente();
         splashScren.termino();
@@ -314,7 +314,7 @@ public class Main {
             try {
                 System.out.println(e.getMessage());
                 UtilidadesServidor.crearBaseDatos();
-                JOptionPane.showMessageDialog(null,"Creada base de datos");
+                //JOptionPane.showMessageDialog(null,"Creada base de datos");
                 AbstractFacade.cargarEntityManager();
             } catch (PersistenceException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);

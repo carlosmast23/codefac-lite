@@ -126,8 +126,8 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
         /**
          * Setear variables de configuracion para los reportes
          */
-        servicio.setPathFacturaJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourcePath("facturaReporte.jrxml"));
-        servicio.setPathNotaCreditoJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourcePath("notaCreditoReporte.jrxml"));
+        servicio.setPathFacturaJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceURL("facturaReporte.jrxml").getPath());
+        servicio.setPathNotaCreditoJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceURL("notaCreditoReporte.jrxml").getPath());
         //String imagenLogo=session.getParametrosCodefac().get(ParametroCodefac.LOGO_EMPRESA).getValor();
         //TODO Este parametro debe ser configurable cuando se la version de pago para que permita seleccionar la imagen del cliente
         //servicio.setLogoImagen(DirectorioCodefac.IMAGENES.getArchivoStream(session,imagenLogo));
@@ -135,7 +135,7 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
         //servicio.setLogoImagen(image);
         servicio.setPathParentJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourcesParentPath("facturaReporte.jrxml"));
         servicio.setMapAdicionalReporte(interfazPadre.mapReportePlantilla());
-        servicio.pathLogoImagen = RecursoCodefac.IMAGENES_GENERAL.getResourcePath("sin_imagen.jpg");
+        servicio.pathLogoImagen = RecursoCodefac.IMAGENES_GENERAL.getResourceURL("sin_imagen.jpg").getPath();
 
         /**
          * Cargar los web services dependiendo el modo de facturacion

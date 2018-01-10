@@ -99,17 +99,17 @@ public class MonitorComprobanteModel extends MonitorComprobantesPanel {
     }
 
     private void setproperties(MonitorComprobanteData monitorComprobanteData) {
-        monitorComprobanteData.getBtnCerrar().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourcePath("pequenos/cerrar-ico.png")));
+        monitorComprobanteData.getBtnCerrar().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("pequenos/cerrar-ico.png")));
         monitorComprobanteData.getBtnCerrar().setText("");
         monitorComprobanteData.getBtnCerrar().setToolTipText("Cerrar");
         monitorComprobanteData.getBtnCerrar().setSize(new Dimension(25,25));
         
-        monitorComprobanteData.getBtnAbrir().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourcePath("pequenos/abrir-ico.png")));
+        monitorComprobanteData.getBtnAbrir().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("pequenos/abrir-ico.png")));
         monitorComprobanteData.getBtnAbrir().setText("");
         monitorComprobanteData.getBtnAbrir().setToolTipText("Abrir");
         monitorComprobanteData.getBtnAbrir().setSize(new Dimension(1,1));
         
-        monitorComprobanteData.getBtnReporte().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourcePath("pequenos/info-ico.png")));
+        monitorComprobanteData.getBtnReporte().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("pequenos/info-ico.png")));
         monitorComprobanteData.getBtnReporte().setText("");
         monitorComprobanteData.getBtnReporte().setToolTipText("Ver detalles");
         monitorComprobanteData.getBtnReporte().setPreferredSize(new Dimension(15,15));

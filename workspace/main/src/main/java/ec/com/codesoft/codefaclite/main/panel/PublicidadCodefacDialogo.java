@@ -22,7 +22,7 @@ public class PublicidadCodefacDialogo extends javax.swing.JDialog {
      */
     public PublicidadCodefacDialogo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        String path= RecursoCodefac.IMAGENES_ICONOS.getResourcePath("logoCodefac-ico.png");
+        String path= RecursoCodefac.IMAGENES_ICONOS.getResourceURL("logoCodefac-ico.png").getPath();
         Image image=new ImageIcon(path).getImage();
         this.setIconImage(image);
         initComponents();

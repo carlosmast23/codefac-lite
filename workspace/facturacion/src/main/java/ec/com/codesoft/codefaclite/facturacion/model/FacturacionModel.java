@@ -54,6 +54,7 @@ import java.awt.event.MouseAdapter;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.sql.Date;
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -936,28 +937,28 @@ public class FacturacionModel extends FacturacionPanel {
     }
 
     private void initComponenesGraficos() {
-        String path = RecursoCodefac.IMAGENES_ICONOS.getResourcePath("pequenos/mas-ico.png");
+        URL path = RecursoCodefac.IMAGENES_ICONOS.getResourceURL("pequenos/mas-ico.png");
         getBtnAgregarDetalleFactura().setIcon(new ImageIcon(path));
         getBtnAgregarDetalleFactura().setText("");
         getBtnAgregarDetalleFactura().setToolTipText("Agregar detalle factura");
 
-        getBtnEditarDetalle().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourcePath("pequenos/edit_icon.png")));
+        getBtnEditarDetalle().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("pequenos/edit_icon.png")));
         getBtnEditarDetalle().setText("");
         getBtnEditarDetalle().setToolTipText("Editar detalle factura");
 
-        getBtnQuitarDetalle().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourcePath("pequenos/cerrar-ico.png")));
+        getBtnQuitarDetalle().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("pequenos/cerrar-ico.png")));
         getBtnQuitarDetalle().setText("");
         getBtnQuitarDetalle().setToolTipText("Eliminar detalle factura");
 
-        getBtnAgregarCliente().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourcePath("pequenos/usuario.png")));
+        getBtnAgregarCliente().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("pequenos/usuario.png")));
         getBtnAgregarCliente().setText("");
         getBtnAgregarCliente().setToolTipText("Crear nuevo cliente");
 
-        getBtnAgregarProducto().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourcePath("pequenos/list.png")));
+        getBtnAgregarProducto().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("pequenos/list.png")));
         getBtnAgregarProducto().setText("");
         getBtnAgregarProducto().setToolTipText("Agregar producto a la factura");
 
-        getBtnCrearProducto().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourcePath("pequenos/add2.png")));
+        getBtnCrearProducto().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("pequenos/add2.png")));
         getBtnCrearProducto().setText("");
         getBtnCrearProducto().setToolTipText("Crear nuevo producto");
         

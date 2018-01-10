@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
 import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoService;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +33,7 @@ public class ProductoReporte extends ControladorCodefacInterface{
     
     private void imprimirReporte()
     {
-        String path = RecursoCodefac.JASPER_CRM.getResourcePath("reporteProducto.jrxml");
+        URL path = RecursoCodefac.JASPER_CRM.getResourceURL("reporteProducto.jrxml");
         Map parameters = new HashMap();
         List<ProductoData> data = new ArrayList<ProductoData>();
         ProductoService service=new ProductoService();
@@ -47,10 +48,10 @@ public class ProductoReporte extends ControladorCodefacInterface{
             productoData.setValorUnitario(producto.getValorUnitario().toString());
             data.add(productoData);
         }
-        
-        ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Productos");
-        this.dispose();
-        this.setVisible(false);
+        setClosable(true);
+        ReporteCodefac.generarReporteInternalFramePlantilla(path.getPath(), parameters, data, panelPadre, "Reporte Productos");
+        //this.dispose();
+        //this.setVisible(false);
     }
 
     
@@ -106,8 +107,9 @@ public class ProductoReporte extends ControladorCodefacInterface{
     }
 
     @Override
-    public void iniciar() {
+    public void iniciar() throws ExcepcionCodefacLite{
         imprimirReporte();
+        throw new ExcepcionCodefacLite("Cerrar Ventan");
     }
 
     @Override

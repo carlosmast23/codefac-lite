@@ -919,7 +919,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     JTextComponent componente=(JTextComponent) metodo.invoke(panel);
                     InputStream input=RecursoCodefac.AYUDA.getResourceInputStream(validacion.recurso());
                     String htmlText=UtilidadVarios.getStringHtmltoUrl(input);
-                    File file = new File(RecursoCodefac.AYUDA.getResourcePath(validacion.recurso()));
+                    File file = new File(RecursoCodefac.AYUDA.getResourceURL(validacion.recurso()).getPath());
                     //File file = new File(getClass().getResource("/pagina/ayudaHtml.html").toURI());
                     
                     String path="file:"+file.getParentFile().toURI().getPath();
@@ -1598,14 +1598,14 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         parametros.put("pl_img_telefono",(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("telefono.png")));
         parametros.put("pl_img_logo_pie",(RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("codesoft-logo.png")));
         
-        parametros.put("pl_url_img1_url",(RecursoCodefac.IMAGENES_GENERAL.getResourcePath("codefac-logotipo.png")));
-        parametros.put("pl_img_facebook_url",(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourcePath("facebook.png")));
-        parametros.put("pl_img_whatsapp_url",(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourcePath("whatsapp.png")));
-        parametros.put("pl_img_telefono_url",(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourcePath("telefono.png")));
-        parametros.put("pl_img_logo_pie_url",(RecursoCodefac.IMAGENES_GENERAL.getResourcePath("codesoft-logo.png")));
+        parametros.put("pl_url_img1_url",(RecursoCodefac.IMAGENES_GENERAL.getResourceURL("codefac-logotipo.png").getPath()));
+        parametros.put("pl_img_facebook_url",(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceURL("facebook.png").getPath()));
+        parametros.put("pl_img_whatsapp_url",(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceURL("whatsapp.png").getPath()));
+        parametros.put("pl_img_telefono_url",(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceURL("telefono.png").getPath()));
+        parametros.put("pl_img_logo_pie_url",(RecursoCodefac.IMAGENES_GENERAL.getResourceURL("codesoft-logo.png").getPath()));
         
-        parametros.put("pl_url_cabecera",RecursoCodefac.JASPER.getResourcePath("encabezado.jasper"));
-        parametros.put("pl_url_piepagina",RecursoCodefac.JASPER.getResourcePath("pie_pagina.jasper"));
+        parametros.put("pl_url_cabecera",RecursoCodefac.JASPER.getResourceURL("encabezado.jasper").getPath());
+        parametros.put("pl_url_piepagina",RecursoCodefac.JASPER.getResourceURL("pie_pagina.jasper").getPath());
         
         //System.out.println(parametros.get("SUBREPORT_DIR"));
         return parametros;
