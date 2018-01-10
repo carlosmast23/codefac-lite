@@ -54,7 +54,6 @@ import java.awt.event.MouseAdapter;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.sql.Date;
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -88,6 +87,7 @@ public class FacturacionModel extends FacturacionPanel {
     private boolean banderaFP;
     private boolean banderaAgregar;
     private boolean banderaFormaPago;
+    private BigDecimal valorTotalFormaDePago;
     private java.util.Date fechaMax;
     private java.util.Date fechaMin;
     
@@ -195,12 +195,15 @@ public class FacturacionModel extends FacturacionPanel {
                     dialog.setLocationRelativeTo(null);
                     dialog.setVisible(true);
                     FormaPago formaPago = dialog.getFormaPago();
+                    valorTotalFormaDePago = formaPago.getTotal();
                     try{
+                        
                         verificarSumaFormaPago();
                         if(banderaFormaPago)
                         {
                             factura.addFormaPago(formaPago);
-                        }                 
+                            valorTotalFormaDePago = new BigDecimal("0");
+                        }
                         cargarFormasPagoTabla();
                     }catch(Exception ex)
                     {
@@ -253,67 +256,17 @@ public class FacturacionModel extends FacturacionPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //System.out.println(panelPadre.validarPorGrupo("detalles"));
-                if(!panelPadre.validarPorGrupo("detalles"))
-                {
-                    return;
-                }
-                
-                if (banderaAgregar && verificarCamposValidados()) {
-                    FacturaDetalle facturaDetalle = new FacturaDetalle();
-                    facturaDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
-                    facturaDetalle.setDescripcion(getTxtDescripcion().getText());
-                    facturaDetalle.setPrecioUnitario(new BigDecimal(getTxtValorUnitario().getText()));
-                    facturaDetalle.setProducto(productoSeleccionado);
-                    
-                    BigDecimal setTotal = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario());
-                    facturaDetalle.setTotal(setTotal.setScale(2, BigDecimal.ROUND_HALF_UP));
-                    facturaDetalle.setValorIce(BigDecimal.ZERO);
-                    
-
-                    
-                    
-                    BigDecimal descuento;
-                    if (!getCheckPorcentaje().isSelected()) {
-                        if (!getTxtDescuento().getText().equals("")) {
-                            descuento = new BigDecimal(getTxtDescuento().getText());
-                        } else {
-                            descuento = BigDecimal.ZERO;
-                        }
-
-                        facturaDetalle.setDescuento(descuento);
-                    } else {
-                        BigDecimal porcentajeDescuento = new BigDecimal(getTxtDescuento().getText());
-                        porcentajeDescuento = porcentajeDescuento.divide(new BigDecimal(100));
-                        descuento = facturaDetalle.getTotal().multiply(porcentajeDescuento);
-                        facturaDetalle.setDescuento(descuento.setScale(2, BigDecimal.ROUND_HALF_UP));
-                    }
-                    
-                                                            /**
-                     * Revisar este calculo del iva para no calcular 2 veces al
-                     * mostrar
-                     */
-                    if(facturaDetalle.getProducto().getIva().getTarifa().equals(0))
-                    {
-                        facturaDetalle.setIva(BigDecimal.ZERO);
-                    }
-                    else
-                    {
-                        BigDecimal iva=facturaDetalle.getTotal().subtract(facturaDetalle.getDescuento()).multiply(obtenerValorIva()).setScale(2,BigDecimal.ROUND_HALF_UP);
-                        facturaDetalle.setIva(iva);
-                    }
-                    
-                    factura.addDetalle(facturaDetalle);
-                    cargarDatosDetalles();
-                    setearDetalleFactura();
-                    cargarTotales();
-                    banderaAgregar = false;
-
-
-
-                }
+                agregarDetallesFactura();
             }
         });
-
+        
+        getTxtCantidad().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                agregarDetallesFactura();
+            }
+        });
+        
         getBtnQuitarDetalle().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1119,10 +1072,19 @@ public class FacturacionModel extends FacturacionPanel {
     {
         BigDecimal totalFormasPago = new BigDecimal("0");
         int res;
-        for(FormaPago fp : factura.getFormaPagos())
+        try
         {
-            totalFormasPago = totalFormasPago.add(fp.getTotal());
+            for(FormaPago fp : factura.getFormaPagos())
+            {
+                totalFormasPago = totalFormasPago.add(fp.getTotal());
+            }
+            totalFormasPago = totalFormasPago.add(valorTotalFormaDePago);
         }
+        catch(Exception e)
+        {
+            System.out.println("Es la primera vez que se utiliza una forma de pago");
+        }
+        
         res = factura.getTotal().compareTo(totalFormasPago);
         if(res == -1)
         {
@@ -1133,6 +1095,68 @@ public class FacturacionModel extends FacturacionPanel {
         {
             banderaFormaPago = true;
         }
+    }
+    
+    public void agregarDetallesFactura()
+    {
+                if(!panelPadre.validarPorGrupo("detalles"))
+                {
+                    return;
+                }
+                
+                if (banderaAgregar && verificarCamposValidados()) {
+                    FacturaDetalle facturaDetalle = new FacturaDetalle();
+                    facturaDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
+                    facturaDetalle.setDescripcion(getTxtDescripcion().getText());
+                    facturaDetalle.setPrecioUnitario(new BigDecimal(getTxtValorUnitario().getText()));
+                    facturaDetalle.setProducto(productoSeleccionado);
+                    
+                    BigDecimal setTotal = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario());
+                    facturaDetalle.setTotal(setTotal.setScale(2, BigDecimal.ROUND_HALF_UP));
+                    facturaDetalle.setValorIce(BigDecimal.ZERO);
+                    
+
+                    
+                    
+                    BigDecimal descuento;
+                    if (!getCheckPorcentaje().isSelected()) {
+                        if (!getTxtDescuento().getText().equals("")) {
+                            descuento = new BigDecimal(getTxtDescuento().getText());
+                        } else {
+                            descuento = BigDecimal.ZERO;
+                        }
+
+                        facturaDetalle.setDescuento(descuento);
+                    } else {
+                        BigDecimal porcentajeDescuento = new BigDecimal(getTxtDescuento().getText());
+                        porcentajeDescuento = porcentajeDescuento.divide(new BigDecimal(100));
+                        descuento = facturaDetalle.getTotal().multiply(porcentajeDescuento);
+                        facturaDetalle.setDescuento(descuento.setScale(2, BigDecimal.ROUND_HALF_UP));
+                    }
+                    
+                                                            /**
+                     * Revisar este calculo del iva para no calcular 2 veces al
+                     * mostrar
+                     */
+                    if(facturaDetalle.getProducto().getIva().getTarifa().equals(0))
+                    {
+                        facturaDetalle.setIva(BigDecimal.ZERO);
+                    }
+                    else
+                    {
+                        BigDecimal iva=facturaDetalle.getTotal().subtract(facturaDetalle.getDescuento()).multiply(obtenerValorIva()).setScale(2,BigDecimal.ROUND_HALF_UP);
+                        facturaDetalle.setIva(iva);
+                    }
+                    
+                    factura.addDetalle(facturaDetalle);
+                    cargarDatosDetalles();
+                    setearDetalleFactura();
+                    cargarTotales();
+                    banderaAgregar = false;
+
+
+
+                }
     }
 
 }
