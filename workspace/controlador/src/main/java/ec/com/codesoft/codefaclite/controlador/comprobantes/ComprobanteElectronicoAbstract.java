@@ -197,7 +197,12 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
          */
         T comprobante=getComprobante();
         comprobante.setInformacionTributaria(getInfoInformacionTributaria());
-        comprobante.setInformacionAdicional(getInformacionAdicional());        
+        
+        //Validacion para verificar que si no existen datos adicionales no se agregue nada
+        List<InformacionAdicional> informacionAdicional=getInformacionAdicional();
+        if(informacionAdicional!=null && informacionAdicional.size()>0)
+            comprobante.setInformacionAdicional(getInformacionAdicional());        
+        
         servicio.setComprobante(comprobante);
         servicio.setEtapaActual(ComprobanteElectronicoService.ETAPA_GENERAR);
         cargarConfiguraciones();
