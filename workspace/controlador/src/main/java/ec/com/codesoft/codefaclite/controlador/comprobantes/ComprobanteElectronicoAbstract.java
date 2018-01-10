@@ -97,9 +97,14 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
         infoTributaria.setClaveAcceso("");
         infoTributaria.setCodigoDocumento(getCodigoComprobante());
         infoTributaria.setDirecionMatriz(session.getEmpresa().getDireccion());
-        infoTributaria.setEstablecimiento("001");
+        
+        String establecimiento=session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor;
+        infoTributaria.setEstablecimiento(establecimiento);
         infoTributaria.setNombreComercial(session.getEmpresa().getNombreLegal());
-        infoTributaria.setPuntoEmision("001");
+        
+        String puntoEmision=session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor;
+        infoTributaria.setPuntoEmision(puntoEmision);
+        
         infoTributaria.setRazonSocial(session.getEmpresa().getRazonSocial());
         infoTributaria.setRuc(session.getEmpresa().getIdentificacion());
         infoTributaria.setSecuencial(getSecuencial());
