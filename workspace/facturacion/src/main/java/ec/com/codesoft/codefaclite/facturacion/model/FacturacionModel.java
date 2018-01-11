@@ -1110,16 +1110,14 @@ public class FacturacionModel extends FacturacionPanel {
                     FacturaDetalle facturaDetalle = new FacturaDetalle();
                     facturaDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
                     facturaDetalle.setDescripcion(getTxtDescripcion().getText());
-                    facturaDetalle.setPrecioUnitario(new BigDecimal(getTxtValorUnitario().getText()));
+                    BigDecimal valorTotalUnitario = new BigDecimal(getTxtValorUnitario().getText());
+                    facturaDetalle.setPrecioUnitario(valorTotalUnitario.setScale(2,BigDecimal.ROUND_HALF_UP));
                     facturaDetalle.setProducto(productoSeleccionado);
-                    
                     BigDecimal setTotal = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario());
                     facturaDetalle.setTotal(setTotal.setScale(2, BigDecimal.ROUND_HALF_UP));
                     facturaDetalle.setValorIce(BigDecimal.ZERO);
                     
 
-                    
-                    
                     BigDecimal descuento;
                     if (!getCheckPorcentaje().isSelected()) {
                         if (!getTxtDescuento().getText().equals("")) {
@@ -1130,10 +1128,12 @@ public class FacturacionModel extends FacturacionPanel {
 
                         facturaDetalle.setDescuento(descuento);
                     } else {
-                        BigDecimal porcentajeDescuento = new BigDecimal(getTxtDescuento().getText());
-                        porcentajeDescuento = porcentajeDescuento.divide(new BigDecimal(100));
-                        descuento = facturaDetalle.getTotal().multiply(porcentajeDescuento);
-                        facturaDetalle.setDescuento(descuento.setScale(2, BigDecimal.ROUND_HALF_UP));
+                        if(!getTxtDescuento().getText().equals("")){
+                            BigDecimal porcentajeDescuento = new BigDecimal(getTxtDescuento().getText());
+                            porcentajeDescuento = porcentajeDescuento.divide(new BigDecimal(100));
+                            descuento = facturaDetalle.getTotal().multiply(porcentajeDescuento);
+                            facturaDetalle.setDescuento(descuento.setScale(2, BigDecimal.ROUND_HALF_UP));
+                        }
                     }
                     
                                                             /**
@@ -1150,12 +1150,19 @@ public class FacturacionModel extends FacturacionPanel {
                         facturaDetalle.setIva(iva);
                     }
                     
-                    factura.addDetalle(facturaDetalle);
-                    cargarDatosDetalles();
-                    setearDetalleFactura();
-                    cargarTotales();
-                    banderaAgregar = false;
-
+                    if(facturaDetalle.getTotal().compareTo(facturaDetalle.getDescuento()) > 0){
+                        factura.addDetalle(facturaDetalle);
+                        cargarDatosDetalles();
+                        setearDetalleFactura();
+                        cargarTotales();
+                        banderaAgregar = false;
+                    }
+                    else
+                    {
+                        DialogoCodefac.mensaje("Alerta", "El valor de Descuento excede, el valor de PrecioTotal del Producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                        setearDetalleFactura();
+                        banderaAgregar = false;
+                    }
 
 
                 }
