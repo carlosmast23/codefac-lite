@@ -89,7 +89,6 @@ public abstract class WidgetVirtualMall extends ObjetoEscritorioAbstract {
         txtBuscador.setBackground(new java.awt.Color(0, 102, 102));
         txtBuscador.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtBuscador.setForeground(new java.awt.Color(255, 255, 255));
-        txtBuscador.setText("Necesito comprar un perrito");
         txtBuscador.setToolTipText("<html>Ingrese el texto a buscar<br><b>Ejemplo:</b>Deseo comprar gafas de sol</html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
@@ -131,7 +130,6 @@ public abstract class WidgetVirtualMall extends ObjetoEscritorioAbstract {
         jPanel4.add(btnBuscar, gridBagConstraints);
 
         txtCelular.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtCelular.setText("0986614820");
         txtCelular.setToolTipText("A este número se enviaran los resultados");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
