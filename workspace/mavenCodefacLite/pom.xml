@@ -18,6 +18,7 @@
         <module>../facturacion</module>
         <module>../configuraciones</module>
         <module>../ws-codefac</module>
+        <module>../ws-virtualmall</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

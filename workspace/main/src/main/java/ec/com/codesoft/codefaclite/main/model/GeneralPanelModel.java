@@ -1501,6 +1501,38 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         iconoConfig.addListenerIcono(new ListenerIcono(ComprobantesConfiguracionModel.class,true));
         getjDesktopPane1().add(iconoConfig);
         
+        /***
+         * Agregar el widget de virtualMall
+         */
+        mapBuscar = new HashMap<>();
+        mapBuscar.put("nombre","WidgetVirtualMall");
+        int x=servicio.obtenerPorMap(mapBuscar).get(0).x;
+        int y=servicio.obtenerPorMap(mapBuscar).get(0).y;
+        
+        WidgetVirtualMallModelo widget=new WidgetVirtualMallModelo(getjDesktopPane1());
+        widget.setPreferredSize(new Dimension(x,y));
+        widget.setBounds(x,y,270, 370);
+        widget.addListenerIcono(new IconoInterfaz() {
+            @Override
+            public void doubleClick() {                
+            }
+
+            @Override
+            public void grabarNuevaPosicion(Point nuevaPosicion) {
+                Map<String, Object> mapBuscar;
+                AccesoDirectoService servicio = new AccesoDirectoService();
+
+                mapBuscar = new HashMap<>();
+                mapBuscar.put("nombre","WidgetVirtualMall");
+                AccesoDirecto acceso=servicio.obtenerPorMap(mapBuscar).get(0);
+                acceso.setX((int)nuevaPosicion.getX());
+                acceso.setY((int)nuevaPosicion.getY());
+                servicio.editar(acceso);
+            }
+        });
+        getjDesktopPane1().add(widget);
+        widget.setVisible(true);
+        
         
         
     }
