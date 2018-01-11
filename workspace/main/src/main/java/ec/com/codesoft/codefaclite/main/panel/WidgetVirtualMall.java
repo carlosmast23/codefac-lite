@@ -120,7 +120,7 @@ public abstract class WidgetVirtualMall extends ObjetoEscritorioAbstract {
         btnBuscar.setBackground(new java.awt.Color(255, 255, 255));
         btnBuscar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/larga-vista-ico.png"))); // NOI18N
-        btnBuscar.setText("  B U S C A R");
+        btnBuscar.setText("Buscar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 11;
@@ -194,7 +194,7 @@ public abstract class WidgetVirtualMall extends ObjetoEscritorioAbstract {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 285, Short.MAX_VALUE)
+            .addGap(0, 313, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Vender", jPanel3);
