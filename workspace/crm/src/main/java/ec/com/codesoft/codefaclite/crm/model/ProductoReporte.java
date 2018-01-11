@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
 import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoService;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,7 +34,7 @@ public class ProductoReporte extends ControladorCodefacInterface{
     
     private void imprimirReporte()
     {
-        URL path = RecursoCodefac.JASPER_CRM.getResourceURL("reporteProducto.jrxml");
+        InputStream path = RecursoCodefac.JASPER_CRM.getResourceInputStream("reporteProducto.jrxml");
         Map parameters = new HashMap();
         List<ProductoData> data = new ArrayList<ProductoData>();
         ProductoService service=new ProductoService();
@@ -49,7 +50,7 @@ public class ProductoReporte extends ControladorCodefacInterface{
             data.add(productoData);
         }
         setClosable(true);
-        ReporteCodefac.generarReporteInternalFramePlantilla(path.getPath(), parameters, data, panelPadre, "Reporte Productos");
+        ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Productos");
         //this.dispose();
         //this.setVisible(false);
     }

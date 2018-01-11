@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d9c21352-f760-4e3a-b774-88dde93e1e8b">
 	<property name="ireport.zoom" value="1.3310000000000064"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="518"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -51,7 +51,7 @@
 	<parameter name="formaPagoList" class="java.util.Collection"/>
 	<parameter name="direccion_sucursal" class="java.lang.String"/>
 	<parameter name="imagen_logo" class="java.io.InputStream"/>
-	<parameter name="pl_url_piepagina" class="java.lang.String"/>
+	<parameter name="pl_url_piepagina" class="java.io.InputStream"/>
 	<parameter name="pl_fecha_hora" class="java.lang.String"/>
 	<parameter name="pl_direccion" class="java.lang.String"/>
 	<parameter name="pl_nombre_empresa" class="java.lang.String"/>
@@ -68,6 +68,8 @@
 	<parameter name="comprobanteModificado" class="java.lang.String"/>
 	<parameter name="razonModificado" class="java.lang.String"/>
 	<parameter name="fechaDocumentoModificado" class="java.lang.String"/>
+	<parameter name="SUBREPORT_INFO_ADICIONAL" class="java.io.InputStream"/>
+	<parameter name="SUBREPORT_FORMA_PAGO" class="java.io.InputStream"/>
 	<field name="codigo" class="java.lang.String"/>
 	<field name="descripcion" class="java.lang.String"/>
 	<field name="precio_unitario" class="java.lang.String"/>
@@ -628,10 +630,10 @@
 			</staticText>
 			<subreport>
 				<reportElement stretchType="RelativeToTallestObject" x="133" y="29" width="175" height="89" uuid="ebd202b3-6874-41a9-9c99-ea4c4aad56c5">
-					<printWhenExpression><![CDATA[$P{formaPagoList}!=null]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$P{SUBREPORT_FORMA_PAGO}!=null]]></printWhenExpression>
 				</reportElement>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{formaPagoList})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "forma_pago.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_FORMA_PAGO}]]></subreportExpression>
 			</subreport>
 			<staticText>
 				<reportElement x="5" y="9" width="120" height="20" uuid="72acdd4c-a8e5-4703-9a75-cddfeb3b5ef8"/>
@@ -642,10 +644,10 @@
 			</staticText>
 			<subreport>
 				<reportElement stretchType="RelativeToTallestObject" x="5" y="29" width="120" height="89" uuid="78a52071-cfc2-461a-a6c3-299d9151537a">
-					<printWhenExpression><![CDATA[$P{informacionAdicionalList}!=null]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$P{SUBREPORT_INFO_ADICIONAL}!=null]]></printWhenExpression>
 				</reportElement>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{informacionAdicionalList})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "datos_adicionales.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_INFO_ADICIONAL}]]></subreportExpression>
 			</subreport>
 		</band>
 	</columnFooter>

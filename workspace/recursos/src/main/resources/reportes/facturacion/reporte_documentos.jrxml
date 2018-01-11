@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_documentos" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="BlankPage" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9cda46cf-cd6e-4c09-b67c-62113b7f5ab2">
-	<property name="ireport.zoom" value="0.8481952367449717"/>
+	<property name="ireport.zoom" value="0.9330147604194691"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="pl_fecha_hora" class="java.lang.String"/>
@@ -14,8 +14,8 @@
 	<parameter name="pl_img_whatsapp" class="java.io.InputStream"/>
 	<parameter name="pl_img_telefono" class="java.io.InputStream"/>
 	<parameter name="pl_img_logo_pie" class="java.io.InputStream"/>
-	<parameter name="pl_url_cabecera" class="java.lang.String"/>
-	<parameter name="pl_url_piepagina" class="java.lang.String"/>
+	<parameter name="pl_url_cabecera" class="java.io.InputStream"/>
+	<parameter name="pl_url_piepagina" class="java.io.InputStream"/>
 	<parameter name="fechainicio" class="java.lang.String"/>
 	<parameter name="fechafin" class="java.lang.String"/>
 	<parameter name="tipodocumento" class="java.lang.String"/>

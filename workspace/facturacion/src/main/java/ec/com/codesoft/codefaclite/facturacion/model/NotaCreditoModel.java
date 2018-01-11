@@ -111,6 +111,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         //String path = facturaElectronica.getServicio().getPathRide();
+                        notaCreditoElectronico.cargarDatosRecursos();
                         JasperPrint print = notaCreditoElectronico.getServicio().getPrintJasper();
                         panelPadre.crearReportePantalla(print, notaCredito.getPreimpreso());
                     }

@@ -159,6 +159,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
 
     @Override
     public void imprimir() {
+        /*
         URL path = RecursoCodefac.JASPER_CRM.getResourceURL("reporteEjemplo.jrxml");
         System.out.println(session.getUsuario().getClave());
         Map parameters = new HashMap();
@@ -168,7 +169,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         List<DataEjemploReporte> data = new ArrayList<DataEjemploReporte>();
         data.add(new DataEjemploReporte("carlos", "1"));
         data.add(new DataEjemploReporte("pedro", "2"));
-        ReporteCodefac.generarReporteInternalFramePlantilla(path.getPath(), parameters, data, panelPadre, "Reporte Nuevos ");
+        ReporteCodefac.generarReporteInternalFramePlantilla(path.getPath(), parameters, data, panelPadre, "Reporte Nuevos ");*/
     }
 
     @Override

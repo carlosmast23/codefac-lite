@@ -27,6 +27,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.net.URL;
@@ -286,7 +287,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
             fechafin = dateFormat.format(getDateFechaFin().getDate());
         }
 
-        URL path = RecursoCodefac.JASPER_FACTURACION.getResourceURL("reporte_documentos.jrxml");
+        InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_documentos.jrxml");
         FacturacionService fs = new FacturacionService();
         datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFact);
         NotaCreditoService nc = new NotaCreditoService();
@@ -383,7 +384,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
         /*        data.add(new ReporteFacturaData("001-002-00001231"));
         data.add(new ReporteFacturaData("001-002-000012331"));
          */
-        ReporteCodefac.generarReporteInternalFramePlantilla(path.getPath(), parameters, data, panelPadre, "Reporte Documentos ");
+        ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Documentos ");
     }
 
     @Override

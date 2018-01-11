@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.corecodefaclite.report;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -73,7 +74,7 @@ public class ReporteCodefac {
         }
     }
     
-    public static void generarReporteInternalFramePlantilla(String pathReporte,Map<String,Object> parametros,Collection datos,InterfazComunicacionPanel panelPadre,String tituloReporte)
+    public static void generarReporteInternalFramePlantilla(InputStream pathReporte,Map<String,Object> parametros,Collection datos,InterfazComunicacionPanel panelPadre,String tituloReporte)
     {
         try {
             Map<String,Object> mapCompleto=new HashMap<String,Object>(panelPadre.mapReportePlantilla());

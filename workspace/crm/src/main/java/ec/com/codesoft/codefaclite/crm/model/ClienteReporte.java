@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.crm.reportdata.DataEjemploReporte;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +32,7 @@ public class ClienteReporte extends ControladorCodefacInterface{
     
     private void imprimirReporte()
     {
-        URL path = RecursoCodefac.JASPER_CRM.getResourceURL("reporteClientes.jrxml");
+        InputStream path = RecursoCodefac.JASPER_CRM.getResourceInputStream("reporteClientes.jrxml");
         Map parameters = new HashMap();
         List<ClienteData> data = new ArrayList<ClienteData>();
         PersonaService service=new PersonaService();
@@ -47,7 +48,7 @@ public class ClienteReporte extends ControladorCodefacInterface{
             data.add(clienteData);
         }
         
-        ReporteCodefac.generarReporteInternalFramePlantilla(path.getPath(), parameters, data, panelPadre, "Reporte Clientes ");
+        ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Clientes ");
         this.dispose();
         this.setVisible(false);
     }
@@ -107,7 +108,6 @@ public class ClienteReporte extends ControladorCodefacInterface{
     @Override
     public void iniciar() throws ExcepcionCodefacLite{
         imprimirReporte();
-                imprimirReporte();
         throw new ExcepcionCodefacLite("Cerrar Ventan");
     }
 

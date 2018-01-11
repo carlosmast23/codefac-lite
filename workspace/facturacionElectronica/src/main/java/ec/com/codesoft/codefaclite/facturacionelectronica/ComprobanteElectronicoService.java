@@ -119,12 +119,12 @@ public class ComprobanteElectronicoService implements Runnable {
 
     private ServicioSri servicioSri;
 
-    private String pathFacturaJasper;
+    private InputStream pathFacturaJasper;
 
-    private String pathNotaCreditoJasper;
+    private InputStream pathNotaCreditoJasper;
         
     private String pathParentJasper;
-    public String pathLogoImagen;
+    public InputStream pathLogoImagen;
 
     private Map<String, Object> mapAdicionalReporte;
     private ListenerComprobanteElectronico escucha;
@@ -133,6 +133,10 @@ public class ComprobanteElectronicoService implements Runnable {
 
     private String footerMensajeCorreo;
     private Integer etapaLimiteProcesar;
+    
+    
+    private InputStream reporteInfoAdicional;
+    private InputStream reporteFormaPago;
     
     /**
      * Map que establece el diccionario de los codigos
@@ -311,6 +315,8 @@ public class ComprobanteElectronicoService implements Runnable {
             List<DetalleReporteData> informacionAdiciona = reporte.getDetalles();
             Map<String, Object> datosMap = reporte.getMapReporte();
             datosMap.put("SUBREPORT_DIR", pathParentJasper);
+            datosMap.put("SUBREPORT_INFO_ADICIONAL", reporteInfoAdicional);
+            datosMap.put("SUBREPORT_FORMA_PAGO", reporteFormaPago);
             datosMap.put("fecha_hora_autorizacion", mapComprobante.get("fechaAutorizacion"));
             datosMap.put("estado", mapComprobante.get("estado"));
 
@@ -326,13 +332,15 @@ public class ComprobanteElectronicoService implements Runnable {
             InputStream is = new ByteArrayInputStream(os.toByteArray());*/
 
             //datosMap.put("imagen_logo",is);
-            datosMap.put("imagen_logo", UtilidadesComprobantes.getStreamByPath(pathLogoImagen));
-
+            //datosMap.put("imagen_logo", UtilidadesComprobantes.getStreamByPath(pathLogoImagen));
+            datosMap.put("imagen_logo",pathLogoImagen);
+            /*
             datosMap.put("pl_url_imgl", UtilidadesComprobantes.getStreamByPath(mapAdicionalReporte.get("pl_url_img1_url").toString()));
             datosMap.put("pl_img_facebook", UtilidadesComprobantes.getStreamByPath(mapAdicionalReporte.get("pl_img_facebook_url").toString()));
             datosMap.put("pl_img_whatsapp", UtilidadesComprobantes.getStreamByPath(mapAdicionalReporte.get("pl_img_whatsapp_url").toString()));
             datosMap.put("pl_img_telefono", UtilidadesComprobantes.getStreamByPath(mapAdicionalReporte.get("pl_img_telefono_url").toString()));
             datosMap.put("pl_img_logo_pie", UtilidadesComprobantes.getStreamByPath(mapAdicionalReporte.get("pl_img_logo_pie_url").toString()));
+            */
             
             UtilidadesComprobantes.generarReporteJasper(getPathJasper(comprobante), datosMap, informacionAdiciona, getPathComprobante(CARPETA_RIDE, getNameRide(comprobante)));
 
@@ -394,7 +402,8 @@ public class ComprobanteElectronicoService implements Runnable {
             datosMap.putAll(mapAdicionalReporte);
 
             //datosMap.put("imagen_logo",is);
-            datosMap.put("imagen_logo", UtilidadesComprobantes.getStreamByPath(pathLogoImagen));
+            //datosMap.put("imagen_logo", UtilidadesComprobantes.getStreamByPath(pathLogoImagen));
+            datosMap.put("imagen_logo",pathLogoImagen);
 
             return UtilidadesComprobantes.generarReporteJasperPrint(getPathJasper(comprobante), datosMap, informacionAdiciona);
 
@@ -635,11 +644,11 @@ public class ComprobanteElectronicoService implements Runnable {
         this.modoFacturacion = modoFacturacion;
     }
 
-    public String getPathFacturaJasper() {
+    public InputStream getPathFacturaJasper() {
         return pathFacturaJasper;
     }
 
-    public void setPathFacturaJasper(String pathFacturaJasper) {
+    public void setPathFacturaJasper(InputStream pathFacturaJasper) {
         this.pathFacturaJasper = pathFacturaJasper;
     }
 
@@ -740,25 +749,34 @@ public class ComprobanteElectronicoService implements Runnable {
         this.etapaLimiteProcesar = etapaLimiteProcesar;
     }
 
-    public String getPathNotaCreditoJasper() {
+    public InputStream getPathNotaCreditoJasper() {
         return pathNotaCreditoJasper;
     }
 
-    public void setPathNotaCreditoJasper(String pathNotaCreditoJasper) {
+    public void setPathNotaCreditoJasper(InputStream pathNotaCreditoJasper) {
         this.pathNotaCreditoJasper = pathNotaCreditoJasper;
     }
 
     public void setMapCodeAndNameFormaPago(Map<String, String> mapCodeAndNameFormaPago) {
         this.mapCodeAndNameFormaPago = mapCodeAndNameFormaPago;
     }
+
+    public void setReporteInfoAdicional(InputStream reporteInfoAdicional) {
+        this.reporteInfoAdicional = reporteInfoAdicional;
+    }
+
+    public void setReporteFormaPago(InputStream reporteFormaPago) {
+        this.reporteFormaPago = reporteFormaPago;
+    }
+    
     
     
     
     
 
-    public String getPathJasper(ComprobanteElectronico comprobanteElectronico)
+    public InputStream getPathJasper(ComprobanteElectronico comprobanteElectronico)
     {
-        String path = "";
+        InputStream path = null;
         ClaveAcceso clave=new ClaveAcceso(claveAcceso);
         if (ComprobanteEnum.FACTURA.getCodigo().equals(clave.tipoComprobante)) {
             path = pathFacturaJasper;

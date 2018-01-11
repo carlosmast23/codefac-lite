@@ -193,7 +193,7 @@ public abstract class UtilidadesComprobantes {
     }
 */
 
-    public static void generarReporteJasper(String pathReporte, Map parametros, Collection datos, String pathGrabar) {
+    public static void generarReporteJasper(InputStream pathReporte, Map parametros, Collection datos, String pathGrabar) {
         try {
             JasperReport report = JasperCompileManager.compileReport(pathReporte);
             JRBeanCollectionDataSource dataReport = new JRBeanCollectionDataSource(datos);
@@ -213,7 +213,7 @@ public abstract class UtilidadesComprobantes {
         }
     }
     
-   public static JasperPrint generarReporteJasperPrint(String pathReporte, Map parametros, Collection datos) {
+   public static JasperPrint generarReporteJasperPrint(InputStream pathReporte, Map parametros, Collection datos) {
         try {
             JasperReport report = JasperCompileManager.compileReport(pathReporte);
             JRBeanCollectionDataSource dataReport = new JRBeanCollectionDataSource(datos);

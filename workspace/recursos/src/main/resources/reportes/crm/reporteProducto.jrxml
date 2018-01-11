@@ -17,8 +17,8 @@
 	<parameter name="pl_img_whatsapp" class="java.io.InputStream"/>
 	<parameter name="pl_img_telefono" class="java.io.InputStream"/>
 	<parameter name="pl_img_logo_pie" class="java.io.InputStream"/>
-	<parameter name="pl_url_cabecera" class="java.lang.String"/>
-	<parameter name="pl_url_piepagina" class="java.lang.String"/>
+	<parameter name="pl_url_cabecera" class="java.io.InputStream"/>
+	<parameter name="pl_url_piepagina" class="java.io.InputStream"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>

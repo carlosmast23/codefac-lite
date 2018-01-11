@@ -1604,8 +1604,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         parametros.put("pl_img_telefono_url",(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceURL("telefono.png").getPath()));
         parametros.put("pl_img_logo_pie_url",(RecursoCodefac.IMAGENES_GENERAL.getResourceURL("codesoft-logo.png").getPath()));
         
-        parametros.put("pl_url_cabecera",RecursoCodefac.JASPER.getResourceURL("encabezado.jasper").getPath());
-        parametros.put("pl_url_piepagina",RecursoCodefac.JASPER.getResourceURL("pie_pagina.jasper").getPath());
+        parametros.put("pl_url_cabecera",RecursoCodefac.JASPER.getResourceInputStream("encabezado.jasper"));
+        parametros.put("pl_url_piepagina",RecursoCodefac.JASPER.getResourceInputStream("pie_pagina.jasper"));
         
         //System.out.println(parametros.get("SUBREPORT_DIR"));
         return parametros;
