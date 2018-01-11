@@ -72,7 +72,8 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
     
         @Override
     public String getSecuencial() {
-       String secuencial= this.session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_FACTURA).getValor();
+       //String secuencial= this.session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_FACTURA).getValor();
+       String secuencial= factura.getSecuencial().toString();
        return UtilidadesTextos.llenarCarateresIzquierda(secuencial,9,"0");
     }
 

@@ -923,7 +923,7 @@ public class FacturacionModel extends FacturacionPanel {
         //factura.setIvaSriId(iva);
         factura.setPuntoEmision(session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor);
         factura.setPuntoEstablecimiento(session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor);
-        factura.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_FACTURA).valor) + 1);
+        factura.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_FACTURA).valor));
         factura.setSubtotalSinImpuestos(BigDecimal.ZERO);
 
         /**
