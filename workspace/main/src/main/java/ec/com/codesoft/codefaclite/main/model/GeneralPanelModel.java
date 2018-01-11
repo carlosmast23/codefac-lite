@@ -1493,6 +1493,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         });
         getjDesktopPane1().add(widget);
         widget.setVisible(true);
+
         
         mapBuscar = new HashMap<>();
         mapBuscar.put("nombre", FacturacionModel.class.getName());
@@ -1759,6 +1760,22 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             @Override
             public void actionPerformed(ActionEvent e) {
                 MonitorComprobanteModel.getInstance().mostrar();
+            }
+        });
+        
+        getjMenuItemInicio().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JInternalFrame[] ventanas= getjDesktopPane1().getAllFrames();
+                for (JInternalFrame ventana : ventanas) {
+                    try {
+                        ventana.setIcon(true);
+                    } catch (PropertyVetoException ex) {
+                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                getjDesktopPane1().revalidate();
+                getjDesktopPane1().repaint();
             }
         });
         
