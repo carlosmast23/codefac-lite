@@ -302,7 +302,14 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         String url="";
         try
         {
-            url=panel.getURLAyuda();
+            if(panel!=null)
+            {
+                url=panel.getURLAyuda();
+            }
+            else
+            {
+                url="http://www.cf.codesoft-ec.com/ayuda";
+            }
         }
         catch (UnsupportedOperationException exception) {
             System.out.println("metodo no implementado");
@@ -315,7 +322,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         int ancho=getjPanelSeleccion().getWidth()-1;
         int alto=getjPanelSeleccion().getHeight()-1;
 
-        if(browser!=null)
+        if(browser!=null && panel!=null)
         {
             //Verifacar si la url cargada es la misma no volver a cargar
             if(!browser.getUrl().equals(panel.getURLAyuda()))
@@ -344,7 +351,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             }
             else
             {
-                browser.loadURL("https://www.google.com.ec/");
+                //Pagina por defecto cuando no existe una ayuda especifica
+                browser.loadURL("http://www.cf.codesoft-ec.com/ayuda");
                 browser.setBounds(1, 1,ancho,alto);
                 jpanel.removeAll();
                 jpanel.add(browser);
@@ -1370,7 +1378,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private void habilitarBotones(Boolean opcion)
     {
         getBtnActualizar().setEnabled(opcion);
-        getBtnAyuda().setEnabled(opcion);
+        //getBtnAyuda().setEnabled(opcion); //Siempre debe estar habilitado
         getBtnBuscar().setEnabled(opcion);
         getBtnEliminar().setEnabled(opcion);
         getBtnGuardar().setEnabled(opcion);
