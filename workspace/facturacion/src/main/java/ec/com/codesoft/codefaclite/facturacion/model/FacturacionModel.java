@@ -259,6 +259,7 @@ public class FacturacionModel extends FacturacionPanel {
                 bandera = true;
                 getBtnEditarDetalle().setEnabled(true);
                 getBtnQuitarDetalle().setEnabled(true);
+                getBtnAgregarDetalleFactura().setEnabled(false);
             }
         });
         
@@ -287,6 +288,7 @@ public class FacturacionModel extends FacturacionPanel {
                     cargarTotales();
                     getBtnEditarDetalle().setEnabled(false);
                     getBtnQuitarDetalle().setEnabled(false);
+                    getBtnAgregarDetalleFactura().setEnabled(true);
                 }
             }
         });
@@ -300,6 +302,7 @@ public class FacturacionModel extends FacturacionPanel {
                     agregarDetallesFactura(facturaDetalle);
                     getBtnEditarDetalle().setEnabled(false);
                     getBtnQuitarDetalle().setEnabled(false);
+                    getBtnAgregarDetalleFactura().setEnabled(true);
                 }
             }
 
@@ -658,6 +661,7 @@ public class FacturacionModel extends FacturacionPanel {
 
         getBtnEditarDetalle().setEnabled(false);
         getBtnQuitarDetalle().setEnabled(false);
+        getBtnAgregarDetalleFactura().setEnabled(true);
         
         //Limpiar las variables de la facturacion
         setearVariablesIniciales();
