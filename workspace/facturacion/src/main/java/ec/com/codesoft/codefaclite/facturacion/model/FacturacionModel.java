@@ -916,7 +916,10 @@ public class FacturacionModel extends FacturacionPanel {
         if(estadoEnum!=null)
             getLblEstadoFactura().setText(estadoEnum.getNombre());
         
-        datosAdicionales.put("email", factura.getCliente().getCorreoElectronico());
+        //Cargar el correo solo cuando exista 
+        if(factura.getCliente().getCorreoElectronico()!=null)
+            datosAdicionales.put("email", factura.getCliente().getCorreoElectronico());
+        
         factura.setCliente(factura.getCliente());
         factura.setRazonSocial(factura.getCliente().getRazonSocial());
         factura.setIdentificacion(factura.getCliente().getIdentificacion());

@@ -240,7 +240,9 @@ public class ComprobanteElectronicoService implements Runnable {
             }
 
             if (etapaActual == ETAPA_ENVIO_COMPROBANTE) {
-                enviarComprobante();
+                if(correosElectronicos!=null && correosElectronicos.size()>0)
+                    enviarComprobante();
+                
                 escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
                 if(etapaLimiteProcesar<=ETAPA_ENVIO_COMPROBANTE) {
                     escucha.termino();
