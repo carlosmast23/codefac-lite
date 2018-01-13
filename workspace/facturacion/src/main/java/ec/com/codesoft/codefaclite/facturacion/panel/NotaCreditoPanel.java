@@ -54,7 +54,6 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         jLabel35 = new javax.swing.JLabel();
         jLabel36 = new javax.swing.JLabel();
         lblSecuencial = new javax.swing.JLabel();
-        panelFechaEmision = new javax.swing.JPanel();
         jDateFechaEmision = new com.toedter.calendar.JDateChooser();
         jLabel38 = new javax.swing.JLabel();
         jLabel39 = new javax.swing.JLabel();
@@ -250,12 +249,6 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         panelDatosGenerales.add(lblSecuencial, gridBagConstraints);
 
-        panelFechaEmision.setBackground(new java.awt.Color(255, 255, 255));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        panelDatosGenerales.add(panelFechaEmision, gridBagConstraints);
-
         jDateFechaEmision.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -286,7 +279,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         PanelDatosNotaCredito.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos Empresa", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 11))); // NOI18N
         PanelDatosNotaCredito.setLayout(new java.awt.GridBagLayout());
 
-        jLabel4.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel4.setText("Factura:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -320,7 +313,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 0;
         PanelDatosNotaCredito.add(btnBuscarFactura, gridBagConstraints);
 
-        jLabel6.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel6.setText("Nombres:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -328,7 +321,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         PanelDatosNotaCredito.add(jLabel6, gridBagConstraints);
 
-        jLabel7.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel7.setText("Telefono:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -336,7 +329,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         PanelDatosNotaCredito.add(jLabel7, gridBagConstraints);
 
-        jLabel8.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel8.setText("Direccion");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
@@ -344,7 +337,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         PanelDatosNotaCredito.add(jLabel8, gridBagConstraints);
 
-        lblDireccionCliente.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        lblDireccionCliente.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblDireccionCliente.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblDireccionCliente.setText("...");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -355,7 +348,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         PanelDatosNotaCredito.add(lblDireccionCliente, gridBagConstraints);
 
-        lblNombreCliente.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        lblNombreCliente.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblNombreCliente.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblNombreCliente.setText("...");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -366,7 +359,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         PanelDatosNotaCredito.add(lblNombreCliente, gridBagConstraints);
 
-        lblTelefonoCliente.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        lblTelefonoCliente.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblTelefonoCliente.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblTelefonoCliente.setText("...");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -750,7 +743,6 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblValorTotal;
     private javax.swing.JPanel panelDatosEmpresa;
     private javax.swing.JPanel panelDatosGenerales;
-    private javax.swing.JPanel panelFechaEmision;
     private javax.swing.JTable tblDetalleNotaCredito;
     private javax.swing.JTextField txtMotivoAnulacion;
     private javax.swing.JTextField txtReferenciaFactura;

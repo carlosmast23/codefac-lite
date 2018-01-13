@@ -6,10 +6,12 @@
 package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.entity.NotaCredito;
+import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.NotaCreditoDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.NotaCreditoFacade;
+import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.sql.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -36,11 +38,27 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
     public void grabar(NotaCredito notaCredito) {
         try {
             notaCreditoFacade.create(notaCredito);
+            /**
+             * Aumentar el codigo de la numeracion en los parametros
+             */
+            ParametroCodefac parametro = parametroCodefacService.getParametroByNombre(ParametroCodefac.SECUENCIAL_NOTA_CREDITO);
+            parametro.valor = (Integer.parseInt(parametro.valor) + 1) + "";
+            parametroCodefacService.grabar(parametro);
+            
+            
         } catch (ConstrainViolationExceptionSQL ex) {
             Logger.getLogger(NotaCreditoService.class.getName()).log(Level.SEVERE, null, ex);
         } catch (DatabaseException ex) {
             Logger.getLogger(NotaCreditoService.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public String getPreimpresoSiguiente() {
+        Integer secuencialSiguiente = Integer.parseInt(parametroCodefacService.getParametroByNombre(ParametroCodefac.SECUENCIAL_NOTA_CREDITO).valor);
+        String secuencial = UtilidadesTextos.llenarCarateresIzquierda(secuencialSiguiente.toString(), 8, "0");
+        String establecimiento = parametroCodefacService.getParametroByNombre(ParametroCodefac.PUNTO_EMISION).valor;
+        String puntoEmision = parametroCodefacService.getParametroByNombre(ParametroCodefac.PUNTO_EMISION).valor;
+        return puntoEmision + "-" + establecimiento + "-" + secuencial;
     }
 
     public void editar(NotaCredito notaCredito) {

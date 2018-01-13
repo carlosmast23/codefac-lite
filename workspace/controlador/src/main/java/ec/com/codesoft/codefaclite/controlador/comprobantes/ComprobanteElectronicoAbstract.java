@@ -231,13 +231,16 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
         List<InformacionAdicional> listaInfoAdicional = new ArrayList<InformacionAdicional>();
         
         Map<String,String> map=getMapAdicional();
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            String key = entry.getKey();
-            String value = entry.getValue();            
-            InformacionAdicional info=new InformacionAdicional();
-            info.setNombre(key);
-            info.setValor(value);
-            listaInfoAdicional.add(info);
+        if(map!=null)
+        {
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();            
+                InformacionAdicional info=new InformacionAdicional();
+                info.setNombre(key);
+                info.setValor(value);
+                listaInfoAdicional.add(info);
+            }
         }
         return listaInfoAdicional;        
     }

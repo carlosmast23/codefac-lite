@@ -59,7 +59,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
     
     private void setearValoresNotaCredito()
     {
-         notaCredito.setEmpresaId(0l);
+        notaCredito.setEmpresaId(0l);
         notaCredito.setEstado(Factura.ESTADO_FACTURADO);
         notaCredito.setFechaCreacion(UtilidadesFecha.getFechaHoy());
         notaCredito.setRazonModificado(getTxtMotivoAnulacion().getText());
@@ -92,8 +92,12 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         NotaCreditoElectronico notaCreditoElectronico=new NotaCreditoElectronico(session, panelPadre);
         notaCreditoElectronico.setNotaCredito(notaCredito);
         Map<String,String> datosAdicionales=new HashMap<String,String>();
-        datosAdicionales.put("correo",notaCredito.getCliente().getCorreoElectronico());
-        notaCreditoElectronico.setMapInfoAdicional(datosAdicionales);
+        
+        if(datosAdicionales.size()>0)
+        {
+            datosAdicionales.put("correo",notaCredito.getCliente().getCorreoElectronico());        
+            notaCreditoElectronico.setMapInfoAdicional(datosAdicionales);
+        }
         notaCreditoElectronico.setCorreosAdicionales(new ArrayList<String>());
         
         notaCreditoElectronico.getServicio().addActionListerComprobanteElectronico(new ListenerComprobanteElectronico() {
@@ -250,6 +254,10 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         getLblDireccion().setText(session.getEmpresa().getDireccion());
         getLblTelefonos().setText(session.getEmpresa().getTelefonos());
         getLblNombreComercial().setText(session.getEmpresa().getRazonSocial());
+        
+        NotaCreditoService servicio=new NotaCreditoService();
+        getLblSecuencial().setText(servicio.getPreimpresoSiguiente());
+        
 
         notaCredito = new NotaCredito();
         crearDetalleTabla();

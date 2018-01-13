@@ -270,18 +270,12 @@ public class ComprobanteElectronicoService implements Runnable {
 
             String pathFile = getPathComprobante(CARPETA_RIDE, getNameRide(comprobante));
             Map<String,String> archivosPath=new HashMap<String,String>();
-            archivosPath.put(ComprobanteEnum.FACTURA.getPrefijo()+"-"+comprobante.getInformacionTributaria().getPreimpreso(),pathFile);
-            archivosPath.put(comprobante.getInformacionTributaria().getPreimpreso(),getPathComprobante(CARPETA_AUTORIZADOS));
+            archivosPath.put(claveAcceso.getTipoComprobante().getPrefijo()+"-"+comprobante.getInformacionTributaria().getPreimpreso()+".pdf",pathFile);
+            archivosPath.put(comprobante.getInformacionTributaria().getPreimpreso()+".xml",getPathComprobante(CARPETA_AUTORIZADOS));
             
             try {
-                String mensajeGenerado = "Estimado/a "
-                        + "<b>" + comprobante.getRazonSocialComprador() + "</b> ,<br><br>"
-                        + "<b>" + comprobante.getInformacionTributaria().getNombreComercial() + "</b>"
-                        + " le informa que su factura  electrónica " + comprobante.getInformacionTributaria().getPreimpreso() + " se generó correctamente. <br><br>";
-                mensajeGenerado = "<p>" + mensajeGenerado + "</p>" + footerMensajeCorreo;
-                
-                metodoEnvioInterface.enviarCorreo(mensajeGenerado, "FACTURA:" + comprobante.getInformacionTributaria().getPreimpreso(), correosElectronicos, archivosPath);
-
+                String mensajeGenerado =getMensajeCorreo(claveAcceso.getTipoComprobante());
+                metodoEnvioInterface.enviarCorreo(mensajeGenerado, claveAcceso.getTipoComprobante().getNombre()+":" + comprobante.getInformacionTributaria().getPreimpreso(), correosElectronicos, archivosPath);
             } catch (Exception ex) {
                 Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
                 ex.printStackTrace();
@@ -296,6 +290,38 @@ public class ComprobanteElectronicoService implements Runnable {
             throw new ComprobanteElectronicoException(ex.getMessage(), "Enviar comprobante", ComprobanteElectronicoException.ERROR_ENVIO_CLIENTE);
         }
 
+    }
+    
+    private String getMensajeCorreo(ComprobanteEnum clase)
+    {
+        String mensajeGenerado = "Estimado/a ";
+        if(clase.equals(ComprobanteEnum.FACTURA))
+        {
+            mensajeGenerado+= " "
+                    + "<b>" + comprobante.getRazonSocialComprador() + "</b> ,<br><br>"
+                    + "<b>" + comprobante.getInformacionTributaria().getNombreComercial() + "</b>"
+                    + " le informa que su factura  electrónica " + comprobante.getInformacionTributaria().getPreimpreso() + " se generó correctamente. <br><br>";
+            mensajeGenerado = "<p>" + mensajeGenerado + "</p>" + footerMensajeCorreo;
+        }
+        else
+        {
+            if(clase.equals(ComprobanteEnum.NOTA_CREDITO))
+            {
+                mensajeGenerado += " "
+                        + "<b>" + comprobante.getRazonSocialComprador() + "</b> ,<br><br>"
+                        + "<b>" + comprobante.getInformacionTributaria().getNombreComercial() + "</b>"
+                        + " le informa que su nota de crédito " + comprobante.getInformacionTributaria().getPreimpreso() + " se generó correctamente. <br><br>";
+                mensajeGenerado = "<p>" + mensajeGenerado + "</p>" + footerMensajeCorreo;
+                
+            }
+            else
+            {
+                //Mensaje generico cuando no es ningun de los comprobantes registtados
+                mensajeGenerado=" puede revisar el comprobante electronico como archivo adjunto";
+            }
+        }
+        return mensajeGenerado;
+        
     }
 
     private void generarRide() throws ComprobanteElectronicoException {
