@@ -454,6 +454,13 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     
     private void agregarListenerBotones()
     {
+        getBtnHome().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               minimizarTodasVentanas();
+            }
+        });
+        
         getBtnNuevo().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1774,18 +1781,24 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         getjMenuItemInicio().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JInternalFrame[] ventanas= getjDesktopPane1().getAllFrames();
-                for (JInternalFrame ventana : ventanas) {
-                    try {
-                        ventana.setIcon(true);
-                    } catch (PropertyVetoException ex) {
-                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                getjDesktopPane1().revalidate();
-                getjDesktopPane1().repaint();
+               minimizarTodasVentanas();
             }
         });
+        
+    }
+    
+    private void minimizarTodasVentanas()
+    {
+        JInternalFrame[] ventanas = getjDesktopPane1().getAllFrames();
+        for (JInternalFrame ventana : ventanas) {
+            try {
+                ventana.setIcon(true);
+            } catch (PropertyVetoException ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        getjDesktopPane1().revalidate();
+        getjDesktopPane1().repaint();
         
     }
 

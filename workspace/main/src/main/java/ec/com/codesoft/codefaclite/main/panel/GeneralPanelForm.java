@@ -61,6 +61,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         btnActualizar = new javax.swing.JButton();
         btnImprimir = new javax.swing.JButton();
         btnAyuda = new javax.swing.JButton();
+        btnHome = new javax.swing.JButton();
         JPanelPiePagina = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -192,6 +193,11 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         btnAyuda.setToolTipText("Ayuda");
         btnAyuda.setMargin(new java.awt.Insets(0, 14, 0, 14));
         JPanelMenu.add(btnAyuda);
+
+        btnHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/home.png"))); // NOI18N
+        btnHome.setToolTipText("Ir al menu principal");
+        btnHome.setMargin(new java.awt.Insets(0, 14, 0, 14));
+        JPanelMenu.add(btnHome);
 
         getContentPane().add(JPanelMenu, java.awt.BorderLayout.PAGE_START);
 
@@ -438,6 +444,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnHome;
     private javax.swing.JButton btnImprimir;
     private javax.swing.JButton btnNuevo;
     private javax.swing.JButton btnSalirPantallaPublicidad;
@@ -732,6 +739,14 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
     public void setjMenuItemContenido(JMenuItem jMenuItemContenido) {
         this.jMenuItemContenido = jMenuItemContenido;
+    }
+
+    public JButton getBtnHome() {
+        return btnHome;
+    }
+
+    public void setBtnHome(JButton btnHome) {
+        this.btnHome = btnHome;
     }
     
     

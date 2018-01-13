@@ -397,6 +397,17 @@
             </Property>
           </Properties>
         </Component>
+        <Component class="javax.swing.JButton" name="btnHome">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/img/iconos/home.png"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Ir al menu principal"/>
+            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[0, 14, 0, 14]"/>
+            </Property>
+          </Properties>
+        </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="JPanelPiePagina">

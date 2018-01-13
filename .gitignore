@@ -8,6 +8,7 @@
 
 #excluir arhivos de compilacion
 
+Thumbs.db
 *.class
 /workspace/*.jar
 /workspace/mavenCodefacLite/target/
