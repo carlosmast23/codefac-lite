@@ -597,6 +597,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         PanelValores.add(lblPropina10, gridBagConstraints);
 
         txtValorTotal.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        txtValorTotal.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtValorTotal.setText("0.00");
         txtValorTotal.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 51, 255)));
         txtValorTotal.addActionListener(new java.awt.event.ActionListener() {

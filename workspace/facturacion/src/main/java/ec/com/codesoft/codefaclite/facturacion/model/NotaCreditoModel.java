@@ -34,6 +34,7 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -235,10 +236,10 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         NotaCredito notaCredito = (NotaCredito) buscarDialogoModel.getResultado();
         if(notaCredito != null)
         {
+            crearDetalleTabla();
             this.notaCredito = notaCredito;
-            mostrarDatosNotaCredito();
-            setearDatosEmpresa();
-
+            mostrarDatosNotaCredito(); 
+            actualizarDatosTablaDetalle();
         }
         
         
@@ -255,12 +256,39 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         getLblTelefonos().setText(session.getEmpresa().getTelefonos());
         getLblNombreComercial().setText(session.getEmpresa().getRazonSocial());
         
+        //Cargar el secuncial correspondiente
         NotaCreditoService servicio=new NotaCreditoService();
         getLblSecuencial().setText(servicio.getPreimpresoSiguiente());
         
 
         notaCredito = new NotaCredito();
         crearDetalleTabla();
+        limpiarCampos();
+    }
+    
+    private void limpiarCampos()
+    {
+        getLblNombreCliente().setText("");
+        getLblDireccionCliente().setText("");
+        getLblTelefonoCliente().setText("");
+        getTxtMotivoAnulacion().setText("");
+        
+        BigDecimal valorCero=new BigDecimal("0.00");
+        getLblSubtotalSinImpuesto().setText(valorCero.toString());
+        getLblSubtotal12().setText(valorCero.toString());
+        getLblSubtotal0().setText(valorCero.toString());
+        getLblSubtotalNoObjetoDeIva().setText(valorCero.toString());
+        getLblSubtotalExentoDeIva().setText(valorCero.toString());
+        getLblTotalDescuento().setText(valorCero.toString());
+        getLblValorIce().setText(valorCero.toString());
+        getLblIva12().setText(valorCero.toString());
+        getLblValorIRBPNR().setText(valorCero.toString());
+        getLblPropina10().setText(valorCero.toString());
+        getTxtValorTotal().setText(valorCero.toString());
+        getTxtReferenciaFactura().setText("");
+        
+        //getTblDetalleNotaCredito().removeAll();
+        
     }
 
     @Override
@@ -311,12 +339,16 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         notaCredito.setSubtotalCero(notaCredito.getFactura().getSubtotalSinImpuestos());
         notaCredito.setSubtotalDoce(notaCredito.getFactura().getSubtotalImpuestos());
         notaCredito.setCliente(notaCredito.getFactura().getCliente());
+
  
         
         /**
          * CargarDetallesNotaCredito
          */
         List<FacturaDetalle> detallesFactura = notaCredito.getFactura().getDetalles();
+        if(notaCredito.getDetalles()!=null)
+            notaCredito.getDetalles().clear();
+        
         for (FacturaDetalle facturaDetalle : detallesFactura) {
             NotaCreditoDetalle notaDetalle = new NotaCreditoDetalle();
             notaDetalle.setCantidad(facturaDetalle.getCantidad());
@@ -327,6 +359,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
             notaDetalle.setProducto(facturaDetalle.getProducto());
             notaDetalle.setTotal(facturaDetalle.getTotal());
             notaDetalle.setValorIce(facturaDetalle.getValorIce());
+
             notaCredito.addDetalle(notaDetalle);
         }
         
@@ -340,6 +373,11 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         getLblNombreCliente().setText(notaCredito.getFactura().getCliente().getRazonSocial());
         getLblDireccionCliente().setText(notaCredito.getFactura().getCliente().getDireccion());
         getLblTelefonoCliente().setText(notaCredito.getFactura().getCliente().getTelefonoCelular());
+        getTxtMotivoAnulacion().setText(notaCredito.getRazonModificado());
+        
+        //Cargar el preimpreso solo cuando el estado sea editar
+        if(estadoFormulario.equals(ESTADO_EDITAR))
+            getLblSecuencial().setText(notaCredito.getPreimpreso());
 
         /**
          * Cargar Los calculos de los totales
