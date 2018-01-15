@@ -77,7 +77,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade>{
     }
     
     public String getPreimpresoSiguiente() {
-        Integer secuencialSiguiente = Integer.parseInt(parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA).valor) + 1;
+        Integer secuencialSiguiente = Integer.parseInt(parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA).valor);
         String secuencial = UtilidadesTextos.llenarCarateresIzquierda(secuencialSiguiente.toString(), 8, "0");
         String establecimiento = parametroService.getParametroByNombre(ParametroCodefac.PUNTO_EMISION).valor;
         String puntoEmision = parametroService.getParametroByNombre(ParametroCodefac.PUNTO_EMISION).valor;

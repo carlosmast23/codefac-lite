@@ -302,7 +302,14 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         String url="";
         try
         {
-            url=panel.getURLAyuda();
+            if(panel!=null)
+            {
+                url=panel.getURLAyuda();
+            }
+            else
+            {
+                url="http://www.cf.codesoft-ec.com/ayuda";
+            }
         }
         catch (UnsupportedOperationException exception) {
             System.out.println("metodo no implementado");
@@ -315,7 +322,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         int ancho=getjPanelSeleccion().getWidth()-1;
         int alto=getjPanelSeleccion().getHeight()-1;
 
-        if(browser!=null)
+        if(browser!=null && panel!=null)
         {
             //Verifacar si la url cargada es la misma no volver a cargar
             if(!browser.getUrl().equals(panel.getURLAyuda()))
@@ -344,7 +351,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             }
             else
             {
-                browser.loadURL("https://www.google.com.ec/");
+                //Pagina por defecto cuando no existe una ayuda especifica
+                browser.loadURL("http://www.cf.codesoft-ec.com/ayuda");
                 browser.setBounds(1, 1,ancho,alto);
                 jpanel.removeAll();
                 jpanel.add(browser);
@@ -446,6 +454,13 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     
     private void agregarListenerBotones()
     {
+        getBtnHome().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               minimizarTodasVentanas();
+            }
+        });
+        
         getBtnNuevo().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1370,7 +1385,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private void habilitarBotones(Boolean opcion)
     {
         getBtnActualizar().setEnabled(opcion);
-        getBtnAyuda().setEnabled(opcion);
+        //getBtnAyuda().setEnabled(opcion); //Siempre debe estar habilitado
         getBtnBuscar().setEnabled(opcion);
         getBtnEliminar().setEnabled(opcion);
         getBtnGuardar().setEnabled(opcion);
@@ -1462,6 +1477,39 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         Map<String,Object> mapBuscar;
         AccesoDirectoService servicio=new AccesoDirectoService();
         
+                /***
+         * Agregar el widget de virtualMall
+         */
+        mapBuscar = new HashMap<>();
+        mapBuscar.put("nombre","WidgetVirtualMall");
+        int x=servicio.obtenerPorMap(mapBuscar).get(0).x;
+        int y=servicio.obtenerPorMap(mapBuscar).get(0).y;
+        
+        WidgetVirtualMallModelo widget=new WidgetVirtualMallModelo(getjDesktopPane1());
+        widget.setPreferredSize(new Dimension(x,y));
+        widget.setBounds(x,y,260, 355);
+        widget.addListenerIcono(new IconoInterfaz() {
+            @Override
+            public void doubleClick() {                
+            }
+
+            @Override
+            public void grabarNuevaPosicion(Point nuevaPosicion) {
+                Map<String, Object> mapBuscar;
+                AccesoDirectoService servicio = new AccesoDirectoService();
+
+                mapBuscar = new HashMap<>();
+                mapBuscar.put("nombre","WidgetVirtualMall");
+                AccesoDirecto acceso=servicio.obtenerPorMap(mapBuscar).get(0);
+                acceso.setX((int)nuevaPosicion.getX());
+                acceso.setY((int)nuevaPosicion.getY());
+                servicio.editar(acceso);
+            }
+        });
+        getjDesktopPane1().add(widget);
+        widget.setVisible(true);
+
+        
         mapBuscar = new HashMap<>();
         mapBuscar.put("nombre", FacturacionModel.class.getName());
         url=RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL("factura.png");
@@ -1500,8 +1548,6 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         IconoPanel iconoConfig=new IconoPanel("Configurar",url,getjDesktopPane1(),servicio.obtenerPorMap(mapBuscar).get(0).x,servicio.obtenerPorMap(mapBuscar).get(0).y);                
         iconoConfig.addListenerIcono(new ListenerIcono(ComprobantesConfiguracionModel.class,true));
         getjDesktopPane1().add(iconoConfig);
-        
-        
         
     }
     
@@ -1731,6 +1777,28 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 MonitorComprobanteModel.getInstance().mostrar();
             }
         });
+        
+        getjMenuItemInicio().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               minimizarTodasVentanas();
+            }
+        });
+        
+    }
+    
+    private void minimizarTodasVentanas()
+    {
+        JInternalFrame[] ventanas = getjDesktopPane1().getAllFrames();
+        for (JInternalFrame ventana : ventanas) {
+            try {
+                ventana.setIcon(true);
+            } catch (PropertyVetoException ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        getjDesktopPane1().revalidate();
+        getjDesktopPane1().repaint();
         
     }
 

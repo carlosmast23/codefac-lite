@@ -50,7 +50,8 @@ public class NotaCreditoElectronico extends ComprobanteElectronicoAbstract<NotaC
 
     @Override
     public String getSecuencial() {
-        String secuencial= this.session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_NOTA_CREDITO).getValor();
+       // String secuencial= this.session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_NOTA_CREDITO).getValor();
+       String secuencial= notaCredito.getSecuencial().toString();       
        return UtilidadesTextos.llenarCarateresIzquierda(secuencial,9,"0");
     }
 

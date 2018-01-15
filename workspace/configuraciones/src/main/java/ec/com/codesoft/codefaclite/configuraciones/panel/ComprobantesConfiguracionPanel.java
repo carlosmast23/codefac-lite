@@ -89,6 +89,8 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
+        setTitle("Configuraciones");
+        setToolTipText("");
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         panelSecuenciales.setBorder(javax.swing.BorderFactory.createTitledBorder("Secuenciales Comprobantes"));

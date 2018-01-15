@@ -49,6 +49,11 @@ public class ClaveAcceso {
    {    
        return ComprobanteEnum.getEnumByCodigo(tipoComprobante).getClase();
    }
+   
+   public ComprobanteEnum getTipoComprobante()
+   {    
+       return ComprobanteEnum.getEnumByCodigo(tipoComprobante);
+   }
     
     
     public String obtenerClaveAcceso() {

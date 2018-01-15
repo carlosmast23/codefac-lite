@@ -14,10 +14,10 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.notacredito.NotaC
  */
 public enum ComprobanteEnum {
     FACTURA("FACTURA","01","FAC",FacturaComprobante.class),
-    NOTA_CREDITO("NOTA_CREDITO","04","CRE",NotaCreditoComprobante.class),
-    NOTA_DEBITO("NOTA_DEBITO","05","",null),
-    GUIA_REMISION("GUIA_REMISION","06","",null),
-    COMPROBANTE_RETENCION("COMPROBANTE_RETENCION","07","",null);
+    NOTA_CREDITO("NOTA DE CRÉDITO","04","CRE",NotaCreditoComprobante.class),
+    NOTA_DEBITO("NOTA DEBITO","05","",null),
+    GUIA_REMISION("GUIA REMISION","06","",null),
+    COMPROBANTE_RETENCION("COMPROBANTE RETENCION","07","",null);
     
     private String nombre;
     private String codigo;

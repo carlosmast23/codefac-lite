@@ -81,6 +81,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
+        //getTxtClaveFirma().setEnabled(true);
         actualizarDatosVista();
         moverArchivo();
         this.parametroCodefacService.editarParametros(parametros);
@@ -358,8 +359,9 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         {
             if(!FirmaElectronica.FirmaVerificar(pathFirma,claveFirma))
             {
-                DialogoCodefac.mensaje("Error Clave","La Clave de la firma es incorrecta",DialogoCodefac.MENSAJE_INCORRECTO);
                 getTxtClaveFirma().setText("");
+                DialogoCodefac.mensaje("Error Clave","La Clave de la firma es incorrecta, ingrese nuevamente.",DialogoCodefac.MENSAJE_INCORRECTO);
+                
             }
         }    
 

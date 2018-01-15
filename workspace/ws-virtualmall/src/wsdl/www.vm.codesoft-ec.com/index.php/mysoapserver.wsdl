@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<definitions xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://www.vm.codesoft-ec.com/mysoapserver" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://www.vm.codesoft-ec.com/mysoapserver">
+<types>
+<xsd:schema elementFormDefault="qualified" targetNamespace="http://www.vm.codesoft-ec.com/mysoapserver"
+>
+ <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+ <xsd:import namespace="http://schemas.xmlsoap.org/wsdl/" />
+ <xsd:complexType name="buscarvmRequestType">
+  <xsd:all>
+   <xsd:element name="celular" type="xsd:string"/>
+   <xsd:element name="buscar" type="xsd:string"/>
+   <xsd:element name="time" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="buscarvmResponseType">
+  <xsd:all>
+   <xsd:element name="return" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:element name="buscarvm" type="tns:buscarvmRequestType"/>
+ <xsd:element name="buscarvmResponse" type="tns:buscarvmResponseType"/>
+</xsd:schema>
+</types>
+<message name="buscarvmRequest">
+  <part name="parameters" element="tns:buscarvm" /></message>
+<message name="buscarvmResponse">
+  <part name="parameters" element="tns:buscarvmResponse" /></message>
+<portType name="SOAPServerPortType">
+  <operation name="buscarvm">
+    <documentation>Buscar en Virtual Mall</documentation>
+    <input message="tns:buscarvmRequest"/>
+    <output message="tns:buscarvmResponse"/>
+  </operation>
+</portType>
+<binding name="SOAPServerBinding" type="tns:SOAPServerPortType">
+  <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+  <operation name="buscarvm">
+    <soap:operation soapAction="urn:http://www.vm.codesoft-ec.com/mysoapserver/buscarvm" style="document"/>
+    <input><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></input>
+    <output><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></output>
+  </operation>
+</binding>
+<service name="SOAPServer">
+  <port name="SOAPServerPort" binding="tns:SOAPServerBinding">
+    <soap:address location="http://www.vm.codesoft-ec.com/index.php/mysoapserver"/>
+  </port>
+</service>
+</definitions>
