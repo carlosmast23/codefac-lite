@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusqueda;
+import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusquedaNotaCredito;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.NotaCreditoBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.other.NotaCreditoElectronico;
 import ec.com.codesoft.codefaclite.facturacion.panel.NotaCreditoPanel;
@@ -317,7 +318,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         getBtnBuscarFactura().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                FacturaBusqueda facturaBusqueda = new FacturaBusqueda();
+                FacturaBusquedaNotaCredito  facturaBusqueda = new FacturaBusquedaNotaCredito();
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(facturaBusqueda);
                 buscarDialogoModel.setVisible(true);
                 Factura factura = (Factura) buscarDialogoModel.getResultado();
