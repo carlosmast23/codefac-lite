@@ -62,15 +62,10 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         super(null,true);
         this.model=model;
         initListener();
-        //crearModeloTabla();
-        //listaResultados=this.model.getConsulta();
         //crearConsulta("");
         ejecutarConsulta();
         //cargarDatos(listaResultados);
         establecerPropiedadesIniciales();
-        //this.paginaActual=0;
-        //this.tamanioConsulta=obtenerTamanioConsulta();
-        
     }
     
     /**

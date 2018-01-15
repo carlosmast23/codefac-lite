@@ -8,6 +8,8 @@ package ec.com.codesoft.codefaclite.servidor.entity;
 import ec.com.codesoft.codefaclite.servidor.facade.*;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -43,8 +45,11 @@ public class ParametroCodefac {
     public static final String ESTABLECIMIENTO= "establecimiento";
     public static final String PUNTO_EMISION= "punto_emision";
     
+    public static final String CELULAR_VIRTUAL_MALL="celular_virtual_mall";
+    
     @Id
     @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long id;
     
     @Column(name = "NOMBRE")

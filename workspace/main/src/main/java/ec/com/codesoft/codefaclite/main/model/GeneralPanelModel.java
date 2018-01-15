@@ -34,6 +34,7 @@ import ec.com.codesoft.codefaclite.main.panel.GeneralPanelForm;
 import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.AccesoDirecto;
+import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidor.service.AccesoDirectoService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
@@ -148,16 +149,22 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
      * Variable que va a controlar cada que tiempo se va a mostrar publicidad
      */
     private HiloPublicidadCodefac hiloPublicidadCodefac;
+    
+    /**
+     * Referencia al widget de Virtuall Mall para poder trabajar con este objeto
+     */
+    private WidgetVirtualMallModelo widgetVirtualMall;
 
 
     public GeneralPanelModel() 
     {
-        iniciarComponentes();
+        iniciarComponentes();        
         agregarListenerBotonesDefecto();
         agregarListenerBotones();
         agregarListenerSplit();
         agregarListenerFrame();
         agregarListenerGraphics();
+        cargarDatosAdicionales();
                
         habilitarBotones(false);
         
@@ -193,9 +200,13 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 Boolean respuesta=DialogoCodefac.dialogoPregunta("Alerta","Estas seguro que deseas salir?",DialogoCodefac.MENSAJE_ADVERTENCIA);
                 if(respuesta)
                 {
+                    grabarDatosSalir();
                     hiloPublicidadCodefac.hiloPublicidad=false;
                     dispose();
+                    System.exit(0);
                 }
+                
+                
                 
                 
             }
@@ -225,6 +236,30 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 
             }
         });
+    }
+    
+    private void grabarDatosSalir()
+    {
+        ParametroCodefacService servicio=new ParametroCodefacService();
+        //Grabar el celular si es distinto de vacio
+        if(!widgetVirtualMall.getTxtCelular().equals(""))
+        {
+            ParametroCodefac parametro=servicio.getParametroByNombre(ParametroCodefac.CELULAR_VIRTUAL_MALL);
+            //Si no existe el parametro la crea en la base de datos
+            if(parametro==null)
+            {
+                parametro=new ParametroCodefac();
+                parametro.setNombre(ParametroCodefac.CELULAR_VIRTUAL_MALL);
+                parametro.setValor(widgetVirtualMall.getTxtCelular().getText());
+                servicio.grabar(parametro);
+            }
+            else
+            {
+                parametro.setValor(widgetVirtualMall.getTxtCelular().getText());
+                servicio.editar(parametro);
+            }
+        }
+        
     }
     
     private void agregarListenerGraphics()
@@ -1485,10 +1520,10 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         int x=servicio.obtenerPorMap(mapBuscar).get(0).x;
         int y=servicio.obtenerPorMap(mapBuscar).get(0).y;
         
-        WidgetVirtualMallModelo widget=new WidgetVirtualMallModelo(getjDesktopPane1());
-        widget.setPreferredSize(new Dimension(x,y));
-        widget.setBounds(x,y,260, 355);
-        widget.addListenerIcono(new IconoInterfaz() {
+        widgetVirtualMall=new WidgetVirtualMallModelo(getjDesktopPane1());
+        widgetVirtualMall.setPreferredSize(new Dimension(x,y));
+        widgetVirtualMall.setBounds(x,y,260, 355);
+        widgetVirtualMall.addListenerIcono(new IconoInterfaz() {
             @Override
             public void doubleClick() {                
             }
@@ -1506,8 +1541,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 servicio.editar(acceso);
             }
         });
-        getjDesktopPane1().add(widget);
-        widget.setVisible(true);
+        getjDesktopPane1().add(widgetVirtualMall);
+        widgetVirtualMall.setVisible(true);
 
         /***
          * Agregar el widget de Ventas diarias
@@ -1839,6 +1874,21 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     public boolean validarPorGrupo(String nombre, String componente) {
         ControladorCodefacInterface panel=getPanelActivo();
         return validarFormulario(panel,nombre,componente);
+    }
+
+    private void cargarDatosAdicionales() {
+        
+        /**
+         * Setear el parametro del celular si ya fue ingresado alguna vez
+         */
+        ParametroCodefacService servicio=new ParametroCodefacService();
+        ParametroCodefac parametro=servicio.getParametroByNombre(ParametroCodefac.CELULAR_VIRTUAL_MALL);
+        if(parametro!=null)
+        {
+            widgetVirtualMall.getTxtCelular().setText(parametro.getValor());
+        }
+        
+                
     }
     
     public class ListenerIcono implements IconoInterfaz 

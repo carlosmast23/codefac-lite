@@ -47,9 +47,19 @@ public class WidgetVirtualMallModelo extends WidgetVirtualMall{
         getBtnBuscar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                
                 String busqueda=getTxtBuscador().getText();
                 String numero=getTxtCelular().getText();
                 String nivel=obtenerNivelPrioridad(getSliderPrioridad().getValue());
+                
+                                
+                //Validacion enviar virtuall mall 
+                if(busqueda.equals("") || numero.equals(""))
+                {
+                    DialogoCodefac.mensaje("Campos requeridos","Por favor ingrese el número de celular y su busqueda para continuar",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    return;
+                }
+                
                 boolean respuesta=WebServiceVirtuallMall.enviarBusqueda(busqueda,numero,nivel);
                 if(respuesta)
                 {

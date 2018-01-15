@@ -23,8 +23,7 @@ public class WebServiceVirtuallMall {
         parametros.setBuscar(buscar);
         parametros.setCelular(celular);
         parametros.setTime(tiempo);
-        puerto.buscarvm(parametros);
-        
+       
         BuscarvmResponseType respuesta=puerto.buscarvm(parametros);
         String respuestaString= respuesta.getReturn();
         if(respuestaString.equals("success"))
