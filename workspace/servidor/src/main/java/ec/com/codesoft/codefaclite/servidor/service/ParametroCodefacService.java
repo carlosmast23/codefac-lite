@@ -19,10 +19,11 @@ import org.eclipse.persistence.exceptions.DatabaseException;
  *
  * @author Carlos
  */
-public class ParametroCodefacService {
+public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,ParametroCodefacFacade>{
     private ParametroCodefacFacade parametroCodefacFacade;
 
     public ParametroCodefacService() {
+        super(ParametroCodefacFacade.class);
         parametroCodefacFacade=new ParametroCodefacFacade();
     }
     
@@ -42,7 +43,11 @@ public class ParametroCodefacService {
     {
         Map<String,Object> map=new HashMap<String, Object>();
         map.put("nombre",nombre);
-        return ((List<ParametroCodefac>) (parametroCodefacFacade.findByMap(map))).get(0);
+        List<ParametroCodefac> parametroCodefacList=parametroCodefacFacade.findByMap(map);
+        if(parametroCodefacList!=null && parametroCodefacList.size()>0 )
+            return ((List<ParametroCodefac>) (parametroCodefacFacade.findByMap(map))).get(0);
+        else
+            return null;
     }
     
     /**
