@@ -54,6 +54,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         JPanelAuxiliarInterno = new javax.swing.JPanel();
         jPanelSeleccion = new javax.swing.JTabbedPane();
         JPanelMenu = new javax.swing.JPanel();
+        btnHome = new javax.swing.JButton();
         btnNuevo = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
@@ -61,7 +62,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         btnActualizar = new javax.swing.JButton();
         btnImprimir = new javax.swing.JButton();
         btnAyuda = new javax.swing.JButton();
-        btnHome = new javax.swing.JButton();
         JPanelPiePagina = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -139,6 +139,11 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
         JPanelMenu.setBackground(new java.awt.Color(255, 255, 255));
 
+        btnHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/home.png"))); // NOI18N
+        btnHome.setToolTipText("Ir al menu principal");
+        btnHome.setMargin(new java.awt.Insets(0, 14, 0, 14));
+        JPanelMenu.add(btnHome);
+
         btnNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/nuevo-icono.png"))); // NOI18N
         btnNuevo.setToolTipText("Nuevo");
         btnNuevo.setMargin(new java.awt.Insets(0, 14, 0, 14));
@@ -193,11 +198,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         btnAyuda.setToolTipText("Ayuda");
         btnAyuda.setMargin(new java.awt.Insets(0, 14, 0, 14));
         JPanelMenu.add(btnAyuda);
-
-        btnHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/home.png"))); // NOI18N
-        btnHome.setToolTipText("Ir al menu principal");
-        btnHome.setMargin(new java.awt.Insets(0, 14, 0, 14));
-        JPanelMenu.add(btnHome);
 
         getContentPane().add(JPanelMenu, java.awt.BorderLayout.PAGE_START);
 

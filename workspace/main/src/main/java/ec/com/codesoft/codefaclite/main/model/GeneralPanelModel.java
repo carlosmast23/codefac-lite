@@ -36,10 +36,12 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.AccesoDirecto;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Perfil;
+import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.service.AccesoDirectoService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
 import ec.com.codesoft.ejemplo.utilidades.imagen.UtilidadImagen;
 import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
+import es.mityc.firmaJava.ocsp.config.ServidorOcsp;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -199,10 +201,13 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             public void windowClosing(WindowEvent e) {
                 Boolean respuesta=DialogoCodefac.dialogoPregunta("Alerta","Estas seguro que deseas salir?",DialogoCodefac.MENSAJE_ADVERTENCIA);
                 if(respuesta)
-                {
+                {                    
                     grabarDatosSalir();
-                    hiloPublicidadCodefac.hiloPublicidad=false;
-                    dispose();
+                    hiloPublicidadCodefac.hiloPublicidad=false;                    
+                    AbstractFacade.entityManager.close();
+                    dispose();                    
+                    System.exit(0);
+                    
                 }
                 
                 
@@ -1521,7 +1526,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         
         widgetVirtualMall=new WidgetVirtualMallModelo(getjDesktopPane1());
         widgetVirtualMall.setPreferredSize(new Dimension(x,y));
-        widgetVirtualMall.setBounds(x,y,260, 355);
+        widgetVirtualMall.setBounds(x,y,260, 400);
         widgetVirtualMall.addListenerIcono(new IconoInterfaz() {
             @Override
             public void doubleClick() {                
