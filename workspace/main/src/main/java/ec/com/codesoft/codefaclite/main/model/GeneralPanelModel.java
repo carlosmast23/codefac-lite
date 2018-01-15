@@ -1509,13 +1509,46 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         getjDesktopPane1().add(widget);
         widget.setVisible(true);
 
+        /***
+         * Agregar el widget de Ventas diarias
+         */
+        mapBuscar = new HashMap<>();
+        mapBuscar.put("nombre", "WidgetVentasDiarias");
+        int xVd=servicio.obtenerPorMap(mapBuscar).get(0).x;
+        int yVd=servicio.obtenerPorMap(mapBuscar).get(0).y;
         
+        VentasDiariasModel widgetVentaDiaria = new VentasDiariasModel(getjDesktopPane1());
+        widgetVentaDiaria.setPreferredSize(new Dimension(x,y));
+        widgetVentaDiaria.setBounds(x,y,280, 380);
+        
+        widgetVentaDiaria.addListenerIcono(new IconoInterfaz() {
+            @Override
+            public void doubleClick() {                
+            }
+
+            @Override
+            public void grabarNuevaPosicion(Point nuevaPosicion) {
+                Map<String, Object> mapBuscar;
+                AccesoDirectoService servicio = new AccesoDirectoService();
+
+                mapBuscar = new HashMap<>();
+                mapBuscar.put("nombre","WidgetVirtualMall");
+                AccesoDirecto acceso=servicio.obtenerPorMap(mapBuscar).get(0);
+                acceso.setX((int)nuevaPosicion.getX());
+                acceso.setY((int)nuevaPosicion.getY());
+                servicio.editar(acceso);
+            }
+        });
+        /***
+         * fin widget Ventas diarias
+         */
         mapBuscar = new HashMap<>();
         mapBuscar.put("nombre", FacturacionModel.class.getName());
         url=RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL("factura.png");
         IconoPanel iconoFactura=new IconoPanel("Factura",url,getjDesktopPane1(),servicio.obtenerPorMap(mapBuscar).get(0).x,servicio.obtenerPorMap(mapBuscar).get(0).y);                
         iconoFactura.addListenerIcono(new ListenerIcono(FacturacionModel.class,true));
         getjDesktopPane1().add(iconoFactura);
+        
         
         mapBuscar=new HashMap<>();
         mapBuscar.put("nombre",ProductoModel.class.getName());
