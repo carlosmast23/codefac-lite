@@ -329,7 +329,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
                         ef.getNombre(),
                         factura.getSubtotalImpuestos().toString(),
                         factura.getSubtotalSinImpuestos().toString(),
-                        acumdesc.toString(),
+                        factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()).toString(),
                         factura.getIva().toString(),
                         d.toString()
                 ));
@@ -351,7 +351,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
                         ef.getNombre(),
                         nota.getSubtotalDoce().toString(),
                         nota.getSubtotalCero().toString(),
-                        acumdesc.toString(),
+                        nota.getFactura().getDescuentoImpuestos().add(nota.getFactura().getDescuentoSinImpuestos()).toString(),
                         nota.getValorIvaDoce().toString(),
                         nota.getTotal().toString()
                 ));

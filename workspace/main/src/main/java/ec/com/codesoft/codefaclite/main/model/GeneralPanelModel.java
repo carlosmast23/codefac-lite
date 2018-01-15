@@ -1522,7 +1522,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         
         widgetVirtualMall=new WidgetVirtualMallModelo(getjDesktopPane1());
         widgetVirtualMall.setPreferredSize(new Dimension(x,y));
-        widgetVirtualMall.setBounds(x,y,260, 355);
+        widgetVirtualMall.setBounds(x,y,260, 400);
         widgetVirtualMall.addListenerIcono(new IconoInterfaz() {
             @Override
             public void doubleClick() {                
