@@ -203,6 +203,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     grabarDatosSalir();
                     hiloPublicidadCodefac.hiloPublicidad=false;
                     dispose();
+                    System.exit(0);
                 }
                 
                 
