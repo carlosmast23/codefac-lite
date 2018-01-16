@@ -274,7 +274,7 @@ public class ComprobanteElectronicoService implements Runnable {
             archivosPath.put(comprobante.getInformacionTributaria().getPreimpreso()+".xml",getPathComprobante(CARPETA_AUTORIZADOS));
             
             try {
-                String mensajeGenerado =getMensajeCorreo(claveAcceso.getTipoComprobante());
+                String mensajeGenerado =getMensajeCorreo(claveAcceso.getTipoComprobante(),comprobante);
                 metodoEnvioInterface.enviarCorreo(mensajeGenerado, claveAcceso.getTipoComprobante().getNombre()+":" + comprobante.getInformacionTributaria().getPreimpreso(), correosElectronicos, archivosPath);
             } catch (Exception ex) {
                 Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
@@ -292,7 +292,7 @@ public class ComprobanteElectronicoService implements Runnable {
 
     }
     
-    private String getMensajeCorreo(ComprobanteEnum clase)
+    private String getMensajeCorreo(ComprobanteEnum clase,ComprobanteElectronico comprobante)
     {
         String mensajeGenerado = "Estimado/a ";
         if(clase.equals(ComprobanteEnum.FACTURA))
