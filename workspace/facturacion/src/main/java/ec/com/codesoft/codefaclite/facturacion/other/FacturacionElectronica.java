@@ -168,6 +168,7 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
                 totalImpuesto.setCodigo(impuesto.getCodigo());
                 totalImpuesto.setCodigoPorcentaje(impuesto.getCodigoPorcentaje());
                 totalImpuesto.setValor(impuesto.getValor());
+                totalImpuesto.setDescuentoAdicional(detalle.getDescuento().toString());
                 mapTotalImpuestos.put(facturaDetalle.getProducto().getIva(), totalImpuesto);
             }
             else
@@ -175,6 +176,7 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
                 TotalImpuesto totalImpuesto=mapTotalImpuestos.get(facturaDetalle.getProducto().getIva());
                 totalImpuesto.setBaseImponible(totalImpuesto.getBaseImponible().add(impuesto.getBaseImponible()));
                 totalImpuesto.setValor(totalImpuesto.getValor().add(impuesto.getValor()));
+                totalImpuesto.setDescuentoAdicional(detalle.getDescuento().toString());
                 mapTotalImpuestos.put(facturaDetalle.getProducto().getIva(), totalImpuesto);
                 
             }
