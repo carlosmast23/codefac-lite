@@ -284,6 +284,8 @@ public class FacturacionModel extends FacturacionPanel {
                     getBtnEditarDetalle().setEnabled(false);
                     getBtnQuitarDetalle().setEnabled(false);
                     getBtnAgregarDetalleFactura().setEnabled(true);
+                    getBtnAgregarProducto().setEnabled(true);
+                    getBtnCrearProducto().setEnabled(true);
                 }
             }
         });
@@ -302,7 +304,6 @@ public class FacturacionModel extends FacturacionPanel {
                     getBtnCrearProducto().setEnabled(true);
                 }
             }
-
         });
 
         getBtnAgregarCliente().addActionListener(new ActionListener() {
