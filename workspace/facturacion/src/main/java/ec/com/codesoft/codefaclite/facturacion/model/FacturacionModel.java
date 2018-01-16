@@ -1124,7 +1124,8 @@ public class FacturacionModel extends FacturacionPanel {
                 if (!getTxtDescuento().getText().equals("")) {
                     BigDecimal porcentajeDescuento = new BigDecimal(getTxtDescuento().getText());
                     porcentajeDescuento = porcentajeDescuento.divide(new BigDecimal(100));
-                    descuento = facturaDetalle.getTotal().multiply(porcentajeDescuento);
+                    BigDecimal total = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario());
+                    descuento = total.multiply(porcentajeDescuento);
                     facturaDetalle.setDescuento(descuento.setScale(2, BigDecimal.ROUND_HALF_UP));
                 }
             }
