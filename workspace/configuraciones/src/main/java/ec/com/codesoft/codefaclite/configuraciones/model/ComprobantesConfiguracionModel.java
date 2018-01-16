@@ -85,7 +85,6 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         actualizarDatosVista();
         moverArchivo();
         this.parametroCodefacService.editarParametros(parametros);
-        
         /**
          * Establesco el ciclo de vida en el cual me encuentro
          */
@@ -123,10 +122,9 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     @Override
     public void limpiar() {
         super.estadoFormulario = GeneralPanelInterface.ESTADO_EDITAR;
-        
+
         //Validaciones adicionales para validar segun el tipo de usuario Logueado
-        if(!session.verificarExistePerfil(Perfil.PERFIl_ADMINISTRADOR))
-        {
+        if (!session.verificarExistePerfil(Perfil.PERFIl_ADMINISTRADOR)) {
             getCmbModoFacturacion().setEnabled(false);
             getCmbIvaDefault().setEnabled(false);
         }
@@ -162,14 +160,12 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         parametros.get(ParametroCodefac.IVA_DEFECTO).setValor(ivaDefacto);
         parametros.get(ParametroCodefac.CORREO_USUARIO).setValor(getTxtCorreoElectronico().getText());
         parametros.get(ParametroCodefac.CORREO_CLAVE).setValor(new String(getTxtPasswordCorreo().getPassword()));
-        
+
         parametros.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).setValor(new String(getTxtClaveFirma().getPassword()));
-        
+
         parametros.get(ParametroCodefac.MODO_FACTURACION).setValor(getCmbModoFacturacion().getSelectedItem().toString());
         //verificarFirmaElectronica();
     }
-
-
 
     private void cargarDatosConfiguraciones() {
         parametros = parametroCodefacService.getParametrosMap();
@@ -194,9 +190,8 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         /**
          * Cargar el modo de facturacion por defecto
          */
-        String modoProduccion=parametros.get(ParametroCodefac.MODO_FACTURACION).getValor();
+        String modoProduccion = parametros.get(ParametroCodefac.MODO_FACTURACION).getValor();
         getCmbModoFacturacion().setSelectedItem(modoProduccion);
-        
 
     }
 
@@ -207,12 +202,11 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             getCmbIvaDefault().addItem(impuesto);
         }
     }
-    
+
     private void cargarModosFacturacion() {
         getCmbModoFacturacion().addItem(ComprobanteElectronicoService.MODO_PRODUCCION);
         getCmbModoFacturacion().addItem(ComprobanteElectronicoService.MODO_PRUEBAS);
     }
-
 
     public void cargarDatosArchivos(File archivoEscogido) {
         File archivo = archivoEscogido;
@@ -234,8 +228,8 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         if (origen == null || destino == null) {
             return;
         }
-        
-        File file=destino.toFile();
+
+        File file = destino.toFile();
         //crear toda la ruta si no existe
         if (!file.exists()) {
             file.getParentFile().mkdirs();
@@ -245,7 +239,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         try {
             Files.copy(origen, destino, StandardCopyOption.REPLACE_EXISTING);
             getTxtNombreFirma().setText("" + destino.getFileName());
-            ParametroCodefac parametro=parametros.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA);
+            ParametroCodefac parametro = parametros.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA);
             parametro.setValor(destino.getFileName().toString());
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -272,11 +266,11 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
 
             }
         });
-        
+
         getTxtClaveFirma().addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-              //  throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                //  throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
 
             @Override
@@ -284,7 +278,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
                 verificarFirmaElectronica();
             }
         });
-        
+
         getTxtPasswordCorreo().addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -294,9 +288,10 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             @Override
             public void focusLost(FocusEvent e) {
                 //No validar cuando el password esta vacio
-                if((new String(getTxtPasswordCorreo().getPassword())).length()==0)
-                return ;
-        
+                if ((new String(getTxtPasswordCorreo().getPassword())).length() == 0) {
+                    return;
+                }
+
                 DialogoCodefac.mostrarDialogoCargando(new ProcesoSegundoPlano() {
                     @Override
                     public void procesar() {
@@ -308,63 +303,57 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
                         return "Validando Correo";
                     }
                 });
-                
+
             }
         });
     }
-    
-    private void verificarCredencialesCorreo()
-    {
 
-        
+    private void verificarCredencialesCorreo() {
+
         try {
-            List<String> correos=new ArrayList<String>();
+            List<String> correos = new ArrayList<String>();
             correos.add(getTxtCorreoElectronico().getText());
-            CorreoElectronico correoElectronico=new CorreoElectronico(getTxtCorreoElectronico().getText(),new String(getTxtPasswordCorreo().getPassword()),"Este correo es de prueba para configurar el sistema de Codefac",correos, "Prueba Codefac");
+            String desc = "Bienvenido a Codefac-Lite. <br>"
+                    + "Estimado/a usuario le informamos que su cuenta en Codefac-Lite ha sido activada exitosamente. Ahora ya puedes aprovechar los beneficios de nuestro sistema de facturación electrónica.\n"
+                    + "<br><br> <b>NOTA.- Este mensaje fue enviado automáticamente por el sistema, por favor no responda a este correo.</b>";
+            CorreoElectronico correoElectronico = new CorreoElectronico(getTxtCorreoElectronico().getText(), new String(getTxtPasswordCorreo().getPassword()), desc, correos, "Notificación Codefac");
             correoElectronico.sendMail();
             configurarCorreoDeConsumidorFinal();
             //DialogoCodefac.mensaje("Exito","El correo y la clave son correctos",DialogoCodefac.MENSAJE_CORRECTO);
-        }catch (AuthenticationFailedException ex) {
+        } catch (AuthenticationFailedException ex) {
             System.out.println("Fallo al autentificar el usuario");
             getTxtPasswordCorreo().setText("");
-            DialogoCodefac.mensaje("Error Correo","Las credenciales de su correo son incorrectas",DialogoCodefac.MENSAJE_INCORRECTO);
-                        
+            DialogoCodefac.mensaje("Error Correo", "Las credenciales de su correo son incorrectas", DialogoCodefac.MENSAJE_INCORRECTO);
+
         } catch (MessagingException ex) {
             Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SmtpNoExisteException ex) {
             System.out.println("Fallo al autentificar el usuario");
             getTxtPasswordCorreo().setText("");
-            DialogoCodefac.mensaje("Error Correo","Ingrese un correo valido",DialogoCodefac.MENSAJE_INCORRECTO);
+            DialogoCodefac.mensaje("Error Correo", "Ingrese un correo valido", DialogoCodefac.MENSAJE_INCORRECTO);
         }
     }
-    
-    private void verificarFirmaElectronica()
-    {
-        String claveFirma=new String(getTxtClaveFirma().getPassword());
-        String nombreArchivo=getTxtNombreFirma().getText();
-        String rutaDestino = session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + ComprobanteElectronicoService.CARPETA_CONFIGURACION + "/";
-        
-        String pathFirma="";
-        
-        if(origen!=null)
-        {
-            pathFirma=origen.toString();
-        }
-        else
-        {
-            pathFirma=rutaDestino+nombreArchivo;
-        }
-        
-        if(!claveFirma.equals("") && !pathFirma.equals(""))
-        {
-            if(!FirmaElectronica.FirmaVerificar(pathFirma,claveFirma))
-            {
-                getTxtClaveFirma().setText("");
-                DialogoCodefac.mensaje("Error Clave","La Clave de la firma es incorrecta, ingrese nuevamente.",DialogoCodefac.MENSAJE_INCORRECTO);
-                
-            }
-        }    
 
+    private void verificarFirmaElectronica() {
+        String claveFirma = new String(getTxtClaveFirma().getPassword());
+        String nombreArchivo = getTxtNombreFirma().getText();
+        String rutaDestino = session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + ComprobanteElectronicoService.CARPETA_CONFIGURACION + "/";
+
+        String pathFirma = "";
+
+        if (origen != null) {
+            pathFirma = origen.toString();
+        } else {
+            pathFirma = rutaDestino + nombreArchivo;
+        }
+
+        if (!claveFirma.equals("") && !pathFirma.equals("")) {
+            if (!FirmaElectronica.FirmaVerificar(pathFirma, claveFirma)) {
+                getTxtClaveFirma().setText("");
+                DialogoCodefac.mensaje("Error Clave", "La Clave de la firma es incorrecta, ingrese nuevamente.", DialogoCodefac.MENSAJE_INCORRECTO);
+
+            }
+        }
 
     }
 
@@ -379,18 +368,16 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
 
     @Override
     public List<String> getPerfilesPermisos() {
-        List<String> permisosPerfil=new ArrayList<String>();
+        List<String> permisosPerfil = new ArrayList<String>();
         permisosPerfil.add(Perfil.PERFIl_OPERADOR);
         permisosPerfil.add(Perfil.PERFIl_ADMINISTRADOR);
         return permisosPerfil;
     }
 
-    public void configurarCorreoDeConsumidorFinal()
-    {
+    public void configurarCorreoDeConsumidorFinal() {
         clienteService = new PersonaService();
-        for(Persona c :clienteService.buscar())
-        {
-            if(c.getRazonSocial().equals("Cliente Final")){
+        for (Persona c : clienteService.buscar()) {
+            if (c.getRazonSocial().equals("Cliente Final")) {
                 cliente = c;
             }
         }
