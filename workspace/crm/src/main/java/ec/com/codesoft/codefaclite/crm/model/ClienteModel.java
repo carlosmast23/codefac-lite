@@ -136,8 +136,13 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
 
     @Override
     public void eliminar() {
-        personaService.eliminar(persona);
-        System.out.println("Se elimino correctamente");
+        Boolean confirmacion=DialogoCodefac.dialogoPregunta("Alerta","Está seguro que desea eliminar el cliente?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+        if(confirmacion)
+        {
+            personaService.eliminar(persona);
+            System.out.println("Se elimino correctamente");
+        }
+        
     }
 
     @Override
