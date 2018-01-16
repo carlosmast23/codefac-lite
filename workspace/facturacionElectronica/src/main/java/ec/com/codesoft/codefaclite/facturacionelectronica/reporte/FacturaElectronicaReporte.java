@@ -9,6 +9,8 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectr
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.DetalleFacturaComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FormaPagoComprobante;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.TotalImpuesto;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,11 +46,32 @@ public class FacturaElectronicaReporte extends ComprobanteElectronicoReporte{
     @Override
     public Map<String,Object> getMapTotales()
     {
+        /**
+         * Calcular los valores de los subtotales 0 y con impuestos         * 
+         */
+        List<TotalImpuesto> impuestos=facturaComprobante.getInformacionFactura().getTotalImpuestos();
+        BigDecimal subTotalCero=BigDecimal.ZERO;
+        BigDecimal subTotalImpuesto=BigDecimal.ZERO;
+        BigDecimal iva=BigDecimal.ZERO;
+        
+        for (TotalImpuesto impuesto : impuestos) {
+            if(impuesto.getValor().compareTo(BigDecimal.ZERO)==0)
+            {
+                subTotalCero=subTotalCero.add(impuesto.getBaseImponible().add(new BigDecimal(impuesto.getDescuentoAdicional())));
+            }
+            else
+            {
+                subTotalImpuesto=subTotalImpuesto.add(impuesto.getBaseImponible().add(new BigDecimal(impuesto.getDescuentoAdicional())));
+                iva=iva.add(impuesto.getValor());
+            }
+        }
+        
         Map<String,Object> map=new HashMap<String,Object>();
-        map.put("subtotal_cero","0");
-        map.put("subtotal",facturaComprobante.getInformacionFactura().getTotalSinImpuestos().toString());
+        map.put("subtotal_cero",subTotalCero.toString());
+        map.put("subtotal",subTotalImpuesto.toString());
         map.put("descuento",facturaComprobante.getInformacionFactura().getTotalDescuento().toString());
-        map.put("iva",facturaComprobante.getInformacionFactura().getImporteTotal().subtract(facturaComprobante.getInformacionFactura().getTotalSinImpuestos())+"");
+        
+        map.put("iva",iva.toString());
         map.put("total",facturaComprobante.getInformacionFactura().getImporteTotal()+"");
         /**
          * Falta setear el iva que se esta usando en el sistema

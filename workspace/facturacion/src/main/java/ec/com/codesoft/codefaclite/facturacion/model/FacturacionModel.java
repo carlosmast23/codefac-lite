@@ -786,7 +786,7 @@ public class FacturacionModel extends FacturacionPanel {
             //Solo sumar los subt
             System.out.println(facturaDetalle.getIva());
             if (facturaDetalle.getIva().compareTo(BigDecimal.ZERO) == 0) {
-                this.factura.setSubtotalSinImpuestos(this.factura.getSubtotalSinImpuestos().add(facturaDetalle.getTotal()));
+                this.factura.setSubtotalSinImpuestos(this.factura.getSubtotalSinImpuestos().add(facturaDetalle.getPrecioUnitario().multiply(facturaDetalle.getCantidad())));
                 this.factura.setDescuentoSinImpuestos(this.factura.getDescuentoSinImpuestos().add(facturaDetalle.getDescuento()));
             }
         }
@@ -820,8 +820,9 @@ public class FacturacionModel extends FacturacionPanel {
         this.factura.setDescuentoImpuestos(new BigDecimal(0));
 
         for (FacturaDetalle facturaDetalle : facturaDetalles) {
+            //TODO este valor esta quemado toca parametrizar
             if (facturaDetalle.getProducto().getIva().getTarifa() == 12) { //esta parametro de 12 debe estar parametrizado
-                this.factura.setSubtotalImpuestos(factura.getSubtotalImpuestos().add(facturaDetalle.getTotal()));
+                this.factura.setSubtotalImpuestos(factura.getSubtotalImpuestos().add(facturaDetalle.getPrecioUnitario().multiply(facturaDetalle.getCantidad())));
                 //this.factura.setDescuentoImpuestos(this.factura.getDescuentoImpuestos().add(facturaDetalle.getTotal()));
                 this.factura.setDescuentoImpuestos(this.factura.getDescuentoImpuestos().add(facturaDetalle.getDescuento()));
                 System.out.println(facturaDetalle.getDescuento());
@@ -1106,8 +1107,6 @@ public class FacturacionModel extends FacturacionPanel {
             BigDecimal valorTotalUnitario = new BigDecimal(getTxtValorUnitario().getText());
             facturaDetalle.setPrecioUnitario(valorTotalUnitario.setScale(2, BigDecimal.ROUND_HALF_UP));
             facturaDetalle.setProducto(productoSeleccionado);
-            BigDecimal setTotal = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario());
-            facturaDetalle.setTotal(setTotal.setScale(2, BigDecimal.ROUND_HALF_UP));
             facturaDetalle.setValorIce(BigDecimal.ZERO);
 
             BigDecimal descuento;
@@ -1128,17 +1127,20 @@ public class FacturacionModel extends FacturacionPanel {
                 }
             }
 
+            //Calular el total despues del descuento porque necesito esa valor para grabar
+            BigDecimal setTotal = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).subtract(facturaDetalle.getDescuento());
+            facturaDetalle.setTotal(setTotal.setScale(2, BigDecimal.ROUND_HALF_UP));
             /**
              * Revisar este calculo del iva para no calcular 2 veces al mostrar
              */
             if (facturaDetalle.getProducto().getIva().getTarifa().equals(0)) {
                 facturaDetalle.setIva(BigDecimal.ZERO);
             } else {
-                BigDecimal iva = facturaDetalle.getTotal().subtract(facturaDetalle.getDescuento()).multiply(obtenerValorIva()).setScale(2, BigDecimal.ROUND_HALF_UP);
+                BigDecimal iva = facturaDetalle.getTotal().multiply(obtenerValorIva()).setScale(2, BigDecimal.ROUND_HALF_UP);
                 facturaDetalle.setIva(iva);
             }
 
-            if (facturaDetalle.getTotal().compareTo(facturaDetalle.getDescuento()) > 0) {
+            if (facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).compareTo(facturaDetalle.getDescuento()) > 0) {
 
                 //Solo agregar si se enviar un dato vacio
                 if (agregar) {
