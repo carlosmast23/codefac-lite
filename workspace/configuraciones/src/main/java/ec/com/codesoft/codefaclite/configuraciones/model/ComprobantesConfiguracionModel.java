@@ -85,7 +85,6 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         actualizarDatosVista();
         moverArchivo();
         this.parametroCodefacService.editarParametros(parametros);
-
         /**
          * Establesco el ciclo de vida en el cual me encuentro
          */
@@ -314,9 +313,9 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         try {
             List<String> correos = new ArrayList<String>();
             correos.add(getTxtCorreoElectronico().getText());
-            String desc = "Bienvenido a Codefac-Lite.\n"
+            String desc = "Bienvenido a Codefac-Lite. <br>"
                     + "Estimado/a usuario le informamos que su cuenta en Codefac-Lite ha sido activada exitosamente. Ahora ya puedes aprovechar los beneficios de nuestro sistema de facturación electrónica.\n"
-                    + "\n\n NOTA.- Este mensaje fue enviado automáticamente por el sistema, por favor no responda a este correo.";
+                    + "<br><br> <b>NOTA.- Este mensaje fue enviado automáticamente por el sistema, por favor no responda a este correo.</b>";
             CorreoElectronico correoElectronico = new CorreoElectronico(getTxtCorreoElectronico().getText(), new String(getTxtPasswordCorreo().getPassword()), desc, correos, "Notificación Codefac");
             correoElectronico.sendMail();
             configurarCorreoDeConsumidorFinal();

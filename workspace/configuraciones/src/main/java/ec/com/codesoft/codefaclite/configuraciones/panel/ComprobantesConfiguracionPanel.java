@@ -236,7 +236,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         panelFacturacionElectronica.add(jLabel8, gridBagConstraints);
 
-        jLabel9.setText("Clave Fima:");
+        jLabel9.setText("Contraseña Firma:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -296,6 +296,8 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         panelConfiguracionesGenerales.add(cmbIvaDefault, gridBagConstraints);
+
+        txtDirectorioRecurso.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
@@ -379,7 +381,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         panelConfiguracionesGenerales.add(jLabel13, gridBagConstraints);
 
-        jLabel23.setText("Password Correo:");
+        jLabel23.setText("Contraseña Correo:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -530,13 +532,10 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         return cmbModoFacturacion;
     }
 
-
+    @ValidacionCodefacAnotacion(requerido = true, min = 0, nombre = "Contraseña de firma electrónica")
     public JPasswordField getTxtClaveFirma() {
         return txtClaveFirma;
     }
-
-
-    
     
     public void setTxtClaveFirma(JPasswordField txtClaveFirma) {
         this.txtClaveFirma = txtClaveFirma;
@@ -547,36 +546,30 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         return txtCorreoElectronico;
     }
 
-
     public void setTxtCorreoElectronico(JTextField txtCorreoElectronico) {
         this.txtCorreoElectronico = txtCorreoElectronico;
     }
 
-    
     public JTextField getTxtDirectorioRecurso() {
         return txtDirectorioRecurso;
     }
-
 
     public void setTxtDirectorioRecurso(JTextField txtDirectorioRecurso) {
         this.txtDirectorioRecurso = txtDirectorioRecurso;
     }
 
-
     public JTextField getTxtNombreFirma() {
         return txtNombreFirma;
     }
-
 
     public void setTxtNombreFirma(JTextField txtNombreFirma) {
         this.txtNombreFirma = txtNombreFirma;
     }
 
-
+    @ValidacionCodefacAnotacion(requerido = true, min = 0, nombre = "Contraseña del correo")
     public JPasswordField getTxtPasswordCorreo() {
         return txtPasswordCorreo;
     }
-
 
     public void setTxtPasswordCorreo(JPasswordField txtPasswordCorreo) {
         this.txtPasswordCorreo = txtPasswordCorreo;
