@@ -91,8 +91,6 @@ public class FacturacionModel extends FacturacionPanel {
     private BigDecimal valorTotalFormaDePago;
     private java.util.Date fechaMax;
     private java.util.Date fechaMin;
-    
-    
 
     /**
      * Mapa de datos adicionales que se almacenan temporalmente y sirven para la
@@ -112,11 +110,11 @@ public class FacturacionModel extends FacturacionPanel {
         initComponenesGraficos();
         initModelTablaFormaPago();
         initModelTablaDetalleFactura();
-        initModelTablaDatoAdicional();        
+        initModelTablaDatoAdicional();
         //setearVariablesIniciales();
 
     }
-    
+
     /*
     private void asds()
     {
@@ -129,11 +127,10 @@ public class FacturacionModel extends FacturacionPanel {
         getLblSubTotalDescuentoSinImpuesto().setText("" + this.subTotalDescuentoSinImpuesto);
         getLblTotalDescuento().setText("" + this.descuento);
     }*/
-
     private void setearFechas() {
         //this.fechaMax = new java.util.Date();
         definirFechaMinFacturacion();
-        
+
     }
 
     private void setearVariablesIniciales() {
@@ -142,7 +139,7 @@ public class FacturacionModel extends FacturacionPanel {
         this.factura.setSubtotalSinImpuestos(BigDecimal.ZERO);
         this.factura.setIva(BigDecimal.ZERO);
         this.factura.setTotal(BigDecimal.ZERO);
-       //this.subTotalDescuentoConImpuesto = new BigDecimal(0);
+        //this.subTotalDescuentoConImpuesto = new BigDecimal(0);
         //this.subTotalDescuentoSinImpuesto = new BigDecimal(0);
         this.factura.setDescuentoImpuestos(new BigDecimal(0));
         //this.subtotalSinImpuestosDescuento=BigDecimal.ZERO;
@@ -190,45 +187,41 @@ public class FacturacionModel extends FacturacionPanel {
         getBtnAgregarFormaPago().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(!factura.getDetalles().isEmpty())
-                {
+                if (!factura.getDetalles().isEmpty()) {
                     FormaPagoDialogModel dialog = new FormaPagoDialogModel(null, true);
                     dialog.setLocationRelativeTo(null);
                     dialog.setVisible(true);
                     FormaPago formaPago = dialog.getFormaPago();
                     valorTotalFormaDePago = formaPago.getTotal();
-                    try{
-                        
+                    try {
+
                         verificarSumaFormaPago();
-                        if(banderaFormaPago)
-                        {
+                        if (banderaFormaPago) {
                             factura.addFormaPago(formaPago);
                             valorTotalFormaDePago = new BigDecimal("0");
                         }
                         cargarFormasPagoTabla();
-                    }catch(Exception ex)
-                    {
+                    } catch (Exception ex) {
                         System.out.println("No existe forma de pago");
                     }
-                            
-                }      
+
+                }
             }
         });
-        
+
         getBtnQuitarDetalleFormaPago().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(banderaFP)
-                {
+                if (banderaFP) {
                     modeloTablaFormasPago.removeRow(filaFP);
                     factura.getFormaPagos().remove(filaFP);
                     verificarSumaFormaPago();
-                    cargarFormasPagoTabla();                  
+                    cargarFormasPagoTabla();
                     banderaFP = false;
                 }
             }
         });
-        
+
         getBtnAgregarProducto().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -250,19 +243,21 @@ public class FacturacionModel extends FacturacionPanel {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 fila = getTblDetalleFactura().getSelectedRow();
                 //setear valores para cargar de nuevo en los campos de la factura
-                FacturaDetalle facturaDetalle=factura.getDetalles().get(fila);
-                getTxtValorUnitario().setText(facturaDetalle.getPrecioUnitario()+"");
-                getTxtCantidad().setText(facturaDetalle.getCantidad()+"");
+                FacturaDetalle facturaDetalle = factura.getDetalles().get(fila);
+                getTxtValorUnitario().setText(facturaDetalle.getPrecioUnitario() + "");
+                getTxtCantidad().setText(facturaDetalle.getCantidad() + "");
                 getTxtDescripcion().setText(facturaDetalle.getDescripcion());
-                getTxtDescuento().setText(facturaDetalle.getDescuento()+"");
+                getTxtDescuento().setText(facturaDetalle.getDescuento() + "");
                 getCheckPorcentaje().setSelected(false);
                 bandera = true;
                 getBtnEditarDetalle().setEnabled(true);
                 getBtnQuitarDetalle().setEnabled(true);
                 getBtnAgregarDetalleFactura().setEnabled(false);
+                getBtnAgregarProducto().setEnabled(false);
+                getBtnCrearProducto().setEnabled(false);
             }
         });
-        
+
         getBtnAgregarDetalleFactura().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -270,14 +265,14 @@ public class FacturacionModel extends FacturacionPanel {
                 agregarDetallesFactura(null);
             }
         });
-        
+
         getTxtCantidad().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 agregarDetallesFactura(null);
             }
         });
-        
+
         getBtnQuitarDetalle().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -289,10 +284,12 @@ public class FacturacionModel extends FacturacionPanel {
                     getBtnEditarDetalle().setEnabled(false);
                     getBtnQuitarDetalle().setEnabled(false);
                     getBtnAgregarDetalleFactura().setEnabled(true);
+                    getBtnAgregarProducto().setEnabled(true);
+                    getBtnCrearProducto().setEnabled(true);
                 }
             }
         });
-                
+
         getBtnEditarDetalle().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -303,9 +300,10 @@ public class FacturacionModel extends FacturacionPanel {
                     getBtnEditarDetalle().setEnabled(false);
                     getBtnQuitarDetalle().setEnabled(false);
                     getBtnAgregarDetalleFactura().setEnabled(true);
+                    getBtnAgregarProducto().setEnabled(true);
+                    getBtnCrearProducto().setEnabled(true);
                 }
             }
-
         });
 
         getBtnAgregarCliente().addActionListener(new ActionListener() {
@@ -351,7 +349,7 @@ public class FacturacionModel extends FacturacionPanel {
                 }
             }
         });
-             
+
         getTblFormasPago().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -359,34 +357,31 @@ public class FacturacionModel extends FacturacionPanel {
                 banderaFP = true;
             }
         });
-        
+
     }
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
 
-        if(!banderaFormaPago)
-        {
+        if (!banderaFormaPago) {
             throw new ExcepcionCodefacLite("Formas de pago erroneas");
         }
-        
-        if(factura.getCliente() == null)
-        {
+
+        if (factura.getCliente() == null) {
             DialogoCodefac.mensaje("Alerta", "Necesita seleccionar un cliente", DialogoCodefac.MENSAJE_ADVERTENCIA);
             throw new ExcepcionCodefacLite("Necesita seleccionar un Cliente");
         }
-        
-        if(factura.getDetalles().isEmpty())
-        {
+
+        if (factura.getDetalles().isEmpty()) {
             DialogoCodefac.mensaje("Alerta", "No se puede facturar sin detalles", DialogoCodefac.MENSAJE_ADVERTENCIA);
             throw new ExcepcionCodefacLite("Necesita seleccionar detalles ");
         }
-        
+
         Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea facturar?", DialogoCodefac.MENSAJE_ADVERTENCIA);
         if (!respuesta) {
             throw new ExcepcionCodefacLite("Cancelacion usuario");
         }
-        
+
         Factura facturaProcesando; //referencia que va a tener la factura procesada para que los listener no pierdan la referencia a la variable del metodo. 
 
         FacturacionService servicio = new FacturacionService();
@@ -541,24 +536,18 @@ public class FacturacionModel extends FacturacionPanel {
     @Override
     public void eliminar() {
         //Eliminar solo si ha cargado un dato para editar
-        if(estadoFormulario.equals(ESTADO_EDITAR))
-        {
-            if(factura!=null)
-            {
-                if(factura.getEstado().equals(FacturaEnumEstado.SIN_AUTORIZAR.getEstado()))
-                {                    
-                    boolean respuesta=DialogoCodefac.dialogoPregunta("Advertencia","Esta seguro que desea eliminar la factura? ", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                    if(respuesta)
-                    {
+        if (estadoFormulario.equals(ESTADO_EDITAR)) {
+            if (factura != null) {
+                if (factura.getEstado().equals(FacturaEnumEstado.SIN_AUTORIZAR.getEstado())) {
+                    boolean respuesta = DialogoCodefac.dialogoPregunta("Advertencia", "Esta seguro que desea eliminar la factura? ", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    if (respuesta) {
                         FacturacionService servicio = new FacturacionService();
                         servicio.eliminarFactura(factura);
-                        DialogoCodefac.mensaje("Exitoso","La factura se elimino correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+                        DialogoCodefac.mensaje("Exitoso", "La factura se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
                         getLblEstadoFactura().setText(FacturaEnumEstado.ELIMINADO.getNombre());
                     }
-                }
-                else
-                {
-                    DialogoCodefac.mensaje("Alerta","Solo se pueden eliminar facturas no autorizadas",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                } else {
+                    DialogoCodefac.mensaje("Alerta", "Solo se pueden eliminar facturas no autorizadas", DialogoCodefac.MENSAJE_ADVERTENCIA);
                 }
             }
         }
@@ -593,16 +582,13 @@ public class FacturacionModel extends FacturacionPanel {
             ///Cargar los datos de la factura
             setearValoresCliente();
             cargarDatosDetalles();
-            setearDetalleFactura();            
+            setearDetalleFactura();
             cargarTotales();
             cargarValoresAdicionales();
             cargarFormasPagoTabla();
+        } else {
+            throw new ExcepcionCodefacLite("cancelar ejecucion");
         }
-        else
-        {
-            throw  new ExcepcionCodefacLite("cancelar ejecucion");
-        }
-        
 
     }
 
@@ -662,11 +648,9 @@ public class FacturacionModel extends FacturacionPanel {
         getBtnEditarDetalle().setEnabled(false);
         getBtnQuitarDetalle().setEnabled(false);
         getBtnAgregarDetalleFactura().setEnabled(true);
-        
+
         //Limpiar las variables de la facturacion
         setearVariablesIniciales();
-        
-        
 
     }
 
@@ -697,8 +681,8 @@ public class FacturacionModel extends FacturacionPanel {
         //this.modeloTablaFormasPago=new DefaultTableModel(fila,0);
         //this.modeloTablaFormasPago.initModelTablaFormaPago();
         initModelTablaFormaPago();
-        
-        List<FormaPago> formasPago=factura.getFormaPagos();
+
+        List<FormaPago> formasPago = factura.getFormaPagos();
         for (FormaPago formaPago : formasPago) {
             Vector<String> fila = new Vector<>();
             fila.add(formaPago.getSriFormaPago().getNombre());
@@ -707,7 +691,7 @@ public class FacturacionModel extends FacturacionPanel {
             fila.add(formaPago.getPlazo() + "");
             this.modeloTablaFormasPago.addRow(fila);
         }
-       
+
     }
 
     private void initModelTablaFormaPago() {
@@ -798,18 +782,17 @@ public class FacturacionModel extends FacturacionPanel {
     public void calcularSubtotalSinImpuestos(List<FacturaDetalle> facturaDetalles) {
         this.factura.setSubtotalSinImpuestos(BigDecimal.ZERO);
         this.factura.setDescuentoSinImpuestos(new BigDecimal(0));
-        
+
         for (FacturaDetalle facturaDetalle : facturaDetalles) {
             //Solo sumar los subt
             System.out.println(facturaDetalle.getIva());
-            if(facturaDetalle.getIva().compareTo(BigDecimal.ZERO)==0)
-            {
+            if (facturaDetalle.getIva().compareTo(BigDecimal.ZERO) == 0) {
                 this.factura.setSubtotalSinImpuestos(this.factura.getSubtotalSinImpuestos().add(facturaDetalle.getPrecioUnitario().multiply(facturaDetalle.getCantidad())));
                 this.factura.setDescuentoSinImpuestos(this.factura.getDescuentoSinImpuestos().add(facturaDetalle.getDescuento()));
             }
         }
-        
-        this.factura.setSubtotalSinImpuestos( this.factura.getSubtotalSinImpuestos().setScale(2, BigDecimal.ROUND_HALF_UP));
+
+        this.factura.setSubtotalSinImpuestos(this.factura.getSubtotalSinImpuestos().setScale(2, BigDecimal.ROUND_HALF_UP));
         this.factura.setDescuentoSinImpuestos(this.factura.getDescuentoSinImpuestos().setScale(2, BigDecimal.ROUND_HALF_UP));
     }
 
@@ -836,18 +819,17 @@ public class FacturacionModel extends FacturacionPanel {
     public void calcularSubtotal12(List<FacturaDetalle> facturaDetalles) {
         this.factura.setSubtotalImpuestos(BigDecimal.ZERO);
         this.factura.setDescuentoImpuestos(new BigDecimal(0));
-        
+
         for (FacturaDetalle facturaDetalle : facturaDetalles) {
             //TODO este valor esta quemado toca parametrizar
-            if (facturaDetalle.getProducto().getIva().getTarifa() == 12) 
-            { //esta parametro de 12 debe estar parametrizado
-                this.factura.setSubtotalImpuestos (factura.getSubtotalImpuestos().add(facturaDetalle.getPrecioUnitario().multiply(facturaDetalle.getCantidad())));
+            if (facturaDetalle.getProducto().getIva().getTarifa() == 12) { //esta parametro de 12 debe estar parametrizado
+                this.factura.setSubtotalImpuestos(factura.getSubtotalImpuestos().add(facturaDetalle.getPrecioUnitario().multiply(facturaDetalle.getCantidad())));
                 //this.factura.setDescuentoImpuestos(this.factura.getDescuentoImpuestos().add(facturaDetalle.getTotal()));
                 this.factura.setDescuentoImpuestos(this.factura.getDescuentoImpuestos().add(facturaDetalle.getDescuento()));
                 System.out.println(facturaDetalle.getDescuento());
             }
         }
-        
+
         //Escalar valores
         this.factura.setSubtotalImpuestos(factura.getSubtotalImpuestos().setScale(2, BigDecimal.ROUND_HALF_UP));
         this.factura.setDescuentoImpuestos(this.factura.getDescuentoImpuestos().setScale(2, BigDecimal.ROUND_HALF_UP));
@@ -863,13 +845,13 @@ public class FacturacionModel extends FacturacionPanel {
         //this.factura.setIva(this.factura.getDescuentoImpuestos().multiply(obtenerValorIva()));
         //this.factura.setIva(this.factura.getIva().setScale(2, BigDecimal.ROUND_HALF_UP));
         this.factura.setIva(this.factura.getSubtotalImpuestos().subtract(this.factura.getDescuentoImpuestos()).multiply(obtenerValorIva()));
-        this.factura.setIva(this.factura.getIva().setScale(2,BigDecimal.ROUND_HALF_UP));
+        this.factura.setIva(this.factura.getIva().setScale(2, BigDecimal.ROUND_HALF_UP));
     }
 
     public void calcularValorTotal() {
         this.factura.setTotal(
                 factura.getSubtotalImpuestos().subtract(this.factura.getDescuentoImpuestos()).
-                add(factura.getSubtotalSinImpuestos().subtract(factura.getDescuentoSinImpuestos())).
+                        add(factura.getSubtotalSinImpuestos().subtract(factura.getDescuentoSinImpuestos())).
                         add(factura.getIva()));
     }
 
@@ -909,19 +891,21 @@ public class FacturacionModel extends FacturacionPanel {
         getLblNombreCliente().setText(factura.getCliente().getRazonSocial());
         getLblDireccionCliente().setText(factura.getCliente().getDireccion());
         getLblTelefonoCliente().setText(factura.getCliente().getTelefonoConvencional());
-        
+
         /**
          * Cargar el estado de la factura
          */
-        FacturaEnumEstado estadoEnum=FacturaEnumEstado.getEnum(factura.getEstado());
-        
-        if(estadoEnum!=null)
+        FacturaEnumEstado estadoEnum = FacturaEnumEstado.getEnum(factura.getEstado());
+
+        if (estadoEnum != null) {
             getLblEstadoFactura().setText(estadoEnum.getNombre());
-        
+        }
+
         //Cargar el correo solo cuando exista 
-        if(factura.getCliente().getCorreoElectronico()!=null)
+        if (factura.getCliente().getCorreoElectronico() != null) {
             datosAdicionales.put("email", factura.getCliente().getCorreoElectronico());
-        
+        }
+
         factura.setCliente(factura.getCliente());
         factura.setRazonSocial(factura.getCliente().getRazonSocial());
         factura.setIdentificacion(factura.getCliente().getIdentificacion());
@@ -986,13 +970,9 @@ public class FacturacionModel extends FacturacionPanel {
         getBtnCrearProducto().setIcon(new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("pequenos/add2.png")));
         getBtnCrearProducto().setText("");
         getBtnCrearProducto().setToolTipText("Crear nuevo producto");
-        
+
         getBtnAgregarFormaPago().setText("");
         getBtnAgregarFormaPago().setToolTipText("Agregar formas e pago");
-        
-        
-        
-        
 
     }
 
@@ -1007,13 +987,12 @@ public class FacturacionModel extends FacturacionPanel {
     }
 
     @Override
-    public void iniciar() throws ExcepcionCodefacLite{
+    public void iniciar() throws ExcepcionCodefacLite {
         System.out.println("Ingresando a iniciar");
-        if(!validacionParametrosCodefac())
-        {
+        if (!validacionParametrosCodefac()) {
             dispose();
             throw new ExcepcionCodefacLite("No cumple validacion inicial");
-            
+
         }
     }
 
@@ -1038,173 +1017,148 @@ public class FacturacionModel extends FacturacionPanel {
         this.fechaMin = calendar.getTime();
 
     }
-    
-    private void cargarValoresAdicionales()
-    {
+
+    private void cargarValoresAdicionales() {
         getLblSecuencial().setText(factura.getPreimpreso());
         getjDateFechaEmision().setDate(factura.getFechaFactura());
     }
 
     private boolean validacionParametrosCodefac() {
         System.out.println("Ingreso a la validacion de Paremtros Codefac");
-        String mensajeValidacion="Esta pantalla requiere : \n";
-        boolean validado=true;
-        if(session.getParametrosCodefac().get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor().equals(""))
-        { 
-            mensajeValidacion+=" - Archivo Firma\n";
-            validado= false;
+        String mensajeValidacion = "Esta pantalla requiere : \n";
+        boolean validado = true;
+        if (session.getParametrosCodefac().get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor().equals("")) {
+            mensajeValidacion += " - Archivo Firma\n";
+            validado = false;
         }
-        
-        if(session.getParametrosCodefac().get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).getValor().equals(""))
-        { 
-            mensajeValidacion+=" - Clave Firma\n";
-            validado= false;
+
+        if (session.getParametrosCodefac().get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).getValor().equals("")) {
+            mensajeValidacion += " - Clave Firma\n";
+            validado = false;
         }
-        
-        if(session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals(""))
-        { 
-            mensajeValidacion+=" - Correo\n";
-            validado= false;
+
+        if (session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals("")) {
+            mensajeValidacion += " - Correo\n";
+            validado = false;
         }
-        
-        if(session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals(""))
-        { 
-            mensajeValidacion+=" - Clave Correo \n";
-            validado= false;
+
+        if (session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals("")) {
+            mensajeValidacion += " - Clave Correo \n";
+            validado = false;
         }
-        
-        if(session.getEmpresa() == null)
-        {
-            mensajeValidacion+=" - Información de Empresa \n";
-            validado= false;
+
+        if (session.getEmpresa() == null) {
+            mensajeValidacion += " - Información de Empresa \n";
+            validado = false;
         }
-        
-        if(!validado)
-        {
+
+        if (!validado) {
             //mensajeValidacion=mensajeValidacion.substring(0,mensajeValidacion.length()-2);
-            DialogoCodefac.mensaje("Acceso no permitido", mensajeValidacion+"\nPofavor complete estos datos en configuración para usar esta pantalla",DialogoCodefac.MENSAJE_ADVERTENCIA);
+            DialogoCodefac.mensaje("Acceso no permitido", mensajeValidacion + "\nPofavor complete estos datos en configuración para usar esta pantalla", DialogoCodefac.MENSAJE_ADVERTENCIA);
         }
-        
+
         return validado;
-        
+
     }
 
     @Override
     public List<String> getPerfilesPermisos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    public void verificarSumaFormaPago()
-    {
+
+    public void verificarSumaFormaPago() {
         BigDecimal totalFormasPago = new BigDecimal("0");
         int res;
-        try
-        {
-            for(FormaPago fp : factura.getFormaPagos())
-            {
+        try {
+            for (FormaPago fp : factura.getFormaPagos()) {
                 totalFormasPago = totalFormasPago.add(fp.getTotal());
             }
             totalFormasPago = totalFormasPago.add(valorTotalFormaDePago);
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             System.out.println("Es la primera vez que se utiliza una forma de pago");
         }
-        
+
         res = factura.getTotal().compareTo(totalFormasPago);
-        if(res == -1)
-        {
+        if (res == -1) {
             DialogoCodefac.mensaje("Advertencia", "La forma de pago sobrepasa el valor a Facturar", DialogoCodefac.MENSAJE_ADVERTENCIA);
             banderaFormaPago = false;
-        }
-        else
-        {
+        } else {
             banderaFormaPago = true;
         }
     }
-    
-    public void agregarDetallesFactura(FacturaDetalle facturaDetalle)
-    {
-        boolean agregar=true;
-        
+
+    public void agregarDetallesFactura(FacturaDetalle facturaDetalle) {
+        boolean agregar = true;
+
         //Verifica si manda un detalle existe solo se modifica
-        if(facturaDetalle!=null)
-            agregar=false;
-        else
-        {
-            facturaDetalle=new FacturaDetalle();
+        if (facturaDetalle != null) {
+            agregar = false;
+        } else {
+            facturaDetalle = new FacturaDetalle();
         }
-                
-                if(!panelPadre.validarPorGrupo("detalles"))
-                {
-                    return;
+
+        if (!panelPadre.validarPorGrupo("detalles")) {
+            return;
+        }
+
+        if (verificarCamposValidados()) {
+            //FacturaDetalle facturaDetalle = new FacturaDetalle();
+            facturaDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
+            facturaDetalle.setDescripcion(getTxtDescripcion().getText());
+            BigDecimal valorTotalUnitario = new BigDecimal(getTxtValorUnitario().getText());
+            facturaDetalle.setPrecioUnitario(valorTotalUnitario.setScale(2, BigDecimal.ROUND_HALF_UP));
+            facturaDetalle.setProducto(productoSeleccionado);
+            facturaDetalle.setValorIce(BigDecimal.ZERO);
+
+            BigDecimal descuento;
+            if (!getCheckPorcentaje().isSelected()) {
+                if (!getTxtDescuento().getText().equals("")) {
+                    descuento = new BigDecimal(getTxtDescuento().getText());
+                } else {
+                    descuento = BigDecimal.ZERO;
                 }
-                
-                if (verificarCamposValidados()) {
-                    //FacturaDetalle facturaDetalle = new FacturaDetalle();
-                    facturaDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
-                    facturaDetalle.setDescripcion(getTxtDescripcion().getText());
-                    BigDecimal valorTotalUnitario = new BigDecimal(getTxtValorUnitario().getText());
-                    facturaDetalle.setPrecioUnitario(valorTotalUnitario.setScale(2,BigDecimal.ROUND_HALF_UP));
-                    facturaDetalle.setProducto(productoSeleccionado);
-                    facturaDetalle.setValorIce(BigDecimal.ZERO);
-                    
 
-                    BigDecimal descuento;
-                    if (!getCheckPorcentaje().isSelected()) {
-                        if (!getTxtDescuento().getText().equals("")) {
-                            descuento = new BigDecimal(getTxtDescuento().getText());
-                        } else {
-                            descuento = BigDecimal.ZERO;
-                        }
-
-                        facturaDetalle.setDescuento(descuento);
-                    } else {
-                        if(!getTxtDescuento().getText().equals("")){
-                            BigDecimal porcentajeDescuento = new BigDecimal(getTxtDescuento().getText());
-                            porcentajeDescuento = porcentajeDescuento.divide(new BigDecimal(100));
-                            descuento = facturaDetalle.getTotal().multiply(porcentajeDescuento);
-                            facturaDetalle.setDescuento(descuento.setScale(2, BigDecimal.ROUND_HALF_UP));
-                        }
-                    }
-                    
-                    //Calular el total despues del descuento porque necesito esa valor para grabar
-                    BigDecimal setTotal = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).subtract(facturaDetalle.getDescuento());
-                    facturaDetalle.setTotal(setTotal.setScale(2, BigDecimal.ROUND_HALF_UP));
-                                                            /**
-                     * Revisar este calculo del iva para no calcular 2 veces al
-                     * mostrar
-                     */
-                    if(facturaDetalle.getProducto().getIva().getTarifa().equals(0))
-                    {
-                        facturaDetalle.setIva(BigDecimal.ZERO);
-                    }
-                    else
-                    {
-                        BigDecimal iva=facturaDetalle.getTotal().multiply(obtenerValorIva()).setScale(2,BigDecimal.ROUND_HALF_UP);
-                        facturaDetalle.setIva(iva);
-                    }
-                    
-                    if(facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).compareTo(facturaDetalle.getDescuento()) > 0){
-                        
-                        //Solo agregar si se enviar un dato vacio
-                        if(agregar)
-                            factura.addDetalle(facturaDetalle);
-                        
-                        cargarDatosDetalles();
-                        setearDetalleFactura();
-                        cargarTotales();
-                        banderaAgregar = false;
-                    }
-                    else
-                    {
-                        DialogoCodefac.mensaje("Alerta", "El valor de Descuento excede, el valor de PrecioTotal del Producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                        setearDetalleFactura();
-                        banderaAgregar = false;
-                    }
-
-
+                facturaDetalle.setDescuento(descuento);
+            } else {
+                if (!getTxtDescuento().getText().equals("")) {
+                    BigDecimal porcentajeDescuento = new BigDecimal(getTxtDescuento().getText());
+                    porcentajeDescuento = porcentajeDescuento.divide(new BigDecimal(100));
+                    descuento = facturaDetalle.getTotal().multiply(porcentajeDescuento);
+                    facturaDetalle.setDescuento(descuento.setScale(2, BigDecimal.ROUND_HALF_UP));
                 }
+            }
+
+            //Calular el total despues del descuento porque necesito esa valor para grabar
+            BigDecimal setTotal = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).subtract(facturaDetalle.getDescuento());
+            facturaDetalle.setTotal(setTotal.setScale(2, BigDecimal.ROUND_HALF_UP));
+            /**
+             * Revisar este calculo del iva para no calcular 2 veces al mostrar
+             */
+            if (facturaDetalle.getProducto().getIva().getTarifa().equals(0)) {
+                facturaDetalle.setIva(BigDecimal.ZERO);
+            } else {
+                BigDecimal iva = facturaDetalle.getTotal().multiply(obtenerValorIva()).setScale(2, BigDecimal.ROUND_HALF_UP);
+                facturaDetalle.setIva(iva);
+            }
+
+            if (facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).compareTo(facturaDetalle.getDescuento()) > 0) {
+
+                //Solo agregar si se enviar un dato vacio
+                if (agregar) {
+                    factura.addDetalle(facturaDetalle);
+                }
+
+                cargarDatosDetalles();
+                setearDetalleFactura();
+                cargarTotales();
+                banderaAgregar = false;
+            } else {
+                DialogoCodefac.mensaje("Alerta", "El valor de Descuento excede, el valor de PrecioTotal del Producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                setearDetalleFactura();
+                banderaAgregar = false;
+            }
+
+        }
     }
 
 }
