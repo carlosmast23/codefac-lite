@@ -47,7 +47,7 @@ public class FacturaElectronicaReporte extends ComprobanteElectronicoReporte{
         Map<String,Object> map=new HashMap<String,Object>();
         map.put("subtotal_cero","0");
         map.put("subtotal",facturaComprobante.getInformacionFactura().getTotalSinImpuestos().toString());
-        map.put("descuento","0");
+        map.put("descuento",facturaComprobante.getInformacionFactura().getTotalDescuento().toString());
         map.put("iva",facturaComprobante.getInformacionFactura().getImporteTotal().subtract(facturaComprobante.getInformacionFactura().getTotalSinImpuestos())+"");
         map.put("total",facturaComprobante.getInformacionFactura().getImporteTotal()+"");
         /**
