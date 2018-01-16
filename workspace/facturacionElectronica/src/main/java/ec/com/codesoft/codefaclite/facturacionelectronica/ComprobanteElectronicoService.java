@@ -555,9 +555,11 @@ public class ComprobanteElectronicoService implements Runnable {
         claveAcceso.add(getTipoCodigoAmbiente());
 
         /**
-         * Valor por defecto serie que no se que se pone
+         * Establecimiento y punto de emision
          */
-        claveAcceso.add("001001");
+        String establecimiento= UtilidadesTextos.llenarCarateresIzquierda(comprobante.getInformacionTributaria().getEstablecimiento(),3,"0");
+        String puntoEmision= UtilidadesTextos.llenarCarateresIzquierda(comprobante.getInformacionTributaria().getPuntoEmision(),3,"0");
+        claveAcceso.add(establecimiento+puntoEmision);
 
         /**
          * Secuendial del comprobante
