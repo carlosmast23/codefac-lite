@@ -168,7 +168,7 @@ public class Main {
             hiloPublicidad.start();
             panel.setHiloPublicidadCodefac(hiloPublicidad);
         }
-        
+        panel.iniciarComponentesGenerales();
         panel.setVisible(true);
 
         

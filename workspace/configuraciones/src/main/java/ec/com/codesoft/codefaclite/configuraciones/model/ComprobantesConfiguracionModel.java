@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.configuraciones.model;
 import ec.com.codesoft.codefaclite.configuraciones.panel.ComprobantesConfiguracionPanel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.dialog.ProcesoSegundoPlano;
+import ec.com.codesoft.codefaclite.controlador.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
@@ -25,6 +26,7 @@ import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
 import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
 import ec.com.codesoft.ejemplo.utilidades.email.CorreoElectronico;
 import ec.com.codesoft.ejemplo.utilidades.email.SmtpNoExisteException;
+import ec.com.codesoft.ejemplo.utilidades.varios.DialogoCopiarArchivos;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -61,6 +63,8 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     private Path destino = null;
     private Persona cliente;
     private PersonaService clienteService;
+    
+    private DialogoCopiarArchivos dialogoCopiarFondoEscritorio;
 
     public ComprobantesConfiguracionModel() {
         impuestoDetalleService = new ImpuestoDetalleService();
@@ -71,6 +75,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         jFileChooser = new JFileChooser();
         jFileChooser.setDialogTitle("Elegir archivo");
         jFileChooser.setFileFilter(new FileNameExtensionFilter("Firma Electronica SRI", "p12"));
+        dialogoCopiarFondoEscritorio=new DialogoCopiarArchivos("Elegir archivo", "Imagen Escritorio", "jpg","png","bpm");
         this.addListenerButtons();
         /**
          * Desactivo el ciclo de vida para controlar manualmente
@@ -84,6 +89,17 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         //getTxtClaveFirma().setEnabled(true);
         actualizarDatosVista();
         moverArchivo();
+        
+        /**
+         * Grabar el fondo de escritorio
+         */
+        if(dialogoCopiarFondoEscritorio.origen!=null && dialogoCopiarFondoEscritorio.destino!=null)
+        {
+            dialogoCopiarFondoEscritorio.moverArchivo();
+            ParametroCodefac parametro = parametros.get(ParametroCodefac.IMAGEN_FONDO);
+            parametro.setValor(dialogoCopiarFondoEscritorio.destino.getFileName().toString());
+        }
+        
         this.parametroCodefacService.editarParametros(parametros);
         /**
          * Establesco el ciclo de vida en el cual me encuentro
@@ -183,6 +199,8 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         getTxtPasswordCorreo().setText(parametros.get(ParametroCodefac.CORREO_CLAVE).getValor());
         getTxtNombreFirma().setText(parametros.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor());
         getTxtClaveFirma().setText(parametros.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).getValor());
+        getTxtFondoEscritorio().setText(parametros.get(ParametroCodefac.IMAGEN_FONDO).getValor());
+        
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("tarifa", Integer.parseInt(parametros.get(ParametroCodefac.IVA_DEFECTO).getValor()));
         List<ImpuestoDetalle> lista = impuestoDetalleService.buscarImpuestoDetallePorMap(map);
@@ -304,6 +322,20 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
                     }
                 });
 
+            }
+        });
+        
+        getBtnBuscarImagen().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                File archivo=dialogoCopiarFondoEscritorio.abrirDialogo();
+                String rutaArchivo = archivo.getPath();
+                String nombreArchivo = archivo.getName();
+                getTxtFondoEscritorio().setText(nombreArchivo);
+                String rutaDestino = session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + DirectorioCodefac.IMAGENES.getNombre() + "/";
+                rutaDestino += nombreArchivo;
+                dialogoCopiarFondoEscritorio.establecerDondeMoverArchivo(rutaArchivo, rutaDestino);
+                
             }
         });
     }

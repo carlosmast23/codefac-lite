@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.controlador.comprobantes.ComprobanteElectroni
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteListener;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecundarioAbstract;
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecundarioListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
@@ -36,6 +37,7 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.AccesoDirecto;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Perfil;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.service.AccesoDirectoService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
@@ -160,6 +162,12 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
     public GeneralPanelModel() 
     {
+    
+        
+    }
+    
+    public void iniciarComponentesGenerales()
+    {
         iniciarComponentes();        
         agregarListenerBotonesDefecto();
         agregarListenerBotones();
@@ -168,8 +176,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         agregarListenerGraphics();
         cargarDatosAdicionales();
                
-        habilitarBotones(false);
-        
+        habilitarBotones(false);  
         
     }
     
@@ -277,16 +284,41 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                Image fondoImg=new javax.swing.ImageIcon(getClass().getResource("/img.general/fondoGeneral.png")).getImage();
-                getjDesktopPane1().setBorder(new Fondo(fondoImg));
-                
-                getjSplitPanel().setDividerLocation(PROPORCION_HORIZONTAL);
-                getjSplitPanelVerticalSecundario().setDividerLocation(PROPORCION_VERTICAL);
+                establecerImagenFondo();
             }
-           
-            
         
         });
+    }
+    
+    public void establecerImagenFondo()
+    {
+        Image fondoImg=null;
+        fondoImg = new javax.swing.ImageIcon(getClass().getResource("/img.general/fondoGeneral.png")).getImage();
+        if(sessionCodefac!=null)
+        {
+            //Solo establecer fondos personalizados para usuarios pro
+            if(sessionCodefac.getTipoLicenciaEnum().equals(TipoLicenciaEnum.PRO))
+            {
+                ParametroCodefacService servicio=new ParametroCodefacService();
+                Map<String,ParametroCodefac> map=servicio.getParametrosMap();
+                if(map!=null)
+                {
+                    ParametroCodefac parametroCodefac=map.get(ParametroCodefac.IMAGEN_FONDO);
+                    if(parametroCodefac!=null)
+                    {
+                        String valor=parametroCodefac.getValor();
+                        String pathImagen=map.get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + DirectorioCodefac.IMAGENES.getNombre() + "/"+valor;
+                        fondoImg = new javax.swing.ImageIcon(pathImagen).getImage();
+                    }
+                }
+            }
+        }
+
+        getjDesktopPane1().setBorder(new Fondo(fondoImg));
+
+        getjSplitPanel().setDividerLocation(PROPORCION_HORIZONTAL);
+        getjSplitPanelVerticalSecundario().setDividerLocation(PROPORCION_VERTICAL);
+        
     }
     
     private void agregarListenerSplit()
