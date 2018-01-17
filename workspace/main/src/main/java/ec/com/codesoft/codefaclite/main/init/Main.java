@@ -42,6 +42,7 @@ import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidor.excepciones.PersistenciaDuplicadaException;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.service.EmpresaService;
@@ -91,24 +92,13 @@ public class Main {
         
         if(empresaList!=null && empresaList.size()>0)
             session.setEmpresa(empresaList.get(0));
-
-//        empresa.setDireccion("Sangolqui,Av.Calderon y Espejo");
-//        empresa.setTelefonos("022333167");
-//        empresa.setIdentificacion("1724218951001");
-//        empresa.setRazonSocial("Carlos Alfonso Sanchez Coyago");
-//        empresa.setNombreLegal("Codesoft Desarrollo");
-//        empresa.setContribuyenteEspecial("");
-//        empresa.setObligadoLlevarContabilidad(Empresa.NO_LLEVA_CONTABILIDAD);
         
         //session.setParametrosCodefac(getParametros());
         splashScren.siguiente();
-
         
-        
-                /**
+         /**
          * Seteando la session de los datos a utilizar en el aplicativo
          */
-        
         GeneralPanelModel panel=new GeneralPanelModel();
         panel.setSessionCodefac(session);
         splashScren.siguiente();
@@ -140,6 +130,16 @@ public class Main {
         {
             System.exit(0);
         }
+        else
+        {
+            //Buscar el tipo de licencia paa setear en el sistema
+            ParametroCodefacService servicio = new ParametroCodefacService();
+            String pathBase = servicio.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS).valor;
+            ValidacionLicenciaCodefac validacion = new ValidacionLicenciaCodefac(pathBase);
+            TipoLicenciaEnum tipoLicencia = validacion.getLicencia().getTipoLicenciaEnum();
+            session.setTipoLicenciaEnum(tipoLicencia);
+            //panel.setTipoLicenciaEnum(tipoLicencia);
+        }
         
         
         
@@ -159,12 +159,15 @@ public class Main {
         session.setPerfiles(obtenerPerfilesUsuario(usuarioLogin));
         
         /**
-         * Agregando Hilo de Publicidad
+         * Agregando Hilo de Publicidad si es usuario Gratuito
          */
-        HiloPublicidadCodefac hiloPublicidad=new HiloPublicidadCodefac();
-        hiloPublicidad.setPublicidades(obtenerPublicidades());
-        hiloPublicidad.start();
-        panel.setHiloPublicidadCodefac(hiloPublicidad);
+        if(session.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS))
+        {
+            HiloPublicidadCodefac hiloPublicidad=new HiloPublicidadCodefac();
+            hiloPublicidad.setPublicidades(obtenerPublicidades());
+            hiloPublicidad.start();
+            panel.setHiloPublicidadCodefac(hiloPublicidad);
+        }
         
         panel.setVisible(true);
 
@@ -335,7 +338,6 @@ public class Main {
         String pathBase=servicio.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS).valor;
         ValidacionLicenciaCodefac validacion = new ValidacionLicenciaCodefac();
         validacion.setPath(pathBase);
-        
         
         if (validacion.verificarExisteLicencia()) 
         {

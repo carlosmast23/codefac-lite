@@ -16,6 +16,7 @@ create table EMPRESA
     NOMBRE_LEGAL varchar(50),
     DIRECCION varchar(100),
     IDENTIFICACION varchar(50),
+    LOGO_IMAGEN_PATH varchar(512),
     OBLIGADO_LLEVAR_CONTABILIDAD varchar(3),
     CONTRIBUYENTE_ESPECIAL varchar(50),
     primary key (ID)

@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.main.license;
 
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
 import java.io.FileWriter;
 import java.net.InetAddress;
@@ -19,12 +20,16 @@ public class Licencia {
     
     public static final String PROPIEDAD_USUARIO="usuario";
     public static final String PROPIEDAD_LICENCIA="licencia";
+    public static final String PROPIEDAD_TIPO_LICENCIA="tipo";
+    
     private String mac;
     private Properties propiedades;
+    private TipoLicenciaEnum tipoLicenciaEnum;
 
     public Licencia(Properties propiedades) {
         this.propiedades = propiedades;
         this.mac=obtenerMac();
+        this.tipoLicenciaEnum=TipoLicenciaEnum.getEnumByNombre(propiedades.getProperty(PROPIEDAD_TIPO_LICENCIA));        
     }
     
     
@@ -38,16 +43,45 @@ public class Licencia {
     {
         String usuario=propiedades.getProperty(PROPIEDAD_USUARIO);
         String licencia=propiedades.getProperty(PROPIEDAD_LICENCIA);
+        String tipoLicencia=propiedades.getProperty(PROPIEDAD_TIPO_LICENCIA);
+               
         try
         {
-            return BCrypt.checkpw(usuario+":"+mac,licencia);
+            if(tipoLicencia.equals(TipoLicenciaEnum.GRATIS.getNombre()))
+            {
+
+                //Validacion cuando el usuario si esta registrado con licencia gratis 
+                this.tipoLicenciaEnum=TipoLicenciaEnum.GRATIS;
+                return BCrypt.checkpw(usuario + ":" + mac + ":" + TipoLicenciaEnum.GRATIS.getLetra(), licencia);
+                                
+            }
+            else
+            {
+                if(tipoLicencia.equals(TipoLicenciaEnum.PRO.getNombre()))
+                {
+                    this.tipoLicenciaEnum=TipoLicenciaEnum.PRO;
+                    return BCrypt.checkpw(usuario+":"+mac+":"+TipoLicenciaEnum.PRO.getLetra(),licencia);
+                }
+            }
+            
+            //Validacion por defecto cuando no existe tipo licencia
+            return false;
         }
         catch(java.lang.IllegalArgumentException iae)
         {
             return false;
         }
+
     }
-    
-    
+
+    public TipoLicenciaEnum getTipoLicenciaEnum() {
+        String usuario=propiedades.getProperty(PROPIEDAD_USUARIO);
+        String licencia=propiedades.getProperty(PROPIEDAD_LICENCIA);
+        String tipoLicencia=propiedades.getProperty(PROPIEDAD_TIPO_LICENCIA);
+        
+        return TipoLicenciaEnum.getEnumByNombre(tipoLicencia);
+        
+    }
+
     
 }

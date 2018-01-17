@@ -156,7 +156,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
      * Referencia al widget de Virtuall Mall para poder trabajar con este objeto
      */
     private WidgetVirtualMallModelo widgetVirtualMall;
-
+    
 
     public GeneralPanelModel() 
     {
@@ -200,10 +200,15 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             @Override
             public void windowClosing(WindowEvent e) {
                 Boolean respuesta=DialogoCodefac.dialogoPregunta("Alerta","Estas seguro que deseas salir?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                
                 if(respuesta)
                 {                    
                     grabarDatosSalir();
-                    hiloPublicidadCodefac.hiloPublicidad=false;                    
+                    
+                    //Solo detener la publicidad cuando exista
+                    if(hiloPublicidadCodefac!=null)
+                        hiloPublicidadCodefac.hiloPublicidad=false;                    
+                    
                     AbstractFacade.entityManager.close();
                     dispose();                    
                     System.exit(0);
@@ -1909,5 +1914,6 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         }
         
     }
+
    
 }

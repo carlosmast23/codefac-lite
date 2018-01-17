@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidor.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidor.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoLicenciaEnum;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +32,7 @@ public interface SessionCodefacInterface {
      * Metodo que devuelve todos los permisos habilitados para ese usuario
      * @return 
      */
+    
     public void setUsuario(Usuario usuario);
     public void setEmpresa(Empresa empresa);
     
@@ -42,5 +44,11 @@ public interface SessionCodefacInterface {
     public Map<String,ParametroCodefac> getParametrosCodefac();
     
     public boolean verificarExistePerfil(String nombre);
+    
+    /**
+     * Obtener el tipo de licencia del usuario
+     * @return 
+     */
+    public TipoLicenciaEnum getTipoLicenciaEnum();
 
 }

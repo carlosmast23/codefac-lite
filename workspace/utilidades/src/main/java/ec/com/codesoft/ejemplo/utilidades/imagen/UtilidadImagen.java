@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageInputStream;
 
 /**
  *
@@ -27,11 +28,9 @@ public abstract class UtilidadImagen {
         try {
             BufferedImage image = ImageIO.read(input); 
             ByteArrayOutputStream os = new ByteArrayOutputStream();
-            ImageIO.write(image, "jpg", os);
+            ImageIO.write(image, "png", os);
             InputStream is = new ByteArrayInputStream(os.toByteArray());
             return is;
-            //BufferedInputStream bufferedIn = new BufferedInputStream(input);
-            //ObjectInputStream ois=new ObjectInputStream(input);
             
         } catch (FileNotFoundException ex) {
             Logger.getLogger(UtilidadImagen.class.getName()).log(Level.SEVERE, null, ex);
@@ -47,5 +46,16 @@ public abstract class UtilidadImagen {
         return null;
         
 
+    }
+    
+    
+    public static ImageInputStream castBufferImputStream(InputStream input) {
+        
+        try {
+            ImageInputStream iis=ImageIO.createImageInputStream(input);
+        } catch (IOException ex) {
+            Logger.getLogger(UtilidadImagen.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 }

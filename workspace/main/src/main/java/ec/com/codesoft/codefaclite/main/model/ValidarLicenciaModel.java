@@ -17,6 +17,8 @@ import ec.com.codesoft.codefaclite.ws.codefac.webservice.ActualizarlicenciaReque
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ActualizarlicenciaResponseType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ComprobarRequestType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ComprobarResponseType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.DevolverlicenciaRequestType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.DevolverlicenciaResponseType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ObtenerlicenciaRequestType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ObtenerlicenciaResponseType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.SOAPServer;
@@ -72,9 +74,9 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
         getBtnRegistrar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               
+                String emailText=getTipoLicencia(getTxtUsuarioVerificar().getText());
                 //Crea la nueva licencia con el usuario
-                Properties propiedad=validacionLicenciaCodefac.crearLicencia(getTxtUsuarioVerificar().getText());
+                Properties propiedad=validacionLicenciaCodefac.crearLicencia(getTxtUsuarioVerificar().getText(),emailText);
                 
                 //Actualizar la licencia en la maquina
                 SOAPServer soapServer = new SOAPServer();
@@ -127,11 +129,13 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
                     ObtenerlicenciaRequestType parametros = new ObtenerlicenciaRequestType();
                     parametros.setEmail(getTxtUsuarioVerificar().getText());
                     ObtenerlicenciaResponseType respuesta = soapServerPort.obtenerlicencia(parametros);
-                    
+                    String emailText=getTipoLicencia(getTxtUsuarioVerificar().getText());
+                                       
                     if(!respuesta.getReturn().equals("fail"))
-                    {
+                    {             
                         //Si existe en el servidor la licencia solo vuelve a descargar
-                        validacionLicenciaCodefac.crearLicencia(getTxtUsuarioVerificar().getText(),respuesta.getReturn());
+                        validacionLicenciaCodefac.crearLicencia(getTxtUsuarioVerificar().getText(),respuesta.getReturn(),emailText);
+                        
                         licenciaCreada=true;
                         DialogoCodefac.mensaje("Adverencia","La licencia ya esta registrada y fue descargada",DialogoCodefac.MENSAJE_ADVERTENCIA);
                         dispose();
@@ -181,6 +185,19 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
             public void mouseExited(MouseEvent e) {}
         });
         
+    }
+    
+    private String getTipoLicencia(String email) {
+        /**
+         * Obtener el tipo de licencia del usuario
+         */
+        SOAPServer soapServer = new SOAPServer();
+        SOAPServerPortType soapServerPort = soapServer.getSOAPServerPort();
+        DevolverlicenciaRequestType parametrosLicencia = new DevolverlicenciaRequestType();
+        parametrosLicencia.setEmail("carlosmast2301@hotmail.es");
+        DevolverlicenciaResponseType respuestaLicencia = soapServerPort.devolverlicencia(parametrosLicencia);
+        return respuestaLicencia.getReturn();
+
     }
     
     private boolean verificarLicencia()

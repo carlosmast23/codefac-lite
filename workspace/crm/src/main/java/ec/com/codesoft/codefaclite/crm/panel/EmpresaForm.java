@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInte
 import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -145,6 +146,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         jTextTelefono = new javax.swing.JTextField();
         lblEspacio1 = new javax.swing.JLabel();
         lblEspacio2 = new javax.swing.JLabel();
+        btnCargarImagen = new javax.swing.JButton();
 
         setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -292,6 +294,15 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         gridBagConstraints.weightx = 0.1;
         jPanelConfiguracionEmisor.add(lblEspacio2, gridBagConstraints);
 
+        btnCargarImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
+        btnCargarImagen.setToolTipText("Buscar imagen en su computador");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        jPanelConfiguracionEmisor.add(btnCargarImagen, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
@@ -312,6 +323,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCargarImagen;
     private javax.swing.JCheckBox jCheckBLlevaContabilidad;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -333,4 +345,14 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     private javax.swing.JLabel lblEspacio2;
     private javax.swing.JTextArea txtDireccion;
     // End of variables declaration//GEN-END:variables
+
+    public JButton getBtnCargarImagen() {
+        return btnCargarImagen;
+    }
+
+    public void setBtnCargarImagen(JButton btnCargarImagen) {
+        this.btnCargarImagen = btnCargarImagen;
+    }
+
+    
 }

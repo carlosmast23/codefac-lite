@@ -10,6 +10,8 @@ import ec.com.codesoft.codefaclite.ws.codefac.webservice.ActualizarlicenciaReque
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ActualizarlicenciaResponseType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ComprobarRequestType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ComprobarResponseType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.DevolverlicenciaRequestType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.DevolverlicenciaResponseType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ObtenerlicenciaRequestType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ObtenerlicenciaResponseType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.SOAPServer;
@@ -23,7 +25,18 @@ public class Test {
     public static void main(String[] args) {
         //obtenerLicencia();
         setearLicencia();
+        //obtenerTipoLicencia();
         //verificar();
+    }
+    
+    public static void obtenerTipoLicencia()
+    {
+        SOAPServer soapServer=new SOAPServer();
+        SOAPServerPortType soapServerPort=soapServer.getSOAPServerPort();        
+        DevolverlicenciaRequestType parametros=new DevolverlicenciaRequestType();
+        parametros.setEmail("carlosmast2301@hotmail.es");
+        DevolverlicenciaResponseType respuesta=soapServerPort.devolverlicencia(parametros);
+        System.out.println(respuesta.getReturn());   
     }
     
     public static void obtenerLicencia()

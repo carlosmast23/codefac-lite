@@ -48,6 +48,16 @@
    <xsd:element name="return" type="xsd:string"/>
   </xsd:all>
  </xsd:complexType>
+ <xsd:complexType name="devolverlicenciaRequestType">
+  <xsd:all>
+   <xsd:element name="email" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="devolverlicenciaResponseType">
+  <xsd:all>
+   <xsd:element name="return" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
  <xsd:element name="addnumbers" type="tns:addnumbersRequestType"/>
  <xsd:element name="addnumbersResponse" type="tns:addnumbersResponseType"/>
  <xsd:element name="actualizarlicencia" type="tns:actualizarlicenciaRequestType"/>
@@ -56,6 +66,8 @@
  <xsd:element name="comprobarResponse" type="tns:comprobarResponseType"/>
  <xsd:element name="obtenerlicencia" type="tns:obtenerlicenciaRequestType"/>
  <xsd:element name="obtenerlicenciaResponse" type="tns:obtenerlicenciaResponseType"/>
+ <xsd:element name="devolverlicencia" type="tns:devolverlicenciaRequestType"/>
+ <xsd:element name="devolverlicenciaResponse" type="tns:devolverlicenciaResponseType"/>
 </xsd:schema>
 </types>
 <message name="addnumbersRequest">
@@ -74,6 +86,10 @@
   <part name="parameters" element="tns:obtenerlicencia" /></message>
 <message name="obtenerlicenciaResponse">
   <part name="parameters" element="tns:obtenerlicenciaResponse" /></message>
+<message name="devolverlicenciaRequest">
+  <part name="parameters" element="tns:devolverlicencia" /></message>
+<message name="devolverlicenciaResponse">
+  <part name="parameters" element="tns:devolverlicenciaResponse" /></message>
 <portType name="SOAPServerPortType">
   <operation name="addnumbers">
     <documentation>Addition Of Two Numbers</documentation>
@@ -95,6 +111,11 @@
     <input message="tns:obtenerlicenciaRequest"/>
     <output message="tns:obtenerlicenciaResponse"/>
   </operation>
+  <operation name="devolverlicencia">
+    <documentation>Devolver Licencia</documentation>
+    <input message="tns:devolverlicenciaRequest"/>
+    <output message="tns:devolverlicenciaResponse"/>
+  </operation>
 </portType>
 <binding name="SOAPServerBinding" type="tns:SOAPServerPortType">
   <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
@@ -115,6 +136,11 @@
   </operation>
   <operation name="obtenerlicencia">
     <soap:operation soapAction="urn:http://www.cf.codesoft-ec.com/mysoapserver/obtenerlicencia" style="document"/>
+    <input><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></input>
+    <output><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></output>
+  </operation>
+  <operation name="devolverlicencia">
+    <soap:operation soapAction="urn:http://www.cf.codesoft-ec.com/mysoapserver/devolverlicencia" style="document"/>
     <input><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></input>
     <output><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></output>
   </operation>
