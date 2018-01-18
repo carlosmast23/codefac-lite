@@ -82,6 +82,24 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
         jSeparator1 = new javax.swing.JSeparator();
         btnRegistrar = new javax.swing.JButton();
         btnSalirRegistro = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel23 = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        lblNumeroMaquinasActualizar = new javax.swing.JLabel();
+        lblNumeroUsuariosActualizar = new javax.swing.JLabel();
+        lblTipoLicenciaActualizar = new javax.swing.JLabel();
+        jLabel29 = new javax.swing.JLabel();
+        jLabel30 = new javax.swing.JLabel();
+        jLabel31 = new javax.swing.JLabel();
+        jLabel32 = new javax.swing.JLabel();
+        jLabel35 = new javax.swing.JLabel();
+        jLabel36 = new javax.swing.JLabel();
+        jSeparator2 = new javax.swing.JSeparator();
+        btnActualizarLicencia = new javax.swing.JButton();
+        btnSalirRegistro1 = new javax.swing.JButton();
 
         jLabel17.setText("jLabel17");
 
@@ -252,7 +270,7 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(jLabel6, gridBagConstraints);
 
-        jLabel7.setText("Numero Usuarios:");
+        jLabel7.setText("Número Usuarios:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 1;
@@ -260,7 +278,7 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(jLabel7, gridBagConstraints);
 
-        jLabel8.setText("Numero Maquinas:");
+        jLabel8.setText("Número Máquinas:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 2;
@@ -364,7 +382,7 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(30, 5, 10, 0);
         jPanel3.add(jLabel14, gridBagConstraints);
 
-        jLabel15.setText("Si no modifica sus credenciales, sus datos de acceso seran los mismos");
+        jLabel15.setText("Si no modifica sus credenciales, sus datos de acceso serán los mismos");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 6;
@@ -418,6 +436,175 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
 
         jTabbedPane1.addTab(" Registrar Licencia", jPanel2);
 
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
+
+        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel5.setLayout(new java.awt.GridBagLayout());
+
+        jPanel6.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos Licencia"));
+        jPanel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jPanel6.setLayout(new java.awt.GridBagLayout());
+
+        jLabel23.setText("Tipo licencia:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel6.add(jLabel23, gridBagConstraints);
+
+        jLabel24.setText("Número Usuarios:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel6.add(jLabel24, gridBagConstraints);
+
+        jLabel25.setText("Número Máquinas:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel6.add(jLabel25, gridBagConstraints);
+
+        lblNumeroMaquinasActualizar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblNumeroMaquinasActualizar.setText("1");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel6.add(lblNumeroMaquinasActualizar, gridBagConstraints);
+
+        lblNumeroUsuariosActualizar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblNumeroUsuariosActualizar.setText("1");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel6.add(lblNumeroUsuariosActualizar, gridBagConstraints);
+
+        lblTipoLicenciaActualizar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblTipoLicenciaActualizar.setForeground(new java.awt.Color(204, 51, 0));
+        lblTipoLicenciaActualizar.setText("GRATIS");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel6.add(lblTipoLicenciaActualizar, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        jPanel6.add(jLabel29, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 0;
+        jPanel6.add(jLabel30, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        jPanel6.add(jLabel31, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        jPanel6.add(jLabel32, gridBagConstraints);
+
+        jLabel35.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel35.setText("Nota:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(30, 5, 10, 0);
+        jPanel6.add(jLabel35, gridBagConstraints);
+
+        jLabel36.setText("Verifique que los datos de su licencia son correctos y presione Actualizar");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(30, 5, 10, 0);
+        jPanel6.add(jLabel36, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 11;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(20, 0, 20, 0);
+        jPanel6.add(jSeparator2, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 115;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        jPanel5.add(jPanel6, gridBagConstraints);
+
+        btnActualizarLicencia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/check-ico.png"))); // NOI18N
+        btnActualizarLicencia.setText("Actualizar");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.ipadx = 38;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
+        jPanel5.add(btnActualizarLicencia, gridBagConstraints);
+
+        btnSalirRegistro1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/cancel-ico.png"))); // NOI18N
+        btnSalirRegistro1.setText("Salir");
+        btnSalirRegistro1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirRegistro1ActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        jPanel5.add(btnSalirRegistro1, gridBagConstraints);
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 512, Short.MAX_VALUE)
+            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel4Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 276, Short.MAX_VALUE)
+            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel4Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+
+        jTabbedPane1.addTab("Actualizar Licencia", jPanel4);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -443,6 +630,10 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
     private void btnVerificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerificarActionPerformed
         
     }//GEN-LAST:event_btnVerificarActionPerformed
+
+    private void btnSalirRegistro1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirRegistro1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSalirRegistro1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -487,8 +678,10 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnActualizarLicencia;
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JButton btnSalirRegistro;
+    private javax.swing.JButton btnSalirRegistro1;
     private javax.swing.JButton btnSalirVerificar;
     private javax.swing.JButton btnVerificar;
     private javax.swing.JLabel jLabel1;
@@ -506,7 +699,16 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -516,11 +718,18 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio2;
+    private javax.swing.JLabel lblNumeroMaquinasActualizar;
+    private javax.swing.JLabel lblNumeroUsuariosActualizar;
     private javax.swing.JLabel lblRegistro;
+    private javax.swing.JLabel lblTipoLicenciaActualizar;
     private javax.swing.JPasswordField txtClaveRegistrar;
     private javax.swing.JPasswordField txtClaveVerificar;
     private javax.swing.JTextField txtUsuarioRegistrar;
@@ -613,6 +822,46 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
 
     public void setValidacionLicenciaCodefac(ValidacionLicenciaCodefac validacionLicenciaCodefac) {
         this.validacionLicenciaCodefac = validacionLicenciaCodefac;
+    }
+
+    public JButton getBtnActualizarLicencia() {
+        return btnActualizarLicencia;
+    }
+
+    public void setBtnActualizarLicencia(JButton btnActualizarLicencia) {
+        this.btnActualizarLicencia = btnActualizarLicencia;
+    }
+
+    public JButton getBtnSalirRegistro1() {
+        return btnSalirRegistro1;
+    }
+
+    public void setBtnSalirRegistro1(JButton btnSalirRegistro1) {
+        this.btnSalirRegistro1 = btnSalirRegistro1;
+    }
+
+    public JLabel getLblNumeroUsuariosActualizar() {
+        return lblNumeroUsuariosActualizar;
+    }
+
+    public void setLblNumeroUsuariosActualizar(JLabel lblNumeroUsuariosActualizar) {
+        this.lblNumeroUsuariosActualizar = lblNumeroUsuariosActualizar;
+    }
+
+    public JLabel getLblNumeroMaquinasActualizar() {
+        return lblNumeroMaquinasActualizar;
+    }
+
+    public void setLblNumeroMaquinasActualizar(JLabel lblNumeroMaquinasActualizar) {
+        this.lblNumeroMaquinasActualizar = lblNumeroMaquinasActualizar;
+    }
+
+    public JLabel getLblTipoLicenciaActualizar() {
+        return lblTipoLicenciaActualizar;
+    }
+
+    public void setLblTipoLicenciaActualizar(JLabel lblTipoLicenciaActualizar) {
+        this.lblTipoLicenciaActualizar = lblTipoLicenciaActualizar;
     }
     
     

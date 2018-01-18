@@ -19,11 +19,13 @@ import java.util.Map;
  * @author Carlos
  */
 public class SessionCodefac implements SessionCodefacInterface{
+    
     private Usuario usuario;
     private Empresa empresa;
     private Map<String,ParametroCodefac>  parametrosCodefac;
     private List<Perfil> perfiles;
     private TipoLicenciaEnum tipoLicenciaEnum;
+    private String usuarioLicencia; 
 
     public SessionCodefac() {
     }
@@ -91,6 +93,15 @@ public class SessionCodefac implements SessionCodefacInterface{
     @Override
     public TipoLicenciaEnum getTipoLicenciaEnum() {
         return tipoLicenciaEnum;
+    }
+
+    public void setUsuarioLicencia(String usuarioLicencia) {
+        this.usuarioLicencia = usuarioLicencia;
+    }
+    
+    @Override
+    public String getUsuarioLicencia() {
+        return this.usuarioLicencia;
     }
     
     

@@ -67,8 +67,13 @@ import javax.swing.JOptionPane;
 public class Main {
     
     
-    public static void main(String[] args) {
+    public static void main(String[] args) {      
+        iniciarComponentes();
         
+    }
+    
+    public static void iniciarComponentes()
+    {
         SplashScreenModel splashScren=new SplashScreenModel();
         splashScren.agregarPorcentaje(40,"Cargando base de datos");
         splashScren.agregarPorcentaje(60,"Cargando datos session");
@@ -138,6 +143,7 @@ public class Main {
             ValidacionLicenciaCodefac validacion = new ValidacionLicenciaCodefac(pathBase);
             TipoLicenciaEnum tipoLicencia = validacion.getLicencia().getTipoLicenciaEnum();
             session.setTipoLicenciaEnum(tipoLicencia);
+            session.setUsuarioLicencia(validacion.obtenerLicencia().getProperty(ValidacionLicenciaCodefac.USUARIO));
             //panel.setTipoLicenciaEnum(tipoLicencia);
         }
         
@@ -170,8 +176,6 @@ public class Main {
         }
         panel.iniciarComponentesGenerales();
         panel.setVisible(true);
-
-        
         
     }
     
@@ -360,7 +364,7 @@ public class Main {
         else //Cuando no existe la licencia
         {
             //Crear un dialogo si no existe la licencia
-            ValidarLicenciaModel licenciaDialog = new ValidarLicenciaModel(null, true);
+            ValidarLicenciaModel licenciaDialog = new ValidarLicenciaModel(null, true,false);
             licenciaDialog.setValidacionLicenciaCodefac(validacion);
             if(validacion.verificarConexionInternet())
             {            

@@ -263,6 +263,14 @@
                 <Property name="text" type="java.lang.String" value="Acerca"/>
               </Properties>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemActualizarLicencia">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Actualizar Licencia"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemActualizarLicenciaActionPerformed"/>
+              </Events>
+            </MenuItem>
           </SubComponents>
         </Menu>
       </SubComponents>

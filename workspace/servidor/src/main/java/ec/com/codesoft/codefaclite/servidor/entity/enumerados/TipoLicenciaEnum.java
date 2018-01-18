@@ -15,19 +15,25 @@ public enum TipoLicenciaEnum {
     /**
      * Licencia gratuita por defecto para los usuario gratuitos
      */
-    GRATIS("f","GRATIS"),
+    GRATIS("f","GRATIS","1","1"),
     /**
      * Licencia premiun para usuario de pago
      */
-    PRO("p","PREMIUM");
+    PRO("p","PREMIUM","1","ilimitados");
     
     private String letra;
     private String nombre;
+    private String numeroMaquinas;
+    private String numeroUsuarios;
 
-    private TipoLicenciaEnum(String letra, String nombre) {
+    private TipoLicenciaEnum(String letra, String nombre, String numeroMaquinas, String numeroUsuarios) {
         this.letra = letra;
         this.nombre = nombre;
+        this.numeroMaquinas = numeroMaquinas;
+        this.numeroUsuarios = numeroUsuarios;
     }
+    
+    
     
     public static TipoLicenciaEnum getEnumByLetra(String letra)
     {
@@ -62,6 +68,15 @@ public enum TipoLicenciaEnum {
     public String getNombre() {
         return nombre;
     }
+
+    public String getNumeroMaquinas() {
+        return numeroMaquinas;
+    }
+
+    public String getNumeroUsuarios() {
+        return numeroUsuarios;
+    }
+    
     
     
     

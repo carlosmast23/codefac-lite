@@ -34,10 +34,8 @@ public class ValidacionLicenciaCodefac{
     public static final String USUARIO="usuario";
     public static final String LICENCIA="licencia";
     public static final String TIPO_LICENCIA="tipo";
-
     
     private Licencia licencia;
-    private SessionCodefac sesion;
     private String path;
 
     public ValidacionLicenciaCodefac(String path) {
@@ -105,7 +103,7 @@ public class ValidacionLicenciaCodefac{
         }
     }
     
-    private Properties obtenerLicencia()
+    public Properties obtenerLicencia()
     {
         try {
             Properties p = new Properties();

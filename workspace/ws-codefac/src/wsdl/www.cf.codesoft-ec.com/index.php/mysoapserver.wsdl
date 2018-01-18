@@ -58,6 +58,17 @@
    <xsd:element name="return" type="xsd:string"/>
   </xsd:all>
  </xsd:complexType>
+ <xsd:complexType name="actualizartipolicenciaRequestType">
+  <xsd:all>
+   <xsd:element name="email" type="xsd:string"/>
+   <xsd:element name="tipo" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="actualizartipolicenciaResponseType">
+  <xsd:all>
+   <xsd:element name="return" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
  <xsd:element name="addnumbers" type="tns:addnumbersRequestType"/>
  <xsd:element name="addnumbersResponse" type="tns:addnumbersResponseType"/>
  <xsd:element name="actualizarlicencia" type="tns:actualizarlicenciaRequestType"/>
@@ -68,6 +79,8 @@
  <xsd:element name="obtenerlicenciaResponse" type="tns:obtenerlicenciaResponseType"/>
  <xsd:element name="devolverlicencia" type="tns:devolverlicenciaRequestType"/>
  <xsd:element name="devolverlicenciaResponse" type="tns:devolverlicenciaResponseType"/>
+ <xsd:element name="actualizartipolicencia" type="tns:actualizartipolicenciaRequestType"/>
+ <xsd:element name="actualizartipolicenciaResponse" type="tns:actualizartipolicenciaResponseType"/>
 </xsd:schema>
 </types>
 <message name="addnumbersRequest">
@@ -90,6 +103,10 @@
   <part name="parameters" element="tns:devolverlicencia" /></message>
 <message name="devolverlicenciaResponse">
   <part name="parameters" element="tns:devolverlicenciaResponse" /></message>
+<message name="actualizartipolicenciaRequest">
+  <part name="parameters" element="tns:actualizartipolicencia" /></message>
+<message name="actualizartipolicenciaResponse">
+  <part name="parameters" element="tns:actualizartipolicenciaResponse" /></message>
 <portType name="SOAPServerPortType">
   <operation name="addnumbers">
     <documentation>Addition Of Two Numbers</documentation>
@@ -116,6 +133,11 @@
     <input message="tns:devolverlicenciaRequest"/>
     <output message="tns:devolverlicenciaResponse"/>
   </operation>
+  <operation name="actualizartipolicencia">
+    <documentation>Actualizar Tipo Licencia</documentation>
+    <input message="tns:actualizartipolicenciaRequest"/>
+    <output message="tns:actualizartipolicenciaResponse"/>
+  </operation>
 </portType>
 <binding name="SOAPServerBinding" type="tns:SOAPServerPortType">
   <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
@@ -141,6 +163,11 @@
   </operation>
   <operation name="devolverlicencia">
     <soap:operation soapAction="urn:http://www.cf.codesoft-ec.com/mysoapserver/devolverlicencia" style="document"/>
+    <input><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></input>
+    <output><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></output>
+  </operation>
+  <operation name="actualizartipolicencia">
+    <soap:operation soapAction="urn:http://www.cf.codesoft-ec.com/mysoapserver/actualizartipolicencia" style="document"/>
     <input><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></input>
     <output><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></output>
   </operation>

@@ -8,6 +8,8 @@ package ec.com.codesoft.codefaclite.ws.codefac.test;
 
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ActualizarlicenciaRequestType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ActualizarlicenciaResponseType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.ActualizartipolicenciaRequestType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.ActualizartipolicenciaResponseType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ComprobarRequestType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ComprobarResponseType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.DevolverlicenciaRequestType;
@@ -24,7 +26,8 @@ import ec.com.codesoft.codefaclite.ws.codefac.webservice.SOAPServerPortType;
 public class Test {
     public static void main(String[] args) {
         //obtenerLicencia();
-        setearLicencia();
+        //setearLicencia();
+        setearTipoLicencia();
         //obtenerTipoLicencia();
         //verificar();
     }
@@ -59,6 +62,18 @@ public class Test {
         parametros.setLicencia("");
 
         ActualizarlicenciaResponseType respuesta=soapServerPort.actualizarlicencia(parametros);
+        System.out.println(respuesta.getReturn());
+    }
+    
+    public static void setearTipoLicencia()
+    {
+        SOAPServer soapServer=new SOAPServer();
+        SOAPServerPortType soapServerPort=soapServer.getSOAPServerPort();        
+       
+        ActualizartipolicenciaRequestType parametros=new ActualizartipolicenciaRequestType();
+        parametros.setEmail("carlosmast2301@hotmail.es");
+        parametros.setTipo("p");
+        ActualizartipolicenciaResponseType respuesta=soapServerPort.actualizartipolicencia(parametros);
         System.out.println(respuesta.getReturn());
     }
     

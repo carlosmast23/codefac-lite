@@ -31,6 +31,7 @@ import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
 import ec.com.codesoft.codefaclite.crm.model.ProductoModel;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import ec.com.codesoft.codefaclite.main.license.ValidacionLicenciaCodefac;
 import ec.com.codesoft.codefaclite.main.panel.GeneralPanelForm;
 import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
@@ -41,6 +42,7 @@ import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.service.AccesoDirectoService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
+import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import ec.com.codesoft.ejemplo.utilidades.imagen.UtilidadImagen;
 import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
 import es.mityc.firmaJava.ocsp.config.ServidorOcsp;
@@ -293,7 +295,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     public void establecerImagenFondo()
     {
         Image fondoImg=null;
-        fondoImg = new javax.swing.ImageIcon(getClass().getResource("/img.general/fondoGeneral.png")).getImage();
+        fondoImg = new javax.swing.ImageIcon(getClass().getResource("/img/general/fondoGeneral.png")).getImage();
         if(sessionCodefac!=null)
         {
             //Solo establecer fondos personalizados para usuarios pro
@@ -307,8 +309,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     if(parametroCodefac!=null)
                     {
                         String valor=parametroCodefac.getValor();
-                        String pathImagen=map.get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + DirectorioCodefac.IMAGENES.getNombre() + "/"+valor;
-                        fondoImg = new javax.swing.ImageIcon(pathImagen).getImage();
+                        if(!valor.equals(""))
+                        {
+                            String pathImagen=map.get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + DirectorioCodefac.IMAGENES.getNombre() + "/"+valor;
+                            fondoImg = new javax.swing.ImageIcon(pathImagen).getImage();
+                        }
                     }
                 }
             }
@@ -1859,6 +1864,35 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             public void actionPerformed(ActionEvent e) {
                minimizarTodasVentanas();
             }
+        });
+        
+        getjMenuItemActualizarLicencia().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String usuarioLicencia=sessionCodefac.getUsuarioLicencia();
+                String tipoLicencia=WebServiceCodefac.getTipoLicencia(usuarioLicencia);
+                
+                if(sessionCodefac.getTipoLicenciaEnum().getLetra().equals(tipoLicencia))
+                {
+                    DialogoCodefac.mensaje("Advertencia","No necesita actualizar su licencia \n Si desea contratar una nueva licencia visite nuestra página Web", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    return;
+                }
+                
+                boolean respuesta=DialogoCodefac.dialogoPregunta("Confirmar","Para actualizar la licencia debe cerrar todas las ventas , desea continuar?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                if(respuesta)
+                {
+                    dispose();
+                    ParametroCodefacService servicio=new ParametroCodefacService();
+                    String pathBase = servicio.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS).valor;
+                    ValidacionLicenciaCodefac validacion = new ValidacionLicenciaCodefac();
+                    validacion.setPath(pathBase);
+                    ValidarLicenciaModel dialogo=new ValidarLicenciaModel(null,true,true);
+                    dialogo.validacionLicenciaCodefac=validacion;
+                    dialogo.setVisible(true);
+                    
+                }
+            }
+                
         });
         
     }

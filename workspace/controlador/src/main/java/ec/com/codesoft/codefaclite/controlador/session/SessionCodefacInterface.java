@@ -50,5 +50,11 @@ public interface SessionCodefacInterface {
      * @return 
      */
     public TipoLicenciaEnum getTipoLicenciaEnum();
+    
+    /**
+     * Obtiene el nombre de usuario actual de la licencia del software
+     * @return 
+     */
+    public String getUsuarioLicencia();
 
 }
