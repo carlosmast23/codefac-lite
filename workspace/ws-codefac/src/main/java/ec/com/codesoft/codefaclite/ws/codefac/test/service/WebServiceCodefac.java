@@ -5,8 +5,11 @@
  */
 package ec.com.codesoft.codefaclite.ws.codefac.test.service;
 
+import com.sun.xml.internal.ws.client.ClientTransportException;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.DevolverlicenciaRequestType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.DevolverlicenciaResponseType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.ObtenerlicenciaRequestType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.ObtenerlicenciaResponseType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.SOAPServer;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.SOAPServerPortType;
 
@@ -21,16 +24,49 @@ public abstract class WebServiceCodefac {
      * @param email
      * @return 
      */
-    public static String getTipoLicencia(String email) {
+    public static String getTipoLicencia(String email) throws ClientTransportException {
         /**
          * Obtener el tipo de licencia del usuario
          */
-        SOAPServer soapServer = new SOAPServer();
-        SOAPServerPortType soapServerPort = soapServer.getSOAPServerPort();
-        DevolverlicenciaRequestType parametrosLicencia = new DevolverlicenciaRequestType();
-        parametrosLicencia.setEmail(email);
-        DevolverlicenciaResponseType respuestaLicencia = soapServerPort.devolverlicencia(parametrosLicencia);
-        return respuestaLicencia.getReturn();
+        try
+        {
+            SOAPServer soapServer = new SOAPServer();
+            SOAPServerPortType soapServerPort = soapServer.getSOAPServerPort();
+            DevolverlicenciaRequestType parametrosLicencia = new DevolverlicenciaRequestType();
+            parametrosLicencia.setEmail(email);
+            DevolverlicenciaResponseType respuestaLicencia = soapServerPort.devolverlicencia(parametrosLicencia);
+            return respuestaLicencia.getReturn();
+        }
+        catch(com.sun.xml.internal.ws.client.ClientTransportException cte)
+        {
+            throw cte;
+        }
+
+    
+    }
+    
+        /**
+     * Obtiene la licencia del servidor
+     * @param email
+     * @return 
+     */
+    public static String getLicencia(String email)throws ClientTransportException{
+        /**
+         * Obtener el tipo de licencia del usuario
+         */
+        try
+        {
+            SOAPServer soapServer = new SOAPServer();
+            SOAPServerPortType soapServerPort = soapServer.getSOAPServerPort();
+            ObtenerlicenciaRequestType parametrosLicencia = new ObtenerlicenciaRequestType();
+            parametrosLicencia.setEmail(email);        
+            ObtenerlicenciaResponseType respuestaLicencia = soapServerPort.obtenerlicencia(parametrosLicencia);
+            return respuestaLicencia.getReturn();
+        }
+        catch(com.sun.xml.internal.ws.client.ClientTransportException cte)
+        {
+            throw cte;
+        }
 
     
     }

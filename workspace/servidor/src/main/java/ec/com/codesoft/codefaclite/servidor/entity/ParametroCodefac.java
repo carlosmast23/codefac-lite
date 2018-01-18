@@ -47,6 +47,7 @@ public class ParametroCodefac {
     
     public static final String CELULAR_VIRTUAL_MALL="celular_virtual_mall";
     public static final String IMAGEN_FONDO="imagen_fondo";
+    public static final String ULTIMA_FECHA_VALIDACION="ultima_fecha_validacion";
     
     @Id
     @Column(name = "ID")
