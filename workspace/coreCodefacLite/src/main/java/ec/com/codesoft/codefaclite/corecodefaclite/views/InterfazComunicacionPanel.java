@@ -39,6 +39,11 @@ public interface InterfazComunicacionPanel
      * @return 
      */
     public boolean validarPorGrupo(String nombre,String componente);
+    
+    /**
+     * Funcion que permite establecer el fondo de pantalla
+     */
+    public void establecerImagenFondo();
 
 
 }

@@ -98,6 +98,8 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             dialogoCopiarFondoEscritorio.moverArchivo();
             ParametroCodefac parametro = parametros.get(ParametroCodefac.IMAGEN_FONDO);
             parametro.setValor(dialogoCopiarFondoEscritorio.destino.getFileName().toString());
+            panelPadre.establecerImagenFondo();
+            
         }
         
         this.parametroCodefacService.editarParametros(parametros);
