@@ -106,6 +106,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             persona.setTelefonoCelular(getjTextCelular().getText());
             persona.setCorreoElectronico(getjTextCorreo().getText());
             persona.setEstado(((ClienteEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
+            persona.setTipo(((OperadorNegocioEnum)getCmbTipoOperador().getSelectedItem()).getLetra());
             personaService.grabar(persona);
             DialogoCodefac.mensaje("Datos correctos", "El cliente se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
             System.err.println("Se grabo correctamente");
@@ -129,6 +130,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         persona.setExtensionTelefono(getjTextExtension().getText());
         persona.setTelefonoCelular(getjTextCelular().getText());
         persona.setCorreoElectronico(getjTextCorreo().getText());
+        persona.setTipo(((OperadorNegocioEnum)getCmbTipoOperador().getSelectedItem()).getLetra());
 
         personaService.editar(persona);
 
@@ -213,6 +215,8 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         getjTextCelular().setText(persona.getTelefonoCelular());
         getjTextCorreo().setText(persona.getCorreoElectronico());
         getCmbEstado().setSelectedItem(ClienteEnumEstado.getEnum(persona.getEstado()));
+        getCmbTipoOperador().setSelectedItem(persona.getTipoEnum());
+        
 
         System.out.println("Datos cargados ");
     }
@@ -315,7 +319,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
          *
          * @author carlos
          */
-        
+               
         SriIdentificacionService service=new SriIdentificacionService();
         SriIdentificacion id;
         Map<String,Object> parametros=new HashMap<String,Object>();
@@ -325,6 +329,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         
         
         getjComboTipoCliente().setSelectedIndex(0);
+        getCmbTipoOperador().setSelectedIndex(0);
         getjTextExtension().setText("0");
 
         //Setear el valor por defecto
@@ -392,7 +397,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         getCmbTipoOperador().removeAllItems();
         OperadorNegocioEnum list[]= OperadorNegocioEnum.values();
         for (OperadorNegocioEnum operadorNegocioEnum : list) {
-            getCmbTipoOperador().addItem(operadorNegocioEnum.getNombre());
+            getCmbTipoOperador().addItem(operadorNegocioEnum);        
         }
     }
 

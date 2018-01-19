@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.crm.test.EjemploCrm;
 import ec.com.codesoft.codefaclite.servidor.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.ClienteEnumEstado;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.OperadorNegocioEnum;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -307,7 +308,6 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanelCaracteristicasGenerales.add(jLabel12, gridBagConstraints);
 
-        cmbTipoOperador.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 1;
@@ -335,7 +335,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<ClienteEnumEstado> cmbEstado;
-    private javax.swing.JComboBox<String> cmbTipoOperador;
+    private javax.swing.JComboBox<OperadorNegocioEnum> cmbTipoOperador;
     private javax.swing.JComboBox<SriIdentificacion> jComboIdentificacion;
     private javax.swing.JComboBox<String> jComboTipoCliente;
     private javax.swing.JLabel jLabel1;
@@ -485,13 +485,15 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         this.jTextNombres = jTextNombres;
     }
 
-    public JComboBox<String> getCmbTipoOperador() {
+    public JComboBox<OperadorNegocioEnum> getCmbTipoOperador() {
         return cmbTipoOperador;
     }
 
-    public void setCmbTipoOperador(JComboBox<String> cmbTipoOperador) {
+    public void setCmbTipoOperador(JComboBox<OperadorNegocioEnum> cmbTipoOperador) {
         this.cmbTipoOperador = cmbTipoOperador;
     }
+
+    
     
     
 

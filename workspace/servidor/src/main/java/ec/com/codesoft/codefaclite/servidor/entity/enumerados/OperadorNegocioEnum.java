@@ -40,12 +40,12 @@ public enum OperadorNegocioEnum {
     }
     
     
-    public static OperadorNegocioEnum getEnum(String estado)
+    public static OperadorNegocioEnum getEnum(String letra)
     {
 
         for (OperadorNegocioEnum enumerador : OperadorNegocioEnum.values())
         {
-            if(enumerador.letra.equals(estado))
+            if(enumerador.letra.equals(letra))
             {
                 return enumerador;
             }
