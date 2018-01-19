@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.servidor.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.ClienteEnumEstado;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
 import ec.com.codesoft.codefaclite.servidor.service.SriIdentificacionService;
@@ -385,7 +386,14 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
 
     @Override
     public void iniciar() {
-        
+        /**
+         * Cargar los datos por defecto de los tipos de operadores
+         */
+        getCmbTipoOperador().removeAllItems();
+        OperadorNegocioEnum list[]= OperadorNegocioEnum.values();
+        for (OperadorNegocioEnum operadorNegocioEnum : list) {
+            getCmbTipoOperador().addItem(operadorNegocioEnum.getNombre());
+        }
     }
 
     @Override

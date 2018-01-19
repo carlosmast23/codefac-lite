@@ -85,6 +85,8 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jTextApellidos = new javax.swing.JTextField();
         jTextNombreSocial = new javax.swing.JTextField();
         lblEspacio = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        cmbTipoOperador = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -297,6 +299,22 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         jPanelCaracteristicasGenerales.add(lblEspacio, gridBagConstraints);
 
+        jLabel12.setText("Tipo:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
+        jPanelCaracteristicasGenerales.add(jLabel12, gridBagConstraints);
+
+        cmbTipoOperador.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        jPanelCaracteristicasGenerales.add(cmbTipoOperador, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -317,11 +335,13 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<ClienteEnumEstado> cmbEstado;
+    private javax.swing.JComboBox<String> cmbTipoOperador;
     private javax.swing.JComboBox<SriIdentificacion> jComboIdentificacion;
     private javax.swing.JComboBox<String> jComboTipoCliente;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
@@ -464,5 +484,15 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     public void setjTextNombres(JTextField jTextNombres) {
         this.jTextNombres = jTextNombres;
     }
+
+    public JComboBox<String> getCmbTipoOperador() {
+        return cmbTipoOperador;
+    }
+
+    public void setCmbTipoOperador(JComboBox<String> cmbTipoOperador) {
+        this.cmbTipoOperador = cmbTipoOperador;
+    }
+    
+    
 
 }
