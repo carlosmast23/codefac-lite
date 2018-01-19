@@ -17,7 +17,7 @@ import java.awt.event.MouseListener;
  */
 public class AcercaModel extends AcercaDialog{
     
-    private static AcercaModel objStatic;
+    private static AcercaModel objStatic;    
     
     public static AcercaModel getInstance()
     {
@@ -77,4 +77,15 @@ public class AcercaModel extends AcercaDialog{
         });
         
     }
+    
+    public void setLicencia(String licencia)
+    {
+        getLblLicencia().setText(licencia);
+    }
+    
+    public void setUsuario(String usuario)
+    {
+        getLblUsuario().setText(usuario);
+    }
+    
 }

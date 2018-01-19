@@ -1847,7 +1847,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         
         getjMenuItemAcerca().addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {                
+                AcercaModel.getInstance().setUsuario(sessionCodefac.getUsuarioLicencia());
+                AcercaModel.getInstance().setLicencia(sessionCodefac.getTipoLicenciaEnum().getNombre());
                 AcercaModel.getInstance().setVisible(true);
             }
         });
