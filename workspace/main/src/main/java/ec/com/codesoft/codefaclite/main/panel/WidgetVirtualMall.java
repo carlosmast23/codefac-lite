@@ -54,6 +54,8 @@ public abstract class WidgetVirtualMall extends ObjetoEscritorioAbstract {
         lblPrioridad = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         sliderPrioridad = new javax.swing.JSlider();
+        lblTextprioridad = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         panelTitulo = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -167,7 +169,7 @@ public abstract class WidgetVirtualMall extends ObjetoEscritorioAbstract {
 
         sliderPrioridad.setBackground(new java.awt.Color(255, 255, 255));
         sliderPrioridad.setMaximum(4);
-        sliderPrioridad.setValue(1);
+        sliderPrioridad.setToolTipText("");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
         gridBagConstraints.gridy = 9;
@@ -177,6 +179,18 @@ public abstract class WidgetVirtualMall extends ObjetoEscritorioAbstract {
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         jPanel4.add(sliderPrioridad, gridBagConstraints);
+
+        lblTextprioridad.setText("--");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridy = 10;
+        jPanel4.add(lblTextprioridad, gridBagConstraints);
+
+        jLabel2.setText("Ejm: 0994725020");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridy = 8;
+        jPanel4.add(jLabel2, gridBagConstraints);
 
         jPanel2.add(jPanel4, java.awt.BorderLayout.CENTER);
 
@@ -192,7 +206,7 @@ public abstract class WidgetVirtualMall extends ObjetoEscritorioAbstract {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 313, Short.MAX_VALUE)
+            .addGap(0, 332, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Vender", jPanel3);
@@ -216,6 +230,7 @@ public abstract class WidgetVirtualMall extends ObjetoEscritorioAbstract {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -228,6 +243,7 @@ public abstract class WidgetVirtualMall extends ObjetoEscritorioAbstract {
     private javax.swing.JLabel lblLinkVirtualMall;
     private javax.swing.JLabel lblPiePagina;
     private javax.swing.JLabel lblPrioridad;
+    private javax.swing.JLabel lblTextprioridad;
     private javax.swing.JPanel panelTitulo;
     private javax.swing.JSlider sliderPrioridad;
     private javax.swing.JTextField txtBuscador;
@@ -284,6 +300,14 @@ public abstract class WidgetVirtualMall extends ObjetoEscritorioAbstract {
 
     public void setLblImagenLogo(JLabel lblImagenLogo) {
         this.lblImagenLogo = lblImagenLogo;
+    }
+
+    public JLabel getLblTextprioridad() {
+        return lblTextprioridad;
+    }
+
+    public void setLblTextprioridad(JLabel lblTextprioridad) {
+        this.lblTextprioridad = lblTextprioridad;
     }
     
     

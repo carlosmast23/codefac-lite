@@ -6,20 +6,33 @@
 package ec.com.codesoft.codefaclite.crm.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.validacionPersonalizadaAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.crm.busqueda.EmpresaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.crm.panel.EmpresaForm;
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.servidor.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.service.EmpresaService;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -29,9 +42,16 @@ public class EmpresaModel extends EmpresaForm
 {
     private Empresa empresa;
     private EmpresaService empresaService;
+    private JFileChooser jFileChooser;
+    private Path origen = null;
+    private Path destino = null;
+
 
     public EmpresaModel() 
     {
+        jFileChooser = new JFileChooser();
+        jFileChooser.setDialogTitle("Elegir archivo");
+        jFileChooser.setFileFilter(new FileNameExtensionFilter("Logo Imagen", "png", "jpg", "bmp"));   
         //this.empresa = new Empresa();
         this.empresaService = new EmpresaService();
         agregarListener();
@@ -39,7 +59,7 @@ public class EmpresaModel extends EmpresaForm
          * Desactivo el ciclo de vida para controlar manualmente
          */
         super.cicloVida = false;
-        
+ 
     }
     
     public Empresa obtenerDatosEmpresa()
@@ -75,7 +95,8 @@ public class EmpresaModel extends EmpresaForm
             {
                 getjCheckBLlevaContabilidad().setSelected(false);
             }
-            getjTextLogo().setText("Valor establecido por defecto");
+            getjTextLogo().setText(e.getImagenLogoPath());
+            
         }  
     }
     
@@ -86,12 +107,14 @@ public class EmpresaModel extends EmpresaForm
         {
             empresaService.grabar(setDatosEmisor());
             session.setEmpresa(empresa);
+            moverArchivo();
             DialogoCodefac.mensaje("Exito","Empresa grabada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         }
         else
         {
             empresaService.editar(setDatosEmisor());
             session.setEmpresa(empresa);
+            moverArchivo();
             DialogoCodefac.mensaje("Exito","Empresa editada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         }
         dispose();
@@ -166,6 +189,7 @@ public class EmpresaModel extends EmpresaForm
         {
             empresa.setObligadoLlevarContabilidad(Empresa.NO_LLEVA_CONTABILIDAD);
         }
+        empresa.setImagenLogoPath(getjTextLogo().getText());
         //empresa.setContribuyenteEspecial("");
         return empresa;
     }
@@ -206,6 +230,39 @@ public class EmpresaModel extends EmpresaForm
                 getTxtDireccion().setText(textoNuevo);
            }
         });
+        
+        getBtnCargarImagen().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int seleccion = jFileChooser.showDialog(null, "Abrir");
+                switch (seleccion) {
+                    case JFileChooser.APPROVE_OPTION:
+                        cargarDatosArchivos(jFileChooser.getSelectedFile());
+                        break;
+                    case JFileChooser.CANCEL_OPTION:
+
+                        break;
+                    case JFileChooser.ERROR_OPTION:
+
+                        break;
+                }
+            }
+        });
+    }
+    
+    public void cargarDatosArchivos(File archivoEscogido) {
+        File archivo = archivoEscogido;
+        String rutaArchivo = archivo.getPath();
+        String nombreArchivo = archivo.getName();
+        getjTextLogo().setText(nombreArchivo);
+        String rutaDestino = session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + DirectorioCodefac.IMAGENES.getNombre() + "/";
+        rutaDestino += nombreArchivo;
+        establecerDondeMoverArchivo(rutaArchivo, rutaDestino);
+    }
+    
+    public void establecerDondeMoverArchivo(String rutaArchivo, String rutaDestino) {
+        this.origen = FileSystems.getDefault().getPath(rutaArchivo);
+        this.destino = FileSystems.getDefault().getPath(rutaDestino);
     }
     
     @validacionPersonalizadaAnotacion(errorTitulo = "Formato de ruc")
@@ -290,6 +347,28 @@ public class EmpresaModel extends EmpresaForm
             resultado = false;
         }
         return resultado;
+    }
+    
+    public void moverArchivo() {
+        //Verifica que solo cuando exista un origen y destino exista se copien los datos
+        if (origen == null || destino == null) {
+            return;
+        }
+
+        File file = destino.toFile();
+        //crear toda la ruta si no existe
+        if (!file.exists()) {
+            file.getParentFile().mkdirs();
+            //file.mkdir();
+        }
+
+        try {
+            Files.copy(origen, destino, StandardCopyOption.REPLACE_EXISTING);
+            getjTextLogo().setText("" + destino.getFileName());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            DialogoCodefac.mensaje("Firma", "Problema en guardar firma", DialogoCodefac.MENSAJE_INCORRECTO);
+        }
     }
 
     

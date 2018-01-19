@@ -77,6 +77,9 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         jLabel13 = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
         jLabel24 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        txtFondoEscritorio = new javax.swing.JTextField();
+        btnBuscarImagen = new javax.swing.JButton();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
@@ -236,7 +239,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         panelFacturacionElectronica.add(jLabel8, gridBagConstraints);
 
-        jLabel9.setText("Clave Fima:");
+        jLabel9.setText("Contraseña Firma:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -292,10 +295,12 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         panelConfiguracionesGenerales.add(cmbIvaDefault, gridBagConstraints);
+
+        txtDirectorioRecurso.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
@@ -305,14 +310,14 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         panelConfiguracionesGenerales.add(txtDirectorioRecurso, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         panelConfiguracionesGenerales.add(txtCorreoElectronico, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
@@ -374,15 +379,15 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         jLabel13.setText("Correo Electrónico: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         panelConfiguracionesGenerales.add(jLabel13, gridBagConstraints);
 
-        jLabel23.setText("Password Correo:");
+        jLabel23.setText("Contraseña Correo:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         panelConfiguracionesGenerales.add(jLabel23, gridBagConstraints);
@@ -392,6 +397,31 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         panelConfiguracionesGenerales.add(jLabel24, gridBagConstraints);
+
+        jLabel10.setText("Imagen Fondo:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
+        panelConfiguracionesGenerales.add(jLabel10, gridBagConstraints);
+
+        txtFondoEscritorio.setEditable(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        panelConfiguracionesGenerales.add(txtFondoEscritorio, gridBagConstraints);
+
+        btnBuscarImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
+        btnBuscarImagen.setToolTipText("Busca Imagen");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panelConfiguracionesGenerales.add(btnBuscarImagen, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -452,10 +482,12 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscarImagen;
     private javax.swing.JButton btnFirmaElectronica;
     private javax.swing.JComboBox<ImpuestoDetalle> cmbIvaDefault;
     private javax.swing.JComboBox<String> cmbModoFacturacion;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
@@ -490,6 +522,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
     private javax.swing.JTextField txtDirectorioRecurso;
     private javax.swing.JTextField txtEstablecimiento;
     private javax.swing.JTextField txtFacturaSecuencial;
+    private javax.swing.JTextField txtFondoEscritorio;
     private javax.swing.JTextField txtGuiaRemisionSecuencial;
     private javax.swing.JTextField txtNombreFirma;
     private javax.swing.JTextField txtNotaCreditoSecuencial;
@@ -530,13 +563,10 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         return cmbModoFacturacion;
     }
 
-
+    @ValidacionCodefacAnotacion(requerido = true, min = 0, nombre = "Contraseña de firma electrónica")
     public JPasswordField getTxtClaveFirma() {
         return txtClaveFirma;
     }
-
-
-    
     
     public void setTxtClaveFirma(JPasswordField txtClaveFirma) {
         this.txtClaveFirma = txtClaveFirma;
@@ -547,36 +577,30 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         return txtCorreoElectronico;
     }
 
-
     public void setTxtCorreoElectronico(JTextField txtCorreoElectronico) {
         this.txtCorreoElectronico = txtCorreoElectronico;
     }
 
-    
     public JTextField getTxtDirectorioRecurso() {
         return txtDirectorioRecurso;
     }
-
 
     public void setTxtDirectorioRecurso(JTextField txtDirectorioRecurso) {
         this.txtDirectorioRecurso = txtDirectorioRecurso;
     }
 
-
     public JTextField getTxtNombreFirma() {
         return txtNombreFirma;
     }
-
 
     public void setTxtNombreFirma(JTextField txtNombreFirma) {
         this.txtNombreFirma = txtNombreFirma;
     }
 
-
+    @ValidacionCodefacAnotacion(requerido = true, min = 0, nombre = "Contraseña del correo")
     public JPasswordField getTxtPasswordCorreo() {
         return txtPasswordCorreo;
     }
-
 
     public void setTxtPasswordCorreo(JPasswordField txtPasswordCorreo) {
         this.txtPasswordCorreo = txtPasswordCorreo;
@@ -616,5 +640,23 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         this.btnFirmaElectronica = btnFirmaElectronica;
     }
 
+    public JButton getBtnBuscarImagen() {
+        return btnBuscarImagen;
+    }
+
+    public void setBtnBuscarImagen(JButton btnBuscarImagen) {
+        this.btnBuscarImagen = btnBuscarImagen;
+    }
+
+    public JTextField getTxtFondoEscritorio() {
+        return txtFondoEscritorio;
+    }
+
+    public void setTxtFondoEscritorio(JTextField txtFondoEscritorio) {
+        this.txtFondoEscritorio = txtFondoEscritorio;
+    }
+
+    
+    
 
 }

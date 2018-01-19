@@ -56,7 +56,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
     public String getPreimpresoSiguiente() {
         Integer secuencialSiguiente = Integer.parseInt(parametroCodefacService.getParametroByNombre(ParametroCodefac.SECUENCIAL_NOTA_CREDITO).valor);
         String secuencial = UtilidadesTextos.llenarCarateresIzquierda(secuencialSiguiente.toString(), 8, "0");
-        String establecimiento = parametroCodefacService.getParametroByNombre(ParametroCodefac.PUNTO_EMISION).valor;
+        String establecimiento = parametroCodefacService.getParametroByNombre(ParametroCodefac.ESTABLECIMIENTO).valor;
         String puntoEmision = parametroCodefacService.getParametroByNombre(ParametroCodefac.PUNTO_EMISION).valor;
         return puntoEmision + "-" + establecimiento + "-" + secuencial;
     }

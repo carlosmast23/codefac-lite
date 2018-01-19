@@ -8,15 +8,20 @@ package ec.com.codesoft.codefaclite.main.model;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.main.license.Licencia;
 import ec.com.codesoft.codefaclite.main.license.ValidacionLicenciaCodefac;
+import ec.com.codesoft.codefaclite.main.license.excepcion.NoExisteLicenciaException;
+import ec.com.codesoft.codefaclite.main.license.excepcion.ValidacionLicenciaExcepcion;
 import ec.com.codesoft.codefaclite.main.panel.ValidarLicenciaDialog;
 import ec.com.codesoft.codefaclite.servidor.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidor.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ActualizarlicenciaRequestType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ActualizarlicenciaResponseType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ComprobarRequestType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ComprobarResponseType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.DevolverlicenciaRequestType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.DevolverlicenciaResponseType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ObtenerlicenciaRequestType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ObtenerlicenciaResponseType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.SOAPServer;
@@ -34,6 +39,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import sun.applet.Main;
 
 /**
  *
@@ -42,20 +48,47 @@ import javax.swing.JOptionPane;
 public class ValidarLicenciaModel extends ValidarLicenciaDialog{
     
     public Boolean licenciaCreada;
+    public Boolean actualizaLicencia;
     
-    public ValidarLicenciaModel(Frame parent, boolean modal) {
+    public ValidarLicenciaModel(Frame parent, boolean modal,Boolean actualizarLicencia) {
         super(parent, modal);
         addListener();
         iniciarComponentes();
         this.licenciaCreada=false;
+        this.actualizaLicencia=actualizarLicencia;
     }
 
     private void addListener() {
         addListenerButtons();
     }
+    
+    private void crearLicencia()
+    {
+        String tipoLicencia = getTipoLicencia(getTxtUsuarioVerificar().getText());
+        //Crea la nueva licencia con el usuario
+        Properties propiedad = validacionLicenciaCodefac.crearLicencia(getTxtUsuarioVerificar().getText(), tipoLicencia);
+
+        //Actualizar la licencia en la maquina
+        SOAPServer soapServer = new SOAPServer();
+        SOAPServerPortType soapServerPort = soapServer.getSOAPServerPort();
+
+        ActualizarlicenciaRequestType parametros = new ActualizarlicenciaRequestType();
+        parametros.setEmail(getTxtUsuarioVerificar().getText());
+        parametros.setLicencia(propiedad.getProperty(Licencia.PROPIEDAD_LICENCIA));
+
+        ActualizarlicenciaResponseType respuesta = soapServerPort.actualizarlicencia(parametros);
+                
+    }
 
     private void addListenerButtons() {
         getBtnSalirRegistro().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+        
+        getBtnSalirRegistro1().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
@@ -72,19 +105,7 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
         getBtnRegistrar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               
-                //Crea la nueva licencia con el usuario
-                Properties propiedad=validacionLicenciaCodefac.crearLicencia(getTxtUsuarioVerificar().getText());
-                
-                //Actualizar la licencia en la maquina
-                SOAPServer soapServer = new SOAPServer();
-                SOAPServerPortType soapServerPort = soapServer.getSOAPServerPort();
-
-                ActualizarlicenciaRequestType parametros = new ActualizarlicenciaRequestType();
-                parametros.setEmail(getTxtUsuarioVerificar().getText());
-                parametros.setLicencia(propiedad.getProperty(Licencia.PROPIEDAD_LICENCIA));
-
-                ActualizarlicenciaResponseType respuesta = soapServerPort.actualizarlicencia(parametros);
+                crearLicencia();
                 
                 //Verificar que no exista el usuario admin
                 if(getTxtUsuarioRegistrar().getText().equals("admin"))
@@ -118,7 +139,7 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
         getBtnVerificar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(verificarLicencia())
+                if(verificarCredenciales())
                 { 
                     //Verificar si existe la licencia para solo descargar
                     SOAPServer soapServer = new SOAPServer();
@@ -127,19 +148,39 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
                     ObtenerlicenciaRequestType parametros = new ObtenerlicenciaRequestType();
                     parametros.setEmail(getTxtUsuarioVerificar().getText());
                     ObtenerlicenciaResponseType respuesta = soapServerPort.obtenerlicencia(parametros);
+                    String tipoLicencia=getTipoLicencia(getTxtUsuarioVerificar().getText());
                     
-                    if(!respuesta.getReturn().equals("fail"))
+                    //No hace verificaciones porque esta accion solo es accesible desde la pantalla de menu
+                    //y se supone que ya esta validando la licencia anterior
+                    if(actualizaLicencia)
                     {
+                        getjTabbedPane1().setEnabledAt(0, false);
+                        getjTabbedPane1().setEnabledAt(1, false);
+                        getjTabbedPane1().setEnabledAt(2, true);
+                        getjTabbedPane1().setSelectedIndex(2);
+                        TipoLicenciaEnum licenciaEnum= TipoLicenciaEnum.getEnumByLetra(tipoLicencia);
+                        getLblTipoLicenciaActualizar().setText(licenciaEnum.getNombre());
+                        getLblNumeroMaquinasActualizar().setText(licenciaEnum.getNumeroMaquinas());
+                        getLblNumeroUsuariosActualizar().setText(licenciaEnum.getNumeroUsuarios());
+                        return; //dtener la ejecucion
+                        
+                    }
+                                       
+                    if(!respuesta.getReturn().equals("fail"))
+                    {             
                         //Si existe en el servidor la licencia solo vuelve a descargar
-                        validacionLicenciaCodefac.crearLicencia(getTxtUsuarioVerificar().getText(),respuesta.getReturn());
+                        validacionLicenciaCodefac.crearLicencia(getTxtUsuarioVerificar().getText(),respuesta.getReturn(),tipoLicencia);
+                        
                         licenciaCreada=true;
                         DialogoCodefac.mensaje("Adverencia","La licencia ya esta registrada y fue descargada",DialogoCodefac.MENSAJE_ADVERTENCIA);
                         dispose();
                         return ;//Detener la ejecucion
                     }
                     
+                    
                     getjTabbedPane1().setEnabledAt(0, false);
                     getjTabbedPane1().setEnabledAt(1, true);
+                    getjTabbedPane1().setEnabledAt(2, false);
                     getjTabbedPane1().setSelectedIndex(1);
                     
                     //Setear las variables del usuario y la clave del la pagina web
@@ -152,6 +193,42 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
                 {
                     DialogoCodefac.mensaje("Error","El usuario o la clave son incorrectas", DialogoCodefac.MENSAJE_ADVERTENCIA);
                 }
+            }
+        });
+        
+        getBtnActualizarLicencia().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Boolean problemaLicenciaAnterior=false; 
+                try {
+                    if(!validacionLicenciaCodefac.validar())
+                    {
+                        problemaLicenciaAnterior=true;                        
+                    }
+                } catch (ValidacionLicenciaExcepcion ex) {
+                    problemaLicenciaAnterior=true;
+                    Logger.getLogger(ValidarLicenciaModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (NoExisteLicenciaException ex) {
+                    problemaLicenciaAnterior=true;
+                    Logger.getLogger(ValidarLicenciaModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+                //Mostrar mensaje cuando exista algun problema con la licencia anterior
+                if(problemaLicenciaAnterior)
+                {
+                    DialogoCodefac.mensaje("Advertencia","Existe problemas con su licencia anterior, Comuníquese con soporte técnico para resolver este problema",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                }
+                else
+                {
+                    
+                    //Crear la nueva licencia con los datos de esta maquina
+                    crearLicencia();
+                    DialogoCodefac.mensaje("Felicidades", "Su licencia fue actualizada correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+                    dispose();
+                    ec.com.codesoft.codefaclite.main.init.Main.iniciarComponentes();
+                }
+                
+                
             }
         });
         
@@ -183,7 +260,20 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
         
     }
     
-    private boolean verificarLicencia()
+    private String getTipoLicencia(String email) {
+        /**
+         * Obtener el tipo de licencia del usuario
+         */
+        SOAPServer soapServer = new SOAPServer();
+        SOAPServerPortType soapServerPort = soapServer.getSOAPServerPort();
+        DevolverlicenciaRequestType parametrosLicencia = new DevolverlicenciaRequestType();
+        parametrosLicencia.setEmail("carlosmast2301@hotmail.es");
+        DevolverlicenciaResponseType respuestaLicencia = soapServerPort.devolverlicencia(parametrosLicencia);
+        return respuestaLicencia.getReturn();
+
+    }
+    
+    private boolean verificarCredenciales()
     {
         SOAPServer soapServer=new SOAPServer();
         SOAPServerPortType soapServerPort=soapServer.getSOAPServerPort();
@@ -204,13 +294,14 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
     
     public static void main(String[] args)
     {
-        ValidarLicenciaModel validar=new ValidarLicenciaModel(null,true);
+        ValidarLicenciaModel validar=new ValidarLicenciaModel(null,true,true);
         validar.setVisible(true);
     }
 
     private void iniciarComponentes() {
         getjTabbedPane1().setEnabledAt(0, true);
         getjTabbedPane1().setEnabledAt(1, false);
+        getjTabbedPane1().setEnabledAt(2, false);
     }
     
     

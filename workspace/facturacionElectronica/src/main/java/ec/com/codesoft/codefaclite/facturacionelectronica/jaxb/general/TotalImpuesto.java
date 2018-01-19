@@ -13,11 +13,12 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Carlos
  */
-@XmlType(propOrder = {"codigo","codigoPorcentaje","baseImponible","valor"})
+@XmlType(propOrder = {"codigo","codigoPorcentaje","descuentoAdicional","baseImponible","valor"})
 public class TotalImpuesto {
     
     private String codigo;
     private String codigoPorcentaje;
+    private String descuentoAdicional;
     private BigDecimal baseImponible;
     private BigDecimal valor;
 
@@ -44,6 +45,12 @@ public class TotalImpuesto {
         return valor;
     }
 
+    @XmlElement(name = "descuentoAdicional")
+    public String getDescuentoAdicional() {
+        return descuentoAdicional;
+    }
+    
+    
     public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
@@ -58,6 +65,10 @@ public class TotalImpuesto {
 
     public void setValor(BigDecimal valor) {
         this.valor = valor;
+    }
+
+    public void setDescuentoAdicional(String descuentoAdicional) {
+        this.descuentoAdicional = descuentoAdicional;
     }
     
     

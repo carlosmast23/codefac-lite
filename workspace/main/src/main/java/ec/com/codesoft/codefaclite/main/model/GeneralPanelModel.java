@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.controlador.comprobantes.ComprobanteElectroni
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteListener;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecundarioAbstract;
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecundarioListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
@@ -30,6 +31,7 @@ import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
 import ec.com.codesoft.codefaclite.crm.model.ProductoModel;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import ec.com.codesoft.codefaclite.main.license.ValidacionLicenciaCodefac;
 import ec.com.codesoft.codefaclite.main.panel.GeneralPanelForm;
 import ec.com.codesoft.codefaclite.main.panel.WidgetVentasDiarias;
 import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
@@ -37,10 +39,14 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.AccesoDirecto;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Perfil;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoLicenciaEnum;
+import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.service.AccesoDirectoService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
+import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import ec.com.codesoft.ejemplo.utilidades.imagen.UtilidadImagen;
 import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
+import es.mityc.firmaJava.ocsp.config.ServidorOcsp;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -157,8 +163,13 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private WidgetVirtualMallModelo widgetVirtualMall;
     private WidgetVentasDiarias widgetVentasDiarias;
 
-
     public GeneralPanelModel() 
+    {
+    
+        
+    }
+    
+    public void iniciarComponentesGenerales()
     {
         iniciarComponentes();        
         agregarListenerBotonesDefecto();
@@ -168,8 +179,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         agregarListenerGraphics();
         cargarDatosAdicionales();
                
-        habilitarBotones(false);
-        
+        habilitarBotones(false);  
         
     }
     
@@ -200,12 +210,19 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             @Override
             public void windowClosing(WindowEvent e) {
                 Boolean respuesta=DialogoCodefac.dialogoPregunta("Alerta","Estas seguro que deseas salir?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                
                 if(respuesta)
-                {
+                {                    
                     grabarDatosSalir();
-                    hiloPublicidadCodefac.hiloPublicidad=false;
-                    dispose();
+                    
+                    //Solo detener la publicidad cuando exista
+                    if(hiloPublicidadCodefac!=null)
+                        hiloPublicidadCodefac.hiloPublicidad=false;                    
+                    
+                    AbstractFacade.entityManager.close();
+                    dispose();                    
                     System.exit(0);
+                    
                 }
                 
                 
@@ -270,16 +287,44 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                Image fondoImg=new javax.swing.ImageIcon(getClass().getResource("/img.general/fondoGeneral.png")).getImage();
-                getjDesktopPane1().setBorder(new Fondo(fondoImg));
-                
-                getjSplitPanel().setDividerLocation(PROPORCION_HORIZONTAL);
-                getjSplitPanelVerticalSecundario().setDividerLocation(PROPORCION_VERTICAL);
+                establecerImagenFondo();
             }
-           
-            
         
         });
+    }
+    
+    public void establecerImagenFondo()
+    {
+        Image fondoImg=null;
+        fondoImg = new javax.swing.ImageIcon(getClass().getResource("/img/general/fondoGeneral.png")).getImage();
+        if(sessionCodefac!=null)
+        {
+            //Solo establecer fondos personalizados para usuarios pro
+            if(sessionCodefac.getTipoLicenciaEnum().equals(TipoLicenciaEnum.PRO))
+            {
+                ParametroCodefacService servicio=new ParametroCodefacService();
+                Map<String,ParametroCodefac> map=servicio.getParametrosMap();
+                if(map!=null)
+                {
+                    ParametroCodefac parametroCodefac=map.get(ParametroCodefac.IMAGEN_FONDO);
+                    if(parametroCodefac!=null)
+                    {
+                        String valor=parametroCodefac.getValor();
+                        if(!valor.equals(""))
+                        {
+                            String pathImagen=map.get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + DirectorioCodefac.IMAGENES.getNombre() + "/"+valor;
+                            fondoImg = new javax.swing.ImageIcon(pathImagen).getImage();
+                        }
+                    }
+                }
+            }
+        }
+
+        getjDesktopPane1().setBorder(new Fondo(fondoImg));
+
+        getjSplitPanel().setDividerLocation(PROPORCION_HORIZONTAL);
+        getjSplitPanelVerticalSecundario().setDividerLocation(PROPORCION_VERTICAL);
+        
     }
     
     private void agregarListenerSplit()
@@ -1524,7 +1569,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         
         widgetVirtualMall=new WidgetVirtualMallModelo(getjDesktopPane1());
         widgetVirtualMall.setPreferredSize(new Dimension(x,y));
-        widgetVirtualMall.setBounds(x,y,260, 355);
+        widgetVirtualMall.setBounds(x,y,260, 400);
         widgetVirtualMall.addListenerIcono(new IconoInterfaz() {
             @Override
             public void doubleClick() {                
@@ -1838,7 +1883,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         
         getjMenuItemAcerca().addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {                
+                AcercaModel.getInstance().setUsuario(sessionCodefac.getUsuarioLicencia());
+                AcercaModel.getInstance().setLicencia(sessionCodefac.getTipoLicenciaEnum().getNombre());
                 AcercaModel.getInstance().setVisible(true);
             }
         });
@@ -1855,6 +1902,35 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             public void actionPerformed(ActionEvent e) {
                minimizarTodasVentanas();
             }
+        });
+        
+        getjMenuItemActualizarLicencia().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String usuarioLicencia=sessionCodefac.getUsuarioLicencia();
+                String tipoLicencia=WebServiceCodefac.getTipoLicencia(usuarioLicencia);
+                
+                if(sessionCodefac.getTipoLicenciaEnum().getLetra().equals(tipoLicencia))
+                {
+                    DialogoCodefac.mensaje("Advertencia","No necesita actualizar su licencia \n Si desea contratar una nueva licencia visite nuestra página Web", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    return;
+                }
+                
+                boolean respuesta=DialogoCodefac.dialogoPregunta("Confirmar","Para actualizar la licencia debe cerrar todas las ventas , desea continuar?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                if(respuesta)
+                {
+                    dispose();
+                    ParametroCodefacService servicio=new ParametroCodefacService();
+                    String pathBase = servicio.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS).valor;
+                    ValidacionLicenciaCodefac validacion = new ValidacionLicenciaCodefac();
+                    validacion.setPath(pathBase);
+                    ValidarLicenciaModel dialogo=new ValidarLicenciaModel(null,true,true);
+                    dialogo.validacionLicenciaCodefac=validacion;
+                    dialogo.setVisible(true);
+                    
+                }
+            }
+                
         });
         
     }
@@ -1942,5 +2018,6 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         }
         
     }
+
    
 }

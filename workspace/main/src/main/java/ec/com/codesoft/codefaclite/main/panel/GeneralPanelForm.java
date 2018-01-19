@@ -54,6 +54,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         JPanelAuxiliarInterno = new javax.swing.JPanel();
         jPanelSeleccion = new javax.swing.JTabbedPane();
         JPanelMenu = new javax.swing.JPanel();
+        btnHome = new javax.swing.JButton();
         btnNuevo = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
@@ -61,7 +62,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         btnActualizar = new javax.swing.JButton();
         btnImprimir = new javax.swing.JButton();
         btnAyuda = new javax.swing.JButton();
-        btnHome = new javax.swing.JButton();
         JPanelPiePagina = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -93,6 +93,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenu8 = new javax.swing.JMenu();
         jMenuItemContenido = new javax.swing.JMenuItem();
         jMenuItemAcerca = new javax.swing.JMenuItem();
+        jMenuItemActualizarLicencia = new javax.swing.JMenuItem();
 
         JpanelAuxiliar.setLayout(new javax.swing.BoxLayout(JpanelAuxiliar, javax.swing.BoxLayout.LINE_AXIS));
 
@@ -138,6 +139,11 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         setSize(new java.awt.Dimension(800, 600));
 
         JPanelMenu.setBackground(new java.awt.Color(255, 255, 255));
+
+        btnHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/home.png"))); // NOI18N
+        btnHome.setToolTipText("Ir al menu principal");
+        btnHome.setMargin(new java.awt.Insets(0, 14, 0, 14));
+        JPanelMenu.add(btnHome);
 
         btnNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/nuevo-icono.png"))); // NOI18N
         btnNuevo.setToolTipText("Nuevo");
@@ -193,11 +199,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         btnAyuda.setToolTipText("Ayuda");
         btnAyuda.setMargin(new java.awt.Insets(0, 14, 0, 14));
         JPanelMenu.add(btnAyuda);
-
-        btnHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/home.png"))); // NOI18N
-        btnHome.setToolTipText("Ir al menu principal");
-        btnHome.setMargin(new java.awt.Insets(0, 14, 0, 14));
-        JPanelMenu.add(btnHome);
 
         getContentPane().add(JPanelMenu, java.awt.BorderLayout.PAGE_START);
 
@@ -339,6 +340,14 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuItemAcerca.setText("Acerca");
         jMenu8.add(jMenuItemAcerca);
 
+        jMenuItemActualizarLicencia.setText("Actualizar Licencia");
+        jMenuItemActualizarLicencia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemActualizarLicenciaActionPerformed(evt);
+            }
+        });
+        jMenu8.add(jMenuItemActualizarLicencia);
+
         jMenuBar1.add(jMenu8);
 
         setJMenuBar(jMenuBar1);
@@ -393,6 +402,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private void jMenuItemContenidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemContenidoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItemContenidoActionPerformed
+
+    private void jMenuItemActualizarLicenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemActualizarLicenciaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItemActualizarLicenciaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -462,6 +475,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JMenuItem jMenuEmisor;
     private javax.swing.JMenuItem jMenuFactura;
     private javax.swing.JMenuItem jMenuItemAcerca;
+    private javax.swing.JMenuItem jMenuItemActualizarLicencia;
     private javax.swing.JMenuItem jMenuItemContenido;
     private javax.swing.JMenuItem jMenuItemFacturaReporte;
     private javax.swing.JMenuItem jMenuItemInicio;
@@ -747,6 +761,14 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
     public void setBtnHome(JButton btnHome) {
         this.btnHome = btnHome;
+    }
+
+    public JMenuItem getjMenuItemActualizarLicencia() {
+        return jMenuItemActualizarLicencia;
+    }
+
+    public void setjMenuItemActualizarLicencia(JMenuItem jMenuItemActualizarLicencia) {
+        this.jMenuItemActualizarLicencia = jMenuItemActualizarLicencia;
     }
     
     

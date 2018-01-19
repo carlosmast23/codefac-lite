@@ -274,7 +274,7 @@ public class ComprobanteElectronicoService implements Runnable {
             archivosPath.put(comprobante.getInformacionTributaria().getPreimpreso()+".xml",getPathComprobante(CARPETA_AUTORIZADOS));
             
             try {
-                String mensajeGenerado =getMensajeCorreo(claveAcceso.getTipoComprobante());
+                String mensajeGenerado =getMensajeCorreo(claveAcceso.getTipoComprobante(),comprobante);
                 metodoEnvioInterface.enviarCorreo(mensajeGenerado, claveAcceso.getTipoComprobante().getNombre()+":" + comprobante.getInformacionTributaria().getPreimpreso(), correosElectronicos, archivosPath);
             } catch (Exception ex) {
                 Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
@@ -292,7 +292,7 @@ public class ComprobanteElectronicoService implements Runnable {
 
     }
     
-    private String getMensajeCorreo(ComprobanteEnum clase)
+    private String getMensajeCorreo(ComprobanteEnum clase,ComprobanteElectronico comprobante)
     {
         String mensajeGenerado = "Estimado/a ";
         if(clase.equals(ComprobanteEnum.FACTURA))
@@ -555,9 +555,11 @@ public class ComprobanteElectronicoService implements Runnable {
         claveAcceso.add(getTipoCodigoAmbiente());
 
         /**
-         * Valor por defecto serie que no se que se pone
+         * Establecimiento y punto de emision
          */
-        claveAcceso.add("001001");
+        String establecimiento= UtilidadesTextos.llenarCarateresIzquierda(comprobante.getInformacionTributaria().getEstablecimiento(),3,"0");
+        String puntoEmision= UtilidadesTextos.llenarCarateresIzquierda(comprobante.getInformacionTributaria().getPuntoEmision(),3,"0");
+        claveAcceso.add(establecimiento+puntoEmision);
 
         /**
          * Secuendial del comprobante

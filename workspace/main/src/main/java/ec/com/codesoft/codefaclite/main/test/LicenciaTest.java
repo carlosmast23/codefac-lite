@@ -27,7 +27,7 @@ public class LicenciaTest {
             }
             else
             {
-                validacion.crearLicencia("pato");
+                validacion.crearLicencia("pato","f");
                 System.out.println("No existe la licencia");
             }
             

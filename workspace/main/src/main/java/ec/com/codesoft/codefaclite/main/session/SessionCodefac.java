@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidor.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidor.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoLicenciaEnum;
 import java.util.List;
 import java.util.Map;
 
@@ -18,17 +19,20 @@ import java.util.Map;
  * @author Carlos
  */
 public class SessionCodefac implements SessionCodefacInterface{
+    
     private Usuario usuario;
     private Empresa empresa;
     private Map<String,ParametroCodefac>  parametrosCodefac;
     private List<Perfil> perfiles;
+    private TipoLicenciaEnum tipoLicenciaEnum;
+    private String usuarioLicencia; 
 
     public SessionCodefac() {
     }
 
     public SessionCodefac(Usuario usuario, Empresa empresa) {
         this.usuario = usuario;
-        this.empresa = empresa;
+        this.empresa = empresa;        
     }
 
     @Override
@@ -80,6 +84,24 @@ public class SessionCodefac implements SessionCodefacInterface{
             }
         }
         return false;
+    }
+
+    public void setTipoLicenciaEnum(TipoLicenciaEnum tipoLicenciaEnum) {
+        this.tipoLicenciaEnum = tipoLicenciaEnum;
+    }
+
+    @Override
+    public TipoLicenciaEnum getTipoLicenciaEnum() {
+        return tipoLicenciaEnum;
+    }
+
+    public void setUsuarioLicencia(String usuarioLicencia) {
+        this.usuarioLicencia = usuarioLicencia;
+    }
+    
+    @Override
+    public String getUsuarioLicencia() {
+        return this.usuarioLicencia;
     }
     
     
