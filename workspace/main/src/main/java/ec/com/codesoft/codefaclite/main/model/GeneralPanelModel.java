@@ -31,6 +31,7 @@ import ec.com.codesoft.codefaclite.crm.model.ProductoModel;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.main.panel.GeneralPanelForm;
+import ec.com.codesoft.codefaclite.main.panel.WidgetVentasDiarias;
 import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.AccesoDirecto;
@@ -154,6 +155,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
      * Referencia al widget de Virtuall Mall para poder trabajar con este objeto
      */
     private WidgetVirtualMallModelo widgetVirtualMall;
+    private WidgetVentasDiarias widgetVentasDiarias;
 
 
     public GeneralPanelModel() 
@@ -1552,11 +1554,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         int xVd=servicio.obtenerPorMap(mapBuscar).get(0).x;
         int yVd=servicio.obtenerPorMap(mapBuscar).get(0).y;
         
-        VentasDiariasModel widgetVentaDiaria = new VentasDiariasModel(getjDesktopPane1());
-        widgetVentaDiaria.setPreferredSize(new Dimension(x,y));
-        widgetVentaDiaria.setBounds(x,y,280, 380);
+        widgetVentasDiarias = new VentasDiariasModel(getjDesktopPane1());
+        widgetVentasDiarias.setPreferredSize(new Dimension(xVd,yVd));
+        widgetVentasDiarias.setBounds(xVd,xVd,220,330);
         
-        widgetVentaDiaria.addListenerIcono(new IconoInterfaz() {
+        widgetVentasDiarias.addListenerIcono(new IconoInterfaz() {
             @Override
             public void doubleClick() {                
             }
@@ -1565,15 +1567,17 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             public void grabarNuevaPosicion(Point nuevaPosicion) {
                 Map<String, Object> mapBuscar;
                 AccesoDirectoService servicio = new AccesoDirectoService();
-
                 mapBuscar = new HashMap<>();
-                mapBuscar.put("nombre","WidgetVirtualMall");
+                mapBuscar.put("nombre","WidgetVentasDiarias");
                 AccesoDirecto acceso=servicio.obtenerPorMap(mapBuscar).get(0);
                 acceso.setX((int)nuevaPosicion.getX());
                 acceso.setY((int)nuevaPosicion.getY());
                 servicio.editar(acceso);
             }
         });
+            //
+            getjDesktopPane1().add(widgetVentasDiarias);
+            widgetVentasDiarias.setVisible(true);
         /***
          * fin widget Ventas diarias
          */

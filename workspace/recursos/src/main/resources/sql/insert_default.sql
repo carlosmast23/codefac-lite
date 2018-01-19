@@ -56,4 +56,5 @@ INSERT INTO ACCESO_DIRECTO (NOMBRE, X,Y)
             ('ec.com.codesoft.codefaclite.crm.model.ProductoModel', 30, 250),
             ('ec.com.codesoft.codefaclite.configuraciones.model.CalculadoraModel', 30, 350),
             ('ec.com.codesoft.codefaclite.configuraciones.model.ComprobantesConfiguracionModel', 30, 450),
-            ('WidgetVirtualMall',120,60);
+            ('WidgetVirtualMall',120,60),
+            ('WidgetVentasDiarias',120,120);
