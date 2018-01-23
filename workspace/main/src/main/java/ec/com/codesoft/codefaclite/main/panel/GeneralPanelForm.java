@@ -78,6 +78,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuItemMonitor = new javax.swing.JMenuItem();
         jMenuItemNotaCredito = new javax.swing.JMenuItem();
         jMenuItemFacturaReporte = new javax.swing.JMenuItem();
+        jMenuItemDisenador = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuCliente = new javax.swing.JMenuItem();
         jMenuItemReporteCliente = new javax.swing.JMenuItem();
@@ -269,6 +270,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
             }
         });
         menuFacturacion.add(jMenuItemFacturaReporte);
+
+        jMenuItemDisenador.setText("Diseñador");
+        jMenuItemDisenador.setToolTipText("Pantalla para diseñar formatos de facturas fisicas");
+        menuFacturacion.add(jMenuItemDisenador);
 
         jMenuBar1.add(menuFacturacion);
 
@@ -477,6 +482,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JMenuItem jMenuItemAcerca;
     private javax.swing.JMenuItem jMenuItemActualizarLicencia;
     private javax.swing.JMenuItem jMenuItemContenido;
+    private javax.swing.JMenuItem jMenuItemDisenador;
     private javax.swing.JMenuItem jMenuItemFacturaReporte;
     private javax.swing.JMenuItem jMenuItemInicio;
     private javax.swing.JMenuItem jMenuItemMonitor;
@@ -769,6 +775,14 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
     public void setjMenuItemActualizarLicencia(JMenuItem jMenuItemActualizarLicencia) {
         this.jMenuItemActualizarLicencia = jMenuItemActualizarLicencia;
+    }
+
+    public JMenuItem getjMenuItemDisenador() {
+        return jMenuItemDisenador;
+    }
+
+    public void setjMenuItemDisenador(JMenuItem jMenuItemDisenador) {
+        this.jMenuItemDisenador = jMenuItemDisenador;
     }
     
     
