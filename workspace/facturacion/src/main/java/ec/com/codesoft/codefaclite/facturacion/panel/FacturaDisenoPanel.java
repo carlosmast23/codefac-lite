@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 
 /**
  *
@@ -44,10 +45,9 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         java.awt.GridBagConstraints gridBagConstraints;
 
         panelContenedor = new javax.swing.JPanel();
-        txtY = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        txtTamanio = new javax.swing.JSpinner();
+        cmbTamanioLetra = new javax.swing.JSpinner(new SpinnerNumberModel(0,0,1000,1));
         jLabel3 = new javax.swing.JLabel();
         chkNegrita = new javax.swing.JCheckBox();
         cmbSeccion = new javax.swing.JComboBox<>();
@@ -58,21 +58,26 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         btnIzquierda = new javax.swing.JButton();
         btnDown = new javax.swing.JButton();
         lblEspacio1 = new javax.swing.JLabel();
-        txtX = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         cmbDocumento = new javax.swing.JComboBox<>();
-        txtAnchoDocumento = new javax.swing.JTextField();
-        txtAltoDocumento = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel10 = new javax.swing.JLabel();
-        txtAltoSeccion = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jSeparator3 = new javax.swing.JSeparator();
         cmbComponente = new javax.swing.JComboBox<>();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        txtAnchoDocumento = new javax.swing.JSpinner(new SpinnerNumberModel(0,0,1000,1));
+        txtAltoDocumento = new javax.swing.JSpinner(new SpinnerNumberModel(0,0,1000,1));
+        txtAltoSeccion = new javax.swing.JSpinner(new SpinnerNumberModel(0,0,1000,1));
+        txtX = new javax.swing.JSpinner(new SpinnerNumberModel(0,0,1000,1));
+        txtY = new javax.swing.JSpinner(new SpinnerNumberModel(0,0,1000,1));
+        txtAnchoComponente = new javax.swing.JSpinner(new SpinnerNumberModel(0,0,1000,1));
+        txtAltoComponente = new javax.swing.JSpinner(new SpinnerNumberModel(0,0,1000,1));
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel(){
             @Override
@@ -96,23 +101,12 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         panelContenedor.setBackground(new java.awt.Color(255, 255, 255));
         panelContenedor.setLayout(new java.awt.GridBagLayout());
 
-        txtY.setText("0000000");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 15;
-        gridBagConstraints.gridy = 26;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 15);
-        panelContenedor.add(txtY, gridBagConstraints);
-
         jLabel1.setText("Y:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 27;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 15);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         panelContenedor.add(jLabel1, gridBagConstraints);
 
         jLabel2.setText("X:");
@@ -120,7 +114,7 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 21;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 15);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         panelContenedor.add(jLabel2, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 15;
@@ -129,8 +123,8 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         gridBagConstraints.ipadx = 40;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 15);
-        panelContenedor.add(txtTamanio, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        panelContenedor.add(cmbTamanioLetra, gridBagConstraints);
 
         jLabel3.setText("Tamaño:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -138,7 +132,7 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 32;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 15);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         panelContenedor.add(jLabel3, gridBagConstraints);
 
         chkNegrita.setBackground(new java.awt.Color(255, 255, 255));
@@ -154,7 +148,7 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         gridBagConstraints.ipadx = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 15);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         panelContenedor.add(chkNegrita, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -211,17 +205,6 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 15);
         panelContenedor.add(jPanel2, gridBagConstraints);
 
-        txtX.setText("0000000");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 15;
-        gridBagConstraints.gridy = 21;
-        gridBagConstraints.gridwidth = 8;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 15);
-        panelContenedor.add(txtX, gridBagConstraints);
-
         jLabel6.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         jLabel6.setText("Documento");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -263,22 +246,6 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 15);
         panelContenedor.add(cmbDocumento, gridBagConstraints);
 
-        txtAnchoDocumento.setText("0");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 15;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 15);
-        panelContenedor.add(txtAnchoDocumento, gridBagConstraints);
-
-        txtAltoDocumento.setText("0");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 15;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 15, 15);
-        panelContenedor.add(txtAltoDocumento, gridBagConstraints);
-
         jLabel7.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         jLabel7.setText("División       ");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -302,15 +269,6 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 15, 15);
         panelContenedor.add(jLabel10, gridBagConstraints);
-
-        txtAltoSeccion.setText("0");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 15;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 15, 15);
-        panelContenedor.add(txtAltoSeccion, gridBagConstraints);
 
         jLabel4.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         jLabel4.setText("Componente");
@@ -336,6 +294,64 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 15);
         panelContenedor.add(cmbComponente, gridBagConstraints);
+
+        jLabel11.setText("Ancho:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 28;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        panelContenedor.add(jLabel11, gridBagConstraints);
+
+        jLabel12.setText("Alto:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 29;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        panelContenedor.add(jLabel12, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 15;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        panelContenedor.add(txtAnchoDocumento, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 15;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        panelContenedor.add(txtAltoDocumento, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 15;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        panelContenedor.add(txtAltoSeccion, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 15;
+        gridBagConstraints.gridy = 21;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        panelContenedor.add(txtX, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 15;
+        gridBagConstraints.gridy = 27;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        panelContenedor.add(txtY, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 15;
+        gridBagConstraints.gridy = 28;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        panelContenedor.add(txtAnchoComponente, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 15;
+        gridBagConstraints.gridy = 29;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        panelContenedor.add(txtAltoComponente, gridBagConstraints);
 
         getContentPane().add(panelContenedor, java.awt.BorderLayout.LINE_END);
 
@@ -366,8 +382,11 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
     private javax.swing.JComboBox<ComponenteComprobanteFisico> cmbComponente;
     private javax.swing.JComboBox<ComprobanteFisicoDisenio> cmbDocumento;
     private javax.swing.JComboBox<BandaComprobante> cmbSeccion;
+    private javax.swing.JSpinner cmbTamanioLetra;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -384,12 +403,13 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JPanel panelContenedor;
-    private javax.swing.JTextField txtAltoDocumento;
-    private javax.swing.JTextField txtAltoSeccion;
-    private javax.swing.JTextField txtAnchoDocumento;
-    private javax.swing.JSpinner txtTamanio;
-    private javax.swing.JTextField txtX;
-    private javax.swing.JTextField txtY;
+    private javax.swing.JSpinner txtAltoComponente;
+    private javax.swing.JSpinner txtAltoDocumento;
+    private javax.swing.JSpinner txtAltoSeccion;
+    private javax.swing.JSpinner txtAnchoComponente;
+    private javax.swing.JSpinner txtAnchoDocumento;
+    private javax.swing.JSpinner txtX;
+    private javax.swing.JSpinner txtY;
     // End of variables declaration//GEN-END:variables
 
     public JButton getBtnArriba() {
@@ -464,53 +484,14 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         this.panelContenedor = panelContenedor;
     }
 
-    public JTextField getTxtAltoDocumento() {
-        return txtAltoDocumento;
-    }
-
-    public void setTxtAltoDocumento(JTextField txtAltoDocumento) {
-        this.txtAltoDocumento = txtAltoDocumento;
-    }
-
-    public JTextField getTxtAltoSeccion() {
-        return txtAltoSeccion;
-    }
-
-    public void setTxtAltoSeccion(JTextField txtAltoSeccion) {
-        this.txtAltoSeccion = txtAltoSeccion;
-    }
-
-    public JTextField getTxtAnchoDocumento() {
-        return txtAnchoDocumento;
-    }
-
-    public void setTxtAnchoDocumento(JTextField txtAnchoDocumento) {
-        this.txtAnchoDocumento = txtAnchoDocumento;
-    }
-
     public JSpinner getTxtTamanio() {
-        return txtTamanio;
+        return cmbTamanioLetra;
     }
 
     public void setTxtTamanio(JSpinner txtTamanio) {
-        this.txtTamanio = txtTamanio;
+        this.cmbTamanioLetra = txtTamanio;
     }
 
-    public JTextField getTxtX() {
-        return txtX;
-    }
-
-    public void setTxtX(JTextField txtX) {
-        this.txtX = txtX;
-    }
-
-    public JTextField getTxtY() {
-        return txtY;
-    }
-
-    public void setTxtY(JTextField txtY) {
-        this.txtY = txtY;
-    }
 
     public JScrollPane getjScrollPane1() {
         return jScrollPane1;
@@ -527,6 +508,72 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
     public void setjPanel1(JPanel jPanel1) {
         this.jPanel1 = jPanel1;
     }
+
+    public JSpinner getCmbTamanioLetra() {
+        return cmbTamanioLetra;
+    }
+
+    public void setCmbTamanioLetra(JSpinner cmbTamanioLetra) {
+        this.cmbTamanioLetra = cmbTamanioLetra;
+    }
+
+    public JSpinner getTxtAltoComponente() {
+        return txtAltoComponente;
+    }
+
+    public void setTxtAltoComponente(JSpinner txtAltoComponente) {
+        this.txtAltoComponente = txtAltoComponente;
+    }
+
+    public JSpinner getTxtAltoDocumento() {
+        return txtAltoDocumento;
+    }
+
+    public void setTxtAltoDocumento(JSpinner txtAltoDocumento) {
+        this.txtAltoDocumento = txtAltoDocumento;
+    }
+
+    public JSpinner getTxtAltoSeccion() {
+        return txtAltoSeccion;
+    }
+
+    public void setTxtAltoSeccion(JSpinner txtAltoSeccion) {
+        this.txtAltoSeccion = txtAltoSeccion;
+    }
+
+    public JSpinner getTxtAnchoComponente() {
+        return txtAnchoComponente;
+    }
+
+    public void setTxtAnchoComponente(JSpinner txtAnchoComponente) {
+        this.txtAnchoComponente = txtAnchoComponente;
+    }
+
+    public JSpinner getTxtAnchoDocumento() {
+        return txtAnchoDocumento;
+    }
+
+    public void setTxtAnchoDocumento(JSpinner txtAnchoDocumento) {
+        this.txtAnchoDocumento = txtAnchoDocumento;
+    }
+
+    public JSpinner getTxtX() {
+        return txtX;
+    }
+
+    public void setTxtX(JSpinner txtX) {
+        this.txtX = txtX;
+    }
+
+    public JSpinner getTxtY() {
+        return txtY;
+    }
+
+    public void setTxtY(JSpinner txtY) {
+        this.txtY = txtY;
+    }
+
+
     
     
     

@@ -48,6 +48,9 @@ public class ComponenteComprobanteFisico {
     @Column(name = "ALTO")
     private int alto;
 
+    @Column(name = "TAMANIO_LETRA")
+    private int tamanioLetra;
+
     @Column(name = "NEGRITA")
     private String negrita;
     
@@ -122,6 +125,16 @@ public class ComponenteComprobanteFisico {
         this.negrita = negrita;
     }
 
+    public int getTamanioLetra() {
+        return tamanioLetra;
+    }
+
+    public void setTamanioLetra(int tamanioLetra) {
+        this.tamanioLetra = tamanioLetra;
+    }
+
+    
+    
     @Override
     public String toString() {
         return nombre;
