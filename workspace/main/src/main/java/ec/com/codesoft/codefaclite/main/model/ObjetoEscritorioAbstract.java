@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.main.model;
 
+import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
@@ -18,6 +19,11 @@ import javax.swing.JPanel;
  * @author Carlos
  */
 public abstract class ObjetoEscritorioAbstract extends JPanel{
+    
+    /**
+     * Referencia que me permite consumir los metodos del controlador principal
+     */
+    public InterfazComunicacionPanel panelPadre;
     
     public boolean presionando;
     

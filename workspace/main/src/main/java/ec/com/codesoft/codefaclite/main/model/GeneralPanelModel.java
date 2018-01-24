@@ -1600,6 +1600,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         int yVd=servicio.obtenerPorMap(mapBuscar).get(0).y;
         
         widgetVentasDiarias = new VentasDiariasModel(getjDesktopPane1());
+        widgetVentasDiarias.panelPadre=this;
         widgetVentasDiarias.setPreferredSize(new Dimension(xVd,yVd));
         widgetVentasDiarias.setBounds(xVd,xVd,220,330);
         
