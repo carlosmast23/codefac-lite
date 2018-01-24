@@ -114,7 +114,11 @@ public class FacturacionModel extends FacturacionPanel {
         //setearVariablesIniciales();
 
     }
-
+    
+    public FacturacionModel(Factura factura)
+    {
+        this.factura = factura;
+    }
     /*
     private void asds()
     {
