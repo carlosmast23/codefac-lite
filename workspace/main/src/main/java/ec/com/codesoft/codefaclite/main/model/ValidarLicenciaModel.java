@@ -183,6 +183,11 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
                     getjTabbedPane1().setEnabledAt(2, false);
                     getjTabbedPane1().setSelectedIndex(1);
                     
+                    TipoLicenciaEnum licenciaEnum = TipoLicenciaEnum.getEnumByLetra(tipoLicencia);
+                    getLblTipoLicenciaActualizar().setText(licenciaEnum.getNombre());
+                    getLblNumeroMaquinasActualizar().setText(licenciaEnum.getNumeroMaquinas());
+                    getLblNumeroUsuariosActualizar().setText(licenciaEnum.getNumeroUsuarios());
+                    
                     //Setear las variables del usuario y la clave del la pagina web
                     getTxtUsuarioRegistrar().setText(getTxtUsuarioVerificar().getText());
                     getTxtClaveRegistrar().setText(new String(getTxtClaveVerificar().getPassword()));

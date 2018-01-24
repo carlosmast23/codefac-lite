@@ -6,6 +6,12 @@
 package ec.com.codesoft.codefaclite.main.init;
 
 
+import com.jgoodies.looks.plastic.Plastic3DLookAndFeel;
+import com.jgoodies.looks.plastic.PlasticLookAndFeel;
+import com.jgoodies.looks.plastic.PlasticXPLookAndFeel;
+import com.jtattoo.plaf.AbstractLookAndFeel;
+import com.seaglasslookandfeel.SeaGlassLookAndFeel;
+import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
 import com.sun.xml.internal.ws.client.ClientTransportException;
 import ec.com.codesoft.codefaclite.configuraciones.model.CalculadoraModel;
 import ec.com.codesoft.codefaclite.configuraciones.model.ComprobantesConfiguracionModel;
@@ -20,6 +26,7 @@ import ec.com.codesoft.codefaclite.crm.model.ClienteReporte;
 import ec.com.codesoft.codefaclite.crm.model.EmpresaModel;
 import ec.com.codesoft.codefaclite.crm.model.ProductoModel;
 import ec.com.codesoft.codefaclite.crm.model.ProductoReporte;
+import ec.com.codesoft.codefaclite.facturacion.model.FacturaDisenioModel;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturaReporteModel;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
 import ec.com.codesoft.codefaclite.facturacion.model.NotaCreditoModel;
@@ -65,6 +72,9 @@ import java.util.logging.Logger;
 import javax.persistence.PersistenceException;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.LookAndFeel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
@@ -80,6 +90,27 @@ public class Main {
     
     public static void iniciarComponentes()
     {
+        /*
+        try {
+            UIManager.setLookAndFeel("com.seaglasslookandfeel.SeaGlassLookAndFeel"); //El tema es interesante
+            //UIManager.setLookAndFeel("net.java.dev.nimbus");
+            //UIManager.setLookAndFeel(NimbusLookAndFeel.class.getCanonicalName ());
+             //UIManager.setLookAndFeel(new Plastic3DLookAndFeel());
+             //UIManager.setLookAndFeel(new PlasticLookAndFeel());
+             //UIManager.setLookAndFeel(new PlasticXPLookAndFeel());
+             //UIManager.setLookAndFeel(new WindowsLookAndFeel()); //El tema es interesante
+             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+             //UIManager.getLookAndFeelDefaults();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+*/
         SplashScreenModel splashScren=new SplashScreenModel();
         splashScren.agregarPorcentaje(40,"Cargando base de datos");
         splashScren.agregarPorcentaje(60,"Cargando datos session");
@@ -435,6 +466,7 @@ public class Main {
         ventanas.add(new MenuControlador(panel.getjMenuItemFacturaReporte(),FacturaReporteModel.class,true));
         ventanas.add(new MenuControlador(panel.getjMenuItemReporteCliente(),ClienteReporte.class,true));
         ventanas.add(new MenuControlador(panel.getjMenuItemReporteProducto(),ProductoReporte.class,true));
+        ventanas.add(new MenuControlador(panel.getjMenuItemDisenador(),FacturaDisenioModel.class,true));
         return ventanas;
     
     }

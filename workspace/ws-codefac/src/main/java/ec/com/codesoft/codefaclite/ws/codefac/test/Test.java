@@ -58,7 +58,8 @@ public class Test {
         SOAPServerPortType soapServerPort=soapServer.getSOAPServerPort();        
        
         ActualizarlicenciaRequestType parametros=new ActualizarlicenciaRequestType();
-        parametros.setEmail("carlosmast2301@hotmail.es");
+        //parametros.setEmail("carlosmast2301@hotmail.es");
+        parametros.setEmail("trebortc@hotmail.com");
         parametros.setLicencia("");
 
         ActualizarlicenciaResponseType respuesta=soapServerPort.actualizarlicencia(parametros);
@@ -71,7 +72,8 @@ public class Test {
         SOAPServerPortType soapServerPort=soapServer.getSOAPServerPort();        
        
         ActualizartipolicenciaRequestType parametros=new ActualizartipolicenciaRequestType();
-        parametros.setEmail("carlosmast2301@hotmail.es");
+        //parametros.setEmail("carlosmast2301@hotmail.es");
+        parametros.setEmail("trebortc@hotmail.coms");
         parametros.setTipo("p");
         ActualizartipolicenciaResponseType respuesta=soapServerPort.actualizartipolicencia(parametros);
         System.out.println(respuesta.getReturn());

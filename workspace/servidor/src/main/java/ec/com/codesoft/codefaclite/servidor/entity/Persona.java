@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidor.entity;
 
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.OperadorNegocioEnum;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -57,7 +58,9 @@ public class Persona implements Serializable {
     @Column(name = "CORREO_ELECTRONICO")
     private String correoElectronico;
     @Column(name = "ESTADO")
-    private String estado;
+    private String estado;    
+    @Column(name = "TIPO_OPERADOR")
+    private String tipo;
 
     public Long getIdCliente() {
         return idCliente;
@@ -172,6 +175,16 @@ public class Persona implements Serializable {
     public void setApellidos(String apellidos) {
         this.apellidos = apellidos;
     }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+    
+    
        
 
     @Override
@@ -192,6 +205,16 @@ public class Persona implements Serializable {
             return false;
         }
         return true;
+    }
+    
+    /**
+     * Datos adicionales
+     * @return 
+     */
+    
+    public OperadorNegocioEnum getTipoEnum()
+    {
+        return OperadorNegocioEnum.getEnum(tipo);
     }
 
     @Override

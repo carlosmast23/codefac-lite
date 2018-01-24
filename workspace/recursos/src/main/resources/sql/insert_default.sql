@@ -58,3 +58,15 @@ INSERT INTO ACCESO_DIRECTO (NOMBRE, X,Y)
             ('ec.com.codesoft.codefaclite.configuraciones.model.ComprobantesConfiguracionModel', 30, 450),
             ('WidgetVirtualMall',120,60),
             ('WidgetVentasDiarias',120,120);
+
+INSERT INTO COMPROBANTE_FISICO_DISENIO (NOMBRE, ANCHO,ALTO)
+    VALUES('Factura',595,842);
+
+INSERT INTO BANDA_COMPROBANTE (COMPROBANTE_FISICO_ID, NOMBRE,TITULO,ORDEN,ALTO)
+    VALUES(1,'pageHeader','Cabecera',1,63),
+          (1,'columnHeader','Cabecera Detalle',2,61),
+          (1,'detail','Detalles',3,125),
+          (1,'columnFooter','Pie Pagina',4,45);
+
+INSERT INTO COMPONENTE_COMPROBANTE_FISICO (BANDA_COMPROBANTE_ID,NOMBRE,UUID,X,Y,ANCHO,ALTO,NEGRITA)
+    VALUES(1,'identificacion','e165fa85-1cb1-47e9-9af2-f89f0ff2c065',15,13,100,20,'s');
