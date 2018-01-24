@@ -95,6 +95,12 @@ public class ManagerReporteFacturaFisica {
             //Si encuentra el elemento que busca setea los valores
             if(elementoReporte.getAttribute(NOMBRE_ID_COMPONENTE).getValue().equals(componente.getUuid()))
             {
+                if(componente.getOculto().equals("s"))
+                {
+                    tipoElemento.detach();
+                    return; //Si el componente de elimina termina el ciclo
+                }
+                
                 elementoReporte.getAttribute(NOMBRE_X_COMPONENTE).setValue(componente.getX()+"");
                 elementoReporte.getAttribute(NOMBRE_Y_COMPONENTE).setValue(componente.getY()+"");
                 elementoReporte.getAttribute(NOMBRE_ANCHO_COMPONENTE).setValue(componente.getAncho()+"");

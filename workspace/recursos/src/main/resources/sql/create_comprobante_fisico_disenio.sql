@@ -43,6 +43,7 @@ create table COMPONENTE_COMPROBANTE_FISICO
     ALTO BIGINT,
     TAMANIO_LETRA BIGINT,
     NEGRITA varchar(1),
+    OCULTO varchar(1),
     primary key (ID),
     CONSTRAINT id_componente_comprobante_fk FOREIGN KEY (BANDA_COMPROBANTE_ID) REFERENCES BANDA_COMPROBANTE(ID)
 );

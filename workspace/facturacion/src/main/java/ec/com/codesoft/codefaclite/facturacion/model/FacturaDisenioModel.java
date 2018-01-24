@@ -282,6 +282,12 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
             } else {
                 getChkNegrita().setSelected(false);
             }
+            
+            if (componente.getOculto().equals("s")) {
+                getChkOculto().setSelected(true);
+            } else {
+                getChkOculto().setSelected(false);
+            }
 
         }
 
@@ -463,7 +469,19 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
                 } else {
                     componente.setNegrita("n");
                 }
-
+                getjPanel1().repaint();
+            }
+        });
+        
+        getChkOculto().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                 ComponenteComprobanteFisico componente = (ComponenteComprobanteFisico) getCmbComponente().getSelectedItem();
+                if (getChkOculto().isSelected()) {
+                    componente.setOculto("s");
+                } else {
+                    componente.setOculto("n");
+                }
                 getjPanel1().repaint();
             }
         });

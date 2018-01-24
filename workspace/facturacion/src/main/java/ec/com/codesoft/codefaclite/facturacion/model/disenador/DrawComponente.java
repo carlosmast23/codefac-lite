@@ -34,6 +34,13 @@ public class DrawComponente implements DrawInterface{
     
     @Override
     public void dibujar(Graphics g, Point desplazamiento, DrawDocumento documento) {
+        
+        //Si el componente esta oculto entonces no se muestra en pantalla
+        if(componenteEntity.getOculto().equals("s"))
+        {
+            return;
+        }
+        
         g.setFont(new Font("Arial", Font.PLAIN,12));
         
         //Si el componente esta selccionado cambio el color de fondo

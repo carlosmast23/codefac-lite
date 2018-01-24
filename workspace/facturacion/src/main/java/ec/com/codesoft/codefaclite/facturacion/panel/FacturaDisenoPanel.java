@@ -78,6 +78,7 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         txtY = new javax.swing.JSpinner(new SpinnerNumberModel(0,0,1000,1));
         txtAnchoComponente = new javax.swing.JSpinner(new SpinnerNumberModel(0,0,1000,1));
         txtAltoComponente = new javax.swing.JSpinner(new SpinnerNumberModel(0,0,1000,1));
+        chkOculto = new javax.swing.JCheckBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel(){
             @Override
@@ -119,6 +120,7 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 15;
         gridBagConstraints.gridy = 32;
+        gridBagConstraints.gridwidth = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 40;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -143,7 +145,7 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 15;
+        gridBagConstraints.gridx = 24;
         gridBagConstraints.gridy = 33;
         gridBagConstraints.ipadx = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
@@ -154,7 +156,7 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
-        gridBagConstraints.gridwidth = 16;
+        gridBagConstraints.gridwidth = 25;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 15);
@@ -201,7 +203,7 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 15;
         gridBagConstraints.gridy = 18;
-        gridBagConstraints.gridwidth = 9;
+        gridBagConstraints.gridwidth = 10;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 15);
         panelContenedor.add(jPanel2, gridBagConstraints);
 
@@ -241,7 +243,7 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 17;
+        gridBagConstraints.gridwidth = 25;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 15);
         panelContenedor.add(cmbDocumento, gridBagConstraints);
@@ -257,7 +259,7 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
-        gridBagConstraints.gridwidth = 16;
+        gridBagConstraints.gridwidth = 25;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         panelContenedor.add(jSeparator2, gridBagConstraints);
@@ -281,7 +283,7 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 11;
-        gridBagConstraints.gridwidth = 16;
+        gridBagConstraints.gridwidth = 25;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         panelContenedor.add(jSeparator3, gridBagConstraints);
@@ -289,7 +291,7 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 12;
-        gridBagConstraints.gridwidth = 16;
+        gridBagConstraints.gridwidth = 25;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 15);
@@ -313,45 +315,60 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 15;
         gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         panelContenedor.add(txtAnchoDocumento, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 15;
         gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         panelContenedor.add(txtAltoDocumento, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 15;
         gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridwidth = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         panelContenedor.add(txtAltoSeccion, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 15;
         gridBagConstraints.gridy = 21;
+        gridBagConstraints.gridwidth = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         panelContenedor.add(txtX, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 15;
         gridBagConstraints.gridy = 27;
+        gridBagConstraints.gridwidth = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         panelContenedor.add(txtY, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 15;
         gridBagConstraints.gridy = 28;
+        gridBagConstraints.gridwidth = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         panelContenedor.add(txtAnchoComponente, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 15;
         gridBagConstraints.gridy = 29;
+        gridBagConstraints.gridwidth = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         panelContenedor.add(txtAltoComponente, gridBagConstraints);
+
+        chkOculto.setBackground(new java.awt.Color(255, 255, 255));
+        chkOculto.setText("Oculto");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 15;
+        gridBagConstraints.gridy = 33;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        panelContenedor.add(chkOculto, gridBagConstraints);
 
         getContentPane().add(panelContenedor, java.awt.BorderLayout.LINE_END);
 
@@ -379,6 +396,7 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnDown;
     private javax.swing.JButton btnIzquierda;
     private javax.swing.JCheckBox chkNegrita;
+    private javax.swing.JCheckBox chkOculto;
     private javax.swing.JComboBox<ComponenteComprobanteFisico> cmbComponente;
     private javax.swing.JComboBox<ComprobanteFisicoDisenio> cmbDocumento;
     private javax.swing.JComboBox<BandaComprobante> cmbSeccion;
@@ -573,6 +591,15 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         this.txtY = txtY;
     }
 
+    public JCheckBox getChkOculto() {
+        return chkOculto;
+    }
+
+    public void setChkOculto(JCheckBox chkOculto) {
+        this.chkOculto = chkOculto;
+    }
+
+    
 
     
     

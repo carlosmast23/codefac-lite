@@ -54,6 +54,9 @@ public class ComponenteComprobanteFisico {
     @Column(name = "NEGRITA")
     private String negrita;
     
+    @Column(name = "OCULTO")
+    private String oculto;
+    
     @JoinColumn(name = "BANDA_COMPROBANTE_ID")
     @ManyToOne
     private BandaComprobante seccion;
@@ -133,6 +136,13 @@ public class ComponenteComprobanteFisico {
         this.tamanioLetra = tamanioLetra;
     }
 
+    public String getOculto() {
+        return oculto;
+    }
+
+    public void setOculto(String oculto) {
+        this.oculto = oculto;
+    }
     
     
     @Override
