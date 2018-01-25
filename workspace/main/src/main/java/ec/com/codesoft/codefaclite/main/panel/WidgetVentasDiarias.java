@@ -56,7 +56,7 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         jPanel5 = new javax.swing.JPanel();
         btnCrearProducto = new javax.swing.JButton();
         btnBuscarProducto = new javax.swing.JButton();
-        btnBuscar = new javax.swing.JButton();
+        btnFacturar = new javax.swing.JButton();
         btnAgregarProducto = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         btnEliminarProducto = new javax.swing.JButton();
@@ -191,14 +191,14 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         gridBagConstraints.gridwidth = 5;
         jPanel1.add(jPanel5, gridBagConstraints);
 
-        btnBuscar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/save-icon.png"))); // NOI18N
-        btnBuscar.setText("Facturar");
+        btnFacturar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        btnFacturar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/save-icon.png"))); // NOI18N
+        btnFacturar.setText("Facturar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 5;
-        jPanel1.add(btnBuscar, gridBagConstraints);
+        jPanel1.add(btnFacturar, gridBagConstraints);
 
         btnAgregarProducto.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
         btnAgregarProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/check-ico.png"))); // NOI18N
@@ -403,6 +403,14 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         this.btnCrearProducto = btnCrearProducto;
     }
 
+    public JButton getBtnFacturar() {
+        return btnFacturar;
+    }
+
+    public void setBtnFacturar(JButton btnFacturar) {
+        this.btnFacturar = btnFacturar;
+    }
+
     public JButton getBtnEliminarProducto() {
         return btnEliminarProducto;
     }
@@ -446,10 +454,10 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable TblDetalleFactura;
     private javax.swing.JButton btnAgregarProducto;
-    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnBuscarProducto;
     private javax.swing.JButton btnCrearProducto;
     private javax.swing.JButton btnEliminarProducto;
+    private javax.swing.JButton btnFacturar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel15;
