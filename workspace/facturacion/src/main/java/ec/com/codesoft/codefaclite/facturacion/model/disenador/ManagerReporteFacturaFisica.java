@@ -8,14 +8,21 @@ package ec.com.codesoft.codefaclite.facturacion.model.disenador;
 import ec.com.codesoft.codefaclite.servidor.entity.BandaComprobante;
 import ec.com.codesoft.codefaclite.servidor.entity.ComponenteComprobanteFisico;
 import ec.com.codesoft.codefaclite.servidor.entity.ComprobanteFisicoDisenio;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
 
 /**
  *
@@ -31,7 +38,7 @@ public class ManagerReporteFacturaFisica {
     private final String NOMBRE_Y_COMPONENTE="y";
     private final String NOMBRE_ANCHO_COMPONENTE="width";
     private final String NOMBRE_ALTO_COMPONENTE="height";
-    private final String NOMBRE_FONT_COMPONENTE="font";
+    private final String NOMBRE_FONT_COMPONENTE="size";
     
     /**
      * Reporte original sobre el cual se va a trabajar
@@ -49,6 +56,7 @@ public class ManagerReporteFacturaFisica {
 
     public ManagerReporteFacturaFisica(InputStream reporteOriginal) {
         this.reporteOriginal = reporteOriginal;
+        cargarDocumento();
     }
     
     private void cargarDocumento()
@@ -85,23 +93,60 @@ public class ManagerReporteFacturaFisica {
             Element tipoElemento=(Element) object;
             Element elementoReporte=buscarEtiquetaPorNombre(tipoElemento, "reportElement");
             //Si encuentra el elemento que busca setea los valores
-            if(elementoReporte.getAttribute(NOMBRE_ID_COMPONENTE).getName().equals(componente.getUuid()))
+            if(elementoReporte.getAttribute(NOMBRE_ID_COMPONENTE).getValue().equals(componente.getUuid()))
             {
+                if(componente.getOculto().equals("s"))
+                {
+                    tipoElemento.detach();
+                    return; //Si el componente de elimina termina el ciclo
+                }
+                
                 elementoReporte.getAttribute(NOMBRE_X_COMPONENTE).setValue(componente.getX()+"");
-                elementoReporte.getAttribute(NOMBRE_Y_COMPONENTE).setValue(componente.getX()+"");
+                elementoReporte.getAttribute(NOMBRE_Y_COMPONENTE).setValue(componente.getY()+"");
                 elementoReporte.getAttribute(NOMBRE_ANCHO_COMPONENTE).setValue(componente.getAncho()+"");
                 elementoReporte.getAttribute(NOMBRE_ALTO_COMPONENTE).setValue(componente.getAlto()+"");
                 
                 Element elementoCaracteristica=buscarEtiquetaPorNombre(tipoElemento, "textElement");
-                Element elementoFont=buscarEtiquetaPorNombre(elementoCaracteristica, "font");
-                elementoFont.getAttribute("NOMBRE_FONT_COMPONENTE").setValue("12");//TODO: Falta grabar este valor
-                
-                
+                if(elementoCaracteristica!=null)
+                {
+                    Element elementoFont=buscarEtiquetaPorNombre(elementoCaracteristica, "font");
+                    elementoFont.getAttribute(NOMBRE_FONT_COMPONENTE).setValue(componente.getTamanioLetra()+"");//TODO: Falta grabar este valor
+                }
             }
             
         }
     }
     
+    /**
+     * Convertir un documento modificado a formato inputStream para que puede compilar
+     * y mostrar el reporte
+     * @return 
+     */
+    public InputStream generarNuevoDocumento()
+    {
+        InputStream stream = null;
+        try {
+            //Generar un nuevo xml
+            XMLOutputter xmlOutput = new XMLOutputter();
+            xmlOutput.setFormat(Format.getPrettyFormat());
+            //xmlOutput.output(document, new FileWriter("factura_fisica.jrxml"));
+            String documento = xmlOutput.outputString(document);
+            stream = new ByteArrayInputStream(documento.getBytes("UTF-8"));
+            return stream;
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(ManagerReporteFacturaFisica.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                stream.close();
+            } catch (IOException ex) {
+                Logger.getLogger(ManagerReporteFacturaFisica.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return stream;
+    
+    }
+    
+
     public void setearNuevosValores(ComprobanteFisicoDisenio comprobante)
     {
        //Establecer propiedades de ancho y alto del documento
@@ -121,6 +166,7 @@ public class ManagerReporteFacturaFisica {
         }
         
     }
-
+    
+    
     
 }

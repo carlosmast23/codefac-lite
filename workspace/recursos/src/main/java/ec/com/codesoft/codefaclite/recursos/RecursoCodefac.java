@@ -27,6 +27,7 @@ public enum RecursoCodefac {
     JASPER_CRM("reportes/crm"),
     JASPER_FACTURACION("reportes/facturacion"),
     JASPER_COMPROBANTES_ELECTRONICOS("reportes/comprobantes_electronicos"),
+    JASPER_COMPROBANTES_FISICOS("reportes/comprobantes_fisicos"),
     JASPER("reportes"),
     HTML("html/factura_electronica"),
     AYUDA("ayuda");

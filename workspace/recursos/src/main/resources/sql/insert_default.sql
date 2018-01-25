@@ -68,5 +68,10 @@ INSERT INTO BANDA_COMPROBANTE (COMPROBANTE_FISICO_ID, NOMBRE,TITULO,ORDEN,ALTO)
           (1,'detail','Detalles',3,125),
           (1,'columnFooter','Pie Pagina',4,45);
 
-INSERT INTO COMPONENTE_COMPROBANTE_FISICO (BANDA_COMPROBANTE_ID,NOMBRE,UUID,X,Y,ANCHO,ALTO,NEGRITA)
-    VALUES(1,'identificacion','e165fa85-1cb1-47e9-9af2-f89f0ff2c065',15,13,100,20,'s');
+INSERT INTO COMPONENTE_COMPROBANTE_FISICO (BANDA_COMPROBANTE_ID,NOMBRE,UUID,X,Y,ANCHO,ALTO,TAMANIO_LETRA,NEGRITA,OCULTO)
+    VALUES(1,'identificacion','e165fa85-1cb1-47e9-9af2-f89f0ff2c065',15,13,100,20,11,'s','n'),
+          (1,'razonSocial','cd88ab17-33e8-4da8-a3c6-b5d4be380f10',18,38,100,20,11,'s','n'),
+          (3,'cantidad','4187fe71-1b90-4ecb-a317-b1515b77fe14',0,0,69,20,11,'s','n'),
+          (3,'descripcion','63c13824-dd49-434e-a00d-7c356f78688b',69,0,300,20,11,'s','n'),
+          (3,'valorUnitario','4352aef2-1d77-425e-95bd-736cd2211c25',369,0,93,20,11,'s','n'),
+          (3,'valorTotal','3119d150-a3dc-4e39-9e60-4e349cc1daf9',462,0,93,20,11,'s','n');

@@ -48,8 +48,14 @@ public class ComponenteComprobanteFisico {
     @Column(name = "ALTO")
     private int alto;
 
+    @Column(name = "TAMANIO_LETRA")
+    private int tamanioLetra;
+
     @Column(name = "NEGRITA")
     private String negrita;
+    
+    @Column(name = "OCULTO")
+    private String oculto;
     
     @JoinColumn(name = "BANDA_COMPROBANTE_ID")
     @ManyToOne
@@ -122,6 +128,23 @@ public class ComponenteComprobanteFisico {
         this.negrita = negrita;
     }
 
+    public int getTamanioLetra() {
+        return tamanioLetra;
+    }
+
+    public void setTamanioLetra(int tamanioLetra) {
+        this.tamanioLetra = tamanioLetra;
+    }
+
+    public String getOculto() {
+        return oculto;
+    }
+
+    public void setOculto(String oculto) {
+        this.oculto = oculto;
+    }
+    
+    
     @Override
     public String toString() {
         return nombre;
