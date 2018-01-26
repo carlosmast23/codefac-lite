@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.model;
 
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
@@ -22,7 +23,9 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.BandaComprobante;
 import ec.com.codesoft.codefaclite.servidor.entity.ComponenteComprobanteFisico;
 import ec.com.codesoft.codefaclite.servidor.entity.ComprobanteFisicoDisenio;
+import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.service.ComprobanteFisicoDisenioService;
+import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -36,11 +39,15 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -54,6 +61,19 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
     private FacturaDisenioModel facturaDisenioModel;
     private DrawCanvas canvas;
     private List<DrawComponente> componentesDraw;
+    
+    /**
+     * Guarda la referencia al ultimo componente seleccionado por el mouse
+     */
+    private DrawComponente componenteSeleccionadoMouse;
+    
+    /**
+     * Variable para saber si se esta dando click sobre un componente para mover de posicion
+     */
+    private DrawComponente mouseSeleccionadoComponente;
+    
+    int desfazMouseX=0;
+    int desfazMouseY=0; 
 
     public FacturaDisenioModel() {
         this.repaintInterface = this;
@@ -66,6 +86,8 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
         agregarListener();
         agregarListenerCamposTexto();
         cargarDatosSeleccion();
+        
+        this.mouseSeleccionadoComponente=null;
 
     }
 
@@ -82,7 +104,10 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ComprobanteFisicoDisenioService servicio = new ComprobanteFisicoDisenioService();
+        ComprobanteFisicoDisenio comprobante= (ComprobanteFisicoDisenio) getCmbDocumento().getSelectedItem();
+        servicio.editar(comprobante);
+        DialogoCodefac.mensaje("Correcto","Los datos fueron grabados correctamente",DialogoCodefac.MENSAJE_CORRECTO);
     }
 
     @Override
@@ -106,8 +131,22 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
         //String xmlStr= UtilidadesTextos.getStringFromInputStream(reporteNuevo);
         //System.out.println(xmlStr);
         Map<String, Object> parametros = new HashMap<String, Object>();
-        parametros.put("identificacion", "1724218951001");
+        parametros.put("fechaEmision", "12/01/2017");
         parametros.put("razonSocial", "Carlos alfonso sanchez coyago");
+        parametros.put("direccion", "Sanchez Coyago Carlo alfonso");
+        parametros.put("telefono", "022339281");
+        parametros.put("correoElectronico", "carlosmast2301@hotmail.es");
+        parametros.put("identificacion", "1724218951001");
+
+        parametros.put("subtotalImpuesto", "100");
+        parametros.put("subtotalSinImpuesto", "0");
+        parametros.put("descuento", "10");
+        parametros.put("subtotalConImpuesto", "90");
+        parametros.put("valorIva", "10");
+        parametros.put("total", "100");
+        parametros.put("iva", "100");
+
+
 
         List<DetalleFacturaFisicaData> detalles = new ArrayList<DetalleFacturaFisicaData>();
         DetalleFacturaFisicaData detalle = new DetalleFacturaFisicaData();
@@ -115,6 +154,13 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
         detalle.setDescripcion("MOUSE OPTICO");
         detalle.setValorTotal("12");
         detalle.setValorUnitario("12");
+        detalles.add(detalle);
+        
+        detalle = new DetalleFacturaFisicaData();
+        detalle.setCantidad("2");
+        detalle.setDescripcion("TECLADO");
+        detalle.setValorTotal("10");
+        detalle.setValorUnitario("10");
         detalles.add(detalle);
 
         ReporteCodefac.generarReporteInternalFrame(reporteNuevo, parametros, detalles, panelPadre, "Muestra Previa");
@@ -133,7 +179,7 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
 
     @Override
     public void limpiar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
@@ -149,7 +195,6 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
         Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
-        permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
         permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
         permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
         permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
@@ -163,6 +208,90 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
 
     private void agregarListener() {
 
+        getjPanel1().addMouseMotionListener(new MouseMotionListener() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                //System.out.println("mouseDragged");
+                if(mouseSeleccionadoComponente!=null)
+                {
+                    System.out.println("moviendo posicion");
+                    int x=e.getX()-mouseSeleccionadoComponente.getDrawSeccion().getX();
+                    int y=e.getY()-mouseSeleccionadoComponente.getDrawSeccion().getY();                    
+                    
+                    int xFinal=(int) ((x-desfazMouseX)/canvas.getEscalaDecimales());
+                    int yFinal=(int) ((y-desfazMouseY)/canvas.getEscalaDecimales());
+                    mouseSeleccionadoComponente.getComponenteEntity().setX(xFinal);
+                    mouseSeleccionadoComponente.getComponenteEntity().setY(yFinal);
+                    getTxtX().setValue(xFinal);
+                    getTxtY().setValue(yFinal);
+                    getjPanel1().repaint();
+
+                }
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                //System.out.println(e.getX()+"-"+e.getY());
+                
+                DrawComponente componente=obtenerComponenteSeleccionado(e.getX(),e.getY());
+                if(componente!=null)
+                {
+                    if(componenteSeleccionadoMouse!=null)
+                        componenteSeleccionadoMouse.setSeleccionadoMouse(false);
+                    
+                    componenteSeleccionadoMouse=componente;                    
+                    componente.setSeleccionadoMouse(true);
+                    getjPanel1().repaint();
+                }
+                else
+                {
+                    //seleccionarComponenteMouse(false);
+                    if (componenteSeleccionadoMouse != null) {
+                        componenteSeleccionadoMouse.setSeleccionadoMouse(false);
+                    }
+                    getjPanel1().repaint();
+                }
+                
+                
+            }
+        });
+        
+        getjPanel1().addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                System.out.println("clicked");
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                
+                DrawComponente componente=obtenerComponenteSeleccionado(e.getX(),e.getY());
+                if(componente!=null)
+                {                    
+                    desfazMouseX = e.getX() - componente.getX();
+                    desfazMouseY = e.getY() - componente.getY();
+                    mouseSeleccionadoComponente=componente;
+                    seleccionarComponenteMouse();
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+                if(mouseSeleccionadoComponente!=null)
+                {
+                    mouseSeleccionadoComponente=null;
+                }
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
+
+        
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentShown(ComponentEvent e) {
@@ -242,6 +371,43 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
 
             }
         });
+    }
+    
+    /**
+     * Metodo que me permite establecer en el panel de control solo el elemento seleccionado
+     */
+    private void seleccionarComponenteMouse()
+    {
+        BandaComprobante bandaComprobante = mouseSeleccionadoComponente.getDrawSeccion().getSeccionEntity();
+        getCmbSeccion().setSelectedItem(bandaComprobante);
+        getCmbComponente().setSelectedItem(mouseSeleccionadoComponente.getComponenteEntity());
+    }
+    /**
+     * Obtiene uno de los componentes seleccionados si esta en la posicion seleccionado por el mouse
+     * @param x
+     * @param y
+     * @return 
+     */
+    private DrawComponente obtenerComponenteSeleccionado(int x, int y) 
+    {
+        for (DrawComponente drawComponente : componentesDraw) {
+            int x1=drawComponente.getX();
+            int y1=drawComponente.getY();
+            int ancho=drawComponente.getWidth();
+            int alto=drawComponente.getHeight();
+            if((x>=x1 && x<=(x1+ancho)) && (y>=y1 && y<=(y1+alto)))
+            {
+                return drawComponente;
+            }
+        }        
+        return null;
+    }
+    
+    private void seleccionarComponenteMouse(boolean opcion) {
+        //Quitar la seleccion de todos los componentes
+        for (DrawComponente drawComponente : componentesDraw) {
+            drawComponente.setSeleccionadoMouse(false);
+        }
     }
 
     private void seleccionarComponenteActual() {
@@ -341,7 +507,7 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
             DrawSeccion drawSeccion = new DrawSeccion(seccion);
 
             for (ComponenteComprobanteFisico componente : seccion.getComponentes()) {
-                DrawComponente drawComponente = new DrawComponente(componente);
+                DrawComponente drawComponente = new DrawComponente(componente,drawSeccion);
                 drawSeccion.agregarComponente(drawComponente);
                 componentesDraw.add(drawComponente);
             }
@@ -365,14 +531,16 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
         ComprobanteFisicoDisenioService servicio = new ComprobanteFisicoDisenioService();
         List<ComprobanteFisicoDisenio> documentos = servicio.obtenerTodos();
         for (ComprobanteFisicoDisenio documento : documentos) {
+            //Esto sirve para desasociar la entidad y que no se reflejen los cambios directamente con la base de datos
+            ServiceAbstract.desasociarEntidadRecursivo(documento);
             getCmbDocumento().addItem(documento);
         }
+        //System.exit(0);
     }
 
     @Override
     public void repaint(Graphics g) {
         Dimension dimension = getjPanel1().getSize();
-        System.out.println(getjPanel1().getWidth() + "-" + getjPanel1().getHeight());
         canvas.dibujar(g, dimension);
     }
 
@@ -482,6 +650,14 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
                 } else {
                     componente.setOculto("n");
                 }
+                getjPanel1().repaint();
+            }
+        });
+        
+        getSliderZoom().addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                canvas.setZoom(getSliderZoom().getValue());
                 getjPanel1().repaint();
             }
         });

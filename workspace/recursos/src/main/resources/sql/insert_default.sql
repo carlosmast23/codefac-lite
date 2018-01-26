@@ -63,15 +63,43 @@ INSERT INTO COMPROBANTE_FISICO_DISENIO (NOMBRE, ANCHO,ALTO)
     VALUES('Factura',595,842);
 
 INSERT INTO BANDA_COMPROBANTE (COMPROBANTE_FISICO_ID, NOMBRE,TITULO,ORDEN,ALTO)
-    VALUES(1,'pageHeader','Cabecera',1,63),
-          (1,'columnHeader','Cabecera Detalle',2,61),
-          (1,'detail','Detalles',3,125),
-          (1,'columnFooter','Pie Pagina',4,45);
+    VALUES(1,'pageHeader','Cabecera',1,84),
+          (1,'detail','Detalles',3,23),
+          (1,'columnFooter','Pie Pagina',4,104);
 
 INSERT INTO COMPONENTE_COMPROBANTE_FISICO (BANDA_COMPROBANTE_ID,NOMBRE,UUID,X,Y,ANCHO,ALTO,TAMANIO_LETRA,NEGRITA,OCULTO)
-    VALUES(1,'identificacion','e165fa85-1cb1-47e9-9af2-f89f0ff2c065',15,13,100,20,11,'s','n'),
-          (1,'razonSocial','cd88ab17-33e8-4da8-a3c6-b5d4be380f10',18,38,100,20,11,'s','n'),
-          (3,'cantidad','4187fe71-1b90-4ecb-a317-b1515b77fe14',0,0,69,20,11,'s','n'),
-          (3,'descripcion','63c13824-dd49-434e-a00d-7c356f78688b',69,0,300,20,11,'s','n'),
-          (3,'valorUnitario','4352aef2-1d77-425e-95bd-736cd2211c25',369,0,93,20,11,'s','n'),
-          (3,'valorTotal','3119d150-a3dc-4e39-9e60-4e349cc1daf9',462,0,93,20,11,'s','n');
+    VALUES
+          (1,'identificacion','e165fa85-1cb1-47e9-9af2-f89f0ff2c065',389,50,133,15,10,'n','n'),
+          (1,'fechaEmision','2915f0d2-afa9-4aba-8f9a-6bc7a4ac49c7',18,5,133,15,10,'n','n'),
+          (1,'razonSocial','a93fd1ad-f710-4b35-ad52-4a4a75b14b83',18,20,244,15,10,'n','n'),
+          (1,'direccion','0ee1f0c6-f914-4ffc-9a43-874e4dc6e8af',18,35,188,15,10,'n','n'),
+          (1,'telefono','649694ec-4c36-45e9-b405-4cc54a640582',18,50,133,15,10,'n','n'),
+          (1,'correoElectronico','bf6539d9-3e3f-4f8b-b9be-917a103e0796',389,35,133,15,10,'n','n'),
+          (2,'cantidad','4187fe71-1b90-4ecb-a317-b1515b77fe14',18,0,81,15,10,'n','n'),
+          (2,'descripcion','63c13824-dd49-434e-a00d-7c356f78688b',99,0,270,15,10,'n','n'),
+          (2,'valorUnitario','4352aef2-1d77-425e-95bd-736cd2211c25',369,0,93,15,10,'n','n'),
+          (2,'valorTotal','3119d150-a3dc-4e39-9e60-4e349cc1daf9',462,0,93,15,10,'n','n'),
+          (3,'subtotalSinImpuesto','b9a3a0cb-774d-485f-8933-f4ca3b41fba7',451,21,100,15,10,'n','n'),
+          (3,'subtotalImpuesto','86054d4c-ae41-4430-9510-2d8749561874',451,6,100,15,10,'n','n'),
+          (3,'descuento','0e91accb-5609-49f8-9878-4f77c27b8491',451,36,100,15,10,'n','n'),
+          (3,'subtotalConDescuento','32b039ed-968e-4b31-acd0-943e1063e6df',451,51,100,15,10,'n','n'),
+          (3,'valorIva','ad8a6e6b-030a-4490-9630-ee0dadf104db',451,66,100,15,10,'n','n'),
+          (3,'iva','bfa48f42-e1e5-4bda-84a5-41af89f66937',422,66,19,15,10,'n','n'),
+          (3,'total','e8b582dc-3b95-4f26-a1b6-dddde4a42378',451,81,100,15,10,'n','n');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -69,4 +69,24 @@ public abstract class ServiceAbstract<Entity,Facade>
        return AbstractFacade.findCountStaticDialog(query,map);
     }
     
+
+    /**
+     * Metodo que se encarga de desasoriar una entidad gestionada para poder hacer acciones
+     * sobre el objecto pero que no se reflejen en la persistencia con la base de datoss
+     */    
+    public static void desasociarEntidadPersistencia(Object entidad)
+    {
+        AbstractFacade.detachEntity(entidad);
+    }
+    
+    /**
+     * Metodo recursivo que se encarga de desasoriar una entidad gestionada para poder
+     * hacer acciones sobre el objecto pero que no se reflejen en la
+     * persistencia con la base de datoss
+     */   
+    public static void desasociarEntidadRecursivo(Object entidad)
+    {
+        AbstractFacade.detachRecursive(entidad);
+    }
+    
 }

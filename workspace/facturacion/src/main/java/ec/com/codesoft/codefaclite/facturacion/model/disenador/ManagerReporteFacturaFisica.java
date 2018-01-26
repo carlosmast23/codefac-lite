@@ -39,6 +39,7 @@ public class ManagerReporteFacturaFisica {
     private final String NOMBRE_ANCHO_COMPONENTE="width";
     private final String NOMBRE_ALTO_COMPONENTE="height";
     private final String NOMBRE_FONT_COMPONENTE="size";
+    private final String NOMBRE_BOLD_COMPONENTE="isBold";
     
     /**
      * Reporte original sobre el cual se va a trabajar
@@ -111,7 +112,11 @@ public class ManagerReporteFacturaFisica {
                 {
                     Element elementoFont=buscarEtiquetaPorNombre(elementoCaracteristica, "font");
                     elementoFont.getAttribute(NOMBRE_FONT_COMPONENTE).setValue(componente.getTamanioLetra()+"");//TODO: Falta grabar este valor
+                    
+                    String boldTxt=(componente.getNegrita().equals("s"))?"true":"false";
+                    elementoFont.getAttribute(NOMBRE_BOLD_COMPONENTE).setValue(boldTxt);                    
                 }
+                return;
             }
             
         }

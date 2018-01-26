@@ -26,6 +26,11 @@ public class DrawSeccion implements DrawInterface{
     public BandaComprobante seccionEntity;
     
     private List<DrawComponente> componentes;
+    
+    private int x;
+    private int y;
+    private int ancho;
+    private int alto;
 
     public DrawSeccion(BandaComprobante seccionEntity) {
         this.seccionEntity=seccionEntity;
@@ -33,20 +38,27 @@ public class DrawSeccion implements DrawInterface{
     }
 
     @Override
-    public void dibujar(Graphics g, Point desplazamiento,DrawDocumento documento) {
+    public void dibujar(Graphics g, Point desplazamiento,DrawDocumento documento,float escala) {
         g.setColor(Color.LIGHT_GRAY);
-        g.drawRect(desplazamiento.x,desplazamiento.y,documento.documentoEntity.getAncho(),seccionEntity.getAlto());
+        
+        this.x=(int) (desplazamiento.x);
+        this.y=(int) (desplazamiento.y);
+        this.ancho=(int) (documento.documentoEntity.getAncho()*escala);
+        this.alto=(int) (seccionEntity.getAlto()*escala);        
+        
+        g.drawRect(this.x,this.y,this.ancho,this.alto);
         //g.drawString(nombre, (desplazamiento.x+documento.ancho)*3/4, desplazamiento.y+alto+50);
-        Rectangle rectangle=new Rectangle(desplazamiento.x,desplazamiento.y,documento.documentoEntity.getAncho(),seccionEntity.getAlto());
+        //Rectangle rectangle=new Rectangle((int) (desplazamiento.x), (int) (desplazamiento.y), (int) (documento.documentoEntity.getAncho()*escala), (int) (seccionEntity.getAlto()*escala));
+        Rectangle rectangle=new Rectangle(this.x,this.y,this.ancho,this.alto);
         g.setColor(new Color(220,220,220));
-        drawCenteredString(g, seccionEntity.getTitulo(),rectangle,new Font("Arial", Font.PLAIN,30));
+        drawCenteredString(g, seccionEntity.getTitulo(),rectangle,new Font("Arial", Font.PLAIN, (int) (25*escala)));
         
         /**
          * Dibujar Componentes
          */
         
         for (DrawComponente componente : componentes) {
-            componente.dibujar(g,desplazamiento, documento);
+            componente.dibujar(g,desplazamiento, documento,escala);
         }
         
     }
@@ -68,5 +80,27 @@ public class DrawSeccion implements DrawInterface{
     {
         this.componentes.add(componente);
     }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getAncho() {
+        return ancho;
+    }
+
+    public int getAlto() {
+        return alto;
+    }
+
+    public BandaComprobante getSeccionEntity() {
+        return seccionEntity;
+    }
+    
+    
     
 }

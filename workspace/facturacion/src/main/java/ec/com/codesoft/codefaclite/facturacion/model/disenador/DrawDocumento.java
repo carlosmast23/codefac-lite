@@ -23,6 +23,11 @@ public class DrawDocumento implements DrawInterface{
     public ComprobanteFisicoDisenio documentoEntity;
     
     private List<DrawSeccion> secciones;
+    
+    private int x;
+    private int y;
+    private int ancho;
+    private int alto;
 
     public DrawDocumento(ComprobanteFisicoDisenio documentoEntity) {
         this.documentoEntity=documentoEntity;
@@ -31,16 +36,21 @@ public class DrawDocumento implements DrawInterface{
 
     
     @Override
-    public void dibujar(Graphics g,Point desplazamiento,DrawDocumento documento) {
+    public void dibujar(Graphics g,Point desplazamiento,DrawDocumento documento,float escala) {
         g.setColor(Color.white);
-        g.fillRect(0+desplazamiento.x,0+desplazamiento.y,documentoEntity.getAncho(),documentoEntity.getAlto());
+        
+        this.x=(int) (0+desplazamiento.x);
+        this.y= (int) (0+desplazamiento.y);
+        this.ancho=(int) (documentoEntity.getAncho()*escala);
+        this.alto=(int) (documentoEntity.getAlto()*escala);
+        g.fillRect(this.x,this.y,this.ancho,this.alto);
         
         Point desplazamientoTemp=new Point(0,0);
         desplazamientoTemp.x+=desplazamiento.x;
         desplazamientoTemp.y+=desplazamiento.y;
         for (DrawSeccion seccion : secciones) {
-            seccion.dibujar(g, desplazamientoTemp, documento);
-            desplazamientoTemp.y+=seccion.seccionEntity.getAlto();
+            seccion.dibujar(g, desplazamientoTemp, documento,escala);
+            desplazamientoTemp.y+=seccion.seccionEntity.getAlto()*escala;
         }
     }
     
@@ -48,6 +58,27 @@ public class DrawDocumento implements DrawInterface{
     {
         this.secciones.add(seccion);
     }
+
+    public List<DrawSeccion> getSecciones() {
+        return secciones;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getAncho() {
+        return ancho;
+    }
+
+    public int getAlto() {
+        return alto;
+    }
    
+    
     
 }

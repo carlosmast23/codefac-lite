@@ -593,7 +593,6 @@ public class FacturacionModel extends FacturacionPanel {
         } else {
             throw new ExcepcionCodefacLite("cancelar ejecucion");
         }
-
     }
 
     @Override

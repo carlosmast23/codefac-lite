@@ -13,5 +13,5 @@ import java.awt.Point;
  * @author Carlos
  */
 public interface DrawInterface {
-    public abstract void dibujar(Graphics g,Point desplazamiento,DrawDocumento documento);
+    public abstract void dibujar(Graphics g,Point desplazamiento,DrawDocumento documento,float escala);
 }

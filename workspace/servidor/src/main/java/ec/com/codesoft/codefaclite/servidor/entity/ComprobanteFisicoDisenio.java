@@ -38,7 +38,7 @@ public class ComprobanteFisicoDisenio {
     @Column (name = "ALTO")
     private int alto;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "documento")
+    @OneToMany(cascade = {CascadeType.ALL,CascadeType.DETACH}, mappedBy = "documento")
     private List<BandaComprobante> secciones;
     
     public ComprobanteFisicoDisenio() {

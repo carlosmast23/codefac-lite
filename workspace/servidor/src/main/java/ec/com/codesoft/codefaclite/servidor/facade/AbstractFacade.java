@@ -8,11 +8,15 @@ package ec.com.codesoft.codefaclite.servidor.facade;
 import com.sun.org.apache.bcel.internal.generic.INSTANCEOF;
 import ec.com.codesoft.codefaclite.servidor.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.excepciones.PersistenciaDuplicadaException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -263,6 +267,46 @@ public abstract class AbstractFacade<T>
         }
         
         return (Long) query.getSingleResult();
+    }
+    
+    /**
+     * Metodo que se encarga de desasoriar una entidad gestionada para poder hacer acciones
+     * sobre el objecto pero que no se reflejen en la persistencia con la base de datoss
+     */
+    public static void detachEntity(Object obj)
+    {
+        //entityManager.contains(obj) para saber si el dato es administrable
+        entityManager.detach(obj);
+    }
+    
+    /**
+     * Desasocia todos los objectos hijos de objeto de la persistencia para que no
+     * sean entidades administradas
+     * @param obj 
+     */
+    //TODO implementar metodo cuando tenga referencias recursivas
+    public static void detachRecursive(Object obj)
+    {
+        entityManager.detach(obj);
+        Method[] metodos= obj.getClass().getMethods();
+        for (Method metodo : metodos) {
+            //Verifica que el tipo de dato sea una lista
+            if(List.class.equals(metodo.getReturnType()))
+            {
+                try {
+                    List<Object> list= (List<Object>) metodo.invoke(obj);
+                    for (Object object : list) {
+                        detachRecursive(object);
+                    }
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(AbstractFacade.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalArgumentException ex) {
+                    Logger.getLogger(AbstractFacade.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InvocationTargetException ex) {
+                    Logger.getLogger(AbstractFacade.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
     }
 
 }

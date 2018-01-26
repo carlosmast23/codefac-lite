@@ -18,9 +18,11 @@ import java.awt.Rectangle;
 public class DrawCanvas{
 
     private DrawDocumento documento;
+    private int zoom;
 
     public DrawCanvas(DrawDocumento documento) {
         this.documento = documento;
+        this.zoom=50;
     }
 
     public DrawCanvas() {
@@ -38,16 +40,28 @@ public class DrawCanvas{
         }
         
         /**
+         * Calcular la escala en decimales desde 0 hasta el doble
+         */
+        //float escala=(float)zoom/(float)50;
+        float escala=getEscalaDecimales();
+        
+        /**
          * Dibujar el fondo principal
          */
         g.setColor(new Color(245, 245, 245));    
 
         g.fillRect(0, 0,(int)dimension.getWidth(),(int)dimension.getHeight());        
         
-        int desfazX=(int) (dimension.getWidth()-this.documento.documentoEntity.getAncho());
+        int desfazX=(int) (dimension.getWidth()-this.documento.documentoEntity.getAncho()*escala);
         desfazX=(int)((double)desfazX/(double)2);
-        this.documento.dibujar(g,new Point(desfazX,50),this.documento);
+        
+        this.documento.dibujar(g,new Point(desfazX,50),this.documento,escala);
 
+    }
+    
+    public float getEscalaDecimales()
+    {
+        return (float)zoom/(float)50;
     }
 
     public DrawDocumento getDocumento() {
@@ -57,6 +71,15 @@ public class DrawCanvas{
     public void setDocumento(DrawDocumento documento) {
         this.documento = documento;
     }
+
+    public int getZoom() {
+        return zoom;
+    }
+
+    public void setZoom(int zoom) {
+        this.zoom = zoom;
+    }
+    
     
     
     

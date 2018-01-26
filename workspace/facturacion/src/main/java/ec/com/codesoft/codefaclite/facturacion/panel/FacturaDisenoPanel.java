@@ -16,6 +16,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
@@ -79,6 +80,9 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         txtAnchoComponente = new javax.swing.JSpinner(new SpinnerNumberModel(0,0,1000,1));
         txtAltoComponente = new javax.swing.JSpinner(new SpinnerNumberModel(0,0,1000,1));
         chkOculto = new javax.swing.JCheckBox();
+        jSeparator4 = new javax.swing.JSeparator();
+        jLabel14 = new javax.swing.JLabel();
+        sliderZoom = new javax.swing.JSlider();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel(){
             @Override
@@ -164,7 +168,6 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 34;
-        gridBagConstraints.gridwidth = 16;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 0.1;
         panelContenedor.add(jLabel5, gridBagConstraints);
@@ -369,6 +372,31 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 33;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         panelContenedor.add(chkOculto, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 35;
+        gridBagConstraints.gridwidth = 25;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        panelContenedor.add(jSeparator4, gridBagConstraints);
+
+        jLabel14.setText("Zoom:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 36;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        panelContenedor.add(jLabel14, gridBagConstraints);
+
+        sliderZoom.setBackground(new java.awt.Color(255, 255, 255));
+        sliderZoom.setMinimum(30);
+        sliderZoom.setValue(60);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 15;
+        gridBagConstraints.gridy = 36;
+        gridBagConstraints.gridwidth = 10;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        panelContenedor.add(sliderZoom, gridBagConstraints);
 
         getContentPane().add(panelContenedor, java.awt.BorderLayout.LINE_END);
 
@@ -405,6 +433,7 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -419,8 +448,10 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JPanel panelContenedor;
+    private javax.swing.JSlider sliderZoom;
     private javax.swing.JSpinner txtAltoComponente;
     private javax.swing.JSpinner txtAltoDocumento;
     private javax.swing.JSpinner txtAltoSeccion;
@@ -597,6 +628,14 @@ public abstract class FacturaDisenoPanel extends ControladorCodefacInterface {
 
     public void setChkOculto(JCheckBox chkOculto) {
         this.chkOculto = chkOculto;
+    }
+
+    public JSlider getSliderZoom() {
+        return sliderZoom;
+    }
+
+    public void setSliderZoom(JSlider sliderZoom) {
+        this.sliderZoom = sliderZoom;
     }
 
     

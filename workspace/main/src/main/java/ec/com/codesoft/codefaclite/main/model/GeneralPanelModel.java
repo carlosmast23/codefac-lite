@@ -339,7 +339,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                   int division=getjSplitPanel().getDividerLocation();
                   int ancho=getWidth();
                   PROPORCION_HORIZONTAL=(double)division/(double)ancho;
-                  System.out.println("division:"+division+"ancho:"+ancho+"p1:"+PROPORCION_HORIZONTAL+">"+PROPORCION_HORIZONTAL_MIN);
+                  //System.out.println("division:"+division+"ancho:"+ancho+"p1:"+PROPORCION_HORIZONTAL+">"+PROPORCION_HORIZONTAL_MIN);
                   //if(PROPORCION_HORIZONTAL>PROPORCION_HORIZONTAL_MIN)
                  //{
                       //PROPORCION_HORIZONTAL=PROPORCION_HORIZONTAL_INICIAL;
