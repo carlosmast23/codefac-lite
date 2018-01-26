@@ -114,12 +114,17 @@ public class FacturacionModel extends FacturacionPanel {
         //setearVariablesIniciales();
 
     }
-    
-    public FacturacionModel(Factura factura)
-    {
-        this.factura = factura;
+
+    public Factura getFactura() {
+        return factura;
     }
-    /*
+
+    public void setFactura(Factura factura) throws ExcepcionCodefacLite {
+        this.factura = factura;
+        setearValoresFactura();
+    }
+    
+    /*setearVariablesIniciales()
     private void asds()
     {
                 getLblSubtotalSinImpuesto().setText("" + this.subtotalSinImpuestos);
@@ -1162,6 +1167,20 @@ public class FacturacionModel extends FacturacionPanel {
                 banderaAgregar = false;
             }
 
+        }
+    }
+    
+    public void setearValoresFactura()
+    {
+        if (factura != null) {
+            this.factura = factura;
+            ///Cargar los datos de la factura
+            setearValoresCliente();
+            cargarDatosDetalles();
+            setearDetalleFactura();
+            cargarTotales();
+            cargarValoresAdicionales();
+            //cargarFormasPagoTabla();
         }
     }
 

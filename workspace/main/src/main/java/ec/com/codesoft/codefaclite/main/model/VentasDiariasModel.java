@@ -10,8 +10,11 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.ClienteFacturacionBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.ProductoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
+import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
 import ec.com.codesoft.codefaclite.main.panel.WidgetVentasDiarias;
 import ec.com.codesoft.codefaclite.servidor.entity.Factura;
 import ec.com.codesoft.codefaclite.servidor.entity.FacturaDetalle;
@@ -30,6 +33,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JDesktopPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
@@ -150,14 +155,30 @@ public class VentasDiariasModel extends WidgetVentasDiarias
             }
         });
         
-    }
+        getBtnFacturar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cargarCliente();
+                definirFechaFacturacion();
+                FacturacionModel facturacionModel = new FacturacionModel();
+                
+                    panelPadre.crearVentanaCodefac(facturacionModel, presionando);
+                    //facturacionModel.setFactura(factura);
+                    facturacionModel.revalidate();
+                    facturacionModel.repaint();
+               
+                
+    
+            }
+        });
+    }            
     
     public void iniciarValores()
     {
         factura = new Factura();
         fila = -1;
         banderaProducto = false;
-        cargarCliente();
+        factura.setFechaCreacion(UtilidadesFecha.getFechaHoy());
     }
     
     public void agregarDetallesFactura (FacturaDetalle facturaDetalle)
@@ -169,19 +190,33 @@ public class VentasDiariasModel extends WidgetVentasDiarias
             facturaDetalle = new FacturaDetalle();
         }
         
-        facturaDetalle.setProducto(productoSeleccionado);
         facturaDetalle.setCantidad(new BigDecimal(getTxtCantidadProducto().getText()));
         facturaDetalle.setDescripcion(getTxtDescripcionProducto().getText());
-        facturaDetalle.setPrecioUnitario(new BigDecimal(getTxtValorUnitarioProducto().getText()));
+        BigDecimal valorTotalUnitario = new BigDecimal(getTxtValorUnitarioProducto().getText());
+        facturaDetalle.setPrecioUnitario(valorTotalUnitario.setScale(2, BigDecimal.ROUND_HALF_UP));
+        facturaDetalle.setProducto(productoSeleccionado);
+        facturaDetalle.setValorIce(BigDecimal.ZERO);
         facturaDetalle.setDescuento(BigDecimal.ZERO);
-        BigDecimal total = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario());
-        facturaDetalle.setTotal(total);
-        
-        if(agregar)
-        {
+            
+            //Calular el total despues del descuento porque necesito esa valor para grabar
+            BigDecimal setTotal = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).subtract(facturaDetalle.getDescuento());
+            facturaDetalle.setTotal(setTotal.setScale(2, BigDecimal.ROUND_HALF_UP));
+            /**
+             * Revisar este calculo del iva para no calcular 2 veces al mostrar
+             */
+            if (facturaDetalle.getProducto().getIva().getTarifa().equals(0)) {
+                facturaDetalle.setIva(BigDecimal.ZERO);
+            } else {
+                BigDecimal iva = facturaDetalle.getTotal().multiply(obtenerValorIva()).setScale(2, BigDecimal.ROUND_HALF_UP);
+                facturaDetalle.setIva(iva);
+            }
+           //Solo agregar si se enviar un dato vacio
+        if (agregar) {
             factura.addDetalle(facturaDetalle);
-        }
-        
+            limpiarValoresCamposTextos();
+            cargarDatosDetalles();
+            procesarTotales();
+        } 
     }
     
     public void limpiarValoresCamposTextos()
@@ -210,20 +245,9 @@ public class VentasDiariasModel extends WidgetVentasDiarias
     public void cargarCliente()
     {
         PersonaService cliente = new PersonaService();
-        try
-        {
-            for(Persona p : cliente.buscar())
-            {
-                if(p.getRazonSocial().equals("Cliente Final"))
-                {
-                    this.factura.setCliente(p);
-                }
-            }
-        }
-        catch(Exception e)
-        {
-            System.out.println("Error cargando cliente");
-        }
+        Map<String,Object> clienteMap = new HashMap<String, Object>();
+        clienteMap.put("razonSocial", "Cliente Final");
+        this.factura.setCliente(cliente.obtenerPorMap(clienteMap).get(0));
     }
     
     public void cargarFecha()
@@ -315,5 +339,11 @@ public class VentasDiariasModel extends WidgetVentasDiarias
             BigDecimal iva = iD.getPorcentaje();
         });
         return new BigDecimal(0.120);
+    }
+    
+    public void definirFechaFacturacion()
+    {
+        java.util.Date fecha = new java.util.Date();
+        factura.setFechaFactura(new Date(fecha.getYear(),fecha.getMonth(),fecha.getDay()));
     }
 }
