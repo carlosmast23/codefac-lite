@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
@@ -70,6 +71,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         impuestoDetalleService = new ImpuestoDetalleService();
         this.parametroCodefacService = new ParametroCodefacService();
         cargarDatosIva();
+        cargarTipoFactura();
         cargarModosFacturacion();
         cargarDatosConfiguraciones();
         jFileChooser = new JFileChooser();
@@ -172,6 +174,13 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         parametros.get(ParametroCodefac.SECUENCIAL_NOTA_DEBITO).setValor(getTxtNotaDebitoSecuencial().getText());
         parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION).setValor(getTxtGuiaRemisionSecuencial().getText());
         parametros.get(ParametroCodefac.SECUENCIAL_RETENCION).setValor(getTxtRetencionesSecuencial().getText());
+        
+        parametros.get(ParametroCodefac.SECUENCIAL_FACTURA_FISICA).setValor(getTxtFacturaSecuencialFisico().getText());
+        parametros.get(ParametroCodefac.SECUENCIAL_NOTA_CREDITO_FISICA).setValor(getTxtNotaCreditoSecuencialFisico().getText());
+        parametros.get(ParametroCodefac.SECUENCIAL_NOTA_DEBITO_FISICA).setValor(getTxtNotaDebitoSecuencialFisico().getText());
+        parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION_FISICA).setValor(getTxtGuiaRemisionSecuencialFisico().getText());
+        parametros.get(ParametroCodefac.SECUENCIAL_RETENCION_FISICA).setValor(getTxtRetencionesSecuencialFisico().getText());
+        
         parametros.get(ParametroCodefac.ESTABLECIMIENTO).setValor(getTxtEstablecimiento().getText());
         parametros.get(ParametroCodefac.PUNTO_EMISION).setValor(getTxtPuntoEmision().getText());
         String ivaDefacto = ((ImpuestoDetalle) getCmbIvaDefault().getSelectedItem()).getTarifa().toString();
@@ -182,18 +191,33 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         parametros.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).setValor(new String(getTxtClaveFirma().getPassword()));
 
         parametros.get(ParametroCodefac.MODO_FACTURACION).setValor(getCmbModoFacturacion().getSelectedItem().toString());
+        
+        parametros.get(ParametroCodefac.TIPO_FACTURACION).setValor(((TipoFacturacionEnumEstado)getCmbTipoFacturacion().getSelectedItem()).getLetra());
+        
+        
+        
         //verificarFirmaElectronica();
     }
 
     private void cargarDatosConfiguraciones() {
         parametros = parametroCodefacService.getParametrosMap();
         ParametroCodefac param = parametros.get(ParametroCodefac.SECUENCIAL_FACTURA);
+        
         getTxtFacturaSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_FACTURA).getValor());
         getTxtGuiaRemisionSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION).getValor());
         getTxtNotaCreditoSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_NOTA_CREDITO).getValor());
         getTxtNotaDebitoSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_NOTA_DEBITO).getValor());
         getTxtGuiaRemisionSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION).getValor());
         getTxtRetencionesSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_RETENCION).getValor());
+        
+        getTxtFacturaSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_FACTURA_FISICA).getValor());
+        getTxtGuiaRemisionSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION_FISICA).getValor());
+        getTxtNotaCreditoSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_NOTA_CREDITO_FISICA).getValor());
+        getTxtNotaDebitoSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_NOTA_DEBITO_FISICA).getValor());
+        getTxtGuiaRemisionSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION_FISICA).getValor());
+        getTxtRetencionesSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_RETENCION_FISICA).getValor());
+    
+        
         getTxtDirectorioRecurso().setText(parametros.get(ParametroCodefac.DIRECTORIO_RECURSOS).getValor());
         getTxtEstablecimiento().setText(parametros.get(ParametroCodefac.ESTABLECIMIENTO).getValor());
         getTxtPuntoEmision().setText(parametros.get(ParametroCodefac.PUNTO_EMISION).getValor());
@@ -212,6 +236,13 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
          */
         String modoProduccion = parametros.get(ParametroCodefac.MODO_FACTURACION).getValor();
         getCmbModoFacturacion().setSelectedItem(modoProduccion);
+        
+        /**
+         * Cargar el tipo de facturacion
+         */
+       String letra=parametros.get(ParametroCodefac.TIPO_FACTURACION).getValor();
+       getCmbTipoFacturacion().setSelectedItem(TipoFacturacionEnumEstado.getEnumByEstado(letra));
+       listenerCmbTipoFacturacion(); //modifica las acciones para esta accion
 
     }
 
@@ -220,6 +251,15 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         Impuesto iva = impuestoService.obtenerImpuestoPorCodigo(Impuesto.IVA);
         for (ImpuestoDetalle impuesto : iva.getDetalleImpuestos()) {
             getCmbIvaDefault().addItem(impuesto);
+        }
+    }
+    
+    private void cargarTipoFactura()
+    {
+        getCmbTipoFacturacion().removeAllItems();
+        TipoFacturacionEnumEstado[] tipos= TipoFacturacionEnumEstado.values();
+        for (TipoFacturacionEnumEstado tipo : tipos) {
+            getCmbTipoFacturacion().addItem(tipo);
         }
     }
 
@@ -340,6 +380,42 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
                 
             }
         });
+        
+        getCmbTipoFacturacion().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                listenerCmbTipoFacturacion();
+            }
+        });
+    }
+    
+    private void listenerCmbTipoFacturacion()
+    {
+        TipoFacturacionEnumEstado tipo = (TipoFacturacionEnumEstado) getCmbTipoFacturacion().getSelectedItem();
+        if (tipo.equals(TipoFacturacionEnumEstado.NORMAL)) {
+            activarOpcionesFacturarElectronica(false);
+        } else {
+            activarOpcionesFacturarElectronica(true);
+        }
+    }
+    
+    private void activarOpcionesFacturarElectronica(boolean opcion)
+    {
+        getPanelFacturacionElectronica().setVisible(opcion);
+        getTxtFacturaSecuencialFisico().setEnabled(!opcion);
+        getTxtGuiaRemisionSecuencialFisico().setEnabled(!opcion);
+        getTxtNotaCreditoSecuencialFisico().setEnabled(!opcion);
+        getTxtNotaDebitoSecuencialFisico().setEnabled(!opcion);
+        getTxtGuiaRemisionSecuencialFisico().setEnabled(!opcion);
+        getTxtRetencionesSecuencialFisico().setEnabled(!opcion);        
+        
+        getTxtFacturaSecuencial().setEnabled(opcion);
+        getTxtGuiaRemisionSecuencial().setEnabled(opcion);
+        getTxtNotaCreditoSecuencial().setEnabled(opcion);
+        getTxtNotaDebitoSecuencial().setEnabled(opcion);
+        getTxtGuiaRemisionSecuencial().setEnabled(opcion);
+        getTxtRetencionesSecuencial().setEnabled(opcion);        
+
     }
 
     private void verificarCredencialesCorreo() {

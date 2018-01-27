@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidor.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.FacturaEnumEstado;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
 import ec.com.codesoft.codefaclite.servidor.service.NotaCreditoService;
 import ec.com.codesoft.codefaclite.test.TipoBusquedaEnum;
@@ -137,6 +138,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
                 titulo.add("Razón social");
                 titulo.add("Nombre legal");
                 titulo.add("Estado");
+                titulo.add("Tipo");
                 titulo.add("Subtotal 12%");
                 titulo.add("Subtotal 0% ");
                 titulo.add("Descuentos");
@@ -154,12 +156,14 @@ public class FacturaReporteModel extends FacturaReportePanel {
                     for (Factura factura : datafact) {
                         Vector<String> fila = new Vector<String>();
                         FacturaEnumEstado ef = FacturaEnumEstado.getEnum(factura.getEstado());
+                        TipoFacturacionEnumEstado tf=TipoFacturacionEnumEstado.getEnumByEstado(factura.getTipoFacturacion());                        
                         fila.add(factura.getPreimpreso());
                         fila.add(dateFormat.format(factura.getFechaFactura()));
                         fila.add(factura.getCliente().getIdentificacion());
                         fila.add(factura.getCliente().getRazonSocial());
                         fila.add(factura.getCliente().getNombreLegal());
                         fila.add(ef.getNombre());
+                        fila.add(tf.getNombre());
                         fila.add(factura.getSubtotalImpuestos().toString());
                         fila.add(factura.getSubtotalSinImpuestos().toString());
                         fila.add(factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()).toString());

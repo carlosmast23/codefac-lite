@@ -23,6 +23,8 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.BandaComprobante;
 import ec.com.codesoft.codefaclite.servidor.entity.ComponenteComprobanteFisico;
 import ec.com.codesoft.codefaclite.servidor.entity.ComprobanteFisicoDisenio;
+import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.service.ComprobanteFisicoDisenioService;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
@@ -47,6 +49,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 import javax.swing.event.ChangeEvent;
@@ -93,6 +96,8 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
+        validarPermisosIniciales();
+        
         cargarDocumentoGrafico((ComprobanteFisicoDisenio) getCmbDocumento().getSelectedItem());
         seleccionarComponenteActual();
     }
@@ -132,19 +137,19 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
         //System.out.println(xmlStr);
         Map<String, Object> parametros = new HashMap<String, Object>();
         parametros.put("fechaEmision", "12/01/2017");
-        parametros.put("razonSocial", "Carlos alfonso sanchez coyago");
-        parametros.put("direccion", "Sanchez Coyago Carlo alfonso");
+        parametros.put("razonSocial", "Nombre Apellido");
+        parametros.put("direccion", "Quito");
         parametros.put("telefono", "022339281");
-        parametros.put("correoElectronico", "carlosmast2301@hotmail.es");
-        parametros.put("identificacion", "1724218951001");
+        parametros.put("correoElectronico", "ejemplo@hotmail.es");
+        parametros.put("identificacion", "1212121212");
 
         parametros.put("subtotalImpuesto", "100");
         parametros.put("subtotalSinImpuesto", "0");
-        parametros.put("descuento", "10");
-        parametros.put("subtotalConImpuesto", "90");
+        parametros.put("descuento", "0");
+        parametros.put("subtotalConDescuento", "100");
         parametros.put("valorIva", "10");
         parametros.put("total", "100");
-        parametros.put("iva", "100");
+        parametros.put("iva", "12");
 
 
 
@@ -661,6 +666,15 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
                 getjPanel1().repaint();
             }
         });
+    }
+
+    private void validarPermisosIniciales() throws ExcepcionCodefacLite{
+        if (!session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).valor.equals(TipoFacturacionEnumEstado.NORMAL.getLetra())) {
+            DialogoCodefac.mensaje("Acceso no pemitido","Esta ventana solo esta disponible en modo Factuación manual",DialogoCodefac.MENSAJE_ADVERTENCIA);
+            dispose();
+            throw new ExcepcionCodefacLite("No cumple validacion inicial");
+
+        }
     }
 
 }

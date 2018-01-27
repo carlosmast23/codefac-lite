@@ -48,6 +48,13 @@ public class ParametroCodefac {
     public static final String CELULAR_VIRTUAL_MALL="celular_virtual_mall";
     public static final String IMAGEN_FONDO="imagen_fondo";
     public static final String ULTIMA_FECHA_VALIDACION="ultima_fecha_validacion";
+    public static final String TIPO_FACTURACION="tipo_facturacion";
+    
+    public static final String SECUENCIAL_FACTURA_FISICA= "secuencial_factura_fisica";
+    public static final String SECUENCIAL_NOTA_CREDITO_FISICA= "secuencial_nota_credito_fisica";
+    public static final String SECUENCIAL_NOTA_DEBITO_FISICA= "secuencial_nota_debito_fisica";
+    public static final String SECUENCIAL_GUIA_REMISION_FISICA= "secuencial_guia_remision_fisica";
+    public static final String SECUENCIAL_RETENCION_FISICA= "secuencial_retencion_fisica";
     
     @Id
     @Column(name = "ID")

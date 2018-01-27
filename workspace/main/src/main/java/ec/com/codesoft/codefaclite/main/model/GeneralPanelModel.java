@@ -724,7 +724,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         limpiarCamposValidacion(frameInterface);
                         mostrarPanelSecundario(false);
                     } catch (ExcepcionCodefacLite ex) {
-                        ex.printStackTrace();
+                        //ex.printStackTrace();
+                        System.out.println("Cancelado metodo buscar");
                         //JOptionPane.showMessageDialog(null,ex.getMessage());
                     }
 

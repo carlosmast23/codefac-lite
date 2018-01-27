@@ -28,6 +28,7 @@ import ec.com.codesoft.codefaclite.servidor.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidor.entity.NotaCreditoDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.FacturaEnumEstado;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
 import ec.com.codesoft.codefaclite.servidor.service.NotaCreditoService;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
@@ -434,34 +435,45 @@ public class NotaCreditoModel extends NotaCreditoPanel {
     private boolean validacionParametrosCodefac() {
         String mensajeValidacion="Esta pantalla requiere : \n";
         boolean validado=true;
-        if(session.getParametrosCodefac().get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor().equals(""))
-        { 
-            mensajeValidacion+=" - Archivo Firma\n";
-            validado= false;
-        }
         
-        if(session.getParametrosCodefac().get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).getValor().equals(""))
-        { 
-            mensajeValidacion+=" - Clave Firma\n";
-            validado= false;
-        }
-        
-        if(session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals(""))
-        { 
-            mensajeValidacion+=" - Correo\n";
-            validado= false;
-        }
-        
-        if(session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals(""))
-        { 
-            mensajeValidacion+=" - Clave Correo \n";
-            validado= false;
-        }
-        
-        if(session.getEmpresa() == null)
+               //Validacion cuando solo sea facturacion manual
+        if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(TipoFacturacionEnumEstado.NORMAL.getLetra()))
         {
-            mensajeValidacion+=" - Información de Empresa \n";
-            validado= false;
+            DialogoCodefac.mensaje("Advertencia","Pantalla solo dispinible para facturación electronica",DialogoCodefac.MENSAJE_ADVERTENCIA);
+            return false;
+        }
+        else
+        {
+        
+            if(session.getParametrosCodefac().get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor().equals(""))
+            { 
+                mensajeValidacion+=" - Archivo Firma\n";
+                validado= false;
+            }
+
+            if(session.getParametrosCodefac().get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).getValor().equals(""))
+            { 
+                mensajeValidacion+=" - Clave Firma\n";
+                validado= false;
+            }
+
+            if(session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals(""))
+            { 
+                mensajeValidacion+=" - Correo\n";
+                validado= false;
+            }
+
+            if(session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals(""))
+            { 
+                mensajeValidacion+=" - Clave Correo \n";
+                validado= false;
+            }
+
+            if(session.getEmpresa() == null)
+            {
+                mensajeValidacion+=" - Información de Empresa \n";
+                validado= false;
+            }
         }
         
         if(!validado)
