@@ -23,6 +23,7 @@ import java.util.logging.Logger;
  */
 public class UtilidadesServidor {
     public static InputStream[] querys={
+        RecursoCodefac.SQL.getResourceInputStream("create_comprobante_fisico_disenio.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_cliente.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_usuario.sql"),
         RecursoCodefac.SQL.getResourceInputStream("insert_usuario.sql"),

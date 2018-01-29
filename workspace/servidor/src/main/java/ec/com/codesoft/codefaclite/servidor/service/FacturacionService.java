@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidor.entity.Factura;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.FacturaEnumEstado;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaFacade;
@@ -39,13 +40,32 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade>{
 
     public void grabar(Factura factura) {
         try {
+            ParametroCodefac parametro =null;
+            //Cuando la factura es electronica
+            if(parametroService.getParametroByNombre(ParametroCodefac.TIPO_FACTURACION).valor.equals(TipoFacturacionEnumEstado.ELECTRONICA.getLetra()))
+            {
+                factura.setTipoFacturacion(TipoFacturacionEnumEstado.ELECTRONICA.getLetra());
+                parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA);
+            }
+            else
+            {
+                //Estableciendo estado de facturacion manual
+                factura.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
+                factura.setTipoFacturacion(TipoFacturacionEnumEstado.NORMAL.getLetra());
+                parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA_FISICA);
+            }
+            
+            
             facturaFacade.create(factura);
             /**
              * Aumentar el codigo de la numeracion en los parametros
              */
-            ParametroCodefac parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA);
+            
+            
             parametro.valor = (Integer.parseInt(parametro.valor) + 1) + "";
             parametroService.grabar(parametro);
+            
+            
         } catch (ConstrainViolationExceptionSQL ex) {
             Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
         } catch (DatabaseException ex) {
@@ -77,7 +97,17 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade>{
     }
     
     public String getPreimpresoSiguiente() {
-        Integer secuencialSiguiente = Integer.parseInt(parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA).valor);
+        Integer secuencialSiguiente=0;
+        //Obtener secuencial cuando es modo electronico
+        if(parametroService.getParametroByNombre(ParametroCodefac.TIPO_FACTURACION).valor.equals(TipoFacturacionEnumEstado.ELECTRONICA.getLetra()))
+        {
+            secuencialSiguiente = Integer.parseInt(parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA).valor);
+        }
+        else //cuando el modo es normals
+        {
+            secuencialSiguiente = Integer.parseInt(parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA_FISICA).valor);
+        }
+            
         String secuencial = UtilidadesTextos.llenarCarateresIzquierda(secuencialSiguiente.toString(), 8, "0");
         String establecimiento = parametroService.getParametroByNombre(ParametroCodefac.ESTABLECIMIENTO).valor;
         String puntoEmision = parametroService.getParametroByNombre(ParametroCodefac.PUNTO_EMISION).valor;

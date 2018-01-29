@@ -45,6 +45,8 @@ public class Empresa implements Serializable{
     private String obligadoLlevarContabilidad;
     @Column (name = "CONTRIBUYENTE_ESPECIAL")
     private String contribuyenteEspecial;
+    @Column (name = "LOGO_IMAGEN_PATH")
+    private String imagenLogoPath;
 
     public String getTelefonos() {
         return telefonos;
@@ -101,6 +103,15 @@ public class Empresa implements Serializable{
     public void setContribuyenteEspecial(String contribuyenteEspecial) {
         this.contribuyenteEspecial = contribuyenteEspecial;
     }
+
+    public String getImagenLogoPath() {
+        return imagenLogoPath;
+    }
+
+    public void setImagenLogoPath(String imagenLogoPath) {
+        this.imagenLogoPath = imagenLogoPath;
+    }
+    
     
     
     

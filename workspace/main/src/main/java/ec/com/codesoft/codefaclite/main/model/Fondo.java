@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.main.model;
 
+import static ec.com.codesoft.codefaclite.main.model.Fondo2.toBufferedImage;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -63,10 +64,14 @@ public static BufferedImage toBufferedImage(Image img)
     @Override
     public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
         //System.out.println(width+" - "+height);
-        BufferedImage imgResize=toBufferedImage(new ImageIcon(image.getScaledInstance((int)(height*1.6666666d),height,Image.SCALE_SMOOTH)).getImage());
+        /*BufferedImage imgResize=toBufferedImage(new ImageIcon(image.getScaledInstance((int)(height*1.6666666d),height,Image.SCALE_SMOOTH)).getImage());
         int x0=x+(width-imgResize.getWidth())/2;
         int y0=x+(height-imgResize.getHeight())/2;
-        g.drawImage(imgResize,x0,y0,null);
+        g.drawImage(imgResize,x0,y0,null);*/
+        BufferedImage imgResize=toBufferedImage(new ImageIcon(image.getScaledInstance(width, height,0)).getImage());
+        //int x0=x+(width-imgResize.getWidth())/2;
+        //int y0=x+(height-imgResize.getHeight())/2;
+        g.drawImage(imgResize,x,y,null);
         
     }
 

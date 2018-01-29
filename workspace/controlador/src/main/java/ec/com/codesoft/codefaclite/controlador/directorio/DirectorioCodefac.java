@@ -81,6 +81,12 @@ public enum DirectorioCodefac {
         }
         return null;
     }
+
+    public String getNombre() {
+        return nombre;
+    }
+    
+    
     
     
     

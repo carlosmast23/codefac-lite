@@ -78,6 +78,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuItemMonitor = new javax.swing.JMenuItem();
         jMenuItemNotaCredito = new javax.swing.JMenuItem();
         jMenuItemFacturaReporte = new javax.swing.JMenuItem();
+        jMenuItemDisenador = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuCliente = new javax.swing.JMenuItem();
         jMenuItemReporteCliente = new javax.swing.JMenuItem();
@@ -93,6 +94,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenu8 = new javax.swing.JMenu();
         jMenuItemContenido = new javax.swing.JMenuItem();
         jMenuItemAcerca = new javax.swing.JMenuItem();
+        jMenuItemActualizarLicencia = new javax.swing.JMenuItem();
 
         JpanelAuxiliar.setLayout(new javax.swing.BoxLayout(JpanelAuxiliar, javax.swing.BoxLayout.LINE_AXIS));
 
@@ -269,6 +271,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         });
         menuFacturacion.add(jMenuItemFacturaReporte);
 
+        jMenuItemDisenador.setText("Diseñador");
+        jMenuItemDisenador.setToolTipText("Pantalla para diseñar formatos de facturas fisicas");
+        menuFacturacion.add(jMenuItemDisenador);
+
         jMenuBar1.add(menuFacturacion);
 
         jMenu2.setText("Clientes");
@@ -339,6 +345,14 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuItemAcerca.setText("Acerca");
         jMenu8.add(jMenuItemAcerca);
 
+        jMenuItemActualizarLicencia.setText("Actualizar Licencia");
+        jMenuItemActualizarLicencia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemActualizarLicenciaActionPerformed(evt);
+            }
+        });
+        jMenu8.add(jMenuItemActualizarLicencia);
+
         jMenuBar1.add(jMenu8);
 
         setJMenuBar(jMenuBar1);
@@ -393,6 +407,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private void jMenuItemContenidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemContenidoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItemContenidoActionPerformed
+
+    private void jMenuItemActualizarLicenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemActualizarLicenciaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItemActualizarLicenciaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -462,7 +480,9 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JMenuItem jMenuEmisor;
     private javax.swing.JMenuItem jMenuFactura;
     private javax.swing.JMenuItem jMenuItemAcerca;
+    private javax.swing.JMenuItem jMenuItemActualizarLicencia;
     private javax.swing.JMenuItem jMenuItemContenido;
+    private javax.swing.JMenuItem jMenuItemDisenador;
     private javax.swing.JMenuItem jMenuItemFacturaReporte;
     private javax.swing.JMenuItem jMenuItemInicio;
     private javax.swing.JMenuItem jMenuItemMonitor;
@@ -747,6 +767,22 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
     public void setBtnHome(JButton btnHome) {
         this.btnHome = btnHome;
+    }
+
+    public JMenuItem getjMenuItemActualizarLicencia() {
+        return jMenuItemActualizarLicencia;
+    }
+
+    public void setjMenuItemActualizarLicencia(JMenuItem jMenuItemActualizarLicencia) {
+        this.jMenuItemActualizarLicencia = jMenuItemActualizarLicencia;
+    }
+
+    public JMenuItem getjMenuItemDisenador() {
+        return jMenuItemDisenador;
+    }
+
+    public void setjMenuItemDisenador(JMenuItem jMenuItemDisenador) {
+        this.jMenuItemDisenador = jMenuItemDisenador;
     }
     
     

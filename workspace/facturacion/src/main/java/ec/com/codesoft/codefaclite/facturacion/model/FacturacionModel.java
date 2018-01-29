@@ -19,8 +19,10 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.ClienteFacturacionBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.ProductoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.facturacion.model.disenador.ManagerReporteFacturaFisica;
 import ec.com.codesoft.codefaclite.facturacion.other.FacturacionElectronica;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
+import ec.com.codesoft.codefaclite.facturacion.reportdata.DetalleFacturaFisicaData;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.ETAPA_AUTORIZAR;
@@ -33,6 +35,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprob
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import ec.com.codesoft.codefaclite.servidor.entity.ComprobanteFisicoDisenio;
 import ec.com.codesoft.codefaclite.servidor.entity.Factura;
 import ec.com.codesoft.codefaclite.servidor.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.FormaPago;
@@ -40,7 +43,11 @@ import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.FacturaEnumEstado;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoFacturacionEnumEstado;
+import ec.com.codesoft.codefaclite.servidor.service.ComprobanteFisicoDisenioService;
 import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
@@ -53,6 +60,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.Date;
@@ -115,7 +123,16 @@ public class FacturacionModel extends FacturacionPanel {
 
     }
 
-    /*
+    public Factura getFactura() {
+        return factura;
+    }
+
+    public void setFactura(Factura factura) throws ExcepcionCodefacLite {
+        this.factura = factura;
+        setearValoresFactura();
+    }
+    
+    /*setearVariablesIniciales()
     private void asds()
     {
                 getLblSubtotalSinImpuesto().setText("" + this.subtotalSinImpuestos);
@@ -387,33 +404,59 @@ public class FacturacionModel extends FacturacionPanel {
         FacturacionService servicio = new FacturacionService();
         setearValoresDefaultFactura();
         servicio.grabar(factura);
+        
         facturaProcesando = factura;
 
         DialogoCodefac.mensaje("Correcto", "La factura se grabo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+        
+        //Si la factura en manual no continua el proceso de facturacion electronica
+        if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(TipoFacturacionEnumEstado.NORMAL.getLetra()))
+        {
+            TipoDocumentoEnum documentoEnum=(TipoDocumentoEnum) getCmbDocumento().getSelectedItem();
+
+            InputStream reporteOriginal=null;
+            if(documentoEnum.NOTA_VENTA.equals(documentoEnum))
+            {
+                reporteOriginal = RecursoCodefac.JASPER_COMPROBANTES_FISICOS.getResourceInputStream("nota_venta.jrxml");
+            }
+            else
+            {
+                reporteOriginal = RecursoCodefac.JASPER_COMPROBANTES_FISICOS.getResourceInputStream("factura_fisica.jrxml");
+            }
+           
+            ManagerReporteFacturaFisica manager = new ManagerReporteFacturaFisica(reporteOriginal);
+            ComprobanteFisicoDisenioService servicioComprobanteDisenio=new ComprobanteFisicoDisenioService();
+            Map<String,Object> parametroComprobanteMap=new HashMap<String,Object>();
+            parametroComprobanteMap.put("codigoDocumento",documentoEnum.getCodigo());
+            ComprobanteFisicoDisenio documento= servicioComprobanteDisenio.obtenerPorMap(parametroComprobanteMap).get(0);
+            manager.setearNuevosValores(documento);
+            InputStream reporteNuevo = manager.generarNuevoDocumento();
+
+            Map<String, Object> parametros = getParametroReporte(documentoEnum);
+            
+            //Llenar los datos de los detalles
+            List<DetalleFacturaFisicaData> detalles = new ArrayList<DetalleFacturaFisicaData>();
+                       
+            for (FacturaDetalle detalleFactura : factura.getDetalles()) {
+                DetalleFacturaFisicaData detalle = new DetalleFacturaFisicaData();
+                detalle.setCantidad(detalleFactura.getCantidad()+"");
+                detalle.setDescripcion(detalleFactura.getDescripcion());
+                detalle.setValorTotal(detalleFactura.getTotal()+"");
+                detalle.setValorUnitario(detalleFactura.getPrecioUnitario()+"");                
+                detalles.add(detalle);
+            }
+            
+            ReporteCodefac.generarReporteInternalFrame(reporteNuevo, parametros, detalles, panelPadre, "Muestra Previa");
+
+            return ;
+        }
+        
         //Despues de implemetar el metodo de grabar
         FacturacionElectronica facturaElectronica = new FacturacionElectronica(factura, session, this.panelPadre);
         facturaElectronica.setFactura(factura);
         facturaElectronica.setMapInfoAdicional(datosAdicionales);
         //facturaElectronica.setFormaPagos();
-        /*
-        ListenerComprobanteElectronico listener=new ListenerComprobanteElectronico() {
-            @Override
-            public void termino() {
-                MonitorComprobanteModel.getInstance().agregarComprobante(new MonitorComprobanteInterface() {
-                    @Override
-                    public void eventBtnAbrir() {
-                        //String path = facturaElectronica.getServicio().getPathRide();
-                        //JasperPrint print = facturaElectronica.getServicio().getPrintJasper();
-                        //panelPadre.crearReportePantalla(print, factura.getPreimpreso());
-                    }
 
-                    @Override
-                    public void eventBtnInforme() {
-                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                    }
-                });
-            }
-        };*/
 
         ComprobanteElectronicoService servicioElectronico = facturaElectronica.getServicio();
 
@@ -527,6 +570,38 @@ public class FacturacionModel extends FacturacionPanel {
 
         facturaElectronica.procesarComprobante();//listo se encarga de procesar el comprobante
     }
+    
+    public Map<String, Object> getParametroReporte(TipoDocumentoEnum documento)
+    {
+        Map<String, Object> parametros = new HashMap<String, Object>();
+        parametros.put("fechaEmision", factura.getFechaFactura().toString());
+        parametros.put("razonSocial", factura.getCliente().getRazonSocial());
+        parametros.put("direccion", factura.getCliente().getDireccion());
+        parametros.put("telefono", factura.getCliente().getTelefonoConvencional());
+        parametros.put("correoElectronico", (factura.getCliente().getCorreoElectronico() != null) ? factura.getCliente().getCorreoElectronico() : "");
+        parametros.put("identificacion", factura.getCliente().getIdentificacion());
+
+        //Datos cuando es una nota de venta
+        if(TipoDocumentoEnum.NOTA_VENTA.equals(documento))
+        {
+            parametros.put("subtotal", factura.getSubtotalImpuestos().add(factura.getSubtotalSinImpuestos()).toString());
+            parametros.put("descuento", factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()).toString());
+            parametros.put("total", factura.getTotal() + "");        
+        }
+        else
+        {   //Datos cuando es una factura
+            parametros.put("subtotalImpuesto", factura.getSubtotalImpuestos().toString());
+            parametros.put("subtotalSinImpuesto", factura.getSubtotalSinImpuestos().toString());
+            parametros.put("descuento", factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()).toString());
+            parametros.put("subtotalConDescuento", factura.getSubtotalImpuestos().add(factura.getSubtotalSinImpuestos()).subtract((factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()))).toString());
+            parametros.put("valorIva", factura.getIva().toString());
+            parametros.put("total", factura.getTotal() + "");
+            String ivaStr = session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).valor;
+            parametros.put("iva", ivaStr);
+        
+        }
+        return parametros;
+    }
 
     @Override
     public void editar() throws ExcepcionCodefacLite {
@@ -538,7 +613,10 @@ public class FacturacionModel extends FacturacionPanel {
         //Eliminar solo si ha cargado un dato para editar
         if (estadoFormulario.equals(ESTADO_EDITAR)) {
             if (factura != null) {
-                if (factura.getEstado().equals(FacturaEnumEstado.SIN_AUTORIZAR.getEstado())) {
+                //Eliminar solo si el estado es sin autorizar, o esta en el modo de facturacion normal y esta con estado facturado
+                if (factura.getEstado().equals(FacturaEnumEstado.SIN_AUTORIZAR.getEstado()) || 
+                        (factura.getTipoFacturacion().equals(TipoFacturacionEnumEstado.NORMAL.getLetra()) && factura.getEstado().equals(FacturaEnumEstado.FACTURADO.getEstado()) )) {
+                    
                     boolean respuesta = DialogoCodefac.dialogoPregunta("Advertencia", "Esta seguro que desea eliminar la factura? ", DialogoCodefac.MENSAJE_ADVERTENCIA);
                     if (respuesta) {
                         FacturacionService servicio = new FacturacionService();
@@ -589,7 +667,6 @@ public class FacturacionModel extends FacturacionPanel {
         } else {
             throw new ExcepcionCodefacLite("cancelar ejecucion");
         }
-
     }
 
     @Override
@@ -652,6 +729,7 @@ public class FacturacionModel extends FacturacionPanel {
         getBtnCrearProducto().setEnabled(true);
         //Limpiar las variables de la facturacion
         setearVariablesIniciales();
+        iniciarValoresIniciales();
 
     }
 
@@ -897,7 +975,7 @@ public class FacturacionModel extends FacturacionPanel {
          * Cargar el estado de la factura
          */
         FacturaEnumEstado estadoEnum = FacturaEnumEstado.getEnum(factura.getEstado());
-
+        
         if (estadoEnum != null) {
             getLblEstadoFactura().setText(estadoEnum.getNombre());
         }
@@ -932,7 +1010,17 @@ public class FacturacionModel extends FacturacionPanel {
         //factura.setIvaSriId(iva);
         factura.setPuntoEmision(session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor);
         factura.setPuntoEstablecimiento(session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor);
-        factura.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_FACTURA).valor));
+        
+        //Cuando la facturacion es electronica
+        if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(TipoFacturacionEnumEstado.ELECTRONICA.getLetra()))
+        {
+            factura.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_FACTURA).valor));
+        }
+        else //cuando la facturacion es normal
+        {
+            factura.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_FACTURA_FISICA).valor));
+        }
+        
         factura.setSubtotalSinImpuestos(BigDecimal.ZERO);
 
         /**
@@ -943,6 +1031,9 @@ public class FacturacionModel extends FacturacionPanel {
         factura.setSubtotalSinImpuestos(new BigDecimal(getLblSubtotal0().getText()));
         factura.setSubtotalImpuestos(new BigDecimal(getLblSubtotal12().getText()));
         factura.setIva(new BigDecimal(getLblIva12().getText()));
+        
+        TipoDocumentoEnum documentoEnum=(TipoDocumentoEnum) getCmbDocumento().getSelectedItem();
+        factura.setCodigoDocumento(documentoEnum.getCodigo());
 
     }
 
@@ -1028,31 +1119,46 @@ public class FacturacionModel extends FacturacionPanel {
         System.out.println("Ingreso a la validacion de Paremtros Codefac");
         String mensajeValidacion = "Esta pantalla requiere : \n";
         boolean validado = true;
-        if (session.getParametrosCodefac().get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor().equals("")) {
-            mensajeValidacion += " - Archivo Firma\n";
-            validado = false;
+        
+        //Validacion cuando solo sea facturacion manual
+        if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(TipoFacturacionEnumEstado.NORMAL.getLetra()))
+        {
+            if (session.getEmpresa() == null) 
+            {
+                mensajeValidacion += " - Información de Empresa \n";
+                validado = false;
+            }
         }
+        else //Validacion cunando es facturacion electronica
+        {        
+       
+            if (session.getParametrosCodefac().get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor().equals("")) {
+                mensajeValidacion += " - Archivo Firma\n";
+                validado = false;
+            }
 
-        if (session.getParametrosCodefac().get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).getValor().equals("")) {
-            mensajeValidacion += " - Clave Firma\n";
-            validado = false;
+            if (session.getParametrosCodefac().get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).getValor().equals("")) {
+                mensajeValidacion += " - Clave Firma\n";
+                validado = false;
+            }
+
+            if (session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals("")) {
+                mensajeValidacion += " - Correo\n";
+                validado = false;
+            }
+
+            if (session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals("")) {
+                mensajeValidacion += " - Clave Correo \n";
+                validado = false;
+            }
+
+            if (session.getEmpresa() == null) {
+                mensajeValidacion += " - Información de Empresa \n";
+                validado = false;
+            }
+
         }
-
-        if (session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals("")) {
-            mensajeValidacion += " - Correo\n";
-            validado = false;
-        }
-
-        if (session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals("")) {
-            mensajeValidacion += " - Clave Correo \n";
-            validado = false;
-        }
-
-        if (session.getEmpresa() == null) {
-            mensajeValidacion += " - Información de Empresa \n";
-            validado = false;
-        }
-
+        
         if (!validado) {
             //mensajeValidacion=mensajeValidacion.substring(0,mensajeValidacion.length()-2);
             DialogoCodefac.mensaje("Acceso no permitido", mensajeValidacion + "\nPofavor complete estos datos en configuración para usar esta pantalla", DialogoCodefac.MENSAJE_ADVERTENCIA);
@@ -1160,6 +1266,38 @@ public class FacturacionModel extends FacturacionPanel {
                 banderaAgregar = false;
             }
 
+        }
+    }
+    
+    public void setearValoresFactura()
+    {
+        if (factura != null) {
+            this.factura = factura;
+            ///Cargar los datos de la factura
+            setearValoresCliente();
+            cargarDatosDetalles();
+            setearDetalleFactura();
+            cargarTotales();
+            cargarValoresAdicionales();
+            //cargarFormasPagoTabla();
+        }
+    }
+
+    private void iniciarValoresIniciales() {
+        List<TipoDocumentoEnum> tiposDocumento=null;
+        //cuando la factura es electronica
+        if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).valor.equals(TipoFacturacionEnumEstado.ELECTRONICA.getLetra()))
+        {
+            tiposDocumento=TipoDocumentoEnum.obtenerPorDocumentosElectronicos(DocumentoEnum.VENTAS);
+        }
+        else //Cuando la factura es fisica
+        {
+            tiposDocumento=TipoDocumentoEnum.obtenerPorDocumentosFisico(DocumentoEnum.VENTAS);
+        }
+        
+        getCmbDocumento().removeAllItems();
+        for (TipoDocumentoEnum tipoDocumentoEnum : tiposDocumento) {
+            getCmbDocumento().addItem(tipoDocumentoEnum);
         }
     }
 

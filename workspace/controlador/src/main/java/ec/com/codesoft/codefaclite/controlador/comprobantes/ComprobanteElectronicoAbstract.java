@@ -19,11 +19,18 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.Informaci
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.SriFormaPago;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidor.service.SriService;
 import ec.com.codesoft.ejemplo.utilidades.email.CorreoElectronico;
+import ec.com.codesoft.ejemplo.utilidades.imagen.UtilidadImagen;
 import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -182,7 +189,36 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
         
         servicio.setMapAdicionalReporte(interfazPadre.mapReportePlantilla());
         //servicio.pathLogoImagen = RecursoCodefac.IMAGENES_GENERAL.getResourceURL("sin_imagen.jpg").getPath();
+        //Segun el tipo de licencia cargar los recursos
         servicio.pathLogoImagen = RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
+        if(!session.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS))
+        {
+            
+            InputStream inputStream=null;
+            try {
+                
+                String imagenLogo=session.getEmpresa().getImagenLogoPath();
+                String pathImagen=session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + DirectorioCodefac.IMAGENES.getNombre() + "/"+imagenLogo;
+                
+                inputStream = new FileInputStream(pathImagen);
+                //Si no existe imagen en la version de pago setea un imagen por defecto
+                if(inputStream==null)
+                    RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
+                //BufferedInputStream bufferStream=new BufferedInputStream(inputStream);
+                servicio.pathLogoImagen =UtilidadImagen.castImputStreamForReport(inputStream);
+            } catch (FileNotFoundException ex) {
+                servicio.pathLogoImagen = RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
+                Logger.getLogger(ComprobanteElectronicoAbstract.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                try {
+                    if(inputStream!=null)
+                        inputStream.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(ComprobanteElectronicoAbstract.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        
     }
     
         /**

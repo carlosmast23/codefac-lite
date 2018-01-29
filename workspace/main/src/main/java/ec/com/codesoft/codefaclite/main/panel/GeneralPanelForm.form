@@ -166,6 +166,12 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemFacturaReporteActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemDisenador">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Dise&#xf1;ador"/>
+                <Property name="toolTipText" type="java.lang.String" value="Pantalla para dise&#xf1;ar formatos de facturas fisicas"/>
+              </Properties>
+            </MenuItem>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu2">
@@ -262,6 +268,14 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Acerca"/>
               </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemActualizarLicencia">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Actualizar Licencia"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemActualizarLicenciaActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>

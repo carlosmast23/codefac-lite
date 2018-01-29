@@ -13,8 +13,8 @@ public enum FacturaEnumEstado {
     /**
      * Cuando la factura se grabo y se autorizo en el SRI
      */
-    FACTURADO("F","Facturado"),
-    /**
+    FACTURADO("F","Facturado"),    
+   /**
      * Estado cuando se graba la factura en la base de datos pero no esta
      * autorizado en el SRI
      */

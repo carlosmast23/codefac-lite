@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.main.license.excepcion.NoExisteLicenciaExcept
 import ec.com.codesoft.codefaclite.main.license.excepcion.ValidacionLicenciaExcepcion;
 import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,10 +31,25 @@ import java.util.logging.Logger;
  */
 public class ValidacionLicenciaCodefac{
     private static final String NOMBRE_LICENCIA="/licencia/licence.codefac";
+    public static final String USUARIO="usuario";
+    public static final String LICENCIA="licencia";
+    public static final String TIPO_LICENCIA="tipo";
     
     private Licencia licencia;
-    private SessionCodefac sesion;
     private String path;
+
+    public ValidacionLicenciaCodefac(String path) {
+        this.path=path;        
+        Properties p = obtenerLicencia();
+        licencia=new Licencia(p);
+    }
+
+    public ValidacionLicenciaCodefac() {
+    }
+    
+    
+    
+    
 
     public boolean validar() throws ValidacionLicenciaExcepcion,NoExisteLicenciaException{
         /*                    
@@ -87,7 +103,7 @@ public class ValidacionLicenciaCodefac{
         }
     }
     
-    private Properties obtenerLicencia()
+    public Properties obtenerLicencia()
     {
         try {
             Properties p = new Properties();
@@ -116,15 +132,17 @@ public class ValidacionLicenciaCodefac{
         }
     }
     
-    public Properties crearLicencia(String usuario)
+    public Properties crearLicencia(String usuario,String tipoLicencia)
     {
         FileOutputStream fr=null;
         try {
-            String licencia=usuario+":"+UtilidadVarios.obtenerMac();            
+            String licencia=usuario+":"+UtilidadVarios.obtenerMac()+":"+tipoLicencia;            
             licencia=BCrypt.hashpw(licencia,BCrypt.gensalt(12));
             Properties prop = new Properties();
-            prop.setProperty("usuario",usuario);
-            prop.setProperty("licencia",licencia);
+            prop.setProperty(USUARIO,usuario);
+            prop.setProperty(LICENCIA,licencia);
+            TipoLicenciaEnum enumTipoLicencia=TipoLicenciaEnum.getEnumByLetra(tipoLicencia);
+            prop.setProperty(TIPO_LICENCIA,enumTipoLicencia.getNombre());
             File file=new File(path+NOMBRE_LICENCIA);
             
              //crear toda la ruta si no existe
@@ -152,15 +170,17 @@ public class ValidacionLicenciaCodefac{
         return null;
     }
     
-    public Properties crearLicencia(String usuario,String licencia)
+    public Properties crearLicencia(String usuario,String licencia,String tipoLicencia)
     {
         FileOutputStream fr=null;
         try {
             //String licencia=usuario+":"+UtilidadVarios.obtenerMac();            
             //licencia=BCrypt.hashpw(licencia,BCrypt.gensalt(12));
             Properties prop = new Properties();
-            prop.setProperty("usuario",usuario);
-            prop.setProperty("licencia",licencia);
+            prop.setProperty(USUARIO,usuario);
+            prop.setProperty(LICENCIA,licencia);
+            TipoLicenciaEnum enumTipoLicencia = TipoLicenciaEnum.getEnumByLetra(tipoLicencia);
+            prop.setProperty(TIPO_LICENCIA,enumTipoLicencia.getNombre());
             File file=new File(path+NOMBRE_LICENCIA);
             
             //crear toda la ruta si no existe
@@ -203,6 +223,11 @@ public class ValidacionLicenciaCodefac{
     public void setPath(String path) {
         this.path = path;
     }
+
+    public Licencia getLicencia() {
+        return licencia;
+    }
+    
     
     
 }

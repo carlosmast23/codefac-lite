@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidor.entity.Factura;
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.FacturaEnumEstado;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoService;
 import java.util.ArrayList;
@@ -28,10 +29,11 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura> {
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<>();
-        titulo.add(new ColumnaDialogo("Id", 0.2d));
+        //titulo.add(new ColumnaDialogo("Id", 0.2d));
         titulo.add(new ColumnaDialogo("preimpreso", 0.2d));
         titulo.add(new ColumnaDialogo("cliente", 0.3d));
         titulo.add(new ColumnaDialogo("estado", 0.15d));
+        titulo.add(new ColumnaDialogo("tipo", 0.15d));
         titulo.add(new ColumnaDialogo("fecha", 0.15d));
         titulo.add(new ColumnaDialogo("total", 0.1d));        
         return titulo;
@@ -50,12 +52,16 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura> {
 
     @Override
     public void agregarObjeto(Factura t, Vector dato) {
-        dato.add(t.getId());
+        //dato.add(t.getId());
         dato.add(t.getPreimpreso());
         System.out.println(t.getPreimpreso());
         dato.add(t.getCliente().getRazonSocial());
         FacturaEnumEstado estadoEnum= FacturaEnumEstado.getEnum(t.getEstado());
         dato.add(estadoEnum.getNombre());
+        
+        TipoFacturacionEnumEstado tipoFactura=TipoFacturacionEnumEstado.getEnumByEstado(t.getTipoFacturacion());
+        dato.add(tipoFactura.getNombre());
+        
         dato.add(t.getFechaFactura());
         dato.add(t.getTotal());
     }

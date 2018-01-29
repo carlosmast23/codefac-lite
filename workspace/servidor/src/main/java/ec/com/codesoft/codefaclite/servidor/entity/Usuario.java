@@ -52,5 +52,11 @@ public class Usuario implements Serializable{
         this.clave = clave;
     }
 
+    @Override
+    public String toString() {
+        return "Usuario{" + "nick=" + nick + ", clave=" + clave + '}';
+    }
+
+    
     
 }
