@@ -52,6 +52,11 @@ public enum TipoDocumentoEnum {
         return codigo;
     }
 
+    public String getNombre() {
+        return nombre;
+    }
+
+    
     
     
     @Override

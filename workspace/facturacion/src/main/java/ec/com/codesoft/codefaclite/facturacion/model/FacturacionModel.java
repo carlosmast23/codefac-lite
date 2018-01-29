@@ -52,6 +52,7 @@ import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.awt.Color;
@@ -374,6 +375,13 @@ public class FacturacionModel extends FacturacionPanel {
                 banderaFP = true;
             }
         });
+        
+        getCmbDocumento().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cargarSecuencial();
+            }
+        });
 
     }
 
@@ -681,7 +689,7 @@ public class FacturacionModel extends FacturacionPanel {
         getLblTelefonos().setText(session.getEmpresa().getTelefonos());
         getLblNombreComercial().setText(session.getEmpresa().getNombreLegal());
         FacturacionService servicio = new FacturacionService();
-        getLblSecuencial().setText(servicio.getPreimpresoSiguiente());
+        //getLblSecuencial().setText(servicio.getPreimpresoSiguiente());
         getLblEstadoFactura().setText("Procesando");
 
         datosAdicionales = new HashMap<String, String>();
@@ -728,8 +736,37 @@ public class FacturacionModel extends FacturacionPanel {
 
         //Limpiar las variables de la facturacion
         setearVariablesIniciales();
-        iniciarValoresIniciales();
+        cargarSecuencial();
 
+    }
+    
+    private void cargarSecuencial()
+    {
+        TipoDocumentoEnum tipoDocumentoEnum= (TipoDocumentoEnum) getCmbDocumento().getSelectedItem();
+        String secuencial="";
+        boolean facturacionElectronica=session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).valor.equals(TipoFacturacionEnumEstado.ELECTRONICA.getLetra());
+        
+        switch(tipoDocumentoEnum)
+        {
+            case FACTURA:
+                if(facturacionElectronica)
+                    secuencial=session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_FACTURA).valor; 
+                else
+                    secuencial = session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_FACTURA_FISICA).valor;
+                    
+                break;
+                
+            case NOTA_VENTA:
+                    secuencial = session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_NOTA_VENTA_FISICA).valor;                    
+                    break;
+        }
+        
+     
+        String preimpreso = UtilidadesTextos.llenarCarateresIzquierda(secuencial.toString(), 8, "0");
+        String establecimiento = session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor;
+        String puntoEmision = session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor;
+        preimpreso=puntoEmision + "-" + establecimiento + "-" + preimpreso;
+        getLblSecuencial().setText(preimpreso);
     }
 
     @Override
@@ -1085,6 +1122,8 @@ public class FacturacionModel extends FacturacionPanel {
             throw new ExcepcionCodefacLite("No cumple validacion inicial");
 
         }
+        
+        iniciarValoresIniciales();
     }
 
     @Override
@@ -1268,6 +1307,9 @@ public class FacturacionModel extends FacturacionPanel {
         }
     }
     
+    /**
+     * Metodo para setear valores de la factura de manera externa
+     */
     public void setearValoresFactura()
     {
         if (factura != null) {

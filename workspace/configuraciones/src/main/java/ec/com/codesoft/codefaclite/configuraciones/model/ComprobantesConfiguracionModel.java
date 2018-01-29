@@ -176,6 +176,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         parametros.get(ParametroCodefac.SECUENCIAL_RETENCION).setValor(getTxtRetencionesSecuencial().getText());
         
         parametros.get(ParametroCodefac.SECUENCIAL_FACTURA_FISICA).setValor(getTxtFacturaSecuencialFisico().getText());
+        parametros.get(ParametroCodefac.SECUENCIAL_NOTA_VENTA_FISICA).setValor(getTxtNotaVentaSecuencialFisico().getText());
         parametros.get(ParametroCodefac.SECUENCIAL_NOTA_CREDITO_FISICA).setValor(getTxtNotaCreditoSecuencialFisico().getText());
         parametros.get(ParametroCodefac.SECUENCIAL_NOTA_DEBITO_FISICA).setValor(getTxtNotaDebitoSecuencialFisico().getText());
         parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION_FISICA).setValor(getTxtGuiaRemisionSecuencialFisico().getText());
@@ -211,6 +212,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         getTxtRetencionesSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_RETENCION).getValor());
         
         getTxtFacturaSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_FACTURA_FISICA).getValor());
+        getTxtNotaVentaSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_NOTA_VENTA_FISICA).getValor());
         getTxtGuiaRemisionSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION_FISICA).getValor());
         getTxtNotaCreditoSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_NOTA_CREDITO_FISICA).getValor());
         getTxtNotaDebitoSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_NOTA_DEBITO_FISICA).getValor());
@@ -407,7 +409,8 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         getTxtNotaCreditoSecuencialFisico().setEnabled(!opcion);
         getTxtNotaDebitoSecuencialFisico().setEnabled(!opcion);
         getTxtGuiaRemisionSecuencialFisico().setEnabled(!opcion);
-        getTxtRetencionesSecuencialFisico().setEnabled(!opcion);        
+        getTxtRetencionesSecuencialFisico().setEnabled(!opcion);   
+        getTxtNotaVentaSecuencialFisico().setEnabled(!opcion);
         
         getTxtFacturaSecuencial().setEnabled(opcion);
         getTxtGuiaRemisionSecuencial().setEnabled(opcion);

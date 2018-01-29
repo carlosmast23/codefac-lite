@@ -55,6 +55,7 @@ public class ParametroCodefac {
     public static final String SECUENCIAL_NOTA_DEBITO_FISICA= "secuencial_nota_debito_fisica";
     public static final String SECUENCIAL_GUIA_REMISION_FISICA= "secuencial_guia_remision_fisica";
     public static final String SECUENCIAL_RETENCION_FISICA= "secuencial_retencion_fisica";
+    public static final String SECUENCIAL_NOTA_VENTA_FISICA= "secuencial_nota_venta_fisica";
     
     @Id
     @Column(name = "ID")
