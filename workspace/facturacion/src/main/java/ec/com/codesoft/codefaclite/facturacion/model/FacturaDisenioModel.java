@@ -314,6 +314,7 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
                     cargarComboSeccion((ComprobanteFisicoDisenio) getCmbDocumento().getSelectedItem());
                     cargarDocumentoGrafico((ComprobanteFisicoDisenio) getCmbDocumento().getSelectedItem());
                     cargarDatosSeleccion();
+                    getjPanel1().repaint();
                 }
             }
         });
@@ -322,8 +323,12 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                cargarComboComponentes((BandaComprobante) getCmbSeccion().getSelectedItem());
-                cargarDatosSeleccion();
+                BandaComprobante banda=(BandaComprobante) getCmbSeccion().getSelectedItem();
+                if(banda!=null)
+                {
+                    cargarComboComponentes(banda);
+                    cargarDatosSeleccion();
+                }
             }
         });
 
@@ -423,8 +428,11 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
         if (getCmbComponente().getSelectedIndex() >= 0) {
             ComponenteComprobanteFisico componente = (ComponenteComprobanteFisico) getCmbComponente().getSelectedItem();
             DrawComponente draw = buscarComponente(componente);
-            draw.setSeleccionado(true);
-            getjPanel1().repaint();
+            if(draw!=null)
+            {
+                draw.setSeleccionado(true);
+                getjPanel1().repaint();
+            }
         }
     }
 

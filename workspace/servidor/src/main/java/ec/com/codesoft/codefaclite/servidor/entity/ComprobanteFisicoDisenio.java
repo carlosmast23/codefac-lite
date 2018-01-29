@@ -37,6 +37,9 @@ public class ComprobanteFisicoDisenio {
     
     @Column (name = "ALTO")
     private int alto;
+    
+    @Column (name = "CODIGO_DOCUMENTO")
+    private String codigoDocumento;
 
     @OneToMany(cascade = {CascadeType.ALL,CascadeType.DETACH}, mappedBy = "documento")
     private List<BandaComprobante> secciones;
@@ -75,6 +78,16 @@ public class ComprobanteFisicoDisenio {
     public void setAlto(int alto) {
         this.alto = alto;
     }
+
+    public String getCodigoDocumento() {
+        return codigoDocumento;
+    }
+
+    public void setCodigoDocumento(String codigoDocumento) {
+        this.codigoDocumento = codigoDocumento;
+    }
+    
+    
 
     public List<BandaComprobante> getSecciones() {
         return secciones;

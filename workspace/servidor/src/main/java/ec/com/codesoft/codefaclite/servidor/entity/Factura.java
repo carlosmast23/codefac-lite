@@ -97,6 +97,8 @@ public class Factura {
     private String telefono;
     @Column(name = "TIPO_FACTURACION")
     private String tipoFacturacion;
+    @Column(name = "CODIGO_DOCUMENTO")
+    private String codigoDocumento;
     
     @JoinColumn(name = "CLIENTE_ID")
     @ManyToOne    
@@ -321,6 +323,14 @@ public class Factura {
 
     public void setTipoFacturacion(String tipoFacturacion) {
         this.tipoFacturacion = tipoFacturacion;
+    }
+
+    public String getCodigoDocumento() {
+        return codigoDocumento;
+    }
+
+    public void setCodigoDocumento(String codigoDocumento) {
+        this.codigoDocumento = codigoDocumento;
     }
     
     

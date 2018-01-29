@@ -43,7 +43,9 @@ import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.FacturaEnumEstado;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.service.ComprobanteFisicoDisenioService;
 import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
@@ -410,31 +412,27 @@ public class FacturacionModel extends FacturacionPanel {
         //Si la factura en manual no continua el proceso de facturacion electronica
         if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(TipoFacturacionEnumEstado.NORMAL.getLetra()))
         {
-            InputStream reporteOriginal = RecursoCodefac.JASPER_COMPROBANTES_FISICOS.getResourceInputStream("factura_fisica.jrxml");
+            TipoDocumentoEnum documentoEnum=(TipoDocumentoEnum) getCmbDocumento().getSelectedItem();
+
+            InputStream reporteOriginal=null;
+            if(documentoEnum.NOTA_VENTA.equals(documentoEnum))
+            {
+                reporteOriginal = RecursoCodefac.JASPER_COMPROBANTES_FISICOS.getResourceInputStream("nota_venta.jrxml");
+            }
+            else
+            {
+                reporteOriginal = RecursoCodefac.JASPER_COMPROBANTES_FISICOS.getResourceInputStream("factura_fisica.jrxml");
+            }
+           
             ManagerReporteFacturaFisica manager = new ManagerReporteFacturaFisica(reporteOriginal);
             ComprobanteFisicoDisenioService servicioComprobanteDisenio=new ComprobanteFisicoDisenioService();
             Map<String,Object> parametroComprobanteMap=new HashMap<String,Object>();
-            parametroComprobanteMap.put("nombre","Factura");
+            parametroComprobanteMap.put("codigoDocumento",documentoEnum.getCodigo());
             ComprobanteFisicoDisenio documento= servicioComprobanteDisenio.obtenerPorMap(parametroComprobanteMap).get(0);
             manager.setearNuevosValores(documento);
             InputStream reporteNuevo = manager.generarNuevoDocumento();
-            
-            Map<String, Object> parametros = new HashMap<String, Object>();
-            parametros.put("fechaEmision",factura.getFechaFactura().toString());
-            parametros.put("razonSocial", factura.getCliente().getRazonSocial());
-            parametros.put("direccion", factura.getCliente().getDireccion());
-            parametros.put("telefono", factura.getCliente().getTelefonoConvencional());
-            parametros.put("correoElectronico", (factura.getCliente().getCorreoElectronico()!=null)?factura.getCliente().getCorreoElectronico():"");
-            parametros.put("identificacion",factura.getCliente().getIdentificacion());
 
-            parametros.put("subtotalImpuesto", factura.getSubtotalImpuestos().toString());
-            parametros.put("subtotalSinImpuesto", factura.getSubtotalSinImpuestos().toString());
-            parametros.put("descuento", factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()).toString());
-            parametros.put("subtotalConDescuento",factura.getSubtotalImpuestos().add(factura.getSubtotalSinImpuestos()).subtract((factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()))).toString());
-            parametros.put("valorIva",factura.getIva().toString());
-            parametros.put("total",factura.getTotal()+"");
-            String ivaStr=session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).valor;
-            parametros.put("iva",ivaStr);
+            Map<String, Object> parametros = getParametroReporte(documentoEnum);
             
             //Llenar los datos de los detalles
             List<DetalleFacturaFisicaData> detalles = new ArrayList<DetalleFacturaFisicaData>();
@@ -572,6 +570,38 @@ public class FacturacionModel extends FacturacionPanel {
 
         facturaElectronica.procesarComprobante();//listo se encarga de procesar el comprobante
     }
+    
+    public Map<String, Object> getParametroReporte(TipoDocumentoEnum documento)
+    {
+        Map<String, Object> parametros = new HashMap<String, Object>();
+        parametros.put("fechaEmision", factura.getFechaFactura().toString());
+        parametros.put("razonSocial", factura.getCliente().getRazonSocial());
+        parametros.put("direccion", factura.getCliente().getDireccion());
+        parametros.put("telefono", factura.getCliente().getTelefonoConvencional());
+        parametros.put("correoElectronico", (factura.getCliente().getCorreoElectronico() != null) ? factura.getCliente().getCorreoElectronico() : "");
+        parametros.put("identificacion", factura.getCliente().getIdentificacion());
+
+        //Datos cuando es una nota de venta
+        if(TipoDocumentoEnum.NOTA_VENTA.equals(documento))
+        {
+            parametros.put("subtotal", factura.getSubtotalImpuestos().add(factura.getSubtotalSinImpuestos()).toString());
+            parametros.put("descuento", factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()).toString());
+            parametros.put("total", factura.getTotal() + "");        
+        }
+        else
+        {   //Datos cuando es una factura
+            parametros.put("subtotalImpuesto", factura.getSubtotalImpuestos().toString());
+            parametros.put("subtotalSinImpuesto", factura.getSubtotalSinImpuestos().toString());
+            parametros.put("descuento", factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()).toString());
+            parametros.put("subtotalConDescuento", factura.getSubtotalImpuestos().add(factura.getSubtotalSinImpuestos()).subtract((factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()))).toString());
+            parametros.put("valorIva", factura.getIva().toString());
+            parametros.put("total", factura.getTotal() + "");
+            String ivaStr = session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).valor;
+            parametros.put("iva", ivaStr);
+        
+        }
+        return parametros;
+    }
 
     @Override
     public void editar() throws ExcepcionCodefacLite {
@@ -698,6 +728,7 @@ public class FacturacionModel extends FacturacionPanel {
 
         //Limpiar las variables de la facturacion
         setearVariablesIniciales();
+        iniciarValoresIniciales();
 
     }
 
@@ -999,6 +1030,9 @@ public class FacturacionModel extends FacturacionPanel {
         factura.setSubtotalSinImpuestos(new BigDecimal(getLblSubtotal0().getText()));
         factura.setSubtotalImpuestos(new BigDecimal(getLblSubtotal12().getText()));
         factura.setIva(new BigDecimal(getLblIva12().getText()));
+        
+        TipoDocumentoEnum documentoEnum=(TipoDocumentoEnum) getCmbDocumento().getSelectedItem();
+        factura.setCodigoDocumento(documentoEnum.getCodigo());
 
     }
 
@@ -1245,6 +1279,24 @@ public class FacturacionModel extends FacturacionPanel {
             cargarTotales();
             cargarValoresAdicionales();
             //cargarFormasPagoTabla();
+        }
+    }
+
+    private void iniciarValoresIniciales() {
+        List<TipoDocumentoEnum> tiposDocumento=null;
+        //cuando la factura es electronica
+        if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).valor.equals(TipoFacturacionEnumEstado.ELECTRONICA.getLetra()))
+        {
+            tiposDocumento=TipoDocumentoEnum.obtenerPorDocumentosElectronicos(DocumentoEnum.VENTAS);
+        }
+        else //Cuando la factura es fisica
+        {
+            tiposDocumento=TipoDocumentoEnum.obtenerPorDocumentosFisico(DocumentoEnum.VENTAS);
+        }
+        
+        getCmbDocumento().removeAllItems();
+        for (TipoDocumentoEnum tipoDocumentoEnum : tiposDocumento) {
+            getCmbDocumento().addItem(tipoDocumentoEnum);
         }
     }
 

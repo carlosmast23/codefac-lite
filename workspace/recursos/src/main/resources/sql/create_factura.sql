@@ -34,6 +34,7 @@ create table FACTURA
     DIRECCION varchar(1024),
     TELEFONO varchar(10),
     TIPO_FACTURACION varchar(1),
+    CODIGO_DOCUMENTO varchar(3),
     primary key (ID),
     CONSTRAINT id_cliente_factura_fk FOREIGN KEY (CLIENTE_ID) REFERENCES CLIENTE(CLIENTE_ID)
 
