@@ -734,7 +734,8 @@ public class FacturacionModel extends FacturacionPanel {
         getBtnEditarDetalle().setEnabled(false);
         getBtnQuitarDetalle().setEnabled(false);
         getBtnAgregarDetalleFactura().setEnabled(true);
-
+        getBtnAgregarProducto().setEnabled(true);
+        getBtnCrearProducto().setEnabled(true);
         //Limpiar las variables de la facturacion
         setearVariablesIniciales();
         cargarSecuencial();
