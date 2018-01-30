@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoProductoEnum;
 import java.util.Map;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
@@ -21,33 +22,33 @@ import javax.swing.JTextField;
  */
 public abstract class ProductoForm extends ControladorCodefacInterface{
 
-    public JComboBox<String> getComboTipoProducto() {
+    public JComboBox<TipoProductoEnum> getComboTipoProducto() {
         return comboTipoProducto;
     }
 
-    public void setComboTipoProducto(JComboBox<String> jComboTipoProducto) {
+    public void setComboTipoProducto(JComboBox<TipoProductoEnum> jComboTipoProducto) {
         this.comboTipoProducto = jComboTipoProducto;
     }
-    
+    /*
     @LimpiarAnotacion
     @ValidacionCodefacAnotacion(requerido=false ,expresionRegular = "^[A-Za-z0-9.\\_\\-\\\\s]*$",nombre = "Codigo Auxiliar", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextField getTextCodigoAuxiliar() {
-        return textCodigoAuxiliar;
+        return txtCodigoUPC;
     }
 
     public void setTextCodigoAuxiliar(JTextField jTextCodigoAuxiliar) {
-        this.textCodigoAuxiliar = jTextCodigoAuxiliar;
+        this.txtCodigoUPC = jTextCodigoAuxiliar;
     }
     
     @LimpiarAnotacion
     @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[A-Za-z0-9.\\_\\-\\\\s]*$",nombre = "Codigo Principal", expresionRegularMensaje = "No se permiten caracteres esperciales")
     public JTextField getTextCodigoPrincipal() {
-        return textCodigoPrincipal;
+        return textCodigoPersonalizado;
     }
 
     public void setTextCodigoPrincipal(JTextField jTextCodigoPrincipal) {
-        this.textCodigoPrincipal = jTextCodigoPrincipal;
-    }
+        this.textCodigoPersonalizado = jTextCodigoPrincipal;
+    }*/
     
     @LimpiarAnotacion
     @ValidacionCodefacAnotacion(requerido=true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$",nombre = "Nombre", expresionRegularMensaje = "No se permiten caracteres especiales")
@@ -119,9 +120,9 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         jPanel3 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        textCodigoPrincipal = new javax.swing.JTextField();
+        txtCodigoPersonalizado = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        textCodigoAuxiliar = new javax.swing.JTextField();
+        txtCodigoUPC = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         comboTipoProducto = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
@@ -129,6 +130,9 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         jLabel6 = new javax.swing.JLabel();
         textValorUnitario = new javax.swing.JTextField();
         lblEspacio = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        txtCodigoEAN = new javax.swing.JTextField();
+        jLabel14 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         comboIva = new javax.swing.JComboBox<>();
@@ -139,10 +143,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         lblEspacio2 = new javax.swing.JLabel();
         lblEspacioBlanco = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jLabel20 = new javax.swing.JLabel();
@@ -155,8 +155,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         jTextField11 = new javax.swing.JTextField();
         jLabel26 = new javax.swing.JLabel();
         jTextField12 = new javax.swing.JTextField();
-        jLabel27 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox<>();
         jPanel5 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
         jTextField5 = new javax.swing.JTextField();
@@ -197,7 +195,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Características Generales"));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jLabel2.setText("Código Principal: ");
+        jLabel2.setText("Código Personalizado: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -209,9 +207,9 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        jPanel1.add(textCodigoPrincipal, gridBagConstraints);
+        jPanel1.add(txtCodigoPersonalizado, gridBagConstraints);
 
-        jLabel3.setText("Código Auxiliar: ");
+        jLabel3.setText("Código UPC: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -223,7 +221,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        jPanel1.add(textCodigoAuxiliar, gridBagConstraints);
+        jPanel1.add(txtCodigoUPC, gridBagConstraints);
 
         jLabel4.setText("Tipo de Producto: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -233,7 +231,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanel1.add(jLabel4, gridBagConstraints);
 
-        comboTipoProducto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BIEN", "SERVICIO" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -244,7 +241,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         jLabel5.setText("Nombre: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanel1.add(jLabel5, gridBagConstraints);
@@ -256,7 +253,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(textNombre, gridBagConstraints);
@@ -264,13 +261,13 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         jLabel6.setText("P.Venta Publico:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanel1.add(jLabel6, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(textValorUnitario, gridBagConstraints);
@@ -280,6 +277,30 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(lblEspacio, gridBagConstraints);
+
+        jLabel1.setText("Código EAN: ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
+        jPanel1.add(jLabel1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        jPanel1.add(txtCodigoEAN, gridBagConstraints);
+
+        jLabel14.setFont(new java.awt.Font("Arial", 1, 10)); // NOI18N
+        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel14.setText("Nota: Solo es necesario ingresar un solo código para el producto ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(8, 0, 0, 0);
+        jPanel1.add(jLabel14, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -299,44 +320,44 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(8, 65, 8, 20);
+        gridBagConstraints.insets = new java.awt.Insets(8, 10, 8, 20);
         jPanel2.add(jLabel10, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.2;
+        gridBagConstraints.weightx = 0.1;
         jPanel2.add(comboIva, gridBagConstraints);
 
         jLabel11.setText("ICE:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(8, 65, 8, 20);
+        gridBagConstraints.insets = new java.awt.Insets(8, 10, 8, 20);
         jPanel2.add(jLabel11, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.2;
+        gridBagConstraints.weightx = 0.1;
         jPanel2.add(comboIce, gridBagConstraints);
 
         jLabel12.setText("IRBPNR:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(8, 65, 8, 20);
+        gridBagConstraints.insets = new java.awt.Insets(8, 10, 8, 20);
         jPanel2.add(jLabel12, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.2;
+        gridBagConstraints.weightx = 0.1;
         jPanel2.add(comboIrbpnr, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
@@ -362,10 +383,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
 
         jTabbedPane1.addTab("Info General", jPanel3);
 
-        jLabel7.setText("Codigo Barras UPC:");
-
-        jLabel8.setText("Codigo Barras EAN:");
-
         jLabel15.setText("Garantia:");
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NO", "SI" }));
@@ -380,10 +397,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
 
         jLabel26.setText("P.Venta Con Tarjeta:");
 
-        jLabel27.setText("Ensamble:");
-
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NO", "SI" }));
-
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -391,83 +404,58 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel23)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField1)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel20)
+                            .addComponent(jLabel23)
                             .addComponent(jLabel15)
-                            .addComponent(jLabel20))
-                        .addGap(34, 34, 34)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField9)
+                            .addComponent(jLabel25))
+                        .addGap(17, 17, 17)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.LEADING, 0, 47, Short.MAX_VALUE)
-                                    .addComponent(jTextField7, javax.swing.GroupLayout.Alignment.LEADING))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
-                                .addComponent(jLabel21)
-                                .addGap(18, 18, 18)
-                                .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(6, 6, 6))))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel25)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(1, 1, 1)
+                                .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel26)
-                            .addComponent(jLabel27))
+                            .addComponent(jLabel21))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(95, Short.MAX_VALUE))
+                .addContainerGap(57, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(22, 22, 22)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel23)
                     .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel15)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel20)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel21)
-                    .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(28, 28, 28)
+                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(25, 25, 25)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel25))
-                .addGap(18, 18, 18)
+                    .addComponent(jLabel25)
+                    .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel26)
                     .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(24, 24, 24)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel27)
-                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(13, Short.MAX_VALUE))
+                    .addComponent(jLabel21)
+                    .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(61, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Info Inventario", jPanel4);
@@ -507,7 +495,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
                             .addComponent(jLabel19))
                         .addGap(103, 103, 103)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
                             .addComponent(jScrollPane3)))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -547,7 +535,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel19))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Info Adicional", jPanel5);
@@ -607,7 +595,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
                                 .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton1)))
-                        .addContainerGap(100, Short.MAX_VALUE))))
+                        .addContainerGap(91, Short.MAX_VALUE))))
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
@@ -650,7 +638,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
     private javax.swing.JComboBox<ImpuestoDetalle> comboIce;
     private javax.swing.JComboBox<ImpuestoDetalle> comboIrbpnr;
     private javax.swing.JComboBox<ImpuestoDetalle> comboIva;
-    private javax.swing.JComboBox<String> comboTipoProducto;
+    private javax.swing.JComboBox<TipoProductoEnum> comboTipoProducto;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -658,11 +646,12 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
     private javax.swing.JButton jButton5;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
@@ -675,13 +664,10 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
-    private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -697,10 +683,8 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
     private javax.swing.JTable jTable1;
     private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextArea jTextArea3;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField11;
     private javax.swing.JTextField jTextField12;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
@@ -711,11 +695,37 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
     private javax.swing.JLabel lblEspacio;
     private javax.swing.JLabel lblEspacio2;
     private javax.swing.JLabel lblEspacioBlanco;
-    private javax.swing.JTextField textCodigoAuxiliar;
-    private javax.swing.JTextField textCodigoPrincipal;
     private javax.swing.JTextField textNombre;
     private javax.swing.JTextField textValorUnitario;
+    private javax.swing.JTextField txtCodigoEAN;
+    private javax.swing.JTextField txtCodigoPersonalizado;
+    private javax.swing.JTextField txtCodigoUPC;
     // End of variables declaration//GEN-END:variables
 
+    public JTextField getTxtCodigoEAN() {
+        return txtCodigoEAN;
+    }
+
+    public void setTxtCodigoEAN(JTextField txtCodigoEAN) {
+        this.txtCodigoEAN = txtCodigoEAN;
+    }
+
+    public JTextField getTxtCodigoPersonalizado() {
+        return txtCodigoPersonalizado;
+    }
+
+    public void setTxtCodigoPersonalizado(JTextField txtCodigoPersonalizado) {
+        this.txtCodigoPersonalizado = txtCodigoPersonalizado;
+    }
+
+    public JTextField getTxtCodigoUPC() {
+        return txtCodigoUPC;
+    }
+
+    public void setTxtCodigoUPC(JTextField txtCodigoUPC) {
+        this.txtCodigoUPC = txtCodigoUPC;
+    }
+    
+    
     
 }

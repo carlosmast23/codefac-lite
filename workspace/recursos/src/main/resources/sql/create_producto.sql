@@ -10,8 +10,9 @@
 create table PRODUCTO
 (
     ID_PRODUCTO BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1),
-    CODIGO_PRINCIPAL varchar(70),
-    CODIGO_AUXILIAR varchar(70),
+    CODIGO_PERSONALIZADO varchar(70),
+    CODIGO_EAN varchar(70),
+    CODIGO_UPC varchar(70),
     TIPO_PRODUCTO varchar(1),
     NOMBRE varchar(100),
     VALOR_UNITARIO decimal(7,3),

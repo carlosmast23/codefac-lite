@@ -30,10 +30,13 @@ public class Producto implements Serializable
     @Basic(optional = false)
     @Column (name = "ID_PRODUCTO")
     private Long  idProducto;
-    @Column(name = "CODIGO_PRINCIPAL")
-    private String codigoPrincipal;
-    @Column(name = "CODIGO_AUXILIAR")
-    private String codigoAuxiliar;
+    @Column(name = "CODIGO_PERSONALIZADO")
+    private String codigoPersonalizado;
+    @Column(name = "CODIGO_EAN")
+    private String codigoEAN;
+    @Column(name = "CODIGO_UPC")
+    private String codigoUPC;
+    
     @Column(name = "TIPO_PRODUCTO")
     private String tipoProducto;
     @Column(name = "NOMBRE")
@@ -57,8 +60,11 @@ public class Producto implements Serializable
     @ManyToOne
     //@Column(name = "IRBPNR")
     private ImpuestoDetalle irbpnr;
-    
 
+    public Producto() {
+    }
+    
+    
 
     public ImpuestoDetalle getIva() {
         return iva;
@@ -98,22 +104,7 @@ public class Producto implements Serializable
         this.idProducto = idProducto;
     }
 
-    public String getCodigoPrincipal() {
-        return codigoPrincipal;
-    }
-
-    public void setCodigoPrincipal(String codigoPrincipal) {
-        this.codigoPrincipal = codigoPrincipal;
-    }
-
-    public String getCodigoAuxiliar() {
-        return codigoAuxiliar;
-    }
-
-    public void setCodigoAuxiliar(String codigoAuxiliar) {
-        this.codigoAuxiliar = codigoAuxiliar;
-    }
-
+    
     public String getTipoProducto() {
         return tipoProducto;
     }
@@ -145,6 +136,34 @@ public class Producto implements Serializable
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
+    public String getCodigoPersonalizado() {
+        return codigoPersonalizado;
+    }
+
+    public void setCodigoPersonalizado(String codigoPersonalizado) {
+        this.codigoPersonalizado = codigoPersonalizado;
+    }
+
+    public String getCodigoEAN() {
+        return codigoEAN;
+    }
+
+    public void setCodigoEAN(String codigoEAN) {
+        this.codigoEAN = codigoEAN;
+    }
+
+    public String getCodigoUPC() {
+        return codigoUPC;
+    }
+
+    public void setCodigoUPC(String codigoUPC) {
+        this.codigoUPC = codigoUPC;
+    }
+
+    
+    
+    
     
     
     

@@ -9,7 +9,7 @@ import ec.com.codesoft.codefaclite.servidor.entity.Factura;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.FacturaEnumEstado;
-import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaDetalleFacade;
@@ -53,7 +53,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade>{
                 //Estableciendo estado de facturacion manual
                 factura.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
                 factura.setTipoFacturacion(TipoFacturacionEnumEstado.NORMAL.getLetra());
-                if(factura.getCodigoDocumento().equals(TipoDocumentoEnum.FACTURA.getCodigo()))
+                if(factura.getCodigoDocumento().equals(DocumentoEnum.FACTURA.getCodigo()))
                 {
                     parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA_FISICA);
                 }

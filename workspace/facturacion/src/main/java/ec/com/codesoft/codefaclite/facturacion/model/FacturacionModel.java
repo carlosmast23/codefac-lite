@@ -43,9 +43,10 @@ import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
-import ec.com.codesoft.codefaclite.servidor.entity.enumerados.DocumentoEnum;
-import ec.com.codesoft.codefaclite.servidor.entity.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.FacturaEnumEstado;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.ModuloEnum;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.service.ComprobanteFisicoDisenioService;
 import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
@@ -420,7 +421,7 @@ public class FacturacionModel extends FacturacionPanel {
         //Si la factura en manual no continua el proceso de facturacion electronica
         if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(TipoFacturacionEnumEstado.NORMAL.getLetra()))
         {
-            TipoDocumentoEnum documentoEnum=(TipoDocumentoEnum) getCmbDocumento().getSelectedItem();
+            DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();
 
             InputStream reporteOriginal=null;
             if(documentoEnum.NOTA_VENTA.equals(documentoEnum))
@@ -579,7 +580,7 @@ public class FacturacionModel extends FacturacionPanel {
         facturaElectronica.procesarComprobante();//listo se encarga de procesar el comprobante
     }
     
-    public Map<String, Object> getParametroReporte(TipoDocumentoEnum documento)
+    public Map<String, Object> getParametroReporte(DocumentoEnum documento)
     {
         Map<String, Object> parametros = new HashMap<String, Object>();
         parametros.put("fechaEmision", factura.getFechaFactura().toString());
@@ -590,7 +591,7 @@ public class FacturacionModel extends FacturacionPanel {
         parametros.put("identificacion", factura.getCliente().getIdentificacion());
 
         //Datos cuando es una nota de venta
-        if(TipoDocumentoEnum.NOTA_VENTA.equals(documento))
+        if(DocumentoEnum.NOTA_VENTA.equals(documento))
         {
             parametros.put("subtotal", factura.getSubtotalImpuestos().add(factura.getSubtotalSinImpuestos()).toString());
             parametros.put("descuento", factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()).toString());
@@ -742,7 +743,7 @@ public class FacturacionModel extends FacturacionPanel {
     
     private void cargarSecuencial()
     {
-        TipoDocumentoEnum tipoDocumentoEnum= (TipoDocumentoEnum) getCmbDocumento().getSelectedItem();
+        DocumentoEnum tipoDocumentoEnum= (DocumentoEnum) getCmbDocumento().getSelectedItem();
         String secuencial="";
         boolean facturacionElectronica=session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).valor.equals(TipoFacturacionEnumEstado.ELECTRONICA.getLetra());
         
@@ -1068,7 +1069,7 @@ public class FacturacionModel extends FacturacionPanel {
         factura.setSubtotalImpuestos(new BigDecimal(getLblSubtotal12().getText()));
         factura.setIva(new BigDecimal(getLblIva12().getText()));
         
-        TipoDocumentoEnum documentoEnum=(TipoDocumentoEnum) getCmbDocumento().getSelectedItem();
+        DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();
         factura.setCodigoDocumento(documentoEnum.getCodigo());
 
     }
@@ -1325,19 +1326,19 @@ public class FacturacionModel extends FacturacionPanel {
     }
 
     private void iniciarValoresIniciales() {
-        List<TipoDocumentoEnum> tiposDocumento=null;
+        List<DocumentoEnum> tiposDocumento=null;
         //cuando la factura es electronica
         if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).valor.equals(TipoFacturacionEnumEstado.ELECTRONICA.getLetra()))
         {
-            tiposDocumento=TipoDocumentoEnum.obtenerPorDocumentosElectronicos(DocumentoEnum.VENTAS);
+            tiposDocumento=DocumentoEnum.obtenerPorDocumentosElectronicos(ModuloEnum.VENTAS);
         }
         else //Cuando la factura es fisica
         {
-            tiposDocumento=TipoDocumentoEnum.obtenerPorDocumentosFisico(DocumentoEnum.VENTAS);
+            tiposDocumento=DocumentoEnum.obtenerPorDocumentosFisico(ModuloEnum.VENTAS);
         }
         
         getCmbDocumento().removeAllItems();
-        for (TipoDocumentoEnum tipoDocumentoEnum : tiposDocumento) {
+        for (DocumentoEnum tipoDocumentoEnum : tiposDocumento) {
             getCmbDocumento().addItem(tipoDocumentoEnum);
         }
     }

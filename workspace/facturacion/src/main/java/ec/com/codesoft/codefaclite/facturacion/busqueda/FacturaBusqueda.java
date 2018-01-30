@@ -11,7 +11,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidor.entity.Factura;
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.FacturaEnumEstado;
-import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoService;
@@ -57,7 +57,7 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura> {
         dato.add(t.getPreimpreso());
         System.out.println(t.getPreimpreso());
         dato.add(t.getCliente().getRazonSocial());
-        TipoDocumentoEnum estadoEnum= TipoDocumentoEnum.obtenerDocumentoPorCodigo(t.getCodigoDocumento());
+        DocumentoEnum estadoEnum= DocumentoEnum.obtenerDocumentoPorCodigo(t.getCodigoDocumento());
         dato.add(estadoEnum.getNombre());
         
         TipoFacturacionEnumEstado tipoFactura=TipoFacturacionEnumEstado.getEnumByEstado(t.getTipoFacturacion());

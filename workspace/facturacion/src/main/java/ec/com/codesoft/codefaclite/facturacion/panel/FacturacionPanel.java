@@ -10,7 +10,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInte
 import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
-import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.DocumentoEnum;
 import java.util.Calendar;
 import java.util.Date;
 import javax.swing.JButton;
@@ -1044,7 +1044,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnQuitarDetalle;
     private javax.swing.JButton btnQuitarDetalleFormaPago;
     private javax.swing.JCheckBox checkPorcentaje;
-    private javax.swing.JComboBox<TipoDocumentoEnum> cmbDocumento;
+    private javax.swing.JComboBox<DocumentoEnum> cmbDocumento;
     private javax.swing.JCheckBox jCheckBox1;
     private com.toedter.calendar.JDateChooser jDateFechaEmision;
     private javax.swing.JLabel jLabel1;
@@ -1394,11 +1394,11 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         this.lblEstadoFactura = lblEstadoFactura;
     }
 
-    public JComboBox<TipoDocumentoEnum> getCmbDocumento() {
+    public JComboBox<DocumentoEnum> getCmbDocumento() {
         return cmbDocumento;
     }
 
-    public void setCmbDocumento(JComboBox<TipoDocumentoEnum> cmbDocumento) {
+    public void setCmbDocumento(JComboBox<DocumentoEnum> cmbDocumento) {
         this.cmbDocumento = cmbDocumento;
     }
     

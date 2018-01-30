@@ -79,6 +79,8 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuItemNotaCredito = new javax.swing.JMenuItem();
         jMenuItemFacturaReporte = new javax.swing.JMenuItem();
         jMenuItemDisenador = new javax.swing.JMenuItem();
+        menuCompras = new javax.swing.JMenu();
+        jMenuCompra = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuCliente = new javax.swing.JMenuItem();
         jMenuItemReporteCliente = new javax.swing.JMenuItem();
@@ -276,6 +278,13 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         menuFacturacion.add(jMenuItemDisenador);
 
         jMenuBar1.add(menuFacturacion);
+
+        menuCompras.setText("Compras");
+
+        jMenuCompra.setText("Compra");
+        menuCompras.add(jMenuCompra);
+
+        jMenuBar1.add(menuCompras);
 
         jMenu2.setText("Clientes");
 
@@ -476,6 +485,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuCalculadora;
     private javax.swing.JMenuItem jMenuCliente;
+    private javax.swing.JMenuItem jMenuCompra;
     private javax.swing.JMenuItem jMenuComprobanteConfig;
     private javax.swing.JMenuItem jMenuEmisor;
     private javax.swing.JMenuItem jMenuFactura;
@@ -500,6 +510,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JSplitPane jSplitPanel;
     private javax.swing.JSplitPane jSplitPanelVerticalSecundario;
     private javax.swing.JLabel lblPiePagina;
+    private javax.swing.JMenu menuCompras;
     private javax.swing.JMenu menuConfiguracion;
     private javax.swing.JMenu menuFacturacion;
     private javax.swing.JMenu menuInicio;
@@ -783,6 +794,14 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
     public void setjMenuItemDisenador(JMenuItem jMenuItemDisenador) {
         this.jMenuItemDisenador = jMenuItemDisenador;
+    }
+
+    public JMenuItem getjMenuCompra() {
+        return jMenuCompra;
+    }
+
+    public void setjMenuCompra(JMenuItem jMenuCompra) {
+        this.jMenuCompra = jMenuCompra;
     }
     
     

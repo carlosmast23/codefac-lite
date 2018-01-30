@@ -13,101 +13,49 @@ import java.util.List;
  * @author Carlos
  */
 public enum TipoDocumentoEnum {
+    VENTA(ModuloEnum.VENTAS,"Ventas"),
     /**
-     * Documento de la factura que puede ser electronica o fisica
+     * Tipo de compra que va a ingresar productos al inventario
      */
-    FACTURA("Factura","FAC",DocumentoEnum.VENTAS,true,true),
+    COMPRA_INVENTARIO(ModuloEnum.COMPRAS,"Compra Inventario"),
     /**
-     * Nota de Venta para los contribuyentes que estan en modalidad RIDE
+     * Tipo de compra que se registra como gastos de la empresa
      */
-    NOTA_VENTA("Nota de venta","NVT",DocumentoEnum.VENTAS,true,false);
-
-    private TipoDocumentoEnum(String nombre,String codigo, DocumentoEnum documentoEnum,Boolean comprobanteFisico,Boolean comprobanteElectronico) {
-        this.nombre=nombre;
-        this.codigo=codigo;
-        this.comprobanteElectronico = comprobanteElectronico;
-        this.comprobanteFisico = comprobanteFisico;
-        this.documentoEnum = documentoEnum;
+    COMPRA_GASTOS(ModuloEnum.COMPRAS,"Compra Gastos"),    
+    /**
+     * Retenciones del iva o del inventario
+     */
+    RETENCIONES(ModuloEnum.RETENCIONES,"Retenciones"),;
+    
+    private TipoDocumentoEnum(ModuloEnum moduloEnum,String nombre) {
+        this.moduloEnum = moduloEnum;
+        this.nombre=nombre;        
     }
     
     private String nombre;
-    private String codigo;
-    private Boolean comprobanteElectronico;
-    private Boolean comprobanteFisico;
-    private DocumentoEnum documentoEnum;
-
-    public Boolean getComprobanteElectronico() {
-        return comprobanteElectronico;
-    }
-
-    public Boolean getComprobanteFisico() {
-        return comprobanteFisico;
-    }
-
-    public DocumentoEnum getDocumentoEnum() {
-        return documentoEnum;
-    }
-
-    public String getCodigo() {
-        return codigo;
-    }
+    
+    private ModuloEnum moduloEnum;
 
     public String getNombre() {
         return nombre;
     }
+    
+    public  static List<TipoDocumentoEnum> obtenerTipoDocumentoPorModulo(ModuloEnum modulo)
+    {
+        List<TipoDocumentoEnum> documentosEnum=new ArrayList<TipoDocumentoEnum>();
+        TipoDocumentoEnum[] tipoDocumentos=TipoDocumentoEnum.values();
+        for (TipoDocumentoEnum tipo : tipoDocumentos) {
+            if(tipo.moduloEnum.equals(modulo))
+            {
+                documentosEnum.add(tipo);
+            }
+        }
+        return documentosEnum;
+    }
 
-    
-    
-    
     @Override
     public String toString() {
-        return nombre;
+        return getNombre();
     }
     
-    
-    
-    
-    /**
-     * Metodos personalizado para obtener documento y si es comprobante fisico o electronica
-     */
-    public static List<TipoDocumentoEnum> obtenerPorDocumentosFisico(DocumentoEnum documentoEnum)
-    {
-        List<TipoDocumentoEnum> tipoDocumentosEnum=new ArrayList<TipoDocumentoEnum>();
-        TipoDocumentoEnum[] documentos=TipoDocumentoEnum.values();
-        for (TipoDocumentoEnum documento : documentos) {
-            if(documento.getDocumentoEnum().equals(documentoEnum) && documento.getComprobanteFisico())
-            {
-                tipoDocumentosEnum.add(documento);
-            }
-        }
-        return tipoDocumentosEnum;
-    }
-    
-        /**
-     * Metodos personalizado para obtener documento y si es comprobante fisico o electronica
-     */
-    public  static List<TipoDocumentoEnum> obtenerPorDocumentosElectronicos(DocumentoEnum documentoEnum)
-    {
-        List<TipoDocumentoEnum> tipoDocumentosEnum=new ArrayList<TipoDocumentoEnum>();
-        TipoDocumentoEnum[] documentos=TipoDocumentoEnum.values();
-        for (TipoDocumentoEnum documento : documentos) {
-            if(documento.getDocumentoEnum().equals(documentoEnum) && documento.getComprobanteElectronico())
-            {
-                tipoDocumentosEnum.add(documento);
-            }
-        }
-        return tipoDocumentosEnum;
-    }
-    
-    public  static TipoDocumentoEnum obtenerDocumentoPorCodigo(String codigo)
-    {
-        TipoDocumentoEnum[] documentos=TipoDocumentoEnum.values();
-        for (TipoDocumentoEnum documento : documentos) {
-            if(documento.getCodigo().equals(codigo))
-            {
-                return documento;
-            }
-        }
-        return null;
-    }
 }

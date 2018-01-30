@@ -17,10 +17,14 @@ import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.ProductoEnumEstado;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoService;
+import ec.com.codesoft.codefaclite.test.TipoBusquedaEnum;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
@@ -50,6 +54,8 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         impuestoDetalleService=new ImpuestoDetalleService();
         getComboIce().setEnabled(false);
         getComboIrbpnr().setEnabled(false);
+        iniciarCombosBox();
+        listenerComboBox();
     }
  
     @Override
@@ -57,9 +63,15 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     {
         try {
             producto = new Producto();
-            producto.setCodigoPrincipal(getTextCodigoPrincipal().getText());
-            producto.setCodigoAuxiliar(getTextCodigoAuxiliar().getText());
+            producto.setCodigoPersonalizado(getTxtCodigoPersonalizado().getText());
+            producto.setCodigoEAN(getTxtCodigoEAN().getText());
+            producto.setCodigoUPC(getTxtCodigoUPC().getText());
             producto.setEstado(ProductoEnumEstado.ACTIVO.getEstado());
+            
+            TipoProductoEnum tipoProductoEnum= (TipoProductoEnum) getComboTipoProducto().getSelectedItem();
+            
+            
+            
             if(getComboTipoProducto().getSelectedItem().equals("Bien"))
             {
                 producto.setTipoProducto("B");
@@ -95,8 +107,9 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
 
     @Override
     public void editar() throws ExcepcionCodefacLite {
-        producto.setCodigoPrincipal(getTextCodigoPrincipal().getText());
-        producto.setCodigoAuxiliar(getTextCodigoAuxiliar().getText());
+        producto.setCodigoPersonalizado(getTxtCodigoPersonalizado().getText());
+        producto.setCodigoEAN(getTxtCodigoEAN().getText());
+        producto.setCodigoUPC(getTxtCodigoUPC().getText());
         if(getComboTipoProducto().getSelectedItem().equals("Bien"))
         {
             producto.setTipoProducto("B");
@@ -150,8 +163,9 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
             throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar producto vacio");
         }
         
-        getTextCodigoPrincipal().setText(producto.getCodigoPrincipal());
-        getTextCodigoAuxiliar().setText(producto.getCodigoAuxiliar());
+        getTxtCodigoPersonalizado().setText(producto.getCodigoPersonalizado());
+        getTxtCodigoEAN().setText(producto.getCodigoEAN());
+        getTxtCodigoUPC().setText(producto.getCodigoUPC());
         getTextNombre().setText(producto.getNombre());
         getTextValorUnitario().setText(producto.getValorUnitario().toString());
         
@@ -250,5 +264,39 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     public List<String> getPerfilesPermisos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    private void iniciarCombosBox() {
+        TipoProductoEnum[] tipos= TipoProductoEnum.values();
+        getComboTipoProducto().removeAllItems();
+        for (TipoProductoEnum tipo : tipos) {
+            getComboTipoProducto().addItem(tipo);
+        }
+    }
+
+    private void listenerComboBox() {
+        getComboTipoProducto().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                TipoProductoEnum tipoPorductoEnum=(TipoProductoEnum) getComboTipoProducto().getSelectedItem();
+                seleccionarTipoProducto(tipoPorductoEnum);
+            }
+        });
+    }
+    
+    
+    private void seleccionarTipoProducto(TipoProductoEnum tipoProducto)
+    {
+        if(tipoProducto.equals(TipoProductoEnum.PRODUCTO))
+        {
+            getTxtCodigoEAN().setEnabled(true);
+            getTxtCodigoUPC().setEnabled(true);
+        }
+        else
+        {
+            getTxtCodigoEAN().setEnabled(false);
+            getTxtCodigoUPC().setEnabled(false);
+        
+        }
+   }
     
 }
