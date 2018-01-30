@@ -6,7 +6,9 @@
 package ec.com.codesoft.codefaclite.inventario.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.EnumSiNo;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
@@ -46,6 +48,8 @@ public abstract class AsociarProductoProveedorPanel extends ControladorCodefacIn
         txtCosto = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblProveedorProducto = new javax.swing.JTable();
+        jLabel5 = new javax.swing.JLabel();
+        cmbIva = new javax.swing.JComboBox<>();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -60,9 +64,15 @@ public abstract class AsociarProductoProveedorPanel extends ControladorCodefacIn
         ));
         jScrollPane1.setViewportView(jTable1);
 
+        setTitle("Asociar Producto");
+
         jLabel1.setText("Producto:");
 
         jLabel2.setText("Proveedor:");
+
+        txtProveedor.setEditable(false);
+
+        txtProducto.setEditable(false);
 
         btnBuscarProveedor.setText("Buscar");
 
@@ -86,6 +96,8 @@ public abstract class AsociarProductoProveedorPanel extends ControladorCodefacIn
             }
         ));
         jScrollPane2.setViewportView(tblProveedorProducto);
+
+        jLabel5.setText("Tiene Iva:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -112,11 +124,13 @@ public abstract class AsociarProductoProveedorPanel extends ControladorCodefacIn
                                     .addComponent(txtDescripcion)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(txtCosto, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE)))))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel5)))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnBuscarProveedor)
-                            .addComponent(btnProductoBuscar))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnBuscarProveedor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnProductoBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cmbIva, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(18, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -137,12 +151,16 @@ public abstract class AsociarProductoProveedorPanel extends ControladorCodefacIn
                     .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(txtCosto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel4)
+                        .addComponent(txtCosto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel5)
+                        .addComponent(cmbIva, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         pack();
@@ -152,10 +170,12 @@ public abstract class AsociarProductoProveedorPanel extends ControladorCodefacIn
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarProveedor;
     private javax.swing.JButton btnProductoBuscar;
+    private javax.swing.JComboBox<EnumSiNo> cmbIva;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
@@ -220,6 +240,14 @@ public abstract class AsociarProductoProveedorPanel extends ControladorCodefacIn
 
     public void setTxtProveedor(JTextField txtProveedor) {
         this.txtProveedor = txtProveedor;
+    }
+
+    public JComboBox<EnumSiNo> getCmbIva() {
+        return cmbIva;
+    }
+
+    public void setCmbIva(JComboBox<EnumSiNo> cmbIva) {
+        this.cmbIva = cmbIva;
     }
     
     

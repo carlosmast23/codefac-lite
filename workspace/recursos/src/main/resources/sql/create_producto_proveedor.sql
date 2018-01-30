@@ -14,7 +14,7 @@ create table PRODUCTO_PROVEEDOR
     PROVEEDOR_ID BIGINT,
     ESTADO varchar(1),
     DESCRIPCION varchar(128),
-    GOOGLE decimal(7,3),
+    CON_IVA varchar(1),
     COSTO_ACTUAL decimal(7,3),    
     primary key (ID)
 );

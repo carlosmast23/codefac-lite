@@ -508,6 +508,14 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         {
                             agregarListenerMenu(ventana,menuControlador.isMaximizado());                    
                         }
+                        else
+                        {
+                            try {
+                                ventana.setSelected(true);
+                            } catch (PropertyVetoException ex) {
+                                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
                         
                         
                 }
