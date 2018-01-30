@@ -61,6 +61,9 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         txtNotaDebitoSecuencialFisico = new javax.swing.JTextField();
         txtGuiaRemisionSecuencialFisico = new javax.swing.JTextField();
         txtRetencionesSecuencialFisico = new javax.swing.JTextField();
+        jLabel25 = new javax.swing.JLabel();
+        txtNotaVentaSecuencialFisico = new javax.swing.JTextField();
+        jTextField2 = new javax.swing.JTextField();
         panelFacturacionElectronica = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         cmbModoFacturacion = new javax.swing.JComboBox<>();
@@ -274,6 +277,28 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panelSecuenciales.add(txtRetencionesSecuencialFisico, gridBagConstraints);
+
+        jLabel25.setText("Nota de Venta:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panelSecuenciales.add(jLabel25, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panelSecuenciales.add(txtNotaVentaSecuencialFisico, gridBagConstraints);
+
+        jTextField2.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panelSecuenciales.add(jTextField2, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -587,6 +612,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
@@ -599,6 +625,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JTextField jTextField2;
     private javax.swing.JLabel lblPuntoEmision;
     private javax.swing.JPanel panelConfiguracionesGenerales;
     private javax.swing.JPanel panelFacturacionElectronica;
@@ -617,6 +644,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
     private javax.swing.JTextField txtNotaCreditoSecuencialFisico;
     private javax.swing.JTextField txtNotaDebitoSecuencial;
     private javax.swing.JTextField txtNotaDebitoSecuencialFisico;
+    private javax.swing.JTextField txtNotaVentaSecuencialFisico;
     private javax.swing.JPasswordField txtPasswordCorreo;
     private javax.swing.JTextField txtPuntoEmision;
     private javax.swing.JTextField txtRetencionesSecuencial;
@@ -803,6 +831,15 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         this.panelFacturacionElectronica = panelFacturacionElectronica;
     }
 
+    public JTextField getTxtNotaVentaSecuencialFisico() {
+        return txtNotaVentaSecuencialFisico;
+    }
+
+    public void setTxtNotaVentaSecuencialFisico(JTextField txtNotaVentaSecuencialFisico) {
+        this.txtNotaVentaSecuencialFisico = txtNotaVentaSecuencialFisico;
+    }
+
+    
     
     
 

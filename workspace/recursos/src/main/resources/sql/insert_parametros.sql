@@ -30,6 +30,7 @@ INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('logo_empresa','');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('correo_virtual_mall','');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('imagen_fondo','');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('secuencial_factura_fisica','1');
+INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('secuencial_nota_venta_fisica','1');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('secuencial_guia_remision_fisica','1');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('secuencial_nota_credito_fisica','1');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('secuencial_nota_debito_fisica','1');

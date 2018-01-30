@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidor.entity.Factura;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.FacturaEnumEstado;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaDetalleFacade;
@@ -52,7 +53,14 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade>{
                 //Estableciendo estado de facturacion manual
                 factura.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
                 factura.setTipoFacturacion(TipoFacturacionEnumEstado.NORMAL.getLetra());
-                parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA_FISICA);
+                if(factura.getCodigoDocumento().equals(TipoDocumentoEnum.FACTURA.getCodigo()))
+                {
+                    parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA_FISICA);
+                }
+                else
+                {
+                    parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_NOTA_VENTA_FISICA);
+                }
             }
             
             
@@ -63,7 +71,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade>{
             
             
             parametro.valor = (Integer.parseInt(parametro.valor) + 1) + "";
-            parametroService.grabar(parametro);
+            parametroService.editar(parametro);
             
             
         } catch (ConstrainViolationExceptionSQL ex) {
@@ -104,7 +112,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade>{
             secuencialSiguiente = Integer.parseInt(parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA).valor);
         }
         else //cuando el modo es normals
-        {
+        {          
             secuencialSiguiente = Integer.parseInt(parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA_FISICA).valor);
         }
             
