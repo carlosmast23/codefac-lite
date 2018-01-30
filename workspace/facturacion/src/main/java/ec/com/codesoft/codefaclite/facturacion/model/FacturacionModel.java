@@ -872,7 +872,7 @@ public class FacturacionModel extends FacturacionPanel {
         this.modeloTablaDetallesProductos = new DefaultTableModel(titulo, 0);
         for (FacturaDetalle detalle : detalles) {
             Vector<String> fila = new Vector<String>();
-            fila.add(detalle.getProducto().getCodigoPrincipal());
+            fila.add(detalle.getProducto().getCodigoPersonalizado());
             fila.add(detalle.getProducto().getValorUnitario().toString());
             fila.add(detalle.getCantidad().toString());
             fila.add(detalle.getDescripcion());

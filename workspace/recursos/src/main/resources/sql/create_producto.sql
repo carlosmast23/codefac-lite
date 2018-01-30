@@ -20,6 +20,19 @@ create table PRODUCTO
     ICE_ID integer,
     IRBPNR_ID integer,
     ESTADO varchar(1),
+
+    UBICACION varchar(100),
+    GARANTIA varchar(1),
+    CANTIDAD_MINIMA integer,
+    PRECIO_DISTRIBUIDOR decimal(7,3),
+    PRECIO_TARJETA decimal(7,3),
+    STOCK_INICIAL bigint,
+    MARCA varchar(50),
+    IMAGEN varchar(100),
+    CATEGORIA varchar(1),
+    CARACTERISTICAS varchar(100),
+    OBSERVACIONES varchar(100),    
+
     primary key (ID_PRODUCTO),
-    UNIQUE(CODIGO_PRINCIPAL)
+    UNIQUE(CODIGO_PERSONALIZADO,CODIGO_EAN,CODIGO_UPC)
 )

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.crm.busqueda;
+package ec.com.codesoft.codefaclite.inventario.busqueda;
 
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;

@@ -501,28 +501,36 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             menuControlador.getMenuItem().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    try {
-                        Constructor contructor=menuControlador.getVentana().getConstructor();
-                        ControladorCodefacInterface ventana= (ControladorCodefacInterface) contructor.newInstance();
-                        agregarListenerMenu(ventana,menuControlador.isMaximizado());
-                    } catch (NoSuchMethodException ex) {
-                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (SecurityException ex) {
-                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (InstantiationException ex) {
-                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IllegalAccessException ex) {
-                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IllegalArgumentException ex) {
-                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (InvocationTargetException ex) {
-                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                        //Constructor contructor=menuControlador.getVentana().getConstructor();
+                        //ControladorCodefacInterface ventana= (ControladorCodefacInterface) contructor.newInstance();
+                        ControladorCodefacInterface ventana= (ControladorCodefacInterface) menuControlador.getInstance();
+                        if(!verificarPantallaCargada(ventana))
+                        {
+                            agregarListenerMenu(ventana,menuControlador.isMaximizado());                    
+                        }
+                        
+                        
                 }
             });
         }
         
 
+    }
+    
+    /**
+     * Verifica si la pantalla ya esta cargada en el escritorio
+     * @return 
+     */
+    private boolean verificarPantallaCargada(ControladorCodefacInterface ventana)
+    {
+         JInternalFrame[] ventanas=getjDesktopPane1().getAllFrames();
+         for (JInternalFrame ventanTemp : ventanas) {
+            if(ventanTemp.equals(ventana))
+            {
+                return true;
+            }
+        }
+         return false;
     }
     
     private String getTituloOriginal(String titulo)

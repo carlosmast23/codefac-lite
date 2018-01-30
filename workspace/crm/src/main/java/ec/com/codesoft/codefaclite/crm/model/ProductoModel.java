@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidor.entity.Impuesto;
 import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.ProductoEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
@@ -26,6 +27,7 @@ import ec.com.codesoft.codefaclite.test.TipoBusquedaEnum;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,7 +65,42 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     {
         try {
             producto = new Producto();
-            producto.setCodigoPersonalizado(getTxtCodigoPersonalizado().getText());
+            setearValoresProducto(producto);            
+            productoService.grabar(producto);
+            DialogoCodefac.mensaje("Datos correctos", "El Producto se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+        } catch (ServicioCodefacException ex) {
+            DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+            throw new ExcepcionCodefacLite("Error al grabar");
+        }
+    }
+
+    @Override
+    public void editar() throws ExcepcionCodefacLite {
+        /*
+        producto.setCodigoPersonalizado(getTxtCodigoPersonalizado().getText());
+        producto.setCodigoEAN(getTxtCodigoEAN().getText());
+        producto.setCodigoUPC(getTxtCodigoUPC().getText());
+        if(getComboTipoProducto().getSelectedItem().equals("Bien"))
+        {
+            producto.setTipoProducto("B");
+        }
+        else
+        {
+            producto.setTipoProducto("S");
+        }
+        
+        producto.setNombre(getTextNombre().getText()); 
+        d = new BigDecimal(getTextValorUnitario().getText());
+        producto.setValorUnitario(d);
+        */
+        setearValoresProducto(producto);
+        productoService.editar(producto);
+        DialogoCodefac.mensaje("Datos correctos", "El producto se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+    }
+    
+    private void setearValoresProducto(Producto producto)
+    {
+        producto.setCodigoPersonalizado(getTxtCodigoPersonalizado().getText());
             producto.setCodigoEAN(getTxtCodigoEAN().getText());
             producto.setCodigoUPC(getTxtCodigoUPC().getText());
             producto.setEstado(ProductoEnumEstado.ACTIVO.getEstado());
@@ -97,34 +134,21 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
                 System.out.println("No se puede hacer una grabacion IRBPNR");
             }
             
-            productoService.grabar(producto);
-            DialogoCodefac.mensaje("Datos correctos", "El Producto se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-        } catch (ServicioCodefacException ex) {
-            DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
-            throw new ExcepcionCodefacLite("Error al grabar");
-        }
-    }
-
-    @Override
-    public void editar() throws ExcepcionCodefacLite {
-        producto.setCodigoPersonalizado(getTxtCodigoPersonalizado().getText());
-        producto.setCodigoEAN(getTxtCodigoEAN().getText());
-        producto.setCodigoUPC(getTxtCodigoUPC().getText());
-        if(getComboTipoProducto().getSelectedItem().equals("Bien"))
-        {
-            producto.setTipoProducto("B");
-        }
-        else
-        {
-            producto.setTipoProducto("S");
-        }
+            /**
+             * Setear valores adicionales
+             */
+            producto.setUbicacion(getTxtUbicacion().getText());
+            producto.setGarantia(((EnumSiNo)getCmbGarantia().getSelectedItem()).getLetra());
+            producto.setCantidadMinima(Integer.parseInt(getTxtCantidadMinima().getText()));
+            producto.setPrecioDistribuidor(new BigDecimal(getTxtPrecioDistribuidor().getText()));
+            producto.setPrecioTarjeta(new BigDecimal(getTxtPrecioTarjeta().getText()));
+            producto.setStockInicial(Long.parseLong(getTxtStockInicial().getText()));
+            producto.setMarca(getTxtMarca().getText());
+            producto.setImagen(getTxtImagenProducto().getText());
+            producto.setCategoria(getCmbCategoriaProducto().getSelectedItem().toString().substring(0,1));
+            producto.setCaracteristicas(getTxtCaracteristica().getText());
+            producto.setObservaciones(getTxtObservaciones().getText());
         
-        producto.setNombre(getTextNombre().getText()); 
-        d = new BigDecimal(getTextValorUnitario().getText());
-        producto.setValorUnitario(d);
-        
-        productoService.editar(producto);
-        DialogoCodefac.mensaje("Datos correctos", "El producto se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
     }
 
     @Override
@@ -177,6 +201,24 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         else{
             getComboTipoProducto().setSelectedItem("Servicio");
         }
+        
+        /**
+         * Cargar datos adicionales
+         */
+        getTxtUbicacion().setText((producto.getUbicacion()!=null)?producto.getUbicacion():"");
+        getCmbGarantia().setSelectedItem(EnumSiNo.getEnumByLetra(producto.getGarantia()));
+        //get().setText((producto.getUbicacion()!=null)?producto.getUbicacion():"");
+        getTxtCantidadMinima().setText((producto.getCantidadMinima()!=null)?producto.getCantidadMinima()+"":"");
+        getTxtPrecioDistribuidor().setText((producto.getPrecioDistribuidor()!=null)?producto.getPrecioDistribuidor()+"":"");
+        getTxtPrecioTarjeta().setText((producto.getPrecioTarjeta()!=null)?producto.getPrecioTarjeta()+"":"");
+        getTxtStockInicial().setText((producto.getStockInicial()!=null)?producto.getStockInicial()+"":"");
+        getTxtMarca().setText((producto.getMarca()!=null)?producto.getMarca()+"":"");
+        getTxtImagenProducto().setText((producto.getImagen()!=null)?producto.getImagen()+"":"");
+        //getCmbCategoriaProducto():
+        getTxtCaracteristica().setText((producto.getCaracteristicas()!=null)?producto.getCaracteristicas()+"":"");
+        getTxtObservaciones().setText((producto.getObservaciones()!=null)?producto.getObservaciones()+"":"");
+        
+        
     }
 
     @Override
@@ -271,6 +313,14 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         for (TipoProductoEnum tipo : tipos) {
             getComboTipoProducto().addItem(tipo);
         }
+        
+        //Agregar combo de garantia
+        getCmbGarantia().removeAllItems();
+        EnumSiNo[] garantias= EnumSiNo.values();
+        for (EnumSiNo garantia : garantias) {
+            getCmbGarantia().addItem(garantia);
+        }
+        
     }
 
     private void listenerComboBox() {
@@ -281,6 +331,8 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
                 seleccionarTipoProducto(tipoPorductoEnum);
             }
         });
+        
+        
     }
     
     

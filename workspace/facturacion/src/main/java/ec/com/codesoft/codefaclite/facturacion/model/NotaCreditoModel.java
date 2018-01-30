@@ -408,7 +408,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         List<NotaCreditoDetalle> detalles = notaCredito.getDetalles();
         for (NotaCreditoDetalle detalle : detalles) {
             Vector<String> fila = new Vector<String>();
-            fila.add(detalle.getProducto().getCodigoPrincipal());
+            fila.add(detalle.getProducto().getCodigoPersonalizado());
             fila.add(detalle.getProducto().getValorUnitario() + "");
             fila.add(detalle.getCantidad() + "");
             fila.add(detalle.getDescripcion());

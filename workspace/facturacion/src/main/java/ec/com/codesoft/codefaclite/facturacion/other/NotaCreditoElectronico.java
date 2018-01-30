@@ -128,7 +128,7 @@ public class NotaCreditoElectronico extends ComprobanteElectronicoAbstract<NotaC
         for (NotaCreditoDetalle detalleNotaCredito : detallesNotaCredito) {
             DetalleNotaCreditoComprobante detalle=new DetalleNotaCreditoComprobante();
 
-            detalle.setCodigoInterno(detalleNotaCredito.getProducto().getCodigoPrincipal());
+            detalle.setCodigoInterno(detalleNotaCredito.getProducto().getCodigoPersonalizado());
             detalle.setCantidad(detalleNotaCredito.getCantidad());
             detalle.setDescripcion(detalleNotaCredito.getDescripcion());
             //Establecer el descuento en el aplicativo

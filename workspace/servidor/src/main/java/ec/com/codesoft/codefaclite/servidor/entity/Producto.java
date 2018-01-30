@@ -46,19 +46,50 @@ public class Producto implements Serializable
     @Column(name = "ESTADO")
     private String estado;
     
-    //@Column(name = "IVA")
+    
+    @Column(name = "UBICACION")
+    private String ubicacion;
+    
+    @Column(name = "GARANTIA")
+    private String garantia;
+    
+    @Column(name = "CANTIDAD_MINIMA")
+    private Integer cantidadMinima;
+    
+    @Column(name = "PRECIO_DISTRIBUIDOR")
+    private BigDecimal precioDistribuidor;
+    
+    @Column(name = "PRECIO_TARJETA")
+    private BigDecimal precioTarjeta;
+    
+    @Column(name = "STOCK_INICIAL")
+    private Long stockInicial;
+    
+    @Column(name = "MARCA")
+    private String marca;
+    
+    @Column(name = "IMAGEN")
+    private String imagen;
+    
+    @Column(name = "CATEGORIA")
+    private String categoria;
+    
+    @Column(name = "CARACTERISTICAS")
+    private String caracteristicas;
+    
+    @Column(name = "OBSERVACIONES")
+    private String observaciones;
+    
     @JoinColumn(name = "IVA_ID")
     @ManyToOne
     private ImpuestoDetalle iva;
     
     @JoinColumn(name = "ICE_ID")
     @ManyToOne
-    //@Column(name = "ICE")
     private ImpuestoDetalle ice;
     
     @JoinColumn(name = "IRBPNR_ID")
     @ManyToOne
-    //@Column(name = "IRBPNR")
     private ImpuestoDetalle irbpnr;
 
     public Producto() {
@@ -161,6 +192,95 @@ public class Producto implements Serializable
         this.codigoUPC = codigoUPC;
     }
 
+    public String getUbicacion() {
+        return ubicacion;
+    }
+
+    public void setUbicacion(String ubicacion) {
+        this.ubicacion = ubicacion;
+    }
+
+    public String getGarantia() {
+        return garantia;
+    }
+
+    public void setGarantia(String garantia) {
+        this.garantia = garantia;
+    }
+
+    public Integer getCantidadMinima() {
+        return cantidadMinima;
+    }
+
+    public void setCantidadMinima(Integer cantidadMinima) {
+        this.cantidadMinima = cantidadMinima;
+    }
+
+    public BigDecimal getPrecioDistribuidor() {
+        return precioDistribuidor;
+    }
+
+    public void setPrecioDistribuidor(BigDecimal precioDistribuidor) {
+        this.precioDistribuidor = precioDistribuidor;
+    }
+
+    public BigDecimal getPrecioTarjeta() {
+        return precioTarjeta;
+    }
+
+    public void setPrecioTarjeta(BigDecimal precioTarjeta) {
+        this.precioTarjeta = precioTarjeta;
+    }
+
+    public Long getStockInicial() {
+        return stockInicial;
+    }
+
+    public void setStockInicial(Long stockInicial) {
+        this.stockInicial = stockInicial;
+    }
+
+    public String getMarca() {
+        return marca;
+    }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
+    }
+
+    public String getCaracteristicas() {
+        return caracteristicas;
+    }
+
+    public void setCaracteristicas(String caracteristicas) {
+        this.caracteristicas = caracteristicas;
+    }
+
+    
     
     
     

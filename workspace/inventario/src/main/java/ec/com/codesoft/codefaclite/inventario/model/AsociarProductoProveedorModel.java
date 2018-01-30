@@ -3,22 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.crm.model;
+package ec.com.codesoft.codefaclite.inventario.model;
 
-import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
-import ec.com.codesoft.codefaclite.crm.data.ClienteData;
-import ec.com.codesoft.codefaclite.crm.data.ProductoData;
-import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import ec.com.codesoft.codefaclite.inventario.busqueda.ProveedorBusquedaDialogo;
+import ec.com.codesoft.codefaclite.inventario.panel.AsociarProductoProveedorPanel;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
-import ec.com.codesoft.codefaclite.servidor.entity.Producto;
-import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
-import ec.com.codesoft.codefaclite.servidor.service.ProductoService;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Map;
 
@@ -26,37 +19,19 @@ import java.util.Map;
  *
  * @author Carlos
  */
-public class ProductoReporte extends ControladorCodefacInterface{
-
-    public ProductoReporte() {        
-        
-    }
-    
-    private void imprimirReporte()
-    {
-        InputStream path = RecursoCodefac.JASPER_CRM.getResourceInputStream("reporteProducto.jrxml");
-        Map parameters = new HashMap();
-        List<ProductoData> data = new ArrayList<ProductoData>();
-        ProductoService service=new ProductoService();
-        List<Producto> productos=service.obtenerTodos();
-        
-        for (Producto producto : productos) {
-            ProductoData productoData=new ProductoData();
-            productoData.setCodigoPrincipal(producto.getCodigoPersonalizado());
-            productoData.setImpuestoIva(producto.getIva().getNombre());
-            productoData.setNombre(producto.getNombre());
-            productoData.setTipoProducto(producto.getTipoProducto());
-            productoData.setValorUnitario(producto.getValorUnitario().toString());
-            data.add(productoData);
-        }
-        setClosable(true);
-        ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Productos");
-        //this.dispose();
-        //this.setVisible(false);
-    }
+public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel{
 
     
-    
+    @Override
+    public void iniciar() throws ExcepcionCodefacLite {
+        agregarListenerBotones();
+    }
+
+    @Override
+    public void nuevo() throws ExcepcionCodefacLite {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     @Override
     public void grabar() throws ExcepcionCodefacLite {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -68,7 +43,7 @@ public class ProductoReporte extends ControladorCodefacInterface{
     }
 
     @Override
-    public void eliminar() {
+    public void eliminar() throws ExcepcionCodefacLite {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -78,7 +53,7 @@ public class ProductoReporte extends ControladorCodefacInterface{
     }
 
     @Override
-    public void actualizar() {
+    public void actualizar() throws ExcepcionCodefacLite {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -108,19 +83,25 @@ public class ProductoReporte extends ControladorCodefacInterface{
     }
 
     @Override
-    public void iniciar() throws ExcepcionCodefacLite{
-        imprimirReporte();
-        throw new ExcepcionCodefacLite("Cerrar Ventan");
-    }
-
-    @Override
-    public void nuevo() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public List<String> getPerfilesPermisos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void agregarListenerBotones() {
+        getBtnBuscarProveedor().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ProveedorBusquedaDialogo buscarBusquedaDialogo = new ProveedorBusquedaDialogo();
+                BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
+                buscarDialogo.setVisible(true);
+                Persona proveedor = (Persona) buscarDialogo.getResultado();
+                if (proveedor != null) {
+                    String identificacion=proveedor.getIdentificacion();
+                    String nombre =proveedor.getRazonSocial();
+                    getTxtProveedor().setText(identificacion+" - "+nombre);
+                }
+            }
+        });
     }
     
 }

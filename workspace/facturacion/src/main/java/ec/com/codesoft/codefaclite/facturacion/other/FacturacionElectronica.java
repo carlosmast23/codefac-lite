@@ -135,7 +135,7 @@ public class FacturacionElectronica extends ComprobanteElectronicoAbstract<Factu
         
         for (FacturaDetalle facturaDetalle : detallesFactura) {
             DetalleFacturaComprobante detalle=new DetalleFacturaComprobante();
-            detalle.setCodigoPrincipal(facturaDetalle.getProducto().getCodigoPrincipal());
+            detalle.setCodigoPrincipal(facturaDetalle.getProducto().getCodigoPersonalizado());
             detalle.setCantidad(facturaDetalle.getCantidad());
             detalle.setDescripcion(facturaDetalle.getDescripcion());
             //Establecer el descuento en el aplicativo

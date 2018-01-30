@@ -5,11 +5,16 @@
  */
 package ec.com.codesoft.codefaclite.inventario.panel;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import javax.swing.JButton;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+
 /**
  *
  * @author Carlos
  */
-public class AsociarProductoProveedorPanel extends javax.swing.JInternalFrame {
+public abstract class AsociarProductoProveedorPanel extends ControladorCodefacInterface {
 
     /**
      * Creates new form AsociarProductoProveedorPanel
@@ -31,16 +36,16 @@ public class AsociarProductoProveedorPanel extends javax.swing.JInternalFrame {
         jTable1 = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jTextField3 = new javax.swing.JTextField();
+        txtProveedor = new javax.swing.JTextField();
+        txtProducto = new javax.swing.JTextField();
+        btnBuscarProveedor = new javax.swing.JButton();
+        btnProductoBuscar = new javax.swing.JButton();
+        txtDescripcion = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        txtCosto = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tblProveedorProducto = new javax.swing.JTable();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -59,15 +64,17 @@ public class AsociarProductoProveedorPanel extends javax.swing.JInternalFrame {
 
         jLabel2.setText("Proveedor:");
 
-        jButton1.setText("jButton1");
+        btnBuscarProveedor.setText("Buscar");
 
-        jButton2.setText("jButton2");
+        btnProductoBuscar.setText("Buscar");
 
         jLabel3.setText("Descripcion:");
 
         jLabel4.setText("Costo:");
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        txtCosto.setText("0");
+
+        tblProveedorProducto.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -78,7 +85,7 @@ public class AsociarProductoProveedorPanel extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(tblProveedorProducto);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -93,7 +100,7 @@ public class AsociarProductoProveedorPanel extends javax.swing.JInternalFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel3)
@@ -101,15 +108,15 @@ public class AsociarProductoProveedorPanel extends javax.swing.JInternalFrame {
                                     .addComponent(jLabel4))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField2)
-                                    .addComponent(jTextField3)
+                                    .addComponent(txtProducto)
+                                    .addComponent(txtDescripcion)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtCosto, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(0, 0, Short.MAX_VALUE)))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1)
-                            .addComponent(jButton2))))
+                            .addComponent(btnBuscarProveedor)
+                            .addComponent(btnProductoBuscar))))
                 .addContainerGap(18, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -117,22 +124,22 @@ public class AsociarProductoProveedorPanel extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(38, 38, 38)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1)
+                    .addComponent(txtProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBuscarProveedor)
                     .addComponent(jLabel2))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2)
+                    .addComponent(txtProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnProductoBuscar)
                     .addComponent(jLabel1))
                 .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtCosto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(23, Short.MAX_VALUE))
@@ -143,8 +150,8 @@ public class AsociarProductoProveedorPanel extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton btnBuscarProveedor;
+    private javax.swing.JButton btnProductoBuscar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -152,10 +159,69 @@ public class AsociarProductoProveedorPanel extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTable tblProveedorProducto;
+    private javax.swing.JTextField txtCosto;
+    private javax.swing.JTextField txtDescripcion;
+    private javax.swing.JTextField txtProducto;
+    private javax.swing.JTextField txtProveedor;
     // End of variables declaration//GEN-END:variables
+
+    public JButton getBtnBuscarProveedor() {
+        return btnBuscarProveedor;
+    }
+
+    public void setBtnBuscarProveedor(JButton btnBuscarProveedor) {
+        this.btnBuscarProveedor = btnBuscarProveedor;
+    }
+
+    public JButton getBtnProductoBuscar() {
+        return btnProductoBuscar;
+    }
+
+    public void setBtnProductoBuscar(JButton btnProductoBuscar) {
+        this.btnProductoBuscar = btnProductoBuscar;
+    }
+
+    public JTable getTblProveedorProducto() {
+        return tblProveedorProducto;
+    }
+
+    public void setTblProveedorProducto(JTable tblProveedorProducto) {
+        this.tblProveedorProducto = tblProveedorProducto;
+    }
+
+    public JTextField getTxtCosto() {
+        return txtCosto;
+    }
+
+    public void setTxtCosto(JTextField txtCosto) {
+        this.txtCosto = txtCosto;
+    }
+
+    public JTextField getTxtDescripcion() {
+        return txtDescripcion;
+    }
+
+    public void setTxtDescripcion(JTextField txtDescripcion) {
+        this.txtDescripcion = txtDescripcion;
+    }
+
+    public JTextField getTxtProducto() {
+        return txtProducto;
+    }
+
+    public void setTxtProducto(JTextField txtProducto) {
+        this.txtProducto = txtProducto;
+    }
+
+    public JTextField getTxtProveedor() {
+        return txtProveedor;
+    }
+
+    public void setTxtProveedor(JTextField txtProveedor) {
+        this.txtProveedor = txtProveedor;
+    }
+    
+    
+
 }

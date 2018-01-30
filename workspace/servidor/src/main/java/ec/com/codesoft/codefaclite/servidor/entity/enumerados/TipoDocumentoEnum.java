@@ -18,6 +18,10 @@ public enum TipoDocumentoEnum {
      * Tipo de compra que va a ingresar productos al inventario
      */
     COMPRA_INVENTARIO(ModuloEnum.COMPRAS,"Compra Inventario"),
+        /**
+     * Tipo de compra que va a ingresar productos al inventario
+     */
+    COMPRA_SERVICIOS(ModuloEnum.COMPRAS,"Compra Servicios"),
     /**
      * Tipo de compra que se registra como gastos de la empresa
      */

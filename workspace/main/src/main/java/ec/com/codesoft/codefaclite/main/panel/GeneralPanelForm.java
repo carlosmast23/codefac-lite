@@ -81,6 +81,8 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuItemDisenador = new javax.swing.JMenuItem();
         menuCompras = new javax.swing.JMenu();
         jMenuCompra = new javax.swing.JMenuItem();
+        menuInventario = new javax.swing.JMenu();
+        jMenuItemAsociarProducto = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuCliente = new javax.swing.JMenuItem();
         jMenuItemReporteCliente = new javax.swing.JMenuItem();
@@ -286,6 +288,18 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
         jMenuBar1.add(menuCompras);
 
+        menuInventario.setText("Inventario");
+
+        jMenuItemAsociarProducto.setText("Asociar producto");
+        jMenuItemAsociarProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemAsociarProductoActionPerformed(evt);
+            }
+        });
+        menuInventario.add(jMenuItemAsociarProducto);
+
+        jMenuBar1.add(menuInventario);
+
         jMenu2.setText("Clientes");
 
         jMenuCliente.setText("Gestionar");
@@ -421,6 +435,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItemActualizarLicenciaActionPerformed
 
+    private void jMenuItemAsociarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAsociarProductoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItemAsociarProductoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -491,6 +509,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JMenuItem jMenuFactura;
     private javax.swing.JMenuItem jMenuItemAcerca;
     private javax.swing.JMenuItem jMenuItemActualizarLicencia;
+    private javax.swing.JMenuItem jMenuItemAsociarProducto;
     private javax.swing.JMenuItem jMenuItemContenido;
     private javax.swing.JMenuItem jMenuItemDisenador;
     private javax.swing.JMenuItem jMenuItemFacturaReporte;
@@ -514,6 +533,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JMenu menuConfiguracion;
     private javax.swing.JMenu menuFacturacion;
     private javax.swing.JMenu menuInicio;
+    private javax.swing.JMenu menuInventario;
     // End of variables declaration//GEN-END:variables
 
     public JMenuItem getjMenuItem1() {
@@ -803,6 +823,15 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     public void setjMenuCompra(JMenuItem jMenuCompra) {
         this.jMenuCompra = jMenuCompra;
     }
+
+    public JMenuItem getjMenuItemAsociarProducto() {
+        return jMenuItemAsociarProducto;
+    }
+
+    public void setjMenuItemAsociarProducto(JMenuItem jMenuItemAsociarProducto) {
+        this.jMenuItemAsociarProducto = jMenuItemAsociarProducto;
+    }
+    
     
     
     

@@ -68,7 +68,15 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         jLabel13 = new javax.swing.JLabel();
         cmbDocumento = new javax.swing.JComboBox<>();
 
+        setClosable(true);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
+        setTitle("Compra");
+
         jLabel1.setText("Proveedor:");
+
+        txtProveedor.setEditable(false);
 
         btnProveedorBuscar.setText("Buscar");
 

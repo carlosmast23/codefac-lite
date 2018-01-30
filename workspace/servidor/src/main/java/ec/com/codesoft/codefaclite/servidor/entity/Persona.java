@@ -59,6 +59,10 @@ public class Persona implements Serializable {
     private String correoElectronico;
     @Column(name = "ESTADO")
     private String estado;    
+    
+    /**
+     *  Variable para identificar el tipo de la persona, si es proveedor , cliente, o ambos
+     */
     @Column(name = "TIPO_OPERADOR")
     private String tipo;
 

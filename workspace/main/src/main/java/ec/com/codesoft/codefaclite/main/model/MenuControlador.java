@@ -7,6 +7,9 @@ package ec.com.codesoft.codefaclite.main.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -20,11 +23,42 @@ public class MenuControlador
    private JMenuItem menuItem;
    private Class ventana;
    private boolean maximizado;
+   private Object instance;
 
     public MenuControlador(JMenuItem menuItem, Class ventana) {
         this.menuItem = menuItem;
         this.ventana = ventana;
         this.maximizado=true;
+        
+    }
+    
+    /**
+     * Devuelve una instancia segun la clase grabada
+     * @return 
+     */
+    public Object getInstance()
+    {
+       try {
+           
+           if(instance==null)
+               instance=this.ventana.getConstructor().newInstance();
+           
+           return instance;
+           
+       } catch (NoSuchMethodException ex) {
+           Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
+       } catch (SecurityException ex) {
+           Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
+       } catch (InstantiationException ex) {
+           Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
+       } catch (IllegalAccessException ex) {
+           Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
+       } catch (IllegalArgumentException ex) {
+           Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
+       } catch (InvocationTargetException ex) {
+           Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
+       }
+       return null;
     }
 
     public MenuControlador(JMenuItem menuItem, Class ventana, boolean maximizado) {
