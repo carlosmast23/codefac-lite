@@ -9,6 +9,7 @@
       <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>
       <property name="javax.persistence.jdbc.password" value="Code17bwbtj"/>
     </properties>
+    <class>ec.com.codesoft.codefaclite.servidor.entity.Bodega</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
   </persistence-unit>
 </persistence>
