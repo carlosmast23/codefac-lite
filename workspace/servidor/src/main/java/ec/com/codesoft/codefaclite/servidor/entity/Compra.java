@@ -27,7 +27,7 @@ import javax.persistence.Table;
  * @author Carlos
  */
 @Entity
-@Table(name = "COMPRA")
+@Table(name = "ROOT.COMPRA")
 public class Compra {    
     public static final String ESTADO_FACTURADO="F";
     public static final String ESTADO_ANULADO="A";
@@ -104,7 +104,7 @@ public class Compra {
     @ManyToOne    
     private Persona proveedor;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "compra")
     private List<CompraDetalle> detalles;
     
 

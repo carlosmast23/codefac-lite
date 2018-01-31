@@ -16,7 +16,7 @@ import javax.persistence.Table;
  * @author Carlos
  */
 @Entity
-@Table(name = "USUARIO")
+@Table(name = "ROOT.USUARIO")
 public class Usuario implements Serializable{
     @Id
     @Column (name = "NICK")

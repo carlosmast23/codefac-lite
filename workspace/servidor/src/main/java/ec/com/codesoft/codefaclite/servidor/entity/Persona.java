@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Carlos
  */
 @Entity
-@Table(name = "CLIENTE")
+@Table(name = "ROOT.CLIENTE")
 @XmlRootElement
 public class Persona implements Serializable {
 

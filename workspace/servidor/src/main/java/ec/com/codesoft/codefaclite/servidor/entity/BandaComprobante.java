@@ -22,7 +22,7 @@ import javax.persistence.Table;
  * @author Carlos
  */
 @Entity
-@Table(name = "BANDA_COMPROBANTE")
+@Table(name = "ROOT.BANDA_COMPROBANTE")
 public class BandaComprobante {
     
     @Id

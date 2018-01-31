@@ -20,7 +20,7 @@ import javax.persistence.Table;
  * @author Carlos
  */
 @Entity
-@Table(name = "COMPRA_DETALLE")
+@Table(name = "ROOT.COMPRA_DETALLE")
 public class CompraDetalle {
     @Id
     @Column(name = "ID")
@@ -29,7 +29,7 @@ public class CompraDetalle {
     //@Column(name = "PRODUCTO_ID")
     //private Long productoId;
     @Column(name = "CANTIDAD")
-    private BigDecimal cantidad;
+    private Integer cantidad;
     @Column(name = "PRECIO_UNITARIO")
     private BigDecimal precioUnitario;
     @Column(name = "DESCUENTO")
@@ -60,7 +60,7 @@ public class CompraDetalle {
 
 
 
-    public BigDecimal getCantidad() {
+    public Integer getCantidad() {
         return cantidad;
     }
 
@@ -82,7 +82,7 @@ public class CompraDetalle {
 
 
 
-    public void setCantidad(BigDecimal cantidad) {
+    public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
     }
 
@@ -138,6 +138,32 @@ public class CompraDetalle {
         this.productoProveedor = productoProveedor;
     }
     
+    /**
+     * Metodo personalizados
+     */
+    
+    
+    /**
+     * Metodo que devuelve el subtotal de la cantidad por el precio unitario y menos el descuento
+     * @return 
+     */
+    public BigDecimal getSubtotal()
+    {
+        return new BigDecimal(cantidad+"").multiply(precioUnitario).subtract(descuento);
+    }
+    /**
+     * Calcula el valor del iva 
+     * @return 
+     */
+    public BigDecimal calcularValorIva()
+    {
+        return getSubtotal().multiply(new BigDecimal("0.12"));
+    }
+    
+    public BigDecimal calcularTotal()
+    {
+        return getSubtotal().multiply(new BigDecimal("1.12"));
+    }
     
     /**
      * Metodos adicionales

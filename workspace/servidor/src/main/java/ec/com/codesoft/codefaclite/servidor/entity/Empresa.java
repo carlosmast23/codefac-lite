@@ -20,7 +20,7 @@ import javax.persistence.Table;
  */
 
 @Entity
-@Table(name = "EMPRESA")
+@Table(name = "ROOT.EMPRESA")
 public class Empresa implements Serializable{
     
     public static final String NO_LLEVA_CONTABILIDAD="NO";

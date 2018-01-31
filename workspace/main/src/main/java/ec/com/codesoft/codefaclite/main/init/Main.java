@@ -469,7 +469,7 @@ public class Main {
         ventanas.add(new MenuControlador(panel.getjMenuItemReporteCliente(),ClienteReporte.class,true));
         ventanas.add(new MenuControlador(panel.getjMenuItemReporteProducto(),ProductoReporte.class,true));
         ventanas.add(new MenuControlador(panel.getjMenuItemDisenador(),FacturaDisenioModel.class,true));
-        ventanas.add(new MenuControlador(panel.getjMenuCompra(),CompraModel.class,true));
+        ventanas.add(new MenuControlador(panel.getjMenuCompra(),CompraModel.class,false));
         ventanas.add(new MenuControlador(panel.getjMenuItemAsociarProducto(),AsociarProductoProveedorModel.class,true));
         return ventanas;
     

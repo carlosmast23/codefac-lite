@@ -10,6 +10,8 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.crm.busqueda.ProductoProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.crm.busqueda.ProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.crm.panel.CompraPanel;
+import ec.com.codesoft.codefaclite.servidor.entity.Compra;
+import ec.com.codesoft.codefaclite.servidor.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.DocumentoEnum;
@@ -18,8 +20,11 @@ import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoFacturacionEnumEstado;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.text.Document;
 
 /**
@@ -28,10 +33,18 @@ import javax.swing.text.Document;
  */
 public class CompraModel extends CompraPanel{
 
+    /**
+     * Referencia donde se va a almacenar la compra gestionado
+     */
+    private Compra compra;
+    private ProductoProveedor productoProveedor;
+    
+    
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         iniciarCombos();
         agregarListenerBotones();
+        crearVariables();
     }
 
     @Override
@@ -42,6 +55,15 @@ public class CompraModel extends CompraPanel{
     @Override
     public void grabar() throws ExcepcionCodefacLite {
         
+    }
+    
+    private void setearValores()
+    {
+        compra.setClaveAcceso("");
+        DocumentoEnum documentoEnum= (DocumentoEnum) getCmbDocumento().getSelectedItem();
+        compra.setCodigoDocumento(documentoEnum.getCodigo());
+        compra.setDireccion("");
+        //compra.set
     }
 
     @Override
@@ -132,7 +154,7 @@ public class CompraModel extends CompraPanel{
                 ProductoProveedorBusquedaDialogo buscarBusquedaDialogo = new ProductoProveedorBusquedaDialogo();
                 BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
                 buscarDialogo.setVisible(true);
-                ProductoProveedor productoProveedor = (ProductoProveedor) buscarDialogo.getResultado();
+                productoProveedor = (ProductoProveedor) buscarDialogo.getResultado();
                 if(productoProveedor!=null)
                 {
                     getTxtProductoItem().setText(productoProveedor.getProducto().getNombre());
@@ -145,9 +167,81 @@ public class CompraModel extends CompraPanel{
         getBtnAgregarItem().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                CompraDetalle compraDetalle=new CompraDetalle();
+                compraDetalle.setCantidad(Integer.parseInt(getTxtCantidadItem().getText()));
+                compraDetalle.setPrecioUnitario(new BigDecimal(getTxtPrecionUnitarioItem().getText()));
+                compraDetalle.setCompra(compra);
+                compraDetalle.setDescripcion(getTxtDescripcionItem().getText());
+                compraDetalle.setDescuento(BigDecimal.ZERO);
+                compraDetalle.setIva(compraDetalle.calcularValorIva());
+                compraDetalle.setProductoProveedor(productoProveedor);
+                compraDetalle.setTotal(compraDetalle.calcularTotal());
+                compraDetalle.setValorIce(BigDecimal.ZERO);
+                compra.addDetalle(compraDetalle);
                 
+                /**
+                 * Cargar los otros valores como el descuento
+                 */
+                compra.setDescuentoImpuestos(new BigDecimal(getTxtDescuentoImpuestos().getText()));
+                compra.setDescuentoSinImpuestos(new BigDecimal(getTxtDescuentoSinImpuestos().getText()));
+                actualizarTotales();
+                mostrarDatosTabla();
+                mostrarDatosTotales();
             }
         });
+    }
+    
+    private void actualizarTotales()
+    {
+        List<CompraDetalle> detalles= compra.getDetalles();
+        
+        //Encerado Valores       
+        compra.setIva(BigDecimal.ZERO);
+        compra.setSubtotalImpuestos(BigDecimal.ZERO);
+        compra.setSubtotalSinImpuestos(BigDecimal.ZERO);
+        compra.setTotal(BigDecimal.ZERO);
+                
+        for (CompraDetalle detalle : detalles) {
+             compra.setIva(compra.getIva().add(detalle.getIva()));
+             compra.setSubtotalImpuestos(compra.getSubtotalImpuestos());
+             compra.setSubtotalSinImpuestos(compra.getSubtotalSinImpuestos());
+             compra.setTotal(compra.getTotal().add(detalle.getTotal()));
+        }
+    }
+    
+    /**
+     * Actualiza los datos de la tabla segun los datos grabados en los detalles de la tabla
+     * de compras
+     */
+    private void mostrarDatosTabla()
+    {
+        String[] titulo={"Cantidad","Descripcion","Valor unitario","Valor Total"};
+        DefaultTableModel modeloTablaCompra=new DefaultTableModel(titulo,0);
+        
+        List<CompraDetalle> detalles= compra.getDetalles();
+        for (CompraDetalle detalle : detalles) {
+            Vector<String> fila=new Vector<String>();
+            fila.add(detalle.getCantidad()+"");
+            fila.add(detalle.getDescripcion()+"");
+            fila.add(detalle.getPrecioUnitario()+"");
+            fila.add(detalle.getSubtotal()+"");
+            modeloTablaCompra.addRow(fila);
+        }
+        
+        getTblDetalleProductos().setModel(modeloTablaCompra);
+        
+    }
+    
+    private void mostrarDatosTotales()
+    {
+        getLblIva().setText(compra.getIva()+"");
+        getLblSubtotalImpuesto().setText(compra.getSubtotalImpuestos()+"");
+        getLblSubtotalSinImpuesto().setText(compra.getSubtotalSinImpuestos()+"");
+        getLblTotal().setText(compra.getTotal()+"");        
+    }
+
+    private void crearVariables() {
+        this.compra=new Compra();        
     }
     
 }
