@@ -7,9 +7,11 @@ package ec.com.codesoft.codefaclite.crm.model;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.crm.busqueda.ProductoProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.crm.busqueda.ProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.crm.panel.CompraPanel;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
+import ec.com.codesoft.codefaclite.servidor.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.ModuloEnum;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoDocumentoEnum;
@@ -121,6 +123,29 @@ public class CompraModel extends CompraPanel{
                     String nombre =proveedor.getRazonSocial();
                     getTxtProveedor().setText(identificacion+" - "+nombre);
                 }
+            }
+        });
+        
+        getBtnBuscarProductoProveedor().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ProductoProveedorBusquedaDialogo buscarBusquedaDialogo = new ProductoProveedorBusquedaDialogo();
+                BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
+                buscarDialogo.setVisible(true);
+                ProductoProveedor productoProveedor = (ProductoProveedor) buscarDialogo.getResultado();
+                if(productoProveedor!=null)
+                {
+                    getTxtProductoItem().setText(productoProveedor.getProducto().getNombre());
+                    getTxtDescripcionItem().setText(productoProveedor.getProducto().getNombre());
+                    getTxtPrecionUnitarioItem().setText(productoProveedor.getCosto()+"");
+                }
+            }
+        });
+        
+        getBtnAgregarItem().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
             }
         });
     }

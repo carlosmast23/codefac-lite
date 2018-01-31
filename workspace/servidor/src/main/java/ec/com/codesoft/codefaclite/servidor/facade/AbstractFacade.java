@@ -139,7 +139,7 @@ public abstract class AbstractFacade<T>
             String where =buildWhere(parametros, objectName);
             queryString += " where " + where;
         }
-        //System.info("query interno: " + queryString);
+        System.out.println("query:" + queryString);
         return queryString;
         /*
 		 * SelectQuery select = new SelectQuery(); Table table = new

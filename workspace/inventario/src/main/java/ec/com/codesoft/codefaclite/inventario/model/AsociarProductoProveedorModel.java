@@ -5,8 +5,10 @@
  */
 package ec.com.codesoft.codefaclite.inventario.model;
 
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.inventario.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.inventario.busqueda.ProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.inventario.panel.AsociarProductoProveedorPanel;
@@ -14,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
 import ec.com.codesoft.codefaclite.servidor.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoProveedorService;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,6 +25,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -33,12 +39,17 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
      * Entidad mediante la cual se va a referenciar al objeto en pantalla
      */
     private ProductoProveedor productoProveedor;
+    private Producto producto;
+    private Persona proveedor;
+    private ProductoProveedorService servicioProductoProveedor;
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         iniciarValores();
         agregarListenerBotones();
         agregarListenerCombo();
+        
+        this.servicioProductoProveedor=new ProductoProveedorService();
     }
 
     @Override
@@ -48,7 +59,15 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
-        
+        try {
+            setearValores();
+            servicioProductoProveedor.grabar(productoProveedor);
+            DialogoCodefac.mensaje("Correcto","El dato se guardo correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+        } catch (ServicioCodefacException ex) {            
+            //Logger.getLogger(AsociarProductoProveedorModel.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje("Error","Error al grabar",DialogoCodefac.MENSAJE_INCORRECTO);
+            throw new ExcepcionCodefacLite("error grabar");
+        }
     }
     
     private void setearValores()
@@ -56,6 +75,10 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
         productoProveedor.setDescripcion(getTxtDescripcion().getText());
         productoProveedor.setCosto(new BigDecimal(getTxtCosto().getText()));
         productoProveedor.setEstado("a");
+        EnumSiNo enumSiNo= (EnumSiNo) getCmbIva().getSelectedItem();
+        productoProveedor.setConIva(enumSiNo.getLetra());
+        productoProveedor.setProducto(producto);
+        productoProveedor.setProveedor(proveedor);        
         //productoProveedor.setProducto(getPr);
     }
 
@@ -101,7 +124,14 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
+        permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
+        return permisos;
     }
 
     @Override
@@ -116,7 +146,7 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
                 ProveedorBusquedaDialogo buscarBusquedaDialogo = new ProveedorBusquedaDialogo();
                 BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
                 buscarDialogo.setVisible(true);
-                Persona proveedor = (Persona) buscarDialogo.getResultado();
+                proveedor = (Persona) buscarDialogo.getResultado();
                 if (proveedor != null) {
                     String identificacion=proveedor.getIdentificacion();
                     String nombre =proveedor.getRazonSocial();
@@ -132,7 +162,7 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
                 ProductoBusquedaDialogo productoDialogo = new ProductoBusquedaDialogo();
                 BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(productoDialogo);
                 buscarDialogo.setVisible(true);
-                Producto producto = (Producto) buscarDialogo.getResultado();
+                producto = (Producto) buscarDialogo.getResultado();
                 if (producto != null) {
                     String nombre=producto.getNombre();
                     getTxtProducto().setText(nombre);
@@ -151,11 +181,12 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
         
         ProductoProveedorService servicio=new ProductoProveedorService();
         List<ProductoProveedor> lista= servicio.obtenerPorMap(parametros);
-        List<String> fila=new ArrayList<String>();
+        
         for (ProductoProveedor productoProveedor : lista) {
+            Vector<String> fila=new Vector<String>();
             fila.add(productoProveedor.getProducto().getNombre());
             fila.add(productoProveedor.getCosto().toString());
-            modeloTabla.addColumn(fila);
+            modeloTabla.addRow(fila);
         }
         getTblProveedorProducto().setModel(modeloTabla);
     }

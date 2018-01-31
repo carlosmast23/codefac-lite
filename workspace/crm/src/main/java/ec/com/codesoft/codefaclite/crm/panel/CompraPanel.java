@@ -53,13 +53,16 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         jPanel2 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         txtProductoItem = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
+        btnBuscarProductoProveedor = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         txtDescripcionItem = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         txtCantidadItem = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         txtPrecionUnitarioItem = new javax.swing.JTextField();
+        btnAgregarItem = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jTextField10 = new javax.swing.JTextField();
@@ -98,7 +101,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
 
         jLabel7.setText("Producto:");
 
-        jButton3.setText("buscar");
+        btnBuscarProductoProveedor.setText("buscar");
 
         jLabel8.setText("Descripcion:");
 
@@ -109,6 +112,12 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         jLabel10.setText("P.Unitario:");
 
         txtPrecionUnitarioItem.setText("0");
+
+        btnAgregarItem.setText("Agregar");
+
+        jButton2.setText("Editar");
+
+        jButton3.setText("Eliminar");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -127,14 +136,20 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
                             .addComponent(txtProductoItem, javax.swing.GroupLayout.DEFAULT_SIZE, 347, Short.MAX_VALUE)
                             .addComponent(txtDescripcionItem))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton3))
+                        .addComponent(btnBuscarProductoProveedor))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(txtCantidadItem, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(55, 55, 55)
                         .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtPrecionUnitarioItem, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(181, Short.MAX_VALUE))
+                .addGap(44, 44, 44)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAgregarItem)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(66, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -143,18 +158,27 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(txtProductoItem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(txtDescripcionItem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(txtCantidadItem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10)
-                    .addComponent(txtPrecionUnitarioItem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                    .addComponent(btnBuscarProductoProveedor)
+                    .addComponent(btnAgregarItem))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(txtDescripcionItem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel9)
+                            .addComponent(txtCantidadItem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel10)
+                            .addComponent(txtPrecionUnitarioItem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap())
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(7, 7, 7)
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Totales"));
@@ -286,7 +310,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(txtAutorizacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -300,11 +324,14 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregarItem;
+    private javax.swing.JButton btnBuscarProductoProveedor;
     private javax.swing.JButton btnOrdenCompraBuscar;
     private javax.swing.JButton btnProveedorBuscar;
     private javax.swing.JComboBox<DocumentoEnum> cmbDocumento;
     private com.toedter.calendar.JDateChooser cmbFechaCompra;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -374,6 +401,44 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     public void setTxtProveedor(JTextField txtProveedor) {
         this.txtProveedor = txtProveedor;
     }
+
+    public JButton getBtnBuscarProductoProveedor() {
+        return btnBuscarProductoProveedor;
+    }
+
+    public void setBtnBuscarProductoProveedor(JButton btnBuscarProductoProveedor) {
+        this.btnBuscarProductoProveedor = btnBuscarProductoProveedor;
+    }
+
+    public JTextField getTxtProductoItem() {
+        return txtProductoItem;
+    }
+
+    public JTextField getTxtDescripcionItem() {
+        return txtDescripcionItem;
+    }
+
+    public void setTxtDescripcionItem(JTextField txtDescripcionItem) {
+        this.txtDescripcionItem = txtDescripcionItem;
+    }
+
+    public JTextField getTxtPrecionUnitarioItem() {
+        return txtPrecionUnitarioItem;
+    }
+
+    public void setTxtPrecionUnitarioItem(JTextField txtPrecionUnitarioItem) {
+        this.txtPrecionUnitarioItem = txtPrecionUnitarioItem;
+    }
+
+    public JButton getBtnAgregarItem() {
+        return btnAgregarItem;
+    }
+
+    public void setBtnAgregarItem(JButton btnAgregarItem) {
+        this.btnAgregarItem = btnAgregarItem;
+    }
+    
+    
     
     
 

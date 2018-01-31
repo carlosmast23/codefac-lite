@@ -12,7 +12,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.ProductoProveedorFacade;
  *
  * @author Carlos
  */
-public class ProductoProveedorService extends ServiceAbstract<ProductoProveedor, ProductoProveedorFacade>{
+public class ProductoProveedorService extends ServiceAbstract<ProductoProveedor,ProductoProveedorFacade>{
     
     public ProductoProveedorService() {
         super(ProductoProveedorFacade.class);
