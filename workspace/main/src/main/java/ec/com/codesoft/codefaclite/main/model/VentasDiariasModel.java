@@ -82,21 +82,6 @@ public class VentasDiariasModel extends WidgetVentasDiarias
                 setearValoresProducto();
             }
         });
-
-        getBtnCrearProducto().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ObserverUpdateInterface observer = new ObserverUpdateInterface<Producto>() {
-                    @Override
-                    public void updateInterface(Producto entity) {
-                        if (entity != null) {
-                            productoSeleccionado = entity;
-                            setearValoresProducto();
-                        }
-                    }
-                };
-            }
-        });
         
         getBtnAgregarProducto().addActionListener(new ActionListener() {
             @Override
@@ -162,13 +147,14 @@ public class VentasDiariasModel extends WidgetVentasDiarias
                 definirFechaFacturacion();
                 FacturacionModel facturacionModel = new FacturacionModel();
                 
-                    panelPadre.crearVentanaCodefac(facturacionModel, presionando);
-                    //facturacionModel.setFactura(factura);
+                    panelPadre.crearVentanaCodefac(facturacionModel, true);
+                    try {
+                        facturacionModel.setFactura(factura);
+                    } catch (ExcepcionCodefacLite ex) {
+                        Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     facturacionModel.revalidate();
                     facturacionModel.repaint();
-               
-                
-    
             }
         });
     }            
