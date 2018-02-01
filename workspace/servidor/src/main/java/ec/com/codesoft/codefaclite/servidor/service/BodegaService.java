@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.entity.Bodega;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.BodegaEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.BodegaFacade;
@@ -36,6 +37,15 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> {
             Logger.getLogger(BodegaService.class.getName()).log(Level.SEVERE, null, ex);
             throw new ServicioCodefacException("Error con la base de datos");
         }
+    }
+
+    public void editar(Bodega b) {
+        bodegaFacade.edit(b);
+    }
+
+    public void eliminar(Bodega b) {
+        b.setEstado(BodegaEnumEstado.ELIMINADO.getEstado());
+        bodegaFacade.edit(b);
     }
 
 }

@@ -38,6 +38,8 @@ public class Bodega implements Serializable {
     private String encargado;
     @Column(name = "IMAGEN_PATH")
     private String imagenPath;
+    @Column(name = "ESTADO")
+    private String estado;
 
     public Long getIdBodega() {
         return idBodega;
@@ -78,8 +80,14 @@ public class Bodega implements Serializable {
     public void setImagenPath(String imagenPath) {
         this.imagenPath = imagenPath;
     }
-    
-    
-    
 
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+    
+    
 }

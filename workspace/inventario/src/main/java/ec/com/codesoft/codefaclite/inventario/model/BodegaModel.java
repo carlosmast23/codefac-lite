@@ -4,26 +4,16 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.inventario.busqueda.BodegaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.inventario.panel.BodegaPanel;
 import ec.com.codesoft.codefaclite.servidor.entity.Bodega;
-<<<<<<< HEAD
 import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.service.BodegaService;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-=======
->>>>>>> 474e807c474d32012b9f9bd1e0c30b47b5b4f1ff
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-/**
- *
- * @author CodesoftDesarrollo
- */
-<<<<<<< HEAD
 public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bodega> {
 
     private Bodega bodega;
@@ -32,16 +22,6 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
     public BodegaModel() {
         bodegaService = new BodegaService();
     }
-=======
-public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bodega>{
-
-    @Override
-    public Bodega getResult() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
->>>>>>> 474e807c474d32012b9f9bd1e0c30b47b5b4f1ff
-    
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
@@ -56,16 +36,11 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
         }
     }
 
-  /*@Override
-    public Bodega getResult() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-*/
     private void setearValoresBodega(Bodega bodega) {
         bodega.setNombre(getTxtNombre().getText());
         bodega.setDescripcion(getTxtDescripcion().getText());
         bodega.setEncargado(getTxtEncargado().getText());
-
+        bodega.setImagenPath(getTxtFoto().getText());
     }
 
     @Override
@@ -80,12 +55,21 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
 
     @Override
     public void editar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        setearValoresBodega(bodega);
+        bodegaService.editar(bodega);
+        DialogoCodefac.mensaje("Datos correctos", "La bodega se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
     }
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (estadoFormulario.equals(GeneralPanelInterface.ESTADO_EDITAR)) {
+            Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea eliminar la bodega?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            if (!respuesta) {
+                throw new ExcepcionCodefacLite("Cancelacion bodega");
+            }
+            bodegaService.eliminar(bodega);
+            DialogoCodefac.mensaje("Datos correctos", "La bodega se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+        }
     }
 
     @Override
@@ -100,7 +84,18 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        BodegaBusquedaDialogo bodegaBusquedaDialogo = new BodegaBusquedaDialogo();
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(bodegaBusquedaDialogo);
+        buscarDialogoModel.setVisible(true);
+        bodega = (Bodega) buscarDialogoModel.getResultado();
+
+        if (bodega == null) {
+            throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar bodega vacio");
+        }
+
+        getTxtNombre().setText(bodega.getNombre());
+        getTxtDescripcion().setText(bodega.getDescripcion());
+        getTxtEncargado().setText(bodega.getEncargado());
     }
 
     @Override
@@ -119,17 +114,24 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
     }
 
     @Override
-    public Map<Integer, Boolean> permisosFormulario() {
+    public Bodega getResult() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Map<Integer, Boolean> permisosFormulario() {
+        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
+        permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
+        return permisos;
     }
 
     @Override
     public List<String> getPerfilesPermisos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Bodega getResult() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
