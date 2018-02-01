@@ -13,28 +13,32 @@ import java.util.List;
  * @author Carlos
  */
 public enum TipoDocumentoEnum {
-    VENTA(ModuloEnum.VENTAS,"Ventas"),
+    
+    VENTA(ModuloEnum.VENTAS,"VET","Ventas"),
     /**
      * Tipo de compra que va a ingresar productos al inventario
      */
-    COMPRA_INVENTARIO(ModuloEnum.COMPRAS,"Compra Inventario"),
+    COMPRA_INVENTARIO(ModuloEnum.COMPRAS,"COI","Compra Inventario"),
         /**
      * Tipo de compra que va a ingresar productos al inventario
      */
-    COMPRA_SERVICIOS(ModuloEnum.COMPRAS,"Compra Servicios"),
+    COMPRA_SERVICIOS(ModuloEnum.COMPRAS,"COS","Compra Servicios"),
     /**
      * Tipo de compra que se registra como gastos de la empresa
      */
-    COMPRA_GASTOS(ModuloEnum.COMPRAS,"Compra Gastos"),    
+    COMPRA_GASTOS(ModuloEnum.COMPRAS,"COG","Compra Gastos"),    
     /**
      * Retenciones del iva o del inventario
      */
-    RETENCIONES(ModuloEnum.RETENCIONES,"Retenciones"),;
+    RETENCIONES(ModuloEnum.RETENCIONES,"RET","Retenciones"),;
     
-    private TipoDocumentoEnum(ModuloEnum moduloEnum,String nombre) {
+    private TipoDocumentoEnum(ModuloEnum moduloEnum,String codigo,String nombre) {
         this.moduloEnum = moduloEnum;
+        this.codigo=codigo;
         this.nombre=nombre;        
     }
+    
+    private String codigo;
     
     private String nombre;
     
@@ -43,6 +47,28 @@ public enum TipoDocumentoEnum {
     public String getNombre() {
         return nombre;
     }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    /**
+     * Obtiene el objeto por el codigo del tipo de documento
+     * @param codigo
+     * @return 
+     */
+    public  static TipoDocumentoEnum obtenerTipoDocumentoPorCodigo(String codigo)
+    {
+        TipoDocumentoEnum[] tipoDocumentos=TipoDocumentoEnum.values();
+        for (TipoDocumentoEnum tipo : tipoDocumentos) {
+            if(tipo.getCodigo().equals(codigo))
+            {
+                return tipo;
+            }
+        }
+        return null;
+    }
+    
     
     public  static List<TipoDocumentoEnum> obtenerTipoDocumentoPorModulo(ModuloEnum modulo)
     {

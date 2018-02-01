@@ -8,8 +8,10 @@ package ec.com.codesoft.codefaclite.inventario.busqueda;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.servidor.entity.Compra;
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.ProductoEnumEstado;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoService;
 import java.util.ArrayList;
@@ -20,46 +22,49 @@ import java.util.Vector;
  *
  * @author PC
  */
-public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto>
+public class CompraBusquedaDialogo implements InterfaceModelFind<Compra>
 {
 
     @Override
     public Vector<ColumnaDialogo> getColumnas() 
     {
         Vector<ColumnaDialogo> titulo = new Vector<>();
-        titulo.add(new ColumnaDialogo("Codigo", 0.2d));
-        titulo.add(new ColumnaDialogo("Nombre", 0.3d));
-        titulo.add(new ColumnaDialogo("Precio Unit", 0.3d));
-        titulo.add(new ColumnaDialogo("IVA", 0.1d));        
-        titulo.add(new ColumnaDialogo("ICE", 0.1d));        
+        titulo.add(new ColumnaDialogo("Preimpreso", 0.2d));
+        titulo.add(new ColumnaDialogo("Proveedor", 0.3d));
+        titulo.add(new ColumnaDialogo("IVA", 0.3d));
+        titulo.add(new ColumnaDialogo("Total", 0.1d));        
+        titulo.add(new ColumnaDialogo("Fecha", 0.1d));        
         return titulo;
     }
 
     @Override
-    public void agregarObjeto(Producto t, Vector dato) 
+    public void agregarObjeto(Compra t, Vector dato) 
     {
-        dato.add(t.getCodigoPersonalizado());
-        dato.add(t.getNombre());
-        dato.add(t.getValorUnitario());
-        dato.add(t.getIva().toString());
-        if(t.getIce() != null){
-            dato.add(t.getIce().toString());
-        }
+        dato.add(t.getPreimpreso());
+        dato.add(t.getProveedor().getRazonSocial());
+        dato.add(t.getIva()+"");
+        dato.add(t.getTotal()+"");
+        dato.add(t.getFechaFactura()+"");
+
     }
 
     @Override
-    public Boolean buscarObjeto(Producto t, Object valor) 
+    public Boolean buscarObjeto(Compra t, Object valor) 
     {
-        return t.getNombre().equals(valor.toString());   
+        return t.getPreimpreso().equals(valor.toString());   
     }
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        String queryString = "SELECT u FROM Producto u WHERE (u.estado=?1) and";
-        queryString+=" ( LOWER(u.nombre) like "+filter+" )";
+        /*Compra compra;
+        compra.getPreimpreso();
+        compra.getCodigoTipoDocumento();
+        */        
+        String queryString = "SELECT u FROM Compra u WHERE (u.codigoTipoDocumento=?1) and";
+        queryString+=" ( LOWER(u.preimpreso) like "+filter+" )";
         QueryDialog queryDialog=new QueryDialog(queryString);
-        queryDialog.agregarParametro(1,ProductoEnumEstado.ACTIVO.getEstado());
-        //queryDialog.agregarParametro(2,ProductoEnumEstado.INACTIVO.getEstado());
+        queryDialog.agregarParametro(1,TipoDocumentoEnum.COMPRA_INVENTARIO.getCodigo());
+        
         return queryDialog;
     }
 }

@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.crm.panel;
 
+import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoDocumentoEnum;
@@ -45,7 +46,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         jLabel3 = new javax.swing.JLabel();
         txtObservacion = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        txtPreimpreso = new javax.swing.JTextField();
+        txtEstablecimiento = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         txtAutorizacion = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
@@ -86,6 +87,8 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         tblDetalleProductos = new javax.swing.JTable();
         jLabel13 = new javax.swing.JLabel();
         cmbDocumento = new javax.swing.JComboBox<>();
+        txtPuntoEmision = new javax.swing.JTextField();
+        txtSecuencial = new javax.swing.JTextField();
 
         setClosable(true);
         setIconifiable(true);
@@ -106,6 +109,8 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         jLabel3.setText("Observacion");
 
         jLabel5.setText("Preimpreso:");
+
+        txtEstablecimiento.setText("001");
 
         jLabel6.setText("Autorizacion");
 
@@ -337,6 +342,8 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
 
         jLabel13.setText("Documento:");
 
+        txtPuntoEmision.setText("001");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -386,7 +393,11 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
                                             .addComponent(cmbFechaCompra, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .addComponent(cmbTipoDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtPreimpreso, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtEstablecimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtPuntoEmision, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtSecuencial, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE)))))
                 .addGap(28, 28, 28))
         );
@@ -420,7 +431,9 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(txtPreimpreso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtEstablecimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPuntoEmision, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtSecuencial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
@@ -483,12 +496,14 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtDescripcionItem;
     private javax.swing.JTextField txtDescuentoImpuestos;
     private javax.swing.JTextField txtDescuentoSinImpuestos;
+    private javax.swing.JTextField txtEstablecimiento;
     private javax.swing.JTextField txtObservacion;
     private javax.swing.JTextField txtOrdenCompra;
     private javax.swing.JTextField txtPrecionUnitarioItem;
-    private javax.swing.JTextField txtPreimpreso;
     private javax.swing.JTextField txtProductoItem;
     private javax.swing.JTextField txtProveedor;
+    private javax.swing.JTextField txtPuntoEmision;
+    private javax.swing.JTextField txtSecuencial;
     // End of variables declaration//GEN-END:variables
 
     public JComboBox<DocumentoEnum> getCmbDocumento() {
@@ -600,11 +615,11 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     }
 
     public JTextField getTxtPreimpreso() {
-        return txtPreimpreso;
+        return txtEstablecimiento;
     }
 
     public void setTxtPreimpreso(JTextField txtPreimpreso) {
-        this.txtPreimpreso = txtPreimpreso;
+        this.txtEstablecimiento = txtPreimpreso;
     }
 
     public JTextField getTxtDescuentoImpuestos() {
@@ -661,6 +676,38 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
 
     public void setTblDetalleProductos(JTable tblDetalleProductos) {
         this.tblDetalleProductos = tblDetalleProductos;
+    }
+
+    public JDateChooser getCmbFechaCompra() {
+        return cmbFechaCompra;
+    }
+
+    public void setCmbFechaCompra(JDateChooser cmbFechaCompra) {
+        this.cmbFechaCompra = cmbFechaCompra;
+    }
+
+    public JTextField getTxtEstablecimiento() {
+        return txtEstablecimiento;
+    }
+
+    public void setTxtEstablecimiento(JTextField txtEstablecimiento) {
+        this.txtEstablecimiento = txtEstablecimiento;
+    }
+
+    public JTextField getTxtPuntoEmision() {
+        return txtPuntoEmision;
+    }
+
+    public void setTxtPuntoEmision(JTextField txtPuntoEmision) {
+        this.txtPuntoEmision = txtPuntoEmision;
+    }
+
+    public JTextField getTxtSecuencial() {
+        return txtSecuencial;
+    }
+
+    public void setTxtSecuencial(JTextField txtSecuencial) {
+        this.txtSecuencial = txtSecuencial;
     }
     
     

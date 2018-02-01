@@ -5,8 +5,10 @@
  */
 package ec.com.codesoft.codefaclite.crm.model;
 
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.crm.busqueda.ProductoProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.crm.busqueda.ProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.crm.panel.CompraPanel;
@@ -18,12 +20,20 @@ import ec.com.codesoft.codefaclite.servidor.entity.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.ModuloEnum;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoFacturacionEnumEstado;
+import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidor.service.CompraService;
+import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
+import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.Document;
 
@@ -54,7 +64,15 @@ public class CompraModel extends CompraPanel{
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
-        
+        try {
+            CompraService servicio=new CompraService();
+            setearValores();
+            servicio.grabar(compra);
+            DialogoCodefac.mensaje("Correcto","La compra fue guardada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+        } catch (ServicioCodefacException ex) {
+            DialogoCodefac.mensaje("Incorrecto","No se puede gurdar la compra",DialogoCodefac.MENSAJE_INCORRECTO);
+            Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void setearValores()
@@ -63,7 +81,24 @@ public class CompraModel extends CompraPanel{
         DocumentoEnum documentoEnum= (DocumentoEnum) getCmbDocumento().getSelectedItem();
         compra.setCodigoDocumento(documentoEnum.getCodigo());
         compra.setDireccion("");
-        //compra.set
+        compra.setEstado("a"); //TODO: cambiar el estado de las ordenes de compra
+        compra.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+        compra.setFechaFactura(new Date(getCmbFechaCompra().getDate().getTime()));
+        compra.setIdentificacion("");
+        compra.setProveedor(productoProveedor.getProveedor());
+        
+        compra.setPuntoEmision(getTxtPuntoEmision().getText());
+        compra.setPuntoEstablecimiento(getTxtEstablecimiento().getText());
+        compra.setSecuencial(Integer.parseInt(getTxtSecuencial().getText()));
+        
+        compra.setRazonSocial("");
+        compra.setTelefono("");
+        compra.setTipoFacturacion(""); //TODO: Establecer el metodo de facturacion manual y electronica
+        
+        //Seteando el tipo de documento 
+        TipoDocumentoEnum tipoDocumentoEnum= (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+        compra.setCodigoTipoDocumento(tipoDocumentoEnum.getCodigo());
+ 
     }
 
     @Override
@@ -108,7 +143,14 @@ public class CompraModel extends CompraPanel{
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
+        permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
+        return permisos;
     }
 
     @Override

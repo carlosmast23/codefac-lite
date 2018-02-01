@@ -100,6 +100,9 @@ public class Compra {
     @Column(name = "CODIGO_DOCUMENTO")
     private String codigoDocumento;
     
+    @Column(name ="CODIGO_TIPO_DOCUMENTO")
+    private String codigoTipoDocumento;
+    
     @JoinColumn(name = "PROVEEDOR_ID")
     @ManyToOne    
     private Persona proveedor;
@@ -323,6 +326,14 @@ public class Compra {
 
     public void setProveedor(Persona proveedor) {
         this.proveedor = proveedor;
+    }
+
+    public String getCodigoTipoDocumento() {
+        return codigoTipoDocumento;
+    }
+
+    public void setCodigoTipoDocumento(String codigoTipoDocumento) {
+        this.codigoTipoDocumento = codigoTipoDocumento;
     }
     
     

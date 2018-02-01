@@ -83,7 +83,11 @@
                               </Group>
                           </Group>
                           <Group type="102" attributes="0">
-                              <Component id="txtPreimpreso" min="-2" pref="131" max="-2" attributes="0"/>
+                              <Component id="txtEstablecimiento" min="-2" pref="50" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="txtPuntoEmision" min="-2" pref="53" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="txtSecuencial" min="-2" pref="112" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
@@ -130,7 +134,9 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtPreimpreso" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtEstablecimiento" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtPuntoEmision" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtSecuencial" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -189,7 +195,10 @@
         <Property name="text" type="java.lang.String" value="Preimpreso:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="txtPreimpreso">
+    <Component class="javax.swing.JTextField" name="txtEstablecimiento">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="001"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel6">
       <Properties>
@@ -613,6 +622,13 @@
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;DocumentoEnum&gt;"/>
       </AuxValues>
+    </Component>
+    <Component class="javax.swing.JTextField" name="txtPuntoEmision">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="001"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="txtSecuencial">
     </Component>
   </SubComponents>
 </Form>
