@@ -472,9 +472,7 @@ public class Main {
         ventanas.add(new MenuControlador(panel.getjMenuItemDisenador(),FacturaDisenioModel.class,true));
         ventanas.add(new MenuControlador(panel.getjMenuCompra(),CompraModel.class,false));
         ventanas.add(new MenuControlador(panel.getjMenuItemAsociarProducto(),AsociarProductoProveedorModel.class,true));
-      
         ventanas.add(new MenuControlador(panel.getMenuBodega(),BodegaModel.class,true));
-        
         return ventanas;
     
     }

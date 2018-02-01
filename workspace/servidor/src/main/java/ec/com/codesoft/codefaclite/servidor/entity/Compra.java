@@ -27,7 +27,7 @@ import javax.persistence.Table;
  * @author Carlos
  */
 @Entity
-@Table(name = "ROOT.COMPRA")
+@Table(name = "COMPRA")
 public class Compra {    
     public static final String ESTADO_FACTURADO="F";
     public static final String ESTADO_ANULADO="A";
@@ -99,6 +99,9 @@ public class Compra {
     private String tipoFacturacion;
     @Column(name = "CODIGO_DOCUMENTO")
     private String codigoDocumento;
+    
+    @Column(name ="CODIGO_TIPO_DOCUMENTO")
+    private String codigoTipoDocumento;
     
     @JoinColumn(name = "PROVEEDOR_ID")
     @ManyToOne    
@@ -323,6 +326,14 @@ public class Compra {
 
     public void setProveedor(Persona proveedor) {
         this.proveedor = proveedor;
+    }
+
+    public String getCodigoTipoDocumento() {
+        return codigoTipoDocumento;
+    }
+
+    public void setCodigoTipoDocumento(String codigoTipoDocumento) {
+        this.codigoTipoDocumento = codigoTipoDocumento;
     }
     
     

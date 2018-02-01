@@ -60,6 +60,26 @@ public class MenuControlador
        }
        return null;
     }
+    
+    public Object createNewInstance()
+    {
+       try {
+           instance=this.ventana.getConstructor().newInstance();
+       } catch (InstantiationException ex) {
+           Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
+       } catch (IllegalAccessException ex) {
+           Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
+       } catch (IllegalArgumentException ex) {
+           Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
+       } catch (InvocationTargetException ex) {
+           Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
+       } catch (NoSuchMethodException ex) {
+           Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
+       } catch (SecurityException ex) {
+           Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
+       }
+       return instance;
+    }
 
     public MenuControlador(JMenuItem menuItem, Class ventana, boolean maximizado) {
         this.menuItem = menuItem;

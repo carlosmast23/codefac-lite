@@ -54,7 +54,6 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
-        btnCrearProducto = new javax.swing.JButton();
         btnBuscarProducto = new javax.swing.JButton();
         btnFacturar = new javax.swing.JButton();
         btnAgregarProducto = new javax.swing.JButton();
@@ -165,23 +164,14 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
         jPanel5.setLayout(new java.awt.GridBagLayout());
 
-        btnCrearProducto.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
-        btnCrearProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/mas-ico.png"))); // NOI18N
-        btnCrearProducto.setText("Crear");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 0);
-        jPanel5.add(btnCrearProducto, gridBagConstraints);
-
         btnBuscarProducto.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
         btnBuscarProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         btnBuscarProducto.setText("Buscar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 0);
         jPanel5.add(btnBuscarProducto, gridBagConstraints);
 
@@ -378,11 +368,6 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         this.btnBuscarProducto = btnBuscarProducto;
     }
 
-    public JButton getBtnCrearProducto() {
-        return btnCrearProducto;
-        
-    }
-
     public JTable getTblDetalleFactura() {
         return TblDetalleFactura;
     }
@@ -397,10 +382,6 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
 
     public void setjTabbedPanel(JTabbedPane jTabbedPanel) {
         this.jTabbedPanel = jTabbedPanel;
-    }
-
-    public void setBtnCrearProducto(JButton btnCrearProducto) {
-        this.btnCrearProducto = btnCrearProducto;
     }
 
     public JButton getBtnFacturar() {
@@ -455,7 +436,6 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
     private javax.swing.JTable TblDetalleFactura;
     private javax.swing.JButton btnAgregarProducto;
     private javax.swing.JButton btnBuscarProducto;
-    private javax.swing.JButton btnCrearProducto;
     private javax.swing.JButton btnEliminarProducto;
     private javax.swing.JButton btnFacturar;
     private javax.swing.JLabel jLabel1;

@@ -23,7 +23,7 @@ import javax.persistence.ManyToOne;
  * @author PC
  */
 @Entity
-@Table(name = "ROOT.IMPUESTO_DETALLE")
+@Table(name = "IMPUESTO_DETALLE")
 @XmlRootElement
 public class ImpuestoDetalle implements Serializable
 {

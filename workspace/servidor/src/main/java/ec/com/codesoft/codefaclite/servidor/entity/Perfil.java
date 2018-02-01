@@ -19,7 +19,7 @@ import javax.persistence.Table;
  * @author Carlos
  */
 @Entity
-@Table(name = "ROOT.PERFIL")
+@Table(name = "PERFIL")
 public class Perfil implements Serializable{
     
     public static final String PERFIl_ADMINISTRADOR="ADMIN";
