@@ -6,6 +6,8 @@
 package ec.com.codesoft.codefaclite.inventario.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -41,6 +43,12 @@ public abstract class BodegaPanel extends ControladorCodefacInterface {
         txtFoto = new javax.swing.JTextField();
         txtEncargado = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+
+        setClosable(true);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
+        setTitle("Bodega");
 
         jLabel1.setText("Nombre:");
 
@@ -117,6 +125,8 @@ public abstract class BodegaPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Descripcion", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextArea getTxtDescripcion() {
         return txtDescripcion;
     }
@@ -125,6 +135,8 @@ public abstract class BodegaPanel extends ControladorCodefacInterface {
         this.txtDescripcion = txtDescripcion;
     }
 
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Encargado", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextField getTxtEncargado() {
         return txtEncargado;
     }
@@ -141,6 +153,8 @@ public abstract class BodegaPanel extends ControladorCodefacInterface {
         this.txtFoto = txtFoto;
     }
 
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Nombre", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextField getTxtNombre() {
         return txtNombre;
     }
@@ -149,6 +163,4 @@ public abstract class BodegaPanel extends ControladorCodefacInterface {
         this.txtNombre = txtNombre;
     }
 
-    
-    
 }
