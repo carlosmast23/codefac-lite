@@ -22,7 +22,7 @@ import javax.persistence.Table;
  * @author Carlos
  */
 @Entity
-@Table(name = "PERFIL_USUARIO")
+@Table(name = "ROOT.PERFIL_USUARIO")
 public class PerfilUsuario {
     
     private static final long serialVersionUID = 1L;

@@ -27,8 +27,8 @@ import javax.persistence.Table;
  * @author Carlos
  */
 @Entity
-@Table(name = "ROOT.FACTURA")
-public class Factura {    
+@Table(name = "ROOT.COMPRA")
+public class Compra {    
     public static final String ESTADO_FACTURADO="F";
     public static final String ESTADO_ANULADO="A";
     public static final String ESTADO_PENDIENTE_FACTURA_ELECTRONICA="P";
@@ -100,17 +100,15 @@ public class Factura {
     @Column(name = "CODIGO_DOCUMENTO")
     private String codigoDocumento;
     
-    @JoinColumn(name = "CLIENTE_ID")
+    @JoinColumn(name = "PROVEEDOR_ID")
     @ManyToOne    
-    private Persona cliente;
+    private Persona proveedor;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura")
-    private List<FacturaDetalle> detalles;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "compra")
+    private List<CompraDetalle> detalles;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura")
-    private List<FormaPago> formaPagos;
 
-    public Factura() {
+    public Compra() {
     }
     
     public Long getId() {
@@ -166,10 +164,7 @@ public class Factura {
         return estado;
     }
 
-    public Persona getCliente() {
-        return cliente;
-    }
-    
+
     
 
     public void setId(Long id) {
@@ -225,15 +220,12 @@ public class Factura {
         this.estado = estado;
     }
 
-    public void setCliente(Persona cliente) {
-        this.cliente = cliente;
-    }
 
-    public List<FacturaDetalle> getDetalles() {
+    public List<CompraDetalle> getDetalles() {
         return detalles;
     }
 
-    public void setDetalles(List<FacturaDetalle> detalles) {
+    public void setDetalles(List<CompraDetalle> detalles) {
         this.detalles = detalles;
     }
     
@@ -309,14 +301,6 @@ public class Factura {
         this.iva = iva;
     }
 
-    public List<FormaPago> getFormaPagos() {
-        return formaPagos;
-    }
-
-    public void setFormaPagos(List<FormaPago> formaPagos) {
-        this.formaPagos = formaPagos;
-    }
-
     public String getTipoFacturacion() {
         return tipoFacturacion;
     }
@@ -332,39 +316,31 @@ public class Factura {
     public void setCodigoDocumento(String codigoDocumento) {
         this.codigoDocumento = codigoDocumento;
     }
-    
-    
-    
+
+    public Persona getProveedor() {
+        return proveedor;
+    }
+
+    public void setProveedor(Persona proveedor) {
+        this.proveedor = proveedor;
+    }
     
     
     /**
      * Informacion adicional
      */
-    public void addDetalle(FacturaDetalle detalle)
+    public void addDetalle(CompraDetalle detalle)
     {
         if(this.detalles==null)
         {
-            this.detalles=new ArrayList<FacturaDetalle>();
+            this.detalles=new ArrayList<CompraDetalle>();
         }
-        detalle.setFactura(this);
+        detalle.setCompra(this);
         this.detalles.add(detalle);
         
     }
     
-     /**
-     * Formas de pago adicional
-     */
-    public void addFormaPago(FormaPago formaPago)
-    {
-        if(this.formaPagos==null)
-        {
-            this.formaPagos=new ArrayList<FormaPago>();
-        }
-        formaPago.setFactura(this);
-        this.formaPagos.add(formaPago);
-        
-    }
-    
+
     public String getPreimpreso()
     {
        return UtilidadesTextos.llenarCarateresIzquierda(puntoEmision,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(puntoEstablecimiento,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(secuencial+"",9,"0");

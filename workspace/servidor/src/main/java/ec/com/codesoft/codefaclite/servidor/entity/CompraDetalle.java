@@ -20,8 +20,8 @@ import javax.persistence.Table;
  * @author Carlos
  */
 @Entity
-@Table(name = "ROOT.NOTA_CREDITO_DETALLE")
-public class NotaCreditoDetalle {
+@Table(name = "ROOT.COMPRA_DETALLE")
+public class CompraDetalle {
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +29,7 @@ public class NotaCreditoDetalle {
     //@Column(name = "PRODUCTO_ID")
     //private Long productoId;
     @Column(name = "CANTIDAD")
-    private BigDecimal cantidad;
+    private Integer cantidad;
     @Column(name = "PRECIO_UNITARIO")
     private BigDecimal precioUnitario;
     @Column(name = "DESCUENTO")
@@ -43,53 +43,55 @@ public class NotaCreditoDetalle {
     @Column(name = "IVA")
     private BigDecimal iva;
     
-    @JoinColumn(name="NOTA_CREDITO_ID")
+    @JoinColumn(name="COMPRA_ID")
     @ManyToOne(optional = false)
-    private NotaCredito notaCredito;
+    private Compra compra;
     
-    @JoinColumn(name = "PRODUCTO_ID")
+    @JoinColumn(name = "PRODUCTO_PROVEEDOR_ID")
     @ManyToOne
-    private Producto producto;
+    private ProductoProveedor productoProveedor;
 
-    public NotaCreditoDetalle() {
+    public CompraDetalle() {
     }
     
-    
-
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
-    public BigDecimal getCantidad() {
+
+    public Integer getCantidad() {
         return cantidad;
-    }
-
-    public void setCantidad(BigDecimal cantidad) {
-        this.cantidad = cantidad;
     }
 
     public BigDecimal getPrecioUnitario() {
         return precioUnitario;
     }
 
-    public void setPrecioUnitario(BigDecimal precioUnitario) {
-        this.precioUnitario = precioUnitario;
-    }
-
     public BigDecimal getDescuento() {
         return descuento;
     }
 
-    public void setDescuento(BigDecimal descuento) {
-        this.descuento = descuento;
-    }
-
     public BigDecimal getValorIce() {
         return valorIce;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+
+
+    public void setCantidad(Integer cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public void setPrecioUnitario(BigDecimal precioUnitario) {
+        this.precioUnitario = precioUnitario;
+    }
+
+    public void setDescuento(BigDecimal descuento) {
+        this.descuento = descuento;
     }
 
     public void setValorIce(BigDecimal valorIce) {
@@ -120,21 +122,57 @@ public class NotaCreditoDetalle {
         this.iva = iva;
     }
 
-    public NotaCredito getNotaCredito() {
-        return notaCredito;
+    public Compra getCompra() {
+        return compra;
     }
 
-    public void setNotaCredito(NotaCredito notaCredito) {
-        this.notaCredito = notaCredito;
+    public void setCompra(Compra compra) {
+        this.compra = compra;
     }
 
-    public Producto getProducto() {
-        return producto;
+    public ProductoProveedor getProductoProveedor() {
+        return productoProveedor;
     }
 
-    public void setProducto(Producto producto) {
-        this.producto = producto;
+    public void setProductoProveedor(ProductoProveedor productoProveedor) {
+        this.productoProveedor = productoProveedor;
     }
+    
+    /**
+     * Metodo personalizados
+     */
+    
+    
+    /**
+     * Metodo que devuelve el subtotal de la cantidad por el precio unitario y menos el descuento
+     * @return 
+     */
+    public BigDecimal getSubtotal()
+    {
+        return new BigDecimal(cantidad+"").multiply(precioUnitario).subtract(descuento);
+    }
+    /**
+     * Calcula el valor del iva 
+     * @return 
+     */
+    public BigDecimal calcularValorIva()
+    {
+        return getSubtotal().multiply(new BigDecimal("0.12"));
+    }
+    
+    public BigDecimal calcularTotal()
+    {
+        return getSubtotal().multiply(new BigDecimal("1.12"));
+    }
+    
+    /**
+     * Metodos adicionales
+     */
+    /*
+    public BigDecimal getIva()
+    {
+        return total.multiply(producto.getIva().getPorcentaje());
+    }*/
     
     
     

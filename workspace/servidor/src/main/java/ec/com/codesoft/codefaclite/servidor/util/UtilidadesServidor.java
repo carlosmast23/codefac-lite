@@ -41,6 +41,7 @@ public class UtilidadesServidor {
         RecursoCodefac.SQL.getResourceInputStream("insert_cliente.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_perfil.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_acceso_directo.sql"),
+        RecursoCodefac.SQL.getResourceInputStream("create_producto_proveedor.sql"),        
         RecursoCodefac.SQL.getResourceInputStream("insert_default.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_empresa.sql"),
         
@@ -59,7 +60,7 @@ public class UtilidadesServidor {
              s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.user.root', 'Code17bwbtj')");
              s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.database.propertiesOnly', 'true')");
              s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.language.sequence.preallocator', '1')");
-             //
+             
             if (conn!=null)
             {
                 
@@ -84,6 +85,7 @@ public class UtilidadesServidor {
                 }
 
             }
+            conn.close();
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(CrearBaseDatos.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {

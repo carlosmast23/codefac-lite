@@ -6,10 +6,13 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.inventario.panel.BodegaPanel;
 import ec.com.codesoft.codefaclite.servidor.entity.Bodega;
+<<<<<<< HEAD
 import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.service.BodegaService;
 import java.util.List;
 import java.util.Map;
+=======
+>>>>>>> 474e807c474d32012b9f9bd1e0c30b47b5b4f1ff
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -20,6 +23,7 @@ import java.util.Map;
  *
  * @author CodesoftDesarrollo
  */
+<<<<<<< HEAD
 public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bodega> {
 
     private Bodega bodega;
@@ -28,6 +32,15 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
     public BodegaModel() {
         bodegaService = new BodegaService();
     }
+=======
+public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bodega>{
+
+    @Override
+    public Bodega getResult() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+>>>>>>> 474e807c474d32012b9f9bd1e0c30b47b5b4f1ff
     
 
     @Override

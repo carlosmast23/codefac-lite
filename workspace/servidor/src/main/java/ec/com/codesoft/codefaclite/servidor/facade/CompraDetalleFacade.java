@@ -5,16 +5,16 @@
  */
 package ec.com.codesoft.codefaclite.servidor.facade;
 
-import ec.com.codesoft.codefaclite.servidor.entity.ProductoProveedor;
+import ec.com.codesoft.codefaclite.servidor.entity.CompraDetalle;
 
 /**
  *
  * @author Carlos
  */
-public class ProductoProveedorFacade extends AbstractFacade<ProductoProveedor>{
-
-    public ProductoProveedorFacade() {
-        super(ProductoProveedor.class);
+public class CompraDetalleFacade extends AbstractFacade<CompraDetalle>{
+    
+    public CompraDetalleFacade() {
+        super(CompraDetalle.class);
     }
     
 }

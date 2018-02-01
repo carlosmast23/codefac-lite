@@ -22,7 +22,7 @@ import javax.persistence.Table;
  * @author Carlos
  */
 @Entity
-@Table(name = "COMPONENTE_COMPROBANTE_FISICO")
+@Table(name = "ROOT.COMPONENTE_COMPROBANTE_FISICO")
 public class ComponenteComprobanteFisico {
 
     @Id
