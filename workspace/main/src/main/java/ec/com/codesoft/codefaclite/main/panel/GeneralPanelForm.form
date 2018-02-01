@@ -199,9 +199,22 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemAsociarProductoActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemIngresarInventario">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Ingresar Inventario"/>
+              </Properties>
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="menuBodega">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Bodega"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuBodegaActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemKardex">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Kardex"/>
               </Properties>
             </MenuItem>
           </SubComponents>
