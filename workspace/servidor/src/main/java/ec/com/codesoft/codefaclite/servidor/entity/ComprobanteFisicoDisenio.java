@@ -21,7 +21,7 @@ import javax.persistence.Table;
  * @author Carlos
  */
 @Entity
-@Table(name = "COMPROBANTE_FISICO_DISENIO")
+@Table(name = "ROOT.COMPROBANTE_FISICO_DISENIO")
 public class ComprobanteFisicoDisenio {
     
     @Id

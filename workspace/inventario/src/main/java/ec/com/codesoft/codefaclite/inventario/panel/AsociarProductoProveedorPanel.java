@@ -64,6 +64,10 @@ public abstract class AsociarProductoProveedorPanel extends ControladorCodefacIn
         ));
         jScrollPane1.setViewportView(jTable1);
 
+        setClosable(true);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
         setTitle("Asociar Producto");
 
         jLabel1.setText("Producto:");

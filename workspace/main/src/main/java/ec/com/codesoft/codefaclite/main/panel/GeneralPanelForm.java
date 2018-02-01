@@ -83,6 +83,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuCompra = new javax.swing.JMenuItem();
         menuInventario = new javax.swing.JMenu();
         jMenuItemAsociarProducto = new javax.swing.JMenuItem();
+        menuBodega = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuCliente = new javax.swing.JMenuItem();
         jMenuItemReporteCliente = new javax.swing.JMenuItem();
@@ -297,6 +298,9 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
             }
         });
         menuInventario.add(jMenuItemAsociarProducto);
+
+        menuBodega.setText("Bodega");
+        menuInventario.add(menuBodega);
 
         jMenuBar1.add(menuInventario);
 
@@ -529,6 +533,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JSplitPane jSplitPanel;
     private javax.swing.JSplitPane jSplitPanelVerticalSecundario;
     private javax.swing.JLabel lblPiePagina;
+    private javax.swing.JMenuItem menuBodega;
     private javax.swing.JMenu menuCompras;
     private javax.swing.JMenu menuConfiguracion;
     private javax.swing.JMenu menuFacturacion;
@@ -831,10 +836,17 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     public void setjMenuItemAsociarProducto(JMenuItem jMenuItemAsociarProducto) {
         this.jMenuItemAsociarProducto = jMenuItemAsociarProducto;
     }
+
+    public JMenuItem getMenuBodega() {
+        return menuBodega;
+    }
+
+    public void setMenuBodega(JMenuItem menuBodega) {
+        this.menuBodega = menuBodega;
+    }
     
     
-    
-    
+        
     
     
         

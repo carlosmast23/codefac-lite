@@ -17,27 +17,25 @@ import org.eclipse.persistence.exceptions.DatabaseException;
  *
  * @author CodesoftDesarrollo
  */
-public class BodegaService extends ServiceAbstract<Bodega,BodegaFacade>{
-    
+public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> {
+
     private BodegaFacade bodegaFacade;
 
-    public BodegaService() 
-    {
+    public BodegaService() {
         super(BodegaFacade.class);
-        this.bodegaFacade=new BodegaFacade();
+        this.bodegaFacade = new BodegaFacade();
     }
-    
-    public void grabar(Bodega b) throws ServicioCodefacException
-    {
+
+    public void grabar(Bodega b) throws ServicioCodefacException {
         try {
             bodegaFacade.create(b);
         } catch (ConstrainViolationExceptionSQL ex) {
-            Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(BodegaService.class.getName()).log(Level.SEVERE, null, ex);
             throw new ServicioCodefacException("La clave principal ya existe en el sistema");
         } catch (DatabaseException ex) {
-            Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(BodegaService.class.getName()).log(Level.SEVERE, null, ex);
             throw new ServicioCodefacException("Error con la base de datos");
         }
     }
-  
+
 }

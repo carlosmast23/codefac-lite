@@ -34,6 +34,7 @@ import ec.com.codesoft.codefaclite.facturacion.model.NotaCreditoModel;
 import ec.com.codesoft.codefaclite.facturacion.model.UtilidadComprobanteModel;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
 import ec.com.codesoft.codefaclite.inventario.model.AsociarProductoProveedorModel;
+import ec.com.codesoft.codefaclite.inventario.model.BodegaModel;
 import ec.com.codesoft.codefaclite.main.license.ValidacionLicenciaCodefac;
 import ec.com.codesoft.codefaclite.main.license.excepcion.NoExisteLicenciaException;
 import ec.com.codesoft.codefaclite.main.license.excepcion.ValidacionLicenciaExcepcion;
@@ -469,8 +470,9 @@ public class Main {
         ventanas.add(new MenuControlador(panel.getjMenuItemReporteCliente(),ClienteReporte.class,true));
         ventanas.add(new MenuControlador(panel.getjMenuItemReporteProducto(),ProductoReporte.class,true));
         ventanas.add(new MenuControlador(panel.getjMenuItemDisenador(),FacturaDisenioModel.class,true));
-        ventanas.add(new MenuControlador(panel.getjMenuCompra(),CompraModel.class,true));
-        //ventanas.add(new MenuControlador(panel.getjMenuItemAsociarProducto(),AsociarProductoProveedorModel.class,true));
+        ventanas.add(new MenuControlador(panel.getjMenuCompra(),CompraModel.class,false));
+        ventanas.add(new MenuControlador(panel.getjMenuItemAsociarProducto(),AsociarProductoProveedorModel.class,true));
+        ventanas.add(new MenuControlador(panel.getMenuBodega(),BodegaModel.class,true));
         return ventanas;
     
     }
