@@ -8,11 +8,14 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.inventario.busqueda.BodegaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.inventario.panel.BodegaPanel;
 import ec.com.codesoft.codefaclite.servidor.entity.Bodega;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.BodegaEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.service.BodegaService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bodega> {
 
@@ -37,6 +40,7 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
     }
 
     private void setearValoresBodega(Bodega bodega) {
+        bodega.setEstado(BodegaEnumEstado.ACTIVO.getEstado());
         bodega.setNombre(getTxtNombre().getText());
         bodega.setDescripcion(getTxtDescripcion().getText());
         bodega.setEncargado(getTxtEncargado().getText());
@@ -115,7 +119,13 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
 
     @Override
     public Bodega getResult() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            grabar();
+            return bodega;
+        } catch (ExcepcionCodefacLite ex) {
+            Logger.getLogger(BodegaModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     @Override
