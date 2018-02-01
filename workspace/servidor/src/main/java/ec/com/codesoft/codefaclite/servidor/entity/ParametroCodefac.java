@@ -18,7 +18,7 @@ import javax.persistence.Table;
  * @author Carlos
  */
 @Entity
-@Table(name = "ROOT.PARAMETRO")
+@Table(name = "PARAMETRO")
 public class ParametroCodefac {
     
     public static final String NOMBRE_FIRMA_ELECTRONICA= "firma_electronica";

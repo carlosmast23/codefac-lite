@@ -27,7 +27,7 @@ import javax.persistence.Table;
  * @author Carlos
  */
 @Entity
-@Table(name = "ROOT.FACTURA")
+@Table(name = "FACTURA")
 public class Factura {    
     public static final String ESTADO_FACTURADO="F";
     public static final String ESTADO_ANULADO="A";

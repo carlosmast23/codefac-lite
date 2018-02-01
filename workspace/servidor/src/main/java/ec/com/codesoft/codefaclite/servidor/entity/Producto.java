@@ -20,7 +20,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 @Entity
-@Table(name = "ROOT.PRODUCTO")
+@Table(name = "PRODUCTO")
 @XmlRootElement
 public class Producto implements Serializable
 {

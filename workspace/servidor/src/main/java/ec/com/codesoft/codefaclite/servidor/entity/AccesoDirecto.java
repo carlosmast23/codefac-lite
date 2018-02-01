@@ -17,7 +17,7 @@ import javax.persistence.Table;
  * @author Carlos
  */
 @Entity
-@Table(name = "ROOT.ACCESO_DIRECTO")
+@Table(name = "ACCESO_DIRECTO")
 public class AccesoDirecto {
     
     @Id

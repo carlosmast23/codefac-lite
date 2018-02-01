@@ -16,7 +16,7 @@ import javax.persistence.Table;
  * @author Carlos
  */
 @Entity
-@Table(name = "ROOT.SRI_IDENTIFICACION")
+@Table(name = "SRI_IDENTIFICACION")
 public class SriIdentificacion {
     
     public static final String CLIENTE="VENTA"; 

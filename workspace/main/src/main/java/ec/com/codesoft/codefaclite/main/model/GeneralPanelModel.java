@@ -506,8 +506,10 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         ControladorCodefacInterface ventana= (ControladorCodefacInterface) menuControlador.getInstance();
                         if(!verificarPantallaCargada(ventana))
                         {
+                            //Este artificio se realiza porque cuando se reutilizaba un referencia de la pantalla generaba problemas con los dialogos
+                            ventana= (ControladorCodefacInterface) menuControlador.createNewInstance();
                             agregarListenerMenu(ventana,menuControlador.isMaximizado());                    
-                        }
+                        }                        
                         else
                         {
                             try {

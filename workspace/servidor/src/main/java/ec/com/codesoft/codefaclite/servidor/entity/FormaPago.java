@@ -20,7 +20,7 @@ import javax.persistence.Table;
  * @author Carlos
  */
 @Entity
-@Table(name = "ROOT.FACTURA_FORMA_PAGO")
+@Table(name = "FACTURA_FORMA_PAGO")
 public class FormaPago {
     
     @Id

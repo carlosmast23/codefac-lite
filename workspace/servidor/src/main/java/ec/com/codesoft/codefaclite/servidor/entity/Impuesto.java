@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author PC
  */
 @Entity
-@Table(name = "ROOT.IMPUESTO")
+@Table(name = "IMPUESTO")
 @XmlRootElement
 public class Impuesto implements Serializable
 {

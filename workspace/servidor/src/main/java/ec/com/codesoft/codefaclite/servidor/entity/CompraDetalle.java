@@ -20,7 +20,7 @@ import javax.persistence.Table;
  * @author Carlos
  */
 @Entity
-@Table(name = "ROOT.COMPRA_DETALLE")
+@Table(name = "COMPRA_DETALLE")
 public class CompraDetalle {
     @Id
     @Column(name = "ID")

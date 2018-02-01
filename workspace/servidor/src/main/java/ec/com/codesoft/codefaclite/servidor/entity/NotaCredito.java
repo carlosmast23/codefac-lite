@@ -26,7 +26,7 @@ import javax.persistence.Table;
  * @author Carlos
  */
 @Entity
-@Table(name = "ROOT.NOTA_CREDITO")
+@Table(name = "NOTA_CREDITO")
 public class NotaCredito {
     
     @Id

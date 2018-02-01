@@ -17,7 +17,7 @@ import javax.persistence.Table;
  * @author Carlos
  */
 @Entity
-@Table(name = "ROOT.SRI_FORMA_PAGO")
+@Table(name = "SRI_FORMA_PAGO")
 public class SriFormaPago implements Serializable{
     @Id
     @Column(name = "ID")
