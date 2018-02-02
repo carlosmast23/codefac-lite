@@ -29,12 +29,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JDesktopPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
@@ -87,12 +91,18 @@ public class VentasDiariasModel extends WidgetVentasDiarias
             @Override
             public void actionPerformed(ActionEvent e) {
                     if(banderaProducto){
-                        agregarDetallesFactura(null);
-                        limpiarValoresCamposTextos();
-                        cargarDatosDetalles();
-                        procesarTotales();
-                        banderaProducto = false;
-                        getjTabbedPanel().setSelectedIndex(1);
+                        if(validarCamposIngresar())
+                        {
+                            agregarDetallesFactura(null);
+                            limpiarValoresCamposTextos();
+                            cargarDatosDetalles();
+                            procesarTotales();
+                            banderaProducto = false;
+                            getjTabbedPanel().setSelectedIndex(1);
+                        }else
+                        {
+                            DialogoCodefac.mensaje("Validacion", "Verificar los campos ingresados", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                        }
                     }
                     else
                     {
@@ -143,18 +153,43 @@ public class VentasDiariasModel extends WidgetVentasDiarias
         getBtnFacturar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cargarCliente();
-                definirFechaFacturacion();
-                FacturacionModel facturacionModel = new FacturacionModel();
-                
-                    panelPadre.crearVentanaCodefac(facturacionModel, true);
+                Boolean permitirFacturar = false;
+                Boolean respuesta = null;
+                if (factura.getDetalles() == null) {
+                    DialogoCodefac.mensaje("Alerta", "No se puede facturar sin detalles", DialogoCodefac.MENSAJE_ADVERTENCIA);
                     try {
-                        facturacionModel.setFactura(factura);
+                        throw new ExcepcionCodefacLite("Necesita seleccionar detalles ");
                     } catch (ExcepcionCodefacLite ex) {
                         Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    facturacionModel.revalidate();
-                    facturacionModel.repaint();
+                }else{
+                    permitirFacturar = true;
+                    respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea continuar con la facturación?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    if (!respuesta) {
+                        try {
+                            throw new ExcepcionCodefacLite("Cancelacion usuario");
+                        } catch (ExcepcionCodefacLite ex) {
+                            Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+                if(permitirFacturar && respuesta)
+                {
+                    cargarCliente();
+                    definirFechaFacturacion();
+                    FacturacionModel facturacionModel = new FacturacionModel();
+
+                        panelPadre.crearVentanaCodefac(facturacionModel, true);
+                        try {
+                            facturacionModel.setFactura(factura);
+                        } catch (ExcepcionCodefacLite ex) {
+                            Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        setarValoresVariables();
+                        facturacionModel.revalidate();
+                        facturacionModel.repaint();
+                }
+                    
             }
         });
     }            
@@ -221,11 +256,20 @@ public class VentasDiariasModel extends WidgetVentasDiarias
     
     public void setarValoresVariables()
     {
+        this.factura = new Factura();
+        this.factura.setDetalles(new ArrayList<FacturaDetalle>());
         this.factura.setSubtotalImpuestos(BigDecimal.ZERO);
         this.factura.setSubtotalSinImpuestos(BigDecimal.ZERO);
         this.factura.setIva(BigDecimal.ZERO);
         this.factura.setTotal(BigDecimal.ZERO);
         this.factura.setDescuentoImpuestos(new BigDecimal(0));
+        //Limpiar detalles
+        initModelTablaDetalleFactura();
+        //Limpiar valores totales
+        getLblSubtotal12().setText("");
+        getLblSubtotal0().setText("");
+        getLblIva12().setText("");
+        getLblValorTotal().setText("");
     }
     
     public void cargarCliente()
@@ -257,7 +301,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
             Vector<String> fila = new Vector<String>();
             fila.add(detalle.getDescripcion());
             fila.add(detalle.getCantidad().toString());
-            fila.add(detalle.getProducto().getValorUnitario().toString());
+            fila.add(detalle.getPrecioUnitario().toString());
             fila.add(detalle.getTotal().toString());
             modeloTablaDetallesProductos.addRow(fila);
         }
@@ -328,8 +372,57 @@ public class VentasDiariasModel extends WidgetVentasDiarias
     }
     
     public void definirFechaFacturacion()
-    {
-        java.util.Date fecha = new java.util.Date();
-        factura.setFechaFactura(new Date(fecha.getYear(),fecha.getMonth(),fecha.getDay()));
+    {   
+        factura.setFechaFactura(UtilidadesFecha.getFechaHoy());
     }
+    
+    private void initModelTablaDetalleFactura() 
+    {
+        Vector<String> titulo = new Vector<>();
+        titulo.add("Nombre");
+        titulo.add("#");
+        titulo.add("Valor");
+        titulo.add("Total");
+        this.modeloTablaDetallesProductos = new DefaultTableModel(titulo, 0);
+        getTblDetalleFactura().setModel(modeloTablaDetallesProductos);
+    }
+    
+    private boolean validarCamposIngresar()
+    {
+        String cantidadProducto = getTxtCantidadProducto().getText();
+        String valorTotal = getTxtValorUnitarioProducto().getText();
+        
+        if(verificarNumeroEntero(cantidadProducto) && verificarNumeroDoble(valorTotal))
+        {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    private boolean verificarNumeroEntero(String Numero)
+    {
+        try{
+            int numero = Integer.parseInt(Numero);
+        }
+        catch(NumberFormatException e){
+            return false;
+        }
+
+        return true;
+    }
+    
+    private boolean verificarNumeroDoble(String Numero)
+    {
+        try{
+            float numero = Float.parseFloat(Numero);
+        }
+        catch(NumberFormatException e){
+            return false;
+        }
+
+        return true;
+    }
+
+            
 }
