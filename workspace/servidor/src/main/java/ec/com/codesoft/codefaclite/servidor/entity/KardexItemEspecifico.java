@@ -19,7 +19,7 @@ import javax.persistence.Table;
  * @author Carlos
  */
 @Entity
-@Table(name = "KARDEX_DETALLE")
+@Table(name = "KARDEX_ITEM_ESPECIFICO")
 public class KardexItemEspecifico {
     
     @Id

@@ -16,8 +16,10 @@ import ec.com.codesoft.codefaclite.servidor.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidor.entity.Compra;
 import ec.com.codesoft.codefaclite.servidor.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.KardexDetalle;
+import ec.com.codesoft.codefaclite.servidor.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.service.BodegaService;
 import ec.com.codesoft.codefaclite.servidor.service.KardexService;
 import java.awt.event.ActionEvent;
@@ -27,6 +29,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -68,40 +72,61 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
-        
-        if(validarItmems())
+        setearValoresKardex();
+        if(validarItems())
         {
-            KardexService servicioKardex=new KardexService();
-            //servicioKardex.grabar(gr);
+            try {
+                KardexService servicioKardex=new KardexService();
+                Bodega bodega= (Bodega) getCmbBodega().getSelectedItem();
+                servicioKardex.ingresarInventario(detallesKardex,bodega);
+                DialogoCodefac.mensaje("Correcto","Los producto fueron agregados correctamente al kardex",DialogoCodefac.MENSAJE_CORRECTO);
+            } 
+            catch (ServicioCodefacException ex) 
+            {
+                DialogoCodefac.mensaje("Incorrecto","No se pudo agregar los productos al inventario",DialogoCodefac.MENSAJE_INCORRECTO);
+                Logger.getLogger(IngresoInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
+                throw new ExcepcionCodefacLite("Cancelar grabar");
+            }
+        }
+        else
+        {
+            throw new ExcepcionCodefacLite("Error al validar");
         }
         
     }
     
-    
-    private boolean validarItmems()
+    /**
+     * Validar los items del kardex que este ingresado el codigo especifico
+     * @return 
+     */
+    private boolean validarItems()
     {
         boolean validado=true;
         
         List<CompraDetalle> detalles= compraInventario.getDetalles();
         
-        for (int i = 0; i < detalles.size(); i++) {
-            CompraDetalle compraDetalle=detalles.get(i);
-            if(compraDetalle.getProductoProveedor().getProducto().getGarantiaEnum().equals(EnumSiNo.SI))
+        for (Map.Entry<KardexDetalle, CompraDetalle> entry : detallesKardex.entrySet()) {
+            KardexDetalle key = entry.getKey();
+            CompraDetalle value = entry.getValue();
+            
+            //Verificar que existan detalles
+            if(key.getDetallesEspecificos()!=null)
             {
-                String codigoUnitario=getTblTblCompra().getModel().getValueAt(i,COLUMNA_CODIGO_UNITARIO).toString();
-                if(codigoUnitario==null || codigoUnitario.equals(""))
+                for(KardexItemEspecifico item: key.getDetallesEspecificos())
                 {
-                    DialogoCodefac.mensaje("Error Validación","El producto "+compraDetalle.getProductoProveedor().getProducto().getNombre()+" requiere el ingreso de un codigo individual",DialogoCodefac.MENSAJE_INCORRECTO);                    
-                    validado=false;
+                    //Verificar que los detalles ingresados tengan un codigo especifico del prodcto para contralar el inventario
+                    if(item.getCodigoEspecifico().equals(""))
+                    {
+                        DialogoCodefac.mensaje("Error Validación","El producto "+value.getProductoProveedor().getProducto().getNombre()+" requiere un código individual",DialogoCodefac.MENSAJE_ADVERTENCIA);                    
+                        validado=false;
+                        break;
+                    }
                 }
-            }
+            }            
         }
-        return validado;
-        
+
+        return validado;        
     }
-    
- 
-    
     
     @Override
     public void editar() throws ExcepcionCodefacLite {
@@ -183,15 +208,28 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
     private void cargarKardexDetalleCompra()
     {
          List<CompraDetalle> detalles=compraInventario.getDetalles();
-         for (CompraDetalle detalle : detalles) {
-            KardexDetalle kardexDetalle=new KardexDetalle();
+        for (CompraDetalle detalle : detalles) {
+            KardexDetalle kardexDetalle = new KardexDetalle();
             kardexDetalle.setCantidad(detalle.getCantidad());
             kardexDetalle.setCodigoDocumento(compraInventario.getCodigoDocumento());
             kardexDetalle.setDocumenoAfectaId(compraInventario.getId());
             kardexDetalle.setPrecioUnitario(detalle.getPrecioUnitario());
             kardexDetalle.setPrecioTotal(detalle.getTotal());
             kardexDetalle.setTipoMovimiento(""); //TODO: Pendiente de grabar
+                        
+            if (detalle.getProductoProveedor().getProducto().getGarantiaEnum().equals(EnumSiNo.SI)) {
+                for (int i = 0; i < detalle.getCantidad(); i++) {
+                    KardexItemEspecifico item=new KardexItemEspecifico();
+                    item.setCodigoEspecifico("");
+                    item.setEstado("a");
+                    item.setObservaciones("");
+                    kardexDetalle.addDetalle(item);
+                }
+            }
+            
             detallesKardex.put(kardexDetalle, detalle);
+
+
         }
         
     }
@@ -201,19 +239,44 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
         String titulo[]={"Cantidad","Descripcion","Costo Unitario","Costo Total","garantia","Codigo Unitario","Observacion Kardex"};
         DefaultTableModel modelTable=new DefaultTableModel(titulo,0);
         
-        List<CompraDetalle> detalles=compraInventario.getDetalles();
-        for (CompraDetalle detalle : detalles) {
-            Vector<String> vector=new Vector<String>();
-            vector.add(detalle.getCantidad()+"");
-            vector.add(detalle.getDescripcion()+"");
-            vector.add(detalle.getPrecioUnitario()+"");
-            vector.add(detalle.getTotal()+"");
-            vector.add(detalle.getProductoProveedor().getProducto().getGarantiaEnum().getNombre()+"");
-            vector.add("");
-            vector.add("");
-            modelTable.addRow(vector);
+        for (Map.Entry<KardexDetalle, CompraDetalle> entry : detallesKardex.entrySet()) 
+        {
+            KardexDetalle kardexDetalle = entry.getKey();
+            CompraDetalle compraDetalle = entry.getValue();
+            
+            List<KardexItemEspecifico> detallesItem=kardexDetalle.getDetallesEspecificos();
+            if(detallesItem==null)
+            {
+                Vector<String> vector = new Vector<String>();
+                vector.add(compraDetalle.getCantidad() + "");
+                vector.add(compraDetalle.getDescripcion() + "");
+                vector.add(compraDetalle.getPrecioUnitario() + "");
+                vector.add(compraDetalle.getTotal() + "");
+                vector.add(compraDetalle.getProductoProveedor().getProducto().getGarantiaEnum().getNombre() + "");
+                vector.add("");
+                vector.add("");
+                modelTable.addRow(vector);                
+            }
+            else
+            {                
+                for (int i = 0; i <detallesItem.size() ; i++) {
+                    Vector<String> vector = new Vector<String>();
+                    vector.add("1");
+                    vector.add(compraDetalle.getDescripcion() + "");
+                    vector.add(compraDetalle.getPrecioUnitario() + "");
+                    vector.add(compraDetalle.getPrecioUnitario() + "");
+                    vector.add(compraDetalle.getProductoProveedor().getProducto().getGarantiaEnum().getNombre() + "");
+                    vector.add("");
+                    vector.add("");
+                    modelTable.addRow(vector);
+                    
+                }
+                
+            }
         }
+        
         getTblTblCompra().setModel(modelTable);
+
     }
 
     private void agregarListenerCombos() {
@@ -231,6 +294,41 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
 
     private void limpiarVariables() {
         this.detallesKardex=new HashMap<KardexDetalle,CompraDetalle>();
+    }
+
+    /**
+     * Setea los valores de la tabla al Kardex
+     */
+    private void setearValoresKardex() {
+        int filaTabla=0;
+         for (Map.Entry<KardexDetalle, CompraDetalle> entry : detallesKardex.entrySet()) 
+        {
+            KardexDetalle kardexDetalle = entry.getKey();
+            CompraDetalle compraDetalle = entry.getValue();
+            
+            List<KardexItemEspecifico> detallesItem=kardexDetalle.getDetallesEspecificos();
+            if(detallesItem==null)
+            {
+                //TODO: Verificar si por algun motivo se puede modificar los datos normales de la compra detalles
+                String codigoUnitario=getTblTblCompra().getModel().getValueAt(filaTabla,COLUMNA_CODIGO_UNITARIO).toString();
+                String observacionKardex=getTblTblCompra().getModel().getValueAt(filaTabla,COLUMNA_OBSERVACION_KARDEX).toString();                            
+                filaTabla++;
+            }
+            else
+            {                
+                for (int i = 0; i <detallesItem.size() ; i++) {
+                    
+                    //TODO: Verificar si por algun motivo se puede modificar los datos normales de la compra detalles
+                    String codigoUnitario = getTblTblCompra().getModel().getValueAt(filaTabla, COLUMNA_CODIGO_UNITARIO).toString();
+                    String observacionKardex = getTblTblCompra().getModel().getValueAt(filaTabla, COLUMNA_OBSERVACION_KARDEX).toString();  
+                    KardexItemEspecifico kardexEspecifico= detallesItem.get(i);
+                    kardexEspecifico.setCodigoEspecifico(codigoUnitario);
+                    kardexEspecifico.setObservaciones(observacionKardex);
+                    filaTabla++;                                        
+                }
+                
+            }
+        }
     }
     
 }

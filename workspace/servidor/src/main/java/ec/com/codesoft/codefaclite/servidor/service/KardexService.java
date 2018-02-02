@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidor.entity.Compra;
 import ec.com.codesoft.codefaclite.servidor.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidor.entity.KardexDetalle;
+import ec.com.codesoft.codefaclite.servidor.entity.Producto;
 import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.KardexFacade;
@@ -51,11 +52,12 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade>{
 
                 KardexDetalle kardexDetalle = entry.getKey();
                 CompraDetalle value = entry.getValue();
+                Producto producto=value.getProductoProveedor().getProducto();
 
                 //Verificar si existe el karde o lo crea;
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put("bodega", bodega);
-                map.put("producto", value.getProductoProveedor().getProducto());
+                map.put("producto",producto);
                 List<Kardex> kardexList=obtenerPorMap(map);
 
                 Kardex kardex=null;
@@ -83,7 +85,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade>{
                  * Grabar los detalles de los kardes y actualizar los valores en el kardex
                  */
                 kardexDetalle.setKardex(kardex);
-                em.merge(kardexDetalle);
+                em.persist(kardexDetalle); //grabando el kardex detalle
 
                 //Esto va a depender del tipo de flujo es decir para saber si suma o resta
                 kardex.setStock(kardex.getStock()+kardexDetalle.getCantidad());
@@ -96,6 +98,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade>{
         }
         catch(Exception e)
         {
+            e.printStackTrace();
             em.getTransaction().rollback();
             throw  new ServicioCodefacException("Error al grabar el inventario");            
         }

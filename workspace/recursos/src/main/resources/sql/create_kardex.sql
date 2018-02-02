@@ -18,29 +18,25 @@ create table KARDEX(
     PRECIO_TOTAL decimal(7,2),
     STOCK BIGINT,
     primary key (ID)
-)
+);
 
 create table KARDEX_DETALLE( 
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1), 
     KARDEX_ID BIGINT,  
     DOCUMENTO_AFECTA_ID BIGINT,
-    CODIGO_DOCUMENTO decimal(7,2), 
+    CODIGO_DOCUMENTO varchar(3), 
     TIPO_MOVIMIENTO varchar(1),
     CANTIDAD Integer,
     PRECIO_UNITARIO decimal(7,2),
     PRECIO_TOTAL decimal(7,2),
     primary key (ID)
-)
+);
 
 create table KARDEX_ITEM_ESPECIFICO( 
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1), 
     KARDEX_DETALLE_ID BIGINT,  
-    CODIGO_ESPECIFICO BIGINT,
+    CODIGO_ESPECIFICO varchar(128),
     OBSERVACIONES varchar(128), 
     ESTADO varchar(1),
-   primary key (ID)
-)
-
-
-
-
+    primary key (ID)
+);

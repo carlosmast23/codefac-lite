@@ -650,7 +650,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                                 frameInterface.grabar();
                                 procesoTerminado=true;
                             } catch (ExcepcionCodefacLite ex) {
-                                ex.printStackTrace();
+                                //ex.printStackTrace();
+                                System.err.println(ex.getMessage());
                                 //JOptionPane.showMessageDialog(null,ex.getMessage());
                             }
                             
