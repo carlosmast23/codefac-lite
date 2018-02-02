@@ -308,5 +308,10 @@ public abstract class AbstractFacade<T>
             }
         }
     }
+    
+    public static EntityTransaction crearTransaccion()
+    {
+        return entityManager.getTransaction();
+    }
 
 }

@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidor.entity;
 
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.EnumSiNo;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Basic;
@@ -280,8 +281,14 @@ public class Producto implements Serializable
         this.caracteristicas = caracteristicas;
     }
 
+    /**
+     * Metodos personalizados
+     */
     
-    
+    public EnumSiNo getGarantiaEnum()
+    {
+        return EnumSiNo.getEnumByLetra(garantia);
+    }
     
     
     

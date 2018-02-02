@@ -83,7 +83,9 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuCompra = new javax.swing.JMenuItem();
         menuInventario = new javax.swing.JMenu();
         jMenuItemAsociarProducto = new javax.swing.JMenuItem();
+        jMenuItemIngresarInventario = new javax.swing.JMenuItem();
         menuBodega = new javax.swing.JMenuItem();
+        jMenuItemKardex = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuCliente = new javax.swing.JMenuItem();
         jMenuItemReporteCliente = new javax.swing.JMenuItem();
@@ -299,8 +301,19 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         });
         menuInventario.add(jMenuItemAsociarProducto);
 
+        jMenuItemIngresarInventario.setText("Ingresar Inventario");
+        menuInventario.add(jMenuItemIngresarInventario);
+
         menuBodega.setText("Bodega");
+        menuBodega.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuBodegaActionPerformed(evt);
+            }
+        });
         menuInventario.add(menuBodega);
+
+        jMenuItemKardex.setText("Kardex");
+        menuInventario.add(jMenuItemKardex);
 
         jMenuBar1.add(menuInventario);
 
@@ -443,6 +456,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItemAsociarProductoActionPerformed
 
+    private void menuBodegaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuBodegaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_menuBodegaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -517,7 +534,9 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JMenuItem jMenuItemContenido;
     private javax.swing.JMenuItem jMenuItemDisenador;
     private javax.swing.JMenuItem jMenuItemFacturaReporte;
+    private javax.swing.JMenuItem jMenuItemIngresarInventario;
     private javax.swing.JMenuItem jMenuItemInicio;
+    private javax.swing.JMenuItem jMenuItemKardex;
     private javax.swing.JMenuItem jMenuItemMonitor;
     private javax.swing.JMenuItem jMenuItemNotaCredito;
     private javax.swing.JMenuItem jMenuItemReporteCliente;
@@ -843,6 +862,22 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
     public void setMenuBodega(JMenuItem menuBodega) {
         this.menuBodega = menuBodega;
+    }
+
+    public JMenuItem getjMenuItemIngresarInventario() {
+        return jMenuItemIngresarInventario;
+    }
+
+    public void setjMenuItemIngresarInventario(JMenuItem jMenuItemIngresarInventario) {
+        this.jMenuItemIngresarInventario = jMenuItemIngresarInventario;
+    }
+
+    public JMenuItem getjMenuItemKardex() {
+        return jMenuItemKardex;
+    }
+
+    public void setjMenuItemKardex(JMenuItem jMenuItemKardex) {
+        this.jMenuItemKardex = jMenuItemKardex;
     }
     
     

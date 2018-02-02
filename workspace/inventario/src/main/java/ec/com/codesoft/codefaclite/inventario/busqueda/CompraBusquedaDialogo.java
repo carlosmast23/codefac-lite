@@ -56,12 +56,13 @@ public class CompraBusquedaDialogo implements InterfaceModelFind<Compra>
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        /*Compra compra;
-        compra.getPreimpreso();
-        compra.getCodigoTipoDocumento();
-        */        
+        /*
+        Compra compra;
+        compra.getSecuencial();
+        compra.getCodigoTipoDocumento();*/
+                
         String queryString = "SELECT u FROM Compra u WHERE (u.codigoTipoDocumento=?1) and";
-        queryString+=" ( LOWER(u.preimpreso) like "+filter+" )";
+        queryString+=" ( LOWER(u.secuencial) like "+filter+" )";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,TipoDocumentoEnum.COMPRA_INVENTARIO.getCodigo());
         
