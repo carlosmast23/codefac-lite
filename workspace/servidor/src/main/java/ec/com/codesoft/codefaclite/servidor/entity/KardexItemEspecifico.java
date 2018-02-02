@@ -33,7 +33,7 @@ public class KardexItemEspecifico {
     @Column(name = "OBSERVACIONES")
     private String observaciones;
     
-    @Column(name = "ID")
+    @Column(name = "ESTADO")
     private String estado;
 
     @JoinColumn(name = "KARDEX_DETALLE_ID")
