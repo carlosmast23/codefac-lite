@@ -1,6 +1,7 @@
 package ec.com.codesoft.codefaclite.inventario.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
@@ -8,22 +9,41 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.inventario.busqueda.BodegaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.inventario.panel.BodegaPanel;
 import ec.com.codesoft.codefaclite.servidor.entity.Bodega;
+import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.BodegaEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.service.BodegaService;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bodega> {
 
     private Bodega bodega;
     private BodegaService bodegaService;
+    private JFileChooser jFileChooser;
+    private Path origen = null;
+    private Path destino = null;
 
     public BodegaModel() {
         bodegaService = new BodegaService();
+
+        jFileChooser = new JFileChooser();
+        jFileChooser.setDialogTitle("Elegir archivo");
+        jFileChooser.setFileFilter(new FileNameExtensionFilter("Foto", "png", "jpg", "bmp"));
+        agregarListenerBotones();
     }
 
     @Override
@@ -32,6 +52,7 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
             bodega = new Bodega();
             setearValoresBodega(bodega);
             bodegaService.grabar(bodega);
+
             DialogoCodefac.mensaje("Datos correctos", "El Producto se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
@@ -45,6 +66,8 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
         bodega.setDescripcion(getTxtDescripcion().getText());
         bodega.setEncargado(getTxtEncargado().getText());
         bodega.setImagenPath(getTxtFoto().getText());
+        
+        moverArchivo();
     }
 
     @Override
@@ -143,6 +166,62 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
     @Override
     public List<String> getPerfilesPermisos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void cargarDatosArchivos(File archivoEscogido) {
+        File archivo = archivoEscogido;
+        String rutaArchivo = archivo.getPath();
+        String nombreArchivo = archivo.getName();
+        getTxtFoto().setText(nombreArchivo);
+        String rutaDestino = session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + DirectorioCodefac.IMAGENES.getNombre() + "/";
+        rutaDestino += nombreArchivo;
+        establecerDondeMoverArchivo(rutaArchivo, rutaDestino);
+    }
+
+    public void establecerDondeMoverArchivo(String rutaArchivo, String rutaDestino) {
+        this.origen = FileSystems.getDefault().getPath(rutaArchivo);
+        this.destino = FileSystems.getDefault().getPath(rutaDestino);
+    }
+
+    private void agregarListenerBotones() {
+        getBtnCargarImagen().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int seleccion = jFileChooser.showDialog(null, "Abrir");
+                switch (seleccion) {
+                    case JFileChooser.APPROVE_OPTION:
+                        cargarDatosArchivos(jFileChooser.getSelectedFile());
+                        break;
+                    case JFileChooser.CANCEL_OPTION:
+
+                        break;
+                    case JFileChooser.ERROR_OPTION:
+
+                        break;
+                }
+            }
+        });
+
+    }
+
+    public void moverArchivo() {
+        //Verifica que solo cuando exista un origen y destino exista se copien los datos
+        if (origen == null || destino == null) {
+            return;
+        }
+        File file = destino.toFile();
+        //crear toda la ruta si no existe
+        if (!file.exists()) {
+            file.getParentFile().mkdirs();
+            //file.mkdir();
+        }
+        try {
+            Files.copy(origen, destino, StandardCopyOption.REPLACE_EXISTING);
+            getTxtFoto().setText("" + destino.getFileName());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            DialogoCodefac.mensaje("Firma", "Problema en guardar firma", DialogoCodefac.MENSAJE_INCORRECTO);
+        }
     }
 
 }

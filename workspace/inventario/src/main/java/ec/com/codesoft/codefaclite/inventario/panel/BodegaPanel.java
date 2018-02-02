@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.inventario.panel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
+import javax.swing.JButton;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -42,7 +43,7 @@ public abstract class BodegaPanel extends ControladorCodefacInterface {
         jLabel4 = new javax.swing.JLabel();
         txtFoto = new javax.swing.JTextField();
         txtEncargado = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        btnCargarImagen = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -62,7 +63,8 @@ public abstract class BodegaPanel extends ControladorCodefacInterface {
 
         jLabel4.setText("Foto:");
 
-        jButton1.setText("Buscar");
+        btnCargarImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
+        btnCargarImagen.setToolTipText("Buscar imagen en su computador");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -81,9 +83,9 @@ public abstract class BodegaPanel extends ControladorCodefacInterface {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
                     .addComponent(txtEncargado)
                     .addComponent(txtFoto))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addComponent(btnCargarImagen)
+                .addGap(19, 19, 19))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -96,16 +98,17 @@ public abstract class BodegaPanel extends ControladorCodefacInterface {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txtEncargado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(txtFoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
-                .addGap(16, 16, 16))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel4)
+                        .addComponent(txtFoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnCargarImagen))
+                .addGap(13, 13, 13))
         );
 
         pack();
@@ -113,7 +116,7 @@ public abstract class BodegaPanel extends ControladorCodefacInterface {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnCargarImagen;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -162,5 +165,14 @@ public abstract class BodegaPanel extends ControladorCodefacInterface {
     public void setTxtNombre(JTextField txtNombre) {
         this.txtNombre = txtNombre;
     }
+
+    public JButton getBtnCargarImagen() {
+        return btnCargarImagen;
+    }
+
+    public void setBtnCargarImagen(JButton btnCargarImagen) {
+        this.btnCargarImagen = btnCargarImagen;
+    }
+    
 
 }
