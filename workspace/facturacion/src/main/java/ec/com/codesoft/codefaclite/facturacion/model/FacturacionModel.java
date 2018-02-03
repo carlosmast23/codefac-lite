@@ -742,7 +742,7 @@ public class FacturacionModel extends FacturacionPanel {
 
     }
     
-    private void cargarSecuencial()
+    public void cargarSecuencial()
     {
         DocumentoEnum tipoDocumentoEnum= (DocumentoEnum) getCmbDocumento().getSelectedItem();
         String secuencial="";

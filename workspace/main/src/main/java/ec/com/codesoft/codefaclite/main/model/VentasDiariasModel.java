@@ -182,6 +182,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
                         panelPadre.crearVentanaCodefac(facturacionModel, true);
                         try {
                             facturacionModel.setFactura(factura);
+                            facturacionModel.cargarSecuencial();
                         } catch (ExcepcionCodefacLite ex) {
                             Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
                         }
