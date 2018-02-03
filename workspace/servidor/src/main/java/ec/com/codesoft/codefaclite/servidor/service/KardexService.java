@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidor.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidor.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.KardexFacade;
@@ -44,14 +45,17 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade>{
      */
     public void ingresarInventario(Map<KardexDetalle,CompraDetalle> detalles,Bodega bodega) throws ServicioCodefacException
     {
+        
         try
         {
             em.getTransaction().begin();
+            Compra compra=null; //referencia para almacenar la compra ingresada a inventario
 
             for (Map.Entry<KardexDetalle, CompraDetalle> entry : detalles.entrySet()) {
 
                 KardexDetalle kardexDetalle = entry.getKey();
                 CompraDetalle value = entry.getValue();
+                compra=value.getCompra();
                 Producto producto=value.getProductoProveedor().getProducto();
 
                 //Verificar si existe el karde o lo crea;
@@ -87,13 +91,18 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade>{
                 kardexDetalle.setKardex(kardex);
                 em.persist(kardexDetalle); //grabando el kardex detalle
 
-                //Esto va a depender del tipo de flujo es decir para saber si suma o resta
+                //Esto va a depender del tipo de flujo del inventario es decir para saber si la suma o resta pero por defecto
+                // el metodo es solo de ingreso asi que no considero el otro caso
                 kardex.setStock(kardex.getStock()+kardexDetalle.getCantidad());
                 kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(kardexDetalle.getPrecioUnitario()).divide(new BigDecimal("2"),2,RoundingMode.HALF_UP));
                 kardex.setPrecioTotal(kardex.getPrecioTotal().add(kardexDetalle.getPrecioTotal()));
                 kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());
                 em.merge(kardex);
             }
+            
+            if(compra!=null)
+                compra.setInventarioIngreso(EnumSiNo.SI.getLetra());
+            
             em.getTransaction().commit(); //si todo sale bien ejecuto en la base de datos
         }
         catch(Exception e)

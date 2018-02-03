@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.EntityManager;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
@@ -21,10 +22,12 @@ import org.eclipse.persistence.exceptions.DatabaseException;
 public abstract class ServiceAbstract<Entity,Facade>
 {
     private AbstractFacade<Entity> facade;
+    protected EntityManager entityManager;
  
     public ServiceAbstract(Class<Facade> clase) {
         try {
             this.facade =(AbstractFacade<Entity>) clase.newInstance();
+            this.entityManager=AbstractFacade.entityManager;
         } catch (InstantiationException ex) {
             Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {

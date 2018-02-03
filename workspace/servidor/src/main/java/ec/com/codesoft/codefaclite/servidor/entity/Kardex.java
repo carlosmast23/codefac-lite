@@ -2,6 +2,8 @@ package ec.com.codesoft.codefaclite.servidor.entity;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /*
@@ -55,6 +58,9 @@ public class Kardex {
     @JoinColumn(name = "PRODUCTO_ID")
     @ManyToOne     
     private Producto producto;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "kardex")
+    private List<KardexDetalle> detallesKardex;
 
     public Kardex() {
     }
@@ -130,6 +136,16 @@ public class Kardex {
     public void setProducto(Producto producto) {
         this.producto = producto;
     }
+
+    public List<KardexDetalle> getDetallesKardex() {
+        return detallesKardex;
+    }
+
+    public void setDetallesKardex(List<KardexDetalle> detallesKardex) {
+        this.detallesKardex = detallesKardex;
+    }
+    
+    
 
     
     

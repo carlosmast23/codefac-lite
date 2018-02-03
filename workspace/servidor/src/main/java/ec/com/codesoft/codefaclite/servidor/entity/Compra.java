@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidor.entity;
 
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.EnumSiNo;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -102,6 +103,9 @@ public class Compra {
     
     @Column(name ="CODIGO_TIPO_DOCUMENTO")
     private String codigoTipoDocumento;
+ 
+    @Column(name ="INVENTARIO_INGRESO")
+    private String inventarioIngreso;
     
     @JoinColumn(name = "PROVEEDOR_ID")
     @ManyToOne    
@@ -335,6 +339,16 @@ public class Compra {
     public void setCodigoTipoDocumento(String codigoTipoDocumento) {
         this.codigoTipoDocumento = codigoTipoDocumento;
     }
+
+    public String getInventarioIngreso() {
+        return inventarioIngreso;
+    }
+
+    public void setInventarioIngreso(String inventarioIngreso) {
+        this.inventarioIngreso = inventarioIngreso;
+    }
+    
+    
     
     
     /**
@@ -349,6 +363,11 @@ public class Compra {
         detalle.setCompra(this);
         this.detalles.add(detalle);
         
+    }
+    
+    public EnumSiNo getInventarioIngresoEnum()
+    {
+        return EnumSiNo.getEnumByLetra(inventarioIngreso);
     }
     
 

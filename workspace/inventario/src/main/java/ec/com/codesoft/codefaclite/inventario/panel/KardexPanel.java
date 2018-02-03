@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInte
 import ec.com.codesoft.codefaclite.servidor.entity.Bodega;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
@@ -47,13 +48,13 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblKardexDetalle = new javax.swing.JTable();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        lblCantidad = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        lblPrecioPromedio = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
+        lblPrecioUltimo = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
+        lblTotal = new javax.swing.JLabel();
         cmbBodega = new javax.swing.JComboBox<>();
 
         setClosable(true);
@@ -93,22 +94,22 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel5.setText("Stock:");
 
-        jLabel6.setText("00.00");
+        lblCantidad.setText("00.00");
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel7.setText("Precio Promedio:");
 
-        jLabel8.setText("00.00");
+        lblPrecioPromedio.setText("00.00");
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel9.setText("Precio Ultimo:");
 
-        jLabel10.setText("00.00");
+        lblPrecioUltimo.setText("00.00");
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel11.setText("Total:");
 
-        jLabel12.setText("0.00");
+        lblTotal.setText("0.00");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -146,23 +147,21 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel6)
+                        .addComponent(lblCantidad)
                         .addGap(37, 37, 37)
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel8)
+                        .addComponent(lblPrecioPromedio)
                         .addGap(49, 49, 49)
                         .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel10)
+                        .addComponent(lblPrecioUltimo)
                         .addGap(55, 55, 55)
                         .addComponent(jLabel11)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel12)
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 510, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addComponent(lblTotal)
+                        .addContainerGap(421, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -186,16 +185,16 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
                     .addComponent(btnConsultar))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jLabel6)
+                    .addComponent(lblCantidad)
                     .addComponent(jLabel7)
-                    .addComponent(jLabel8)
+                    .addComponent(lblPrecioPromedio)
                     .addComponent(jLabel9)
-                    .addComponent(jLabel10)
+                    .addComponent(lblPrecioUltimo)
                     .addComponent(jLabel11)
-                    .addComponent(jLabel12))
+                    .addComponent(lblTotal))
                 .addGap(34, 34, 34))
         );
 
@@ -210,18 +209,18 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
     private com.toedter.calendar.JDateChooser cmbFechaFinal;
     private com.toedter.calendar.JDateChooser cmbFechaInicial;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblCantidad;
+    private javax.swing.JLabel lblPrecioPromedio;
+    private javax.swing.JLabel lblPrecioUltimo;
+    private javax.swing.JLabel lblTotal;
     private javax.swing.JTable tblKardexDetalle;
     private javax.swing.JTextField txtProducto;
     // End of variables declaration//GEN-END:variables
@@ -285,6 +284,39 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
     public void setTxtProducto(JTextField txtProducto) {
         this.txtProducto = txtProducto;
     }
+
+    public JLabel getLblCantidad() {
+        return lblCantidad;
+    }
+
+    public void setLblCantidad(JLabel lblCantidad) {
+        this.lblCantidad = lblCantidad;
+    }
+
+    public JLabel getLblPrecioPromedio() {
+        return lblPrecioPromedio;
+    }
+
+    public void setLblPrecioPromedio(JLabel lblPrecioPromedio) {
+        this.lblPrecioPromedio = lblPrecioPromedio;
+    }
+
+    public JLabel getLblPrecioUltimo() {
+        return lblPrecioUltimo;
+    }
+
+    public void setLblPrecioUltimo(JLabel lblPrecioUltimo) {
+        this.lblPrecioUltimo = lblPrecioUltimo;
+    }
+
+    public JLabel getLblTotal() {
+        return lblTotal;
+    }
+
+    public void setLblTotal(JLabel lblTotal) {
+        this.lblTotal = lblTotal;
+    }
+    
     
     
 }

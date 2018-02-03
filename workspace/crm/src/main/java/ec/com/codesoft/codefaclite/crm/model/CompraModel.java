@@ -9,24 +9,29 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.crm.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.crm.busqueda.ProductoProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.crm.busqueda.ProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.crm.panel.CompraPanel;
 import ec.com.codesoft.codefaclite.servidor.entity.Compra;
 import ec.com.codesoft.codefaclite.servidor.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
+import ec.com.codesoft.codefaclite.servidor.entity.Producto;
 import ec.com.codesoft.codefaclite.servidor.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.ModuloEnum;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.service.CompraService;
+import ec.com.codesoft.codefaclite.servidor.service.ProductoProveedorService;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
 import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +52,8 @@ public class CompraModel extends CompraPanel{
      * Referencia donde se va a almacenar la compra gestionado
      */
     private Compra compra;
+    private Producto productoSeleccionado;
+    private Persona proveedor;
     private ProductoProveedor productoProveedor;
     
     
@@ -67,7 +74,7 @@ public class CompraModel extends CompraPanel{
         try {
             CompraService servicio=new CompraService();
             setearValores();
-            servicio.grabar(compra);
+            servicio.grabarCompra(compra);
             DialogoCodefac.mensaje("Correcto","La compra fue guardada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Incorrecto","No se puede gurdar la compra",DialogoCodefac.MENSAJE_INCORRECTO);
@@ -85,7 +92,7 @@ public class CompraModel extends CompraPanel{
         compra.setFechaCreacion(UtilidadesFecha.getFechaHoy());
         compra.setFechaFactura(new Date(getCmbFechaCompra().getDate().getTime()));
         compra.setIdentificacion("");
-        compra.setProveedor(productoProveedor.getProveedor());
+        compra.setProveedor(proveedor);
         
         compra.setPuntoEmision(getTxtPuntoEmision().getText());
         compra.setPuntoEstablecimiento(getTxtEstablecimiento().getText());
@@ -94,6 +101,7 @@ public class CompraModel extends CompraPanel{
         compra.setRazonSocial("");
         compra.setTelefono("");
         compra.setTipoFacturacion(""); //TODO: Establecer el metodo de facturacion manual y electronica
+        compra.setInventarioIngreso(EnumSiNo.NO.getLetra());
         
         //Seteando el tipo de documento 
         TipoDocumentoEnum tipoDocumentoEnum= (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
@@ -128,7 +136,7 @@ public class CompraModel extends CompraPanel{
 
     @Override
     public void limpiar() {
-        
+        getTxtCantidadItem().setText("1");
     }
 
     @Override
@@ -172,6 +180,13 @@ public class CompraModel extends CompraPanel{
         for (TipoDocumentoEnum tipoDocumento : tipoDocumentos) {
             getCmbTipoDocumento().addItem(tipoDocumento);
         }
+        
+        //Agregar los valores para ver si se cobra el iva o no
+        EnumSiNo enumSiNo=(EnumSiNo) getCmbCobraIva().getSelectedItem();
+        for (EnumSiNo enumerador : EnumSiNo.values()) {
+            getCmbCobraIva().addItem(enumerador);
+        }
+        
     }
 
     private void agregarListenerBotones() {
@@ -181,7 +196,7 @@ public class CompraModel extends CompraPanel{
                 ProveedorBusquedaDialogo buscarBusquedaDialogo = new ProveedorBusquedaDialogo();
                 BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
                 buscarDialogo.setVisible(true);
-                Persona proveedor = (Persona) buscarDialogo.getResultado();
+                proveedor = (Persona) buscarDialogo.getResultado();
                 if (proveedor != null) {
                     String identificacion=proveedor.getIdentificacion();
                     String nombre =proveedor.getRazonSocial();
@@ -193,15 +208,39 @@ public class CompraModel extends CompraPanel{
         getBtnBuscarProductoProveedor().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ProductoProveedorBusquedaDialogo buscarBusquedaDialogo = new ProductoProveedorBusquedaDialogo();
+                ProductoBusquedaDialogo buscarBusquedaDialogo = new ProductoBusquedaDialogo();
                 BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
                 buscarDialogo.setVisible(true);
-                productoProveedor = (ProductoProveedor) buscarDialogo.getResultado();
-                if(productoProveedor!=null)
+                productoSeleccionado = (Producto) buscarDialogo.getResultado();
+                                               
+                if(productoSeleccionado!=null)
                 {
-                    getTxtProductoItem().setText(productoProveedor.getProducto().getNombre());
-                    getTxtDescripcionItem().setText(productoProveedor.getProducto().getNombre());
-                    getTxtPrecionUnitarioItem().setText(productoProveedor.getCosto()+"");
+                    //Buscar si existe el producto vinculado con un proveedor
+                    ProductoProveedorService serviceProductoProveedor = new ProductoProveedorService();
+                    Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    mapParametros.put("producto", productoSeleccionado);
+                    mapParametros.put("proveedor", proveedor);
+                    List<ProductoProveedor> resultados = serviceProductoProveedor.obtenerPorMap(mapParametros);
+                    if (resultados != null && resultados.size() > 0) {
+                        productoProveedor = resultados.get(0); //Si existe el proveedor solo seteo la variale
+                        getTxtPrecionUnitarioItem().setText(productoProveedor.getCosto()+"");
+                        EnumSiNo enumSiNo=EnumSiNo.getEnumByLetra(productoProveedor.getConIva());
+                        getCmbCobraIva().setSelectedItem(enumSiNo);
+                    } 
+                    else 
+                    {//Cuando no existe crea un nuevo producto proveedor
+                        productoProveedor=new ProductoProveedor(); //Si no existe el item lo creo para posteriormente cuando grabe persistir con la base de datos
+                        productoProveedor.setDescripcion("");
+                        productoProveedor.setEstado("a");
+                        productoProveedor.setProducto(productoSeleccionado);
+                        productoProveedor.setProveedor(proveedor);
+                        getTxtPrecionUnitarioItem().setText("0"); //Seteo con el valor de 0 porque no existe el costo grabado
+                        getCmbCobraIva().setSelectedItem(EnumSiNo.SI); //Seteo por defecto el valor de SI cuando no existe en la base de datos
+                    }
+                    
+                    getTxtProductoItem().setText(productoSeleccionado.getNombre());
+                    getTxtDescripcionItem().setText(productoSeleccionado.getNombre());
+                    
                 }
             }
         });
@@ -209,6 +248,16 @@ public class CompraModel extends CompraPanel{
         getBtnAgregarItem().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                /**
+                 * Seteo el valor que se ingresa en el costo para actualizar el valor del producto para ese proveedor
+                 */
+                BigDecimal costo=new BigDecimal(getTxtPrecionUnitarioItem().getText());
+                productoProveedor.setCosto(costo);
+                
+                EnumSiNo enumSiNo= (EnumSiNo) getCmbCobraIva().getSelectedItem();
+                productoProveedor.setConIva(enumSiNo.getLetra());
+                
+                //Seteo los valores de los detalles e la compra
                 CompraDetalle compraDetalle=new CompraDetalle();
                 compraDetalle.setCantidad(Integer.parseInt(getTxtCantidadItem().getText()));
                 compraDetalle.setPrecioUnitario(new BigDecimal(getTxtPrecionUnitarioItem().getText()));

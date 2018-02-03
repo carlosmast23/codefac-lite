@@ -211,12 +211,11 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
         for (CompraDetalle detalle : detalles) {
             KardexDetalle kardexDetalle = new KardexDetalle();
             kardexDetalle.setCantidad(detalle.getCantidad());
-            kardexDetalle.setCodigoDocumento(compraInventario.getCodigoDocumento());
-            kardexDetalle.setDocumenoAfectaId(compraInventario.getId());
+            kardexDetalle.setCodigoTipoDocumento(compraInventario.getCodigoTipoDocumento());
+            kardexDetalle.setReferenciaDocumentoId(compraInventario.getId());
             kardexDetalle.setPrecioUnitario(detalle.getPrecioUnitario());
             kardexDetalle.setPrecioTotal(detalle.getTotal());
-            kardexDetalle.setTipoMovimiento(""); //TODO: Pendiente de grabar
-                        
+                                    
             if (detalle.getProductoProveedor().getProducto().getGarantiaEnum().equals(EnumSiNo.SI)) {
                 for (int i = 0; i < detalle.getCantidad(); i++) {
                     KardexItemEspecifico item=new KardexItemEspecifico();

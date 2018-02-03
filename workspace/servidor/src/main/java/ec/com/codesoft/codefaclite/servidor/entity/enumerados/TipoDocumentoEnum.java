@@ -13,29 +13,33 @@ import java.util.List;
  * @author Carlos
  */
 public enum TipoDocumentoEnum {
-    
-    VENTA(ModuloEnum.VENTAS,"VET","Ventas"),
+            
+    VENTA(ModuloEnum.VENTAS,"VET","Ventas",TipoDocumentoEnum.AFECTA_INVENTARIO_NEGATIVO),
     /**
      * Tipo de compra que va a ingresar productos al inventario
      */
-    COMPRA_INVENTARIO(ModuloEnum.COMPRAS,"COI","Compra Inventario"),
+    COMPRA_INVENTARIO(ModuloEnum.COMPRAS,"COI","Compra Inventario",TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO),
         /**
      * Tipo de compra que va a ingresar productos al inventario
      */
-    COMPRA_SERVICIOS(ModuloEnum.COMPRAS,"COS","Compra Servicios"),
+    COMPRA_SERVICIOS(ModuloEnum.COMPRAS,"COS","Compra Servicios",TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO),
     /**
      * Tipo de compra que se registra como gastos de la empresa
      */
-    COMPRA_GASTOS(ModuloEnum.COMPRAS,"COG","Compra Gastos"),    
+    COMPRA_GASTOS(ModuloEnum.COMPRAS,"COG","Compra Gastos",TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO),    
     /**
      * Retenciones del iva o del inventario
      */
-    RETENCIONES(ModuloEnum.RETENCIONES,"RET","Retenciones"),;
+    RETENCIONES(ModuloEnum.RETENCIONES,"RET","Retenciones",TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO),;
     
-    private TipoDocumentoEnum(ModuloEnum moduloEnum,String codigo,String nombre) {
+    public static final String AFECTA_INVENTARIO_POSITIVO="+";
+    public static final String AFECTA_INVENTARIO_NEGATIVO="-";
+    
+    private TipoDocumentoEnum(ModuloEnum moduloEnum,String codigo,String nombre,String signoInventario) {
         this.moduloEnum = moduloEnum;
         this.codigo=codigo;
         this.nombre=nombre;        
+        this.signoInventario=signoInventario;
     }
     
     private String codigo;
@@ -43,6 +47,11 @@ public enum TipoDocumentoEnum {
     private String nombre;
     
     private ModuloEnum moduloEnum;
+        
+    /**
+     * El signo del inventario para saber si se tiene que restar o sumar
+     */
+    private String signoInventario;
 
     public String getNombre() {
         return nombre;
@@ -51,6 +60,12 @@ public enum TipoDocumentoEnum {
     public String getCodigo() {
         return codigo;
     }
+
+    public ModuloEnum getModuloEnum() {
+        return moduloEnum;
+    }
+    
+    
 
     /**
      * Obtiene el objeto por el codigo del tipo de documento

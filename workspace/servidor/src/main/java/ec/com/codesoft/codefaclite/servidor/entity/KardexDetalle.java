@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidor.entity;
 
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoDocumentoEnum;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,17 +33,18 @@ public class KardexDetalle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "DOCUMENTO_AFECTA_ID")
-    private Long documenoAfectaId;
+    /**
+     * ID del documento que hacer e
+     */
+    @Column(name = "REFERENCIA_DOCUMENTO_ID")
+    private Long referenciaDocumentoId;
     
-    @Column(name = "CODIGO_DOCUMENTO")
-    private String codigoDocumento;
     
     /**
      * Variable para saber si el ingreso es positivo o negativo en el cardex
      */
-    @Column(name = "TIPO_MOVIMIENTO")
-    private String tipoMovimiento;
+    @Column(name = "CODIGO_TIPO_DOCUMENTO")
+    private String codigoTipoDocumento;
     
     @Column(name = "CANTIDAD")
     private Integer cantidad;
@@ -75,28 +77,21 @@ public class KardexDetalle {
         this.id = id;
     }
 
-    public Long getDocumenoAfectaId() {
-        return documenoAfectaId;
+    public Long getReferenciaDocumentoId() {
+        return referenciaDocumentoId;
     }
 
-    public void setDocumenoAfectaId(Long documenoAfectaId) {
-        this.documenoAfectaId = documenoAfectaId;
+    public void setReferenciaDocumentoId(Long referenciaDocumentoId) {
+        this.referenciaDocumentoId = referenciaDocumentoId;
     }
 
-    public String getCodigoDocumento() {
-        return codigoDocumento;
+
+    public String getCodigoTipoDocumento() {
+        return codigoTipoDocumento;
     }
 
-    public void setCodigoDocumento(String codigoDocumento) {
-        this.codigoDocumento = codigoDocumento;
-    }
-
-    public String getTipoMovimiento() {
-        return tipoMovimiento;
-    }
-
-    public void setTipoMovimiento(String tipoMovimiento) {
-        this.tipoMovimiento = tipoMovimiento;
+    public void setCodigoTipoDocumento(String codigoTipoDocumento) {
+        this.codigoTipoDocumento = codigoTipoDocumento;
     }
 
     public Integer getCantidad() {
@@ -155,5 +150,9 @@ public class KardexDetalle {
         
     }
     
+    public TipoDocumentoEnum getCodigoTipoDocumentoEnum()
+    {
+        return TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(codigoTipoDocumento);
+    }
     
 }

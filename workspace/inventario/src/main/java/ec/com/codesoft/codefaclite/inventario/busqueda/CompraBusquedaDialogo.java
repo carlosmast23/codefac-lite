@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidor.entity.Compra;
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.ProductoEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
@@ -59,12 +60,14 @@ public class CompraBusquedaDialogo implements InterfaceModelFind<Compra>
         /*
         Compra compra;
         compra.getSecuencial();
+        compra.setInventarioIngreso();
         compra.getCodigoTipoDocumento();*/
                 
-        String queryString = "SELECT u FROM Compra u WHERE (u.codigoTipoDocumento=?1) and";
+        String queryString = "SELECT u FROM Compra u WHERE (u.codigoTipoDocumento=?1) and u.inventarioIngreso=?2 and ";
         queryString+=" ( LOWER(u.secuencial) like "+filter+" )";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,TipoDocumentoEnum.COMPRA_INVENTARIO.getCodigo());
+        queryDialog.agregarParametro(2,EnumSiNo.NO.getLetra());
         
         return queryDialog;
     }

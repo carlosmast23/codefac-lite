@@ -36,6 +36,7 @@ create table COMPRA
     TIPO_FACTURACION varchar(1),
     CODIGO_DOCUMENTO varchar(3),
     CODIGO_TIPO_DOCUMENTO varchar(3),
+    INVENTARIO_INGRESO varchar(1),
     primary key (ID),
     CONSTRAINT id_cliente_compra_fk FOREIGN KEY (PROVEEDOR_ID) REFERENCES CLIENTE(CLIENTE_ID)
 
