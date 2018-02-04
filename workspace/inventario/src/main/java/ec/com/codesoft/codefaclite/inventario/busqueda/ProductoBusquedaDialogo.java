@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.ProductoEnumEstado;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoService;
 import java.util.ArrayList;
@@ -22,6 +23,8 @@ import java.util.Vector;
  */
 public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto>
 {
+    
+    private TipoProductoEnum tipoProductoEnum;
 
     @Override
     public Vector<ColumnaDialogo> getColumnas() 
@@ -55,11 +58,31 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto>
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        String queryString = "SELECT u FROM Producto u WHERE (u.estado=?1) and";
+        String queryExtra="";
+        if(tipoProductoEnum!=null)
+        {
+            queryExtra=" u.tipoProducto=?99 and ";
+        }        
+        
+        String queryString = "SELECT u FROM Producto u WHERE (u.estado=?1) and "+queryExtra;
         queryString+=" ( LOWER(u.nombre) like "+filter+" )";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,ProductoEnumEstado.ACTIVO.getEstado());
+        if(tipoProductoEnum!=null)
+        {
+            queryDialog.agregarParametro(99,tipoProductoEnum);
+        }
         //queryDialog.agregarParametro(2,ProductoEnumEstado.INACTIVO.getEstado());
         return queryDialog;
     }
+
+    public TipoProductoEnum getTipoProductoEnum() {
+        return tipoProductoEnum;
+    }
+
+    public void setTipoProductoEnum(TipoProductoEnum tipoProductoEnum) {
+        this.tipoProductoEnum = tipoProductoEnum;
+    }
+    
+    
 }
