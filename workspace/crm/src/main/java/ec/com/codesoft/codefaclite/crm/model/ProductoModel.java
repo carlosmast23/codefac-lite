@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidor.entity.Impuesto;
 import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
+import ec.com.codesoft.codefaclite.servidor.entity.ProductoEnsamble;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.ProductoEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoProductoEnum;
@@ -31,8 +32,10 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -49,6 +52,11 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     
     private BigDecimal d;
     
+    /*
+    Referencia sobre el producto seleccionado para el ensamble
+    */
+    private Producto productoEnsamble;
+    
     public ProductoModel()
     {
         productoService = new ProductoService();
@@ -58,13 +66,13 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getComboIrbpnr().setEnabled(false);
         iniciarCombosBox();
         listenerComboBox();
+        listenerBotones();
     }
  
     @Override
     public void grabar() throws ExcepcionCodefacLite 
     {
         try {
-            producto = new Producto();
             setearValoresProducto(producto);            
             productoService.grabar(producto);
             DialogoCodefac.mensaje("Datos correctos", "El Producto se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
@@ -106,18 +114,9 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
             producto.setEstado(ProductoEnumEstado.ACTIVO.getEstado());
             
             TipoProductoEnum tipoProductoEnum= (TipoProductoEnum) getComboTipoProducto().getSelectedItem();
+            producto.setTipoProducto(tipoProductoEnum.getLetra());
             
-            
-            
-            if(getComboTipoProducto().getSelectedItem().equals("Bien"))
-            {
-                producto.setTipoProducto("B");
-            }
-            else
-            {
-                producto.setTipoProducto("S");
-            }
-            
+           
             producto.setNombre(getTextNombre().getText());
             d = new BigDecimal(getTextValorUnitario().getText());
             
@@ -195,12 +194,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         
         getComboIva().setSelectedItem(producto.getIva());
         
-        if(producto.getTipoProducto().equals('B')){
-            getComboTipoProducto().setSelectedItem("Bien");
-        }
-        else{
-            getComboTipoProducto().setSelectedItem("Servicio");
-        }
+        getComboTipoProducto().setSelectedItem(TipoProductoEnum.getEnumByLetra(producto.getTipoProducto()));
         
         /**
          * Cargar datos adicionales
@@ -218,11 +212,15 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getTxtCaracteristica().setText((producto.getCaracteristicas()!=null)?producto.getCaracteristicas()+"":"");
         getTxtObservaciones().setText((producto.getObservaciones()!=null)?producto.getObservaciones()+"":"");
         
+        actualizarTablaEnsamble();
         
     }
 
     @Override
     public void limpiar() {
+        
+        this.producto=new Producto();
+        
         getComboIva().removeAllItems();
         getComboIce().removeAllItems();
         getComboIrbpnr().removeAllItems();
@@ -350,5 +348,47 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         
         }
    }
+
+    private void listenerBotones() {
+        getBtnBuscarProductoEnsamble().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo();
+                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
+                buscarDialogoModel.setVisible(true);
+                productoEnsamble = (Producto) buscarDialogoModel.getResultado();
+
+                if (productoEnsamble != null) {
+                    getTxtProductoEnsamble().setText(productoEnsamble.getNombre());
+                }
+            }
+        });
+        
+        getBtnAgregarEnsamble().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ProductoEnsamble componenteEnsamble=new ProductoEnsamble();
+                componenteEnsamble.setCantidad(Integer.parseInt(getTxtCantidadEnsamble().getText()));
+                componenteEnsamble.setComponenteEnsamble(productoEnsamble);
+                producto.addProductoEnsamble(componenteEnsamble);
+                actualizarTablaEnsamble();
+            }
+        });
+        
+    }
+    
+    private void actualizarTablaEnsamble() {
+        String[] titulo = {"Cantidad", "Nombre", "Precio Venta"};
+        DefaultTableModel tableModel = new DefaultTableModel(titulo, 0);
+
+        for (ProductoEnsamble productoEnsamble : producto.getDetallesEnsamble()) {
+            Vector<String> fila = new Vector<String>();
+            fila.add(productoEnsamble.getCantidad() + "");
+            fila.add(productoEnsamble.getComponenteEnsamble().getNombre());
+            fila.add(productoEnsamble.getComponenteEnsamble().getValorUnitario() + "");
+            tableModel.addRow(fila);
+        }
+        getTblDatosEnsamble().setModel(tableModel);
+    }
     
 }

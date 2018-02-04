@@ -8,7 +8,10 @@ package ec.com.codesoft.codefaclite.servidor.entity;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.EnumSiNo;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,6 +21,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 @Entity
@@ -92,6 +96,9 @@ public class Producto implements Serializable
     @JoinColumn(name = "IRBPNR_ID")
     @ManyToOne
     private ImpuestoDetalle irbpnr;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productoEnsamble")
+    private List<ProductoEnsamble> detallesEnsamble;
 
     public Producto() {
     }
@@ -281,6 +288,16 @@ public class Producto implements Serializable
         this.caracteristicas = caracteristicas;
     }
 
+    public List<ProductoEnsamble> getDetallesEnsamble() {
+        return detallesEnsamble;
+    }
+
+    public void setDetallesEnsamble(List<ProductoEnsamble> detallesEnsamble) {
+        this.detallesEnsamble = detallesEnsamble;
+    }
+    
+    
+
     /**
      * Metodos personalizados
      */
@@ -290,7 +307,20 @@ public class Producto implements Serializable
         return EnumSiNo.getEnumByLetra(garantia);
     }
     
-    
+    /**
+     * Agregar producto al ensamble
+     * @param detalle 
+     */
+    public void addProductoEnsamble(ProductoEnsamble detalle)
+    {
+        if(this.detallesEnsamble==null)
+        {
+            this.detallesEnsamble=new ArrayList<ProductoEnsamble>();
+        }
+        detalle.setProductoEnsamble(this);
+        this.detallesEnsamble.add(detalle);
+        
+    }
     
     
     

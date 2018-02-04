@@ -14,7 +14,9 @@ import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoProductoEnum;
 import java.util.Map;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -173,15 +175,15 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         cmbCategoriaProducto = new javax.swing.JComboBox<>();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblDatos = new javax.swing.JTable();
+        tblDatosEnsamble = new javax.swing.JTable();
         jLabel9 = new javax.swing.JLabel();
-        txtProducto = new javax.swing.JTextField();
-        btnProducto = new javax.swing.JButton();
+        txtProductoEnsamble = new javax.swing.JTextField();
+        btnBuscarProductoEnsamble = new javax.swing.JButton();
         jLabel13 = new javax.swing.JLabel();
-        txtCantidad = new javax.swing.JTextField();
-        btnAgregar = new javax.swing.JButton();
-        btnEditar = new javax.swing.JButton();
-        btnEliminar = new javax.swing.JButton();
+        txtCantidadEnsamble = new javax.swing.JTextField();
+        btnAgregarEnsamble = new javax.swing.JButton();
+        btnEditarEnsamble = new javax.swing.JButton();
+        btnEliminarEnsamble = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -550,7 +552,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
 
         jTabbedPane1.addTab("Info Adicional", jPanel5);
 
-        tblDatos.setModel(new javax.swing.table.DefaultTableModel(
+        tblDatosEnsamble.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -561,24 +563,26 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(tblDatos);
+        jScrollPane1.setViewportView(tblDatosEnsamble);
 
         jLabel9.setText("Producto:");
 
-        btnProducto.setText("Buscar");
+        txtProductoEnsamble.setEditable(false);
+
+        btnBuscarProductoEnsamble.setText("Buscar");
 
         jLabel13.setText("Cantidad:");
 
-        txtCantidad.setText("0");
+        txtCantidadEnsamble.setText("1");
 
-        btnAgregar.setText("+");
+        btnAgregarEnsamble.setText("+");
 
-        btnEditar.setText("Editar");
+        btnEditarEnsamble.setText("Editar");
 
-        btnEliminar.setText("X");
-        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+        btnEliminarEnsamble.setText("X");
+        btnEliminarEnsamble.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEliminarActionPerformed(evt);
+                btnEliminarEnsambleActionPerformed(evt);
             }
         });
 
@@ -592,21 +596,21 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(jLabel13)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnAgregar)
+                        .addComponent(btnAgregarEnsamble)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnEditar)
+                        .addComponent(btnEditarEnsamble)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnEliminar)
+                        .addComponent(btnEliminarEnsamble)
                         .addGap(28, 28, 28))
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtCantidadEnsamble, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel6Layout.createSequentialGroup()
-                                .addComponent(txtProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtProductoEnsamble, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnProducto)))
+                                .addComponent(btnBuscarProductoEnsamble)))
                         .addContainerGap(91, Short.MAX_VALUE))))
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
@@ -618,15 +622,15 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
                 .addGap(24, 24, 24)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
-                    .addComponent(txtProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnProducto))
+                    .addComponent(txtProductoEnsamble, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBuscarProductoEnsamble))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAgregar)
-                    .addComponent(btnEditar)
-                    .addComponent(btnEliminar)
+                    .addComponent(btnAgregarEnsamble)
+                    .addComponent(btnEditarEnsamble)
+                    .addComponent(btnEliminarEnsamble)
                     .addComponent(jLabel13)
-                    .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtCantidadEnsamble, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(4, 4, 4)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -642,16 +646,16 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
     private void textNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textNombreActionPerformed
     }//GEN-LAST:event_textNombreActionPerformed
 
-    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+    private void btnEliminarEnsambleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarEnsambleActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnEliminarActionPerformed
+    }//GEN-LAST:event_btnEliminarEnsambleActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnAgregarEnsamble;
     private javax.swing.JButton btnBuscarImagen;
-    private javax.swing.JButton btnEditar;
-    private javax.swing.JButton btnEliminar;
-    private javax.swing.JButton btnProducto;
+    private javax.swing.JButton btnBuscarProductoEnsamble;
+    private javax.swing.JButton btnEditarEnsamble;
+    private javax.swing.JButton btnEliminarEnsamble;
     private javax.swing.JComboBox<String> cmbCategoriaProducto;
     private javax.swing.JComboBox<ec.com.codesoft.codefaclite.servidor.entity.enumerados.EnumSiNo> cmbGarantia;
     private javax.swing.JComboBox<ImpuestoDetalle> comboIce;
@@ -695,10 +699,10 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
     private javax.swing.JLabel lblEspacio;
     private javax.swing.JLabel lblEspacio2;
     private javax.swing.JLabel lblEspacioBlanco;
-    private javax.swing.JTable tblDatos;
+    private javax.swing.JTable tblDatosEnsamble;
     private javax.swing.JTextField textNombre;
     private javax.swing.JTextField textValorUnitario;
-    private javax.swing.JTextField txtCantidad;
+    private javax.swing.JTextField txtCantidadEnsamble;
     private javax.swing.JTextField txtCantidadMinima;
     private javax.swing.JTextArea txtCaracteristica;
     private javax.swing.JTextField txtCodigoEAN;
@@ -709,7 +713,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
     private javax.swing.JTextArea txtObservaciones;
     private javax.swing.JTextField txtPrecioDistribuidor;
     private javax.swing.JTextField txtPrecioTarjeta;
-    private javax.swing.JTextField txtProducto;
+    private javax.swing.JTextField txtProductoEnsamble;
     private javax.swing.JTextField txtStockInicial;
     private javax.swing.JTextField txtUbicacion;
     // End of variables declaration//GEN-END:variables
@@ -755,11 +759,11 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
     }
 
     public JTextField getTxtCantidad() {
-        return txtCantidad;
+        return txtCantidadEnsamble;
     }
 
     public void setTxtCantidad(JTextField txtCantidad) {
-        this.txtCantidad = txtCantidad;
+        this.txtCantidadEnsamble = txtCantidad;
     }
 
     public JTextField getTxtCantidadMinima() {
@@ -819,11 +823,11 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
     }
 
     public JTextField getTxtProducto() {
-        return txtProducto;
+        return txtProductoEnsamble;
     }
 
     public void setTxtProducto(JTextField txtProducto) {
-        this.txtProducto = txtProducto;
+        this.txtProductoEnsamble = txtProducto;
     }
 
     public JTextField getTxtStockInicial() {
@@ -840,6 +844,62 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
 
     public void setTxtUbicacion(JTextField txtUbicacion) {
         this.txtUbicacion = txtUbicacion;
+    }
+
+    public JButton getBtnAgregarEnsamble() {
+        return btnAgregarEnsamble;
+    }
+
+    public void setBtnAgregarEnsamble(JButton btnAgregarEnsamble) {
+        this.btnAgregarEnsamble = btnAgregarEnsamble;
+    }
+
+    public JButton getBtnBuscarProductoEnsamble() {
+        return btnBuscarProductoEnsamble;
+    }
+
+    public void setBtnBuscarProductoEnsamble(JButton btnBuscarProductoEnsamble) {
+        this.btnBuscarProductoEnsamble = btnBuscarProductoEnsamble;
+    }
+
+    public JButton getBtnEditarEnsamble() {
+        return btnEditarEnsamble;
+    }
+
+    public void setBtnEditarEnsamble(JButton btnEditarEnsamble) {
+        this.btnEditarEnsamble = btnEditarEnsamble;
+    }
+
+    public JButton getBtnEliminarEnsamble() {
+        return btnEliminarEnsamble;
+    }
+
+    public void setBtnEliminarEnsamble(JButton btnEliminarEnsamble) {
+        this.btnEliminarEnsamble = btnEliminarEnsamble;
+    }
+
+    public JTextField getTxtCantidadEnsamble() {
+        return txtCantidadEnsamble;
+    }
+
+    public void setTxtCantidadEnsamble(JTextField txtCantidadEnsamble) {
+        this.txtCantidadEnsamble = txtCantidadEnsamble;
+    }
+
+    public JTable getTblDatosEnsamble() {
+        return tblDatosEnsamble;
+    }
+
+    public void setTblDatosEnsamble(JTable tblDatosEnsamble) {
+        this.tblDatosEnsamble = tblDatosEnsamble;
+    }
+
+    public JTextField getTxtProductoEnsamble() {
+        return txtProductoEnsamble;
+    }
+
+    public void setTxtProductoEnsamble(JTextField txtProductoEnsamble) {
+        this.txtProductoEnsamble = txtProductoEnsamble;
     }
     
     

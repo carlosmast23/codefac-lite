@@ -42,6 +42,21 @@ public enum TipoProductoEnum {
     }
     
     
+        public static TipoProductoEnum getEnumByLetra(String letra)
+    {
+
+        for (TipoProductoEnum enumerador : TipoProductoEnum.values())
+        {
+            if(enumerador.getLetra().equals(letra))
+            {
+                return enumerador;
+            }
+        }
+        return null;
+    }
+    
+    
+    
 
     @Override
     public String toString() {

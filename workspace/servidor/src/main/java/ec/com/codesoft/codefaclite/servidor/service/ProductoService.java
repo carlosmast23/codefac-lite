@@ -7,12 +7,14 @@ package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.entity.Producto;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.ProductoEnumEstado;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidor.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.ProductoFacade;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.EntityTransaction;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
@@ -31,12 +33,27 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade>
         
     public void grabar(Producto p) throws ServicioCodefacException
     {
+        EntityTransaction transactions= entityManager.getTransaction();
+        transactions.begin();
         try {
-            productoFacade.create(p);
-        } catch (ConstrainViolationExceptionSQL ex) {
-            Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, null, ex);
-            throw new ServicioCodefacException("La clave principal ya existe en el sistema");
+                        
+            //Si no son ensables remover datos para no tener incoherencias
+            if(!TipoProductoEnum.EMSAMBLE.getLetra().equals(p.getTipoProducto()))
+            {          
+                if(p.getDetallesEnsamble()!=null)
+                {
+                    p.getDetallesEnsamble().clear();
+                }
+            }
+            
+            entityManager.persist(p);
+            transactions.commit();
+            
+        //} catch (ConstrainViolationExceptionSQL ex) {
+        //    Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, null, ex);
+        //    throw new ServicioCodefacException("La clave principal ya existe en el sistema");
         } catch (DatabaseException ex) {
+            transactions.rollback();
             Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, null, ex);
             throw new ServicioCodefacException("Error con la base de datos");
         }
