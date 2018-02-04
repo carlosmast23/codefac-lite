@@ -6,19 +6,30 @@
 package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.entity.Factura;
+import ec.com.codesoft.codefaclite.servidor.entity.FacturaDetalle;
+import ec.com.codesoft.codefaclite.servidor.entity.Kardex;
+import ec.com.codesoft.codefaclite.servidor.entity.KardexDetalle;
+import ec.com.codesoft.codefaclite.servidor.entity.Kardex_;
 import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
+import ec.com.codesoft.codefaclite.servidor.entity.Producto;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaFacade;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.EntityTransaction;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
@@ -40,6 +51,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade>{
     }
 
     public void grabar(Factura factura) {
+        EntityTransaction transaction= entityManager.getTransaction();
+        transaction.begin();
         try {
             ParametroCodefac parametro =null;
             //Cuando la factura es electronica
@@ -64,19 +77,53 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade>{
             }
             
             
-            facturaFacade.create(factura);
+            //facturaFacade.create(factura);
+            entityManager.persist(factura);
+            entityManager.flush();
+            
+            /**
+             * Actualizar valores del inventario con el kardex
+             */
+            for (FacturaDetalle detalle : factura.getDetalles()) {
+                Producto producto= detalle.getProducto();
+                Map<String,Object> mapParametros=new HashMap<String,Object>();
+                mapParametros.put("producto", producto);
+                KardexService kardexService=new KardexService();
+                List<Kardex> kardexs= kardexService.obtenerPorMap(mapParametros);
+                //TODO: Definir especificamente cual es la bodega principal
+                if(kardexs!=null && kardexs.size()>0)
+                {
+                    //TODO: Analizar caso cuando se resta un producto especifico
+                    Kardex kardex= kardexs.get(0);
+                    KardexDetalle kardexDetalle=new KardexDetalle();
+                    kardexDetalle.setCantidad(detalle.getCantidad().intValue());
+                    kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.VENTA.getCodigo());
+                    kardexDetalle.setPrecioTotal(detalle.getTotal());
+                    kardexDetalle.setPrecioUnitario(detalle.getPrecioUnitario());
+                    kardexDetalle.setReferenciaDocumentoId(factura.getId());
+                    kardex.addDetalleKardex(kardexDetalle);
+                    
+                    //Actualizar los valores del kardex
+                    kardex.setStock(kardex.getStock() - kardexDetalle.getCantidad());
+                    //kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(kardexDetalle.getPrecioUnitario()).divide(new BigDecimal("2"), 2, RoundingMode.HALF_UP));
+                    kardex.setPrecioTotal(kardex.getPrecioTotal().subtract(kardexDetalle.getPrecioTotal()));
+                    //kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());
+                    
+                    entityManager.merge(kardex);
+                }
+                
+            }
             /**
              * Aumentar el codigo de la numeracion en los parametros
-             */
-            
+             */            
             
             parametro.valor = (Integer.parseInt(parametro.valor) + 1) + "";
-            parametroService.editar(parametro);
+            //parametroService.editar(parametro);
+            entityManager.merge(parametro);
             
-            
-        } catch (ConstrainViolationExceptionSQL ex) {
-            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+        transaction.commit();
         } catch (DatabaseException ex) {
+            transaction.rollback();
             Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
         }
 
