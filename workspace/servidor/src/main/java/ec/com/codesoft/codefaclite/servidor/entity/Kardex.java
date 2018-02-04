@@ -2,6 +2,7 @@ package ec.com.codesoft.codefaclite.servidor.entity;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -145,7 +146,19 @@ public class Kardex {
         this.detallesKardex = detallesKardex;
     }
     
-    
+         /**
+     * Formas de pago adicional
+     */
+    public void addDetalleKardex(KardexDetalle kardexDetalle)
+    {
+        if(this.detallesKardex==null)
+        {
+            this.detallesKardex=new ArrayList<KardexDetalle>();
+        }
+        kardexDetalle.setKardex(this);
+        this.detallesKardex.add(kardexDetalle);
+        
+    }
 
     
     

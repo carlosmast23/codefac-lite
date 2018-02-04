@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 
 /**
  *
@@ -45,10 +46,10 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade>{
      */
     public void ingresarInventario(Map<KardexDetalle,CompraDetalle> detalles,Bodega bodega) throws ServicioCodefacException
     {
-        
+        EntityTransaction transaction=em.getTransaction();
         try
-        {
-            em.getTransaction().begin();
+        {            
+            transaction.begin();
             Compra compra=null; //referencia para almacenar la compra ingresada a inventario
 
             for (Map.Entry<KardexDetalle, CompraDetalle> entry : detalles.entrySet()) {
@@ -89,7 +90,8 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade>{
                  * Grabar los detalles de los kardes y actualizar los valores en el kardex
                  */
                 kardexDetalle.setKardex(kardex);
-                em.persist(kardexDetalle); //grabando el kardex detalle
+                kardex.addDetalleKardex(kardexDetalle);
+                //em.persist(kardexDetalle); //grabando el kardex detalle
 
                 //Esto va a depender del tipo de flujo del inventario es decir para saber si la suma o resta pero por defecto
                 // el metodo es solo de ingreso asi que no considero el otro caso
@@ -97,21 +99,21 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade>{
                 kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(kardexDetalle.getPrecioUnitario()).divide(new BigDecimal("2"),2,RoundingMode.HALF_UP));
                 kardex.setPrecioTotal(kardex.getPrecioTotal().add(kardexDetalle.getPrecioTotal()));
                 kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());
-                em.merge(kardex);
+                kardex=em.merge(kardex);
             }
             
             if(compra!=null)
                 compra.setInventarioIngreso(EnumSiNo.SI.getLetra());
+
+            transaction.commit(); //si todo sale bien ejecuto en la base de datos
             
-            em.getTransaction().commit(); //si todo sale bien ejecuto en la base de datos
         }
         catch(Exception e)
         {
             e.printStackTrace();
-            em.getTransaction().rollback();
+            transaction.rollback();
             throw  new ServicioCodefacException("Error al grabar el inventario");            
-        }
- 
+        } 
     
     }
     
