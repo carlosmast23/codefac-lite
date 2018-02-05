@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JInternalFrameFormInfo">
+  <Properties>
+    <Property name="closable" type="boolean" value="true"/>
+    <Property name="iconifiable" type="boolean" value="true"/>
+    <Property name="maximizable" type="boolean" value="true"/>
+    <Property name="resizable" type="boolean" value="true"/>
+  </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
   </SyntheticProperties>
@@ -55,7 +61,6 @@
                                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                               <Component id="btnBuscarEnsamble" min="-2" max="-2" attributes="0"/>
                                           </Group>
-                                          <Component id="lblStockActual" alignment="0" min="-2" max="-2" attributes="0"/>
                                           <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
                                               <Component id="cmbAccion" alignment="0" max="32767" attributes="0"/>
                                               <Group type="102" alignment="0" attributes="0">
@@ -64,6 +69,7 @@
                                                   <Component id="btnVerificar" min="-2" max="-2" attributes="0"/>
                                               </Group>
                                           </Group>
+                                          <Component id="lblStockActual" alignment="0" min="-2" pref="96" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -150,7 +156,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblStockActual">
       <Properties>
-        <Property name="text" type="java.lang.String" value="0000"/>
+        <Property name="text" type="java.lang.String" value="0"/>
       </Properties>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">

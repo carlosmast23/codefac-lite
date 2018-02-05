@@ -26,6 +26,7 @@ import es.mityc.firmaJava.ocsp.config.ServidorOcsp;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -156,11 +157,11 @@ public class KardexModel extends KardexPanel{
     private void cargarTablaKardex()
     {
         Integer cantidadAcumulada=0;
-        BigDecimal precioUnitarioAcumulado=BigDecimal.ZERO;
+        BigDecimal precioUnitarioPromedio=BigDecimal.ZERO;
         BigDecimal precioTotalAcumulado=BigDecimal.ZERO;
         
         String[] titulo={"#","Documento","Preimpreso","Proveedor","Cant","P.Unit","P.Total","Cant","P.Unit","P.Total","Cant","P.Unit","P.Total"};
-        String[] primeraFila={" ","KARDEX","","","","INGRESO","","","EGRESO","","","","SALDO"};
+        String[] primeraFila={" ","KARDEX","","","","INGRESO","","","EGRESO","","","SALDO",""};
         
         DefaultTableModel modeloTabla=new DefaultTableModel(primeraFila,0);
         modeloTabla.addRow(titulo);
@@ -174,12 +175,21 @@ public class KardexModel extends KardexPanel{
             fila.add(kardexDetalle.getCodigoTipoDocumentoEnum().getNombre()); //tipo del documento
             TipoDocumentoEnum tipoDocumentoEnum=kardexDetalle.getCodigoTipoDocumentoEnum();
             
+            if(i==0) //Si es el primer registro el precio es el mismo
+            {
+                precioUnitarioPromedio=kardexDetalle.getPrecioUnitario();
+            }
+            else //Cuando es el segundo registro empiezo a calcular el promedio
+            {
+                precioUnitarioPromedio=precioUnitarioPromedio.add(kardexDetalle.getPrecioUnitario()).divide(new BigDecimal("2"),3,RoundingMode.HALF_UP);
+            }
+            
+            
             switch(tipoDocumentoEnum.getModuloEnum())
             {
                 case VENTAS:
-                    cantidadAcumulada-=kardexDetalle.getCantidad();
-                    precioTotalAcumulado=precioUnitarioAcumulado.subtract(kardexDetalle.getPrecioUnitario());
-                    precioTotalAcumulado=precioUnitarioAcumulado.subtract(kardexDetalle.getPrecioTotal());
+                    cantidadAcumulada-=kardexDetalle.getCantidad();                    
+                    precioTotalAcumulado=precioTotalAcumulado.subtract(kardexDetalle.getPrecioTotal());
                     
                     FacturacionService servicio=new FacturacionService();
                     Map<String,Object> mapParametros=new HashMap<String,Object>();
@@ -187,13 +197,12 @@ public class KardexModel extends KardexPanel{
                     Factura factura=servicio.obtenerPorMap(mapParametros).get(0);
                     fila.add(factura.getPreimpreso());
                     fila.add(factura.getCliente().getRazonSocial());
-                    completarFila(fila, tipoDocumentoEnum.getModuloEnum(), kardexDetalle, cantidadAcumulada, precioUnitarioAcumulado, precioTotalAcumulado);
+                    completarFila(fila, tipoDocumentoEnum.getModuloEnum(), kardexDetalle, cantidadAcumulada, precioUnitarioPromedio, precioTotalAcumulado,false);
                     break;
                     
                 case COMPRAS:
                     cantidadAcumulada+=kardexDetalle.getCantidad();
-                    precioTotalAcumulado=precioUnitarioAcumulado.add(kardexDetalle.getPrecioUnitario());
-                    precioTotalAcumulado=precioUnitarioAcumulado.add(kardexDetalle.getPrecioTotal());
+                    precioTotalAcumulado=precioTotalAcumulado.add(kardexDetalle.getPrecioTotal());
                     
                     CompraService servicio2=new CompraService();
                     Map<String,Object> mapParametros2=new HashMap<String,Object>();
@@ -201,8 +210,34 @@ public class KardexModel extends KardexPanel{
                     Compra compra=servicio2.obtenerPorMap(mapParametros2).get(0);
                     fila.add(compra.getPreimpreso());
                     fila.add(compra.getProveedor().getRazonSocial());
-                    completarFila(fila, tipoDocumentoEnum.getModuloEnum(), kardexDetalle, cantidadAcumulada, precioUnitarioAcumulado, precioTotalAcumulado);
+                    completarFila(fila, tipoDocumentoEnum.getModuloEnum(), kardexDetalle, cantidadAcumulada, precioUnitarioPromedio, precioTotalAcumulado,true);
                     break;
+                    
+                    
+                case INVENTARIO:
+                    
+                    if(tipoDocumentoEnum.equals(TipoDocumentoEnum.ENSAMBLE_INGRESO))
+                    {
+                        cantidadAcumulada += kardexDetalle.getCantidad();
+                        precioTotalAcumulado = precioTotalAcumulado.add(kardexDetalle.getPrecioTotal());
+
+                        fila.add("");
+                        fila.add("Interno");
+                        completarFila(fila, tipoDocumentoEnum.getModuloEnum(), kardexDetalle, cantidadAcumulada, precioUnitarioPromedio, precioTotalAcumulado,true);
+                        break;                    
+                    }
+                    else
+                    {
+                        cantidadAcumulada -= kardexDetalle.getCantidad();
+                        precioTotalAcumulado = precioTotalAcumulado.subtract(kardexDetalle.getPrecioTotal());
+
+                        fila.add("");
+                        fila.add("Interno");
+                        completarFila(fila, tipoDocumentoEnum.getModuloEnum(), kardexDetalle, cantidadAcumulada, precioUnitarioPromedio, precioTotalAcumulado,false);
+                        break;
+                    
+                    }
+                    
             }
             
             modeloTabla.addRow(fila);
@@ -218,34 +253,34 @@ public class KardexModel extends KardexPanel{
         
     }
     
-    private void completarFila(Vector<String> fila,ModuloEnum moduloEnum,KardexDetalle kardexDetalle,Integer cantidadAcumulada,BigDecimal precioUnitarioAcumulado,BigDecimal precioTotalAcumulado)
+    private void completarFila(Vector<String> fila,ModuloEnum moduloEnum,KardexDetalle kardexDetalle,Integer cantidadAcumulada,BigDecimal precioUnitarioAcumulado,BigDecimal precioTotalAcumulado,boolean agregar)
     {
-        switch(moduloEnum)
+        if (agregar) {
+            fila.add(kardexDetalle.getCantidad() + "");
+            fila.add(kardexDetalle.getPrecioUnitario() + "");
+            fila.add(kardexDetalle.getPrecioTotal() + "");
+
+            fila.add("");
+            fila.add("");
+            fila.add("");
+
+        } 
+        else 
         {
-            case VENTAS:
-                fila.add("");
-                fila.add("");
-                fila.add("");
-                
-                fila.add(kardexDetalle.getCantidad() + "");
-                fila.add(kardexDetalle.getPrecioUnitario() + "");
-                fila.add(kardexDetalle.getPrecioTotal() + "");
-                
-            case COMPRAS:
-               
-                fila.add(kardexDetalle.getCantidad()+"");
-                fila.add(kardexDetalle.getPrecioUnitario()+"");
-                fila.add(kardexDetalle.getPrecioTotal()+"");
-                
-                fila.add("");
-                fila.add("");
-                fila.add("");
+            fila.add("");
+            fila.add("");
+            fila.add("");
+            
+            fila.add(kardexDetalle.getCantidad() + "");
+            fila.add(kardexDetalle.getPrecioUnitario() + "");
+            fila.add(kardexDetalle.getPrecioTotal() + "");
 
         }
-
+        
+        //Agregar los saldos
         fila.add(cantidadAcumulada + "");
-        fila.add(precioUnitarioAcumulado + "");
-        fila.add(precioTotalAcumulado + "");
+        fila.add(precioUnitarioAcumulado+ "");
+        fila.add(precioTotalAcumulado+"");
         
     }
     

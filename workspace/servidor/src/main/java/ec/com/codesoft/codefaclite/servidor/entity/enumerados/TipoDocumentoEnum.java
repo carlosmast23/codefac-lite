@@ -30,7 +30,17 @@ public enum TipoDocumentoEnum {
     /**
      * Retenciones del iva o del inventario
      */
-    RETENCIONES(ModuloEnum.RETENCIONES,"RET","Retenciones",TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO),;
+    RETENCIONES(ModuloEnum.RETENCIONES,"RET","Retenciones",TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO),
+    
+    /**
+     *  Tipo de documento cuando se hace un ingreso de los ensambles
+     */
+    ENSAMBLE_INGRESO(ModuloEnum.INVENTARIO,"INV","Ingreso Inventario Ensamble",TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO),
+    
+     /**
+     *  Tipo de documento cuando se hace un egreso de los ensambles
+     */
+    ENSAMBLE_EGRESO(ModuloEnum.INVENTARIO,"INE","Egreso Inventario Ensamble",TipoDocumentoEnum.AFECTA_INVENTARIO_NEGATIVO);
     
     public static final String AFECTA_INVENTARIO_POSITIVO="+";
     public static final String AFECTA_INVENTARIO_NEGATIVO="-";

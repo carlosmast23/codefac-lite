@@ -17,6 +17,7 @@ create table KARDEX(
     PRECIO_ULTIMO decimal(7,2),
     PRECIO_TOTAL decimal(7,2),
     STOCK BIGINT,
+    RESERVA BIGINT,
     primary key (ID)
 );
 

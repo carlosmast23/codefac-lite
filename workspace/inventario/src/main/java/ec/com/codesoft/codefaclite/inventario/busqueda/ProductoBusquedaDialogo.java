@@ -70,7 +70,7 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto>
         queryDialog.agregarParametro(1,ProductoEnumEstado.ACTIVO.getEstado());
         if(tipoProductoEnum!=null)
         {
-            queryDialog.agregarParametro(99,tipoProductoEnum);
+            queryDialog.agregarParametro(99,tipoProductoEnum.getLetra());
         }
         //queryDialog.agregarParametro(2,ProductoEnumEstado.INACTIVO.getEstado());
         return queryDialog;

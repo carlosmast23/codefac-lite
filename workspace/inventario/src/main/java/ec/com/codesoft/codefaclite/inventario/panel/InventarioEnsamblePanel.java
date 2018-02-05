@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInte
 import ec.com.codesoft.codefaclite.servidor.entity.Bodega;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
@@ -18,6 +19,8 @@ import javax.swing.JTextField;
  */
 public abstract class InventarioEnsamblePanel extends ControladorCodefacInterface {
 
+    public static final String OPCION_AGREGAR="Agregar";
+    public static final String OPCION_QUITAR="Quitar";
     /**
      * Creates new form EnsamblePanel
      */
@@ -52,6 +55,11 @@ public abstract class InventarioEnsamblePanel extends ControladorCodefacInterfac
         jLabel9 = new javax.swing.JLabel();
         cmbAccion = new javax.swing.JComboBox<>();
 
+        setClosable(true);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
+
         jLabel1.setText("Cantidad:");
 
         txtCantidad.setText("0");
@@ -62,7 +70,7 @@ public abstract class InventarioEnsamblePanel extends ControladorCodefacInterfac
 
         jLabel3.setText("Stok Actual:");
 
-        lblStockActual.setText("0000");
+        lblStockActual.setText("0");
 
         tblDatos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -125,13 +133,13 @@ public abstract class InventarioEnsamblePanel extends ControladorCodefacInterfac
                                                     .addComponent(txtEnsamble, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                                 .addComponent(btnBuscarEnsamble))
-                                            .addComponent(lblStockActual)
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                                 .addComponent(cmbAccion, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                                     .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                     .addGap(26, 26, 26)
-                                                    .addComponent(btnVerificar)))))
+                                                    .addComponent(btnVerificar)))
+                                            .addComponent(lblStockActual, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addComponent(jLabel3))
                                 .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
@@ -252,6 +260,16 @@ public abstract class InventarioEnsamblePanel extends ControladorCodefacInterfac
     public void setCmbBodega(JComboBox<Bodega> cmbBodega) {
         this.cmbBodega = cmbBodega;
     }
+
+    public JLabel getLblStockActual() {
+        return lblStockActual;
+    }
+
+    public void setLblStockActual(JLabel lblStockActual) {
+        this.lblStockActual = lblStockActual;
+    }
+    
+    
 
     
     
