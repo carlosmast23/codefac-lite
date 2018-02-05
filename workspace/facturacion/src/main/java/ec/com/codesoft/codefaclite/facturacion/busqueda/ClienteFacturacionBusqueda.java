@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.ClienteEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.FacturaEnumEstado;
+import ec.com.codesoft.codefaclite.servidor.entity.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,10 +61,11 @@ public class ClienteFacturacionBusqueda implements InterfaceModelFind<Persona> {
     @Override
     public QueryDialog getConsulta(String filter) {
         //p.getRazonSocial();
-        String queryString = "SELECT u FROM Persona u WHERE (u.estado<>?1) AND  ";
+        String queryString = "SELECT u FROM Persona u WHERE (u.estado<>?1) AND u.tipo=?2 AND ";
         queryString+=" ( LOWER(u.razonSocial) like "+filter+" )";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,ClienteEnumEstado.ELIMINADO.getEstado());
+        queryDialog.agregarParametro(2,OperadorNegocioEnum.CLIENTE.getLetra());
         return queryDialog;
     }
     
