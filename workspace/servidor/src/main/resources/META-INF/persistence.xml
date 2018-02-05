@@ -11,6 +11,7 @@
       <!--<property name = " eclipselink.ddl-generation " value = "create-or-extend-tables" />-->
     </properties>
     <class>ec.com.codesoft.codefaclite.servidor.entity.Bodega</class>
+    <class>ec.com.codesoft.codefaclite.servidor.entity.CategoriaProducto</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
   </persistence-unit>
 </persistence>

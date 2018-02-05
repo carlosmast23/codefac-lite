@@ -52,7 +52,6 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
             bodega = new Bodega();
             setearValoresBodega(bodega);
             bodegaService.grabar(bodega);
-
             DialogoCodefac.mensaje("Datos correctos", "El Producto se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
