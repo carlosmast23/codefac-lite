@@ -6,14 +6,18 @@
 package ec.com.codesoft.codefaclite.inventario.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.inventario.busqueda.BodegaBusquedaDialogo;
+import ec.com.codesoft.codefaclite.inventario.busqueda.CategoriaProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.inventario.panel.CategoriaProductoPanel;
 import ec.com.codesoft.codefaclite.servidor.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.CategoriaProductoEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.service.CategoriaProductoService;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -58,7 +62,7 @@ public class CategoriaProductoModel extends CategoriaProductoPanel implements Di
 
     public void eliminar() throws ExcepcionCodefacLite {
         if (estadoFormulario.equals(GeneralPanelInterface.ESTADO_EDITAR)) {
-            Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea eliminar la bodega?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea eliminar la categoria del producto?", DialogoCodefac.MENSAJE_ADVERTENCIA);
             if (!respuesta) {
                 throw new ExcepcionCodefacLite("Cancelacion bodega");
             }
@@ -66,7 +70,7 @@ public class CategoriaProductoModel extends CategoriaProductoPanel implements Di
             DialogoCodefac.mensaje("Datos correctos", "La categoria del producto se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         }
     }
-    
+
     @Override
     public CategoriaProducto getResult() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -94,7 +98,15 @@ public class CategoriaProductoModel extends CategoriaProductoPanel implements Di
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        CategoriaProductoBusquedaDialogo catProdBusquedaDialogo = new CategoriaProductoBusquedaDialogo();
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(catProdBusquedaDialogo);
+        buscarDialogoModel.setVisible(true);
+        catProducto = (CategoriaProducto) buscarDialogoModel.getResultado();
+        if (catProducto == null) {
+            throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar bodega vacio");
+        }
+        getTxtNombre().setText(catProducto.getNombre());
+        getTxtDescripcion().setText(catProducto.getDescripcion());
     }
 
     @Override
@@ -114,7 +126,14 @@ public class CategoriaProductoModel extends CategoriaProductoPanel implements Di
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
+        permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
+        //permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
+        return permisos;
     }
 
     @Override
