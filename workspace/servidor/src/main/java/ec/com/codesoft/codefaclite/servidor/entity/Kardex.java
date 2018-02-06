@@ -52,6 +52,13 @@ public class Kardex {
     @Column(name = "STOCK")
     private Integer stock;
     
+    /**
+     * Variable que me permite almacenar stock reservado cuando se crean
+     * ensambles
+     */
+    @Column(name = "RESERVA")            
+    private Integer reserva;
+    
     @JoinColumn(name = "BODEGA_ID")
     @ManyToOne  
     private Bodega bodega;
@@ -145,6 +152,16 @@ public class Kardex {
     public void setDetallesKardex(List<KardexDetalle> detallesKardex) {
         this.detallesKardex = detallesKardex;
     }
+
+    public Integer getReserva() {
+        return reserva;
+    }
+
+    public void setReserva(Integer reserva) {
+        this.reserva = reserva;
+    }
+    
+    
     
          /**
      * Formas de pago adicional

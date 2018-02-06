@@ -12,5 +12,6 @@ package ec.com.codesoft.codefaclite.servidor.entity.enumerados;
 public enum ModuloEnum {
     VENTAS,
     COMPRAS,
+    INVENTARIO,
     RETENCIONES;
 }

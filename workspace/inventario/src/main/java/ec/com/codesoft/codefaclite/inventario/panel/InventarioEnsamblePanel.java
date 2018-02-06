@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInte
 import ec.com.codesoft.codefaclite.servidor.entity.Bodega;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
@@ -18,6 +19,8 @@ import javax.swing.JTextField;
  */
 public abstract class InventarioEnsamblePanel extends ControladorCodefacInterface {
 
+    public static final String OPCION_AGREGAR="Agregar";
+    public static final String OPCION_QUITAR="Quitar";
     /**
      * Creates new form EnsamblePanel
      */
@@ -292,6 +295,14 @@ public abstract class InventarioEnsamblePanel extends ControladorCodefacInterfac
 
     public void setCmbBodega(JComboBox<Bodega> cmbBodega) {
         this.cmbBodega = cmbBodega;
+    }
+
+    public JLabel getLblStockActual() {
+        return lblStockActual;
+    }
+
+    public void setLblStockActual(JLabel lblStockActual) {
+        this.lblStockActual = lblStockActual;
     }
 
     

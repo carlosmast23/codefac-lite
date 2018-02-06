@@ -36,6 +36,7 @@ import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
 import ec.com.codesoft.codefaclite.inventario.model.AsociarProductoProveedorModel;
 import ec.com.codesoft.codefaclite.inventario.model.BodegaModel;
 import ec.com.codesoft.codefaclite.inventario.model.IngresoInventarioModel;
+import ec.com.codesoft.codefaclite.inventario.model.InventarioEnsambleModel;
 import ec.com.codesoft.codefaclite.inventario.model.KardexModel;
 import ec.com.codesoft.codefaclite.main.license.ValidacionLicenciaCodefac;
 import ec.com.codesoft.codefaclite.main.license.excepcion.NoExisteLicenciaException;
@@ -90,7 +91,6 @@ public class Main {
     
     public static void main(String[] args) {      
         iniciarComponentes();
-        
     }
     
     public static void iniciarComponentes()
@@ -477,6 +477,7 @@ public class Main {
         ventanas.add(new MenuControlador(panel.getMenuBodega(),BodegaModel.class,true));
         ventanas.add(new MenuControlador(panel.getjMenuItemIngresarInventario(),IngresoInventarioModel.class,true));
         ventanas.add(new MenuControlador(panel.getjMenuItemKardex(),KardexModel.class,false));
+        ventanas.add(new MenuControlador(panel.getjMenuItemInventarioEnsamble(),InventarioEnsambleModel.class,false));
         
         return ventanas;
     

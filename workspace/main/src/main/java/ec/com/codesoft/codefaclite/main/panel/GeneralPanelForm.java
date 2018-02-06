@@ -86,6 +86,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuItemIngresarInventario = new javax.swing.JMenuItem();
         menuBodega = new javax.swing.JMenuItem();
         jMenuItemKardex = new javax.swing.JMenuItem();
+        jMenuItemInventarioEnsamble = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuCliente = new javax.swing.JMenuItem();
         jMenuItemReporteCliente = new javax.swing.JMenuItem();
@@ -315,6 +316,9 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuItemKardex.setText("Kardex");
         menuInventario.add(jMenuItemKardex);
 
+        jMenuItemInventarioEnsamble.setText("Inventario Ensamble");
+        menuInventario.add(jMenuItemInventarioEnsamble);
+
         jMenuBar1.add(menuInventario);
 
         jMenu2.setText("Clientes");
@@ -536,6 +540,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JMenuItem jMenuItemFacturaReporte;
     private javax.swing.JMenuItem jMenuItemIngresarInventario;
     private javax.swing.JMenuItem jMenuItemInicio;
+    private javax.swing.JMenuItem jMenuItemInventarioEnsamble;
     private javax.swing.JMenuItem jMenuItemKardex;
     private javax.swing.JMenuItem jMenuItemMonitor;
     private javax.swing.JMenuItem jMenuItemNotaCredito;
@@ -879,6 +884,15 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     public void setjMenuItemKardex(JMenuItem jMenuItemKardex) {
         this.jMenuItemKardex = jMenuItemKardex;
     }
+
+    public JMenuItem getjMenuItemInventarioEnsamble() {
+        return jMenuItemInventarioEnsamble;
+    }
+
+    public void setjMenuItemInventarioEnsamble(JMenuItem jMenuItemInventarioEnsamble) {
+        this.jMenuItemInventarioEnsamble = jMenuItemInventarioEnsamble;
+    }
+    
     
     
         
