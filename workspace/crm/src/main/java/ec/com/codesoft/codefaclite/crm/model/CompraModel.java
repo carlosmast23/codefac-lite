@@ -55,6 +55,7 @@ public class CompraModel extends CompraPanel{
     private Producto productoSeleccionado;
     private Persona proveedor;
     private ProductoProveedor productoProveedor;
+    private DefaultTableModel modeloTablaDetallesCompra;
     
     
     @Override
@@ -62,6 +63,7 @@ public class CompraModel extends CompraPanel{
         iniciarCombos();
         agregarListenerBotones();
         crearVariables();
+        initModelTablaDetalleCompra();
     }
 
     @Override
@@ -306,7 +308,7 @@ public class CompraModel extends CompraPanel{
      */
     private void mostrarDatosTabla()
     {
-        String[] titulo={"Cantidad","Descripcion","Valor unitario","Valor Total"};
+        String[] titulo={"Cantidad","Descripción","Valor Unitario","Valor Total"};
         DefaultTableModel modeloTablaCompra=new DefaultTableModel(titulo,0);
         
         List<CompraDetalle> detalles= compra.getDetalles();
@@ -335,4 +337,14 @@ public class CompraModel extends CompraPanel{
         this.compra=new Compra();        
     }
     
+    private void initModelTablaDetalleCompra() {
+        Vector<String> titulo = new Vector<>();
+        titulo.add("Cantidad");
+        titulo.add("Descripción");
+        titulo.add("Valor Unitario");
+        titulo.add("Valor Total");
+        this.modeloTablaDetallesCompra = new DefaultTableModel(titulo, 0);
+        //this.modeloTablaDetallesProductos.isCellEditable
+        getTblDetalleProductos().setModel(modeloTablaDetallesCompra);
+    }
 }
