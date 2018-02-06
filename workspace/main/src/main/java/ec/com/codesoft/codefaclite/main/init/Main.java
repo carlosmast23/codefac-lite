@@ -35,6 +35,7 @@ import ec.com.codesoft.codefaclite.facturacion.model.UtilidadComprobanteModel;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
 import ec.com.codesoft.codefaclite.inventario.model.AsociarProductoProveedorModel;
 import ec.com.codesoft.codefaclite.inventario.model.BodegaModel;
+import ec.com.codesoft.codefaclite.inventario.model.CategoriaProductoModel;
 import ec.com.codesoft.codefaclite.inventario.model.IngresoInventarioModel;
 import ec.com.codesoft.codefaclite.inventario.model.InventarioEnsambleModel;
 import ec.com.codesoft.codefaclite.inventario.model.KardexModel;
@@ -475,6 +476,7 @@ public class Main {
         ventanas.add(new MenuControlador(panel.getjMenuCompra(),CompraModel.class,false));
         ventanas.add(new MenuControlador(panel.getjMenuItemAsociarProducto(),AsociarProductoProveedorModel.class,true));
         ventanas.add(new MenuControlador(panel.getMenuBodega(),BodegaModel.class,true));
+        ventanas.add(new MenuControlador(panel.getMenuCatProducto(),CategoriaProductoModel.class,true));
         ventanas.add(new MenuControlador(panel.getjMenuItemIngresarInventario(),IngresoInventarioModel.class,true));
         ventanas.add(new MenuControlador(panel.getjMenuItemKardex(),KardexModel.class,false));
         ventanas.add(new MenuControlador(panel.getjMenuItemInventarioEnsamble(),InventarioEnsambleModel.class,false));

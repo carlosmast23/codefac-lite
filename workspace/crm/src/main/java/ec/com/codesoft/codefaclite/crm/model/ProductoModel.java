@@ -106,8 +106,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         DialogoCodefac.mensaje("Datos correctos", "El producto se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
     }
     
-    private void setearValoresProducto(Producto producto)
-    {
+    private void setearValoresProducto(Producto producto){
         producto.setCodigoPersonalizado(getTxtCodigoPersonalizado().getText());
             producto.setCodigoEAN(getTxtCodigoEAN().getText());
             producto.setCodigoUPC(getTxtCodigoUPC().getText());
@@ -267,8 +266,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     }
 
     @Override
-    public Map<Integer, Boolean> permisosFormulario() 
-    {
+    public Map<Integer, Boolean> permisosFormulario(){
         Map<Integer,Boolean> permisos=new HashMap<Integer,Boolean>();
         permisos.put(GeneralPanelInterface.BOTON_NUEVO,true);
         permisos.put(GeneralPanelInterface.BOTON_GRABAR,true);

@@ -222,6 +222,11 @@
                 <Property name="text" type="java.lang.String" value="Inventario Ensamble"/>
               </Properties>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="menuCatProducto">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Categoria Producto"/>
+              </Properties>
+            </MenuItem>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu2">

@@ -45,6 +45,7 @@ public class UtilidadesServidor {
         RecursoCodefac.SQL.getResourceInputStream("create_kardex.sql"),        
         RecursoCodefac.SQL.getResourceInputStream("create_compra.sql"),        
         RecursoCodefac.SQL.getResourceInputStream("create_bodega.sql"),
+        RecursoCodefac.SQL.getResourceInputStream("create_categoria_producto.sql"),
         RecursoCodefac.SQL.getResourceInputStream("insert_default.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_empresa.sql"),
         

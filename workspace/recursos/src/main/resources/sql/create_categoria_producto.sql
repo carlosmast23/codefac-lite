@@ -13,6 +13,6 @@ create table CATEGORIA_PRODUCTO(
     DESCRIPCION varchar(256),
     IMAGEN_PATH varchar(512),
     ESTADO varchar(1),
-    primary key (BODEGA_ID)
+    primary key (CATPRODUCTO_ID)
 )
 

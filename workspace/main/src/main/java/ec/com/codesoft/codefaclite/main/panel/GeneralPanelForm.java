@@ -87,6 +87,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         menuBodega = new javax.swing.JMenuItem();
         jMenuItemKardex = new javax.swing.JMenuItem();
         jMenuItemInventarioEnsamble = new javax.swing.JMenuItem();
+        menuCatProducto = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuCliente = new javax.swing.JMenuItem();
         jMenuItemReporteCliente = new javax.swing.JMenuItem();
@@ -318,6 +319,9 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
         jMenuItemInventarioEnsamble.setText("Inventario Ensamble");
         menuInventario.add(jMenuItemInventarioEnsamble);
+
+        menuCatProducto.setText("Categoria Producto");
+        menuInventario.add(menuCatProducto);
 
         jMenuBar1.add(menuInventario);
 
@@ -558,6 +562,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JSplitPane jSplitPanelVerticalSecundario;
     private javax.swing.JLabel lblPiePagina;
     private javax.swing.JMenuItem menuBodega;
+    private javax.swing.JMenuItem menuCatProducto;
     private javax.swing.JMenu menuCompras;
     private javax.swing.JMenu menuConfiguracion;
     private javax.swing.JMenu menuFacturacion;
@@ -580,8 +585,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     public void setjMenuItem2(JMenuItem jMenuItem2) {
         this.jMenuItemSalir = jMenuItem2;
     }
-
-
 
     public JDesktopPane getjDesktopPane1() {
         return jDesktopPane1;
@@ -891,6 +894,14 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
     public void setjMenuItemInventarioEnsamble(JMenuItem jMenuItemInventarioEnsamble) {
         this.jMenuItemInventarioEnsamble = jMenuItemInventarioEnsamble;
+    }
+
+    public JMenuItem getMenuCatProducto() {
+        return menuCatProducto;
+    }
+
+    public void setMenuCatProducto(JMenuItem menuCatProducto) {
+        this.menuCatProducto = menuCatProducto;
     }
     
     

@@ -52,7 +52,7 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
             bodega = new Bodega();
             setearValoresBodega(bodega);
             bodegaService.grabar(bodega);
-            DialogoCodefac.mensaje("Datos correctos", "El Producto se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+            DialogoCodefac.mensaje("Datos correctos", "La bodega se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite("Error al grabar");
@@ -157,7 +157,7 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
         permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
         permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
         permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
-        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        //permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
         permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
         return permisos;
     }
