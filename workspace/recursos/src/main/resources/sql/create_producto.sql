@@ -29,7 +29,7 @@ create table PRODUCTO
     STOCK_INICIAL bigint,
     MARCA varchar(50),
     IMAGEN varchar(100),
-    CATEGORIA varchar(1),
+    CATEGORIA bigint,
     CARACTERISTICAS varchar(100),
     OBSERVACIONES varchar(100),    
 

@@ -24,24 +24,25 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+
 @Entity
 @Table(name = "PRODUCTO")
 @XmlRootElement
-public class Producto implements Serializable
-{
+public class Producto implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column (name = "ID_PRODUCTO")
-    private Long  idProducto;
+    @Column(name = "ID_PRODUCTO")
+    private Long idProducto;
     @Column(name = "CODIGO_PERSONALIZADO")
     private String codigoPersonalizado;
     @Column(name = "CODIGO_EAN")
     private String codigoEAN;
     @Column(name = "CODIGO_UPC")
     private String codigoUPC;
-    
+
     @Column(name = "TIPO_PRODUCTO")
     private String tipoProducto;
     @Column(name = "NOMBRE")
@@ -50,60 +51,61 @@ public class Producto implements Serializable
     private BigDecimal valorUnitario;
     @Column(name = "ESTADO")
     private String estado;
-    
-    
+
     @Column(name = "UBICACION")
     private String ubicacion;
-    
+
     @Column(name = "GARANTIA")
     private String garantia;
-    
+
     @Column(name = "CANTIDAD_MINIMA")
     private Integer cantidadMinima;
-    
+
     @Column(name = "PRECIO_DISTRIBUIDOR")
     private BigDecimal precioDistribuidor;
-    
+
     @Column(name = "PRECIO_TARJETA")
     private BigDecimal precioTarjeta;
-    
+
     @Column(name = "STOCK_INICIAL")
     private Long stockInicial;
-    
+
     @Column(name = "MARCA")
     private String marca;
-    
+
     @Column(name = "IMAGEN")
     private String imagen;
-    
+    /*
     @Column(name = "CATEGORIA")
     private String categoria;
-    
+     */
     @Column(name = "CARACTERISTICAS")
     private String caracteristicas;
-    
+
     @Column(name = "OBSERVACIONES")
     private String observaciones;
-    
+
     @JoinColumn(name = "IVA_ID")
     @ManyToOne
     private ImpuestoDetalle iva;
-    
+
     @JoinColumn(name = "ICE_ID")
     @ManyToOne
     private ImpuestoDetalle ice;
-    
+
     @JoinColumn(name = "IRBPNR_ID")
     @ManyToOne
     private ImpuestoDetalle irbpnr;
-    
+
+    @JoinColumn(name = "CATEGORIA")
+    @ManyToOne
+    private CategoriaProducto categoriaProducto;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productoEnsamble")
     private List<ProductoEnsamble> detallesEnsamble;
 
     public Producto() {
     }
-    
-    
 
     public ImpuestoDetalle getIva() {
         return iva;
@@ -134,7 +136,6 @@ public class Producto implements Serializable
         this.irbpnr = irbpnr;
     }
 
-    
     public Long getIdProducto() {
         return idProducto;
     }
@@ -143,7 +144,6 @@ public class Producto implements Serializable
         this.idProducto = idProducto;
     }
 
-    
     public String getTipoProducto() {
         return tipoProducto;
     }
@@ -264,12 +264,12 @@ public class Producto implements Serializable
         this.imagen = imagen;
     }
 
-    public String getCategoria() {
-        return categoria;
+    public CategoriaProducto getCategoriaProducto() {
+        return categoriaProducto;
     }
 
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
+    public void setCategoriaProducto(CategoriaProducto categoriaProducto) {
+        this.categoriaProducto = categoriaProducto;
     }
 
     public String getObservaciones() {
@@ -295,33 +295,26 @@ public class Producto implements Serializable
     public void setDetallesEnsamble(List<ProductoEnsamble> detallesEnsamble) {
         this.detallesEnsamble = detallesEnsamble;
     }
-    
-    
 
     /**
      * Metodos personalizados
      */
-    
-    public EnumSiNo getGarantiaEnum()
-    {
+    public EnumSiNo getGarantiaEnum() {
         return EnumSiNo.getEnumByLetra(garantia);
     }
-    
+
     /**
      * Agregar producto al ensamble
-     * @param detalle 
+     *
+     * @param detalle
      */
-    public void addProductoEnsamble(ProductoEnsamble detalle)
-    {
-        if(this.detallesEnsamble==null)
-        {
-            this.detallesEnsamble=new ArrayList<ProductoEnsamble>();
+    public void addProductoEnsamble(ProductoEnsamble detalle) {
+        if (this.detallesEnsamble == null) {
+            this.detallesEnsamble = new ArrayList<ProductoEnsamble>();
         }
         detalle.setProductoEnsamble(this);
         this.detallesEnsamble.add(detalle);
-        
+
     }
-    
-    
-    
+
 }

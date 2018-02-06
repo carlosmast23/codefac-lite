@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.servidor.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoProductoEnum;
@@ -24,7 +25,7 @@ import javax.swing.JTextField;
  *
  * @author PC
  */
-public abstract class ProductoForm extends ControladorCodefacInterface{
+public abstract class ProductoForm extends ControladorCodefacInterface {
 
     public JComboBox<TipoProductoEnum> getComboTipoProducto() {
         return comboTipoProducto;
@@ -33,6 +34,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
     public void setComboTipoProducto(JComboBox<TipoProductoEnum> jComboTipoProducto) {
         this.comboTipoProducto = jComboTipoProducto;
     }
+
     /*
     @LimpiarAnotacion
     @ValidacionCodefacAnotacion(requerido=false ,expresionRegular = "^[A-Za-z0-9.\\_\\-\\\\s]*$",nombre = "Codigo Auxiliar", expresionRegularMensaje = "No se permiten caracteres especiales")
@@ -53,9 +55,8 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
     public void setTextCodigoPrincipal(JTextField jTextCodigoPrincipal) {
         this.textCodigoPersonalizado = jTextCodigoPrincipal;
     }*/
-    
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$",nombre = "Nombre", expresionRegularMensaje = "No se permiten caracteres especiales")
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Nombre", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextField getTextNombre() {
         return textNombre;
     }
@@ -63,9 +64,9 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
     public void setTextNombre(JTextField jTextNombre) {
         this.textNombre = jTextNombre;
     }
-    
+
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true, expresionRegular = "^[0-9]+([.][0-9]+)?$", expresionRegularMensaje = "Solo se permite numeros enteros y decimales")
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[0-9]+([.][0-9]+)?$", expresionRegularMensaje = "Solo se permite numeros enteros y decimales")
     public JTextField getTextValorUnitario() {
         return textValorUnitario;
     }
@@ -97,8 +98,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
     public void setComboIva(JComboBox<ImpuestoDetalle> comboIva) {
         this.comboIva = comboIva;
     }
-    
-    
 
     /**
      * Creates new form ProductoForm
@@ -106,9 +105,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
     public ProductoForm() {
         initComponents();
     }
-    
-    
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -213,6 +210,12 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanel1.add(jLabel2, gridBagConstraints);
+
+        txtCodigoPersonalizado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCodigoPersonalizadoActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
@@ -487,7 +490,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanel5.add(jLabel22, gridBagConstraints);
 
-        cmbCategoriaProducto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
@@ -734,13 +736,17 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         // TODO add your handling code here:
     }//GEN-LAST:event_btnEliminarEnsambleActionPerformed
 
+    private void txtCodigoPersonalizadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoPersonalizadoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCodigoPersonalizadoActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarEnsamble;
     private javax.swing.JButton btnBuscarImagen;
     private javax.swing.JButton btnBuscarProductoEnsamble;
     private javax.swing.JButton btnEditarEnsamble;
     private javax.swing.JButton btnEliminarEnsamble;
-    private javax.swing.JComboBox<String> cmbCategoriaProducto;
+    private javax.swing.JComboBox<CategoriaProducto> cmbCategoriaProducto;
     private javax.swing.JComboBox<ec.com.codesoft.codefaclite.servidor.entity.enumerados.EnumSiNo> cmbGarantia;
     private javax.swing.JComboBox<ImpuestoDetalle> comboIce;
     private javax.swing.JComboBox<ImpuestoDetalle> comboIrbpnr;
@@ -817,6 +823,8 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         this.txtCodigoEAN = txtCodigoEAN;
     }
 
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Codigo Personalizado", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextField getTxtCodigoPersonalizado() {
         return txtCodigoPersonalizado;
     }
@@ -825,6 +833,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         this.txtCodigoPersonalizado = txtCodigoPersonalizado;
     }
 
+    @LimpiarAnotacion
     public JTextField getTxtCodigoUPC() {
         return txtCodigoUPC;
     }
@@ -833,11 +842,11 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         this.txtCodigoUPC = txtCodigoUPC;
     }
 
-    public JComboBox<String> getCmbCategoriaProducto() {
+    public JComboBox<CategoriaProducto> getCmbCategoriaProducto() {
         return cmbCategoriaProducto;
     }
 
-    public void setCmbCategoriaProducto(JComboBox<String> cmbCategoriaProducto) {
+    public void setCmbCategoriaProducto(JComboBox<CategoriaProducto> cmbCategoriaProducto) {
         this.cmbCategoriaProducto = cmbCategoriaProducto;
     }
 
@@ -849,6 +858,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         this.cmbGarantia = cmbGarantia;
     }
 
+    @LimpiarAnotacion
     public JTextField getTxtCantidad() {
         return txtCantidadEnsamble;
     }
@@ -857,6 +867,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         this.txtCantidadEnsamble = txtCantidad;
     }
 
+    @LimpiarAnotacion
     public JTextField getTxtCantidadMinima() {
         return txtCantidadMinima;
     }
@@ -865,6 +876,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         this.txtCantidadMinima = txtCantidadMinima;
     }
 
+    @LimpiarAnotacion
     public JTextArea getTxtCaracteristica() {
         return txtCaracteristica;
     }
@@ -881,6 +893,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         this.txtImagenProducto = txtImagenProducto;
     }
 
+    @LimpiarAnotacion
     public JTextField getTxtMarca() {
         return txtMarca;
     }
@@ -889,6 +902,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         this.txtMarca = txtMarca;
     }
 
+    @LimpiarAnotacion
     public JTextArea getTxtObservaciones() {
         return txtObservaciones;
     }
@@ -897,6 +911,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         this.txtObservaciones = txtObservaciones;
     }
 
+    @LimpiarAnotacion
     public JTextField getTxtPrecioDistribuidor() {
         return txtPrecioDistribuidor;
     }
@@ -905,6 +920,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         this.txtPrecioDistribuidor = txtPrecioDistribuidor;
     }
 
+    @LimpiarAnotacion
     public JTextField getTxtPrecioTarjeta() {
         return txtPrecioTarjeta;
     }
@@ -913,6 +929,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         this.txtPrecioTarjeta = txtPrecioTarjeta;
     }
 
+    @LimpiarAnotacion
     public JTextField getTxtProducto() {
         return txtProductoEnsamble;
     }
@@ -921,6 +938,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         this.txtProductoEnsamble = txtProducto;
     }
 
+    @LimpiarAnotacion
     public JTextField getTxtStockInicial() {
         return txtStockInicial;
     }
@@ -929,6 +947,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         this.txtStockInicial = txtStockInicial;
     }
 
+    @LimpiarAnotacion
     public JTextField getTxtUbicacion() {
         return txtUbicacion;
     }
@@ -969,6 +988,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         this.btnEliminarEnsamble = btnEliminarEnsamble;
     }
 
+    @LimpiarAnotacion
     public JTextField getTxtCantidadEnsamble() {
         return txtCantidadEnsamble;
     }
@@ -985,6 +1005,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
         this.tblDatosEnsamble = tblDatosEnsamble;
     }
 
+    @LimpiarAnotacion
     public JTextField getTxtProductoEnsamble() {
         return txtProductoEnsamble;
     }
@@ -992,7 +1013,5 @@ public abstract class ProductoForm extends ControladorCodefacInterface{
     public void setTxtProductoEnsamble(JTextField txtProductoEnsamble) {
         this.txtProductoEnsamble = txtProductoEnsamble;
     }
-    
-    
-    
+
 }
