@@ -21,9 +21,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import ec.com.codesoft.codefaclite.servidor.service.BodegaService;
-import ec.com.codesoft.codefaclite.servidor.service.KardexService;
-import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
@@ -89,6 +86,8 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
             } catch (RemoteException ex) {
                 Logger.getLogger(InventarioEnsambleModel.class.getName()).log(Level.SEVERE, null, ex);
                 DialogoCodefac.mensaje("Error", "Existe un error en los datos", DialogoCodefac.MENSAJE_INCORRECTO);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(InventarioEnsambleModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -151,13 +150,17 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
     }
 
     private void cargarValoresIniciales() {
-        //Cargar las bodegas disponibles
-        getCmbBodega().removeAllItems();
-        BodegaServiceIf servicioBodega = ServiceController.getController().getBodegaServiceIf();
-        List<Bodega> bodegas = servicioBodega.obtenerTodos();
-        for (Bodega bodega : bodegas) {
-            getCmbBodega().addItem(bodega);
-        }        
+        try {
+            //Cargar las bodegas disponibles
+            getCmbBodega().removeAllItems();
+            BodegaServiceIf servicioBodega = ServiceController.getController().getBodegaServiceIf();
+            List<Bodega> bodegas = servicioBodega.obtenerTodos();
+            for (Bodega bodega : bodegas) {
+                getCmbBodega().addItem(bodega);        
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(InventarioEnsambleModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void agregarListenerBotones() {
@@ -243,7 +246,7 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
                     Integer cantidadTotal=cantidadEnsamble*cantidadProducto;
                     //Kardex kardexComponente=listaKardex.get(0);
                     //Este paso lo hago porque cuando seteo un valor a una entidad cuando esta asociado automaticamente se refleja en la base de datos
-                    ServiceAbstract.desasociarEntidadRecursivo(kardexComponente);
+                    //ServiceAbstract.desasociarEntidadRecursivo(kardexComponente);
                     
                     if(accion.equals(InventarioEnsamblePanel.OPCION_AGREGAR))
                     {
@@ -302,45 +305,51 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
         
         for(ProductoEnsamble componenteProducto: productoEnsamble.getDetallesEnsamble())
         {
-            Vector<String> fila=new Vector<String>();
-            
-            Producto componente=componenteProducto.getComponenteEnsamble();
-            Map<String,Object> mapParametros=new HashMap<String,Object>();
-            mapParametros.put("producto",componente);
-            mapParametros.put("bodega",bodega);
-            KardexServiceIf servicioKardex=ServiceController.getController().getKardexServiceIf();
-            List<Kardex> listaKardex= servicioKardex.obtenerPorMap(mapParametros);
-            if(listaKardex!=null && listaKardex.size()>0)
-            {
-                Kardex kardexComponente=listaKardex.get(0);
-                fila.add(componente.getNombre());
-                fila.add(componenteProducto.getCantidad()+"");
-                fila.add(componenteProducto.getCantidad()*cantidad+"");
-                fila.add(kardexComponente.getStock()+"");
-                boolean disponible=componenteProducto.getCantidad()*cantidad<=kardexComponente.getStock();
+            try {
+                Vector<String> fila=new Vector<String>();
                 
-                if(disponible)
+                Producto componente=componenteProducto.getComponenteEnsamble();
+                Map<String,Object> mapParametros=new HashMap<String,Object>();
+                mapParametros.put("producto",componente);
+                mapParametros.put("bodega",bodega);
+                KardexServiceIf servicioKardex=ServiceController.getController().getKardexServiceIf();
+                List<Kardex> listaKardex= servicioKardex.obtenerPorMap(mapParametros);
+                if(listaKardex!=null && listaKardex.size()>0)
                 {
-                    fila.add("SI");
+                    Kardex kardexComponente=listaKardex.get(0);
+                    fila.add(componente.getNombre());
+                    fila.add(componenteProducto.getCantidad()+"");
+                    fila.add(componenteProducto.getCantidad()*cantidad+"");
+                    fila.add(kardexComponente.getStock()+"");
+                    boolean disponible=componenteProducto.getCantidad()*cantidad<=kardexComponente.getStock();
+                    
+                    if(disponible)
+                    {
+                        fila.add("SI");
+                    }
+                    else
+                    {
+                        fila.add("NO");
+                        productosProblemas.add(componente);
+                    }
                 }
                 else
                 {
+                    //Si no existe kardex no existe disponibilidad
+                    //TODO: toca revisar si el producto es un servicio entonces esto no aplica
+                    fila.add(componente.getNombre());
+                    fila.add(componenteProducto.getCantidad() + "");
+                    fila.add(componenteProducto.getCantidad() * cantidad + "");
+                    fila.add("0");
                     fila.add("NO");
                     productosProblemas.add(componente);
                 }
+                tableModel.addRow(fila);
+            } catch (RemoteException ex) {
+                Logger.getLogger(InventarioEnsambleModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(InventarioEnsambleModel.class.getName()).log(Level.SEVERE, null, ex);
             }
-            else
-            {
-                //Si no existe kardex no existe disponibilidad
-                //TODO: toca revisar si el producto es un servicio entonces esto no aplica
-                fila.add(componente.getNombre());
-                fila.add(componenteProducto.getCantidad() + "");
-                fila.add(componenteProducto.getCantidad() * cantidad + "");
-                fila.add("0");
-                fila.add("NO");
-                productosProblemas.add(componente);                
-            }            
-            tableModel.addRow(fila);
             
         }
         getTblDatos().setModel(tableModel);

@@ -26,8 +26,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteFisicoDise
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import ec.com.codesoft.codefaclite.servidor.service.ComprobanteFisicoDisenioService;
-import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteFisicoDisenioServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
@@ -45,6 +43,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.InputStream;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -111,10 +110,14 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
-        ComprobanteFisicoDisenioServiceIf servicio =ServiceController.getController().getComprobanteFisicoDisenioServiceIf();
-        ComprobanteFisicoDisenio comprobante= (ComprobanteFisicoDisenio) getCmbDocumento().getSelectedItem();
-        servicio.editar(comprobante);
-        DialogoCodefac.mensaje("Correcto","Los datos fueron grabados correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+        try {
+            ComprobanteFisicoDisenioServiceIf servicio =ServiceController.getController().getComprobanteFisicoDisenioServiceIf();
+            ComprobanteFisicoDisenio comprobante= (ComprobanteFisicoDisenio) getCmbDocumento().getSelectedItem();
+            servicio.editar(comprobante);
+            DialogoCodefac.mensaje("Correcto","Los datos fueron grabados correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturaDisenioModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -542,15 +545,19 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
         getjScrollPane1().setViewportView(lienzo);
     }*/
     private void cargarDatos() {
-        getCmbDocumento().removeAllItems();
-        ComprobanteFisicoDisenioServiceIf servicio = ServiceController.getController().getComprobanteFisicoDisenioServiceIf();
-        List<ComprobanteFisicoDisenio> documentos = servicio.obtenerTodos();
-        for (ComprobanteFisicoDisenio documento : documentos) {
-            //Esto sirve para desasociar la entidad y que no se reflejen los cambios directamente con la base de datos
-            ServiceAbstract.desasociarEntidadRecursivo(documento);
-            getCmbDocumento().addItem(documento);
+        try {
+            getCmbDocumento().removeAllItems();
+            ComprobanteFisicoDisenioServiceIf servicio = ServiceController.getController().getComprobanteFisicoDisenioServiceIf();
+            List<ComprobanteFisicoDisenio> documentos = servicio.obtenerTodos();
+            for (ComprobanteFisicoDisenio documento : documentos) {
+                //Esto sirve para desasociar la entidad y que no se reflejen los cambios directamente con la base de datos
+                //ServiceAbstract.desasociarEntidadRecursivo(documento);
+                getCmbDocumento().addItem(documento);
+            }
+            //System.exit(0);
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturaDisenioModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //System.exit(0);
     }
 
     @Override

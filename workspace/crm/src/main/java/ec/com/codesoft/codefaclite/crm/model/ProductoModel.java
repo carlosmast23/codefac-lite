@@ -22,13 +22,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ProductoEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import ec.com.codesoft.codefaclite.servidor.service.CategoriaProductoService;
-import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
-import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
-import ec.com.codesoft.codefaclite.servidor.service.ProductoService;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CategoriaProductoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
-import ec.com.codesoft.codefaclite.test.TipoBusquedaEnum;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
@@ -53,9 +51,9 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     private CategoriaProducto catProducto;
 
     private ProductoServiceIf productoService;
-    private ImpuestoService impuestoService;
-    private ImpuestoDetalleService impuestoDetalleService;
-    private CategoriaProductoService catProdService;
+    private ImpuestoServiceIf impuestoService;
+    private ImpuestoDetalleServiceIf impuestoDetalleService;
+    private CategoriaProductoServiceIf catProdService;
     private BigDecimal d;
 
     /*
@@ -64,20 +62,15 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     private Producto productoEnsamble;
 
     public ProductoModel() {
-        try {
-            productoService = ServiceController.getController().getProductoServiceIf();
-            impuestoService = new ImpuestoService();
-            impuestoDetalleService = new ImpuestoDetalleService();
-            catProdService = new CategoriaProductoService();
-            
-            getComboIce().setEnabled(false);
-            getComboIrbpnr().setEnabled(false);
-            iniciarCombosBox();
-            listenerComboBox();
-            listenerBotones();
-        } catch (RemoteException ex) {
-            Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        productoService = ServiceController.getController().getProductoServiceIf();
+        impuestoService = ServiceController.getController().getImpuestoServiceIf();
+        impuestoDetalleService = ServiceController.getController().getImpuestoDetalleServiceIf();
+        catProdService = ServiceController.getController().getCategoriaProductoServiceIf();
+        getComboIce().setEnabled(false);
+        getComboIrbpnr().setEnabled(false);
+        iniciarCombosBox();
+        listenerComboBox();
+        listenerBotones();
     }
 
     @Override
@@ -237,36 +230,40 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     @Override
     public void limpiar() {
 
-        this.producto = new Producto();
-
-        getComboIva().removeAllItems();
-        getComboIce().removeAllItems();
-        getComboIrbpnr().removeAllItems();
-
-        List<ImpuestoDetalle> impuestoDetalleList = impuestoDetalleService.obtenerIvaVigente();
-        ImpuestoDetalle impuestoDefault = null;
-        String ivaDefecto = session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).valor;
-        for (ImpuestoDetalle impuesto : impuestoDetalleList) {
-            if (impuesto.getTarifa().toString().equals(ivaDefecto)) {
-                impuestoDefault = impuesto;
+        try {
+            this.producto = new Producto();
+            
+            getComboIva().removeAllItems();
+            getComboIce().removeAllItems();
+            getComboIrbpnr().removeAllItems();
+            
+            List<ImpuestoDetalle> impuestoDetalleList = impuestoDetalleService.obtenerIvaVigente();
+            ImpuestoDetalle impuestoDefault = null;
+            String ivaDefecto = session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).valor;
+            for (ImpuestoDetalle impuesto : impuestoDetalleList) {
+                if (impuesto.getTarifa().toString().equals(ivaDefecto)) {
+                    impuestoDefault = impuesto;
+                }
+                getComboIva().addItem(impuesto);
             }
-            getComboIva().addItem(impuesto);
+            getComboIva().setSelectedItem(impuestoDefault);
+            
+            Impuesto ice = impuestoService.obtenerImpuestoPorCodigo(Impuesto.ICE);
+            for (ImpuestoDetalle impuesto : ice.getDetalleImpuestos()) {
+                getComboIce().addItem(impuesto);
+            }
+            getComboIce().setEditable(true);
+            getComboIce().setSelectedItem("Seleccione : ");
+            
+            Impuesto irbpnr = impuestoService.obtenerImpuestoPorCodigo(Impuesto.IRBPNR);
+            for (ImpuestoDetalle impuesto : irbpnr.getDetalleImpuestos()) {
+                getComboIrbpnr().addItem(impuesto);
+            }
+            getComboIrbpnr().setEditable(true);
+            getComboIrbpnr().setSelectedItem("Seleccione: ");
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        getComboIva().setSelectedItem(impuestoDefault);
-
-        Impuesto ice = impuestoService.obtenerImpuestoPorCodigo(Impuesto.ICE);
-        for (ImpuestoDetalle impuesto : ice.getDetalleImpuestos()) {
-            getComboIce().addItem(impuesto);
-        }
-        getComboIce().setEditable(true);
-        getComboIce().setSelectedItem("Seleccione : ");
-
-        Impuesto irbpnr = impuestoService.obtenerImpuestoPorCodigo(Impuesto.IRBPNR);
-        for (ImpuestoDetalle impuesto : irbpnr.getDetalleImpuestos()) {
-            getComboIrbpnr().addItem(impuesto);
-        }
-        getComboIrbpnr().setEditable(true);
-        getComboIrbpnr().setSelectedItem("Seleccione: ");
 
     }
 
@@ -319,23 +316,27 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     }
 
     private void iniciarCombosBox() {
-        TipoProductoEnum[] tipos = TipoProductoEnum.values();
-        getComboTipoProducto().removeAllItems();
-        for (TipoProductoEnum tipo : tipos) {
-            getComboTipoProducto().addItem(tipo);
-        }
-
-        //Agregar combo de garantia
-        getCmbGarantia().removeAllItems();
-        EnumSiNo[] garantias = EnumSiNo.values();
-        for (EnumSiNo garantia : garantias) {
-            getCmbGarantia().addItem(garantia);
-        }
-
-        getCmbCategoriaProducto().removeAllItems();
-        List<CategoriaProducto> catProdList = catProdService.obtenerTodos();
-        for (CategoriaProducto cat : catProdList) {
-            getCmbCategoriaProducto().addItem(cat);
+        try {
+            TipoProductoEnum[] tipos = TipoProductoEnum.values();
+            getComboTipoProducto().removeAllItems();
+            for (TipoProductoEnum tipo : tipos) {
+                getComboTipoProducto().addItem(tipo);
+            }
+            
+            //Agregar combo de garantia
+            getCmbGarantia().removeAllItems();
+            EnumSiNo[] garantias = EnumSiNo.values();
+            for (EnumSiNo garantia : garantias) {
+                getCmbGarantia().addItem(garantia);
+            }
+            
+            getCmbCategoriaProducto().removeAllItems();
+            List<CategoriaProducto> catProdList = catProdService.obtenerTodos();
+            for (CategoriaProducto cat : catProdList) {
+                getCmbCategoriaProducto().addItem(cat);
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }

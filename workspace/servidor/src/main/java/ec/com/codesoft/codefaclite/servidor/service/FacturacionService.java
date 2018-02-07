@@ -156,21 +156,26 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     }
     
     public String getPreimpresoSiguiente() {
-        Integer secuencialSiguiente=0;
-        //Obtener secuencial cuando es modo electronico
-        if(parametroService.getParametroByNombre(ParametroCodefac.TIPO_FACTURACION).valor.equals(TipoFacturacionEnumEstado.ELECTRONICA.getLetra()))
-        {
-            secuencialSiguiente = Integer.parseInt(parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA).valor);
-        }
-        else //cuando el modo es normals
-        {          
-            secuencialSiguiente = Integer.parseInt(parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA_FISICA).valor);
-        }
+        try {
+            Integer secuencialSiguiente=0;
+            //Obtener secuencial cuando es modo electronico
+            if(parametroService.getParametroByNombre(ParametroCodefac.TIPO_FACTURACION).valor.equals(TipoFacturacionEnumEstado.ELECTRONICA.getLetra()))
+            {
+                secuencialSiguiente = Integer.parseInt(parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA).valor);
+            }
+            else //cuando el modo es normals
+            {
+                secuencialSiguiente = Integer.parseInt(parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA_FISICA).valor);
+            }
             
-        String secuencial = UtilidadesTextos.llenarCarateresIzquierda(secuencialSiguiente.toString(), 8, "0");
-        String establecimiento = parametroService.getParametroByNombre(ParametroCodefac.ESTABLECIMIENTO).valor;
-        String puntoEmision = parametroService.getParametroByNombre(ParametroCodefac.PUNTO_EMISION).valor;
-        return puntoEmision + "-" + establecimiento + "-" + secuencial;
+            String secuencial = UtilidadesTextos.llenarCarateresIzquierda(secuencialSiguiente.toString(), 8, "0");
+            String establecimiento = parametroService.getParametroByNombre(ParametroCodefac.ESTABLECIMIENTO).valor;
+            String puntoEmision = parametroService.getParametroByNombre(ParametroCodefac.PUNTO_EMISION).valor;
+            return puntoEmision + "-" + establecimiento + "-" + secuencial;
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
     }
     
     public void eliminarFactura(Factura factura)

@@ -43,9 +43,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.service.AccesoDirectoService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceControllerServer;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import ec.com.codesoft.ejemplo.utilidades.imagen.UtilidadImagen;
 import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
@@ -310,20 +312,24 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             //Solo establecer fondos personalizados para usuarios pro
             if(sessionCodefac.getTipoLicenciaEnum().equals(TipoLicenciaEnum.PRO))
             {
-                ParametroCodefacServiceIf servicio=ServiceController.getController().getParametroCodefacServiceIf();
-                Map<String,ParametroCodefac> map=servicio.getParametrosMap();
-                if(map!=null)
-                {
-                    ParametroCodefac parametroCodefac=map.get(ParametroCodefac.IMAGEN_FONDO);
-                    if(parametroCodefac!=null)
+                try {
+                    ParametroCodefacServiceIf servicio=ServiceController.getController().getParametroCodefacServiceIf();
+                    Map<String,ParametroCodefac> map=servicio.getParametrosMap();
+                    if(map!=null)
                     {
-                        String valor=parametroCodefac.getValor();
-                        if(!valor.equals(""))
+                        ParametroCodefac parametroCodefac=map.get(ParametroCodefac.IMAGEN_FONDO);
+                        if(parametroCodefac!=null)
                         {
-                            String pathImagen=map.get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + DirectorioCodefac.IMAGENES.getNombre() + "/"+valor;
-                            fondoImg = new javax.swing.ImageIcon(pathImagen).getImage();
+                            String valor=parametroCodefac.getValor();
+                            if(!valor.equals(""))
+                            {
+                                String pathImagen=map.get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + DirectorioCodefac.IMAGENES.getNombre() + "/"+valor;
+                                fondoImg = new javax.swing.ImageIcon(pathImagen).getImage();
+                            }
                         }
                     }
+                } catch (RemoteException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -1028,6 +1034,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         
         } catch (PropertyVetoException ex) {
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -1563,137 +1571,155 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     
     private void iniciarComponentes()
     {
-        controladorVista=new ControladorVista();
-        
-        //Cargar configuraciones de los divisores
-        PROPORCION_HORIZONTAL=PROPORCION_HORIZONTAL_INICIAL;
-        PROPORCION_VERTICAL=PROPORCION_VERTICAL_INICIAL;
-        
-        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        
-        getjSplitPanel().setDividerLocation(PROPORCION_HORIZONTAL);
-        getjSplitPanelVerticalSecundario().setDividerLocation(PROPORCION_VERTICAL);
-        
-        //Cargar el fondo de la pantalla
-        Image fondoImg=new javax.swing.ImageIcon(getClass().getResource("/img.general/fondoGeneral.png")).getImage();
-        getjDesktopPane1().setBorder(new Fondo(fondoImg));
-        
-        //Setear el segundo componente de la ventana auxliar
-        getjSplitPanel().setRightComponent(getJpanelAuxiliar());
-        
-        //Cargar el componente de publicidad para que siempre exista
-        cargarPublicidad();
-        URL url=null;
-        Map<String,Object> mapBuscar;
-        AccesoDirectoServiceIf servicio=ServiceController.getController().getAccesoDirectoServiceIf();
-        
-                /***
-         * Agregar el widget de virtualMall
-         */
-        mapBuscar = new HashMap<>();
-        mapBuscar.put("nombre","WidgetVirtualMall");
-        int x=servicio.obtenerPorMap(mapBuscar).get(0).x;
-        int y=servicio.obtenerPorMap(mapBuscar).get(0).y;
-        
-        widgetVirtualMall=new WidgetVirtualMallModelo(getjDesktopPane1());
-        widgetVirtualMall.setPreferredSize(new Dimension(x,y));
-        widgetVirtualMall.setBounds(x,y,260, 400);
-        widgetVirtualMall.addListenerIcono(new IconoInterfaz() {
-            @Override
-            public void doubleClick() {                
-            }
-
-            @Override
-            public void grabarNuevaPosicion(Point nuevaPosicion) {
-                Map<String, Object> mapBuscar;
-                AccesoDirectoService servicio = new AccesoDirectoService();
-
-                mapBuscar = new HashMap<>();
-                mapBuscar.put("nombre","WidgetVirtualMall");
-                AccesoDirecto acceso=servicio.obtenerPorMap(mapBuscar).get(0);
-                acceso.setX((int)nuevaPosicion.getX());
-                acceso.setY((int)nuevaPosicion.getY());
-                servicio.editar(acceso);
-            }
-        });
-        getjDesktopPane1().add(widgetVirtualMall);
-        widgetVirtualMall.setVisible(true);
-
-        /***
-         * Agregar el widget de Ventas diarias
-         */
-        mapBuscar = new HashMap<>();
-        mapBuscar.put("nombre", "WidgetVentasDiarias");
-        int xVd=servicio.obtenerPorMap(mapBuscar).get(0).x;
-        int yVd=servicio.obtenerPorMap(mapBuscar).get(0).y;
-        
-        widgetVentasDiarias = new VentasDiariasModel(getjDesktopPane1());
-        widgetVentasDiarias.panelPadre=this;
-        widgetVentasDiarias.setPreferredSize(new Dimension(xVd,yVd));
-        widgetVentasDiarias.setBounds(xVd,xVd,220,330);
-        
-        widgetVentasDiarias.addListenerIcono(new IconoInterfaz() {
-            @Override
-            public void doubleClick() {                
-            }
-
-            @Override
-            public void grabarNuevaPosicion(Point nuevaPosicion) {
-                Map<String, Object> mapBuscar;
-                AccesoDirectoServiceIf servicio = ServiceController.getController().getAccesoDirectoServiceIf();
-                mapBuscar = new HashMap<>();
-                mapBuscar.put("nombre","WidgetVentasDiarias");
-                AccesoDirecto acceso=servicio.obtenerPorMap(mapBuscar).get(0);
-                acceso.setX((int)nuevaPosicion.getX());
-                acceso.setY((int)nuevaPosicion.getY());
-                servicio.editar(acceso);
-            }
-        });
+        try {
+            controladorVista=new ControladorVista();
+            
+            //Cargar configuraciones de los divisores
+            PROPORCION_HORIZONTAL=PROPORCION_HORIZONTAL_INICIAL;
+            PROPORCION_VERTICAL=PROPORCION_VERTICAL_INICIAL;
+            
+            setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+            
+            getjSplitPanel().setDividerLocation(PROPORCION_HORIZONTAL);
+            getjSplitPanelVerticalSecundario().setDividerLocation(PROPORCION_VERTICAL);
+            
+            //Cargar el fondo de la pantalla
+            Image fondoImg=new javax.swing.ImageIcon(getClass().getResource("/img.general/fondoGeneral.png")).getImage();
+            getjDesktopPane1().setBorder(new Fondo(fondoImg));
+            
+            //Setear el segundo componente de la ventana auxliar
+            getjSplitPanel().setRightComponent(getJpanelAuxiliar());
+            
+            //Cargar el componente de publicidad para que siempre exista
+            cargarPublicidad();
+            URL url=null;
+            Map<String,Object> mapBuscar;
+            AccesoDirectoServiceIf servicio=ServiceController.getController().getAccesoDirectoServiceIf();
+            
+            /***
+             * Agregar el widget de virtualMall
+             */
+            mapBuscar = new HashMap<>();
+            mapBuscar.put("nombre","WidgetVirtualMall");
+            int x=servicio.obtenerPorMap(mapBuscar).get(0).x;
+            int y=servicio.obtenerPorMap(mapBuscar).get(0).y;
+            
+            widgetVirtualMall=new WidgetVirtualMallModelo(getjDesktopPane1());
+            widgetVirtualMall.setPreferredSize(new Dimension(x,y));
+            widgetVirtualMall.setBounds(x,y,260, 400);
+            widgetVirtualMall.addListenerIcono(new IconoInterfaz() {
+                @Override
+                public void doubleClick() {
+                }
+                
+                @Override
+                public void grabarNuevaPosicion(Point nuevaPosicion) {
+                    try {
+                        Map<String, Object> mapBuscar;
+                        AccesoDirectoServiceIf servicio = ServiceController.getController().getAccesoDirectoServiceIf();
+                        
+                        mapBuscar = new HashMap<>();
+                        mapBuscar.put("nombre","WidgetVirtualMall");
+                        AccesoDirecto acceso=servicio.obtenerPorMap(mapBuscar).get(0);
+                        acceso.setX((int)nuevaPosicion.getX());
+                        acceso.setY((int)nuevaPosicion.getY());
+                        servicio.editar(acceso);
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
+            getjDesktopPane1().add(widgetVirtualMall);
+            widgetVirtualMall.setVisible(true);
+            
+            /***
+             * Agregar el widget de Ventas diarias
+             */
+            mapBuscar = new HashMap<>();
+            mapBuscar.put("nombre", "WidgetVentasDiarias");
+            int xVd=servicio.obtenerPorMap(mapBuscar).get(0).x;
+            int yVd=servicio.obtenerPorMap(mapBuscar).get(0).y;
+            
+            widgetVentasDiarias = new VentasDiariasModel(getjDesktopPane1());
+            widgetVentasDiarias.panelPadre=this;
+            widgetVentasDiarias.setPreferredSize(new Dimension(xVd,yVd));
+            widgetVentasDiarias.setBounds(xVd,xVd,220,330);
+            
+            widgetVentasDiarias.addListenerIcono(new IconoInterfaz() {
+                @Override
+                public void doubleClick() {
+                }
+                
+                @Override
+                public void grabarNuevaPosicion(Point nuevaPosicion) {
+                    try {
+                        Map<String, Object> mapBuscar;
+                        AccesoDirectoServiceIf servicio = ServiceController.getController().getAccesoDirectoServiceIf();
+                        mapBuscar = new HashMap<>();
+                        mapBuscar.put("nombre","WidgetVentasDiarias");
+                        AccesoDirecto acceso=servicio.obtenerPorMap(mapBuscar).get(0);
+                        acceso.setX((int)nuevaPosicion.getX());
+                        acceso.setY((int)nuevaPosicion.getY());
+                        servicio.editar(acceso);
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
             //
             getjDesktopPane1().add(widgetVentasDiarias);
             widgetVentasDiarias.setVisible(true);
-        /***
-         * fin widget Ventas diarias
-         */
-        mapBuscar = new HashMap<>();
-        mapBuscar.put("nombre", FacturacionModel.class.getName());
-        url=RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL("factura.png");
-        IconoPanel iconoFactura=new IconoPanel("Factura",url,getjDesktopPane1(),servicio.obtenerPorMap(mapBuscar).get(0).x,servicio.obtenerPorMap(mapBuscar).get(0).y);                
-        iconoFactura.addListenerIcono(new ListenerIcono(FacturacionModel.class,true));
-        getjDesktopPane1().add(iconoFactura);
-        
-        
-        mapBuscar=new HashMap<>();
-        mapBuscar.put("nombre",ProductoModel.class.getName());
-        url=RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL("producto.png");
-        IconoPanel iconoPanel=new IconoPanel("Producto",url,getjDesktopPane1(),servicio.obtenerPorMap(mapBuscar).get(0).x,servicio.obtenerPorMap(mapBuscar).get(0).y);                
-        iconoPanel.addListenerIcono(new ListenerIcono(ProductoModel.class, true));
-        getjDesktopPane1().add(iconoPanel);
-        
-        
-        mapBuscar = new HashMap<>();
-        mapBuscar.put("nombre", CalculadoraModel.class.getName());
-        url=RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL("calculadora.png");
-        IconoPanel iconoCalcu=new IconoPanel("Calculadora",url,getjDesktopPane1(),servicio.obtenerPorMap(mapBuscar).get(0).x,servicio.obtenerPorMap(mapBuscar).get(0).y);                
-        iconoCalcu.addListenerIcono(new ListenerIcono(CalculadoraModel.class,false));
-        getjDesktopPane1().add(iconoCalcu);
-        
-     
-        
-        mapBuscar = new HashMap<>();
-        mapBuscar.put("nombre", ClienteModel.class.getName());
-        url=RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL("cliente.png");
-        IconoPanel iconoCliente=new IconoPanel("Cliente",url,getjDesktopPane1(),servicio.obtenerPorMap(mapBuscar).get(0).x,servicio.obtenerPorMap(mapBuscar).get(0).y);                
-        iconoCliente.addListenerIcono(new ListenerIcono(ClienteModel.class,true));
-        getjDesktopPane1().add(iconoCliente);
-        
-        
-        mapBuscar = new HashMap<>();
-        mapBuscar.put("nombre", ComprobantesConfiguracionModel.class.getName());
-        url=RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL("configuracion.png");
-        IconoPanel iconoConfig=new IconoPanel("Configurar",url,getjDesktopPane1(),servicio.obtenerPorMap(mapBuscar).get(0).x,servicio.obtenerPorMap(mapBuscar).get(0).y);                
-        iconoConfig.addListenerIcono(new ListenerIcono(ComprobantesConfiguracionModel.class,true));
-        getjDesktopPane1().add(iconoConfig);
+            /***
+             * fin widget Ventas diarias
+             */
+            mapBuscar = new HashMap<>();
+            mapBuscar.put("nombre", FacturacionModel.class.getName());
+            url=RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL("factura.png");
+            IconoPanel iconoFactura=new IconoPanel("Factura",url,getjDesktopPane1(),servicio.obtenerPorMap(mapBuscar).get(0).x,servicio.obtenerPorMap(mapBuscar).get(0).y);
+            iconoFactura.addListenerIcono(new ListenerIcono(FacturacionModel.class,true));
+            getjDesktopPane1().add(iconoFactura);
+            
+            
+            mapBuscar=new HashMap<>();
+            mapBuscar.put("nombre",ProductoModel.class.getName());
+            url=RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL("producto.png");
+            IconoPanel iconoPanel=new IconoPanel("Producto",url,getjDesktopPane1(),servicio.obtenerPorMap(mapBuscar).get(0).x,servicio.obtenerPorMap(mapBuscar).get(0).y);
+            iconoPanel.addListenerIcono(new ListenerIcono(ProductoModel.class, true));
+            getjDesktopPane1().add(iconoPanel);
+            
+            
+            mapBuscar = new HashMap<>();
+            mapBuscar.put("nombre", CalculadoraModel.class.getName());
+            url=RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL("calculadora.png");
+            IconoPanel iconoCalcu=new IconoPanel("Calculadora",url,getjDesktopPane1(),servicio.obtenerPorMap(mapBuscar).get(0).x,servicio.obtenerPorMap(mapBuscar).get(0).y);
+            iconoCalcu.addListenerIcono(new ListenerIcono(CalculadoraModel.class,false));
+            getjDesktopPane1().add(iconoCalcu);
+            
+            
+            
+            mapBuscar = new HashMap<>();
+            mapBuscar.put("nombre", ClienteModel.class.getName());
+            url=RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL("cliente.png");
+            IconoPanel iconoCliente=new IconoPanel("Cliente",url,getjDesktopPane1(),servicio.obtenerPorMap(mapBuscar).get(0).x,servicio.obtenerPorMap(mapBuscar).get(0).y);
+            iconoCliente.addListenerIcono(new ListenerIcono(ClienteModel.class,true));
+            getjDesktopPane1().add(iconoCliente);
+            
+            
+            mapBuscar = new HashMap<>();
+            mapBuscar.put("nombre", ComprobantesConfiguracionModel.class.getName());
+            url=RecursoCodefac.IMAGENES_ACCESO_DIRECTO.getResourceURL("configuracion.png");
+            IconoPanel iconoConfig=new IconoPanel("Configurar",url,getjDesktopPane1(),servicio.obtenerPorMap(mapBuscar).get(0).x,servicio.obtenerPorMap(mapBuscar).get(0).y);
+            iconoConfig.addListenerIcono(new ListenerIcono(ComprobantesConfiguracionModel.class,true));
+            getjDesktopPane1().add(iconoConfig);
+        } catch (RemoteException ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
     
@@ -2043,15 +2069,21 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
         @Override
         public void grabarNuevaPosicion(Point nuevaPosicion) {
-            Map<String, Object> mapBuscar;
-            AccesoDirectoServiceIf servicio = ServiceController.getController().getAccesoDirectoServiceIf();
-
-            mapBuscar = new HashMap<>();
-            mapBuscar.put("nombre", ventanaClase.getName());
-            AccesoDirecto acceso=servicio.obtenerPorMap(mapBuscar).get(0);
-            acceso.setX((int)nuevaPosicion.getX());
-            acceso.setY((int)nuevaPosicion.getY());
-            servicio.editar(acceso);
+            try {
+                Map<String, Object> mapBuscar;
+                AccesoDirectoServiceIf servicio = ServiceController.getController().getAccesoDirectoServiceIf();
+                
+                mapBuscar = new HashMap<>();
+                mapBuscar.put("nombre", ventanaClase.getName());
+                AccesoDirecto acceso=servicio.obtenerPorMap(mapBuscar).get(0);
+                acceso.setX((int)nuevaPosicion.getX());
+                acceso.setY((int)nuevaPosicion.getY());
+                servicio.editar(acceso);
+            } catch (RemoteException ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
     }

@@ -25,12 +25,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ClienteEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
-import ec.com.codesoft.codefaclite.servidor.service.SriIdentificacionService;
-import ec.com.codesoft.codefaclite.servidor.service.SriService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
@@ -362,6 +360,8 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             this.razonSocial = "";
         } catch (RemoteException ex) {
             Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -370,17 +370,21 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
      * Cargar los tipos de clientes de la base de datos
      */
     private void cargarClientes() {
-        /**
-         * Cargar los valores por defecto de las identificaciones
-         */
-        SriService servicioSri = new SriService();
-        identificaciones = servicioSri.obtenerIdentificaciones(SriIdentificacion.CLIENTE);
-        getjComboIdentificacion().removeAllItems();
-        for (SriIdentificacion identificacion : identificaciones) {
-            if(!(identificacion.getCodigo().equals("07") || identificacion.getCodigo().equals("19")))
-            {
-                getjComboIdentificacion().addItem(identificacion);
+        try {
+            /**
+             * Cargar los valores por defecto de las identificaciones
+             */
+            SriServiceIf servicioSri =ServiceController.getController().getSriServiceIf();
+            identificaciones = servicioSri.obtenerIdentificaciones(SriIdentificacion.CLIENTE);
+            getjComboIdentificacion().removeAllItems();
+            for (SriIdentificacion identificacion : identificaciones) {
+                if(!(identificacion.getCodigo().equals("07") || identificacion.getCodigo().equals("19")))
+                {
+                    getjComboIdentificacion().addItem(identificacion);
+                }
             }
+        } catch (RemoteException ex) {
+            Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
 

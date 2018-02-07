@@ -53,15 +53,22 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
             Logger.getLogger(NotaCreditoService.class.getName()).log(Level.SEVERE, null, ex);
         } catch (DatabaseException ex) {
             Logger.getLogger(NotaCreditoService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(NotaCreditoService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     public String getPreimpresoSiguiente() {
-        Integer secuencialSiguiente = Integer.parseInt(parametroCodefacService.getParametroByNombre(ParametroCodefac.SECUENCIAL_NOTA_CREDITO).valor);
-        String secuencial = UtilidadesTextos.llenarCarateresIzquierda(secuencialSiguiente.toString(), 8, "0");
-        String establecimiento = parametroCodefacService.getParametroByNombre(ParametroCodefac.ESTABLECIMIENTO).valor;
-        String puntoEmision = parametroCodefacService.getParametroByNombre(ParametroCodefac.PUNTO_EMISION).valor;
-        return puntoEmision + "-" + establecimiento + "-" + secuencial;
+        try {
+            Integer secuencialSiguiente = Integer.parseInt(parametroCodefacService.getParametroByNombre(ParametroCodefac.SECUENCIAL_NOTA_CREDITO).valor);
+            String secuencial = UtilidadesTextos.llenarCarateresIzquierda(secuencialSiguiente.toString(), 8, "0");
+            String establecimiento = parametroCodefacService.getParametroByNombre(ParametroCodefac.ESTABLECIMIENTO).valor;
+            String puntoEmision = parametroCodefacService.getParametroByNombre(ParametroCodefac.PUNTO_EMISION).valor;
+            return puntoEmision + "-" + establecimiento + "-" + secuencial;
+        } catch (RemoteException ex) {
+            Logger.getLogger(NotaCreditoService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
     }
 
     public void editar(NotaCredito notaCredito) {

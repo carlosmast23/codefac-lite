@@ -10,8 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ProductoEnumEstado;
-import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
-import ec.com.codesoft.codefaclite.servidor.service.ProductoService;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;

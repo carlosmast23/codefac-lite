@@ -48,12 +48,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
-import ec.com.codesoft.codefaclite.servidor.service.ComprobanteFisicoDisenioService;
-import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
-import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
-import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteFisicoDisenioServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
@@ -441,7 +439,7 @@ public class FacturacionModel extends FacturacionPanel {
                 }
                 
                 ManagerReporteFacturaFisica manager = new ManagerReporteFacturaFisica(reporteOriginal);
-                ComprobanteFisicoDisenioService servicioComprobanteDisenio=new ComprobanteFisicoDisenioService();
+                ComprobanteFisicoDisenioServiceIf servicioComprobanteDisenio=ServiceController.getController().getComprobanteFisicoDisenioServiceIf();;
                 Map<String,Object> parametroComprobanteMap=new HashMap<String,Object>();
                 parametroComprobanteMap.put("codigoDocumento",documentoEnum.getCodigo());
                 ComprobanteFisicoDisenio documento= servicioComprobanteDisenio.obtenerPorMap(parametroComprobanteMap).get(0);
@@ -997,14 +995,19 @@ public class FacturacionModel extends FacturacionPanel {
     }
 
     public BigDecimal obtenerValorIva() {
-        Map<String, Object> map = new HashMap<>();
-        ImpuestoDetalleService impuestoDetalleService = new ImpuestoDetalleService();
-        map.put("tarifa", 12); //TODO Parametrizar el iva con la variable del sistema
-        List<ImpuestoDetalle> listaImpuestoDetalles = impuestoDetalleService.buscarImpuestoDetallePorMap(map);
-        listaImpuestoDetalles.forEach((iD) -> {
-            BigDecimal iva = iD.getPorcentaje();
-        });
-        return new BigDecimal(0.120);
+        try {
+            Map<String, Object> map = new HashMap<>();
+            ImpuestoDetalleServiceIf impuestoDetalleService =ServiceController.getController().getImpuestoDetalleServiceIf();
+            map.put("tarifa", 12); //TODO Parametrizar el iva con la variable del sistema
+            List<ImpuestoDetalle> listaImpuestoDetalles = impuestoDetalleService.buscarImpuestoDetallePorMap(map);
+            listaImpuestoDetalles.forEach((iD) -> {
+                BigDecimal iva = iD.getPorcentaje();
+            });
+            return new BigDecimal(0.120);
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     public void cargarTotales() {

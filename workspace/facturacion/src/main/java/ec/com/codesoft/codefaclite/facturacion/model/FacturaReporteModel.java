@@ -20,13 +20,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoBusquedaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
-import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
-import ec.com.codesoft.codefaclite.servidor.service.NotaCreditoService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
-import ec.com.codesoft.codefaclite.test.TipoBusquedaEnum;
 import static ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -148,9 +146,9 @@ public class FacturaReporteModel extends FacturaReportePanel {
                     titulo.add("IVA 12%");
                     titulo.add("Total");
                     modeloTablaFacturas = new DefaultTableModel(titulo, 0);
-                    FacturacionService fs = new FacturacionService();
+                    FacturacionServiceIf fs = ServiceController.getController().getFacturacionServiceIf();
                     datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFact);
-                    NotaCreditoService nc = new NotaCreditoService();
+                    NotaCreditoServiceIf nc = ServiceController.getController().getNotaCreditoServiceIf();
                     datafact2 = nc.obtenerNotasReporte(persona, fechaInicio, fechaFin);
                     if (estadoSeleccionado.getTipo() == "T" || estadoSeleccionado.getTipo() == "F") {
                         for (Factura factura : datafact) {

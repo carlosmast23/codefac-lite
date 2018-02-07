@@ -24,8 +24,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import ec.com.codesoft.codefaclite.servidor.service.CompraService;
-import ec.com.codesoft.codefaclite.servidor.service.ProductoProveedorService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
@@ -224,31 +222,37 @@ public class CompraModel extends CompraPanel{
                                                
                 if(productoSeleccionado!=null)
                 {
-                    //Buscar si existe el producto vinculado con un proveedor
-                    ProductoProveedorServiceIf serviceProductoProveedor = ServiceController.getController().getProductoProveedorServiceIf();
-                    Map<String, Object> mapParametros = new HashMap<String, Object>();
-                    mapParametros.put("producto", productoSeleccionado);
-                    mapParametros.put("proveedor", proveedor);
-                    List<ProductoProveedor> resultados = serviceProductoProveedor.obtenerPorMap(mapParametros);
-                    if (resultados != null && resultados.size() > 0) {
-                        productoProveedor = resultados.get(0); //Si existe el proveedor solo seteo la variale
-                        getTxtPrecionUnitarioItem().setText(productoProveedor.getCosto()+"");
-                        EnumSiNo enumSiNo=EnumSiNo.getEnumByLetra(productoProveedor.getConIva());
-                        getCmbCobraIva().setSelectedItem(enumSiNo);
-                    } 
-                    else 
-                    {//Cuando no existe crea un nuevo producto proveedor
-                        productoProveedor=new ProductoProveedor(); //Si no existe el item lo creo para posteriormente cuando grabe persistir con la base de datos
-                        productoProveedor.setDescripcion("");
-                        productoProveedor.setEstado("a");
-                        productoProveedor.setProducto(productoSeleccionado);
-                        productoProveedor.setProveedor(proveedor);
-                        getTxtPrecionUnitarioItem().setText("0"); //Seteo con el valor de 0 porque no existe el costo grabado
-                        getCmbCobraIva().setSelectedItem(EnumSiNo.SI); //Seteo por defecto el valor de SI cuando no existe en la base de datos
+                    try {
+                        //Buscar si existe el producto vinculado con un proveedor
+                        ProductoProveedorServiceIf serviceProductoProveedor = ServiceController.getController().getProductoProveedorServiceIf();
+                        Map<String, Object> mapParametros = new HashMap<String, Object>();
+                        mapParametros.put("producto", productoSeleccionado);
+                        mapParametros.put("proveedor", proveedor);
+                        List<ProductoProveedor> resultados = serviceProductoProveedor.obtenerPorMap(mapParametros);
+                        if (resultados != null && resultados.size() > 0) {
+                            productoProveedor = resultados.get(0); //Si existe el proveedor solo seteo la variale
+                            getTxtPrecionUnitarioItem().setText(productoProveedor.getCosto()+"");
+                            EnumSiNo enumSiNo=EnumSiNo.getEnumByLetra(productoProveedor.getConIva());
+                            getCmbCobraIva().setSelectedItem(enumSiNo);
+                        }
+                        else
+                        {//Cuando no existe crea un nuevo producto proveedor
+                            productoProveedor=new ProductoProveedor(); //Si no existe el item lo creo para posteriormente cuando grabe persistir con la base de datos
+                            productoProveedor.setDescripcion("");
+                            productoProveedor.setEstado("a");
+                            productoProveedor.setProducto(productoSeleccionado);
+                            productoProveedor.setProveedor(proveedor);
+                            getTxtPrecionUnitarioItem().setText("0"); //Seteo con el valor de 0 porque no existe el costo grabado
+                            getCmbCobraIva().setSelectedItem(EnumSiNo.SI); //Seteo por defecto el valor de SI cuando no existe en la base de datos
+                        }
+                        
+                        getTxtProductoItem().setText(productoSeleccionado.getNombre());
+                        getTxtDescripcionItem().setText(productoSeleccionado.getNombre());
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    
-                    getTxtProductoItem().setText(productoSeleccionado.getNombre());
-                    getTxtDescripcionItem().setText(productoSeleccionado.getNombre());
                     
                 }
             }

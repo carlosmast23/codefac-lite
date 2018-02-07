@@ -21,5 +21,5 @@ public interface ServiceAbstractIf<Entity> extends Remote {
     
     public void editar(Entity entity) throws java.rmi.RemoteException;
     
-    public List<Entity> obtenerPorMap(Map<String,Object> parametros) throws java.rmi.RemoteException;
+    public List<Entity> obtenerPorMap(Map<String,Object> parametros) throws java.rmi.RemoteException,ServicioCodefacException;
 }

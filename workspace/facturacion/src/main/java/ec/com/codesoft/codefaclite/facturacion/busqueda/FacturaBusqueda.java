@@ -13,8 +13,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
-import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
-import ec.com.codesoft.codefaclite.servidor.service.ProductoService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;

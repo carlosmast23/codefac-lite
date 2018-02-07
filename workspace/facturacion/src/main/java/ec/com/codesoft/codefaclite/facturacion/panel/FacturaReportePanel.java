@@ -9,7 +9,7 @@ import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
-import ec.com.codesoft.codefaclite.test.TipoBusquedaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoBusquedaEnum;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;

@@ -20,8 +20,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import ec.com.codesoft.codefaclite.servidor.service.BodegaService;
-import ec.com.codesoft.codefaclite.servidor.service.KardexService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
@@ -93,6 +91,8 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
             } catch (RemoteException ex) {
                 Logger.getLogger(IngresoInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
                 throw new ExcepcionCodefacLite("Cancelar grabar");
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(IngresoInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         else
@@ -290,11 +290,15 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
     }
 
     private void valoresIniciales() {
-        getCmbBodega().removeAllItems();
-        BodegaServiceIf servicioBodega=ServiceController.getController().getBodegaServiceIf();
-        List<Bodega> bodegas=servicioBodega.obtenerTodos();
-        for (Bodega bodega : bodegas) {
-            getCmbBodega().addItem(bodega);
+        try {
+            getCmbBodega().removeAllItems();
+            BodegaServiceIf servicioBodega=ServiceController.getController().getBodegaServiceIf();
+            List<Bodega> bodegas=servicioBodega.obtenerTodos();
+            for (Bodega bodega : bodegas) {
+                getCmbBodega().addItem(bodega);
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(IngresoInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

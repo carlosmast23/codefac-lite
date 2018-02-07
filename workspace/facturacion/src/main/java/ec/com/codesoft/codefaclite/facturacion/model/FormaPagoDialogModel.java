@@ -8,12 +8,17 @@ package ec.com.codesoft.codefaclite.facturacion.model;
 import ec.com.codesoft.codefaclite.facturacion.dialog.FormaPagoDialog;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
-import ec.com.codesoft.codefaclite.servidor.service.SriService;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
+
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import java.rmi.RemoteException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -31,22 +36,26 @@ public class FormaPagoDialogModel extends FormaPagoDialog{
 
     private void componentesIniciales() {
         
-        //Cargar valores de las formas de pago del sri
-        SriService service=new SriService();
-        List<SriFormaPago> formasPagoSri=service.obtenerFormasPagoActivo();
-        getCmbFormaPagoSri().removeAllItems();
-        for (SriFormaPago sriFormaPago : formasPagoSri) {
-            getCmbFormaPagoSri().addItem(sriFormaPago);
+        try {
+            //Cargar valores de las formas de pago del sri
+            SriServiceIf service=ServiceController.getController().getSriServiceIf();
+            List<SriFormaPago> formasPagoSri=service.obtenerFormasPagoActivo();
+            getCmbFormaPagoSri().removeAllItems();
+            for (SriFormaPago sriFormaPago : formasPagoSri) {
+                getCmbFormaPagoSri().addItem(sriFormaPago);
+            }
+            
+            //Setear valores catergorias tiempo
+            getCmbTiempo().removeAllItems();
+            for (String categoria : categoriaTiempo) {
+                getCmbTiempo().addItem(categoria);
+            }
+            
+            getTxtPlazo().setText("");
+            getTxtValor().setText("");
+        } catch (RemoteException ex) {
+            Logger.getLogger(FormaPagoDialogModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        //Setear valores catergorias tiempo
-        getCmbTiempo().removeAllItems();
-        for (String categoria : categoriaTiempo) {
-            getCmbTiempo().addItem(categoria);
-        }
-        
-        getTxtPlazo().setText("");
-        getTxtValor().setText("");
         
                
     }

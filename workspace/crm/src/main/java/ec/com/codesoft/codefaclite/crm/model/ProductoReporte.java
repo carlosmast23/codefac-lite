@@ -13,16 +13,17 @@ import ec.com.codesoft.codefaclite.crm.data.ProductoData;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
-import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
-import ec.com.codesoft.codefaclite.servidor.service.ProductoService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
 import java.io.InputStream;
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -36,25 +37,29 @@ public class ProductoReporte extends ControladorCodefacInterface{
     
     private void imprimirReporte()
     {
-        InputStream path = RecursoCodefac.JASPER_CRM.getResourceInputStream("reporteProducto.jrxml");
-        Map parameters = new HashMap();
-        List<ProductoData> data = new ArrayList<ProductoData>();
-        ProductoServiceIf service=ServiceController.getController().getProductoServiceIf();
-        List<Producto> productos=service.obtenerTodos();
-        
-        for (Producto producto : productos) {
-            ProductoData productoData=new ProductoData();
-            productoData.setCodigoPrincipal(producto.getCodigoPersonalizado());
-            productoData.setImpuestoIva(producto.getIva().getNombre());
-            productoData.setNombre(producto.getNombre());
-            productoData.setTipoProducto(producto.getTipoProducto());
-            productoData.setValorUnitario(producto.getValorUnitario().toString());
-            data.add(productoData);
+        try {
+            InputStream path = RecursoCodefac.JASPER_CRM.getResourceInputStream("reporteProducto.jrxml");
+            Map parameters = new HashMap();
+            List<ProductoData> data = new ArrayList<ProductoData>();
+            ProductoServiceIf service=ServiceController.getController().getProductoServiceIf();
+            List<Producto> productos=service.obtenerTodos();
+            
+            for (Producto producto : productos) {
+                ProductoData productoData=new ProductoData();
+                productoData.setCodigoPrincipal(producto.getCodigoPersonalizado());
+                productoData.setImpuestoIva(producto.getIva().getNombre());
+                productoData.setNombre(producto.getNombre());
+                productoData.setTipoProducto(producto.getTipoProducto());
+                productoData.setValorUnitario(producto.getValorUnitario().toString());
+                data.add(productoData);
+            }
+            setClosable(true);
+            ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Productos");
+            //this.dispose();
+            //this.setVisible(false);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProductoReporte.class.getName()).log(Level.SEVERE, null, ex);
         }
-        setClosable(true);
-        ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Productos");
-        //this.dispose();
-        //this.setVisible(false);
     }
 
     

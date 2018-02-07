@@ -20,7 +20,8 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
-import ec.com.codesoft.codefaclite.servidor.service.SriService;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
 import ec.com.codesoft.ejemplo.utilidades.email.CorreoElectronico;
 import ec.com.codesoft.ejemplo.utilidades.imagen.UtilidadImagen;
 import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
@@ -31,6 +32,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -122,52 +124,56 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
     
     private void cargarConfiguraciones()
     {
-        //String pathBase de los directorios
-
-        servicio.setPathBase(session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor);
-        servicio.setNombreFirma(session.getParametrosCodefac().get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).valor);
-        servicio.setClaveFirma(session.getParametrosCodefac().get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).valor);
-        String modoFacturacion = session.getParametrosCodefac().get(ParametroCodefac.MODO_FACTURACION).valor;
-        servicio.setModoFacturacion(modoFacturacion);
-
-        cargarDatosRecursos();
-
-        /**
-         * Cargar los web services dependiendo el modo de facturacion
-         */
-        if (ComprobanteElectronicoService.MODO_PRODUCCION.equals(modoFacturacion)) {
-            String autorizacion = session.getParametrosCodefac().get(ParametroCodefac.SRI_WS_AUTORIZACION).valor;
-            servicio.setUriAutorizacion(autorizacion);
-
-            String recepcion = session.getParametrosCodefac().get(ParametroCodefac.SRI_WS_RECEPCION).valor;
-            servicio.setUriRecepcion(recepcion);
-
-        } else {
-            String autorizacion = session.getParametrosCodefac().get(ParametroCodefac.SRI_WS_AUTORIZACION_PRUEBA).valor;
-            servicio.setUriAutorizacion(autorizacion);
-
-            String recepcion = session.getParametrosCodefac().get(ParametroCodefac.SRI_WS_RECEPCION_PRUEBA).valor;
-            servicio.setUriRecepcion(recepcion);
+        try {
+            //String pathBase de los directorios
+            
+            servicio.setPathBase(session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor);
+            servicio.setNombreFirma(session.getParametrosCodefac().get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).valor);
+            servicio.setClaveFirma(session.getParametrosCodefac().get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).valor);
+            String modoFacturacion = session.getParametrosCodefac().get(ParametroCodefac.MODO_FACTURACION).valor;
+            servicio.setModoFacturacion(modoFacturacion);
+            
+            cargarDatosRecursos();
+            
+            /**
+             * Cargar los web services dependiendo el modo de facturacion
+             */
+            if (ComprobanteElectronicoService.MODO_PRODUCCION.equals(modoFacturacion)) {
+                String autorizacion = session.getParametrosCodefac().get(ParametroCodefac.SRI_WS_AUTORIZACION).valor;
+                servicio.setUriAutorizacion(autorizacion);
+                
+                String recepcion = session.getParametrosCodefac().get(ParametroCodefac.SRI_WS_RECEPCION).valor;
+                servicio.setUriRecepcion(recepcion);
+                
+            } else {
+                String autorizacion = session.getParametrosCodefac().get(ParametroCodefac.SRI_WS_AUTORIZACION_PRUEBA).valor;
+                servicio.setUriAutorizacion(autorizacion);
+                
+                String recepcion = session.getParametrosCodefac().get(ParametroCodefac.SRI_WS_RECEPCION_PRUEBA).valor;
+                servicio.setUriRecepcion(recepcion);
+            }
+            
+            /**
+             * Cargar variables para el envio del correo
+             */
+            cargarConfiguracionesCorreo();
+            servicio.setCorreosElectronicos(getCorreos());
+            String footer = UtilidadVarios.getStringHtmltoUrl(RecursoCodefac.HTML.getResourceInputStream("footer_codefac.html"));
+            servicio.setFooterMensajeCorreo(footer);
+            
+            /**
+             * Cargar datos de las formas de pago
+             */
+            SriServiceIf service=ServiceController.getController().getSriServiceIf();
+            List<SriFormaPago> formasPagoSri=service.obtenerFormasPagoActivo();
+            Map<String,String> mapFormasPago=new HashMap<String,String>();
+            for (SriFormaPago sriFormaPago : formasPagoSri) {
+                mapFormasPago.put(sriFormaPago.getCodigo(),sriFormaPago.getNombre());
+            }
+            servicio.setMapCodeAndNameFormaPago(mapFormasPago);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ComprobanteElectronicoAbstract.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        /**
-         * Cargar variables para el envio del correo
-         */
-        cargarConfiguracionesCorreo();
-        servicio.setCorreosElectronicos(getCorreos());
-        String footer = UtilidadVarios.getStringHtmltoUrl(RecursoCodefac.HTML.getResourceInputStream("footer_codefac.html"));
-        servicio.setFooterMensajeCorreo(footer);
-        
-        /**
-         * Cargar datos de las formas de pago
-         */
-        SriService service=new SriService();
-        List<SriFormaPago> formasPagoSri=service.obtenerFormasPagoActivo();
-        Map<String,String> mapFormasPago=new HashMap<String,String>();
-        for (SriFormaPago sriFormaPago : formasPagoSri) {
-            mapFormasPago.put(sriFormaPago.getCodigo(),sriFormaPago.getNombre());
-        }
-        servicio.setMapCodeAndNameFormaPago(mapFormasPago);
 
     }
     

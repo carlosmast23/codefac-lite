@@ -26,10 +26,9 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.Comprobantes
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NotaCreditoEnumEstado;
-import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
-import ec.com.codesoft.codefaclite.servidor.service.NotaCreditoService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
@@ -331,32 +330,42 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
         public void procesando(int etapa,ClaveAcceso clave) {
             if(etapa == ComprobanteElectronicoService.ETAPA_AUTORIZAR) //Si ya cumple la etapa de autorizar cambio el estado de los comprobantes
             {
-                ComprobanteEnum comprobante = ComprobanteEnum.getEnumByCodigo(clave.tipoComprobante);
-                Map<String, Object> map = new HashMap<String, Object>();
-                map.put("claveAcceso", clave.clave);
-                switch(comprobante)
-                {
-                    case FACTURA:
-                        FacturacionServiceIf servicio=ServiceController.getController().getFacturacionServiceIf();                        
-                        List<Factura> facturas=servicio.obtenerPorMap(map);
-                        for (Factura factura : facturas) {
-                    try {
-                        factura.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
-                        servicio.editar(factura);
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(UtilidadComprobanteModel.class.getName()).log(Level.SEVERE, null, ex);
+                try {
+                    ComprobanteEnum comprobante = ComprobanteEnum.getEnumByCodigo(clave.tipoComprobante);
+                    Map<String, Object> map = new HashMap<String, Object>();
+                    map.put("claveAcceso", clave.clave);
+                    switch(comprobante)
+                    {
+                        case FACTURA:
+                            FacturacionServiceIf servicio=ServiceController.getController().getFacturacionServiceIf();
+                            List<Factura> facturas=servicio.obtenerPorMap(map);
+                            for (Factura factura : facturas) {
+                                try {
+                                    factura.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
+                                    servicio.editar(factura);
+                                } catch (RemoteException ex) {
+                                    Logger.getLogger(UtilidadComprobanteModel.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
+                            break;
+                            
+                        case NOTA_CREDITO:
+                            NotaCreditoServiceIf servicioNotaCredito=ServiceController.getController().getNotaCreditoServiceIf();
+                            List<NotaCredito> notasCredito=servicioNotaCredito.obtenerPorMap(map);
+                            for (NotaCredito notaCredito : notasCredito) {
+                                try {
+                                    notaCredito.setClaveAcceso(NotaCreditoEnumEstado.TERMINADO.getEstado());
+                                    servicioNotaCredito.editar(notaCredito);
+                                } catch (RemoteException ex) {
+                                    Logger.getLogger(UtilidadComprobanteModel.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
+                            break;
                     }
-                        }
-                        break;
-                        
-                    case NOTA_CREDITO:
-                        NotaCreditoServiceIf servicioNotaCredito=ServiceController.getController().getNotaCreditoServiceIf();
-                        List<NotaCredito> notasCredito=servicioNotaCredito.obtenerPorMap(map);
-                        for (NotaCredito notaCredito : notasCredito) {
-                            notaCredito.setClaveAcceso(NotaCreditoEnumEstado.TERMINADO.getEstado());
-                            servicioNotaCredito.editar(notaCredito);
-                        }
-                        break;
+                } catch (RemoteException ex) {
+                    Logger.getLogger(UtilidadComprobanteModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(UtilidadComprobanteModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }

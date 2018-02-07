@@ -101,142 +101,148 @@ public class Main {
     
     public static void iniciarComponentes()
     {
-        /*
         try {
+            /*
+            try {
             UIManager.setLookAndFeel("com.seaglasslookandfeel.SeaGlassLookAndFeel"); //El tema es interesante
             //UIManager.setLookAndFeel("net.java.dev.nimbus");
             //UIManager.setLookAndFeel(NimbusLookAndFeel.class.getCanonicalName ());
-             //UIManager.setLookAndFeel(new Plastic3DLookAndFeel());
-             //UIManager.setLookAndFeel(new PlasticLookAndFeel());
-             //UIManager.setLookAndFeel(new PlasticXPLookAndFeel());
-             //UIManager.setLookAndFeel(new WindowsLookAndFeel()); //El tema es interesante
-             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-             //UIManager.getLookAndFeelDefaults();
-        } catch (ClassNotFoundException ex) {
+            //UIManager.setLookAndFeel(new Plastic3DLookAndFeel());
+            //UIManager.setLookAndFeel(new PlasticLookAndFeel());
+            //UIManager.setLookAndFeel(new PlasticXPLookAndFeel());
+            //UIManager.setLookAndFeel(new WindowsLookAndFeel()); //El tema es interesante
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            //UIManager.getLookAndFeelDefaults();
+            } catch (ClassNotFoundException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
+            } catch (InstantiationException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
+            } catch (IllegalAccessException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedLookAndFeelException ex) {
+            } catch (UnsupportedLookAndFeelException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
-*/
-        SplashScreenModel splashScren=new SplashScreenModel();
-        splashScren.agregarPorcentaje(40,"Cargando base de datos");
-        splashScren.agregarPorcentaje(60,"Cargando datos session");
-        splashScren.agregarPorcentaje(80,"Creando controlador codefac");
-        splashScren.agregarPorcentaje(100,"Cargando ventanas");
-        splashScren.setVisible(true);
-        splashScren.iniciar();
-
-        //DialogoCodefac.mensaje("uno mas","otro mas",DialogoCodefac.MENSAJE_CORRECTO);
-        
-        componentesIniciales();
-        splashScren.siguiente();
-        
-       
-                /**
-         * Crear la session y cargar otro datos de la empresa
-         */
-        SessionCodefac session=new SessionCodefac();        
-        EmpresaServiceIf empresaService = ServiceController.getController().getEmpresaServiceIf();
-        List<Empresa> empresaList=empresaService.obtenerTodos();
-        
-        if(empresaList!=null && empresaList.size()>0)
-            session.setEmpresa(empresaList.get(0));
-        
-        //session.setParametrosCodefac(getParametros());
-        splashScren.siguiente();
-        
-         /**
-         * Seteando la session de los datos a utilizar en el aplicativo
-         */
-        GeneralPanelModel panel=new GeneralPanelModel();
-        panel.setSessionCodefac(session);
-        splashScren.siguiente();
-        
-        /**
-         * Añadir menus y ventanas a la aplicacion principal
-         */        
-        panel.setVentanasMenuList(agregarMenuVentana(panel));
-        panel.setPanelesSecundarios(agregarPanelesSecundarios());
-        panel.agregarPanelesSecundarios();
-        /**
-         * Establecer propiedades del formulario principal
-         */
-        panel.setIconImage(new javax.swing.ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("logoCodefac-ico.png")).getImage()); // NOI18N        
-        panel.setExtendedState(MAXIMIZED_BOTH);
-        splashScren.siguiente();
-        splashScren.termino();
-        
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        /**
-         * Realizar Analisis para verificar si existe la licencia instalada
-         */
-        if(!comprobarLicencia())
-        {
-            System.exit(0);
-        }
-        else 
-        {
+            }
+            */
+            SplashScreenModel splashScren=new SplashScreenModel();
+            splashScren.agregarPorcentaje(40,"Cargando base de datos");
+            splashScren.agregarPorcentaje(60,"Cargando datos session");
+            splashScren.agregarPorcentaje(80,"Creando controlador codefac");
+            splashScren.agregarPorcentaje(100,"Cargando ventanas");
+            splashScren.setVisible(true);
+            splashScren.iniciar();
+            
+            //DialogoCodefac.mensaje("uno mas","otro mas",DialogoCodefac.MENSAJE_CORRECTO);
+            
+            componentesIniciales();
+            splashScren.siguiente();
+            
+            
+            /**
+             * Crear la session y cargar otro datos de la empresa
+             */
+            SessionCodefac session=new SessionCodefac();
+            EmpresaServiceIf empresaService = ServiceController.getController().getEmpresaServiceIf();
+            List<Empresa> empresaList=empresaService.obtenerTodos();
+            
+            if(empresaList!=null && empresaList.size()>0)
+                session.setEmpresa(empresaList.get(0));
+            
+            //session.setParametrosCodefac(getParametros());
+            splashScren.siguiente();
+            
+            /**
+             * Seteando la session de los datos a utilizar en el aplicativo
+             */
+            GeneralPanelModel panel=new GeneralPanelModel();
+            panel.setSessionCodefac(session);
+            splashScren.siguiente();
+            
+            /**
+             * Añadir menus y ventanas a la aplicacion principal
+             */
+            panel.setVentanasMenuList(agregarMenuVentana(panel));
+            panel.setPanelesSecundarios(agregarPanelesSecundarios());
+            panel.agregarPanelesSecundarios();
+            /**
+             * Establecer propiedades del formulario principal
+             */
+            panel.setIconImage(new javax.swing.ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("logoCodefac-ico.png")).getImage()); // NOI18N
+            panel.setExtendedState(MAXIMIZED_BOTH);
+            splashScren.siguiente();
+            splashScren.termino();
+            
             try {
-                //Buscar el tipo de licencia paa setear en el sistema
-                ParametroCodefacServiceIf servicio = ServiceController.getController().getParametroCodefacServiceIf();
-                String pathBase = servicio.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS).valor;
-                ValidacionLicenciaCodefac validacion = new ValidacionLicenciaCodefac(pathBase);
-                TipoLicenciaEnum tipoLicencia = validacion.getLicencia().getTipoLicenciaEnum();
-                
-                //Esta validacion es solo para usuario premium para cuando no paguen y tengamos que disminuir la licencia
-                if(!TipoLicenciaEnum.GRATIS.equals(tipoLicencia))
-                {
-                    validacionCodefacOnline(validacion);
-                    validacion = new ValidacionLicenciaCodefac(pathBase);
-                    tipoLicencia = validacion.getLicencia().getTipoLicenciaEnum();
-                }
-                
-                //Setear Variables de sesion
-                session.setTipoLicenciaEnum(tipoLicencia);
-                session.setUsuarioLicencia(validacion.obtenerLicencia().getProperty(ValidacionLicenciaCodefac.USUARIO));
-            } catch (RemoteException ex) {
+                Thread.sleep(500);
+            } catch (InterruptedException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
             
+            /**
+             * Realizar Analisis para verificar si existe la licencia instalada
+             */
+            if(!comprobarLicencia())
+            {
+                System.exit(0);
+            }
+            else
+            {
+                try {
+                    //Buscar el tipo de licencia paa setear en el sistema
+                    ParametroCodefacServiceIf servicio = ServiceController.getController().getParametroCodefacServiceIf();
+                    String pathBase = servicio.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS).valor;
+                    ValidacionLicenciaCodefac validacion = new ValidacionLicenciaCodefac(pathBase);
+                    TipoLicenciaEnum tipoLicencia = validacion.getLicencia().getTipoLicenciaEnum();
+                    
+                    //Esta validacion es solo para usuario premium para cuando no paguen y tengamos que disminuir la licencia
+                    if(!TipoLicenciaEnum.GRATIS.equals(tipoLicencia))
+                    {
+                        validacionCodefacOnline(validacion);
+                        validacion = new ValidacionLicenciaCodefac(pathBase);
+                        tipoLicencia = validacion.getLicencia().getTipoLicenciaEnum();
+                    }
+                    
+                    //Setear Variables de sesion
+                    session.setTipoLicenciaEnum(tipoLicencia);
+                    session.setUsuarioLicencia(validacion.obtenerLicencia().getProperty(ValidacionLicenciaCodefac.USUARIO));
+                } catch (RemoteException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            }
+            
+            
+            /**
+             * Si el usuario devuuelto es incorrecto terminar el aplicativo
+             */
+            LoginModel loginModel=new LoginModel();
+            loginModel.setVisible(true);
+            Usuario usuarioLogin=loginModel.getUsuarioLogin();
+            if(usuarioLogin==null)
+            {
+                System.out.println("aplicacion terminada");
+                return ;
+            }
+            
+            session.setUsuario(usuarioLogin);
+            session.setPerfiles(obtenerPerfilesUsuario(usuarioLogin));
+            
+            /**
+             * Agregando Hilo de Publicidad si es usuario Gratuito
+             */
+            if(session.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS))
+            {
+                HiloPublicidadCodefac hiloPublicidad=new HiloPublicidadCodefac();
+                hiloPublicidad.setPublicidades(obtenerPublicidades());
+                hiloPublicidad.start();
+                panel.setHiloPublicidadCodefac(hiloPublicidad);
+            }
+            panel.iniciarComponentesGenerales();
+            panel.setVisible(true);
+            
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        
-        /**
-         * Si el usuario devuuelto es incorrecto terminar el aplicativo
-         */
-        LoginModel loginModel=new LoginModel();
-        loginModel.setVisible(true);
-        Usuario usuarioLogin=loginModel.getUsuarioLogin();
-        if(usuarioLogin==null)
-        {
-            System.out.println("aplicacion terminada");
-            return ;
-        }
-        
-        session.setUsuario(usuarioLogin);
-        session.setPerfiles(obtenerPerfilesUsuario(usuarioLogin));
-        
-        /**
-         * Agregando Hilo de Publicidad si es usuario Gratuito
-         */
-        if(session.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS))
-        {
-            HiloPublicidadCodefac hiloPublicidad=new HiloPublicidadCodefac();
-            hiloPublicidad.setPublicidades(obtenerPublicidades());
-            hiloPublicidad.start();
-            panel.setHiloPublicidadCodefac(hiloPublicidad);
-        }
-        panel.iniciarComponentesGenerales();
-        panel.setVisible(true);
         
         
     }

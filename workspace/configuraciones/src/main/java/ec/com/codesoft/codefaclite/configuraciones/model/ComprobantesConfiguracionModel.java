@@ -13,16 +13,14 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.FirmaElectronica;
-import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
-import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
-import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
-import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Impuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
@@ -59,7 +57,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
 
     private Map<String, ParametroCodefac> parametros;
     private ParametroCodefacServiceIf parametroCodefacService;
-    private ImpuestoDetalleService impuestoDetalleService;
+    private ImpuestoDetalleServiceIf impuestoDetalleService;
     private JFileChooser jFileChooser;
     private Path origen = null;
     private Path destino = null;
@@ -69,7 +67,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     private DialogoCopiarArchivos dialogoCopiarFondoEscritorio;
 
     public ComprobantesConfiguracionModel() {
-        impuestoDetalleService = new ImpuestoDetalleService();
+        impuestoDetalleService = ServiceController.getController().getImpuestoDetalleServiceIf();
         this.parametroCodefacService = ServiceController.getController().getParametroCodefacServiceIf();
         cargarDatosIva();
         cargarTipoFactura();
@@ -258,10 +256,14 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     }
 
     private void cargarDatosIva() {
-        ImpuestoService impuestoService = new ImpuestoService();
-        Impuesto iva = impuestoService.obtenerImpuestoPorCodigo(Impuesto.IVA);
-        for (ImpuestoDetalle impuesto : iva.getDetalleImpuestos()) {
-            getCmbIvaDefault().addItem(impuesto);
+        try {
+            ImpuestoServiceIf impuestoService = ServiceController.getController().getImpuestoServiceIf();
+            Impuesto iva = impuestoService.obtenerImpuestoPorCodigo(Impuesto.IVA);
+            for (ImpuestoDetalle impuesto : iva.getDetalleImpuestos()) {
+                getCmbIvaDefault().addItem(impuesto);
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

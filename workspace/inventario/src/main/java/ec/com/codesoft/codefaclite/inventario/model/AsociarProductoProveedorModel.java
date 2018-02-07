@@ -17,7 +17,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import ec.com.codesoft.codefaclite.servidor.service.ProductoProveedorService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
 import java.awt.event.ActionEvent;
@@ -182,21 +181,25 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
     
     private void cargarTablaProductoProveedor(Persona persona) throws RemoteException
     {
-        String[] titulos={"Producto","Costo"};
-        DefaultTableModel modeloTabla=new DefaultTableModel(titulos,0);
-        Map<String,Object> parametros=new HashMap<String,Object>();
-        parametros.put("proveedor",persona);
-        
-        ProductoProveedorServiceIf servicio=ServiceController.getController().getProductoProveedorServiceIf();
-        List<ProductoProveedor> lista= servicio.obtenerPorMap(parametros);
-        
-        for (ProductoProveedor productoProveedor : lista) {
-            Vector<String> fila=new Vector<String>();
-            fila.add(productoProveedor.getProducto().getNombre());
-            fila.add(productoProveedor.getCosto().toString());
-            modeloTabla.addRow(fila);
+        try {
+            String[] titulos={"Producto","Costo"};
+            DefaultTableModel modeloTabla=new DefaultTableModel(titulos,0);
+            Map<String,Object> parametros=new HashMap<String,Object>();
+            parametros.put("proveedor",persona);
+            
+            ProductoProveedorServiceIf servicio=ServiceController.getController().getProductoProveedorServiceIf();
+            List<ProductoProveedor> lista= servicio.obtenerPorMap(parametros);
+            
+            for (ProductoProveedor productoProveedor : lista) {
+                Vector<String> fila=new Vector<String>();
+                fila.add(productoProveedor.getProducto().getNombre());
+                fila.add(productoProveedor.getCosto().toString());
+                modeloTabla.addRow(fila);
+            }
+            getTblProveedorProducto().setModel(modeloTabla);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(AsociarProductoProveedorModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        getTblProveedorProducto().setModel(modeloTabla);
     }
 
     private void agregarListenerCombo() {

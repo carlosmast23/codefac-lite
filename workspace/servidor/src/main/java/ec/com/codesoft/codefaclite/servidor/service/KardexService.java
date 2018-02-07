@@ -50,7 +50,8 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
      * Metodo que permite buscar el kardex por bodega y el el producto
      * @return 
      */
-    public Kardex buscarKardexPorProductoyBodega(Bodega bodega,Producto producto)
+    
+    public Kardex buscarKardexPorProductoyBodega(Bodega bodega,Producto producto) throws java.rmi.RemoteException
     {
         Map<String,Object> mapParametros=new HashMap<String,Object>();
         mapParametros.put("bodega",bodega);
@@ -65,7 +66,8 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         return null;
     }
     
-    public void IngresoEgresoInventarioEnsamble(Bodega bodega, Producto productoEnsamble,Integer cantidad,List<Kardex> componentesKardex, boolean ingreso) throws ServicioCodefacException
+
+    public void IngresoEgresoInventarioEnsamble(Bodega bodega, Producto productoEnsamble,Integer cantidad,List<Kardex> componentesKardex, boolean ingreso) throws java.rmi.RemoteException,ServicioCodefacException
     {
         EntityTransaction et= entityManager.getTransaction();
         try
@@ -158,7 +160,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
      * Metodo para el ingreso de nuevos productos del kardex
      * @param detalles 
      */
-    public void ingresarInventario(Map<KardexDetalle,CompraDetalle> detalles,Bodega bodega) throws ServicioCodefacException
+    public void ingresarInventario(Map<KardexDetalle,CompraDetalle> detalles,Bodega bodega) throws java.rmi.RemoteException,ServicioCodefacException
     {
         EntityTransaction transaction=em.getTransaction();
         try

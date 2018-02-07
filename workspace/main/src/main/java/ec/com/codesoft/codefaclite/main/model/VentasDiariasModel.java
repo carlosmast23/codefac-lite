@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
@@ -30,6 +31,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.math.BigDecimal;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -277,10 +279,16 @@ public class VentasDiariasModel extends WidgetVentasDiarias
     
     public void cargarCliente()
     {
-        PersonaServiceIf cliente = ServiceController.getController().getPersonaServiceIf();
-        Map<String,Object> clienteMap = new HashMap<String, Object>();
-        clienteMap.put("razonSocial", "Cliente Final");
-        this.factura.setCliente(cliente.obtenerPorMap(clienteMap).get(0));
+        try {
+            PersonaServiceIf cliente = ServiceController.getController().getPersonaServiceIf();
+            Map<String,Object> clienteMap = new HashMap<String, Object>();
+            clienteMap.put("razonSocial", "Cliente Final");
+            this.factura.setCliente(cliente.obtenerPorMap(clienteMap).get(0));
+        } catch (RemoteException ex) {
+            Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void cargarFecha()
