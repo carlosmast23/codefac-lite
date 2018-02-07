@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.EmpresaFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.logging.Level;
@@ -18,7 +19,7 @@ import org.eclipse.persistence.exceptions.DatabaseException;
  *
  * @author PC
  */
-public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade>
+public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> implements EmpresaServiceIf
 {
     private EmpresaFacade empresaFacade;
     

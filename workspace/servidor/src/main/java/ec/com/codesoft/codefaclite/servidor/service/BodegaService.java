@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.BodegaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.BodegaFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,7 +20,7 @@ import org.eclipse.persistence.exceptions.DatabaseException;
  *
  * @author CodesoftDesarrollo
  */
-public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> {
+public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> implements BodegaServiceIf{
 
     private BodegaFacade bodegaFacade;
 

@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.KardexFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -32,7 +33,8 @@ import javax.persistence.EntityTransaction;
  *
  * @author Carlos
  */
-public class KardexService extends ServiceAbstract<Kardex,KardexFacade>{
+public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implements KardexServiceIf
+{
     
     /**
      * Entidad de control para manejar transacciones con la base de datos

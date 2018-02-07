@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidor.facade.PerfilFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.PerfilUsuarioFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.UsuarioFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
 import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.HashMap;
@@ -26,7 +27,7 @@ import org.eclipse.persistence.exceptions.DatabaseException;
  *
  * @author Carlos
  */
-public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade>{
+public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> implements UsuarioServicioIf{
     UsuarioFacade usuarioFacade=new UsuarioFacade();
     PerfilUsuarioFacade perfilUsuarioFacade=new PerfilUsuarioFacade();
     PerfilFacade perfilFacade=new PerfilFacade();

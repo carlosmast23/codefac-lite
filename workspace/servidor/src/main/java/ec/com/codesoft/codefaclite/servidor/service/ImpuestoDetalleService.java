@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Impuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.ImpuestoDetalleFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -19,7 +20,7 @@ import org.eclipse.persistence.exceptions.DatabaseException;
  *
  * @author PC
  */
-public class ImpuestoDetalleService 
+public class ImpuestoDetalleService implements ImpuestoDetalleServiceIf
 {
     private ImpuestoDetalleFacade impuestoDetalleFacade;
 

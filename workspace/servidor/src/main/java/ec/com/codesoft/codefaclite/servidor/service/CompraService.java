@@ -9,13 +9,14 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.CompraFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
 import java.rmi.RemoteException;
 
 /**
  *
  * @author Carlos
  */
-public class CompraService extends ServiceAbstract<Compra,CompraFacade>{
+public class CompraService extends ServiceAbstract<Compra,CompraFacade> implements CompraServiceIf{
     
     public CompraService() throws RemoteException {
         super(CompraFacade.class);

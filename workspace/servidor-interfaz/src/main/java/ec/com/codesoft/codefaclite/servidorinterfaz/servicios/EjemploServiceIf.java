@@ -3,12 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.servidor.service;
+package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
+
+import java.rmi.Remote;
 
 /**
  *
- * @author Carlos
+ * @author CodesoftDesarrollo 1
  */
-public class EjemploService {
+public interface EjemploServiceIf extends Remote
+{
     
 }

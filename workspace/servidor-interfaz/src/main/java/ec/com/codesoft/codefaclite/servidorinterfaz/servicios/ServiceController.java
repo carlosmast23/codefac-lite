@@ -49,6 +49,31 @@ public abstract class ServiceController {
     public PersonaServiceIf getPersonaServiceIf(){return (PersonaServiceIf) getRecursosRMI(PersonaServiceIf.class);};
     public ParametroCodefacServiceIf getParametroCodefacServiceIf(){return (ParametroCodefacServiceIf) getRecursosRMI(ParametroCodefacServiceIf.class);};
     public UtilidadesServiceIf getUtilidadesServiceIf(){return (UtilidadesServiceIf) getRecursosRMI(UtilidadesServiceIf.class);};
+    public AccesoDirectoServiceIf getAccesoDirectoServiceIf(){return (AccesoDirectoServiceIf) getRecursosRMI(AccesoDirectoServiceIf.class);};
+    public BodegaServiceIf getBodegaServiceIf(){return (BodegaServiceIf) getRecursosRMI(BodegaServiceIf.class);};
+    public CategoriaProductoServiceIf getCategoriaProductoServiceIf(){return (CategoriaProductoServiceIf) getRecursosRMI(CategoriaProductoServiceIf.class);};
+    public CompraDetalleServiceIf getCompraDetalleServiceIf(){return (CompraDetalleServiceIf) getRecursosRMI(CompraDetalleServiceIf.class);};
+    public CompraServiceIf getCompraServiceIf(){return (CompraServiceIf) getRecursosRMI(CompraServiceIf.class);};
+    public ComprobanteFisicoDisenioServiceIf getComprobanteFisicoDisenioServiceIf(){return (ComprobanteFisicoDisenioServiceIf) getRecursosRMI(ComprobanteFisicoDisenioServiceIf.class);};
+    public EmpresaServiceIf getEmpresaServiceIf(){return (EmpresaServiceIf) getRecursosRMI(EmpresaServiceIf.class);};
+    public FacturacionServiceIf getFacturacionServiceIf(){return (FacturacionServiceIf) getRecursosRMI(FacturacionServiceIf.class);};
+    public ImpuestoDetalleServiceIf getImpuestoDetalleServiceIf(){return (ImpuestoDetalleServiceIf) getRecursosRMI(ImpuestoDetalleServiceIf.class);};
+    public ImpuestoServiceIf getImpuestoServiceIf(){return (ImpuestoServiceIf) getRecursosRMI(ImpuestoServiceIf.class);};
+    public KardexDetalleServiceIf getKardexDetalleServiceIf(){return (KardexDetalleServiceIf) getRecursosRMI(KardexDetalleServiceIf.class);};
+    public KardexItemEspecificoServiceIf getItemEspecificoServiceIf(){return (KardexItemEspecificoServiceIf) getRecursosRMI(KardexItemEspecificoServiceIf.class);};
+    public KardexServiceIf getKardexServiceIf(){return (KardexServiceIf) getRecursosRMI(KardexServiceIf.class);};
+    public NotaCreditoServiceIf getNotaCreditoServiceIf(){return (NotaCreditoServiceIf) getRecursosRMI(NotaCreditoServiceIf.class);};
+    public PerfilServicioIf getPerfilServicioIf(){return (PerfilServicioIf) getRecursosRMI(PerfilServicioIf.class);};
+    public ProductoEnsambleServiceIf getProductoEnsambleServiceIf(){return (ProductoEnsambleServiceIf) getRecursosRMI(ProductoEnsambleServiceIf.class);};
+    public ProductoProveedorServiceIf getProductoProveedorServiceIf(){return (ProductoProveedorServiceIf) getRecursosRMI(ProductoProveedorServiceIf.class);};
+    public SriIdentificacionServiceIf getSriIdentificacionServiceIf(){return (SriIdentificacionServiceIf) getRecursosRMI(SriIdentificacionServiceIf.class);};
+    public SriServiceIf getSriServiceIf(){return (SriServiceIf) getRecursosRMI(SriServiceIf.class);};
+    public UsuarioServicioIf getUsuarioServicioIf(){return (UsuarioServicioIf) getRecursosRMI(UsuarioServicioIf.class);};
+    
+    
+    
+    
+    
     
     
     /**

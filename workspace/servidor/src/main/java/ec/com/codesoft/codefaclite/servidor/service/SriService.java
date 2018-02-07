@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidor.facade.SriFormaPagoFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.SriIdentificacionFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
 import java.sql.Date;
 import java.util.List;
 
@@ -16,7 +17,8 @@ import java.util.List;
  *
  * @author Carlos
  */
-public class SriService {
+public class SriService implements SriServiceIf
+{
     private SriFormaPagoFacade sriFormaPagoFacade;
     private SriIdentificacionFacade sriIdentificacionFacade;
 

@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidor.facade.PerfilFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServicioIf;
 import java.rmi.RemoteException;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
  *
  * @author Carlos
  */
-public class PerfilServicio extends ServiceAbstract<Perfil,PerfilFacade>{
+public class PerfilServicio extends ServiceAbstract<Perfil,PerfilFacade> implements PerfilServicioIf{
 
     private PerfilFacade perfilFacade;
     public PerfilServicio() throws RemoteException 
