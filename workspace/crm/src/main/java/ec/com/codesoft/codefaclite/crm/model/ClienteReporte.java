@@ -13,10 +13,13 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import java.io.InputStream;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -30,25 +33,29 @@ public class ClienteReporte extends ControladorCodefacInterface{
     
     private void imprimirReporte()
     {
-        InputStream path = RecursoCodefac.JASPER_CRM.getResourceInputStream("reporteClientes.jrxml");
-        Map parameters = new HashMap();
-        List<ClienteData> data = new ArrayList<ClienteData>();
-        PersonaService service=new PersonaService();
-        List<Persona> clientes=service.obtenerTodos();
-        
-        for (Persona cliente : clientes) {
-            ClienteData clienteData=new ClienteData();
-            clienteData.setDireccion(cliente.getDireccion());
-            clienteData.setEmail(cliente.getCorreoElectronico());
-            clienteData.setIdentificacion(cliente.getIdentificacion());
-            clienteData.setNombresCompletos(cliente.getRazonSocial());
-            clienteData.setTelefono(cliente.getTelefonoCelular());
-            data.add(clienteData);
+        try {
+            InputStream path = RecursoCodefac.JASPER_CRM.getResourceInputStream("reporteClientes.jrxml");
+            Map parameters = new HashMap();
+            List<ClienteData> data = new ArrayList<ClienteData>();
+            PersonaService service=new PersonaService();
+            List<Persona> clientes=service.obtenerTodos();
+            
+            for (Persona cliente : clientes) {
+                ClienteData clienteData=new ClienteData();
+                clienteData.setDireccion(cliente.getDireccion());
+                clienteData.setEmail(cliente.getCorreoElectronico());
+                clienteData.setIdentificacion(cliente.getIdentificacion());
+                clienteData.setNombresCompletos(cliente.getRazonSocial());
+                clienteData.setTelefono(cliente.getTelefonoCelular());
+                data.add(clienteData);
+            }
+            
+            ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Clientes ");
+            this.dispose();
+            this.setVisible(false);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ClienteReporte.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Clientes ");
-        this.dispose();
-        this.setVisible(false);
     }
 
     
