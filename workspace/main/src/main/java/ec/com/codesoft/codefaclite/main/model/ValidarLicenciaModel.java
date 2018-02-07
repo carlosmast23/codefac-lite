@@ -16,6 +16,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ActualizarlicenciaRequestType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ActualizarlicenciaResponseType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ComprobarRequestType;
@@ -35,6 +37,7 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.rmi.RemoteException;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -116,7 +119,7 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
                 
                 
                 //Genera un nuevo usuario con los datos ingresados
-                UsuarioServicio servicio=new UsuarioServicio();
+                UsuarioServicioIf servicio=ServiceController.getController().getUsuarioServicioIf();
                 Usuario usuario=new Usuario();
                 String clave=new String(getTxtClaveRegistrar().getPassword());
                 usuario.setClave(clave);
@@ -126,6 +129,8 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
                 } catch (ServicioCodefacException ex) {
                     DialogoCodefac.mensaje("Error", ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
                     return;
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ValidarLicenciaModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 
                 licenciaCreada=true;
