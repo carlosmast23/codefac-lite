@@ -5,12 +5,14 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
-import ec.com.codesoft.codefaclite.servidor.entity.Persona;
-import ec.com.codesoft.codefaclite.servidor.entity.enumerados.ClienteEnumEstado;
-import ec.com.codesoft.codefaclite.servidor.excepciones.ConstrainViolationExceptionSQL;
-import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ClienteEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.PersonaFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
+import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
@@ -21,17 +23,17 @@ import org.eclipse.persistence.exceptions.DatabaseException;
  *
  * @author PC
  */
-public class PersonaService extends ServiceAbstract<Persona,PersonaFacade>
+public class PersonaService extends ServiceAbstract<Persona,PersonaFacade> implements PersonaServiceIf
 {
     private PersonaFacade personaFacade;
 
-    public PersonaService() 
+    public PersonaService() throws RemoteException 
     {
         super(PersonaFacade.class);
         this.personaFacade=new PersonaFacade();
     }
 
-    public void grabar(Persona p) throws ServicioCodefacException
+    public void grabar(Persona p) throws ServicioCodefacException,java.rmi.RemoteException
     {
         try {
             personaFacade.create(p);

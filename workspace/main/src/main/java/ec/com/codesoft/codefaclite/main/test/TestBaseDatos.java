@@ -5,13 +5,14 @@
  */
 package ec.com.codesoft.codefaclite.main.test;
 
-import ec.com.codesoft.codefaclite.servidor.entity.ComprobanteFisicoDisenio;
-import ec.com.codesoft.codefaclite.servidor.entity.Usuario;
-import ec.com.codesoft.codefaclite.servidor.excepciones.PersistenciaDuplicadaException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteFisicoDisenio;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.PersistenciaDuplicadaException;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.service.ComprobanteFisicoDisenioService;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -65,6 +66,8 @@ public class TestBaseDatos {
         } catch (PersistenceException ex) {
             Logger.getLogger(TestBaseDatos.class.getName()).log(Level.SEVERE, null, ex);
         } catch (PersistenciaDuplicadaException ex) {
+            Logger.getLogger(TestBaseDatos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
             Logger.getLogger(TestBaseDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

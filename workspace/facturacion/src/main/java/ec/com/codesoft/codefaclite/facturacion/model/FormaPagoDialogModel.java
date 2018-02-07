@@ -6,8 +6,8 @@
 package ec.com.codesoft.codefaclite.facturacion.model;
 
 import ec.com.codesoft.codefaclite.facturacion.dialog.FormaPagoDialog;
-import ec.com.codesoft.codefaclite.servidor.entity.FormaPago;
-import ec.com.codesoft.codefaclite.servidor.entity.SriFormaPago;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidor.service.SriService;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;

@@ -8,7 +8,7 @@ package ec.com.codesoft.codefaclite.test;
 //import ec.com.codesoft.codefaclite.servidor.entity.Ejemplo;
 //import ec.com.codesoft.codefaclite.servidor.entity.Persona;
 
-import ec.com.codesoft.codefaclite.servidor.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidor.facade.PersonaFacade;
 import java.util.List;
 import javax.persistence.EntityManager;

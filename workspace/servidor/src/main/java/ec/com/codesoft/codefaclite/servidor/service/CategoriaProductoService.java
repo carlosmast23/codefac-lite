@@ -5,11 +5,12 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
-import ec.com.codesoft.codefaclite.servidor.entity.CategoriaProducto;
-import ec.com.codesoft.codefaclite.servidor.entity.enumerados.CategoriaProductoEnumEstado;
-import ec.com.codesoft.codefaclite.servidor.excepciones.ConstrainViolationExceptionSQL;
-import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaProductoEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.CategoriaProductoFacade;
+import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.persistence.exceptions.DatabaseException;
@@ -22,7 +23,7 @@ public class CategoriaProductoService extends ServiceAbstract<CategoriaProducto,
 
     private CategoriaProductoFacade categoriaProductoFacade;
 
-    public CategoriaProductoService() {
+    public CategoriaProductoService() throws RemoteException {
         super(CategoriaProductoFacade.class);
         this.categoriaProductoFacade = new CategoriaProductoFacade();
     }

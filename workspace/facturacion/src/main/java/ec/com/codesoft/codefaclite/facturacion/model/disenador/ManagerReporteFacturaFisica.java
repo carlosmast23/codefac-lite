@@ -5,9 +5,9 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.model.disenador;
 
-import ec.com.codesoft.codefaclite.servidor.entity.BandaComprobante;
-import ec.com.codesoft.codefaclite.servidor.entity.ComponenteComprobanteFisico;
-import ec.com.codesoft.codefaclite.servidor.entity.ComprobanteFisicoDisenio;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.BandaComprobante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComponenteComprobanteFisico;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteFisicoDisenio;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;

@@ -5,8 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.servidor.facade;
 
-import ec.com.codesoft.codefaclite.servidor.entity.NotaCredito;
-import ec.com.codesoft.codefaclite.servidor.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import java.sql.Date;
 import java.util.List;
 import javax.persistence.NoResultException;

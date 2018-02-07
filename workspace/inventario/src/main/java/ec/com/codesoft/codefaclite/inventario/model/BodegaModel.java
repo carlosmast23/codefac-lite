@@ -8,10 +8,10 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.inventario.busqueda.BodegaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.inventario.panel.BodegaPanel;
-import ec.com.codesoft.codefaclite.servidor.entity.Bodega;
-import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
-import ec.com.codesoft.codefaclite.servidor.entity.enumerados.BodegaEnumEstado;
-import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.BodegaEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.service.BodegaService;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

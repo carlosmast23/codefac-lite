@@ -8,8 +8,8 @@ package ec.com.codesoft.codefaclite.inventario.busqueda;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
-import ec.com.codesoft.codefaclite.servidor.entity.Bodega;
-import ec.com.codesoft.codefaclite.servidor.entity.enumerados.BodegaEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.BodegaEnumEstado;
 import java.util.Vector;
 
 /**

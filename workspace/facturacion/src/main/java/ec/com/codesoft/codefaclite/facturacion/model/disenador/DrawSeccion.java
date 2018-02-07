@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.model.disenador;
 
-import ec.com.codesoft.codefaclite.servidor.entity.BandaComprobante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.BandaComprobante;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;

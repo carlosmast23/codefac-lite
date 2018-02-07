@@ -9,11 +9,7 @@ package ec.com.codesoft.codefaclite.crm.busqueda;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
-import ec.com.codesoft.codefaclite.servidor.entity.Persona;
-import ec.com.codesoft.codefaclite.servidor.entity.enumerados.FacturaEnumEstado;
-import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
-import java.util.ArrayList;
-import java.util.List;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import java.util.Vector;
 
 /**

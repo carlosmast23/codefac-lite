@@ -23,11 +23,11 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectr
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
-import ec.com.codesoft.codefaclite.servidor.entity.Factura;
-import ec.com.codesoft.codefaclite.servidor.entity.NotaCredito;
-import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
-import ec.com.codesoft.codefaclite.servidor.entity.enumerados.FacturaEnumEstado;
-import ec.com.codesoft.codefaclite.servidor.entity.enumerados.NotaCreditoEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NotaCreditoEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
 import ec.com.codesoft.codefaclite.servidor.service.NotaCreditoService;
 import java.awt.event.ActionEvent;

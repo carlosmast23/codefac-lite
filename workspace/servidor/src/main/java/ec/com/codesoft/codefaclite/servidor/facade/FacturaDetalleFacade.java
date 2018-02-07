@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidor.facade;
 
-import ec.com.codesoft.codefaclite.servidor.entity.FacturaDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 
 /**
  *

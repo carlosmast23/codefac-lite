@@ -6,21 +6,22 @@
 package ec.com.codesoft.codefaclite.servidor.service;
 
 import com.sun.mail.handlers.multipart_mixed;
-import ec.com.codesoft.codefaclite.servidor.entity.Bodega;
-import ec.com.codesoft.codefaclite.servidor.entity.Compra;
-import ec.com.codesoft.codefaclite.servidor.entity.CompraDetalle;
-import ec.com.codesoft.codefaclite.servidor.entity.Kardex;
-import ec.com.codesoft.codefaclite.servidor.entity.KardexDetalle;
-import ec.com.codesoft.codefaclite.servidor.entity.Producto;
-import ec.com.codesoft.codefaclite.servidor.entity.ProductoEnsamble;
-import ec.com.codesoft.codefaclite.servidor.entity.enumerados.EnumSiNo;
-import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoDocumentoEnum;
-import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.KardexFacade;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +39,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade>{
      */
     private EntityManager em;
     
-    public KardexService() {
+    public KardexService() throws RemoteException {
         super(KardexFacade.class);
         em=AbstractFacade.entityManager;
     }

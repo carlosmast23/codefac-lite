@@ -5,9 +5,9 @@
  */
 package ec.com.codesoft.codefaclite.servidor.facade;
 
-import ec.com.codesoft.codefaclite.servidor.entity.Perfil;
-import ec.com.codesoft.codefaclite.servidor.entity.PerfilUsuario;
-import ec.com.codesoft.codefaclite.servidor.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PerfilUsuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;

@@ -8,10 +8,7 @@ package ec.com.codesoft.codefaclite.crm.busqueda;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
-import ec.com.codesoft.codefaclite.servidor.entity.Empresa;
-import ec.com.codesoft.codefaclite.servidor.service.EmpresaService;
-import java.util.ArrayList;
-import java.util.List;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import java.util.Vector;
 
 /**

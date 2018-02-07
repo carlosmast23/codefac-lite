@@ -5,11 +5,12 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
-import ec.com.codesoft.codefaclite.servidor.entity.Bodega;
-import ec.com.codesoft.codefaclite.servidor.entity.enumerados.BodegaEnumEstado;
-import ec.com.codesoft.codefaclite.servidor.excepciones.ConstrainViolationExceptionSQL;
-import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.BodegaEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.BodegaFacade;
+import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.persistence.exceptions.DatabaseException;
@@ -22,7 +23,7 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> {
 
     private BodegaFacade bodegaFacade;
 
-    public BodegaService() {
+    public BodegaService() throws RemoteException {
         super(BodegaFacade.class);
         this.bodegaFacade = new BodegaFacade();
     }

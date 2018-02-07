@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.main.license;
 
-import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoLicenciaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
 import java.io.FileWriter;
 import java.net.InetAddress;

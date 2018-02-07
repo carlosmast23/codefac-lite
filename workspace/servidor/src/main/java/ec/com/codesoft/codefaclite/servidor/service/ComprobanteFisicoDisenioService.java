@@ -5,8 +5,9 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
-import ec.com.codesoft.codefaclite.servidor.entity.ComprobanteFisicoDisenio;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteFisicoDisenio;
 import ec.com.codesoft.codefaclite.servidor.facade.ComprobanteFisicoDisenioFacade;
+import java.rmi.RemoteException;
 
 /**
  *
@@ -14,7 +15,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.ComprobanteFisicoDisenioFacad
  */
 public class ComprobanteFisicoDisenioService extends ServiceAbstract<ComprobanteFisicoDisenio,ComprobanteFisicoDisenioFacade>{
     
-    public ComprobanteFisicoDisenioService() {
+    public ComprobanteFisicoDisenioService() throws RemoteException {
         super(ComprobanteFisicoDisenioFacade.class);
     }
     

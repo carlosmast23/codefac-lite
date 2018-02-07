@@ -7,9 +7,9 @@ package ec.com.codesoft.codefaclite.crm.panel;
 
 import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
-import ec.com.codesoft.codefaclite.servidor.entity.enumerados.DocumentoEnum;
-import ec.com.codesoft.codefaclite.servidor.entity.enumerados.EnumSiNo;
-import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;

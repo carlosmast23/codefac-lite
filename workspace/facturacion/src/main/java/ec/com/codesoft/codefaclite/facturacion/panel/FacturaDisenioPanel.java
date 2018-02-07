@@ -6,9 +6,9 @@
 package ec.com.codesoft.codefaclite.facturacion.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
-import ec.com.codesoft.codefaclite.servidor.entity.BandaComprobante;
-import ec.com.codesoft.codefaclite.servidor.entity.ComponenteComprobanteFisico;
-import ec.com.codesoft.codefaclite.servidor.entity.ComprobanteFisicoDisenio;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.BandaComprobante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComponenteComprobanteFisico;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteFisicoDisenio;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;

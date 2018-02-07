@@ -5,9 +5,10 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
-import ec.com.codesoft.codefaclite.servidor.entity.SriIdentificacion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidor.facade.SriFormaPagoFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.SriIdentificacionFacade;
+import java.rmi.RemoteException;
 
 /**
  *
@@ -15,7 +16,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.SriIdentificacionFacade;
  */
 public class SriIdentificacionService extends ServiceAbstract<SriIdentificacion,SriIdentificacionFacade>{
     
-    public SriIdentificacionService() {
+    public SriIdentificacionService() throws RemoteException {
         super(SriIdentificacionFacade.class);
     }
     

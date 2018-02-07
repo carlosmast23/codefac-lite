@@ -5,9 +5,10 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
-import ec.com.codesoft.codefaclite.servidor.entity.Empresa;
-import ec.com.codesoft.codefaclite.servidor.excepciones.ConstrainViolationExceptionSQL;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.EmpresaFacade;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,7 +22,7 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade>
 {
     private EmpresaFacade empresaFacade;
     
-    public EmpresaService() 
+    public EmpresaService() throws RemoteException 
     {        
         super(EmpresaFacade.class);
         this.empresaFacade = new EmpresaFacade();

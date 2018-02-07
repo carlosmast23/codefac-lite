@@ -9,26 +9,26 @@ import ec.com.codesoft.codefaclite.configuraciones.panel.ComprobantesConfiguraci
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.dialog.ProcesoSegundoPlano;
 import ec.com.codesoft.codefaclite.controlador.directorio.DirectorioCodefac;
-import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.FirmaElectronica;
-import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
-import ec.com.codesoft.codefaclite.servidor.entity.Impuesto;
-import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
-import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
-import ec.com.codesoft.codefaclite.servidor.entity.Perfil;
-import ec.com.codesoft.codefaclite.servidor.entity.Persona;
-import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
 import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Impuesto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
 import ec.com.codesoft.ejemplo.utilidades.email.CorreoElectronico;
 import ec.com.codesoft.ejemplo.utilidades.email.SmtpNoExisteException;
 import ec.com.codesoft.ejemplo.utilidades.varios.DialogoCopiarArchivos;
-import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -39,6 +39,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -57,19 +58,19 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPanel {
 
     private Map<String, ParametroCodefac> parametros;
-    private ParametroCodefacService parametroCodefacService;
+    private ParametroCodefacServiceIf parametroCodefacService;
     private ImpuestoDetalleService impuestoDetalleService;
     private JFileChooser jFileChooser;
     private Path origen = null;
     private Path destino = null;
     private Persona cliente;
-    private PersonaService clienteService;
+    private PersonaServiceIf clienteService;
     
     private DialogoCopiarArchivos dialogoCopiarFondoEscritorio;
 
     public ComprobantesConfiguracionModel() {
         impuestoDetalleService = new ImpuestoDetalleService();
-        this.parametroCodefacService = new ParametroCodefacService();
+        this.parametroCodefacService = ServiceController.getController().getParametroCodefacServiceIf();
         cargarDatosIva();
         cargarTipoFactura();
         cargarModosFacturacion();
@@ -88,30 +89,34 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
-        //getTxtClaveFirma().setEnabled(true);
-        actualizarDatosVista();
-        moverArchivo();
-        
-        /**
-         * Grabar el fondo de escritorio
-         */
-        if(dialogoCopiarFondoEscritorio.origen!=null && dialogoCopiarFondoEscritorio.destino!=null)
-        {
-            dialogoCopiarFondoEscritorio.moverArchivo();
-            ParametroCodefac parametro = parametros.get(ParametroCodefac.IMAGEN_FONDO);
-            parametro.setValor(dialogoCopiarFondoEscritorio.destino.getFileName().toString());
-            panelPadre.establecerImagenFondo();
+        try {
+            //getTxtClaveFirma().setEnabled(true);
+            actualizarDatosVista();
+            moverArchivo();
             
+            /**
+             * Grabar el fondo de escritorio
+             */
+            if(dialogoCopiarFondoEscritorio.origen!=null && dialogoCopiarFondoEscritorio.destino!=null)
+            {
+                dialogoCopiarFondoEscritorio.moverArchivo();
+                ParametroCodefac parametro = parametros.get(ParametroCodefac.IMAGEN_FONDO);
+                parametro.setValor(dialogoCopiarFondoEscritorio.destino.getFileName().toString());
+                panelPadre.establecerImagenFondo();
+                
+            }
+            
+            this.parametroCodefacService.editarParametros(parametros);
+            /**
+             * Establesco el ciclo de vida en el cual me encuentro
+             */
+            this.estadoFormulario = GeneralPanelInterface.ESTADO_GRABAR;
+            DialogoCodefac.mensaje("Actualizado datos", "Los datos de los parametros fueron actualizados", DialogoCodefac.MENSAJE_CORRECTO);
+            //DialogoCodefac.mensaje("Firma", "Datos actualizados correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+            dispose();
+        } catch (RemoteException ex) {
+            Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        this.parametroCodefacService.editarParametros(parametros);
-        /**
-         * Establesco el ciclo de vida en el cual me encuentro
-         */
-        this.estadoFormulario = GeneralPanelInterface.ESTADO_GRABAR;
-        DialogoCodefac.mensaje("Actualizado datos", "Los datos de los parametros fueron actualizados", DialogoCodefac.MENSAJE_CORRECTO);
-        //DialogoCodefac.mensaje("Firma", "Datos actualizados correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-        dispose();
     }
 
     @Override
@@ -201,50 +206,54 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     }
 
     private void cargarDatosConfiguraciones() {
-        parametros = parametroCodefacService.getParametrosMap();
-        ParametroCodefac param = parametros.get(ParametroCodefac.SECUENCIAL_FACTURA);
-        
-        getTxtFacturaSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_FACTURA).getValor());
-        getTxtGuiaRemisionSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION).getValor());
-        getTxtNotaCreditoSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_NOTA_CREDITO).getValor());
-        getTxtNotaDebitoSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_NOTA_DEBITO).getValor());
-        getTxtGuiaRemisionSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION).getValor());
-        getTxtRetencionesSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_RETENCION).getValor());
-        
-        getTxtFacturaSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_FACTURA_FISICA).getValor());
-        getTxtNotaVentaSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_NOTA_VENTA_FISICA).getValor());
-        getTxtGuiaRemisionSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION_FISICA).getValor());
-        getTxtNotaCreditoSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_NOTA_CREDITO_FISICA).getValor());
-        getTxtNotaDebitoSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_NOTA_DEBITO_FISICA).getValor());
-        getTxtGuiaRemisionSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION_FISICA).getValor());
-        getTxtRetencionesSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_RETENCION_FISICA).getValor());
-    
-        
-        getTxtDirectorioRecurso().setText(parametros.get(ParametroCodefac.DIRECTORIO_RECURSOS).getValor());
-        getTxtEstablecimiento().setText(parametros.get(ParametroCodefac.ESTABLECIMIENTO).getValor());
-        getTxtPuntoEmision().setText(parametros.get(ParametroCodefac.PUNTO_EMISION).getValor());
-        getTxtCorreoElectronico().setText(parametros.get(ParametroCodefac.CORREO_USUARIO).getValor());
-        getTxtPasswordCorreo().setText(parametros.get(ParametroCodefac.CORREO_CLAVE).getValor());
-        getTxtNombreFirma().setText(parametros.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor());
-        getTxtClaveFirma().setText(parametros.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).getValor());
-        getTxtFondoEscritorio().setText(parametros.get(ParametroCodefac.IMAGEN_FONDO).getValor());
-        
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("tarifa", Integer.parseInt(parametros.get(ParametroCodefac.IVA_DEFECTO).getValor()));
-        List<ImpuestoDetalle> lista = impuestoDetalleService.buscarImpuestoDetallePorMap(map);
-        getCmbIvaDefault().getModel().setSelectedItem(lista.get(0));
-        /**
-         * Cargar el modo de facturacion por defecto
-         */
-        String modoProduccion = parametros.get(ParametroCodefac.MODO_FACTURACION).getValor();
-        getCmbModoFacturacion().setSelectedItem(modoProduccion);
-        
-        /**
-         * Cargar el tipo de facturacion
-         */
-       String letra=parametros.get(ParametroCodefac.TIPO_FACTURACION).getValor();
-       getCmbTipoFacturacion().setSelectedItem(TipoFacturacionEnumEstado.getEnumByEstado(letra));
-       listenerCmbTipoFacturacion(); //modifica las acciones para esta accion
+        try {
+            parametros = parametroCodefacService.getParametrosMap();
+            ParametroCodefac param = parametros.get(ParametroCodefac.SECUENCIAL_FACTURA);
+            
+            getTxtFacturaSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_FACTURA).getValor());
+            getTxtGuiaRemisionSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION).getValor());
+            getTxtNotaCreditoSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_NOTA_CREDITO).getValor());
+            getTxtNotaDebitoSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_NOTA_DEBITO).getValor());
+            getTxtGuiaRemisionSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION).getValor());
+            getTxtRetencionesSecuencial().setText(parametros.get(ParametroCodefac.SECUENCIAL_RETENCION).getValor());
+            
+            getTxtFacturaSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_FACTURA_FISICA).getValor());
+            getTxtNotaVentaSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_NOTA_VENTA_FISICA).getValor());
+            getTxtGuiaRemisionSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION_FISICA).getValor());
+            getTxtNotaCreditoSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_NOTA_CREDITO_FISICA).getValor());
+            getTxtNotaDebitoSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_NOTA_DEBITO_FISICA).getValor());
+            getTxtGuiaRemisionSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_GUIA_REMISION_FISICA).getValor());
+            getTxtRetencionesSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_RETENCION_FISICA).getValor());
+            
+            
+            getTxtDirectorioRecurso().setText(parametros.get(ParametroCodefac.DIRECTORIO_RECURSOS).getValor());
+            getTxtEstablecimiento().setText(parametros.get(ParametroCodefac.ESTABLECIMIENTO).getValor());
+            getTxtPuntoEmision().setText(parametros.get(ParametroCodefac.PUNTO_EMISION).getValor());
+            getTxtCorreoElectronico().setText(parametros.get(ParametroCodefac.CORREO_USUARIO).getValor());
+            getTxtPasswordCorreo().setText(parametros.get(ParametroCodefac.CORREO_CLAVE).getValor());
+            getTxtNombreFirma().setText(parametros.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor());
+            getTxtClaveFirma().setText(parametros.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).getValor());
+            getTxtFondoEscritorio().setText(parametros.get(ParametroCodefac.IMAGEN_FONDO).getValor());
+            
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("tarifa", Integer.parseInt(parametros.get(ParametroCodefac.IVA_DEFECTO).getValor()));
+            List<ImpuestoDetalle> lista = impuestoDetalleService.buscarImpuestoDetallePorMap(map);
+            getCmbIvaDefault().getModel().setSelectedItem(lista.get(0));
+            /**
+             * Cargar el modo de facturacion por defecto
+             */
+            String modoProduccion = parametros.get(ParametroCodefac.MODO_FACTURACION).getValor();
+            getCmbModoFacturacion().setSelectedItem(modoProduccion);
+            
+            /**
+             * Cargar el tipo de facturacion
+             */
+            String letra=parametros.get(ParametroCodefac.TIPO_FACTURACION).getValor();
+            getCmbTipoFacturacion().setSelectedItem(TipoFacturacionEnumEstado.getEnumByEstado(letra));
+            listenerCmbTipoFacturacion(); //modifica las acciones para esta accion
+        } catch (RemoteException ex) {
+            Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 
@@ -488,13 +497,17 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     }
 
     public void configurarCorreoDeConsumidorFinal() {
-        clienteService = new PersonaService();
-        for (Persona c : clienteService.buscar()) {
-            if (c.getRazonSocial().equals("Cliente Final")) {
-                cliente = c;
+        try {
+            clienteService = ServiceController.getController().getPersonaServiceIf();
+            for (Persona c : clienteService.buscar()) {
+                if (c.getRazonSocial().equals("Cliente Final")) {
+                    cliente = c;
+                }
             }
+            cliente.setCorreoElectronico(getTxtCorreoElectronico().getText());
+            clienteService.editar(cliente);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        cliente.setCorreoElectronico(getTxtCorreoElectronico().getText());
-        clienteService.editar(cliente);
     }
 }

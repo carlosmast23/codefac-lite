@@ -5,8 +5,9 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
-import ec.com.codesoft.codefaclite.servidor.entity.AccesoDirecto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.AccesoDirecto;
 import ec.com.codesoft.codefaclite.servidor.facade.AccesoDirectoFacade;
+import java.rmi.RemoteException;
 
 /**
  *
@@ -14,7 +15,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.AccesoDirectoFacade;
  */
 public class AccesoDirectoService extends ServiceAbstract<AccesoDirecto,AccesoDirectoFacade>{
     
-    public AccesoDirectoService() {
+    public AccesoDirectoService() throws RemoteException {
         super(AccesoDirectoFacade.class);
     }
     

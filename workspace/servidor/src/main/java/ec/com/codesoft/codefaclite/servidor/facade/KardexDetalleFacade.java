@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidor.facade;
 
-import ec.com.codesoft.codefaclite.servidor.entity.KardexDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 
 /**
  *

@@ -5,9 +5,9 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
-import ec.com.codesoft.codefaclite.servidor.entity.Impuesto;
-import ec.com.codesoft.codefaclite.servidor.entity.ImpuestoDetalle;
-import ec.com.codesoft.codefaclite.servidor.excepciones.ConstrainViolationExceptionSQL;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Impuesto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.ImpuestoDetalleFacade;
 import java.util.List;
 import java.util.Map;

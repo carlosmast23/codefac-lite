@@ -5,12 +5,14 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
-import ec.com.codesoft.codefaclite.servidor.entity.Producto;
-import ec.com.codesoft.codefaclite.servidor.entity.enumerados.ProductoEnumEstado;
-import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoProductoEnum;
-import ec.com.codesoft.codefaclite.servidor.excepciones.ConstrainViolationExceptionSQL;
-import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ProductoEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.ProductoFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,11 +23,11 @@ import org.eclipse.persistence.exceptions.DatabaseException;
  *
  * @author PC
  */
-public class ProductoService extends ServiceAbstract<Producto,ProductoFacade>
+public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> implements ProductoServiceIf
 {
     private ProductoFacade productoFacade;
     
-    public ProductoService()
+    public ProductoService() throws RemoteException
     {
         super(ProductoFacade.class);
         this.productoFacade = new ProductoFacade();

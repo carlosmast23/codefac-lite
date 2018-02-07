@@ -5,24 +5,24 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
-import ec.com.codesoft.codefaclite.servidor.entity.Factura;
-import ec.com.codesoft.codefaclite.servidor.entity.FacturaDetalle;
-import ec.com.codesoft.codefaclite.servidor.entity.Kardex;
-import ec.com.codesoft.codefaclite.servidor.entity.KardexDetalle;
-import ec.com.codesoft.codefaclite.servidor.entity.Kardex_;
-import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
-import ec.com.codesoft.codefaclite.servidor.entity.Persona;
-import ec.com.codesoft.codefaclite.servidor.entity.Producto;
-import ec.com.codesoft.codefaclite.servidor.entity.enumerados.FacturaEnumEstado;
-import ec.com.codesoft.codefaclite.servidor.entity.enumerados.DocumentoEnum;
-import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoDocumentoEnum;
-import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoFacturacionEnumEstado;
-import ec.com.codesoft.codefaclite.servidor.excepciones.ConstrainViolationExceptionSQL;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaFacade;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +42,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade>{
     FacturaDetalleFacade facturaDetalleFacade;
     ParametroCodefacService parametroService;
 
-    public FacturacionService() {
+    public FacturacionService() throws RemoteException {
         super(FacturaFacade.class);
         this.facturaFacade = new FacturaFacade();
         this.facturaDetalleFacade = new FacturaDetalleFacade();
@@ -124,6 +124,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade>{
         transaction.commit();
         } catch (DatabaseException ex) {
             transaction.rollback();
+            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
             Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
         }
 

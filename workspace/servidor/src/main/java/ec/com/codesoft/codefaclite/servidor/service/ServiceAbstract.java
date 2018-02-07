@@ -5,9 +5,10 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
-import ec.com.codesoft.codefaclite.servidor.excepciones.ConstrainViolationExceptionSQL;
-import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -19,12 +20,13 @@ import org.eclipse.persistence.exceptions.DatabaseException;
  *
  * @author Carlos
  */
-public abstract class ServiceAbstract<Entity,Facade>
+public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
 {
     private AbstractFacade<Entity> facade;
     protected EntityManager entityManager;
  
-    public ServiceAbstract(Class<Facade> clase) {
+    public ServiceAbstract(Class<Facade> clase) throws java.rmi.RemoteException
+    {
         try {
             this.facade =(AbstractFacade<Entity>) clase.newInstance();
             this.entityManager=AbstractFacade.entityManager;
@@ -41,7 +43,7 @@ public abstract class ServiceAbstract<Entity,Facade>
         return this.facade.findAll();
     }
     
-    public void grabar(Entity entity) throws ServicioCodefacException
+    public void grabar(Entity entity) throws ServicioCodefacException,java.rmi.RemoteException
     {
         try {
             this.facade.create(entity);
@@ -62,16 +64,7 @@ public abstract class ServiceAbstract<Entity,Facade>
         return this.facade.findByMap(parametros);
     }
     
-    public static List<Object> consultaGeneralDialogos(String query,Map<Integer,Object> map,int limiteMinimo,int limiteMaximo)
-    {
-       return AbstractFacade.findStaticDialog(query,map, limiteMinimo, limiteMaximo);
-    }
-    
-    public static Long consultaTamanioGeneralDialogos(String query,Map<Integer,Object> map)
-    {
-       return AbstractFacade.findCountStaticDialog(query,map);
-    }
-    
+
 
     /**
      * Metodo que se encarga de desasoriar una entidad gestionada para poder hacer acciones

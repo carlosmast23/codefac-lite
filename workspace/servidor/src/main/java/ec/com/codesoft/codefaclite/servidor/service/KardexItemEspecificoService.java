@@ -5,8 +5,9 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
-import ec.com.codesoft.codefaclite.servidor.entity.KardexItemEspecifico;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidor.facade.KardexItemEspecificoFacade;
+import java.rmi.RemoteException;
 
 /**
  *
@@ -14,7 +15,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.KardexItemEspecificoFacade;
  */
 public class KardexItemEspecificoService extends ServiceAbstract<KardexItemEspecifico, KardexItemEspecificoFacade>{
     
-    public KardexItemEspecificoService() {
+    public KardexItemEspecificoService() throws RemoteException {
         super(KardexItemEspecificoFacade.class);
     }
     

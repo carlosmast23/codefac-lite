@@ -5,9 +5,11 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
-import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
-import ec.com.codesoft.codefaclite.servidor.excepciones.ConstrainViolationExceptionSQL;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.ParametroCodefacFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,15 +21,15 @@ import org.eclipse.persistence.exceptions.DatabaseException;
  *
  * @author Carlos
  */
-public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,ParametroCodefacFacade>{
+public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,ParametroCodefacFacade> implements ParametroCodefacServiceIf{
     private ParametroCodefacFacade parametroCodefacFacade;
 
-    public ParametroCodefacService() {
+    public ParametroCodefacService() throws RemoteException {
         super(ParametroCodefacFacade.class);
         parametroCodefacFacade=new ParametroCodefacFacade();
     }
     
-    public Map<String ,ParametroCodefac> getParametrosMap()
+    public Map<String ,ParametroCodefac> getParametrosMap() throws java.rmi.RemoteException
     {
             Map<String ,ParametroCodefac> parametrosCodefacMap=new HashMap<String,ParametroCodefac>();
         
@@ -39,7 +41,7 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
         return parametrosCodefacMap;
     }
     
-    public ParametroCodefac getParametroByNombre(String nombre)
+    public ParametroCodefac getParametroByNombre(String nombre) throws java.rmi.RemoteException
     {
         Map<String,Object> map=new HashMap<String, Object>();
         map.put("nombre",nombre);
@@ -54,7 +56,7 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
      * Edita todos los parametros 
      * @param parametro 
      */
-    public void editarParametros(Map<String ,ParametroCodefac> parametro)
+    public void editarParametros(Map<String ,ParametroCodefac> parametro) throws java.rmi.RemoteException
     {
            for (Map.Entry<String, ParametroCodefac> entry : parametro.entrySet()) {
             String key = entry.getKey();
@@ -63,7 +65,7 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
         }
     }
     
-    public void grabar(ParametroCodefac parametro)
+    public void grabar(ParametroCodefac parametro) throws java.rmi.RemoteException
     {
         try {
             parametroCodefacFacade.create(parametro);
@@ -74,7 +76,7 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
         }
     }
     
-    public List<ParametroCodefac> buscarParametrosPorMap(Map<String,Object> map)
+    public List<ParametroCodefac> buscarParametrosPorMap(Map<String,Object> map) throws java.rmi.RemoteException
     {
         return parametroCodefacFacade.findByMap(map);
     }

@@ -5,13 +5,14 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
-import ec.com.codesoft.codefaclite.servidor.entity.NotaCredito;
-import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
-import ec.com.codesoft.codefaclite.servidor.entity.Persona;
-import ec.com.codesoft.codefaclite.servidor.excepciones.ConstrainViolationExceptionSQL;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.NotaCreditoDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.NotaCreditoFacade;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -28,7 +29,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
     NotaCreditoDetalleFacade notaCreditoDetalleFacade;
     ParametroCodefacService parametroCodefacService;
 
-    public NotaCreditoService() {
+    public NotaCreditoService() throws RemoteException {
         super(NotaCreditoFacade.class);
         this.notaCreditoFacade = new NotaCreditoFacade();
         this.notaCreditoDetalleFacade = new NotaCreditoDetalleFacade();

@@ -5,11 +5,11 @@
  */
 package ec.com.codesoft.codefaclite.controlador.session;
 
-import ec.com.codesoft.codefaclite.servidor.entity.Empresa;
-import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
-import ec.com.codesoft.codefaclite.servidor.entity.Perfil;
-import ec.com.codesoft.codefaclite.servidor.entity.Usuario;
-import ec.com.codesoft.codefaclite.servidor.entity.enumerados.TipoLicenciaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import java.util.List;
 import java.util.Map;
 

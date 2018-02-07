@@ -5,8 +5,9 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
-import ec.com.codesoft.codefaclite.servidor.entity.ProductoProveedor;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidor.facade.ProductoProveedorFacade;
+import java.rmi.RemoteException;
 
 /**
  *
@@ -14,7 +15,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.ProductoProveedorFacade;
  */
 public class ProductoProveedorService extends ServiceAbstract<ProductoProveedor,ProductoProveedorFacade>{
     
-    public ProductoProveedorService() {
+    public ProductoProveedorService() throws RemoteException {
         super(ProductoProveedorFacade.class);
     }
     

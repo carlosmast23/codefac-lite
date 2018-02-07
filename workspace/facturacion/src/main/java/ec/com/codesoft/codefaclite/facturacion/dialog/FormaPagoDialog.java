@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.dialog;
 
-import ec.com.codesoft.codefaclite.servidor.entity.SriFormaPago;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;

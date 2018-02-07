@@ -5,8 +5,9 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
-import ec.com.codesoft.codefaclite.servidor.entity.CompraDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidor.facade.CompraDetalleFacade;
+import java.rmi.RemoteException;
 
 /**
  *
@@ -14,7 +15,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.CompraDetalleFacade;
  */
 public class CompraDetalleService extends ServiceAbstract<CompraDetalle, CompraDetalleFacade>{
     
-    public CompraDetalleService() {
+    public CompraDetalleService() throws RemoteException {
         super(CompraDetalleFacade.class);
     }
     

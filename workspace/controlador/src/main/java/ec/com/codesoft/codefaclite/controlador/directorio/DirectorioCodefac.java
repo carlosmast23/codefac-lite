@@ -6,7 +6,7 @@
 package ec.com.codesoft.codefaclite.controlador.directorio;
 
 import ec.com.codesoft.codefaclite.controlador.session.SessionCodefacInterface;
-import ec.com.codesoft.codefaclite.servidor.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.File;

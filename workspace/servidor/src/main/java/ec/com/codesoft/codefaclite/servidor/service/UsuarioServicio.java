@@ -5,14 +5,15 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
-import ec.com.codesoft.codefaclite.servidor.entity.Perfil;
-import ec.com.codesoft.codefaclite.servidor.entity.PerfilUsuario;
-import ec.com.codesoft.codefaclite.servidor.entity.Usuario;
-import ec.com.codesoft.codefaclite.servidor.excepciones.ConstrainViolationExceptionSQL;
-import ec.com.codesoft.codefaclite.servidor.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PerfilUsuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.PerfilFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.PerfilUsuarioFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.UsuarioFacade;
+import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +32,7 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade>{
     PerfilFacade perfilFacade=new PerfilFacade();
     
 
-    public UsuarioServicio() {
+    public UsuarioServicio() throws RemoteException {
         super(UsuarioFacade.class);
         this.usuarioFacade=new UsuarioFacade();
     }    

@@ -8,7 +8,7 @@ package ec.com.codesoft.codefaclite.inventario.panel;
 import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
-import ec.com.codesoft.codefaclite.servidor.entity.Bodega;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;

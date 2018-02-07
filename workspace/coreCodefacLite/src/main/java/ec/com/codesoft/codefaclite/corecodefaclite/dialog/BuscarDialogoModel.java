@@ -7,7 +7,7 @@ package ec.com.codesoft.codefaclite.corecodefaclite.dialog;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.panel.DialogoBuscadorForm;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
-import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -18,9 +18,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -73,22 +76,25 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
      */
     private void consultaSecundaria()
     {
-        String filtro=getTxtBuscar().getText();
-        QueryDialog queryDialog=this.model.getConsulta(ALIAS_BUSQUEDA);
-        queryDialog.agregarParametro(1000,"%"+filtro+"%");
-        
-        int limiteInferior=CANTIDAD_FILAS*(paginaActual-1);
-        int limiteSuperior=CANTIDAD_FILAS*(paginaActual);
-        //Limpiar los resutados anteriores
-        if(listaResultados!=null)
-            listaResultados.clear();
-        
-        
-        listaResultados=ServiceAbstract.consultaGeneralDialogos(queryDialog.query,queryDialog.getParametros(),limiteInferior,CANTIDAD_FILAS);
-        cargarDatos(listaResultados);
-        
-        setearBotonesSiguienteAtras();
-        imprimirTexto();
+        try {
+            String filtro=getTxtBuscar().getText();
+            QueryDialog queryDialog=this.model.getConsulta(ALIAS_BUSQUEDA);
+            queryDialog.agregarParametro(1000,"%"+filtro+"%");
+            
+            int limiteInferior=CANTIDAD_FILAS*(paginaActual-1);
+            int limiteSuperior=CANTIDAD_FILAS*(paginaActual);
+            //Limpiar los resutados anteriores
+            if(listaResultados!=null)
+                listaResultados.clear();
+            
+            listaResultados=ServiceController.getController().getUtilidadesServiceIf().consultaGeneralDialogos(queryDialog.query,queryDialog.getParametros(),limiteInferior,CANTIDAD_FILAS);
+            cargarDatos(listaResultados);
+            
+            setearBotonesSiguienteAtras();
+            imprimirTexto();
+        } catch (RemoteException ex) {
+            Logger.getLogger(BuscarDialogoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
     
@@ -128,16 +134,21 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
     
     private Long obtenerTamanioConsulta()
     {
-        String filtro=getTxtBuscar().getText();
-        QueryDialog queryDialog=this.model.getConsulta(ALIAS_BUSQUEDA);
-        queryDialog.agregarParametro(1000,"%"+filtro+"%");
-        String query=queryDialog.query;
-        query=query.toLowerCase();
-        int primerCorte=query.indexOf("select")+"select".length();        
-        int segundoCorte=query.indexOf("from");
-        String queryModificado=queryDialog.query.substring(0,primerCorte)+" count(1) "+queryDialog.query.substring(segundoCorte);
-        System.out.println(queryModificado);
-        return ServiceAbstract.consultaTamanioGeneralDialogos(queryModificado, queryDialog.getParametros());
+        try {
+            String filtro=getTxtBuscar().getText();
+            QueryDialog queryDialog=this.model.getConsulta(ALIAS_BUSQUEDA);
+            queryDialog.agregarParametro(1000,"%"+filtro+"%");
+            String query=queryDialog.query;
+            query=query.toLowerCase();
+            int primerCorte=query.indexOf("select")+"select".length();
+            int segundoCorte=query.indexOf("from");
+            String queryModificado=queryDialog.query.substring(0,primerCorte)+" count(1) "+queryDialog.query.substring(segundoCorte);
+            System.out.println(queryModificado);            
+            return ServiceController.getController().getUtilidadesServiceIf().consultaTamanioGeneralDialogos(queryModificado, queryDialog.getParametros());
+        } catch (RemoteException ex) {
+            Logger.getLogger(BuscarDialogoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     /**

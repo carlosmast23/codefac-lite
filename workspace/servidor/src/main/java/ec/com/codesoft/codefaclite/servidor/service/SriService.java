@@ -5,8 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
-import ec.com.codesoft.codefaclite.servidor.entity.SriFormaPago;
-import ec.com.codesoft.codefaclite.servidor.entity.SriIdentificacion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidor.facade.SriFormaPagoFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.SriIdentificacionFacade;
 import java.sql.Date;
