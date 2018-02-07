@@ -58,6 +58,10 @@ public abstract class InventarioEnsamblePanel extends ControladorCodefacInterfac
         jLabel4 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
 
+        setClosable(true);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setText("Cantidad:");
@@ -90,7 +94,7 @@ public abstract class InventarioEnsamblePanel extends ControladorCodefacInterfac
         gridBagConstraints.weightx = 0.1;
         getContentPane().add(txtEnsamble, gridBagConstraints);
 
-        btnBuscarEnsamble.setText("Buscar");
+        btnBuscarEnsamble.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;

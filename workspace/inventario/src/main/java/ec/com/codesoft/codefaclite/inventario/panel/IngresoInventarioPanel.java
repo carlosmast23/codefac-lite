@@ -37,7 +37,6 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
 
         jLabel1 = new javax.swing.JLabel();
         txtCompraSeleccionada = new javax.swing.JTextField();
-        btnBuscarCompraPendiente = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -49,6 +48,7 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         cmbBodega = new javax.swing.JComboBox<>();
+        btnBuscarCompraPendiente = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -72,14 +72,6 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         getContentPane().add(txtCompraSeleccionada, gridBagConstraints);
-
-        btnBuscarCompraPendiente.setText("Buscar");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 9;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
-        getContentPane().add(btnBuscarCompraPendiente, gridBagConstraints);
 
         jLabel4.setText("Fecha Ingreso:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -177,6 +169,14 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         getContentPane().add(cmbBodega, gridBagConstraints);
+
+        btnBuscarCompraPendiente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
+        btnBuscarCompraPendiente.setToolTipText("Buscar imagen en su computador");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        getContentPane().add(btnBuscarCompraPendiente, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

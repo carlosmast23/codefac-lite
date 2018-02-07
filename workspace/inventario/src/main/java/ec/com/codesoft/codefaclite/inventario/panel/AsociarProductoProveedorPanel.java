@@ -78,9 +78,9 @@ public abstract class AsociarProductoProveedorPanel extends ControladorCodefacIn
 
         txtProducto.setEditable(false);
 
-        btnBuscarProveedor.setText("Buscar");
+        btnBuscarProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
 
-        btnProductoBuscar.setText("Buscar");
+        btnProductoBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
 
         jLabel3.setText("Descripcion:");
 
@@ -143,8 +143,8 @@ public abstract class AsociarProductoProveedorPanel extends ControladorCodefacIn
                 .addGap(38, 38, 38)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBuscarProveedor)
-                    .addComponent(jLabel2))
+                    .addComponent(jLabel2)
+                    .addComponent(btnBuscarProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)

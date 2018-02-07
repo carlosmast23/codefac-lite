@@ -84,7 +84,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         getContentPane().add(txtProducto, gridBagConstraints);
 
-        btnProductoBuscar.setText("Buscar");
+        btnProductoBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 0;
