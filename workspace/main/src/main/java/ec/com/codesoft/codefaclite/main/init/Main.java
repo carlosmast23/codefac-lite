@@ -64,9 +64,12 @@ import ec.com.codesoft.codefaclite.servidor.service.EmpresaService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
 import ec.com.codesoft.codefaclite.servidor.service.PerfilServicio;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
 import static java.awt.Frame.MAXIMIZED_BOTH;
+import java.rmi.RemoteException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -180,23 +183,27 @@ public class Main {
         }
         else 
         {
-            //Buscar el tipo de licencia paa setear en el sistema
-            ParametroCodefacService servicio = new ParametroCodefacService();
-            String pathBase = servicio.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS).valor;
-            ValidacionLicenciaCodefac validacion = new ValidacionLicenciaCodefac(pathBase);
-            TipoLicenciaEnum tipoLicencia = validacion.getLicencia().getTipoLicenciaEnum();
-            
-            //Esta validacion es solo para usuario premium para cuando no paguen y tengamos que disminuir la licencia
-            if(!TipoLicenciaEnum.GRATIS.equals(tipoLicencia))
-            {
-                validacionCodefacOnline(validacion);
-                validacion = new ValidacionLicenciaCodefac(pathBase);
-                tipoLicencia = validacion.getLicencia().getTipoLicenciaEnum();
+            try {
+                //Buscar el tipo de licencia paa setear en el sistema
+                ParametroCodefacServiceIf servicio = ServiceController.getController().getParametroCodefacServiceIf();
+                String pathBase = servicio.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS).valor;
+                ValidacionLicenciaCodefac validacion = new ValidacionLicenciaCodefac(pathBase);
+                TipoLicenciaEnum tipoLicencia = validacion.getLicencia().getTipoLicenciaEnum();
+                
+                //Esta validacion es solo para usuario premium para cuando no paguen y tengamos que disminuir la licencia
+                if(!TipoLicenciaEnum.GRATIS.equals(tipoLicencia))
+                {
+                    validacionCodefacOnline(validacion);
+                    validacion = new ValidacionLicenciaCodefac(pathBase);
+                    tipoLicencia = validacion.getLicencia().getTipoLicenciaEnum();
+                }
+                
+                //Setear Variables de sesion
+                session.setTipoLicenciaEnum(tipoLicencia);
+                session.setUsuarioLicencia(validacion.obtenerLicencia().getProperty(ValidacionLicenciaCodefac.USUARIO));
+            } catch (RemoteException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-            //Setear Variables de sesion
-            session.setTipoLicenciaEnum(tipoLicencia);
-            session.setUsuarioLicencia(validacion.obtenerLicencia().getProperty(ValidacionLicenciaCodefac.USUARIO));
             
         }
 
@@ -234,8 +241,9 @@ public class Main {
     
     public static void validacionCodefacOnline(ValidacionLicenciaCodefac validacion)
     {
-        ParametroCodefacService servicio = new ParametroCodefacService();
-        /**
+        try {
+            ParametroCodefacServiceIf servicio = ServiceController.getController().getParametroCodefacServiceIf();
+            /**
              * Verificar si la licencia actual es la misma que tiene el servidor
              */
             ParametroCodefac parametroFechaValidacion = servicio.getParametroByNombre(ParametroCodefac.ULTIMA_FECHA_VALIDACION);
@@ -306,6 +314,9 @@ public class Main {
                 }
             
             }
+        } catch (RemoteException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private static void grabarFechaRevision(ParametroCodefac parametroFechaValidacion,boolean crear)
@@ -316,7 +327,7 @@ public class Main {
             parametroFechaValidacion.setNombre(ParametroCodefac.ULTIMA_FECHA_VALIDACION);
         }
         
-        ParametroCodefacService servicio=new ParametroCodefacService();
+        ParametroCodefacServiceIf servicio=ServiceController.getController().getParametroCodefacServiceIf();
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         Date fechaHoy = UtilidadesFecha.getFechaHoy();
         parametroFechaValidacion.setValor(format.format(fechaHoy));
@@ -535,54 +546,58 @@ public class Main {
     
     private static boolean comprobarLicencia()
     {
-        ParametroCodefacService servicio=new ParametroCodefacService();
-        String pathBase=servicio.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS).valor;
-        ValidacionLicenciaCodefac validacion = new ValidacionLicenciaCodefac();
-        validacion.setPath(pathBase);
-        
-        if (validacion.verificarExisteLicencia()) 
-        {
-            try {
-                if(validacion.validar())
-                {
-                    return true;
-                }
-                else
-                {//Si la licencia es incorrecta abre el dialogo de verificacion
-                    DialogoCodefac.mensaje("Error","La licencia es incorrecta para esta maquina",DialogoCodefac.MENSAJE_INCORRECTO);
-                    return false;
-                }
-            } catch (ValidacionLicenciaExcepcion ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (NoExisteLicenciaException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } 
-        else //Cuando no existe la licencia
-        {
-            //Crear un dialogo si no existe la licencia
-            ValidarLicenciaModel licenciaDialog = new ValidarLicenciaModel(null, true,false);
-            licenciaDialog.setValidacionLicenciaCodefac(validacion);
-            if(validacion.verificarConexionInternet())
-            {            
-                licenciaDialog.setVisible(true);
-                if(licenciaDialog.licenciaCreada)
-                {
-                    return comprobarLicencia(); //volver a verificar la licencia
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
+        try {
+            ParametroCodefacServiceIf servicio=ServiceController.getController().getParametroCodefacServiceIf();
+            String pathBase=servicio.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS).valor;
+            ValidacionLicenciaCodefac validacion = new ValidacionLicenciaCodefac();
+            validacion.setPath(pathBase);
+            
+            if (validacion.verificarExisteLicencia())
             {
-                DialogoCodefac.mensaje("Error","Para activar su producto conéctese a Internet",DialogoCodefac.MENSAJE_INCORRECTO);
-                return false;
+                try {
+                    if(validacion.validar())
+                    {
+                        return true;
+                    }
+                    else
+                    {//Si la licencia es incorrecta abre el dialogo de verificacion
+                        DialogoCodefac.mensaje("Error","La licencia es incorrecta para esta maquina",DialogoCodefac.MENSAJE_INCORRECTO);
+                        return false;
+                    }
+                } catch (ValidacionLicenciaExcepcion ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (NoExisteLicenciaException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
+            else //Cuando no existe la licencia
+            {
+                //Crear un dialogo si no existe la licencia
+                ValidarLicenciaModel licenciaDialog = new ValidarLicenciaModel(null, true,false);
+                licenciaDialog.setValidacionLicenciaCodefac(validacion);
+                if(validacion.verificarConexionInternet())
+                {
+                    licenciaDialog.setVisible(true);
+                    if(licenciaDialog.licenciaCreada)
+                    {
+                        return comprobarLicencia(); //volver a verificar la licencia
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    DialogoCodefac.mensaje("Error","Para activar su producto conéctese a Internet",DialogoCodefac.MENSAJE_INCORRECTO);
+                    return false;
+                }
+            }
+            return false;
+        } catch (RemoteException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
-        
     }
     
     private static List<Perfil> obtenerPerfilesUsuario(Usuario usuario)
