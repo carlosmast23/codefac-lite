@@ -9,10 +9,15 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.main.panel.LoginFormDialog;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
 import java.awt.Frame;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -21,13 +26,13 @@ import javax.swing.JOptionPane;
  */
 public class LoginModel extends LoginFormDialog{
 
-    UsuarioServicio usuarioServicio;
+    UsuarioServicioIf usuarioServicio;
     Usuario usuario;
 
     public LoginModel() {
         super(null,true);
         initListenerBotones();
-        this.usuarioServicio=new UsuarioServicio();
+        this.usuarioServicio=ServiceController.getController().getUsuarioServicioIf();
         
         Image fondoImg = new javax.swing.ImageIcon(getClass().getResource("/img/general/fondoInicial.jpg")).getImage();
         getPanelPrincipal().setBorder(new Fondo2(fondoImg));
@@ -48,15 +53,19 @@ public class LoginModel extends LoginFormDialog{
                 String clave=new String(getTxtClave().getPassword());
                 if(!getTxtUsuario().getText().equals("") && !clave.equals(""))
                 {
-                    usuario=usuarioServicio.login(getTxtUsuario().getText(),clave);
-                    if(usuario!=null)
-                    {
-                        //JOptionPane.showMessageDialog(null,"Usuario correcto");
-                        dispose();
-                    }
-                    else
-                    {
-                        DialogoCodefac.mensaje("Error Login","Datos Incorrectos",DialogoCodefac.MENSAJE_INCORRECTO);
+                    try {
+                        usuario=usuarioServicio.login(getTxtUsuario().getText(),clave);
+                        if(usuario!=null)
+                        {
+                            //JOptionPane.showMessageDialog(null,"Usuario correcto");
+                            dispose();
+                        }
+                        else
+                        {
+                            DialogoCodefac.mensaje("Error Login","Datos Incorrectos",DialogoCodefac.MENSAJE_INCORRECTO);
+                        }
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     
                 }

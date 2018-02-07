@@ -28,6 +28,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEn
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.service.ComprobanteFisicoDisenioService;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteFisicoDisenioServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -109,7 +111,7 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
-        ComprobanteFisicoDisenioService servicio = new ComprobanteFisicoDisenioService();
+        ComprobanteFisicoDisenioServiceIf servicio =ServiceController.getController().getComprobanteFisicoDisenioServiceIf();
         ComprobanteFisicoDisenio comprobante= (ComprobanteFisicoDisenio) getCmbDocumento().getSelectedItem();
         servicio.editar(comprobante);
         DialogoCodefac.mensaje("Correcto","Los datos fueron grabados correctamente",DialogoCodefac.MENSAJE_CORRECTO);
@@ -541,7 +543,7 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
     }*/
     private void cargarDatos() {
         getCmbDocumento().removeAllItems();
-        ComprobanteFisicoDisenioService servicio = new ComprobanteFisicoDisenioService();
+        ComprobanteFisicoDisenioServiceIf servicio = ServiceController.getController().getComprobanteFisicoDisenioServiceIf();
         List<ComprobanteFisicoDisenio> documentos = servicio.obtenerTodos();
         for (ComprobanteFisicoDisenio documento : documentos) {
             //Esto sirve para desasociar la entidad y que no se reflejen los cambios directamente con la base de datos

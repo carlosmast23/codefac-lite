@@ -22,6 +22,11 @@ import ec.com.codesoft.codefaclite.servidor.service.BodegaService;
 import ec.com.codesoft.codefaclite.servidor.service.CompraService;
 import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
 import ec.com.codesoft.codefaclite.servidor.service.KardexService;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
 import es.mityc.firmaJava.ocsp.config.ServidorOcsp;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -137,7 +142,7 @@ public class KardexModel extends KardexPanel{
                 //Date fechaFin=new Date(getCmbFechaFinal().getDate().getTime());
                 Bodega bodega=(Bodega) getCmbBodega().getSelectedItem();
                 
-                KardexService kardexService=new KardexService();
+                KardexServiceIf kardexService=ServiceController.getController().getKardexServiceIf();
                 
                 Map<String,Object> parametrosMap=new HashMap<String, Object>();
                 parametrosMap.put("bodega", bodega);
@@ -191,7 +196,7 @@ public class KardexModel extends KardexPanel{
                     cantidadAcumulada-=kardexDetalle.getCantidad();                    
                     precioTotalAcumulado=precioTotalAcumulado.subtract(kardexDetalle.getPrecioTotal());
                     
-                    FacturacionService servicio=new FacturacionService();
+                    FacturacionServiceIf servicio=ServiceController.getController().getFacturacionServiceIf();
                     Map<String,Object> mapParametros=new HashMap<String,Object>();
                     mapParametros.put("id",kardexDetalle.getReferenciaDocumentoId());
                     Factura factura=servicio.obtenerPorMap(mapParametros).get(0);
@@ -204,7 +209,7 @@ public class KardexModel extends KardexPanel{
                     cantidadAcumulada+=kardexDetalle.getCantidad();
                     precioTotalAcumulado=precioTotalAcumulado.add(kardexDetalle.getPrecioTotal());
                     
-                    CompraService servicio2=new CompraService();
+                    CompraServiceIf servicio2=ServiceController.getController().getCompraServiceIf();
                     Map<String,Object> mapParametros2=new HashMap<String,Object>();
                     mapParametros2.put("id",kardexDetalle.getReferenciaDocumentoId());
                     Compra compra=servicio2.obtenerPorMap(mapParametros2).get(0);
@@ -288,7 +293,7 @@ public class KardexModel extends KardexPanel{
         
         
         getCmbBodega().removeAllItems();
-        BodegaService servicioBodega = new BodegaService();
+        BodegaServiceIf servicioBodega = ServiceController.getController().getBodegaServiceIf();
         List<Bodega> bodegas = servicioBodega.obtenerTodos();
         for (Bodega bodega : bodegas) {
             getCmbBodega().addItem(bodega);

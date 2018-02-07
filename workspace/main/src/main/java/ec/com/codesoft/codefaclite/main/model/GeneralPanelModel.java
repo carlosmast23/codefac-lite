@@ -43,6 +43,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.service.AccesoDirectoService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import ec.com.codesoft.ejemplo.utilidades.imagen.UtilidadImagen;
 import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
@@ -83,6 +86,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -259,23 +263,27 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     
     private void grabarDatosSalir()
     {
-        ParametroCodefacService servicio=new ParametroCodefacService();
+        ParametroCodefacServiceIf servicio=ServiceController.getController().getParametroCodefacServiceIf();
         //Grabar el celular si es distinto de vacio
         if(!widgetVirtualMall.getTxtCelular().equals(""))
         {
-            ParametroCodefac parametro=servicio.getParametroByNombre(ParametroCodefac.CELULAR_VIRTUAL_MALL);
-            //Si no existe el parametro la crea en la base de datos
-            if(parametro==null)
-            {
-                parametro=new ParametroCodefac();
-                parametro.setNombre(ParametroCodefac.CELULAR_VIRTUAL_MALL);
-                parametro.setValor(widgetVirtualMall.getTxtCelular().getText());
-                servicio.grabar(parametro);
-            }
-            else
-            {
-                parametro.setValor(widgetVirtualMall.getTxtCelular().getText());
-                servicio.editar(parametro);
+            try {
+                ParametroCodefac parametro=servicio.getParametroByNombre(ParametroCodefac.CELULAR_VIRTUAL_MALL);
+                //Si no existe el parametro la crea en la base de datos
+                if(parametro==null)
+                {
+                    parametro=new ParametroCodefac();
+                    parametro.setNombre(ParametroCodefac.CELULAR_VIRTUAL_MALL);
+                    parametro.setValor(widgetVirtualMall.getTxtCelular().getText());
+                    servicio.grabar(parametro);
+                }
+                else
+                {
+                    parametro.setValor(widgetVirtualMall.getTxtCelular().getText());
+                    servicio.editar(parametro);
+                }
+            } catch (RemoteException ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         
@@ -302,7 +310,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             //Solo establecer fondos personalizados para usuarios pro
             if(sessionCodefac.getTipoLicenciaEnum().equals(TipoLicenciaEnum.PRO))
             {
-                ParametroCodefacService servicio=new ParametroCodefacService();
+                ParametroCodefacServiceIf servicio=ServiceController.getController().getParametroCodefacServiceIf();
                 Map<String,ParametroCodefac> map=servicio.getParametrosMap();
                 if(map!=null)
                 {
@@ -1577,7 +1585,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         cargarPublicidad();
         URL url=null;
         Map<String,Object> mapBuscar;
-        AccesoDirectoService servicio=new AccesoDirectoService();
+        AccesoDirectoServiceIf servicio=ServiceController.getController().getAccesoDirectoServiceIf();
         
                 /***
          * Agregar el widget de virtualMall
@@ -1632,7 +1640,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             @Override
             public void grabarNuevaPosicion(Point nuevaPosicion) {
                 Map<String, Object> mapBuscar;
-                AccesoDirectoService servicio = new AccesoDirectoService();
+                AccesoDirectoServiceIf servicio = ServiceController.getController().getAccesoDirectoServiceIf();
                 mapBuscar = new HashMap<>();
                 mapBuscar.put("nombre","WidgetVentasDiarias");
                 AccesoDirecto acceso=servicio.obtenerPorMap(mapBuscar).get(0);
@@ -1940,14 +1948,18 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 boolean respuesta=DialogoCodefac.dialogoPregunta("Confirmar","Para actualizar la licencia debe cerrar todas las ventas , desea continuar?",DialogoCodefac.MENSAJE_ADVERTENCIA);
                 if(respuesta)
                 {
-                    dispose();
-                    ParametroCodefacService servicio=new ParametroCodefacService();
-                    String pathBase = servicio.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS).valor;
-                    ValidacionLicenciaCodefac validacion = new ValidacionLicenciaCodefac();
-                    validacion.setPath(pathBase);
-                    ValidarLicenciaModel dialogo=new ValidarLicenciaModel(null,true,true);
-                    dialogo.validacionLicenciaCodefac=validacion;
-                    dialogo.setVisible(true);
+                    try {
+                        dispose();
+                        ParametroCodefacServiceIf servicio=ServiceController.getController().getParametroCodefacServiceIf();
+                        String pathBase = servicio.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS).valor;
+                        ValidacionLicenciaCodefac validacion = new ValidacionLicenciaCodefac();
+                        validacion.setPath(pathBase);
+                        ValidarLicenciaModel dialogo=new ValidarLicenciaModel(null,true,true);
+                        dialogo.validacionLicenciaCodefac=validacion;
+                        dialogo.setVisible(true);
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     
                 }
             }
@@ -1979,14 +1991,18 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
     private void cargarDatosAdicionales() {
         
-        /**
-         * Setear el parametro del celular si ya fue ingresado alguna vez
-         */
-        ParametroCodefacService servicio=new ParametroCodefacService();
-        ParametroCodefac parametro=servicio.getParametroByNombre(ParametroCodefac.CELULAR_VIRTUAL_MALL);
-        if(parametro!=null)
-        {
-            widgetVirtualMall.getTxtCelular().setText(parametro.getValor());
+        try {
+            /**
+             * Setear el parametro del celular si ya fue ingresado alguna vez
+             */
+            ParametroCodefacServiceIf servicio=ServiceController.getController().getParametroCodefacServiceIf();
+            ParametroCodefac parametro=servicio.getParametroByNombre(ParametroCodefac.CELULAR_VIRTUAL_MALL);
+            if(parametro!=null)
+            {
+                widgetVirtualMall.getTxtCelular().setText(parametro.getValor());
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
                 
@@ -2028,7 +2044,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         @Override
         public void grabarNuevaPosicion(Point nuevaPosicion) {
             Map<String, Object> mapBuscar;
-            AccesoDirectoService servicio = new AccesoDirectoService();
+            AccesoDirectoServiceIf servicio = ServiceController.getController().getAccesoDirectoServiceIf();
 
             mapBuscar = new HashMap<>();
             mapBuscar.put("nombre", ventanaClase.getName());

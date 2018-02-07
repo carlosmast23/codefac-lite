@@ -50,9 +50,8 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
     public void iniciar() throws ExcepcionCodefacLite {
         iniciarValores();
         agregarListenerBotones();
-        agregarListenerCombo();
-        
-        this.servicioProductoProveedor = ServiceController.getController().getProductoProveedorServiceIf();
+        agregarListenerCombo();     
+        this.servicioProductoProveedor=ServiceController.getController().getProductoProveedorServiceIf();
     }
 
     @Override
@@ -188,7 +187,7 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
         Map<String,Object> parametros=new HashMap<String,Object>();
         parametros.put("proveedor",persona);
         
-        ProductoProveedorService servicio=new ProductoProveedorService();
+        ProductoProveedorServiceIf servicio=ServiceController.getController().getProductoProveedorServiceIf();
         List<ProductoProveedor> lista= servicio.obtenerPorMap(parametros);
         
         for (ProductoProveedor productoProveedor : lista) {

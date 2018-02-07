@@ -30,11 +30,15 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NotaCreditoEnumEstado;
 import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
 import ec.com.codesoft.codefaclite.servidor.service.NotaCreditoService;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,6 +46,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
@@ -331,16 +337,20 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
                 switch(comprobante)
                 {
                     case FACTURA:
-                        FacturacionService servicio=new FacturacionService();                        
+                        FacturacionServiceIf servicio=ServiceController.getController().getFacturacionServiceIf();                        
                         List<Factura> facturas=servicio.obtenerPorMap(map);
                         for (Factura factura : facturas) {
-                            factura.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
-                            servicio.editar(factura);
+                    try {
+                        factura.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
+                        servicio.editar(factura);
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(UtilidadComprobanteModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                         }
                         break;
                         
                     case NOTA_CREDITO:
-                        NotaCreditoService servicioNotaCredito=new NotaCreditoService();
+                        NotaCreditoServiceIf servicioNotaCredito=ServiceController.getController().getNotaCreditoServiceIf();
                         List<NotaCredito> notasCredito=servicioNotaCredito.obtenerPorMap(map);
                         for (NotaCredito notaCredito : notasCredito) {
                             notaCredito.setClaveAcceso(NotaCreditoEnumEstado.TERMINADO.getEstado());

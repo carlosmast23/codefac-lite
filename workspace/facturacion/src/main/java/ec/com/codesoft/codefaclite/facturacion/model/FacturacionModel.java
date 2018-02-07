@@ -52,6 +52,9 @@ import ec.com.codesoft.codefaclite.servidor.service.ComprobanteFisicoDisenioServ
 import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
@@ -65,6 +68,7 @@ import java.beans.PropertyChangeListener;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -73,6 +77,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -389,195 +395,209 @@ public class FacturacionModel extends FacturacionPanel {
     @Override
     public void grabar() throws ExcepcionCodefacLite {
 
-        if (!banderaFormaPago) {
-            throw new ExcepcionCodefacLite("Formas de pago erroneas");
-        }
-
-        if (factura.getCliente() == null) {
-            DialogoCodefac.mensaje("Alerta", "Necesita seleccionar un cliente", DialogoCodefac.MENSAJE_ADVERTENCIA);
-            throw new ExcepcionCodefacLite("Necesita seleccionar un Cliente");
-        }
-
-        if (factura.getDetalles().isEmpty()) {
-            DialogoCodefac.mensaje("Alerta", "No se puede facturar sin detalles", DialogoCodefac.MENSAJE_ADVERTENCIA);
-            throw new ExcepcionCodefacLite("Necesita seleccionar detalles ");
-        }
-
-        Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea facturar?", DialogoCodefac.MENSAJE_ADVERTENCIA);
-        if (!respuesta) {
-            throw new ExcepcionCodefacLite("Cancelacion usuario");
-        }
-
-        Factura facturaProcesando; //referencia que va a tener la factura procesada para que los listener no pierdan la referencia a la variable del metodo. 
-
-        FacturacionService servicio = new FacturacionService();
-        setearValoresDefaultFactura();
-        servicio.grabar(factura);
-        
-        facturaProcesando = factura;
-
-        DialogoCodefac.mensaje("Correcto", "La factura se grabo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-        
-        //Si la factura en manual no continua el proceso de facturacion electronica
-        if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(TipoFacturacionEnumEstado.NORMAL.getLetra()))
-        {
-            DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();
-
-            InputStream reporteOriginal=null;
-            if(documentoEnum.NOTA_VENTA.equals(documentoEnum))
-            {
-                reporteOriginal = RecursoCodefac.JASPER_COMPROBANTES_FISICOS.getResourceInputStream("nota_venta.jrxml");
-            }
-            else
-            {
-                reporteOriginal = RecursoCodefac.JASPER_COMPROBANTES_FISICOS.getResourceInputStream("factura_fisica.jrxml");
-            }
-           
-            ManagerReporteFacturaFisica manager = new ManagerReporteFacturaFisica(reporteOriginal);
-            ComprobanteFisicoDisenioService servicioComprobanteDisenio=new ComprobanteFisicoDisenioService();
-            Map<String,Object> parametroComprobanteMap=new HashMap<String,Object>();
-            parametroComprobanteMap.put("codigoDocumento",documentoEnum.getCodigo());
-            ComprobanteFisicoDisenio documento= servicioComprobanteDisenio.obtenerPorMap(parametroComprobanteMap).get(0);
-            manager.setearNuevosValores(documento);
-            InputStream reporteNuevo = manager.generarNuevoDocumento();
-
-            Map<String, Object> parametros = getParametroReporte(documentoEnum);
-            
-            //Llenar los datos de los detalles
-            List<DetalleFacturaFisicaData> detalles = new ArrayList<DetalleFacturaFisicaData>();
-                       
-            for (FacturaDetalle detalleFactura : factura.getDetalles()) {
-                DetalleFacturaFisicaData detalle = new DetalleFacturaFisicaData();
-                detalle.setCantidad(detalleFactura.getCantidad()+"");
-                detalle.setDescripcion(detalleFactura.getDescripcion());
-                detalle.setValorTotal(detalleFactura.getTotal()+"");
-                detalle.setValorUnitario(detalleFactura.getPrecioUnitario()+"");                
-                detalles.add(detalle);
+        try {
+            if (!banderaFormaPago) {
+                throw new ExcepcionCodefacLite("Formas de pago erroneas");
             }
             
-            ReporteCodefac.generarReporteInternalFrame(reporteNuevo, parametros, detalles, panelPadre, "Muestra Previa");
-
-            return ;
-        }
-        
-        //Despues de implemetar el metodo de grabar
-        FacturacionElectronica facturaElectronica = new FacturacionElectronica(factura, session, this.panelPadre);
-        facturaElectronica.setFactura(factura);
-        facturaElectronica.setMapInfoAdicional(datosAdicionales);
-        //facturaElectronica.setFormaPagos();
-
-
-        ComprobanteElectronicoService servicioElectronico = facturaElectronica.getServicio();
-
-        servicioElectronico.addActionListerComprobanteElectronico(new ListenerComprobanteElectronico() {
-
-            private MonitorComprobanteData monitorData;
-
-            @Override
-            public void termino() {
-                monitorData.getBarraProgreso().setForeground(Color.GREEN);
-                monitorData.getBtnAbrir().setEnabled(true);
-                monitorData.getBtnCerrar().setEnabled(true);
-                monitorData.getBtnAbrir().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        //String path = facturaElectronica.getServicio().getPathRide();
-                        facturaElectronica.cargarDatosRecursos();
-                        JasperPrint print = facturaElectronica.getServicio().getPrintJasper();
-                        panelPadre.crearReportePantalla(print, facturaProcesando.getPreimpreso());
-                    }
-                });
-
-                /**
-                 * Seteando datos adicionales de la factura
-                 */
-                facturaProcesando.setClaveAcceso(facturaElectronica.getServicio().getClaveAcceso());
-                facturaProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
-                servicio.editar(facturaProcesando);
-
+            if (factura.getCliente() == null) {
+                DialogoCodefac.mensaje("Alerta", "Necesita seleccionar un cliente", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                throw new ExcepcionCodefacLite("Necesita seleccionar un Cliente");
             }
-
-            @Override
-            public void procesando(int etapa, ClaveAcceso clave) {
-                if (etapa == ComprobanteElectronicoService.ETAPA_GENERAR) {
-                    monitorData.getBarraProgreso().setValue(20);
-                    facturaProcesando.setClaveAcceso(clave.clave);
-                }
-
-                if (etapa == ComprobanteElectronicoService.ETAPA_PRE_VALIDAR) {
-                    monitorData.getBarraProgreso().setValue(30);
-                }
-
-                if (etapa == ComprobanteElectronicoService.ETAPA_FIRMAR) {
-                    monitorData.getBarraProgreso().setValue(50);
-                }
-
-                if (etapa == ComprobanteElectronicoService.ETAPA_ENVIAR) {
-                    monitorData.getBarraProgreso().setValue(70);
-                }
-
-                if (etapa == ComprobanteElectronicoService.ETAPA_AUTORIZAR) {
-                    monitorData.getBarraProgreso().setValue(90);
-                    facturaProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
-                }
-
-                if (etapa == ComprobanteElectronicoService.ETAPA_RIDE) {
-                    monitorData.getBarraProgreso().setValue(95);
-                    facturaProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
-                }
-
-                if (etapa == ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE) {
-                    monitorData.getBarraProgreso().setValue(100);
-                    facturaProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
-                }
+            
+            if (factura.getDetalles().isEmpty()) {
+                DialogoCodefac.mensaje("Alerta", "No se puede facturar sin detalles", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                throw new ExcepcionCodefacLite("Necesita seleccionar detalles ");
             }
-
-            @Override
-            public void iniciado(ComprobanteElectronico comprobante) {
-                monitorData = MonitorComprobanteModel.getInstance().agregarComprobante();
-                monitorData.getLblPreimpreso().setText(factura.getPreimpreso() + " ");
-                monitorData.getBtnAbrir().setEnabled(false);
-                monitorData.getBtnReporte().setEnabled(false);
-                monitorData.getBtnCerrar().setEnabled(false);
-                monitorData.getBarraProgreso().setString(comprobante.getInformacionTributaria().getPreimpreso());
-                monitorData.getBarraProgreso().setStringPainted(true);
-                MonitorComprobanteModel.getInstance().mostrar();
-
-                facturaProcesando.setEstado(FacturaEnumEstado.SIN_AUTORIZAR.getEstado());
-
+            
+            Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea facturar?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            if (!respuesta) {
+                throw new ExcepcionCodefacLite("Cancelacion usuario");
             }
-
-            @Override
-            public void error(ComprobanteElectronicoException cee) {
-                monitorData.getBtnReporte().setEnabled(true);
-                monitorData.getBtnCerrar().setEnabled(true);
-                monitorData.getBtnReporte().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        JOptionPane.showMessageDialog(null, "Etapa: " + cee.getEtapa() + "\n" + cee.getMessage());
+            
+            Factura facturaProcesando; //referencia que va a tener la factura procesada para que los listener no pierdan la referencia a la variable del metodo.
+            
+            FacturacionServiceIf servicio = ServiceController.getController().getFacturacionServiceIf();
+            setearValoresDefaultFactura();
+            servicio.grabar(factura);
+            
+            facturaProcesando = factura;
+            
+            DialogoCodefac.mensaje("Correcto", "La factura se grabo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+            
+            //Si la factura en manual no continua el proceso de facturacion electronica
+            if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(TipoFacturacionEnumEstado.NORMAL.getLetra()))
+            {
+                DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();
+                
+                InputStream reporteOriginal=null;
+                if(documentoEnum.NOTA_VENTA.equals(documentoEnum))
+                {
+                    reporteOriginal = RecursoCodefac.JASPER_COMPROBANTES_FISICOS.getResourceInputStream("nota_venta.jrxml");
+                }
+                else
+                {
+                    reporteOriginal = RecursoCodefac.JASPER_COMPROBANTES_FISICOS.getResourceInputStream("factura_fisica.jrxml");
+                }
+                
+                ManagerReporteFacturaFisica manager = new ManagerReporteFacturaFisica(reporteOriginal);
+                ComprobanteFisicoDisenioService servicioComprobanteDisenio=new ComprobanteFisicoDisenioService();
+                Map<String,Object> parametroComprobanteMap=new HashMap<String,Object>();
+                parametroComprobanteMap.put("codigoDocumento",documentoEnum.getCodigo());
+                ComprobanteFisicoDisenio documento= servicioComprobanteDisenio.obtenerPorMap(parametroComprobanteMap).get(0);
+                manager.setearNuevosValores(documento);
+                InputStream reporteNuevo = manager.generarNuevoDocumento();
+                
+                Map<String, Object> parametros = getParametroReporte(documentoEnum);
+                
+                //Llenar los datos de los detalles
+                List<DetalleFacturaFisicaData> detalles = new ArrayList<DetalleFacturaFisicaData>();
+                
+                for (FacturaDetalle detalleFactura : factura.getDetalles()) {
+                    DetalleFacturaFisicaData detalle = new DetalleFacturaFisicaData();
+                    detalle.setCantidad(detalleFactura.getCantidad()+"");
+                    detalle.setDescripcion(detalleFactura.getDescripcion());
+                    detalle.setValorTotal(detalleFactura.getTotal()+"");
+                    detalle.setValorUnitario(detalleFactura.getPrecioUnitario()+"");
+                    detalles.add(detalle);
+                }
+                
+                ReporteCodefac.generarReporteInternalFrame(reporteNuevo, parametros, detalles, panelPadre, "Muestra Previa");
+                
+                return ;
+            }
+            
+            //Despues de implemetar el metodo de grabar
+            FacturacionElectronica facturaElectronica = new FacturacionElectronica(factura, session, this.panelPadre);
+            facturaElectronica.setFactura(factura);
+            facturaElectronica.setMapInfoAdicional(datosAdicionales);
+            //facturaElectronica.setFormaPagos();
+            
+            
+            ComprobanteElectronicoService servicioElectronico = facturaElectronica.getServicio();
+            
+            servicioElectronico.addActionListerComprobanteElectronico(new ListenerComprobanteElectronico() {
+                
+                private MonitorComprobanteData monitorData;
+                
+                @Override
+                public void termino() {
+                    try {
+                        monitorData.getBarraProgreso().setForeground(Color.GREEN);
+                        monitorData.getBtnAbrir().setEnabled(true);
+                        monitorData.getBtnCerrar().setEnabled(true);
                         monitorData.getBtnAbrir().addActionListener(new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
+                                //String path = facturaElectronica.getServicio().getPathRide();
+                                facturaElectronica.cargarDatosRecursos();
                                 JasperPrint print = facturaElectronica.getServicio().getPrintJasper();
                                 panelPadre.crearReportePantalla(print, facturaProcesando.getPreimpreso());
                             }
                         });
+                        
+                        /**
+                         * Seteando datos adicionales de la factura
+                         */
+                        facturaProcesando.setClaveAcceso(facturaElectronica.getServicio().getClaveAcceso());
+                        facturaProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
+                        servicio.editar(facturaProcesando);
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                });
-
-                if (cee.getTipoError().equals(ComprobanteElectronicoException.ERROR_ENVIO_CLIENTE)) {
-                    monitorData.getBtnAbrir().setEnabled(true);
-                    monitorData.getBarraProgreso().setForeground(Color.YELLOW);
-                } else {
-                    monitorData.getBarraProgreso().setForeground(Color.ORANGE);
+                    
                 }
-
-                servicio.editar(facturaProcesando);
-
-            }
-        });
-
-        facturaElectronica.procesarComprobante();//listo se encarga de procesar el comprobante
+                
+                @Override
+                public void procesando(int etapa, ClaveAcceso clave) {
+                    if (etapa == ComprobanteElectronicoService.ETAPA_GENERAR) {
+                        monitorData.getBarraProgreso().setValue(20);
+                        facturaProcesando.setClaveAcceso(clave.clave);
+                    }
+                    
+                    if (etapa == ComprobanteElectronicoService.ETAPA_PRE_VALIDAR) {
+                        monitorData.getBarraProgreso().setValue(30);
+                    }
+                    
+                    if (etapa == ComprobanteElectronicoService.ETAPA_FIRMAR) {
+                        monitorData.getBarraProgreso().setValue(50);
+                    }
+                    
+                    if (etapa == ComprobanteElectronicoService.ETAPA_ENVIAR) {
+                        monitorData.getBarraProgreso().setValue(70);
+                    }
+                    
+                    if (etapa == ComprobanteElectronicoService.ETAPA_AUTORIZAR) {
+                        monitorData.getBarraProgreso().setValue(90);
+                        facturaProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
+                    }
+                    
+                    if (etapa == ComprobanteElectronicoService.ETAPA_RIDE) {
+                        monitorData.getBarraProgreso().setValue(95);
+                        facturaProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
+                    }
+                    
+                    if (etapa == ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE) {
+                        monitorData.getBarraProgreso().setValue(100);
+                        facturaProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
+                    }
+                }
+                
+                @Override
+                public void iniciado(ComprobanteElectronico comprobante) {
+                    monitorData = MonitorComprobanteModel.getInstance().agregarComprobante();
+                    monitorData.getLblPreimpreso().setText(factura.getPreimpreso() + " ");
+                    monitorData.getBtnAbrir().setEnabled(false);
+                    monitorData.getBtnReporte().setEnabled(false);
+                    monitorData.getBtnCerrar().setEnabled(false);
+                    monitorData.getBarraProgreso().setString(comprobante.getInformacionTributaria().getPreimpreso());
+                    monitorData.getBarraProgreso().setStringPainted(true);
+                    MonitorComprobanteModel.getInstance().mostrar();
+                    
+                    facturaProcesando.setEstado(FacturaEnumEstado.SIN_AUTORIZAR.getEstado());
+                    
+                }
+                
+                @Override
+                public void error(ComprobanteElectronicoException cee) {
+                    try {
+                        monitorData.getBtnReporte().setEnabled(true);
+                        monitorData.getBtnCerrar().setEnabled(true);
+                        monitorData.getBtnReporte().addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                JOptionPane.showMessageDialog(null, "Etapa: " + cee.getEtapa() + "\n" + cee.getMessage());
+                                monitorData.getBtnAbrir().addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        JasperPrint print = facturaElectronica.getServicio().getPrintJasper();
+                                        panelPadre.crearReportePantalla(print, facturaProcesando.getPreimpreso());
+                                    }
+                                });
+                            }
+                        });
+                        
+                        if (cee.getTipoError().equals(ComprobanteElectronicoException.ERROR_ENVIO_CLIENTE)) {
+                            monitorData.getBtnAbrir().setEnabled(true);
+                            monitorData.getBarraProgreso().setForeground(Color.YELLOW);
+                        } else {
+                            monitorData.getBarraProgreso().setForeground(Color.ORANGE);
+                        }
+                        
+                        servicio.editar(facturaProcesando);
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                }
+            });
+            
+            facturaElectronica.procesarComprobante();//listo se encarga de procesar el comprobante
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public Map<String, Object> getParametroReporte(DocumentoEnum documento)
@@ -628,10 +648,14 @@ public class FacturacionModel extends FacturacionPanel {
                     
                     boolean respuesta = DialogoCodefac.dialogoPregunta("Advertencia", "Esta seguro que desea eliminar la factura? ", DialogoCodefac.MENSAJE_ADVERTENCIA);
                     if (respuesta) {
-                        FacturacionService servicio = new FacturacionService();
-                        servicio.eliminarFactura(factura);
-                        DialogoCodefac.mensaje("Exitoso", "La factura se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-                        getLblEstadoFactura().setText(FacturaEnumEstado.ELIMINADO.getNombre());
+                        try {
+                            FacturacionServiceIf servicio = ServiceController.getController().getFacturacionServiceIf();
+                            servicio.eliminarFactura(factura);
+                            DialogoCodefac.mensaje("Exitoso", "La factura se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+                            getLblEstadoFactura().setText(FacturaEnumEstado.ELIMINADO.getNombre());
+                        } catch (RemoteException ex) {
+                            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                 } else {
                     DialogoCodefac.mensaje("Alerta", "Solo se pueden eliminar facturas no autorizadas", DialogoCodefac.MENSAJE_ADVERTENCIA);
@@ -689,7 +713,7 @@ public class FacturacionModel extends FacturacionPanel {
         getLblDireccion().setText(session.getEmpresa().getDireccion());
         getLblTelefonos().setText(session.getEmpresa().getTelefonos());
         getLblNombreComercial().setText(session.getEmpresa().getNombreLegal());
-        FacturacionService servicio = new FacturacionService();
+        FacturacionServiceIf servicio = ServiceController.getController().getFacturacionServiceIf();
         //getLblSecuencial().setText(servicio.getPreimpresoSiguiente());
         getLblEstadoFactura().setText("Procesando");
 

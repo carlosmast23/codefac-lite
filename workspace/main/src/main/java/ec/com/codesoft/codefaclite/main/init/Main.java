@@ -64,7 +64,9 @@ import ec.com.codesoft.codefaclite.servidor.service.EmpresaService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
 import ec.com.codesoft.codefaclite.servidor.service.PerfilServicio;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServicioIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
@@ -138,7 +140,7 @@ public class Main {
          * Crear la session y cargar otro datos de la empresa
          */
         SessionCodefac session=new SessionCodefac();        
-        EmpresaService empresaService = new EmpresaService();
+        EmpresaServiceIf empresaService = ServiceController.getController().getEmpresaServiceIf();
         List<Empresa> empresaList=empresaService.obtenerTodos();
         
         if(empresaList!=null && empresaList.size()>0)
@@ -321,20 +323,24 @@ public class Main {
     
     private static void grabarFechaRevision(ParametroCodefac parametroFechaValidacion,boolean crear)
     {
-        if(crear)
-        {
-            parametroFechaValidacion=new ParametroCodefac();
-            parametroFechaValidacion.setNombre(ParametroCodefac.ULTIMA_FECHA_VALIDACION);
+        try {
+            if(crear)
+            {
+                parametroFechaValidacion=new ParametroCodefac();
+                parametroFechaValidacion.setNombre(ParametroCodefac.ULTIMA_FECHA_VALIDACION);
+            }
+            
+            ParametroCodefacServiceIf servicio=ServiceController.getController().getParametroCodefacServiceIf();
+            SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+            Date fechaHoy = UtilidadesFecha.getFechaHoy();
+            parametroFechaValidacion.setValor(format.format(fechaHoy));
+            if(crear)
+                servicio.grabar(parametroFechaValidacion);
+            else
+                servicio.editar(parametroFechaValidacion);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        ParametroCodefacServiceIf servicio=ServiceController.getController().getParametroCodefacServiceIf();
-        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-        Date fechaHoy = UtilidadesFecha.getFechaHoy();
-        parametroFechaValidacion.setValor(format.format(fechaHoy));
-        if(crear)
-            servicio.grabar(parametroFechaValidacion);
-        else
-            servicio.editar(parametroFechaValidacion);
     }
     
     /**
@@ -602,8 +608,13 @@ public class Main {
     
     private static List<Perfil> obtenerPerfilesUsuario(Usuario usuario)
     {
-        PerfilServicio servicio=new PerfilServicio();
-        return servicio.obtenerPerfilesPorUsuario(usuario);
+        try {
+            PerfilServicioIf servicio=ServiceController.getController().getPerfilServicioIf();
+            return servicio.obtenerPerfilesPorUsuario(usuario);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 }
 

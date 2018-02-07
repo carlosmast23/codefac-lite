@@ -13,6 +13,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.BodegaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.service.BodegaService;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -21,6 +23,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,13 +35,13 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bodega> {
 
     private Bodega bodega;
-    private BodegaService bodegaService;
+    private BodegaServiceIf bodegaService;
     private JFileChooser jFileChooser;
     private Path origen = null;
     private Path destino = null;
 
     public BodegaModel() {
-        bodegaService = new BodegaService();
+        bodegaService = ServiceController.getController().getBodegaServiceIf();
 
         jFileChooser = new JFileChooser();
         jFileChooser.setDialogTitle("Elegir archivo");
@@ -56,6 +59,8 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite("Error al grabar");
+        } catch (RemoteException ex) {
+            Logger.getLogger(BodegaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -81,20 +86,28 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
 
     @Override
     public void editar() throws ExcepcionCodefacLite {
-        setearValoresBodega(bodega);
-        bodegaService.editar(bodega);
-        DialogoCodefac.mensaje("Datos correctos", "La bodega se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+        try {
+            setearValoresBodega(bodega);
+            bodegaService.editar(bodega);
+            DialogoCodefac.mensaje("Datos correctos", "La bodega se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+        } catch (RemoteException ex) {
+            Logger.getLogger(BodegaModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite {
         if (estadoFormulario.equals(GeneralPanelInterface.ESTADO_EDITAR)) {
-            Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea eliminar la bodega?", DialogoCodefac.MENSAJE_ADVERTENCIA);
-            if (!respuesta) {
-                throw new ExcepcionCodefacLite("Cancelacion bodega");
+            try {
+                Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea eliminar la bodega?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                if (!respuesta) {
+                    throw new ExcepcionCodefacLite("Cancelacion bodega");
+                }
+                bodegaService.eliminar(bodega);
+                DialogoCodefac.mensaje("Datos correctos", "La bodega se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+            } catch (RemoteException ex) {
+                Logger.getLogger(BodegaModel.class.getName()).log(Level.SEVERE, null, ex);
             }
-            bodegaService.eliminar(bodega);
-            DialogoCodefac.mensaje("Datos correctos", "La bodega se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         }
     }
 
