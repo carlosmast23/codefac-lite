@@ -24,9 +24,13 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidor.service.BodegaService;
 import ec.com.codesoft.codefaclite.servidor.service.KardexService;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -70,7 +74,7 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
         else 
         {
             try {
-                KardexService kardexService=new KardexService();
+                KardexServiceIf kardexService=ServiceController.getController().getKardexServiceIf();
                 Bodega bodega=(Bodega) getCmbBodega().getSelectedItem();
                 String accion=getCmbAccion().getSelectedItem().toString();
                 Integer cantidad=Integer.parseInt(getTxtCantidad().getText());
@@ -79,9 +83,12 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
                 
                 kardexService.IngresoEgresoInventarioEnsamble(bodega, productoEnsamble, cantidad, kardexList, ingreso);
                 DialogoCodefac.mensaje("Correcto", "Sus datos fueron grabados correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-            } catch (ServicioCodefacException ex) {
-                DialogoCodefac.mensaje("Error", "Existe un error en los datos", DialogoCodefac.MENSAJE_INCORRECTO);
+            //} catch (ServicioCodefacException ex) {
+            //    DialogoCodefac.mensaje("Error", "Existe un error en los datos", DialogoCodefac.MENSAJE_INCORRECTO);
+            //    Logger.getLogger(InventarioEnsambleModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
                 Logger.getLogger(InventarioEnsambleModel.class.getName()).log(Level.SEVERE, null, ex);
+                DialogoCodefac.mensaje("Error", "Existe un error en los datos", DialogoCodefac.MENSAJE_INCORRECTO);
             }
         }
     }
@@ -146,7 +153,7 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
     private void cargarValoresIniciales() {
         //Cargar las bodegas disponibles
         getCmbBodega().removeAllItems();
-        BodegaService servicioBodega = new BodegaService();
+        BodegaServiceIf servicioBodega = ServiceController.getController().getBodegaServiceIf();
         List<Bodega> bodegas = servicioBodega.obtenerTodos();
         for (Bodega bodega : bodegas) {
             getCmbBodega().addItem(bodega);
@@ -163,18 +170,22 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
                 buscarDialogo.setVisible(true);
                 productoEnsamble = (Producto) buscarDialogo.getResultado();
                 if (productoEnsamble != null) {
-                    getTxtEnsamble().setText(productoEnsamble.getNombre());
-                    //Buscar el Kardex o crear un Kardex nuevo si no existes
-                    KardexService kardexService = new KardexService();
-                    Bodega bodega = (Bodega) getCmbBodega().getSelectedItem();
-                    Kardex kardex = kardexService.buscarKardexPorProductoyBodega(bodega, productoEnsamble);
-                    if(kardex!=null)
-                    {
-                        getLblStockActual().setText(kardex.getStock()+"");
-                    }
-                    else
-                    {
-                       getLblStockActual().setText("0");
+                    try {
+                        getTxtEnsamble().setText(productoEnsamble.getNombre());
+                        //Buscar el Kardex o crear un Kardex nuevo si no existes
+                        KardexServiceIf kardexService = ServiceController.getController().getKardexServiceIf();
+                        Bodega bodega = (Bodega) getCmbBodega().getSelectedItem();
+                        Kardex kardex = kardexService.buscarKardexPorProductoyBodega(bodega, productoEnsamble);
+                        if(kardex!=null)
+                        {
+                            getLblStockActual().setText(kardex.getStock()+"");
+                        }
+                        else
+                        {
+                            getLblStockActual().setText("0");
+                        }
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(InventarioEnsambleModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }
@@ -217,50 +228,54 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
         
         for(ProductoEnsamble componenteProducto: productoEnsamble.getDetallesEnsamble())
         {
-            Vector<String> fila=new Vector<String>();
-            Integer cantidadProducto=componenteProducto.getCantidad();
-            
-            Producto componente=componenteProducto.getComponenteEnsamble();
-            //Map<String,Object> mapParametros=new HashMap<String,Object>();
-            //mapParametros.put("producto",componente);
-            //mapParametros.put("bodega",bodega);
-            KardexService servicioKardex=new KardexService();
-            Kardex kardexComponente= servicioKardex.buscarKardexPorProductoyBodega(bodega,componente);
-            if(kardexComponente!=null)
-            {
-                Integer cantidadTotal=cantidadEnsamble*cantidadProducto;
-                //Kardex kardexComponente=listaKardex.get(0);
-                //Este paso lo hago porque cuando seteo un valor a una entidad cuando esta asociado automaticamente se refleja en la base de datos
-                ServiceAbstract.desasociarEntidadRecursivo(kardexComponente);
+            try {
+                Vector<String> fila=new Vector<String>();
+                Integer cantidadProducto=componenteProducto.getCantidad();
                 
-                if(accion.equals(InventarioEnsamblePanel.OPCION_AGREGAR))
+                Producto componente=componenteProducto.getComponenteEnsamble();
+                //Map<String,Object> mapParametros=new HashMap<String,Object>();
+                //mapParametros.put("producto",componente);
+                //mapParametros.put("bodega",bodega);
+                KardexServiceIf servicioKardex=ServiceController.getController().getKardexServiceIf();
+                Kardex kardexComponente= servicioKardex.buscarKardexPorProductoyBodega(bodega,componente);
+                if(kardexComponente!=null)
                 {
-                    kardexComponente.setReserva(kardexComponente.getReserva()+cantidadTotal);
-                    kardexComponente.setStock(kardexComponente.getStock()-cantidadTotal);
+                    Integer cantidadTotal=cantidadEnsamble*cantidadProducto;
+                    //Kardex kardexComponente=listaKardex.get(0);
+                    //Este paso lo hago porque cuando seteo un valor a una entidad cuando esta asociado automaticamente se refleja en la base de datos
+                    ServiceAbstract.desasociarEntidadRecursivo(kardexComponente);
+                    
+                    if(accion.equals(InventarioEnsamblePanel.OPCION_AGREGAR))
+                    {
+                        kardexComponente.setReserva(kardexComponente.getReserva()+cantidadTotal);
+                        kardexComponente.setStock(kardexComponente.getStock()-cantidadTotal);
+                    }
+                    else
+                    {
+                        kardexComponente.setReserva(kardexComponente.getReserva() - cantidadTotal);
+                        kardexComponente.setStock(kardexComponente.getStock() + cantidadTotal);
+                    }
+                    
+                    //Agregar el detalle de kardex
+                    KardexDetalle kardexDetalle=new KardexDetalle();
+                    kardexDetalle.setCantidad(cantidadTotal);
+                    
+                    if(accion.equals(InventarioEnsamblePanel.OPCION_AGREGAR))
+                        kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.ENSAMBLE_EGRESO.getCodigo());
+                    else
+                        kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.ENSAMBLE_INGRESO.getCodigo());
+                    
+                    kardexDetalle.setPrecioTotal(new BigDecimal(cantidadTotal).multiply(kardexComponente.getPrecioUltimo()));
+                    kardexDetalle.setPrecioUnitario(kardexComponente.getPrecioUltimo());
+                    kardexDetalle.setReferenciaDocumentoId(null);
+                    
+                    kardexComponente.addDetalleKardex(kardexDetalle);
+                    
+                    kardeList.add(kardexComponente);
+                    
                 }
-                else
-                {
-                    kardexComponente.setReserva(kardexComponente.getReserva() - cantidadTotal);
-                    kardexComponente.setStock(kardexComponente.getStock() + cantidadTotal);            
-                }
-                
-                //Agregar el detalle de kardex
-                KardexDetalle kardexDetalle=new KardexDetalle();
-                kardexDetalle.setCantidad(cantidadTotal);
-                
-                if(accion.equals(InventarioEnsamblePanel.OPCION_AGREGAR))
-                    kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.ENSAMBLE_EGRESO.getCodigo());
-                else
-                    kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.ENSAMBLE_INGRESO.getCodigo());
-                
-                kardexDetalle.setPrecioTotal(new BigDecimal(cantidadTotal).multiply(kardexComponente.getPrecioUltimo()));
-                kardexDetalle.setPrecioUnitario(kardexComponente.getPrecioUltimo());
-                kardexDetalle.setReferenciaDocumentoId(null);
-                
-                kardexComponente.addDetalleKardex(kardexDetalle);
-                
-                kardeList.add(kardexComponente);                
-
+            } catch (RemoteException ex) {
+                Logger.getLogger(InventarioEnsambleModel.class.getName()).log(Level.SEVERE, null, ex);
             }            
         }
         
@@ -293,7 +308,7 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
             Map<String,Object> mapParametros=new HashMap<String,Object>();
             mapParametros.put("producto",componente);
             mapParametros.put("bodega",bodega);
-            KardexService servicioKardex=new KardexService();
+            KardexServiceIf servicioKardex=ServiceController.getController().getKardexServiceIf();
             List<Kardex> listaKardex= servicioKardex.obtenerPorMap(mapParametros);
             if(listaKardex!=null && listaKardex.size()>0)
             {

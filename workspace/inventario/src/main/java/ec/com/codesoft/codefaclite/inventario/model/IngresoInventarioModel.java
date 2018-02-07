@@ -22,8 +22,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.service.BodegaService;
 import ec.com.codesoft.codefaclite.servidor.service.KardexService;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -76,14 +80,17 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
         if(validarItems())
         {
             try {
-                KardexService servicioKardex=new KardexService();
+                KardexServiceIf servicioKardex=ServiceController.getController().getKardexServiceIf();
                 Bodega bodega= (Bodega) getCmbBodega().getSelectedItem();
                 servicioKardex.ingresarInventario(detallesKardex,bodega);
                 DialogoCodefac.mensaje("Correcto","Los producto fueron agregados correctamente al kardex",DialogoCodefac.MENSAJE_CORRECTO);
-            } 
-            catch (ServicioCodefacException ex) 
-            {
-                DialogoCodefac.mensaje("Incorrecto","No se pudo agregar los productos al inventario",DialogoCodefac.MENSAJE_INCORRECTO);
+            //} 
+            //catch (ServicioCodefacException ex) 
+            //{
+            //    DialogoCodefac.mensaje("Incorrecto","No se pudo agregar los productos al inventario",DialogoCodefac.MENSAJE_INCORRECTO);
+            //    Logger.getLogger(IngresoInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
+            //    throw new ExcepcionCodefacLite("Cancelar grabar");
+            } catch (RemoteException ex) {
                 Logger.getLogger(IngresoInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
                 throw new ExcepcionCodefacLite("Cancelar grabar");
             }
@@ -284,7 +291,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
 
     private void valoresIniciales() {
         getCmbBodega().removeAllItems();
-        BodegaService servicioBodega=new BodegaService();
+        BodegaServiceIf servicioBodega=ServiceController.getController().getBodegaServiceIf();
         List<Bodega> bodegas=servicioBodega.obtenerTodos();
         for (Bodega bodega : bodegas) {
             getCmbBodega().addItem(bodega);

@@ -17,9 +17,14 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaProductoEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.service.CategoriaProductoService;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CategoriaProductoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -28,10 +33,10 @@ import java.util.Map;
 public class CategoriaProductoModel extends CategoriaProductoPanel implements DialogInterfacePanel<CategoriaProducto> {
 
     private CategoriaProducto catProducto;
-    private CategoriaProductoService catProductoService;
+    private CategoriaProductoServiceIf catProductoService;
 
     public CategoriaProductoModel() {
-        catProductoService = new CategoriaProductoService();
+        catProductoService = ServiceController.getController().getCategoriaProductoServiceIf();
     }
 
     @Override
@@ -39,7 +44,11 @@ public class CategoriaProductoModel extends CategoriaProductoPanel implements Di
         try {
             catProducto = new CategoriaProducto();
             setearValoresCatProducto(catProducto);
-            catProductoService.grabar(catProducto);
+            try {
+                catProductoService.grabar(catProducto);
+            } catch (RemoteException ex) {
+                Logger.getLogger(CategoriaProductoModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
             DialogoCodefac.mensaje("Datos correctos", "La categoria del producto se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
@@ -55,19 +64,27 @@ public class CategoriaProductoModel extends CategoriaProductoPanel implements Di
     }
 
     public void editar() throws ExcepcionCodefacLite {
-        setearValoresCatProducto(catProducto);
-        catProductoService.editar(catProducto);
-        DialogoCodefac.mensaje("Datos correctos", "La categoria del producto se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+        try {
+            setearValoresCatProducto(catProducto);
+            catProductoService.editar(catProducto);
+            DialogoCodefac.mensaje("Datos correctos", "La categoria del producto se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+        } catch (RemoteException ex) {
+            Logger.getLogger(CategoriaProductoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void eliminar() throws ExcepcionCodefacLite {
         if (estadoFormulario.equals(GeneralPanelInterface.ESTADO_EDITAR)) {
-            Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea eliminar la categoria del producto?", DialogoCodefac.MENSAJE_ADVERTENCIA);
-            if (!respuesta) {
-                throw new ExcepcionCodefacLite("Cancelacion bodega");
+            try {
+                Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea eliminar la categoria del producto?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                if (!respuesta) {
+                    throw new ExcepcionCodefacLite("Cancelacion bodega");
+                }
+                catProductoService.eliminar(catProducto);
+                DialogoCodefac.mensaje("Datos correctos", "La categoria del producto se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+            } catch (RemoteException ex) {
+                Logger.getLogger(CategoriaProductoModel.class.getName()).log(Level.SEVERE, null, ex);
             }
-            catProductoService.eliminar(catProducto);
-            DialogoCodefac.mensaje("Datos correctos", "La categoria del producto se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         }
     }
 
