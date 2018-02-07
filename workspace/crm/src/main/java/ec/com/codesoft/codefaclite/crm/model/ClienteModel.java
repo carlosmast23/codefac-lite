@@ -28,6 +28,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
 import ec.com.codesoft.codefaclite.servidor.service.SriIdentificacionService;
 import ec.com.codesoft.codefaclite.servidor.service.SriService;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
@@ -38,6 +40,7 @@ import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,7 +70,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     private DefaultComboBoxModel<SriIdentificacion> modelComboIdentificacion;
     List<SriIdentificacion> identificaciones;
 
-    private PersonaService personaService;
+    private PersonaServiceIf personaService;
     private Persona persona;
     private String razonSocial;
     private String comboIdentificacion [] = {"CEDULA","RUC","PASAPORTE","IDENTIFICACION DEL EXTERIOR","PLACA"};
@@ -76,7 +79,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     private int opcionIdentificacion = 4;
 
     public ClienteModel() {
-        this.personaService = new PersonaService();
+        this.personaService = ServiceController.getController().getPersonaServiceIf();
         getjTextExtension().setText("0");
         this.razonSocial = "";
         cargarClientes();
@@ -113,28 +116,34 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error", ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite("Error al prevalidar");
+        } catch (RemoteException ex) {
+            Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
 
     @Override
     public void editar() throws ExcepcionCodefacLite {
-        persona.setNombres(getjTextNombres().getText());
-        persona.setApellidos(getjTextApellidos().getText());
-        persona.setRazonSocial(getjTextNombreSocial().getText());
-        persona.setTipoIdentificacion(((SriIdentificacion) getjComboIdentificacion().getSelectedItem()).getCodigo());
-        persona.setIdentificacion(getjTextIdentificacion().getText());
-        persona.setTipCliente((String) getjComboTipoCliente().getSelectedItem());
-        persona.setDireccion(getjTextAreaDireccion().getText());
-        persona.setTelefonoConvencional(getjTextTelefono().getText());
-        persona.setExtensionTelefono(getjTextExtension().getText());
-        persona.setTelefonoCelular(getjTextCelular().getText());
-        persona.setCorreoElectronico(getjTextCorreo().getText());
-        persona.setTipo(((OperadorNegocioEnum)getCmbTipoOperador().getSelectedItem()).getLetra());
-
-        personaService.editar(persona);
-
-        System.out.println("Se edito correctamente");
+        try {
+            persona.setNombres(getjTextNombres().getText());
+            persona.setApellidos(getjTextApellidos().getText());
+            persona.setRazonSocial(getjTextNombreSocial().getText());
+            persona.setTipoIdentificacion(((SriIdentificacion) getjComboIdentificacion().getSelectedItem()).getCodigo());
+            persona.setIdentificacion(getjTextIdentificacion().getText());
+            persona.setTipCliente((String) getjComboTipoCliente().getSelectedItem());
+            persona.setDireccion(getjTextAreaDireccion().getText());
+            persona.setTelefonoConvencional(getjTextTelefono().getText());
+            persona.setExtensionTelefono(getjTextExtension().getText());
+            persona.setTelefonoCelular(getjTextCelular().getText());
+            persona.setCorreoElectronico(getjTextCorreo().getText());
+            persona.setTipo(((OperadorNegocioEnum)getCmbTipoOperador().getSelectedItem()).getLetra());
+            
+            personaService.editar(persona);
+            
+            System.out.println("Se edito correctamente");
+        } catch (RemoteException ex) {
+            Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -142,8 +151,12 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         Boolean confirmacion=DialogoCodefac.dialogoPregunta("Alerta","Está seguro que desea eliminar el cliente?",DialogoCodefac.MENSAJE_ADVERTENCIA);
         if(confirmacion)
         {
-            personaService.eliminar(persona);
-            System.out.println("Se elimino correctamente");
+            try {
+                personaService.eliminar(persona);
+                System.out.println("Se elimino correctamente");
+            } catch (RemoteException ex) {
+                Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
     }
