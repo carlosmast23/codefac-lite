@@ -23,6 +23,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -275,7 +277,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
     
     public void cargarCliente()
     {
-        PersonaService cliente = new PersonaService();
+        PersonaServiceIf cliente = ServiceController.getController().getPersonaServiceIf();
         Map<String,Object> clienteMap = new HashMap<String, Object>();
         clienteMap.put("razonSocial", "Cliente Final");
         this.factura.setCliente(cliente.obtenerPorMap(clienteMap).get(0));
