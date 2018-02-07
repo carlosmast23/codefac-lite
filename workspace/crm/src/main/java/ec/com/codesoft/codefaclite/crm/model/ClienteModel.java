@@ -30,6 +30,7 @@ import ec.com.codesoft.codefaclite.servidor.service.SriIdentificacionService;
 import ec.com.codesoft.codefaclite.servidor.service.SriService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
@@ -336,28 +337,32 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
 
     @Override
     public void limpiar() {
-        /**
-         * Seleccionando valores por defecto que se deben seleccionar despues de
-         * limpiar
-         *
-         * @author carlos
-         */
-               
-        SriIdentificacionService service=new SriIdentificacionService();
-        SriIdentificacion id;
-        Map<String,Object> parametros=new HashMap<String,Object>();
-        parametros.put("codigo","05");
-        SriIdentificacion identificacion=service.obtenerPorMap(parametros).get(0);
-        getjComboIdentificacion().setSelectedItem(identificacion);
-        
-        
-        getjComboTipoCliente().setSelectedIndex(0);
-        getCmbTipoOperador().setSelectedIndex(0);
-        getjTextExtension().setText("0");
-
-        //Setear el valor por defecto
-        getCmbEstado().setSelectedItem(ClienteEnumEstado.ACTIVO);
-        this.razonSocial = "";
+        try {
+            /**
+             * Seleccionando valores por defecto que se deben seleccionar despues de
+             * limpiar
+             *
+             * @author carlos
+             */
+            
+            SriIdentificacionServiceIf  service=ServiceController.getController().getSriIdentificacionServiceIf();
+            SriIdentificacion id;
+            Map<String,Object> parametros=new HashMap<String,Object>();
+            parametros.put("codigo","05");
+            SriIdentificacion identificacion=service.obtenerPorMap(parametros).get(0);
+            getjComboIdentificacion().setSelectedItem(identificacion);
+            
+            
+            getjComboTipoCliente().setSelectedIndex(0);
+            getCmbTipoOperador().setSelectedIndex(0);
+            getjTextExtension().setText("0");
+            
+            //Setear el valor por defecto
+            getCmbEstado().setSelectedItem(ClienteEnumEstado.ACTIVO);
+            this.razonSocial = "";
+        } catch (RemoteException ex) {
+            Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 

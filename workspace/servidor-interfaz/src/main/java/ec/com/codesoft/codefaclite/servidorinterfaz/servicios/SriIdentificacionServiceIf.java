@@ -5,13 +5,14 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
 import java.rmi.Remote;
 
 /**
  *
  * @author CodesoftDesarrollo 1
  */
-public interface SriIdentificacionServiceIf extends Remote
+public interface SriIdentificacionServiceIf extends ServiceAbstractIf<SriIdentificacion>
 {
     
 }
