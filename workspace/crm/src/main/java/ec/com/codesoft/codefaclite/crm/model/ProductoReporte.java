@@ -15,6 +15,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoService;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -37,7 +39,7 @@ public class ProductoReporte extends ControladorCodefacInterface{
         InputStream path = RecursoCodefac.JASPER_CRM.getResourceInputStream("reporteProducto.jrxml");
         Map parameters = new HashMap();
         List<ProductoData> data = new ArrayList<ProductoData>();
-        ProductoService service=new ProductoService();
+        ProductoServiceIf service=ServiceController.getController().getProductoServiceIf();
         List<Producto> productos=service.obtenerTodos();
         
         for (Producto producto : productos) {

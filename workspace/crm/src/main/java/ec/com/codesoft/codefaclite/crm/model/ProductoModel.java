@@ -26,11 +26,14 @@ import ec.com.codesoft.codefaclite.servidor.service.CategoriaProductoService;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoService;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
 import ec.com.codesoft.codefaclite.test.TipoBusquedaEnum;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +52,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     private Impuesto impuesto;
     private CategoriaProducto catProducto;
 
-    private ProductoService productoService;
+    private ProductoServiceIf productoService;
     private ImpuestoService impuestoService;
     private ImpuestoDetalleService impuestoDetalleService;
     private CategoriaProductoService catProdService;
@@ -61,16 +64,20 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     private Producto productoEnsamble;
 
     public ProductoModel() {
-        productoService = new ProductoService();
-        impuestoService = new ImpuestoService();
-        impuestoDetalleService = new ImpuestoDetalleService();
-        catProdService = new CategoriaProductoService();
-
-        getComboIce().setEnabled(false);
-        getComboIrbpnr().setEnabled(false);
-        iniciarCombosBox();
-        listenerComboBox();
-        listenerBotones();
+        try {
+            productoService = ServiceController.getController().getProductoServiceIf();
+            impuestoService = new ImpuestoService();
+            impuestoDetalleService = new ImpuestoDetalleService();
+            catProdService = new CategoriaProductoService();
+            
+            getComboIce().setEnabled(false);
+            getComboIrbpnr().setEnabled(false);
+            iniciarCombosBox();
+            listenerComboBox();
+            listenerBotones();
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -82,31 +89,37 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite("Error al grabar");
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Override
     public void editar() throws ExcepcionCodefacLite {
-        /*
-        producto.setCodigoPersonalizado(getTxtCodigoPersonalizado().getText());
-        producto.setCodigoEAN(getTxtCodigoEAN().getText());
-        producto.setCodigoUPC(getTxtCodigoUPC().getText());
-        if(getComboTipoProducto().getSelectedItem().equals("Bien"))
-        {
+        try {
+            /*
+            producto.setCodigoPersonalizado(getTxtCodigoPersonalizado().getText());
+            producto.setCodigoEAN(getTxtCodigoEAN().getText());
+            producto.setCodigoUPC(getTxtCodigoUPC().getText());
+            if(getComboTipoProducto().getSelectedItem().equals("Bien"))
+            {
             producto.setTipoProducto("B");
-        }
-        else
-        {
+            }
+            else
+            {
             producto.setTipoProducto("S");
+            }
+            
+            producto.setNombre(getTextNombre().getText());
+            d = new BigDecimal(getTextValorUnitario().getText());
+            producto.setValorUnitario(d);
+            */
+            setearValoresProducto(producto);
+            productoService.editar(producto);
+            DialogoCodefac.mensaje("Datos correctos", "El producto se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        producto.setNombre(getTextNombre().getText()); 
-        d = new BigDecimal(getTextValorUnitario().getText());
-        producto.setValorUnitario(d);
-         */
-        setearValoresProducto(producto);
-        productoService.editar(producto);
-        DialogoCodefac.mensaje("Datos correctos", "El producto se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
     }
 
     private void setearValoresProducto(Producto producto) {
@@ -156,12 +169,16 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     @Override
     public void eliminar() throws ExcepcionCodefacLite {
         if (estadoFormulario.equals(GeneralPanelInterface.ESTADO_EDITAR)) {
-            Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea eliminar el producto?", DialogoCodefac.MENSAJE_ADVERTENCIA);
-            if (!respuesta) {
-                throw new ExcepcionCodefacLite("Cancelacion usuario");
+            try {
+                Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea eliminar el producto?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                if (!respuesta) {
+                    throw new ExcepcionCodefacLite("Cancelacion usuario");
+                }
+                productoService.eliminar(producto);
+                DialogoCodefac.mensaje("Datos correctos", "El producto se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+            } catch (RemoteException ex) {
+                Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
             }
-            productoService.eliminar(producto);
-            DialogoCodefac.mensaje("Datos correctos", "El producto se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         }
 
     }

@@ -14,6 +14,9 @@ import ec.com.codesoft.codefaclite.crm.panel.EmpresaForm;
 import ec.com.codesoft.codefaclite.servidor.service.EmpresaService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,9 +28,12 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -38,7 +44,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class EmpresaModel extends EmpresaForm
 {
     private Empresa empresa;
-    private EmpresaService empresaService;
+    private EmpresaServiceIf empresaService;
     private JFileChooser jFileChooser;
     private Path origen = null;
     private Path destino = null;
@@ -50,7 +56,7 @@ public class EmpresaModel extends EmpresaForm
         jFileChooser.setDialogTitle("Elegir archivo");
         jFileChooser.setFileFilter(new FileNameExtensionFilter("Logo Imagen", "png", "jpg", "bmp"));   
         //this.empresa = new Empresa();
-        this.empresaService = new EmpresaService();
+        this.empresaService = ServiceController.getController().getEmpresaServiceIf();
         agregarListener();
          /**
          * Desactivo el ciclo de vida para controlar manualmente
@@ -102,17 +108,27 @@ public class EmpresaModel extends EmpresaForm
     {
         if(session.getEmpresa()==null)
         {
-            empresaService.grabar(setDatosEmisor());
-            session.setEmpresa(empresa);
-            moverArchivo();
-            DialogoCodefac.mensaje("Exito","Empresa grabada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+            try {
+                empresaService.grabar(setDatosEmisor());
+                session.setEmpresa(empresa);
+                moverArchivo();
+                DialogoCodefac.mensaje("Exito","Empresa grabada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         else
         {
-            empresaService.editar(setDatosEmisor());
-            session.setEmpresa(empresa);
-            moverArchivo();
-            DialogoCodefac.mensaje("Exito","Empresa editada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+            try {
+                empresaService.editar(setDatosEmisor());
+                session.setEmpresa(empresa);
+                moverArchivo();
+                DialogoCodefac.mensaje("Exito","Empresa editada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+            } catch (RemoteException ex) {
+                Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         dispose();
     }
@@ -120,7 +136,11 @@ public class EmpresaModel extends EmpresaForm
     @Override
     public void editar() throws ExcepcionCodefacLite 
     {
-        empresaService.editar(setDatosEmisor());
+        try {
+            empresaService.editar(setDatosEmisor());
+        } catch (RemoteException ex) {
+            Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override

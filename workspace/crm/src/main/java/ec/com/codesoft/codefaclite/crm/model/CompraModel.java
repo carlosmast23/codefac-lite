@@ -26,12 +26,17 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEn
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.service.CompraService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoProveedorService;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
 import es.mityc.firmaJava.libreria.utilidades.Utilidades;
+import es.mityc.firmaJava.ocsp.config.ServidorOcsp;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -74,12 +79,14 @@ public class CompraModel extends CompraPanel{
     @Override
     public void grabar() throws ExcepcionCodefacLite {
         try {
-            CompraService servicio=new CompraService();
+            CompraServiceIf servicio=ServiceController.getController().getCompraServiceIf();
             setearValores();
             servicio.grabarCompra(compra);
             DialogoCodefac.mensaje("Correcto","La compra fue guardada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Incorrecto","No se puede gurdar la compra",DialogoCodefac.MENSAJE_INCORRECTO);
+            Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
             Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -218,7 +225,7 @@ public class CompraModel extends CompraPanel{
                 if(productoSeleccionado!=null)
                 {
                     //Buscar si existe el producto vinculado con un proveedor
-                    ProductoProveedorService serviceProductoProveedor = new ProductoProveedorService();
+                    ProductoProveedorServiceIf serviceProductoProveedor = ServiceController.getController().getProductoProveedorServiceIf();
                     Map<String, Object> mapParametros = new HashMap<String, Object>();
                     mapParametros.put("producto", productoSeleccionado);
                     mapParametros.put("proveedor", proveedor);
