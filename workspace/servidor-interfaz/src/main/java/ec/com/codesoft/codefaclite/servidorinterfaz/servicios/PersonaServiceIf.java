@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author Carlos
  */
-public interface PersonaServiceIf extends Remote{
+public interface PersonaServiceIf extends ServiceAbstractIf<Persona>{
     
     public void grabar(Persona p) throws ServicioCodefacException,java.rmi.RemoteException;
     

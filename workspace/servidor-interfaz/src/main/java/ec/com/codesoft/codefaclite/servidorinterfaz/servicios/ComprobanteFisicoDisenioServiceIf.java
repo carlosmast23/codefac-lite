@@ -5,13 +5,14 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteFisicoDisenio;
 import java.rmi.Remote;
 
 /**
  *
  * @author CodesoftDesarrollo 1
  */
-public interface ComprobanteFisicoDisenioServiceIf extends Remote
+public interface ComprobanteFisicoDisenioServiceIf extends ServiceAbstractIf<ComprobanteFisicoDisenio>
 {
     
 }

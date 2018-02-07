@@ -5,13 +5,14 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import java.rmi.Remote;
 
 /**
  *
  * @author CodesoftDesarrollo 1
  */
-public interface CompraDetalleServiceIf extends Remote
+public interface CompraDetalleServiceIf extends ServiceAbstractIf<CompraDetalle>
 {
     
 }

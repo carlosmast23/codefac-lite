@@ -18,7 +18,7 @@ import org.eclipse.persistence.exceptions.DatabaseException;
  *
  * @author CodesoftDesarrollo 1
  */
-public interface EmpresaServiceIf extends Remote
+public interface EmpresaServiceIf extends ServiceAbstractIf<Empresa>
 {
     public void grabar(Empresa p) throws ServicioCodefacException,java.rmi.RemoteException;
     public void editar(Empresa p) throws java.rmi.RemoteException;

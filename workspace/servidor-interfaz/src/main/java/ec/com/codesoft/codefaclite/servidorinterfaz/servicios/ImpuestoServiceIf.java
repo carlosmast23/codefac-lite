@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author CodesoftDesarrollo 1
  */
-public interface ImpuestoServiceIf extends Remote
+public interface ImpuestoServiceIf extends ServiceAbstractIf<Impuesto>
 {
     public void grabar(Impuesto i) throws ServicioCodefacException,java.rmi.RemoteException;;
     public void editar(Impuesto i) throws java.rmi.RemoteException;;

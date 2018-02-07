@@ -14,7 +14,8 @@ import java.util.Map;
  *
  * @author Carlos
  */
-public interface ParametroCodefacServiceIf extends Remote {
+public interface ParametroCodefacServiceIf extends ServiceAbstractIf<ParametroCodefac>
+{
        
     public Map<String ,ParametroCodefac> getParametrosMap() throws java.rmi.RemoteException;
     

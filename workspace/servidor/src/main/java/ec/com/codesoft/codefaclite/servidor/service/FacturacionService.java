@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEn
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -36,7 +37,8 @@ import org.eclipse.persistence.exceptions.DatabaseException;
  *
  * @author Carlos
  */
-public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade>{
+public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> implements FacturacionServiceIf
+{
 
     FacturaFacade facturaFacade;
     FacturaDetalleFacade facturaDetalleFacade;

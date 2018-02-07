@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.ImpuestoDetalleFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -58,5 +59,15 @@ public class ImpuestoDetalleService implements ImpuestoDetalleServiceIf
     public List<ImpuestoDetalle> obtenerIvaVigente()
     {
         return impuestoDetalleFacade.getImpuestoVigenteByName(Impuesto.IVA);
+    }
+
+    @Override
+    public List<ImpuestoDetalle> obtenerTodos() throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<ImpuestoDetalle> obtenerPorMap(Map<String, Object> parametros) throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

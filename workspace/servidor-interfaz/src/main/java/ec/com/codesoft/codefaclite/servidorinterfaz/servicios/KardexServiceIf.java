@@ -19,7 +19,7 @@ import java.util.Map;
  *
  * @author CodesoftDesarrollo 1
  */
-public interface KardexServiceIf extends Remote
+public interface KardexServiceIf extends ServiceAbstractIf<Kardex>
 {
     public Kardex buscarKardexPorProductoyBodega(Bodega bodega,Producto producto) throws java.rmi.RemoteException;
     public void IngresoEgresoInventarioEnsamble(Bodega bodega, Producto productoEnsamble,Integer cantidad,List<Kardex> componentesKardex, boolean ingreso) throws java.rmi.RemoteException;

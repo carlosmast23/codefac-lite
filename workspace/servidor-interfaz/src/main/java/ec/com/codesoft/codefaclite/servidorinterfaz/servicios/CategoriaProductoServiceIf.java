@@ -13,7 +13,7 @@ import java.rmi.Remote;
  *
  * @author CodesoftDesarrollo 1
  */
-public interface CategoriaProductoServiceIf extends Remote
+public interface CategoriaProductoServiceIf extends ServiceAbstractIf<CategoriaProducto>
 {
     public void grabar(CategoriaProducto c) throws ServicioCodefacException,java.rmi.RemoteException;
     public void editar(CategoriaProducto c) throws java.rmi.RemoteException;

@@ -18,9 +18,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoProveedorService;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,7 +44,7 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
     private ProductoProveedor productoProveedor;
     private Producto producto;
     private Persona proveedor;
-    private ProductoProveedorService servicioProductoProveedor;
+    private ProductoProveedorServiceIf servicioProductoProveedor;
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
@@ -49,7 +52,7 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
         agregarListenerBotones();
         agregarListenerCombo();
         
-        this.servicioProductoProveedor=new ProductoProveedorService();
+        this.servicioProductoProveedor = ServiceController.getController().getProductoProveedorServiceIf();
     }
 
     @Override
@@ -67,6 +70,8 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
             //Logger.getLogger(AsociarProductoProveedorModel.class.getName()).log(Level.SEVERE, null, ex);
             DialogoCodefac.mensaje("Error","Error al grabar",DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite("error grabar");
+        } catch (RemoteException ex) {
+            Logger.getLogger(AsociarProductoProveedorModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -151,7 +156,11 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
                     String identificacion=proveedor.getIdentificacion();
                     String nombre =proveedor.getRazonSocial();
                     getTxtProveedor().setText(identificacion+" - "+nombre);
-                    cargarTablaProductoProveedor(proveedor);
+                    try {
+                        cargarTablaProductoProveedor(proveedor);
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(AsociarProductoProveedorModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             }
         });
@@ -172,7 +181,7 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
         });
     }
     
-    private void cargarTablaProductoProveedor(Persona persona)
+    private void cargarTablaProductoProveedor(Persona persona) throws RemoteException
     {
         String[] titulos={"Producto","Costo"};
         DefaultTableModel modeloTabla=new DefaultTableModel(titulos,0);

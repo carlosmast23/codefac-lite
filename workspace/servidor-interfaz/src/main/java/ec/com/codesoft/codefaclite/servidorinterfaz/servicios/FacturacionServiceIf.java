@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author CodesoftDesarrollo 1
  */
-public interface FacturacionServiceIf extends Remote
+public interface FacturacionServiceIf extends ServiceAbstractIf<Factura>
 {
     public void grabar(Factura factura) throws ServicioCodefacException,java.rmi.RemoteException; 
     public List<Factura> consultaDialogo(String param,int limiteMinimo,int limiteMaximo) throws java.rmi.RemoteException;

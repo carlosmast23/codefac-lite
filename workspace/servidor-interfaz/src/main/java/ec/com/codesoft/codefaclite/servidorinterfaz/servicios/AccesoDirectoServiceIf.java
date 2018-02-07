@@ -5,13 +5,14 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.AccesoDirecto;
 import java.rmi.Remote;
 
 /**
  *
  * @author CodesoftDesarrollo 1
  */
-public interface AccesoDirectoServiceIf extends Remote
+public interface AccesoDirectoServiceIf extends ServiceAbstractIf<AccesoDirecto>
 {
     
 }

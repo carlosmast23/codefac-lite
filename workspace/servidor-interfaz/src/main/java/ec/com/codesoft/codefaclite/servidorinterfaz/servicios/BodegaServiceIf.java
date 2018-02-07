@@ -13,7 +13,7 @@ import java.rmi.Remote;
  *
  * @author CodesoftDesarrollo 1
  */
-public interface BodegaServiceIf extends Remote 
+public interface BodegaServiceIf extends ServiceAbstractIf<Bodega>
 {
     public void grabar(Bodega b) throws ServicioCodefacException,java.rmi.RemoteException;
     public void editar(Bodega b) throws java.rmi.RemoteException;

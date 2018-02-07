@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author Carlos
  */
-public interface ProductoServiceIf extends Remote {
+public interface ProductoServiceIf extends ServiceAbstractIf<Producto> {
 
         
     public void grabar(Producto p) throws ServicioCodefacException, java.rmi.RemoteException;

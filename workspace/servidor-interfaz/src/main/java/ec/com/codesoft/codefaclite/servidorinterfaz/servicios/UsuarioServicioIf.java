@@ -13,7 +13,7 @@ import java.rmi.Remote;
  *
  * @author CodesoftDesarrollo 1
  */
-public interface UsuarioServicioIf extends Remote, ServiceAbstractIf<Usuario>
+public interface UsuarioServicioIf extends ServiceAbstractIf<Usuario>
 {
     public Usuario login(String nick,String clave) throws java.rmi.RemoteException;
     public void grabarUsuario(Usuario usuario,String nombrePerfil) throws ServicioCodefacException,java.rmi.RemoteException;

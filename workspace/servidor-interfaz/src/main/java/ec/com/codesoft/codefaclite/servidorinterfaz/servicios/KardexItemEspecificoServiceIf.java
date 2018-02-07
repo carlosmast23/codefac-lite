@@ -5,13 +5,14 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import java.rmi.Remote;
 
 /**
  *
  * @author CodesoftDesarrollo 1
  */
-public interface KardexItemEspecificoServiceIf extends Remote
+public interface KardexItemEspecificoServiceIf extends ServiceAbstractIf<KardexItemEspecifico>
 {
     
 }

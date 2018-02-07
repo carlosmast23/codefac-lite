@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author CodesoftDesarrollo 1
  */
-public interface NotaCreditoServiceIf extends Remote
+public interface NotaCreditoServiceIf extends ServiceAbstractIf<NotaCredito>
 {
     public void grabar(NotaCredito notaCredito) throws ServicioCodefacException,java.rmi.RemoteException;;
     public String getPreimpresoSiguiente() throws java.rmi.RemoteException;;

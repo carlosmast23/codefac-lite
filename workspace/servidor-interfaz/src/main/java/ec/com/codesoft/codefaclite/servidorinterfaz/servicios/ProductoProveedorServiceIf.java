@@ -5,13 +5,14 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
 import java.rmi.Remote;
 
 /**
  *
  * @author CodesoftDesarrollo 1
  */
-public interface ProductoProveedorServiceIf extends Remote
+public interface ProductoProveedorServiceIf extends ServiceAbstractIf<ProductoProveedor>
 {
     
 }
