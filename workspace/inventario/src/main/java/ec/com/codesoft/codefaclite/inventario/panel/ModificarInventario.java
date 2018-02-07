@@ -47,6 +47,7 @@ public class ModificarInventario extends javax.swing.JInternalFrame {
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
+        setTitle("Modificar Inventario");
 
         jLabel1.setText("Producto:");
 

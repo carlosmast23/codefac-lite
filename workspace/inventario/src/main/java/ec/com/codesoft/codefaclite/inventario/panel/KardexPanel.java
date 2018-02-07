@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.inventario.panel;
 
 import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.servidor.entity.Bodega;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -127,6 +128,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         getContentPane().add(cmbFechaFinal, gridBagConstraints);
 
+        btnConsultar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         btnConsultar.setText("Consultar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
@@ -255,8 +257,6 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtProducto;
     // End of variables declaration//GEN-END:variables
 
-
-
     public JButton getBtnConsultar() {
         return btnConsultar;
     }
@@ -273,6 +273,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         this.btnProductoBuscar = btnProductoBuscar;
     }
 
+    @LimpiarAnotacion
     public JDateChooser getCmbFechaFinal() {
         return cmbFechaFinal;
     }
@@ -281,6 +282,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         this.cmbFechaFinal = cmbFechaFinal;
     }
 
+    @LimpiarAnotacion
     public JDateChooser getCmbFechaInicial() {
         return cmbFechaInicial;
     }
@@ -304,8 +306,6 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
     public void setCmbBodega(JComboBox<Bodega> cmbBodega) {
         this.cmbBodega = cmbBodega;
     }
-
-    
 
     public JTextField getTxtProducto() {
         return txtProducto;
@@ -346,7 +346,5 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
     public void setLblTotal(JLabel lblTotal) {
         this.lblTotal = lblTotal;
     }
-    
-    
-    
+
 }

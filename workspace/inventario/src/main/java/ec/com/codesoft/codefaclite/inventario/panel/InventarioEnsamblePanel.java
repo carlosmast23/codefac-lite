@@ -6,6 +6,8 @@
 package ec.com.codesoft.codefaclite.inventario.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidor.entity.Bodega;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -19,8 +21,9 @@ import javax.swing.JTextField;
  */
 public abstract class InventarioEnsamblePanel extends ControladorCodefacInterface {
 
-    public static final String OPCION_AGREGAR="Agregar";
-    public static final String OPCION_QUITAR="Quitar";
+    public static final String OPCION_AGREGAR = "Agregar";
+    public static final String OPCION_QUITAR = "Quitar";
+
     /**
      * Creates new form EnsamblePanel
      */
@@ -62,6 +65,7 @@ public abstract class InventarioEnsamblePanel extends ControladorCodefacInterfac
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
+        setTitle("Ensamble Inventario");
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setText("Cantidad:");
@@ -260,7 +264,6 @@ public abstract class InventarioEnsamblePanel extends ControladorCodefacInterfac
         this.btnVerificar = btnVerificar;
     }
 
-
     public JComboBox<String> getCmbAccion() {
         return cmbAccion;
     }
@@ -277,6 +280,8 @@ public abstract class InventarioEnsamblePanel extends ControladorCodefacInterfac
         this.tblDatos = tblDatos;
     }
 
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[0-9]+([.][0-9]+)?$", expresionRegularMensaje = "Solo se permite numeros enteros y decimales")
     public JTextField getTxtCantidad() {
         return txtCantidad;
     }
@@ -309,8 +314,4 @@ public abstract class InventarioEnsamblePanel extends ControladorCodefacInterfac
         this.lblStockActual = lblStockActual;
     }
 
-    
-    
-
-    
 }

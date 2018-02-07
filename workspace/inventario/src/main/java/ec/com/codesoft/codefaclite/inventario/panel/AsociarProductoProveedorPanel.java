@@ -6,6 +6,8 @@
 package ec.com.codesoft.codefaclite.inventario.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidor.entity.enumerados.EnumSiNo;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -141,10 +143,11 @@ public abstract class AsociarProductoProveedorPanel extends ControladorCodefacIn
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(38, 38, 38)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
-                    .addComponent(btnBuscarProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnBuscarProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -214,6 +217,8 @@ public abstract class AsociarProductoProveedorPanel extends ControladorCodefacIn
         this.tblProveedorProducto = tblProveedorProducto;
     }
 
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[0-9]+([.][0-9]+)?$", expresionRegularMensaje = "Solo se permite numeros enteros y decimales")
     public JTextField getTxtCosto() {
         return txtCosto;
     }
@@ -222,6 +227,8 @@ public abstract class AsociarProductoProveedorPanel extends ControladorCodefacIn
         this.txtCosto = txtCosto;
     }
 
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Descripción", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextField getTxtDescripcion() {
         return txtDescripcion;
     }
@@ -253,7 +260,5 @@ public abstract class AsociarProductoProveedorPanel extends ControladorCodefacIn
     public void setCmbIva(JComboBox<EnumSiNo> cmbIva) {
         this.cmbIva = cmbIva;
     }
-    
-    
 
 }
