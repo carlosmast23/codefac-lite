@@ -33,7 +33,8 @@ public class TestClienteRMI {
             List<Persona> buscarList= personaServiceIf.buscar();
             
             for (Persona persona : buscarList) {
-                System.out.println(persona.getIdentificacion());
+               System.out.println(persona.getNombres()); 
+               System.out.println(persona.getIdentificacion());
             }
             
             /*

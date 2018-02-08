@@ -67,7 +67,7 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
 
         txtCompraSeleccionada.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
@@ -75,14 +75,13 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
 
         jLabel4.setText("Fecha Ingreso:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 18;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         getContentPane().add(jLabel4, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 19;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 21;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
         getContentPane().add(jDateChooser1, gridBagConstraints);
 
@@ -102,7 +101,7 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 40;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
@@ -114,7 +113,7 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 40;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 40, 0, 40);
         getContentPane().add(jLabel7, gridBagConstraints);
@@ -123,7 +122,7 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 40;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 40, 0, 40);
         getContentPane().add(jLabel8, gridBagConstraints);
@@ -132,7 +131,7 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 40;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 40, 0, 40);
         getContentPane().add(jLabel9, gridBagConstraints);
@@ -140,16 +139,15 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel10.setText("Total:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 36;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         getContentPane().add(jLabel10, gridBagConstraints);
 
         jLabel11.setText("jLabel2");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 37;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         getContentPane().add(jLabel11, gridBagConstraints);
 
@@ -157,15 +155,13 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         getContentPane().add(jLabel12, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         getContentPane().add(cmbBodega, gridBagConstraints);
@@ -173,7 +169,7 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
         btnBuscarCompraPendiente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         btnBuscarCompraPendiente.setToolTipText("Buscar imagen en su computador");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
         getContentPane().add(btnBuscarCompraPendiente, gridBagConstraints);

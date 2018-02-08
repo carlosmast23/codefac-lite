@@ -61,7 +61,7 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         jPanel4 = new javax.swing.JPanel();
         btnEliminarProducto = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
         TblDetalleFactura = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
@@ -257,13 +257,13 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         TblDetalleFactura.setPreferredSize(new java.awt.Dimension(260, 60));
         TblDetalleFactura.setSelectionBackground(new java.awt.Color(188, 217, 245));
         TblDetalleFactura.setSelectionForeground(new java.awt.Color(0, 0, 0));
-        jScrollPane2.setViewportView(TblDetalleFactura);
+        jScrollPane1.setViewportView(TblDetalleFactura);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
-        jPanel6.add(jScrollPane2, gridBagConstraints);
+        jPanel6.add(jScrollPane1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -474,6 +474,7 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPanel;
     private javax.swing.JLabel lblIva12;
