@@ -40,9 +40,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.AccesoDirecto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
-import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
-import ec.com.codesoft.codefaclite.servidor.service.AccesoDirectoService;
-import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
@@ -225,7 +222,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     if(hiloPublicidadCodefac!=null)
                         hiloPublicidadCodefac.hiloPublicidad=false;                    
                     
-                    AbstractFacade.entityManager.close();
+                    //AbstractFacade.entityManager.close();
                     dispose();                    
                     System.exit(0);
                     
@@ -975,7 +972,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             /**
              * Agregar variables de session a la pantalla
              */
-            ParametroCodefacService servicio=new ParametroCodefacService();
+            ParametroCodefacServiceIf servicio=ServiceController.getController().getParametroCodefacServiceIf();
             sessionCodefac.setParametrosCodefac(servicio.getParametrosMap());
             
             
