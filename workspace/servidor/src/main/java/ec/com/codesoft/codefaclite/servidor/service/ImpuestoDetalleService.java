@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Impuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.ImpuestoDetalleFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -21,16 +22,17 @@ import org.eclipse.persistence.exceptions.DatabaseException;
  *
  * @author PC
  */
-public class ImpuestoDetalleService implements ImpuestoDetalleServiceIf
+public class ImpuestoDetalleService extends ServiceAbstract<ImpuestoDetalle,ImpuestoDetalleFacade> implements ImpuestoDetalleServiceIf
 {
     private ImpuestoDetalleFacade impuestoDetalleFacade;
 
-    public ImpuestoDetalleService() 
+    public ImpuestoDetalleService() throws java.rmi.RemoteException
     {
+        super(ImpuestoDetalleFacade.class);
         impuestoDetalleFacade= new ImpuestoDetalleFacade();
     }
     
-    public void grabar(ImpuestoDetalle i)
+    public void grabar(ImpuestoDetalle i) throws ServicioCodefacException,java.rmi.RemoteException
     {
         try {
             impuestoDetalleFacade.create(i);
@@ -39,35 +41,21 @@ public class ImpuestoDetalleService implements ImpuestoDetalleServiceIf
         } catch (DatabaseException ex) {
             Logger.getLogger(ImpuestoDetalleService.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+    }    
     
-    public void editar(ImpuestoDetalle i)
-    {
-        impuestoDetalleFacade.edit(i);
-    }
-    
-    public void eliminar(ImpuestoDetalle i)
+    public void eliminar(ImpuestoDetalle i) throws java.rmi.RemoteException
     {
         impuestoDetalleFacade.remove(i);
     }
     
-    public List<ImpuestoDetalle> buscarImpuestoDetallePorMap(Map<String,Object> map)
+    public List<ImpuestoDetalle> buscarImpuestoDetallePorMap(Map<String,Object> map) throws java.rmi.RemoteException
     {
         return impuestoDetalleFacade.findByMap(map);        
     }
     
-    public List<ImpuestoDetalle> obtenerIvaVigente()
+    public List<ImpuestoDetalle> obtenerIvaVigente() throws java.rmi.RemoteException
     {
         return impuestoDetalleFacade.getImpuestoVigenteByName(Impuesto.IVA);
     }
 
-    @Override
-    public List<ImpuestoDetalle> obtenerTodos() throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<ImpuestoDetalle> obtenerPorMap(Map<String, Object> parametros) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }

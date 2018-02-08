@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import java.io.Serializable;
 import java.sql.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -23,7 +24,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "PERFIL_USUARIO")
-public class PerfilUsuario {
+public class PerfilUsuario implements Serializable {
     
     private static final long serialVersionUID = 1L;
      

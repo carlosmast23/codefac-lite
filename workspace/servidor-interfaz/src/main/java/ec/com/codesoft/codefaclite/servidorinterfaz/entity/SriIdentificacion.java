@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import java.io.Serializable;
 import java.sql.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,7 +18,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "SRI_IDENTIFICACION")
-public class SriIdentificacion {
+public class SriIdentificacion implements Serializable{
     
     public static final String CLIENTE="VENTA"; 
     public static final String PROVEEDOR="COMPRA"; 

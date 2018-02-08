@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,7 +21,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "KARDEX_ITEM_ESPECIFICO")
-public class KardexItemEspecifico {
+public class KardexItemEspecifico implements Serializable {
     
     @Id
     @Column(name = "ID")

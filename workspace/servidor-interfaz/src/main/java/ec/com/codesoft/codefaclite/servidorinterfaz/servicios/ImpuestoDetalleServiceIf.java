@@ -17,9 +17,9 @@ import java.util.Map;
  */
 public interface ImpuestoDetalleServiceIf extends ServiceAbstractIf<ImpuestoDetalle>
 {
-    public void grabar(ImpuestoDetalle i) throws ServicioCodefacException,java.rmi.RemoteException;
-    public void editar(ImpuestoDetalle i) throws java.rmi.RemoteException;
+    //public void grabar(ImpuestoDetalle i) throws ServicioCodefacException,java.rmi.RemoteException;
+    //public void editar(ImpuestoDetalle i) throws java.rmi.RemoteException;
     public void eliminar(ImpuestoDetalle i) throws java.rmi.RemoteException;
-    public List<ImpuestoDetalle> buscarImpuestoDetallePorMap(Map<String,Object> map) throws java.rmi.RemoteException;;
+    public List<ImpuestoDetalle> buscarImpuestoDetallePorMap(Map<String,Object> map) throws java.rmi.RemoteException;
     public List<ImpuestoDetalle> obtenerIvaVigente()throws java.rmi.RemoteException;
 }

@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -29,7 +30,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "COMPRA")
-public class Compra {    
+public class Compra implements Serializable {    
     public static final String ESTADO_FACTURADO="F";
     public static final String ESTADO_ANULADO="A";
     public static final String ESTADO_PENDIENTE_FACTURA_ELECTRONICA="P";

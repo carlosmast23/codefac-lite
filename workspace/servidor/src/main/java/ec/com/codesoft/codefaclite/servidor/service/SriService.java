@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidor.facade.SriFormaPagoFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.SriIdentificacionFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
+import java.rmi.server.UnicastRemoteObject;
 import java.sql.Date;
 import java.util.List;
 
@@ -17,17 +18,18 @@ import java.util.List;
  *
  * @author Carlos
  */
-public class SriService implements SriServiceIf
+public class SriService extends UnicastRemoteObject implements SriServiceIf
 {
     private SriFormaPagoFacade sriFormaPagoFacade;
     private SriIdentificacionFacade sriIdentificacionFacade;
 
-    public SriService() {
+    public SriService() throws java.rmi.RemoteException {
+        super();
         this.sriFormaPagoFacade = new SriFormaPagoFacade();
-         this.sriIdentificacionFacade = new SriIdentificacionFacade();
+        this.sriIdentificacionFacade = new SriIdentificacionFacade();
     }
     
-    public List<SriFormaPago> obtenerFormasPagoActivo()
+    public List<SriFormaPago> obtenerFormasPagoActivo() throws java.rmi.RemoteException
     {
         java.util.Date fechaActual=new java.util.Date();
         
@@ -43,7 +45,7 @@ public class SriService implements SriServiceIf
      * @param tipo
      * @return 
      */
-    public List<SriIdentificacion> obtenerIdentificaciones(String tipo)
+    public List<SriIdentificacion> obtenerIdentificaciones(String tipo) throws java.rmi.RemoteException
     {
 
         return sriIdentificacionFacade.getSriIdentificacionByTipoTransaccion(tipo);

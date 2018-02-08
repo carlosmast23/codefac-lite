@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -28,7 +29,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "FACTURA")
-public class Factura {    
+public class Factura implements Serializable {    
     public static final String ESTADO_FACTURADO="F";
     public static final String ESTADO_ANULADO="A";
     public static final String ESTADO_PENDIENTE_FACTURA_ELECTRONICA="P";
