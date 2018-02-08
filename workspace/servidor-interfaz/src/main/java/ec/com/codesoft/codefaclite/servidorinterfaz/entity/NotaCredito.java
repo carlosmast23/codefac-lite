@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "NOTA_CREDITO")
-public class NotaCredito {
+public class NotaCredito implements Serializable {
     
     @Id
     @Column(name = "ID")

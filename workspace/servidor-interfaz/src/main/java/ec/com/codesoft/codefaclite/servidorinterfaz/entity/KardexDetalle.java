@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "KARDEX_DETALLE")
-public class KardexDetalle {
+public class KardexDetalle implements Serializable {
 
     @Id
     @Column(name = "ID")

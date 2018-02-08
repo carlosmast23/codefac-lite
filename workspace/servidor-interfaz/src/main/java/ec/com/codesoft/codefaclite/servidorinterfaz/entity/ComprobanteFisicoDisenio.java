@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -22,7 +23,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "COMPROBANTE_FISICO_DISENIO")
-public class ComprobanteFisicoDisenio {
+public class ComprobanteFisicoDisenio implements Serializable {
     
     @Id
     @Column(name = "ID")

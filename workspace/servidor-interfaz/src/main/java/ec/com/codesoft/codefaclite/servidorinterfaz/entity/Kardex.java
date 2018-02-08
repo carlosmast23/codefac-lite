@@ -1,5 +1,6 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "KARDEX")
-public class Kardex {
+public class Kardex implements Serializable {
     
     @Id
     @Column(name = "ID")

@@ -35,6 +35,7 @@ public class ServiceControllerServer {
             
             for (Map.Entry<Class, Class> entry : mapRecursos.entrySet()) {
                 Class claseImplementacion=entry.getKey();
+                System.out.println("Cargando RMI: "+claseImplementacion.getName());
                 UnicastRemoteObject remoteObject=(UnicastRemoteObject) claseImplementacion.newInstance();
                 
                 Class claseInterfaz=entry.getValue();

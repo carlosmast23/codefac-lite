@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,7 +19,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "PARAMETRO")
-public class ParametroCodefac {
+public class ParametroCodefac implements Serializable {
     
     public static final String NOMBRE_FIRMA_ELECTRONICA= "firma_electronica";
     public static final String CLAVE_FIRMA_ELECTRONICA= "clave_firma_electronica";

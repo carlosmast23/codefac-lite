@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ClienteEnumEstado;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,7 +22,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "PRODUCTO_PROVEEDOR")
-public class ProductoProveedor {
+public class ProductoProveedor implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)    

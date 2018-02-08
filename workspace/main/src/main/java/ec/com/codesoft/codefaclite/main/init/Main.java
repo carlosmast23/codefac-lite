@@ -46,11 +46,14 @@ import ec.com.codesoft.codefaclite.main.model.GeneralPanelModel;
 import ec.com.codesoft.codefaclite.main.model.HiloPublicidadCodefac;
 import ec.com.codesoft.codefaclite.main.model.LoginModel;
 import ec.com.codesoft.codefaclite.main.model.MenuControlador;
+import ec.com.codesoft.codefaclite.main.model.ModoAplicativoModel;
 import ec.com.codesoft.codefaclite.main.model.SplashScreenModel;
 import ec.com.codesoft.codefaclite.main.model.ValidarLicenciaModel;
+import ec.com.codesoft.codefaclite.main.panel.ModoAplicativoDialog;
 import ec.com.codesoft.codefaclite.main.panel.ValidarLicenciaDialog;
 import ec.com.codesoft.codefaclite.main.panel.publicidad.Publicidad;
 import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
+import ec.com.codesoft.codefaclite.main.test.TestPruebaRMI;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
@@ -60,14 +63,57 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.PersistenciaDuplicadaException;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
+import ec.com.codesoft.codefaclite.servidor.service.AccesoDirectoService;
+import ec.com.codesoft.codefaclite.servidor.service.BodegaService;
+import ec.com.codesoft.codefaclite.servidor.service.CategoriaProductoService;
+import ec.com.codesoft.codefaclite.servidor.service.CompraDetalleService;
+import ec.com.codesoft.codefaclite.servidor.service.CompraService;
+import ec.com.codesoft.codefaclite.servidor.service.ComprobanteFisicoDisenioService;
 import ec.com.codesoft.codefaclite.servidor.service.EmpresaService;
+import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
+import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
+import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
+import ec.com.codesoft.codefaclite.servidor.service.KardexDetalleService;
+import ec.com.codesoft.codefaclite.servidor.service.KardexItemEspecificoService;
+import ec.com.codesoft.codefaclite.servidor.service.KardexService;
+import ec.com.codesoft.codefaclite.servidor.service.NotaCreditoService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
 import ec.com.codesoft.codefaclite.servidor.service.PerfilServicio;
+import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
+import ec.com.codesoft.codefaclite.servidor.service.ProductoEnsambleService;
+import ec.com.codesoft.codefaclite.servidor.service.ProductoProveedorService;
+import ec.com.codesoft.codefaclite.servidor.service.ProductoService;
+import ec.com.codesoft.codefaclite.servidor.service.SriIdentificacionService;
+import ec.com.codesoft.codefaclite.servidor.service.SriService;
+import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
+import ec.com.codesoft.codefaclite.servidor.service.UtilidadesService;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CategoriaProductoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraDetalleServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteFisicoDisenioServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexDetalleServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexItemEspecificoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServicioIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoEnsambleServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceControllerServer;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceIf;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
 import static java.awt.Frame.MAXIMIZED_BOTH;
@@ -94,35 +140,106 @@ import javax.swing.UnsupportedLookAndFeelException;
  */
 public class Main {
     
+    public static Integer modoAplicativo;
     
     public static void main(String[] args) {      
+        /**
+         * Seleccionar el modo de inicio de Codefac si no selecciona un modo no le permite acceder
+         * a los siguiente funcionalidad
+         */
+        iniciarModoAplicativo();
+        
+        /**
+         * Funcionalidad complementaria que inicia todos los componentes necesarios
+         */
         iniciarComponentes();
+    }
+    
+    public static void iniciarModoAplicativo()
+    {
+                /**
+         * Seleccionar el modo de inicio de Codefac si no selecciona un modo no le permite acceder
+         * a los siguiente funcionalidad
+         */
+        ModoAplicativoModel dialogAplicativo=new ModoAplicativoModel(null, true);
+        dialogAplicativo.setLocationRelativeTo(null);
+        dialogAplicativo.setVisible(true);
+        
+        //Si no selecciona ninguna opcion salir del aplicativo
+        if(dialogAplicativo.getModo()==null)
+        {
+            System.exit(0);
+        }
+        else
+        {
+            modoAplicativo=dialogAplicativo.getModo();
+        }
+        
+    }
+    
+    public static void cargarRecursosServidor()
+    {
+        try {
+            AbstractFacade.cargarEntityManager();
+           
+            Map<Class,Class> mapRecursos=new HashMap<Class, Class>();
+            
+            mapRecursos.put(ProductoService.class,ProductoServiceIf.class);
+            mapRecursos.put(PersonaService.class,PersonaServiceIf.class);
+            mapRecursos.put(AccesoDirectoService.class,AccesoDirectoServiceIf.class);
+            mapRecursos.put(BodegaService.class,BodegaServiceIf.class);
+            mapRecursos.put(CategoriaProductoService.class,CategoriaProductoServiceIf.class);
+            mapRecursos.put(CompraDetalleService.class,CompraDetalleServiceIf.class);
+            mapRecursos.put(CompraService.class,CompraServiceIf.class);
+            mapRecursos.put(ComprobanteFisicoDisenioService.class,ComprobanteFisicoDisenioServiceIf.class);
+            mapRecursos.put(EmpresaService.class,EmpresaServiceIf.class);
+            mapRecursos.put(FacturacionService.class,FacturacionServiceIf.class);
+            mapRecursos.put(ImpuestoDetalleService.class,ImpuestoDetalleServiceIf.class);
+            mapRecursos.put(ImpuestoService.class,ImpuestoServiceIf.class);
+            mapRecursos.put(KardexDetalleService.class,KardexDetalleServiceIf.class);
+            mapRecursos.put(KardexItemEspecificoService.class,KardexItemEspecificoServiceIf.class);
+            mapRecursos.put(KardexService.class,KardexServiceIf.class);
+            mapRecursos.put(NotaCreditoService.class,NotaCreditoServiceIf.class);
+            mapRecursos.put(ParametroCodefacService.class,ParametroCodefacServiceIf.class);
+            mapRecursos.put(PerfilServicio.class,PerfilServicioIf.class);
+            mapRecursos.put(ProductoEnsambleService.class,ProductoEnsambleServiceIf.class);            
+            mapRecursos.put(ProductoProveedorService.class,ProductoProveedorServiceIf.class);            
+            mapRecursos.put(SriIdentificacionService.class,SriIdentificacionServiceIf.class);
+            mapRecursos.put(SriService.class,SriServiceIf.class);
+            mapRecursos.put(UsuarioServicio.class, UsuarioServicioIf.class);
+            mapRecursos.put(UtilidadesService.class,UtilidadesServiceIf.class);
+            ServiceControllerServer.cargarRecursos(mapRecursos);
+            System.out.println("servidor iniciado");
+
+        } catch (PersistenceException ex) {
+            Logger.getLogger(TestPruebaRMI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (PersistenciaDuplicadaException ex) {
+            Logger.getLogger(TestPruebaRMI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void cargarRecursosCliente(String ipServidor)
+    {
+        try {
+            ServiceController.newController(ipServidor);
+            List<Class> listaServicios = new ArrayList<Class>();
+            PersonaServiceIf personaServiceIf = ServiceController.getController().getPersonaServiceIf();
+            List<Persona> buscarList = personaServiceIf.buscar();
+
+            for (Persona persona : buscarList) {
+                System.out.println(persona.getIdentificacion());
+            }
+
+        } catch (RemoteException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
     }
     
     public static void iniciarComponentes()
     {
         try {
-            /*
-            try {
-            UIManager.setLookAndFeel("com.seaglasslookandfeel.SeaGlassLookAndFeel"); //El tema es interesante
-            //UIManager.setLookAndFeel("net.java.dev.nimbus");
-            //UIManager.setLookAndFeel(NimbusLookAndFeel.class.getCanonicalName ());
-            //UIManager.setLookAndFeel(new Plastic3DLookAndFeel());
-            //UIManager.setLookAndFeel(new PlasticLookAndFeel());
-            //UIManager.setLookAndFeel(new PlasticXPLookAndFeel());
-            //UIManager.setLookAndFeel(new WindowsLookAndFeel()); //El tema es interesante
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            //UIManager.getLookAndFeelDefaults();
-            } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InstantiationException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            */
+
             SplashScreenModel splashScren=new SplashScreenModel();
             splashScren.agregarPorcentaje(40,"Cargando base de datos");
             splashScren.agregarPorcentaje(60,"Cargando datos session");
@@ -131,12 +248,25 @@ public class Main {
             splashScren.setVisible(true);
             splashScren.iniciar();
             
-            //DialogoCodefac.mensaje("uno mas","otro mas",DialogoCodefac.MENSAJE_CORRECTO);
+            /***
+             * Cargar componentes de la base de datos  si se carga en modo de servidor
+             */
+            if(modoAplicativo.equals(ModoAplicativoModel.MODO_SERVIDOR))
+            {                
+                componentesBaseDatos();
+                cargarRecursosServidor();
+                String ipServidor=JOptionPane.showInputDialog("Ingresa la Ip del servidor: ");
+                cargarRecursosCliente(ipServidor);
+            }
+            else
+            {
+                //Cargar los recursos para funcionar en modo cliente
+                String ipServidor=JOptionPane.showInputDialog("Ingresa la Ip del servidor: ");
+                cargarRecursosCliente(ipServidor);
             
-            componentesIniciales();
+            }
+            
             splashScren.siguiente();
-            
-            
             /**
              * Crear la session y cargar otro datos de la empresa
              */
@@ -244,6 +374,35 @@ public class Main {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        
+    }
+    
+    /**
+     * Metodo para cargar los estilos disponibles
+     */
+    private static void cargarEstilosCodefac() 
+    {
+        /*
+            try {
+            UIManager.setLookAndFeel("com.seaglasslookandfeel.SeaGlassLookAndFeel"); //El tema es interesante
+            //UIManager.setLookAndFeel("net.java.dev.nimbus");
+            //UIManager.setLookAndFeel(NimbusLookAndFeel.class.getCanonicalName ());
+            //UIManager.setLookAndFeel(new Plastic3DLookAndFeel());
+            //UIManager.setLookAndFeel(new PlasticLookAndFeel());
+            //UIManager.setLookAndFeel(new PlasticXPLookAndFeel());
+            //UIManager.setLookAndFeel(new WindowsLookAndFeel()); //El tema es interesante
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            //UIManager.getLookAndFeelDefaults();
+            } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InstantiationException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
+         */
         
     }
     
@@ -533,7 +692,7 @@ public class Main {
     
     
  
-    public static void componentesIniciales()
+    public static void componentesBaseDatos()
     {
         try {
             AbstractFacade.cargarEntityManager();
