@@ -418,6 +418,7 @@ public class Main {
             if(!respuesta)
             {
                 DialogoCodefac.mensaje("Error","Excedio el numero de clientes permitidos",DialogoCodefac.MENSAJE_INCORRECTO);
+                System.exit(0);
             }
         } catch (RemoteException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
