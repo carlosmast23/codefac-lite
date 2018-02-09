@@ -50,6 +50,7 @@ import ec.com.codesoft.codefaclite.main.model.ModoAplicativoModel;
 import ec.com.codesoft.codefaclite.main.model.SplashScreenModel;
 import ec.com.codesoft.codefaclite.main.model.ValidarLicenciaModel;
 import ec.com.codesoft.codefaclite.main.panel.ModoAplicativoDialog;
+import ec.com.codesoft.codefaclite.main.panel.ServidorMonitorPanel;
 import ec.com.codesoft.codefaclite.main.panel.ValidarLicenciaDialog;
 import ec.com.codesoft.codefaclite.main.panel.publicidad.Publicidad;
 import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
@@ -117,6 +118,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceI
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
 import static java.awt.Frame.MAXIMIZED_BOTH;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -246,24 +249,45 @@ public class Main {
             splashScren.agregarPorcentaje(80,"Creando controlador codefac");
             splashScren.agregarPorcentaje(100,"Cargando ventanas");
             splashScren.setVisible(true);
-            splashScren.iniciar();
+            splashScren.iniciar();            
             
-            /***
-             * Cargar componentes de la base de datos  si se carga en modo de servidor
+            /**
+             * *
+             * Cargar componentes de la base de datos si se carga en modo de
+             * servidor
              */
-            if(modoAplicativo.equals(ModoAplicativoModel.MODO_SERVIDOR))
-            {                
+            if (modoAplicativo.equals(ModoAplicativoModel.MODO_SERVIDOR)) {
                 componentesBaseDatos();
                 cargarRecursosServidor();
-                String ipServidor=JOptionPane.showInputDialog("Ingresa la Ip del servidor: ");
+                String ipServidor=InetAddress.getLocalHost().getHostAddress();
                 cargarRecursosCliente(ipServidor);
-            }
+                //Crear el pantalla que va a manterner encedidad la conexion con los clientes
+                ServidorMonitorPanel monitor=new ServidorMonitorPanel();
+                monitor.setVisible(true);
+                splashScren.siguiente();
+                splashScren.termino();
+                return;
+                        
+            } 
             else
             {
-                //Cargar los recursos para funcionar en modo cliente
-                String ipServidor=JOptionPane.showInputDialog("Ingresa la Ip del servidor: ");
-                cargarRecursosCliente(ipServidor);
-            
+                if (modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE)) 
+                {
+                    //Cargar los recursos para funcionar en modo cliente
+                    String ipServidor = JOptionPane.showInputDialog("Ingresa la Ip del servidor: ");
+                    cargarRecursosCliente(ipServidor);
+                }
+                else
+                {
+                    if (modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE_SERVIDOR)) {
+                        //Cargar los recursos para funcionar en modo cliente y le p
+                        componentesBaseDatos();
+                        cargarRecursosServidor();
+                        String ipServidor=InetAddress.getLocalHost().getHostAddress();
+                        cargarRecursosCliente(ipServidor);
+                    }
+                
+                }
             }
             
             splashScren.siguiente();
@@ -371,6 +395,8 @@ public class Main {
             
             
         } catch (RemoteException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnknownHostException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -691,7 +717,9 @@ public class Main {
     }
     
     
- 
+    /**
+     * Verifica y carga el Entity manager
+     */
     public static void componentesBaseDatos()
     {
         try {

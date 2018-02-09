@@ -11,6 +11,7 @@ import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.RemoteServer;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Map;
 import java.util.logging.Level;
@@ -43,7 +44,7 @@ public class ServiceControllerServer {
                 String nombreRecurso=claseInterfaz.getSimpleName();
                 
                 //Lanza el recurso para que este disponible por la red
-                registro.rebind("rmi://"+host+":"+PUERTO_SERVIDOR+"/"+nombreRecurso,remoteObject);
+                registro.rebind("rmi://"+host+":"+PUERTO_SERVIDOR+"/"+nombreRecurso,remoteObject);               
                 
             }
             
