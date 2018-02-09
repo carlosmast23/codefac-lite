@@ -5,6 +5,9 @@
  */
 package ec.com.codesoft.codefaclite.main.panel;
 
+import javax.swing.JButton;
+import javax.swing.JToggleButton;
+
 /**
  *
  * @author Carlos
@@ -34,10 +37,10 @@ public class ServidorMonitorPanel extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jToggleButton1 = new javax.swing.JToggleButton();
+        btnCambiarEstado = new javax.swing.JToggleButton();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnSalir = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -63,7 +66,7 @@ public class ServidorMonitorPanel extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
         jLabel5.setText("Estado:");
 
-        jToggleButton1.setText("Apagar");
+        btnCambiarEstado.setText("Apagar");
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel6.setText("jLabel6");
@@ -71,7 +74,7 @@ public class ServidorMonitorPanel extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel7.setText("jLabel7");
 
-        jButton1.setText("Salir");
+        btnSalir.setText("Salir");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -89,9 +92,9 @@ public class ServidorMonitorPanel extends javax.swing.JFrame {
                             .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
                             .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jToggleButton1)
+                        .addComponent(btnCambiarEstado)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(19, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -107,8 +110,8 @@ public class ServidorMonitorPanel extends javax.swing.JFrame {
                     .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jToggleButton1)
-                    .addComponent(jButton1))
+                    .addComponent(btnCambiarEstado)
+                    .addComponent(btnSalir))
                 .addContainerGap())
         );
 
@@ -191,7 +194,8 @@ public class ServidorMonitorPanel extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JToggleButton btnCambiarEstado;
+    private javax.swing.JButton btnSalir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -202,6 +206,23 @@ public class ServidorMonitorPanel extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JToggleButton jToggleButton1;
     // End of variables declaration//GEN-END:variables
+
+    public JToggleButton getBtnCambiarEstado() {
+        return btnCambiarEstado;
+    }
+
+    public void setBtnCambiarEstado(JToggleButton btnCambiarEstado) {
+        this.btnCambiarEstado = btnCambiarEstado;
+    }
+
+    public JButton getBtnSalir() {
+        return btnSalir;
+    }
+
+    public void setBtnSalir(JButton btnSalir) {
+        this.btnSalir = btnSalir;
+    }
+
+    
 }

@@ -47,6 +47,7 @@ import ec.com.codesoft.codefaclite.main.model.HiloPublicidadCodefac;
 import ec.com.codesoft.codefaclite.main.model.LoginModel;
 import ec.com.codesoft.codefaclite.main.model.MenuControlador;
 import ec.com.codesoft.codefaclite.main.model.ModoAplicativoModel;
+import ec.com.codesoft.codefaclite.main.model.ServidorMonitorModel;
 import ec.com.codesoft.codefaclite.main.model.SplashScreenModel;
 import ec.com.codesoft.codefaclite.main.model.ValidarLicenciaModel;
 import ec.com.codesoft.codefaclite.main.panel.ModoAplicativoDialog;
@@ -262,7 +263,7 @@ public class Main {
                 String ipServidor=InetAddress.getLocalHost().getHostAddress();
                 cargarRecursosCliente(ipServidor);
                 //Crear el pantalla que va a manterner encedidad la conexion con los clientes
-                ServidorMonitorPanel monitor=new ServidorMonitorPanel();
+                ServidorMonitorModel monitor=new ServidorMonitorModel();
                 monitor.setVisible(true);
                 splashScren.siguiente();
                 splashScren.termino();
@@ -276,6 +277,8 @@ public class Main {
                     //Cargar los recursos para funcionar en modo cliente
                     String ipServidor = JOptionPane.showInputDialog("Ingresa la Ip del servidor: ");
                     cargarRecursosCliente(ipServidor);
+                    verificarConexionesPermitidas();
+                    
                 }
                 else
                 {
@@ -285,6 +288,7 @@ public class Main {
                         cargarRecursosServidor();
                         String ipServidor=InetAddress.getLocalHost().getHostAddress();
                         cargarRecursosCliente(ipServidor);
+                        verificarConexionesPermitidas();
                     }
                 
                 }
@@ -401,6 +405,24 @@ public class Main {
         }
         
         
+    }
+    
+    /**
+     * Verifica si no se exedio el numero de conexiones permitidas
+     * @return 
+     */
+    private static void verificarConexionesPermitidas()
+    {
+        try {
+            Boolean respuesta= ServiceController.getController().getUtilidadesServiceIf().verificarConexionesServidor();
+            if(!respuesta)
+            {
+                DialogoCodefac.mensaje("Error","Excedio el numero de clientes permitidos",DialogoCodefac.MENSAJE_INCORRECTO);
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
     
     /**

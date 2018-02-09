@@ -137,9 +137,9 @@
                               </Group>
                           </Group>
                           <Group type="102" attributes="0">
-                              <Component id="jToggleButton1" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnCambiarEstado" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jButton1" min="-2" pref="65" max="-2" attributes="0"/>
+                              <Component id="btnSalir" min="-2" pref="65" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace pref="19" max="32767" attributes="0"/>
@@ -161,8 +161,8 @@
                       </Group>
                       <EmptySpace pref="16" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jToggleButton1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnCambiarEstado" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnSalir" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -186,7 +186,7 @@
                 <Property name="text" type="java.lang.String" value="Estado:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JToggleButton" name="jToggleButton1">
+            <Component class="javax.swing.JToggleButton" name="btnCambiarEstado">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Apagar"/>
               </Properties>
@@ -207,7 +207,7 @@
                 <Property name="text" type="java.lang.String" value="jLabel7"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton1">
+            <Component class="javax.swing.JButton" name="btnSalir">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Salir"/>
               </Properties>

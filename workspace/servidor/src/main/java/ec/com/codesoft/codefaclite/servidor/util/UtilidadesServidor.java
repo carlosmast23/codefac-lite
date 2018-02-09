@@ -14,6 +14,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,6 +24,10 @@ import java.util.logging.Logger;
  * @author Carlos
  */
 public class UtilidadesServidor {
+    
+    //Listado de conexiones en el Servidor
+    public static List<String> hostConectados=new ArrayList<String>();
+    
     public static InputStream[] querys={
         RecursoCodefac.SQL.getResourceInputStream("create_comprobante_fisico_disenio.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_cliente.sql"),

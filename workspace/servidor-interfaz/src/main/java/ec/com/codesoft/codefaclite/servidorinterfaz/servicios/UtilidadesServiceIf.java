@@ -17,4 +17,5 @@ public interface UtilidadesServiceIf extends Remote
 {
     public List<Object> consultaGeneralDialogos(String query, Map<Integer, Object> map, int limiteMinimo, int limiteMaximo) throws java.rmi.RemoteException;
     public Long consultaTamanioGeneralDialogos(String query, Map<Integer, Object> map) throws java.rmi.RemoteException;
+    public boolean verificarConexionesServidor() throws java.rmi.RemoteException;
 }

@@ -6,11 +6,16 @@
 package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
+import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceIf;
 import java.rmi.RemoteException;
+import java.rmi.server.RemoteServer;
+import java.rmi.server.ServerNotActiveException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -28,4 +33,34 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
     public  Long consultaTamanioGeneralDialogos(String query, Map<Integer, Object> map) throws java.rmi.RemoteException {
         return AbstractFacade.findCountStaticDialog(query, map);
     }
+
+    @Override
+    public boolean verificarConexionesServidor() throws RemoteException {
+        int numeroConexionesPermitidas=1;
+        try {
+            String hostCliente=RemoteServer.getClientHost();
+            
+                        
+            if(UtilidadesServidor.hostConectados.contains(hostCliente))
+            {
+                return true; //Existe en la lista de usuarios permitidos                
+            }
+            else
+            {
+                if(UtilidadesServidor.hostConectados.size()<numeroConexionesPermitidas)
+                {
+                    UtilidadesServidor.hostConectados.add(hostCliente);
+                    return true;
+                }
+            }
+            
+            //Si ya supera el numero de conexiones permitidas retorno falso
+            return false;
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(UtilidadesService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+        
+
 }
