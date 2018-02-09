@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.crm.panel;
 
 import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
@@ -730,7 +731,8 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     public void setTxtCantidadItem(JTextField txtCantidadItem) {
         this.txtCantidadItem = txtCantidadItem;
     }
-
+    
+    @ValidacionCodefacAnotacion(nombre = "Observacion", requerido = false, expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\,\\ ]*$",expresionRegularMensaje = "Ingrese caracteres validos")
     public JTextField getTxtObservacion() {
         return txtObservacion;
     }
@@ -746,7 +748,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     public void setTxtOrdenCompra(JTextField txtOrdenCompra) {
         this.txtOrdenCompra = txtOrdenCompra;
     }
-
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^\\d+$", expresionRegularMensaje = "Solo se admiten numeros" ,nombre = "PreImpreso 1")
     public JTextField getTxtPreimpreso() {
         return txtEstablecimiento;
     }
@@ -827,6 +829,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         this.txtEstablecimiento = txtEstablecimiento;
     }
 
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^\\d+$", expresionRegularMensaje = "Solo se admiten numeros" ,nombre = "PreImpreso 2")
     public JTextField getTxtPuntoEmision() {
         return txtPuntoEmision;
     }
@@ -835,6 +838,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         this.txtPuntoEmision = txtPuntoEmision;
     }
 
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^\\d+$", expresionRegularMensaje = "Solo se admiten numeros" ,nombre = "PreImpreso 3")
     public JTextField getTxtSecuencial() {
         return txtSecuencial;
     }

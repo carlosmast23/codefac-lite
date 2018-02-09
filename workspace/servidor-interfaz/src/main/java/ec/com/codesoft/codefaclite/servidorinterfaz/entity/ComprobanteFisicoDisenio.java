@@ -11,6 +11,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -42,7 +43,7 @@ public class ComprobanteFisicoDisenio implements Serializable {
     @Column (name = "CODIGO_DOCUMENTO")
     private String codigoDocumento;
 
-    @OneToMany(cascade = {CascadeType.ALL,CascadeType.DETACH}, mappedBy = "documento")
+    @OneToMany(cascade = {CascadeType.ALL,CascadeType.DETACH}, mappedBy = "documento",fetch = FetchType.EAGER)
     private List<BandaComprobante> secciones;
     
     public ComprobanteFisicoDisenio() {

@@ -16,6 +16,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -112,7 +113,7 @@ public class Compra implements Serializable {
     @ManyToOne    
     private Persona proveedor;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "compra")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "compra", fetch = FetchType.EAGER)
     private List<CompraDetalle> detalles;
     
 
