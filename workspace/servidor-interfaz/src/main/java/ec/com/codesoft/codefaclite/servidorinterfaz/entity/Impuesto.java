@@ -11,6 +11,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -47,7 +48,7 @@ public class Impuesto implements Serializable
     
     //@OneToMany(cascade= CascadeType.ALL)
     //@JoinColumn(name="ID_IMPUESTO")
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "impuesto")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "impuesto", fetch = FetchType.EAGER)
     private List<ImpuestoDetalle> detalleImpuestos;
 
     public Long getIdImpuesto() {
