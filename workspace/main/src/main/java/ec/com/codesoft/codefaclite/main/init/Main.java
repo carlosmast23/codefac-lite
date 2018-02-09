@@ -264,7 +264,9 @@ public class Main {
                 cargarRecursosCliente(ipServidor);
                 //Crear el pantalla que va a manterner encedidad la conexion con los clientes
                 ServidorMonitorModel monitor=new ServidorMonitorModel();
-                monitor.setVisible(true);
+                UtilidadesServidor.monitorUpdate=monitor;
+                monitor.setLocationRelativeTo(null);
+                monitor.setVisible(true);   
                 splashScren.siguiente();
                 splashScren.termino();
                 return;

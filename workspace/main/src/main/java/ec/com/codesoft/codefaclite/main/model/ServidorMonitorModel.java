@@ -5,38 +5,67 @@
  */
 package ec.com.codesoft.codefaclite.main.model;
 
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.main.panel.ServidorMonitorPanel;
+import ec.com.codesoft.codefaclite.servidor.service.interfacePanel.ServidorMonitorUpdateInterface;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.rmi.server.RemoteServer;
 import java.rmi.server.ServerNotActiveException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 
 /**
  *
  * @author Carlos
  */
-public class ServidorMonitorModel extends ServidorMonitorPanel{
-
-            
+public class ServidorMonitorModel extends ServidorMonitorPanel implements ServidorMonitorUpdateInterface{
+                
     public ServidorMonitorModel() {
+        valoresIniciales();
         listenerBotones();
     }
 
     private void listenerBotones() {
-        getBtnSalir().addActionListener(new ActionListener() {
+        getBtnTerminar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    String host=RemoteServer.getClientHost();
-                    System.out.println(host);
-                } catch (ServerNotActiveException ex) {
-                    Logger.getLogger(ServidorMonitorModel.class.getName()).log(Level.SEVERE, null, ex);
+                Boolean salir= DialogoCodefac.dialogoPregunta("Advertencia","Advertencia: Se perderan todas las conexiones con los clientes \n Esta seguro que desea salir ?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                if(salir)
+                {
+                    System.exit(0);
                 }
-                 
             }
         });
+        
+        
+    }
+
+    private void valoresIniciales() {
+        try {
+            String ipServidor=InetAddress.getLocalHost().getHostAddress();
+            getLblDireccionIp().setText(ipServidor);
+            
+            getLblEstado().setText("Activo");
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(ServidorMonitorModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public void actualizarNumeroConexiones(String[] conexiones) {
+        getLblClientesRegistrados().setText(conexiones.length+"");
+        
+        //Actualizar los valores de la tabla
+        getLstClientesConectados().removeAll();
+        DefaultListModel listModel = new DefaultListModel();
+        for (String conexion : conexiones) {
+            listModel.addElement(conexion.toString());
+        }
+        getLstClientesConectados().setModel(listModel);
     }
     
 }

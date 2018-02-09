@@ -21,39 +21,39 @@ import java.util.logging.Logger;
  *
  * @author Carlos
  */
-public class UtilidadesService extends UnicastRemoteObject implements UtilidadesServiceIf{
+public class UtilidadesService extends UnicastRemoteObject implements UtilidadesServiceIf {
 
     public UtilidadesService() throws RemoteException {
-    }       
-    
-    public  List<Object> consultaGeneralDialogos(String query, Map<Integer, Object> map, int limiteMinimo, int limiteMaximo) throws java.rmi.RemoteException {
+    }
+
+    public List<Object> consultaGeneralDialogos(String query, Map<Integer, Object> map, int limiteMinimo, int limiteMaximo) throws java.rmi.RemoteException {
         return AbstractFacade.findStaticDialog(query, map, limiteMinimo, limiteMaximo);
     }
 
-    public  Long consultaTamanioGeneralDialogos(String query, Map<Integer, Object> map) throws java.rmi.RemoteException {
+    public Long consultaTamanioGeneralDialogos(String query, Map<Integer, Object> map) throws java.rmi.RemoteException {
         return AbstractFacade.findCountStaticDialog(query, map);
     }
 
     @Override
     public boolean verificarConexionesServidor() throws RemoteException {
-        int numeroConexionesPermitidas=1;
+        int numeroConexionesPermitidas = 1;
         try {
-            String hostCliente=RemoteServer.getClientHost();
-            
-                        
-            if(UtilidadesServidor.hostConectados.contains(hostCliente))
-            {
+            String hostCliente = RemoteServer.getClientHost();
+
+            if (UtilidadesServidor.hostConectados.contains(hostCliente)) {
                 return true; //Existe en la lista de usuarios permitidos                
-            }
-            else
-            {
-                if(UtilidadesServidor.hostConectados.size()<numeroConexionesPermitidas)
-                {
-                    UtilidadesServidor.hostConectados.add(hostCliente);
-                    return true;
+            } else if (UtilidadesServidor.hostConectados.size() < numeroConexionesPermitidas) {
+                UtilidadesServidor.hostConectados.add(hostCliente);
+                if (UtilidadesServidor.monitorUpdate != null) {
+                    
+                    String[] stockArr = new String[UtilidadesServidor.hostConectados.size()];
+                    stockArr = UtilidadesServidor.hostConectados.toArray(stockArr);
+                    UtilidadesServidor.monitorUpdate.actualizarNumeroConexiones(stockArr);
+
                 }
+                return true;
             }
-            
+
             //Si ya supera el numero de conexiones permitidas retorno falso
             return false;
         } catch (ServerNotActiveException ex) {
@@ -61,6 +61,5 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
         }
         return false;
     }
-        
 
 }

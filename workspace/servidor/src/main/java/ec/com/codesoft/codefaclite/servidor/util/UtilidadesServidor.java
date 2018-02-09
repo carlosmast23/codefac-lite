@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidor.util;
 
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import ec.com.codesoft.codefaclite.servidor.service.interfacePanel.ServidorMonitorUpdateInterface;
 import ec.com.codesoft.codefaclite.test.CrearBaseDatos;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.io.InputStream;
@@ -27,6 +28,8 @@ public class UtilidadesServidor {
     
     //Listado de conexiones en el Servidor
     public static List<String> hostConectados=new ArrayList<String>();
+    
+    public static ServidorMonitorUpdateInterface monitorUpdate;
     
     public static InputStream[] querys={
         RecursoCodefac.SQL.getResourceInputStream("create_comprobante_fisico_disenio.sql"),
