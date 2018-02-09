@@ -50,6 +50,7 @@ import ec.com.codesoft.codefaclite.main.model.ModoAplicativoModel;
 import ec.com.codesoft.codefaclite.main.model.SplashScreenModel;
 import ec.com.codesoft.codefaclite.main.model.ValidarLicenciaModel;
 import ec.com.codesoft.codefaclite.main.panel.ModoAplicativoDialog;
+import ec.com.codesoft.codefaclite.main.panel.ServidorMonitorPanel;
 import ec.com.codesoft.codefaclite.main.panel.ValidarLicenciaDialog;
 import ec.com.codesoft.codefaclite.main.panel.publicidad.Publicidad;
 import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
@@ -248,8 +249,7 @@ public class Main {
             splashScren.agregarPorcentaje(80,"Creando controlador codefac");
             splashScren.agregarPorcentaje(100,"Cargando ventanas");
             splashScren.setVisible(true);
-            splashScren.iniciar();
-            
+            splashScren.iniciar();            
             
             /**
              * *
@@ -261,6 +261,13 @@ public class Main {
                 cargarRecursosServidor();
                 String ipServidor=InetAddress.getLocalHost().getHostAddress();
                 cargarRecursosCliente(ipServidor);
+                //Crear el pantalla que va a manterner encedidad la conexion con los clientes
+                ServidorMonitorPanel monitor=new ServidorMonitorPanel();
+                monitor.setVisible(true);
+                splashScren.siguiente();
+                splashScren.termino();
+                return;
+                        
             } 
             else
             {
