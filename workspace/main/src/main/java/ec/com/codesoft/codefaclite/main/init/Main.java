@@ -117,6 +117,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceI
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
 import static java.awt.Frame.MAXIMIZED_BOTH;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -248,22 +250,37 @@ public class Main {
             splashScren.setVisible(true);
             splashScren.iniciar();
             
-            /***
-             * Cargar componentes de la base de datos  si se carga en modo de servidor
+            
+            /**
+             * *
+             * Cargar componentes de la base de datos si se carga en modo de
+             * servidor
              */
-            if(modoAplicativo.equals(ModoAplicativoModel.MODO_SERVIDOR))
-            {                
+            if (modoAplicativo.equals(ModoAplicativoModel.MODO_SERVIDOR)) {
                 componentesBaseDatos();
                 cargarRecursosServidor();
-                String ipServidor=JOptionPane.showInputDialog("Ingresa la Ip del servidor: ");
+                String ipServidor=InetAddress.getLocalHost().getHostAddress();
                 cargarRecursosCliente(ipServidor);
-            }
+            } 
             else
             {
-                //Cargar los recursos para funcionar en modo cliente
-                String ipServidor=JOptionPane.showInputDialog("Ingresa la Ip del servidor: ");
-                cargarRecursosCliente(ipServidor);
-            
+                if (modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE)) 
+                {
+                    //Cargar los recursos para funcionar en modo cliente
+                    String ipServidor = JOptionPane.showInputDialog("Ingresa la Ip del servidor: ");
+                    cargarRecursosCliente(ipServidor);
+                }
+                else
+                {
+                    if (modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE_SERVIDOR)) {
+                        //Cargar los recursos para funcionar en modo cliente y le p
+                        componentesBaseDatos();
+                        cargarRecursosServidor();
+                        String ipServidor=InetAddress.getLocalHost().getHostAddress();
+                        cargarRecursosCliente(ipServidor);
+                    }
+                
+                }
             }
             
             splashScren.siguiente();
@@ -371,6 +388,8 @@ public class Main {
             
             
         } catch (RemoteException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnknownHostException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -691,7 +710,9 @@ public class Main {
     }
     
     
- 
+    /**
+     * Verifica y carga el Entity manager
+     */
     public static void componentesBaseDatos()
     {
         try {
