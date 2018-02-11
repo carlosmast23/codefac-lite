@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
+package ec.com.codesoft.codefaclite.servidorinterfaz.controller;
 
-import static ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController.PUERTO_SERVIDOR;
+import static ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory.PUERTO_SERVIDOR;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
@@ -49,13 +49,13 @@ public class ServiceControllerServer {
             }
             
         } catch (RemoteException ex) {
-            Logger.getLogger(ServiceController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ServiceFactory.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            Logger.getLogger(ServiceController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ServiceFactory.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            Logger.getLogger(ServiceController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ServiceFactory.class.getName()).log(Level.SEVERE, null, ex);
         } catch (UnknownHostException ex) {
-            Logger.getLogger(ServiceController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ServiceFactory.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

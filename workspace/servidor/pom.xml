@@ -66,5 +66,10 @@
             <artifactId>servidor-interfaz</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>facturacionElectronica</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

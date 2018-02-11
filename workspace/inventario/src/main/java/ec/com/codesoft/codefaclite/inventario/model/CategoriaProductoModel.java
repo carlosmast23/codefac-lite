@@ -17,7 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaProductoEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CategoriaProductoServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +35,7 @@ public class CategoriaProductoModel extends CategoriaProductoPanel implements Di
     private CategoriaProductoServiceIf catProductoService;
 
     public CategoriaProductoModel() {
-        catProductoService = ServiceController.getController().getCategoriaProductoServiceIf();
+        catProductoService = ServiceFactory.getFactory().getCategoriaProductoServiceIf();
     }
 
     @Override

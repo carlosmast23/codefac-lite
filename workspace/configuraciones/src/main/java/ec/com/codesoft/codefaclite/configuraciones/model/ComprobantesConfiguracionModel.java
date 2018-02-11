@@ -8,7 +8,7 @@ package ec.com.codesoft.codefaclite.configuraciones.model;
 import ec.com.codesoft.codefaclite.configuraciones.panel.ComprobantesConfiguracionPanel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.dialog.ProcesoSegundoPlano;
-import ec.com.codesoft.codefaclite.controlador.directorio.DirectorioCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
@@ -23,7 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleSer
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.ejemplo.utilidades.email.CorreoElectronico;
 import ec.com.codesoft.ejemplo.utilidades.email.SmtpNoExisteException;
 import ec.com.codesoft.ejemplo.utilidades.varios.DialogoCopiarArchivos;
@@ -67,8 +67,8 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     private DialogoCopiarArchivos dialogoCopiarFondoEscritorio;
 
     public ComprobantesConfiguracionModel() {
-        impuestoDetalleService = ServiceController.getController().getImpuestoDetalleServiceIf();
-        this.parametroCodefacService = ServiceController.getController().getParametroCodefacServiceIf();
+        impuestoDetalleService = ServiceFactory.getFactory().getImpuestoDetalleServiceIf();
+        this.parametroCodefacService = ServiceFactory.getFactory().getParametroCodefacServiceIf();
         cargarDatosIva();
         cargarTipoFactura();
         cargarModosFacturacion();
@@ -257,7 +257,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
 
     private void cargarDatosIva() {
         try {
-            ImpuestoServiceIf impuestoService = ServiceController.getController().getImpuestoServiceIf();
+            ImpuestoServiceIf impuestoService = ServiceFactory.getFactory().getImpuestoServiceIf();
             Impuesto iva = impuestoService.obtenerImpuestoPorCodigo(Impuesto.IVA);
             for (ImpuestoDetalle impuesto : iva.getDetalleImpuestos()) {
                 getCmbIvaDefault().addItem(impuesto);
@@ -500,7 +500,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
 
     public void configurarCorreoDeConsumidorFinal() {
         try {
-            clienteService = ServiceController.getController().getPersonaServiceIf();
+            clienteService = ServiceFactory.getFactory().getPersonaServiceIf();
             for (Persona c : clienteService.buscar()) {
                 if (c.getRazonSocial().equals("Cliente Final")) {
                     cliente = c;

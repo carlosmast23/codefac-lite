@@ -27,7 +27,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteFisicoDisenioServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -111,7 +111,7 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
     @Override
     public void grabar() throws ExcepcionCodefacLite {
         try {
-            ComprobanteFisicoDisenioServiceIf servicio =ServiceController.getController().getComprobanteFisicoDisenioServiceIf();
+            ComprobanteFisicoDisenioServiceIf servicio =ServiceFactory.getFactory().getComprobanteFisicoDisenioServiceIf();
             ComprobanteFisicoDisenio comprobante= (ComprobanteFisicoDisenio) getCmbDocumento().getSelectedItem();
             servicio.editar(comprobante);
             DialogoCodefac.mensaje("Correcto","Los datos fueron grabados correctamente",DialogoCodefac.MENSAJE_CORRECTO);
@@ -547,7 +547,7 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
     private void cargarDatos() {
         try {
             getCmbDocumento().removeAllItems();
-            ComprobanteFisicoDisenioServiceIf servicio = ServiceController.getController().getComprobanteFisicoDisenioServiceIf();
+            ComprobanteFisicoDisenioServiceIf servicio = ServiceFactory.getFactory().getComprobanteFisicoDisenioServiceIf();
             List<ComprobanteFisicoDisenio> documentos = servicio.obtenerTodos();
             for (ComprobanteFisicoDisenio documento : documentos) {
                 //Esto sirve para desasociar la entidad y que no se reflejen los cambios directamente con la base de datos

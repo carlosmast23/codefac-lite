@@ -22,7 +22,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
@@ -78,7 +78,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
         if(validarItems())
         {
             try {
-                KardexServiceIf servicioKardex=ServiceController.getController().getKardexServiceIf();
+                KardexServiceIf servicioKardex=ServiceFactory.getFactory().getKardexServiceIf();
                 Bodega bodega= (Bodega) getCmbBodega().getSelectedItem();
                 servicioKardex.ingresarInventario(detallesKardex,bodega);
                 DialogoCodefac.mensaje("Correcto","Los producto fueron agregados correctamente al kardex",DialogoCodefac.MENSAJE_CORRECTO);
@@ -292,7 +292,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
     private void valoresIniciales() {
         try {
             getCmbBodega().removeAllItems();
-            BodegaServiceIf servicioBodega=ServiceController.getController().getBodegaServiceIf();
+            BodegaServiceIf servicioBodega=ServiceFactory.getFactory().getBodegaServiceIf();
             List<Bodega> bodegas=servicioBodega.obtenerTodos();
             for (Bodega bodega : bodegas) {
                 getCmbBodega().addItem(bodega);

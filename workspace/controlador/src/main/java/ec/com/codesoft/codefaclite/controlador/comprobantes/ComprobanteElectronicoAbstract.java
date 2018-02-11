@@ -6,7 +6,7 @@
 package ec.com.codesoft.codefaclite.controlador.comprobantes;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.mail.CorreoCodefac;
-import ec.com.codesoft.codefaclite.controlador.directorio.DirectorioCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.controlador.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
@@ -20,7 +20,7 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
 import ec.com.codesoft.ejemplo.utilidades.email.CorreoElectronico;
 import ec.com.codesoft.ejemplo.utilidades.imagen.UtilidadImagen;
@@ -164,7 +164,7 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
             /**
              * Cargar datos de las formas de pago
              */
-            SriServiceIf service=ServiceController.getController().getSriServiceIf();
+            SriServiceIf service=ServiceFactory.getFactory().getSriServiceIf();
             List<SriFormaPago> formasPagoSri=service.obtenerFormasPagoActivo();
             Map<String,String> mapFormasPago=new HashMap<String,String>();
             for (SriFormaPago sriFormaPago : formasPagoSri) {

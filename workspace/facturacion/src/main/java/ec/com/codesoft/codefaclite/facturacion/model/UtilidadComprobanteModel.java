@@ -7,7 +7,7 @@ package ec.com.codesoft.codefaclite.facturacion.model;
 
 import com.sun.glass.ui.Cursor;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
-import ec.com.codesoft.codefaclite.controlador.directorio.DirectorioCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacion.other.FacturacionElectronica;
@@ -31,7 +31,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NotaCreditoEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -243,25 +243,29 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 
-                //TODO: Revisar esta validacion temporal porque no existe la carpeta de no autorizado
-                if(getCmbCarpetaComprobante().getSelectedItem().equals(ComprobanteElectronicoService.CARPETA_NO_AUTORIZADOS))
-                {
-                    return ;
+                try {
+                    //TODO: Revisar esta validacion temporal porque no existe la carpeta de no autorizado
+                    if(getCmbCarpetaComprobante().getSelectedItem().equals(ComprobanteElectronicoService.CARPETA_NO_AUTORIZADOS))
+                    {
+                        return ;
+                    }
+                    
+                    String path = session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor;
+                    String modoFacturacion=session.getParametrosCodefac().get(ParametroCodefac.MODO_FACTURACION).valor;
+                    String pathComprobantes="";
+                    if(modoFacturacion.equals(ComprobanteElectronicoService.MODO_PRODUCCION))
+                        pathComprobantes=DirectorioCodefac.COMPROBANTES_PRODUCCION.getDirectorio();
+                    else
+                        pathComprobantes=DirectorioCodefac.COMPROBANTES_PRUEBAS.getDirectorio();
+                    
+                    
+                    //File[] archivos = ComprobantesElectronicosUtil.getComprobantesByFolder(path, getCmbCarpetaComprobante().getSelectedItem().toString());
+                    comprobantes= ComprobantesElectronicosUtil.getComprobantesObjectByFolder(pathComprobantes,getCmbCarpetaComprobante().getSelectedItem().toString());
+                    cargarDatosComprobantesTabla(comprobantes);
+                    cargarSiguienteEtapaPorCarpeta(getCmbCarpetaComprobante().getSelectedItem().toString());
+                } catch (RemoteException ex) {
+                    Logger.getLogger(UtilidadComprobanteModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
-                String path = session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor;
-                String modoFacturacion=session.getParametrosCodefac().get(ParametroCodefac.MODO_FACTURACION).valor;
-                String pathComprobantes="";
-                if(modoFacturacion.equals(ComprobanteElectronicoService.MODO_PRODUCCION))
-                   pathComprobantes=DirectorioCodefac.COMPROBANTES_PRODUCCION.getDirectorio(session);
-                else
-                   pathComprobantes=DirectorioCodefac.COMPROBANTES_PRUEBAS.getDirectorio(session);
-                
-                
-                //File[] archivos = ComprobantesElectronicosUtil.getComprobantesByFolder(path, getCmbCarpetaComprobante().getSelectedItem().toString());
-                comprobantes= ComprobantesElectronicosUtil.getComprobantesObjectByFolder(pathComprobantes,getCmbCarpetaComprobante().getSelectedItem().toString());
-                cargarDatosComprobantesTabla(comprobantes);
-                cargarSiguienteEtapaPorCarpeta(getCmbCarpetaComprobante().getSelectedItem().toString());
             }
         });
 
@@ -337,7 +341,7 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
                     switch(comprobante)
                     {
                         case FACTURA:
-                            FacturacionServiceIf servicio=ServiceController.getController().getFacturacionServiceIf();
+                            FacturacionServiceIf servicio=ServiceFactory.getFactory().getFacturacionServiceIf();
                             List<Factura> facturas=servicio.obtenerPorMap(map);
                             for (Factura factura : facturas) {
                                 try {
@@ -350,7 +354,7 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
                             break;
                             
                         case NOTA_CREDITO:
-                            NotaCreditoServiceIf servicioNotaCredito=ServiceController.getController().getNotaCreditoServiceIf();
+                            NotaCreditoServiceIf servicioNotaCredito=ServiceFactory.getFactory().getNotaCreditoServiceIf();
                             List<NotaCredito> notasCredito=servicioNotaCredito.obtenerPorMap(map);
                             for (NotaCredito notaCredito : notasCredito) {
                                 try {

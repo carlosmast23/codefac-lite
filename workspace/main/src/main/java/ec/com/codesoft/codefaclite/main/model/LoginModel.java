@@ -9,7 +9,7 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.main.panel.LoginFormDialog;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
 import java.awt.Frame;
 import java.awt.Image;
@@ -32,7 +32,7 @@ public class LoginModel extends LoginFormDialog{
     public LoginModel() {
         super(null,true);
         initListenerBotones();
-        this.usuarioServicio=ServiceController.getController().getUsuarioServicioIf();
+        this.usuarioServicio=ServiceFactory.getFactory().getUsuarioServicioIf();
         
         Image fondoImg = new javax.swing.ImageIcon(getClass().getResource("/img/general/fondoInicial.jpg")).getImage();
         getPanelPrincipal().setBorder(new Fondo2(fondoImg));

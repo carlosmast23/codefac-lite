@@ -71,6 +71,7 @@ import ec.com.codesoft.codefaclite.servidor.service.CategoriaProductoService;
 import ec.com.codesoft.codefaclite.servidor.service.CompraDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.CompraService;
 import ec.com.codesoft.codefaclite.servidor.service.ComprobanteFisicoDisenioService;
+import ec.com.codesoft.codefaclite.servidor.service.ComprobantesService;
 import ec.com.codesoft.codefaclite.servidor.service.EmpresaService;
 import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
@@ -110,8 +111,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoEnsambleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceControllerServer;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceControllerServer;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
@@ -212,6 +214,7 @@ public class Main {
             mapRecursos.put(SriService.class,SriServiceIf.class);
             mapRecursos.put(UsuarioServicio.class, UsuarioServicioIf.class);
             mapRecursos.put(UtilidadesService.class,UtilidadesServiceIf.class);
+            mapRecursos.put(ComprobantesService.class,ComprobanteServiceIf.class);
             ServiceControllerServer.cargarRecursos(mapRecursos);
             System.out.println("servidor iniciado");
 
@@ -225,9 +228,9 @@ public class Main {
     public static void cargarRecursosCliente(String ipServidor)
     {
         try {
-            ServiceController.newController(ipServidor);
+            ServiceFactory.newController(ipServidor);
             List<Class> listaServicios = new ArrayList<Class>();
-            PersonaServiceIf personaServiceIf = ServiceController.getController().getPersonaServiceIf();
+            PersonaServiceIf personaServiceIf = ServiceFactory.getFactory().getPersonaServiceIf();
             List<Persona> buscarList = personaServiceIf.buscar();
 
             for (Persona persona : buscarList) {
@@ -301,7 +304,7 @@ public class Main {
              * Crear la session y cargar otro datos de la empresa
              */
             SessionCodefac session=new SessionCodefac();
-            EmpresaServiceIf empresaService = ServiceController.getController().getEmpresaServiceIf();
+            EmpresaServiceIf empresaService = ServiceFactory.getFactory().getEmpresaServiceIf();
             List<Empresa> empresaList=empresaService.obtenerTodos();
             
             if(empresaList!=null && empresaList.size()>0)
@@ -348,7 +351,7 @@ public class Main {
             {
                 try {
                     //Buscar el tipo de licencia paa setear en el sistema
-                    ParametroCodefacServiceIf servicio = ServiceController.getController().getParametroCodefacServiceIf();
+                    ParametroCodefacServiceIf servicio = ServiceFactory.getFactory().getParametroCodefacServiceIf();
                     String pathBase = servicio.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS).valor;
                     ValidacionLicenciaCodefac validacion = new ValidacionLicenciaCodefac(pathBase);
                     TipoLicenciaEnum tipoLicencia = validacion.getLicencia().getTipoLicenciaEnum();
@@ -363,6 +366,9 @@ public class Main {
                     
                     //Setear Variables de sesion
                     session.setTipoLicenciaEnum(tipoLicencia);
+                    //Este valor seteo para que sea accesible desde el servidor
+                    //TODO: Verficar si se puede mejorar esta linea de codigo
+                    UtilidadesServidor.tipoLicenciaEnum=tipoLicencia;
                     session.setUsuarioLicencia(validacion.obtenerLicencia().getProperty(ValidacionLicenciaCodefac.USUARIO));
                 } catch (RemoteException ex) {
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
@@ -416,7 +422,7 @@ public class Main {
     private static void verificarConexionesPermitidas()
     {
         try {
-            Boolean respuesta= ServiceController.getController().getUtilidadesServiceIf().verificarConexionesServidor();
+            Boolean respuesta= ServiceFactory.getFactory().getUtilidadesServiceIf().verificarConexionesServidor();
             if(!respuesta)
             {
                 DialogoCodefac.mensaje("Error","Excedio el numero de clientes permitidos",DialogoCodefac.MENSAJE_INCORRECTO);
@@ -460,7 +466,7 @@ public class Main {
     public static void validacionCodefacOnline(ValidacionLicenciaCodefac validacion)
     {
         try {
-            ParametroCodefacServiceIf servicio = ServiceController.getController().getParametroCodefacServiceIf();
+            ParametroCodefacServiceIf servicio = ServiceFactory.getFactory().getParametroCodefacServiceIf();
             /**
              * Verificar si la licencia actual es la misma que tiene el servidor
              */
@@ -546,7 +552,7 @@ public class Main {
                 parametroFechaValidacion.setNombre(ParametroCodefac.ULTIMA_FECHA_VALIDACION);
             }
             
-            ParametroCodefacServiceIf servicio=ServiceController.getController().getParametroCodefacServiceIf();
+            ParametroCodefacServiceIf servicio=ServiceFactory.getFactory().getParametroCodefacServiceIf();
             SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
             Date fechaHoy = UtilidadesFecha.getFechaHoy();
             parametroFechaValidacion.setValor(format.format(fechaHoy));
@@ -771,7 +777,7 @@ public class Main {
     private static boolean comprobarLicencia()
     {
         try {
-            ParametroCodefacServiceIf servicio=ServiceController.getController().getParametroCodefacServiceIf();
+            ParametroCodefacServiceIf servicio=ServiceFactory.getFactory().getParametroCodefacServiceIf();
             String pathBase=servicio.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS).valor;
             ValidacionLicenciaCodefac validacion = new ValidacionLicenciaCodefac();
             validacion.setPath(pathBase);
@@ -827,7 +833,7 @@ public class Main {
     private static List<Perfil> obtenerPerfilesUsuario(Usuario usuario)
     {
         try {
-            PerfilServicioIf servicio=ServiceController.getController().getPerfilServicioIf();
+            PerfilServicioIf servicio=ServiceFactory.getFactory().getPerfilServicioIf();
             return servicio.obtenerPerfilesPorUsuario(usuario);
         } catch (RemoteException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);

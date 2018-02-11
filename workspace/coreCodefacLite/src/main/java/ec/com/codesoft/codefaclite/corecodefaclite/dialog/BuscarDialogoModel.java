@@ -7,7 +7,7 @@ package ec.com.codesoft.codefaclite.corecodefaclite.dialog;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.panel.DialogoBuscadorForm;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -87,7 +87,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
             if(listaResultados!=null)
                 listaResultados.clear();
             
-            listaResultados=ServiceController.getController().getUtilidadesServiceIf().consultaGeneralDialogos(queryDialog.query,queryDialog.getParametros(),limiteInferior,CANTIDAD_FILAS);
+            listaResultados=ServiceFactory.getFactory().getUtilidadesServiceIf().consultaGeneralDialogos(queryDialog.query,queryDialog.getParametros(),limiteInferior,CANTIDAD_FILAS);
             cargarDatos(listaResultados);
             
             setearBotonesSiguienteAtras();
@@ -144,7 +144,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
             int segundoCorte=query.indexOf("from");
             String queryModificado=queryDialog.query.substring(0,primerCorte)+" count(1) "+queryDialog.query.substring(segundoCorte);
             System.out.println(queryModificado);            
-            return ServiceController.getController().getUtilidadesServiceIf().consultaTamanioGeneralDialogos(queryModificado, queryDialog.getParametros());
+            return ServiceFactory.getFactory().getUtilidadesServiceIf().consultaTamanioGeneralDialogos(queryModificado, queryDialog.getParametros());
         } catch (RemoteException ex) {
             Logger.getLogger(BuscarDialogoModel.class.getName()).log(Level.SEVERE, null, ex);
         }

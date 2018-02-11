@@ -31,7 +31,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -92,7 +92,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
     public void grabar() throws ExcepcionCodefacLite {
         try {
             NotaCredito notaCreditoGrabada;
-            NotaCreditoServiceIf servicio=ServiceController.getController().getNotaCreditoServiceIf();
+            NotaCreditoServiceIf servicio=ServiceFactory.getFactory().getNotaCreditoServiceIf();
             setearValoresNotaCredito();
             servicio.grabar(notaCredito);
             notaCreditoGrabada=notaCredito;//graba una referencia con ambiento del metodo para los listener
@@ -274,7 +274,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
             getLblNombreComercial().setText(session.getEmpresa().getRazonSocial());
             
             //Cargar el secuncial correspondiente
-            NotaCreditoServiceIf servicio=ServiceController.getController().getNotaCreditoServiceIf();
+            NotaCreditoServiceIf servicio=ServiceFactory.getFactory().getNotaCreditoServiceIf();
             getLblSecuencial().setText(servicio.getPreimpresoSiguiente());
             
             

@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.controlador.directorio;
+package ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio;
 
-import ec.com.codesoft.codefaclite.controlador.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -16,6 +17,8 @@ import java.io.IOException;
 import javax.mail.Session;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.rmi.RemoteException;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -44,23 +47,29 @@ public enum DirectorioCodefac {
     }
     
     
-    public String getDirectorio(SessionCodefacInterface session)
+    public String getDirectorio() throws RemoteException
     {
-        String path_raiz=session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).getValor();
+        ParametroCodefacServiceIf service=ServiceFactory.getFactory().getParametroCodefacServiceIf();
+        Map<String,ParametroCodefac> parametrosMap= service.getParametrosMap();
+        String path_raiz=parametrosMap.get(ParametroCodefac.DIRECTORIO_RECURSOS).getValor();
         return path_raiz+"/"+nombre;
     }
     
-    public String getArchivo(SessionCodefacInterface session,String archivo)
+    public String getArchivo(String archivo) throws RemoteException
     {
-        String path_raiz=session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).getValor();
+        ParametroCodefacServiceIf service = ServiceFactory.getFactory().getParametroCodefacServiceIf();
+        Map<String, ParametroCodefac> parametrosMap = service.getParametrosMap();
+        String path_raiz=parametrosMap.get(ParametroCodefac.DIRECTORIO_RECURSOS).getValor();
         return path_raiz+"/"+nombre+"/"+archivo;
     }
     
-    public BufferedImage getArchivoStream(SessionCodefacInterface session,String archivo)
+    public BufferedImage getArchivoStream(String archivo) throws RemoteException
     {
+        ParametroCodefacServiceIf service = ServiceFactory.getFactory().getParametroCodefacServiceIf();
+        Map<String, ParametroCodefac> parametrosMap = service.getParametrosMap();
         InputStream input=null;
         try {
-            String path_raiz=session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).getValor();
+            String path_raiz=parametrosMap.get(ParametroCodefac.DIRECTORIO_RECURSOS).getValor();
             File file=new File(path_raiz+"/"+nombre+"/"+archivo);
             input = new FileInputStream(file);
             BufferedImage image = ImageIO.read(file ); 

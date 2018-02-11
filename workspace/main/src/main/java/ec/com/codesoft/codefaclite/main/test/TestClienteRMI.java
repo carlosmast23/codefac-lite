@@ -9,7 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import java.rmi.AccessException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -27,9 +27,9 @@ import java.util.logging.Logger;
 public class TestClienteRMI {
     public static void main(String[] args) {
         try {
-            ServiceController.newController("192.168.100.14");
+            ServiceFactory.newController("192.168.100.14");
             List<Class> listaServicios=new ArrayList<Class>();
-            PersonaServiceIf personaServiceIf= ServiceController.getController().getPersonaServiceIf();
+            PersonaServiceIf personaServiceIf= ServiceFactory.getFactory().getPersonaServiceIf();
             List<Persona> buscarList= personaServiceIf.buscar();
             
             for (Persona persona : buscarList) {

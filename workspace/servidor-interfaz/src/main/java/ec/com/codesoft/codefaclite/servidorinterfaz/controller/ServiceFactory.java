@@ -3,8 +3,33 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
+package ec.com.codesoft.codefaclite.servidorinterfaz.controller;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CategoriaProductoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraDetalleServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteFisicoDisenioServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexDetalleServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexItemEspecificoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServicioIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoEnsambleServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceIf;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.rmi.AccessException;
@@ -24,20 +49,20 @@ import java.util.logging.Logger;
  *
  * @author Carlos
  */
-public abstract class ServiceController {
+public abstract class ServiceFactory {
     
     /**
      * Puerto mediante el cual nos vamos a comunicar con el servidor por RMI
      */
     public static final int PUERTO_SERVIDOR=1099;
     public String ipServidor="192.168.1.3";
-    public static ServiceController serviceController;
+    public static ServiceFactory serviceController;
     
     /**
      * Obtiene la instancia del controlador actual
      * @return 
      */
-    public static ServiceController getController()
+    public static ServiceFactory getFactory()
     {
         return serviceController;
     }
@@ -69,6 +94,7 @@ public abstract class ServiceController {
     public SriIdentificacionServiceIf getSriIdentificacionServiceIf(){return (SriIdentificacionServiceIf) getRecursosRMI(SriIdentificacionServiceIf.class);};
     public SriServiceIf getSriServiceIf(){return (SriServiceIf) getRecursosRMI(SriServiceIf.class);};
     public UsuarioServicioIf getUsuarioServicioIf(){return (UsuarioServicioIf) getRecursosRMI(UsuarioServicioIf.class);};
+    public ComprobanteServiceIf getComprobanteServiceIf(){return (ComprobanteServiceIf) getRecursosRMI(ComprobanteServiceIf.class);};
     
     
     
@@ -82,13 +108,13 @@ public abstract class ServiceController {
      */
     public static void newController(String ipServidor)
     {
-        serviceController=new ServiceController(ipServidor) {};
+        serviceController=new ServiceFactory(ipServidor) {};
     }
     
     
     private Map<Class,Remote> mapRecursosRMI;
 
-    private ServiceController(String ipServidor) 
+    private ServiceFactory(String ipServidor) 
     {
         this.ipServidor=ipServidor;
         this.mapRecursosRMI=new HashMap<Class,Remote>();
@@ -113,9 +139,9 @@ public abstract class ServiceController {
                 
                 
             } catch (RemoteException ex) {
-                Logger.getLogger(ServiceController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ServiceFactory.class.getName()).log(Level.SEVERE, null, ex);
             } catch (NotBoundException ex) {
-                Logger.getLogger(ServiceController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ServiceFactory.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         

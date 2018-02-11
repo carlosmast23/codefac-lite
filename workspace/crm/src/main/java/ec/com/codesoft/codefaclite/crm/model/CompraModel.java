@@ -26,7 +26,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEn
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
 import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import es.mityc.firmaJava.ocsp.config.ServidorOcsp;
@@ -77,7 +77,7 @@ public class CompraModel extends CompraPanel{
     @Override
     public void grabar() throws ExcepcionCodefacLite {
         try {
-            CompraServiceIf servicio=ServiceController.getController().getCompraServiceIf();
+            CompraServiceIf servicio=ServiceFactory.getFactory().getCompraServiceIf();
             setearValores();
             servicio.grabarCompra(compra);
             DialogoCodefac.mensaje("Correcto","La compra fue guardada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
@@ -224,7 +224,7 @@ public class CompraModel extends CompraPanel{
                 {
                     try {
                         //Buscar si existe el producto vinculado con un proveedor
-                        ProductoProveedorServiceIf serviceProductoProveedor = ServiceController.getController().getProductoProveedorServiceIf();
+                        ProductoProveedorServiceIf serviceProductoProveedor = ServiceFactory.getFactory().getProductoProveedorServiceIf();
                         Map<String, Object> mapParametros = new HashMap<String, Object>();
                         mapParametros.put("producto", productoSeleccionado);
                         mapParametros.put("proveedor", proveedor);

@@ -12,7 +12,7 @@ import ec.com.codesoft.codefaclite.crm.data.ClienteData;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class ClienteReporte extends ControladorCodefacInterface{
             InputStream path = RecursoCodefac.JASPER_CRM.getResourceInputStream("reporteClientes.jrxml");
             Map parameters = new HashMap();
             List<ClienteData> data = new ArrayList<ClienteData>();
-            PersonaServiceIf service=ServiceController.getController().getPersonaServiceIf();
+            PersonaServiceIf service=ServiceFactory.getFactory().getPersonaServiceIf();
             List<Persona> clientes=service.obtenerTodos();
             
             for (Persona cliente : clientes) {

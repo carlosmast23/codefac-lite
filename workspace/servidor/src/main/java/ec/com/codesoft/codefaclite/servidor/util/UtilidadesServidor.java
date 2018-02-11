@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.util;
 
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.service.interfacePanel.ServidorMonitorUpdateInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.test.CrearBaseDatos;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.io.InputStream;
@@ -30,6 +31,8 @@ public class UtilidadesServidor {
     public static List<String> hostConectados=new ArrayList<String>();
     
     public static ServidorMonitorUpdateInterface monitorUpdate;
+    
+    public static TipoLicenciaEnum tipoLicenciaEnum;
     
     public static InputStream[] querys={
         RecursoCodefac.SQL.getResourceInputStream("create_comprobante_fisico_disenio.sql"),

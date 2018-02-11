@@ -8,7 +8,7 @@ package ec.com.codesoft.codefaclite.facturacion.model;
 import ec.com.codesoft.codefaclite.facturacion.dialog.FormaPagoDialog;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
 
 import java.awt.Frame;
@@ -38,7 +38,7 @@ public class FormaPagoDialogModel extends FormaPagoDialog{
         
         try {
             //Cargar valores de las formas de pago del sri
-            SriServiceIf service=ServiceController.getController().getSriServiceIf();
+            SriServiceIf service=ServiceFactory.getFactory().getSriServiceIf();
             List<SriFormaPago> formasPagoSri=service.obtenerFormasPagoActivo();
             getCmbFormaPagoSri().removeAllItems();
             for (SriFormaPago sriFormaPago : formasPagoSri) {

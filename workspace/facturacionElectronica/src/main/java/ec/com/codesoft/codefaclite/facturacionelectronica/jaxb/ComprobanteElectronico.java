@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionTributaria;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAnyElement;
@@ -20,7 +21,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Carlos
  */
 @XmlTransient
-public abstract class ComprobanteElectronico {
+public abstract class ComprobanteElectronico implements Serializable{
 
     public static final String FACTURA = "factura";
     public static final String NOTA_CREDITO = "notaCredito";

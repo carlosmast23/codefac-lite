@@ -18,7 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
@@ -50,7 +50,7 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
         iniciarValores();
         agregarListenerBotones();
         agregarListenerCombo();     
-        this.servicioProductoProveedor=ServiceController.getController().getProductoProveedorServiceIf();
+        this.servicioProductoProveedor=ServiceFactory.getFactory().getProductoProveedorServiceIf();
     }
 
     @Override
@@ -187,7 +187,7 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
             Map<String,Object> parametros=new HashMap<String,Object>();
             parametros.put("proveedor",persona);
             
-            ProductoProveedorServiceIf servicio=ServiceController.getController().getProductoProveedorServiceIf();
+            ProductoProveedorServiceIf servicio=ServiceFactory.getFactory().getProductoProveedorServiceIf();
             List<ProductoProveedor> lista= servicio.obtenerPorMap(parametros);
             
             for (ProductoProveedor productoProveedor : lista) {

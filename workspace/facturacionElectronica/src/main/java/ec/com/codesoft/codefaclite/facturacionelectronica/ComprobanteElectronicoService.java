@@ -168,15 +168,15 @@ public class ComprobanteElectronicoService implements Runnable {
 
     private void procesarComprobante() {
         try {
-            escucha.iniciado(comprobante);
+            if(escucha!=null)escucha.iniciado(comprobante);
             
             if (etapaActual == ETAPA_GENERAR) {
                 generar();
-                escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
+                if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
                 System.out.println("generar()");
 
                 if (etapaLimiteProcesar<=ETAPA_GENERAR) {
-                    escucha.termino();
+                    if(escucha!=null)escucha.termino();
                     return;
                 }
 
@@ -185,10 +185,10 @@ public class ComprobanteElectronicoService implements Runnable {
 
             if (etapaActual == ETAPA_PRE_VALIDAR) {
                 preValidacion();
-                escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
+                if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
                 System.out.println("preValidacion()");
                 if (etapaLimiteProcesar<=ETAPA_PRE_VALIDAR) {
-                    escucha.termino();
+                    if(escucha!=null)escucha.termino();
                     return;
                 }
                 etapaActual++;
@@ -196,10 +196,10 @@ public class ComprobanteElectronicoService implements Runnable {
 
             if (etapaActual == ETAPA_FIRMAR) {
                 firmar();
-                escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
+                if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
                 System.out.println("firmar()");
                 if(etapaLimiteProcesar<=ETAPA_FIRMAR) {
-                    escucha.termino();
+                    if(escucha!=null)escucha.termino();
                     return;
                 }
                 etapaActual++;
@@ -207,10 +207,10 @@ public class ComprobanteElectronicoService implements Runnable {
 
             if (etapaActual == ETAPA_ENVIAR) {
                 enviarSri();
-                escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
+                if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
                 System.out.println("enviarSri()");
                 if(etapaLimiteProcesar<=ETAPA_ENVIAR) {
-                    escucha.termino();
+                    if(escucha!=null)escucha.termino();
                     return;
                 }
                 etapaActual++;
@@ -218,10 +218,10 @@ public class ComprobanteElectronicoService implements Runnable {
 
             if (etapaActual == ETAPA_AUTORIZAR) {
                 autorizarSri();
-                escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
+                if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
                 System.out.println("autorizarSri()");
                 if(etapaLimiteProcesar<=ETAPA_AUTORIZAR) {
-                    escucha.termino();
+                    if(escucha!=null)escucha.termino();
                     return;
                 }
                 etapaActual++;
@@ -229,11 +229,11 @@ public class ComprobanteElectronicoService implements Runnable {
 
             if (etapaActual == ETAPA_RIDE) {
                 generarRide();
-                escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
+                if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
                 //generarRide();
                 System.out.println("generarRide()");
                 if(etapaLimiteProcesar<=ETAPA_RIDE) {
-                    escucha.termino();
+                    if(escucha!=null)escucha.termino();
                     return;
                 }
                 etapaActual++;
@@ -243,18 +243,18 @@ public class ComprobanteElectronicoService implements Runnable {
                 if(correosElectronicos!=null && correosElectronicos.size()>0)
                     enviarComprobante();
                 
-                escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
+                if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
                 if(etapaLimiteProcesar<=ETAPA_ENVIO_COMPROBANTE) {
-                    escucha.termino();
+                    if(escucha!=null)escucha.termino();
                     return;
                 }
                 //generarRide();
                 System.out.println("enviarCorreo()");
             }
 
-            escucha.termino();
+            if(escucha!=null)escucha.termino();
         } catch (ComprobanteElectronicoException cee) {
-            escucha.error(cee);
+            if(escucha!=null)escucha.error(cee);
         }
 
     }

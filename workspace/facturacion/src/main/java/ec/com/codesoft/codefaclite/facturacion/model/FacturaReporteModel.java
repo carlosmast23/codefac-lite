@@ -24,7 +24,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoBusquedaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import static ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -146,9 +146,9 @@ public class FacturaReporteModel extends FacturaReportePanel {
                     titulo.add("IVA 12%");
                     titulo.add("Total");
                     modeloTablaFacturas = new DefaultTableModel(titulo, 0);
-                    FacturacionServiceIf fs = ServiceController.getController().getFacturacionServiceIf();
+                    FacturacionServiceIf fs = ServiceFactory.getFactory().getFacturacionServiceIf();
                     datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFact);
-                    NotaCreditoServiceIf nc = ServiceController.getController().getNotaCreditoServiceIf();
+                    NotaCreditoServiceIf nc = ServiceFactory.getFactory().getNotaCreditoServiceIf();
                     datafact2 = nc.obtenerNotasReporte(persona, fechaInicio, fechaFin);
                     if (estadoSeleccionado.getTipo() == "T" || estadoSeleccionado.getTipo() == "F") {
                         for (Factura factura : datafact) {
@@ -290,9 +290,9 @@ public class FacturaReporteModel extends FacturaReportePanel {
                 fechaFin = new Date(getDateFechaFin().getDate().getTime());
                 fechafin = dateFormat.format(getDateFechaFin().getDate());
             }   InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_documentos.jrxml");
-            FacturacionServiceIf fs = ServiceController.getController().getFacturacionServiceIf();
+            FacturacionServiceIf fs = ServiceFactory.getFactory().getFacturacionServiceIf();
             datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFact);
-            NotaCreditoServiceIf nc = ServiceController.getController().getNotaCreditoServiceIf();
+            NotaCreditoServiceIf nc = ServiceFactory.getFactory().getNotaCreditoServiceIf();
             datafact2 = nc.obtenerNotasReporte(persona, fechaInicio, fechaFin);
             List<ReporteFacturaData> data = new ArrayList<ReporteFacturaData>();
             if (estadoSeleccionado.getTipo() == "T" || estadoSeleccionado.getTipo() == "F") {

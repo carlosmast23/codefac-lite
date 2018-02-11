@@ -23,7 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
@@ -71,7 +71,7 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
         else 
         {
             try {
-                KardexServiceIf kardexService=ServiceController.getController().getKardexServiceIf();
+                KardexServiceIf kardexService=ServiceFactory.getFactory().getKardexServiceIf();
                 Bodega bodega=(Bodega) getCmbBodega().getSelectedItem();
                 String accion=getCmbAccion().getSelectedItem().toString();
                 Integer cantidad=Integer.parseInt(getTxtCantidad().getText());
@@ -153,7 +153,7 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
         try {
             //Cargar las bodegas disponibles
             getCmbBodega().removeAllItems();
-            BodegaServiceIf servicioBodega = ServiceController.getController().getBodegaServiceIf();
+            BodegaServiceIf servicioBodega = ServiceFactory.getFactory().getBodegaServiceIf();
             List<Bodega> bodegas = servicioBodega.obtenerTodos();
             for (Bodega bodega : bodegas) {
                 getCmbBodega().addItem(bodega);        
@@ -176,7 +176,7 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
                     try {
                         getTxtEnsamble().setText(productoEnsamble.getNombre());
                         //Buscar el Kardex o crear un Kardex nuevo si no existes
-                        KardexServiceIf kardexService = ServiceController.getController().getKardexServiceIf();
+                        KardexServiceIf kardexService = ServiceFactory.getFactory().getKardexServiceIf();
                         Bodega bodega = (Bodega) getCmbBodega().getSelectedItem();
                         Kardex kardex = kardexService.buscarKardexPorProductoyBodega(bodega, productoEnsamble);
                         if(kardex!=null)
@@ -239,7 +239,7 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
                 //Map<String,Object> mapParametros=new HashMap<String,Object>();
                 //mapParametros.put("producto",componente);
                 //mapParametros.put("bodega",bodega);
-                KardexServiceIf servicioKardex=ServiceController.getController().getKardexServiceIf();
+                KardexServiceIf servicioKardex=ServiceFactory.getFactory().getKardexServiceIf();
                 Kardex kardexComponente= servicioKardex.buscarKardexPorProductoyBodega(bodega,componente);
                 if(kardexComponente!=null)
                 {
@@ -312,7 +312,7 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
                 Map<String,Object> mapParametros=new HashMap<String,Object>();
                 mapParametros.put("producto",componente);
                 mapParametros.put("bodega",bodega);
-                KardexServiceIf servicioKardex=ServiceController.getController().getKardexServiceIf();
+                KardexServiceIf servicioKardex=ServiceFactory.getFactory().getKardexServiceIf();
                 List<Kardex> listaKardex= servicioKardex.obtenerPorMap(mapParametros);
                 if(listaKardex!=null && listaKardex.size()>0)
                 {

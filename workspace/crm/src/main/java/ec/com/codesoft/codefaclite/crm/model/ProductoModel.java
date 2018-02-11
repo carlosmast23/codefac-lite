@@ -26,7 +26,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CategoriaProductoS
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
@@ -62,10 +62,10 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     private Producto productoEnsamble;
 
     public ProductoModel() {
-        productoService = ServiceController.getController().getProductoServiceIf();
-        impuestoService = ServiceController.getController().getImpuestoServiceIf();
-        impuestoDetalleService = ServiceController.getController().getImpuestoDetalleServiceIf();
-        catProdService = ServiceController.getController().getCategoriaProductoServiceIf();
+        productoService = ServiceFactory.getFactory().getProductoServiceIf();
+        impuestoService = ServiceFactory.getFactory().getImpuestoServiceIf();
+        impuestoDetalleService = ServiceFactory.getFactory().getImpuestoDetalleServiceIf();
+        catProdService = ServiceFactory.getFactory().getCategoriaProductoServiceIf();
         getComboIce().setEnabled(false);
         getComboIrbpnr().setEnabled(false);
         iniciarCombosBox();

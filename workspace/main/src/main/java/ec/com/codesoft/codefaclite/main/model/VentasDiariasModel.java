@@ -26,7 +26,7 @@ import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -281,7 +281,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
     public void cargarCliente()
     {
         try {
-            PersonaServiceIf cliente = ServiceController.getController().getPersonaServiceIf();
+            PersonaServiceIf cliente = ServiceFactory.getFactory().getPersonaServiceIf();
             Map<String,Object> clienteMap = new HashMap<String, Object>();
             clienteMap.put("razonSocial", "Cliente Final");
             this.factura.setCliente(cliente.obtenerPorMap(clienteMap).get(0));
@@ -375,7 +375,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
     public BigDecimal obtenerValorIva() {
         try {
             Map<String, Object> map = new HashMap<>();
-            ImpuestoDetalleServiceIf impuestoDetalleService = ServiceController.getController().getImpuestoDetalleServiceIf();
+            ImpuestoDetalleServiceIf impuestoDetalleService = ServiceFactory.getFactory().getImpuestoDetalleServiceIf();
             map.put("tarifa", 12); //TODO Parametrizar el iva con la variable del sistema
             List<ImpuestoDetalle> listaImpuestoDetalles = impuestoDetalleService.buscarImpuestoDetallePorMap(map);
             listaImpuestoDetalles.forEach((iD) -> {

@@ -26,7 +26,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ClienteEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
 import java.awt.event.ActionEvent;
@@ -78,7 +78,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     private int opcionIdentificacion = 4;
 
     public ClienteModel() {
-        this.personaService = ServiceController.getController().getPersonaServiceIf();
+        this.personaService = ServiceFactory.getFactory().getPersonaServiceIf();
         getjTextExtension().setText("0");
         this.razonSocial = "";
         cargarClientes();
@@ -343,7 +343,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
              * @author carlos
              */
             
-            SriIdentificacionServiceIf  service=ServiceController.getController().getSriIdentificacionServiceIf();
+            SriIdentificacionServiceIf  service=ServiceFactory.getFactory().getSriIdentificacionServiceIf();
             SriIdentificacion id;
             Map<String,Object> parametros=new HashMap<String,Object>();
             parametros.put("codigo","05");
@@ -374,7 +374,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             /**
              * Cargar los valores por defecto de las identificaciones
              */
-            SriServiceIf servicioSri =ServiceController.getController().getSriServiceIf();
+            SriServiceIf servicioSri =ServiceFactory.getFactory().getSriServiceIf();
             identificaciones = servicioSri.obtenerIdentificaciones(SriIdentificacion.CLIENTE);
             getjComboIdentificacion().removeAllItems();
             for (SriIdentificacion identificacion : identificaciones) {

@@ -14,7 +14,7 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import java.io.InputStream;
 import java.net.URL;
 import java.rmi.RemoteException;
@@ -41,7 +41,7 @@ public class ProductoReporte extends ControladorCodefacInterface{
             InputStream path = RecursoCodefac.JASPER_CRM.getResourceInputStream("reporteProducto.jrxml");
             Map parameters = new HashMap();
             List<ProductoData> data = new ArrayList<ProductoData>();
-            ProductoServiceIf service=ServiceController.getController().getProductoServiceIf();
+            ProductoServiceIf service=ServiceFactory.getFactory().getProductoServiceIf();
             List<Producto> productos=service.obtenerTodos();
             
             for (Producto producto : productos) {

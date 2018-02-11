@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.ClienteFacturacionBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.ProductoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.facturacion.callback.ClienteImplComprobante;
 import ec.com.codesoft.codefaclite.facturacion.model.disenador.ManagerReporteFacturaFisica;
 import ec.com.codesoft.codefaclite.facturacion.other.FacturacionElectronica;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
@@ -35,6 +36,8 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprob
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataFactura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteFisicoDisenio;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
@@ -52,7 +55,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteFisicoDisenioServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
@@ -64,6 +68,7 @@ import java.awt.event.MouseAdapter;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.rmi.RemoteException;
@@ -88,7 +93,7 @@ import net.sf.jasperreports.engine.JasperPrint;
  *
  * @author Carlos
  */
-public class FacturacionModel extends FacturacionPanel {
+public class FacturacionModel extends FacturacionPanel implements ClienteInterfaceComprobante{
 
     //private Persona persona;
     private Factura factura;
@@ -415,7 +420,7 @@ public class FacturacionModel extends FacturacionPanel {
             
             Factura facturaProcesando; //referencia que va a tener la factura procesada para que los listener no pierdan la referencia a la variable del metodo.
             
-            FacturacionServiceIf servicio = ServiceController.getController().getFacturacionServiceIf();
+            FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
             setearValoresDefaultFactura();
             servicio.grabar(factura);
             
@@ -439,7 +444,7 @@ public class FacturacionModel extends FacturacionPanel {
                 }
                 
                 ManagerReporteFacturaFisica manager = new ManagerReporteFacturaFisica(reporteOriginal);
-                ComprobanteFisicoDisenioServiceIf servicioComprobanteDisenio=ServiceController.getController().getComprobanteFisicoDisenioServiceIf();;
+                ComprobanteFisicoDisenioServiceIf servicioComprobanteDisenio=ServiceFactory.getFactory().getComprobanteFisicoDisenioServiceIf();;
                 Map<String,Object> parametroComprobanteMap=new HashMap<String,Object>();
                 parametroComprobanteMap.put("codigoDocumento",documentoEnum.getCodigo());
                 ComprobanteFisicoDisenio documento= servicioComprobanteDisenio.obtenerPorMap(parametroComprobanteMap).get(0);
@@ -464,6 +469,19 @@ public class FacturacionModel extends FacturacionPanel {
                 
                 return ;
             }
+            ComprobanteDataFactura comprobanteData=new ComprobanteDataFactura(factura);
+            //comprobanteData.setCorreosAdicionales(correosAdicionales);
+            comprobanteData.setMapInfoAdicional(datosAdicionales);
+            
+            ClienteInterfaceComprobante cic=new ClienteImplComprobante(this);
+            ComprobanteServiceIf comprobanteServiceIf= ServiceFactory.getFactory().getComprobanteServiceIf();
+            comprobanteServiceIf.registerForCallback(cic);
+            comprobanteServiceIf.procesarComprobante(comprobanteData,session.getUsuario());
+            
+            if (true) {
+                return;
+            }
+
             
             //Despues de implemetar el metodo de grabar
             FacturacionElectronica facturaElectronica = new FacturacionElectronica(factura, session, this.panelPadre);
@@ -471,7 +489,7 @@ public class FacturacionModel extends FacturacionPanel {
             facturaElectronica.setMapInfoAdicional(datosAdicionales);
             //facturaElectronica.setFormaPagos();
             
-            
+           
             ComprobanteElectronicoService servicioElectronico = facturaElectronica.getServicio();
             
             servicioElectronico.addActionListerComprobanteElectronico(new ListenerComprobanteElectronico() {
@@ -647,7 +665,7 @@ public class FacturacionModel extends FacturacionPanel {
                     boolean respuesta = DialogoCodefac.dialogoPregunta("Advertencia", "Esta seguro que desea eliminar la factura? ", DialogoCodefac.MENSAJE_ADVERTENCIA);
                     if (respuesta) {
                         try {
-                            FacturacionServiceIf servicio = ServiceController.getController().getFacturacionServiceIf();
+                            FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
                             servicio.eliminarFactura(factura);
                             DialogoCodefac.mensaje("Exitoso", "La factura se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
                             getLblEstadoFactura().setText(FacturaEnumEstado.ELIMINADO.getNombre());
@@ -711,7 +729,7 @@ public class FacturacionModel extends FacturacionPanel {
         getLblDireccion().setText(session.getEmpresa().getDireccion());
         getLblTelefonos().setText(session.getEmpresa().getTelefonos());
         getLblNombreComercial().setText(session.getEmpresa().getNombreLegal());
-        FacturacionServiceIf servicio = ServiceController.getController().getFacturacionServiceIf();
+        FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
         //getLblSecuencial().setText(servicio.getPreimpresoSiguiente());
         getLblEstadoFactura().setText("Procesando");
 
@@ -997,7 +1015,7 @@ public class FacturacionModel extends FacturacionPanel {
     public BigDecimal obtenerValorIva() {
         try {
             Map<String, Object> map = new HashMap<>();
-            ImpuestoDetalleServiceIf impuestoDetalleService =ServiceController.getController().getImpuestoDetalleServiceIf();
+            ImpuestoDetalleServiceIf impuestoDetalleService =ServiceFactory.getFactory().getImpuestoDetalleServiceIf();
             map.put("tarifa", 12); //TODO Parametrizar el iva con la variable del sistema
             List<ImpuestoDetalle> listaImpuestoDetalles = impuestoDetalleService.buscarImpuestoDetallePorMap(map);
             listaImpuestoDetalles.forEach((iD) -> {
@@ -1369,6 +1387,11 @@ public class FacturacionModel extends FacturacionPanel {
         for (DocumentoEnum tipoDocumentoEnum : tiposDocumento) {
             getCmbDocumento().addItem(tipoDocumentoEnum);
         }
+    }
+
+    @Override
+    public void termino(String novedad) {
+        JOptionPane.showMessageDialog(null,"termino de ejecutar");
     }
 
 }

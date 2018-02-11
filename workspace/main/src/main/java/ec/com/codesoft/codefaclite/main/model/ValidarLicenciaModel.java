@@ -16,7 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceController;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ActualizarlicenciaRequestType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ActualizarlicenciaResponseType;
@@ -119,7 +119,7 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
                 
                 
                 //Genera un nuevo usuario con los datos ingresados
-                UsuarioServicioIf servicio=ServiceController.getController().getUsuarioServicioIf();
+                UsuarioServicioIf servicio=ServiceFactory.getFactory().getUsuarioServicioIf();
                 Usuario usuario=new Usuario();
                 String clave=new String(getTxtClaveRegistrar().getPassword());
                 usuario.setClave(clave);
