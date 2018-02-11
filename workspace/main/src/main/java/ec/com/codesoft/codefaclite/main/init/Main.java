@@ -270,9 +270,9 @@ public class Main {
                 UtilidadesServidor.monitorUpdate=monitor;
                 monitor.setLocationRelativeTo(null);
                 monitor.setVisible(true);   
-                splashScren.siguiente();
-                splashScren.termino();
-                return;
+                //splashScren.siguiente();
+                //splashScren.termino();
+                //return;
                         
             } 
             else
@@ -374,6 +374,12 @@ public class Main {
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 
+            }
+            
+            //Solucion temporal para el servidor
+            if (modoAplicativo.equals(ModoAplicativoModel.MODO_SERVIDOR)) {
+                splashScren.termino();
+                return;
             }
             
             
