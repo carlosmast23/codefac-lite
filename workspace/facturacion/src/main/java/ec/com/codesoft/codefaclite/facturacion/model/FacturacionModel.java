@@ -93,7 +93,7 @@ import net.sf.jasperreports.engine.JasperPrint;
  *
  * @author Carlos
  */
-public class FacturacionModel extends FacturacionPanel implements ClienteInterfaceComprobante{
+public class FacturacionModel extends FacturacionPanel{
 
     //private Persona persona;
     private Factura factura;
@@ -472,11 +472,11 @@ public class FacturacionModel extends FacturacionPanel implements ClienteInterfa
             ComprobanteDataFactura comprobanteData=new ComprobanteDataFactura(factura);
             //comprobanteData.setCorreosAdicionales(correosAdicionales);
             comprobanteData.setMapInfoAdicional(datosAdicionales);
-            
-            ClienteInterfaceComprobante cic=new ClienteImplComprobante(this);
+            MonitorComprobanteData monitorData2 = MonitorComprobanteModel.getInstance().agregarComprobante();
+            ClienteInterfaceComprobante cic=new ClienteImplComprobante(this, monitorData2, servicio, facturaProcesando);
             ComprobanteServiceIf comprobanteServiceIf= ServiceFactory.getFactory().getComprobanteServiceIf();
-            comprobanteServiceIf.registerForCallback(cic);
-            comprobanteServiceIf.procesarComprobante(comprobanteData,session.getUsuario());
+            //comprobanteServiceIf.registerForCallback(cic);
+            comprobanteServiceIf.procesarComprobante(comprobanteData,facturaProcesando,session.getUsuario(),cic);
             
             if (true) {
                 return;
@@ -1389,9 +1389,5 @@ public class FacturacionModel extends FacturacionPanel implements ClienteInterfa
         }
     }
 
-    @Override
-    public void termino(String novedad) {
-        JOptionPane.showMessageDialog(null,"termino de ejecutar");
-    }
 
 }

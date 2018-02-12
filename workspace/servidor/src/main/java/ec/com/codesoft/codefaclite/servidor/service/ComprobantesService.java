@@ -26,13 +26,18 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
 import ec.com.codesoft.ejemplo.utilidades.imagen.UtilidadImagen;
+import ec.com.codesoft.ejemplo.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.text.SimpleDateFormat;
@@ -44,6 +49,7 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.sf.jasperreports.engine.JasperPrint;
 
 /**
  *
@@ -59,13 +65,36 @@ public class ComprobantesService extends UnicastRemoteObject implements Comproba
     public ComprobantesService() throws RemoteException {
         clientesLista=new Vector<ClienteInterfaceComprobante>();
     }
+    
+    /**
+     * Regresa un jasperPrint para que pueda generar un reporte
+     * @param claveAcceso
+     * @return
+     * @throws RemoteException 
+     */
+    public byte[] getReporteComprobante(String claveAcceso) throws RemoteException
+    {
+        try {
+            ComprobanteElectronicoService comprobanteElectronico = new ComprobanteElectronicoService();
+            //Cargar recursos para el reporte
+            cargarDatosRecursos(comprobanteElectronico);
+            mapReportePlantilla(null);
+            cargarConfiguraciones(comprobanteElectronico);
+            comprobanteElectronico.setClaveAcceso(claveAcceso);
+            JasperPrint jasperPrint=comprobanteElectronico.getPrintJasper();
+            return UtilidadesRmi.serializar(jasperPrint);
+        } catch (IOException ex) {
+            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 
     /**
      *
      * @param comprobante el comprobante a procesar facturas, notas de credito
      * con los datos finales implementados
      */
-    public void procesarComprobante(ComprobanteDataInterface comprobanteData,Usuario usuario) throws RemoteException {
+    public void procesarComprobante(ComprobanteDataInterface comprobanteData,Factura factura,Usuario usuario,ClienteInterfaceComprobante callbackClientObject) throws RemoteException {
         /**
          * Metodo del modulo de facturacion electronica que contiene la interfaz
          * para facturar electronicamente
@@ -101,25 +130,50 @@ public class ComprobantesService extends UnicastRemoteObject implements Comproba
             @Override
             public void termino() {
                 try {
-                    doCallbacks();
+                    //Si la factura termina corectamente grabo el estado y numero de autorizacion
+                    FacturacionService facturacionService=new FacturacionService();
+                    factura.setClaveAcceso(comprobanteElectronico.getClaveAcceso());
+                    factura.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
+                    facturacionService.editar(factura);
+                    //cargarDatosRecursos(comprobanteElectronico);
+                    //mapReportePlantilla(usuario);
+                    byte[] serializedPrint= getReporteComprobante(comprobanteElectronico.getClaveAcceso());                   
+                    callbackClientObject.termino(serializedPrint);
+                    
+                    //doCallbacks();
                 } catch (RemoteException ex) {
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
             @Override
             public void iniciado(ComprobanteElectronico comprobante) {
-                
+                try {
+                    callbackClientObject.iniciado();
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
 
             @Override
             public void procesando(int etapa, ClaveAcceso clave) {
+                try {
+                    callbackClientObject.procesando(etapa, clave);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 
             }
 
             @Override
             public void error(ComprobanteElectronicoException cee) {
-                
+                try {
+                    callbackClientObject.error(cee,comprobanteElectronico.getClaveAcceso());
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         
@@ -249,7 +303,7 @@ public class ComprobantesService extends UnicastRemoteObject implements Comproba
         servicio.setPathParentJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourcesParentPath("facturaReporte.jrxml"));
         servicio.setReporteFormaPago(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceInputStream("forma_pago.jasper"));
         servicio.setReporteInfoAdicional(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceInputStream("datos_adicionales.jasper"));
-
+        servicio.setMapAdicionalReporte(mapReportePlantilla(null));
         //servicio.pathLogoImagen = RecursoCodefac.IMAGENES_GENERAL.getResourceURL("sin_imagen.jpg").getPath();
         //Segun el tipo de licencia cargar los recursos
         servicio.pathLogoImagen = RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
@@ -293,7 +347,7 @@ public class ComprobantesService extends UnicastRemoteObject implements Comproba
         SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
         Map<String, Object> parametros = new HashMap<String, Object>();
         parametros.put("pl_fecha_hora", formateador.format(new Date()));
-        parametros.put("pl_usuario", usuario.getNick());
+        parametros.put("pl_usuario", (usuario==null)?"":usuario.getNick());
         parametros.put("pl_direccion", empresa.getDireccion());
         parametros.put("pl_nombre_empresa", empresa.getNombreLegal());
         parametros.put("pl_telefonos", empresa.getTelefonos());
@@ -366,7 +420,7 @@ public class ComprobantesService extends UnicastRemoteObject implements Comproba
     private synchronized void doCallbacks() throws RemoteException {
         for (int i = 0; i < clientesLista.size(); i++) {
             ClienteInterfaceComprobante nextClient= (ClienteInterfaceComprobante) clientesLista.elementAt(i);
-            nextClient.termino("correcto :)");
+            //nextClient.termino();
         } // for
     } // function
 

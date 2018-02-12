@@ -9,13 +9,14 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectr
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
+import java.io.Serializable;
 import java.util.Vector;
 
 /**
  *
  * @author Carlos
  */
-public class ClaveAcceso {
+public class ClaveAcceso implements Serializable{
     
     public String clave;
     

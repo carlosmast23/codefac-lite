@@ -221,6 +221,7 @@ public abstract class UtilidadesComprobantes {
             return print;
             //JasperViewer.viewReport(print,false);
         } catch (JRException ex) {
+            ex.printStackTrace();
             Logger.getLogger(UtilidadesComprobantes.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;

@@ -436,8 +436,10 @@ public class ComprobanteElectronicoService implements Runnable {
             return UtilidadesComprobantes.generarReporteJasperPrint(getPathJasper(comprobante), datosMap, informacionAdiciona);
 
         } catch (JAXBException ex) {
+            ex.printStackTrace();
             Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
+            ex.printStackTrace();
             Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
