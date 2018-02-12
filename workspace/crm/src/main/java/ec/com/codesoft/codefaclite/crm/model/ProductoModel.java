@@ -77,7 +77,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     public void grabar() throws ExcepcionCodefacLite {
         try {
             setearValoresProducto(producto);
-            productoService.grabar(producto);
+            producto=productoService.grabar(producto);
             DialogoCodefac.mensaje("Datos correctos", "El Producto se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);

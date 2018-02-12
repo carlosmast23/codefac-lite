@@ -20,7 +20,7 @@ import org.eclipse.persistence.exceptions.DatabaseException;
  */
 public interface EmpresaServiceIf extends ServiceAbstractIf<Empresa>
 {
-    public void grabar(Empresa p) throws ServicioCodefacException,java.rmi.RemoteException;
+    public Empresa grabar(Empresa p) throws ServicioCodefacException,java.rmi.RemoteException;
     public void editar(Empresa p) throws java.rmi.RemoteException;
     public void eliminar(Empresa p) throws java.rmi.RemoteException;   
     public List<Empresa> buscar() throws java.rmi.RemoteException;

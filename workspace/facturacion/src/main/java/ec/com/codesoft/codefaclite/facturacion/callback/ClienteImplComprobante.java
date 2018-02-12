@@ -43,9 +43,8 @@ public class ClienteImplComprobante extends UnicastRemoteObject implements Clien
     private FacturacionServiceIf servicio;
     private Factura facturaProcesando;
 
-    public ClienteImplComprobante(FacturacionModel facturacionModel, MonitorComprobanteData monitorData, FacturacionServiceIf servicio, Factura facturaProcesando) throws RemoteException {
+    public ClienteImplComprobante(FacturacionModel facturacionModel, FacturacionServiceIf servicio, Factura facturaProcesando) throws RemoteException {
         this.facturacionModel = facturacionModel;
-        this.monitorData = monitorData;
         this.servicio = servicio;
         this.facturaProcesando = facturaProcesando;
     }
@@ -84,8 +83,7 @@ public class ClienteImplComprobante extends UnicastRemoteObject implements Clien
         monitorData.getBarraProgreso().setString(facturaProcesando.getPreimpreso());
         monitorData.getBarraProgreso().setStringPainted(true);
         MonitorComprobanteModel.getInstance().mostrar();
-
-        facturaProcesando.setEstado(FacturaEnumEstado.SIN_AUTORIZAR.getEstado());
+        
     }
 
     @Override
@@ -152,7 +150,7 @@ public class ClienteImplComprobante extends UnicastRemoteObject implements Clien
                 monitorData.getBarraProgreso().setForeground(Color.ORANGE);
             }
 
-            servicio.editar(facturaProcesando);
+            //servicio.editar(facturaProcesando);
         } catch (RemoteException ex) {
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {

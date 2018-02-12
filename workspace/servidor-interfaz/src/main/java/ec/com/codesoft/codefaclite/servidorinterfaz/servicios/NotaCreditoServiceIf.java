@@ -18,7 +18,7 @@ import java.util.List;
  */
 public interface NotaCreditoServiceIf extends ServiceAbstractIf<NotaCredito>
 {
-    public void grabar(NotaCredito notaCredito) throws ServicioCodefacException,java.rmi.RemoteException;;
+    public NotaCredito grabar(NotaCredito notaCredito) throws ServicioCodefacException,java.rmi.RemoteException;;
     public String getPreimpresoSiguiente() throws java.rmi.RemoteException;;
     public void editar(NotaCredito notaCredito) throws java.rmi.RemoteException;;
     public List<NotaCredito> obtenerTodos() throws java.rmi.RemoteException;;

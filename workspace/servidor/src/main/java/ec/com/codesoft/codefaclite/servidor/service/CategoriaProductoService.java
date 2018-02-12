@@ -29,7 +29,7 @@ public class CategoriaProductoService extends ServiceAbstract<CategoriaProducto,
         this.categoriaProductoFacade = new CategoriaProductoFacade();
     }
     
-    public void grabar(CategoriaProducto c) throws ServicioCodefacException {
+    public CategoriaProducto grabar(CategoriaProducto c) throws ServicioCodefacException {
         try {
             categoriaProductoFacade.create(c);
         } catch (ConstrainViolationExceptionSQL ex) {
@@ -39,6 +39,7 @@ public class CategoriaProductoService extends ServiceAbstract<CategoriaProducto,
             Logger.getLogger(BodegaService.class.getName()).log(Level.SEVERE, null, ex);
             throw new ServicioCodefacException("Error con la base de datos");
         }
+        return c;
     }
 
     public void editar(CategoriaProducto c) {

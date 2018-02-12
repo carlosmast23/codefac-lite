@@ -65,7 +65,7 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
         }
     }
     
-    public void grabar(ParametroCodefac parametro) throws java.rmi.RemoteException
+    public ParametroCodefac grabar(ParametroCodefac parametro) throws java.rmi.RemoteException
     {
         try {
             parametroCodefacFacade.create(parametro);
@@ -74,6 +74,7 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
         } catch (DatabaseException ex) {
             Logger.getLogger(ParametroCodefacService.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return parametro;
     }
     
     public List<ParametroCodefac> buscarParametrosPorMap(Map<String,Object> map) throws java.rmi.RemoteException

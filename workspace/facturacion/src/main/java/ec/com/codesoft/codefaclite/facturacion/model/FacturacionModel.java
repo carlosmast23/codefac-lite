@@ -58,6 +58,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleSer
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.ejemplo.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
@@ -67,6 +68,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -422,7 +424,7 @@ public class FacturacionModel extends FacturacionPanel{
             
             FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
             setearValoresDefaultFactura();
-            servicio.grabar(factura);
+            factura=servicio.grabar(factura);
             
             facturaProcesando = factura;
             
@@ -469,11 +471,12 @@ public class FacturacionModel extends FacturacionPanel{
                 
                 return ;
             }
+            
             ComprobanteDataFactura comprobanteData=new ComprobanteDataFactura(factura);
             //comprobanteData.setCorreosAdicionales(correosAdicionales);
             comprobanteData.setMapInfoAdicional(datosAdicionales);
-            MonitorComprobanteData monitorData2 = MonitorComprobanteModel.getInstance().agregarComprobante();
-            ClienteInterfaceComprobante cic=new ClienteImplComprobante(this, monitorData2, servicio, facturaProcesando);
+            //MonitorComprobanteData monitorData = MonitorComprobanteModel.getInstance().agregarComprobante();
+            ClienteInterfaceComprobante cic=new ClienteImplComprobante(this, servicio, facturaProcesando);
             ComprobanteServiceIf comprobanteServiceIf= ServiceFactory.getFactory().getComprobanteServiceIf();
             //comprobanteServiceIf.registerForCallback(cic);
             comprobanteServiceIf.procesarComprobante(comprobanteData,facturaProcesando,session.getUsuario(),cic);
@@ -481,134 +484,7 @@ public class FacturacionModel extends FacturacionPanel{
             if (true) {
                 return;
             }
-
-            
-            //Despues de implemetar el metodo de grabar
-            FacturacionElectronica facturaElectronica = new FacturacionElectronica(factura, session, this.panelPadre);
-            facturaElectronica.setFactura(factura);
-            facturaElectronica.setMapInfoAdicional(datosAdicionales);
-            //facturaElectronica.setFormaPagos();
-            
-           
-            ComprobanteElectronicoService servicioElectronico = facturaElectronica.getServicio();
-            
-            servicioElectronico.addActionListerComprobanteElectronico(new ListenerComprobanteElectronico() {
-                
-                private MonitorComprobanteData monitorData;
-                
-                @Override
-                public void termino() {
-                    try {
-                        monitorData.getBarraProgreso().setForeground(Color.GREEN);
-                        monitorData.getBtnAbrir().setEnabled(true);
-                        monitorData.getBtnCerrar().setEnabled(true);
-                        monitorData.getBtnAbrir().addActionListener(new ActionListener() {
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
-                                //String path = facturaElectronica.getServicio().getPathRide();
-                                facturaElectronica.cargarDatosRecursos();
-                                JasperPrint print = facturaElectronica.getServicio().getPrintJasper();
-                                panelPadre.crearReportePantalla(print, facturaProcesando.getPreimpreso());
-                            }
-                        });
-                        
-                        /**
-                         * Seteando datos adicionales de la factura
-                         */
-                        facturaProcesando.setClaveAcceso(facturaElectronica.getServicio().getClaveAcceso());
-                        facturaProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
-                        servicio.editar(facturaProcesando);
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    
-                }
-                
-                @Override
-                public void procesando(int etapa, ClaveAcceso clave) {
-                    if (etapa == ComprobanteElectronicoService.ETAPA_GENERAR) {
-                        monitorData.getBarraProgreso().setValue(20);
-                        facturaProcesando.setClaveAcceso(clave.clave);
-                    }
-                    
-                    if (etapa == ComprobanteElectronicoService.ETAPA_PRE_VALIDAR) {
-                        monitorData.getBarraProgreso().setValue(30);
-                    }
-                    
-                    if (etapa == ComprobanteElectronicoService.ETAPA_FIRMAR) {
-                        monitorData.getBarraProgreso().setValue(50);
-                    }
-                    
-                    if (etapa == ComprobanteElectronicoService.ETAPA_ENVIAR) {
-                        monitorData.getBarraProgreso().setValue(70);
-                    }
-                    
-                    if (etapa == ComprobanteElectronicoService.ETAPA_AUTORIZAR) {
-                        monitorData.getBarraProgreso().setValue(90);
-                        facturaProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
-                    }
-                    
-                    if (etapa == ComprobanteElectronicoService.ETAPA_RIDE) {
-                        monitorData.getBarraProgreso().setValue(95);
-                        facturaProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
-                    }
-                    
-                    if (etapa == ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE) {
-                        monitorData.getBarraProgreso().setValue(100);
-                        facturaProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
-                    }
-                }
-                
-                @Override
-                public void iniciado(ComprobanteElectronico comprobante) {
-                    monitorData = MonitorComprobanteModel.getInstance().agregarComprobante();
-                    monitorData.getLblPreimpreso().setText(factura.getPreimpreso() + " ");
-                    monitorData.getBtnAbrir().setEnabled(false);
-                    monitorData.getBtnReporte().setEnabled(false);
-                    monitorData.getBtnCerrar().setEnabled(false);
-                    monitorData.getBarraProgreso().setString(comprobante.getInformacionTributaria().getPreimpreso());
-                    monitorData.getBarraProgreso().setStringPainted(true);
-                    MonitorComprobanteModel.getInstance().mostrar();
-                    
-                    facturaProcesando.setEstado(FacturaEnumEstado.SIN_AUTORIZAR.getEstado());
-                    
-                }
-                
-                @Override
-                public void error(ComprobanteElectronicoException cee) {
-                    try {
-                        monitorData.getBtnReporte().setEnabled(true);
-                        monitorData.getBtnCerrar().setEnabled(true);
-                        monitorData.getBtnReporte().addActionListener(new ActionListener() {
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
-                                JOptionPane.showMessageDialog(null, "Etapa: " + cee.getEtapa() + "\n" + cee.getMessage());
-                                monitorData.getBtnAbrir().addActionListener(new ActionListener() {
-                                    @Override
-                                    public void actionPerformed(ActionEvent e) {
-                                        JasperPrint print = facturaElectronica.getServicio().getPrintJasper();
-                                        panelPadre.crearReportePantalla(print, facturaProcesando.getPreimpreso());
-                                    }
-                                });
-                            }
-                        });
-                        
-                        if (cee.getTipoError().equals(ComprobanteElectronicoException.ERROR_ENVIO_CLIENTE)) {
-                            monitorData.getBtnAbrir().setEnabled(true);
-                            monitorData.getBarraProgreso().setForeground(Color.YELLOW);
-                        } else {
-                            monitorData.getBarraProgreso().setForeground(Color.ORANGE);
-                        }
-                        
-                        servicio.editar(facturaProcesando);
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    
-                }
-            });
-            
-            facturaElectronica.procesarComprobante();//listo se encarga de procesar el comprobante
+     
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {
@@ -683,13 +559,18 @@ public class FacturacionModel extends FacturacionPanel{
     @Override
     public void imprimir() {
         if (this.factura != null) {
-            String claveAceeso = this.factura.getClaveAcceso();
-            facturaElectronica.setClaveAcceso(claveAceeso);
-            facturaElectronica.setFactura(factura);
-            //facturaElectronica.procesarComprobanteEtapa(ComprobanteElectronicoService.ETAPA_RIDE,false);
-            //facturaElectronica.procesarComprobante();
-            //JasperPrint print = facturaElectronica.getServicio().getPrintJasper();
-            panelPadre.crearReportePantalla(facturaElectronica.obtenerRide(), factura.getPreimpreso());
+            try {
+                String claveAceeso = this.factura.getClaveAcceso();
+                byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAceeso);
+                JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
+                panelPadre.crearReportePantalla(jasperPrint, factura.getPreimpreso());
+            } catch (RemoteException ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 

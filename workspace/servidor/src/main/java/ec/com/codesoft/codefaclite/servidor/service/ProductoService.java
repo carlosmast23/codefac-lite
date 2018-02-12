@@ -32,8 +32,10 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         super(ProductoFacade.class);
         this.productoFacade = new ProductoFacade();
     }
+    
+
         
-    public void grabar(Producto p) throws ServicioCodefacException
+    public Producto grabar(Producto p) throws ServicioCodefacException
     {
         EntityTransaction transactions= entityManager.getTransaction();
         transactions.begin();
@@ -59,6 +61,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, null, ex);
             throw new ServicioCodefacException("Error con la base de datos");
         }
+        return p;
     }
     
     public void editar(Producto p)

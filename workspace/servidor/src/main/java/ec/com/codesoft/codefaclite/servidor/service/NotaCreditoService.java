@@ -38,7 +38,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
         parametroCodefacService = new ParametroCodefacService();
     }
 
-    public void grabar(NotaCredito notaCredito) {
+    public NotaCredito grabar(NotaCredito notaCredito) {
         try {
             notaCreditoFacade.create(notaCredito);
             /**
@@ -56,6 +56,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
         } catch (RemoteException ex) {
             Logger.getLogger(NotaCreditoService.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return notaCredito;
     }
     
     public String getPreimpresoSiguiente() {

@@ -16,8 +16,8 @@ import java.util.List;
  */
 public interface ProductoServiceIf extends ServiceAbstractIf<Producto> {
 
-        
-    public void grabar(Producto p) throws ServicioCodefacException, java.rmi.RemoteException;
+       
+    public Producto grabar(Producto p) throws ServicioCodefacException, java.rmi.RemoteException;
     
     public void editar(Producto p) throws java.rmi.RemoteException;
     

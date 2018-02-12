@@ -33,7 +33,7 @@ public class PersonaService extends ServiceAbstract<Persona,PersonaFacade> imple
         this.personaFacade=new PersonaFacade();
     }
 
-    public void grabar(Persona p) throws ServicioCodefacException,java.rmi.RemoteException
+    public Persona grabar(Persona p) throws ServicioCodefacException,java.rmi.RemoteException
     {
         try {
             personaFacade.create(p);
@@ -44,7 +44,7 @@ public class PersonaService extends ServiceAbstract<Persona,PersonaFacade> imple
             Logger.getLogger(PersonaService.class.getName()).log(Level.SEVERE, null, ex);
             throw  new ServicioCodefacException("Error sql");
         }
-
+        return p;
     }
     
     public void editar(Persona p)

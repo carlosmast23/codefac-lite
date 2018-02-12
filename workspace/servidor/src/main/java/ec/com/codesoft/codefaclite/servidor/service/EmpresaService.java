@@ -29,7 +29,7 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
         this.empresaFacade = new EmpresaFacade();
     }
     
-    public void grabar(Empresa p)
+    public Empresa grabar(Empresa p)
     {
         try {
             empresaFacade.create(p);
@@ -38,6 +38,7 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
         } catch (ConstrainViolationExceptionSQL ex) {
             Logger.getLogger(EmpresaService.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return p;
     }
     
     public void editar(Empresa p)

@@ -109,7 +109,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             persona.setCorreoElectronico(getjTextCorreo().getText());
             persona.setEstado(((ClienteEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
             persona.setTipo(((OperadorNegocioEnum)getCmbTipoOperador().getSelectedItem()).getLetra());
-            personaService.grabar(persona);
+            persona=personaService.grabar(persona);
             DialogoCodefac.mensaje("Datos correctos", "El cliente se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
             System.err.println("Se grabo correctamente");
         } catch (ServicioCodefacException ex) {

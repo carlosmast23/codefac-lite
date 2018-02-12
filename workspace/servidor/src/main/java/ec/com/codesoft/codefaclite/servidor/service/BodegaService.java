@@ -29,7 +29,7 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
         this.bodegaFacade = new BodegaFacade();
     }
 
-    public void grabar(Bodega b) throws ServicioCodefacException {
+    public Bodega grabar(Bodega b) throws ServicioCodefacException {
         try {
             bodegaFacade.create(b);
         } catch (ConstrainViolationExceptionSQL ex) {
@@ -39,6 +39,7 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
             Logger.getLogger(BodegaService.class.getName()).log(Level.SEVERE, null, ex);
             throw new ServicioCodefacException("Error con la base de datos");
         }
+        return b;
     }
 
     public void editar(Bodega b) {

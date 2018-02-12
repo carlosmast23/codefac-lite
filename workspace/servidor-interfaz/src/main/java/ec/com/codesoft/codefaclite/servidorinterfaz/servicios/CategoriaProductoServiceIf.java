@@ -15,7 +15,7 @@ import java.rmi.Remote;
  */
 public interface CategoriaProductoServiceIf extends ServiceAbstractIf<CategoriaProducto>
 {
-    public void grabar(CategoriaProducto c) throws ServicioCodefacException,java.rmi.RemoteException;
+    public CategoriaProducto grabar(CategoriaProducto c) throws ServicioCodefacException,java.rmi.RemoteException;
     public void editar(CategoriaProducto c) throws java.rmi.RemoteException;
     public void eliminar(CategoriaProducto c) throws java.rmi.RemoteException;
 }

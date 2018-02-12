@@ -55,7 +55,7 @@ import net.sf.jasperreports.engine.JasperPrint;
  *
  * @author Carlos
  */
-public class ComprobantesService extends UnicastRemoteObject implements ComprobanteServiceIf{
+public class ComprobantesService extends ServiceAbstract implements ComprobanteServiceIf{
 
     /**
      * Graba una lista e clientes suscritos para responder
@@ -63,6 +63,7 @@ public class ComprobantesService extends UnicastRemoteObject implements Comproba
     private Vector<ClienteInterfaceComprobante> clientesLista;
     
     public ComprobantesService() throws RemoteException {
+        super();
         clientesLista=new Vector<ClienteInterfaceComprobante>();
     }
     
@@ -132,9 +133,11 @@ public class ComprobantesService extends UnicastRemoteObject implements Comproba
                 try {
                     //Si la factura termina corectamente grabo el estado y numero de autorizacion
                     FacturacionService facturacionService=new FacturacionService();
+                   
                     factura.setClaveAcceso(comprobanteElectronico.getClaveAcceso());
                     factura.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
-                    facturacionService.editar(factura);
+                    entityManager.merge(factura);
+                    //facturacionService.editar(factura);
                     //cargarDatosRecursos(comprobanteElectronico);
                     //mapReportePlantilla(usuario);
                     byte[] serializedPrint= getReporteComprobante(comprobanteElectronico.getClaveAcceso());                   

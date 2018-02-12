@@ -15,7 +15,7 @@ import java.rmi.Remote;
  */
 public interface BodegaServiceIf extends ServiceAbstractIf<Bodega>
 {
-    public void grabar(Bodega b) throws ServicioCodefacException,java.rmi.RemoteException;
+    public Bodega grabar(Bodega b) throws ServicioCodefacException,java.rmi.RemoteException;
     public void editar(Bodega b) throws java.rmi.RemoteException;
     public void eliminar(Bodega b) throws java.rmi.RemoteException;
 }

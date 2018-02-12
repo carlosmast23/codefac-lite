@@ -18,7 +18,7 @@ import java.util.List;
  */
 public interface FacturacionServiceIf extends ServiceAbstractIf<Factura>
 {
-    public void grabar(Factura factura) throws ServicioCodefacException,java.rmi.RemoteException; 
+    public Factura grabar(Factura factura) throws ServicioCodefacException,java.rmi.RemoteException; 
     public List<Factura> consultaDialogo(String param,int limiteMinimo,int limiteMaximo) throws java.rmi.RemoteException;
     public void editar(Factura factura) throws java.rmi.RemoteException;
     public List<Factura> obtenerTodos()throws java.rmi.RemoteException;

@@ -32,7 +32,7 @@ public class ImpuestoDetalleService extends ServiceAbstract<ImpuestoDetalle,Impu
         impuestoDetalleFacade= new ImpuestoDetalleFacade();
     }
     
-    public void grabar(ImpuestoDetalle i) throws ServicioCodefacException,java.rmi.RemoteException
+    public ImpuestoDetalle grabar(ImpuestoDetalle i) throws ServicioCodefacException,java.rmi.RemoteException
     {
         try {
             impuestoDetalleFacade.create(i);
@@ -41,6 +41,7 @@ public class ImpuestoDetalleService extends ServiceAbstract<ImpuestoDetalle,Impu
         } catch (DatabaseException ex) {
             Logger.getLogger(ImpuestoDetalleService.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return i;
     }    
     
     public void eliminar(ImpuestoDetalle i) throws java.rmi.RemoteException

@@ -17,7 +17,7 @@ public interface ServiceAbstractIf<Entity> extends Remote {
         //private T t;
     public List<Entity> obtenerTodos() throws java.rmi.RemoteException;
     
-    public void grabar(Entity entity) throws ServicioCodefacException,java.rmi.RemoteException;
+    public Entity grabar(Entity entity) throws ServicioCodefacException,java.rmi.RemoteException;
     
     public void editar(Entity entity) throws java.rmi.RemoteException;
     

@@ -33,7 +33,7 @@ public class ImpuestoService extends ServiceAbstract<Impuesto, ImpuestoFacade> i
         impuestoDetalleFacade=new ImpuestoDetalleFacade();
     }
    
-    public void grabar(Impuesto i)
+    public Impuesto grabar(Impuesto i)
     {
         try {
             impuestoFacade.create(i);
@@ -42,6 +42,7 @@ public class ImpuestoService extends ServiceAbstract<Impuesto, ImpuestoFacade> i
         } catch (DatabaseException ex) {
             Logger.getLogger(ImpuestoService.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return i;
     }
     
     public void editar(Impuesto i)

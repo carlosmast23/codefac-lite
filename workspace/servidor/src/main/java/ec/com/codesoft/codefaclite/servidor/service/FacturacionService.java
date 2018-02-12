@@ -52,7 +52,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
 
     }
 
-    public void grabar(Factura factura) {
+    public Factura grabar(Factura factura) {
         EntityTransaction transaction= entityManager.getTransaction();
         transaction.begin();
         try {
@@ -130,7 +130,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         } catch (RemoteException ex) {
             Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        return factura;
     }
     
     public List<Factura> consultaDialogo(String param,int limiteMinimo,int limiteMaximo)

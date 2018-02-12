@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
+import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,12 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
 {
     private AbstractFacade<Entity> facade;
     protected EntityManager entityManager;
+
+    public ServiceAbstract() throws RemoteException {
+        this.entityManager=AbstractFacade.entityManager;
+    }
+    
+    
  
     public ServiceAbstract(Class<Facade> clase) throws java.rmi.RemoteException
     {
@@ -43,15 +50,17 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
         return this.facade.findAll();
     }
     
-    public void grabar(Entity entity) throws ServicioCodefacException,java.rmi.RemoteException
+    public Entity grabar(Entity entity) throws ServicioCodefacException,java.rmi.RemoteException
     {
         try {
             this.facade.create(entity);
+            entityManager.flush();
         } catch (ConstrainViolationExceptionSQL ex) {
             Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, ex);
         } catch (DatabaseException ex) {
             Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return entity;
     }
     
     public void editar(Entity entity)

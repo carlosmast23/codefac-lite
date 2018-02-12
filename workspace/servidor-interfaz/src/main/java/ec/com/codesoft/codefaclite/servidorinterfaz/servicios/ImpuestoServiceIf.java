@@ -16,7 +16,7 @@ import java.util.List;
  */
 public interface ImpuestoServiceIf extends ServiceAbstractIf<Impuesto>
 {
-    public void grabar(Impuesto i) throws ServicioCodefacException,java.rmi.RemoteException;;
+    public Impuesto grabar(Impuesto i) throws ServicioCodefacException,java.rmi.RemoteException;;
     public void editar(Impuesto i) throws java.rmi.RemoteException;;
     public void eliminar(Impuesto i) throws java.rmi.RemoteException;;
     public Impuesto obtenerImpuestoPorCodigo(String nombre) throws java.rmi.RemoteException;;
