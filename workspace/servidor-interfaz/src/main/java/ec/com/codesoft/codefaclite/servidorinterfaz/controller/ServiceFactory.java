@@ -44,6 +44,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -139,7 +140,9 @@ public abstract class ServiceFactory {
                 
                 
             } catch (RemoteException ex) {
+                JOptionPane.showMessageDialog(null,"Error de conexión con el servidor","Error",JOptionPane.ERROR_MESSAGE);
                 Logger.getLogger(ServiceFactory.class.getName()).log(Level.SEVERE, null, ex);
+                System.exit(0);
             } catch (NotBoundException ex) {
                 Logger.getLogger(ServiceFactory.class.getName()).log(Level.SEVERE, null, ex);
             }
