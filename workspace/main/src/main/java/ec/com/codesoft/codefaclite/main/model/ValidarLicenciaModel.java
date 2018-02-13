@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
+import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ActualizarlicenciaRequestType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ActualizarlicenciaResponseType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ComprobarRequestType;
@@ -68,8 +69,9 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
     private void crearLicencia()
     {
         String tipoLicencia = getTipoLicencia(getTxtUsuarioVerificar().getText());
+        Integer cantidadUsuarios=WebServiceCodefac.getCantidadClientes(getTxtUsuarioVerificar().getText());
         //Crea la nueva licencia con el usuario
-        Properties propiedad = validacionLicenciaCodefac.crearLicencia(getTxtUsuarioVerificar().getText(), tipoLicencia);
+        Properties propiedad = validacionLicenciaCodefac.crearLicencia(getTxtUsuarioVerificar().getText(), tipoLicencia,cantidadUsuarios);
 
         //Actualizar la licencia en la maquina
         SOAPServer soapServer = new SOAPServer();
@@ -154,6 +156,7 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
                     parametros.setEmail(getTxtUsuarioVerificar().getText());
                     ObtenerlicenciaResponseType respuesta = soapServerPort.obtenerlicencia(parametros);
                     String tipoLicencia=getTipoLicencia(getTxtUsuarioVerificar().getText());
+                    Integer cantidadUsuarios=WebServiceCodefac.getCantidadClientes(getTxtUsuarioVerificar().getText());
                     
                     //No hace verificaciones porque esta accion solo es accesible desde la pantalla de menu
                     //y se supone que ya esta validando la licencia anterior
@@ -165,7 +168,7 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
                         getjTabbedPane1().setSelectedIndex(2);
                         TipoLicenciaEnum licenciaEnum= TipoLicenciaEnum.getEnumByLetra(tipoLicencia);
                         getLblTipoLicenciaActualizar().setText(licenciaEnum.getNombre());
-                        getLblNumeroMaquinasActualizar().setText(licenciaEnum.getNumeroMaquinas());
+                        getLblNumeroMaquinasActualizar().setText(cantidadUsuarios+"");
                         getLblNumeroUsuariosActualizar().setText(licenciaEnum.getNumeroUsuarios());
                         return; //dtener la ejecucion
                         
@@ -174,7 +177,7 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
                     if(!respuesta.getReturn().equals("fail"))
                     {             
                         //Si existe en el servidor la licencia solo vuelve a descargar
-                        validacionLicenciaCodefac.crearLicencia(getTxtUsuarioVerificar().getText(),respuesta.getReturn(),tipoLicencia);
+                        validacionLicenciaCodefac.crearLicencia(getTxtUsuarioVerificar().getText(),respuesta.getReturn(),tipoLicencia,cantidadUsuarios);
                         
                         licenciaCreada=true;
                         DialogoCodefac.mensaje("Adverencia","La licencia ya esta registrada y fue descargada",DialogoCodefac.MENSAJE_ADVERTENCIA);

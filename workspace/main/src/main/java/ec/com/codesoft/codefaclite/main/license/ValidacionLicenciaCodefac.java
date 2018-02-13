@@ -34,6 +34,10 @@ public class ValidacionLicenciaCodefac{
     public static final String USUARIO="usuario";
     public static final String LICENCIA="licencia";
     public static final String TIPO_LICENCIA="tipo";
+    /**
+     * Campo que identifica la cantidad de usuarios de clientes permitidas
+     */
+    public static final String CANTIDAD_USUARIOS="clientes";
     
     private Licencia licencia;
     private String path;
@@ -132,15 +136,17 @@ public class ValidacionLicenciaCodefac{
         }
     }
     
-    public Properties crearLicencia(String usuario,String tipoLicencia)
+    public Properties crearLicencia(String usuario,String tipoLicencia,Integer cantidadUsuarios)
     {
         FileOutputStream fr=null;
         try {
-            String licencia=usuario+":"+UtilidadVarios.obtenerMac()+":"+tipoLicencia;            
+            String licencia=usuario+":"+UtilidadVarios.obtenerMac()+":"+tipoLicencia+":"+cantidadUsuarios;            
             licencia=BCrypt.hashpw(licencia,BCrypt.gensalt(12));
             Properties prop = new Properties();
             prop.setProperty(USUARIO,usuario);
             prop.setProperty(LICENCIA,licencia);
+            prop.setProperty(CANTIDAD_USUARIOS,cantidadUsuarios.toString());
+            
             TipoLicenciaEnum enumTipoLicencia=TipoLicenciaEnum.getEnumByLetra(tipoLicencia);
             prop.setProperty(TIPO_LICENCIA,enumTipoLicencia.getNombre());
             File file=new File(path+NOMBRE_LICENCIA);
@@ -170,7 +176,7 @@ public class ValidacionLicenciaCodefac{
         return null;
     }
     
-    public Properties crearLicencia(String usuario,String licencia,String tipoLicencia)
+    public Properties crearLicencia(String usuario,String licencia,String tipoLicencia,Integer cantidadUsuarios)
     {
         FileOutputStream fr=null;
         try {
@@ -179,6 +185,7 @@ public class ValidacionLicenciaCodefac{
             Properties prop = new Properties();
             prop.setProperty(USUARIO,usuario);
             prop.setProperty(LICENCIA,licencia);
+            prop.setProperty(CANTIDAD_USUARIOS,cantidadUsuarios.toString());
             TipoLicenciaEnum enumTipoLicencia = TipoLicenciaEnum.getEnumByLetra(tipoLicencia);
             prop.setProperty(TIPO_LICENCIA,enumTipoLicencia.getNombre());
             File file=new File(path+NOMBRE_LICENCIA);

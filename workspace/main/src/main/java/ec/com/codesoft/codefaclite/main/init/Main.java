@@ -635,19 +635,21 @@ public class Main {
             String usuario=validacion.obtenerLicencia().getProperty(ValidacionLicenciaCodefac.USUARIO);
             String licencia = WebServiceCodefac.getLicencia(usuario);
             String tipoLicencia = WebServiceCodefac.getTipoLicencia(usuario);
+            Integer cantidadCliente=WebServiceCodefac.getCantidadClientes(usuario);
 
             String tipoLicenciaPc=validacion.obtenerLicencia().getProperty(ValidacionLicenciaCodefac.TIPO_LICENCIA);
             String licenciaPc=validacion.obtenerLicencia().getProperty(ValidacionLicenciaCodefac.LICENCIA);
+            Integer cantidadClientePc=Integer.parseInt(validacion.obtenerLicencia().getProperty(ValidacionLicenciaCodefac.CANTIDAD_USUARIOS));
 
-
-            if(licencia.equals(licenciaPc) && tipoLicencia.equals(TipoLicenciaEnum.getEnumByNombre(tipoLicenciaPc).getLetra()))
+            //TODO verificar que este tipo de licencia este funcionando
+            if(licencia.equals(licenciaPc) && tipoLicencia.equals(TipoLicenciaEnum.getEnumByNombre(tipoLicenciaPc).getLetra()) && cantidadCliente.equals(cantidadClientePc))
             {             
                 return true;
             }
             else
             {
                 //cuando la licencia es incorrecta se vuelve a descargar
-                validacion.crearLicencia(usuario,tipoLicencia);
+                validacion.crearLicencia(usuario,tipoLicencia,cantidadCliente);
                 if(validacion.validar())
                 {
                     return true;
