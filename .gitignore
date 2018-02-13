@@ -29,3 +29,6 @@ derby.log
 /workspace/ws-virtualmall/target/
 /workspace/inventario/target/
 /workspace/servidor-interfaz/target/
+
+#Excluir archivo de configuracion inicial
+workspace/main/codefac.ini
