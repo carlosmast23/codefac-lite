@@ -1,0 +1,2 @@
+LIBRERIA RMI PARA SERIALIZAR OBJETOS INPUTSTREAM
+	https://www.javatips.net/api/rmiio-slf4j-master/src/test/java/examples/stream/TestServer.java
