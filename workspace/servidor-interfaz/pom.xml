@@ -19,6 +19,12 @@
         </dependency>
         
         <dependency>
+            <groupId>com.healthmarketscience.rmiio</groupId>
+            <artifactId>rmiio</artifactId>
+            <version>2.1.2</version>
+        </dependency>
+        
+        <dependency>
             <groupId>ec.com.codesoft.ejemplo</groupId>
             <artifactId>utilidades</artifactId>
             <version>1.0-SNAPSHOT</version>
@@ -26,6 +32,11 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>facturacionElectronica</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>recursos</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

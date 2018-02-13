@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.main.model;
 
 
 
+import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import ec.com.codesoft.codefaclite.configuraciones.model.CalculadoraModel;
 import ec.com.codesoft.codefaclite.configuraciones.model.ComprobantesConfiguracionModel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
@@ -45,8 +46,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServi
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceControllerServer;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import ec.com.codesoft.ejemplo.utilidades.imagen.UtilidadImagen;
+import ec.com.codesoft.ejemplo.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
 import es.mityc.firmaJava.ocsp.config.ServidorOcsp;
 import java.awt.BorderLayout;
@@ -1799,30 +1802,62 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
     @Override
     public Map<String, Object> mapReportePlantilla() {
+        InputStream inputStream = null;
+
         SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
-        Map<String,Object> parametros=new HashMap<String,Object>();
-        parametros.put("pl_fecha_hora",formateador.format(new Date()));
-        parametros.put("pl_usuario",sessionCodefac.getUsuario().getNick());
-        parametros.put("pl_direccion",sessionCodefac.getEmpresa().getDireccion());
-        parametros.put("pl_nombre_empresa",sessionCodefac.getEmpresa().getNombreLegal());
-        parametros.put("pl_telefonos",sessionCodefac.getEmpresa().getTelefonos());
+        Map<String, Object> parametros = new HashMap<String, Object>();
+        parametros.put("pl_fecha_hora", formateador.format(new Date()));
+        parametros.put("pl_usuario", sessionCodefac.getUsuario().getNick());
+        parametros.put("pl_direccion", sessionCodefac.getEmpresa().getDireccion());
+        parametros.put("pl_nombre_empresa", sessionCodefac.getEmpresa().getNombreLegal());
+        parametros.put("pl_telefonos", sessionCodefac.getEmpresa().getTelefonos());
         
-        parametros.put("pl_url_img1",(RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("codefac-logotipo.png")));
-        parametros.put("pl_img_facebook",(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("facebook.png")));
-        parametros.put("pl_img_whatsapp",(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("whatsapp.png")));
-        parametros.put("pl_img_telefono",(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("telefono.png")));
-        parametros.put("pl_img_logo_pie",(RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("codesoft-logo.png")));
-        
-        parametros.put("pl_url_img1_url",(RecursoCodefac.IMAGENES_GENERAL.getResourceURL("codefac-logotipo.png").getPath()));
-        parametros.put("pl_img_facebook_url",(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceURL("facebook.png").getPath()));
-        parametros.put("pl_img_whatsapp_url",(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceURL("whatsapp.png").getPath()));
-        parametros.put("pl_img_telefono_url",(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceURL("telefono.png").getPath()));
-        parametros.put("pl_img_logo_pie_url",(RecursoCodefac.IMAGENES_GENERAL.getResourceURL("codesoft-logo.png").getPath()));
-        
-        parametros.put("pl_url_cabecera",RecursoCodefac.JASPER.getResourceInputStream("encabezado.jasper"));
-        parametros.put("pl_url_piepagina",RecursoCodefac.JASPER.getResourceInputStream("pie_pagina.jasper"));
-        
-        //System.out.println(parametros.get("SUBREPORT_DIR"));
+        try {    
+            RecursosServiceIf service= ServiceFactory.getFactory().getRecursosServiceIf();
+            //service.getResourceInputStream(RecursoCodefac.AYUDA, file);
+            
+            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_GENERAL, "codefac-logotipo.png"));
+            //inputStream = (InputStream) UtilidadesRmi.deserializar(service.getResourceInputStream(RecursoCodefac.IMAGENES_GENERAL, "codefac-logotipo.png"));
+            parametros.put("pl_url_img1",inputStream);
+            
+            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "facebook.png"));
+            parametros.put("pl_img_facebook",inputStream);
+            
+            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "whatsapp.png"));
+            parametros.put("pl_img_whatsapp",inputStream);
+            
+            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "telefono.png"));
+            parametros.put("pl_img_telefono",inputStream);
+            
+            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_GENERAL, "codesoft-logo.png"));
+            parametros.put("pl_img_logo_pie",inputStream);
+            
+            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_GENERAL, "codefac-logotipo.png"));
+            parametros.put("pl_url_img1_url",inputStream);
+            
+            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "facebook.png"));
+            parametros.put("pl_img_facebook_url",inputStream);
+            
+            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "whatsapp.png"));
+            parametros.put("pl_img_whatsapp_url",inputStream);
+            
+            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "telefono.png"));
+            parametros.put("pl_img_telefono_url",inputStream);
+            
+            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_GENERAL, "codesoft-logo.png"));
+            parametros.put("pl_img_logo_pie_url",inputStream);
+            
+            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER, "encabezado.jasper"));
+            parametros.put("pl_url_cabecera",inputStream);
+            
+            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER, "pie_pagina.jasper"));
+            parametros.put("pl_url_piepagina",inputStream);
+            //System.out.println(parametros.get("SUBREPORT_DIR"));            
+        } catch (RemoteException ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return parametros;
     }
 
