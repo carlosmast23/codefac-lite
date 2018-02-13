@@ -121,6 +121,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceI
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
 import static java.awt.Frame.MAXIMIZED_BOTH;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
@@ -131,6 +135,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.PersistenceException;
@@ -146,9 +151,21 @@ import javax.swing.UnsupportedLookAndFeelException;
  */
 public class Main {
     
+    private static Properties propiedadesIniciales;
+    /**
+     * Nombre del archivo de configuraciones iniciales
+     */
+    private static final String NOMBRE_ARCHIVO_CONFIGURACION="codefac.ini";
+    
+    private static final String CAMPO_MODO_APLICATIVO="modo";
+    /**
+     * Variable para saber el modo que inicia el aplicativo
+     */
     public static Integer modoAplicativo;
     
-    public static void main(String[] args) {      
+    public static void main(String[] args) {   
+        
+        cargarConfiguracionesIniciales();
         /**
          * Seleccionar el modo de inicio de Codefac si no selecciona un modo no le permite acceder
          * a los siguiente funcionalidad
@@ -161,9 +178,35 @@ public class Main {
         iniciarComponentes();
     }
     
+    //Lee el archivo de configuraciones de cada computador como por ejemplo
+    //para saber la modalidad por defecto que se debe ejcutar el aplicativo
+    private static void cargarConfiguracionesIniciales() {
+        try {
+            propiedadesIniciales = new Properties();
+            propiedadesIniciales.load(new FileReader(NOMBRE_ARCHIVO_CONFIGURACION));
+        } catch (FileNotFoundException ex) {
+            //Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("Archivo de configuracion inicial no existe");
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    
     public static void iniciarModoAplicativo()
     {
-                /**
+        //Si existen configuraciones iniciales solo las carga
+        if(propiedadesIniciales!=null)
+        {
+            String modoAplicativoStr=propiedadesIniciales.getProperty(CAMPO_MODO_APLICATIVO);
+            if(modoAplicativoStr!=null)
+            {
+                modoAplicativo=Integer.parseInt(modoAplicativoStr);
+                return; //sio existe no continua buscando el modo de aplicativo
+            }
+        }
+        
+         /**
          * Seleccionar el modo de inicio de Codefac si no selecciona un modo no le permite acceder
          * a los siguiente funcionalidad
          */
@@ -178,7 +221,14 @@ public class Main {
         }
         else
         {
-            modoAplicativo=dialogAplicativo.getModo();
+            try {
+                modoAplicativo=dialogAplicativo.getModo();
+                propiedadesIniciales=new Properties();
+                propiedadesIniciales.put(CAMPO_MODO_APLICATIVO,modoAplicativo+"");
+                propiedadesIniciales.store(new FileWriter(NOMBRE_ARCHIVO_CONFIGURACION),"");
+            } catch (IOException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
     }
