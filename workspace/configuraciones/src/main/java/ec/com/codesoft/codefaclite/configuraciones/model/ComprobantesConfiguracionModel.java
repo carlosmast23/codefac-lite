@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.configuraciones.model;
 
+import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
 import ec.com.codesoft.codefaclite.configuraciones.panel.ComprobantesConfiguracionPanel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.dialog.ProcesoSegundoPlano;
@@ -32,6 +33,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -224,7 +227,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             getTxtRetencionesSecuencialFisico().setText(parametros.get(ParametroCodefac.SECUENCIAL_RETENCION_FISICA).getValor());
             
             
-            getTxtDirectorioRecurso().setText(parametros.get(ParametroCodefac.DIRECTORIO_RECURSOS).getValor());
+            //getTxtDirectorioRecurso().setText(parametros.get(ParametroCodefac.DIRECTORIO_RECURSOS).getValor());
             getTxtEstablecimiento().setText(parametros.get(ParametroCodefac.ESTABLECIMIENTO).getValor());
             getTxtPuntoEmision().setText(parametros.get(ParametroCodefac.PUNTO_EMISION).getValor());
             getTxtCorreoElectronico().setText(parametros.get(ParametroCodefac.CORREO_USUARIO).getValor());
@@ -286,7 +289,9 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         String rutaArchivo = archivo.getPath();
         String nombreArchivo = archivo.getName();
         getTxtNombreFirma().setText(nombreArchivo);
-        String rutaDestino = session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + ComprobanteElectronicoService.CARPETA_CONFIGURACION + "/";
+        //TODO:Cambiar la copia de archivos por un servicio de transferencia de archivos
+        String rutaDestino ="";
+        //String rutaDestino = session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + ComprobanteElectronicoService.CARPETA_CONFIGURACION + "/";
         rutaDestino += nombreArchivo;
         establecerDondeMoverArchivo(rutaArchivo, rutaDestino);
     }
@@ -296,27 +301,39 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         this.destino = FileSystems.getDefault().getPath(rutaDestino);
     }
 
+    /**
+     * Metodo para mover las firmas
+     */
     public void moverArchivo() {
-        //Verifica que solo cuando exista un origen y destino exista se copien los datos
-        if (origen == null || destino == null) {
-            return;
-        }
-
-        File file = destino.toFile();
-        //crear toda la ruta si no existe
-        if (!file.exists()) {
-            file.getParentFile().mkdirs();
-            //file.mkdir();
-        }
-
         try {
-            Files.copy(origen, destino, StandardCopyOption.REPLACE_EXISTING);
+            //Verifica que solo cuando exista un origen y destino exista se copien los datos
+            if (origen == null || destino == null) {
+                return;
+            }
+            
+            
+            SimpleRemoteInputStream istream = new SimpleRemoteInputStream(
+                    new FileInputStream(origen.toFile()));
+            
+            ServiceFactory.getFactory().getRecursosServiceIf().uploadFileServer(DirectorioCodefac.CONFIGURACION, istream,origen.getFileName().toString());
+            
+            //try {
+            //Files.copy(origen, destino, StandardCopyOption.REPLACE_EXISTING);
+            //RemoteInput
+            //    SimpleRemoteInputStream istream = new SimpleRemoteInputStream(
+            //    new FileInputStream(fileName));
+            //ServiceFactory.getFactory().getRecursosServiceIf().uploadFileServer(DirectorioCodefac.FIRMA, ERROR,"firma","p12");
             getTxtNombreFirma().setText("" + destino.getFileName());
             ParametroCodefac parametro = parametros.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA);
             parametro.setValor(destino.getFileName().toString());
-        } catch (IOException ex) {
+            /*} catch (IOException ex) {
             ex.printStackTrace();
             DialogoCodefac.mensaje("Firma", "Problema en guardar firma", DialogoCodefac.MENSAJE_INCORRECTO);
+            }*/
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -387,7 +404,9 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
                 String rutaArchivo = archivo.getPath();
                 String nombreArchivo = archivo.getName();
                 getTxtFondoEscritorio().setText(nombreArchivo);
-                String rutaDestino = session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + DirectorioCodefac.IMAGENES.getNombre() + "/";
+                //TODO:Cambiar la copia de archivos por un servicio de transferencia de archivos
+                String rutaDestino ="";
+                //String rutaDestino = session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + DirectorioCodefac.IMAGENES.getNombre() + "/";
                 rutaDestino += nombreArchivo;
                 dialogoCopiarFondoEscritorio.establecerDondeMoverArchivo(rutaArchivo, rutaDestino);
                 
@@ -461,7 +480,9 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     private void verificarFirmaElectronica() {
         String claveFirma = new String(getTxtClaveFirma().getPassword());
         String nombreArchivo = getTxtNombreFirma().getText();
-        String rutaDestino = session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + ComprobanteElectronicoService.CARPETA_CONFIGURACION + "/";
+        //TODO:Cambiar la copia de archivos por un servicio de transferencia de archivos
+        String rutaDestino = "";
+        //String rutaDestino = session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + ComprobanteElectronicoService.CARPETA_CONFIGURACION + "/";
 
         String pathFirma = "";
 

@@ -240,9 +240,10 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
         
                 
         getCmbCarpetaComprobante().addActionListener(new ActionListener() {
+            
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+                /*
                 try {
                     //TODO: Revisar esta validacion temporal porque no existe la carpeta de no autorizado
                     if(getCmbCarpetaComprobante().getSelectedItem().equals(ComprobanteElectronicoService.CARPETA_NO_AUTORIZADOS))
@@ -265,7 +266,7 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
                     cargarSiguienteEtapaPorCarpeta(getCmbCarpetaComprobante().getSelectedItem().toString());
                 } catch (RemoteException ex) {
                     Logger.getLogger(UtilidadComprobanteModel.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                }*/
             }
         });
 

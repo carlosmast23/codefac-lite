@@ -239,7 +239,8 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             Map<String, ParametroCodefac> parametroCodefacMap = parametroCodefacService.getParametrosMap();
             //String pathBase de los directorios
 
-            servicio.setPathBase(parametroCodefacMap.get(ParametroCodefac.DIRECTORIO_RECURSOS).valor);
+            //servicio.setPathBase(parametroCodefacMap.get(ParametroCodefac.DIRECTORIO_RECURSOS).valor);
+            servicio.setPathBase(UtilidadesServidor.pathRecursos);
             servicio.setNombreFirma(parametroCodefacMap.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).valor);
             servicio.setClaveFirma(parametroCodefacMap.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).valor);
             String modoFacturacion = parametroCodefacMap.get(ParametroCodefac.MODO_FACTURACION).valor;
@@ -316,7 +317,8 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             try {
 
                 String imagenLogo = empresa.getImagenLogoPath();
-                String pathImagen = parametroCodefacMap.get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + DirectorioCodefac.IMAGENES.getNombre() + "/" + imagenLogo;
+                //String pathImagen = parametroCodefacMap.get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + DirectorioCodefac.IMAGENES.getNombre() + "/" + imagenLogo;
+                String pathImagen = UtilidadesServidor.pathRecursos+ DirectorioCodefac.IMAGENES.getNombre() + "/" + imagenLogo;
 
                 inputStream = new FileInputStream(pathImagen);
                 //Si no existe imagen en la version de pago setea un imagen por defecto

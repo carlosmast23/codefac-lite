@@ -184,7 +184,9 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
         String rutaArchivo = archivo.getPath();
         String nombreArchivo = archivo.getName();
         getTxtFoto().setText(nombreArchivo);
-        String rutaDestino = session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + DirectorioCodefac.IMAGENES.getNombre() + "/";
+        //TODO cambiar el metodo de copiar por un servicio de transferencia al servidor
+        String rutaDestino = "";
+        //String rutaDestino = session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + DirectorioCodefac.IMAGENES.getNombre() + "/";
         rutaDestino += nombreArchivo;
         establecerDondeMoverArchivo(rutaArchivo, rutaDestino);
     }

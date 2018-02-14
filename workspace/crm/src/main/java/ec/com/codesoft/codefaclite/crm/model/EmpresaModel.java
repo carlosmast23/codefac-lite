@@ -271,7 +271,9 @@ public class EmpresaModel extends EmpresaForm
         String rutaArchivo = archivo.getPath();
         String nombreArchivo = archivo.getName();
         getjTextLogo().setText(nombreArchivo);
-        String rutaDestino = session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + DirectorioCodefac.IMAGENES.getNombre() + "/";
+        //TODO:Cambiar la copia de archivos por un servicio de transferencia de archivos
+        String rutaDestino ="";
+        //String rutaDestino = session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + DirectorioCodefac.IMAGENES.getNombre() + "/";
         rutaDestino += nombreArchivo;
         establecerDondeMoverArchivo(rutaArchivo, rutaDestino);
     }

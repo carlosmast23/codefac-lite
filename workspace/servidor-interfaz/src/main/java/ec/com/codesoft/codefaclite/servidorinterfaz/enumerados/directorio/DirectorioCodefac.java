@@ -28,6 +28,7 @@ import javax.imageio.ImageIO;
  * @author Carlos
  */
 public enum DirectorioCodefac {
+    CONFIGURACION("configuracion"),
     IMAGENES("imagenes"),
     LICENCIA("licencia"),
     COMPROBANTES_PRUEBAS("comprobantes/pruebas"),
@@ -46,7 +47,7 @@ public enum DirectorioCodefac {
         this.nombre = nombre;
     }
     
-    
+    /*
     public String getDirectorio() throws RemoteException
     {
         ParametroCodefacServiceIf service=ServiceFactory.getFactory().getParametroCodefacServiceIf();
@@ -89,7 +90,7 @@ public enum DirectorioCodefac {
             }
         }
         return null;
-    }
+    }*/
 
     public String getNombre() {
         return nombre;

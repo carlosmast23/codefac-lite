@@ -1,0 +1,27 @@
+public static void validacionCodefacOnline(ValidacionLicenciaCodefac validacion) en main revisar el metodo online para validar porque depende de la base de datos pero se cambio el orden de validacion , de preferencia ver si se cambia esa validacion posteriormente cuando carga la base de datos
+
+Revisar pantallas notas de credito y utilidades comprobantes que falta implementar correctamente
+En la pantalla de utilidades comprobante revisar la linea getCmbCarpetaComprobante().addActionListener(new ActionListener() { porque depende exclusivamente de los recursos del servidor
+Eliminar clases de facturacion electronica que ya no se van a usar
+cambiar los metodos que copia imagenes a un servicio para transferir las imagenes al servidor , pantalla configuraciones en especial metodos para enviar la firma esta etiquetadas con TODO:
+getjMenuItemActualizarLicencia().addActionListener(new ActionListener() en GeneralPanelModel esa linea queda comentada por el momento pero la validacion la tiene que hacer en el servidor LINEA 1995
+Revisar factura cuando se manda un preimpreso repetido no funciona
+Activar el modulo de enviar el correo
+Revisar problema cuando creo y luego consulto el mismo dato (ejemplo creo un cliente en la factura e intento facturar con ese cliente y no funciona)
+Analisar si el tipo de dato comprobante electronico solo lo puedo usar en el servidor y que solo mande una
+opcion numerica para escoger el documento y no utilizar la referencia de facturacion electronica en otros modulos
+esocoger en que modulo debe estar la opcion de enviar correo
+Verificar como puedo hacer para validar connfiguraciones especificos de los usuarios
+de preferencia validar como un archivo de configuracion por cada usuario
+Posiciones de widget pantalla
+Configuracion iniciales del modo para iniciar
+
+Verficar el tiempo maximo de respuesta de los clientes para que salga mensaje que no existe comunicacion
+y ver como se implementan todos las excepcione de errores de comunicacion con el cliente
+
+Verificar como hacer para que cuando se ejecute en modo cliente los comprobantes se graben en el servidor
+
+Crear un pantalla que se muestre cuando solo elijen funcionar unicamente como servidor
+
+Gladys Rodriguez (Veci concidad de Angita Contabilidad)
+0997256962

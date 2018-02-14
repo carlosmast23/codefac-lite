@@ -127,7 +127,8 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
         try {
             //String pathBase de los directorios
             
-            servicio.setPathBase(session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor);
+            //servicio.setPathBase(session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor);
+            //servicio.setPathBase(session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor);
             servicio.setNombreFirma(session.getParametrosCodefac().get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).valor);
             servicio.setClaveFirma(session.getParametrosCodefac().get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).valor);
             String modoFacturacion = session.getParametrosCodefac().get(ParametroCodefac.MODO_FACTURACION).valor;
@@ -204,17 +205,17 @@ public abstract class ComprobanteElectronicoAbstract <T extends ComprobanteElect
             try {
                 
                 String imagenLogo=session.getEmpresa().getImagenLogoPath();
-                String pathImagen=session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + DirectorioCodefac.IMAGENES.getNombre() + "/"+imagenLogo;
+                //String pathImagen=session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + DirectorioCodefac.IMAGENES.getNombre() + "/"+imagenLogo;
                 
-                inputStream = new FileInputStream(pathImagen);
+                //inputStream = new FileInputStream(pathImagen);
                 //Si no existe imagen en la version de pago setea un imagen por defecto
                 if(inputStream==null)
                     RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
                 //BufferedInputStream bufferStream=new BufferedInputStream(inputStream);
                 servicio.pathLogoImagen =UtilidadImagen.castImputStreamForReport(inputStream);
-            } catch (FileNotFoundException ex) {
-                servicio.pathLogoImagen = RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
-                Logger.getLogger(ComprobanteElectronicoAbstract.class.getName()).log(Level.SEVERE, null, ex);
+            //} catch (FileNotFoundException ex) {
+            //    servicio.pathLogoImagen = RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
+            //    Logger.getLogger(ComprobanteElectronicoAbstract.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
                 try {
                     if(inputStream!=null)

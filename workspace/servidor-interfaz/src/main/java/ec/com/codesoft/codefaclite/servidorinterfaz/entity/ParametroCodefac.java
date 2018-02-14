@@ -23,7 +23,7 @@ public class ParametroCodefac implements Serializable {
     
     public static final String NOMBRE_FIRMA_ELECTRONICA= "firma_electronica";
     public static final String CLAVE_FIRMA_ELECTRONICA= "clave_firma_electronica";
-    public static final String DIRECTORIO_RECURSOS= "directorio_recursos";
+    //public static final String DIRECTORIO_RECURSOS= "directorio_recursos";
     public static final String LOGO_EMPRESA= "logo_empresa";
     public static final String MODO_FACTURACION= "modo_facturacion";
     public static final String IVA_DEFECTO= "iva_defecto";

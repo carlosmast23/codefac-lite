@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import com.healthmarketscience.rmiio.RemoteInputStream;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import java.io.InputStream;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -17,4 +18,6 @@ import java.rmi.RemoteException;
  */
 public interface RecursosServiceIf extends Remote {
     public RemoteInputStream getResourceInputStream(RecursoCodefac recurso,String file) throws RemoteException;
+    public RemoteInputStream getResourceInputStreamByFile(DirectorioCodefac directorio,String nameFile) throws RemoteException;
+    public void uploadFileServer(DirectorioCodefac directorio,RemoteInputStream recurso,String nombre) throws RemoteException;
 }

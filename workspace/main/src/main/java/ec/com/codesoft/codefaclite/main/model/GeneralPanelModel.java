@@ -323,12 +323,17 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             String valor=parametroCodefac.getValor();
                             if(!valor.equals(""))
                             {
-                                String pathImagen=map.get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + DirectorioCodefac.IMAGENES.getNombre() + "/"+valor;
-                                fondoImg = new javax.swing.ImageIcon(pathImagen).getImage();
+                                
+                                InputStream inputStream=RemoteInputStreamClient.wrap(ServiceFactory.getFactory().getRecursosServiceIf().getResourceInputStreamByFile(DirectorioCodefac.IMAGENES,valor));
+                                //String pathImagen=map.get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + DirectorioCodefac.IMAGENES.getNombre() + "/"+valor;
+                                BufferedImage bufferImage= ImageIO.read(inputStream);
+                                fondoImg = bufferImage;
                             }
                         }
                     }
                 } catch (RemoteException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -2003,6 +2008,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     return;
                 }
                 
+                /*
                 boolean respuesta=DialogoCodefac.dialogoPregunta("Confirmar","Para actualizar la licencia debe cerrar todas las ventas , desea continuar?",DialogoCodefac.MENSAJE_ADVERTENCIA);
                 if(respuesta)
                 {
@@ -2020,6 +2026,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     }
                     
                 }
+                */
             }
                 
         });

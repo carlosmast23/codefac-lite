@@ -34,6 +34,11 @@ public class UtilidadesServidor {
     
     public static TipoLicenciaEnum tipoLicenciaEnum;
     
+    public static String usuarioLicencia;
+    
+    public static String pathRecursos;
+    
+    
     public static InputStream[] querys={
         RecursoCodefac.SQL.getResourceInputStream("create_comprobante_fisico_disenio.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_cliente.sql"),
