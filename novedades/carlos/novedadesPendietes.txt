@@ -1,3 +1,4 @@
+Falta implementar que se comunique el numero de clientes disponibles con la pantalla del servidor para receptar conexiones
 public static void validacionCodefacOnline(ValidacionLicenciaCodefac validacion) en main revisar el metodo online para validar porque depende de la base de datos pero se cambio el orden de validacion , de preferencia ver si se cambia esa validacion posteriormente cuando carga la base de datos
 
 Revisar pantallas notas de credito y utilidades comprobantes que falta implementar correctamente
