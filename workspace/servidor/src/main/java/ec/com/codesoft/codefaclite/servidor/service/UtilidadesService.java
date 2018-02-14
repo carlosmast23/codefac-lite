@@ -36,7 +36,7 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
 
     @Override
     public boolean verificarConexionesServidor() throws RemoteException {
-        int numeroConexionesPermitidas = 1;
+        int numeroConexionesPermitidas = UtilidadesServidor.cantidadUsuarios;
         try {
             String hostCliente = RemoteServer.getClientHost();
 

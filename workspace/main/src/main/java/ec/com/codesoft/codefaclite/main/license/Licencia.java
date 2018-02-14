@@ -86,5 +86,11 @@ public class Licencia {
         
     }
 
+    public Properties getPropiedades() {
+        return propiedades;
+    }
+    
+    
+
     
 }

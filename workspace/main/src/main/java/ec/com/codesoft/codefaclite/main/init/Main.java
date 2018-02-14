@@ -229,6 +229,7 @@ public class Main {
                 //Este valor seteo para que sea accesible desde el servidor
                 //TODO: Verficar si se puede mejorar esta linea de codigo
                 UtilidadesServidor.tipoLicenciaEnum = tipoLicencia;
+                UtilidadesServidor.cantidadUsuarios= Integer.parseInt(validacion.obtenerLicencia().getProperty(ValidacionLicenciaCodefac.CANTIDAD_USUARIOS));
                 UtilidadesServidor.usuarioLicencia = validacion.obtenerLicencia().getProperty(ValidacionLicenciaCodefac.USUARIO);
                 //session.setUsuarioLicencia(validacion.obtenerLicencia().getProperty(ValidacionLicenciaCodefac.USUARIO));
 
@@ -358,6 +359,13 @@ public class Main {
                 cargarRecursosServidor();
                 String ipServidor=InetAddress.getLocalHost().getHostAddress();
                 cargarRecursosCliente(ipServidor);
+                
+                //Valida la licencia antes de ejecutar el servidor
+                ParametroCodefac parametroDirectorioRecursos = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS);
+                verificarLicencia(parametroDirectorioRecursos.getValor());
+                //Seteo el path de los directorio como una referencia global de todo el sistema
+                UtilidadesServidor.pathRecursos = parametroDirectorioRecursos.getValor();
+                
                 //Crear el pantalla que va a manterner encedidad la conexion con los clientes
                 ServidorMonitorModel monitor=new ServidorMonitorModel();
                 UtilidadesServidor.monitorUpdate=monitor;
@@ -386,20 +394,18 @@ public class Main {
                         cargarRecursosServidor();
                         String ipServidor=InetAddress.getLocalHost().getHostAddress();
                         cargarRecursosCliente(ipServidor);
+                        //Valida la licencia antes de ejecutar el servidor
+                        ParametroCodefac parametroDirectorioRecursos = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS);
+                        verificarLicencia(parametroDirectorioRecursos.getValor());
+                        //Seteo el path de los directorio como una referencia global de todo el sistema
+                        UtilidadesServidor.pathRecursos = parametroDirectorioRecursos.getValor();
+                        
                         verificarConexionesPermitidas();
                     }
                 
                 }
             }
             
-            /**
-             * Valida la licencia antes de ejecutar el aplicativo y envia el
-             * directorio donde debe estar la licencia
-             */
-            ParametroCodefac parametroDirectorioRecursos=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS);            
-            verificarLicencia(parametroDirectorioRecursos.getValor());
-            //Seteo el path de los directorio como una referencia global de todo el sistema
-            UtilidadesServidor.pathRecursos=parametroDirectorioRecursos.getValor();
             
             //Si el aplicativo debe iniciar en modo servidor se cierra la pantalla de carga del slashScreen
             if (modoAplicativo.equals(ModoAplicativoModel.MODO_SERVIDOR)) {
