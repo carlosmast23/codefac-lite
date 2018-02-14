@@ -6,13 +6,17 @@
 package ec.com.codesoft.codefaclite.main.session;
 
 import ec.com.codesoft.codefaclite.controlador.session.SessionCodefacInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -57,7 +61,13 @@ public class SessionCodefac implements SessionCodefacInterface{
 
     @Override
     public Map<String,ParametroCodefac>  getParametrosCodefac() {
-        return parametrosCodefac;
+        try {
+            //return parametrosCodefac;
+            return ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametrosMap();
+        } catch (RemoteException ex) {
+            Logger.getLogger(SessionCodefac.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     public void setParametrosCodefac(Map<String,ParametroCodefac> parametrosCodefac) {

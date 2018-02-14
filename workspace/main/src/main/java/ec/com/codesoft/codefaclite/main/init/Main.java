@@ -545,83 +545,83 @@ public class Main {
     
     public static void validacionCodefacOnline(ValidacionLicenciaCodefac validacion)
     {
-//        
-//        try {
-//            ParametroCodefacServiceIf servicio = ServiceFactory.getFactory().getParametroCodefacServiceIf();
-//            /**
-//             * Verificar si la licencia actual es la misma que tiene el servidor
-//             */
-//            ParametroCodefac parametroFechaValidacion = servicio.getParametroByNombre(ParametroCodefac.ULTIMA_FECHA_VALIDACION);
-//            if (parametroFechaValidacion != null) {
-//                String fechaStr = parametroFechaValidacion.getValor();
-//                if (!fechaStr.equals("")) {
-//                    try {
-//                        SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
-//                        Date fechaUltimaRevision = formato.parse(fechaStr);
-//                        int dias = UtilidadesFecha.obtenerDistanciaDias(fechaUltimaRevision, UtilidadesFecha.hoy());
-//                        
-//                        //Validacion para evitar que cambien fechas del sistema o que corrompan la fecha
-//                        if(dias<0)
-//                        {
-//                            DialogoCodefac.mensaje("Error", "No se puede validar su licencia ,inconsistencia con las fechas", DialogoCodefac.MENSAJE_INCORRECTO);
-//                            System.exit(0);
-//                            
-//                        }
-//                        
-//                        //Revisar la licencia cada despues de 15 dias con un rango maximo de 30 dias 
-//                        if (dias > 15 && dias < 30) {
-//                            if (verificarLicenciaOnline(validacion)) {
-//                                grabarFechaRevision(parametroFechaValidacion,false);
-//                            }
-//                        }
-//
-//                        //Si execde los 30 dias sin validar por internet ya no permite el acceso
-//                        if (dias >= 30) {
-//                            if (verificarLicenciaOnline(validacion)) {
-//                                grabarFechaRevision(parametroFechaValidacion,false);
-//                            } else {
-//                                //Si no se logro validar la licencia durante 30 dias ya no se abre el software
-//                                DialogoCodefac.mensaje("Error", "No se puede validar su licencia , verifique su conexión a internet", DialogoCodefac.MENSAJE_INCORRECTO);
-//                                System.exit(0);
-//                            }
-//                        }
-//
-//                    } catch (ParseException ex) {
-//                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-//                    }
-//
-//                } else {
-//                    if(verificarLicenciaOnline(validacion)) //no se pone en un if, porque esta controlado en el metodo si no existe salir
-//                    {
-//                        grabarFechaRevision(parametroFechaValidacion,false);                    
-//                    }
-//                    else
-//                    {
-//                        //Si no se logro validar la licencia por primera vez  no se abre el software
-//                        DialogoCodefac.mensaje("Error", "No se puede validar su licencia , verifique su conexión a internet", DialogoCodefac.MENSAJE_INCORRECTO);
-//                        System.exit(0);
-//                        
-//                    }
-//                }
-//
-//            }
-//            else //cuando no se tiene registro de la fecha de validacion
-//            {
-//                if (verificarLicenciaOnline(validacion)) 
-//                {
-//                    grabarFechaRevision(parametroFechaValidacion,true);
-//                }
-//                else
-//                {
-//                    //Si no se logro validar la licencia por primera vez  no se abre el software
-//                    DialogoCodefac.mensaje("Error", "No se puede validar su licencia , verifique su conexión a internet", DialogoCodefac.MENSAJE_INCORRECTO);
-//                    System.exit(0);
-//                }
-//            
-//            }
-//        } catch (RemoteException ex) {
-//            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        
+        try {
+            ParametroCodefacServiceIf servicio = ServiceFactory.getFactory().getParametroCodefacServiceIf();
+            /**
+             * Verificar si la licencia actual es la misma que tiene el servidor
+             */
+            ParametroCodefac parametroFechaValidacion = servicio.getParametroByNombre(ParametroCodefac.ULTIMA_FECHA_VALIDACION);
+            if (parametroFechaValidacion != null) {
+                String fechaStr = parametroFechaValidacion.getValor();
+                if (!fechaStr.equals("")) {
+                    try {
+                        SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
+                        Date fechaUltimaRevision = formato.parse(fechaStr);
+                        int dias = UtilidadesFecha.obtenerDistanciaDias(fechaUltimaRevision, UtilidadesFecha.hoy());
+                        
+                        //Validacion para evitar que cambien fechas del sistema o que corrompan la fecha
+                        if(dias<0)
+                        {
+                            DialogoCodefac.mensaje("Error", "No se puede validar su licencia ,inconsistencia con las fechas", DialogoCodefac.MENSAJE_INCORRECTO);
+                            System.exit(0);
+                            
+                        }
+                        
+                        //Revisar la licencia cada despues de 15 dias con un rango maximo de 30 dias 
+                        if (dias > 15 && dias < 30) {
+                            if (verificarLicenciaOnline(validacion)) {
+                                grabarFechaRevision(parametroFechaValidacion,false);
+                            }
+                        }
+
+                        //Si execde los 30 dias sin validar por internet ya no permite el acceso
+                        if (dias >= 30) {
+                            if (verificarLicenciaOnline(validacion)) {
+                                grabarFechaRevision(parametroFechaValidacion,false);
+                            } else {
+                                //Si no se logro validar la licencia durante 30 dias ya no se abre el software
+                                DialogoCodefac.mensaje("Error", "No se puede validar su licencia , verifique su conexión a internet", DialogoCodefac.MENSAJE_INCORRECTO);
+                                System.exit(0);
+                            }
+                        }
+
+                    } catch (ParseException ex) {
+                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                } else {
+                    if(verificarLicenciaOnline(validacion)) //no se pone en un if, porque esta controlado en el metodo si no existe salir
+                    {
+                        grabarFechaRevision(parametroFechaValidacion,false);                    
+                    }
+                    else
+                    {
+                        //Si no se logro validar la licencia por primera vez  no se abre el software
+                        DialogoCodefac.mensaje("Error", "No se puede validar su licencia , verifique su conexión a internet", DialogoCodefac.MENSAJE_INCORRECTO);
+                        System.exit(0);
+                        
+                    }
+                }
+
+            }
+            else //cuando no se tiene registro de la fecha de validacion
+            {
+                if (verificarLicenciaOnline(validacion)) 
+                {
+                    grabarFechaRevision(parametroFechaValidacion,true);
+                }
+                else
+                {
+                    //Si no se logro validar la licencia por primera vez  no se abre el software
+                    DialogoCodefac.mensaje("Error", "No se puede validar su licencia , verifique su conexión a internet", DialogoCodefac.MENSAJE_INCORRECTO);
+                    System.exit(0);
+                }
+            
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     /**
