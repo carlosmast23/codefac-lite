@@ -8,6 +8,8 @@ package ec.com.codesoft.codefaclite.ws.codefac.test.service;
 import com.sun.xml.internal.ws.client.ClientTransportException;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.DevolverlicenciaRequestType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.DevolverlicenciaResponseType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.NumaquinasRequestType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.NumaquinasResponseType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ObtenerlicenciaRequestType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ObtenerlicenciaResponseType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.SOAPServer;
@@ -85,11 +87,11 @@ public abstract class WebServiceCodefac {
         try {
             SOAPServer soapServer = new SOAPServer();
             SOAPServerPortType soapServerPort = soapServer.getSOAPServerPort();
-            ObtenerlicenciaRequestType parametrosLicencia = new ObtenerlicenciaRequestType();
+            NumaquinasRequestType parametrosLicencia = new NumaquinasRequestType();
             parametrosLicencia.setEmail(email);
-            ObtenerlicenciaResponseType respuestaLicencia = soapServerPort.obtenerlicencia(parametrosLicencia);
+            NumaquinasResponseType respuestaLicencia = soapServerPort.numaquinas(parametrosLicencia);
             //return respuestaLicencia.getReturn();
-            return 3;
+            return Integer.parseInt(respuestaLicencia.getReturn());
         } catch (com.sun.xml.internal.ws.client.ClientTransportException cte) {
             throw cte;
         }

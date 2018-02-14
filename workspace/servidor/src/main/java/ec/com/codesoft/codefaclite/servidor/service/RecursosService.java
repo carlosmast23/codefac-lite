@@ -63,8 +63,7 @@ public class RecursosService extends UnicastRemoteObject implements RecursosServ
         } catch (IOException ex) {
             Logger.getLogger(RecursosService.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return null; //Si falla el servidor devuelve null
-        
+        return null; //Si falla el servidor devuelve null        
     }
     
     /**

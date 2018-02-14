@@ -69,6 +69,16 @@
    <xsd:element name="return" type="xsd:string"/>
   </xsd:all>
  </xsd:complexType>
+ <xsd:complexType name="numaquinasRequestType">
+  <xsd:all>
+   <xsd:element name="email" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="numaquinasResponseType">
+  <xsd:all>
+   <xsd:element name="return" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
  <xsd:element name="addnumbers" type="tns:addnumbersRequestType"/>
  <xsd:element name="addnumbersResponse" type="tns:addnumbersResponseType"/>
  <xsd:element name="actualizarlicencia" type="tns:actualizarlicenciaRequestType"/>
@@ -81,6 +91,8 @@
  <xsd:element name="devolverlicenciaResponse" type="tns:devolverlicenciaResponseType"/>
  <xsd:element name="actualizartipolicencia" type="tns:actualizartipolicenciaRequestType"/>
  <xsd:element name="actualizartipolicenciaResponse" type="tns:actualizartipolicenciaResponseType"/>
+ <xsd:element name="numaquinas" type="tns:numaquinasRequestType"/>
+ <xsd:element name="numaquinasResponse" type="tns:numaquinasResponseType"/>
 </xsd:schema>
 </types>
 <message name="addnumbersRequest">
@@ -107,6 +119,10 @@
   <part name="parameters" element="tns:actualizartipolicencia" /></message>
 <message name="actualizartipolicenciaResponse">
   <part name="parameters" element="tns:actualizartipolicenciaResponse" /></message>
+<message name="numaquinasRequest">
+  <part name="parameters" element="tns:numaquinas" /></message>
+<message name="numaquinasResponse">
+  <part name="parameters" element="tns:numaquinasResponse" /></message>
 <portType name="SOAPServerPortType">
   <operation name="addnumbers">
     <documentation>Addition Of Two Numbers</documentation>
@@ -138,6 +154,11 @@
     <input message="tns:actualizartipolicenciaRequest"/>
     <output message="tns:actualizartipolicenciaResponse"/>
   </operation>
+  <operation name="numaquinas">
+    <documentation>Devolver cantidad de maquinas</documentation>
+    <input message="tns:numaquinasRequest"/>
+    <output message="tns:numaquinasResponse"/>
+  </operation>
 </portType>
 <binding name="SOAPServerBinding" type="tns:SOAPServerPortType">
   <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
@@ -168,6 +189,11 @@
   </operation>
   <operation name="actualizartipolicencia">
     <soap:operation soapAction="urn:http://www.cf.codesoft-ec.com/mysoapserver/actualizartipolicencia" style="document"/>
+    <input><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></input>
+    <output><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></output>
+  </operation>
+  <operation name="numaquinas">
+    <soap:operation soapAction="urn:http://www.cf.codesoft-ec.com/mysoapserver/numaquinas" style="document"/>
     <input><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></input>
     <output><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></output>
   </operation>
