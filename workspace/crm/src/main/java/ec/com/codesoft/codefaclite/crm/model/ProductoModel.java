@@ -261,6 +261,9 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
             }
             getComboIrbpnr().setEditable(true);
             getComboIrbpnr().setSelectedItem("Seleccione: ");
+            
+            initModelTablaDatosEnsamble();
+            setearValoresIniciales();
         } catch (RemoteException ex) {
             Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -404,5 +407,21 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         }
         getTblDatosEnsamble().setModel(tableModel);
     }
-
+    
+    private void setearValoresIniciales()
+    {
+        getTextValorUnitario().setText("0");
+        getTxtCantidadEnsamble().setText("0");
+        getTxtCantidadMinima().setText("0");
+        getTxtPrecioDistribuidor().setText("0");
+        getTxtPrecioTarjeta().setText("0");
+        getTxtStockInicial().setText("0");
+    }
+    
+    private void initModelTablaDatosEnsamble()
+    {
+        String[] titulo = {"Cantidad","Nombre","Precio Venta"};
+        DefaultTableModel tableModel = new DefaultTableModel(titulo, 0);
+        getTblDatosEnsamble().setModel(tableModel);
+    }
 }
