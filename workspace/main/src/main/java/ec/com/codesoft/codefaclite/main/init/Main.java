@@ -173,7 +173,7 @@ public class Main {
          * Seleccionar el modo de inicio de Codefac si no selecciona un modo no le permite acceder
          * a los siguiente funcionalidad
          */
-        iniciarModoAplicativo();
+        iniciarModoAplicativo(true);
         
         /**
          * Funcionalidad complementaria que inicia todos los componentes necesarios
@@ -236,11 +236,14 @@ public class Main {
             }
     }
 
-    
-    public static void iniciarModoAplicativo()
+    /**
+     * Verifica si existe o selecciona el modo del aplicativo (Cliente, Servidor, Cliente-Servidor)
+     * @param configuracionesDefecto elige si desea que esocja las configuraciones guardas o que siempre pregunte el modo de inicio
+     */
+    public static void iniciarModoAplicativo(Boolean configuracionesDefecto)
     {
         //Si existen configuraciones iniciales solo las carga
-        /*if(propiedadesIniciales!=null)
+        if(propiedadesIniciales!=null && configuracionesDefecto)
         {
             String modoAplicativoStr=propiedadesIniciales.getProperty(CAMPO_MODO_APLICATIVO);
             if(modoAplicativoStr!=null)
@@ -248,7 +251,7 @@ public class Main {
                 modoAplicativo=Integer.parseInt(modoAplicativoStr);
                 return; //sio existe no continua buscando el modo de aplicativo
             }
-        }*/
+        }
         
          /**
          * Seleccionar el modo de inicio de Codefac si no selecciona un modo no le permite acceder

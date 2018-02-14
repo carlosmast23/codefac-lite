@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataFactura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.CorreoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
@@ -381,7 +382,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         servicio.setMetodoEnvioInterface(new MetodosEnvioInterface() {
             @Override
             public void enviarCorreo(String mensaje, String subject, List<String> destinatorios, Map<String,String> pathFiles) throws Exception {
-                /*CorreoCodefac correo=new CorreoCodefac(session) {
+                CorreoCodefac correo=new CorreoCodefac() {
                     @Override
                     public String getMensaje() {
                         return mensaje;
@@ -410,7 +411,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                 {
                     e.printStackTrace();
                     throw new RuntimeException(e);
-                }*/
+                }
             }
         });
     }
