@@ -160,7 +160,6 @@ public class Main {
     private static final String NOMBRE_ARCHIVO_CONFIGURACION="codefac.ini";
     
     private static final String CAMPO_MODO_APLICATIVO="modo";
-    private static final String CAMPO_PATH_BASE="path_recursos";
     /**
      * Variable para saber el modo que inicia el aplicativo
      */
@@ -168,13 +167,7 @@ public class Main {
     
     public static void main(String[] args) {   
         
-        cargarConfiguracionesIniciales();
-        
-        /**
-         * Valida la licencia antes de ejecutar el aplicativo y envia el directorio donde debe estar la licencia
-         */
-        verificarLicencia(propiedadesIniciales.getProperty(CAMPO_PATH_BASE));
-        
+        cargarConfiguracionesIniciales();       
         
         /**
          * Seleccionar el modo de inicio de Codefac si no selecciona un modo no le permite acceder
@@ -194,29 +187,11 @@ public class Main {
         try {
             propiedadesIniciales = new Properties();
             propiedadesIniciales.load(new FileReader(NOMBRE_ARCHIVO_CONFIGURACION));
-            UtilidadesServidor.pathRecursos=propiedadesIniciales.getProperty(CAMPO_PATH_BASE);
 
         } catch (FileNotFoundException ex) {
             //Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             System.err.println("Archivo de configuracion inicial no existe");
-            
-            //Crear el archivo init con un path para los recursos por defecto  si no existe
-            String path="";
-            if (System.getProperty("os.name").startsWith("Windows")) { //Si el sistema operativo es windows
-                // includes: Windows 2000,  Windows 95, Windows 98, Windows NT, Windows Vista, Windows XP
-                path="C:/CodefacRecursos";
-            } else { //Si el sistema operativo es linux
-                // everything else
-            }
-            //Crear el archivo
-            try {            
-                propiedadesIniciales.put(CAMPO_PATH_BASE,path);
-                propiedadesIniciales.store(new FileWriter(NOMBRE_ARCHIVO_CONFIGURACION),"");
-                UtilidadesServidor.pathRecursos=path;
-            } catch (IOException ex1) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-            
+           
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -417,6 +392,21 @@ public class Main {
                 }
             }
             
+            /**
+             * Valida la licencia antes de ejecutar el aplicativo y envia el
+             * directorio donde debe estar la licencia
+             */
+            ParametroCodefac parametroDirectorioRecursos=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS);            
+            verificarLicencia(parametroDirectorioRecursos.getValor());
+            //Seteo el path de los directorio como una referencia global de todo el sistema
+            UtilidadesServidor.pathRecursos=parametroDirectorioRecursos.getValor();
+            
+            //Si el aplicativo debe iniciar en modo servidor se cierra la pantalla de carga del slashScreen
+            if (modoAplicativo.equals(ModoAplicativoModel.MODO_SERVIDOR)) {
+                splashScren.termino();
+                return;
+            }
+            
             splashScren.siguiente();
             /**
              * Crear la session y cargar otro datos de la empresa
@@ -458,14 +448,6 @@ public class Main {
                 Thread.sleep(500);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-
-            
-            //Solucion temporal para el servidor
-            if (modoAplicativo.equals(ModoAplicativoModel.MODO_SERVIDOR)) {
-                splashScren.termino();
-                return;
             }
             
             

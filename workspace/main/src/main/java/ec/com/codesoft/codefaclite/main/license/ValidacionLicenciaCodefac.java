@@ -50,38 +50,22 @@ public class ValidacionLicenciaCodefac{
 
     public ValidacionLicenciaCodefac() {
     }
-    
-    
-    
-    
 
     public boolean validar() throws ValidacionLicenciaExcepcion,NoExisteLicenciaException{
-        /*                    
-        if (!verificarConexionInternet()) {
-            throw new ValidacionLicenciaExcepcion("No existe comunicacion con el servidor");
-        }*/
-        
-        if(verificarExisteLicencia())
-        {
+
+        if (verificarExisteLicencia()) {
             Properties p = obtenerLicencia();
-            licencia=new Licencia(p);
-            
-            if(licencia.validarLicencia())
-            {
+            licencia = new Licencia(p);
+
+            if (licencia.validarLicencia()) {
                 return true;
-            }
-            else
-            {
+            } else {
                 return false;
             }
-            
-        }
-        else
-        {
+
+        } else {
             throw new NoExisteLicenciaException("No existe licencia");
         }
-            
-
 
     }
 
