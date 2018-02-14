@@ -38,6 +38,8 @@ public class UtilidadesServidor {
     
     public static String pathRecursos;
     
+    public static Integer cantidadUsuarios;
+    
     
     public static InputStream[] querys={
         RecursoCodefac.SQL.getResourceInputStream("create_comprobante_fisico_disenio.sql"),

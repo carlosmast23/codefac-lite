@@ -160,7 +160,6 @@ public class Main {
     private static final String NOMBRE_ARCHIVO_CONFIGURACION="codefac.ini";
     
     private static final String CAMPO_MODO_APLICATIVO="modo";
-    private static final String CAMPO_PATH_BASE="path_recursos";
     /**
      * Variable para saber el modo que inicia el aplicativo
      */
@@ -168,13 +167,7 @@ public class Main {
     
     public static void main(String[] args) {   
         
-        cargarConfiguracionesIniciales();
-        
-        /**
-         * Valida la licencia antes de ejecutar el aplicativo y envia el directorio donde debe estar la licencia
-         */
-        verificarLicencia(propiedadesIniciales.getProperty(CAMPO_PATH_BASE));
-        
+        cargarConfiguracionesIniciales();       
         
         /**
          * Seleccionar el modo de inicio de Codefac si no selecciona un modo no le permite acceder
@@ -194,29 +187,11 @@ public class Main {
         try {
             propiedadesIniciales = new Properties();
             propiedadesIniciales.load(new FileReader(NOMBRE_ARCHIVO_CONFIGURACION));
-            UtilidadesServidor.pathRecursos=propiedadesIniciales.getProperty(CAMPO_PATH_BASE);
 
         } catch (FileNotFoundException ex) {
             //Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             System.err.println("Archivo de configuracion inicial no existe");
-            
-            //Crear el archivo init con un path para los recursos por defecto  si no existe
-            String path="";
-            if (System.getProperty("os.name").startsWith("Windows")) { //Si el sistema operativo es windows
-                // includes: Windows 2000,  Windows 95, Windows 98, Windows NT, Windows Vista, Windows XP
-                path="C:/CodefacRecursos";
-            } else { //Si el sistema operativo es linux
-                // everything else
-            }
-            //Crear el archivo
-            try {            
-                propiedadesIniciales.put(CAMPO_PATH_BASE,path);
-                propiedadesIniciales.store(new FileWriter(NOMBRE_ARCHIVO_CONFIGURACION),"");
-                UtilidadesServidor.pathRecursos=path;
-            } catch (IOException ex1) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-            
+           
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -254,6 +229,7 @@ public class Main {
                 //Este valor seteo para que sea accesible desde el servidor
                 //TODO: Verficar si se puede mejorar esta linea de codigo
                 UtilidadesServidor.tipoLicenciaEnum = tipoLicencia;
+                UtilidadesServidor.cantidadUsuarios= Integer.parseInt(validacion.obtenerLicencia().getProperty(ValidacionLicenciaCodefac.CANTIDAD_USUARIOS));
                 UtilidadesServidor.usuarioLicencia = validacion.obtenerLicencia().getProperty(ValidacionLicenciaCodefac.USUARIO);
                 //session.setUsuarioLicencia(validacion.obtenerLicencia().getProperty(ValidacionLicenciaCodefac.USUARIO));
 
@@ -383,6 +359,13 @@ public class Main {
                 cargarRecursosServidor();
                 String ipServidor=InetAddress.getLocalHost().getHostAddress();
                 cargarRecursosCliente(ipServidor);
+                
+                //Valida la licencia antes de ejecutar el servidor
+                ParametroCodefac parametroDirectorioRecursos = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS);
+                verificarLicencia(parametroDirectorioRecursos.getValor());
+                //Seteo el path de los directorio como una referencia global de todo el sistema
+                UtilidadesServidor.pathRecursos = parametroDirectorioRecursos.getValor();
+                
                 //Crear el pantalla que va a manterner encedidad la conexion con los clientes
                 ServidorMonitorModel monitor=new ServidorMonitorModel();
                 UtilidadesServidor.monitorUpdate=monitor;
@@ -411,10 +394,23 @@ public class Main {
                         cargarRecursosServidor();
                         String ipServidor=InetAddress.getLocalHost().getHostAddress();
                         cargarRecursosCliente(ipServidor);
+                        //Valida la licencia antes de ejecutar el servidor
+                        ParametroCodefac parametroDirectorioRecursos = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS);
+                        verificarLicencia(parametroDirectorioRecursos.getValor());
+                        //Seteo el path de los directorio como una referencia global de todo el sistema
+                        UtilidadesServidor.pathRecursos = parametroDirectorioRecursos.getValor();
+                        
                         verificarConexionesPermitidas();
                     }
                 
                 }
+            }
+            
+            
+            //Si el aplicativo debe iniciar en modo servidor se cierra la pantalla de carga del slashScreen
+            if (modoAplicativo.equals(ModoAplicativoModel.MODO_SERVIDOR)) {
+                splashScren.termino();
+                return;
             }
             
             splashScren.siguiente();
@@ -458,14 +454,6 @@ public class Main {
                 Thread.sleep(500);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-
-            
-            //Solucion temporal para el servidor
-            if (modoAplicativo.equals(ModoAplicativoModel.MODO_SERVIDOR)) {
-                splashScren.termino();
-                return;
             }
             
             
@@ -557,83 +545,83 @@ public class Main {
     
     public static void validacionCodefacOnline(ValidacionLicenciaCodefac validacion)
     {
-//        
-//        try {
-//            ParametroCodefacServiceIf servicio = ServiceFactory.getFactory().getParametroCodefacServiceIf();
-//            /**
-//             * Verificar si la licencia actual es la misma que tiene el servidor
-//             */
-//            ParametroCodefac parametroFechaValidacion = servicio.getParametroByNombre(ParametroCodefac.ULTIMA_FECHA_VALIDACION);
-//            if (parametroFechaValidacion != null) {
-//                String fechaStr = parametroFechaValidacion.getValor();
-//                if (!fechaStr.equals("")) {
-//                    try {
-//                        SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
-//                        Date fechaUltimaRevision = formato.parse(fechaStr);
-//                        int dias = UtilidadesFecha.obtenerDistanciaDias(fechaUltimaRevision, UtilidadesFecha.hoy());
-//                        
-//                        //Validacion para evitar que cambien fechas del sistema o que corrompan la fecha
-//                        if(dias<0)
-//                        {
-//                            DialogoCodefac.mensaje("Error", "No se puede validar su licencia ,inconsistencia con las fechas", DialogoCodefac.MENSAJE_INCORRECTO);
-//                            System.exit(0);
-//                            
-//                        }
-//                        
-//                        //Revisar la licencia cada despues de 15 dias con un rango maximo de 30 dias 
-//                        if (dias > 15 && dias < 30) {
-//                            if (verificarLicenciaOnline(validacion)) {
-//                                grabarFechaRevision(parametroFechaValidacion,false);
-//                            }
-//                        }
-//
-//                        //Si execde los 30 dias sin validar por internet ya no permite el acceso
-//                        if (dias >= 30) {
-//                            if (verificarLicenciaOnline(validacion)) {
-//                                grabarFechaRevision(parametroFechaValidacion,false);
-//                            } else {
-//                                //Si no se logro validar la licencia durante 30 dias ya no se abre el software
-//                                DialogoCodefac.mensaje("Error", "No se puede validar su licencia , verifique su conexión a internet", DialogoCodefac.MENSAJE_INCORRECTO);
-//                                System.exit(0);
-//                            }
-//                        }
-//
-//                    } catch (ParseException ex) {
-//                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-//                    }
-//
-//                } else {
-//                    if(verificarLicenciaOnline(validacion)) //no se pone en un if, porque esta controlado en el metodo si no existe salir
-//                    {
-//                        grabarFechaRevision(parametroFechaValidacion,false);                    
-//                    }
-//                    else
-//                    {
-//                        //Si no se logro validar la licencia por primera vez  no se abre el software
-//                        DialogoCodefac.mensaje("Error", "No se puede validar su licencia , verifique su conexión a internet", DialogoCodefac.MENSAJE_INCORRECTO);
-//                        System.exit(0);
-//                        
-//                    }
-//                }
-//
-//            }
-//            else //cuando no se tiene registro de la fecha de validacion
-//            {
-//                if (verificarLicenciaOnline(validacion)) 
-//                {
-//                    grabarFechaRevision(parametroFechaValidacion,true);
-//                }
-//                else
-//                {
-//                    //Si no se logro validar la licencia por primera vez  no se abre el software
-//                    DialogoCodefac.mensaje("Error", "No se puede validar su licencia , verifique su conexión a internet", DialogoCodefac.MENSAJE_INCORRECTO);
-//                    System.exit(0);
-//                }
-//            
-//            }
-//        } catch (RemoteException ex) {
-//            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        
+        try {
+            ParametroCodefacServiceIf servicio = ServiceFactory.getFactory().getParametroCodefacServiceIf();
+            /**
+             * Verificar si la licencia actual es la misma que tiene el servidor
+             */
+            ParametroCodefac parametroFechaValidacion = servicio.getParametroByNombre(ParametroCodefac.ULTIMA_FECHA_VALIDACION);
+            if (parametroFechaValidacion != null) {
+                String fechaStr = parametroFechaValidacion.getValor();
+                if (!fechaStr.equals("")) {
+                    try {
+                        SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
+                        Date fechaUltimaRevision = formato.parse(fechaStr);
+                        int dias = UtilidadesFecha.obtenerDistanciaDias(fechaUltimaRevision, UtilidadesFecha.hoy());
+                        
+                        //Validacion para evitar que cambien fechas del sistema o que corrompan la fecha
+                        if(dias<0)
+                        {
+                            DialogoCodefac.mensaje("Error", "No se puede validar su licencia ,inconsistencia con las fechas", DialogoCodefac.MENSAJE_INCORRECTO);
+                            System.exit(0);
+                            
+                        }
+                        
+                        //Revisar la licencia cada despues de 15 dias con un rango maximo de 30 dias 
+                        if (dias > 15 && dias < 30) {
+                            if (verificarLicenciaOnline(validacion)) {
+                                grabarFechaRevision(parametroFechaValidacion,false);
+                            }
+                        }
+
+                        //Si execde los 30 dias sin validar por internet ya no permite el acceso
+                        if (dias >= 30) {
+                            if (verificarLicenciaOnline(validacion)) {
+                                grabarFechaRevision(parametroFechaValidacion,false);
+                            } else {
+                                //Si no se logro validar la licencia durante 30 dias ya no se abre el software
+                                DialogoCodefac.mensaje("Error", "No se puede validar su licencia , verifique su conexión a internet", DialogoCodefac.MENSAJE_INCORRECTO);
+                                System.exit(0);
+                            }
+                        }
+
+                    } catch (ParseException ex) {
+                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                } else {
+                    if(verificarLicenciaOnline(validacion)) //no se pone en un if, porque esta controlado en el metodo si no existe salir
+                    {
+                        grabarFechaRevision(parametroFechaValidacion,false);                    
+                    }
+                    else
+                    {
+                        //Si no se logro validar la licencia por primera vez  no se abre el software
+                        DialogoCodefac.mensaje("Error", "No se puede validar su licencia , verifique su conexión a internet", DialogoCodefac.MENSAJE_INCORRECTO);
+                        System.exit(0);
+                        
+                    }
+                }
+
+            }
+            else //cuando no se tiene registro de la fecha de validacion
+            {
+                if (verificarLicenciaOnline(validacion)) 
+                {
+                    grabarFechaRevision(parametroFechaValidacion,true);
+                }
+                else
+                {
+                    //Si no se logro validar la licencia por primera vez  no se abre el software
+                    DialogoCodefac.mensaje("Error", "No se puede validar su licencia , verifique su conexión a internet", DialogoCodefac.MENSAJE_INCORRECTO);
+                    System.exit(0);
+                }
+            
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     /**

@@ -980,8 +980,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             /**
              * Agregar variables de session a la pantalla
              */
-            ParametroCodefacServiceIf servicio=ServiceFactory.getFactory().getParametroCodefacServiceIf();
-            sessionCodefac.setParametrosCodefac(servicio.getParametrosMap());
+            //ParametroCodefacServiceIf servicio=ServiceFactory.getFactory().getParametroCodefacServiceIf();
+            //sessionCodefac.setParametrosCodefac(servicio.getParametrosMap());
             
             
             panel.panelPadre=generalPanelModel;
@@ -1038,8 +1038,6 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
                         
         } catch (PropertyVetoException ex) {
-            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -2008,7 +2006,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     return;
                 }
                 
-                /*
+                
                 boolean respuesta=DialogoCodefac.dialogoPregunta("Confirmar","Para actualizar la licencia debe cerrar todas las ventas , desea continuar?",DialogoCodefac.MENSAJE_ADVERTENCIA);
                 if(respuesta)
                 {
@@ -2026,7 +2024,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     }
                     
                 }
-                */
+                
             }
                 
         });
