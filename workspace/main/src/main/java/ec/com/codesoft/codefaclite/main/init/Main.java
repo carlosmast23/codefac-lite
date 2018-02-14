@@ -240,7 +240,7 @@ public class Main {
     public static void iniciarModoAplicativo()
     {
         //Si existen configuraciones iniciales solo las carga
-        if(propiedadesIniciales!=null)
+        /*if(propiedadesIniciales!=null)
         {
             String modoAplicativoStr=propiedadesIniciales.getProperty(CAMPO_MODO_APLICATIVO);
             if(modoAplicativoStr!=null)
@@ -248,7 +248,7 @@ public class Main {
                 modoAplicativo=Integer.parseInt(modoAplicativoStr);
                 return; //sio existe no continua buscando el modo de aplicativo
             }
-        }
+        }*/
         
          /**
          * Seleccionar el modo de inicio de Codefac si no selecciona un modo no le permite acceder
@@ -418,7 +418,16 @@ public class Main {
              * Crear la session y cargar otro datos de la empresa
              */
             SessionCodefac session=new SessionCodefac();
-            session.setTipoLicenciaEnum(UtilidadesServidor.tipoLicenciaEnum);
+            if(modoAplicativo.equals(ModoAplicativoModel.MODO_SERVIDOR))
+            {
+                session.setTipoLicenciaEnum(UtilidadesServidor.tipoLicenciaEnum);
+            }
+            else
+            {
+                TipoLicenciaEnum tipoLicencia=ServiceFactory.getFactory().getUtilidadesServiceIf().getTipoLicencia();
+                session.setTipoLicenciaEnum(tipoLicencia);
+            }
+            
             session.setUsuarioLicencia(UtilidadesServidor.usuarioLicencia);
             EmpresaServiceIf empresaService = ServiceFactory.getFactory().getEmpresaServiceIf();
             List<Empresa> empresaList=empresaService.obtenerTodos();

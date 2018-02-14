@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceIf;
 import java.rmi.RemoteException;
 import java.rmi.server.RemoteServer;
@@ -60,6 +61,11 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
             Logger.getLogger(UtilidadesService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
+    }
+
+    @Override
+    public TipoLicenciaEnum getTipoLicencia() throws RemoteException {
+        return UtilidadesServidor.tipoLicenciaEnum;
     }
 
 }
