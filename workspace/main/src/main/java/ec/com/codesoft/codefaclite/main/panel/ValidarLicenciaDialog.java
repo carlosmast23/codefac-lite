@@ -863,6 +863,30 @@ public class ValidarLicenciaDialog extends javax.swing.JDialog {
     public void setLblTipoLicenciaActualizar(JLabel lblTipoLicenciaActualizar) {
         this.lblTipoLicenciaActualizar = lblTipoLicenciaActualizar;
     }
+
+    public JLabel getLblNumeroMaquinaRegistro() {
+        return lblNumeroMaquinaRegistro;
+    }
+
+    public void setLblNumeroMaquinaRegistro(JLabel lblNumeroMaquinaRegistro) {
+        this.lblNumeroMaquinaRegistro = lblNumeroMaquinaRegistro;
+    }
+
+    public JLabel getLblNumeroUsuarioRegistro() {
+        return lblNumeroUsuarioRegistro;
+    }
+
+    public void setLblNumeroUsuarioRegistro(JLabel lblNumeroUsuarioRegistro) {
+        this.lblNumeroUsuarioRegistro = lblNumeroUsuarioRegistro;
+    }
+
+    public JLabel getLblTipoLicenciaRegistro() {
+        return lblTipoLicenciaRegistro;
+    }
+
+    public void setLblTipoLicenciaRegistro(JLabel lblTipoLicenciaRegistro) {
+        this.lblTipoLicenciaRegistro = lblTipoLicenciaRegistro;
+    }
     
     
     

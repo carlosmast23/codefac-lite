@@ -26,8 +26,8 @@ import ec.com.codesoft.codefaclite.ws.codefac.webservice.SOAPServerPortType;
 public class Test {
     public static void main(String[] args) {
         //obtenerLicencia();
-        //setearLicencia();
-        setearTipoLicencia();
+        setearLicencia();
+        //setearTipoLicencia();
         //obtenerTipoLicencia();
         //verificar();
     }
@@ -58,8 +58,8 @@ public class Test {
         SOAPServerPortType soapServerPort=soapServer.getSOAPServerPort();        
        
         ActualizarlicenciaRequestType parametros=new ActualizarlicenciaRequestType();
-        //parametros.setEmail("carlosmast2301@hotmail.es");
-        parametros.setEmail("trebortc@hotmail.com");
+        parametros.setEmail("carlosmast2301@hotmail.es");
+        //parametros.setEmail("trebortc@hotmail.com");
         parametros.setLicencia("");
 
         ActualizarlicenciaResponseType respuesta=soapServerPort.actualizarlicencia(parametros);

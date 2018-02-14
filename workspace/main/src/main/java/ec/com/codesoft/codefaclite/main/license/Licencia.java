@@ -21,6 +21,8 @@ public class Licencia {
     public static final String PROPIEDAD_USUARIO="usuario";
     public static final String PROPIEDAD_LICENCIA="licencia";
     public static final String PROPIEDAD_TIPO_LICENCIA="tipo";
+    //TODO: Verificar estas variables porque se repiten 2 veces en el modulo de verificacion licencia
+    public static final String PROPIEDAD_CANTIDAD_CLIENTES="clientes";
     
     private String mac;
     private Properties propiedades;
@@ -42,8 +44,9 @@ public class Licencia {
     public boolean validarLicencia()
     {
         String usuario=propiedades.getProperty(PROPIEDAD_USUARIO);
-        String licencia=propiedades.getProperty(PROPIEDAD_LICENCIA);
+        String licencia=propiedades.getProperty(PROPIEDAD_LICENCIA);        
         String tipoLicencia=propiedades.getProperty(PROPIEDAD_TIPO_LICENCIA);
+        String cantidadUsuarios=propiedades.getProperty(PROPIEDAD_CANTIDAD_CLIENTES);
                
         try
         {
@@ -52,7 +55,7 @@ public class Licencia {
 
                 //Validacion cuando el usuario si esta registrado con licencia gratis 
                 this.tipoLicenciaEnum=TipoLicenciaEnum.GRATIS;
-                return BCrypt.checkpw(usuario + ":" + mac + ":" + TipoLicenciaEnum.GRATIS.getLetra(), licencia);
+                return BCrypt.checkpw(usuario + ":" + mac + ":" + TipoLicenciaEnum.GRATIS.getLetra()+":"+cantidadUsuarios, licencia);
                                 
             }
             else
@@ -60,7 +63,7 @@ public class Licencia {
                 if(tipoLicencia.equals(TipoLicenciaEnum.PRO.getNombre()))
                 {
                     this.tipoLicenciaEnum=TipoLicenciaEnum.PRO;
-                    return BCrypt.checkpw(usuario+":"+mac+":"+TipoLicenciaEnum.PRO.getLetra(),licencia);
+                    return BCrypt.checkpw(usuario+":"+mac+":"+TipoLicenciaEnum.PRO.getLetra()+":"+cantidadUsuarios,licencia);
                 }
             }
             

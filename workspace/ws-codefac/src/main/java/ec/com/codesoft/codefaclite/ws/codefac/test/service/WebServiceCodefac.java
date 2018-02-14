@@ -89,7 +89,7 @@ public abstract class WebServiceCodefac {
             parametrosLicencia.setEmail(email);
             ObtenerlicenciaResponseType respuestaLicencia = soapServerPort.obtenerlicencia(parametrosLicencia);
             //return respuestaLicencia.getReturn();
-            return 1;
+            return 3;
         } catch (com.sun.xml.internal.ws.client.ClientTransportException cte) {
             throw cte;
         }
