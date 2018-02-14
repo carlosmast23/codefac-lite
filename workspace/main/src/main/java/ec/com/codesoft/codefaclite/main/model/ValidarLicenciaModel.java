@@ -121,6 +121,7 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
                 
                 
                 //Genera un nuevo usuario con los datos ingresados
+                /*
                 UsuarioServicioIf servicio=ServiceFactory.getFactory().getUsuarioServicioIf();
                 Usuario usuario=new Usuario();
                 String clave=new String(getTxtClaveRegistrar().getPassword());
@@ -134,7 +135,7 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
                 } catch (RemoteException ex) {
                     Logger.getLogger(ValidarLicenciaModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
+                */
                 licenciaCreada=true;
                 
                 DialogoCodefac.mensaje("Felicidades","La licencia fue creada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
@@ -288,7 +289,7 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
         SOAPServer soapServer = new SOAPServer();
         SOAPServerPortType soapServerPort = soapServer.getSOAPServerPort();
         DevolverlicenciaRequestType parametrosLicencia = new DevolverlicenciaRequestType();
-        parametrosLicencia.setEmail("carlosmast2301@hotmail.es");
+        parametrosLicencia.setEmail(email);
         DevolverlicenciaResponseType respuestaLicencia = soapServerPort.devolverlicencia(parametrosLicencia);
         return respuestaLicencia.getReturn();
 
