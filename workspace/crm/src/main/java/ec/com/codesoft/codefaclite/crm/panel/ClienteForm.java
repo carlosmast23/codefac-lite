@@ -281,6 +281,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 20, 10, 20);
         jPanelCaracteristicasGenerales.add(lblEspacio, gridBagConstraints);
 
         jLabel12.setText("Tipo:");

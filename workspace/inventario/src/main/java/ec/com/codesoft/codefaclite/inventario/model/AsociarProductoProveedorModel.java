@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.inventario.busqueda.ProductoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.inventario.busqueda.ProductoProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.inventario.busqueda.ProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.inventario.panel.AsociarProductoProveedorPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
@@ -21,6 +22,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorS
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -44,26 +46,38 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
     private Producto producto;
     private Persona proveedor;
     private ProductoProveedorServiceIf servicioProductoProveedor;
+    private int fila;
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         iniciarValores();
         agregarListenerBotones();
-        agregarListenerCombo();     
+        agregarListenerCombo();
+        initModelTablaProductoProveedor();
         this.servicioProductoProveedor=ServiceFactory.getFactory().getProductoProveedorServiceIf();
     }
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Si desea continuar se perderan los datos sin guardar?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+        if (!respuesta) {
+            throw new ExcepcionCodefacLite("Cancelacion usuario");
+        }        
     }
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
         try {
-            setearValores();
-            servicioProductoProveedor.grabar(productoProveedor);
-            DialogoCodefac.mensaje("Correcto","El dato se guardo correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+            if(proveedor != null && producto != null)
+            {
+                setearValores();
+                servicioProductoProveedor.grabar(productoProveedor);
+                DialogoCodefac.mensaje("Correcto","El dato se guardo correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+            }
+            else
+            {
+                DialogoCodefac.mensaje("Error", "De escojer un proveedor y un producto", DialogoCodefac.MENSAJE_INCORRECTO);
+            }
         } catch (ServicioCodefacException ex) {            
             //Logger.getLogger(AsociarProductoProveedorModel.class.getName()).log(Level.SEVERE, null, ex);
             DialogoCodefac.mensaje("Error","Error al grabar",DialogoCodefac.MENSAJE_INCORRECTO);
@@ -82,7 +96,6 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
         productoProveedor.setConIva(enumSiNo.getLetra());
         productoProveedor.setProducto(producto);
         productoProveedor.setProveedor(proveedor);        
-        //productoProveedor.setProducto(getPr);
     }
 
     @Override
@@ -92,7 +105,10 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(productoProveedor != null)
+        {
+            //servicioProductoProveedor
+        }
     }
 
     @Override
@@ -113,6 +129,7 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
     @Override
     public void limpiar() {
         limpiarVariables();
+        initModelTablaProductoProveedor();
     }
 
     @Override
@@ -177,12 +194,23 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
                 
             }
         });
+        
+        getTblProveedorProducto().addMouseListener( new MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                fila = getTblProveedorProducto().getSelectedRow();
+            }
+        });
+        
+     
+           
     }
     
     private void cargarTablaProductoProveedor(Persona persona) throws RemoteException
     {
         try {
-            String[] titulos={"Producto","Costo"};
+            String[] titulos={"Producto","Costo","Iva"};
             DefaultTableModel modeloTabla=new DefaultTableModel(titulos,0);
             Map<String,Object> parametros=new HashMap<String,Object>();
             parametros.put("proveedor",persona);
@@ -194,12 +222,26 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
                 Vector<String> fila=new Vector<String>();
                 fila.add(productoProveedor.getProducto().getNombre());
                 fila.add(productoProveedor.getCosto().toString());
+                if(productoProveedor.getConIva().equals("n"))
+                {
+                    fila.add("Sin Iva");
+                }else{
+                    fila.add("Con Iva");
+                }
+                System.out.println("Estado de producto--->" +productoProveedor.getEstado());
                 modeloTabla.addRow(fila);
             }
             getTblProveedorProducto().setModel(modeloTabla);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(AsociarProductoProveedorModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private void initModelTablaProductoProveedor()
+    {
+        String [] titulos={"Producto","Costo","Iva"};
+        DefaultTableModel defaultTableModel = new DefaultTableModel(titulos,0);
+        getTblProveedorProducto().setModel(defaultTableModel);
     }
 
     private void agregarListenerCombo() {

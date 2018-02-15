@@ -67,11 +67,16 @@ public class CompraModel extends CompraPanel{
         agregarListenerBotones();
         crearVariables();
         initModelTablaDetalleCompra();
+        getCmbFechaCompra().setDate(new java.util.Date());
+        desbloquearIngresoDetalleProducto();
     }
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
-        
+        Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Si desea continuar se perderan los datos sin guardar?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+        if (!respuesta) {
+            throw new ExcepcionCodefacLite("Cancelacion usuario");
+        }
     }
 
     @Override
@@ -144,6 +149,29 @@ public class CompraModel extends CompraPanel{
     @Override
     public void limpiar() {
         getTxtCantidadItem().setText("1");
+        getTxtOrdenCompra().setText("");
+        getTxtProveedor().setText("");
+        getTxtObservacion().setText("");
+        getTxtSecuencial().setText("");
+        getTxtAutorizacion().setText("");
+        //Limpiar Detalles de Producto
+        getTxtProductoItem().setText("");
+        getTxtDescripcionItem().setText("");
+        getTxtPrecionUnitarioItem().setText("");
+        getTxtCantidadItem().setText("");
+        //Limpiar Tabla de Detalles Producto
+        initModelTablaDetalleCompra();
+        //Limpiar totales
+        getLblSubtotalImpuesto().setText("0.00");
+        getLblSubtotalSinImpuesto().setText("0.00");
+        getTxtDescuentoImpuestos().setText("0.00");
+        getTxtDescuentoSinImpuestos().setText("0.00");
+        getLblIva().setText("0.00");
+        getLblTotal().setText("0.00");
+        getCmbFechaCompra().setDate(new java.util.Date());
+        //Bloquear Campos Detalles producto
+        bloquearIngresoDetalleProducto();
+        
     }
 
     @Override
@@ -208,6 +236,7 @@ public class CompraModel extends CompraPanel{
                     String identificacion=proveedor.getIdentificacion();
                     String nombre =proveedor.getRazonSocial();
                     getTxtProveedor().setText(identificacion+" - "+nombre);
+                    desbloquearIngresoDetalleProducto();
                 }
             }
         });
@@ -358,4 +387,21 @@ public class CompraModel extends CompraPanel{
         //this.modeloTablaDetallesProductos.isCellEditable
         getTblDetalleProductos().setModel(modeloTablaDetallesCompra);
     }
+    
+    private void desbloquearIngresoDetalleProducto()
+    {
+        getTxtDescripcionItem().enable(true);
+        getTxtProductoItem().enable(true);
+        getTxtCantidadItem().enable(true);
+        getTxtPrecionUnitarioItem().enable(true);
+    }
+    
+    private void bloquearIngresoDetalleProducto()
+    {
+        getTxtDescripcionItem().enable(false);
+        getTxtProductoItem().enable(false);
+        getTxtCantidadItem().enable(false);
+        getTxtPrecionUnitarioItem().enable(false);
+    }
+    
 }

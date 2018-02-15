@@ -258,7 +258,8 @@ public abstract class AsociarProductoProveedorPanel extends ControladorCodefacIn
     public void setTxtDescripcion(JTextField txtDescripcion) {
         this.txtDescripcion = txtDescripcion;
     }
-
+    
+    @LimpiarAnotacion
     public JTextField getTxtProducto() {
         return txtProducto;
     }
@@ -266,7 +267,8 @@ public abstract class AsociarProductoProveedorPanel extends ControladorCodefacIn
     public void setTxtProducto(JTextField txtProducto) {
         this.txtProducto = txtProducto;
     }
-
+    
+    @LimpiarAnotacion
     public JTextField getTxtProveedor() {
         return txtProveedor;
     }

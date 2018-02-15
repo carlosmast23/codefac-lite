@@ -12,6 +12,7 @@ import java.util.Map;
 /**
  *
  * @author Carlos
+ * @param <Entity>
  */
 public interface ServiceAbstractIf<Entity> extends Remote {
         //private T t;
