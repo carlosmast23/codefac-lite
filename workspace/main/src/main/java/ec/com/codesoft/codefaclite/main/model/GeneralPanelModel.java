@@ -11,7 +11,6 @@ import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import ec.com.codesoft.codefaclite.configuraciones.model.CalculadoraModel;
 import ec.com.codesoft.codefaclite.configuraciones.model.ComprobantesConfiguracionModel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
-import ec.com.codesoft.codefaclite.controlador.comprobantes.ComprobanteElectronicoAbstract;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteListener;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;

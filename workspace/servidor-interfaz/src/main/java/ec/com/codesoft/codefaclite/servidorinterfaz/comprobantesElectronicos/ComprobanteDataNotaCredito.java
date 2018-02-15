@@ -3,26 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.facturacion.other;
+package ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos;
 
-import ec.com.codesoft.codefaclite.controlador.comprobantes.ComprobanteElectronicoAbstract;
-import ec.com.codesoft.codefaclite.controlador.session.SessionCodefacInterface;
-import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
-import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.DetalleFacturaComprobante;
+import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.ImpuestoComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.TotalImpuesto;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.notacredito.DetalleNotaCreditoComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.notacredito.InformacionNotaCredito;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.notacredito.NotaCreditoComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoDetalle;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,14 +29,14 @@ import java.util.Map;
  *
  * @author Carlos
  */
-public class NotaCreditoElectronico extends ComprobanteElectronicoAbstract<NotaCreditoComprobante>{
+public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Serializable {
     private NotaCredito notaCredito;
     private Map<String,String> mapInfoAdicional;
     private List<String> correosAdicionales;
+    private ListenerComprobanteElectronico listener;
     
-    
-    public NotaCreditoElectronico(SessionCodefacInterface session, InterfazComunicacionPanel interfazPadre) {
-        super(session, interfazPadre);
+    public ComprobanteDataNotaCredito(NotaCredito notaCredito) {
+        this.notaCredito=notaCredito;
     }
 
     @Override
@@ -220,7 +216,20 @@ public class NotaCreditoElectronico extends ComprobanteElectronicoAbstract<NotaC
     public void setCorreosAdicionales(List<String> correosAdicionales) {
         this.correosAdicionales = correosAdicionales;
     }
+
+    public ListenerComprobanteElectronico getListener() {
+        return listener;
+    }
+
+    public void setListener(ListenerComprobanteElectronico listener) {
+        this.listener = listener;
+    }
     
     
+
+    @Override
+    public ListenerComprobanteElectronico getListenerComprobanteElectronico() {
+        return listener;
+    }
     
 }

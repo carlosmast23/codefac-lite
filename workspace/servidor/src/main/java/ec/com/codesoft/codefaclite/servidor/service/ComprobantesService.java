@@ -28,7 +28,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.Direct
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NotaCreditoEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
 import ec.com.codesoft.ejemplo.utilidades.imagen.UtilidadImagen;
 import ec.com.codesoft.ejemplo.utilidades.rmi.UtilidadesRmi;
@@ -90,42 +92,87 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         }
         return null;
     }
+    
+    
+    /**
+     *
+     * @param comprobante el comprobante a procesar facturas, notas de credito
+     * con los datos finales implementados
+     */
+    public void procesarComprobanteNotaCredito(ComprobanteDataInterface comprobanteData,NotaCredito notaCredito,Usuario usuario,ClienteInterfaceComprobante callbackClientObject) throws RemoteException {
+        /**
+         * Metodo del modulo de facturacion electronica que contiene la interfaz
+         * para facturar electronicamente
+         */
+        ComprobanteElectronicoService comprobanteElectronico= cargarConfiguracionesInicialesComprobantes(comprobanteData, usuario);
+        
+        //Agregar el listener
+        comprobanteElectronico.addActionListerComprobanteElectronico(new ListenerComprobanteElectronico() {
+            @Override
+            public void termino() {
+                try {
+                    //Si la factura termina corectamente grabo el estado y numero de autorizacion
+                    NotaCreditoService notaCreditoService=new NotaCreditoService();
+                   
+                    notaCredito.setClaveAcceso(comprobanteElectronico.getClaveAcceso());
+                    notaCredito.setEstado(NotaCreditoEnumEstado.TERMINADO.getEstado());
+                    entityManager.merge(notaCredito);
+                    //facturacionService.editar(factura);
+                    //cargarDatosRecursos(comprobanteElectronico);
+                    //mapReportePlantilla(usuario);
+                    byte[] serializedPrint= getReporteComprobante(comprobanteElectronico.getClaveAcceso());                   
+                    callbackClientObject.termino(serializedPrint);
+                    
+                    //doCallbacks();
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
 
+            @Override
+            public void iniciado(ComprobanteElectronico comprobante) {
+                try {
+                    callbackClientObject.iniciado();
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            @Override
+            public void procesando(int etapa, ClaveAcceso clave) {
+                try {
+                    callbackClientObject.procesando(etapa, clave);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            }
+
+            @Override
+            public void error(ComprobanteElectronicoException cee) {
+                try {
+                    callbackClientObject.error(cee,comprobanteElectronico.getClaveAcceso());
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        
+        //Proceso el comprobante
+        comprobanteElectronico.procesar();
+
+    }
+    
     /**
      *
      * @param comprobante el comprobante a procesar facturas, notas de credito
      * con los datos finales implementados
      */
     public void procesarComprobante(ComprobanteDataInterface comprobanteData,Factura factura,Usuario usuario,ClienteInterfaceComprobante callbackClientObject) throws RemoteException {
-        /**
-         * Metodo del modulo de facturacion electronica que contiene la interfaz
-         * para facturar electronicamente
-         */
-        ComprobanteElectronico comprobante= comprobanteData.getComprobante();
-        ComprobanteElectronicoService comprobanteElectronico = new ComprobanteElectronicoService();
-
-        //Agregando informacionTributaria
-        comprobante.setInformacionTributaria(getInfoInformacionTributaria(comprobanteData));
-
-        //Validacion para verificar que si no existen datos adicionales no se agregue nada
-        List<InformacionAdicional> informacionAdicional = getInformacionAdicional(comprobanteData);
-        if (informacionAdicional != null && informacionAdicional.size() > 0) {
-            comprobante.setInformacionAdicional(informacionAdicional);
-        }
-        
-        //Agregar datos adicionales del Reporte
-        comprobanteElectronico.setMapAdicionalReporte(mapReportePlantilla(usuario));
-        
-        //Cargar los correos que se van a usar para enviar los datos
-        comprobanteElectronico.setCorreosElectronicos(comprobanteData.getCorreos());
-
-        comprobanteElectronico.setComprobante(comprobante);
-        
-        //Cargar configuraciones por defecto para los comprobantes
-        cargarConfiguraciones(comprobanteElectronico);
-
-        //Etapa desde la cual va a procesar los comprobantes
-        comprobanteElectronico.setEtapaActual(ComprobanteElectronicoService.ETAPA_GENERAR);
+                
+        ComprobanteElectronicoService comprobanteElectronico= cargarConfiguracionesInicialesComprobantes(comprobanteData, usuario);
         
         //Agregar el listener
         comprobanteElectronico.addActionListerComprobanteElectronico(new ListenerComprobanteElectronico() {
@@ -184,6 +231,41 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         //Proceso el comprobante
         comprobanteElectronico.procesar();
 
+    }
+    
+    private ComprobanteElectronicoService cargarConfiguracionesInicialesComprobantes(ComprobanteDataInterface comprobanteData,Usuario usuario) throws RemoteException
+    {
+        /**
+         * Metodo del modulo de facturacion electronica que contiene la interfaz
+         * para facturar electronicamente
+         */
+        ComprobanteElectronico comprobante= comprobanteData.getComprobante();
+        ComprobanteElectronicoService comprobanteElectronico = new ComprobanteElectronicoService();
+
+        //Agregando informacionTributaria
+        comprobante.setInformacionTributaria(getInfoInformacionTributaria(comprobanteData));
+
+        //Validacion para verificar que si no existen datos adicionales no se agregue nada
+        List<InformacionAdicional> informacionAdicional = getInformacionAdicional(comprobanteData);
+        if (informacionAdicional != null && informacionAdicional.size() > 0) {
+            comprobante.setInformacionAdicional(informacionAdicional);
+        }
+        
+        //Agregar datos adicionales del Reporte
+        comprobanteElectronico.setMapAdicionalReporte(mapReportePlantilla(usuario));
+        
+        //Cargar los correos que se van a usar para enviar los datos
+        comprobanteElectronico.setCorreosElectronicos(comprobanteData.getCorreos());
+
+        comprobanteElectronico.setComprobante(comprobante);
+        
+        //Cargar configuraciones por defecto para los comprobantes
+        cargarConfiguraciones(comprobanteElectronico);
+
+        //Etapa desde la cual va a procesar los comprobantes
+        comprobanteElectronico.setEtapaActual(ComprobanteElectronicoService.ETAPA_GENERAR);
+    
+        return comprobanteElectronico;
     }
 
     private InformacionTributaria getInfoInformacionTributaria(ComprobanteDataInterface comprobanteData) throws RemoteException {

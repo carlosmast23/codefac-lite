@@ -10,7 +10,6 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
-import ec.com.codesoft.codefaclite.facturacion.other.FacturacionElectronica;
 import ec.com.codesoft.codefaclite.facturacion.panel.UtilidadComprobantePanel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
@@ -384,13 +383,14 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
     
     private void procesarComprabante(Integer etapaInicial,Integer etapaLimite) 
     {
+        /*
         FacturacionElectronica servicio = new FacturacionElectronica(session, panelPadre);
         servicio.setCorreosAdicionales(obtenerCorreos());
         servicio.getServicio().addActionListerComprobanteElectronico(listener);
         estadoCargando();
         String claveAcceso = tableModel.getValueAt(getTblComprobantes().getSelectedRow(), 0).toString().replace(".xml", "");
         servicio.setClaveAcceso(claveAcceso);
-        servicio.procesarComprobanteEtapa(etapaInicial,etapaLimite);
+        servicio.procesarComprobanteEtapa(etapaInicial,etapaLimite);*/
     }
     
     private List<String> obtenerCorreos()
@@ -405,12 +405,14 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
     
 
     private void etapaGenerados(Boolean completarTodasEtapas) {
+        /*
         FacturacionElectronica servicio = new FacturacionElectronica(session, panelPadre);
         servicio.getServicio().addActionListerComprobanteElectronico(listener);
         estadoCargando();
         String claveAcceso = tableModel.getValueAt(getTblComprobantes().getSelectedRow(), 0).toString().replace(".xml", "");
         servicio.setClaveAcceso(claveAcceso);
         //servicio.procesarComprobanteEtapa(ComprobanteElectronicoService.ETAPA_GENERAR + 1, completarTodasEtapas);
+        */
     }
 
     private void iniciarComponentes() {
