@@ -5,7 +5,6 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.model;
 
-import ec.com.codesoft.codefaclite.controlador.aplicacion.mail.CorreoCodefac;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteInterface;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
@@ -19,9 +18,8 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.ClienteFacturacionBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.ProductoBusquedaDialogo;
-import ec.com.codesoft.codefaclite.facturacion.callback.ClienteImplComprobante;
+import ec.com.codesoft.codefaclite.facturacion.callback.ClienteFacturaImplComprobante;
 import ec.com.codesoft.codefaclite.facturacion.model.disenador.ManagerReporteFacturaFisica;
-import ec.com.codesoft.codefaclite.facturacion.other.FacturacionElectronica;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
 import ec.com.codesoft.codefaclite.facturacion.reportdata.DetalleFacturaFisicaData;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
@@ -119,11 +117,6 @@ public class FacturacionModel extends FacturacionPanel{
      */
     private Map<String, String> datosAdicionales;
 
-    /**
-     * Objeto que permite interactuar con los servicio de la facturacion
-     * Electronica
-     */
-    private FacturacionElectronica facturaElectronica;
 
     public FacturacionModel() {
         setearFechas();
@@ -476,14 +469,11 @@ public class FacturacionModel extends FacturacionPanel{
             //comprobanteData.setCorreosAdicionales(correosAdicionales);
             comprobanteData.setMapInfoAdicional(datosAdicionales);
             //MonitorComprobanteData monitorData = MonitorComprobanteModel.getInstance().agregarComprobante();
-            ClienteInterfaceComprobante cic=new ClienteImplComprobante(this, servicio, facturaProcesando);
+            ClienteInterfaceComprobante cic=new ClienteFacturaImplComprobante(this, facturaProcesando);
             ComprobanteServiceIf comprobanteServiceIf= ServiceFactory.getFactory().getComprobanteServiceIf();
             //comprobanteServiceIf.registerForCallback(cic);
             comprobanteServiceIf.procesarComprobante(comprobanteData,facturaProcesando,session.getUsuario(),cic);
             
-            if (true) {
-                return;
-            }
      
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -615,7 +605,7 @@ public class FacturacionModel extends FacturacionPanel{
         getLblEstadoFactura().setText("Procesando");
 
         datosAdicionales = new HashMap<String, String>();
-        facturaElectronica = new FacturacionElectronica(session, this.panelPadre);
+        //facturaElectronica = new FacturacionElectronica(session, this.panelPadre);
 
         //Limpiar los campos del cliente
         getLblNombreCliente().setText("");

@@ -5,7 +5,6 @@
  */
 package ec.com.codesoft.codefaclite.main.test;
 
-import ec.com.codesoft.codefaclite.controlador.aplicacion.mail.CorreoCodefac;
 import ec.com.codesoft.ejemplo.utilidades.email.CorreoElectronico;
 import ec.com.codesoft.ejemplo.utilidades.email.SmtpNoExisteException;
 import java.util.ArrayList;

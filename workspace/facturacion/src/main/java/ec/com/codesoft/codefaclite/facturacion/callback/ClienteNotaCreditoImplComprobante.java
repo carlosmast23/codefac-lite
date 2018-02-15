@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.facturacion.callback;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
+import ec.com.codesoft.codefaclite.facturacion.model.NotaCreditoModel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
@@ -16,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceCom
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataFactura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.ejemplo.utilidades.rmi.UtilidadesRmi;
@@ -36,17 +38,15 @@ import net.sf.jasperreports.engine.JasperPrint;
  *
  * @author Carlos
  */
-public class ClienteImplComprobante extends UnicastRemoteObject implements ClienteInterfaceComprobante {
+public class ClienteNotaCreditoImplComprobante extends UnicastRemoteObject implements ClienteInterfaceComprobante {
 
-    private FacturacionModel facturacionModel;
+    private NotaCreditoModel notaCreditoModel;
     private MonitorComprobanteData monitorData;
-    private FacturacionServiceIf servicio;
-    private Factura facturaProcesando;
+    private NotaCredito notaCreditoProcesando;
 
-    public ClienteImplComprobante(FacturacionModel facturacionModel, FacturacionServiceIf servicio, Factura facturaProcesando) throws RemoteException {
-        this.facturacionModel = facturacionModel;
-        this.servicio = servicio;
-        this.facturaProcesando = facturaProcesando;
+    public ClienteNotaCreditoImplComprobante(NotaCreditoModel notaCreditoModel, NotaCredito notaCreditoProcesando) throws RemoteException {
+        this.notaCreditoModel = notaCreditoModel;
+        this.notaCreditoProcesando = notaCreditoProcesando;
     }
 
     @Override
@@ -62,13 +62,13 @@ public class ClienteImplComprobante extends UnicastRemoteObject implements Clien
                 @Override
                 public void actionPerformed(ActionEvent e) {
 
-                    facturacionModel.panelPadre.crearReportePantalla(jasperPrint, facturaProcesando.getPreimpreso());
+                    notaCreditoModel.panelPadre.crearReportePantalla(jasperPrint, notaCreditoProcesando.getPreimpreso());
                 }
             });
         } catch (IOException ex) {
-            Logger.getLogger(ClienteImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClienteNotaCreditoImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ClienteImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClienteNotaCreditoImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         } 
 
     }
@@ -76,11 +76,11 @@ public class ClienteImplComprobante extends UnicastRemoteObject implements Clien
     @Override
     public void iniciado() {
         monitorData = MonitorComprobanteModel.getInstance().agregarComprobante();
-        monitorData.getLblPreimpreso().setText(facturaProcesando.getPreimpreso() + " ");
+        monitorData.getLblPreimpreso().setText(notaCreditoProcesando.getPreimpreso() + " ");
         monitorData.getBtnAbrir().setEnabled(false);
         monitorData.getBtnReporte().setEnabled(false);
         monitorData.getBtnCerrar().setEnabled(false);
-        monitorData.getBarraProgreso().setString(facturaProcesando.getPreimpreso());
+        monitorData.getBarraProgreso().setString(notaCreditoProcesando.getPreimpreso());
         monitorData.getBarraProgreso().setStringPainted(true);
         MonitorComprobanteModel.getInstance().mostrar();
         
@@ -90,7 +90,7 @@ public class ClienteImplComprobante extends UnicastRemoteObject implements Clien
     public void procesando(int etapa, ClaveAcceso clave) throws RemoteException {
         if (etapa == ComprobanteElectronicoService.ETAPA_GENERAR) {
             monitorData.getBarraProgreso().setValue(20);
-            facturaProcesando.setClaveAcceso(clave.clave);
+            notaCreditoProcesando.setClaveAcceso(clave.clave);
         }
 
         if (etapa == ComprobanteElectronicoService.ETAPA_PRE_VALIDAR) {
@@ -107,17 +107,17 @@ public class ClienteImplComprobante extends UnicastRemoteObject implements Clien
 
         if (etapa == ComprobanteElectronicoService.ETAPA_AUTORIZAR) {
             monitorData.getBarraProgreso().setValue(90);
-            facturaProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
+            notaCreditoProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
         }
 
         if (etapa == ComprobanteElectronicoService.ETAPA_RIDE) {
             monitorData.getBarraProgreso().setValue(95);
-            facturaProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
+            notaCreditoProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
         }
 
         if (etapa == ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE) {
             monitorData.getBarraProgreso().setValue(100);
-            facturaProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
+            notaCreditoProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
         }
     }
 
@@ -135,7 +135,7 @@ public class ClienteImplComprobante extends UnicastRemoteObject implements Clien
                     monitorData.getBtnAbrir().addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            facturacionModel.panelPadre.crearReportePantalla(jasperPrint, facturaProcesando.getPreimpreso());
+                            notaCreditoModel.panelPadre.crearReportePantalla(jasperPrint, notaCreditoProcesando.getPreimpreso());
                             //JasperPrint print = facturaElectronica.getServicio().getPrintJasper();
                             //panelPadre.crearReportePantalla(print, facturaProcesando.getPreimpreso());
                         }
@@ -154,9 +154,9 @@ public class ClienteImplComprobante extends UnicastRemoteObject implements Clien
         } catch (RemoteException ex) {
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(ClienteImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClienteNotaCreditoImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ClienteImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClienteNotaCreditoImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
