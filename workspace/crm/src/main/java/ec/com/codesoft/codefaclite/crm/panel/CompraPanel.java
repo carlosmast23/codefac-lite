@@ -255,6 +255,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         jPanel2.add(txtProductoItem, gridBagConstraints);
 
         btnBuscarProductoProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/list.png"))); // NOI18N
+        btnBuscarProductoProveedor.setText("Productos");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -383,7 +384,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         jPanel1.add(txtDescuentoImpuestos, gridBagConstraints);
 
         jLabel14.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        jLabel14.setText("Subtotal 12% :");
+        jLabel14.setText("Subtotal 12%");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -392,7 +393,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         jPanel1.add(jLabel14, gridBagConstraints);
 
         jLabel15.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        jLabel15.setText("Subtotal 0% :");
+        jLabel15.setText("Subtotal 0%");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
