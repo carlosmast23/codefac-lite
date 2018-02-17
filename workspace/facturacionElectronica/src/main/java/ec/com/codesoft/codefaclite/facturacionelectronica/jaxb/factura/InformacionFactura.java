@@ -1,4 +1,4 @@
-/*
+ /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.TotalImpuesto;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
@@ -27,7 +28,7 @@ import javax.xml.bind.annotation.XmlType;
     "totalImpuestos",
     "importeTotal",
     "formaPagos"})
-public class InformacionFactura {
+public class InformacionFactura implements Serializable{
     private String fechaEmision;
     private String tipoIdentificacionComprador;
     private String razonSocialComprador;

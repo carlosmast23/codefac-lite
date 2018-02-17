@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.notacredito;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.DetalleAdicional;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.ImpuestoComprobante;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
@@ -27,7 +28,7 @@ import javax.xml.bind.annotation.XmlType;
             "precioTotalSinImpuesto",
             "detallesAdicionales",
             "impuestos"})
-public class DetalleNotaCreditoComprobante {
+public class DetalleNotaCreditoComprobante implements Serializable{
     private String codigoInterno;
     private String codigoAdicional;
     private String descripcion;

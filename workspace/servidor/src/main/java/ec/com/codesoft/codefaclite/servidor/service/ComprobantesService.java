@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteE
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionTributaria;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
@@ -31,10 +32,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NotaCreditoEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
 import ec.com.codesoft.ejemplo.utilidades.imagen.UtilidadImagen;
 import ec.com.codesoft.ejemplo.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
+import java.awt.event.ActionListener;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -68,6 +71,76 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
     public ComprobantesService() throws RemoteException {
         super();
         clientesLista=new Vector<ClienteInterfaceComprobante>();
+    }
+    
+    public boolean procesarComprobantesPendiente(Integer etapaInicial,Integer etapaLimite,String claveAcceso, List<String> correos,ClienteInterfaceComprobante callbackClientObject) throws RemoteException
+    {
+        
+        ComprobanteElectronicoService comprobanteElectronico= new ComprobanteElectronicoService();
+        cargarConfiguraciones(comprobanteElectronico);
+        
+        comprobanteElectronico.setCorreosElectronicos(correos);
+
+        comprobanteElectronico.addActionListerComprobanteElectronico(new ListenerComprobanteElectronico() {
+            @Override
+            public void termino() {
+                try {
+                    callbackClientObject.termino(null);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            @Override
+            public void iniciado(ComprobanteElectronico comprobante) {
+                try {
+                    callbackClientObject.iniciado();
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            @Override
+            public void procesando(int etapa, ClaveAcceso clave) {
+                try {
+                    callbackClientObject.procesando(etapa, clave);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            @Override
+            public void error(ComprobanteElectronicoException cee) {
+                try {
+                    callbackClientObject.error(cee,"");
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        comprobanteElectronico.setClaveAcceso(claveAcceso);
+        
+        comprobanteElectronico.setEtapaActual(etapaInicial);
+        comprobanteElectronico.setClaveAcceso(claveAcceso);
+        comprobanteElectronico.setEtapaLimiteProcesar(etapaLimite);
+        //comprobanteElectronico
+        comprobanteElectronico.procesar();
+        return true;
+    }
+    
+    public List<ComprobanteElectronico> getComprobantesObjectByFolder(String carpetaConfiguracion) throws RemoteException
+    {
+        ParametroCodefacService parametroService=new ParametroCodefacService();
+        String path= parametroService.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS).valor;
+        String modoFacturacion=parametroService.getParametroByNombre(ParametroCodefac.MODO_FACTURACION).valor;
+        String pathComprobantes="";
+        
+        if (modoFacturacion.equals(ComprobanteElectronicoService.MODO_PRODUCCION)) {
+            pathComprobantes =path+"/"+ DirectorioCodefac.COMPROBANTES_PRODUCCION.getNombre();
+        } else {
+            pathComprobantes =path+"/"+ DirectorioCodefac.COMPROBANTES_PRUEBAS.getNombre();
+        }
+        return ComprobantesElectronicosUtil.getComprobantesObjectByFolder(pathComprobantes,carpetaConfiguracion);
     }
     
     /**

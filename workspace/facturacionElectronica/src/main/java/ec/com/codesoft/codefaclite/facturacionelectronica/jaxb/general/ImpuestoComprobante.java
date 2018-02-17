@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
@@ -14,7 +15,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author Carlos
  */
 @XmlType(propOrder = {"codigo","codigoPorcentaje","tarifa","baseImponible","valor"})
-public class ImpuestoComprobante {
+public class ImpuestoComprobante implements Serializable{
     private String codigo;
     private String codigoPorcentaje;
     private BigDecimal tarifa;

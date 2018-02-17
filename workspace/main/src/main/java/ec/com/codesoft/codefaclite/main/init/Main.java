@@ -224,14 +224,11 @@ public class Main {
                     tipoLicencia = validacion.getLicencia().getTipoLicenciaEnum();
                 }
 
-                //Setear Variables de sesion
-                //session.setTipoLicenciaEnum(tipoLicencia);
                 //Este valor seteo para que sea accesible desde el servidor
                 //TODO: Verficar si se puede mejorar esta linea de codigo
                 UtilidadesServidor.tipoLicenciaEnum = tipoLicencia;
                 UtilidadesServidor.cantidadUsuarios= Integer.parseInt(validacion.obtenerLicencia().getProperty(ValidacionLicenciaCodefac.CANTIDAD_USUARIOS));
                 UtilidadesServidor.usuarioLicencia = validacion.obtenerLicencia().getProperty(ValidacionLicenciaCodefac.USUARIO);
-                //session.setUsuarioLicencia(validacion.obtenerLicencia().getProperty(ValidacionLicenciaCodefac.USUARIO));
 
             }
     }

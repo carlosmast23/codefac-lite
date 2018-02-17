@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.notacredito;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.Compensacion;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.TotalImpuesto;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
@@ -35,7 +36,7 @@ import javax.xml.bind.annotation.XmlType;
     "totalModificacion",
     "totalImpuestos",
     "motivo",})
-public class InformacionNotaCredito {
+public class InformacionNotaCredito implements Serializable{
 
     private String fechaEmision;
 

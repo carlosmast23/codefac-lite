@@ -151,19 +151,10 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
     public void estadoCargando()
     {
             componentesTemporales=new ArrayList<Component>();
-            /*
-            java.awt.Toolkit toolkit = java.awt.Toolkit.getDefaultToolkit();
-            InputStream is=RecursoCodefac.IMAGENES_ICONOS.getResourceInputStream("gif/cargando.gif");
-            Image image = ImageIO.read(is);
-            ImageIcon imageIcon=new ImageIcon(image);
-            int width=imageIcon.getIconWidth()/2;
-            int height=imageIcon.getIconHeight()/2;
-            Cursor cursor=toolkit.createCustomCursor(image, new Point(0,0),"");*/
-            
+
             setEnableRec(this,false);
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            //this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            //toolkit.createCustomCursor(image , new Point(width,height), "");
+
 
     }
     

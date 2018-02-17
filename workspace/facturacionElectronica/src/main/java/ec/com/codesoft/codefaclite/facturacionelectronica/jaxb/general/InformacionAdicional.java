@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general;
 
+import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlValue;
@@ -13,7 +14,7 @@ import javax.xml.bind.annotation.XmlValue;
  *
  * @author Carlos
  */
-public class InformacionAdicional {
+public class InformacionAdicional implements Serializable{
     public static final String EMAIL="email";
     
    private String nombre;

@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataFactura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataInterface;
@@ -13,6 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.List;
 import net.sf.jasperreports.engine.JasperPrint;
 
 /**
@@ -20,6 +22,10 @@ import net.sf.jasperreports.engine.JasperPrint;
  * @author Carlos
  */
 public interface ComprobanteServiceIf extends Remote {
+
+    public boolean procesarComprobantesPendiente(Integer etapaInicial,Integer etapaLimite,String claveAcceso, List<String> correos,ClienteInterfaceComprobante callbackClientObject) throws RemoteException;
+    
+    public List<ComprobanteElectronico> getComprobantesObjectByFolder(String carpetaConfiguracion) throws RemoteException;
     
     public byte[] getReporteComprobante(String claveAcceso) throws RemoteException;
 
