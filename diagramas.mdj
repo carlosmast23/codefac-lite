@@ -1,0 +1,88 @@
+{
+	"_type": "Project",
+	"_id": "AAAAAAFF+h6SjaM2Hec=",
+	"name": "Untitled",
+	"ownedElements": [
+		{
+			"_type": "UMLModel",
+			"_id": "AAAAAAFF+qBWK6M3Z8Y=",
+			"_parent": {
+				"$ref": "AAAAAAFF+h6SjaM2Hec="
+			},
+			"name": "modulos",
+			"ownedElements": [
+				{
+					"_type": "UMLClassDiagram",
+					"_id": "AAAAAAFF+qBtyKM79qY=",
+					"_parent": {
+						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
+					},
+					"name": "Main",
+					"visible": true,
+					"defaultDiagram": true
+				},
+				{
+					"_type": "UMLModel",
+					"_id": "AAAAAAFhob3kgNAGW0A=",
+					"_parent": {
+						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
+					},
+					"name": "inventario",
+					"visibility": "public"
+				},
+				{
+					"_type": "UMLModel",
+					"_id": "AAAAAAFhob4joNAKDJQ=",
+					"_parent": {
+						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
+					},
+					"name": "facturacion",
+					"visibility": "public"
+				},
+				{
+					"_type": "UMLModel",
+					"_id": "AAAAAAFhob7iB9AP4QM=",
+					"_parent": {
+						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
+					},
+					"name": "gestionAcademica",
+					"ownedElements": [
+						{
+							"_type": "UMLModel",
+							"_id": "AAAAAAFhocBgptAV4xU=",
+							"_parent": {
+								"$ref": "AAAAAAFhob7iB9AP4QM="
+							},
+							"name": "entidadRelacion",
+							"ownedElements": [
+								{
+									"_type": "ERDDataModel",
+									"_id": "AAAAAAFhocCKz9AZqP0=",
+									"_parent": {
+										"$ref": "AAAAAAFhocBgptAV4xU="
+									},
+									"name": "Data Model1",
+									"ownedElements": [
+										{
+											"_type": "ERDDiagram",
+											"_id": "AAAAAAFhocCKz9AaRNE=",
+											"_parent": {
+												"$ref": "AAAAAAFhocCKz9AZqP0="
+											},
+											"name": "EntidadRelacion",
+											"visible": true,
+											"defaultDiagram": false
+										}
+									]
+								}
+							],
+							"visibility": "public"
+						}
+					],
+					"visibility": "public"
+				}
+			],
+			"visibility": "public"
+		}
+	]
+}
