@@ -39,6 +39,7 @@ import ec.com.codesoft.codefaclite.inventario.model.CategoriaProductoModel;
 import ec.com.codesoft.codefaclite.inventario.model.IngresoInventarioModel;
 import ec.com.codesoft.codefaclite.inventario.model.InventarioEnsambleModel;
 import ec.com.codesoft.codefaclite.inventario.model.KardexModel;
+import ec.com.codesoft.codefaclite.main.license.Licencia;
 import ec.com.codesoft.codefaclite.main.license.ValidacionLicenciaCodefac;
 import ec.com.codesoft.codefaclite.main.license.excepcion.NoExisteLicenciaException;
 import ec.com.codesoft.codefaclite.main.license.excepcion.ValidacionLicenciaExcepcion;
@@ -227,8 +228,8 @@ public class Main {
                 //Este valor seteo para que sea accesible desde el servidor
                 //TODO: Verficar si se puede mejorar esta linea de codigo
                 UtilidadesServidor.tipoLicenciaEnum = tipoLicencia;
-                UtilidadesServidor.cantidadUsuarios= Integer.parseInt(validacion.obtenerLicencia().getProperty(ValidacionLicenciaCodefac.CANTIDAD_USUARIOS));
-                UtilidadesServidor.usuarioLicencia = validacion.obtenerLicencia().getProperty(ValidacionLicenciaCodefac.USUARIO);
+                UtilidadesServidor.cantidadUsuarios= Integer.parseInt(validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_CANTIDAD_CLIENTES));
+                UtilidadesServidor.usuarioLicencia = validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_USUARIO);
 
             }
     }
@@ -670,14 +671,14 @@ public class Main {
     {
         try
         {
-            String usuario=validacion.obtenerLicencia().getProperty(ValidacionLicenciaCodefac.USUARIO);
+            String usuario=validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_USUARIO);
             String licencia = WebServiceCodefac.getLicencia(usuario);
             String tipoLicencia = WebServiceCodefac.getTipoLicencia(usuario);
             Integer cantidadCliente=WebServiceCodefac.getCantidadClientes(usuario);
 
-            String tipoLicenciaPc=validacion.obtenerLicencia().getProperty(ValidacionLicenciaCodefac.TIPO_LICENCIA);
-            String licenciaPc=validacion.obtenerLicencia().getProperty(ValidacionLicenciaCodefac.LICENCIA);
-            Integer cantidadClientePc=Integer.parseInt(validacion.obtenerLicencia().getProperty(ValidacionLicenciaCodefac.CANTIDAD_USUARIOS));
+            String tipoLicenciaPc=validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_TIPO_LICENCIA);
+            String licenciaPc=validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_LICENCIA);
+            Integer cantidadClientePc=Integer.parseInt(validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_CANTIDAD_CLIENTES));
 
             //TODO verificar que este tipo de licencia este funcionando
             if(licencia.equals(licenciaPc) && tipoLicencia.equals(TipoLicenciaEnum.getEnumByNombre(tipoLicenciaPc).getLetra()) && cantidadCliente.equals(cantidadClientePc))

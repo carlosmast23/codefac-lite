@@ -30,14 +30,16 @@ import java.util.logging.Logger;
  * @author Carlos
  */
 public class ValidacionLicenciaCodefac{
+    
     private static final String NOMBRE_LICENCIA="/licencia/licence.codefac";
-    public static final String USUARIO="usuario";
+    /*public static final String USUARIO="usuario";
     public static final String LICENCIA="licencia";
     public static final String TIPO_LICENCIA="tipo";
+    
     /**
      * Campo que identifica la cantidad de usuarios de clientes permitidas
      */
-    public static final String CANTIDAD_USUARIOS="clientes";
+    //public static final String CANTIDAD_USUARIOS="clientes";
     
     private Licencia licencia;
     private String path;
@@ -127,12 +129,13 @@ public class ValidacionLicenciaCodefac{
             String licencia=usuario+":"+UtilidadVarios.obtenerMac()+":"+tipoLicencia+":"+cantidadUsuarios;            
             licencia=BCrypt.hashpw(licencia,BCrypt.gensalt(12));
             Properties prop = new Properties();
-            prop.setProperty(USUARIO,usuario);
-            prop.setProperty(LICENCIA,licencia);
-            prop.setProperty(CANTIDAD_USUARIOS,cantidadUsuarios.toString());
+            prop.setProperty(Licencia.PROPIEDAD_USUARIO,usuario);
+            prop.setProperty(Licencia.PROPIEDAD_LICENCIA,licencia);
+            prop.setProperty(Licencia.PROPIEDAD_CANTIDAD_CLIENTES,cantidadUsuarios.toString());
+            
             
             TipoLicenciaEnum enumTipoLicencia=TipoLicenciaEnum.getEnumByLetra(tipoLicencia);
-            prop.setProperty(TIPO_LICENCIA,enumTipoLicencia.getNombre());
+            prop.setProperty(Licencia.PROPIEDAD_TIPO_LICENCIA,enumTipoLicencia.getNombre());
             File file=new File(path+NOMBRE_LICENCIA);
             
              //crear toda la ruta si no existe
@@ -167,11 +170,11 @@ public class ValidacionLicenciaCodefac{
             //String licencia=usuario+":"+UtilidadVarios.obtenerMac();            
             //licencia=BCrypt.hashpw(licencia,BCrypt.gensalt(12));
             Properties prop = new Properties();
-            prop.setProperty(USUARIO,usuario);
-            prop.setProperty(LICENCIA,licencia);
-            prop.setProperty(CANTIDAD_USUARIOS,cantidadUsuarios.toString());
+            prop.setProperty(Licencia.PROPIEDAD_USUARIO,usuario);
+            prop.setProperty(Licencia.PROPIEDAD_LICENCIA,licencia);
+            prop.setProperty(Licencia.PROPIEDAD_CANTIDAD_CLIENTES,cantidadUsuarios.toString());
             TipoLicenciaEnum enumTipoLicencia = TipoLicenciaEnum.getEnumByLetra(tipoLicencia);
-            prop.setProperty(TIPO_LICENCIA,enumTipoLicencia.getNombre());
+            prop.setProperty(Licencia.PROPIEDAD_TIPO_LICENCIA,enumTipoLicencia.getNombre());
             File file=new File(path+NOMBRE_LICENCIA);
             
             //crear toda la ruta si no existe

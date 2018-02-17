@@ -24,6 +24,13 @@ public class Licencia {
     //TODO: Verificar estas variables porque se repiten 2 veces en el modulo de verificacion licencia
     public static final String PROPIEDAD_CANTIDAD_CLIENTES="clientes";
     
+    //Modulos adicionales que puede tener la licencia
+    public static String MODULO_INVENTARIO="modulo_inventario";
+    public static String MODULO_GESTION_ACADEMICA="modulo_gestion_academica";
+    public static String MODULO_FACTURACION="modulo_facturacion";
+    public static String MODULO_CRM="modulo_facturacion";
+
+    
     private String mac;
     private Properties propiedades;
     private TipoLicenciaEnum tipoLicenciaEnum;
@@ -47,6 +54,7 @@ public class Licencia {
         String licencia=propiedades.getProperty(PROPIEDAD_LICENCIA);        
         String tipoLicencia=propiedades.getProperty(PROPIEDAD_TIPO_LICENCIA);
         String cantidadUsuarios=propiedades.getProperty(PROPIEDAD_CANTIDAD_CLIENTES);
+        String modulosStr=getModulosStr(); //Obtiene los valores de los modulos activos con snsnsnssn para validar la licencia
                
         try
         {
@@ -55,7 +63,7 @@ public class Licencia {
 
                 //Validacion cuando el usuario si esta registrado con licencia gratis 
                 this.tipoLicenciaEnum=TipoLicenciaEnum.GRATIS;
-                return BCrypt.checkpw(usuario + ":" + mac + ":" + TipoLicenciaEnum.GRATIS.getLetra()+":"+cantidadUsuarios, licencia);
+                return BCrypt.checkpw(usuario + ":" + mac + ":" + TipoLicenciaEnum.GRATIS.getLetra()+":"+cantidadUsuarios+":"+modulosStr, licencia);
                                 
             }
             else
@@ -63,7 +71,7 @@ public class Licencia {
                 if(tipoLicencia.equals(TipoLicenciaEnum.PRO.getNombre()))
                 {
                     this.tipoLicenciaEnum=TipoLicenciaEnum.PRO;
-                    return BCrypt.checkpw(usuario+":"+mac+":"+TipoLicenciaEnum.PRO.getLetra()+":"+cantidadUsuarios,licencia);
+                    return BCrypt.checkpw(usuario+":"+mac+":"+TipoLicenciaEnum.PRO.getLetra()+":"+cantidadUsuarios+":"+modulosStr,licencia);
                 }
             }
             
@@ -76,10 +84,37 @@ public class Licencia {
         }
 
     }
+    
+    /**
+     * Devuelve una cadena construida con los modulos para verificar la licencia
+     * @return 
+     */
+    private String getModulosStr()
+    {
+        String modulosStr="";
+        
+        modulosStr+=getRespuestaModulo(propiedades.getProperty(MODULO_CRM));
+        modulosStr+=getRespuestaModulo(propiedades.getProperty(MODULO_FACTURACION));
+        modulosStr+=getRespuestaModulo(propiedades.getProperty(MODULO_GESTION_ACADEMICA));
+        modulosStr+=getRespuestaModulo(propiedades.getProperty(MODULO_INVENTARIO));
+        return modulosStr;
+    }
+    
+    private String getRespuestaModulo(String modulo)
+    {
+        String valorPropiedad= propiedades.getProperty(modulo);
+        
+        String respuesta="n";
+        if(valorPropiedad!=null && valorPropiedad.equals("si"))
+        {
+            respuesta="s";
+        }
+        return respuesta;
+    }
 
     public TipoLicenciaEnum getTipoLicenciaEnum() {
-        String usuario=propiedades.getProperty(PROPIEDAD_USUARIO);
-        String licencia=propiedades.getProperty(PROPIEDAD_LICENCIA);
+        //String usuario=propiedades.getProperty(PROPIEDAD_USUARIO);
+        //String licencia=propiedades.getProperty(PROPIEDAD_LICENCIA);
         String tipoLicencia=propiedades.getProperty(PROPIEDAD_TIPO_LICENCIA);
         
         return TipoLicenciaEnum.getEnumByNombre(tipoLicencia);

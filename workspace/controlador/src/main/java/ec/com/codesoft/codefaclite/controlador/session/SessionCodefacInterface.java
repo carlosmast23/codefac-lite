@@ -43,6 +43,11 @@ public interface SessionCodefacInterface {
      */
     public Map<String,ParametroCodefac> getParametrosCodefac();
     
+    /**
+     * Verifica si el nombre de perfil existe para poder hacer las comprobaciones
+     * @param nombre
+     * @return 
+     */
     public boolean verificarExistePerfil(String nombre);
     
     /**
