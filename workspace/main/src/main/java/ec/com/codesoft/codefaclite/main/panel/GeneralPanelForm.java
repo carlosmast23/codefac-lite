@@ -73,6 +73,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         menuInicio = new javax.swing.JMenu();
         jMenuItemInicio = new javax.swing.JMenuItem();
         jMenuItemSalir = new javax.swing.JMenuItem();
+
         jMenuUtilidades = new javax.swing.JMenu();
         jMenuCalculadora = new javax.swing.JMenuItem();
         jMenu8 = new javax.swing.JMenu();
@@ -236,6 +237,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
         jMenuBar1.add(menuInicio);
 
+
         jMenuUtilidades.setText("Utilidades");
 
         jMenuCalculadora.setText("Calculadora");
@@ -316,6 +318,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItemActualizarLicenciaActionPerformed
 
+
     /**
      * @param args the command line arguments
      */
@@ -391,6 +394,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JSplitPane jSplitPanelVerticalSecundario;
     private javax.swing.JLabel lblPiePagina;
     private javax.swing.JMenu menuInicio;
+
     // End of variables declaration//GEN-END:variables
 
     public JMenuItem getjMenuItem1() {
@@ -585,5 +589,5 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         this.jMenuItemActualizarLicencia = jMenuItemActualizarLicencia;
     }
 
- 
+
 }

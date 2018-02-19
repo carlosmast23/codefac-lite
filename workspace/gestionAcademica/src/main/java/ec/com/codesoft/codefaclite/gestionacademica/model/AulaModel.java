@@ -5,16 +5,34 @@
  */
 package ec.com.codesoft.codefaclite.gestionacademica.model;
 
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.AulaPanel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Aula;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
+import java.rmi.RemoteException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Carlos
  */
-public class AulaModel extends AulaPanel {
+public class AulaModel extends AulaPanel implements DialogInterfacePanel<Aula> {
+
+    private Aula aula;
+    private AulaServiceIf aulaService;
+
+    public AulaModel() {
+        aulaService = ServiceFactory.getFactory().getAulaServiceIf();
+    }
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
@@ -28,7 +46,20 @@ public class AulaModel extends AulaPanel {
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            setearValoresAula(aula);
+            aula = aulaService.grabar(aula);
+            DialogoCodefac.mensaje("Datos correctos", "El aula se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+        } catch (ServicioCodefacException ex) {
+            DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
+            throw new ExcepcionCodefacLite("Error al grabar aula modelo");
+        } catch (RemoteException ex) {
+            Logger.getLogger(AulaModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void setearValoresAula(Aula aula) {
+
     }
 
     @Override
@@ -73,12 +104,24 @@ public class AulaModel extends AulaPanel {
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
+        permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
+        return permisos;
     }
 
     @Override
     public List<String> getPerfilesPermisos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
+    @Override
+    public Aula getResult() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

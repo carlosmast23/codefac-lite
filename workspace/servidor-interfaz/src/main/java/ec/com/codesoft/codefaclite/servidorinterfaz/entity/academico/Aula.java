@@ -5,12 +5,15 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
+import java.io.Serializable;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -18,27 +21,31 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "Aula")
-public class Aula {
-    
+@XmlRootElement
+public class Aula implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
-    
+    @Basic(optional = false)
+    @Column(name = "AULA_ID")
+    private Long idAula;
+    @Column(name = "NOMBRE")
     private String nombre;
+    @Column(name = "UBICACION")
     private String ubicacion;
+    @Column(name = "CAPACIDAD")
     private Integer capacidad;
+    @Column(name = "ESTADO")
     private String estado;
 
-    public Aula() {
+
+    public Long getIdAula() {
+        return idAula;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdAula(Long idAula) {
+        this.idAula = idAula;
     }
 
     public String getNombre() {
@@ -72,7 +79,5 @@ public class Aula {
     public void setEstado(String estado) {
         this.estado = estado;
     }
-    
-    
-    
+
 }
