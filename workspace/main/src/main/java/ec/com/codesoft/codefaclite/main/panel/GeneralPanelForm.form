@@ -266,6 +266,46 @@
             </MenuItem>
           </SubComponents>
         </Menu>
+        <Menu class="javax.swing.JMenu" name="menuAcademico">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Academico"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="menuEstudiantes">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Estudiantes"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="menuAula">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Aula"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuAulaActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="menuNivel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Nivel"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="menuNivelAcademico">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Nivel Academico"/>
+              </Properties>
+            </MenuItem>
+            <Menu class="javax.swing.JMenu" name="menuRubros">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Rubros"/>
+              </Properties>
+            </Menu>
+            <Menu class="javax.swing.JMenu" name="menuPeriodos">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Periodos"/>
+              </Properties>
+            </Menu>
+          </SubComponents>
+        </Menu>
         <Menu class="javax.swing.JMenu" name="menuConfiguracion">
           <Properties>
             <Property name="text" type="java.lang.String" value="Configuraciones"/>

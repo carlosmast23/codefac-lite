@@ -94,6 +94,13 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenu3 = new javax.swing.JMenu();
         jMenuProducto = new javax.swing.JMenuItem();
         jMenuItemReporteProducto = new javax.swing.JMenuItem();
+        menuAcademico = new javax.swing.JMenu();
+        menuEstudiantes = new javax.swing.JMenuItem();
+        menuAula = new javax.swing.JMenuItem();
+        menuNivel = new javax.swing.JMenuItem();
+        menuNivelAcademico = new javax.swing.JMenuItem();
+        menuRubros = new javax.swing.JMenu();
+        menuPeriodos = new javax.swing.JMenu();
         menuConfiguracion = new javax.swing.JMenu();
         jMenuComprobanteConfig = new javax.swing.JMenuItem();
         jMenuEmisor = new javax.swing.JMenuItem();
@@ -350,6 +357,33 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
         jMenuBar1.add(jMenu3);
 
+        menuAcademico.setText("Academico");
+
+        menuEstudiantes.setText("Estudiantes");
+        menuAcademico.add(menuEstudiantes);
+
+        menuAula.setText("Aula");
+        menuAula.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuAulaActionPerformed(evt);
+            }
+        });
+        menuAcademico.add(menuAula);
+
+        menuNivel.setText("Nivel");
+        menuAcademico.add(menuNivel);
+
+        menuNivelAcademico.setText("Nivel Academico");
+        menuAcademico.add(menuNivelAcademico);
+
+        menuRubros.setText("Rubros");
+        menuAcademico.add(menuRubros);
+
+        menuPeriodos.setText("Periodos");
+        menuAcademico.add(menuPeriodos);
+
+        jMenuBar1.add(menuAcademico);
+
         menuConfiguracion.setText("Configuraciones");
 
         jMenuComprobanteConfig.setText("Comprobante");
@@ -468,6 +502,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         // TODO add your handling code here:
     }//GEN-LAST:event_menuBodegaActionPerformed
 
+    private void menuAulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAulaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_menuAulaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -561,13 +599,20 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JSplitPane jSplitPanel;
     private javax.swing.JSplitPane jSplitPanelVerticalSecundario;
     private javax.swing.JLabel lblPiePagina;
+    private javax.swing.JMenu menuAcademico;
+    private javax.swing.JMenuItem menuAula;
     private javax.swing.JMenuItem menuBodega;
     private javax.swing.JMenuItem menuCatProducto;
     private javax.swing.JMenu menuCompras;
     private javax.swing.JMenu menuConfiguracion;
+    private javax.swing.JMenuItem menuEstudiantes;
     private javax.swing.JMenu menuFacturacion;
     private javax.swing.JMenu menuInicio;
     private javax.swing.JMenu menuInventario;
+    private javax.swing.JMenuItem menuNivel;
+    private javax.swing.JMenuItem menuNivelAcademico;
+    private javax.swing.JMenu menuPeriodos;
+    private javax.swing.JMenu menuRubros;
     // End of variables declaration//GEN-END:variables
 
     public JMenuItem getjMenuItem1() {
@@ -902,6 +947,38 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
     public void setMenuCatProducto(JMenuItem menuCatProducto) {
         this.menuCatProducto = menuCatProducto;
+    }
+
+    public JMenuItem getMenuAula() {
+        return menuAula;
+    }
+
+    public void setMenuAula(JMenuItem menuAula) {
+        this.menuAula = menuAula;
+    }
+
+    public JMenuItem getMenuEstudiantes() {
+        return menuEstudiantes;
+    }
+
+    public void setMenuEstudiantes(JMenuItem menuEstudiantes) {
+        this.menuEstudiantes = menuEstudiantes;
+    }
+
+    public JMenuItem getMenuNivel() {
+        return menuNivel;
+    }
+
+    public void setMenuNivel(JMenuItem menuNivel) {
+        this.menuNivel = menuNivel;
+    }
+
+    public JMenuItem getMenuNivelAcademico() {
+        return menuNivelAcademico;
+    }
+
+    public void setMenuNivelAcademico(JMenuItem menuNivelAcademico) {
+        this.menuNivelAcademico = menuNivelAcademico;
     }
     
     
