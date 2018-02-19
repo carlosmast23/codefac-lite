@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.util;
 
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.service.interfacePanel.ServidorMonitorUpdateInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.test.CrearBaseDatos;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
@@ -18,6 +19,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -39,6 +41,8 @@ public class UtilidadesServidor {
     public static String pathRecursos;
     
     public static Integer cantidadUsuarios;
+    
+    public static Map<ModuloCodefacEnum, Boolean> modulosMap;
     
     
     public static InputStream[] querys={

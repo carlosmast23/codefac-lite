@@ -7,7 +7,10 @@ package ec.com.codesoft.codefaclite.main.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JMenu;
@@ -20,17 +23,48 @@ import javax.swing.JMenuItem;
  */
 public class MenuControlador 
 {
-   private JMenuItem menuItem;
    private Class ventana;
    private boolean maximizado;
    private Object instance;
+   
+   private ModuloCodefacEnum modulo;
+   private CategoriaMenuEnum categoriaMenu;
+   
+   private JMenuItem jmenuItem;
+   
+   /**
+    * Lista de permisos para los modulos permitidos
+    * Nota: Si no se setea ningun modulo es permitido para todos los modulos
+    */
+   private ModuloCodefacEnum[] modulosPermitidos;
+   
+   public MenuControlador(Class ventana,ModuloCodefacEnum modulo,CategoriaMenuEnum categoriaMenu)
+   {
+       this.ventana=ventana;
+       this.modulo=modulo;
+       this.categoriaMenu=categoriaMenu;
+       this.modulosPermitidos=modulosPermitidos;
+   }
+   
+   
+   public MenuControlador(Class ventana,ModuloCodefacEnum modulo,CategoriaMenuEnum categoriaMenu,boolean maximizado)
+   {
+       this.ventana=ventana;
+       this.modulo=modulo;
+       this.categoriaMenu=categoriaMenu;
+       this.maximizado=maximizado;
+   }
+   
+   public MenuControlador(Class ventana,ModuloCodefacEnum modulo,CategoriaMenuEnum categoriaMenu,boolean maximizado,ModuloCodefacEnum[] modulosPermitidos)
+   {
+       this.ventana=ventana;
+       this.modulo=modulo;
+       this.categoriaMenu=categoriaMenu;
+       this.maximizado=maximizado;
+       this.modulosPermitidos=modulosPermitidos;       
+   }
 
-    public MenuControlador(JMenuItem menuItem, Class ventana) {
-        this.menuItem = menuItem;
-        this.ventana = ventana;
-        this.maximizado=true;
-        
-    }
+
     
     /**
      * Devuelve una instancia segun la clase grabada
@@ -81,22 +115,33 @@ public class MenuControlador
        return instance;
     }
 
-    public MenuControlador(JMenuItem menuItem, Class ventana, boolean maximizado) {
-        this.menuItem = menuItem;
-        this.ventana = ventana;
-        this.maximizado = maximizado;
+
+    
+    public Boolean verificarPermisoModulo(Map<ModuloCodefacEnum,Boolean> modulos)
+    {
+        //Si no existe ningun dato en modulo permitidos asumo que tiene acceso para todos los modulos
+        if(modulosPermitidos==null)
+            return true;
+        
+        for (Map.Entry<ModuloCodefacEnum, Boolean> entry : modulos.entrySet()) {
+            ModuloCodefacEnum moduloSistema = entry.getKey();
+            Boolean value = entry.getValue();
+            
+            if(value) //Verificar solo para los modulos activos
+            {
+                for (ModuloCodefacEnum modulosPermitido : modulosPermitidos) {
+                    if(moduloSistema.equals(modulosPermitido))
+                    {
+                        return true;
+                    }
+                }
+            }
+            
+        }
+        return false;
     }
     
     
-
-    public JMenuItem getMenuItem() {
-        return menuItem;
-    }
-
-    public void setMenuItem(JMenuItem menuItem) {
-        this.menuItem = menuItem;
-    }
-
     public Class getVentana() {
         return ventana;
     }
@@ -112,6 +157,41 @@ public class MenuControlador
     public void setMaximizado(boolean maximizado) {
         this.maximizado = maximizado;
     }
+
+    public ModuloCodefacEnum[] getModulosPermitidos() {
+        return modulosPermitidos;
+    }
+
+    public void setModulosPermitidos(ModuloCodefacEnum[] modulosPermitidos) {
+        this.modulosPermitidos = modulosPermitidos;
+    }
+
+    public ModuloCodefacEnum getModulo() {
+        return modulo;
+    }
+
+    public void setModulo(ModuloCodefacEnum modulo) {
+        this.modulo = modulo;
+    }
+
+    public CategoriaMenuEnum getCategoriaMenu() {
+        return categoriaMenu;
+    }
+
+    public void setCategoriaMenu(CategoriaMenuEnum categoriaMenu) {
+        this.categoriaMenu = categoriaMenu;
+    }
+
+    public JMenuItem getJmenuItem() {
+        return jmenuItem;
+    }
+
+    public void setJmenuItem(JMenuItem jmenuItem) {
+        this.jmenuItem = jmenuItem;
+    }
+    
+    
+    
 
     
    

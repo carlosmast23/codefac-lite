@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.main.license;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
@@ -27,12 +28,11 @@ public class Licencia {
     public static final String PROPIEDAD_CANTIDAD_CLIENTES="clientes";
     
     //Modulos adicionales que puede tener la licencia
-    public static String MODULO_INVENTARIO="modulo_inventario";
-    public static String MODULO_GESTION_ACADEMICA="modulo_gestion_academica";
-    public static String MODULO_FACTURACION="modulo_facturacion";
-    public static String MODULO_CRM="modulo_crm";
+    public static ModuloCodefacEnum MODULO_INVENTARIO=ModuloCodefacEnum.INVENTARIO;
+    public static ModuloCodefacEnum MODULO_GESTION_ACADEMICA=ModuloCodefacEnum.GESTIONA_ACADEMICA;
+    public static ModuloCodefacEnum MODULO_FACTURACION=ModuloCodefacEnum.FACTURACION;
+    public static ModuloCodefacEnum MODULO_CRM=ModuloCodefacEnum.CRM;
     
-    public static String[] MODULOS={MODULO_INVENTARIO,MODULO_GESTION_ACADEMICA,MODULO_FACTURACION,MODULO_CRM};
     
     private String mac;
     private Properties propiedades;
@@ -111,11 +111,11 @@ public class Licencia {
      */
     public String getModulosStr()
     {
-        String[] modulos=MODULOS;
+        ModuloCodefacEnum[] modulos=ModuloCodefacEnum.values();
         String modulosStr="";
-        Map<String,Boolean> modulosMap=getModulosSistema();
+        Map<ModuloCodefacEnum,Boolean> modulosMap=getModulosSistema();
         //El orden de verificar los modulos es importante porque siempre lee y verifica la licencia de esa forma
-        for (String modulo : modulos) 
+        for (ModuloCodefacEnum modulo : modulos) 
         {
             Boolean activo=modulosMap.get(modulo);
             if(activo!=null)
@@ -181,10 +181,10 @@ public class Licencia {
         this.licencia = propiedades.getProperty(Licencia.PROPIEDAD_LICENCIA);
         this.tipoLicenciaEnum = TipoLicenciaEnum.getEnumByNombre(propiedades.getProperty(Licencia.PROPIEDAD_TIPO_LICENCIA));
         this.cantidadClientes = Integer.parseInt(propiedades.getProperty(Licencia.PROPIEDAD_CANTIDAD_CLIENTES));
-        this.moduloInventario = castStringBooleanProperty(propiedades.getProperty(Licencia.MODULO_INVENTARIO));
-        this.moduloGestionAcademica = castStringBooleanProperty(propiedades.getProperty(Licencia.MODULO_GESTION_ACADEMICA));
-        this.moduloFacturacion = castStringBooleanProperty(propiedades.getProperty(Licencia.MODULO_FACTURACION));
-        this.moduloCrm = castStringBooleanProperty(propiedades.getProperty(Licencia.MODULO_CRM));
+        this.moduloInventario = castStringBooleanProperty(propiedades.getProperty(Licencia.MODULO_INVENTARIO.getNombrePropiedad()));
+        this.moduloGestionAcademica = castStringBooleanProperty(propiedades.getProperty(Licencia.MODULO_GESTION_ACADEMICA.getNombrePropiedad()));
+        this.moduloFacturacion = castStringBooleanProperty(propiedades.getProperty(Licencia.MODULO_FACTURACION.getNombrePropiedad()));
+        this.moduloCrm = castStringBooleanProperty(propiedades.getProperty(Licencia.MODULO_CRM.getNombrePropiedad()));
     }
     
     /**
@@ -226,9 +226,9 @@ public class Licencia {
         return false;
     }
     
-    private Map<String,Boolean> getModulosSistema()
+    public Map<ModuloCodefacEnum,Boolean> getModulosSistema()
     {
-        Map<String,Boolean> modulosMap=new HashMap<String,Boolean>();
+        Map<ModuloCodefacEnum,Boolean> modulosMap=new HashMap<ModuloCodefacEnum,Boolean>();
         modulosMap.put(MODULO_CRM, moduloCrm);
         modulosMap.put(MODULO_FACTURACION, moduloFacturacion);
         modulosMap.put(MODULO_GESTION_ACADEMICA, moduloGestionAcademica);
@@ -238,15 +238,15 @@ public class Licencia {
     
     public void llenarPropertiesModulo(Properties propiedades)
     {
-        Map<String,Boolean> modulosMap=getModulosSistema();
-        String[] modulos=MODULOS;
+        Map<ModuloCodefacEnum,Boolean> modulosMap=getModulosSistema();
+        ModuloCodefacEnum[] modulos=ModuloCodefacEnum.values();
         
         //Llenar en orden dependiendo que modulos estan activos
-        for (String modulo : modulos) {
+        for (ModuloCodefacEnum modulo : modulos) {
             Boolean activo=modulosMap.get(modulo);
             if(activo!=null)
             {
-                propiedades.setProperty(modulo,(activo?"si":"no"));
+                propiedades.setProperty(modulo.getNombrePropiedad(),(activo?"si":"no"));
             }            
         }
         

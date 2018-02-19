@@ -45,6 +45,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServi
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceControllerServer;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import ec.com.codesoft.ejemplo.utilidades.imagen.UtilidadImagen;
@@ -89,6 +91,7 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -110,6 +113,8 @@ import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -512,34 +517,43 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             //PROPORCION_VERTICAL=PROPORCION_VERTICAL_DEFAULT;
             //getjSplitPanelVerticalSecundario().setDividerLocation(PROPORCION_VERTICAL);
     }
-  
+    
+    
     private void agregarListenerMenu()
     {
         for (MenuControlador menuControlador : ventanasMenuList) {
-            menuControlador.getMenuItem().addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                        //Constructor contructor=menuControlador.getVentana().getConstructor();
-                        //ControladorCodefacInterface ventana= (ControladorCodefacInterface) contructor.newInstance();
-                        ControladorCodefacInterface ventana= (ControladorCodefacInterface) menuControlador.getInstance();
-                        if(!verificarPantallaCargada(ventana))
-                        {
-                            //Este artificio se realiza porque cuando se reutilizaba un referencia de la pantalla generaba problemas con los dialogos
-                            ventana= (ControladorCodefacInterface) menuControlador.createNewInstance();
-                            agregarListenerMenu(ventana,menuControlador.isMaximizado());                    
-                        }                        
-                        else
-                        {
-                            try {
-                                ventana.setSelected(true);
-                            } catch (PropertyVetoException ex) {
-                                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        }
-                        
-                        
-                }
-            });
+            
+//            menuControlador.getMenuItem().addActionListener(new ActionListener() {
+//                @Override
+//                public void actionPerformed(ActionEvent e) {
+//                        /*
+//                        if(!menuControlador.verificarPermisoModulo(sessionCodefac.getModulosMap())) //Verifica si la pantalla tiene permisos para los modulos cargados en
+//                        {
+//                            //Si no tiene permise solo oculto el menu para que no acceda
+//                            menuControlador.getMenuItem().setVisible(false);
+//                            return; //termina la ejecucion porque no se agregan listener
+//                        }
+//                        menuControlador.getMenuItem().setVisible(true);*/
+//                    
+//                        ControladorCodefacInterface ventana= (ControladorCodefacInterface) menuControlador.getInstance();
+//                        if(!verificarPantallaCargada(ventana))
+//                        {
+//                            //Este artificio se realiza porque cuando se reutilizaba un referencia de la pantalla generaba problemas con los dialogos
+//                            ventana= (ControladorCodefacInterface) menuControlador.createNewInstance();
+//                            agregarListenerMenu(ventana,menuControlador.isMaximizado());                    
+//                        }                        
+//                        else
+//                        {
+//                            try {
+//                                ventana.setSelected(true);
+//                            } catch (PropertyVetoException ex) {
+//                                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+//                            }
+//                        }
+//                        
+//                        
+//                }
+//            });
         }
         
 
@@ -1799,8 +1813,72 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
     public void setVentanasMenuList(List<MenuControlador> ventanasMenuList) {
         this.ventanasMenuList = ventanasMenuList;
+        
+        List<JMenu> menus=construirMenuDinamico();
+        for (JMenu menu : menus) {
+            this.getJMenuBar().add(menu);
+        }
+        
+        //actualizarMenuCodefac();
         agregarListenerMenu();
     }
+    
+    private List<JMenu> construirMenuDinamico()
+    {
+        List<JMenu> menus=new ArrayList<JMenu>();
+        
+        sessionCodefac.getModulosMap();
+        for (Map.Entry<ModuloCodefacEnum, Boolean> entry : sessionCodefac.getModulosMap().entrySet()) {
+            ModuloCodefacEnum moduloSistema = entry.getKey();
+            Boolean activo = entry.getValue();
+            
+            //Solo cargar las pantallas de los modulos contratados
+            if(activo)
+            {
+                JMenu menuModulo = new JMenu(moduloSistema.getNombre());
+                for (CategoriaMenuEnum categoriaEnum : CategoriaMenuEnum.values()) {
+                    JMenu menuCategoria=new JMenu(categoriaEnum.getNombre());
+                    
+                    for (MenuControlador menuControlador : ventanasMenuList) {
+                        //Verificar si el modulo y la categoria son las mismas entonces las carga
+                        if (menuControlador.getModulo().equals(moduloSistema) && menuControlador.getCategoriaMenu().equals(categoriaEnum)) {
+                            menuControlador.setJmenuItem(menuCategoria);
+                            JMenuItem menuVentana=new JMenuItem("Nuevo");
+                            menuCategoria.add(menuVentana);
+                        }
+                    }
+                    menuModulo.add(menuCategoria);
+                }               
+                menus.add(menuModulo);
+            }
+            
+            
+        }
+        return menus;
+    }
+    
+    /**
+     * Permite actualizar los menus disponibles segun los modulos que tengan permisos
+     */
+    /*
+    private void actualizarMenuCodefac()
+    {
+        for (MenuControlador menuControlador : ventanasMenuList) {
+            
+            
+            if (!menuControlador.verificarPermisoModulo(sessionCodefac.getModulosMap())) //Verifica si la pantalla tiene permisos para los modulos cargados en
+            {
+                //Si no tiene permise solo oculto el menu para que no acceda
+                menuControlador.getMenuItem().setVisible(false);
+
+            }
+            else
+            {
+                menuControlador.getMenuItem().setVisible(true);
+            }
+        }
+        
+    }*/
 
     @Override
     public Map<String, Object> mapReportePlantilla() {
@@ -1979,12 +2057,12 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             }
         });
         
-        getjMenuItemMonitor().addActionListener(new ActionListener() {
+        /*getjMenuItemMonitor().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MonitorComprobanteModel.getInstance().mostrar();
             }
-        });
+        });*/
         
         getjMenuItemInicio().addActionListener(new ActionListener() {
             @Override

@@ -115,6 +115,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorS
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceControllerServer;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
@@ -228,6 +230,7 @@ public class Main {
                 //Este valor seteo para que sea accesible desde el servidor
                 //TODO: Verficar si se puede mejorar esta linea de codigo
                 UtilidadesServidor.tipoLicenciaEnum = tipoLicencia;
+                UtilidadesServidor.modulosMap=validacion.getLicencia().getModulosSistema();
                 UtilidadesServidor.cantidadUsuarios= Integer.parseInt(validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_CANTIDAD_CLIENTES));
                 UtilidadesServidor.usuarioLicencia = validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_USUARIO);
 
@@ -419,14 +422,20 @@ public class Main {
              * Crear la session y cargar otro datos de la empresa
              */
             SessionCodefac session=new SessionCodefac();
+            
             if(modoAplicativo.equals(ModoAplicativoModel.MODO_SERVIDOR))
             {
                 session.setTipoLicenciaEnum(UtilidadesServidor.tipoLicenciaEnum);
+                session.setModulos(UtilidadesServidor.modulosMap);
             }
             else
             {
-                TipoLicenciaEnum tipoLicencia=ServiceFactory.getFactory().getUtilidadesServiceIf().getTipoLicencia();
+                UtilidadesServiceIf utilidadesServiceIf=ServiceFactory.getFactory().getUtilidadesServiceIf();
+                TipoLicenciaEnum tipoLicencia=utilidadesServiceIf.getTipoLicencia();
                 session.setTipoLicenciaEnum(tipoLicencia);
+                
+                session.setModulos(utilidadesServiceIf.getModulosSistema());                
+                
             }
             
             session.setUsuarioLicencia(UtilidadesServidor.usuarioLicencia);
@@ -802,30 +811,36 @@ public class Main {
     public static List<MenuControlador> agregarMenuVentana(GeneralPanelModel panel)
     {
         List<MenuControlador> ventanas=new ArrayList<MenuControlador>();
-        ventanas.add(new MenuControlador(panel.getjMenuCliente(),ClienteModel.class));
-        ventanas.add(new MenuControlador(panel.getjMenuProducto(),ProductoModel.class));
-        ventanas.add(new MenuControlador(panel.getjMenuFactura(),FacturacionModel.class));
-        ventanas.add(new MenuControlador(panel.getjMenuEmisor(),EmpresaModel.class));
-        ventanas.add(new MenuControlador(panel.getjMenuComprobanteConfig(),ComprobantesConfiguracionModel.class));
-        ventanas.add(new MenuControlador(panel.getjMenuCalculadora(),CalculadoraModel.class,false));
-        ventanas.add(new MenuControlador(panel.getjMenuItemUtilidades(),UtilidadComprobanteModel.class,true));
-        ventanas.add(new MenuControlador(panel.getjMenuItemNotaCredito(),NotaCreditoModel.class,true));
-        ventanas.add(new MenuControlador(panel.getjMenuItemFacturaReporte(),FacturaReporteModel.class,true));
-        ventanas.add(new MenuControlador(panel.getjMenuItemReporteCliente(),ClienteReporte.class,true));
-        ventanas.add(new MenuControlador(panel.getjMenuItemReporteProducto(),ProductoReporte.class,true));
-        ventanas.add(new MenuControlador(panel.getjMenuItemDisenador(),FacturaDisenioModel.class,true));
-        ventanas.add(new MenuControlador(panel.getjMenuCompra(),CompraModel.class,true));
-        ventanas.add(new MenuControlador(panel.getjMenuItemAsociarProducto(),AsociarProductoProveedorModel.class,true));
-        ventanas.add(new MenuControlador(panel.getMenuBodega(),BodegaModel.class,true));
-        ventanas.add(new MenuControlador(panel.getMenuCatProducto(),CategoriaProductoModel.class,true));
-        ventanas.add(new MenuControlador(panel.getjMenuItemIngresarInventario(),IngresoInventarioModel.class,true));
-        ventanas.add(new MenuControlador(panel.getjMenuItemKardex(),KardexModel.class,false));
-        ventanas.add(new MenuControlador(panel.getjMenuItemInventarioEnsamble(),InventarioEnsambleModel.class,false));
+        
+        //Agregado permiso para los modulos disponibles de la pantalla
+        ModuloCodefacEnum[] modulosPermitidos={ModuloCodefacEnum.CRM};
+        ventanas.add(new MenuControlador(ClienteModel.class,ModuloCodefacEnum.CRM,CategoriaMenuEnum.GESTIONAR,true,modulosPermitidos));
+        
+        ventanas.add(new MenuControlador(ProductoModel.class,ModuloCodefacEnum.CRM,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
+        
+        ventanas.add(new MenuControlador(FacturacionModel.class,ModuloCodefacEnum.FACTURACION,CategoriaMenuEnum.PROCESOS,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
+        ventanas.add(new MenuControlador(EmpresaModel.class,ModuloCodefacEnum.CRM,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
+        ventanas.add(new MenuControlador(ComprobantesConfiguracionModel.class,ModuloCodefacEnum.FACTURACION,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
+        //ventanas.add(new MenuControlador(CalculadoraModel.class,ModuloCodefacEnum.CRM,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
+        ventanas.add(new MenuControlador(UtilidadComprobanteModel.class,ModuloCodefacEnum.CRM,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
+        ventanas.add(new MenuControlador(NotaCreditoModel.class,ModuloCodefacEnum.FACTURACION,CategoriaMenuEnum.PROCESOS,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
+        ventanas.add(new MenuControlador(FacturaReporteModel.class,ModuloCodefacEnum.FACTURACION,CategoriaMenuEnum.REPORTES,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
+        ventanas.add(new MenuControlador(ClienteReporte.class,ModuloCodefacEnum.CRM,CategoriaMenuEnum.REPORTES,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
+        ventanas.add(new MenuControlador(ProductoReporte.class,ModuloCodefacEnum.CRM,CategoriaMenuEnum.REPORTES,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
+        ventanas.add(new MenuControlador(FacturaDisenioModel.class,ModuloCodefacEnum.FACTURACION,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
+        ventanas.add(new MenuControlador(CompraModel.class,ModuloCodefacEnum.FACTURACION,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
+        ventanas.add(new MenuControlador(AsociarProductoProveedorModel.class,ModuloCodefacEnum.INVENTARIO,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
+        ventanas.add(new MenuControlador(BodegaModel.class,ModuloCodefacEnum.INVENTARIO,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
+        ventanas.add(new MenuControlador(CategoriaProductoModel.class,ModuloCodefacEnum.INVENTARIO,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
+        ventanas.add(new MenuControlador(IngresoInventarioModel.class,ModuloCodefacEnum.INVENTARIO,CategoriaMenuEnum.PROCESOS,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
+        ventanas.add(new MenuControlador(KardexModel.class,ModuloCodefacEnum.INVENTARIO,CategoriaMenuEnum.REPORTES,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
+        ventanas.add(new MenuControlador(InventarioEnsambleModel.class,ModuloCodefacEnum.INVENTARIO,CategoriaMenuEnum.PROCESOS,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
         
         return ventanas;
     
     }
     
+
     public static Map<String,PanelSecundarioAbstract> agregarPanelesSecundarios()
     {
         Map<String,PanelSecundarioAbstract> paneles=new HashMap<String,PanelSecundarioAbstract>();

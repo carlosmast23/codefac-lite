@@ -118,7 +118,7 @@ public abstract class WebServiceCodefac {
     }
 
     public static String getModuloCrm(String email) throws ClientTransportException {
-        return "s";
+        return "n";
     }
 
 }

@@ -9,9 +9,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import java.util.List;
 import java.util.Map;
+import org.jfree.ui.about.Licences;
 
 /**
  *
@@ -62,4 +64,5 @@ public interface SessionCodefacInterface {
      */
     public String getUsuarioLicencia();
 
+    public Map<ModuloCodefacEnum,Boolean> getModulosMap();
 }

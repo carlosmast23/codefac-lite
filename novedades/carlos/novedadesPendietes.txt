@@ -1,4 +1,4 @@
-
+getjMenuItemMonitor().addActionListener(new ActionListener() { en el general menu queda comentado esa linea e codigo
 Revisar pantallas notas de credito y utilidades comprobantes que falta implementar correctamente
 En la pantalla de utilidades comprobante revisar la linea getCmbCarpetaComprobante().addActionListener(new ActionListener() { porque depende exclusivamente de los recursos del servidor
 Eliminar clases de facturacion electronica que ya no se van a usar
