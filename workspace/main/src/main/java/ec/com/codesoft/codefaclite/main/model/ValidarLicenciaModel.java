@@ -39,6 +39,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -68,10 +70,20 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
     
     private void crearLicencia()
     {
-        String tipoLicencia = getTipoLicencia(getTxtUsuarioVerificar().getText());
-        Integer cantidadUsuarios=WebServiceCodefac.getCantidadClientes(getTxtUsuarioVerificar().getText());
+        String usuarioTxt=getTxtUsuarioVerificar().getText();
+        String tipoLicencia = getTipoLicencia(usuarioTxt);
+        Integer cantidadUsuarios=WebServiceCodefac.getCantidadClientes(usuarioTxt);
+        
+                
         //Crea la nueva licencia con el usuario
-        Properties propiedad = validacionLicenciaCodefac.crearLicencia(getTxtUsuarioVerificar().getText(), tipoLicencia,cantidadUsuarios);
+        Licencia licencia=new Licencia();
+        licencia.setUsuario(getTxtUsuarioVerificar().getText());
+        licencia.setTipoLicenciaEnum(TipoLicenciaEnum.getEnumByLetra(tipoLicencia));
+        licencia.setCantidadClientes(cantidadUsuarios);
+        licencia.cargarModulosOnline();
+        
+        
+        Properties propiedad = validacionLicenciaCodefac.crearLicenciaMaquina(licencia);
 
         //Actualizar la licencia en la maquina
         SOAPServer soapServer = new SOAPServer();
@@ -84,6 +96,7 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
         ActualizarlicenciaResponseType respuesta = soapServerPort.actualizarlicencia(parametros);
                 
     }
+    
 
     private void addListenerButtons() {
         getBtnSalirRegistro().addActionListener(new ActionListener() {
@@ -158,6 +171,29 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
                     String tipoLicencia=getTipoLicencia(getTxtUsuarioVerificar().getText());
                     Integer cantidadUsuarios=WebServiceCodefac.getCantidadClientes(getTxtUsuarioVerificar().getText());
                     
+                    String moduloInventario = WebServiceCodefac.getModuloInventario(getTxtUsuarioVerificar().getText());
+                    String moduloGestionAcademica = WebServiceCodefac.getModuloGestionAcademica(getTxtUsuarioVerificar().getText());
+                    String moduloFacturacion = WebServiceCodefac.getModuloFacturacion(getTxtUsuarioVerificar().getText());
+                    String moduloCRM = WebServiceCodefac.getModuloCrm(getTxtUsuarioVerificar().getText());
+                    
+                    //Agregar a una lista solo los modulos activos
+                    List<String> modulosActivos = new ArrayList<String>();
+                    if (moduloInventario != null && moduloInventario.equals("s")) {
+                        modulosActivos.add(moduloInventario);
+                    }
+
+                    if (moduloGestionAcademica != null && moduloGestionAcademica.equals("s")) {
+                        modulosActivos.add(moduloGestionAcademica);
+                    }
+
+                    if (moduloFacturacion != null && moduloFacturacion.equals("s")) {
+                        modulosActivos.add(moduloFacturacion);
+                    }
+
+                    if (moduloCRM != null && moduloCRM.equals("s")) {
+                        modulosActivos.add(moduloCRM);
+                    }
+                    
                     //No hace verificaciones porque esta accion solo es accesible desde la pantalla de menu
                     //y se supone que ya esta validando la licencia anterior
                     if(actualizaLicencia)
@@ -177,7 +213,14 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
                     if(!respuesta.getReturn().equals("fail"))
                     {             
                         //Si existe en el servidor la licencia solo vuelve a descargar
-                        validacionLicenciaCodefac.crearLicencia(getTxtUsuarioVerificar().getText(),respuesta.getReturn(),tipoLicencia,cantidadUsuarios);
+                        Licencia licenciaDescargada=new Licencia();
+                        licenciaDescargada.setUsuario(getTxtUsuarioVerificar().getText());
+                        licenciaDescargada.setLicencia(respuesta.getReturn());
+                        licenciaDescargada.setTipoLicenciaEnum(TipoLicenciaEnum.getEnumByLetra(tipoLicencia));
+                        licenciaDescargada.setCantidadClientes(cantidadUsuarios);
+                        licenciaDescargada.cargarModulosOnline();
+                        
+                        validacionLicenciaCodefac.crearLicenciaDescargada(licenciaDescargada);
                         
                         licenciaCreada=true;
                         DialogoCodefac.mensaje("Adverencia","La licencia ya esta registrada y fue descargada",DialogoCodefac.MENSAJE_ADVERTENCIA);

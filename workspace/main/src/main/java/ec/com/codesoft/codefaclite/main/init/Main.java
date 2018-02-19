@@ -649,28 +649,39 @@ public class Main {
      *
      * @return
      */
-    public static boolean verificarLicenciaOnline(ValidacionLicenciaCodefac validacion) throws ClientTransportException {
-        try {
-            String usuario = validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_USUARIO);
-            String licencia = WebServiceCodefac.getLicencia(usuario);
-            String tipoLicencia = WebServiceCodefac.getTipoLicencia(usuario);
-            Integer cantidadCliente = WebServiceCodefac.getCantidadClientes(usuario);
 
-            String tipoLicenciaPc = validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_TIPO_LICENCIA);
-            String licenciaPc = validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_LICENCIA);
-            Integer cantidadClientePc = Integer.parseInt(validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_CANTIDAD_CLIENTES));
+    public static boolean verificarLicenciaOnline(ValidacionLicenciaCodefac validacion) throws ClientTransportException
+    {
+        try
+        {
+            
+            String usuario=validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_USUARIO);
+            Licencia licenciaOnline=new Licencia();
+            licenciaOnline.cargarLicenciaOnline(usuario);
+            
+            
+            Licencia licenciaFisica=new Licencia();
+            licenciaFisica.cargarLicenciaFisica(validacion.obtenerLicencia());
 
-            //TODO verificar que este tipo de licencia este funcionando
-            if (licencia.equals(licenciaPc) && tipoLicencia.equals(TipoLicenciaEnum.getEnumByNombre(tipoLicenciaPc).getLetra()) && cantidadCliente.equals(cantidadClientePc)) {
+
+            if(licenciaOnline.compararOtraLicencia(licenciaFisica))
+            {
                 return true;
-            } else {
-                //cuando la licencia es incorrecta se vuelve a descargar
-                validacion.crearLicencia(usuario, tipoLicencia, cantidadCliente);
-                if (validacion.validar()) {
+            }
+            else
+            {
+                validacion.crearLicenciaDescargada(licenciaOnline);
+                //validacion.crearLicencia(usuario,tipoLicencia,cantidadCliente,modulosActivos);
+                if(validacion.validar())
+                {
                     return true;
                 }
-            }
-        } catch (com.sun.xml.internal.ws.client.ClientTransportException cte) {
+                
+            }            
+
+        }
+        catch(com.sun.xml.internal.ws.client.ClientTransportException cte)
+        {
             return false;
         } catch (ValidacionLicenciaExcepcion ex) {
             return false;
