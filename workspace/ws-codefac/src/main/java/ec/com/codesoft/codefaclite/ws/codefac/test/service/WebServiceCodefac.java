@@ -97,4 +97,28 @@ public abstract class WebServiceCodefac {
         }
 
     }
+    
+    
+        /**
+     * Obtiene la licencia del servidor
+     *
+     * @param email
+     * @return
+     */
+    public static String getModuloInventario(String email) throws ClientTransportException {
+        return "s";
+    }
+
+    public static String getModuloGestionAcademica(String email) throws ClientTransportException {
+        return "s";
+    }
+
+    public static String getModuloFacturacion(String email) throws ClientTransportException {
+        return "s";
+    }
+
+    public static String getModuloCrm(String email) throws ClientTransportException {
+        return "s";
+    }
+
 }
