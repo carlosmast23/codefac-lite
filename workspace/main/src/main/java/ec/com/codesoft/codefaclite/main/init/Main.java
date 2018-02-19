@@ -5,7 +5,6 @@
  */
 package ec.com.codesoft.codefaclite.main.init;
 
-
 import com.jgoodies.looks.plastic.Plastic3DLookAndFeel;
 import com.jgoodies.looks.plastic.PlasticLookAndFeel;
 import com.jgoodies.looks.plastic.PlasticXPLookAndFeel;
@@ -92,6 +91,10 @@ import ec.com.codesoft.codefaclite.servidor.service.SriIdentificacionService;
 import ec.com.codesoft.codefaclite.servidor.service.SriService;
 import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
 import ec.com.codesoft.codefaclite.servidor.service.UtilidadesService;
+import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.AulaService;
+import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.EstudianteService;
+import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.NivelAcademicoService;
+import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.NivelService;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
@@ -115,7 +118,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorS
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceControllerServer;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
@@ -153,35 +159,36 @@ import javax.swing.UnsupportedLookAndFeelException;
  * @author Carlos
  */
 public class Main {
-    
+
     private static Properties propiedadesIniciales;
     /**
      * Nombre del archivo de configuraciones iniciales
      */
-    private static final String NOMBRE_ARCHIVO_CONFIGURACION="codefac.ini";
-    
-    private static final String CAMPO_MODO_APLICATIVO="modo";
+    private static final String NOMBRE_ARCHIVO_CONFIGURACION = "codefac.ini";
+
+    private static final String CAMPO_MODO_APLICATIVO = "modo";
     /**
      * Variable para saber el modo que inicia el aplicativo
      */
     public static Integer modoAplicativo;
-    
-    public static void main(String[] args) {   
-        
-        cargarConfiguracionesIniciales();       
-        
+
+    public static void main(String[] args) {
+
+        cargarConfiguracionesIniciales();
+
         /**
-         * Seleccionar el modo de inicio de Codefac si no selecciona un modo no le permite acceder
-         * a los siguiente funcionalidad
+         * Seleccionar el modo de inicio de Codefac si no selecciona un modo no
+         * le permite acceder a los siguiente funcionalidad
          */
         iniciarModoAplicativo(true);
-        
+
         /**
-         * Funcionalidad complementaria que inicia todos los componentes necesarios
+         * Funcionalidad complementaria que inicia todos los componentes
+         * necesarios
          */
         iniciarComponentes();
     }
-    
+
     //Lee el archivo de configuraciones de cada computador como por ejemplo
     //para saber la modalidad por defecto que se debe ejcutar el aplicativo
     private static void cargarConfiguracionesIniciales() {
@@ -192,124 +199,121 @@ public class Main {
         } catch (FileNotFoundException ex) {
             //Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             System.err.println("Archivo de configuracion inicial no existe");
-           
+
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     /**
      * Verifica si la licencia es correcta en el servidor
-     * @param pathBase 
+     *
+     * @param pathBase
      */
-    private static void verificarLicencia(String pathBase)
-    {
-                    /**
-             * Realizar Analisis para verificar si existe la licencia instalada
-             */
-            if(!comprobarLicencia(pathBase))
-            {
-                System.exit(0);
+    private static void verificarLicencia(String pathBase) {
+        /**
+         * Realizar Analisis para verificar si existe la licencia instalada
+         */
+        if (!comprobarLicencia(pathBase)) {
+            System.exit(0);
+        } else {
+
+            //Buscar el tipo de licencia paa setear en el sistema
+            ValidacionLicenciaCodefac validacion = new ValidacionLicenciaCodefac(pathBase);
+            TipoLicenciaEnum tipoLicencia = validacion.getLicencia().getTipoLicenciaEnum();
+
+            //Esta validacion es solo para usuario premium para cuando no paguen y tengamos que disminuir la licencia
+            if (!TipoLicenciaEnum.GRATIS.equals(tipoLicencia)) {
+                validacionCodefacOnline(validacion);
+                validacion = new ValidacionLicenciaCodefac(pathBase);
+                tipoLicencia = validacion.getLicencia().getTipoLicenciaEnum();
             }
-            else
-            {
-                
-                //Buscar el tipo de licencia paa setear en el sistema
-                ValidacionLicenciaCodefac validacion = new ValidacionLicenciaCodefac(pathBase);
-                TipoLicenciaEnum tipoLicencia = validacion.getLicencia().getTipoLicenciaEnum();
 
-                //Esta validacion es solo para usuario premium para cuando no paguen y tengamos que disminuir la licencia
-                if (!TipoLicenciaEnum.GRATIS.equals(tipoLicencia)) {
-                    validacionCodefacOnline(validacion);
-                    validacion = new ValidacionLicenciaCodefac(pathBase);
-                    tipoLicencia = validacion.getLicencia().getTipoLicenciaEnum();
-                }
+            //Este valor seteo para que sea accesible desde el servidor
+            //TODO: Verficar si se puede mejorar esta linea de codigo
+            UtilidadesServidor.tipoLicenciaEnum = tipoLicencia;
+            UtilidadesServidor.cantidadUsuarios = Integer.parseInt(validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_CANTIDAD_CLIENTES));
+            UtilidadesServidor.usuarioLicencia = validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_USUARIO);
 
-                //Este valor seteo para que sea accesible desde el servidor
-                //TODO: Verficar si se puede mejorar esta linea de codigo
-                UtilidadesServidor.tipoLicenciaEnum = tipoLicencia;
-                UtilidadesServidor.cantidadUsuarios= Integer.parseInt(validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_CANTIDAD_CLIENTES));
-                UtilidadesServidor.usuarioLicencia = validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_USUARIO);
-
-            }
+        }
     }
 
     /**
-     * Verifica si existe o selecciona el modo del aplicativo (Cliente, Servidor, Cliente-Servidor)
-     * @param configuracionesDefecto elige si desea que esocja las configuraciones guardas o que siempre pregunte el modo de inicio
+     * Verifica si existe o selecciona el modo del aplicativo (Cliente,
+     * Servidor, Cliente-Servidor)
+     *
+     * @param configuracionesDefecto elige si desea que esocja las
+     * configuraciones guardas o que siempre pregunte el modo de inicio
      */
-    public static void iniciarModoAplicativo(Boolean configuracionesDefecto)
-    {
+    public static void iniciarModoAplicativo(Boolean configuracionesDefecto) {
         //Si existen configuraciones iniciales solo las carga
-        if(propiedadesIniciales!=null && configuracionesDefecto)
-        {
-            String modoAplicativoStr=propiedadesIniciales.getProperty(CAMPO_MODO_APLICATIVO);
-            if(modoAplicativoStr!=null)
-            {
-                modoAplicativo=Integer.parseInt(modoAplicativoStr);
+        if (propiedadesIniciales != null && configuracionesDefecto) {
+            String modoAplicativoStr = propiedadesIniciales.getProperty(CAMPO_MODO_APLICATIVO);
+            if (modoAplicativoStr != null) {
+                modoAplicativo = Integer.parseInt(modoAplicativoStr);
                 return; //sio existe no continua buscando el modo de aplicativo
             }
         }
-        
-         /**
-         * Seleccionar el modo de inicio de Codefac si no selecciona un modo no le permite acceder
-         * a los siguiente funcionalidad
+
+        /**
+         * Seleccionar el modo de inicio de Codefac si no selecciona un modo no
+         * le permite acceder a los siguiente funcionalidad
          */
-        ModoAplicativoModel dialogAplicativo=new ModoAplicativoModel(null, true);
+        ModoAplicativoModel dialogAplicativo = new ModoAplicativoModel(null, true);
         dialogAplicativo.setLocationRelativeTo(null);
         dialogAplicativo.setVisible(true);
-        
+
         //Si no selecciona ninguna opcion salir del aplicativo
-        if(dialogAplicativo.getModo()==null)
-        {
+        if (dialogAplicativo.getModo() == null) {
             System.exit(0);
-        }
-        else
-        {
+        } else {
             try {
-                modoAplicativo=dialogAplicativo.getModo();
-                propiedadesIniciales.put(CAMPO_MODO_APLICATIVO,modoAplicativo+"");
-                propiedadesIniciales.store(new FileWriter(NOMBRE_ARCHIVO_CONFIGURACION),"");
+                modoAplicativo = dialogAplicativo.getModo();
+                propiedadesIniciales.put(CAMPO_MODO_APLICATIVO, modoAplicativo + "");
+                propiedadesIniciales.store(new FileWriter(NOMBRE_ARCHIVO_CONFIGURACION), "");
             } catch (IOException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+
     }
-    
-    public static void cargarRecursosServidor()
-    {
+
+    public static void cargarRecursosServidor() {
         try {
             AbstractFacade.cargarEntityManager();
-           
-            Map<Class,Class> mapRecursos=new HashMap<Class, Class>();
-            
-            mapRecursos.put(ProductoService.class,ProductoServiceIf.class);
-            mapRecursos.put(PersonaService.class,PersonaServiceIf.class);
-            mapRecursos.put(AccesoDirectoService.class,AccesoDirectoServiceIf.class);
-            mapRecursos.put(BodegaService.class,BodegaServiceIf.class);
-            mapRecursos.put(CategoriaProductoService.class,CategoriaProductoServiceIf.class);
-            mapRecursos.put(CompraDetalleService.class,CompraDetalleServiceIf.class);
-            mapRecursos.put(CompraService.class,CompraServiceIf.class);
-            mapRecursos.put(ComprobanteFisicoDisenioService.class,ComprobanteFisicoDisenioServiceIf.class);
-            mapRecursos.put(EmpresaService.class,EmpresaServiceIf.class);
-            mapRecursos.put(FacturacionService.class,FacturacionServiceIf.class);
-            mapRecursos.put(ImpuestoDetalleService.class,ImpuestoDetalleServiceIf.class);
-            mapRecursos.put(ImpuestoService.class,ImpuestoServiceIf.class);
-            mapRecursos.put(KardexDetalleService.class,KardexDetalleServiceIf.class);
-            mapRecursos.put(KardexItemEspecificoService.class,KardexItemEspecificoServiceIf.class);
-            mapRecursos.put(KardexService.class,KardexServiceIf.class);
-            mapRecursos.put(NotaCreditoService.class,NotaCreditoServiceIf.class);
-            mapRecursos.put(ParametroCodefacService.class,ParametroCodefacServiceIf.class);
-            mapRecursos.put(PerfilServicio.class,PerfilServicioIf.class);
-            mapRecursos.put(ProductoEnsambleService.class,ProductoEnsambleServiceIf.class);            
-            mapRecursos.put(ProductoProveedorService.class,ProductoProveedorServiceIf.class);            
-            mapRecursos.put(SriIdentificacionService.class,SriIdentificacionServiceIf.class);
-            mapRecursos.put(SriService.class,SriServiceIf.class);
+
+            Map<Class, Class> mapRecursos = new HashMap<Class, Class>();
+
+            mapRecursos.put(ProductoService.class, ProductoServiceIf.class);
+            mapRecursos.put(PersonaService.class, PersonaServiceIf.class);
+            mapRecursos.put(AccesoDirectoService.class, AccesoDirectoServiceIf.class);
+            mapRecursos.put(BodegaService.class, BodegaServiceIf.class);
+            mapRecursos.put(CategoriaProductoService.class, CategoriaProductoServiceIf.class);
+            mapRecursos.put(CompraDetalleService.class, CompraDetalleServiceIf.class);
+            mapRecursos.put(CompraService.class, CompraServiceIf.class);
+            mapRecursos.put(ComprobanteFisicoDisenioService.class, ComprobanteFisicoDisenioServiceIf.class);
+            mapRecursos.put(EmpresaService.class, EmpresaServiceIf.class);
+            mapRecursos.put(FacturacionService.class, FacturacionServiceIf.class);
+            mapRecursos.put(ImpuestoDetalleService.class, ImpuestoDetalleServiceIf.class);
+            mapRecursos.put(ImpuestoService.class, ImpuestoServiceIf.class);
+            mapRecursos.put(KardexDetalleService.class, KardexDetalleServiceIf.class);
+            mapRecursos.put(KardexItemEspecificoService.class, KardexItemEspecificoServiceIf.class);
+            mapRecursos.put(KardexService.class, KardexServiceIf.class);
+            mapRecursos.put(NotaCreditoService.class, NotaCreditoServiceIf.class);
+            mapRecursos.put(ParametroCodefacService.class, ParametroCodefacServiceIf.class);
+            mapRecursos.put(PerfilServicio.class, PerfilServicioIf.class);
+            mapRecursos.put(ProductoEnsambleService.class, ProductoEnsambleServiceIf.class);
+            mapRecursos.put(ProductoProveedorService.class, ProductoProveedorServiceIf.class);
+            mapRecursos.put(SriIdentificacionService.class, SriIdentificacionServiceIf.class);
+            mapRecursos.put(SriService.class, SriServiceIf.class);
             mapRecursos.put(UsuarioServicio.class, UsuarioServicioIf.class);
-            mapRecursos.put(UtilidadesService.class,UtilidadesServiceIf.class);
-            mapRecursos.put(ComprobantesService.class,ComprobanteServiceIf.class);
-            mapRecursos.put(RecursosService.class,RecursosServiceIf.class);
+            mapRecursos.put(UtilidadesService.class, UtilidadesServiceIf.class);
+            mapRecursos.put(ComprobantesService.class, ComprobanteServiceIf.class);
+            mapRecursos.put(RecursosService.class, RecursosServiceIf.class);
+            mapRecursos.put(AulaService.class, AulaServiceIf.class);
+            mapRecursos.put(EstudianteService.class, EstudianteServiceIf.class);
+            mapRecursos.put(NivelService.class, NivelServiceIf.class);
+            mapRecursos.put(NivelAcademicoService.class, NivelAcademicoService.class);
             ServiceControllerServer.cargarRecursos(mapRecursos);
             System.out.println("servidor iniciado");
 
@@ -319,9 +323,8 @@ public class Main {
             Logger.getLogger(TestPruebaRMI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public static void cargarRecursosCliente(String ipServidor)
-    {
+
+    public static void cargarRecursosCliente(String ipServidor) {
         try {
             ServiceFactory.newController(ipServidor);
             List<Class> listaServicios = new ArrayList<Class>();
@@ -335,21 +338,20 @@ public class Main {
         } catch (RemoteException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
-    
+
     }
-    
-    public static void iniciarComponentes()
-    {
+
+    public static void iniciarComponentes() {
         try {
 
-            SplashScreenModel splashScren=new SplashScreenModel();
-            splashScren.agregarPorcentaje(40,"Cargando base de datos");
-            splashScren.agregarPorcentaje(60,"Cargando datos session");
-            splashScren.agregarPorcentaje(80,"Creando controlador codefac");
-            splashScren.agregarPorcentaje(100,"Cargando ventanas");
+            SplashScreenModel splashScren = new SplashScreenModel();
+            splashScren.agregarPorcentaje(40, "Cargando base de datos");
+            splashScren.agregarPorcentaje(60, "Cargando datos session");
+            splashScren.agregarPorcentaje(80, "Creando controlador codefac");
+            splashScren.agregarPorcentaje(100, "Cargando ventanas");
             splashScren.setVisible(true);
-            splashScren.iniciar();            
-            
+            splashScren.iniciar();
+
             /**
              * *
              * Cargar componentes de la base de datos si se carga en modo de
@@ -358,94 +360,86 @@ public class Main {
             if (modoAplicativo.equals(ModoAplicativoModel.MODO_SERVIDOR)) {
                 componentesBaseDatos();
                 cargarRecursosServidor();
-                String ipServidor=InetAddress.getLocalHost().getHostAddress();
+                String ipServidor = InetAddress.getLocalHost().getHostAddress();
                 cargarRecursosCliente(ipServidor);
-                
+
                 //Valida la licencia antes de ejecutar el servidor
                 ParametroCodefac parametroDirectorioRecursos = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS);
                 verificarLicencia(parametroDirectorioRecursos.getValor());
                 //Seteo el path de los directorio como una referencia global de todo el sistema
                 UtilidadesServidor.pathRecursos = parametroDirectorioRecursos.getValor();
-                
+
                 //Crear el pantalla que va a manterner encedidad la conexion con los clientes
-                ServidorMonitorModel monitor=new ServidorMonitorModel();
-                UtilidadesServidor.monitorUpdate=monitor;
+                ServidorMonitorModel monitor = new ServidorMonitorModel();
+                UtilidadesServidor.monitorUpdate = monitor;
                 monitor.setLocationRelativeTo(null);
-                monitor.setVisible(true);   
+                monitor.setVisible(true);
                 //splashScren.siguiente();
                 //splashScren.termino();
                 //return;
-                        
-            } 
-            else
-            {
-                if (modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE)) 
-                {
+
+            } else {
+                if (modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE)) {
                     //Cargar los recursos para funcionar en modo cliente
                     String ipServidor = JOptionPane.showInputDialog("Ingresa la Ip del servidor: ");
                     cargarRecursosCliente(ipServidor);
                     verificarConexionesPermitidas();
-                    
-                }
-                else
-                {
+
+                } else {
                     if (modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE_SERVIDOR)) {
                         //Cargar los recursos para funcionar en modo cliente y le p
                         componentesBaseDatos();
                         cargarRecursosServidor();
-                        String ipServidor=InetAddress.getLocalHost().getHostAddress();
+                        String ipServidor = InetAddress.getLocalHost().getHostAddress();
                         cargarRecursosCliente(ipServidor);
                         //Valida la licencia antes de ejecutar el servidor
                         ParametroCodefac parametroDirectorioRecursos = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS);
                         verificarLicencia(parametroDirectorioRecursos.getValor());
                         //Seteo el path de los directorio como una referencia global de todo el sistema
                         UtilidadesServidor.pathRecursos = parametroDirectorioRecursos.getValor();
-                        
+
                         verificarConexionesPermitidas();
                     }
-                
+
                 }
             }
-            
-            
+
             //Si el aplicativo debe iniciar en modo servidor se cierra la pantalla de carga del slashScreen
             if (modoAplicativo.equals(ModoAplicativoModel.MODO_SERVIDOR)) {
                 splashScren.termino();
                 return;
             }
-            
+
             splashScren.siguiente();
             /**
              * Crear la session y cargar otro datos de la empresa
              */
-            SessionCodefac session=new SessionCodefac();
-            if(modoAplicativo.equals(ModoAplicativoModel.MODO_SERVIDOR))
-            {
+            SessionCodefac session = new SessionCodefac();
+            if (modoAplicativo.equals(ModoAplicativoModel.MODO_SERVIDOR)) {
                 session.setTipoLicenciaEnum(UtilidadesServidor.tipoLicenciaEnum);
-            }
-            else
-            {
-                TipoLicenciaEnum tipoLicencia=ServiceFactory.getFactory().getUtilidadesServiceIf().getTipoLicencia();
+            } else {
+                TipoLicenciaEnum tipoLicencia = ServiceFactory.getFactory().getUtilidadesServiceIf().getTipoLicencia();
                 session.setTipoLicenciaEnum(tipoLicencia);
             }
-            
+
             session.setUsuarioLicencia(UtilidadesServidor.usuarioLicencia);
             EmpresaServiceIf empresaService = ServiceFactory.getFactory().getEmpresaServiceIf();
-            List<Empresa> empresaList=empresaService.obtenerTodos();
-            
-            if(empresaList!=null && empresaList.size()>0)
+            List<Empresa> empresaList = empresaService.obtenerTodos();
+
+            if (empresaList != null && empresaList.size() > 0) {
                 session.setEmpresa(empresaList.get(0));
-            
+            }
+
             //session.setParametrosCodefac(getParametros());
             splashScren.siguiente();
-            
+
             /**
              * Seteando la session de los datos a utilizar en el aplicativo
              */
-            GeneralPanelModel panel=new GeneralPanelModel();
+            GeneralPanelModel panel = new GeneralPanelModel();
             panel.setSessionCodefac(session);
             splashScren.siguiente();
-            
+
             /**
              * Añadir menus y ventanas a la aplicacion principal
              */
@@ -459,63 +453,57 @@ public class Main {
             panel.setExtendedState(MAXIMIZED_BOTH);
             splashScren.siguiente();
             splashScren.termino();
-            
+
             try {
                 Thread.sleep(500);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-            
+
             /**
              * Si el usuario devuuelto es incorrecto terminar el aplicativo
              */
-            LoginModel loginModel=new LoginModel();
+            LoginModel loginModel = new LoginModel();
             loginModel.setVisible(true);
-            Usuario usuarioLogin=loginModel.getUsuarioLogin();
-            if(usuarioLogin==null)
-            {
+            Usuario usuarioLogin = loginModel.getUsuarioLogin();
+            if (usuarioLogin == null) {
                 System.out.println("aplicacion terminada");
-                return ;
+                return;
             }
-            
+
             session.setUsuario(usuarioLogin);
             session.setPerfiles(obtenerPerfilesUsuario(usuarioLogin));
-            
+
             /**
              * Agregando Hilo de Publicidad si es usuario Gratuito
              */
-            if(session.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS))
-            {
-                HiloPublicidadCodefac hiloPublicidad=new HiloPublicidadCodefac();
+            if (session.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS)) {
+                HiloPublicidadCodefac hiloPublicidad = new HiloPublicidadCodefac();
                 hiloPublicidad.setPublicidades(obtenerPublicidades());
                 hiloPublicidad.start();
                 panel.setHiloPublicidadCodefac(hiloPublicidad);
             }
             panel.iniciarComponentesGenerales();
             panel.setVisible(true);
-            
-            
+
         } catch (RemoteException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         } catch (UnknownHostException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
+
     }
-    
+
     /**
      * Verifica si no se exedio el numero de conexiones permitidas
-     * @return 
+     *
+     * @return
      */
-    private static void verificarConexionesPermitidas()
-    {
+    private static void verificarConexionesPermitidas() {
         try {
-            Boolean respuesta= ServiceFactory.getFactory().getUtilidadesServiceIf().verificarConexionesServidor();
-            if(!respuesta)
-            {
-                DialogoCodefac.mensaje("Error","Excedio el numero de clientes permitidos",DialogoCodefac.MENSAJE_INCORRECTO);
+            Boolean respuesta = ServiceFactory.getFactory().getUtilidadesServiceIf().verificarConexionesServidor();
+            if (!respuesta) {
+                DialogoCodefac.mensaje("Error", "Excedio el numero de clientes permitidos", DialogoCodefac.MENSAJE_INCORRECTO);
                 System.exit(0);
             }
         } catch (RemoteException ex) {
@@ -523,12 +511,11 @@ public class Main {
         }
 
     }
-    
+
     /**
      * Metodo para cargar los estilos disponibles
      */
-    private static void cargarEstilosCodefac() 
-    {
+    private static void cargarEstilosCodefac() {
         /*
             try {
             UIManager.setLookAndFeel("com.seaglasslookandfeel.SeaGlassLookAndFeel"); //El tema es interesante
@@ -550,12 +537,11 @@ public class Main {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
          */
-        
+
     }
-    
-    public static void validacionCodefacOnline(ValidacionLicenciaCodefac validacion)
-    {
-        
+
+    public static void validacionCodefacOnline(ValidacionLicenciaCodefac validacion) {
+
         try {
             ParametroCodefacServiceIf servicio = ServiceFactory.getFactory().getParametroCodefacServiceIf();
             /**
@@ -569,26 +555,25 @@ public class Main {
                         SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
                         Date fechaUltimaRevision = formato.parse(fechaStr);
                         int dias = UtilidadesFecha.obtenerDistanciaDias(fechaUltimaRevision, UtilidadesFecha.hoy());
-                        
+
                         //Validacion para evitar que cambien fechas del sistema o que corrompan la fecha
-                        if(dias<0)
-                        {
+                        if (dias < 0) {
                             DialogoCodefac.mensaje("Error", "No se puede validar su licencia ,inconsistencia con las fechas", DialogoCodefac.MENSAJE_INCORRECTO);
                             System.exit(0);
-                            
+
                         }
-                        
+
                         //Revisar la licencia cada despues de 15 dias con un rango maximo de 30 dias 
                         if (dias > 15 && dias < 30) {
                             if (verificarLicenciaOnline(validacion)) {
-                                grabarFechaRevision(parametroFechaValidacion,false);
+                                grabarFechaRevision(parametroFechaValidacion, false);
                             }
                         }
 
                         //Si execde los 30 dias sin validar por internet ya no permite el acceso
                         if (dias >= 30) {
                             if (verificarLicenciaOnline(validacion)) {
-                                grabarFechaRevision(parametroFechaValidacion,false);
+                                grabarFechaRevision(parametroFechaValidacion, false);
                             } else {
                                 //Si no se logro validar la licencia durante 30 dias ya no se abre el software
                                 DialogoCodefac.mensaje("Error", "No se puede validar su licencia , verifique su conexión a internet", DialogoCodefac.MENSAJE_INCORRECTO);
@@ -601,102 +586,91 @@ public class Main {
                     }
 
                 } else {
-                    if(verificarLicenciaOnline(validacion)) //no se pone en un if, porque esta controlado en el metodo si no existe salir
+                    if (verificarLicenciaOnline(validacion)) //no se pone en un if, porque esta controlado en el metodo si no existe salir
                     {
-                        grabarFechaRevision(parametroFechaValidacion,false);                    
-                    }
-                    else
-                    {
+                        grabarFechaRevision(parametroFechaValidacion, false);
+                    } else {
                         //Si no se logro validar la licencia por primera vez  no se abre el software
                         DialogoCodefac.mensaje("Error", "No se puede validar su licencia , verifique su conexión a internet", DialogoCodefac.MENSAJE_INCORRECTO);
                         System.exit(0);
-                        
+
                     }
                 }
 
-            }
-            else //cuando no se tiene registro de la fecha de validacion
+            } else //cuando no se tiene registro de la fecha de validacion
             {
-                if (verificarLicenciaOnline(validacion)) 
-                {
-                    grabarFechaRevision(parametroFechaValidacion,true);
-                }
-                else
-                {
+                if (verificarLicenciaOnline(validacion)) {
+                    grabarFechaRevision(parametroFechaValidacion, true);
+                } else {
                     //Si no se logro validar la licencia por primera vez  no se abre el software
                     DialogoCodefac.mensaje("Error", "No se puede validar su licencia , verifique su conexión a internet", DialogoCodefac.MENSAJE_INCORRECTO);
                     System.exit(0);
                 }
-            
+
             }
         } catch (RemoteException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     /**
-     * Funcion que graba la fecha de la ultima revision de la licencia y me permite hacer un control
-     * para evitar que el softare funcione sin verificar alteraciones en su licencia o cuando
-     * se requiera cambiar el tipo de licencia por ejemplo cuando no realiza los pagos de la licencia
+     * Funcion que graba la fecha de la ultima revision de la licencia y me
+     * permite hacer un control para evitar que el softare funcione sin
+     * verificar alteraciones en su licencia o cuando se requiera cambiar el
+     * tipo de licencia por ejemplo cuando no realiza los pagos de la licencia
+     *
      * @param parametroFechaValidacion
-     * @param crear 
+     * @param crear
      */
-    private static void grabarFechaRevision(ParametroCodefac parametroFechaValidacion,boolean crear)
-    {
+    private static void grabarFechaRevision(ParametroCodefac parametroFechaValidacion, boolean crear) {
         try {
-            if(crear)
-            {
-                parametroFechaValidacion=new ParametroCodefac();
+            if (crear) {
+                parametroFechaValidacion = new ParametroCodefac();
                 parametroFechaValidacion.setNombre(ParametroCodefac.ULTIMA_FECHA_VALIDACION);
             }
-            
-            ParametroCodefacServiceIf servicio=ServiceFactory.getFactory().getParametroCodefacServiceIf();
+
+            ParametroCodefacServiceIf servicio = ServiceFactory.getFactory().getParametroCodefacServiceIf();
             SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
             Date fechaHoy = UtilidadesFecha.getFechaHoy();
             parametroFechaValidacion.setValor(format.format(fechaHoy));
-            if(crear)
+            if (crear) {
                 servicio.grabar(parametroFechaValidacion);
-            else
+            } else {
                 servicio.editar(parametroFechaValidacion);
+            }
         } catch (RemoteException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     /**
-     * Verifica que la licencia que esta en el computador sea la misma que la del servidor
-     * @return 
+     * Verifica que la licencia que esta en el computador sea la misma que la
+     * del servidor
+     *
+     * @return
      */
-    public static boolean verificarLicenciaOnline(ValidacionLicenciaCodefac validacion) throws ClientTransportException
-    {
-        try
-        {
-            String usuario=validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_USUARIO);
+    public static boolean verificarLicenciaOnline(ValidacionLicenciaCodefac validacion) throws ClientTransportException {
+        try {
+            String usuario = validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_USUARIO);
             String licencia = WebServiceCodefac.getLicencia(usuario);
             String tipoLicencia = WebServiceCodefac.getTipoLicencia(usuario);
-            Integer cantidadCliente=WebServiceCodefac.getCantidadClientes(usuario);
+            Integer cantidadCliente = WebServiceCodefac.getCantidadClientes(usuario);
 
-            String tipoLicenciaPc=validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_TIPO_LICENCIA);
-            String licenciaPc=validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_LICENCIA);
-            Integer cantidadClientePc=Integer.parseInt(validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_CANTIDAD_CLIENTES));
+            String tipoLicenciaPc = validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_TIPO_LICENCIA);
+            String licenciaPc = validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_LICENCIA);
+            Integer cantidadClientePc = Integer.parseInt(validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_CANTIDAD_CLIENTES));
 
             //TODO verificar que este tipo de licencia este funcionando
-            if(licencia.equals(licenciaPc) && tipoLicencia.equals(TipoLicenciaEnum.getEnumByNombre(tipoLicenciaPc).getLetra()) && cantidadCliente.equals(cantidadClientePc))
-            {             
+            if (licencia.equals(licenciaPc) && tipoLicencia.equals(TipoLicenciaEnum.getEnumByNombre(tipoLicenciaPc).getLetra()) && cantidadCliente.equals(cantidadClientePc)) {
                 return true;
-            }
-            else
-            {
+            } else {
                 //cuando la licencia es incorrecta se vuelve a descargar
-                validacion.crearLicencia(usuario,tipoLicencia,cantidadCliente);
-                if(validacion.validar())
-                {
+                validacion.crearLicencia(usuario, tipoLicencia, cantidadCliente);
+                if (validacion.validar()) {
                     return true;
-                }                
+                }
             }
-        }
-        catch(com.sun.xml.internal.ws.client.ClientTransportException cte)
-        {
+        } catch (com.sun.xml.internal.ws.client.ClientTransportException cte) {
             return false;
         } catch (ValidacionLicenciaExcepcion ex) {
             return false;
@@ -705,154 +679,147 @@ public class Main {
         }
         return false;
     }
-    
-    public static Map<String,ParametroCodefac> getParametros()
-    {
-        Map<String,ParametroCodefac> parametros=new HashMap<String,ParametroCodefac>();
-        ParametroCodefac param=new ParametroCodefac();
-        
-        param.id=1;
-        param.nombre=ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA;
-        param.valor="carlos_alfonso_sanchez_coyago.p12";        
-        parametros.put(param.nombre,param);
-        
-        param=new ParametroCodefac();
-        param.id=2;
-        param.nombre=ParametroCodefac.CLAVE_FIRMA_ELECTRONICA;
-        param.valor="Code17bwbtj";        
-        parametros.put(param.nombre,param);
-        
-        
+
+    public static Map<String, ParametroCodefac> getParametros() {
+        Map<String, ParametroCodefac> parametros = new HashMap<String, ParametroCodefac>();
+        ParametroCodefac param = new ParametroCodefac();
+
+        param.id = 1;
+        param.nombre = ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA;
+        param.valor = "carlos_alfonso_sanchez_coyago.p12";
+        parametros.put(param.nombre, param);
+
+        param = new ParametroCodefac();
+        param.id = 2;
+        param.nombre = ParametroCodefac.CLAVE_FIRMA_ELECTRONICA;
+        param.valor = "Code17bwbtj";
+        parametros.put(param.nombre, param);
+
         //param=new ParametroCodefac();
         //param.id=3;
         //param.nombre=ParametroCodefac.DIRECTORIO_RECURSOS;
         //param.valor="E:/FacturacionOffline";        
         //parametros.put(param.nombre,param);
-        
-        param=new ParametroCodefac();
-        param.id=4;
-        param.nombre=ParametroCodefac.MODO_FACTURACION;
-        param.valor="pruebas";        
-        parametros.put(param.nombre,param);
-        
-        param=new ParametroCodefac();
-        param.id=5;
-        param.nombre=ParametroCodefac.SRI_WS_RECEPCION;
-        param.valor="https://cel.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl";        
-        parametros.put(param.nombre,param);
+        param = new ParametroCodefac();
+        param.id = 4;
+        param.nombre = ParametroCodefac.MODO_FACTURACION;
+        param.valor = "pruebas";
+        parametros.put(param.nombre, param);
 
-        param=new ParametroCodefac();
-        param.id=6;
-        param.nombre=ParametroCodefac.SRI_WS_RECEPCION_PRUEBA;
-        param.valor="https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl";        
-        parametros.put(param.nombre,param);
+        param = new ParametroCodefac();
+        param.id = 5;
+        param.nombre = ParametroCodefac.SRI_WS_RECEPCION;
+        param.valor = "https://cel.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl";
+        parametros.put(param.nombre, param);
 
-        param=new ParametroCodefac();
-        param.id=7;
-        param.nombre=ParametroCodefac.SRI_WS_AUTORIZACION;
-        param.valor="https://cel.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl";        
-        parametros.put(param.nombre,param);
+        param = new ParametroCodefac();
+        param.id = 6;
+        param.nombre = ParametroCodefac.SRI_WS_RECEPCION_PRUEBA;
+        param.valor = "https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl";
+        parametros.put(param.nombre, param);
 
-        param=new ParametroCodefac();
-        param.id=8;
-        param.nombre=ParametroCodefac.SRI_WS_AUTORIZACION_PRUEBA;
-        param.valor="https://celcer.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl";        
-        parametros.put(param.nombre,param);
-        
-        param=new ParametroCodefac();
-        param.id=9;
-        param.nombre=ParametroCodefac.SECUENCIAL_FACTURA;
-        param.valor="1";        
-        parametros.put(param.nombre,param);
-        
-        param=new ParametroCodefac();
-        param.id=10;
-        param.nombre=ParametroCodefac.SECUENCIAL_GUIA_REMISION;
-        param.valor="1";        
-        parametros.put(param.nombre,param);
-        
-        param=new ParametroCodefac();
-        param.id=11;
-        param.nombre=ParametroCodefac.SECUENCIAL_NOTA_CREDITO;
-        param.valor="1";        
-        parametros.put(param.nombre,param);
-        
-        param=new ParametroCodefac();
-        param.id=12;
-        param.nombre=ParametroCodefac.SECUENCIAL_NOTA_DEBITO;
-        param.valor="1";        
-        parametros.put(param.nombre,param);
-        
-        param=new ParametroCodefac();
-        param.id=13;
-        param.nombre=ParametroCodefac.SECUENCIAL_RETENCION;
-        param.valor="1";        
-        parametros.put(param.nombre,param);
-        
+        param = new ParametroCodefac();
+        param.id = 7;
+        param.nombre = ParametroCodefac.SRI_WS_AUTORIZACION;
+        param.valor = "https://cel.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl";
+        parametros.put(param.nombre, param);
+
+        param = new ParametroCodefac();
+        param.id = 8;
+        param.nombre = ParametroCodefac.SRI_WS_AUTORIZACION_PRUEBA;
+        param.valor = "https://celcer.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl";
+        parametros.put(param.nombre, param);
+
+        param = new ParametroCodefac();
+        param.id = 9;
+        param.nombre = ParametroCodefac.SECUENCIAL_FACTURA;
+        param.valor = "1";
+        parametros.put(param.nombre, param);
+
+        param = new ParametroCodefac();
+        param.id = 10;
+        param.nombre = ParametroCodefac.SECUENCIAL_GUIA_REMISION;
+        param.valor = "1";
+        parametros.put(param.nombre, param);
+
+        param = new ParametroCodefac();
+        param.id = 11;
+        param.nombre = ParametroCodefac.SECUENCIAL_NOTA_CREDITO;
+        param.valor = "1";
+        parametros.put(param.nombre, param);
+
+        param = new ParametroCodefac();
+        param.id = 12;
+        param.nombre = ParametroCodefac.SECUENCIAL_NOTA_DEBITO;
+        param.valor = "1";
+        parametros.put(param.nombre, param);
+
+        param = new ParametroCodefac();
+        param.id = 13;
+        param.nombre = ParametroCodefac.SECUENCIAL_RETENCION;
+        param.valor = "1";
+        parametros.put(param.nombre, param);
+
         return parametros;
     }
-    
+
     /**
      * Metodo donde se van a ligar las ventanas con los menus correspondientes
+     *
      * @param panel
-     * @return                                             
+     * @return
      */
-    public static List<MenuControlador> agregarMenuVentana(GeneralPanelModel panel)
-    {
-        List<MenuControlador> ventanas=new ArrayList<MenuControlador>();
-        ventanas.add(new MenuControlador(panel.getjMenuCliente(),ClienteModel.class));
-        ventanas.add(new MenuControlador(panel.getjMenuProducto(),ProductoModel.class));
-        ventanas.add(new MenuControlador(panel.getjMenuFactura(),FacturacionModel.class));
-        ventanas.add(new MenuControlador(panel.getjMenuEmisor(),EmpresaModel.class));
-        ventanas.add(new MenuControlador(panel.getjMenuComprobanteConfig(),ComprobantesConfiguracionModel.class));
-        ventanas.add(new MenuControlador(panel.getjMenuCalculadora(),CalculadoraModel.class,false));
-        ventanas.add(new MenuControlador(panel.getjMenuItemUtilidades(),UtilidadComprobanteModel.class,true));
-        ventanas.add(new MenuControlador(panel.getjMenuItemNotaCredito(),NotaCreditoModel.class,true));
-        ventanas.add(new MenuControlador(panel.getjMenuItemFacturaReporte(),FacturaReporteModel.class,true));
-        ventanas.add(new MenuControlador(panel.getjMenuItemReporteCliente(),ClienteReporte.class,true));
-        ventanas.add(new MenuControlador(panel.getjMenuItemReporteProducto(),ProductoReporte.class,true));
-        ventanas.add(new MenuControlador(panel.getjMenuItemDisenador(),FacturaDisenioModel.class,true));
-        ventanas.add(new MenuControlador(panel.getjMenuCompra(),CompraModel.class,true));
-        ventanas.add(new MenuControlador(panel.getjMenuItemAsociarProducto(),AsociarProductoProveedorModel.class,true));
-        ventanas.add(new MenuControlador(panel.getMenuBodega(),BodegaModel.class,true));
-        ventanas.add(new MenuControlador(panel.getMenuCatProducto(),CategoriaProductoModel.class,true));
-        ventanas.add(new MenuControlador(panel.getjMenuItemIngresarInventario(),IngresoInventarioModel.class,true));
-        ventanas.add(new MenuControlador(panel.getjMenuItemKardex(),KardexModel.class,false));
-        ventanas.add(new MenuControlador(panel.getjMenuItemInventarioEnsamble(),InventarioEnsambleModel.class,false));
-        
+    public static List<MenuControlador> agregarMenuVentana(GeneralPanelModel panel) {
+        List<MenuControlador> ventanas = new ArrayList<MenuControlador>();
+        ventanas.add(new MenuControlador(panel.getjMenuCliente(), ClienteModel.class));
+        ventanas.add(new MenuControlador(panel.getjMenuProducto(), ProductoModel.class));
+        ventanas.add(new MenuControlador(panel.getjMenuFactura(), FacturacionModel.class));
+        ventanas.add(new MenuControlador(panel.getjMenuEmisor(), EmpresaModel.class));
+        ventanas.add(new MenuControlador(panel.getjMenuComprobanteConfig(), ComprobantesConfiguracionModel.class));
+        ventanas.add(new MenuControlador(panel.getjMenuCalculadora(), CalculadoraModel.class, false));
+        ventanas.add(new MenuControlador(panel.getjMenuItemUtilidades(), UtilidadComprobanteModel.class, true));
+        ventanas.add(new MenuControlador(panel.getjMenuItemNotaCredito(), NotaCreditoModel.class, true));
+        ventanas.add(new MenuControlador(panel.getjMenuItemFacturaReporte(), FacturaReporteModel.class, true));
+        ventanas.add(new MenuControlador(panel.getjMenuItemReporteCliente(), ClienteReporte.class, true));
+        ventanas.add(new MenuControlador(panel.getjMenuItemReporteProducto(), ProductoReporte.class, true));
+        ventanas.add(new MenuControlador(panel.getjMenuItemDisenador(), FacturaDisenioModel.class, true));
+        ventanas.add(new MenuControlador(panel.getjMenuCompra(), CompraModel.class, true));
+        ventanas.add(new MenuControlador(panel.getjMenuItemAsociarProducto(), AsociarProductoProveedorModel.class, true));
+        ventanas.add(new MenuControlador(panel.getMenuBodega(), BodegaModel.class, true));
+        ventanas.add(new MenuControlador(panel.getMenuCatProducto(), CategoriaProductoModel.class, true));
+        ventanas.add(new MenuControlador(panel.getjMenuItemIngresarInventario(), IngresoInventarioModel.class, true));
+        ventanas.add(new MenuControlador(panel.getjMenuItemKardex(), KardexModel.class, false));
+        ventanas.add(new MenuControlador(panel.getjMenuItemInventarioEnsamble(), InventarioEnsambleModel.class, false));
+
         return ventanas;
-    
+
     }
-    
-    public static Map<String,PanelSecundarioAbstract> agregarPanelesSecundarios()
-    {
-        Map<String,PanelSecundarioAbstract> paneles=new HashMap<String,PanelSecundarioAbstract>();
-        paneles.put(PanelSecundarioAbstract.PANEL_AYUDA,new AyudaCodefacModel() );
-        paneles.put(PanelSecundarioAbstract.PANEL_MONITOR,MonitorComprobanteModel.getInstance());
-        paneles.put(PanelSecundarioAbstract.PANEL_VALIDACION,new ValidadorCodefacModel());
+
+    public static Map<String, PanelSecundarioAbstract> agregarPanelesSecundarios() {
+        Map<String, PanelSecundarioAbstract> paneles = new HashMap<String, PanelSecundarioAbstract>();
+        paneles.put(PanelSecundarioAbstract.PANEL_AYUDA, new AyudaCodefacModel());
+        paneles.put(PanelSecundarioAbstract.PANEL_MONITOR, MonitorComprobanteModel.getInstance());
+        paneles.put(PanelSecundarioAbstract.PANEL_VALIDACION, new ValidadorCodefacModel());
         return paneles;
     }
-    
-    public static List<Publicidad> obtenerPublicidades()
-    {
-        List<Publicidad> publicidades=new ArrayList<Publicidad>();
-        publicidades.add(new Publicidad(RecursoCodefac.IMAGENES_PUBLICIDAD.getResourceURL("angelicaPerfumes.png"),"https://www.facebook.com/avonbellezacosmeticos/",3,"Dale click a la imagen para mas información"));
-        publicidades.add(new Publicidad(RecursoCodefac.IMAGENES_PUBLICIDAD.getResourceURL("anunciateConNosotros.png"),"https://www.facebook.com/codefac.ec/",6,"Dale click a la imagen para mas información"));
-        publicidades.add(new Publicidad(RecursoCodefac.IMAGENES_PUBLICIDAD.getResourceURL("desarrolloSoftware.png"),"https://www.facebook.com/codesoft.ec/",3,"Dale click a la imagen para mas información"));
-        publicidades.add(new Publicidad(RecursoCodefac.IMAGENES_PUBLICIDAD.getResourceURL("publicidadCodesoft.png"),"https://www.facebook.com/codesoft.ec/",3,"Dale click a la imagen para mas información"));
-        publicidades.add(new Publicidad(RecursoCodefac.IMAGENES_PUBLICIDAD.getResourceURL("publicidadPaquete.png"),"https://www.facebook.com/codefac.ec/",10,"Dale click a la imagen para mas información"));
-        publicidades.add(new Publicidad(RecursoCodefac.IMAGENES_PUBLICIDAD.getResourceURL("publicidadVirtualMall.png"),"https://www.facebook.com/vmquito/",5,"Dale click a la imagen para mas información"));
-        publicidades.add(new Publicidad(RecursoCodefac.IMAGENES_PUBLICIDAD.getResourceURL("tol2dox.png"),"https://www.facebook.com/toldos.max.5",2,"Dale click a la imagen para mas información"));
-        publicidades.add(new Publicidad(RecursoCodefac.IMAGENES_PUBLICIDAD.getResourceURL("virtuallMallMensajeria.png"),"https://www.facebook.com/vmquito/",4,"Dale click a la imagen para mas información"));
+
+    public static List<Publicidad> obtenerPublicidades() {
+        List<Publicidad> publicidades = new ArrayList<Publicidad>();
+        publicidades.add(new Publicidad(RecursoCodefac.IMAGENES_PUBLICIDAD.getResourceURL("angelicaPerfumes.png"), "https://www.facebook.com/avonbellezacosmeticos/", 3, "Dale click a la imagen para mas información"));
+        publicidades.add(new Publicidad(RecursoCodefac.IMAGENES_PUBLICIDAD.getResourceURL("anunciateConNosotros.png"), "https://www.facebook.com/codefac.ec/", 6, "Dale click a la imagen para mas información"));
+        publicidades.add(new Publicidad(RecursoCodefac.IMAGENES_PUBLICIDAD.getResourceURL("desarrolloSoftware.png"), "https://www.facebook.com/codesoft.ec/", 3, "Dale click a la imagen para mas información"));
+        publicidades.add(new Publicidad(RecursoCodefac.IMAGENES_PUBLICIDAD.getResourceURL("publicidadCodesoft.png"), "https://www.facebook.com/codesoft.ec/", 3, "Dale click a la imagen para mas información"));
+        publicidades.add(new Publicidad(RecursoCodefac.IMAGENES_PUBLICIDAD.getResourceURL("publicidadPaquete.png"), "https://www.facebook.com/codefac.ec/", 10, "Dale click a la imagen para mas información"));
+        publicidades.add(new Publicidad(RecursoCodefac.IMAGENES_PUBLICIDAD.getResourceURL("publicidadVirtualMall.png"), "https://www.facebook.com/vmquito/", 5, "Dale click a la imagen para mas información"));
+        publicidades.add(new Publicidad(RecursoCodefac.IMAGENES_PUBLICIDAD.getResourceURL("tol2dox.png"), "https://www.facebook.com/toldos.max.5", 2, "Dale click a la imagen para mas información"));
+        publicidades.add(new Publicidad(RecursoCodefac.IMAGENES_PUBLICIDAD.getResourceURL("virtuallMallMensajeria.png"), "https://www.facebook.com/vmquito/", 4, "Dale click a la imagen para mas información"));
         return publicidades;
     }
-    
-    
+
     /**
      * Verifica y carga el Entity manager
      */
-    public static void componentesBaseDatos()
-    {
+    public static void componentesBaseDatos() {
         try {
             AbstractFacade.cargarEntityManager();
         } catch (PersistenceException e) {
@@ -866,16 +833,15 @@ public class Main {
             } catch (PersistenciaDuplicadaException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
         } catch (PersistenciaDuplicadaException ex) {
-            DialogoCodefac.mensaje("Error",ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
+            DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             System.exit(0);//Salir si existe otra instancia abierta
         }
-        
+
     }
-    
-    private static boolean comprobarLicencia(String pathBase)
-    {
+
+    private static boolean comprobarLicencia(String pathBase) {
 
         //ParametroCodefacServiceIf servicio=ServiceFactory.getFactory().getParametroCodefacServiceIf();
         //String pathBase=servicio.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS).valor;
@@ -915,11 +881,10 @@ public class Main {
         return false;
 
     }
-    
-    private static List<Perfil> obtenerPerfilesUsuario(Usuario usuario)
-    {
+
+    private static List<Perfil> obtenerPerfilesUsuario(Usuario usuario) {
         try {
-            PerfilServicioIf servicio=ServiceFactory.getFactory().getPerfilServicioIf();
+            PerfilServicioIf servicio = ServiceFactory.getFactory().getPerfilServicioIf();
             return servicio.obtenerPerfilesPorUsuario(usuario);
         } catch (RemoteException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
@@ -927,4 +892,3 @@ public class Main {
         return null;
     }
 }
-
