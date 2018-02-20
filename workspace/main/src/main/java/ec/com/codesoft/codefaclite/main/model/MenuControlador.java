@@ -21,127 +21,126 @@ import javax.swing.JMenuItem;
  *
  * @author Carlos
  */
-public class MenuControlador 
-{
-   private Class<GeneralPanelInterface> ventana;
-   private boolean maximizado;
-   private Object instance;
-   
-   private ModuloCodefacEnum modulo;
-   private CategoriaMenuEnum categoriaMenu;
-   
-   private JMenuItem jmenuItem;
-   
-   /**
-    * Lista de permisos para los modulos permitidos
-    * Nota: Si no se setea ningun modulo es permitido para todos los modulos
-    */
-   private ModuloCodefacEnum[] modulosPermitidos;
-   
-   public MenuControlador(Class<GeneralPanelInterface> ventana,ModuloCodefacEnum modulo,CategoriaMenuEnum categoriaMenu)
-   {
-       this.ventana=ventana;
-       this.modulo=modulo;
-       this.categoriaMenu=categoriaMenu;
-       this.modulosPermitidos=modulosPermitidos;
-   }
-   
-   
-   public MenuControlador(Class ventana,ModuloCodefacEnum modulo,CategoriaMenuEnum categoriaMenu,boolean maximizado)
-   {
-       this.ventana=ventana;
-       this.modulo=modulo;
-       this.categoriaMenu=categoriaMenu;
-       this.maximizado=maximizado;
-   }
-   
-   public MenuControlador(Class ventana,ModuloCodefacEnum modulo,CategoriaMenuEnum categoriaMenu,boolean maximizado,ModuloCodefacEnum[] modulosPermitidos)
-   {
-       this.ventana=ventana;
-       this.modulo=modulo;
-       this.categoriaMenu=categoriaMenu;
-       this.maximizado=maximizado;
-       this.modulosPermitidos=modulosPermitidos;       
-   }
+public class MenuControlador {
 
+    private Class<GeneralPanelInterface> ventana;
+    private boolean maximizado;
+    private Object instance;
 
-    
+    private ModuloCodefacEnum modulo;
+    private CategoriaMenuEnum categoriaMenu;
+
+    private JMenuItem jmenuItem;
+
+    /**
+     * Lista de permisos para los modulos permitidos Nota: Si no se setea ningun
+     * modulo es permitido para todos los modulos
+     */
+    private ModuloCodefacEnum[] modulosPermitidos;
+
+    public MenuControlador(Class<GeneralPanelInterface> ventana, ModuloCodefacEnum modulo, CategoriaMenuEnum categoriaMenu) {
+        this.ventana = ventana;
+        this.modulo = modulo;
+        this.categoriaMenu = categoriaMenu;
+        this.modulosPermitidos = modulosPermitidos;
+    }
+
+    public MenuControlador(Class ventana, ModuloCodefacEnum modulo, CategoriaMenuEnum categoriaMenu, boolean maximizado) {
+        this.ventana = ventana;
+        this.modulo = modulo;
+        this.categoriaMenu = categoriaMenu;
+        this.maximizado = maximizado;
+    }
+
+    public MenuControlador(Class ventana, ModuloCodefacEnum modulo, CategoriaMenuEnum categoriaMenu, boolean maximizado, ModuloCodefacEnum[] modulosPermitidos) {
+        this.ventana = ventana;
+        this.modulo = modulo;
+        this.categoriaMenu = categoriaMenu;
+        this.maximizado = maximizado;
+        this.modulosPermitidos = modulosPermitidos;
+    }
+
     /**
      * Devuelve una instancia segun la clase grabada
-     * @return 
+     *
+     * @return
      */
-    public GeneralPanelInterface getInstance()
-    {
-       try {
-           
-           if(instance==null)
-               instance=this.ventana.getConstructor().newInstance();
-           
-           return (GeneralPanelInterface) instance;
-           
-       } catch (NoSuchMethodException ex) {
-           Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
-       } catch (SecurityException ex) {
-           Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
-       } catch (InstantiationException ex) {
-           Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
-       } catch (IllegalAccessException ex) {
-           Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
-       } catch (IllegalArgumentException ex) {
-           Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
-       } catch (InvocationTargetException ex) {
-           Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
-       }
-       return null;
-    }
-    
-    public Object createNewInstance()
-    {
-       try {
-           instance=this.ventana.getConstructor().newInstance();
-       } catch (InstantiationException ex) {
-           Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
-       } catch (IllegalAccessException ex) {
-           Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
-       } catch (IllegalArgumentException ex) {
-           Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
-       } catch (InvocationTargetException ex) {
-           Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
-       } catch (NoSuchMethodException ex) {
-           Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
-       } catch (SecurityException ex) {
-           Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
-       }
-       return instance;
+    public GeneralPanelInterface getInstance() {
+        try {
+
+            if (instance == null) {
+                instance = this.ventana.getConstructor().newInstance();
+            }
+
+            return (GeneralPanelInterface) instance;
+
+        } catch (NoSuchMethodException ex) {
+            Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SecurityException ex) {
+            Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvocationTargetException ex) {
+            Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
+    public Object createNewInstance() {
+        try {
+            instance = this.ventana.getConstructor().newInstance();
+        } catch (InstantiationException ex) {
+            Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvocationTargetException ex) {
+            Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchMethodException ex) {
+            Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SecurityException ex) {
+            Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return instance;
+    }
 
-    
-    public Boolean verificarPermisoModulo(Map<ModuloCodefacEnum,Boolean> modulos)
-    {
-        //Si no existe ningun dato en modulo permitidos asumo que tiene acceso para todos los modulos
-        if(modulosPermitidos==null)
-            return true;
+    public Boolean verificarPermisoModulo(ModuloCodefacEnum moduloVerificar) {
         
+        if(modulo.equals(moduloVerificar))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public Boolean verificarPermisoModuloAdicional(Map<ModuloCodefacEnum, Boolean> modulos) {
+        //Si no existe ningun dato en modulo permitidos asumo que tiene acceso para todos los modulos
+
         for (Map.Entry<ModuloCodefacEnum, Boolean> entry : modulos.entrySet()) {
             ModuloCodefacEnum moduloSistema = entry.getKey();
             Boolean value = entry.getValue();
-            
-            if(value) //Verificar solo para los modulos activos
+
+            if (value) //Verificar solo para los modulos activos
             {
+                //Verifico si indirectamente otro modulo necesita de esta pantalla
                 for (ModuloCodefacEnum modulosPermitido : modulosPermitidos) {
-                    if(moduloSistema.equals(modulosPermitido))
-                    {
+                    if (moduloSistema.equals(modulosPermitido)) {
                         return true;
                     }
                 }
+
             }
-            
+
         }
         return false;
     }
-    
-    
+
     public Class getVentana() {
         return ventana;
     }
@@ -189,11 +188,5 @@ public class MenuControlador
     public void setJmenuItem(JMenuItem jmenuItem) {
         this.jmenuItem = jmenuItem;
     }
-    
-    
-    
 
-    
-   
-   
 }

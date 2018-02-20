@@ -798,7 +798,7 @@ public class Main {
         ModuloCodefacEnum[] modulosPermitidos={ModuloCodefacEnum.CRM};
         ventanas.add(new MenuControlador(ClienteModel.class,ModuloCodefacEnum.CRM,CategoriaMenuEnum.GESTIONAR,true,modulosPermitidos));
         
-        ventanas.add(new MenuControlador(ProductoModel.class,ModuloCodefacEnum.CRM,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
+        ventanas.add(new MenuControlador(ProductoModel.class,ModuloCodefacEnum.CRM,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION}));
         
         ventanas.add(new MenuControlador(FacturacionModel.class,ModuloCodefacEnum.FACTURACION,CategoriaMenuEnum.PROCESOS,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
         ventanas.add(new MenuControlador(EmpresaModel.class,ModuloCodefacEnum.CRM,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
