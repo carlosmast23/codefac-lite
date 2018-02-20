@@ -19,29 +19,32 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "Periodo")
-public class Periodo {    
+public class Periodo {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    private Long id;
-    
+    private Long idPeriodo;
+    private String nombre;
     private Date fechaInicio;
-    
     private Date fechaFin;
-    
     private String estado;
-    
     private String observaciones;
 
-    public Periodo() {
+    public Long getIdPeriodo() {
+        return idPeriodo;
     }
 
-    public Long getId() {
-        return id;
+    public void setIdPeriodo(Long idPeriodo) {
+        this.idPeriodo = idPeriodo;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public Date getFechaInicio() {
@@ -75,7 +78,7 @@ public class Periodo {
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
     }
-    
-    
-    
+
+   
+
 }

@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Carlos
  */
 @Entity
-@Table(name = "Aula")
+@Table(name = "AULA")
 @XmlRootElement
 public class Aula implements Serializable {
 
