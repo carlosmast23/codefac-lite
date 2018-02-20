@@ -170,7 +170,7 @@ public class ComprobanteElectronicoService implements Runnable {
         try {
             if(escucha!=null)escucha.iniciado(comprobante);
             
-            if (etapaActual == ETAPA_GENERAR) {
+            if (etapaActual.equals(ETAPA_GENERAR)){
                 generar();
                 if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
                 System.out.println("generar()");
@@ -183,7 +183,7 @@ public class ComprobanteElectronicoService implements Runnable {
                 etapaActual++;
             }
 
-            if (etapaActual == ETAPA_PRE_VALIDAR) {
+            if (etapaActual.equals(ETAPA_PRE_VALIDAR)) {
                 preValidacion();
                 if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
                 System.out.println("preValidacion()");
@@ -194,7 +194,7 @@ public class ComprobanteElectronicoService implements Runnable {
                 etapaActual++;
             }
 
-            if (etapaActual == ETAPA_FIRMAR) {
+            if (etapaActual.equals(ETAPA_FIRMAR)) {
                 firmar();
                 if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
                 System.out.println("firmar()");
@@ -205,7 +205,7 @@ public class ComprobanteElectronicoService implements Runnable {
                 etapaActual++;
             }
 
-            if (etapaActual == ETAPA_ENVIAR) {
+            if (etapaActual.equals(ETAPA_ENVIAR)) {
                 enviarSri();
                 if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
                 System.out.println("enviarSri()");
@@ -216,7 +216,7 @@ public class ComprobanteElectronicoService implements Runnable {
                 etapaActual++;
             }
 
-            if (etapaActual == ETAPA_AUTORIZAR) {
+            if (etapaActual.equals(ETAPA_AUTORIZAR)) {
                 autorizarSri();
                 if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
                 System.out.println("autorizarSri()");
@@ -227,7 +227,7 @@ public class ComprobanteElectronicoService implements Runnable {
                 etapaActual++;
             }
 
-            if (etapaActual == ETAPA_RIDE) {
+            if (etapaActual.equals(ETAPA_RIDE)) {
                 generarRide();
                 if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
                 //generarRide();
@@ -239,7 +239,7 @@ public class ComprobanteElectronicoService implements Runnable {
                 etapaActual++;
             }
 
-            if (etapaActual == ETAPA_ENVIO_COMPROBANTE) {
+            if (etapaActual.equals(ETAPA_ENVIO_COMPROBANTE)) {
                 if(correosElectronicos!=null && correosElectronicos.size()>0)
                     enviarComprobante();
                 

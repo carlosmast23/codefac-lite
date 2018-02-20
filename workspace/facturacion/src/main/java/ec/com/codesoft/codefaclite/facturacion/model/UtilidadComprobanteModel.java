@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.facturacion.callback.ClienteUtilidadImplComprobante;
 import ec.com.codesoft.codefaclite.facturacion.panel.UtilidadComprobantePanel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
@@ -31,6 +32,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NotaCreditoEnumEs
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -242,30 +244,20 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                /*
+                
                 try {
                     //TODO: Revisar esta validacion temporal porque no existe la carpeta de no autorizado
                     if(getCmbCarpetaComprobante().getSelectedItem().equals(ComprobanteElectronicoService.CARPETA_NO_AUTORIZADOS))
                     {
                         return ;
                     }
-                    
-                    String path = session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor;
-                    String modoFacturacion=session.getParametrosCodefac().get(ParametroCodefac.MODO_FACTURACION).valor;
-                    String pathComprobantes="";
-                    if(modoFacturacion.equals(ComprobanteElectronicoService.MODO_PRODUCCION))
-                        pathComprobantes=DirectorioCodefac.COMPROBANTES_PRODUCCION.getDirectorio();
-                    else
-                        pathComprobantes=DirectorioCodefac.COMPROBANTES_PRUEBAS.getDirectorio();
-                    
-                    
-                    //File[] archivos = ComprobantesElectronicosUtil.getComprobantesByFolder(path, getCmbCarpetaComprobante().getSelectedItem().toString());
-                    comprobantes= ComprobantesElectronicosUtil.getComprobantesObjectByFolder(pathComprobantes,getCmbCarpetaComprobante().getSelectedItem().toString());
+                    ComprobanteServiceIf comprobanteServiceIf=ServiceFactory.getFactory().getComprobanteServiceIf();
+                    comprobantes= comprobanteServiceIf.getComprobantesObjectByFolder(getCmbCarpetaComprobante().getSelectedItem().toString());
                     cargarDatosComprobantesTabla(comprobantes);
                     cargarSiguienteEtapaPorCarpeta(getCmbCarpetaComprobante().getSelectedItem().toString());
                 } catch (RemoteException ex) {
                     Logger.getLogger(UtilidadComprobanteModel.class.getName()).log(Level.SEVERE, null, ex);
-                }*/
+                }
             }
         });
 
@@ -290,27 +282,27 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
                 switch (etapa) {
 
                     case ComprobanteElectronicoService.CARPETA_GENERADOS:
-                        procesarComprabante(ComprobanteElectronicoService.ETAPA_GENERAR+1,etapaLimite);
+                        procesarComprobante(ComprobanteElectronicoService.ETAPA_GENERAR+1,etapaLimite);
                         break;
 
                     case ComprobanteElectronicoService.CARPETA_FIRMADOS:
-                        procesarComprabante(ComprobanteElectronicoService.ETAPA_FIRMAR+1,etapaLimite);
+                        procesarComprobante(ComprobanteElectronicoService.ETAPA_FIRMAR+1,etapaLimite);
                         break;
 
                     case ComprobanteElectronicoService.CARPETA_ENVIADOS:
-                        procesarComprabante(ComprobanteElectronicoService.ETAPA_ENVIAR+1,etapaLimite);
+                        procesarComprobante(ComprobanteElectronicoService.ETAPA_ENVIAR+1,etapaLimite);
                         break;
                         
                     case ComprobanteElectronicoService.CARPETA_AUTORIZADOS:
-                        procesarComprabante(ComprobanteElectronicoService.ETAPA_AUTORIZAR+1,etapaLimite);
+                        procesarComprobante(ComprobanteElectronicoService.ETAPA_AUTORIZAR+1,etapaLimite);
                         break;
 
                     case ComprobanteElectronicoService.CARPETA_NO_AUTORIZADOS:
-                        procesarComprabante(ComprobanteElectronicoService.ETAPA_AUTORIZAR+1,etapaLimite);
+                        procesarComprobante(ComprobanteElectronicoService.ETAPA_AUTORIZAR+1,etapaLimite);
                         break;
                         
                     case ComprobanteElectronicoService.CARPETA_RIDE:
-                        procesarComprabante(ComprobanteElectronicoService.ETAPA_RIDE+1,etapaLimite);
+                        procesarComprobante(ComprobanteElectronicoService.ETAPA_RIDE+1,etapaLimite);
                         break;
                 }
 
@@ -318,6 +310,7 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
         });
     }
 
+    /*
     private ListenerComprobanteElectronico listener = new ListenerComprobanteElectronico() {
         @Override
         public void termino() {
@@ -379,18 +372,23 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
             estadoNormal();
             DialogoCodefac.mensaje("Dialogo", cee.getMessage(), 1);
         }
-    };
+    };*/
     
-    private void procesarComprabante(Integer etapaInicial,Integer etapaLimite) 
+    private void procesarComprobante(Integer etapaInicial,Integer etapaLimite) 
     {
-        /*
-        FacturacionElectronica servicio = new FacturacionElectronica(session, panelPadre);
-        servicio.setCorreosAdicionales(obtenerCorreos());
-        servicio.getServicio().addActionListerComprobanteElectronico(listener);
-        estadoCargando();
-        String claveAcceso = tableModel.getValueAt(getTblComprobantes().getSelectedRow(), 0).toString().replace(".xml", "");
-        servicio.setClaveAcceso(claveAcceso);
-        servicio.procesarComprobanteEtapa(etapaInicial,etapaLimite);*/
+        
+        try {
+            String claveAcceso = tableModel.getValueAt(getTblComprobantes().getSelectedRow(), 0).toString().replace(".xml", "");
+            
+            ComprobanteServiceIf comprobanteServiceIf=ServiceFactory.getFactory().getComprobanteServiceIf();
+            ClienteUtilidadImplComprobante callBack=new ClienteUtilidadImplComprobante(this);
+
+            estadoCargando();            
+            comprobanteServiceIf.procesarComprobantesPendiente(etapaInicial, etapaLimite,claveAcceso,obtenerCorreos(),callBack);
+
+        } catch (RemoteException ex) {
+            Logger.getLogger(UtilidadComprobanteModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private List<String> obtenerCorreos()
@@ -404,16 +402,16 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
 
     
 
-    private void etapaGenerados(Boolean completarTodasEtapas) {
+    //private void etapaGenerados(Boolean completarTodasEtapas) {
         /*
         FacturacionElectronica servicio = new FacturacionElectronica(session, panelPadre);
         servicio.getServicio().addActionListerComprobanteElectronico(listener);
         estadoCargando();
         String claveAcceso = tableModel.getValueAt(getTblComprobantes().getSelectedRow(), 0).toString().replace(".xml", "");
         servicio.setClaveAcceso(claveAcceso);
-        //servicio.procesarComprobanteEtapa(ComprobanteElectronicoService.ETAPA_GENERAR + 1, completarTodasEtapas);
-        */
-    }
+        //servicio.procesarComprobanteEtapa(ComprobanteElectronicoService.ETAPA_GENERAR + 1, completarTodasEtapas);*/
+        
+    //}
 
     private void iniciarComponentes() {
         /**

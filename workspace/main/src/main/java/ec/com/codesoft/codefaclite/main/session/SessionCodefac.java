@@ -6,11 +6,13 @@
 package ec.com.codesoft.codefaclite.main.session;
 
 import ec.com.codesoft.codefaclite.controlador.session.SessionCodefacInterface;
+import ec.com.codesoft.codefaclite.main.license.Licencia;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -30,8 +32,10 @@ public class SessionCodefac implements SessionCodefacInterface{
     private List<Perfil> perfiles;
     private TipoLicenciaEnum tipoLicenciaEnum;
     private String usuarioLicencia; 
+    private Licencia licencia;
+    private Map<ModuloCodefacEnum, Boolean> modulos;
 
-    public SessionCodefac() {
+    public SessionCodefac() {       
     }
 
     public SessionCodefac(Usuario usuario, Empresa empresa) {
@@ -113,6 +117,16 @@ public class SessionCodefac implements SessionCodefacInterface{
     public String getUsuarioLicencia() {
         return this.usuarioLicencia;
     }
+
+    @Override
+    public Map<ModuloCodefacEnum, Boolean> getModulosMap() {
+        return modulos;
+    }
+
+    public void setModulos(Map<ModuloCodefacEnum, Boolean> modulos) {
+        this.modulos = modulos;
+    }
+    
     
     
     

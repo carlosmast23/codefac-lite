@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
@@ -14,7 +15,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author Carlos
  */
 @XmlType(propOrder = {"formaPago","total","plazo","unidadTiempo"})
-public class FormaPagoComprobante {    
+public class FormaPagoComprobante implements Serializable{    
     
     private String formaPago;
     

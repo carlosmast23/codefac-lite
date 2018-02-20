@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.xml.bind.annotation.XmlElement;
 
@@ -12,7 +13,7 @@ import javax.xml.bind.annotation.XmlElement;
  *
  * @author Carlos
  */
-public class Compensacion {
+public class Compensacion implements Serializable{
     private String codigo;
     private BigDecimal tarifa;
     private BigDecimal valor;

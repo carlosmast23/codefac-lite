@@ -134,7 +134,7 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
 
     @Override
     public String getNombre() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "Asociar Proveedor Producto";
     }
 
     @Override

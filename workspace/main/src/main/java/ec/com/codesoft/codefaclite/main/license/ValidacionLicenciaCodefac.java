@@ -20,6 +20,7 @@ import javax.mail.Session;
 import java.net.Socket;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,14 +31,16 @@ import java.util.logging.Logger;
  * @author Carlos
  */
 public class ValidacionLicenciaCodefac{
+    
     private static final String NOMBRE_LICENCIA="/licencia/licence.codefac";
-    public static final String USUARIO="usuario";
+    /*public static final String USUARIO="usuario";
     public static final String LICENCIA="licencia";
     public static final String TIPO_LICENCIA="tipo";
+    
     /**
      * Campo que identifica la cantidad de usuarios de clientes permitidas
      */
-    public static final String CANTIDAD_USUARIOS="clientes";
+    //public static final String CANTIDAD_USUARIOS="clientes";
     
     private Licencia licencia;
     private String path;
@@ -45,7 +48,8 @@ public class ValidacionLicenciaCodefac{
     public ValidacionLicenciaCodefac(String path) {
         this.path=path;        
         Properties p = obtenerLicencia();
-        licencia=new Licencia(p);
+        licencia=new Licencia();
+        licencia.cargarLicenciaFisica(p);
     }
 
     public ValidacionLicenciaCodefac() {
@@ -120,19 +124,32 @@ public class ValidacionLicenciaCodefac{
         }
     }
     
-    public Properties crearLicencia(String usuario,String tipoLicencia,Integer cantidadUsuarios)
+    /**
+     * Metodo que crea la licencia
+     * @return 
+     */
+    public Properties crearLicenciaMaquina(Licencia licencia)
     {
         FileOutputStream fr=null;
         try {
-            String licencia=usuario+":"+UtilidadVarios.obtenerMac()+":"+tipoLicencia+":"+cantidadUsuarios;            
-            licencia=BCrypt.hashpw(licencia,BCrypt.gensalt(12));
+
+            //String licencia=usuario+":"+UtilidadVarios.obtenerMac()+":"+tipoLicencia+":"+cantidadUsuarios;            
+            String modulosStr=licencia.getModulosStr();
+            String licenciaStr=licencia.getUsuario()+":"+UtilidadVarios.obtenerMac()+":"+licencia.getTipoLicenciaEnum().getLetra()+":"+licencia.getCantidadClientes()+":"+modulosStr;            
+            licenciaStr=BCrypt.hashpw(licenciaStr,BCrypt.gensalt(12));
             Properties prop = new Properties();
-            prop.setProperty(USUARIO,usuario);
-            prop.setProperty(LICENCIA,licencia);
-            prop.setProperty(CANTIDAD_USUARIOS,cantidadUsuarios.toString());
+            prop.setProperty(Licencia.PROPIEDAD_USUARIO,licencia.getUsuario());
+            prop.setProperty(Licencia.PROPIEDAD_LICENCIA,licenciaStr);
+            prop.setProperty(Licencia.PROPIEDAD_CANTIDAD_CLIENTES,licencia.getCantidadClientes().toString());
+                        
+            //setearPropiedadesModulos(prop,licen); //Setea los modulos activos
             
-            TipoLicenciaEnum enumTipoLicencia=TipoLicenciaEnum.getEnumByLetra(tipoLicencia);
-            prop.setProperty(TIPO_LICENCIA,enumTipoLicencia.getNombre());
+            TipoLicenciaEnum enumTipoLicencia=licencia.getTipoLicenciaEnum();
+            prop.setProperty(Licencia.PROPIEDAD_TIPO_LICENCIA,enumTipoLicencia.getNombre());
+            
+            //Llea en el properties los datos adicionales del modulo
+            licencia.llenarPropertiesModulo(prop);
+            
             File file=new File(path+NOMBRE_LICENCIA);
             
              //crear toda la ruta si no existe
@@ -160,18 +177,22 @@ public class ValidacionLicenciaCodefac{
         return null;
     }
     
-    public Properties crearLicencia(String usuario,String licencia,String tipoLicencia,Integer cantidadUsuarios)
+    
+    public Properties crearLicenciaDescargada(Licencia licencia)
     {
         FileOutputStream fr=null;
         try {
             //String licencia=usuario+":"+UtilidadVarios.obtenerMac();            
             //licencia=BCrypt.hashpw(licencia,BCrypt.gensalt(12));
             Properties prop = new Properties();
-            prop.setProperty(USUARIO,usuario);
-            prop.setProperty(LICENCIA,licencia);
-            prop.setProperty(CANTIDAD_USUARIOS,cantidadUsuarios.toString());
-            TipoLicenciaEnum enumTipoLicencia = TipoLicenciaEnum.getEnumByLetra(tipoLicencia);
-            prop.setProperty(TIPO_LICENCIA,enumTipoLicencia.getNombre());
+            prop.setProperty(Licencia.PROPIEDAD_USUARIO,licencia.getUsuario());
+            prop.setProperty(Licencia.PROPIEDAD_LICENCIA,licencia.getLicencia());
+            prop.setProperty(Licencia.PROPIEDAD_CANTIDAD_CLIENTES,licencia.getCantidadClientes().toString());            
+            //setearPropiedadesModulos(prop,modulosActivos); //Setea los modulos activos
+            //TipoLicenciaEnum enumTipoLicencia = TipoLicenciaEnum.getEnumByLetra(licencia.getTipoLicenciaEnum());
+            prop.setProperty(Licencia.PROPIEDAD_TIPO_LICENCIA,licencia.getTipoLicenciaEnum().getNombre());
+            
+            licencia.llenarPropertiesModulo(prop);
             File file=new File(path+NOMBRE_LICENCIA);
             
             //crear toda la ruta si no existe
@@ -198,6 +219,22 @@ public class ValidacionLicenciaCodefac{
         }
         return null;
     }
+    
+    /*
+    private void setearPropiedadesModulos(Properties propiedades,List<String> modulosActivos)
+    {
+        String[] modulos=Licencia.MODULOS;
+        for (String modulo : modulos) {
+            if(modulosActivos.contains(modulo))
+            {
+                propiedades.setProperty(modulo,"si");
+            }
+            else
+            {
+                propiedades.setProperty(modulo,"no");
+            }
+        }
+    }*/
    /* 
     static void saveProperties(Properties p)throws IOException
     {

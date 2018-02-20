@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general;
 
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
+import java.io.Serializable;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -14,7 +15,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author Carlos
  */
 @XmlType(propOrder = {"ambiente","tipoEmision","razonSocial","nombreComercial","ruc","claveAcceso","codigoDocumento","establecimiento","puntoEmision","secuencial","direcionMatriz"})
-public class InformacionTributaria {
+public class InformacionTributaria implements Serializable{
     private String ambiente;
     private String tipoEmision;
     private String razonSocial;

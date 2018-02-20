@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceIf;
 import java.rmi.RemoteException;
@@ -67,5 +68,12 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
     public TipoLicenciaEnum getTipoLicencia() throws RemoteException {
         return UtilidadesServidor.tipoLicenciaEnum;
     }
+    
+    @Override
+    public Map<ModuloCodefacEnum,Boolean> getModulosSistema()  throws RemoteException
+    {
+        return UtilidadesServidor.modulosMap;
+    }
+    
 
 }

@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.controller;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CategoriaProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraDetalleServiceIf;
@@ -13,20 +14,26 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteFisicoDisenioServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexItemEspecificoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
+//import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.MatriculaEstudianteServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServicioIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PeriodoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoEnsambleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RubrosNivelServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
@@ -98,6 +105,13 @@ public abstract class ServiceFactory {
     public UsuarioServicioIf getUsuarioServicioIf(){return (UsuarioServicioIf) getRecursosRMI(UsuarioServicioIf.class);};
     public ComprobanteServiceIf getComprobanteServiceIf(){return (ComprobanteServiceIf) getRecursosRMI(ComprobanteServiceIf.class);};
     public RecursosServiceIf getRecursosServiceIf(){return (RecursosServiceIf) getRecursosRMI(RecursosServiceIf.class);};
+    public AulaServiceIf getAulaServiceIf(){return (AulaServiceIf) getRecursosRMI(AulaServiceIf.class);};
+    public EstudianteServiceIf getEstudianteServiceIf(){return (EstudianteServiceIf) getRecursosRMI(EstudianteServiceIf.class);};
+    //public MatriculaEstudianteServiceIf getMatriculaEstudianteServiceIf(){return (MatriculaEstudianteServiceIf) getRecursosRMI(MatriculaEstudianteServiceIf.class);};
+    public NivelAcademicoServiceIf getNivelAcademicoServiceIf(){return (NivelAcademicoServiceIf) getRecursosRMI(NivelAcademicoServiceIf.class);};
+    public NivelServiceIf getNivelServiceIf(){return (NivelServiceIf) getRecursosRMI(NivelServiceIf.class);};
+    public PeriodoServiceIf getPeriodoServiceIf(){return (PeriodoServiceIf) getRecursosRMI(PeriodoServiceIf.class);};
+    public RubrosNivelServiceIf getRubrosNivelServiceIf(){return (RubrosNivelServiceIf) getRecursosRMI(RubrosNivelServiceIf.class);};
     
     
     

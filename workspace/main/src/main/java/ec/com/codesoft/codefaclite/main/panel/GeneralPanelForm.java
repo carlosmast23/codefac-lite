@@ -73,31 +73,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         menuInicio = new javax.swing.JMenu();
         jMenuItemInicio = new javax.swing.JMenuItem();
         jMenuItemSalir = new javax.swing.JMenuItem();
-        menuFacturacion = new javax.swing.JMenu();
-        jMenuFactura = new javax.swing.JMenuItem();
-        jMenuItemMonitor = new javax.swing.JMenuItem();
-        jMenuItemNotaCredito = new javax.swing.JMenuItem();
-        jMenuItemFacturaReporte = new javax.swing.JMenuItem();
-        jMenuItemDisenador = new javax.swing.JMenuItem();
-        menuCompras = new javax.swing.JMenu();
-        jMenuCompra = new javax.swing.JMenuItem();
-        menuInventario = new javax.swing.JMenu();
-        jMenuItemAsociarProducto = new javax.swing.JMenuItem();
-        jMenuItemIngresarInventario = new javax.swing.JMenuItem();
-        menuBodega = new javax.swing.JMenuItem();
-        jMenuItemKardex = new javax.swing.JMenuItem();
-        jMenuItemInventarioEnsamble = new javax.swing.JMenuItem();
-        menuCatProducto = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        jMenuCliente = new javax.swing.JMenuItem();
-        jMenuItemReporteCliente = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
-        jMenuProducto = new javax.swing.JMenuItem();
-        jMenuItemReporteProducto = new javax.swing.JMenuItem();
-        menuConfiguracion = new javax.swing.JMenu();
-        jMenuComprobanteConfig = new javax.swing.JMenuItem();
-        jMenuEmisor = new javax.swing.JMenuItem();
-        jMenuItemUtilidades = new javax.swing.JMenuItem();
+
         jMenuUtilidades = new javax.swing.JMenu();
         jMenuCalculadora = new javax.swing.JMenuItem();
         jMenu8 = new javax.swing.JMenu();
@@ -261,112 +237,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
         jMenuBar1.add(menuInicio);
 
-        menuFacturacion.setText("Facturacion");
-
-        jMenuFactura.setText("Factura");
-        menuFacturacion.add(jMenuFactura);
-
-        jMenuItemMonitor.setText("Monitor");
-        menuFacturacion.add(jMenuItemMonitor);
-
-        jMenuItemNotaCredito.setText("Nota Credito");
-        menuFacturacion.add(jMenuItemNotaCredito);
-
-        jMenuItemFacturaReporte.setText("Reporte");
-        jMenuItemFacturaReporte.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemFacturaReporteActionPerformed(evt);
-            }
-        });
-        menuFacturacion.add(jMenuItemFacturaReporte);
-
-        jMenuItemDisenador.setText("Diseñador");
-        jMenuItemDisenador.setToolTipText("Pantalla para diseñar formatos de facturas fisicas");
-        menuFacturacion.add(jMenuItemDisenador);
-
-        jMenuBar1.add(menuFacturacion);
-
-        menuCompras.setText("Compras");
-
-        jMenuCompra.setText("Compra");
-        menuCompras.add(jMenuCompra);
-
-        jMenuBar1.add(menuCompras);
-
-        menuInventario.setText("Inventario");
-
-        jMenuItemAsociarProducto.setText("Asociar producto");
-        jMenuItemAsociarProducto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemAsociarProductoActionPerformed(evt);
-            }
-        });
-        menuInventario.add(jMenuItemAsociarProducto);
-
-        jMenuItemIngresarInventario.setText("Ingresar Inventario");
-        menuInventario.add(jMenuItemIngresarInventario);
-
-        menuBodega.setText("Bodega");
-        menuBodega.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuBodegaActionPerformed(evt);
-            }
-        });
-        menuInventario.add(menuBodega);
-
-        jMenuItemKardex.setText("Kardex");
-        menuInventario.add(jMenuItemKardex);
-
-        jMenuItemInventarioEnsamble.setText("Inventario Ensamble");
-        menuInventario.add(jMenuItemInventarioEnsamble);
-
-        menuCatProducto.setText("Categoria Producto");
-        menuInventario.add(menuCatProducto);
-
-        jMenuBar1.add(menuInventario);
-
-        jMenu2.setText("Clientes");
-
-        jMenuCliente.setText("Gestionar");
-        jMenuCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuClienteActionPerformed(evt);
-            }
-        });
-        jMenu2.add(jMenuCliente);
-
-        jMenuItemReporteCliente.setText("Reporte");
-        jMenu2.add(jMenuItemReporteCliente);
-
-        jMenuBar1.add(jMenu2);
-
-        jMenu3.setText("Productos");
-
-        jMenuProducto.setText("Gestionar");
-        jMenu3.add(jMenuProducto);
-
-        jMenuItemReporteProducto.setText("Reporte");
-        jMenu3.add(jMenuItemReporteProducto);
-
-        jMenuBar1.add(jMenu3);
-
-        menuConfiguracion.setText("Configuraciones");
-
-        jMenuComprobanteConfig.setText("Comprobante");
-        jMenuComprobanteConfig.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuComprobanteConfigActionPerformed(evt);
-            }
-        });
-        menuConfiguracion.add(jMenuComprobanteConfig);
-
-        jMenuEmisor.setText("Empresa");
-        menuConfiguracion.add(jMenuEmisor);
-
-        jMenuItemUtilidades.setText("Utilidades");
-        menuConfiguracion.add(jMenuItemUtilidades);
-
-        jMenuBar1.add(menuConfiguracion);
 
         jMenuUtilidades.setText("Utilidades");
 
@@ -432,14 +302,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
        
     }//GEN-LAST:event_btnActualizarActionPerformed
 
-    private void jMenuClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuClienteActionPerformed
-       
-    }//GEN-LAST:event_jMenuClienteActionPerformed
-
-    private void jMenuComprobanteConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuComprobanteConfigActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuComprobanteConfigActionPerformed
-
     private void jMenuCalculadoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCalculadoraActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuCalculadoraActionPerformed
@@ -447,10 +309,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private void btnSalirPantallaPublicidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirPantallaPublicidadActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnSalirPantallaPublicidadActionPerformed
-
-    private void jMenuItemFacturaReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFacturaReporteActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItemFacturaReporteActionPerformed
 
     private void jMenuItemContenidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemContenidoActionPerformed
         // TODO add your handling code here:
@@ -460,13 +318,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItemActualizarLicenciaActionPerformed
 
-    private void jMenuItemAsociarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAsociarProductoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItemAsociarProductoActionPerformed
-
-    private void menuBodegaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuBodegaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menuBodegaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -526,33 +377,14 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu8;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuCalculadora;
-    private javax.swing.JMenuItem jMenuCliente;
-    private javax.swing.JMenuItem jMenuCompra;
-    private javax.swing.JMenuItem jMenuComprobanteConfig;
-    private javax.swing.JMenuItem jMenuEmisor;
-    private javax.swing.JMenuItem jMenuFactura;
     private javax.swing.JMenuItem jMenuItemAcerca;
     private javax.swing.JMenuItem jMenuItemActualizarLicencia;
-    private javax.swing.JMenuItem jMenuItemAsociarProducto;
     private javax.swing.JMenuItem jMenuItemContenido;
-    private javax.swing.JMenuItem jMenuItemDisenador;
-    private javax.swing.JMenuItem jMenuItemFacturaReporte;
-    private javax.swing.JMenuItem jMenuItemIngresarInventario;
     private javax.swing.JMenuItem jMenuItemInicio;
-    private javax.swing.JMenuItem jMenuItemInventarioEnsamble;
-    private javax.swing.JMenuItem jMenuItemKardex;
-    private javax.swing.JMenuItem jMenuItemMonitor;
-    private javax.swing.JMenuItem jMenuItemNotaCredito;
-    private javax.swing.JMenuItem jMenuItemReporteCliente;
-    private javax.swing.JMenuItem jMenuItemReporteProducto;
     private javax.swing.JMenuItem jMenuItemSalir;
-    private javax.swing.JMenuItem jMenuItemUtilidades;
-    private javax.swing.JMenuItem jMenuProducto;
     private javax.swing.JMenu jMenuUtilidades;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanelPublicidadBorde;
@@ -561,13 +393,8 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JSplitPane jSplitPanel;
     private javax.swing.JSplitPane jSplitPanelVerticalSecundario;
     private javax.swing.JLabel lblPiePagina;
-    private javax.swing.JMenuItem menuBodega;
-    private javax.swing.JMenuItem menuCatProducto;
-    private javax.swing.JMenu menuCompras;
-    private javax.swing.JMenu menuConfiguracion;
-    private javax.swing.JMenu menuFacturacion;
     private javax.swing.JMenu menuInicio;
-    private javax.swing.JMenu menuInventario;
+
     // End of variables declaration//GEN-END:variables
 
     public JMenuItem getjMenuItem1() {
@@ -598,22 +425,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         return btnActualizar;
     }
 
-    public JMenuItem getjMenuCliente() {
-        return jMenuCliente;
-    }
-
-    public void setjMenuCliente(JMenuItem jMenuCliente) {
-        this.jMenuCliente = jMenuCliente;
-    }
-
-    public JMenuItem getjMenuProducto() {
-        return jMenuProducto;
-    }
-
-    public void setjMenuProducto(JMenuItem jMenuProducto) {
-        this.jMenuProducto = jMenuProducto;
-    }
-    
     public void setBtnActualizar(JButton btnActualizar) {
         this.btnActualizar = btnActualizar;
     }
@@ -716,30 +527,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         this.btnNuevo = btnNuevo;
     }
 
-    public JMenuItem getjMenuFactura() {
-        return jMenuFactura;
-    }
-
-    public void setjMenuFactura(JMenuItem jMenuFactura) {
-        this.jMenuFactura = jMenuFactura;
-    }
-
-    public JMenuItem getjMenuEmisor() {
-        return jMenuEmisor;
-    }
-
-    public void setjMenuEmisor(JMenuItem jMenuEmisor) {
-        this.jMenuEmisor = jMenuEmisor;
-    }
-
-    public JMenuItem getjMenuComprobanteConfig() {
-        return jMenuComprobanteConfig;
-    }
-
-    public void setjMenuComprobanteConfig(JMenuItem jMenuComprobanteConfig) {
-        this.jMenuComprobanteConfig = jMenuComprobanteConfig;
-    }
-
     public JMenuItem getjMenuCalculadora() {
         return jMenuCalculadora;
     }
@@ -748,49 +535,11 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         this.jMenuCalculadora = jMenuCalculadora;
     }
 
-    public JMenuItem getjMenuItemMonitor() {
-        return jMenuItemMonitor;
-    }
 
     public JTabbedPane getjPanelSeleccion() {
         return jPanelSeleccion;
     }
 
-    public JMenuItem getjMenuItemUtilidades() {
-        return jMenuItemUtilidades;
-    }
-
-    public void setjMenuItemUtilidades(JMenuItem jMenuItemUtilidades) {
-        this.jMenuItemUtilidades = jMenuItemUtilidades;
-    }
-
-    public JMenuItem getjMenuItemNotaCredito() {
-        return jMenuItemNotaCredito;
-    }
-
-    public JMenuItem getjMenuItemFacturaReporte() {
-        return jMenuItemFacturaReporte;
-    }
-
-    public void setjMenuItemFacturaReporte(JMenuItem jMenuItemFacturaReporte) {
-        this.jMenuItemFacturaReporte = jMenuItemFacturaReporte;
-    }
-
-    public JMenuItem getjMenuItemReporteCliente() {
-        return jMenuItemReporteCliente;
-    }
-
-    public void setjMenuItemReporteCliente(JMenuItem jMenuItemReporteCliente) {
-        this.jMenuItemReporteCliente = jMenuItemReporteCliente;
-    }
-
-    public JMenuItem getjMenuItemReporteProducto() {
-        return jMenuItemReporteProducto;
-    }
-
-    public void setjMenuItemReporteProducto(JMenuItem jMenuItemReporteProducto) {
-        this.jMenuItemReporteProducto = jMenuItemReporteProducto;
-    }
 
     public JMenuItem getjMenuItemInicio() {
         return jMenuItemInicio;
@@ -840,74 +589,5 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         this.jMenuItemActualizarLicencia = jMenuItemActualizarLicencia;
     }
 
-    public JMenuItem getjMenuItemDisenador() {
-        return jMenuItemDisenador;
-    }
 
-    public void setjMenuItemDisenador(JMenuItem jMenuItemDisenador) {
-        this.jMenuItemDisenador = jMenuItemDisenador;
-    }
-
-    public JMenuItem getjMenuCompra() {
-        return jMenuCompra;
-    }
-
-    public void setjMenuCompra(JMenuItem jMenuCompra) {
-        this.jMenuCompra = jMenuCompra;
-    }
-
-    public JMenuItem getjMenuItemAsociarProducto() {
-        return jMenuItemAsociarProducto;
-    }
-
-    public void setjMenuItemAsociarProducto(JMenuItem jMenuItemAsociarProducto) {
-        this.jMenuItemAsociarProducto = jMenuItemAsociarProducto;
-    }
-
-    public JMenuItem getMenuBodega() {
-        return menuBodega;
-    }
-
-    public void setMenuBodega(JMenuItem menuBodega) {
-        this.menuBodega = menuBodega;
-    }
-
-    public JMenuItem getjMenuItemIngresarInventario() {
-        return jMenuItemIngresarInventario;
-    }
-
-    public void setjMenuItemIngresarInventario(JMenuItem jMenuItemIngresarInventario) {
-        this.jMenuItemIngresarInventario = jMenuItemIngresarInventario;
-    }
-
-    public JMenuItem getjMenuItemKardex() {
-        return jMenuItemKardex;
-    }
-
-    public void setjMenuItemKardex(JMenuItem jMenuItemKardex) {
-        this.jMenuItemKardex = jMenuItemKardex;
-    }
-
-    public JMenuItem getjMenuItemInventarioEnsamble() {
-        return jMenuItemInventarioEnsamble;
-    }
-
-    public void setjMenuItemInventarioEnsamble(JMenuItem jMenuItemInventarioEnsamble) {
-        this.jMenuItemInventarioEnsamble = jMenuItemInventarioEnsamble;
-    }
-
-    public JMenuItem getMenuCatProducto() {
-        return menuCatProducto;
-    }
-
-    public void setMenuCatProducto(JMenuItem menuCatProducto) {
-        this.menuCatProducto = menuCatProducto;
-    }
-    
-    
-    
-        
-    
-    
-        
 }
