@@ -51,10 +51,10 @@ public enum ModuloCodefacEnum {
     public ImageIcon getIcono() {
         return icono;
     }
-    
-    
-    
-    
-    
+
+    @Override
+    public String toString() {
+        return nombre;
+    }
     
 }

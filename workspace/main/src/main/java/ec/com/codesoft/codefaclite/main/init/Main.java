@@ -83,6 +83,7 @@ import ec.com.codesoft.codefaclite.servidor.service.KardexService;
 import ec.com.codesoft.codefaclite.servidor.service.NotaCreditoService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
 import ec.com.codesoft.codefaclite.servidor.service.PerfilServicio;
+import ec.com.codesoft.codefaclite.servidor.service.PermisoVentanaService;
 import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoEnsambleService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoProveedorService;
@@ -125,6 +126,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PermisoVentanaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
@@ -318,6 +320,7 @@ public class Main {
             mapRecursos.put(EstudianteService.class, EstudianteServiceIf.class);
             mapRecursos.put(NivelService.class, NivelServiceIf.class);
             mapRecursos.put(NivelAcademicoService.class, NivelAcademicoService.class);
+            mapRecursos.put(PermisoVentanaService.class, PermisoVentanaServiceIf.class);
             ServiceControllerServer.cargarRecursos(mapRecursos);
             System.out.println("servidor iniciado");
 

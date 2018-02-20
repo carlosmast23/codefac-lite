@@ -41,6 +41,7 @@
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Aula</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.PermisoVentana</class>
 
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
   </persistence-unit>
