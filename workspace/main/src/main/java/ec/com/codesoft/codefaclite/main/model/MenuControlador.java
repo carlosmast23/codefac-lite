@@ -23,7 +23,7 @@ import javax.swing.JMenuItem;
  */
 public class MenuControlador 
 {
-   private Class ventana;
+   private Class<GeneralPanelInterface> ventana;
    private boolean maximizado;
    private Object instance;
    
@@ -38,7 +38,7 @@ public class MenuControlador
     */
    private ModuloCodefacEnum[] modulosPermitidos;
    
-   public MenuControlador(Class ventana,ModuloCodefacEnum modulo,CategoriaMenuEnum categoriaMenu)
+   public MenuControlador(Class<GeneralPanelInterface> ventana,ModuloCodefacEnum modulo,CategoriaMenuEnum categoriaMenu)
    {
        this.ventana=ventana;
        this.modulo=modulo;
@@ -70,14 +70,14 @@ public class MenuControlador
      * Devuelve una instancia segun la clase grabada
      * @return 
      */
-    public Object getInstance()
+    public GeneralPanelInterface getInstance()
     {
        try {
            
            if(instance==null)
                instance=this.ventana.getConstructor().newInstance();
            
-           return instance;
+           return (GeneralPanelInterface) instance;
            
        } catch (NoSuchMethodException ex) {
            Logger.getLogger(MenuControlador.class.getName()).log(Level.SEVERE, null, ex);

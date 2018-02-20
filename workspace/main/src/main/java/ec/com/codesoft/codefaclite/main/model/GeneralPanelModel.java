@@ -59,6 +59,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.Panel;
 import java.awt.Point;
@@ -523,37 +524,40 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     {
         for (MenuControlador menuControlador : ventanasMenuList) {
             
-//            menuControlador.getMenuItem().addActionListener(new ActionListener() {
-//                @Override
-//                public void actionPerformed(ActionEvent e) {
-//                        /*
-//                        if(!menuControlador.verificarPermisoModulo(sessionCodefac.getModulosMap())) //Verifica si la pantalla tiene permisos para los modulos cargados en
-//                        {
-//                            //Si no tiene permise solo oculto el menu para que no acceda
-//                            menuControlador.getMenuItem().setVisible(false);
-//                            return; //termina la ejecucion porque no se agregan listener
-//                        }
-//                        menuControlador.getMenuItem().setVisible(true);*/
-//                    
-//                        ControladorCodefacInterface ventana= (ControladorCodefacInterface) menuControlador.getInstance();
-//                        if(!verificarPantallaCargada(ventana))
-//                        {
-//                            //Este artificio se realiza porque cuando se reutilizaba un referencia de la pantalla generaba problemas con los dialogos
-//                            ventana= (ControladorCodefacInterface) menuControlador.createNewInstance();
-//                            agregarListenerMenu(ventana,menuControlador.isMaximizado());                    
-//                        }                        
-//                        else
-//                        {
-//                            try {
-//                                ventana.setSelected(true);
-//                            } catch (PropertyVetoException ex) {
-//                                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-//                            }
-//                        }
-//                        
-//                        
-//                }
-//            });
+            if(menuControlador.getJmenuItem()==null)
+                continue; //Si no tiene asiganod un jmenu item continua al siguiente menu
+            
+            menuControlador.getJmenuItem().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                        /*
+                        if(!menuControlador.verificarPermisoModulo(sessionCodefac.getModulosMap())) //Verifica si la pantalla tiene permisos para los modulos cargados en
+                        {
+                            //Si no tiene permise solo oculto el menu para que no acceda
+                            menuControlador.getMenuItem().setVisible(false);
+                            return; //termina la ejecucion porque no se agregan listener
+                        }
+                        menuControlador.getMenuItem().setVisible(true);*/
+                    
+                        ControladorCodefacInterface ventana= (ControladorCodefacInterface) menuControlador.getInstance();
+                        if(!verificarPantallaCargada(ventana))
+                        {
+                            //Este artificio se realiza porque cuando se reutilizaba un referencia de la pantalla generaba problemas con los dialogos
+                            ventana= (ControladorCodefacInterface) menuControlador.createNewInstance();
+                            agregarListenerMenu(ventana,menuControlador.isMaximizado());                    
+                        }                        
+                        else
+                        {
+                            try {
+                                ventana.setSelected(true);
+                            } catch (PropertyVetoException ex) {
+                                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                        
+                        
+                }
+            });
         }
         
 
@@ -1818,7 +1822,6 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         for (JMenu menu : menus) {
             this.getJMenuBar().add(menu);
         }
-        
         //actualizarMenuCodefac();
         agregarListenerMenu();
     }
@@ -1836,15 +1839,32 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             if(activo)
             {
                 JMenu menuModulo = new JMenu(moduloSistema.getNombre());
+                menuModulo.setIcon(moduloSistema.getIcono());
+                menuModulo.setFont(new Font("Arial",2,15));
                 for (CategoriaMenuEnum categoriaEnum : CategoriaMenuEnum.values()) {
                     JMenu menuCategoria=new JMenu(categoriaEnum.getNombre());
+                    menuCategoria.setIcon(categoriaEnum.getIcono());
+                    menuCategoria.setFont(new Font("Arial", 0, 13));
                     
                     for (MenuControlador menuControlador : ventanasMenuList) {
                         //Verificar si el modulo y la categoria son las mismas entonces las carga
                         if (menuControlador.getModulo().equals(moduloSistema) && menuControlador.getCategoriaMenu().equals(categoriaEnum)) {
-                            menuControlador.setJmenuItem(menuCategoria);
-                            JMenuItem menuVentana=new JMenuItem("Nuevo");
+                            
+                            String nombreVentana="Sin nombre";
+                            try
+                            {
+                                nombreVentana=menuControlador.getInstance().getNombre();
+                            }
+                            catch(java.lang.UnsupportedOperationException uoe)
+                            {
+                                System.err.println(menuControlador.getClass().getSimpleName()+": Ventana sin implementar nombre");
+                            }
+
+                            JMenuItem menuVentana = new JMenuItem(nombreVentana);
+                            menuVentana.setFont(new Font("Arial", 0, 13));
                             menuCategoria.add(menuVentana);
+
+                            menuControlador.setJmenuItem(menuVentana);
                         }
                     }
                     menuModulo.add(menuCategoria);

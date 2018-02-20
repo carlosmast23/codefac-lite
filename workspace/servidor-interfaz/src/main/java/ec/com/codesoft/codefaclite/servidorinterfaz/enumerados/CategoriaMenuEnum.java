@@ -5,23 +5,38 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.enumerados;
 
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import java.net.URL;
+import javax.swing.ImageIcon;
+
 /**
  *
  * @author Carlos
  */
 public enum CategoriaMenuEnum {
-    GESTIONAR("Gestionar"),
-    PROCESOS("Procesos"),
-    REPORTES("Reportes");
+    GESTIONAR("Gestionar",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("categoriamenu/gestionar.png")),
+    PROCESOS("Procesos",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("categoriamenu/proceso.png")),
+    REPORTES("Reportes",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("categoriamenu/reporte.png"));
     
     private String nombre;
+    private ImageIcon icono;
 
-    private CategoriaMenuEnum(String nombre) {
+    private CategoriaMenuEnum(String nombre,URL path ) {
         this.nombre = nombre;
+        setImageIcon(path);
+    }
+    
+    private void setImageIcon(URL path) {
+        icono = new ImageIcon(path);
     }
 
     public String getNombre() {
         return nombre;
     }
+
+    public ImageIcon getIcono() {
+        return icono;
+    }
+    
     
 }
