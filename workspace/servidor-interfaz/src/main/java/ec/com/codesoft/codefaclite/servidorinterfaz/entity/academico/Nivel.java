@@ -19,27 +19,28 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "Nivel")
 public class Nivel {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    private Long id;
-    
+    private Long idNivel;
+
     private Integer orden;
-    
+
     private Nivel nivelAnterior;
-    
+
     private String descripcion;
+    private String estado;
 
     public Nivel() {
     }
 
-    public Long getId() {
-        return id;
+    public Long getIdNivel() {
+        return idNivel;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdNivel(Long idNivel) {
+        this.idNivel = idNivel;
     }
 
     public Integer getOrden() {
@@ -65,8 +66,14 @@ public class Nivel {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-    
-    
-    
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
     
 }

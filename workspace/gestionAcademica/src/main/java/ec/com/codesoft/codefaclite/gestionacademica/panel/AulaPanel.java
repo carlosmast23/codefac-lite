@@ -7,6 +7,9 @@ package ec.com.codesoft.codefaclite.gestionacademica.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.gestionacademica.model.AulaModel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.AulaEnumEstado;
+import javax.swing.JComboBox;
+import javax.swing.JTextField;
 
 /**
  *
@@ -58,8 +61,6 @@ public abstract class AulaPanel extends ControladorCodefacInterface {
                 txtUbicacionActionPerformed(evt);
             }
         });
-
-        cmbEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -120,7 +121,7 @@ public abstract class AulaPanel extends ControladorCodefacInterface {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> cmbEstado;
+    private javax.swing.JComboBox<AulaEnumEstado> cmbEstado;
     private javax.swing.JLabel lblCapacidad;
     private javax.swing.JLabel lblEstado;
     private javax.swing.JLabel lblNombre;
@@ -129,4 +130,30 @@ public abstract class AulaPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtUbicacion;
     // End of variables declaration//GEN-END:variables
+
+  
+    public JTextField getTxtCapacidad() {
+        return txtCapacidad;
+    }
+
+    public void setTxtCapacidad(JTextField txtCapacidad) {
+        this.txtCapacidad = txtCapacidad;
+    }
+
+    public JTextField getTxtNombre() {
+        return txtNombre;
+    }
+
+    public void setTxtNombre(JTextField txtNombre) {
+        this.txtNombre = txtNombre;
+    }
+
+    public JTextField getTxtUbicacion() {
+        return txtUbicacion;
+    }
+
+    public void setTxtUbicacion(JTextField txtUbicacion) {
+        this.txtUbicacion = txtUbicacion;
+    }
+
 }

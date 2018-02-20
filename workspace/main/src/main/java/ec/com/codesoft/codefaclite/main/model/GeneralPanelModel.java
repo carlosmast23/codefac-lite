@@ -1818,46 +1818,85 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     public void setVentanasMenuList(List<MenuControlador> ventanasMenuList) {
         this.ventanasMenuList = ventanasMenuList;
         
+        this.getJMenuBar().removeAll();
         List<JMenu> menus=construirMenuDinamico();
+        this.getJMenuBar().add(getjMenuInicio());
+        this.getJMenuBar().add(getjMenuUtilidades());
+        
         for (JMenu menu : menus) {
             this.getJMenuBar().add(menu);
         }
+        this.getJMenuBar().add(getjMenuAyuda());
         //actualizarMenuCodefac();
         agregarListenerMenu();
     }
+    
+    private boolean isModuloPermitido(ModuloCodefacEnum moduloVerificar)
+    {
+        Map<ModuloCodefacEnum, Boolean> modulosPermitidos =sessionCodefac.getModulosMap();
+        for (Map.Entry<ModuloCodefacEnum, Boolean> entry : modulosPermitidos.entrySet()) {
+            ModuloCodefacEnum key = entry.getKey();
+            Boolean value = entry.getValue();
+            
+            if(value)
+            {
+                if(moduloVerificar.equals(key))
+                {
+                    return true;
+                }
+            }
+            
+        }
+        return false;
+    
+    }
+    private static final Logger LOG = Logger.getLogger(GeneralPanelModel.class.getName());
     
     private List<JMenu> construirMenuDinamico()
     {
         List<JMenu> menus=new ArrayList<JMenu>();
         
-        sessionCodefac.getModulosMap();
-        for (Map.Entry<ModuloCodefacEnum, Boolean> entry : sessionCodefac.getModulosMap().entrySet()) {
-            ModuloCodefacEnum moduloSistema = entry.getKey();
-            Boolean activo = entry.getValue();
-            
-            //Solo cargar las pantallas de los modulos contratados
-            if(activo)
-            {
+                
+        for (ModuloCodefacEnum moduloSistema : ModuloCodefacEnum.values()) {
+
                 JMenu menuModulo = new JMenu(moduloSistema.getNombre());
                 menuModulo.setIcon(moduloSistema.getIcono());
                 menuModulo.setFont(new Font("Arial",2,15));
+                boolean existenCategorias=false;
                 for (CategoriaMenuEnum categoriaEnum : CategoriaMenuEnum.values()) {
                     JMenu menuCategoria=new JMenu(categoriaEnum.getNombre());
                     menuCategoria.setIcon(categoriaEnum.getIcono());
                     menuCategoria.setFont(new Font("Arial", 0, 13));
                     
+                    boolean existenMenuItem=false;
                     for (MenuControlador menuControlador : ventanasMenuList) {
-                        //Verificar si el modulo y la categoria son las mismas entonces las carga
-                        if (menuControlador.getModulo().equals(moduloSistema) && menuControlador.getCategoriaMenu().equals(categoriaEnum)) {
-                            
-                            String nombreVentana="Sin nombre";
-                            try
+                        
+                        //Verificacion cuando es un modulo habilitado
+                        boolean agregarAlMenu=false;
+                        if(isModuloPermitido(moduloSistema))
+                        {
+                            if(menuControlador.getModulo().equals(moduloSistema))
                             {
-                                nombreVentana=menuControlador.getInstance().getNombre();
+                                agregarAlMenu=true;
                             }
-                            catch(java.lang.UnsupportedOperationException uoe)
+                        }
+                        else //Verificacion cuando no es un modulo habilitado
+                        {
+                            if(menuControlador.verificarPermisoModuloAdicional(sessionCodefac.getModulosMap()))
                             {
-                                System.err.println(menuControlador.getClass().getSimpleName()+": Ventana sin implementar nombre");
+                                agregarAlMenu=true;
+                            }
+                        
+                        }
+                        
+                        
+                        if (menuControlador.getCategoriaMenu().equals(categoriaEnum)&& agregarAlMenu) {
+                            existenMenuItem = true;
+                            String nombreVentana = "Sin nombre";
+                            try {
+                                nombreVentana = menuControlador.getInstance().getNombre();
+                            } catch (java.lang.UnsupportedOperationException uoe) {
+                                System.err.println(menuControlador.getClass().getSimpleName() + ": Ventana sin implementar nombre");
                             }
 
                             JMenuItem menuVentana = new JMenuItem(nombreVentana);
@@ -1866,11 +1905,21 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
                             menuControlador.setJmenuItem(menuVentana);
                         }
+                        
                     }
-                    menuModulo.add(menuCategoria);
-                }               
-                menus.add(menuModulo);
-            }
+                    
+                    if(existenMenuItem)
+                    {
+                        menuModulo.add(menuCategoria);
+                        existenCategorias=true;
+                    }
+                    
+                } 
+                if(existenCategorias)
+                {
+                    menus.add(menuModulo);
+                }
+            //}
             
             
         }

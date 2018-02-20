@@ -68,6 +68,11 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
         this.facade.edit(entity);
     }
     
+    public void eliminar(Entity entity)
+    {
+        this.facade.remove(entity);
+    }
+    
     public List<Entity> obtenerPorMap(Map<String,Object> parametros)
     {
         return this.facade.findByMap(parametros);

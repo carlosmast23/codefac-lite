@@ -32,6 +32,7 @@ import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
 import ec.com.codesoft.codefaclite.facturacion.model.NotaCreditoModel;
 import ec.com.codesoft.codefaclite.facturacion.model.UtilidadComprobanteModel;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
+import ec.com.codesoft.codefaclite.gestionacademica.model.AulaModel;
 import ec.com.codesoft.codefaclite.inventario.model.AsociarProductoProveedorModel;
 import ec.com.codesoft.codefaclite.inventario.model.BodegaModel;
 import ec.com.codesoft.codefaclite.inventario.model.CategoriaProductoModel;
@@ -798,7 +799,7 @@ public class Main {
         ModuloCodefacEnum[] modulosPermitidos={ModuloCodefacEnum.CRM};
         ventanas.add(new MenuControlador(ClienteModel.class,ModuloCodefacEnum.CRM,CategoriaMenuEnum.GESTIONAR,true,modulosPermitidos));
         
-        ventanas.add(new MenuControlador(ProductoModel.class,ModuloCodefacEnum.CRM,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
+        ventanas.add(new MenuControlador(ProductoModel.class,ModuloCodefacEnum.CRM,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION}));
         
         ventanas.add(new MenuControlador(FacturacionModel.class,ModuloCodefacEnum.FACTURACION,CategoriaMenuEnum.PROCESOS,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
         ventanas.add(new MenuControlador(EmpresaModel.class,ModuloCodefacEnum.CRM,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
@@ -817,6 +818,8 @@ public class Main {
         ventanas.add(new MenuControlador(IngresoInventarioModel.class,ModuloCodefacEnum.INVENTARIO,CategoriaMenuEnum.PROCESOS,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
         ventanas.add(new MenuControlador(KardexModel.class,ModuloCodefacEnum.INVENTARIO,CategoriaMenuEnum.REPORTES,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
         ventanas.add(new MenuControlador(InventarioEnsambleModel.class,ModuloCodefacEnum.INVENTARIO,CategoriaMenuEnum.PROCESOS,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
+        
+       ventanas.add(new MenuControlador(AulaModel.class,ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.GESTIONAR,true));
 
         return ventanas;
 
