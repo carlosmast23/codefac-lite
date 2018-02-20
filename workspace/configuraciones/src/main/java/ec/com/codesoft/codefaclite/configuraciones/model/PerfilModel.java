@@ -9,6 +9,10 @@ import ec.com.codesoft.codefaclite.configuraciones.panel.PerfilPanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +24,7 @@ public class PerfilModel extends PerfilPanel{
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
+        agregarListener();
         //Cargar los modulos disponibles
         ModuloCodefacEnum[] modulos= ModuloCodefacEnum.values();
         getCmbModulo().removeAllItems();
@@ -37,7 +42,22 @@ public class PerfilModel extends PerfilPanel{
             getCmbCategoria().addItem(categoria);
         }
         
+        cargarVentanasSeleccionadas();
         
+    }
+    
+    private void cargarVentanasSeleccionadas()
+    {
+            //Cargar las ventanas por categoria
+        ModuloCodefacEnum modulo=(ModuloCodefacEnum) getCmbModulo().getSelectedItem();
+        CategoriaMenuEnum categoria=(CategoriaMenuEnum) getCmbCategoria().getSelectedItem();
+        List<VentanaEnum> ventanas= VentanaEnum.getVentanaByModuloAndCategoria(modulo,categoria);
+        
+        getCmbVentana().removeAllItems();
+        for (VentanaEnum ventana : ventanas) {
+            getCmbVentana().addItem(ventana);
+        }
+    
     }
 
     @Override
@@ -98,6 +118,30 @@ public class PerfilModel extends PerfilPanel{
     @Override
     public List<String> getPerfilesPermisos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void agregarListener() {
+        
+        getCmbModulo().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cargarVentanasSeleccionadas();
+            }
+        });
+        
+        getCmbCategoria().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cargarVentanasSeleccionadas();
+            }
+        });
+        
+        getCmbVentana().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cargarVentanasSeleccionadas();
+            }
+        });
     }
     
 }

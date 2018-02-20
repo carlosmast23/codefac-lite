@@ -48,7 +48,6 @@ import ec.com.codesoft.codefaclite.main.license.excepcion.ValidacionLicenciaExce
 import ec.com.codesoft.codefaclite.main.model.GeneralPanelModel;
 import ec.com.codesoft.codefaclite.main.model.HiloPublicidadCodefac;
 import ec.com.codesoft.codefaclite.main.model.LoginModel;
-import ec.com.codesoft.codefaclite.main.model.MenuControlador;
 import ec.com.codesoft.codefaclite.main.model.ModoAplicativoModel;
 import ec.com.codesoft.codefaclite.main.model.ServidorMonitorModel;
 import ec.com.codesoft.codefaclite.main.model.SplashScreenModel;
@@ -458,7 +457,8 @@ public class Main {
             /**
              * Añadir menus y ventanas a la aplicacion principal
              */
-            panel.setVentanasMenuList(agregarMenuVentana(panel));
+            //panel.setVentanasMenuList(agregarMenuVentana(panel));
+            panel.setVentanasMenuList(null);
             panel.setPanelesSecundarios(agregarPanelesSecundarios());
             panel.agregarPanelesSecundarios();
             /**
@@ -788,50 +788,6 @@ public class Main {
 
         return parametros;
     }
-
-    /**
-     * Metodo donde se van a ligar las ventanas con los menus correspondientes
-     *
-     * @param panel
-     * @return
-     */
-
-    public static List<MenuControlador> agregarMenuVentana(GeneralPanelModel panel)
-    {
-        List<MenuControlador> ventanas=new ArrayList<MenuControlador>();
-        
-        //Agregado permiso para los modulos disponibles de la pantalla
-        ModuloCodefacEnum[] modulosPermitidos={ModuloCodefacEnum.CRM};
-        ventanas.add(new MenuControlador(ClienteModel.class,ModuloCodefacEnum.CRM,CategoriaMenuEnum.GESTIONAR,true,modulosPermitidos));
-        
-        ventanas.add(new MenuControlador(ProductoModel.class,ModuloCodefacEnum.CRM,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION}));
-        
-        ventanas.add(new MenuControlador(FacturacionModel.class,ModuloCodefacEnum.FACTURACION,CategoriaMenuEnum.PROCESOS,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
-        ventanas.add(new MenuControlador(EmpresaModel.class,ModuloCodefacEnum.CRM,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
-        ventanas.add(new MenuControlador(ComprobantesConfiguracionModel.class,ModuloCodefacEnum.FACTURACION,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
-        //ventanas.add(new MenuControlador(CalculadoraModel.class,ModuloCodefacEnum.CRM,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
-        ventanas.add(new MenuControlador(UtilidadComprobanteModel.class,ModuloCodefacEnum.CRM,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
-        ventanas.add(new MenuControlador(NotaCreditoModel.class,ModuloCodefacEnum.FACTURACION,CategoriaMenuEnum.PROCESOS,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
-        ventanas.add(new MenuControlador(FacturaReporteModel.class,ModuloCodefacEnum.FACTURACION,CategoriaMenuEnum.REPORTES,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
-        ventanas.add(new MenuControlador(ClienteReporte.class,ModuloCodefacEnum.CRM,CategoriaMenuEnum.REPORTES,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
-        ventanas.add(new MenuControlador(ProductoReporte.class,ModuloCodefacEnum.CRM,CategoriaMenuEnum.REPORTES,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
-        ventanas.add(new MenuControlador(FacturaDisenioModel.class,ModuloCodefacEnum.FACTURACION,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
-        ventanas.add(new MenuControlador(CompraModel.class,ModuloCodefacEnum.FACTURACION,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
-        ventanas.add(new MenuControlador(AsociarProductoProveedorModel.class,ModuloCodefacEnum.INVENTARIO,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
-        ventanas.add(new MenuControlador(BodegaModel.class,ModuloCodefacEnum.INVENTARIO,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
-        ventanas.add(new MenuControlador(CategoriaProductoModel.class,ModuloCodefacEnum.INVENTARIO,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
-        ventanas.add(new MenuControlador(IngresoInventarioModel.class,ModuloCodefacEnum.INVENTARIO,CategoriaMenuEnum.PROCESOS,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
-        ventanas.add(new MenuControlador(KardexModel.class,ModuloCodefacEnum.INVENTARIO,CategoriaMenuEnum.REPORTES,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
-        ventanas.add(new MenuControlador(InventarioEnsambleModel.class,ModuloCodefacEnum.INVENTARIO,CategoriaMenuEnum.PROCESOS,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
-        
-       ventanas.add(new MenuControlador(AulaModel.class,ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.GESTIONAR,true));
-       ventanas.add(new MenuControlador(NivelModel.class,ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.GESTIONAR,true));
-       ventanas.add(new MenuControlador(PeriodoModel.class,ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.GESTIONAR,true));
-
-        return ventanas;
-
-    }
-
 
     public static Map<String,PanelSecundarioAbstract> agregarPanelesSecundarios()
     {

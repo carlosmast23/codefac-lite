@@ -13,8 +13,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PermisoVentana;
  */
 public class PermisoVentanaFacade extends AbstractFacade<PermisoVentana>{
     
-    public PermisoVentanaFacade(Class<PermisoVentana> entityClass) {
-        super(entityClass);
+    public PermisoVentanaFacade() {
+        super(PermisoVentana.class);
     }
     
 }
