@@ -32,3 +32,4 @@ derby.log
 
 #Excluir archivo de configuracion inicial
 workspace/main/codefac.ini
+/workspace/gestionAcademica/target/

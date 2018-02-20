@@ -6,9 +6,11 @@
 package ec.com.codesoft.codefaclite.gestionacademica.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.gestionacademica.busqueda.AulaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.AulaPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Aula;
@@ -25,7 +27,7 @@ import java.util.logging.Logger;
  *
  * @author Carlos
  */
-public class AulaModel extends AulaPanel implements DialogInterfacePanel<Aula> {
+public class AulaModel extends AulaPanel{
 
     private Aula aula;
     private AulaServiceIf aulaService;
@@ -58,18 +60,38 @@ public class AulaModel extends AulaPanel implements DialogInterfacePanel<Aula> {
         }
     }
 
-    private void setearValoresAula(Aula aula) {
-
+    private void setearValoresAula(Aula aula) {       
+        aula.setNombre(getTxtNombre().getText());
+        aula.setUbicacion(getTxtUbicacion().getText());
+        aula.setCapacidad(Integer.parseInt(getTxtCapacidad().getText()));
+        aula.setEstado("A");
     }
 
     @Override
     public void editar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    try {
+            setearValoresAula(aula);
+            aulaService.editar(aula);
+            DialogoCodefac.mensaje("Datos correctos", "El aula se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+        } catch (RemoteException ex) {
+            Logger.getLogger(AulaModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+   if (estadoFormulario.equals(GeneralPanelInterface.ESTADO_EDITAR)) {
+            try {
+                Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea eliminar el aula?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                if (!respuesta) {
+                    throw new ExcepcionCodefacLite("Cancelacion aula");
+                }
+                aulaService.eliminar(aula);
+                DialogoCodefac.mensaje("Datos correctos", "El aula se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+            } catch (RemoteException ex) {
+                Logger.getLogger(AulaModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     @Override
@@ -84,7 +106,16 @@ public class AulaModel extends AulaPanel implements DialogInterfacePanel<Aula> {
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        AulaBusquedaDialogo aulaBusquedaDialogo = new AulaBusquedaDialogo();
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(aulaBusquedaDialogo);
+        buscarDialogoModel.setVisible(true);
+        aula = (Aula) buscarDialogoModel.getResultado();
+        if (aula == null) {
+            throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar aula vacio");
+        }
+        getTxtNombre().setText(aula.getNombre());
+        getTxtUbicacion().setText(aula.getUbicacion());
+        getTxtCapacidad().setText(aula.getCapacidad().toString());
     }
 
     @Override
@@ -94,7 +125,7 @@ public class AulaModel extends AulaPanel implements DialogInterfacePanel<Aula> {
 
     @Override
     public String getNombre() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "Aula";
     }
 
     @Override
@@ -119,9 +150,6 @@ public class AulaModel extends AulaPanel implements DialogInterfacePanel<Aula> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public Aula getResult() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+
 
 }

@@ -30,7 +30,7 @@ public class AulaService extends ServiceAbstract<Aula, AulaFacade> implements Au
         this.aulaFacade = new AulaFacade();
     }
 
-        public Aula grabar(Aula a) throws ServicioCodefacException {
+    public Aula grabar(Aula a) throws ServicioCodefacException {
         try {
             aulaFacade.create(a);
         } catch (ConstrainViolationExceptionSQL ex) {
