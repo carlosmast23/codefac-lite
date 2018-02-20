@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.gestionacademica.panel.AulaPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Aula;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.AulaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -33,12 +34,14 @@ public class AulaModel extends AulaPanel {
     private AulaServiceIf aulaService;
 
     public AulaModel() {
-        aulaService = ServiceFactory.getFactory().getAulaServiceIf();
     }
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        getCmbEstado().removeAllItems();
+        for (AulaEnumEstado enumerador : AulaEnumEstado.values()) {
+            getCmbEstado().addItem(enumerador);
+        }
     }
 
     @Override
@@ -64,7 +67,7 @@ public class AulaModel extends AulaPanel {
         aula.setNombre(getTxtNombre().getText());
         aula.setUbicacion(getTxtUbicacion().getText());
         aula.setCapacidad(Integer.parseInt(getTxtCapacidad().getText()));
-        aula.setEstado("A");
+        aula.setEstado(((AulaEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
     }
 
     @Override
@@ -121,6 +124,7 @@ public class AulaModel extends AulaPanel {
     @Override
     public void limpiar() {
         aula = new Aula();
+        aulaService = ServiceFactory.getFactory().getAulaServiceIf();
     }
 
     @Override

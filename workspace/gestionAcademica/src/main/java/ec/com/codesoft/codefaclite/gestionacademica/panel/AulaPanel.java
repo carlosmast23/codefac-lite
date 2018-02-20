@@ -6,6 +6,8 @@
 package ec.com.codesoft.codefaclite.gestionacademica.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.gestionacademica.model.AulaModel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.AulaEnumEstado;
 import javax.swing.JComboBox;
@@ -130,8 +132,7 @@ public abstract class AulaPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtUbicacion;
     // End of variables declaration//GEN-END:variables
-
-  
+    @LimpiarAnotacion
     public JTextField getTxtCapacidad() {
         return txtCapacidad;
     }
@@ -140,6 +141,8 @@ public abstract class AulaPanel extends ControladorCodefacInterface {
         this.txtCapacidad = txtCapacidad;
     }
 
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Nombre", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextField getTxtNombre() {
         return txtNombre;
     }
@@ -148,6 +151,8 @@ public abstract class AulaPanel extends ControladorCodefacInterface {
         this.txtNombre = txtNombre;
     }
 
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Ubicacion", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextField getTxtUbicacion() {
         return txtUbicacion;
     }
@@ -156,4 +161,14 @@ public abstract class AulaPanel extends ControladorCodefacInterface {
         this.txtUbicacion = txtUbicacion;
     }
 
+    public JComboBox<AulaEnumEstado> getCmbEstado() {
+        return cmbEstado;
+    }
+
+    public void setCmbEstado(JComboBox<AulaEnumEstado> cmbEstado) {
+        this.cmbEstado = cmbEstado;
+    }
+
+    
+    
 }

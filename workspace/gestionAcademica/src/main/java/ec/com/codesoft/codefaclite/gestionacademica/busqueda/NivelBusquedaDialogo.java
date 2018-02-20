@@ -8,44 +8,43 @@ package ec.com.codesoft.codefaclite.gestionacademica.busqueda;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Aula;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.AulaEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NivelEnumEstado;
 import java.util.Vector;
 
 /**
  *
  * @author CodesoftDesarrollo
  */
-public class AulaBusquedaDialogo implements InterfaceModelFind<Aula> {
+public class NivelBusquedaDialogo implements InterfaceModelFind<Nivel> {
 
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<>();
         titulo.add(new ColumnaDialogo("Nombre", 0.3d));
-        titulo.add(new ColumnaDialogo("Ubicacion", 0.3d));
-        titulo.add(new ColumnaDialogo("Capacidad", 0.2d));
+        titulo.add(new ColumnaDialogo("Orden", 0.3d));
+        titulo.add(new ColumnaDialogo("Referencia", 0.2d));
         return titulo;
     }
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        String queryString = "SELECT u FROM Aula u WHERE (u.estado=?1) and";
+        String queryString = "SELECT u FROM Nivel u WHERE (u.estado=?1) and";
         queryString += " ( LOWER(u.nombre) LIKE " + filter + " )";
         QueryDialog queryDialog = new QueryDialog(queryString);
-        queryDialog.agregarParametro(1, AulaEnumEstado.ACTIVO.getEstado());
+        queryDialog.agregarParametro(1, NivelEnumEstado.ACTIVO.getEstado());
         return queryDialog;
     }
 
     @Override
-    public void agregarObjeto(Aula a, Vector dato) {
-        dato.add(a.getNombre());
-        dato.add(a.getUbicacion());
-        dato.add(a.getCapacidad());
+    public void agregarObjeto(Nivel n, Vector dato) {
+        dato.add(n.getNombre());
+        dato.add(n.getOrden());
     }
 
     @Override
-    public Boolean buscarObjeto(Aula a, Object valor) {
-        return a.getNombre().equals(valor.toString());
+    public Boolean buscarObjeto(Nivel n, Object valor) {
+        return n.getNombre().equals(valor.toString());
     }
 
 }

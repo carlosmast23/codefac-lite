@@ -33,6 +33,8 @@ import ec.com.codesoft.codefaclite.facturacion.model.NotaCreditoModel;
 import ec.com.codesoft.codefaclite.facturacion.model.UtilidadComprobanteModel;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
 import ec.com.codesoft.codefaclite.gestionacademica.model.AulaModel;
+import ec.com.codesoft.codefaclite.gestionacademica.model.NivelModel;
+import ec.com.codesoft.codefaclite.gestionacademica.model.PeriodoModel;
 import ec.com.codesoft.codefaclite.inventario.model.AsociarProductoProveedorModel;
 import ec.com.codesoft.codefaclite.inventario.model.BodegaModel;
 import ec.com.codesoft.codefaclite.inventario.model.CategoriaProductoModel;
@@ -820,6 +822,8 @@ public class Main {
         ventanas.add(new MenuControlador(InventarioEnsambleModel.class,ModuloCodefacEnum.INVENTARIO,CategoriaMenuEnum.PROCESOS,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.CRM}));
         
        ventanas.add(new MenuControlador(AulaModel.class,ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.GESTIONAR,true));
+       ventanas.add(new MenuControlador(NivelModel.class,ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.GESTIONAR,true));
+       ventanas.add(new MenuControlador(PeriodoModel.class,ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.GESTIONAR,true));
 
         return ventanas;
 
