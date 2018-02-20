@@ -70,12 +70,12 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jSplitPanel = new javax.swing.JSplitPane();
         jDesktopPane1 = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
-        menuInicio = new javax.swing.JMenu();
+        jMenuInicio = new javax.swing.JMenu();
         jMenuItemInicio = new javax.swing.JMenuItem();
         jMenuItemSalir = new javax.swing.JMenuItem();
         jMenuUtilidades = new javax.swing.JMenu();
         jMenuCalculadora = new javax.swing.JMenuItem();
-        jMenu8 = new javax.swing.JMenu();
+        jMenuAyuda = new javax.swing.JMenu();
         jMenuItemContenido = new javax.swing.JMenuItem();
         jMenuItemAcerca = new javax.swing.JMenuItem();
         jMenuItemActualizarLicencia = new javax.swing.JMenuItem();
@@ -221,23 +221,28 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
         getContentPane().add(jSplitPanel, java.awt.BorderLayout.CENTER);
 
-        menuInicio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/modulos/menu.png"))); // NOI18N
+        jMenuInicio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/modulos/menu.png"))); // NOI18N
+        jMenuInicio.setToolTipText("Principal");
 
+        jMenuItemInicio.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         jMenuItemInicio.setText("Iinicio");
         jMenuItemInicio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemInicioActionPerformed(evt);
             }
         });
-        menuInicio.add(jMenuItemInicio);
+        jMenuInicio.add(jMenuItemInicio);
 
+        jMenuItemSalir.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         jMenuItemSalir.setText("Salir");
-        menuInicio.add(jMenuItemSalir);
+        jMenuInicio.add(jMenuItemSalir);
 
-        jMenuBar1.add(menuInicio);
+        jMenuBar1.add(jMenuInicio);
 
         jMenuUtilidades.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/modulos/utilidades.png"))); // NOI18N
+        jMenuUtilidades.setToolTipText("Herramientas");
 
+        jMenuCalculadora.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         jMenuCalculadora.setText("Calculadora");
         jMenuCalculadora.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -248,28 +253,33 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
         jMenuBar1.add(jMenuUtilidades);
 
-        jMenu8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/modulos/ayuda.png"))); // NOI18N
+        jMenuAyuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/modulos/ayuda.png"))); // NOI18N
+        jMenuAyuda.setText("Ayuda");
+        jMenuAyuda.setFont(new java.awt.Font("Arial", 2, 15)); // NOI18N
 
+        jMenuItemContenido.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         jMenuItemContenido.setText("Contenido");
         jMenuItemContenido.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemContenidoActionPerformed(evt);
             }
         });
-        jMenu8.add(jMenuItemContenido);
+        jMenuAyuda.add(jMenuItemContenido);
 
+        jMenuItemAcerca.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         jMenuItemAcerca.setText("Acerca");
-        jMenu8.add(jMenuItemAcerca);
+        jMenuAyuda.add(jMenuItemAcerca);
 
+        jMenuItemActualizarLicencia.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         jMenuItemActualizarLicencia.setText("Actualizar Licencia");
         jMenuItemActualizarLicencia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemActualizarLicenciaActionPerformed(evt);
             }
         });
-        jMenu8.add(jMenuItemActualizarLicencia);
+        jMenuAyuda.add(jMenuItemActualizarLicencia);
 
-        jMenuBar1.add(jMenu8);
+        jMenuBar1.add(jMenuAyuda);
 
         setJMenuBar(jMenuBar1);
 
@@ -375,9 +385,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JMenu jMenu8;
+    private javax.swing.JMenu jMenuAyuda;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuCalculadora;
+    private javax.swing.JMenu jMenuInicio;
     private javax.swing.JMenuItem jMenuItemAcerca;
     private javax.swing.JMenuItem jMenuItemActualizarLicencia;
     private javax.swing.JMenuItem jMenuItemContenido;
@@ -391,7 +402,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JSplitPane jSplitPanel;
     private javax.swing.JSplitPane jSplitPanelVerticalSecundario;
     private javax.swing.JLabel lblPiePagina;
-    private javax.swing.JMenu menuInicio;
     // End of variables declaration//GEN-END:variables
 
     public JMenuItem getjMenuItem1() {
@@ -586,5 +596,29 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         this.jMenuItemActualizarLicencia = jMenuItemActualizarLicencia;
     }
 
+    public JMenu getjMenuAyuda() {
+        return jMenuAyuda;
+    }
 
+    public void setjMenuAyuda(JMenu jMenuAyuda) {
+        this.jMenuAyuda = jMenuAyuda;
+    }
+
+    public JMenu getjMenuInicio() {
+        return jMenuInicio;
+    }
+
+    public void setjMenuInicio(JMenu jMenuInicio) {
+        this.jMenuInicio = jMenuInicio;
+    }
+
+    public JMenu getjMenuUtilidades() {
+        return jMenuUtilidades;
+    }
+
+    public void setjMenuUtilidades(JMenu jMenuUtilidades) {
+        this.jMenuUtilidades = jMenuUtilidades;
+    }
+
+    
 }

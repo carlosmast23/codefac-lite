@@ -1818,10 +1818,15 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     public void setVentanasMenuList(List<MenuControlador> ventanasMenuList) {
         this.ventanasMenuList = ventanasMenuList;
         
+        this.getJMenuBar().removeAll();
         List<JMenu> menus=construirMenuDinamico();
+        this.getJMenuBar().add(getjMenuInicio());
+        this.getJMenuBar().add(getjMenuUtilidades());
+        
         for (JMenu menu : menus) {
             this.getJMenuBar().add(menu);
         }
+        this.getJMenuBar().add(getjMenuAyuda());
         //actualizarMenuCodefac();
         agregarListenerMenu();
     }
@@ -1841,15 +1846,19 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 JMenu menuModulo = new JMenu(moduloSistema.getNombre());
                 menuModulo.setIcon(moduloSistema.getIcono());
                 menuModulo.setFont(new Font("Arial",2,15));
+                boolean existenCategorias=false;
                 for (CategoriaMenuEnum categoriaEnum : CategoriaMenuEnum.values()) {
                     JMenu menuCategoria=new JMenu(categoriaEnum.getNombre());
                     menuCategoria.setIcon(categoriaEnum.getIcono());
                     menuCategoria.setFont(new Font("Arial", 0, 13));
                     
+                    boolean existenMenuItem=false;
                     for (MenuControlador menuControlador : ventanasMenuList) {
+                        
                         //Verificar si el modulo y la categoria son las mismas entonces las carga
-                        if (menuControlador.getModulo().equals(moduloSistema) && menuControlador.getCategoriaMenu().equals(categoriaEnum)) {
-                            
+                        if (menuControlador.getModulo().equals(moduloSistema) && menuControlador.getCategoriaMenu().equals(categoriaEnum)) 
+                        {
+                            existenMenuItem=true;
                             String nombreVentana="Sin nombre";
                             try
                             {
@@ -1867,9 +1876,18 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             menuControlador.setJmenuItem(menuVentana);
                         }
                     }
-                    menuModulo.add(menuCategoria);
-                }               
-                menus.add(menuModulo);
+                    
+                    if(existenMenuItem)
+                    {
+                        menuModulo.add(menuCategoria);
+                        existenCategorias=true;
+                    }
+                    
+                } 
+                if(existenCategorias)
+                {
+                    menus.add(menuModulo);
+                }
             }
             
             
