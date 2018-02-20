@@ -11,28 +11,37 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author Carlos
  */
 @Entity
-@Table(name = "Nivel")
+@Table(name = "NIVEL")
+@XmlRootElement
 public class Nivel {
 
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
+    @Column(name = "NIVEL_ID")
     private Long idNivel;
-
+    @Column(name = "NOMBRE")
+    private String nombre;
+    @Column(name = "ORDEN")
     private Integer orden;
-
     private Nivel nivelAnterior;
-
+    @Column(name = "DESCRIPCION")
     private String descripcion;
     private String estado;
 
-    public Nivel() {
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public Long getIdNivel() {
@@ -75,5 +84,4 @@ public class Nivel {
         this.estado = estado;
     }
 
-    
 }
