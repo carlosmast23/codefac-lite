@@ -38,6 +38,9 @@
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Aula</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo</class>
 
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
   </persistence-unit>
