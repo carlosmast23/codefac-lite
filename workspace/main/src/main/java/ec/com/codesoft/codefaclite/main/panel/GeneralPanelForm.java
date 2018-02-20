@@ -73,7 +73,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         menuInicio = new javax.swing.JMenu();
         jMenuItemInicio = new javax.swing.JMenuItem();
         jMenuItemSalir = new javax.swing.JMenuItem();
-
         jMenuUtilidades = new javax.swing.JMenu();
         jMenuCalculadora = new javax.swing.JMenuItem();
         jMenu8 = new javax.swing.JMenu();
@@ -222,7 +221,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
         getContentPane().add(jSplitPanel, java.awt.BorderLayout.CENTER);
 
-        menuInicio.setText("Inicio");
+        menuInicio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/modulos/menu.png"))); // NOI18N
 
         jMenuItemInicio.setText("Iinicio");
         jMenuItemInicio.addActionListener(new java.awt.event.ActionListener() {
@@ -237,8 +236,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
         jMenuBar1.add(menuInicio);
 
-
-        jMenuUtilidades.setText("Utilidades");
+        jMenuUtilidades.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/modulos/utilidades.png"))); // NOI18N
 
         jMenuCalculadora.setText("Calculadora");
         jMenuCalculadora.addActionListener(new java.awt.event.ActionListener() {
@@ -250,7 +248,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
         jMenuBar1.add(jMenuUtilidades);
 
-        jMenu8.setText("Ayuda");
+        jMenu8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/modulos/ayuda.png"))); // NOI18N
 
         jMenuItemContenido.setText("Contenido");
         jMenuItemContenido.addActionListener(new java.awt.event.ActionListener() {
@@ -394,7 +392,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JSplitPane jSplitPanelVerticalSecundario;
     private javax.swing.JLabel lblPiePagina;
     private javax.swing.JMenu menuInicio;
-
     // End of variables declaration//GEN-END:variables
 
     public JMenuItem getjMenuItem1() {

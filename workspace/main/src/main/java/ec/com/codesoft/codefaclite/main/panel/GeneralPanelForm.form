@@ -120,7 +120,9 @@
       <SubComponents>
         <Menu class="javax.swing.JMenu" name="menuInicio">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Inicio"/>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/img/iconos/modulos/menu.png"/>
+            </Property>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemInicio">
@@ -140,7 +142,9 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenuUtilidades">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Utilidades"/>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/img/iconos/modulos/utilidades.png"/>
+            </Property>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuCalculadora">
@@ -155,7 +159,9 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu8">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Ayuda"/>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/img/iconos/modulos/ayuda.png"/>
+            </Property>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemContenido">
