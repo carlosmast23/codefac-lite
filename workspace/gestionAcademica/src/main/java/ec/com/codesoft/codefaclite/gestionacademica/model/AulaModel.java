@@ -27,7 +27,7 @@ import java.util.logging.Logger;
  *
  * @author Carlos
  */
-public class AulaModel extends AulaPanel{
+public class AulaModel extends AulaPanel {
 
     private Aula aula;
     private AulaServiceIf aulaService;
@@ -60,7 +60,7 @@ public class AulaModel extends AulaPanel{
         }
     }
 
-    private void setearValoresAula(Aula aula) {       
+    private void setearValoresAula(Aula aula) {
         aula.setNombre(getTxtNombre().getText());
         aula.setUbicacion(getTxtUbicacion().getText());
         aula.setCapacidad(Integer.parseInt(getTxtCapacidad().getText()));
@@ -69,7 +69,7 @@ public class AulaModel extends AulaPanel{
 
     @Override
     public void editar() throws ExcepcionCodefacLite {
-    try {
+        try {
             setearValoresAula(aula);
             aulaService.editar(aula);
             DialogoCodefac.mensaje("Datos correctos", "El aula se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
@@ -80,7 +80,7 @@ public class AulaModel extends AulaPanel{
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite {
-   if (estadoFormulario.equals(GeneralPanelInterface.ESTADO_EDITAR)) {
+        if (estadoFormulario.equals(GeneralPanelInterface.ESTADO_EDITAR)) {
             try {
                 Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea eliminar el aula?", DialogoCodefac.MENSAJE_ADVERTENCIA);
                 if (!respuesta) {
@@ -120,7 +120,7 @@ public class AulaModel extends AulaPanel{
 
     @Override
     public void limpiar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        aula = new Aula();
     }
 
     @Override
@@ -149,7 +149,5 @@ public class AulaModel extends AulaPanel{
     public List<String> getPerfilesPermisos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-
 
 }

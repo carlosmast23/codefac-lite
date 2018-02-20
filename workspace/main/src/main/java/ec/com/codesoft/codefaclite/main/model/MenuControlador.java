@@ -121,6 +121,10 @@ public class MenuControlador {
 
     public Boolean verificarPermisoModuloAdicional(Map<ModuloCodefacEnum, Boolean> modulos) {
         //Si no existe ningun dato en modulo permitidos asumo que tiene acceso para todos los modulos
+        
+        if(modulosPermitidos==null)
+            return false;
+        
 
         for (Map.Entry<ModuloCodefacEnum, Boolean> entry : modulos.entrySet()) {
             ModuloCodefacEnum moduloSistema = entry.getKey();

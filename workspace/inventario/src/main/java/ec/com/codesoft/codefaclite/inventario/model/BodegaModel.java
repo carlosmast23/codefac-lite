@@ -40,18 +40,11 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
     private Path destino = null;
 
     public BodegaModel() {
-        bodegaService = ServiceFactory.getFactory().getBodegaServiceIf();
-
-        jFileChooser = new JFileChooser();
-        jFileChooser.setDialogTitle("Elegir archivo");
-        jFileChooser.setFileFilter(new FileNameExtensionFilter("Foto", "png", "jpg", "bmp"));
-        agregarListenerBotones();
     }
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
         try {
-            bodega = new Bodega();
             setearValoresBodega(bodega);
             bodegaService.grabar(bodega);
             DialogoCodefac.mensaje("Datos correctos", "La bodega se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
@@ -69,13 +62,18 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
         bodega.setDescripcion(getTxtDescripcion().getText());
         bodega.setEncargado(getTxtEncargado().getText());
         bodega.setImagenPath(getTxtFoto().getText());
-        
+
         moverArchivo();
     }
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        bodegaService = ServiceFactory.getFactory().getBodegaServiceIf();
+
+        jFileChooser = new JFileChooser();
+        jFileChooser.setDialogTitle("Elegir archivo");
+        jFileChooser.setFileFilter(new FileNameExtensionFilter("Foto", "png", "jpg", "bmp"));
+        agregarListenerBotones();
     }
 
     @Override
@@ -138,7 +136,7 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
 
     @Override
     public void limpiar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        bodega = new Bodega();
     }
 
     @Override

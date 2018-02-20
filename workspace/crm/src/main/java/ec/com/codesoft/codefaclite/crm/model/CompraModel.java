@@ -32,8 +32,10 @@ import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import es.mityc.firmaJava.ocsp.config.ServidorOcsp;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.HashMap;
@@ -302,13 +304,22 @@ public class CompraModel extends CompraPanel{
                 //Seteo los valores de los detalles e la compra
                 CompraDetalle compraDetalle=new CompraDetalle();
                 compraDetalle.setCantidad(Integer.parseInt(getTxtCantidadItem().getText()));
-                compraDetalle.setPrecioUnitario(new BigDecimal(getTxtPrecionUnitarioItem().getText()));
+                BigDecimal precioUnitario = new BigDecimal(getTxtPrecionUnitarioItem().getText()); 
+                compraDetalle.setPrecioUnitario(precioUnitario.setScale(2,BigDecimal.ROUND_HALF_UP));
                 compraDetalle.setCompra(compra);
                 compraDetalle.setDescripcion(getTxtDescripcionItem().getText());
                 compraDetalle.setDescuento(BigDecimal.ZERO);
-                compraDetalle.setIva(compraDetalle.calcularValorIva());
+                if(productoProveedor.getConIva().equals("s"))
+                {
+                    compraDetalle.setIva(compraDetalle.calcularValorIva());
+                }
+                else
+                {
+                    compraDetalle.setIva(BigDecimal.ZERO);
+                }
                 compraDetalle.setProductoProveedor(productoProveedor);
-                compraDetalle.setTotal(compraDetalle.calcularTotal());
+                //compraDetalle.setTotal(compraDetalle.calcularTotal());
+                compraDetalle.setTotal(compraDetalle.getSubtotal());
                 compraDetalle.setValorIce(BigDecimal.ZERO);
                 compra.addDetalle(compraDetalle);
                 
@@ -320,6 +331,21 @@ public class CompraModel extends CompraPanel{
                 actualizarTotales();
                 mostrarDatosTabla();
                 mostrarDatosTotales();
+                limpiarCampos();
+            }
+        });
+        
+        getTxtDescuentoImpuestos().addFocusListener(new FocusListener() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                compra.setDescuentoImpuestos(new BigDecimal(getTxtDescuentoImpuestos().getText()));
+                //compra.setDescuentoSinImpuestos(new BigDecimal(getTxtDescuentoSinImpuestos().getText()));
+                calcularValorTotal();
+            }
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                
             }
         });
     }
@@ -333,15 +359,59 @@ public class CompraModel extends CompraPanel{
         compra.setSubtotalImpuestos(BigDecimal.ZERO);
         compra.setSubtotalSinImpuestos(BigDecimal.ZERO);
         compra.setTotal(BigDecimal.ZERO);
-                
-        for (CompraDetalle detalle : detalles) {
-             compra.setIva(compra.getIva().add(detalle.getIva()));
-             compra.setSubtotalImpuestos(compra.getSubtotalImpuestos());
-             compra.setSubtotalSinImpuestos(compra.getSubtotalSinImpuestos());
-             compra.setTotal(compra.getTotal().add(detalle.getTotal()));
-        }
+        compra.setDescuentoSinImpuestos(BigDecimal.ZERO);
+        compra.setDescuentoImpuestos(BigDecimal.ZERO);
+        //LLamo metodos para calcular valores totales
+        calcularSubtotalSinImpuestos(detalles);
+        calcularSubtotalImpuesto(detalles);
+        calcularIva12(detalles);
+        calcularValorTotal();
+
     }
     
+    public void calcularSubtotalSinImpuestos(List<CompraDetalle> detalles)
+    {
+        for(CompraDetalle detalle : detalles)
+        {
+            if(detalle.getProductoProveedor().getConIva().equals("n"))
+            {
+                this.compra.setSubtotalSinImpuestos(this.compra.getSubtotalSinImpuestos().add(detalle.getTotal()));
+            }
+        }
+        this.compra.setSubtotalSinImpuestos(this.compra.getSubtotalSinImpuestos().setScale(2,RoundingMode.HALF_UP));
+    }
+    
+    public void calcularSubtotalImpuesto(List<CompraDetalle> detalles)
+    {
+        for(CompraDetalle detalle : detalles)
+        {
+            if(detalle.getProductoProveedor().getConIva().equals("s"))
+            {
+                this.compra.setSubtotalImpuestos(this.compra.getSubtotalImpuestos().add(detalle.getTotal()));
+            }
+        }
+        this.compra.setSubtotalImpuestos(this.compra.getSubtotalImpuestos().setScale(2,RoundingMode.HALF_UP));
+    }
+    
+    public void calcularIva12(List<CompraDetalle> detalles)
+    {
+        for(CompraDetalle detalle : detalles)
+        {
+            this.compra.setIva(this.compra.getIva().add(detalle.getIva()));
+        }
+        this.compra.setIva(this.compra.getIva().setScale(2,RoundingMode.HALF_UP));
+    }
+    
+    public void calcularValorTotal()
+    {
+        //this.compra.setDescuentoImpuestos(this.compra.getSubtotalImpuestos().subtract(this.compra.getDescuentoImpuestos()));
+        //this.compra.setDescuentoSinImpuestos(this.compra.getDescuentoSinImpuestos().subtract(this.compra.getDescuentoSinImpuestos()));
+        this.compra.setTotal(this.compra.getSubtotalImpuestos().
+                subtract(this.compra.getDescuentoImpuestos()).
+                add(this.compra.getSubtotalSinImpuestos().
+                subtract(this.compra.getDescuentoSinImpuestos())).
+                add(this.compra.getIva()));
+    }
     /**
      * Actualiza los datos de la tabla segun los datos grabados en los detalles de la tabla
      * de compras
@@ -367,10 +437,12 @@ public class CompraModel extends CompraPanel{
     
     private void mostrarDatosTotales()
     {
-        getLblIva().setText(compra.getIva()+"");
         getLblSubtotalImpuesto().setText(compra.getSubtotalImpuestos()+"");
         getLblSubtotalSinImpuesto().setText(compra.getSubtotalSinImpuestos()+"");
-        getLblTotal().setText(compra.getTotal()+"");        
+        getLblIva().setText(compra.getIva()+"");
+        getTxtDescuentoImpuestos().setText(compra.getDescuentoImpuestos()+"");
+        getTxtDescuentoSinImpuestos().setText(compra.getDescuentoSinImpuestos()+"");
+        getLblTotal().setText(compra.getTotal()+""); 
     }
 
     private void crearVariables() {
@@ -394,6 +466,7 @@ public class CompraModel extends CompraPanel{
         getTxtProductoItem().enable(true);
         getTxtCantidadItem().enable(true);
         getTxtPrecionUnitarioItem().enable(true);
+        getCmbCobraIva().enable(true);
     }
     
     private void bloquearIngresoDetalleProducto()
@@ -402,6 +475,15 @@ public class CompraModel extends CompraPanel{
         getTxtProductoItem().enable(false);
         getTxtCantidadItem().enable(false);
         getTxtPrecionUnitarioItem().enable(false);
+        getCmbCobraIva().enable(false);
+    }
+    
+    private void limpiarCampos()
+    {
+        getTxtDescripcionItem().setText("");
+        getTxtPrecionUnitarioItem().setText("");
+        getTxtProductoItem().setText("");
+        getTxtCantidadItem().setText("");
     }
     
 }
