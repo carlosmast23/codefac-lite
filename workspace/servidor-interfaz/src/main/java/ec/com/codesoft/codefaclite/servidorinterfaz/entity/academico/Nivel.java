@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -31,9 +33,12 @@ public class Nivel {
     private String nombre;
     @Column(name = "ORDEN")
     private Integer orden;
-    private Nivel nivelAnterior;
+    @JoinColumn(name = "NIVELPOSTERIOR_ID")
+    @ManyToOne
+    private Nivel nivelPosterior;
     @Column(name = "DESCRIPCION")
     private String descripcion;
+    @Column(name = "ESTADO")
     private String estado;
 
     public String getNombre() {
@@ -60,14 +65,14 @@ public class Nivel {
         this.orden = orden;
     }
 
-    public Nivel getNivelAnterior() {
-        return nivelAnterior;
+    public Nivel getNivelPosterior() {
+        return nivelPosterior;
     }
 
-    public void setNivelAnterior(Nivel nivelAnterior) {
-        this.nivelAnterior = nivelAnterior;
+    public void setNivelPosterior(Nivel nivelPosterior) {
+        this.nivelPosterior = nivelPosterior;
     }
-
+   
     public String getDescripcion() {
         return descripcion;
     }
