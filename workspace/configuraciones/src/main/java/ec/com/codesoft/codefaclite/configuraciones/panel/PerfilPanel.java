@@ -52,6 +52,11 @@ public abstract class PerfilPanel extends ControladorCodefacInterface {
         jLabel4 = new javax.swing.JLabel();
         cmbVentana = new javax.swing.JComboBox<>();
 
+        setClosable(true);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
+
         jLabel1.setText("Nombre:");
 
         jTextField1.setText("jTextField1");

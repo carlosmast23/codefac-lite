@@ -102,7 +102,7 @@ public class PerfilModel extends PerfilPanel{
 
     @Override
     public String getNombre() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "Perfiles";
     }
 
     @Override

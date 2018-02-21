@@ -1884,9 +1884,14 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         }
                         else //Verificacion cuando no es un modulo habilitado
                         {
-                            if(menuControlador.verificarPermisoModuloAdicional(sessionCodefac.getModulosMap()))
+                            //Solo verifica si debe agregar otras ventanas de otros modulos si el menu pertenece al modulo actual
+                            //Nota: sin esta linea pueden aparecer varios enlaces a esta ventana desde otros menus de modulos
+                            if(menuControlador.getModulo().equals(moduloSistema))
                             {
-                                agregarAlMenu=true;
+                                if(menuControlador.verificarPermisoModuloAdicional(sessionCodefac.getModulosMap()))
+                                {
+                                    agregarAlMenu=true;
+                                }
                             }
                         
                         }

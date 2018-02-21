@@ -17,8 +17,8 @@ public enum ModuloCodefacEnum {
     INVENTARIO("Inventario","INVS","modulo_inventario",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/inventario.png")),
     FACTURACION("Facturacion","FAC","modulo_facturacion",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/facturacion.png")),
     CRM("Crm","CRM","modulo_crm",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/crm.png")),
-    GESTIONA_ACADEMICA("Academico","ACAS","modulo_gestion_academica",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/gestion_academica.png"));
-    
+    GESTIONA_ACADEMICA("Academico","ACAS","modulo_gestion_academica",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/gestion_academica.png")),
+    SISTEMA("Sistema","SIST","modulo_sistema",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/sistema.png"));
     private String nombre;
     private String codigo;
     private String nombrePropiedad;

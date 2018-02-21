@@ -39,7 +39,7 @@ public enum VentanaEnum {
     AULA("ec.com.codesoft.codefaclite.gestionacademica.model.AulaModel","CLIE","Aula",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.GESTIONAR),
     NIVEL("ec.com.codesoft.codefaclite.gestionacademica.model.NivelModel","CLIE","Nivel",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.GESTIONAR),
     PERIODO("ec.com.codesoft.codefaclite.gestionacademica.model.PeriodoModel","CLIE","Periodo",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.GESTIONAR),
-    PERFILES("ec.com.codesoft.codefaclite.configuraciones.model.PerfilModel","UTIL","Utilidad Comprobante",ModuloCodefacEnum.CRM,CategoriaMenuEnum.PROCESOS);
+    PERFILES("ec.com.codesoft.codefaclite.configuraciones.model.PerfilModel","UTIL","Utilidad Comprobante",ModuloCodefacEnum.SISTEMA,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION});
 
     private VentanaEnum(String clase, String codigo, String nombre, ModuloCodefacEnum modulo, CategoriaMenuEnum categoriaMenu) {
         this.claseNombre = clase;
