@@ -6,7 +6,9 @@
 package ec.com.codesoft.codefaclite.gestionacademica.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.AulaEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NivelEnumEstado;
 import javax.swing.JComboBox;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -39,9 +41,9 @@ public abstract class NivelPanel extends ControladorCodefacInterface {
         jScrollPane1 = new javax.swing.JScrollPane();
         txtDescripcion = new javax.swing.JTextArea();
         lblOrden = new javax.swing.JLabel();
-        lblAnterior = new javax.swing.JLabel();
+        lblPosterior = new javax.swing.JLabel();
         txtOrden = new javax.swing.JTextField();
-        cmbNivelAnterior = new javax.swing.JComboBox<>();
+        cmbNivelPosterior = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         lblEstado = new javax.swing.JLabel();
         cmbEstado = new javax.swing.JComboBox<>();
@@ -62,11 +64,9 @@ public abstract class NivelPanel extends ControladorCodefacInterface {
 
         lblOrden.setText("Orden:");
 
-        lblAnterior.setText("Predecesor - Referencia");
+        lblPosterior.setText("Nivel Posterior:");
 
-        cmbNivelAnterior.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jLabel5.setText("Se debe cargar uno de los niveles anteriores para enlazar");
+        jLabel5.setText("Se debe cargar uno de los niveles superiores para enlazar");
 
         lblEstado.setText("Estado:");
 
@@ -80,18 +80,18 @@ public abstract class NivelPanel extends ControladorCodefacInterface {
                     .addComponent(lblNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblOrden)
                     .addComponent(lblDescripcion)
-                    .addComponent(lblAnterior)
+                    .addComponent(lblPosterior)
                     .addComponent(lblEstado))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 96, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cmbNivelAnterior, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(txtOrden, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(txtNombre, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(cmbEstado, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(cmbNivelPosterior, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtOrden, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txtNombre, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)))
                 .addGap(47, 47, 47))
         );
         layout.setVerticalGroup(
@@ -107,8 +107,8 @@ public abstract class NivelPanel extends ControladorCodefacInterface {
                     .addComponent(txtOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblAnterior)
-                    .addComponent(cmbNivelAnterior, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblPosterior)
+                    .addComponent(cmbNivelPosterior, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
                 .addGap(4, 4, 4)
@@ -119,7 +119,7 @@ public abstract class NivelPanel extends ControladorCodefacInterface {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblEstado)
                     .addComponent(cmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(74, Short.MAX_VALUE))
+                .addContainerGap(78, Short.MAX_VALUE))
         );
 
         pack();
@@ -127,27 +127,20 @@ public abstract class NivelPanel extends ControladorCodefacInterface {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<AulaEnumEstado> cmbEstado;
-    private javax.swing.JComboBox<String> cmbNivelAnterior;
+    private javax.swing.JComboBox<NivelEnumEstado> cmbEstado;
+    private javax.swing.JComboBox<Nivel> cmbNivelPosterior;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblAnterior;
     private javax.swing.JLabel lblDescripcion;
     private javax.swing.JLabel lblEstado;
     private javax.swing.JLabel lblNombre;
     private javax.swing.JLabel lblOrden;
+    private javax.swing.JLabel lblPosterior;
     private javax.swing.JTextArea txtDescripcion;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtOrden;
     // End of variables declaration//GEN-END:variables
 
-    public JComboBox<String> getCmbNivelAnterior() {
-        return cmbNivelAnterior;
-    }
-
-    public void setCmbNivelAnterior(JComboBox<String> cmbNivelAnterior) {
-        this.cmbNivelAnterior = cmbNivelAnterior;
-    }
 
     public JTextArea getTxtDescripcion() {
         return txtDescripcion;
@@ -173,13 +166,23 @@ public abstract class NivelPanel extends ControladorCodefacInterface {
         this.txtOrden = txtOrden;
     }
 
-    public JComboBox<AulaEnumEstado> getCmbEstado() {
+    public JComboBox<NivelEnumEstado> getCmbEstado() {
         return cmbEstado;
     }
 
-    public void setCmbEstado(JComboBox<AulaEnumEstado> cmbEstado) {
+    public void setCmbEstado(JComboBox<NivelEnumEstado> cmbEstado) {
         this.cmbEstado = cmbEstado;
     }
+
+    public JComboBox<Nivel> getCmbNivelPosterior() {
+        return cmbNivelPosterior;
+    }
+
+    public void setCmbNivelPosterior(JComboBox<Nivel> cmbNivelPosterior) {
+        this.cmbNivelPosterior = cmbNivelPosterior;
+    }
     
+    
+   
     
 }

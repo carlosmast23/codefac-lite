@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.enumerados;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ import javax.swing.JMenuItem;
  * @author Carlos
  */
 public enum VentanaEnum {
+    
     CLIENTE("ec.com.codesoft.codefaclite.crm.model.ClienteModel","CLIE","Cliente",ModuloCodefacEnum.CRM,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION}),
     PRODUCTO("ec.com.codesoft.codefaclite.crm.model.ProductoModel","PROD","Producto",ModuloCodefacEnum.CRM,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION}),
     FACTURACION("ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel","FACT","facturacion",ModuloCodefacEnum.FACTURACION,CategoriaMenuEnum.PROCESOS),
@@ -164,7 +166,9 @@ public enum VentanaEnum {
         try {
 
             if (instance == null) {
-                instance = this.getClase().getConstructor().newInstance();
+                Class clase=getClase();
+                Constructor constructor= clase.getConstructor();
+                instance = constructor.newInstance();
             }
 
             return instance;

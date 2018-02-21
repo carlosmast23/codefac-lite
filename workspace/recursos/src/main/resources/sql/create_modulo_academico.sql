@@ -22,7 +22,7 @@ create table ESTUDIANTE(
 
 create table NIVEL( 
     NIVEL_ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
-    REF_ID bigint,     
+    NIVELPOSTERIOR_ID bigint,     
     NOMBRE varchar(256),
     ORDEN integer,   
     ESTADO varchar(1),

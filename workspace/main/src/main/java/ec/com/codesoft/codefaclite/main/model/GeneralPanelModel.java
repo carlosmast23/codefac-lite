@@ -1901,6 +1901,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             existenMenuItem = true;
                             String nombreVentana = "Sin nombre";
                             try {
+                                System.out.println(menuControlador.getNombre());
                                 nombreVentana =((GeneralPanelInterface)(menuControlador.getInstance())).getNombre();
                             } catch (java.lang.UnsupportedOperationException uoe) {
                                 System.err.println(menuControlador.getClass().getSimpleName() + ": Ventana sin implementar nombre");
