@@ -6,6 +6,8 @@
 package ec.com.codesoft.codefaclite.gestionacademica.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.AulaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NivelEnumEstado;
@@ -141,7 +143,8 @@ public abstract class NivelPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtOrden;
     // End of variables declaration//GEN-END:variables
 
-
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Descripcion", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextArea getTxtDescripcion() {
         return txtDescripcion;
     }
@@ -150,6 +153,8 @@ public abstract class NivelPanel extends ControladorCodefacInterface {
         this.txtDescripcion = txtDescripcion;
     }
 
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Nombre", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextField getTxtNombre() {
         return txtNombre;
     }
@@ -158,6 +163,7 @@ public abstract class NivelPanel extends ControladorCodefacInterface {
         this.txtNombre = txtNombre;
     }
 
+    @LimpiarAnotacion
     public JTextField getTxtOrden() {
         return txtOrden;
     }
@@ -181,8 +187,5 @@ public abstract class NivelPanel extends ControladorCodefacInterface {
     public void setCmbNivelPosterior(JComboBox<Nivel> cmbNivelPosterior) {
         this.cmbNivelPosterior = cmbNivelPosterior;
     }
-    
-    
-   
-    
+
 }

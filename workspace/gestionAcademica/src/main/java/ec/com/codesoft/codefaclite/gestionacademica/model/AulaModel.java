@@ -34,6 +34,7 @@ public class AulaModel extends AulaPanel {
     private AulaServiceIf aulaService;
 
     public AulaModel() {
+        aulaService = ServiceFactory.getFactory().getAulaServiceIf();
     }
 
     @Override
@@ -124,7 +125,6 @@ public class AulaModel extends AulaPanel {
     @Override
     public void limpiar() {
         aula = new Aula();
-        aulaService = ServiceFactory.getFactory().getAulaServiceIf();
     }
 
     @Override

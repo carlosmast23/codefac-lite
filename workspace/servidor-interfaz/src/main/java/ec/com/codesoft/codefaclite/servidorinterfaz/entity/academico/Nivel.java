@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "NIVEL")
 @XmlRootElement
-public class Nivel {
+public class Nivel implements Serializable{
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -87,6 +88,11 @@ public class Nivel {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+    
+    @Override
+    public String toString() {
+        return nombre;
     }
 
 }

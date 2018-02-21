@@ -18,7 +18,7 @@ public enum PeriodoEnumEstado{
      * Estado inactivo del cliente seguramente por algun motivo que el usuario
      * cosidere
      */
-    INACTIVO("I"),
+    TERMINADO("T"),
     /**
      * Estado cuando un cliente es eliminado de forma permanente
      */

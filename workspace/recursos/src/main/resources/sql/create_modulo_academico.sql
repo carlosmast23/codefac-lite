@@ -23,7 +23,8 @@ create table ESTUDIANTE(
 create table NIVEL( 
     NIVEL_ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
     NIVELPOSTERIOR_ID bigint,     
-    NOMBRE varchar(256),
+    NOMBRE varchar(100),
+    DESCRIPCION varchar(256),  
     ORDEN integer,   
     ESTADO varchar(1),
     primary key (NIVEL_ID)
@@ -34,7 +35,7 @@ create table PERIODO(
     NOMBRE varchar(100),
     FECHA_INICIO date,
     FECHA_FIN date,
-    OBSERVACION varchar(100),  
+    OBSERVACION varchar(256),  
     ESTADO varchar(1),
     primary key (PERIODO_ID)
 );

@@ -5,13 +5,19 @@
  */
 package ec.com.codesoft.codefaclite.gestionacademica.model;
 
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.PeriodoPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PeriodoEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PeriodoServiceIf;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -23,11 +29,15 @@ public class PeriodoModel extends PeriodoPanel {
     private PeriodoServiceIf periodoService;
 
     public PeriodoModel() {
+        periodoService = ServiceFactory.getFactory().getPeriodoServiceIf();
     }
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        getCmbEstado().removeAllItems();
+        for (PeriodoEnumEstado enumerador : PeriodoEnumEstado.values()) {
+            getCmbEstado().addItem(enumerador);
+        }
     }
 
     @Override
@@ -37,7 +47,24 @@ public class PeriodoModel extends PeriodoPanel {
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            setearValoresPeriodo(periodo);
+            periodo = periodoService.grabar(periodo);
+            DialogoCodefac.mensaje("Datos correctos", "El periodo se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+        } catch (ServicioCodefacException ex) {
+            DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
+            throw new ExcepcionCodefacLite("Error al grabar periodo modelo");
+        } catch (RemoteException ex) {
+            Logger.getLogger(AulaModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void setearValoresPeriodo(Periodo periodo) {
+        periodo.setNombre(getTxtNombre().getText());
+        periodo.setObservaciones(getTxtObservacion().getText());
+        periodo.setEstado(((PeriodoEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
+
+
     }
 
     @Override
@@ -68,7 +95,6 @@ public class PeriodoModel extends PeriodoPanel {
     @Override
     public void limpiar() {
         periodo = new Periodo();
-        periodoService = ServiceFactory.getFactory().getPeriodoServiceIf();
     }
 
     @Override

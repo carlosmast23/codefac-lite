@@ -8,15 +8,15 @@ package ec.com.codesoft.codefaclite.gestionacademica.busqueda;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NivelEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PeriodoEnumEstado;
 import java.util.Vector;
 
 /**
  *
  * @author CodesoftDesarrollo
  */
-public class NivelBusquedaDialogo implements InterfaceModelFind<Nivel> {
+public class PeriodoBusquedaDialogo implements InterfaceModelFind<Periodo> {
 
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
@@ -29,23 +29,22 @@ public class NivelBusquedaDialogo implements InterfaceModelFind<Nivel> {
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        String queryString = "SELECT u FROM Nivel u WHERE (u.estado=?1) and";
+        String queryString = "SELECT u FROM Periodo u WHERE (u.estado=?1) and";
         queryString += " ( LOWER(u.nombre) LIKE " + filter + " )";
         QueryDialog queryDialog = new QueryDialog(queryString);
-        queryDialog.agregarParametro(1, NivelEnumEstado.ACTIVO.getEstado());
+        queryDialog.agregarParametro(1, PeriodoEnumEstado.ACTIVO.getEstado());
         return queryDialog;
     }
 
     @Override
-    public void agregarObjeto(Nivel n, Vector dato) {
-        dato.add(n.getNombre());
-        dato.add(n.getDescripcion());
-        dato.add(n.getOrden());
+    public void agregarObjeto(Periodo p, Vector dato) {
+        dato.add(p.getNombre());
+
     }
 
     @Override
-    public Boolean buscarObjeto(Nivel n, Object valor) {
-        return n.getNombre().equals(valor.toString());
+    public Boolean buscarObjeto(Periodo p, Object valor) {
+        return p.getNombre().equals(valor.toString());
     }
 
 }
