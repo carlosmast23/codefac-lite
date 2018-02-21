@@ -7,6 +7,8 @@ package ec.com.codesoft.codefaclite.crm.panel;
 
 import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
@@ -718,18 +720,25 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         this.btnBuscarProductoProveedor = btnBuscarProductoProveedor;
     }
 
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Producto")
     public JTextField getTxtProductoItem() {
         return txtProductoItem;
     }
-
+    
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Descripción")
     public JTextField getTxtDescripcionItem() {
         return txtDescripcionItem;
     }
 
+    
     public void setTxtDescripcionItem(JTextField txtDescripcionItem) {
         this.txtDescripcionItem = txtDescripcionItem;
     }
 
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0-9]+([.][0-9]+)?$", nombre = "Precio Unitario")
     public JTextField getTxtPrecionUnitarioItem() {
         return txtPrecionUnitarioItem;
     }
@@ -745,7 +754,9 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     public void setBtnAgregarItem(JButton btnAgregarItem) {
         this.btnAgregarItem = btnAgregarItem;
     }
-
+    
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido=false ,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Autorización")
     public JTextField getTxtAutorizacion() {
         return txtAutorizacion;
     }
@@ -753,7 +764,9 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     public void setTxtAutorizacion(JTextField txtAutorizacion) {
         this.txtAutorizacion = txtAutorizacion;
     }
-
+    
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0-9]+$",nombre = "Cantidad")
     public JTextField getTxtCantidadItem() {
         return txtCantidadItem;
     }
@@ -761,7 +774,9 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     public void setTxtCantidadItem(JTextField txtCantidadItem) {
         this.txtCantidadItem = txtCantidadItem;
     }
-
+    
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Observación")
     public JTextField getTxtObservacion() {
         return txtObservacion;
     }
@@ -778,6 +793,8 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         this.txtOrdenCompra = txtOrdenCompra;
     }
 
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0-9]+$",nombre = "Preimpreso")
     public JTextField getTxtPreimpreso() {
         return txtEstablecimiento;
     }
@@ -857,7 +874,9 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     public void setTxtEstablecimiento(JTextField txtEstablecimiento) {
         this.txtEstablecimiento = txtEstablecimiento;
     }
-
+    
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0-9]+$",nombre = "Punto Emisión")
     public JTextField getTxtPuntoEmision() {
         return txtPuntoEmision;
     }
@@ -865,7 +884,9 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     public void setTxtPuntoEmision(JTextField txtPuntoEmision) {
         this.txtPuntoEmision = txtPuntoEmision;
     }
-
+    
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0-9]+$",nombre = "Secuencial")
     public JTextField getTxtSecuencial() {
         return txtSecuencial;
     }

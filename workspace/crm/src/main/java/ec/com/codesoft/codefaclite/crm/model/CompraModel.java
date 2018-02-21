@@ -341,9 +341,19 @@ public class CompraModel extends CompraPanel{
         getTxtDescuentoImpuestos().addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent e) {
-                compra.setDescuentoImpuestos(new BigDecimal(getTxtDescuentoImpuestos().getText()));
-                calcularIva12();
-                calcularValorTotal();
+                BigDecimal descuento = new BigDecimal(getTxtDescuentoImpuestos().getText());
+                if(descuento.compareTo(compra.getSubtotalImpuestos()) == 1)
+                {
+                    DialogoCodefac.mensaje("Descuento", "El descuento no puede ser mayor que el subtotal con impuesto", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                }
+                else
+                {
+                    compra.setDescuentoImpuestos(descuento);
+                    calcularSubtotalImpuesto();
+                    calcularIva12();
+                    calcularValorTotal();
+                    mostrarDatosTotales();
+                } 
             }
 
             @Override
@@ -357,9 +367,19 @@ public class CompraModel extends CompraPanel{
             @Override
             public void focusLost(FocusEvent e)
             {
-                compra.setDescuentoSinImpuestos(new BigDecimal(getTxtDescuentoSinImpuestos().getText()));
-                calcularIva12();
-                calcularValorTotal();
+                BigDecimal descuento = new BigDecimal(getTxtDescuentoSinImpuestos().getText());
+                if(descuento.compareTo(compra.getSubtotalSinImpuestos()) == 1)
+                {
+                    DialogoCodefac.mensaje("Descuento", "El descuento no puede ser mayor que el subtotal sin impuesto", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                }
+                else
+                {
+                    compra.setDescuentoSinImpuestos(descuento);
+                    calcularSubtotalSinImpuesto();
+                    calcularIva12();
+                    calcularValorTotal();
+                    mostrarDatosTotales();
+                }
             }
             
             @Override
@@ -419,7 +439,7 @@ public class CompraModel extends CompraPanel{
     
     public void calcularIva12()
     {
-        this.compra.setIva(this.compra.getSubtotalImpuestos().subtract(this.compra.getDescuentoImpuestos()).multiply(new BigDecimal("0.120")));
+        this.compra.setIva(this.compra.getSubtotalImpuestos().multiply(new BigDecimal("0.120")));
         this.compra.setIva(this.compra.getIva().setScale(2,RoundingMode.HALF_UP));
     }
     
@@ -437,11 +457,7 @@ public class CompraModel extends CompraPanel{
     
     public void calcularValorTotal()
     {    
-        this.compra.setTotal(this.compra.getSubtotalImpuestos().
-                subtract(this.compra.getDescuentoImpuestos()).
-                add(this.compra.getSubtotalSinImpuestos().
-                subtract(this.compra.getDescuentoSinImpuestos())).
-                add(this.compra.getIva()));
+        this.compra.setTotal(this.compra.getSubtotalImpuestos().add(this.compra.getSubtotalSinImpuestos().add(this.compra.getIva())));
     }
     
     /**
@@ -518,6 +534,7 @@ public class CompraModel extends CompraPanel{
         getTxtPrecionUnitarioItem().setText("");
         getTxtProductoItem().setText("");
         getTxtCantidadItem().setText("");
+        
     }
     
 }
