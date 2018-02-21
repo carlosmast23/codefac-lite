@@ -47,6 +47,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceControllerServer;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import ec.com.codesoft.ejemplo.utilidades.imagen.UtilidadImagen;
@@ -93,6 +94,7 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -146,7 +148,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private ControladorCodefacInterface panelActual;
     private SwingBrowser browser ;
     private SwingBrowser browserPublicidad ;
-    private List<MenuControlador> ventanasMenuList;
+    private List<VentanaEnum> ventanasMenuList;
     private SessionCodefac sessionCodefac;
     private Map<String,PanelSecundarioAbstract> panelesSecundariosMap;
     
@@ -522,7 +524,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     
     private void agregarListenerMenu()
     {
-        for (MenuControlador menuControlador : ventanasMenuList) {
+        for (VentanaEnum menuControlador : ventanasMenuList) {
             
             if(menuControlador.getJmenuItem()==null)
                 continue; //Si no tiene asiganod un jmenu item continua al siguiente menu
@@ -1811,12 +1813,12 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         agregarListenerMenu((ControladorCodefacInterface) panel,maximizado);
     }
 
-    public List<MenuControlador> getVentanasMenuList() {
+    public List<VentanaEnum> getVentanasMenuList() {
         return ventanasMenuList;
     }
 
-    public void setVentanasMenuList(List<MenuControlador> ventanasMenuList) {
-        this.ventanasMenuList = ventanasMenuList;
+    public void setVentanasMenuList(List<VentanaEnum> ventanasMenuList) {
+        this.ventanasMenuList=VentanaEnum.getListValues();
         
         this.getJMenuBar().removeAll();
         List<JMenu> menus=construirMenuDinamico();
@@ -1869,7 +1871,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     menuCategoria.setFont(new Font("Arial", 0, 13));
                     
                     boolean existenMenuItem=false;
-                    for (MenuControlador menuControlador : ventanasMenuList) {
+                    for (VentanaEnum menuControlador : ventanasMenuList) {
                         
                         //Verificacion cuando es un modulo habilitado
                         boolean agregarAlMenu=false;
@@ -1882,9 +1884,14 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         }
                         else //Verificacion cuando no es un modulo habilitado
                         {
-                            if(menuControlador.verificarPermisoModuloAdicional(sessionCodefac.getModulosMap()))
+                            //Solo verifica si debe agregar otras ventanas de otros modulos si el menu pertenece al modulo actual
+                            //Nota: sin esta linea pueden aparecer varios enlaces a esta ventana desde otros menus de modulos
+                            if(menuControlador.getModulo().equals(moduloSistema))
                             {
-                                agregarAlMenu=true;
+                                if(menuControlador.verificarPermisoModuloAdicional(sessionCodefac.getModulosMap()))
+                                {
+                                    agregarAlMenu=true;
+                                }
                             }
                         
                         }
@@ -1894,7 +1901,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             existenMenuItem = true;
                             String nombreVentana = "Sin nombre";
                             try {
-                                nombreVentana = menuControlador.getInstance().getNombre();
+                                nombreVentana =((GeneralPanelInterface)(menuControlador.getInstance())).getNombre();
                             } catch (java.lang.UnsupportedOperationException uoe) {
                                 System.err.println(menuControlador.getClass().getSimpleName() + ": Ventana sin implementar nombre");
                             }
@@ -2064,10 +2071,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
      */
     private Class buscarPanelDialog(String nombre)
     {
-        for (MenuControlador menuControlador : ventanasMenuList) {
-            if(menuControlador.getVentana().getName().equals(nombre))
+        for (VentanaEnum menuControlador : ventanasMenuList) {
+            Class<GeneralPanelInterface> clase=menuControlador.getClase();
+            if(clase.getName().equals(nombre))
             {
-                 return menuControlador.getVentana();
+                 return menuControlador.getClase();
             }
         }
         return null;

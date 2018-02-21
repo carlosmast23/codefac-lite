@@ -27,4 +27,20 @@ create table PERFIL_USUARIO
     CONSTRAINT id_perfil_usuario_fk FOREIGN KEY (PERFIL_ID) REFERENCES PERFIL(ID)    
 )
 
+create table PERMISO_VENTANA
+(
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1),
+    PERFIL_ID  BIGINT,
+    NOMBRE_CLASE  varchar(250),
+    PERMISO_GRABAR varchar(1),
+    PERMISO_ELIMINAR varchar(1),
+    PERMISO_IMPRIMIR varchar(1),
+    PERMISO_EDITAR varchar(1),
+    PERMISO_BUSCAR varchar(1),
+    primary key (ID),
+    CONSTRAINT id_usuario_perfil_fk FOREIGN KEY (NICK) REFERENCES USUARIO(NICK),
+    CONSTRAINT id_perfil_usuario_fk FOREIGN KEY (PERFIL_ID) REFERENCES PERFIL(ID)    
+)
+
+
 

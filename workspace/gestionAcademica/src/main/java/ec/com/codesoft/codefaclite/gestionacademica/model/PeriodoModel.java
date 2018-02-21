@@ -7,6 +7,9 @@ package ec.com.codesoft.codefaclite.gestionacademica.model;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.PeriodoPanel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PeriodoServiceIf;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +17,13 @@ import java.util.Map;
  *
  * @author Carlos
  */
-public class PeriodoModel extends PeriodoPanel{
+public class PeriodoModel extends PeriodoPanel {
+
+    private Periodo periodo;
+    private PeriodoServiceIf periodoService;
+
+    public PeriodoModel() {
+    }
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
@@ -58,12 +67,13 @@ public class PeriodoModel extends PeriodoPanel{
 
     @Override
     public void limpiar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        periodo = new Periodo();
+        periodoService = ServiceFactory.getFactory().getPeriodoServiceIf();
     }
 
     @Override
     public String getNombre() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "Periodo";
     }
 
     @Override
@@ -80,5 +90,5 @@ public class PeriodoModel extends PeriodoPanel{
     public List<String> getPerfilesPermisos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }

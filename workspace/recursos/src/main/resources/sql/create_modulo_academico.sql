@@ -2,7 +2,7 @@ create table AULA(
     AULA_ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
     NOMBRE varchar(256),
     UBICACION varchar(256),    
-    CANTIDAD integer,
+    CAPACIDAD integer,
     ESTADO varchar(1),
     primary key (AULA_ID)
 );
@@ -22,10 +22,21 @@ create table ESTUDIANTE(
 
 create table NIVEL( 
     NIVEL_ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
+    REF_ID bigint,     
     NOMBRE varchar(256),
     ORDEN integer,   
     ESTADO varchar(1),
     primary key (NIVEL_ID)
+);
+
+create table PERIODO( 
+    PERIODO_ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
+    NOMBRE varchar(100),
+    FECHA_INICIO date,
+    FECHA_FIN date,
+    OBSERVACION varchar(100),  
+    ESTADO varchar(1),
+    primary key (PERIODO_ID)
 );
 
 create table NIVEL_ACADEMICO( 
