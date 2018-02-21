@@ -501,7 +501,7 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel22">
+        <Component class="javax.swing.JLabel" name="lblSubtotalImpuestos">
           <Properties>
             <Property name="text" type="java.lang.String" value="0.00"/>
           </Properties>
@@ -511,7 +511,7 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel23">
+        <Component class="javax.swing.JLabel" name="lblSubtotalSinImpuestos">
           <Properties>
             <Property name="text" type="java.lang.String" value="0.00"/>
           </Properties>

@@ -29,6 +29,22 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         initComponents();
     }
 
+    public JLabel getLblSubtotalImpuestos() {
+        return lblSubtotalImpuestos;
+    }
+
+    public void setLblSubtotalImpuestos(JLabel lblSubtotalImpuestos) {
+        this.lblSubtotalImpuestos = lblSubtotalImpuestos;
+    }
+
+    public JLabel getLblSubtotalSinImpuestos() {
+        return lblSubtotalSinImpuestos;
+    }
+
+    public void setLblSubtotalSinImpuestos(JLabel lblSubtotalSinImpuestos) {
+        this.lblSubtotalSinImpuestos = lblSubtotalSinImpuestos;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -82,8 +98,8 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         txtDescuentoSinImpuestos = new javax.swing.JTextField();
         jLabel20 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
-        jLabel22 = new javax.swing.JLabel();
-        jLabel23 = new javax.swing.JLabel();
+        lblSubtotalImpuestos = new javax.swing.JLabel();
+        lblSubtotalSinImpuestos = new javax.swing.JLabel();
         jLabel24 = new javax.swing.JLabel();
         lblTotal = new javax.swing.JLabel();
         lblIva = new javax.swing.JLabel();
@@ -467,7 +483,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 2);
         jPanel1.add(jLabel21, gridBagConstraints);
 
-        jLabel22.setText("0.00");
+        lblSubtotalImpuestos.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -475,9 +491,9 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 10);
-        jPanel1.add(jLabel22, gridBagConstraints);
+        jPanel1.add(lblSubtotalImpuestos, gridBagConstraints);
 
-        jLabel23.setText("0.00");
+        lblSubtotalSinImpuestos.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
@@ -485,7 +501,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 10);
-        jPanel1.add(jLabel23, gridBagConstraints);
+        jPanel1.add(lblSubtotalSinImpuestos, gridBagConstraints);
 
         jLabel24.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
         jLabel24.setText("TOTAL:");
@@ -619,8 +635,6 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel28;
@@ -636,7 +650,9 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblIva;
     private javax.swing.JLabel lblSubtotalImpuesto;
+    private javax.swing.JLabel lblSubtotalImpuestos;
     private javax.swing.JLabel lblSubtotalSinImpuesto;
+    private javax.swing.JLabel lblSubtotalSinImpuestos;
     private javax.swing.JLabel lblTotal;
     private javax.swing.JTable tblDetalleProductos;
     private javax.swing.JTextField txtAutorizacion;

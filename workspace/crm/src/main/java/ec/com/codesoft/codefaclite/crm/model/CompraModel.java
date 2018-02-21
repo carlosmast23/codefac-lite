@@ -32,6 +32,7 @@ import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import es.mityc.firmaJava.ocsp.config.ServidorOcsp;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.math.BigDecimal;
@@ -61,6 +62,8 @@ public class CompraModel extends CompraPanel{
     private Persona proveedor;
     private ProductoProveedor productoProveedor;
     private DefaultTableModel modeloTablaDetallesCompra;
+    private BigDecimal subtotal12;
+    private BigDecimal subtotal0;
     
     
     @Override
@@ -335,11 +338,11 @@ public class CompraModel extends CompraPanel{
             }
         });
         
-        getTxtDescuentoImpuestos().addFocusListener(new FocusListener() {
+        getTxtDescuentoImpuestos().addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent e) {
                 compra.setDescuentoImpuestos(new BigDecimal(getTxtDescuentoImpuestos().getText()));
-                //compra.setDescuentoSinImpuestos(new BigDecimal(getTxtDescuentoSinImpuestos().getText()));
+                calcularIva12();
                 calcularValorTotal();
             }
 
@@ -348,6 +351,25 @@ public class CompraModel extends CompraPanel{
                 
             }
         });
+        
+        getTxtDescuentoSinImpuestos().addFocusListener(new FocusAdapter() {
+            
+            @Override
+            public void focusLost(FocusEvent e)
+            {
+                compra.setDescuentoSinImpuestos(new BigDecimal(getTxtDescuentoSinImpuestos().getText()));
+                calcularIva12();
+                calcularValorTotal();
+            }
+            
+            @Override
+            public void focusGained(FocusEvent e)
+            {
+                
+            }
+            
+        });
+       
     }
     
     private void actualizarTotales()
@@ -362,14 +384,14 @@ public class CompraModel extends CompraPanel{
         compra.setDescuentoSinImpuestos(BigDecimal.ZERO);
         compra.setDescuentoImpuestos(BigDecimal.ZERO);
         //LLamo metodos para calcular valores totales
-        calcularSubtotalSinImpuestos(detalles);
-        calcularSubtotalImpuesto(detalles);
-        calcularIva12(detalles);
+        calcularSubtotal0(detalles);
+        calcularSubtotal12(detalles);
+        calcularIva12();
         calcularValorTotal();
 
     }
     
-    public void calcularSubtotalSinImpuestos(List<CompraDetalle> detalles)
+    public void calcularSubtotal0(List<CompraDetalle> detalles)
     {
         for(CompraDetalle detalle : detalles)
         {
@@ -379,9 +401,10 @@ public class CompraModel extends CompraPanel{
             }
         }
         this.compra.setSubtotalSinImpuestos(this.compra.getSubtotalSinImpuestos().setScale(2,RoundingMode.HALF_UP));
+        this.subtotal0 = this.compra.getSubtotalSinImpuestos();
     }
     
-    public void calcularSubtotalImpuesto(List<CompraDetalle> detalles)
+    public void calcularSubtotal12(List<CompraDetalle> detalles)
     {
         for(CompraDetalle detalle : detalles)
         {
@@ -391,27 +414,36 @@ public class CompraModel extends CompraPanel{
             }
         }
         this.compra.setSubtotalImpuestos(this.compra.getSubtotalImpuestos().setScale(2,RoundingMode.HALF_UP));
+        this.subtotal12 = this.compra.getSubtotalImpuestos();
     }
     
-    public void calcularIva12(List<CompraDetalle> detalles)
+    public void calcularIva12()
     {
-        for(CompraDetalle detalle : detalles)
-        {
-            this.compra.setIva(this.compra.getIva().add(detalle.getIva()));
-        }
+        this.compra.setIva(this.compra.getSubtotalImpuestos().subtract(this.compra.getDescuentoImpuestos()).multiply(new BigDecimal("0.120")));
         this.compra.setIva(this.compra.getIva().setScale(2,RoundingMode.HALF_UP));
     }
     
-    public void calcularValorTotal()
+    public void calcularSubtotalSinImpuesto()
     {
-        //this.compra.setDescuentoImpuestos(this.compra.getSubtotalImpuestos().subtract(this.compra.getDescuentoImpuestos()));
-        //this.compra.setDescuentoSinImpuestos(this.compra.getDescuentoSinImpuestos().subtract(this.compra.getDescuentoSinImpuestos()));
+        this.compra.setSubtotalSinImpuestos(this.compra.getSubtotalSinImpuestos().subtract(this.compra.getDescuentoSinImpuestos()));
+        this.compra.setSubtotalSinImpuestos(this.compra.getSubtotalSinImpuestos().setScale(2,RoundingMode.HALF_UP));
+    }
+    
+    public void calcularSubtotalImpuesto()
+    {
+        this.compra.setSubtotalImpuestos(this.compra.getSubtotalImpuestos().subtract(this.compra.getDescuentoImpuestos()));
+        this.compra.setSubtotalImpuestos(this.compra.getSubtotalImpuestos().setScale(2,RoundingMode.HALF_UP));
+    }
+    
+    public void calcularValorTotal()
+    {    
         this.compra.setTotal(this.compra.getSubtotalImpuestos().
                 subtract(this.compra.getDescuentoImpuestos()).
                 add(this.compra.getSubtotalSinImpuestos().
                 subtract(this.compra.getDescuentoSinImpuestos())).
                 add(this.compra.getIva()));
     }
+    
     /**
      * Actualiza los datos de la tabla segun los datos grabados en los detalles de la tabla
      * de compras
@@ -437,11 +469,13 @@ public class CompraModel extends CompraPanel{
     
     private void mostrarDatosTotales()
     {
-        getLblSubtotalImpuesto().setText(compra.getSubtotalImpuestos()+"");
-        getLblSubtotalSinImpuesto().setText(compra.getSubtotalSinImpuestos()+"");
-        getLblIva().setText(compra.getIva()+"");
+        getLblSubtotalSinImpuesto().setText(this.subtotal0 + "");
+        getLblSubtotalImpuesto().setText(this.subtotal12 + "");
         getTxtDescuentoImpuestos().setText(compra.getDescuentoImpuestos()+"");
         getTxtDescuentoSinImpuestos().setText(compra.getDescuentoSinImpuestos()+"");
+        getLblSubtotalImpuestos().setText(compra.getSubtotalImpuestos()+"");
+        getLblSubtotalSinImpuestos().setText(compra.getSubtotalSinImpuestos()+"");
+        getLblIva().setText(compra.getIva()+"");
         getLblTotal().setText(compra.getTotal()+""); 
     }
 
