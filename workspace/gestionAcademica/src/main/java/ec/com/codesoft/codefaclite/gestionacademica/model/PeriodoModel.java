@@ -6,14 +6,23 @@
 package ec.com.codesoft.codefaclite.gestionacademica.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.gestionacademica.busqueda.PeriodoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.PeriodoPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PeriodoEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PeriodoServiceIf;
+import static ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha.fechaInicioMes;
+import static ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha.hoy;
 import java.rmi.RemoteException;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -27,6 +36,11 @@ public class PeriodoModel extends PeriodoPanel {
 
     private Periodo periodo;
     private PeriodoServiceIf periodoService;
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    Date fechaInicio = null;
+    Date fechaFin = null;
+    String fechainicio = "";
+    String fechafin = "";
 
     public PeriodoModel() {
         periodoService = ServiceFactory.getFactory().getPeriodoServiceIf();
@@ -38,6 +52,9 @@ public class PeriodoModel extends PeriodoPanel {
         for (PeriodoEnumEstado enumerador : PeriodoEnumEstado.values()) {
             getCmbEstado().addItem(enumerador);
         }
+
+        getDateFechaInicio().setDate(fechaInicioMes(hoy()));
+        getDateFechaFin().setDate(hoy());
     }
 
     @Override
@@ -63,8 +80,17 @@ public class PeriodoModel extends PeriodoPanel {
         periodo.setNombre(getTxtNombre().getText());
         periodo.setObservaciones(getTxtObservacion().getText());
         periodo.setEstado(((PeriodoEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
-
-
+        if (getDateFechaInicio().getDate() != null) {
+            fechaInicio = new Date(getDateFechaInicio().getDate().getTime());
+            fechainicio = dateFormat.format(getDateFechaInicio().getDate());
+            periodo.setFechaInicio(fechaInicio);
+        }
+        if (getDateFechaFin().getDate() != null) {
+            fechaFin = new Date(getDateFechaFin().getDate().getTime());
+            fechafin = dateFormat.format(getDateFechaFin().getDate());
+            periodo.setFechaInicio(fechaFin);
+        }
+        
     }
 
     @Override
@@ -89,7 +115,18 @@ public class PeriodoModel extends PeriodoPanel {
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        PeriodoBusquedaDialogo periodoBusquedaDialogo = new PeriodoBusquedaDialogo();
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(periodoBusquedaDialogo);
+        buscarDialogoModel.setVisible(true);
+        periodo = (Periodo) buscarDialogoModel.getResultado();
+        if (periodo == null) {
+            throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar periodo vacio");
+        }
+        getTxtNombre().setText(periodo.getNombre());
+        getTxtObservacion().setText(periodo.getObservaciones());
+
+        getDateFechaInicio().setDate(periodo.getFechaInicio());
+        getDateFechaFin().setDate(periodo.getFechaFin());
     }
 
     @Override
@@ -109,7 +146,14 @@ public class PeriodoModel extends PeriodoPanel {
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
+        permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
+        return permisos;
     }
 
     @Override

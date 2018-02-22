@@ -98,6 +98,7 @@ import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.AulaService
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.EstudianteService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.NivelAcademicoService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.NivelService;
+import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.PeriodoService;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
@@ -126,7 +127,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PeriodoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PermisoVentanaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
@@ -320,7 +323,8 @@ public class Main {
             mapRecursos.put(AulaService.class, AulaServiceIf.class);
             mapRecursos.put(EstudianteService.class, EstudianteServiceIf.class);
             mapRecursos.put(NivelService.class, NivelServiceIf.class);
-            mapRecursos.put(NivelAcademicoService.class, NivelAcademicoService.class);
+            mapRecursos.put(PeriodoService.class, PeriodoServiceIf.class);
+            mapRecursos.put(NivelAcademicoService.class, NivelAcademicoServiceIf.class);
             mapRecursos.put(PermisoVentanaService.class, PermisoVentanaServiceIf.class);
             ServiceControllerServer.cargarRecursos(mapRecursos);
             System.out.println("servidor iniciado");

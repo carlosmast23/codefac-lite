@@ -40,8 +40,8 @@ public abstract class PeriodoPanel extends ControladorCodefacInterface {
         lblFechaInicio = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
         lblFechaFin = new javax.swing.JLabel();
-        cmbFechaInicio = new com.toedter.calendar.JDateChooser();
-        cmbFechaFin = new com.toedter.calendar.JDateChooser();
+        dateFechaInicio = new com.toedter.calendar.JDateChooser();
+        dateFechaFin = new com.toedter.calendar.JDateChooser();
         lblEstado = new javax.swing.JLabel();
         cmbEstado = new javax.swing.JComboBox<>();
         lblObservacion = new javax.swing.JLabel();
@@ -83,8 +83,8 @@ public abstract class PeriodoPanel extends ControladorCodefacInterface {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblNombre)
-                        .addGap(32, 32, 32)
-                        .addComponent(txtNombre))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 479, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -93,10 +93,10 @@ public abstract class PeriodoPanel extends ControladorCodefacInterface {
                             .addComponent(lblEstado))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(cmbFechaFin, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
+                            .addComponent(dateFechaFin, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
                             .addComponent(cmbEstado, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cmbFechaInicio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap())
+                            .addComponent(dateFechaInicio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -108,11 +108,11 @@ public abstract class PeriodoPanel extends ControladorCodefacInterface {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblFechaInicio)
-                    .addComponent(cmbFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(dateFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblFechaFin)
-                    .addComponent(cmbFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(dateFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblEstado)
@@ -121,7 +121,7 @@ public abstract class PeriodoPanel extends ControladorCodefacInterface {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblObservacion)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         pack();
@@ -130,8 +130,8 @@ public abstract class PeriodoPanel extends ControladorCodefacInterface {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<PeriodoEnumEstado> cmbEstado;
-    private com.toedter.calendar.JDateChooser cmbFechaFin;
-    private com.toedter.calendar.JDateChooser cmbFechaInicio;
+    private com.toedter.calendar.JDateChooser dateFechaFin;
+    private com.toedter.calendar.JDateChooser dateFechaInicio;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblEstado;
     private javax.swing.JLabel lblFechaFin;
@@ -150,21 +150,23 @@ public abstract class PeriodoPanel extends ControladorCodefacInterface {
         this.cmbEstado = cmbEstado;
     }
 
-    public JDateChooser getCmbFechaFin() {
-        return cmbFechaFin;
+    public JDateChooser getDateFechaFin() {
+        return dateFechaFin;
     }
 
-    public void setCmbFechaFin(JDateChooser cmbFechaFin) {
-        this.cmbFechaFin = cmbFechaFin;
+    public void setDateFechaFin(JDateChooser dateFechaFin) {
+        this.dateFechaFin = dateFechaFin;
     }
 
-    public JDateChooser getCmbFechaInicio() {
-        return cmbFechaInicio;
+    public JDateChooser getDateFechaInicio() {
+        return dateFechaInicio;
     }
 
-    public void setCmbFechaInicio(JDateChooser cmbFechaInicio) {
-        this.cmbFechaInicio = cmbFechaInicio;
+    public void setDateFechaInicio(JDateChooser dateFechaInicio) {
+        this.dateFechaInicio = dateFechaInicio;
     }
+
+
 
     @LimpiarAnotacion
     @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Nombre", expresionRegularMensaje = "No se permiten caracteres especiales")

@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
+import java.io.Serializable;
 import java.sql.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,24 +13,32 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author Carlos
  */
 @Entity
-@Table(name = "Periodo")
-public class Periodo {
+@Table(name = "PERIODO")
+@XmlRootElement
+public class Periodo implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
+    @Column(name = "PERIODO_ID")
     private Long idPeriodo;
+    @Column(name = "NOMBRE")
     private String nombre;
+    @Column(name = "FECHA_INICIO")
     private Date fechaInicio;
+    @Column(name = "FECHA_FIN")
     private Date fechaFin;
-    private String estado;
+    @Column(name = "OBSERVACION")
     private String observaciones;
+    @Column(name = "ESTADO")
+    private String estado;
 
     public Long getIdPeriodo() {
         return idPeriodo;
@@ -79,6 +88,8 @@ public class Periodo {
         this.observaciones = observaciones;
     }
 
-   
-
+    @Override
+    public String toString() {
+        return nombre;
+    }
 }

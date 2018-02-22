@@ -22,8 +22,8 @@ public class PeriodoBusquedaDialogo implements InterfaceModelFind<Periodo> {
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<>();
         titulo.add(new ColumnaDialogo("Nombre", 0.3d));
-        titulo.add(new ColumnaDialogo("Orden", 0.2d));
-        titulo.add(new ColumnaDialogo("Descripcion", 0.3d));
+        titulo.add(new ColumnaDialogo("Fecha inicio", 0.2d));
+        titulo.add(new ColumnaDialogo("Fecha fin", 0.2d));
         return titulo;
     }
 
@@ -39,7 +39,8 @@ public class PeriodoBusquedaDialogo implements InterfaceModelFind<Periodo> {
     @Override
     public void agregarObjeto(Periodo p, Vector dato) {
         dato.add(p.getNombre());
-
+        dato.add(p.getFechaInicio());
+        dato.add(p.getFechaFin());
     }
 
     @Override

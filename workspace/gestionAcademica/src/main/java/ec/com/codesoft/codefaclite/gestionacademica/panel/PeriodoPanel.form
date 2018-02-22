@@ -36,8 +36,8 @@
                   </Group>
                   <Group type="102" attributes="0">
                       <Component id="lblNombre" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                      <Component id="txtNombre" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="txtNombre" min="-2" pref="479" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -49,13 +49,13 @@
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="cmbFechaFin" pref="108" max="32767" attributes="0"/>
+                          <Component id="dateFechaFin" pref="108" max="32767" attributes="0"/>
                           <Component id="cmbEstado" max="32767" attributes="0"/>
-                          <Component id="cmbFechaInicio" alignment="0" max="32767" attributes="0"/>
+                          <Component id="dateFechaInicio" alignment="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -70,12 +70,12 @@
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="lblFechaInicio" min="-2" max="-2" attributes="0"/>
-                  <Component id="cmbFechaInicio" min="-2" max="-2" attributes="0"/>
+                  <Component id="dateFechaInicio" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="lblFechaFin" min="-2" max="-2" attributes="0"/>
-                  <Component id="cmbFechaFin" min="-2" max="-2" attributes="0"/>
+                  <Component id="dateFechaFin" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -87,7 +87,7 @@
                   <Component id="lblObservacion" min="-2" max="-2" attributes="0"/>
                   <Component id="jScrollPane1" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="22" max="32767" attributes="0"/>
+              <EmptySpace pref="26" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -113,9 +113,9 @@
         <Property name="text" type="java.lang.String" value="Fecha Fin:"/>
       </Properties>
     </Component>
-    <Component class="com.toedter.calendar.JDateChooser" name="cmbFechaInicio">
+    <Component class="com.toedter.calendar.JDateChooser" name="dateFechaInicio">
     </Component>
-    <Component class="com.toedter.calendar.JDateChooser" name="cmbFechaFin">
+    <Component class="com.toedter.calendar.JDateChooser" name="dateFechaFin">
     </Component>
     <Component class="javax.swing.JLabel" name="lblEstado">
       <Properties>
