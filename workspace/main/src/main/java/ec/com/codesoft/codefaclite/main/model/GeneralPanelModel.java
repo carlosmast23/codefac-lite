@@ -979,7 +979,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private void agregarListenerMenu(ControladorCodefacInterface panel,boolean maximisado)
     {
         try {
-            
+            /*
             List<String> perfilesPermisos=null;
             try
             {
@@ -995,7 +995,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 DialogoCodefac.mensaje("Error Permisos","El usuario actual no tiene permisos para ver esta pantalla",DialogoCodefac.MENSAJE_INCORRECTO);
                 panel.dispose();
                 return;
-            }
+            }*/
             
             /**
              * Agregar variables de session a la pantalla
@@ -1541,6 +1541,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         return frameInterface;
     }
  
+    /**
+     * Habilita solo los botones disponibles para la pantalla
+     */
     private void habilitarConfiguracioneBotones()
     {
         JInternalFrame frame = getjDesktopPane1().getSelectedFrame();
@@ -1552,37 +1555,48 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             for (Map.Entry<Integer, Boolean> entry : mapPermisos.entrySet()) {
                 Integer key = entry.getKey();
                 Boolean value = entry.getValue();
+                JButton boton=null;
 
                 switch (key) {
                     case ControladorCodefacInterface.BOTON_GRABAR:
-                        getBtnGuardar().setEnabled(value);
+                        boton=getBtnGuardar();
                         break;
 
                     case ControladorCodefacInterface.BOTON_ELIMINAR:
-                        getBtnEliminar().setEnabled(value);
+                        boton=getBtnEliminar();
                         break;
 
                     case ControladorCodefacInterface.BOTON_IMPRIMIR:
-                        getBtnImprimir().setEnabled(value);
+                        boton=getBtnImprimir();
                         break;
 
                     case ControladorCodefacInterface.BOTON_AYUDA:
-                        getBtnAyuda().setEnabled(value);
+                        boton=getBtnAyuda();
                         break;
 
                     case ControladorCodefacInterface.BOTON_NUEVO:
-                        getBtnNuevo().setEnabled(value);
+                        boton=getBtnNuevo();
                         break;
 
                     case ControladorCodefacInterface.BOTON_REFRESCAR:
-                        getBtnActualizar().setEnabled(value);
+                        boton=getBtnActualizar();
                         break;
 
                     case ControladorCodefacInterface.BOTON_BUSCAR:
-                        getBtnBuscar().setEnabled(value);
+                        boton=getBtnBuscar();
                         break;
                 }
-
+                
+                boton.setEnabled(value);
+                //Adicional de validar si la pantalla tiene disponible la opcion verificar si el usuario tiene permisos para los botones
+                if(value) //Validar solo si el valor es positivo porque solo debo poder desactivar opciones
+                {
+                    Boolean permisoBotonUsuario=permisoBotonesRoles(frameInterface,key);
+                    if(!permisoBotonUsuario)
+                        boton.setEnabled(false); //Descivar si no tiene permisos
+                }
+                
+                
             }
         }
         catch(java.lang.UnsupportedOperationException uoe)
@@ -1590,6 +1604,39 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             //Si no esta implementado el metodo poner todos los botones en falso
             habilitarBotones(false);
         }
+    }
+    
+    /**
+     * Verificar si el usuario tiene permisos para activar el boton del menu
+     * @return 
+     */
+    private boolean permisoBotonesRoles(ControladorCodefacInterface frame,Integer boton )
+    {
+        String claseNombre=frame.getClass().getName();
+        List<Perfil> perfiles= sessionCodefac.getPerfiles();
+        for (Perfil perfil : perfiles) {
+            for (PermisoVentana permisoVentana : perfil.getVentanasPermisos()) {
+                if(permisoVentana.getVentanaEnum().getClaseNombre().equals(claseNombre))
+                {
+                    if(permisoVentana.getPermisoBuscar().equals("s") && ControladorCodefacInterface.BOTON_BUSCAR==boton)
+                        return true;
+                    
+                    if(permisoVentana.getPermisoEditar().equals("s") && ControladorCodefacInterface.BOTON_GRABAR==boton)
+                        return true;
+                    
+                    if(permisoVentana.getPermisoEliminar().equals("s") && ControladorCodefacInterface.BOTON_ELIMINAR==boton)
+                        return true;
+                    
+                    if(permisoVentana.getPermisoGrabar().equals("s") && ControladorCodefacInterface.BOTON_GRABAR==boton)
+                        return true;
+                    
+                    if(permisoVentana.getPermisoImprimir().equals("s") && ControladorCodefacInterface.BOTON_IMPRIMIR==boton)
+                        return true;                    
+                }
+            }
+        }
+        
+        return false;
     }
     
     private void iniciarComponentes()

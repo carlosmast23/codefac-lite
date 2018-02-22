@@ -1,3 +1,4 @@
+Verificar como puedo hacer para validar el boton de grabar y eliminar por separado por roles de usuario
 En los metodos de buscar de las pantallas tomar en cuenta que no se debe setear la variable global de la entidad con la que se trabaje porque por algun motivo si cancela la busqueda devuelve null y puede generar problemas con los datos actuales del formulario
 getjMenuItemMonitor().addActionListener(new ActionListener() { en el general menu queda comentado esa linea e codigo
 Revisar pantallas notas de credito y utilidades comprobantes que falta implementar correctamente
