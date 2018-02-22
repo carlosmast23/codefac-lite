@@ -99,19 +99,27 @@ public class PerfilModel extends PerfilPanel{
             setearValoresPantalla();
             PerfilServicioIf perfilServiceIf=ServiceFactory.getFactory().getPerfilServicioIf();        
             perfilServiceIf.grabar(perfil);
-            DialogoCodefac.mensaje("Correcto","EL perfil se grabo correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+            DialogoCodefac.mensaje("Correcto","El perfil se grabo correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error","No se pueden grabar los datos", DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(PerfilModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {
-            DialogoCodefac.mensaje("Error","Ocurrio un error al grabar los datos", DialogoCodefac.MENSAJE_INCORRECTO);
+            DialogoCodefac.mensaje("Error","Ocurrio un error con el servidor", DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(PerfilModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Override
     public void editar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            setearValoresPantalla();
+            PerfilServicioIf perfilServiceIf=ServiceFactory.getFactory().getPerfilServicioIf();
+            perfilServiceIf.editar(perfil);
+            DialogoCodefac.mensaje("Correcto","El perfil se edito correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+        } catch (RemoteException ex) {
+            DialogoCodefac.mensaje("Error","Ocurrio un error con el servidor", DialogoCodefac.MENSAJE_INCORRECTO);
+            Logger.getLogger(PerfilModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -145,11 +153,13 @@ public class PerfilModel extends PerfilPanel{
         }
         
         getTxtNombrePerfil().setText(this.perfil.getNombre());
+        construirTabla();
     }
 
     @Override
     public void limpiar() {
-        this.perfil=new Perfil();
+        this.perfil=new Perfil();        
+        limpiarPantalla();
     }
 
     @Override
@@ -219,20 +229,19 @@ public class PerfilModel extends PerfilPanel{
        DefaultTableModel modeloTabla=new DefaultTableModel(titulo,0);
        
        //Verificar si no existen datos en el perfil no carga nada
-       if(perfil==null || perfil.getVentanasPermisos()==null)
-           return;
-       
-        for (PermisoVentana permisoVentana : perfil.getVentanasPermisos()) {
-            Vector<String> fila=new Vector<String>();
-            fila.add(permisoVentana.getVentanaEnum().getNombre());
-            fila.add((permisoVentana.getPermisoGrabar().equals("s"))?"x":"");
-            fila.add((permisoVentana.getPermisoEditar().equals("s"))?"x":"");
-            fila.add((permisoVentana.getPermisoBuscar().equals("s"))?"x":"");
-            fila.add((permisoVentana.getPermisoImprimir().equals("s"))?"x":"");
-            fila.add((permisoVentana.getPermisoEliminar().equals("s"))?"x":"");
-            modeloTabla.addRow(fila);
+       if (perfil != null && perfil.getVentanasPermisos() != null) {
+
+            for (PermisoVentana permisoVentana : perfil.getVentanasPermisos()) {
+                Vector<String> fila = new Vector<String>();
+                fila.add(permisoVentana.getVentanaEnum().getNombre());
+                fila.add((permisoVentana.getPermisoGrabar().equals("s")) ? "x" : "");
+                fila.add((permisoVentana.getPermisoEditar().equals("s")) ? "x" : "");
+                fila.add((permisoVentana.getPermisoBuscar().equals("s")) ? "x" : "");
+                fila.add((permisoVentana.getPermisoImprimir().equals("s")) ? "x" : "");
+                fila.add((permisoVentana.getPermisoEliminar().equals("s")) ? "x" : "");
+                modeloTabla.addRow(fila);
+            }
         }
-        
         getTblDatos().setModel(modeloTabla);
                
     }
@@ -260,6 +269,16 @@ public class PerfilModel extends PerfilPanel{
 
     private void setearValoresPantalla() {
         perfil.setNombre(getTxtNombrePerfil().getText());
+    }
+
+    private void limpiarPantalla() {
+        getTxtNombrePerfil().setText("");        
+        getChkBuscar().setSelected(false);
+        getChkEditar().setSelected(false);
+        getChkEliminar().setSelected(false);
+        getChkGrabar().setSelected(false);
+        getChkImprimir().setSelected(false);
+        construirTabla();
     }
     
 }
