@@ -1629,6 +1629,12 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 }
                 
                 boton.setEnabled(value);
+                
+                //Si es un super usuario no debe hacer mas validaciones de los botonew
+                if(sessionCodefac.getUsuario().getNick().equals(Usuario.SUPER_USUARIO))
+                {
+                    continue; //continua con la siguiete validacion sin verificar permisos por roles de usuario
+                }
                 //Adicional de validar si la pantalla tiene disponible la opcion verificar si el usuario tiene permisos para los botones
                 if(value) //Validar solo si el valor es positivo porque solo debo poder desactivar opciones
                 {
@@ -1968,23 +1974,39 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         {
                             if(menuControlador.getModulo().equals(moduloSistema))
                             {
-                                if(verificarMenuUsuario(menuControlador))
+                                //Verifica si es super usuario carga todos los modulos
+                                if(sessionCodefac.getUsuario().getNick().equals(Usuario.SUPER_USUARIO))
                                 {
                                     agregarAlMenu=true;
+                                    
+                                }
+                                else
+                                {                                
+                                    if(verificarMenuUsuario(menuControlador))
+                                    {
+                                        agregarAlMenu=true;
+                                    }
                                 }
                             }
                         }
                         else //Verificacion cuando no es un modulo habilitado
                         {
-                            //Solo verifica si debe agregar otras ventanas de otros modulos si el menu pertenece al modulo actual
-                            //Nota: sin esta linea pueden aparecer varios enlaces a esta ventana desde otros menus de modulos
-                            if(menuControlador.getModulo().equals(moduloSistema))
+                            //Verifica si es super usuario carga todos los modulos
+                            if (sessionCodefac.getUsuario().getNick().equals(Usuario.SUPER_USUARIO)) {
+                                agregarAlMenu = true;
+                            }
+                            else
                             {
-                                if(menuControlador.verificarPermisoModuloAdicional(sessionCodefac.getModulosMap()))
+                                //Solo verifica si debe agregar otras ventanas de otros modulos si el menu pertenece al modulo actual
+                                //Nota: sin esta linea pueden aparecer varios enlaces a esta ventana desde otros menus de modulos
+                                if(menuControlador.getModulo().equals(moduloSistema))
                                 {
-                                    if(verificarMenuUsuario(menuControlador))
+                                    if(menuControlador.verificarPermisoModuloAdicional(sessionCodefac.getModulosMap()))
                                     {
-                                        agregarAlMenu=true;
+                                        if(verificarMenuUsuario(menuControlador))
+                                        {
+                                            agregarAlMenu=true;
+                                        }
                                     }
                                 }
                             }

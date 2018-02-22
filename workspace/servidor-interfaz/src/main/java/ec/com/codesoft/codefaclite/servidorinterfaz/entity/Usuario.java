@@ -23,6 +23,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "USUARIO")
 public class Usuario implements Serializable{
+    
+    public static final String SUPER_USUARIO="root";
+    
     @Id
     @Column (name = "NICK")
     private String nick;

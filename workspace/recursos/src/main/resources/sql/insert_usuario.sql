@@ -8,8 +8,12 @@
  * Created: 10/11/2017
  */
 
+
 INSERT INTO USUARIO
      VALUES ('admin', 'Code17bwbtj');
+
+INSERT INTO USUARIO
+     VALUES ('root', 'Code17bwbtj');
 
 INSERT INTO PERFIL(NOMBRE,DESCRIPCION,ESTADO)
     VALUES('ADMIN','Perfil para administrador para cambiar configuraciones del sistema','A');
