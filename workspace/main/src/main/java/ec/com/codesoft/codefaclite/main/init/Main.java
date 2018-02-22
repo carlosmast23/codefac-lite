@@ -482,9 +482,7 @@ public class Main {
             /**
              * Si el usuario devuuelto es incorrecto terminar el aplicativo
              */
-            LoginModel loginModel = new LoginModel();
-            loginModel.setVisible(true);
-            Usuario usuarioLogin = loginModel.getUsuarioLogin();
+            Usuario usuarioLogin= cargarLoginUsuario();
             if (usuarioLogin == null) {
                 System.out.println("aplicacion terminada");
                 return;
@@ -512,6 +510,13 @@ public class Main {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+    
+    public static Usuario cargarLoginUsuario() {
+        LoginModel loginModel = new LoginModel();
+        loginModel.setVisible(true);
+        Usuario usuarioLogin = loginModel.getUsuarioLogin();
+        return usuarioLogin;
     }
 
     /**
@@ -878,7 +883,7 @@ public class Main {
 
     }
 
-    private static List<Perfil> obtenerPerfilesUsuario(Usuario usuario) {
+    public static List<Perfil> obtenerPerfilesUsuario(Usuario usuario) {
         try {
             PerfilServicioIf servicio = ServiceFactory.getFactory().getPerfilServicioIf();
             return servicio.obtenerPerfilesPorUsuario(usuario);

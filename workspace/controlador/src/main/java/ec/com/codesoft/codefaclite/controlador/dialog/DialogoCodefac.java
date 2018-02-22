@@ -93,5 +93,32 @@ public abstract class DialogoCodefac {
           return false;
         } 
     }
+    
+    public static int dialogoPreguntaPersonalizada(String titulo, String mensaje, Integer tipoMensaje,String[] opciones) {
+        ImageIcon icono=null;
+       
+        if(tipoMensaje.equals(MENSAJE_CORRECTO))
+        {
+            icono=new ImageIcon(RecursoCodefac.IMAGENES_ICONOS_DIALOGOS.getResourceURL("icono-correcto.png"));
+        }
+        else
+        {
+            if(tipoMensaje.equals(MENSAJE_INCORRECTO))
+            {
+                icono=new ImageIcon(RecursoCodefac.IMAGENES_ICONOS_DIALOGOS.getResourceURL("icono-error.png"));
+            }
+            else
+            {
+                if (tipoMensaje.equals(MENSAJE_ADVERTENCIA)) {
+                    icono = new ImageIcon(RecursoCodefac.IMAGENES_ICONOS_DIALOGOS.getResourceURL("icono-informacion.png"));
+                }
+            }
+        }
+        
+        int resp = JOptionPane.showOptionDialog(null, mensaje, titulo, JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, icono,opciones,opciones[0]);
+        return resp;
+    }
+    
+    
 
 }

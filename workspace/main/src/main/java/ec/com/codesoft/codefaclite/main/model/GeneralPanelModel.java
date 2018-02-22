@@ -31,6 +31,7 @@ import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
 import ec.com.codesoft.codefaclite.crm.model.ProductoModel;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import ec.com.codesoft.codefaclite.main.init.Main;
 import ec.com.codesoft.codefaclite.main.license.ValidacionLicenciaCodefac;
 import ec.com.codesoft.codefaclite.main.panel.GeneralPanelForm;
 import ec.com.codesoft.codefaclite.main.panel.WidgetVentasDiarias;
@@ -46,6 +47,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacSe
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceControllerServer;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PermisoVentana;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
@@ -223,7 +225,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
             @Override
             public void windowClosing(WindowEvent e) {
-                Boolean respuesta=DialogoCodefac.dialogoPregunta("Alerta","Estas seguro que deseas salir?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                /*Boolean respuesta=DialogoCodefac.dialogoPregunta("Alerta","Estas seguro que deseas salir?",DialogoCodefac.MENSAJE_ADVERTENCIA);
                 
                 if(respuesta)
                 {                    
@@ -237,6 +239,35 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     dispose();                    
                     System.exit(0);
                     
+                }*/
+                
+                String[] opciones={"Salir","Cambiar usuario","Cancelar"};
+                int opcionSeleccionada=DialogoCodefac.dialogoPreguntaPersonalizada("Alerta","Porfavor seleccione una opción?",DialogoCodefac.MENSAJE_ADVERTENCIA,opciones);
+                switch(opcionSeleccionada)
+                {
+                    case 0: //opcion de salir
+                        grabarDatosSalir();
+
+                        //Solo detener la publicidad cuando exista
+                        if (hiloPublicidadCodefac != null) {
+                            hiloPublicidadCodefac.hiloPublicidad = false;
+                        }
+                        dispose();
+                        System.exit(0);
+                        break;
+                        
+                    case 1:
+                        cerrarTodasPantallas();
+                        setVisible(false);
+                        Usuario usuario=Main.cargarLoginUsuario();
+                        sessionCodefac.setUsuario(usuario);
+                        sessionCodefac.setPerfiles(Main.obtenerPerfilesUsuario(usuario));
+                        setVentanasMenuList(null);
+                        setVisible(true);
+                        break;
+                        
+                    case 2:
+                        break;
                 }
                 
                 
@@ -269,6 +300,16 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 
             }
         });
+    }
+    
+    private void cerrarTodasPantallas()
+    {
+        JInternalFrame[] ventanas = getjDesktopPane1().getAllFrames();
+        for (JInternalFrame ventana : ventanas) {
+            ventana.dispose();
+
+        }
+
     }
     
     private void grabarDatosSalir()
@@ -2182,12 +2223,23 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         getjMenuItemSalir().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Boolean respuesta=DialogoCodefac.dialogoPregunta("Alerta","Estas seguro que deseas salir?",DialogoCodefac.MENSAJE_ADVERTENCIA);
-                if(respuesta)
+                //Boolean respuesta=DialogoCodefac.dialogoPregunta("Alerta","Estas seguro que deseas salir?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                String[] opciones={"Salir","Cambiar usuario","Cancelar"};
+                int opcionSeleccionada=DialogoCodefac.dialogoPreguntaPersonalizada("Alerta","Porfavor seleccione una opción?",DialogoCodefac.MENSAJE_ADVERTENCIA,opciones);
+                switch(opcionSeleccionada)
                 {
-                    hiloPublicidadCodefac.hiloPublicidad=false;
-                    dispose();
+                    case 0: //opcion de salir
+                        hiloPublicidadCodefac.hiloPublicidad = false;
+                        dispose();
+                        break;
+                        
+                    case 1:
+                        break;
+                        
+                    case 2:
+                        break;
                 }
+
             }
         });
         
