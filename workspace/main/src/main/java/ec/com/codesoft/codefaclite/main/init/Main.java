@@ -725,11 +725,6 @@ public class Main {
         param.valor = "Code17bwbtj";
         parametros.put(param.nombre, param);
 
-        //param=new ParametroCodefac();
-        //param.id=3;
-        //param.nombre=ParametroCodefac.DIRECTORIO_RECURSOS;
-        //param.valor="E:/FacturacionOffline";        
-        //parametros.put(param.nombre,param);
         param = new ParametroCodefac();
         param.id = 4;
         param.nombre = ParametroCodefac.MODO_FACTURACION;
