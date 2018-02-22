@@ -45,6 +45,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServi
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceControllerServer;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PermisoVentana;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
@@ -1879,7 +1880,10 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         {
                             if(menuControlador.getModulo().equals(moduloSistema))
                             {
-                                agregarAlMenu=true;
+                                if(verificarMenuUsuario(menuControlador))
+                                {
+                                    agregarAlMenu=true;
+                                }
                             }
                         }
                         else //Verificacion cuando no es un modulo habilitado
@@ -1890,7 +1894,10 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             {
                                 if(menuControlador.verificarPermisoModuloAdicional(sessionCodefac.getModulosMap()))
                                 {
-                                    agregarAlMenu=true;
+                                    if(verificarMenuUsuario(menuControlador))
+                                    {
+                                        agregarAlMenu=true;
+                                    }
                                 }
                             }
                         
@@ -1932,6 +1939,25 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             
         }
         return menus;
+    }
+    
+    /*
+    Metodo que permite verificar si el usuario tiene permiso para el menu seleccionado
+    */
+    private boolean verificarMenuUsuario(VentanaEnum ventanaEnum)
+    {
+        List<Perfil> perfiles=sessionCodefac.getPerfiles();
+        for (Perfil perfil : perfiles) {
+            //Verificar si tiene permisos dentro de cada perfil asignado al usuario
+            for (PermisoVentana permisoVentana : perfil.getVentanasPermisos()) {
+                if(permisoVentana.getVentanaEnum().equals(ventanaEnum))
+                {
+                    return true;
+                }
+            }
+ 
+        }
+        return false;
     }
     
     /**

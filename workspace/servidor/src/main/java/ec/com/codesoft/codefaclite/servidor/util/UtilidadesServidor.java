@@ -49,7 +49,6 @@ public class UtilidadesServidor {
         RecursoCodefac.SQL.getResourceInputStream("create_comprobante_fisico_disenio.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_cliente.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_usuario.sql"),
-        RecursoCodefac.SQL.getResourceInputStream("insert_usuario.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_sri_forma_pago.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_sri_identificacion.sql"),        
         RecursoCodefac.SQL.getResourceInputStream("create_impuesto.sql"),
@@ -72,6 +71,7 @@ public class UtilidadesServidor {
         RecursoCodefac.SQL.getResourceInputStream("insert_default.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_empresa.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_modulo_academico.sql"),
+        RecursoCodefac.SQL.getResourceInputStream("insert_usuario.sql"),
         
         
     };

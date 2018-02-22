@@ -462,7 +462,7 @@ public class Main {
              * Añadir menus y ventanas a la aplicacion principal
              */
             //panel.setVentanasMenuList(agregarMenuVentana(panel));
-            panel.setVentanasMenuList(null);
+            //panel.setVentanasMenuList(null);
             panel.setPanelesSecundarios(agregarPanelesSecundarios());
             panel.agregarPanelesSecundarios();
             /**
@@ -492,6 +492,7 @@ public class Main {
 
             session.setUsuario(usuarioLogin);
             session.setPerfiles(obtenerPerfilesUsuario(usuarioLogin));
+            panel.setVentanasMenuList(null);
 
             /**
              * Agregando Hilo de Publicidad si es usuario Gratuito
@@ -886,4 +887,5 @@ public class Main {
         }
         return null;
     }
+    
 }
