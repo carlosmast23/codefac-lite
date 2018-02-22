@@ -23,7 +23,7 @@ public class NivelBusquedaDialogo implements InterfaceModelFind<Nivel> {
         Vector<ColumnaDialogo> titulo = new Vector<>();
         titulo.add(new ColumnaDialogo("Nombre", 0.3d));
         titulo.add(new ColumnaDialogo("Orden", 0.2d));
-        titulo.add(new ColumnaDialogo("Descripcion", 0.3d));
+        titulo.add(new ColumnaDialogo("Nivel Posterior", 0.3d));
         return titulo;
     }
 
@@ -39,8 +39,11 @@ public class NivelBusquedaDialogo implements InterfaceModelFind<Nivel> {
     @Override
     public void agregarObjeto(Nivel n, Vector dato) {
         dato.add(n.getNombre());
-        dato.add(n.getDescripcion());
         dato.add(n.getOrden());
+        if (n.getNivelPosterior() != null) {
+            dato.add(n.getNivelPosterior().getNombre());
+        }else
+            dato.add("S/N");
     }
 
     @Override

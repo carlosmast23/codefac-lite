@@ -133,6 +133,7 @@ public abstract class AulaPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtUbicacion;
     // End of variables declaration//GEN-END:variables
     @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[0-9]+$", nombre = "Orden")
     public JTextField getTxtCapacidad() {
         return txtCapacidad;
     }
@@ -169,6 +170,4 @@ public abstract class AulaPanel extends ControladorCodefacInterface {
         this.cmbEstado = cmbEstado;
     }
 
-    
-    
 }

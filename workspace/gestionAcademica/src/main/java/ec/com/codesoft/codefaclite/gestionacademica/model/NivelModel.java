@@ -28,17 +28,20 @@ import java.util.logging.Logger;
  * @author Carlos
  */
 public class NivelModel extends NivelPanel {
-
+    
     private Nivel nivel;
     private NivelServiceIf nivelService;
-
+    
     public NivelModel() {
         nivelService = ServiceFactory.getFactory().getNivelServiceIf();
     }
-
+    
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
-
+        iniciarCombos();
+    }
+    
+    public void iniciarCombos() {
         getCmbEstado().removeAllItems();
         for (NivelEnumEstado enumerador : NivelEnumEstado.values()) {
             getCmbEstado().addItem(enumerador);
@@ -57,14 +60,13 @@ public class NivelModel extends NivelPanel {
         } catch (RemoteException ex) {
             Logger.getLogger(NivelModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
-
+    
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
     @Override
     public void grabar() throws ExcepcionCodefacLite {
         try {
@@ -78,29 +80,32 @@ public class NivelModel extends NivelPanel {
             Logger.getLogger(AulaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     private void setearValoresNivel(Nivel nivel) {
         nivel.setNombre(getTxtNombre().getText());
         nivel.setOrden(Integer.parseInt(getTxtOrden().getText()));
         nivel.setDescripcion(getTxtDescripcion().getText());
         nivel.setEstado(((NivelEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
-
-        nivel = (Nivel) getCmbNivelPosterior().getSelectedItem();
-        nivel.setNivelPosterior(nivel);
-
+        
+        System.out.println("NIVEL POSTERIOR" + getCmbNivelPosterior().getSelectedItem());
+        
+        if (getCmbNivelPosterior().getSelectedItem() != null) {
+            nivel = (Nivel) getCmbNivelPosterior().getSelectedItem();
+            nivel.setNivelPosterior(nivel);
+        }
     }
-
+    
     @Override
     public void editar() throws ExcepcionCodefacLite {
         try {
             setearValoresNivel(nivel);
             nivelService.editar(nivel);
-            DialogoCodefac.mensaje("Datos correctos", "El nivelse edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+            DialogoCodefac.mensaje("Datos correctos", "El nivel se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         } catch (RemoteException ex) {
             Logger.getLogger(NivelModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     @Override
     public void eliminar() throws ExcepcionCodefacLite {
         if (estadoFormulario.equals(GeneralPanelInterface.ESTADO_EDITAR)) {
@@ -116,48 +121,53 @@ public class NivelModel extends NivelPanel {
             }
         }
     }
-
+    
     @Override
     public void imprimir() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
     @Override
     public void actualizar() throws ExcepcionCodefacLite {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
     @Override
     public void buscar() throws ExcepcionCodefacLite {
         NivelBusquedaDialogo nivelBusquedaDialogo = new NivelBusquedaDialogo();
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(nivelBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
-        nivel = (Nivel) buscarDialogoModel.getResultado();
-        if (nivel == null) {
+        Nivel nivelTemp = (Nivel) buscarDialogoModel.getResultado();
+        if (nivelTemp == null) {
             throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar aula vacio");
+        } else {
+            nivel = nivelTemp;
         }
+        
         getTxtNombre().setText(nivel.getNombre());
         getTxtOrden().setText(nivel.getOrden().toString());
         getTxtDescripcion().setText(nivel.getDescripcion());
         getCmbNivelPosterior().setSelectedItem(nivel.getNivelPosterior());
-
+        
     }
-
+    
     @Override
     public void limpiar() {
         nivel = new Nivel();
+        //iniciarCombos();
+        getCmbNivelPosterior().setSelectedIndex(0);
     }
-
+    
     @Override
     public String getNombre() {
         return "Nivel";
     }
-
+    
     @Override
     public String getURLAyuda() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
         Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
@@ -169,10 +179,10 @@ public class NivelModel extends NivelPanel {
         permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
         return permisos;
     }
-
+    
     @Override
     public List<String> getPerfilesPermisos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
 }

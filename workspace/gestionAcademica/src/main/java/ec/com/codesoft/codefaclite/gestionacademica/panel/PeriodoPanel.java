@@ -166,8 +166,6 @@ public abstract class PeriodoPanel extends ControladorCodefacInterface {
         this.dateFechaInicio = dateFechaInicio;
     }
 
-
-
     @LimpiarAnotacion
     @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Nombre", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextField getTxtNombre() {
