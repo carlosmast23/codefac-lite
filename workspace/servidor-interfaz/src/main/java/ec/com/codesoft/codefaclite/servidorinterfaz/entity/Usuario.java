@@ -6,9 +6,14 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -24,6 +29,9 @@ public class Usuario implements Serializable{
     
     @Column (name = "CLAVE")
     private String clave;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario",fetch = FetchType.EAGER)
+    private List<PerfilUsuario> perfilesUsuario;
     
 
     public Usuario(String nick, String clave) {
@@ -52,11 +60,35 @@ public class Usuario implements Serializable{
         this.clave = clave;
     }
 
+    public List<PerfilUsuario> getPerfilesUsuario() {
+        return perfilesUsuario;
+    }
+
+    public void setPerfilesUsuario(List<PerfilUsuario> perfilesUsuario) {
+        this.perfilesUsuario = perfilesUsuario;
+    }
+
     @Override
     public String toString() {
         return "Usuario{" + "nick=" + nick + ", clave=" + clave + '}';
     }
 
+    /**
+     * Metodo que permite agregar un PerfilUsuario a la lista
+     * @param perfilUsuario 
+     */
+    
+    public void addPerfilUsuario(PerfilUsuario perfilUsuario)
+    {
+        if(this.perfilesUsuario==null)
+        {
+            this.perfilesUsuario=new ArrayList<PerfilUsuario>();
+        }
+        perfilUsuario.setUsuario(this);
+        
+        this.perfilesUsuario.add(perfilUsuario);
+        
+    }
     
     
 }

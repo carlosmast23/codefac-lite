@@ -6,6 +6,11 @@
 package ec.com.codesoft.codefaclite.configuraciones.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JList;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
 /**
  *
@@ -32,16 +37,16 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         jLabel1 = new javax.swing.JLabel();
         txtUsuario = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cmbEstado = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        jListPerfiles = new javax.swing.JList<>();
         jLabel3 = new javax.swing.JLabel();
         btnAgregarPerfil = new javax.swing.JButton();
         btnQuitarPerfil = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
-        jPasswordField2 = new javax.swing.JPasswordField();
+        txtClave = new javax.swing.JPasswordField();
+        txtClaveRepetir = new javax.swing.JPasswordField();
 
         setClosable(true);
         setIconifiable(true);
@@ -53,14 +58,14 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
 
         jLabel2.setText("Estado:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+        jListPerfiles.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(jListPerfiles);
 
         jLabel3.setText("Perfiles:");
 
@@ -72,9 +77,9 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
 
         jLabel5.setText("Clave Repetir:");
 
-        jPasswordField1.setText("jPasswordField1");
+        txtClave.setText("jPasswordField1");
 
-        jPasswordField2.setText("jPasswordField2");
+        txtClaveRepetir.setText("jPasswordField2");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -91,21 +96,18 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel2)
-                            .addComponent(jLabel5))
-                        .addGap(40, 40, 40))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel3))
+                        .addGap(40, 40, 40)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnAgregarPerfil)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnQuitarPerfil))
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtUsuario)
-                    .addComponent(jPasswordField1, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
-                    .addComponent(jPasswordField2)
+                    .addComponent(txtClave, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
+                    .addComponent(txtClaveRepetir)
                     .addComponent(jScrollPane1))
                 .addContainerGap(34, Short.MAX_VALUE))
         );
@@ -119,22 +121,22 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtClave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jPasswordField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtClaveRepetir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                    .addComponent(cmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAgregarPerfil)
                     .addComponent(btnQuitarPerfil)
                     .addComponent(jLabel3))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
                 .addGap(15, 15, 15))
         );
 
@@ -145,16 +147,75 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarPerfil;
     private javax.swing.JButton btnQuitarPerfil;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> cmbEstado;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JList<String> jList1;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JPasswordField jPasswordField2;
+    private javax.swing.JList<String> jListPerfiles;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPasswordField txtClave;
+    private javax.swing.JPasswordField txtClaveRepetir;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
+
+    public JButton getBtnAgregarPerfil() {
+        return btnAgregarPerfil;
+    }
+
+    public void setBtnAgregarPerfil(JButton btnAgregarPerfil) {
+        this.btnAgregarPerfil = btnAgregarPerfil;
+    }
+
+    public JButton getBtnQuitarPerfil() {
+        return btnQuitarPerfil;
+    }
+
+    public void setBtnQuitarPerfil(JButton btnQuitarPerfil) {
+        this.btnQuitarPerfil = btnQuitarPerfil;
+    }
+
+    public JComboBox<String> getCmbEstado() {
+        return cmbEstado;
+    }
+
+    public void setCmbEstado(JComboBox<String> cmbEstado) {
+        this.cmbEstado = cmbEstado;
+    }
+
+    public JPasswordField getTxtClave() {
+        return txtClave;
+    }
+
+    public void setTxtClave(JPasswordField txtClave) {
+        this.txtClave = txtClave;
+    }
+
+    public JPasswordField getTxtClaveRepetir() {
+        return txtClaveRepetir;
+    }
+
+    public void setTxtClaveRepetir(JPasswordField txtClaveRepetir) {
+        this.txtClaveRepetir = txtClaveRepetir;
+    }
+
+    public JTextField getTxtUsuario() {
+        return txtUsuario;
+    }
+
+    public void setTxtUsuario(JTextField txtUsuario) {
+        this.txtUsuario = txtUsuario;
+    }
+
+    public JList<String> getjListPerfiles() {
+        return jListPerfiles;
+    }
+
+    public void setjListPerfiles(JList<String> jListPerfiles) {
+        this.jListPerfiles = jListPerfiles;
+    }
+
+    
+    
 }

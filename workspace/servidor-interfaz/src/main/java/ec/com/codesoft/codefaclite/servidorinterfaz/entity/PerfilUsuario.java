@@ -43,7 +43,6 @@ public class PerfilUsuario implements Serializable {
 
     @JoinColumn(name = "PERFIL_ID")
     @ManyToOne        
-    //@PrimaryKeyJoinColumn (referencedColumnName = "ID" ) 
     private Perfil perfil;
 
     public PerfilUsuario() {
