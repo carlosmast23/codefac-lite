@@ -22,6 +22,8 @@ import net.sf.jasperreports.engine.JasperPrint;
  * @author Carlos
  */
 public interface ComprobanteServiceIf extends Remote {
+    
+    public boolean verificarCredencialesFirma(String claveFirma) throws RemoteException;
 
     public boolean procesarComprobantesPendiente(Integer etapaInicial,Integer etapaLimite,String claveAcceso, List<String> correos,ClienteInterfaceComprobante callbackClientObject) throws RemoteException;
     

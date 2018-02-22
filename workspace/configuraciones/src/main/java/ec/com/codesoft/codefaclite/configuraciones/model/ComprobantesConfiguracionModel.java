@@ -478,26 +478,39 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     }
 
     private void verificarFirmaElectronica() {
-        String claveFirma = new String(getTxtClaveFirma().getPassword());
-        String nombreArchivo = getTxtNombreFirma().getText();
-        //TODO:Cambiar la copia de archivos por un servicio de transferencia de archivos
-        String rutaDestino = "";
-        //String rutaDestino = session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + ComprobanteElectronicoService.CARPETA_CONFIGURACION + "/";
+        try {
+            String claveFirma = new String(getTxtClaveFirma().getPassword());
+            String nombreArchivo = getTxtNombreFirma().getText();
+            //TODO:Cambiar la copia de archivos por un servicio de transferencia de archivos
+            String rutaDestino = "";
+            //String rutaDestino = session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + ComprobanteElectronicoService.CARPETA_CONFIGURACION + "/";
 
-        String pathFirma = "";
+            String pathFirma = "";
 
-        if (origen != null) {
-            pathFirma = origen.toString();
-        } else {
-            pathFirma = rutaDestino + nombreArchivo;
-        }
+            if (origen != null) { //Si selecciona una archivo para recien grabar se verifica con el archivo del cliente
+                //TODO: Ver si se puede mejorar y hacer la validacion enviando archivo y clave para tener mas modular el procesos de firma
+                pathFirma = origen.toString();
+                if (!claveFirma.equals("") && !pathFirma.equals("")) {
+                    if (!FirmaElectronica.FirmaVerificar(pathFirma, claveFirma)) {
+                        getTxtClaveFirma().setText("");
+                        DialogoCodefac.mensaje("Error Clave", "La Clave de la firma es incorrecta, ingrese nuevamente.", DialogoCodefac.MENSAJE_INCORRECTO);
 
-        if (!claveFirma.equals("") && !pathFirma.equals("")) {
-            if (!FirmaElectronica.FirmaVerificar(pathFirma, claveFirma)) {
-                getTxtClaveFirma().setText("");
-                DialogoCodefac.mensaje("Error Clave", "La Clave de la firma es incorrecta, ingrese nuevamente.", DialogoCodefac.MENSAJE_INCORRECTO);
+                    }
+                }
+            } else {
+                //Cuando el archivo de la firma ya esta en el servidor se consulta por un servicio
+
+                Boolean validacion = ServiceFactory.getFactory().getComprobanteServiceIf().verificarCredencialesFirma(claveFirma);
+
+                if (!validacion) {
+                    getTxtClaveFirma().setText("");
+                    DialogoCodefac.mensaje("Error Clave", "La Clave de la firma es incorrecta, ingrese nuevamente.", DialogoCodefac.MENSAJE_INCORRECTO);
+
+                }
 
             }
+        } catch (RemoteException ex) {
+            Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }

@@ -5,13 +5,19 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -40,6 +46,9 @@ public class Perfil implements Serializable{
     
     @Column (name = "ESTADO")
     private String estado;
+    
+     @OneToMany(cascade = CascadeType.ALL, mappedBy = "perfil",fetch = FetchType.EAGER)
+    private List<PermisoVentana> ventanasPermisos;
 
     public Perfil() {
     }
@@ -74,6 +83,26 @@ public class Perfil implements Serializable{
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public List<PermisoVentana> getVentanasPermisos() {
+        return ventanasPermisos;
+    }
+
+    public void setVentanasPermisos(List<PermisoVentana> ventanasPermisos) {
+        this.ventanasPermisos = ventanasPermisos;
+    }
+    
+
+    public void addPermisoVentana(PermisoVentana permisoVentana)
+    {
+        if(this.ventanasPermisos==null)
+        {
+            this.ventanasPermisos=new ArrayList<PermisoVentana>();
+        }
+        permisoVentana.setPerfil(this);
+        this.ventanasPermisos.add(permisoVentana);
+        
     }
     
     

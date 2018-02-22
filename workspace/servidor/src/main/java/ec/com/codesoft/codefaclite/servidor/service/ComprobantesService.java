@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
+import ec.com.codesoft.codefaclite.facturacionelectronica.FirmaElectronica;
 import ec.com.codesoft.codefaclite.facturacionelectronica.MetodosEnvioInterface;
 import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
@@ -71,6 +72,27 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
     public ComprobantesService() throws RemoteException {
         super();
         clientesLista=new Vector<ClienteInterfaceComprobante>();
+    }
+    
+    public boolean verificarCredencialesFirma(String claveFirma) throws RemoteException
+    {
+        try {
+            ParametroCodefacService servicioParametros=new ParametroCodefacService();
+            Map<String,ParametroCodefac> parametrosMap=  servicioParametros.getParametrosMap();
+            
+            String pathFirma=parametrosMap.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor();
+            String rutaDestino = parametrosMap.get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + ComprobanteElectronicoService.CARPETA_CONFIGURACION + "/"+pathFirma;
+            
+            if (!claveFirma.equals("") && !pathFirma.equals("")) {
+                if (FirmaElectronica.FirmaVerificar(rutaDestino, claveFirma)) {
+                    return true;
+                }
+            }
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
     
     public boolean procesarComprobantesPendiente(Integer etapaInicial,Integer etapaLimite,String claveAcceso, List<String> correos,ClienteInterfaceComprobante callbackClientObject) throws RemoteException

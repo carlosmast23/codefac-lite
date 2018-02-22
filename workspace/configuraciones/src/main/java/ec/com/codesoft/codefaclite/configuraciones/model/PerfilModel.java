@@ -5,23 +5,44 @@
  */
 package ec.com.codesoft.codefaclite.configuraciones.model;
 
+import ec.com.codesoft.codefaclite.configuraciones.busqueda.PerfilBusquedaDialogo;
 import ec.com.codesoft.codefaclite.configuraciones.panel.PerfilPanel;
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PermisoVentana;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServicioIf;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JComboBox;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Carlos
  */
 public class PerfilModel extends PerfilPanel{
-
+    
+    /**
+     * Entidad con la voy a trabajar para grabar editar y consultar los perfiles
+     */
+    private Perfil perfil;
+    
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         agregarListener();
@@ -59,6 +80,13 @@ public class PerfilModel extends PerfilPanel{
         }
     
     }
+    
+    private void eliminarItemsCombo(JComboBox combo)
+    {
+        for (int i = combo.getItemCount() - 1; i >= 0; i--) {
+            combo.removeItemAt(i);
+        }
+    }
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
@@ -67,7 +95,18 @@ public class PerfilModel extends PerfilPanel{
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            setearValoresPantalla();
+            PerfilServicioIf perfilServiceIf=ServiceFactory.getFactory().getPerfilServicioIf();        
+            perfilServiceIf.grabar(perfil);
+            DialogoCodefac.mensaje("Correcto","EL perfil se grabo correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+        } catch (ServicioCodefacException ex) {
+            DialogoCodefac.mensaje("Error","No se pueden grabar los datos", DialogoCodefac.MENSAJE_INCORRECTO);
+            Logger.getLogger(PerfilModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            DialogoCodefac.mensaje("Error","Ocurrio un error al grabar los datos", DialogoCodefac.MENSAJE_INCORRECTO);
+            Logger.getLogger(PerfilModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -92,12 +131,25 @@ public class PerfilModel extends PerfilPanel{
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        PerfilBusquedaDialogo perfilBusquedaDialogo=new PerfilBusquedaDialogo();
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(perfilBusquedaDialogo);
+        buscarDialogoModel.setVisible(true);
+        Perfil perfilTemp = (Perfil) buscarDialogoModel.getResultado();
+
+        if (perfilTemp == null) {
+            throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar");
+        }
+        else
+        {
+            this.perfil=perfilTemp;
+        }
+        
+        getTxtNombrePerfil().setText(this.perfil.getNombre());
     }
 
     @Override
     public void limpiar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.perfil=new Perfil();
     }
 
     @Override
@@ -112,7 +164,14 @@ public class PerfilModel extends PerfilPanel{
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
+        permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
+        return permisos;
     }
 
     @Override
@@ -136,12 +195,71 @@ public class PerfilModel extends PerfilPanel{
             }
         });
         
-        getCmbVentana().addActionListener(new ActionListener() {
+       getBtnAgregar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cargarVentanasSeleccionadas();
+                perfil.addPermisoVentana(getPermisoAgregar());
+                construirTabla();
             }
         });
+       
+       getBtnQuitar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int fila=getTblDatos().getSelectedRow();
+                perfil.getVentanasPermisos().remove(fila);
+                construirTabla();
+            }
+        });
+    }
+    
+    private void construirTabla()
+    {
+       String[] titulo={"Nombre","Grabar","Editar","Buscar","Imprimir","Eliminar"};
+       DefaultTableModel modeloTabla=new DefaultTableModel(titulo,0);
+       
+       //Verificar si no existen datos en el perfil no carga nada
+       if(perfil==null || perfil.getVentanasPermisos()==null)
+           return;
+       
+        for (PermisoVentana permisoVentana : perfil.getVentanasPermisos()) {
+            Vector<String> fila=new Vector<String>();
+            fila.add(permisoVentana.getVentanaEnum().getNombre());
+            fila.add((permisoVentana.getPermisoGrabar().equals("s"))?"x":"");
+            fila.add((permisoVentana.getPermisoEditar().equals("s"))?"x":"");
+            fila.add((permisoVentana.getPermisoBuscar().equals("s"))?"x":"");
+            fila.add((permisoVentana.getPermisoImprimir().equals("s"))?"x":"");
+            fila.add((permisoVentana.getPermisoEliminar().equals("s"))?"x":"");
+            modeloTabla.addRow(fila);
+        }
+        
+        getTblDatos().setModel(modeloTabla);
+               
+    }
+    
+    private PermisoVentana getPermisoAgregar()
+    {
+        VentanaEnum ventanaEnum=(VentanaEnum) getCmbVentana().getSelectedItem();
+        
+        String opcionBuscar=getChkBuscar().isSelected()?"s":"n";
+        String opcionEditar=getChkEditar().isSelected()?"s":"n";
+        String opcionEliminar=getChkEliminar().isSelected()?"s":"n";
+        String opcionGrabar=getChkGrabar().isSelected()?"s":"n";
+        String opcionImprimir=getChkImprimir().isSelected()?"s":"n";
+        
+        PermisoVentana permisoVentana=new PermisoVentana();
+        permisoVentana.setNombreClase(ventanaEnum.getCodigo());
+        permisoVentana.setPermisoBuscar(opcionBuscar);
+        permisoVentana.setPermisoEditar(opcionEditar);
+        permisoVentana.setPermisoEliminar(opcionEliminar);
+        permisoVentana.setPermisoGrabar(opcionGrabar);
+        permisoVentana.setPermisoImprimir(opcionImprimir);
+        
+        return permisoVentana;
+    }
+
+    private void setearValoresPantalla() {
+        perfil.setNombre(getTxtNombrePerfil().getText());
     }
     
 }
