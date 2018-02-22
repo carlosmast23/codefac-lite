@@ -57,6 +57,7 @@ public abstract class AbstractFacade<T>
             tx.begin();
             //getEntityManager().getTransaction().begin();
             getEntityManager().persist(entity);
+            entityManager.flush();
             tx.commit();
         }catch(PersistenceException e)
         {

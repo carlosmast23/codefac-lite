@@ -23,7 +23,7 @@ public enum VentanaEnum {
     CLIENTE("ec.com.codesoft.codefaclite.crm.model.ClienteModel","CLIE","Cliente",ModuloCodefacEnum.CRM,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION}),
     PRODUCTO("ec.com.codesoft.codefaclite.crm.model.ProductoModel","PROD","Producto",ModuloCodefacEnum.CRM,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION}),
     FACTURACION("ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel","FACT","facturacion",ModuloCodefacEnum.FACTURACION,CategoriaMenuEnum.PROCESOS),
-    EMPRESA("ec.com.codesoft.codefaclite.crm.model.EmpresaModel","EMPR","Empresa",ModuloCodefacEnum.CRM,CategoriaMenuEnum.GESTIONAR),
+    EMPRESA("ec.com.codesoft.codefaclite.crm.model.EmpresaModel","EMPR","Empresa",ModuloCodefacEnum.SISTEMA,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION}),
     COMPROBANTE_CONFIGURACION("ec.com.codesoft.codefaclite.configuraciones.model.ComprobantesConfiguracionModel","CONF","Comprobante",ModuloCodefacEnum.FACTURACION,CategoriaMenuEnum.GESTIONAR),
     UTILIDAD_COMPROBANTE("ec.com.codesoft.codefaclite.facturacion.model.UtilidadComprobanteModel","UTIL","Utilidad Comprobante",ModuloCodefacEnum.FACTURACION,CategoriaMenuEnum.GESTIONAR),    
     NOTA_CREDITO("ec.com.codesoft.codefaclite.facturacion.model.NotaCreditoModel","NOTC","Nota de credito",ModuloCodefacEnum.FACTURACION,CategoriaMenuEnum.PROCESOS),
@@ -160,6 +160,17 @@ public enum VentanaEnum {
             }
         }
         return listaVentanas;
+    }
+    
+    public static VentanaEnum buscarPorCodigo(String codigo)
+    {
+        for (VentanaEnum ventana : VentanaEnum.values()) {
+            if(ventana.getCodigo().equals(codigo))
+            {
+               return ventana;
+            }
+        }
+        return null;
     }
     
      public Object getInstance() {

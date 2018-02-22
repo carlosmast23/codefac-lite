@@ -395,6 +395,7 @@ public class Factura implements Serializable {
         this.formaPagos.add(formaPago);
         
     }
+   
     
     public String getPreimpreso()
     {

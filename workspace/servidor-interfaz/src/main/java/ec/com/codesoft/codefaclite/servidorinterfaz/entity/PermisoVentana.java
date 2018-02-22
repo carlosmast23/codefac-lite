@@ -5,9 +5,15 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -16,9 +22,10 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "PERMISO_VENTANA")
-public class PermisoVentana {
+public class PermisoVentana implements Serializable{
     
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column (name = "ID")    
     private Long id;
 
@@ -41,7 +48,8 @@ public class PermisoVentana {
     @Column (name = "PERMISO_BUSCAR") 
     private String permisoBuscar;
         
-    
+    @JoinColumn(name="PERFIL_ID")
+    @ManyToOne(optional = false)    
     private Perfil perfil;
 
     public PermisoVentana() {
@@ -111,7 +119,11 @@ public class PermisoVentana {
         this.perfil = perfil;
     }
     
-    
+    //Metodo que obtiene el enum atravez del codigo
+    public VentanaEnum getVentanaEnum()
+    {
+        return VentanaEnum.buscarPorCodigo(nombreClase);
+    }
     
     
     

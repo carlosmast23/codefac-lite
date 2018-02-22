@@ -9,8 +9,12 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInte
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JList;
+import javax.swing.JRadioButton;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 
 /**
  *
@@ -38,28 +42,32 @@ public abstract class PerfilPanel extends ControladorCodefacInterface {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtNombrePerfil = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        tblDatos = new javax.swing.JTable();
+        btnQuitar = new javax.swing.JButton();
+        btnAgregar = new javax.swing.JButton();
         cmbModulo = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
         cmbCategoria = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         cmbVentana = new javax.swing.JComboBox<>();
+        chkGrabar = new javax.swing.JRadioButton();
+        chkEditar = new javax.swing.JRadioButton();
+        chkBuscar = new javax.swing.JRadioButton();
+        chkImprimir = new javax.swing.JRadioButton();
+        chkEliminar = new javax.swing.JRadioButton();
 
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
+        setTitle("Perfiles");
 
         jLabel1.setText("Nombre:");
-
-        jTextField1.setText("jTextField1");
 
         jLabel2.setText("Estado:");
 
@@ -67,7 +75,7 @@ public abstract class PerfilPanel extends ControladorCodefacInterface {
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblDatos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -78,15 +86,25 @@ public abstract class PerfilPanel extends ControladorCodefacInterface {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane3.setViewportView(jTable1);
+        jScrollPane3.setViewportView(tblDatos);
 
-        jButton3.setText("Quitar");
+        btnQuitar.setText("Quitar");
 
-        jButton4.setText("Agregar");
+        btnAgregar.setText("Agregar");
 
         jLabel6.setText("Categoria:");
 
         jLabel4.setText("Ventana:");
+
+        chkGrabar.setText("Grabar");
+
+        chkEditar.setText("Editar");
+
+        chkBuscar.setText("Buscar");
+
+        chkImprimir.setText("Imprimir");
+
+        chkEliminar.setText("Eliminar");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -97,21 +115,27 @@ public abstract class PerfilPanel extends ControladorCodefacInterface {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(1, 1, 1)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(13, 13, 13)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
+                                .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cmbModulo, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(jScrollPane3)))
+                                .addComponent(txtNombrePerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(13, 13, 13)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel3)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(cmbModulo, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 576, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(27, 27, 27)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(chkGrabar)
+                                            .addComponent(chkImprimir)
+                                            .addComponent(chkEliminar)
+                                            .addComponent(chkBuscar)
+                                            .addComponent(chkEditar))))))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -121,14 +145,16 @@ public abstract class PerfilPanel extends ControladorCodefacInterface {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cmbVentana, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(cmbVentana, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(51, 51, 51)
+                                .addGap(4, 4, 4)
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
-                        .addComponent(jButton4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 105, Short.MAX_VALUE)
+                        .addComponent(btnAgregar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3)))
+                        .addComponent(btnQuitar)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -137,30 +163,42 @@ public abstract class PerfilPanel extends ControladorCodefacInterface {
                 .addGap(19, 19, 19)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNombrePerfil, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(cmbModulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(36, 36, 36))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel3)
+                                    .addComponent(cmbModulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(36, 36, 36))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel6)
+                                        .addComponent(cmbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel4)
+                                        .addComponent(cmbVentana, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(btnAgregar)
+                                        .addComponent(btnQuitar)))
+                                .addGap(13, 13, 13)))
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel6)
-                                .addComponent(cmbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel4)
-                                .addComponent(cmbVentana, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jButton4)
-                                .addComponent(jButton3)))
-                        .addGap(13, 13, 13)))
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(chkGrabar)
+                        .addGap(15, 15, 15)
+                        .addComponent(chkEditar)
+                        .addGap(18, 18, 18)
+                        .addComponent(chkBuscar)
+                        .addGap(17, 17, 17)
+                        .addComponent(chkImprimir)
+                        .addGap(18, 18, 18)
+                        .addComponent(chkEliminar)))
                 .addContainerGap())
         );
 
@@ -169,11 +207,16 @@ public abstract class PerfilPanel extends ControladorCodefacInterface {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnQuitar;
+    private javax.swing.JRadioButton chkBuscar;
+    private javax.swing.JRadioButton chkEditar;
+    private javax.swing.JRadioButton chkEliminar;
+    private javax.swing.JRadioButton chkGrabar;
+    private javax.swing.JRadioButton chkImprimir;
     private javax.swing.JComboBox<CategoriaMenuEnum> cmbCategoria;
     private javax.swing.JComboBox<ModuloCodefacEnum> cmbModulo;
     private javax.swing.JComboBox<VentanaEnum> cmbVentana;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -181,8 +224,8 @@ public abstract class PerfilPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable tblDatos;
+    private javax.swing.JTextField txtNombrePerfil;
     // End of variables declaration//GEN-END:variables
 
     public JComboBox<CategoriaMenuEnum> getCmbCategoria() {
@@ -209,6 +252,80 @@ public abstract class PerfilPanel extends ControladorCodefacInterface {
         this.cmbVentana = cmbVentana;
     }
 
+
+    public JButton getBtnAgregar() {
+        return btnAgregar;
+    }
+
+    public void setBtnAgregar(JButton btnAgregar) {
+        this.btnAgregar = btnAgregar;
+    }
+
+    public JButton getBtnQuitar() {
+        return btnQuitar;
+    }
+
+    public void setBtnQuitar(JButton btnQuitar) {
+        this.btnQuitar = btnQuitar;
+    }
+
+    public JRadioButton getChkBuscar() {
+        return chkBuscar;
+    }
+
+    public void setChkBuscar(JRadioButton chkBuscar) {
+        this.chkBuscar = chkBuscar;
+    }
+
+    public JRadioButton getChkEditar() {
+        return chkEditar;
+    }
+
+    public void setChkEditar(JRadioButton chkEditar) {
+        this.chkEditar = chkEditar;
+    }
+
+    public JRadioButton getChkEliminar() {
+        return chkEliminar;
+    }
+
+    public void setChkEliminar(JRadioButton chkEliminar) {
+        this.chkEliminar = chkEliminar;
+    }
+
+    public JRadioButton getChkGrabar() {
+        return chkGrabar;
+    }
+
+    public void setChkGrabar(JRadioButton chkGrabar) {
+        this.chkGrabar = chkGrabar;
+    }
+
+    public JRadioButton getChkImprimir() {
+        return chkImprimir;
+    }
+
+    public void setChkImprimir(JRadioButton chkImprimir) {
+        this.chkImprimir = chkImprimir;
+    }
+
+    public JTable getTblDatos() {
+        return tblDatos;
+    }
+
+    public void setTblDatos(JTable tblDatos) {
+        this.tblDatos = tblDatos;
+    }
+
+    public JTextField getTxtNombrePerfil() {
+        return txtNombrePerfil;
+    }
+
+    public void setTxtNombrePerfil(JTextField txtNombrePerfil) {
+        this.txtNombrePerfil = txtNombrePerfil;
+    }
+
+    
     
 
     

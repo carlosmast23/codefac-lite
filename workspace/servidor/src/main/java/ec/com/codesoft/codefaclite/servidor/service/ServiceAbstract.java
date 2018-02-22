@@ -53,8 +53,8 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
     public Entity grabar(Entity entity) throws ServicioCodefacException,java.rmi.RemoteException
     {
         try {
-            this.facade.create(entity);
-            entityManager.flush();
+            this.facade.create(entity);            
+
         } catch (ConstrainViolationExceptionSQL ex) {
             Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, ex);
         } catch (DatabaseException ex) {
