@@ -88,19 +88,36 @@ public class PeriodoModel extends PeriodoPanel {
         if (getDateFechaFin().getDate() != null) {
             fechaFin = new Date(getDateFechaFin().getDate().getTime());
             fechafin = dateFormat.format(getDateFechaFin().getDate());
-            periodo.setFechaInicio(fechaFin);
+            periodo.setFechaFin(fechaFin);
         }
-        
+
     }
 
     @Override
     public void editar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            setearValoresPeriodo(periodo);
+            periodoService.editar(periodo);
+            DialogoCodefac.mensaje("Datos correctos", "El periodo se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+        } catch (RemoteException ex) {
+            Logger.getLogger(NivelModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (estadoFormulario.equals(GeneralPanelInterface.ESTADO_EDITAR)) {
+            try {
+                Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea eliminar el periodo?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                if (!respuesta) {
+                    throw new ExcepcionCodefacLite("Cancelacion periodo");
+                }
+                periodoService.eliminar(periodo);
+                DialogoCodefac.mensaje("Datos correctos", "El periodo se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+            } catch (RemoteException ex) {
+                Logger.getLogger(AulaModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     @Override
@@ -132,6 +149,9 @@ public class PeriodoModel extends PeriodoPanel {
     @Override
     public void limpiar() {
         periodo = new Periodo();
+        
+        getDateFechaInicio().setDate(fechaInicioMes(hoy()));
+        getDateFechaFin().setDate(hoy());
     }
 
     @Override

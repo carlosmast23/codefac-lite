@@ -144,7 +144,7 @@ public abstract class NivelPanel extends ControladorCodefacInterface {
     // End of variables declaration//GEN-END:variables
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Descripcion", expresionRegularMensaje = "No se permiten caracteres especiales")
+    @ValidacionCodefacAnotacion(requerido = false, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Descripcion", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextArea getTxtDescripcion() {
         return txtDescripcion;
     }
@@ -164,6 +164,7 @@ public abstract class NivelPanel extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[0-9]+$", nombre = "Orden")
     public JTextField getTxtOrden() {
         return txtOrden;
     }
