@@ -38,6 +38,11 @@ public abstract class NivelAcademicoPanel extends ControladorCodefacInterface {
         jLabel4 = new javax.swing.JLabel();
         jComboBox3 = new javax.swing.JComboBox<>();
 
+        setClosable(true);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
+
         jLabel1.setText("Nombre:");
 
         jLabel2.setText("Nivel:");

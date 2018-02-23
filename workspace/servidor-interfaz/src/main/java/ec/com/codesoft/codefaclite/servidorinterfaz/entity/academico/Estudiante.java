@@ -6,55 +6,87 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author Carlos
  */
 @Entity
-@Table(name = "Estudiante")
-public class Estudiante {
+@Table(name = "ESTUDIANTE")
+@XmlRootElement
+public class Estudiante implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
-    
-    private String codigo;
-    
+    @Column(name = "ESTUDIANTE_ID")
+    private Long idEstudiante;
+    @Column(name = "CODSISTEMA")
+    private String codigoSistema;
+    @Column(name = "CODAUXILIAR")
+    private String codigoAuxiliar;
+    @Column(name = "CEDULA")
+    private String cedula;
+    @Column(name = "NOMBRES")
     private String nombres;
-    
+    @Column(name = "APELLIDOS")
     private String apellidos;
-    
+    @Column(name = "GENERO")
+    private String genero;
+    @Column(name = "FECHA_NACIMIENTO")
+    private String fechaNacimiento;
+    @Column(name = "TELEFONO")
+    private String telefono;
+    @Column(name = "CELULAR")
+    private String celular;
+    @Column(name = "DIRECCION")
     private String direccion;
-    
+    @Column(name = "ADICIONALES")
     private String datosAdicionales;
-    
+
     private Persona persona;
 
     public Estudiante() {
     }
 
-    public Long getId() {
-        return id;
+    public Long getIdEstudiante() {
+        return idEstudiante;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdEstudiante(Long idEstudiante) {
+        this.idEstudiante = idEstudiante;
     }
 
-    public String getCodigo() {
-        return codigo;
+    public String getCodigoSistema() {
+        return codigoSistema;
     }
 
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
+    public void setCodigoSistema(String codigoSistema) {
+        this.codigoSistema = codigoSistema;
+    }
+
+    public String getCodigoAuxiliar() {
+        return codigoAuxiliar;
+    }
+
+    public void setCodigoAuxiliar(String codigoAuxiliar) {
+        this.codigoAuxiliar = codigoAuxiliar;
+    }
+
+    public String getCedula() {
+        return cedula;
+    }
+
+    public void setCedula(String cedula) {
+        this.cedula = cedula;
     }
 
     public String getNombres() {
@@ -71,6 +103,38 @@ public class Estudiante {
 
     public void setApellidos(String apellidos) {
         this.apellidos = apellidos;
+    }
+
+    public String getGenero() {
+        return genero;
+    }
+
+    public void setGenero(String genero) {
+        this.genero = genero;
+    }
+
+    public String getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(String fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getCelular() {
+        return celular;
+    }
+
+    public void setCelular(String celular) {
+        this.celular = celular;
     }
 
     public String getDireccion() {
@@ -96,7 +160,6 @@ public class Estudiante {
     public void setPersona(Persona persona) {
         this.persona = persona;
     }
-    
     
     
 

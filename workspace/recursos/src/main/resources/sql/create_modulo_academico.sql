@@ -14,6 +14,10 @@ create table ESTUDIANTE(
     CODAUXILIAR varchar(100),    
     NOMBRES varchar(100),    
     APELLIDOS varchar(100),
+    GENERO varchar(1),
+    FECHA_NACIMIENTO date,
+    TELEFONO varchar(15),
+    CELULAR varchar(15)
     DIRECCION varchar(150),  
     ADICIONALES varchar(256),   
     ESTADO varchar(1),
