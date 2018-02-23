@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.crm.model;
 
+import com.sun.prism.paint.Color;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
@@ -35,16 +36,20 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.Document;
 
@@ -64,6 +69,8 @@ public class CompraModel extends CompraPanel{
     private DefaultTableModel modeloTablaDetallesCompra;
     private BigDecimal subtotal12;
     private BigDecimal subtotal0;
+    private Boolean bandera;
+    private int filaDP;
     
     
     @Override
@@ -74,6 +81,8 @@ public class CompraModel extends CompraPanel{
         initModelTablaDetalleCompra();
         getCmbFechaCompra().setDate(new java.util.Date());
         desbloquearIngresoDetalleProducto();
+        this.bandera = false;
+        bloquearDesbloquearBotones(true);
     }
 
     @Override
@@ -298,43 +307,10 @@ public class CompraModel extends CompraPanel{
                 /**
                  * Seteo el valor que se ingresa en el costo para actualizar el valor del producto para ese proveedor
                  */
-                BigDecimal costo=new BigDecimal(getTxtPrecionUnitarioItem().getText());
-                productoProveedor.setCosto(costo);
-                
-                EnumSiNo enumSiNo= (EnumSiNo) getCmbCobraIva().getSelectedItem();
-                productoProveedor.setConIva(enumSiNo.getLetra());
-                
-                //Seteo los valores de los detalles e la compra
-                CompraDetalle compraDetalle=new CompraDetalle();
-                compraDetalle.setCantidad(Integer.parseInt(getTxtCantidadItem().getText()));
-                BigDecimal precioUnitario = new BigDecimal(getTxtPrecionUnitarioItem().getText()); 
-                compraDetalle.setPrecioUnitario(precioUnitario.setScale(2,BigDecimal.ROUND_HALF_UP));
-                compraDetalle.setCompra(compra);
-                compraDetalle.setDescripcion(getTxtDescripcionItem().getText());
-                compraDetalle.setDescuento(BigDecimal.ZERO);
-                if(productoProveedor.getConIva().equals("s"))
+                if(verificarCamposValidados())
                 {
-                    compraDetalle.setIva(compraDetalle.calcularValorIva());
+                    agregarDetallesCompra(null);
                 }
-                else
-                {
-                    compraDetalle.setIva(BigDecimal.ZERO);
-                }
-                compraDetalle.setProductoProveedor(productoProveedor);
-                //compraDetalle.setTotal(compraDetalle.calcularTotal());
-                compraDetalle.setTotal(compraDetalle.getSubtotal());
-                compraDetalle.setValorIce(BigDecimal.ZERO);
-                compra.addDetalle(compraDetalle);
-                
-                /**
-                 * Cargar los otros valores como el descuento
-                 */
-                compra.setDescuentoImpuestos(new BigDecimal(getTxtDescuentoImpuestos().getText()));
-                compra.setDescuentoSinImpuestos(new BigDecimal(getTxtDescuentoSinImpuestos().getText()));
-                actualizarTotales();
-                mostrarDatosTabla();
-                mostrarDatosTotales();
-                limpiarCampos();
             }
         });
         
@@ -389,7 +365,47 @@ public class CompraModel extends CompraPanel{
             }
             
         });
-       
+        
+        getTblDetalleProductos().addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent evt)
+            {
+                filaDP = getTblDetalleProductos().getSelectedRow();
+                bandera = true;
+                CompraDetalle compraDetalle = (CompraDetalle) compra.getDetalles().get(filaDP);
+                getTxtProductoItem().setText(compraDetalle.getDescripcion());
+                getTxtDescripcionItem().setText(compraDetalle.getDescripcion());
+                getTxtCantidadItem().setText(compraDetalle.getCantidad()+"");
+                getTxtPrecionUnitarioItem().setText(compraDetalle.getPrecioUnitario()+"");
+                bloquearDesbloquearBotones(false);
+                
+            }
+        });
+        
+        getBtnEditarItem().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(bandera)
+                {
+                    bandera = false;
+                    CompraDetalle compraDetalle = compra.getDetalles().get(filaDP);
+                    agregarDetallesCompra(compraDetalle);
+                }
+            }
+        });
+        
+        getBtnEliminarItem().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(bandera)
+                {
+                    bandera = false;
+                    compra.getDetalles().remove(filaDP);
+                    modeloTablaDetallesCompra.removeRow(filaDP);
+                    actualizarDatosMostrarVentana();
+                }
+            }
+        });
+                
     }
     
     private void actualizarTotales()
@@ -537,4 +553,90 @@ public class CompraModel extends CompraPanel{
         
     }
     
+    private void bloquearDesbloquearBotones(Boolean b)
+    {
+        getBtnAgregarItem().enable(b);
+        getBtnBuscarProductoProveedor().enable(b);
+        getBtnEditarItem().enable(!b);
+        getBtnEliminarItem().enable(!b);
+    }
+   
+    private void agregarDetallesCompra(CompraDetalle compraDetalle)
+    {
+        Boolean agregar = false;
+        
+        if(compraDetalle != null){
+            agregar = false;
+        }
+        else{
+            compraDetalle = new CompraDetalle();
+        }
+        
+        if(verificarCamposValidados())
+        {
+            BigDecimal costo=new BigDecimal(getTxtPrecionUnitarioItem().getText());
+            productoProveedor.setCosto(costo);
+
+            EnumSiNo enumSiNo= (EnumSiNo) getCmbCobraIva().getSelectedItem();
+            productoProveedor.setConIva(enumSiNo.getLetra());
+
+            //Seteo los valores de los detalles e la compra
+            compraDetalle.setCantidad(Integer.parseInt(getTxtCantidadItem().getText()));
+            BigDecimal precioUnitario = new BigDecimal(getTxtPrecionUnitarioItem().getText()); 
+            compraDetalle.setPrecioUnitario(precioUnitario.setScale(2,BigDecimal.ROUND_HALF_UP));
+            compraDetalle.setCompra(compra);
+            compraDetalle.setDescripcion(getTxtDescripcionItem().getText());
+            compraDetalle.setDescuento(BigDecimal.ZERO);
+            if(productoProveedor.getConIva().equals("s"))
+            {
+                compraDetalle.setIva(compraDetalle.calcularValorIva());
+            }
+            else
+            {
+                compraDetalle.setIva(BigDecimal.ZERO);
+            }
+            compraDetalle.setProductoProveedor(productoProveedor);
+            //compraDetalle.setTotal(compraDetalle.calcularTotal());
+            compraDetalle.setTotal(compraDetalle.getSubtotal());
+            compraDetalle.setValorIce(BigDecimal.ZERO);
+
+            if(agregar)
+            {
+                compra.addDetalle(compraDetalle);
+                compra.setDescuentoImpuestos(new BigDecimal(getTxtDescuentoImpuestos().getText()));
+                compra.setDescuentoSinImpuestos(new BigDecimal(getTxtDescuentoSinImpuestos().getText()));
+            }
+            
+            actualizarDatosMostrarVentana();
+            
+        }
+     
+    }
+    
+    private void actualizarDatosMostrarVentana()
+    {
+        actualizarTotales();
+        mostrarDatosTabla();
+        mostrarDatosTotales();
+        limpiarCampos();
+    }
+    
+    private boolean verificarCamposValidados()
+    {
+        boolean b = true;
+        List<JTextField> camposValidar = new ArrayList<JTextField>();
+            camposValidar.add(getTxtCantidadItem());
+            camposValidar.add(getTxtPrecionUnitarioItem());
+            camposValidar.add(getTxtDescripcionItem());
+            camposValidar.add(getTxtProductoItem());
+            for(JTextField campo : camposValidar)
+            {
+                if(!campo.getBackground().equals(Color.WHITE))
+                {
+                    b = false;
+                }
+            }
+            
+        return b;
+    }
 }
