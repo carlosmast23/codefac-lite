@@ -574,15 +574,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             menuControlador.getJmenuItem().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                        /*
-                        if(!menuControlador.verificarPermisoModulo(sessionCodefac.getModulosMap())) //Verifica si la pantalla tiene permisos para los modulos cargados en
-                        {
-                            //Si no tiene permise solo oculto el menu para que no acceda
-                            menuControlador.getMenuItem().setVisible(false);
-                            return; //termina la ejecucion porque no se agregan listener
-                        }
-                        menuControlador.getMenuItem().setVisible(true);*/
-                    
+
                         ControladorCodefacInterface ventana= (ControladorCodefacInterface) menuControlador.getInstance();
                         if(!verificarPantallaCargada(ventana))
                         {
@@ -1991,34 +1983,31 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         }
                         else //Verificacion cuando no es un modulo habilitado
                         {
-                            //Verifica si es super usuario carga todos los modulos
-                            if (sessionCodefac.getUsuario().getNick().equals(Usuario.SUPER_USUARIO)) {
-                                agregarAlMenu = true;
-                            }
-                            else
-                            {
-                                //Solo verifica si debe agregar otras ventanas de otros modulos si el menu pertenece al modulo actual
-                                //Nota: sin esta linea pueden aparecer varios enlaces a esta ventana desde otros menus de modulos
-                                if(menuControlador.getModulo().equals(moduloSistema))
+                            //Solo agregar otras ventanas de otros modulos si el menu pertenece al modulo actual
+                            //Nota: sin esta linea pueden aparecer varios enlaces a esta ventana desde otros menus de modulos
+                            if (menuControlador.getModulo().equals(moduloSistema)) {
+                                //Verifica si es super usuario carga todos los modulos
+                                if (sessionCodefac.getUsuario().getNick().equals(Usuario.SUPER_USUARIO)) 
                                 {
-                                    if(menuControlador.verificarPermisoModuloAdicional(sessionCodefac.getModulosMap()))
-                                    {
-                                        if(verificarMenuUsuario(menuControlador))
-                                        {
-                                            agregarAlMenu=true;
-                                        }
+                                    agregarAlMenu = true;
+                                } 
+                                else 
+                                    if (menuControlador.verificarPermisoModuloAdicional(sessionCodefac.getModulosMap())) {
+                                    if (verificarMenuUsuario(menuControlador)) {
+                                        agregarAlMenu = true;
                                     }
                                 }
                             }
+
                         
                         }
                         
                         
-                        if (menuControlador.getCategoriaMenu().equals(categoriaEnum)&& agregarAlMenu) {
+                        if (menuControlador.getCategoriaMenu().equals(categoriaEnum)&& agregarAlMenu ) {
                             existenMenuItem = true;
                             String nombreVentana = "Sin nombre";
                             try {
-                                System.out.println(menuControlador.getNombre());
+                                System.out.println(moduloSistema.getNombre()+":"+categoriaEnum.getNombre()+"->"+menuControlador.getNombre());
                                 nombreVentana =((GeneralPanelInterface)(menuControlador.getInstance())).getNombre();
                             } catch (java.lang.UnsupportedOperationException uoe) {
                                 System.err.println(menuControlador.getClass().getSimpleName() + ": Ventana sin implementar nombre");
