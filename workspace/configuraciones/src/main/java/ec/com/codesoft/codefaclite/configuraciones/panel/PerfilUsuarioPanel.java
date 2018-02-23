@@ -6,6 +6,8 @@
 package ec.com.codesoft.codefaclite.configuraciones.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JList;
@@ -239,6 +241,8 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         this.cmbEstado = cmbEstado;
     }
 
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido=true ,min=0,nombre = "Clave")
     public JPasswordField getTxtClave() {
         return txtClave;
     }
@@ -247,6 +251,8 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         this.txtClave = txtClave;
     }
 
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, min = 0, nombre = "Clave")
     public JPasswordField getTxtClaveRepetir() {
         return txtClaveRepetir;
     }
@@ -255,6 +261,8 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         this.txtClaveRepetir = txtClaveRepetir;
     }
 
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido=true ,min=0,nombre = "Usuario")
     public JTextField getTxtUsuario() {
         return txtUsuario;
     }

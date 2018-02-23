@@ -6,6 +6,8 @@
 package ec.com.codesoft.codefaclite.configuraciones.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
@@ -371,6 +373,8 @@ public abstract class PerfilPanel extends ControladorCodefacInterface {
         this.tblDatos = tblDatos;
     }
 
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido=true ,min=0,nombre = "Nombre del Perfil")
     public JTextField getTxtNombrePerfil() {
         return txtNombrePerfil;
     }
