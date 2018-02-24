@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import java.io.Serializable;
+import java.sql.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,6 +36,8 @@ public class Estudiante implements Serializable {
     private String codigoAuxiliar;
     @Column(name = "CEDULA")
     private String cedula;
+    @Column(name = "EMAIL")
+    private String email;
     @Column(name = "NOMBRES")
     private String nombres;
     @Column(name = "APELLIDOS")
@@ -42,7 +45,7 @@ public class Estudiante implements Serializable {
     @Column(name = "GENERO")
     private String genero;
     @Column(name = "FECHA_NACIMIENTO")
-    private String fechaNacimiento;
+    private Date fechaNacimiento;
     @Column(name = "TELEFONO")
     private String telefono;
     @Column(name = "CELULAR")
@@ -51,6 +54,8 @@ public class Estudiante implements Serializable {
     private String direccion;
     @Column(name = "ADICIONALES")
     private String datosAdicionales;
+    @Column(name = "ESTADO")
+    private String estado;
 
     private Persona persona;
 
@@ -89,6 +94,14 @@ public class Estudiante implements Serializable {
         this.cedula = cedula;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getNombres() {
         return nombres;
     }
@@ -113,14 +126,15 @@ public class Estudiante implements Serializable {
         this.genero = genero;
     }
 
-    public String getFechaNacimiento() {
+    public Date getFechaNacimiento() {
         return fechaNacimiento;
     }
 
-    public void setFechaNacimiento(String fechaNacimiento) {
+    public void setFechaNacimiento(Date fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
 
+ 
     public String getTelefono() {
         return telefono;
     }
@@ -153,6 +167,14 @@ public class Estudiante implements Serializable {
         this.datosAdicionales = datosAdicionales;
     }
 
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
     public Persona getPersona() {
         return persona;
     }
@@ -160,7 +182,5 @@ public class Estudiante implements Serializable {
     public void setPersona(Persona persona) {
         this.persona = persona;
     }
-    
-    
 
 }

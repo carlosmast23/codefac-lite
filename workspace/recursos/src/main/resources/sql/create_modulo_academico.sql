@@ -12,6 +12,8 @@ create table ESTUDIANTE(
     PERSONA_ID bigint,    
     CODSISTEMA varchar(100),
     CODAUXILIAR varchar(100),    
+    CEDULA varchar(13),
+    EMAIL varchar(100),    
     NOMBRES varchar(100),    
     APELLIDOS varchar(100),
     GENERO varchar(1),
