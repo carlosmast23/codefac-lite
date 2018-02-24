@@ -24,6 +24,22 @@ import javax.swing.JTextField;
  */
 public abstract class CompraPanel extends ControladorCodefacInterface {
 
+    public JButton getBtnEditarItem() {
+        return btnEditarItem;
+    }
+
+    public void setBtnEditarItem(JButton btnEditarItem) {
+        this.btnEditarItem = btnEditarItem;
+    }
+
+    public JButton getBtnEliminarItem() {
+        return btnEliminarItem;
+    }
+
+    public void setBtnEliminarItem(JButton btnEliminarItem) {
+        this.btnEliminarItem = btnEliminarItem;
+    }
+
     /**
      * Creates new form CompraPanel
      */
@@ -84,8 +100,8 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         jLabel10 = new javax.swing.JLabel();
         txtPrecionUnitarioItem = new javax.swing.JTextField();
         btnAgregarItem = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnEditarItem = new javax.swing.JButton();
+        btnEliminarItem = new javax.swing.JButton();
         jLabel17 = new javax.swing.JLabel();
         cmbCobraIva = new javax.swing.JComboBox<>();
         jPanel1 = new javax.swing.JPanel();
@@ -338,21 +354,21 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
         jPanel2.add(btnAgregarItem, gridBagConstraints);
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/edit_icon.png"))); // NOI18N
+        btnEditarItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/edit_icon.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
-        jPanel2.add(jButton2, gridBagConstraints);
+        jPanel2.add(btnEditarItem, gridBagConstraints);
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/cerrar-ico.png"))); // NOI18N
+        btnEliminarItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/cerrar-ico.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 11;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
-        jPanel2.add(jButton3, gridBagConstraints);
+        jPanel2.add(btnEliminarItem, gridBagConstraints);
 
         jLabel17.setText("Cobra Iva:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -616,14 +632,14 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarItem;
     private javax.swing.JButton btnBuscarProductoProveedor;
+    private javax.swing.JButton btnEditarItem;
+    private javax.swing.JButton btnEliminarItem;
     private javax.swing.JButton btnOrdenCompraBuscar;
     private javax.swing.JButton btnProveedorBuscar;
     private javax.swing.JComboBox<EnumSiNo> cmbCobraIva;
     private javax.swing.JComboBox<DocumentoEnum> cmbDocumento;
     private com.toedter.calendar.JDateChooser cmbFechaCompra;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -721,13 +737,13 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Producto")
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Producto",grupo = "detalles")
     public JTextField getTxtProductoItem() {
         return txtProductoItem;
     }
     
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Descripción")
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Descripción",grupo = "detalles")
     public JTextField getTxtDescripcionItem() {
         return txtDescripcionItem;
     }
@@ -738,7 +754,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0-9]+([.][0-9]+)?$", nombre = "Precio Unitario")
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0-9]+([.][0-9]+)?$", nombre = "Precio Unitario",grupo = "detalles")
     public JTextField getTxtPrecionUnitarioItem() {
         return txtPrecionUnitarioItem;
     }
@@ -766,7 +782,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     }
     
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0-9]+$",nombre = "Cantidad")
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0-9]+$",nombre = "Cantidad",grupo = "detalles")
     public JTextField getTxtCantidadItem() {
         return txtCantidadItem;
     }
