@@ -5,11 +5,14 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -17,20 +20,27 @@ import javax.persistence.Table;
  * @author Carlos
  */
 @Entity
-@Table(name = "NivelAcademico")
-public class NivelAcademico {
+@Table(name = "NIVEL_ACADEMICO")
+public class NivelAcademico implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
-    
+
+    @Column(name = "NOMBRE")    
     private String nombre;
-    
+
+    @JoinColumn(name = "AULA_ID")
+    @ManyToOne        
     private Aula aula;
     
+    @JoinColumn(name = "PERIODO_ID")
+    @ManyToOne        
     private Periodo periodo;
     
+    @JoinColumn(name = "NIVEL_ID")
+    @ManyToOne        
     private Nivel nivel;
 
     public NivelAcademico() {
@@ -74,6 +84,11 @@ public class NivelAcademico {
 
     public void setNivel(Nivel nivel) {
         this.nivel = nivel;
+    }
+
+    @Override
+    public String toString() {
+        return nombre;
     }
     
     
