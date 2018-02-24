@@ -42,7 +42,9 @@ public enum VentanaEnum {
     NIVEL("ec.com.codesoft.codefaclite.gestionacademica.model.NivelModel","NIVE","Nivel",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.GESTIONAR),
     PERIODO("ec.com.codesoft.codefaclite.gestionacademica.model.PeriodoModel","PERI","Periodo",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.GESTIONAR),
     PERFILES("ec.com.codesoft.codefaclite.configuraciones.model.PerfilModel","PERF","Utilidad Comprobante",ModuloCodefacEnum.SISTEMA,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION}),
-    USUARIOS("ec.com.codesoft.codefaclite.configuraciones.model.PerfilUsuarioModel","PEUM","Perfil Usuario",ModuloCodefacEnum.SISTEMA,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION});
+    USUARIOS("ec.com.codesoft.codefaclite.configuraciones.model.PerfilUsuarioModel","PEUM","Perfil Usuario",ModuloCodefacEnum.SISTEMA,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION}),
+    MATRICULA("ec.com.codesoft.codefaclite.gestionacademica.model.MatriculaModel","MATR","",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.PROCESOS),
+    NIVEL_ACADEMICO("ec.com.codesoft.codefaclite.gestionacademica.model.NivelAcademicoModel","NIAC","",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.GESTIONAR);
 
     private VentanaEnum(String clase, String codigo, String nombre, ModuloCodefacEnum modulo, CategoriaMenuEnum categoriaMenu) {
         this.claseNombre = clase;

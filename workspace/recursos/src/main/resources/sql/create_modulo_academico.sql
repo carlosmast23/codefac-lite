@@ -41,7 +41,11 @@ create table PERIODO(
 );
 
 create table NIVEL_ACADEMICO( 
-    ESTUDIANTE_ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
-    primary key (ESTUDIANTE_ID)
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
+    NOMBRE varchar(100),
+    AULA_ID bigint,
+    PERIODO_ID bigint,
+    NIVEL_ID bigint,
+    primary key (ID)
 );
 

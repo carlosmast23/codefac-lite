@@ -1,3 +1,5 @@
+Ver si en el modo cliente y servidor en la misma maquina puedo configurar como local host , porque cuando no tiene red no se puede usar el sistema
+En la pantalla de niveles se debe cargar los nuevos niveles para coger el nievel anterior
 los iconos revisar el nivel de acceso
 Verificar como puedo hacer para validar el boton de grabar y eliminar por separado por roles de usuario
 En los metodos de buscar de las pantallas tomar en cuenta que no se debe setear la variable global de la entidad con la que se trabaje porque por algun motivo si cancela la busqueda devuelve null y puede generar problemas con los datos actuales del formulario
