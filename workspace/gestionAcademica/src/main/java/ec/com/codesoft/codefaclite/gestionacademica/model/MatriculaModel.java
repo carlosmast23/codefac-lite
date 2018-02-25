@@ -26,6 +26,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -42,6 +43,8 @@ public class MatriculaModel extends MatriculaPanel{
      * Nivel por defecto para cargar todos los alumnos sin nivel
      */
     private NivelAcademico nivelNinguno;
+    
+    private DefaultTableModel modeloTablaSinMatricula;
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
@@ -206,7 +209,7 @@ public class MatriculaModel extends MatriculaPanel{
                 {
                     try {
                         List<Estudiante> estudiantes=ServiceFactory.getFactory().getEstudianteServiceIf().estudianteSinMatriculaPorPeriodo(nivelAcademico.getPeriodo());
-                        cargarListaEstudiantes(estudiantes);
+                        cargarTablaSinMatricula(estudiantes);
                     } catch (RemoteException ex) {
                         Logger.getLogger(MatriculaModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -215,13 +218,18 @@ public class MatriculaModel extends MatriculaPanel{
         });
     }
     
-    private void cargarListaEstudiantes(List<Estudiante> estudiantes)
+   
+    private void cargarTablaSinMatricula(List<Estudiante> estudiantes)
     {
+        String[] titulos={"Opcion","Estudiante"};
+        this.modeloTablaSinMatricula=new DefaultTableModel(titulos,0);
+        
         DefaultListModel<Estudiante> listaEstudiantes=new DefaultListModel<Estudiante>();
         for (Estudiante estudiante : estudiantes) {
-            listaEstudiantes.addElement(estudiante);
+            Object[] fila={new Boolean(false),estudiante};
+            modeloTablaSinMatricula.addRow(fila);
        }
-       getLstAlumnosDisponibles().setModel(listaEstudiantes);
+       getTblAlumnosSinMatricula().setModel(modeloTablaSinMatricula);
     }
     
     private void cargarNivelesPeriodo(Periodo periodo,JComboBox<NivelAcademico> comboNivel)

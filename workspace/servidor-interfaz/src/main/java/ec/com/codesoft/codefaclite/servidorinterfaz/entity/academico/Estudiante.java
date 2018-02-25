@@ -13,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -57,7 +59,9 @@ public class Estudiante implements Serializable {
     @Column(name = "ESTADO")
     private String estado;
 
-    private Persona persona;
+    @JoinColumn(name = "PERSONA_ID")
+    @ManyToOne    
+    private Persona representante;
     
     public Estudiante() {
     }
@@ -175,13 +179,15 @@ public class Estudiante implements Serializable {
         this.estado = estado;
     }
 
-    public Persona getPersona() {
-        return persona;
+    public Persona getRepresentante() {
+        return representante;
     }
 
-    public void setPersona(Persona persona) {
-        this.persona = persona;
+    public void setRepresentante(Persona representante) {
+        this.representante = representante;
     }
+
+    
 
     @Override
     public String toString() {
