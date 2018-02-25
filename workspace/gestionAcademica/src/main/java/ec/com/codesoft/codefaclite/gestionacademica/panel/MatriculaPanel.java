@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.gestionacademica.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import javax.swing.JButton;
@@ -196,7 +197,7 @@ public abstract class MatriculaPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JList<String> lstAlumnosDisponibles;
+    private javax.swing.JList<Estudiante> lstAlumnosDisponibles;
     private javax.swing.JList<String> lstAlumnosMatriculados;
     // End of variables declaration//GEN-END:variables
 
@@ -248,13 +249,7 @@ public abstract class MatriculaPanel extends ControladorCodefacInterface {
         this.cmbPeriodoSiguiente = cmbPeriodoSiguiente;
     }
 
-    public JList<String> getLstAlumnosDisponibles() {
-        return lstAlumnosDisponibles;
-    }
-
-    public void setLstAlumnosDisponibles(JList<String> lstAlumnosDisponibles) {
-        this.lstAlumnosDisponibles = lstAlumnosDisponibles;
-    }
+    
 
     public JList<String> getLstAlumnosMatriculados() {
         return lstAlumnosMatriculados;
@@ -278,6 +273,14 @@ public abstract class MatriculaPanel extends ControladorCodefacInterface {
 
     public void setCmbNivelMatricula(JComboBox<NivelAcademico> cmbNivelMatricula) {
         this.cmbNivelMatricula = cmbNivelMatricula;
+    }
+
+    public JList<Estudiante> getLstAlumnosDisponibles() {
+        return lstAlumnosDisponibles;
+    }
+
+    public void setLstAlumnosDisponibles(JList<Estudiante> lstAlumnosDisponibles) {
+        this.lstAlumnosDisponibles = lstAlumnosDisponibles;
     }
 
     

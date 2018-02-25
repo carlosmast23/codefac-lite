@@ -58,7 +58,7 @@ public class Estudiante implements Serializable {
     private String estado;
 
     private Persona persona;
-
+    
     public Estudiante() {
     }
 
@@ -182,5 +182,12 @@ public class Estudiante implements Serializable {
     public void setPersona(Persona persona) {
         this.persona = persona;
     }
+
+    @Override
+    public String toString() {
+        return nombres+" "+apellidos;
+    }
+    
+    
 
 }

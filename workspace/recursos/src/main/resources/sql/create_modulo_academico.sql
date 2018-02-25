@@ -19,7 +19,7 @@ create table ESTUDIANTE(
     GENERO varchar(1),
     FECHA_NACIMIENTO date,
     TELEFONO varchar(15),
-    CELULAR varchar(15)
+    CELULAR varchar(15),
     DIRECCION varchar(150),  
     ADICIONALES varchar(256),   
     ESTADO varchar(1),
@@ -52,6 +52,14 @@ create table NIVEL_ACADEMICO(
     AULA_ID bigint,
     PERIODO_ID bigint,
     NIVEL_ID bigint,
+    primary key (ID)
+);
+
+
+create table ESTUDIANTE_INSCRITO( 
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
+    ESTUDIANTE_ID bigint,
+    NIVEL_ACADEMICO_ID bigint,
     primary key (ID)
 );
 

@@ -6,8 +6,10 @@
 package ec.com.codesoft.codefaclite.gestionacademica.model;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.MatriculaPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
@@ -22,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
 
 /**
@@ -29,12 +32,33 @@ import javax.swing.JComboBox;
  * @author Carlos
  */
 public class MatriculaModel extends MatriculaPanel{
+    
+    /**
+     * Periodo por defecto para manejar cuando el estudiante no esta inscrito o es nuevo
+     */
+    private Periodo periodoNinguno;
+    
+    /**
+     * Nivel por defecto para cargar todos los alumnos sin nivel
+     */
+    private NivelAcademico nivelNinguno;
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
+        crearVariablesPorDefecto();
         iniciarListener();
         cargarValoresIniciales();
+        
     }
+    
+   private void crearVariablesPorDefecto()
+   {
+       periodoNinguno=new Periodo();
+       periodoNinguno.setNombre("Ninguno");
+       
+       nivelNinguno=new NivelAcademico();
+       nivelNinguno.setNombre("Ninguno");
+   }
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
@@ -88,7 +112,14 @@ public class MatriculaModel extends MatriculaPanel{
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
+        permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
+        return permisos;
     }
 
     @Override
@@ -125,6 +156,10 @@ public class MatriculaModel extends MatriculaPanel{
                     getCmbPeriodoSiguiente().addItem(nivel);
                 }
             }
+            //Agregar valor por defecto al combo de nivel anterior cuando los alumnos no estan inscritos en ninguna curso anterior
+           
+            getCmbPeriodoAnterior().addItem(periodoNinguno);
+            
         } catch (RemoteException ex) {
             Logger.getLogger(MatriculaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -141,6 +176,52 @@ public class MatriculaModel extends MatriculaPanel{
                 }
             }
         });
+        
+        getCmbPeriodoAnterior().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Periodo periodo= (Periodo) getCmbPeriodoAnterior().getSelectedItem();
+                if(periodo!=null)
+                {
+                    if(periodoNinguno.equals(periodo))
+                    {
+                        getCmbNivel().removeAllItems();
+                        getCmbNivel().addItem(nivelNinguno);
+                    }
+                    else
+                    {
+                        cargarNivelesPeriodo(periodo,getCmbNivel());
+                    }
+                }
+                
+            }
+        });
+        
+        
+        getCmbNivel().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                NivelAcademico nivelAcademico=(NivelAcademico) getCmbNivel().getSelectedItem();
+                if(nivelAcademico.equals(nivelNinguno))
+                {
+                    try {
+                        List<Estudiante> estudiantes=ServiceFactory.getFactory().getEstudianteServiceIf().estudianteSinMatriculaPorPeriodo(nivelAcademico.getPeriodo());
+                        cargarListaEstudiantes(estudiantes);
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(MatriculaModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+    }
+    
+    private void cargarListaEstudiantes(List<Estudiante> estudiantes)
+    {
+        DefaultListModel<Estudiante> listaEstudiantes=new DefaultListModel<Estudiante>();
+        for (Estudiante estudiante : estudiantes) {
+            listaEstudiantes.addElement(estudiante);
+       }
+       getLstAlumnosDisponibles().setModel(listaEstudiantes);
     }
     
     private void cargarNivelesPeriodo(Periodo periodo,JComboBox<NivelAcademico> comboNivel)

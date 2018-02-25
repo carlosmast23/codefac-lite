@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.gestionacademica.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.EstudiantePanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
@@ -18,6 +19,7 @@ import java.rmi.RemoteException;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -45,6 +47,11 @@ public class EstudianteModel extends EstudiantePanel {
         for (EstudianteEnumEstado enumerador : EstudianteEnumEstado.values()) {
             getCmbEstado().addItem(enumerador);
         }
+        
+        getCmbGenero().removeAllItems();
+        for (GeneroEnum generoEnum : GeneroEnum.values()) {
+            getCmbGenero().addItem(generoEnum);
+        }
     }
 
     @Override
@@ -56,7 +63,7 @@ public class EstudianteModel extends EstudiantePanel {
     public void grabar() throws ExcepcionCodefacLite {
         try {
             setearValoresEstudiante(estudiante);
-            estudiante = estudianteService.grabar(estudiante);
+            estudianteService.grabar(estudiante);
             DialogoCodefac.mensaje("Datos correctos", "El registro de estudiante se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
@@ -78,7 +85,7 @@ public class EstudianteModel extends EstudiantePanel {
         estudiante.setDireccion(getTxtDireccion().getText());
         estudiante.setDatosAdicionales(getTxtAdicionales().getText());
 
-        estudiante.setEstado(((GeneroEnum) getCmbEstado().getSelectedItem()).getEstado());
+        estudiante.setEstado(((GeneroEnum) getCmbGenero().getSelectedItem()).getEstado());
         estudiante.setEstado(((EstudianteEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
         
         
@@ -116,12 +123,12 @@ public class EstudianteModel extends EstudiantePanel {
 
     @Override
     public void limpiar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.estudiante=new Estudiante();
     }
 
     @Override
     public String getNombre() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "Estudiantes";
     }
 
     @Override
@@ -131,7 +138,14 @@ public class EstudianteModel extends EstudiantePanel {
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
+        permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
+        return permisos;
     }
 
     @Override
