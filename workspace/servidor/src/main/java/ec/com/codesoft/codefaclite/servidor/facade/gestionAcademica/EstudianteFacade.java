@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import java.util.List;
@@ -29,10 +30,13 @@ public class EstudianteFacade extends AbstractFacade<Estudiante>{
     {
         try {
             //Estudiante e;
+            //e.getApellidos();
             //EstudianteInscrito ei;
             //ei.getEstudiante()
             //ei.getNivelAcademico().getPeriodo();            
-            String queryString = "SELECT e FROM EstudianteInscrito u LEFT JOIN u.estudiante e WHERE u.nivelAcademico.periodo=?1";
+            String queryString = "SELECT e FROM Estudiante e where "
+                    + "( SELECT COUNT(ei.id) FROM EstudianteInscrito ei WHERE ei.estudiante=e AND ei.nivelAcademico.periodo=?1 ) "
+                    + "=0";
             Query query = getEntityManager().createQuery(queryString);
             query.setParameter(1,periodo);
             return (List<Estudiante>) query.getResultList();
@@ -40,5 +44,5 @@ public class EstudianteFacade extends AbstractFacade<Estudiante>{
             return null;
         }
     }
-    
+
 }

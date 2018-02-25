@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.service.gestionAcademica;
 import ec.com.codesoft.codefaclite.servidor.facade.gestionAcademica.EstudianteFacade;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteServiceIf;
 import java.rmi.RemoteException;
@@ -30,5 +31,6 @@ public class EstudianteService extends ServiceAbstract<Estudiante,EstudianteFaca
     {
         return estudianteFacade.getEstudiantesSinMatricula(periodo);
     }
+    
     
 }

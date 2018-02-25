@@ -7,9 +7,11 @@ package ec.com.codesoft.codefaclite.gestionacademica.model;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.gestionacademica.other.RowsRenderer;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.MatriculaPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
@@ -19,6 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServ
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +48,11 @@ public class MatriculaModel extends MatriculaPanel{
     private NivelAcademico nivelNinguno;
     
     private DefaultTableModel modeloTablaSinMatricula;
+    
+    /**
+     * Lista que va a contener los nuevos estudiantes agregado para grabar y matricular
+     */
+    private List<Estudiante> estudiantesAgregados;
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
@@ -61,6 +69,8 @@ public class MatriculaModel extends MatriculaPanel{
        
        nivelNinguno=new NivelAcademico();
        nivelNinguno.setNombre("Ninguno");
+       
+       getTblAlumnosConMatricula().setDefaultRenderer(Object.class,new RowsRenderer(1));
    }
 
     @Override
@@ -100,7 +110,7 @@ public class MatriculaModel extends MatriculaPanel{
 
     @Override
     public void limpiar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        estudiantesAgregados=new ArrayList<Estudiante>();
     }
 
     @Override
@@ -133,9 +143,37 @@ public class MatriculaModel extends MatriculaPanel{
     private void iniciarListener() {
         iniciarListenerBotones();
         iniciarListenerCombos();
+       
     }
 
     private void iniciarListenerBotones() {
+        getBtnPasar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //Obtener todos los datos Seleccionados
+                DefaultTableModel modeloDatos= (DefaultTableModel) getTblAlumnosSinMatricula().getModel();
+                for (int i = 0; i < modeloDatos.getRowCount(); i++) {
+                    Boolean seleccionado=(Boolean) modeloDatos.getValueAt(i,0);
+                    if(seleccionado)
+                    {
+                        Estudiante estudiante=(Estudiante) modeloDatos.getValueAt(i,2);
+                        estudiantesAgregados.add(estudiante);
+                        actualizarTablaMatricula();
+                    }
+                }
+            }
+        });
+    }
+    
+    private void actualizarTablaMatricula()
+    {
+        DefaultTableModel modeloTabla= (DefaultTableModel) getTblAlumnosConMatricula().getModel();
+        for (Estudiante estudiantesAgregado : estudiantesAgregados) {
+            
+            modeloTabla.insertRow(0,new Object[]{false,"No",estudiantesAgregado});       
+            //getTblAlumnosConMatricula().get
+        }
+        
         
     }
 
@@ -216,20 +254,66 @@ public class MatriculaModel extends MatriculaPanel{
                 }
             }
         });
+        
+        
+        getCmbNivelMatricula().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                NivelAcademico nivelAcademico=(NivelAcademico) getCmbNivelMatricula().getSelectedItem();
+                if(nivelAcademico.equals(nivelNinguno))
+                {
+                    try {
+                        Map<String,Object> mapParametros=new HashMap<String,Object>();
+                        mapParametros.put("NivelAcademico",nivelAcademico);
+                        List<EstudianteInscrito> estudiantesInscritos= ServiceFactory.getFactory().getEstudianteInscritoServiceIf().obtenerPorMap(mapParametros);
+                        cargarTablaConMatricula(estudiantesInscritos);
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(MatriculaModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(MatriculaModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+        
     }
     
    
     private void cargarTablaSinMatricula(List<Estudiante> estudiantes)
     {
-        String[] titulos={"Opcion","Estudiante"};
-        this.modeloTablaSinMatricula=new DefaultTableModel(titulos,0);
+        String[] titulos={"Opcion","Grabado","Estudiante"};
+        this.modeloTablaSinMatricula=crearModeloTabla(titulos,new Class[]{Boolean.class,String.class,Estudiante.class});
         
         DefaultListModel<Estudiante> listaEstudiantes=new DefaultListModel<Estudiante>();
         for (Estudiante estudiante : estudiantes) {
-            Object[] fila={new Boolean(false),estudiante};
+            Object[] fila={new Boolean(false),"Si",estudiante};
             modeloTablaSinMatricula.addRow(fila);
        }
        getTblAlumnosSinMatricula().setModel(modeloTablaSinMatricula);
+    }
+    
+    private void cargarTablaConMatricula(List<EstudianteInscrito> estudiantesInscritos)
+    {
+        String[] titulos={"Opcion","Estudiante"};
+        this.modeloTablaSinMatricula=crearModeloTabla(titulos,new Class[]{Boolean.class,Estudiante.class});
+        
+        DefaultListModel<Estudiante> listaEstudiantes=new DefaultListModel<Estudiante>();
+        for (EstudianteInscrito estudiante : estudiantesInscritos) {
+            Object[] fila={new Boolean(false),"Si",estudiante.getEstudiante()};
+            modeloTablaSinMatricula.addRow(fila);
+       }
+       getTblAlumnosSinMatricula().setModel(modeloTablaSinMatricula);
+    }
+    
+    private DefaultTableModel crearModeloTabla(String titulos[],Class[] tipoDatoFilas)
+    {
+         DefaultTableModel defaultTableModel=new javax.swing.table.DefaultTableModel(titulos,0) 
+         {
+             public Class getColumnClass(int columnIndex) {
+                return tipoDatoFilas [columnIndex];
+            }
+        };    
+         return defaultTableModel;
     }
     
     private void cargarNivelesPeriodo(Periodo periodo,JComboBox<NivelAcademico> comboNivel)

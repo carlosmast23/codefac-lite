@@ -44,6 +44,7 @@
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.PermisoVentana</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito</class>
 
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
   </persistence-unit>
