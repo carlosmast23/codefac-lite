@@ -32,5 +32,10 @@ public class EstudianteService extends ServiceAbstract<Estudiante,EstudianteFaca
         return estudianteFacade.getEstudiantesSinMatricula(periodo);
     }
     
+    public List<Estudiante> estudianteNuevosSinMatricula() throws RemoteException
+    {
+        return estudianteFacade.getEstudiantesNuevos();
+    }
+    
     
 }

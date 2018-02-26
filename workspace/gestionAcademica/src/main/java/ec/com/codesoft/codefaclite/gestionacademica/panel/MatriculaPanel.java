@@ -79,7 +79,7 @@ public abstract class MatriculaPanel extends ControladorCodefacInterface {
 
         jLabel1.setText("Nivel:");
 
-        jLabel2.setText("Periodo Anterior:");
+        jLabel2.setText("Buscar Por:");
 
         jLabel3.setText("Periodo Matricula:");
 

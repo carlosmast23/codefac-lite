@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -193,6 +194,32 @@ public class Estudiante implements Serializable {
     public String toString() {
         return nombres+" "+apellidos;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 73 * hash + Objects.hashCode(this.idEstudiante);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Estudiante other = (Estudiante) obj;
+        if (!Objects.equals(this.idEstudiante, other.idEstudiante)) {
+            return false;
+        }
+        return true;
+    }
+    
     
     
 

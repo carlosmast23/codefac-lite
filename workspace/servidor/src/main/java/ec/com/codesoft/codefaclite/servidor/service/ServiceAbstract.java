@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
@@ -30,7 +31,13 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
         this.entityManager=AbstractFacade.entityManager;
     }
     
-    
+    /**
+     * Obtiene un transaccion para trabar con el entity manager
+     */
+    public EntityTransaction getTransaccion()
+    {
+        return entityManager.getTransaction();
+    }
  
     public ServiceAbstract(Class<Facade> clase) throws java.rmi.RemoteException
     {
