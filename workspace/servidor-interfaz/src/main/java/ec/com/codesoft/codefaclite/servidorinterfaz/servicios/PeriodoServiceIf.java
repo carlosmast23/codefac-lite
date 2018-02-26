@@ -6,11 +6,13 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
+import java.rmi.RemoteException;
+import java.util.List;
 
 /**
  *
  * @author CodesoftDesarrollo
  */
 public interface PeriodoServiceIf extends ServiceAbstractIf<Periodo>{
-    
+    public List<Periodo> obtenerPeriodoActivo() throws RemoteException;
 }

@@ -13,6 +13,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PeriodoEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PeriodoServiceIf;
 import java.rmi.RemoteException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.persistence.exceptions.DatabaseException;
@@ -41,6 +44,14 @@ public class PeriodoService extends ServiceAbstract<Periodo, PeriodoFacade> impl
             throw new ServicioCodefacException("Error con la base de datos periodo");
         }
         return p;
+    }
+    
+    public List<Periodo> obtenerPeriodoActivo() throws RemoteException
+    {
+        Map<String,Object> mapParametros=new HashMap<String, Object>();
+        mapParametros.put("estado",PeriodoEnumEstado.ACTIVO.getEstado());
+        List<Periodo> periodos= obtenerPorMap(mapParametros);
+        return periodos;
     }
 
     public void editar(Periodo p) {

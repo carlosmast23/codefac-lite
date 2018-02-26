@@ -100,6 +100,7 @@ import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.EstudianteS
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.NivelAcademicoService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.NivelService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.PeriodoService;
+import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubrosNivelService;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
@@ -124,6 +125,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceControllerServer;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
@@ -135,6 +137,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PeriodoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PermisoVentanaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RubrosNivelServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
@@ -330,6 +333,8 @@ public class Main {
             mapRecursos.put(NivelAcademicoService.class, NivelAcademicoServiceIf.class);
             mapRecursos.put(PermisoVentanaService.class, PermisoVentanaServiceIf.class);
             mapRecursos.put(EstudianteInscritoService.class,EstudianteInscritoServiceIf.class);
+            mapRecursos.put(RubrosNivelService.class,RubrosNivelServiceIf.class);
+            
             ServiceControllerServer.cargarRecursos(mapRecursos);
             System.out.println("servidor iniciado");
 

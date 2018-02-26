@@ -45,6 +45,7 @@
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel</class>
 
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
   </persistence-unit>

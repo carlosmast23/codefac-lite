@@ -63,3 +63,14 @@ create table ESTUDIANTE_INSCRITO(
     primary key (ID)
 );
 
+create table RUBROS_NIVEL( 
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
+    NOMBRE varchar(100),
+    PERIODO_ID bigint,
+    NIVEL_ID bigint,
+    PRODUCTO_ID bigint,
+    TIPO_RUBRO varchar(1),
+    VALOR decimal(7,2),
+    primary key (ID)
+);
+

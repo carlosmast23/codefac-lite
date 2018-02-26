@@ -147,7 +147,7 @@ public class MatriculaModel extends MatriculaPanel{
 
     @Override
     public String getNombre() {
-        return "Matricula";
+        return "Matricula por grupo";
     }
 
     @Override

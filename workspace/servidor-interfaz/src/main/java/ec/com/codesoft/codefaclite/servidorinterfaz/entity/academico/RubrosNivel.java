@@ -5,34 +5,54 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author Carlos
  */
 @Entity
-@Table(name = "RubrosNivel")
-public class RubrosNivel {
+@Table(name = "RUBROS_NIVEL")
+@XmlRootElement
+public class RubrosNivel implements Serializable{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
+    
+    @Column(name = "NOMBRE")
+    private String nombre;
 
+    @JoinColumn(name = "NIVEL_ID")
+    @ManyToOne
     private Nivel nivel;
-    
+
+    @JoinColumn(name = "PERIODO_ID")
+    @ManyToOne
     private Periodo periodo;
+
+    @JoinColumn(name = "PRODUCTO_ID")
+    @ManyToOne    
+    private Producto producto;
     
+    @Column(name = "TIPO_RUBRO")
     private String tipoRubro;
-    
-    private Date fechaGenerar;
+
+    @Column(name = "VALOR")    
+    private BigDecimal valor;
 
     public RubrosNivel() {
     }
@@ -61,14 +81,6 @@ public class RubrosNivel {
         this.periodo = periodo;
     }
 
-    public Date getFechaGenerar() {
-        return fechaGenerar;
-    }
-
-    public void setFechaGenerar(Date fechaGenerar) {
-        this.fechaGenerar = fechaGenerar;
-    }
-
     public String getTipoRubro() {
         return tipoRubro;
     }
@@ -76,6 +88,31 @@ public class RubrosNivel {
     public void setTipoRubro(String tipoRubro) {
         this.tipoRubro = tipoRubro;
     }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public Producto getProducto() {
+        return producto;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
+    }
+
+    public BigDecimal getValor() {
+        return valor;
+    }
+
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
+    }
+    
     
     
     

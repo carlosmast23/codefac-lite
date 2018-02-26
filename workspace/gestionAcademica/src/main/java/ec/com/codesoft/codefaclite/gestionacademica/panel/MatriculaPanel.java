@@ -64,6 +64,7 @@ public abstract class MatriculaPanel extends ControladorCodefacInterface {
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
+        setTitle("Matricula por grupo");
 
         btnPasar.setText(">");
         btnPasar.setToolTipText("Matricular");
