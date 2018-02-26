@@ -44,5 +44,18 @@ public class EstudianteFacade extends AbstractFacade<Estudiante>{
             return null;
         }
     }
+    
+    public List<Estudiante> getEstudiantesNuevos()
+    {
+        try {
+            String queryString = "SELECT e FROM Estudiante e where "
+                    + "( SELECT COUNT(ei.id) FROM EstudianteInscrito ei WHERE ei.estudiante=e) "
+                    + "=0";
+            Query query = getEntityManager().createQuery(queryString);            
+            return (List<Estudiante>) query.getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 
 }

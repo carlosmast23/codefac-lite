@@ -1012,24 +1012,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private void agregarListenerMenu(ControladorCodefacInterface panel,boolean maximisado)
     {
         try {
-            /*
-            List<String> perfilesPermisos=null;
-            try
-            {
-               perfilesPermisos=panel.getPerfilesPermisos();
-            }catch(java.lang.UnsupportedOperationException uoe)
-            {
-               // uoe.printStackTrace();
-            }
-            
-            //Si no existe ningun perfil del usuario que coincida con la pantalla se cierra la aplicacion
-            if(!verificarPermisosVentana(perfilesPermisos,sessionCodefac.getPerfiles()))
-            {
-                DialogoCodefac.mensaje("Error Permisos","El usuario actual no tiene permisos para ver esta pantalla",DialogoCodefac.MENSAJE_INCORRECTO);
-                panel.dispose();
-                return;
-            }*/
-            
+           
             /**
              * Agregar variables de session a la pantalla
              */

@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.gestionacademica.model;
 
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.gestionacademica.other.RowsRenderer;
@@ -17,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcadem
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NivelEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteInscritoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServiceIf;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,22 +42,27 @@ public class MatriculaModel extends MatriculaPanel{
     /**
      * Periodo por defecto para manejar cuando el estudiante no esta inscrito o es nuevo
      */
-    private Periodo periodoNinguno;
+    private Periodo periodoNuevosEstudiantes;
     
-    /**
-     * Nivel por defecto para cargar todos los alumnos sin nivel
-     */
-    private NivelAcademico nivelNinguno;
+    
+    private Periodo periodoTodosSinMatricular;
+    
     
     private DefaultTableModel modeloTablaSinMatricula;
     
     /**
      * Lista que va a contener los nuevos estudiantes agregado para grabar y matricular
      */
-    private List<Estudiante> estudiantesAgregados;
+    private Map<NivelAcademico,List<Estudiante>> mapEstudiantesAgregadosMatricula;
+    
+    private List<Estudiante> estudiantesSinMatricular;
+    
+    private List<Estudiante> estudiantesMatriculados;
+    
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
+        limpiarVariables();
         crearVariablesPorDefecto();
         iniciarListener();
         cargarValoresIniciales();
@@ -64,11 +71,11 @@ public class MatriculaModel extends MatriculaPanel{
     
    private void crearVariablesPorDefecto()
    {
-       periodoNinguno=new Periodo();
-       periodoNinguno.setNombre("Ninguno");
+       periodoNuevosEstudiantes=new Periodo();
+       periodoNuevosEstudiantes.setNombre("Nuevos Estudiante");
        
-       nivelNinguno=new NivelAcademico();
-       nivelNinguno.setNombre("Ninguno");
+       periodoTodosSinMatricular=new Periodo();
+       periodoTodosSinMatricular.setNombre("Sin Matricular");
        
        getTblAlumnosConMatricula().setDefaultRenderer(Object.class,new RowsRenderer(1));
    }
@@ -80,7 +87,21 @@ public class MatriculaModel extends MatriculaPanel{
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(mapEstudiantesAgregadosMatricula.size()==0)
+        {
+            DialogoCodefac.mensaje("Advertencia","No existen datos para matricular",DialogoCodefac.MENSAJE_ADVERTENCIA);
+            throw new ExcepcionCodefacLite("Cancelado metodo grabar");
+        }
+        else
+        {
+            try {
+                ServiceFactory.getFactory().getEstudianteInscritoServiceIf().matricularEstudiantesByMap(mapEstudiantesAgregadosMatricula);
+                DialogoCodefac.mensaje("Correcto","Los estudiantes fueron grabados correctamente",DialogoCodefac.MENSAJE_ADVERTENCIA);
+            } catch (RemoteException ex) {
+                DialogoCodefac.mensaje("Error","No existe comunicación con el servidor",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                Logger.getLogger(MatriculaModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     @Override
@@ -110,7 +131,18 @@ public class MatriculaModel extends MatriculaPanel{
 
     @Override
     public void limpiar() {
-        estudiantesAgregados=new ArrayList<Estudiante>();
+        limpiarVariables();
+        //System.out.println("Tam:" + getCmbPeriodoAnterior().getModel().getSize());
+        getCmbPeriodoAnterior().setSelectedIndex(0);
+        cargarTablaSinMatricula();
+        cargarTablaSinMatricula();
+    }
+    
+    private void limpiarVariables()
+    {
+        mapEstudiantesAgregadosMatricula = new HashMap<NivelAcademico,List<Estudiante>>();
+        estudiantesMatriculados = new ArrayList<Estudiante>();
+        estudiantesSinMatricular = new ArrayList<Estudiante>();
     }
 
     @Override
@@ -147,34 +179,82 @@ public class MatriculaModel extends MatriculaPanel{
     }
 
     private void iniciarListenerBotones() {
+        
+        getBtnRegresar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DefaultTableModel modeloTabla = (DefaultTableModel) getTblAlumnosConMatricula().getModel();
+                for (int i = 0; i < modeloTabla.getRowCount(); i++) {
+                    Boolean seleccionado = (Boolean) modeloTabla.getValueAt(i, 0);
+
+                    if (seleccionado) {
+                        Estudiante estudiante = (Estudiante) modeloTabla.getValueAt(i,2);
+                        List<Estudiante> estudiantesAgregadosMatricula=obtenerTodosEstudiantesAgregados();
+                        if (estudiantesAgregadosMatricula.contains(estudiante)) {
+                            quitarEstudianteParaMatricular(estudiante);
+                        }
+                        else
+                        {
+                            DialogoCodefac.mensaje("Advertencia","Solo se pueden quitar estudiantes sin grabar",DialogoCodefac.MENSAJE_INCORRECTO);
+                        }
+                    }
+                }
+                cargarTablaMatriculados();
+                cargarTablaSinMatricula();
+            }
+        });
+        
         getBtnPasar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //Obtener todos los datos Seleccionados
+                NivelAcademico nivelAcademicoParaMatricular= (NivelAcademico) getCmbNivelMatricula().getSelectedItem();
                 DefaultTableModel modeloDatos= (DefaultTableModel) getTblAlumnosSinMatricula().getModel();
                 for (int i = 0; i < modeloDatos.getRowCount(); i++) {
                     Boolean seleccionado=(Boolean) modeloDatos.getValueAt(i,0);
                     if(seleccionado)
                     {
-                        Estudiante estudiante=(Estudiante) modeloDatos.getValueAt(i,2);
-                        estudiantesAgregados.add(estudiante);
-                        actualizarTablaMatricula();
+                        Estudiante estudiante=(Estudiante) modeloDatos.getValueAt(i,1);
+                        agregarEstudiantesMatricula(estudiante,nivelAcademicoParaMatricular);                        
                     }
                 }
+                
+                cargarTablaMatriculados();
+                cargarTablaSinMatricula();
             }
         });
     }
     
-    private void actualizarTablaMatricula()
+   
+    private void agregarEstudiantesMatricula(Estudiante estudiante, NivelAcademico nivelAcademico)
     {
-        DefaultTableModel modeloTabla= (DefaultTableModel) getTblAlumnosConMatricula().getModel();
-        for (Estudiante estudiantesAgregado : estudiantesAgregados) {
-            
-            modeloTabla.insertRow(0,new Object[]{false,"No",estudiantesAgregado});       
-            //getTblAlumnosConMatricula().get
+        List<Estudiante> listaEstudiantes=mapEstudiantesAgregadosMatricula.get(nivelAcademico);
+        if(listaEstudiantes==null)
+        {
+            listaEstudiantes=new ArrayList<Estudiante>();
+            listaEstudiantes.add(estudiante);
+            mapEstudiantesAgregadosMatricula.put(nivelAcademico, listaEstudiantes);
         }
-        
-        
+        else
+        {
+            listaEstudiantes.add(estudiante);
+        }
+    }
+    
+    
+    public void quitarEstudianteParaMatricular(Estudiante estudiante)
+    {
+        for (Map.Entry<NivelAcademico, List<Estudiante>> entry : mapEstudiantesAgregadosMatricula.entrySet()) {
+            NivelAcademico key = entry.getKey();
+            List<Estudiante> lista = entry.getValue();
+            
+            for (Estudiante estudianteTemp : lista) {
+                if(estudianteTemp.equals(estudiante))
+                {
+                    lista.remove(estudiante);
+                }
+            }
+        }
     }
 
     private void cargarValoresIniciales() {
@@ -184,6 +264,8 @@ public class MatriculaModel extends MatriculaPanel{
             getCmbPeriodoAnterior().removeAllItems();
             getCmbPeriodoSiguiente().removeAllItems();
             
+            getCmbPeriodoAnterior().addItem(periodoNuevosEstudiantes);
+            getCmbPeriodoAnterior().addItem(periodoTodosSinMatricular);
             for (Periodo nivel : niveles) 
             {
                 if(NivelEnumEstado.getEnum(nivel.getEstado()).equals(NivelEnumEstado.INACTIVO))
@@ -197,10 +279,9 @@ public class MatriculaModel extends MatriculaPanel{
                     getCmbPeriodoSiguiente().addItem(nivel);
                 }
             }
-            //Agregar valor por defecto al combo de nivel anterior cuando los alumnos no estan inscritos en ninguna curso anterior
-           
-            getCmbPeriodoAnterior().addItem(periodoNinguno);
             
+           
+                        
         } catch (RemoteException ex) {
             Logger.getLogger(MatriculaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -218,40 +299,42 @@ public class MatriculaModel extends MatriculaPanel{
             }
         });
         
+        
         getCmbPeriodoAnterior().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Periodo periodo= (Periodo) getCmbPeriodoAnterior().getSelectedItem();
                 if(periodo!=null)
                 {
-                    if(periodoNinguno.equals(periodo))
+                    //Cuando no sea busqueda por periodo descativo el combo de los niveles
+                    if(periodoNuevosEstudiantes.equals(periodo) || periodoTodosSinMatricular.equals(periodo))
                     {
-                        getCmbNivel().removeAllItems();
-                        getCmbNivel().addItem(nivelNinguno);
+                        if(periodoNuevosEstudiantes.equals(periodo))
+                        {
+                            cargarNuevosEstudiantes();
+                        }
+                        
+                        if(periodoTodosSinMatricular.equals(periodo))
+                        {
+                            cargarEstudiantesSinMatricula();
+                        }
                     }
                     else
                     {
+                        getCmbNivel().setEnabled(true);
                         cargarNivelesPeriodo(periodo,getCmbNivel());
                     }
                 }
                 
             }
+
         });
         
         
         getCmbNivel().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                NivelAcademico nivelAcademico=(NivelAcademico) getCmbNivel().getSelectedItem();
-                if(nivelAcademico.equals(nivelNinguno))
-                {
-                    try {
-                        List<Estudiante> estudiantes=ServiceFactory.getFactory().getEstudianteServiceIf().estudianteSinMatriculaPorPeriodo(nivelAcademico.getPeriodo());
-                        cargarTablaSinMatricula(estudiantes);
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(MatriculaModel.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
+
             }
         });
         
@@ -259,14 +342,20 @@ public class MatriculaModel extends MatriculaPanel{
         getCmbNivelMatricula().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                NivelAcademico nivelAcademico=(NivelAcademico) getCmbNivelMatricula().getSelectedItem();
-                if(nivelAcademico.equals(nivelNinguno))
-                {
+                NivelAcademico nivelAcademico = (NivelAcademico) getCmbNivelMatricula().getSelectedItem();
+                if (nivelAcademico != null) {
                     try {
-                        Map<String,Object> mapParametros=new HashMap<String,Object>();
-                        mapParametros.put("NivelAcademico",nivelAcademico);
-                        List<EstudianteInscrito> estudiantesInscritos= ServiceFactory.getFactory().getEstudianteInscritoServiceIf().obtenerPorMap(mapParametros);
-                        cargarTablaConMatricula(estudiantesInscritos);
+                        Map<String, Object> mapParametros = new HashMap<String, Object>();
+                        mapParametros.put("nivelAcademico", nivelAcademico);
+                        EstudianteInscritoServiceIf servicio= ServiceFactory.getFactory().getEstudianteInscritoServiceIf();
+                        List<EstudianteInscrito> estudiantesInscritos = servicio.obtenerPorMap(mapParametros);
+                        estudiantesMatriculados.clear();
+                        for (EstudianteInscrito estudiantesInscrito : estudiantesInscritos) {
+                            estudiantesMatriculados.add(estudiantesInscrito.getEstudiante());
+                        }
+                        cargarTablaMatriculados();
+                        cargarTablaSinMatricula();
+                        
                     } catch (RemoteException ex) {
                         Logger.getLogger(MatriculaModel.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (ServicioCodefacException ex) {
@@ -278,33 +367,98 @@ public class MatriculaModel extends MatriculaPanel{
         
     }
     
-   
-    private void cargarTablaSinMatricula(List<Estudiante> estudiantes)
-    {
-        String[] titulos={"Opcion","Grabado","Estudiante"};
-        this.modeloTablaSinMatricula=crearModeloTabla(titulos,new Class[]{Boolean.class,String.class,Estudiante.class});
-        
-        DefaultListModel<Estudiante> listaEstudiantes=new DefaultListModel<Estudiante>();
-        for (Estudiante estudiante : estudiantes) {
-            Object[] fila={new Boolean(false),"Si",estudiante};
-            modeloTablaSinMatricula.addRow(fila);
-       }
-       getTblAlumnosSinMatricula().setModel(modeloTablaSinMatricula);
+    private void cargarEstudiantesSinMatricula() {
+        Periodo periodo = (Periodo) getCmbPeriodoAnterior().getSelectedItem();
+        if (periodo.equals(periodoNuevosEstudiantes)) {
+            try {
+                estudiantesSinMatricular = ServiceFactory.getFactory().getEstudianteServiceIf().estudianteSinMatriculaPorPeriodo(periodo);
+                cargarTablaMatriculados();
+                cargarTablaSinMatricula();
+                
+            } catch (RemoteException ex) {
+                Logger.getLogger(MatriculaModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
     
-    private void cargarTablaConMatricula(List<EstudianteInscrito> estudiantesInscritos)
+    private void cargarNuevosEstudiantes()
+    {
+        Periodo periodo = (Periodo) getCmbPeriodoAnterior().getSelectedItem();
+        if (periodo.equals(periodoNuevosEstudiantes)) {
+            try {
+                estudiantesSinMatricular = ServiceFactory.getFactory().getEstudianteServiceIf().estudianteNuevosSinMatricula();
+                cargarTablaMatriculados();
+                cargarTablaSinMatricula();
+                
+            } catch (RemoteException ex) {
+                Logger.getLogger(MatriculaModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    private List<Estudiante> obtenerTodosEstudiantesAgregados()
+    {
+        List<Estudiante> listaEstudiantes=new ArrayList<Estudiante>();
+        for (Map.Entry<NivelAcademico, List<Estudiante>> entry : mapEstudiantesAgregadosMatricula.entrySet()) {
+            NivelAcademico key = entry.getKey();
+            List<Estudiante> value = entry.getValue();
+            
+            for (Estudiante estudiante : value) {
+                listaEstudiantes.add(estudiante);
+            }
+        }
+        return listaEstudiantes;
+    }
+   
+    private void cargarTablaSinMatricula()
     {
         String[] titulos={"Opcion","Estudiante"};
         this.modeloTablaSinMatricula=crearModeloTabla(titulos,new Class[]{Boolean.class,Estudiante.class});
         
         DefaultListModel<Estudiante> listaEstudiantes=new DefaultListModel<Estudiante>();
-        for (EstudianteInscrito estudiante : estudiantesInscritos) {
-            Object[] fila={new Boolean(false),"Si",estudiante.getEstudiante()};
-            modeloTablaSinMatricula.addRow(fila);
+        List<Estudiante> estudiantesAgregadosMatricula=obtenerTodosEstudiantesAgregados();
+        for (Estudiante estudiante : estudiantesSinMatricular) {
+            //Agregar los estudiantes a la tabla sin matricula solo si no estan en la lista de estudiante sin matricular
+            if(!estudiantesAgregadosMatricula.contains(estudiante))
+            {
+                Object[] fila={new Boolean(false),estudiante};
+                modeloTablaSinMatricula.addRow(fila);
+            }
        }
        getTblAlumnosSinMatricula().setModel(modeloTablaSinMatricula);
     }
     
+    private void cargarTablaMatriculados()
+    {
+        String[] titulos={"Opcion","Grabado","Estudiante"};
+        this.modeloTablaSinMatricula=crearModeloTabla(titulos,new Class[]{Boolean.class,String.class,Estudiante.class});
+        
+        DefaultListModel<Estudiante> listaEstudiantes=new DefaultListModel<Estudiante>();
+        
+        //Agregar la lista de los estudiantes por matricular
+        NivelAcademico nivelAcademico=(NivelAcademico) getCmbNivelMatricula().getSelectedItem();
+        List<Estudiante> estudiantesAgregadosMatricula=mapEstudiantesAgregadosMatricula.get(nivelAcademico);
+        
+        //Si no existen datos agregados no carga nada
+        if(estudiantesAgregadosMatricula!=null)
+        {
+            for (Estudiante estudiante : estudiantesAgregadosMatricula) {
+                Object[] fila = {new Boolean(false), "No", estudiante};
+                modeloTablaSinMatricula.addRow(fila);
+            }
+        }
+        
+        //Agregar la lista de los estudiantes matriculados
+        for (Estudiante estudiante : estudiantesMatriculados) {
+            //Agregar los estudiantes a la tabla sin matricula solo si no estan en la lista de estudiante sin matricular
+            Object[] fila = {new Boolean(false), "Si", estudiante};
+            modeloTablaSinMatricula.addRow(fila);
+       }
+       getTblAlumnosConMatricula().setModel(modeloTablaSinMatricula);
+        
+    
+    }
+
     private DefaultTableModel crearModeloTabla(String titulos[],Class[] tipoDatoFilas)
     {
          DefaultTableModel defaultTableModel=new javax.swing.table.DefaultTableModel(titulos,0) 
@@ -319,8 +473,7 @@ public class MatriculaModel extends MatriculaPanel{
     private void cargarNivelesPeriodo(Periodo periodo,JComboBox<NivelAcademico> comboNivel)
     {
         try {
-            NivelAcademico na=new NivelAcademico();
-            na.getPeriodo();
+
             NivelAcademicoServiceIf servicio= ServiceFactory.getFactory().getNivelAcademicoServiceIf();
             Map<String,Object> mapBusqueda=new HashMap<String,Object>();
             mapBusqueda.put("periodo",periodo);

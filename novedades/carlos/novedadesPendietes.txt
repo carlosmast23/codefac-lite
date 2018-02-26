@@ -1,3 +1,4 @@
+Existe un caso de revisar cuando se crea una variable o setean valores en el metodo init y despues se ejecuta el metodo limpiar se puede borrar los datos antes de cargar
 Ver si en el modo cliente y servidor en la misma maquina puedo configurar como local host , porque cuando no tiene red no se puede usar el sistema
 En la pantalla de niveles se debe cargar los nuevos niveles para coger el nievel anterior
 los iconos revisar el nivel de acceso
