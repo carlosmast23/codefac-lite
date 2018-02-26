@@ -6,8 +6,10 @@
 package ec.com.codesoft.codefaclite.gestionacademica.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.gestionacademica.busqueda.EstudianteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.EstudiantePanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
@@ -47,7 +49,7 @@ public class EstudianteModel extends EstudiantePanel {
         for (EstudianteEnumEstado enumerador : EstudianteEnumEstado.values()) {
             getCmbEstado().addItem(enumerador);
         }
-        
+
         getCmbGenero().removeAllItems();
         for (GeneroEnum generoEnum : GeneroEnum.values()) {
             getCmbGenero().addItem(generoEnum);
@@ -87,9 +89,8 @@ public class EstudianteModel extends EstudiantePanel {
 
         estudiante.setEstado(((GeneroEnum) getCmbGenero().getSelectedItem()).getEstado());
         estudiante.setEstado(((EstudianteEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
-        
-        
-           if (getDateFechaNacimiento().getDate() != null) {
+
+        if (getDateFechaNacimiento().getDate() != null) {
             fechaNacimiento = new Date(getDateFechaNacimiento().getDate().getTime());
             fechanacimiento = dateFormat.format(getDateFechaNacimiento().getDate());
             estudiante.setFechaNacimiento(fechaNacimiento);
@@ -98,12 +99,29 @@ public class EstudianteModel extends EstudiantePanel {
 
     @Override
     public void editar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            setearValoresEstudiante(estudiante);
+            estudianteService.editar(estudiante);
+            DialogoCodefac.mensaje("Datos correctos", "El estudiante se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+        } catch (RemoteException ex) {
+            Logger.getLogger(EstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (estadoFormulario.equals(GeneralPanelInterface.ESTADO_EDITAR)) {
+            try {
+                Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea eliminar el estudiante?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                if (!respuesta) {
+                    throw new ExcepcionCodefacLite("Cancelacion aula");
+                }
+                estudianteService.eliminar(estudiante);
+                DialogoCodefac.mensaje("Datos correctos", "El estudiante se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+            } catch (RemoteException ex) {
+                Logger.getLogger(AulaModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     @Override
@@ -118,12 +136,18 @@ public class EstudianteModel extends EstudiantePanel {
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        EstudianteBusquedaDialogo aulaBusquedaDialogo = new EstudianteBusquedaDialogo();
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(aulaBusquedaDialogo);
+        buscarDialogoModel.setVisible(true);
+        estudiante = (Estudiante) buscarDialogoModel.getResultado();
+        if (estudiante == null) {
+            throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar estudiante vacio");
+        }      
     }
 
     @Override
     public void limpiar() {
-        this.estudiante=new Estudiante();
+        this.estudiante = new Estudiante();
     }
 
     @Override
