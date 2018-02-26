@@ -36,6 +36,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoEnsambleSe
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RubroEstudianteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RubrosNivelServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
@@ -117,6 +118,7 @@ public abstract class ServiceFactory {
     public RubrosNivelServiceIf getRubrosNivelServiceIf(){return (RubrosNivelServiceIf) getRecursosRMI(RubrosNivelServiceIf.class);};
     public PermisoVentanaServiceIf getPermisoVentanaServiceIf(){return (PermisoVentanaServiceIf) getRecursosRMI(PermisoVentanaServiceIf.class);};
     public EstudianteInscritoServiceIf getEstudianteInscritoServiceIf(){return (EstudianteInscritoServiceIf) getRecursosRMI(EstudianteInscritoServiceIf.class);};
+    public RubroEstudianteServiceIf getRubroEstudianteServiceIf(){return (RubroEstudianteServiceIf) getRecursosRMI(RubroEstudianteServiceIf.class);};
     
     
     
