@@ -168,7 +168,22 @@ public class CompraModel extends CompraPanel{
         {
             this.compra = compra;
             //Cargar datos compra
+            //Proveedor
+            String identificacion = this.compra.getProveedor().getIdentificacion();
+            String nombre = this.compra.getProveedor().getRazonSocial();
+            getTxtProveedor().setText(identificacion+" - "+nombre);
+            //Observacion
+            this.getTxtObservacion().setText("Por Defecto");
+            //Preimpreso
+            this.getTxtEstablecimiento().setText(this.compra.getPuntoEstablecimiento());
+            this.getTxtPuntoEmision().setText(this.compra.getPuntoEmision());
+            this.getTxtSecuencial().setText(this.compra.getSecuencial()+"");
+            //Autorizacion
+            this.getTxtAutorizacion().setText("Por Defecto"); 
+            //Fecha
+            this.getCmbFechaCompra().setDate(this.compra.getFechaFactura());
             actualizarDatosMostrarVentana();
+            desbloquearIngresoDetalleProducto();
             
         }
         
