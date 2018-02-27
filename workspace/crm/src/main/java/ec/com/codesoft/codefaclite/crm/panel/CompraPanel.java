@@ -819,6 +819,8 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         this.txtEstablecimiento = txtPreimpreso;
     }
 
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido=false, expresionRegular = "^[0-9]+([.][0-9]+)?$", nombre = "DescuentoImpuestos")
     public JTextField getTxtDescuentoImpuestos() {
         return txtDescuentoImpuestos;
     }
@@ -826,7 +828,9 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     public void setTxtDescuentoImpuestos(JTextField txtDescuentoImpuestos) {
         this.txtDescuentoImpuestos = txtDescuentoImpuestos;
     }
-
+    
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = false, expresionRegular = "^[0-9]+([.][0-9]+)?$", nombre = "DescuentoSinImpuesto")
     public JTextField getTxtDescuentoSinImpuestos() {
         return txtDescuentoSinImpuestos;
     }
@@ -882,7 +886,9 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     public void setCmbFechaCompra(JDateChooser cmbFechaCompra) {
         this.cmbFechaCompra = cmbFechaCompra;
     }
-
+    
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[0-9]+$", nombre = "Codigo establecimiento")
     public JTextField getTxtEstablecimiento() {
         return txtEstablecimiento;
     }
@@ -892,7 +898,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     }
     
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0-9]+$",nombre = "Punto Emisión")
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0-9]+$",nombre = "Codigo punto emisión")
     public JTextField getTxtPuntoEmision() {
         return txtPuntoEmision;
     }
@@ -902,7 +908,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     }
     
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0-9]+$",nombre = "Secuencial")
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0-9]+$",nombre = "Codigo secuencial")
     public JTextField getTxtSecuencial() {
         return txtSecuencial;
     }

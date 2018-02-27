@@ -1257,7 +1257,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     }
     
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "",nombre = "Valor Unitario",grupo = "detalles")
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0-9]+([.][0-9]+)?$",nombre = "Valor Unitario",grupo = "detalles")
     public JTextField getTxtValorUnitario() {
         return txtValorUnitario;
     }

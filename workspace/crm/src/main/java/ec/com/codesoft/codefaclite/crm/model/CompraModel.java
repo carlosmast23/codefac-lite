@@ -5,11 +5,12 @@
  */
 package ec.com.codesoft.codefaclite.crm.model;
 
-import com.sun.prism.paint.Color;
+import java.awt.Color;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.crm.busqueda.CompraBusqueda;
 import ec.com.codesoft.codefaclite.crm.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.crm.busqueda.ProductoProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.crm.busqueda.ProveedorBusquedaDialogo;
@@ -71,6 +72,7 @@ public class CompraModel extends CompraPanel{
     private BigDecimal subtotal0;
     private Boolean bandera;
     private int filaDP;
+    private Boolean banderaIngresoDetallesCompra;
     
     
     @Override
@@ -82,6 +84,7 @@ public class CompraModel extends CompraPanel{
         getCmbFechaCompra().setDate(new java.util.Date());
         desbloquearIngresoDetalleProducto();
         this.bandera = false;
+        this.banderaIngresoDetallesCompra = false;
         bloquearDesbloquearBotones(true);
     }
 
@@ -157,6 +160,17 @@ public class CompraModel extends CompraPanel{
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
+        CompraBusqueda compraBusqueda = new CompraBusqueda();
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(compraBusqueda);
+        buscarDialogoModel.setVisible(true);
+        Compra compra = (Compra)buscarDialogoModel.getResultado();
+        if(compra != null)
+        {
+            this.compra = compra;
+            //Cargar datos compra
+            actualizarDatosMostrarVentana();
+            
+        }
         
     }
 
@@ -296,7 +310,7 @@ public class CompraModel extends CompraPanel{
                     } catch (ServicioCodefacException ex) {
                         Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    
+                bloquearDesbloquearBotones(true);
                 }
             }
         });
@@ -307,10 +321,8 @@ public class CompraModel extends CompraPanel{
                 /**
                  * Seteo el valor que se ingresa en el costo para actualizar el valor del producto para ese proveedor
                  */
-                if(verificarCamposValidados())
-                {
-                    agregarDetallesCompra(null);
-                }
+                agregarDetallesCompra(null);
+
             }
         });
         
@@ -318,13 +330,14 @@ public class CompraModel extends CompraPanel{
             @Override
             public void focusLost(FocusEvent e) {
                 BigDecimal descuento = new BigDecimal(getTxtDescuentoImpuestos().getText());
-                if(descuento.compareTo(compra.getSubtotalImpuestos()) == 1)
+                if(descuento.compareTo(subtotal12) == 1)
                 {
                     DialogoCodefac.mensaje("Descuento", "El descuento no puede ser mayor que el subtotal con impuesto", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    getTxtDescuentoImpuestos().setText(compra.getDescuentoImpuestos()+"");
                 }
                 else
                 {
-                    compra.setDescuentoImpuestos(descuento);
+                    compra.setDescuentoImpuestos(descuento.setScale(2, RoundingMode.HALF_UP));
                     calcularSubtotalImpuesto();
                     calcularIva12();
                     calcularValorTotal();
@@ -344,13 +357,14 @@ public class CompraModel extends CompraPanel{
             public void focusLost(FocusEvent e)
             {
                 BigDecimal descuento = new BigDecimal(getTxtDescuentoSinImpuestos().getText());
-                if(descuento.compareTo(compra.getSubtotalSinImpuestos()) == 1)
+                if(descuento.compareTo(subtotal0) == 1)
                 {
                     DialogoCodefac.mensaje("Descuento", "El descuento no puede ser mayor que el subtotal sin impuesto", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    getTxtDescuentoSinImpuestos().setText(compra.getDescuentoSinImpuestos()+"");
                 }
                 else
                 {
-                    compra.setDescuentoSinImpuestos(descuento);
+                    compra.setDescuentoSinImpuestos(descuento.setScale(2,RoundingMode.HALF_UP));
                     calcularSubtotalSinImpuesto();
                     calcularIva12();
                     calcularValorTotal();
@@ -367,6 +381,7 @@ public class CompraModel extends CompraPanel{
         });
         
         getTblDetalleProductos().addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent evt)
             {
                 filaDP = getTblDetalleProductos().getSelectedRow();
@@ -387,6 +402,7 @@ public class CompraModel extends CompraPanel{
                 if(bandera)
                 {
                     bandera = false;
+                    filaDP = getTblDetalleProductos().getSelectedRow();
                     CompraDetalle compraDetalle = compra.getDetalles().get(filaDP);
                     agregarDetallesCompra(compraDetalle);
                 }
@@ -399,8 +415,10 @@ public class CompraModel extends CompraPanel{
                 if(bandera)
                 {
                     bandera = false;
-                    compra.getDetalles().remove(filaDP);
+                    System.out.println("Fila numero: " +filaDP );
+                    System.out.println("Compra: "+compra.getDetalles().toString());
                     modeloTablaDetallesCompra.removeRow(filaDP);
+                    compra.getDetalles().remove(filaDP);                   
                     actualizarDatosMostrarVentana();
                 }
             }
@@ -418,7 +436,9 @@ public class CompraModel extends CompraPanel{
         compra.setSubtotalSinImpuestos(BigDecimal.ZERO);
         compra.setTotal(BigDecimal.ZERO);
         compra.setDescuentoSinImpuestos(BigDecimal.ZERO);
+        compra.setDescuentoSinImpuestos(compra.getDescuentoSinImpuestos().setScale(2,RoundingMode.HALF_UP));
         compra.setDescuentoImpuestos(BigDecimal.ZERO);
+        compra.setDescuentoImpuestos(compra.getDescuentoImpuestos().setScale(2,RoundingMode.HALF_UP));
         //LLamo metodos para calcular valores totales
         calcularSubtotal0(detalles);
         calcularSubtotal12(detalles);
@@ -461,13 +481,13 @@ public class CompraModel extends CompraPanel{
     
     public void calcularSubtotalSinImpuesto()
     {
-        this.compra.setSubtotalSinImpuestos(this.compra.getSubtotalSinImpuestos().subtract(this.compra.getDescuentoSinImpuestos()));
+        this.compra.setSubtotalSinImpuestos(this.subtotal0.subtract(this.compra.getDescuentoSinImpuestos()));
         this.compra.setSubtotalSinImpuestos(this.compra.getSubtotalSinImpuestos().setScale(2,RoundingMode.HALF_UP));
     }
     
     public void calcularSubtotalImpuesto()
     {
-        this.compra.setSubtotalImpuestos(this.compra.getSubtotalImpuestos().subtract(this.compra.getDescuentoImpuestos()));
+        this.compra.setSubtotalImpuestos(this.subtotal12.subtract(this.compra.getDescuentoImpuestos()));
         this.compra.setSubtotalImpuestos(this.compra.getSubtotalImpuestos().setScale(2,RoundingMode.HALF_UP));
     }
     
@@ -483,8 +503,7 @@ public class CompraModel extends CompraPanel{
     private void mostrarDatosTabla()
     {
         String[] titulo={"Cantidad","Descripción","Valor Unitario","Valor Total"};
-        DefaultTableModel modeloTablaCompra=new DefaultTableModel(titulo,0);
-        
+        this.modeloTablaDetallesCompra = new DefaultTableModel(titulo,0);
         List<CompraDetalle> detalles= compra.getDetalles();
         for (CompraDetalle detalle : detalles) {
             Vector<String> fila=new Vector<String>();
@@ -492,10 +511,10 @@ public class CompraModel extends CompraPanel{
             fila.add(detalle.getDescripcion()+"");
             fila.add(detalle.getPrecioUnitario()+"");
             fila.add(detalle.getSubtotal()+"");
-            modeloTablaCompra.addRow(fila);
+            this.modeloTablaDetallesCompra.addRow(fila);
         }
         
-        getTblDetalleProductos().setModel(modeloTablaCompra);
+        getTblDetalleProductos().setModel(this.modeloTablaDetallesCompra);
         
     }
     
@@ -528,20 +547,20 @@ public class CompraModel extends CompraPanel{
     
     private void desbloquearIngresoDetalleProducto()
     {
-        getTxtDescripcionItem().enable(true);
-        getTxtProductoItem().enable(true);
-        getTxtCantidadItem().enable(true);
-        getTxtPrecionUnitarioItem().enable(true);
-        getCmbCobraIva().enable(true);
+        getTxtDescripcionItem().setEnabled(true);
+        getTxtProductoItem().setEnabled(true);
+        getTxtCantidadItem().setEnabled(true);
+        getTxtPrecionUnitarioItem().setEnabled(true);
+        getCmbCobraIva().setEnabled(true);
     }
     
     private void bloquearIngresoDetalleProducto()
     {
-        getTxtDescripcionItem().enable(false);
-        getTxtProductoItem().enable(false);
-        getTxtCantidadItem().enable(false);
-        getTxtPrecionUnitarioItem().enable(false);
-        getCmbCobraIva().enable(false);
+        getTxtDescripcionItem().setEnabled(false);
+        getTxtProductoItem().setEnabled(false);
+        getTxtCantidadItem().setEnabled(false);
+        getTxtPrecionUnitarioItem().setEnabled(false);
+        getCmbCobraIva().setEnabled(false);
     }
     
     private void limpiarCampos()
@@ -555,21 +574,26 @@ public class CompraModel extends CompraPanel{
     
     private void bloquearDesbloquearBotones(Boolean b)
     {
-        getBtnAgregarItem().enable(b);
-        getBtnBuscarProductoProveedor().enable(b);
-        getBtnEditarItem().enable(!b);
-        getBtnEliminarItem().enable(!b);
+        getBtnAgregarItem().setEnabled(b);
+        //getBtnBuscarProductoProveedor().setEnabled(!b);
+        getBtnEditarItem().setEnabled(!b);
+        getBtnEliminarItem().setEnabled(!b);
     }
    
     private void agregarDetallesCompra(CompraDetalle compraDetalle)
     {
-        Boolean agregar = false;
+        Boolean agregar = true;
         
         if(compraDetalle != null){
             agregar = false;
         }
         else{
             compraDetalle = new CompraDetalle();
+            
+        }
+        
+        if (!panelPadre.validarPorGrupo("detalles")) {
+            return;
         }
         
         if(verificarCamposValidados())
@@ -631,12 +655,12 @@ public class CompraModel extends CompraPanel{
             camposValidar.add(getTxtProductoItem());
             for(JTextField campo : camposValidar)
             {
+                System.out.println("Color: -->" + campo.getBackground());
                 if(!campo.getBackground().equals(Color.WHITE))
                 {
                     b = false;
                 }
             }
-            
         return b;
     }
 }
