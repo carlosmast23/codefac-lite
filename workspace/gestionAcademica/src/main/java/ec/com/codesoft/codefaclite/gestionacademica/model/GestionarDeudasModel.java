@@ -5,23 +5,30 @@
  */
 package ec.com.codesoft.codefaclite.gestionacademica.model;
 
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.gestionacademica.other.RubroEstudianteData;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.GestionarDeudasPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -30,6 +37,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public class GestionarDeudasModel extends GestionarDeudasPanel{
 
+    private List<RubroEstudianteData> listaEstudiantes;
+    
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         iniciarListener();
@@ -43,7 +52,36 @@ public class GestionarDeudasModel extends GestionarDeudasPanel{
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            List<EstudianteInscrito> lista=getListaCrearRubrosEstudiantes();
+            RubrosNivel rubroNivel=(RubrosNivel) getCmbRubrosNivel().getSelectedItem();            
+            ServiceFactory.getFactory().getRubroEstudianteServiceIf().crearRubrosEstudiantes(lista,rubroNivel);
+            DialogoCodefac.mensaje("Correcto","Los estudiantes se grabaron correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+        } catch (RemoteException ex) {      
+            DialogoCodefac.mensaje("Error","No existe comunicación con el servidor",DialogoCodefac.MENSAJE_INCORRECTO);
+            Logger.getLogger(GestionarDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ExcepcionCodefacLite("Cancelar grabar");
+        }
+        
+    }
+    
+    private List<EstudianteInscrito> getListaCrearRubrosEstudiantes()
+    {
+        List<EstudianteInscrito> lista=new ArrayList<EstudianteInscrito>();
+        if(listaEstudiantes!=null)
+        {
+            for (RubroEstudianteData estudiante : listaEstudiantes) {
+                if(estudiante.isDatoModificado())
+                {
+                    //Solo agregar Estudiantes que agregaron rubros
+                    if(estudiante.getEstadoFinal())
+                    {
+                        lista.add(estudiante.getEstudianteInscrito());
+                    }
+                }
+            }
+        }
+        return lista;
     }
 
     @Override
@@ -73,7 +111,7 @@ public class GestionarDeudasModel extends GestionarDeudasPanel{
 
     @Override
     public void limpiar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
@@ -121,6 +159,7 @@ public class GestionarDeudasModel extends GestionarDeudasPanel{
 
     private void listenerCombos() {
         
+       
         getCmbPeriodo().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -149,14 +188,22 @@ public class GestionarDeudasModel extends GestionarDeudasPanel{
             public void actionPerformed(ActionEvent e) {
               
                 try {
+                    getCmbRubrosNivel().removeAllItems();
                     NivelAcademico nivelSeleccionado=(NivelAcademico) getCmbNivelAcademico().getSelectedItem();
                     Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    mapParametros.put("nivel",null);
+                    mapParametros.put("periodo",nivelSeleccionado.getPeriodo());
+                    List<RubrosNivel> rubrosSinNivel=ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorMap(mapParametros);
+                    for (RubrosNivel rubrosNivel : rubrosSinNivel) {
+                        getCmbRubrosNivel().addItem(rubrosNivel);
+                    }
+                    
+                    mapParametros.clear();
                     mapParametros.put("nivel",nivelSeleccionado.getNivel());
                     mapParametros.put("periodo",nivelSeleccionado.getPeriodo());
                     List<RubrosNivel> rubros=ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorMap(mapParametros);
                     
                     //Agregar todos los rubros disponibles para el nivels
-                    getCmbRubrosNivel().removeAllItems();
                     for (RubrosNivel rubro : rubros) {
                         getCmbRubrosNivel().addItem(rubro);
                     }                    
@@ -169,18 +216,93 @@ public class GestionarDeudasModel extends GestionarDeudasPanel{
             }
         });
         
+        getCmbRubrosNivel().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cargarTabla();
+            }
+        });
+        
     }
     
-    private void cargarTabla()
-    {
-        DefaultTableModel modeloTabla=crearModeloTabla(new String[]{"Opcion","Alumno"},new Class[]{Boolean.class,EstudianteInscrito.class});
-        NivelAcademico nivelAcademico= (NivelAcademico) getCmbNivelAcademico().getSelectedItem();
-        RubrosNivel rubroNivel=(RubrosNivel) getCmbRubrosNivel().getSelectedItem();
-        
-        if(nivelAcademico!=null && rubroNivel!=null)
-        {
-            //Crear servicio que me devuelva los objetos de estudiante inscrito y rubro selecccionado para cargar el tipo de dato boolean
+    private void cargarTabla() {
+        DefaultTableModel modeloTabla = crearModeloTabla(new String[]{"Opcion", "Alumno"}, new Class[]{Boolean.class, RubroEstudianteData.class});
+        listaEstudiantes=new ArrayList<RubroEstudianteData>();
+        try {            
+            NivelAcademico nivelAcademico = (NivelAcademico) getCmbNivelAcademico().getSelectedItem();
+            RubrosNivel rubroNivel = (RubrosNivel) getCmbRubrosNivel().getSelectedItem();
+
+            if (nivelAcademico != null && rubroNivel != null) {
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("nivelAcademico", nivelAcademico);
+                List<EstudianteInscrito> estudiantesInscritos = ServiceFactory.getFactory().getEstudianteInscritoServiceIf().obtenerPorMap(mapParametros);
+               
+                for (EstudianteInscrito estudiantesInscrito : estudiantesInscritos) {
+                    Map<String, Object> mapParametroNivelAcademico = new HashMap<String, Object>();
+                    mapParametroNivelAcademico.put("estudianteInscrito", estudiantesInscrito);
+                    mapParametroNivelAcademico.put("rubroNivel",rubroNivel);
+
+                    List<RubroEstudiante> rubrosEstudiantes= ServiceFactory.getFactory().getRubroEstudianteServiceIf().obtenerPorMap(mapParametroNivelAcademico);
+                    
+                    if(rubrosEstudiantes.size()==0)
+                    {
+                        RubroEstudianteData rubroEstudianteData=new RubroEstudianteData(estudiantesInscrito,false);
+                        listaEstudiantes.add(rubroEstudianteData);
+                        //modeloTabla.addRow(new Object[]{false,estudiantesInscrito});
+                    }
+                    else
+                    {
+                        RubroEstudianteData rubroEstudianteData = new RubroEstudianteData(estudiantesInscrito,true);
+                        listaEstudiantes.add(rubroEstudianteData);
+                        //modeloTabla.addRow(new Object[]{true,estudiantesInscrito});
+                    }
+                }
+                
+                /**
+                 * Agregar lista de los estudiantes y los rubros a la tabla
+                 */
+                for (RubroEstudianteData estudianteRubroData : listaEstudiantes) {
+                    if(estudianteRubroData.getEstadoOriginal())
+                    {
+                        modeloTabla.addRow(new Object[]{true,estudianteRubroData});
+                    }
+                    else
+                    {
+                        modeloTabla.addRow(new Object[]{false,estudianteRubroData});
+                    }
+                }
+                
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(GestionarDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(GestionarDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+        getTblEstudiantes().setModel(modeloTabla);
+        
+        getTblEstudiantes().getModel().addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                int fila = e.getFirstRow();
+                int columna = e.getColumn();
+
+                //Solo verificar si se modifico la columna del option listener
+                if (columna == 0) {
+                    Boolean opcion = (Boolean) getTblEstudiantes().getValueAt(fila,0);
+                    RubroEstudianteData rubroEstudianteData=(RubroEstudianteData) getTblEstudiantes().getValueAt(fila,1);
+                    if(opcion)
+                    {
+                        rubroEstudianteData.setSeleccionado(true);
+                    }
+                    else
+                    {
+                        rubroEstudianteData.setSeleccionado(false);
+                    }
+                    
+                }
+            }
+        });
+        
     }
     
     

@@ -6,8 +6,10 @@
 package ec.com.codesoft.codefaclite.gestionacademica.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.gestionacademica.busqueda.NivelAcademicoDialogo;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.NivelAcademicoPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Aula;
@@ -83,7 +85,27 @@ public class NivelAcademicoModel extends NivelAcademicoPanel implements Serializ
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        NivelAcademicoDialogo clienteBusquedaDialogo = new NivelAcademicoDialogo();
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
+        buscarDialogoModel.setVisible(true);
+        NivelAcademico nivelAcademicoTemp = (NivelAcademico) buscarDialogoModel.getResultado();
+        
+        if(nivelAcademicoTemp==null)
+        {
+            throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar");
+        }
+        nivelAcademico=nivelAcademicoTemp;
+        setearDatosPantalla();
+
+    }
+    
+    private void setearDatosPantalla()
+    {
+        getTxtNombre().setText(nivelAcademico.getNombre());
+        getCmbAula().setSelectedItem(nivelAcademico.getAula());
+        getCmbNivel().setSelectedItem(nivelAcademico.getNivel());
+        getCmbPeriodo().setSelectedItem(nivelAcademico.getPeriodo());
+        
     }
 
     @Override

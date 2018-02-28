@@ -63,6 +63,11 @@ public class EstudianteInscrito implements Serializable{
     public void setNivelAcademico(NivelAcademico nivelAcademico) {
         this.nivelAcademico = nivelAcademico;
     }
+
+    @Override
+    public String toString() {
+        return estudiante.getNombres()+" "+estudiante.getApellidos();
+    }
     
     
     
