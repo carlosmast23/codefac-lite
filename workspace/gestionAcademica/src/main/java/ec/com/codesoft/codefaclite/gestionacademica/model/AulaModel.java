@@ -60,6 +60,7 @@ public class AulaModel extends AulaPanel {
             DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite("Error al grabar aula modelo");
         } catch (RemoteException ex) {
+            DialogoCodefac.mensaje("Error", "Error de comunicación con el servidor , aula", DialogoCodefac.MENSAJE_ADVERTENCIA);
             Logger.getLogger(AulaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -125,6 +126,8 @@ public class AulaModel extends AulaPanel {
     @Override
     public void limpiar() {
         aula = new Aula();
+        getCmbEstado().setSelectedIndex(0);
+
     }
 
     @Override

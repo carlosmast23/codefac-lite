@@ -42,16 +42,23 @@ public class UtilidadesFecha {
         java.util.Date fecha = new java.util.Date();
         return fecha;
     }
-    
+
     /**
      * Obtiene el numero de dias entre 2 fechas dadas
+     *
      * @param fechaMenor
      * @param fechaMayor
-     * @return 
+     * @return
      */
-    public static int obtenerDistanciaDias(java.util.Date fechaMenor,java.util.Date fechaMayor)
-    {
-        int dias=(int) ((fechaMayor.getTime()-fechaMenor.getTime())/86400000);
+    public static int obtenerDistanciaDias(java.util.Date fechaMenor, java.util.Date fechaMayor) {
+        int dias = (int) ((fechaMayor.getTime() - fechaMenor.getTime()) / 86400000);
         return dias;
+    }
+
+    public static String formatDate(java.util.Date fecha, String formato) {
+        //yyyy MMMMM dd
+        //yyyy-MM-dd
+        DateFormat dateFormat = new SimpleDateFormat(formato);
+        return dateFormat.format(fecha);
     }
 }

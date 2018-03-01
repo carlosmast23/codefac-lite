@@ -11,12 +11,17 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.gestionacademica.busqueda.EstudianteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.EstudiantePanel;
+import ec.com.codesoft.codefaclite.inventario.busqueda.RepresentanteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EstudianteEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneroEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteServiceIf;
+import static ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha.hoy;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.text.DateFormat;
@@ -33,6 +38,7 @@ import java.util.logging.Logger;
  */
 public class EstudianteModel extends EstudiantePanel {
 
+    private Persona representante;
     private Estudiante estudiante;
     private EstudianteServiceIf estudianteService;
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -45,6 +51,8 @@ public class EstudianteModel extends EstudiantePanel {
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
+        getDateFechaNacimiento().setDate(hoy());
+
         getCmbEstado().removeAllItems();
         for (EstudianteEnumEstado enumerador : EstudianteEnumEstado.values()) {
             getCmbEstado().addItem(enumerador);
@@ -54,6 +62,22 @@ public class EstudianteModel extends EstudiantePanel {
         for (GeneroEnum generoEnum : GeneroEnum.values()) {
             getCmbGenero().addItem(generoEnum);
         }
+
+        getBtnBuscarRepresentante().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                RepresentanteBusquedaDialogo buscarBusquedaDialogo = new RepresentanteBusquedaDialogo();
+                BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
+                buscarDialogo.setVisible(true);
+                representante = (Persona) buscarDialogo.getResultado();
+
+                if (representante != null) {
+                    String identificacion = representante.getIdentificacion();
+                    String nombre = representante.getRazonSocial();
+                    getTxtRepresentante().setText(identificacion + " - " + nombre);
+                }
+            }
+        });
     }
 
     @Override
@@ -71,6 +95,7 @@ public class EstudianteModel extends EstudiantePanel {
             DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite("Error al grabar aula modelo");
         } catch (RemoteException ex) {
+            DialogoCodefac.mensaje("Error", "Error de comunicación con el servidor , estudiantes", DialogoCodefac.MENSAJE_ADVERTENCIA);
             Logger.getLogger(EstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -87,7 +112,7 @@ public class EstudianteModel extends EstudiantePanel {
         estudiante.setDireccion(getTxtDireccion().getText());
         estudiante.setDatosAdicionales(getTxtAdicionales().getText());
 
-        estudiante.setEstado(((GeneroEnum) getCmbGenero().getSelectedItem()).getEstado());
+        estudiante.setGenero(((GeneroEnum) getCmbGenero().getSelectedItem()).getEstado());
         estudiante.setEstado(((EstudianteEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
 
         if (getDateFechaNacimiento().getDate() != null) {
@@ -95,6 +120,9 @@ public class EstudianteModel extends EstudiantePanel {
             fechanacimiento = dateFormat.format(getDateFechaNacimiento().getDate());
             estudiante.setFechaNacimiento(fechaNacimiento);
         }
+
+        estudiante.setRepresentante(representante);
+
     }
 
     @Override
@@ -142,12 +170,36 @@ public class EstudianteModel extends EstudiantePanel {
         estudiante = (Estudiante) buscarDialogoModel.getResultado();
         if (estudiante == null) {
             throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar estudiante vacio");
-        }      
+        }
+        getTxtCodSistema().setText(estudiante.getCodigoSistema());
+        getTxtCodAuxiliar().setText(estudiante.getCodigoAuxiliar());
+        getTxtCedula().setText(estudiante.getCedula());
+        getTxtCorreo().setText(estudiante.getEmail());
+        getTxtNombres().setText(estudiante.getNombres());
+        getTxtApellidos().setText(estudiante.getApellidos());
+        getTxtTelefono().setText(estudiante.getTelefono());
+        getTxtCelular().setText(estudiante.getCelular());
+        getTxtDireccion().setText(estudiante.getDireccion());
+        getTxtAdicionales().setText(estudiante.getDatosAdicionales());
+
+        getCmbGenero().setSelectedItem(estudiante.getGenero());
+        getCmbEstado().setSelectedItem(estudiante.getEstado());
+        getDateFechaNacimiento().setDate(estudiante.getFechaNacimiento());
+
+        String identificacion = estudiante.getRepresentante().getIdentificacion();
+        String nombre = estudiante.getRepresentante().getRazonSocial();
+        getTxtRepresentante().setText(identificacion + " - " + nombre);
+
     }
 
     @Override
     public void limpiar() {
         this.estudiante = new Estudiante();
+
+        getDateFechaNacimiento().setDate(hoy());
+        getCmbEstado().setSelectedIndex(0);
+        getCmbGenero().setSelectedIndex(0);
+
     }
 
     @Override

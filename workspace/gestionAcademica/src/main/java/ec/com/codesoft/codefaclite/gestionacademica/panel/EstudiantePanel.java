@@ -7,8 +7,11 @@ package ec.com.codesoft.codefaclite.gestionacademica.panel;
 
 import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EstudianteEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneroEnum;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -18,6 +21,8 @@ import javax.swing.JTextField;
  * @author Carlos
  */
 public abstract class EstudiantePanel extends ControladorCodefacInterface {
+
+    public static final String NOMBRE_VALIDADOR_IDENTIFICACION = "Identificacion";
 
     /**
      * Creates new form Estudiante
@@ -45,11 +50,9 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         txtApellidos = new javax.swing.JTextField();
         lblRepresentante = new javax.swing.JLabel();
         lblDireccion = new javax.swing.JLabel();
-        txtDireccion = new javax.swing.JTextField();
         lblAdicionales = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtAdicionales = new javax.swing.JTextArea();
-        jLabel8 = new javax.swing.JLabel();
         lblGenero = new javax.swing.JLabel();
         lblFechaNacimiento = new javax.swing.JLabel();
         cmbGenero = new javax.swing.JComboBox<>();
@@ -60,12 +63,14 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         txtCelular = new javax.swing.JTextField();
         txtRepresentante = new javax.swing.JTextField();
         btnBuscarRepresentante = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        lblCedula = new javax.swing.JLabel();
         txtCedula = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
+        lblCorreo = new javax.swing.JLabel();
         txtCorreo = new javax.swing.JTextField();
         lblEstado = new javax.swing.JLabel();
         cmbEstado = new javax.swing.JComboBox<>();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtDireccion = new javax.swing.JTextArea();
 
         setClosable(true);
         setIconifiable(true);
@@ -97,8 +102,6 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         txtAdicionales.setRows(5);
         jScrollPane1.setViewportView(txtAdicionales);
 
-        jLabel8.setText("Debe cargar de la tabla de clientes");
-
         lblGenero.setText("Genero:");
 
         lblFechaNacimiento.setText("Fecha nacimiento:");
@@ -111,11 +114,15 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
 
         btnBuscarRepresentante.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
 
-        jLabel1.setText("Cédula:");
+        lblCedula.setText("Cédula:");
 
-        jLabel2.setText("Correo electrónico:");
+        lblCorreo.setText("Correo electrónico:");
 
         lblEstado.setText("Estado:");
+
+        txtDireccion.setColumns(20);
+        txtDireccion.setRows(5);
+        jScrollPane2.setViewportView(txtDireccion);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -126,61 +133,35 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblNombres)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblEstado)
-                                .addGap(80, 80, 80)
-                                .addComponent(cmbEstado, 0, 135, Short.MAX_VALUE))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(lblRepresentante)
-                                    .addGap(41, 41, 41)
-                                    .addComponent(txtRepresentante))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(lblCodSistema)
-                                        .addComponent(lblGenero)
-                                        .addComponent(lblTelefono)
-                                        .addComponent(lblDireccion)
-                                        .addComponent(jLabel1))
-                                    .addGap(40, 40, 40)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(txtTelefono)
-                                        .addComponent(txtCodSistema, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
-                                        .addComponent(txtNombres)
-                                        .addComponent(txtDireccion)
-                                        .addComponent(cmbGenero, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(txtCedula)))))
-                        .addGap(45, 45, 45)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnBuscarRepresentante)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblCodSistema)
+                                    .addComponent(lblGenero)
+                                    .addComponent(lblTelefono)
+                                    .addComponent(lblDireccion)
+                                    .addComponent(lblCedula)
+                                    .addComponent(lblEstado))
+                                .addGap(40, 40, 40)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(txtTelefono)
+                                        .addComponent(txtCodSistema)
+                                        .addComponent(txtNombres)
+                                        .addComponent(cmbGenero, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txtCedula)
+                                        .addComponent(cmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblRepresentante)
+                                .addGap(41, 41, 41)
+                                .addComponent(txtRepresentante, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                            .addComponent(lblCelular)
-                                            .addGap(68, 68, 68)
-                                            .addComponent(txtCelular, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                .addGroup(layout.createSequentialGroup()
-                                                    .addComponent(lblCodAuxiliar)
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                    .addComponent(txtCodAuxiliar, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addGroup(layout.createSequentialGroup()
-                                                    .addComponent(lblApellidos)
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                    .addComponent(txtApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addGroup(layout.createSequentialGroup()
-                                                    .addComponent(jLabel2)
-                                                    .addGap(18, 18, 18)
-                                                    .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                            .addGap(60, 60, 60)))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(lblAdicionales)
                                         .addGap(18, 18, 18)
@@ -188,9 +169,29 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(lblFechaNacimiento)
                                         .addGap(23, 23, 23)
-                                        .addComponent(dateFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 40, Short.MAX_VALUE)))))
-                .addContainerGap(11, Short.MAX_VALUE))
+                                        .addComponent(dateFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(btnBuscarRepresentante, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(lblCelular)
+                                        .addGap(68, 68, 68)
+                                        .addComponent(txtCelular, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(lblCodAuxiliar)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(txtCodAuxiliar, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(lblApellidos)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(txtApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(lblCorreo)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -203,11 +204,11 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
                     .addComponent(txtCodAuxiliar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
+                    .addComponent(lblCedula)
                     .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
+                    .addComponent(lblCorreo)
                     .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 20, Short.MAX_VALUE)
+                .addGap(18, 24, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblNombres)
                     .addComponent(txtNombres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -224,7 +225,6 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(lblRepresentante)
-                        .addComponent(jLabel8)
                         .addComponent(txtRepresentante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(btnBuscarRepresentante))
                 .addGap(18, 18, 18)
@@ -233,20 +233,26 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
                     .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblCelular)
                     .addComponent(txtCelular, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(57, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblDireccion)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(lblAdicionales)))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblDireccion)
+                                    .addComponent(lblAdicionales))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblEstado)
-                            .addComponent(cmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(57, Short.MAX_VALUE))
+                            .addComponent(cmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(48, Short.MAX_VALUE))))
         );
 
         pack();
@@ -262,15 +268,15 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
     private javax.swing.JComboBox<EstudianteEnumEstado> cmbEstado;
     private javax.swing.JComboBox<GeneroEnum> cmbGenero;
     private com.toedter.calendar.JDateChooser dateFechaNacimiento;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblAdicionales;
     private javax.swing.JLabel lblApellidos;
+    private javax.swing.JLabel lblCedula;
     private javax.swing.JLabel lblCelular;
     private javax.swing.JLabel lblCodAuxiliar;
     private javax.swing.JLabel lblCodSistema;
+    private javax.swing.JLabel lblCorreo;
     private javax.swing.JLabel lblDireccion;
     private javax.swing.JLabel lblEstado;
     private javax.swing.JLabel lblFechaNacimiento;
@@ -285,7 +291,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtCodAuxiliar;
     private javax.swing.JTextField txtCodSistema;
     private javax.swing.JTextField txtCorreo;
-    private javax.swing.JTextField txtDireccion;
+    private javax.swing.JTextArea txtDireccion;
     private javax.swing.JTextField txtNombres;
     private javax.swing.JTextField txtRepresentante;
     private javax.swing.JTextField txtTelefono;
@@ -307,6 +313,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         this.dateFechaNacimiento = dateFechaNacimiento;
     }
 
+    @LimpiarAnotacion
     public JTextArea getTxtAdicionales() {
         return txtAdicionales;
     }
@@ -315,6 +322,8 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         this.txtAdicionales = txtAdicionales;
     }
 
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Apellidos", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextField getTxtApellidos() {
         return txtApellidos;
     }
@@ -323,6 +332,8 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         this.txtApellidos = txtApellidos;
     }
 
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, personalizado = {"validarIdentificacionSegunOpcionEstablecida"}, min = 0, max = 13, expresionRegular = "", nombre = NOMBRE_VALIDADOR_IDENTIFICACION)
     public JTextField getTxtCedula() {
         return txtCedula;
     }
@@ -331,6 +342,8 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         this.txtCedula = txtCedula;
     }
 
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = false, expresionRegular = "^[0][0-9]{9}$", nombre = "Celular", expresionRegularMensaje = "Ingrese un número de celular valido")
     public JTextField getTxtCelular() {
         return txtCelular;
     }
@@ -339,6 +352,8 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         this.txtCelular = txtCelular;
     }
 
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Codigo Auxiliar", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextField getTxtCodAuxiliar() {
         return txtCodAuxiliar;
     }
@@ -347,6 +362,8 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         this.txtCodAuxiliar = txtCodAuxiliar;
     }
 
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Codigo Sistema", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextField getTxtCodSistema() {
         return txtCodSistema;
     }
@@ -355,14 +372,8 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         this.txtCodSistema = txtCodSistema;
     }
 
-    public JTextField getTxtDireccion() {
-        return txtDireccion;
-    }
-
-    public void setTxtDireccion(JTextField txtDireccion) {
-        this.txtDireccion = txtDireccion;
-    }
-
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Nombre", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextField getTxtNombres() {
         return txtNombres;
     }
@@ -371,6 +382,17 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         this.txtNombres = txtNombres;
     }
 
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = false, min = 0, expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\,\\ ]*$", nombre = "Direccion", expresionRegularMensaje = "No se permite la letra ñ, ni tildes")
+    public JTextArea getTxtDireccion() {
+        return txtDireccion;
+    }
+
+    public void setTxtDireccion(JTextArea txtDireccion) {
+        this.txtDireccion = txtDireccion;
+    }
+
+    @LimpiarAnotacion
     public JTextField getTxtRepresentante() {
         return txtRepresentante;
     }
@@ -379,6 +401,8 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         this.txtRepresentante = txtRepresentante;
     }
 
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = false, expresionRegular = "^[0][0-9]{8}$", nombre = "Telefono", expresionRegularMensaje = "Anteponga el código provincial")
     public JTextField getTxtTelefono() {
         return txtTelefono;
     }
@@ -395,6 +419,8 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         this.cmbEstado = cmbEstado;
     }
 
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$", nombre = "Correo Electronico", expresionRegularMensaje = "Ingrese una dirección de correo valida")
     public JTextField getTxtCorreo() {
         return txtCorreo;
     }
@@ -403,5 +429,12 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         this.txtCorreo = txtCorreo;
     }
 
-    
+    public JButton getBtnBuscarRepresentante() {
+        return btnBuscarRepresentante;
+    }
+
+    public void setBtnBuscarRepresentante(JButton btnBuscarRepresentante) {
+        this.btnBuscarRepresentante = btnBuscarRepresentante;
+    }
+
 }
