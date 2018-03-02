@@ -14,7 +14,7 @@ import ec.com.codesoft.codefaclite.gestionacademica.panel.NivelPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NivelEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelServiceIf;
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -43,7 +43,7 @@ public class NivelModel extends NivelPanel {
 
     public void iniciarCombos() {
         getCmbEstado().removeAllItems();
-        for (NivelEnumEstado enumerador : NivelEnumEstado.values()) {
+        for (GeneralEnumEstado enumerador : GeneralEnumEstado.values()) {
             getCmbEstado().addItem(enumerador);
         }
 
@@ -86,7 +86,7 @@ public class NivelModel extends NivelPanel {
         nivel.setNombre(getTxtNombre().getText());
         nivel.setOrden(Integer.parseInt(getTxtOrden().getText()));
         nivel.setDescripcion(getTxtDescripcion().getText());
-        nivel.setEstado(((NivelEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
+        nivel.setEstado(((GeneralEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
 
         if (getCmbNivelPosterior().getSelectedItem() != null) {
             nivel = (Nivel) getCmbNivelPosterior().getSelectedItem();

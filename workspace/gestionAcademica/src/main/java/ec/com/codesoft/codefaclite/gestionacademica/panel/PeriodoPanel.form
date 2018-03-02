@@ -127,7 +127,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;PeriodoEnumEstado&gt;"/>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;GeneralEnumEstado&gt;"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="lblObservacion">

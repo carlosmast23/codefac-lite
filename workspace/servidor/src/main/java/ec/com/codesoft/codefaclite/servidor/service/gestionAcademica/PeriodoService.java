@@ -10,7 +10,7 @@ import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PeriodoEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PeriodoServiceIf;
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -49,7 +49,7 @@ public class PeriodoService extends ServiceAbstract<Periodo, PeriodoFacade> impl
     public List<Periodo> obtenerPeriodoActivo() throws RemoteException
     {
         Map<String,Object> mapParametros=new HashMap<String, Object>();
-        mapParametros.put("estado",PeriodoEnumEstado.ACTIVO.getEstado());
+        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
         List<Periodo> periodos= obtenerPorMap(mapParametros);
         return periodos;
     }
@@ -59,7 +59,7 @@ public class PeriodoService extends ServiceAbstract<Periodo, PeriodoFacade> impl
     }
 
     public void eliminar(Periodo p) {
-        p.setEstado(PeriodoEnumEstado.ELIMINADO.getEstado());
+        p.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
         periodoFacade.edit(p);
     }
 }

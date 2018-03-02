@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServiceIf;
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -36,6 +37,11 @@ public class NivelAcademicoModel extends NivelAcademicoPanel implements Serializ
      * Referencia para mejar los cruds
      */
     private NivelAcademico nivelAcademico;
+    private NivelAcademicoServiceIf nivelAcademicoService;
+
+    public NivelAcademicoModel() {
+        nivelAcademicoService = ServiceFactory.getFactory().getNivelAcademicoServiceIf();
+    }
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
@@ -65,12 +71,30 @@ public class NivelAcademicoModel extends NivelAcademicoPanel implements Serializ
 
     @Override
     public void editar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            setearVariablesPantalla();
+            nivelAcademicoService.editar(nivelAcademico);
+            DialogoCodefac.mensaje("Datos correctos", "El nivel academico se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+        } catch (RemoteException ex) {
+            Logger.getLogger(NivelModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (estadoFormulario.equals(GeneralPanelInterface.ESTADO_EDITAR)) {
+            try {
+                Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea eliminar el nivel academico(curso)?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                if (!respuesta) {
+                    throw new ExcepcionCodefacLite("Cancelacion nivel acemico");
+                }
+                nivelAcademicoService.eliminar(nivelAcademico);
+                DialogoCodefac.mensaje("Datos correctos", "El nivel academico se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+            } catch (RemoteException ex) {
+                Logger.getLogger(AulaModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     @Override
@@ -89,13 +113,11 @@ public class NivelAcademicoModel extends NivelAcademicoPanel implements Serializ
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
         NivelAcademico nivelAcademicoTemp = (NivelAcademico) buscarDialogoModel.getResultado();
-
         if (nivelAcademicoTemp == null) {
             throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar");
         }
         nivelAcademico = nivelAcademicoTemp;
         setearDatosPantalla();
-
     }
 
     private void setearDatosPantalla() {
@@ -143,6 +165,10 @@ public class NivelAcademicoModel extends NivelAcademicoPanel implements Serializ
     }
 
     private void cargarValoresIniciales() {
+        getCmbEstado().removeAllItems();
+        for (GeneralEnumEstado enumerador : GeneralEnumEstado.values()) {
+            getCmbEstado().addItem(enumerador);
+        }
         cargarCombos();
     }
 
@@ -182,6 +208,8 @@ public class NivelAcademicoModel extends NivelAcademicoPanel implements Serializ
         nivelAcademico.setAula((Aula) getCmbAula().getSelectedItem());
         nivelAcademico.setNivel((Nivel) getCmbNivel().getSelectedItem());
         nivelAcademico.setPeriodo((Periodo) getCmbPeriodo().getSelectedItem());
+        nivelAcademico.setEstado(((GeneralEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
+
     }
 
 }

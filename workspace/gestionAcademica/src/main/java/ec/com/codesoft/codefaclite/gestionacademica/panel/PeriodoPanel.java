@@ -9,7 +9,7 @@ import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PeriodoEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import javax.swing.JComboBox;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -128,7 +128,7 @@ public abstract class PeriodoPanel extends ControladorCodefacInterface {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<PeriodoEnumEstado> cmbEstado;
+    private javax.swing.JComboBox<GeneralEnumEstado> cmbEstado;
     private com.toedter.calendar.JDateChooser dateFechaFin;
     private com.toedter.calendar.JDateChooser dateFechaInicio;
     private javax.swing.JScrollPane jScrollPane1;
@@ -141,11 +141,11 @@ public abstract class PeriodoPanel extends ControladorCodefacInterface {
     private javax.swing.JTextArea txtObservacion;
     // End of variables declaration//GEN-END:variables
 
-    public JComboBox<PeriodoEnumEstado> getCmbEstado() {
+    public JComboBox<GeneralEnumEstado> getCmbEstado() {
         return cmbEstado;
     }
 
-    public void setCmbEstado(JComboBox<PeriodoEnumEstado> cmbEstado) {
+    public void setCmbEstado(JComboBox<GeneralEnumEstado> cmbEstado) {
         this.cmbEstado = cmbEstado;
     }
 

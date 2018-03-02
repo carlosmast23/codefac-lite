@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.service.gestionAcademica;
 import ec.com.codesoft.codefaclite.servidor.facade.gestionAcademica.NivelAcademicoFacade;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServiceIf;
 import java.rmi.RemoteException;
 
@@ -15,10 +16,17 @@ import java.rmi.RemoteException;
  *
  * @author Carlos
  */
-public class NivelAcademicoService extends ServiceAbstract<NivelAcademico,NivelAcademicoFacade>  implements NivelAcademicoServiceIf
-{
+public class NivelAcademicoService extends ServiceAbstract<NivelAcademico, NivelAcademicoFacade> implements NivelAcademicoServiceIf {
+
+    private NivelAcademicoFacade nivelAcademicoFacade;
+
     public NivelAcademicoService() throws RemoteException {
         super(NivelAcademicoFacade.class);
     }
-    
+
+    public void eliminar(NivelAcademico n) {
+        n.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
+        nivelAcademicoFacade.edit(n);
+    }
+
 }

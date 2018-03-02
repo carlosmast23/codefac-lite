@@ -14,7 +14,7 @@ import ec.com.codesoft.codefaclite.gestionacademica.panel.PeriodoPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PeriodoEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PeriodoServiceIf;
 import static ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha.fechaInicioMes;
 import static ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha.formatDate;
@@ -52,7 +52,7 @@ public class PeriodoModel extends PeriodoPanel {
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         getCmbEstado().removeAllItems();
-        for (PeriodoEnumEstado enumerador : PeriodoEnumEstado.values()) {
+        for (GeneralEnumEstado enumerador : GeneralEnumEstado.values()) {
             getCmbEstado().addItem(enumerador);
         }
 
@@ -106,7 +106,7 @@ public class PeriodoModel extends PeriodoPanel {
     private void setearValoresPeriodo(Periodo periodo) {
         periodo.setNombre(getTxtNombre().getText());
         periodo.setObservaciones(getTxtObservacion().getText());
-        periodo.setEstado(((PeriodoEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
+        periodo.setEstado(((GeneralEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
         if (getDateFechaInicio().getDate() != null) {
             fechaInicio = new Date(getDateFechaInicio().getDate().getTime());
             //fechainicio = dateFormat.format(getDateFechaInicio().getDate());

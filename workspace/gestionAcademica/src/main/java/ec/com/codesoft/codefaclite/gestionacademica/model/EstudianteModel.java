@@ -16,7 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EstudianteEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneroEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteServiceIf;
 import static ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha.hoy;
@@ -54,7 +54,7 @@ public class EstudianteModel extends EstudiantePanel {
         getDateFechaNacimiento().setDate(hoy());
 
         getCmbEstado().removeAllItems();
-        for (EstudianteEnumEstado enumerador : EstudianteEnumEstado.values()) {
+        for (GeneralEnumEstado enumerador : GeneralEnumEstado.values()) {
             getCmbEstado().addItem(enumerador);
         }
 
@@ -113,7 +113,7 @@ public class EstudianteModel extends EstudiantePanel {
         estudiante.setDatosAdicionales(getTxtAdicionales().getText());
 
         estudiante.setGenero(((GeneroEnum) getCmbGenero().getSelectedItem()).getEstado());
-        estudiante.setEstado(((EstudianteEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
+        estudiante.setEstado(((GeneralEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
 
         if (getDateFechaNacimiento().getDate() != null) {
             fechaNacimiento = new Date(getDateFechaNacimiento().getDate().getTime());

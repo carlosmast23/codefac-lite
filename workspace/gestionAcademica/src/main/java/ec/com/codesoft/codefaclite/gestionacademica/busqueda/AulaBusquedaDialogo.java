@@ -9,7 +9,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Aula;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.AulaEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Vector;
 
 /**
@@ -32,7 +32,7 @@ public class AulaBusquedaDialogo implements InterfaceModelFind<Aula> {
         String queryString = "SELECT u FROM Aula u WHERE (u.estado=?1) and";
         queryString += " ( LOWER(u.nombre) LIKE " + filter + " )";
         QueryDialog queryDialog = new QueryDialog(queryString);
-        queryDialog.agregarParametro(1, AulaEnumEstado.ACTIVO.getEstado());
+        queryDialog.agregarParametro(1, GeneralEnumEstado.ACTIVO.getEstado());
         return queryDialog;
     }
 

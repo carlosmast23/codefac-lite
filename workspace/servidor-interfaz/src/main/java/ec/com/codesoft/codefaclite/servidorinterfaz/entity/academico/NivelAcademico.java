@@ -21,27 +21,30 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "NIVEL_ACADEMICO")
-public class NivelAcademico implements Serializable{
+public class NivelAcademico implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "NOMBRE")    
+    @Column(name = "NOMBRE")
     private String nombre;
 
     @JoinColumn(name = "AULA_ID")
-    @ManyToOne        
+    @ManyToOne
     private Aula aula;
-    
+
     @JoinColumn(name = "PERIODO_ID")
-    @ManyToOne        
+    @ManyToOne
     private Periodo periodo;
-    
+
     @JoinColumn(name = "NIVEL_ID")
-    @ManyToOne        
+    @ManyToOne
     private Nivel nivel;
+
+    @Column(name = "ESTADO")
+    private String estado;
 
     public NivelAcademico() {
     }
@@ -86,13 +89,17 @@ public class NivelAcademico implements Serializable{
         this.nivel = nivel;
     }
 
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
     @Override
     public String toString() {
         return nombre;
     }
-    
-    
-    
-    
-    
+
 }

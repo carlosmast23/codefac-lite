@@ -10,7 +10,7 @@ import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Aula;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.AulaEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
@@ -48,7 +48,7 @@ public class AulaService extends ServiceAbstract<Aula, AulaFacade> implements Au
     }
 
     public void eliminar(Aula a) {
-        a.setEstado(AulaEnumEstado.ELIMINADO.getEstado());
+        a.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
         aulaFacade.edit(a);
     }
 

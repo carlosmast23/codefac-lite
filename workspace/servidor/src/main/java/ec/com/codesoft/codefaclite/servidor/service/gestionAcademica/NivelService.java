@@ -10,7 +10,7 @@ import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PeriodoEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelServiceIf;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
@@ -48,7 +48,7 @@ public class NivelService extends ServiceAbstract<Nivel, NivelFacade> implements
     }
 
     public void eliminar(Nivel n) {
-        n.setEstado(PeriodoEnumEstado.ELIMINADO.getEstado());
+        n.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
         nivelFacade.edit(n);
     }
 
