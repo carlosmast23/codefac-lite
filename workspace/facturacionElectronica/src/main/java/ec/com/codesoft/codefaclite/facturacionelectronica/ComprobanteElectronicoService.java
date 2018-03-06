@@ -491,63 +491,65 @@ public class ComprobanteElectronicoService implements Runnable {
     }
 
     private void generarRide() throws ComprobanteElectronicoException {
-        try {
-            Map<String, String> mapComprobante = UtilidadesComprobantes.decodificarArchivoBase64Offline(getPathComprobante(CARPETA_AUTORIZADOS), null, null);
-            ClaveAcceso claveAcceso=new ClaveAcceso(this.claveAcceso);
-            
-            JAXBContext jaxbContext = JAXBContext.newInstance(claveAcceso.getClassTipoComprobante());
-            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            StringReader reader = new StringReader(mapComprobante.get("comprobante"));
-            
-            //FacturaComprobante comprobante = (FacturaComprobante) jaxbUnmarshaller.unmarshal(reader);
-            //FacturaElectronicaReporte reporte = new FacturaElectronicaReporte(comprobante);
-            
-            ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(reader);
-            //FacturaElectronicaReporte reporte = new FacturaElectronicaReporte(comprobante);
-            ComprobanteElectronicoReporte reporte =getComprobanteReporte(comprobante);
-            
-            List<DetalleReporteData> informacionAdiciona = reporte.getDetalles();
-            Map<String, Object> datosMap = reporte.getMapReporte();
-            datosMap.put("SUBREPORT_DIR", pathParentJasper);
-            datosMap.put("SUBREPORT_INFO_ADICIONAL", reporteInfoAdicional);
-            datosMap.put("SUBREPORT_FORMA_PAGO", reporteFormaPago);
-            datosMap.put("fecha_hora_autorizacion", mapComprobante.get("fechaAutorizacion"));
-            datosMap.put("estado", mapComprobante.get("estado"));
-
-            /**
-             * Agregar datos adicionales como por ejemplo los datos del pide de
-             * pagina
-             */
-            datosMap.putAll(mapAdicionalReporte);
-            
-            /*
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-            ImageIO.write(logoImagen, "jpg", os);
-            InputStream is = new ByteArrayInputStream(os.toByteArray());*/
-
-            //datosMap.put("imagen_logo",is);
-            //datosMap.put("imagen_logo", UtilidadesComprobantes.getStreamByPath(pathLogoImagen));
-            datosMap.put("imagen_logo",pathLogoImagen);
-            /*
-            datosMap.put("pl_url_imgl", UtilidadesComprobantes.getStreamByPath(mapAdicionalReporte.get("pl_url_img1_url").toString()));
-            datosMap.put("pl_img_facebook", UtilidadesComprobantes.getStreamByPath(mapAdicionalReporte.get("pl_img_facebook_url").toString()));
-            datosMap.put("pl_img_whatsapp", UtilidadesComprobantes.getStreamByPath(mapAdicionalReporte.get("pl_img_whatsapp_url").toString()));
-            datosMap.put("pl_img_telefono", UtilidadesComprobantes.getStreamByPath(mapAdicionalReporte.get("pl_img_telefono_url").toString()));
-            datosMap.put("pl_img_logo_pie", UtilidadesComprobantes.getStreamByPath(mapAdicionalReporte.get("pl_img_logo_pie_url").toString()));
-            */
-            
-            UtilidadesComprobantes.generarReporteJasper(getPathJasper(comprobante), datosMap, informacionAdiciona, getPathComprobante(CARPETA_RIDE, getNameRide(comprobante)));
-
-        } catch (JAXBException ex) {
-            Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
-            throw new ComprobanteElectronicoException(ex.getMessage(), "Generando RIDE", ComprobanteElectronicoException.ERROR_COMPROBANTE);
-        } catch (IOException ex) {
-            Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
-            throw new ComprobanteElectronicoException(ex.getMessage(), "Generando RIDE", ComprobanteElectronicoException.ERROR_COMPROBANTE);
-        } catch (Exception ex) {
-            Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
-            throw new ComprobanteElectronicoException(ex.getMessage(), "Generando RIDE", ComprobanteElectronicoException.ERROR_COMPROBANTE);
-        }
+        generarRideIndividual(this.claveAcceso);
+//        try {
+//            
+//            Map<String, String> mapComprobante = UtilidadesComprobantes.decodificarArchivoBase64Offline(getPathComprobante(CARPETA_AUTORIZADOS), null, null);
+//            ClaveAcceso claveAcceso=new ClaveAcceso(this.claveAcceso);
+//            
+//            JAXBContext jaxbContext = JAXBContext.newInstance(claveAcceso.getClassTipoComprobante());
+//            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+//            StringReader reader = new StringReader(mapComprobante.get("comprobante"));
+//            
+//            //FacturaComprobante comprobante = (FacturaComprobante) jaxbUnmarshaller.unmarshal(reader);
+//            //FacturaElectronicaReporte reporte = new FacturaElectronicaReporte(comprobante);
+//            
+//            ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(reader);
+//            //FacturaElectronicaReporte reporte = new FacturaElectronicaReporte(comprobante);
+//            ComprobanteElectronicoReporte reporte =getComprobanteReporte(comprobante);
+//            
+//            List<DetalleReporteData> informacionAdiciona = reporte.getDetalles();
+//            Map<String, Object> datosMap = reporte.getMapReporte();
+//            datosMap.put("SUBREPORT_DIR", pathParentJasper);
+//            datosMap.put("SUBREPORT_INFO_ADICIONAL", reporteInfoAdicional);
+//            datosMap.put("SUBREPORT_FORMA_PAGO", reporteFormaPago);
+//            datosMap.put("fecha_hora_autorizacion", mapComprobante.get("fechaAutorizacion"));
+//            datosMap.put("estado", mapComprobante.get("estado"));
+//
+//            /**
+//             * Agregar datos adicionales como por ejemplo los datos del pide de
+//             * pagina
+//             */
+//            datosMap.putAll(mapAdicionalReporte);
+//            
+//            /*
+//            ByteArrayOutputStream os = new ByteArrayOutputStream();
+//            ImageIO.write(logoImagen, "jpg", os);
+//            InputStream is = new ByteArrayInputStream(os.toByteArray());*/
+//
+//            //datosMap.put("imagen_logo",is);
+//            //datosMap.put("imagen_logo", UtilidadesComprobantes.getStreamByPath(pathLogoImagen));
+//            datosMap.put("imagen_logo",pathLogoImagen);
+//            /*
+//            datosMap.put("pl_url_imgl", UtilidadesComprobantes.getStreamByPath(mapAdicionalReporte.get("pl_url_img1_url").toString()));
+//            datosMap.put("pl_img_facebook", UtilidadesComprobantes.getStreamByPath(mapAdicionalReporte.get("pl_img_facebook_url").toString()));
+//            datosMap.put("pl_img_whatsapp", UtilidadesComprobantes.getStreamByPath(mapAdicionalReporte.get("pl_img_whatsapp_url").toString()));
+//            datosMap.put("pl_img_telefono", UtilidadesComprobantes.getStreamByPath(mapAdicionalReporte.get("pl_img_telefono_url").toString()));
+//            datosMap.put("pl_img_logo_pie", UtilidadesComprobantes.getStreamByPath(mapAdicionalReporte.get("pl_img_logo_pie_url").toString()));
+//            */
+//            
+//            UtilidadesComprobantes.generarReporteJasper(getPathJasper(comprobante), datosMap, informacionAdiciona, getPathComprobante(CARPETA_RIDE, getNameRide(comprobante)));
+//
+//        } catch (JAXBException ex) {
+//            Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
+//            throw new ComprobanteElectronicoException(ex.getMessage(), "Generando RIDE", ComprobanteElectronicoException.ERROR_COMPROBANTE);
+//        } catch (IOException ex) {
+//            Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
+//            throw new ComprobanteElectronicoException(ex.getMessage(), "Generando RIDE", ComprobanteElectronicoException.ERROR_COMPROBANTE);
+//        } catch (Exception ex) {
+//            Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
+//            throw new ComprobanteElectronicoException(ex.getMessage(), "Generando RIDE", ComprobanteElectronicoException.ERROR_COMPROBANTE);
+//        }
 
     }
     
@@ -682,11 +684,12 @@ public class ComprobanteElectronicoService implements Runnable {
              * Agregar datos adicionales como por ejemplo los datos del pide de
              * pagina
              */
-            datosMap.putAll(mapAdicionalReporte);
+            //datosMap.putAll(mapAdicionalReporte);
+            datosMap.putAll(getMapCopyAdicionalReporte());
 
             //datosMap.put("imagen_logo",is);
             //datosMap.put("imagen_logo", UtilidadesComprobantes.getStreamByPath(pathLogoImagen));
-            datosMap.put("imagen_logo",pathLogoImagen);
+            datosMap.put("imagen_logo",pathLogoImagen.openStream());
 
             return UtilidadesComprobantes.generarReporteJasperPrint(getPathJasper(comprobante), datosMap, informacionAdiciona);
 
