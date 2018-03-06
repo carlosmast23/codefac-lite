@@ -25,6 +25,7 @@ public abstract class ComprobanteElectronico implements Serializable{
 
     public static final String FACTURA = "factura";
     public static final String NOTA_CREDITO = "notaCredito";
+    public static final String LOTE = "lote";
 
     public static final String MODO_FACTURACION_NORMAL = "1";
     protected InformacionTributaria informacionTributaria;
@@ -39,6 +40,11 @@ public abstract class ComprobanteElectronico implements Serializable{
      * 
      */
     public abstract String getRazonSocialComprador();
+    
+    /**
+     * Variable adicional que permite almacenar los correos en una lista que no se procesa al generar el xml
+     */
+    protected List<String> correos;
 
     public ComprobanteElectronico() {
     }
@@ -89,4 +95,14 @@ public abstract class ComprobanteElectronico implements Serializable{
         return this.informacionTributaria.getRuc();
     }
 
+    @XmlTransient
+    public List<String> getCorreos() {
+        return correos;
+    }
+
+    public void setCorreos(List<String> correos) {
+        this.correos = correos;
+    }
+
+    
 }

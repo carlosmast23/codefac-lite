@@ -35,6 +35,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NotaCreditoEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
+import ec.com.codesoft.codefaclite.ws.recepcion.Comprobante;
 import ec.com.codesoft.ejemplo.utilidades.imagen.UtilidadImagen;
 import ec.com.codesoft.ejemplo.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
@@ -45,6 +46,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.text.SimpleDateFormat;
@@ -146,7 +149,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         comprobanteElectronico.setClaveAcceso(claveAcceso);
         comprobanteElectronico.setEtapaLimiteProcesar(etapaLimite);
         //comprobanteElectronico
-        comprobanteElectronico.procesar();
+        comprobanteElectronico.procesar(false);
         return true;
     }
     
@@ -256,8 +259,30 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         });
         
         //Proceso el comprobante
-        comprobanteElectronico.procesar();
+        comprobanteElectronico.procesar(false);
 
+    }
+    
+    /**
+     * Metodo que permite procesar varios comprobante en Lote
+     * @param comprobanteData 
+     */
+    public void procesarComprobanteLote(List<ComprobanteDataInterface> comprobantesData,Usuario usuario) throws RemoteException
+    {
+        ComprobanteElectronicoService comprobanteElectronico= cargarConfiguracionesInicialesComprobantesLote(comprobantesData, usuario);
+        
+        //Obtener el numero de secuencial siguiente
+        ParametroCodefacServiceIf servicio=new ParametroCodefacService();
+        
+        //Incrementa el secuencial de lote
+        ParametroCodefac parametroCodefac=servicio.getParametroByNombre(ParametroCodefac.SECUENCIAL_LOTE);
+        Integer secuencialLote=Integer.parseInt(parametroCodefac.getValor());                
+        parametroCodefac.setValor((secuencialLote+1)+"");
+        entityManager.merge(parametroCodefac);
+        
+        comprobanteElectronico.setSecuencialLote(secuencialLote);
+        
+        comprobanteElectronico.procesar(true);
     }
     
     /**
@@ -324,8 +349,45 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         });
         
         //Proceso el comprobante
-        comprobanteElectronico.procesar();
+        comprobanteElectronico.procesar(false);
 
+    }
+    
+    private ComprobanteElectronicoService cargarConfiguracionesInicialesComprobantesLote(List<ComprobanteDataInterface> comprobantesData,Usuario usuario) throws RemoteException
+    {
+        ComprobanteElectronicoService comprobanteElectronico = new ComprobanteElectronicoService();
+        
+        List<ComprobanteElectronico> comprobantesElectronico=new ArrayList<ComprobanteElectronico>();
+        
+        for (ComprobanteDataInterface comprobanteData : comprobantesData) {
+            ComprobanteElectronico comprobante= comprobanteData.getComprobante();
+            //Agregando informacionTributaria
+            comprobante.setInformacionTributaria(getInfoInformacionTributaria(comprobanteData));
+            
+            //Validacion para verificar que si no existen datos adicionales no se agregue nada
+            List<InformacionAdicional> informacionAdicional = getInformacionAdicional(comprobanteData);
+            if (informacionAdicional != null && informacionAdicional.size() > 0) {
+                comprobante.setInformacionAdicional(informacionAdicional);
+            }
+            
+            comprobantesElectronico.add(comprobante);
+        }        
+        //Agregar datos adicionales del Reporte
+        comprobanteElectronico.setMapAdicionalReporte(mapReportePlantilla(usuario));
+        
+        //Cargar los correos que se van a usar para enviar los datos
+        //comprobanteElectronico.setCorreosElectronicos(comprobanteData.getCorreos());
+
+        
+        comprobanteElectronico.setComprobantesLote(comprobantesElectronico);
+        
+        //Cargar configuraciones por defecto para los comprobantes
+        cargarConfiguraciones(comprobanteElectronico);
+
+        //Etapa desde la cual va a procesar los comprobantes
+        comprobanteElectronico.setEtapaActual(ComprobanteElectronicoService.ETAPA_GENERAR);
+    
+        return comprobanteElectronico;
     }
     
     private ComprobanteElectronicoService cargarConfiguracionesInicialesComprobantes(ComprobanteDataInterface comprobanteData,Usuario usuario) throws RemoteException
@@ -475,20 +537,20 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         /**
          * Setear variables de configuracion para los reportes
          */
-        servicio.setPathFacturaJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceInputStream("facturaReporte.jrxml"));
-        servicio.setPathNotaCreditoJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceInputStream("notaCreditoReporte.jrxml"));
+        servicio.setPathFacturaJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceURL("facturaReporte.jrxml"));
+        servicio.setPathNotaCreditoJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceURL("notaCreditoReporte.jrxml"));
         //String imagenLogo=session.getParametrosCodefac().get(ParametroCodefac.LOGO_EMPRESA).getValor();
         //TODO Este parametro debe ser configurable cuando se la version de pago para que permita seleccionar la imagen del cliente
         //servicio.setLogoImagen(DirectorioCodefac.IMAGENES.getArchivoStream(session,imagenLogo));
         //BufferedImage image = ImageIO.read(RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg"));
         //servicio.setLogoImagen(image);
         servicio.setPathParentJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourcesParentPath("facturaReporte.jrxml"));
-        servicio.setReporteFormaPago(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceInputStream("forma_pago.jasper"));
-        servicio.setReporteInfoAdicional(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceInputStream("datos_adicionales.jasper"));
+        servicio.setReporteFormaPago(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceURL("forma_pago.jasper"));
+        servicio.setReporteInfoAdicional(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceURL("datos_adicionales.jasper"));
         servicio.setMapAdicionalReporte(mapReportePlantilla(null));
         //servicio.pathLogoImagen = RecursoCodefac.IMAGENES_GENERAL.getResourceURL("sin_imagen.jpg").getPath();
         //Segun el tipo de licencia cargar los recursos
-        servicio.pathLogoImagen = RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
+        servicio.pathLogoImagen = RecursoCodefac.IMAGENES_GENERAL.getResourceURL("sin_imagen.jpg");
         if (UtilidadesServidor.tipoLicenciaEnum.equals(TipoLicenciaEnum.GRATIS)) {
 
             InputStream inputStream = null;
@@ -504,9 +566,12 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                     RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
                 }
                 //BufferedInputStream bufferStream=new BufferedInputStream(inputStream);
-                servicio.pathLogoImagen = UtilidadImagen.castImputStreamForReport(inputStream);
+                //servicio.pathLogoImagen = UtilidadImagen.castImputStreamForReport(inputStream);
+                servicio.pathLogoImagen = new URL(pathImagen);
             } catch (FileNotFoundException ex) {
-                servicio.pathLogoImagen = RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
+                servicio.pathLogoImagen = RecursoCodefac.IMAGENES_GENERAL.getResourceURL("sin_imagen.jpg");
+                Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (MalformedURLException ex) {
                 Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
                 try {
@@ -535,20 +600,21 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         parametros.put("pl_nombre_empresa", empresa.getNombreLegal());
         parametros.put("pl_telefonos", empresa.getTelefonos());
 
-        parametros.put("pl_url_img1", (RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("codefac-logotipo.png")));
-        parametros.put("pl_img_facebook", (RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("facebook.png")));
-        parametros.put("pl_img_whatsapp", (RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("whatsapp.png")));
-        parametros.put("pl_img_telefono", (RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("telefono.png")));
-        parametros.put("pl_img_logo_pie", (RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("codesoft-logo.png")));
-
+        parametros.put("pl_url_img1", (RecursoCodefac.IMAGENES_GENERAL.getResourceURL("codefac-logotipo.png")));
+        parametros.put("pl_img_facebook", (RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceURL("facebook.png")));
+        parametros.put("pl_img_whatsapp", (RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceURL("whatsapp.png")));
+        parametros.put("pl_img_telefono", (RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceURL("telefono.png")));
+        parametros.put("pl_img_logo_pie", (RecursoCodefac.IMAGENES_GENERAL.getResourceURL("codesoft-logo.png")));
+        
+        /*
         parametros.put("pl_url_img1_url", (RecursoCodefac.IMAGENES_GENERAL.getResourceURL("codefac-logotipo.png").getPath()));
         parametros.put("pl_img_facebook_url", (RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceURL("facebook.png").getPath()));
         parametros.put("pl_img_whatsapp_url", (RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceURL("whatsapp.png").getPath()));
         parametros.put("pl_img_telefono_url", (RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceURL("telefono.png").getPath()));
-        parametros.put("pl_img_logo_pie_url", (RecursoCodefac.IMAGENES_GENERAL.getResourceURL("codesoft-logo.png").getPath()));
+        parametros.put("pl_img_logo_pie_url", (RecursoCodefac.IMAGENES_GENERAL.getResourceURL("codesoft-logo.png").getPath()));*/
 
-        parametros.put("pl_url_cabecera", RecursoCodefac.JASPER.getResourceInputStream("encabezado.jasper"));
-        parametros.put("pl_url_piepagina", RecursoCodefac.JASPER.getResourceInputStream("pie_pagina.jasper"));
+        parametros.put("pl_url_cabecera", RecursoCodefac.JASPER.getResourceURL("encabezado.jasper"));
+        parametros.put("pl_url_piepagina", RecursoCodefac.JASPER.getResourceURL("pie_pagina.jasper"));
 
         //System.out.println(parametros.get("SUBREPORT_DIR"));
         return parametros;

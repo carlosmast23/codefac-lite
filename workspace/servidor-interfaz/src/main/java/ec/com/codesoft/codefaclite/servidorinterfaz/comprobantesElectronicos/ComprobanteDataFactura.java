@@ -38,10 +38,20 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
     private Map<String,String> mapInfoAdicional;
     private List<String> correosAdicionales;   
     private ListenerComprobanteElectronico listener;
+    private Integer secuencial;
     //private List<FormaPago> formaPagos;
 
     public ComprobanteDataFactura(Factura factura) {
+        String secuencialStr = factura.getSecuencial().toString();
+        secuencialStr=UtilidadesTextos.llenarCarateresIzquierda(secuencialStr, 9, "0");
+        secuencial=Integer.parseInt(secuencialStr);
+        
         this.factura = factura;
+    }
+
+    public ComprobanteDataFactura(Factura factura, Integer secuencial) {
+        this.factura = factura;
+        this.secuencial = secuencial;
     }
     
     
@@ -188,7 +198,7 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
         /**
          * Informacion adicional
          */
-        
+        facturaComprobante.setCorreos(getCorreos());
         
         return facturaComprobante;
     }

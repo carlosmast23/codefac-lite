@@ -190,6 +190,8 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
         }
         notaCreditoComprobante.getInfoNotaCredito().setTotalImpuestos(totalImpuestos);
         
+        notaCreditoComprobante.setCorreos(getCorreos());
+        
         return notaCreditoComprobante;
     }
 

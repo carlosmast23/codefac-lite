@@ -73,7 +73,6 @@ public class FacturaComprobante extends ComprobanteElectronico{
 */
 
     @XmlAttribute(name = "version")
-    //@Override
     public String getVersionAttribute() {
         return "1.0.0";
     }

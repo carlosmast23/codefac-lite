@@ -38,4 +38,6 @@ public interface ComprobanteServiceIf extends Remote {
     public void registerForCallback(ClienteInterfaceComprobante callbackClientObject) throws java.rmi.RemoteException;
 
     public void unregisterForCallback(ClienteInterfaceComprobante callbackClientObject) throws java.rmi.RemoteException;
+    
+    public void procesarComprobanteLote(List<ComprobanteDataInterface> comprobantesData,Usuario usuario) throws RemoteException;
 }

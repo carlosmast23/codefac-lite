@@ -9,10 +9,19 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import org.apache.commons.lang.StringUtils;
+import org.w3c.dom.Document;
 
 /**
  *
@@ -114,5 +123,23 @@ public abstract class UtilidadesTextos {
         return sb.toString();
 
     }
+    
+    public static String documentToString(Document document) {
+    try {
+      TransformerFactory tf = TransformerFactory.newInstance();
+      Transformer trans = tf.newTransformer();
+      StringWriter sw = new StringWriter();
+      trans.transform(new DOMSource(document), new StreamResult(sw));
+      
+      //Covertir a formato utf-8
+      byte[] byteText = sw.toString().getBytes(Charset.forName("UTF-8"));
+      return new String(byteText,"UTF-8");
+    } catch (TransformerException tEx) {
+      tEx.printStackTrace();
+    }   catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(UtilidadesTextos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    return null;
+  }
 
 }
