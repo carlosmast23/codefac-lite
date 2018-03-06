@@ -9,7 +9,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInte
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.gestionacademica.model.AulaModel;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.AulaEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
@@ -123,7 +123,7 @@ public abstract class AulaPanel extends ControladorCodefacInterface {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<AulaEnumEstado> cmbEstado;
+    private javax.swing.JComboBox<GeneralEnumEstado> cmbEstado;
     private javax.swing.JLabel lblCapacidad;
     private javax.swing.JLabel lblEstado;
     private javax.swing.JLabel lblNombre;
@@ -162,12 +162,13 @@ public abstract class AulaPanel extends ControladorCodefacInterface {
         this.txtUbicacion = txtUbicacion;
     }
 
-    public JComboBox<AulaEnumEstado> getCmbEstado() {
+    public JComboBox<GeneralEnumEstado> getCmbEstado() {
         return cmbEstado;
     }
 
-    public void setCmbEstado(JComboBox<AulaEnumEstado> cmbEstado) {
+    public void setCmbEstado(JComboBox<GeneralEnumEstado> cmbEstado) {
         this.cmbEstado = cmbEstado;
     }
 
+  
 }

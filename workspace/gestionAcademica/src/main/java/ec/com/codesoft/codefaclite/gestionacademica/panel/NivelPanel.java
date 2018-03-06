@@ -9,8 +9,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInte
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.AulaEnumEstado;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NivelEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import javax.swing.JComboBox;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -129,7 +128,7 @@ public abstract class NivelPanel extends ControladorCodefacInterface {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<NivelEnumEstado> cmbEstado;
+    private javax.swing.JComboBox<GeneralEnumEstado> cmbEstado;
     private javax.swing.JComboBox<Nivel> cmbNivelPosterior;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
@@ -173,14 +172,15 @@ public abstract class NivelPanel extends ControladorCodefacInterface {
         this.txtOrden = txtOrden;
     }
 
-    public JComboBox<NivelEnumEstado> getCmbEstado() {
+    public JComboBox<GeneralEnumEstado> getCmbEstado() {
         return cmbEstado;
     }
 
-    public void setCmbEstado(JComboBox<NivelEnumEstado> cmbEstado) {
+    public void setCmbEstado(JComboBox<GeneralEnumEstado> cmbEstado) {
         this.cmbEstado = cmbEstado;
     }
 
+ 
     public JComboBox<Nivel> getCmbNivelPosterior() {
         return cmbNivelPosterior;
     }

@@ -9,8 +9,8 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.enumerados;
  *
  * @author CodesoftDesarrollo
  */
-public enum NivelEnumEstado {
-       /**
+public enum GeneralEnumEstado {
+    /**
      * Valor por defecto del cliente
      */
     ACTIVO("A"),
@@ -26,7 +26,7 @@ public enum NivelEnumEstado {
 
     private String estado;
 
-    private NivelEnumEstado(String estado) {
+    private GeneralEnumEstado(String estado) {
         this.estado = estado;
     }
 
@@ -38,8 +38,8 @@ public enum NivelEnumEstado {
         this.estado = estado;
     }
 
-    public static NivelEnumEstado getEnum(String estado) {
-        for (NivelEnumEstado enumerador : NivelEnumEstado.values()) {
+    public static GeneralEnumEstado getEnum(String estado) {
+        for (GeneralEnumEstado enumerador : GeneralEnumEstado.values()) {
             if (enumerador.estado.equals(estado)) {
                 return enumerador;
             }

@@ -31,6 +31,11 @@ import java.util.logging.Logger;
  */
 public class RubrosPeriodoModel extends RubrosPeriodoPanel{
 
+    /**
+     * Nivel por defecto que especifica que se debe aplicar a todos los niveles
+     */
+    private Nivel nivelDefecto;
+    
     private RubrosNivel rubrosNivel;
     
     @Override
@@ -129,6 +134,9 @@ public class RubrosPeriodoModel extends RubrosPeriodoPanel{
             
             //Cargar los combos de los niveles
             List<Nivel> niveles=ServiceFactory.getFactory().getNivelServiceIf().obtenerTodos();
+            //Ingresa un valor por defecto  para todos los rubros para referirse que va a estar disponibles para todos lo nivelss
+            getCmbNivel().addItem(nivelDefecto);
+            
             for (Nivel nivel : niveles) {
                 getCmbNivel().addItem(nivel);
             }
@@ -152,11 +160,20 @@ public class RubrosPeriodoModel extends RubrosPeriodoPanel{
 
     private void iniciarVariables() {
         rubrosNivel=new RubrosNivel();
+        nivelDefecto=new Nivel();
+        nivelDefecto.setNombre("Todos");
     }
 
     private void setearVariablesPantalla() {
         rubrosNivel.setNombre(getTxtNombre().getText());
-        rubrosNivel.setNivel((Nivel) getCmbNivel().getSelectedItem());
+        
+        //Verificar si el nivel seleccionado es uno por defecto
+        Nivel nivelSeleccionado=(Nivel) getCmbNivel().getSelectedItem();
+        if(nivelSeleccionado.equals(nivelDefecto))
+            nivelSeleccionado=null;
+                
+        rubrosNivel.setNivel(nivelSeleccionado);
+        
         rubrosNivel.setPeriodo((Periodo) getCmbPeriodo().getSelectedItem());
         rubrosNivel.setProducto((Producto) getCmbRubro().getSelectedItem());
         TipoRubroEnum tipoRubroEnum= (TipoRubroEnum) getCmbTipoRubro().getSelectedItem();

@@ -52,6 +52,7 @@ create table NIVEL_ACADEMICO(
     AULA_ID bigint,
     PERIODO_ID bigint,
     NIVEL_ID bigint,
+    ESTADO varchar(1),
     primary key (ID)
 );
 
@@ -74,3 +75,9 @@ create table RUBROS_NIVEL(
     primary key (ID)
 );
 
+create table RUBRO_ESTUDIANTE( 
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
+    RUBRO_NIVEL_ID BIGINT,
+    ESTUDIANTE_INSCRITO_ID BIGINT,
+    primary key (ID)
+);

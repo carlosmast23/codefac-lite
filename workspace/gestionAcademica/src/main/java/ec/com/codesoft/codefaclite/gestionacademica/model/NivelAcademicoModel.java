@@ -6,8 +6,10 @@
 package ec.com.codesoft.codefaclite.gestionacademica.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.gestionacademica.busqueda.NivelAcademicoDialogo;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.NivelAcademicoPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Aula;
@@ -15,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServiceIf;
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -28,12 +31,17 @@ import java.util.logging.Logger;
  *
  * @author Carlos
  */
-public class NivelAcademicoModel extends NivelAcademicoPanel implements Serializable{
-    
+public class NivelAcademicoModel extends NivelAcademicoPanel implements Serializable {
+
     /**
      * Referencia para mejar los cruds
      */
     private NivelAcademico nivelAcademico;
+    private NivelAcademicoServiceIf nivelAcademicoService;
+
+    public NivelAcademicoModel() {
+        nivelAcademicoService = ServiceFactory.getFactory().getNivelAcademicoServiceIf();
+    }
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
@@ -48,27 +56,45 @@ public class NivelAcademicoModel extends NivelAcademicoPanel implements Serializ
     @Override
     public void grabar() throws ExcepcionCodefacLite {
         try {
-            NivelAcademicoServiceIf servicio= ServiceFactory.getFactory().getNivelAcademicoServiceIf();
+            NivelAcademicoServiceIf servicio = ServiceFactory.getFactory().getNivelAcademicoServiceIf();
             setearVariablesPantalla();
             servicio.grabar(nivelAcademico);
-            DialogoCodefac.mensaje("Correcto","El nivel academico fue creado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+            DialogoCodefac.mensaje("Correcto", "El nivel academico fue creado correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         } catch (ServicioCodefacException ex) {
-            DialogoCodefac.mensaje("Error","Ocurrio un error al grabar los datos",DialogoCodefac.MENSAJE_CORRECTO);
+            DialogoCodefac.mensaje("Error", "Ocurrio un error al grabar los datos", DialogoCodefac.MENSAJE_CORRECTO);
             Logger.getLogger(NivelAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {
-            DialogoCodefac.mensaje("Error","Error de comunicación con el servidor",DialogoCodefac.MENSAJE_CORRECTO);
+            DialogoCodefac.mensaje("Error", "Error de comunicación con el servidor", DialogoCodefac.MENSAJE_ADVERTENCIA);
             Logger.getLogger(NivelAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Override
     public void editar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            setearVariablesPantalla();
+            nivelAcademicoService.editar(nivelAcademico);
+            DialogoCodefac.mensaje("Datos correctos", "El nivel academico se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+        } catch (RemoteException ex) {
+            Logger.getLogger(NivelModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (estadoFormulario.equals(GeneralPanelInterface.ESTADO_EDITAR)) {
+            try {
+                Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea eliminar el nivel academico(curso)?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                if (!respuesta) {
+                    throw new ExcepcionCodefacLite("Cancelacion nivel acemico");
+                }
+                nivelAcademicoService.eliminar(nivelAcademico);
+                DialogoCodefac.mensaje("Datos correctos", "El nivel academico se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+            } catch (RemoteException ex) {
+                Logger.getLogger(AulaModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     @Override
@@ -83,12 +109,32 @@ public class NivelAcademicoModel extends NivelAcademicoPanel implements Serializ
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        NivelAcademicoDialogo clienteBusquedaDialogo = new NivelAcademicoDialogo();
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
+        buscarDialogoModel.setVisible(true);
+        NivelAcademico nivelAcademicoTemp = (NivelAcademico) buscarDialogoModel.getResultado();
+        if (nivelAcademicoTemp == null) {
+            throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar");
+        }
+        nivelAcademico = nivelAcademicoTemp;
+        setearDatosPantalla();
+    }
+
+    private void setearDatosPantalla() {
+        getTxtNombre().setText(nivelAcademico.getNombre());
+        getCmbAula().setSelectedItem(nivelAcademico.getAula());
+        getCmbNivel().setSelectedItem(nivelAcademico.getNivel());
+        getCmbPeriodo().setSelectedItem(nivelAcademico.getPeriodo());
+
     }
 
     @Override
     public void limpiar() {
         limpiarVariables();
+
+        getCmbAula().setSelectedIndex(0);
+        getCmbNivel().setSelectedIndex(0);
+        getCmbPeriodo().setSelectedIndex(0);
     }
 
     @Override
@@ -119,46 +165,51 @@ public class NivelAcademicoModel extends NivelAcademicoPanel implements Serializ
     }
 
     private void cargarValoresIniciales() {
+        getCmbEstado().removeAllItems();
+        for (GeneralEnumEstado enumerador : GeneralEnumEstado.values()) {
+            getCmbEstado().addItem(enumerador);
+        }
         cargarCombos();
     }
 
     private void cargarCombos() {
-      
+
         try {
-            List<Aula> aulas= ServiceFactory.getFactory().getAulaServiceIf().obtenerTodos();
+            List<Aula> aulas = ServiceFactory.getFactory().getAulaServiceIf().obtenerTodos();
             getCmbAula().removeAllItems();
             for (Aula aula : aulas) {
                 getCmbAula().addItem(aula);
             }
-            
-            List<Periodo> periodos= ServiceFactory.getFactory().getPeriodoServiceIf().obtenerTodos();
+
+            List<Periodo> periodos = ServiceFactory.getFactory().getPeriodoServiceIf().obtenerTodos();
             getCmbPeriodo().removeAllItems();
             for (Periodo periodo : periodos) {
                 getCmbPeriodo().addItem(periodo);
             }
-            
-            List<Nivel> niveles= ServiceFactory.getFactory().getNivelServiceIf().obtenerTodos();
+
+            List<Nivel> niveles = ServiceFactory.getFactory().getNivelServiceIf().obtenerTodos();
             getCmbNivel().removeAllItems();
             for (Nivel nivel : niveles) {
                 getCmbNivel().addItem(nivel);
             }
-            
-            
+
         } catch (RemoteException ex) {
             Logger.getLogger(NivelAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     private void limpiarVariables() {
-        nivelAcademico=new NivelAcademico();
+        nivelAcademico = new NivelAcademico();
     }
 
     private void setearVariablesPantalla() {
         nivelAcademico.setNombre(getTxtNombre().getText());
-        
+
         nivelAcademico.setAula((Aula) getCmbAula().getSelectedItem());
         nivelAcademico.setNivel((Nivel) getCmbNivel().getSelectedItem());
         nivelAcademico.setPeriodo((Periodo) getCmbPeriodo().getSelectedItem());
+        nivelAcademico.setEstado(((GeneralEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
+
     }
-    
+
 }

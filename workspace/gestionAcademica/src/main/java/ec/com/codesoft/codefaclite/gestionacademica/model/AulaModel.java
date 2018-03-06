@@ -15,7 +15,7 @@ import ec.com.codesoft.codefaclite.gestionacademica.panel.AulaPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Aula;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.AulaEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -40,7 +40,7 @@ public class AulaModel extends AulaPanel {
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         getCmbEstado().removeAllItems();
-        for (AulaEnumEstado enumerador : AulaEnumEstado.values()) {
+        for (GeneralEnumEstado enumerador : GeneralEnumEstado.values()) {
             getCmbEstado().addItem(enumerador);
         }
     }
@@ -60,6 +60,7 @@ public class AulaModel extends AulaPanel {
             DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite("Error al grabar aula modelo");
         } catch (RemoteException ex) {
+            DialogoCodefac.mensaje("Error", "Error de comunicación con el servidor , aula", DialogoCodefac.MENSAJE_ADVERTENCIA);
             Logger.getLogger(AulaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -68,7 +69,7 @@ public class AulaModel extends AulaPanel {
         aula.setNombre(getTxtNombre().getText());
         aula.setUbicacion(getTxtUbicacion().getText());
         aula.setCapacidad(Integer.parseInt(getTxtCapacidad().getText()));
-        aula.setEstado(((AulaEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
+        aula.setEstado(((GeneralEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
     }
 
     @Override
@@ -125,6 +126,8 @@ public class AulaModel extends AulaPanel {
     @Override
     public void limpiar() {
         aula = new Aula();
+        getCmbEstado().setSelectedIndex(0);
+
     }
 
     @Override

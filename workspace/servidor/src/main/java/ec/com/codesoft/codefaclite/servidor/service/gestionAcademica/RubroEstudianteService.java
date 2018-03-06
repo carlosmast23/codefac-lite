@@ -7,9 +7,13 @@ package ec.com.codesoft.codefaclite.servidor.service.gestionAcademica;
 
 import ec.com.codesoft.codefaclite.servidor.facade.gestionAcademica.RubroEstudianteFacade;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RubroEstudianteServiceIf;
 import java.rmi.RemoteException;
+import java.util.List;
+import javax.persistence.EntityTransaction;
 
 /**
  *
@@ -19,6 +23,22 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
 
     public RubroEstudianteService() throws RemoteException {
         super(RubroEstudianteFacade.class);
+    }
+    
+    public void crearRubrosEstudiantes(List<EstudianteInscrito> estudiantes,RubrosNivel rubroNivel) throws RemoteException
+    {
+        EntityTransaction transaccion=getTransaccion();
+        transaccion.begin();
+        for (EstudianteInscrito estudiante : estudiantes) {
+            RubroEstudiante rubroEstudiante=new RubroEstudiante();
+            rubroEstudiante.setEstudianteInscrito(estudiante);
+            rubroEstudiante.setRubroNivel(rubroNivel);
+            
+            entityManager.persist(rubroEstudiante);
+        }
+        entityManager.flush();
+        transaccion.commit();
+        
     }
     
 }

@@ -9,7 +9,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NivelEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Vector;
 
 /**
@@ -32,7 +32,7 @@ public class NivelBusquedaDialogo implements InterfaceModelFind<Nivel> {
         String queryString = "SELECT u FROM Nivel u WHERE (u.estado=?1) and";
         queryString += " ( LOWER(u.nombre) LIKE " + filter + " )";
         QueryDialog queryDialog = new QueryDialog(queryString);
-        queryDialog.agregarParametro(1, NivelEnumEstado.ACTIVO.getEstado());
+        queryDialog.agregarParametro(1, GeneralEnumEstado.ACTIVO.getEstado());
         return queryDialog;
     }
 
