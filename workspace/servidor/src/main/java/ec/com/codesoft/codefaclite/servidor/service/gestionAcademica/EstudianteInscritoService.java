@@ -20,19 +20,23 @@ import javax.persistence.EntityTransaction;
  *
  * @author Carlos
  */
-public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrito, EstudianteInscritoFacade> implements EstudianteInscritoServiceIf{
+public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrito, EstudianteInscritoFacade> implements EstudianteInscritoServiceIf {
+
+    EstudianteInscritoFacade estudianteInscritoFacade;
 
     public EstudianteInscritoService() throws RemoteException {
         super(EstudianteInscritoFacade.class);
+        this.estudianteInscritoFacade = new EstudianteInscritoFacade();
+
     }
-    
+
     /**
      * Permite grabar un conjunto de estudiantes para matricular
+     *
      * @param mapEstudiantes
-     * @throws RemoteException 
+     * @throws RemoteException
      */
-    public void matricularEstudiantesByMap(Map<NivelAcademico,List<Estudiante>> mapEstudiantes) throws RemoteException
-    {
+    public void matricularEstudiantesByMap(Map<NivelAcademico, List<Estudiante>> mapEstudiantes) throws RemoteException {
         EntityTransaction transaccion = getTransaccion();
         transaccion.begin();
         for (Map.Entry<NivelAcademico, List<Estudiante>> entry : mapEstudiantes.entrySet()) {
@@ -50,5 +54,10 @@ public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrit
 
         transaccion.commit();
     }
-    
+
+    @Override
+    public List<EstudianteInscrito> obtenerEstudiantesInscritos(NivelAcademico nivel) throws RemoteException {
+        return estudianteInscritoFacade.lista(nivel);
+    }
+
 }
