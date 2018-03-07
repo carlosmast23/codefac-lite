@@ -13,17 +13,22 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.notacredito.Detal
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.notacredito.InformacionNotaCredito;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.notacredito.NotaCreditoComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -122,58 +127,63 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
         List<NotaCreditoDetalle> detallesNotaCredito= notaCredito.getDetalles();
         
         for (NotaCreditoDetalle detalleNotaCredito : detallesNotaCredito) {
-            DetalleNotaCreditoComprobante detalle=new DetalleNotaCreditoComprobante();
-
-            detalle.setCodigoInterno(detalleNotaCredito.getProducto().getCodigoPersonalizado());
-            detalle.setCantidad(detalleNotaCredito.getCantidad());
-            detalle.setDescripcion(detalleNotaCredito.getDescripcion());
-            //Establecer el descuento en el aplicativo
-            detalle.setDescuento(BigDecimal.ZERO);
-            detalle.setPrecioTotalSinImpuesto(detalleNotaCredito.getTotal());
-            detalle.setPrecioUnitario(detalleNotaCredito.getPrecioUnitario());  
-            
-            
-            //facturaDetalle.getProducto().get
-            
-            /**
-             * Agregado impuesto que se cobran a cada detalle individual
-             */
-            List<ImpuestoComprobante> listaComprobantes=new ArrayList<ImpuestoComprobante>();
-            
-            ImpuestoComprobante impuesto=new ImpuestoComprobante();
-            impuesto.setCodigo(detalleNotaCredito.getProducto().getIva().getImpuesto().getCodigoSri());
-            impuesto.setCodigoPorcentaje(detalleNotaCredito.getProducto().getIva().getCodigo()+"");
-            impuesto.setTarifa(new BigDecimal(detalleNotaCredito.getProducto().getIva().getTarifa()+""));
-            impuesto.setBaseImponible(detalleNotaCredito.getTotal());
-            impuesto.setValor(detalleNotaCredito.getIva());
-            
-            /**
-             * Verificar valores para el total de impuesto
-             */
-            if(mapTotalImpuestos.get(detalleNotaCredito.getProducto().getIva())==null)
-            {
-                TotalImpuesto totalImpuesto=new TotalImpuesto();
-                totalImpuesto.setBaseImponible(impuesto.getBaseImponible());
-                totalImpuesto.setCodigo(impuesto.getCodigo());
-                totalImpuesto.setCodigoPorcentaje(impuesto.getCodigoPorcentaje());
-                totalImpuesto.setValor(impuesto.getValor());
-                mapTotalImpuestos.put(detalleNotaCredito.getProducto().getIva(), totalImpuesto);
-            }
-            else
-            {
-                TotalImpuesto totalImpuesto=mapTotalImpuestos.get(detalleNotaCredito.getProducto().getIva());
-                totalImpuesto.setBaseImponible(totalImpuesto.getBaseImponible().add(impuesto.getBaseImponible()));
-                totalImpuesto.setValor(totalImpuesto.getValor().add(impuesto.getValor()));
-                mapTotalImpuestos.put(detalleNotaCredito.getProducto().getIva(), totalImpuesto);
+            try {
+                Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalleNotaCredito.getReferenciaId());
+                DetalleNotaCreditoComprobante detalle=new DetalleNotaCreditoComprobante();
                 
+                detalle.setCodigoInterno(producto.getCodigoPersonalizado());
+                detalle.setCantidad(detalleNotaCredito.getCantidad());
+                detalle.setDescripcion(detalleNotaCredito.getDescripcion());
+                //Establecer el descuento en el aplicativo
+                detalle.setDescuento(BigDecimal.ZERO);
+                detalle.setPrecioTotalSinImpuesto(detalleNotaCredito.getTotal());
+                detalle.setPrecioUnitario(detalleNotaCredito.getPrecioUnitario());
+                
+                
+                //facturaDetalle.getProducto().get
+                
+                /**
+                 * Agregado impuesto que se cobran a cada detalle individual
+                 */
+                List<ImpuestoComprobante> listaComprobantes=new ArrayList<ImpuestoComprobante>();
+                
+                ImpuestoComprobante impuesto=new ImpuestoComprobante();
+                impuesto.setCodigo(producto.getIva().getImpuesto().getCodigoSri());
+                impuesto.setCodigoPorcentaje(producto.getIva().getCodigo()+"");
+                impuesto.setTarifa(new BigDecimal(producto.getIva().getTarifa()+""));
+                impuesto.setBaseImponible(detalleNotaCredito.getTotal());
+                impuesto.setValor(detalleNotaCredito.getIva());
+                
+                /**
+                 * Verificar valores para el total de impuesto
+                 */
+                if(mapTotalImpuestos.get(producto.getIva())==null)
+                {
+                    TotalImpuesto totalImpuesto=new TotalImpuesto();
+                    totalImpuesto.setBaseImponible(impuesto.getBaseImponible());
+                    totalImpuesto.setCodigo(impuesto.getCodigo());
+                    totalImpuesto.setCodigoPorcentaje(impuesto.getCodigoPorcentaje());
+                    totalImpuesto.setValor(impuesto.getValor());
+                    mapTotalImpuestos.put(producto.getIva(), totalImpuesto);
+                }
+                else
+                {
+                    TotalImpuesto totalImpuesto=mapTotalImpuestos.get(producto.getIva());
+                    totalImpuesto.setBaseImponible(totalImpuesto.getBaseImponible().add(impuesto.getBaseImponible()));
+                    totalImpuesto.setValor(totalImpuesto.getValor().add(impuesto.getValor()));
+                    mapTotalImpuestos.put(producto.getIva(), totalImpuesto);
+                    
+                }
+                
+                //-------------> FIN <----------------
+                listaComprobantes.add(impuesto);
+                
+                detalle.setImpuestos(listaComprobantes);
+                
+                detallesComprobante.add(detalle);
+            } catch (RemoteException ex) {
+                Logger.getLogger(ComprobanteDataNotaCredito.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-            //-------------> FIN <----------------
-            listaComprobantes.add(impuesto);
-            
-            detalle.setImpuestos(listaComprobantes);
-            
-            detallesComprobante.add(detalle);
         }
         
         notaCreditoComprobante.setDetalles(detallesComprobante);

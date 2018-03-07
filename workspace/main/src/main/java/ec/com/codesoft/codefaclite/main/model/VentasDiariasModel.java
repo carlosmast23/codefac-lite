@@ -210,20 +210,22 @@ public class VentasDiariasModel extends WidgetVentasDiarias
     
     public void agregarDetallesFactura (FacturaDetalle facturaDetalle)
     {
-        boolean agregar = true;
-        if (facturaDetalle != null) {
-            agregar = false;
-        } else {
-            facturaDetalle = new FacturaDetalle();
-        }
-        
-        facturaDetalle.setCantidad(new BigDecimal(getTxtCantidadProducto().getText()));
-        facturaDetalle.setDescripcion(getTxtDescripcionProducto().getText());
-        BigDecimal valorTotalUnitario = new BigDecimal(getTxtValorUnitarioProducto().getText());
-        facturaDetalle.setPrecioUnitario(valorTotalUnitario.setScale(2, BigDecimal.ROUND_HALF_UP));
-        facturaDetalle.setProducto(productoSeleccionado);
-        facturaDetalle.setValorIce(BigDecimal.ZERO);
-        facturaDetalle.setDescuento(BigDecimal.ZERO);
+        try {
+            boolean agregar = true;
+            if (facturaDetalle != null) {
+                agregar = false;
+            } else {
+                facturaDetalle = new FacturaDetalle();
+            }
+            
+            facturaDetalle.setCantidad(new BigDecimal(getTxtCantidadProducto().getText()));
+            facturaDetalle.setDescripcion(getTxtDescripcionProducto().getText());
+            BigDecimal valorTotalUnitario = new BigDecimal(getTxtValorUnitarioProducto().getText());
+            facturaDetalle.setPrecioUnitario(valorTotalUnitario.setScale(2, BigDecimal.ROUND_HALF_UP));
+            facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
+            //facturaDetalle.setProducto(productoSeleccionado);
+            facturaDetalle.setValorIce(BigDecimal.ZERO);
+            facturaDetalle.setDescuento(BigDecimal.ZERO);
             
             //Calular el total despues del descuento porque necesito esa valor para grabar
             BigDecimal setTotal = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).subtract(facturaDetalle.getDescuento());
@@ -231,19 +233,23 @@ public class VentasDiariasModel extends WidgetVentasDiarias
             /**
              * Revisar este calculo del iva para no calcular 2 veces al mostrar
              */
-            if (facturaDetalle.getProducto().getIva().getTarifa().equals(0)) {
+            Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getId());
+            if (producto.getIva().getTarifa().equals(0)) {
                 facturaDetalle.setIva(BigDecimal.ZERO);
             } else {
                 BigDecimal iva = facturaDetalle.getTotal().multiply(obtenerValorIva()).setScale(2, BigDecimal.ROUND_HALF_UP);
                 facturaDetalle.setIva(iva);
             }
-           //Solo agregar si se enviar un dato vacio
-        if (agregar) {
-            factura.addDetalle(facturaDetalle);
-            limpiarValoresCamposTextos();
-            cargarDatosDetalles();
-            procesarTotales();
-        } 
+            //Solo agregar si se enviar un dato vacio
+            if (agregar) {
+                factura.addDetalle(facturaDetalle);
+                limpiarValoresCamposTextos();
+                cargarDatosDetalles();
+                procesarTotales();
+            } 
+        } catch (RemoteException ex) {
+            Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void limpiarValoresCamposTextos()
@@ -327,10 +333,15 @@ public class VentasDiariasModel extends WidgetVentasDiarias
         
         
         for (FacturaDetalle facturaDetalle : facturaDetalles) {
-            if (facturaDetalle.getProducto().getIva().getTarifa() == 12) {
-                this.factura.setSubtotalImpuestos(factura.getSubtotalImpuestos().add(facturaDetalle.getPrecioUnitario().multiply(facturaDetalle.getCantidad())));                         
-            }      
+            try {
+                Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getId());
+                if (producto.getIva().getTarifa() == 12) {
+                    this.factura.setSubtotalImpuestos(factura.getSubtotalImpuestos().add(facturaDetalle.getPrecioUnitario().multiply(facturaDetalle.getCantidad())));      
+                }
                 this.factura.setSubtotalSinImpuestos(this.factura.getSubtotalSinImpuestos().add(facturaDetalle.getPrecioUnitario().multiply(facturaDetalle.getCantidad())));
+            } catch (RemoteException ex) {
+                Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
         this.factura.setSubtotalImpuestos(factura.getSubtotalImpuestos().setScale(2, BigDecimal.ROUND_HALF_UP));

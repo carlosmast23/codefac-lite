@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEn
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.math.BigDecimal;
@@ -87,7 +88,9 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
              * Actualizar valores del inventario con el kardex
              */
             for (FacturaDetalle detalle : factura.getDetalles()) {
-                Producto producto= detalle.getProducto();
+                
+                Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
+                
                 Map<String,Object> mapParametros=new HashMap<String,Object>();
                 mapParametros.put("producto", producto);
                 KardexService kardexService=new KardexService();

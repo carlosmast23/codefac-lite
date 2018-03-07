@@ -48,9 +48,11 @@ public class NotaCreditoDetalle implements Serializable {
     @ManyToOne(optional = false)
     private NotaCredito notaCredito;
     
-    @JoinColumn(name = "PRODUCTO_ID")
-    @ManyToOne
-    private Producto producto;
+    @Column(name = "REFERENCIA_ID")
+    private Long referenciaId;
+    
+    @Column(name = "TIPO_REFERENCIA")
+    private String tipoReferencia;
 
     public NotaCreditoDetalle() {
     }
@@ -129,13 +131,23 @@ public class NotaCreditoDetalle implements Serializable {
         this.notaCredito = notaCredito;
     }
 
-    public Producto getProducto() {
-        return producto;
+    public Long getReferenciaId() {
+        return referenciaId;
     }
 
-    public void setProducto(Producto producto) {
-        this.producto = producto;
+    public void setReferenciaId(Long referenciaId) {
+        this.referenciaId = referenciaId;
     }
+
+    public String getTipoReferencia() {
+        return tipoReferencia;
+    }
+
+    public void setTipoReferencia(String tipoReferencia) {
+        this.tipoReferencia = tipoReferencia;
+    }
+
+    
     
     
     
