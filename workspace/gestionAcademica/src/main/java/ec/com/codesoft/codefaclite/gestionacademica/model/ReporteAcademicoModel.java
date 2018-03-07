@@ -6,7 +6,11 @@
 package ec.com.codesoft.codefaclite.gestionacademica.model;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.ReporteAcademicoPanel;
+import ec.com.codesoft.codefaclite.gestionacademica.reportdata.ReporteAcademicoData;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
@@ -17,7 +21,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteInscrito
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServiceIf;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.InputStream;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +41,7 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
 
     private DefaultTableModel modeloTablaEstudiantes;
     private List<EstudianteInscrito> dataEstudiantes;
+    Map parameters = new HashMap();
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
@@ -125,7 +132,45 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
 
     @Override
     public void imprimir() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            InputStream path = RecursoCodefac.JASPER_ACADEMICO.getResourceInputStream("reporte_academico.jrxml");
+
+            EstudianteInscritoServiceIf na = ServiceFactory.getFactory().getEstudianteInscritoServiceIf();
+            dataEstudiantes = na.obtenerEstudiantesInscritos((NivelAcademico) getCmbNivelAcademico().getSelectedItem());
+            List<ReporteAcademicoData> data = new ArrayList<ReporteAcademicoData>();
+
+            for (EstudianteInscrito est : dataEstudiantes) {
+
+                data.add(new ReporteAcademicoData(
+                        est.getEstudiante().getCedula(),
+                        est.getEstudiante().getNombres(),
+                        est.getEstudiante().getApellidos(),
+                        est.getEstudiante().getEmail(),
+                        est.getEstudiante().getTelefono(),
+                        est.getEstudiante().getRepresentante().getNombres() + " " + est.getEstudiante().getRepresentante().getApellidos(),
+                        est.getNivelAcademico().getNombre()
+                ));
+
+            }
+   
+            Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
+            NivelAcademico nivela = (NivelAcademico) getCmbNivelAcademico().getSelectedItem();
+            if (periodo != null) {
+                parameters.put("periodo", periodo.getNombre());
+            } else {
+                parameters.put("periodo", "TODOS");
+            }
+
+            if (nivela != null) {
+                parameters.put("nivelacademico", nivela.getNombre());
+            } else {
+                parameters.put("nivelacademico", "TODOS");
+            }
+
+            ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Academico");
+        } catch (RemoteException ex) {
+            Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -155,7 +200,10 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
+        return permisos;
     }
 
     @Override
@@ -174,12 +222,16 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
             comboNivel.removeAllItems();
             for (NivelAcademico resultado : resultados) {
                 comboNivel.addItem(resultado);
+
             }
 
         } catch (RemoteException ex) {
-            Logger.getLogger(MatriculaModel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MatriculaModel.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
         } catch (ServicioCodefacException ex) {
-            Logger.getLogger(MatriculaModel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MatriculaModel.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
 
     }
