@@ -5,12 +5,16 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
+import ec.com.codesoft.codefaclite.servidor.facade.CompraDetalleFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.CompraFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
 import java.rmi.RemoteException;
+import java.sql.Date;
+import java.util.List;
 
 /**
  *
@@ -18,8 +22,13 @@ import java.rmi.RemoteException;
  */
 public class CompraService extends ServiceAbstract<Compra,CompraFacade> implements CompraServiceIf{
     
+    CompraFacade compraFacade;
+    CompraDetalleFacade compraDetalleFacade;
+    
     public CompraService() throws RemoteException {
         super(CompraFacade.class);
+        this.compraFacade = new CompraFacade();
+        this.compraDetalleFacade = new CompraDetalleFacade();
     }
     
     
@@ -52,6 +61,16 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             
         }
         
+    }
+    
+    public List<Compra> obtenerTodos()
+    {
+        return compraFacade.findAll();
+    }
+    
+    public List<Compra> obtenerCompraReporte(Persona proveedor, Date fechaInicial, Date fechaFin)
+    {
+        return null;
     }
     
 }
