@@ -10,6 +10,7 @@ import autorizacion.ws.sri.gob.ec.AutorizacionComprobante;
 import autorizacion.ws.sri.gob.ec.AutorizacionComprobantesOffline;
 import autorizacion.ws.sri.gob.ec.AutorizacionComprobantesOfflineService;
 import autorizacion.ws.sri.gob.ec.RespuestaComprobante;
+import autorizacion.ws.sri.gob.ec.RespuestaLote;
 import com.thoughtworks.xstream.XStream;
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
@@ -43,6 +44,8 @@ public class ServicioSri {
     private static final String namespaceAutorizarURI="http://ec.gob.sri.ws.autorizacion";
     private static final String localPort="RecepcionComprobantesOfflineService";
     private static final String localPortAutorizacion="AutorizacionComprobantesOfflineService";
+    
+    public static final String AUTORIZADO="AUTORIZADO";
     
     private static final Long TIEMPO_ESPERA_AUTORIZACION =400L;
     private static final Long INTENTOS_AUTORIZACION =400L; 
@@ -139,7 +142,7 @@ public class ServicioSri {
     public Boolean enviar()
     {
         try {
-            //File archivoXMLFirmado = new File("C:\\e-spirit-pruebas\\firmados\\2609201701179053733100110010020000072070000000011.xml");
+            //File archivoXMLFirmado = new File("C:\\CodefacRecursos\\comprobantes\\pruebas\\firmados\\0103201801172421895100110010010000000010000000011.xml");
             File archivoXMLFirmado = new File(urlFile);
             RecepcionComprobantesOffline port= servicio.getRecepcionComprobantesOfflinePort();
             RespuestaSolicitud respuestaSolicitud = port.validarComprobante(archivoToByte(archivoXMLFirmado));
@@ -158,8 +161,8 @@ public class ServicioSri {
             Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
-    }
-    
+    }    
+   
     public boolean autorizar(String claveAcceso) throws ComprobanteElectronicoException
     {
        if(verificarConexionAutorizar())
@@ -177,7 +180,7 @@ public class ServicioSri {
                    }
                    else
                    {
-                       if(autorizacion.get(0).getEstado().equals("AUTORIZADO"))
+                       if(autorizacion.get(0).getEstado().equals(AUTORIZADO))
                        {
                             return true;
                        }
@@ -205,6 +208,64 @@ public class ServicioSri {
        
     }
     
+    public boolean autorizarLote(String claveAcceso) throws ComprobanteElectronicoException
+    {
+       if(verificarConexionAutorizar())
+       {
+           
+           for(int i=0;i<INTENTOS_AUTORIZACION;i++)
+           {
+               try {
+                   AutorizacionComprobantesOffline port= servicioAutorizacion.getAutorizacionComprobantesOfflinePort();
+                   RespuestaLote respuesta=port.autorizacionComprobanteLote(claveAcceso);
+                   autorizacion=respuesta.getAutorizaciones().getAutorizacion();
+                   if(autorizacion.size()==0)
+                   {
+                        Thread.sleep(TIEMPO_ESPERA_AUTORIZACION);                        
+                   }
+                   else
+                   {
+                       Boolean autorizadoAlguno=false;
+                       for (Autorizacion autorizacion : autorizacion) {
+                           if (autorizacion.getEstado().equals("AUTORIZADO")) {
+
+                               autorizadoAlguno=true;
+                               break;
+                           }
+                       }
+                       
+                       return true;
+ 
+                   }
+               } catch (InterruptedException ex) {
+                   Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);
+               }
+           }
+       }
+       return false;
+       
+    }
+    
+    /**
+     * Busca entre los documentos autorizados alguno en especifico por la clave de acceso
+     * @return 
+     */
+    public Autorizacion buscarAutorizacion(String claveAcceso)
+    {
+        for (Autorizacion autorizacion : autorizacion) {
+            if(autorizacion.getNumeroAutorizacion().equals(claveAcceso))
+            {
+                return autorizacion;
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * Obtiene la respuesta del comprobante individual y lo transforma en texto
+     * @return
+     * @throws ComprobanteElectronicoException 
+     */
     public String obtenerRespuestaAutorizacion() throws ComprobanteElectronicoException
     {
         try {
@@ -246,6 +307,53 @@ public class ServicioSri {
         }
 
     }
+    
+    /**
+     * Cambiar el formato de autorizacion  a String
+     * @param item
+     * @return
+     * @throws ComprobanteElectronicoException 
+     */
+    public String castAutorizacionToString(Autorizacion item) throws ComprobanteElectronicoException
+    {
+          try {
+            item.setComprobante("<![CDATA[" + item.getComprobante() + "]]>");            
+            XStream xstream = XStreamUtil.getRespuestaXStream();
+            Writer writer = null;
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            writer = new OutputStreamWriter(outputStream, "UTF-8");
+            writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+            xstream.toXML(item, writer);
+            String xmlAutorizacion = outputStream.toString("UTF-8");
+            
+            /**
+             * Solucion temporal para obtener la fecha con el tiempo 
+             */
+            int posicionInicial=xmlAutorizacion.indexOf("<fechaAutorizacion class=\"fechaAutorizacion\">");
+            int posicionFinal=xmlAutorizacion.indexOf("</fechaAutorizacion>");
+            xmlAutorizacion=xmlAutorizacion.substring(0,posicionInicial)+"<fechaAutorizacion>"+item.getFechaAutorizacion()+xmlAutorizacion.substring(posicionFinal,xmlAutorizacion.length());
+            
+            //System.out.println(xmlAutorizacion);
+            
+            if (item.getEstado().equals("AUTORIZADO")) {
+                return xmlAutorizacion;
+            }
+            else
+            {
+                throw  new ComprobanteElectronicoException("Documeto no autorizado","Leyendo respuesta autorizado",ComprobanteElectronicoException.ERROR_COMPROBANTE);
+                //implementar cuando esta autorizado
+            }
+            
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);
+            throw  new ComprobanteElectronicoException(ex.getMessage(),"Leyendo respuesta autorizado",ComprobanteElectronicoException.ERROR_COMPROBANTE);
+        } catch (IOException ex) {
+            Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);
+            throw  new ComprobanteElectronicoException(ex.getMessage(),"Leyendo respuesta autorizado",ComprobanteElectronicoException.ERROR_COMPROBANTE);
+        }
+         
+        
+    }
 
     public List<Mensaje> getMensajes() {
         return mensajes;
@@ -257,6 +365,10 @@ public class ServicioSri {
 
     public void setUrlFile(String urlFile) {
         this.urlFile = urlFile;
+    }
+
+    public List<Autorizacion> getAutorizacion() {
+        return autorizacion;
     }
     
     

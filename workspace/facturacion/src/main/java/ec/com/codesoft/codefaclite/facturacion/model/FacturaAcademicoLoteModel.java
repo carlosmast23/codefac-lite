@@ -7,7 +7,9 @@ package ec.com.codesoft.codefaclite.facturacion.model;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturaAcademicoLotePanel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataFactura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
@@ -350,7 +352,36 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel{
                 cargarCursosLista();
             }
         });
+        
+        
+        getBtnFacturar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                facturarLote();
+            }
+        });
        
+    }
+    
+    private void facturarLote()
+    {
+        //mapDatosFacturar;
+        for (Map.Entry<NivelAcademico, Map<EstudianteInscrito, List<RubroEstudiante>>> entry : mapDatosFacturar.entrySet()) {
+            NivelAcademico nivelAcademico = entry.getKey();
+            Map<EstudianteInscrito, List<RubroEstudiante>> rubrosEstudianteMap = entry.getValue();
+        
+            
+            
+        }
+    }
+    
+    private void generarFactura(EstudianteInscrito estudianteInscrito,List<RubroEstudiante> listaRubros)
+    {
+        Factura factura=new Factura();
+        //factura.setClaveAcceso(title);
+        factura.setCliente(estudianteInscrito.getEstudiante().getRepresentante());
+        factura.setCodigoDocumento(IS_ICON_PROPERTY);
+        //ComprobanteDataFactura comprobanteData=new ComprobanteDataFactura();
     }
     
     private void cargarRubrosLista()

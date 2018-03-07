@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoReferenciaEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Column;
@@ -48,9 +49,11 @@ public class FacturaDetalle implements Serializable {
     @ManyToOne(optional = false)
     private Factura factura;
     
-    @JoinColumn(name = "PRODUCTO_ID")
-    @ManyToOne
-    private Producto producto;
+    @Column(name = "REFERENCIA_ID")
+    private Long referenciaId;
+    
+    @Column(name = "TIPO_REFERENCIA")
+    private String tipoReferencia;
 
     public FacturaDetalle() {
     }
@@ -107,14 +110,6 @@ public class FacturaDetalle implements Serializable {
         this.factura = factura;
     }
 
-    public Producto getProducto() {
-        return producto;
-    }
-
-    public void setProducto(Producto producto) {
-        this.producto = producto;
-    }
-
     public String getDescripcion() {
         return descripcion;
     }
@@ -138,6 +133,27 @@ public class FacturaDetalle implements Serializable {
     public void setIva(BigDecimal iva) {
         this.iva = iva;
     }
+
+    public Long getReferenciaId() {
+        return referenciaId;
+    }
+
+    public void setReferenciaId(Long referenciaId) {
+        this.referenciaId = referenciaId;
+    }
+
+    public String getTipoReferencia() {
+        return tipoReferencia;
+    }
+
+    public void setTipoReferencia(String tipoReferencia) {
+        this.tipoReferencia = tipoReferencia;
+    }
+
+    public TipoReferenciaEnum getTipoReferenciaEnum()
+    {
+        return TipoReferenciaEnum.getFindByTipoReferencia(this.tipoReferencia);
+    }
     
     /**
      * Metodos adicionales
@@ -147,7 +163,6 @@ public class FacturaDetalle implements Serializable {
     {
         return total.multiply(producto.getIva().getPorcentaje());
     }*/
-    
-    
+        
     
 }

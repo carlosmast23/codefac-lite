@@ -35,6 +35,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEn
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
 import java.awt.Color;
@@ -273,7 +274,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
             notaDetalle.setDescuento(facturaDetalle.getDescuento());
             notaDetalle.setIva(facturaDetalle.getIva());
             notaDetalle.setPrecioUnitario(facturaDetalle.getPrecioUnitario());
-            notaDetalle.setProducto(facturaDetalle.getProducto());
+            notaDetalle.setReferenciaId(facturaDetalle.getReferenciaId());
             notaDetalle.setTotal(facturaDetalle.getTotal());
             notaDetalle.setValorIce(facturaDetalle.getValorIce());
 
@@ -322,13 +323,18 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         crearDetalleTabla();
         List<NotaCreditoDetalle> detalles = notaCredito.getDetalles();
         for (NotaCreditoDetalle detalle : detalles) {
-            Vector<String> fila = new Vector<String>();
-            fila.add(detalle.getProducto().getCodigoPersonalizado());
-            fila.add(detalle.getProducto().getValorUnitario() + "");
-            fila.add(detalle.getCantidad() + "");
-            fila.add(detalle.getDescripcion());
-            fila.add(detalle.getTotal() + "");
-            this.modeloTablaDetalle.addRow(fila);
+            try {
+                Producto producto= ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
+                Vector<String> fila = new Vector<String>();
+                fila.add(producto.getCodigoPersonalizado());
+                fila.add(producto.getValorUnitario() + "");
+                fila.add(detalle.getCantidad() + "");
+                fila.add(detalle.getDescripcion());
+                fila.add(detalle.getTotal() + "");
+                this.modeloTablaDetalle.addRow(fila);
+            } catch (RemoteException ex) {
+                Logger.getLogger(NotaCreditoModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
     }

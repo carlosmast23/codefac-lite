@@ -783,14 +783,19 @@ public class FacturacionModel extends FacturacionPanel{
 
         this.modeloTablaDetallesProductos = new DefaultTableModel(titulo, 0);
         for (FacturaDetalle detalle : detalles) {
-            Vector<String> fila = new Vector<String>();
-            fila.add(detalle.getProducto().getCodigoPersonalizado());
-            fila.add(detalle.getProducto().getValorUnitario().toString());
-            fila.add(detalle.getCantidad().toString());
-            fila.add(detalle.getDescripcion());
-            fila.add(detalle.getDescuento().toString());
-            fila.add(detalle.getTotal().toString());
-            modeloTablaDetallesProductos.addRow(fila);
+            try {
+                Vector<String> fila = new Vector<String>();
+                Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
+                fila.add(producto.getCodigoPersonalizado());
+                fila.add(producto.getValorUnitario().toString());
+                fila.add(detalle.getCantidad().toString());
+                fila.add(detalle.getDescripcion());
+                fila.add(detalle.getDescuento().toString());
+                fila.add(detalle.getTotal().toString());
+                modeloTablaDetallesProductos.addRow(fila);
+            } catch (RemoteException ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         getTblDetalleFactura().setModel(this.modeloTablaDetallesProductos);
     }
@@ -849,12 +854,17 @@ public class FacturacionModel extends FacturacionPanel{
         this.factura.setDescuentoImpuestos(new BigDecimal(0));
 
         for (FacturaDetalle facturaDetalle : facturaDetalles) {
-            //TODO este valor esta quemado toca parametrizar
-            if (facturaDetalle.getProducto().getIva().getTarifa() == 12) { //esta parametro de 12 debe estar parametrizado
-                this.factura.setSubtotalImpuestos(factura.getSubtotalImpuestos().add(facturaDetalle.getPrecioUnitario().multiply(facturaDetalle.getCantidad())));
-                //this.factura.setDescuentoImpuestos(this.factura.getDescuentoImpuestos().add(facturaDetalle.getTotal()));
-                this.factura.setDescuentoImpuestos(this.factura.getDescuentoImpuestos().add(facturaDetalle.getDescuento()));
-                System.out.println(facturaDetalle.getDescuento());
+            try {
+                //TODO este valor esta quemado toca parametrizar
+                Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                if (producto.getIva().getTarifa() == 12) { //esta parametro de 12 debe estar parametrizado
+                    this.factura.setSubtotalImpuestos(factura.getSubtotalImpuestos().add(facturaDetalle.getPrecioUnitario().multiply(facturaDetalle.getCantidad())));
+                    //this.factura.setDescuentoImpuestos(this.factura.getDescuentoImpuestos().add(facturaDetalle.getTotal()));
+                    this.factura.setDescuentoImpuestos(this.factura.getDescuentoImpuestos().add(facturaDetalle.getDescuento()));
+                    System.out.println(facturaDetalle.getDescuento());
+                }
+            } catch (RemoteException ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
@@ -1165,61 +1175,66 @@ public class FacturacionModel extends FacturacionPanel{
         }
 
         if (verificarCamposValidados()) {
-            //FacturaDetalle facturaDetalle = new FacturaDetalle();
-            facturaDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
-            facturaDetalle.setDescripcion(getTxtDescripcion().getText());
-            BigDecimal valorTotalUnitario = new BigDecimal(getTxtValorUnitario().getText());
-            facturaDetalle.setPrecioUnitario(valorTotalUnitario.setScale(2, BigDecimal.ROUND_HALF_UP));
-            facturaDetalle.setProducto(productoSeleccionado);
-            facturaDetalle.setValorIce(BigDecimal.ZERO);
-
-            BigDecimal descuento;
-            if (!getCheckPorcentaje().isSelected()) {
-                if (!getTxtDescuento().getText().equals("")) {
-                    descuento = new BigDecimal(getTxtDescuento().getText());
+            try {
+                //FacturaDetalle facturaDetalle = new FacturaDetalle();
+                facturaDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
+                facturaDetalle.setDescripcion(getTxtDescripcion().getText());
+                BigDecimal valorTotalUnitario = new BigDecimal(getTxtValorUnitario().getText());
+                facturaDetalle.setPrecioUnitario(valorTotalUnitario.setScale(2, BigDecimal.ROUND_HALF_UP));
+                facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
+                facturaDetalle.setValorIce(BigDecimal.ZERO);
+                
+                BigDecimal descuento;
+                if (!getCheckPorcentaje().isSelected()) {
+                    if (!getTxtDescuento().getText().equals("")) {
+                        descuento = new BigDecimal(getTxtDescuento().getText());
+                    } else {
+                        descuento = BigDecimal.ZERO;
+                    }
+                    
+                    facturaDetalle.setDescuento(descuento);
                 } else {
-                    descuento = BigDecimal.ZERO;
+                    if (!getTxtDescuento().getText().equals("")) {
+                        BigDecimal porcentajeDescuento = new BigDecimal(getTxtDescuento().getText());
+                        porcentajeDescuento = porcentajeDescuento.divide(new BigDecimal(100));
+                        BigDecimal total = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario());
+                        descuento = total.multiply(porcentajeDescuento);
+                        facturaDetalle.setDescuento(descuento.setScale(2, BigDecimal.ROUND_HALF_UP));
+                    }
                 }
-
-                facturaDetalle.setDescuento(descuento);
-            } else {
-                if (!getTxtDescuento().getText().equals("")) {
-                    BigDecimal porcentajeDescuento = new BigDecimal(getTxtDescuento().getText());
-                    porcentajeDescuento = porcentajeDescuento.divide(new BigDecimal(100));
-                    BigDecimal total = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario());
-                    descuento = total.multiply(porcentajeDescuento);
-                    facturaDetalle.setDescuento(descuento.setScale(2, BigDecimal.ROUND_HALF_UP));
+                
+                //Calular el total despues del descuento porque necesito esa valor para grabar
+                BigDecimal setTotal = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).subtract(facturaDetalle.getDescuento());
+                facturaDetalle.setTotal(setTotal.setScale(2, BigDecimal.ROUND_HALF_UP));
+                /**
+                 * Revisar este calculo del iva para no calcular 2 veces al mostrar
+                 */
+                Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                if (producto.getIva().getTarifa().equals(0)) {
+                    facturaDetalle.setIva(BigDecimal.ZERO);
+                } else {
+                    BigDecimal iva = facturaDetalle.getTotal().multiply(obtenerValorIva()).setScale(2, BigDecimal.ROUND_HALF_UP);
+                    facturaDetalle.setIva(iva);
                 }
-            }
-
-            //Calular el total despues del descuento porque necesito esa valor para grabar
-            BigDecimal setTotal = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).subtract(facturaDetalle.getDescuento());
-            facturaDetalle.setTotal(setTotal.setScale(2, BigDecimal.ROUND_HALF_UP));
-            /**
-             * Revisar este calculo del iva para no calcular 2 veces al mostrar
-             */
-            if (facturaDetalle.getProducto().getIva().getTarifa().equals(0)) {
-                facturaDetalle.setIva(BigDecimal.ZERO);
-            } else {
-                BigDecimal iva = facturaDetalle.getTotal().multiply(obtenerValorIva()).setScale(2, BigDecimal.ROUND_HALF_UP);
-                facturaDetalle.setIva(iva);
-            }
-
-            if (facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).compareTo(facturaDetalle.getDescuento()) > 0) {
-
-                //Solo agregar si se enviar un dato vacio
-                if (agregar) {
-                    factura.addDetalle(facturaDetalle);
+                
+                if (facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).compareTo(facturaDetalle.getDescuento()) > 0) {
+                    
+                    //Solo agregar si se enviar un dato vacio
+                    if (agregar) {
+                        factura.addDetalle(facturaDetalle);
+                    }
+                    
+                    cargarDatosDetalles();
+                    setearDetalleFactura();
+                    cargarTotales();
+                    banderaAgregar = false;
+                } else {
+                    DialogoCodefac.mensaje("Alerta", "El valor de Descuento excede, el valor de PrecioTotal del Producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    setearDetalleFactura();
+                    banderaAgregar = false;
                 }
-
-                cargarDatosDetalles();
-                setearDetalleFactura();
-                cargarTotales();
-                banderaAgregar = false;
-            } else {
-                DialogoCodefac.mensaje("Alerta", "El valor de Descuento excede, el valor de PrecioTotal del Producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                setearDetalleFactura();
-                banderaAgregar = false;
+            } catch (RemoteException ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }

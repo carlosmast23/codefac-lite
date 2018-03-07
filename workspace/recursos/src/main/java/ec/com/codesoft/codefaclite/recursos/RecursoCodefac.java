@@ -26,6 +26,7 @@ public enum RecursoCodefac {
     SQL("sql"),
     JASPER_CRM("reportes/crm"),
     JASPER_FACTURACION("reportes/facturacion"),
+    JASPER_ACADEMICO("reportes/academico"),
     JASPER_COMPROBANTES_ELECTRONICOS("reportes/comprobantes_electronicos"),
     JASPER_COMPROBANTES_FISICOS("reportes/comprobantes_fisicos"),
     JASPER("reportes"),

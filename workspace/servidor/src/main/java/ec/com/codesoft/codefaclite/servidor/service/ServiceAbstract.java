@@ -69,6 +69,11 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
         }
         return entity;
     }
+   
+    public Entity buscarPorId(Object primaryKey) throws java.rmi.RemoteException
+    {
+        return this.facade.find(primaryKey);
+    }
     
     public void editar(Entity entity)
     {

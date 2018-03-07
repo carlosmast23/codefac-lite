@@ -1,3 +1,5 @@
+Manejar una lista de errores para la facturacion por lotes porque a diferencia de la individual cada comprobante puede generar un caso distinto
+Verificar que paso con los secuenciales cuando falla la facuracion tema especial con la facturacion en lotes
 Existe un caso de revisar cuando se crea una variable o setean valores en el metodo init y despues se ejecuta el metodo limpiar se puede borrar los datos antes de cargar
 Ver si en el modo cliente y servidor en la misma maquina puedo configurar como local host , porque cuando no tiene red no se puede usar el sistema
 En la pantalla de niveles se debe cargar los nuevos niveles para coger el nievel anterior
