@@ -13,16 +13,16 @@ public enum TipoReferenciaEnum {
     INVENTARIO("INV"),
     ACADEMICO("ACA");
 
-    private TipoReferenciaEnum(String letra) {
-        this.letra = letra;
+    private TipoReferenciaEnum(String codigo) {
+        this.codigo = codigo;
     }
 
-    private String letra;
+    private String codigo;
 
-    public static TipoReferenciaEnum getFindByTipoReferencia(String letra)
+    public static TipoReferenciaEnum getFindByTipoReferencia(String codigo)
     {
         for (TipoReferenciaEnum tipoReferenciaEnum : TipoReferenciaEnum.values()) {
-            if(tipoReferenciaEnum.letra.equals(letra))
+            if(tipoReferenciaEnum.codigo.equals(codigo))
             {
                 return tipoReferenciaEnum;
             }
@@ -30,5 +30,13 @@ public enum TipoReferenciaEnum {
         
         return null;
     }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    
+    
+    
     
 }

@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.facturacionelectronica;
 import autorizacion.ws.sri.gob.ec.Autorizacion;
 import com.sun.xml.bind.marshaller.DataWriter;
 import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
+import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronicoLote;
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
@@ -141,6 +142,8 @@ public class ComprobanteElectronicoService implements Runnable {
 
     private Map<String, Object> mapAdicionalReporte;
     private ListenerComprobanteElectronico escucha;
+    private ListenerComprobanteElectronicoLote escuchaLote;
+    
     private MetodosEnvioInterface metodoEnvioInterface;
     private List<String> correosElectronicos;
 
@@ -281,15 +284,15 @@ public class ComprobanteElectronicoService implements Runnable {
     private void procesarComprobanteLote()
     {
         try {
-            if(escucha!=null)escucha.iniciado(comprobante);
+            if(escuchaLote!=null)escuchaLote.iniciado();
             
             if (etapaActual.equals(ETAPA_GENERAR)){
                 generarLote();
-                if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
+                if(escuchaLote!=null)escuchaLote.procesando(etapaActual);
                 System.out.println("generar lote()");
 
                 if (etapaLimiteProcesar<=ETAPA_GENERAR) {
-                    if(escucha!=null)escucha.termino();
+                    if(escuchaLote!=null)escuchaLote.termino();
                     return;
                 }
 
@@ -298,10 +301,10 @@ public class ComprobanteElectronicoService implements Runnable {
 
             if (etapaActual.equals(ETAPA_PRE_VALIDAR)) {
                 preValidacion();
-                if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
+                if(escuchaLote!=null)escuchaLote.procesando(etapaActual);
                 System.out.println("preValidacion lote()");
                 if (etapaLimiteProcesar<=ETAPA_PRE_VALIDAR) {
-                    if(escucha!=null)escucha.termino();
+                    if(escuchaLote!=null)escuchaLote.termino();
                     return;
                 }
                 etapaActual++;
@@ -309,10 +312,10 @@ public class ComprobanteElectronicoService implements Runnable {
 
             if (etapaActual.equals(ETAPA_FIRMAR)) {
                 firmarLote();
-                if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
+                if(escuchaLote!=null)escuchaLote.procesando(etapaActual);
                 System.out.println("firmar lote()");
                 if(etapaLimiteProcesar<=ETAPA_FIRMAR) {
-                    if(escucha!=null)escucha.termino();
+                    if(escuchaLote!=null)escuchaLote.termino();
                     return;
                 }
                 etapaActual++;
@@ -320,10 +323,10 @@ public class ComprobanteElectronicoService implements Runnable {
 
             if (etapaActual.equals(ETAPA_ENVIAR)) {
                 enviarSriLote();
-                if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
+                if(escuchaLote!=null)escuchaLote.procesando(etapaActual);
                 System.out.println("enviarSri lote()");
                 if(etapaLimiteProcesar<=ETAPA_ENVIAR) {
-                    if(escucha!=null)escucha.termino();
+                    if(escuchaLote!=null)escuchaLote.termino();
                     return;
                 }
                 etapaActual++;
@@ -331,10 +334,10 @@ public class ComprobanteElectronicoService implements Runnable {
 
             if (etapaActual.equals(ETAPA_AUTORIZAR)) {
                 autorizarSriLote();
-                if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
+                if(escuchaLote!=null)escuchaLote.procesando(etapaActual);
                 System.out.println("autorizarSri lote()");
                 if(etapaLimiteProcesar<=ETAPA_AUTORIZAR) {
-                    if(escucha!=null)escucha.termino();
+                    if(escuchaLote!=null)escuchaLote.termino();
                     return;
                 }
                 etapaActual++;
@@ -342,11 +345,11 @@ public class ComprobanteElectronicoService implements Runnable {
 
             if (etapaActual.equals(ETAPA_RIDE)) {
                 generarRideLote();
-                if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
+                if(escuchaLote!=null)escuchaLote.procesando(etapaActual);
                 //generarRide();
                 System.out.println("generarRide()");
                 if(etapaLimiteProcesar<=ETAPA_RIDE) {
-                    if(escucha!=null)escucha.termino();
+                    if(escuchaLote!=null)escuchaLote.termino();
                     return;
                 }
                 etapaActual++;
@@ -355,18 +358,18 @@ public class ComprobanteElectronicoService implements Runnable {
             if (etapaActual.equals(ETAPA_ENVIO_COMPROBANTE)) {
                 enviarComprobanteLoteCorreo();
                 
-                if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
+                if(escuchaLote!=null)escuchaLote.procesando(etapaActual);
                 if(etapaLimiteProcesar<=ETAPA_ENVIO_COMPROBANTE) {
-                    if(escucha!=null)escucha.termino();
+                    if(escuchaLote!=null)escuchaLote.termino();
                     return;
                 }
                 //generarRide();
                 System.out.println("enviarCorreo()");
             }
 
-            if(escucha!=null)escucha.termino();
+            if(escuchaLote!=null)escuchaLote.termino();
         } catch (ComprobanteElectronicoException cee) {
-            if(escucha!=null)escucha.error(cee);
+            if(escuchaLote!=null)escuchaLote.error();
         }
     
      }
@@ -709,6 +712,7 @@ public class ComprobanteElectronicoService implements Runnable {
             comprobante.getInformacionTributaria().setClaveAcceso(claveAcceso);
             StringWriter stringWriter = generarXml(comprobante,claveAcceso);
             ComprobantesElectronicosUtil.generarArchivoXml(stringWriter, getPathComprobante(CARPETA_GENERADOS));
+            System.out.println("generando "+claveAcceso);
         } catch (Exception e) {
             e.printStackTrace();
             throw new ComprobanteElectronicoException(e.getMessage(), "Generando XML", ComprobanteElectronicoException.ERROR_COMPROBANTE);
@@ -1219,6 +1223,11 @@ public class ComprobanteElectronicoService implements Runnable {
     public void addActionListerComprobanteElectronico(ListenerComprobanteElectronico e) {
         this.escucha = e;
     }
+    
+    public void addActionListerComprobanteElectronicoLote(ListenerComprobanteElectronicoLote e) {
+        this.escuchaLote = e;
+    }
+    
 
     public Integer getEtapaActual() {
         return etapaActual;
