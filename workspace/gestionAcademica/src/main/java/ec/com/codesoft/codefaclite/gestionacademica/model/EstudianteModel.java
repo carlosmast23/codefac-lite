@@ -185,11 +185,11 @@ public class EstudianteModel extends EstudiantePanel {
         getCmbGenero().setSelectedItem(estudiante.getGenero());
         getCmbEstado().setSelectedItem(estudiante.getEstado());
         getDateFechaNacimiento().setDate(estudiante.getFechaNacimiento());
-
-        String identificacion = estudiante.getRepresentante().getIdentificacion();
-        String nombre = estudiante.getRepresentante().getRazonSocial();
-        getTxtRepresentante().setText(identificacion + " - " + nombre);
-
+        if (estudiante.getRepresentante() != null) {
+            String identificacion = estudiante.getRepresentante().getIdentificacion();
+            String nombre = estudiante.getRepresentante().getRazonSocial();
+            getTxtRepresentante().setText(identificacion + " - " + nombre);
+        }
     }
 
     @Override

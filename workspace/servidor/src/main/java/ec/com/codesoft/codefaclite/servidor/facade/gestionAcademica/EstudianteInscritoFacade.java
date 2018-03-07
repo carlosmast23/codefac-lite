@@ -18,10 +18,31 @@ import javax.persistence.Query;
  *
  * @author Carlos
  */
-public class EstudianteInscritoFacade extends AbstractFacade<EstudianteInscrito>{
+public class EstudianteInscritoFacade extends AbstractFacade<EstudianteInscrito> {
 
     public EstudianteInscritoFacade() {
         super(EstudianteInscrito.class);
     }
-    
+
+    public List<EstudianteInscrito> lista(NivelAcademico nivel) {
+        String academico = "";
+        if (nivel != null) {
+            academico = "u.nivelAcademico=?1";
+        } else {
+            academico = "1=1";
+        }
+
+        try {
+            String queryString = "SELECT u FROM EstudianteInscrito u WHERE " + academico;
+            Query query = getEntityManager().createQuery(queryString);
+            //System.err.println("QUERY--->"+query.toString());
+            if (nivel != null) {
+                query.setParameter(1, nivel);
+            }
+            return query.getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
 }
