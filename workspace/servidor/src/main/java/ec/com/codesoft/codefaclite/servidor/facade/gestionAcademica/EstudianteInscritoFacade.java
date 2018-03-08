@@ -24,7 +24,7 @@ public class EstudianteInscritoFacade extends AbstractFacade<EstudianteInscrito>
         super(EstudianteInscrito.class);
     }
 
-    public List<EstudianteInscrito> lista(NivelAcademico nivel) {
+    public List<EstudianteInscrito> obtenerEstudiantesInscritos(NivelAcademico nivel) {
         String academico = "";
         if (nivel != null) {
             academico = "u.nivelAcademico=?1";

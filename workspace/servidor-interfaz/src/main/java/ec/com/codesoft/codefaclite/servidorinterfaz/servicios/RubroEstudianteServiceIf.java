@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import java.rmi.RemoteException;
@@ -15,6 +16,10 @@ import java.util.List;
  *
  * @author Carlos
  */
-public interface RubroEstudianteServiceIf extends ServiceAbstractIf<RubroEstudiante>{
-    public void crearRubrosEstudiantes(List<EstudianteInscrito> estudiantes,RubrosNivel rubroNivel) throws RemoteException;
+public interface RubroEstudianteServiceIf extends ServiceAbstractIf<RubroEstudiante> {
+
+    public void crearRubrosEstudiantes(List<EstudianteInscrito> estudiantes, RubrosNivel rubroNivel) throws RemoteException;
+
+    public List<RubroEstudiante> obtenerDeudasEstudiante(NivelAcademico nivel) throws java.rmi.RemoteException;
+
 }
