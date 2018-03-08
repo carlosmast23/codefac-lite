@@ -6,6 +6,13 @@
 package ec.com.codesoft.codefaclite.servidor.facade;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import java.sql.Date;
+import java.util.List;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
 
 /**
  *
@@ -15,6 +22,68 @@ public class CompraFacade extends AbstractFacade<Compra>{
     
     public CompraFacade() {
         super(Compra.class);
+    }
+    public List<Compra> obtenerCompraReporte(Persona proveedor, Date fechaInicial, Date fechaFin, DocumentoEnum documentoEnum, TipoDocumentoEnum tipoDocumentoEnum)
+    {
+        
+        String cliente = "";
+        String fecha = "";
+        String documento = "";
+        String tipoDocumento = "";
+        
+        if (proveedor != null) {
+            cliente = "u.proveedor=?1";
+        } else {
+            cliente = "1=1";
+        }
+        if (fechaInicial == null && fechaFin != null) {
+            fecha = " AND u.fechaFactura <= ?3";
+        } else if (fechaInicial != null && fechaFin == null) {
+            fecha = " AND u.fechaFactura <= ?2";
+        } else if (fechaInicial == null && fechaFin == null) {
+            fecha = "";
+        } else {
+            fecha = " AND (u.fechaFactura BETWEEN ?2 AND ?3)";
+        }
+        
+        if (documentoEnum != null) {
+            documento = " AND u.codigoDocumento=?4";
+        }
+        
+        if(tipoDocumentoEnum != null)
+        {
+            tipoDocumento = " AND u.codigoTipoDocumento=?5";
+        }
+        
+        try {
+            String queryString = "SELECT u FROM Compra u WHERE " + cliente + fecha + documento + tipoDocumento;
+            Query query = getEntityManager().createQuery(queryString);
+            if (proveedor != null) 
+            {
+                query.setParameter(1, proveedor);
+            }
+            if (fechaInicial != null) 
+            {
+                query.setParameter(2, fechaInicial);
+            }
+            if (fechaFin != null) 
+            {
+                query.setParameter(3, fechaFin);
+            }
+            if (documentoEnum != null) 
+            {
+                System.out.println("---->>>>>>" + documentoEnum.getCodigo());
+                query.setParameter(4, documentoEnum.getCodigo());
+                
+            }
+            if(tipoDocumentoEnum != null)
+            {
+                query.setParameter(5, tipoDocumentoEnum.getCodigo());
+            }
+            return query.getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }    
     }
     
 }

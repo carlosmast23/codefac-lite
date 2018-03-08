@@ -557,7 +557,7 @@ public class CompraModel extends CompraPanel{
         getLblSubtotalImpuestos().setText(compra.getSubtotalImpuestos()+"");
         getLblSubtotalSinImpuestos().setText(compra.getSubtotalSinImpuestos()+"");
         getLblIva().setText(compra.getIva()+"");
-        getLblTotal().setText(compra.getTotal()+""); 
+        getLblTotal().setText(compra.getTotal()+"");
     }
 
     private void crearVariables() {
