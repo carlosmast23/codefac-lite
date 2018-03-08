@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronico
 import ec.com.codesoft.codefaclite.facturacionelectronica.FirmaElectronica;
 import ec.com.codesoft.codefaclite.facturacionelectronica.MetodosEnvioInterface;
 import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
+import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronicoLote;
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
@@ -18,6 +19,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.Comprobantes
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobanteLote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataFactura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.CorreoCodefac;
@@ -75,6 +77,28 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
     public ComprobantesService() throws RemoteException {
         super();
         clientesLista=new Vector<ClienteInterfaceComprobante>();
+    }
+    
+    /**
+     * Obtiene el siguiente secuencial y setea ese valor
+     * @return 
+     */
+    public Integer obtenerSecuencialFacturaYAvanzar() throws RemoteException
+    {
+        try {
+            ParametroCodefacService servicio=new ParametroCodefacService();
+            ParametroCodefac parametroCodefac=servicio.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA);
+            String secuencialStr=parametroCodefac.getValor();
+            Integer secuencialInt=Integer.parseInt(secuencialStr)+1;
+            parametroCodefac.setValor(secuencialInt.toString());
+            
+            servicio.editar(parametroCodefac);
+            return secuencialInt;
+                    
+                    } catch (RemoteException ex) {
+            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     public boolean verificarCredencialesFirma(String claveFirma) throws RemoteException
@@ -267,7 +291,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
      * Metodo que permite procesar varios comprobante en Lote
      * @param comprobanteData 
      */
-    public void procesarComprobanteLote(List<ComprobanteDataInterface> comprobantesData,Usuario usuario) throws RemoteException
+    public void procesarComprobanteLote(List<ComprobanteDataInterface> comprobantesData,Usuario usuario,ClienteInterfaceComprobanteLote callbackClientObject) throws RemoteException
     {
         ComprobanteElectronicoService comprobanteElectronico= cargarConfiguracionesInicialesComprobantesLote(comprobantesData, usuario);
         
@@ -282,6 +306,45 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         
         comprobanteElectronico.setSecuencialLote(secuencialLote);
         
+        comprobanteElectronico.addActionListerComprobanteElectronicoLote(new ListenerComprobanteElectronicoLote() {
+            @Override
+            public void iniciado() {
+                 try {
+                    callbackClientObject.iniciado();
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            @Override
+            public void procesando(int etapa) {
+                try {
+                    callbackClientObject.procesando(etapa);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            @Override
+            public void error() {
+                try {
+                    callbackClientObject.error();
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            @Override
+            public void termino() {
+                try {
+                    callbackClientObject.termino();
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        
+    
         comprobanteElectronico.procesar(true);
     }
     

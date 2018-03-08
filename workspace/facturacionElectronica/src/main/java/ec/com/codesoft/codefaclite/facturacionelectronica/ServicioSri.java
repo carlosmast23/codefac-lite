@@ -253,7 +253,7 @@ public class ServicioSri {
     public Autorizacion buscarAutorizacion(String claveAcceso)
     {
         for (Autorizacion autorizacion : autorizacion) {
-            if(autorizacion.getNumeroAutorizacion().equals(claveAcceso))
+            if(autorizacion.getNumeroAutorizacion()!=null && autorizacion.getNumeroAutorizacion().equals(claveAcceso))
             {
                 return autorizacion;
             }

@@ -20,8 +20,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoReferenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
@@ -70,9 +73,15 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
     
         @Override
     public String getSecuencial() {
-       //String secuencial= this.session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_FACTURA).getValor();
-       String secuencial= factura.getSecuencial().toString();
-       return UtilidadesTextos.llenarCarateresIzquierda(secuencial,9,"0");
+        try {
+            //String secuencial= this.session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_FACTURA).getValor();
+            Integer secuencial=ServiceFactory.getFactory().getComprobanteServiceIf().obtenerSecuencialFacturaYAvanzar();
+            //String secuencial= factura.getSecuencial().toString();
+            return UtilidadesTextos.llenarCarateresIzquierda(secuencial.toString(),9,"0");
+        } catch (RemoteException ex) {
+            Logger.getLogger(ComprobanteDataFactura.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
     }
 
     @Override
@@ -135,7 +144,15 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
             try {
                 DetalleFacturaComprobante detalle=new DetalleFacturaComprobante();
                 
-                Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                Producto producto=null;
+                if(facturaDetalle.getTipoReferencia()!=null && facturaDetalle.getTipoReferenciaEnum().equals(TipoReferenciaEnum.ACADEMICO))
+                {
+                    RubroEstudiante rubroEstudiante=ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                    producto=rubroEstudiante.getRubroNivel().getProducto();
+                }
+                else
+                    producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                
                 detalle.setCodigoPrincipal(producto.getCodigoPersonalizado());
                 detalle.setCantidad(facturaDetalle.getCantidad());
                 detalle.setDescripcion(facturaDetalle.getDescripcion());

@@ -61,6 +61,7 @@ public abstract class FacturaAcademicoLotePanel extends ControladorCodefacInterf
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
+        setTitle("Factura Por Lote");
         setToolTipText("Factura Académica por Lote");
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N

@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobanteLote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataFactura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
@@ -22,6 +23,8 @@ import net.sf.jasperreports.engine.JasperPrint;
  * @author Carlos
  */
 public interface ComprobanteServiceIf extends Remote {
+    
+    public Integer obtenerSecuencialFacturaYAvanzar() throws RemoteException;
     
     public boolean verificarCredencialesFirma(String claveFirma) throws RemoteException;
 
@@ -39,5 +42,5 @@ public interface ComprobanteServiceIf extends Remote {
 
     public void unregisterForCallback(ClienteInterfaceComprobante callbackClientObject) throws java.rmi.RemoteException;
     
-    public void procesarComprobanteLote(List<ComprobanteDataInterface> comprobantesData,Usuario usuario) throws RemoteException;
+    public void procesarComprobanteLote(List<ComprobanteDataInterface> comprobantesData,Usuario usuario,ClienteInterfaceComprobanteLote callbackClientObject) throws RemoteException;
 }

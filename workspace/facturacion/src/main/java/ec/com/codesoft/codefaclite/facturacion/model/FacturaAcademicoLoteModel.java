@@ -5,11 +5,20 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.model;
 
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.facturacion.callback.ClienteFacturaImplComprobante;
+import ec.com.codesoft.codefaclite.facturacion.callback.ClienteFacturaLoteImplComprobante;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturaAcademicoLotePanel;
+import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronicoLote;
+import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobanteLote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataFactura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
@@ -17,10 +26,16 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoReferenciaEnum;
+import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +51,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
+import org.eclipse.persistence.sessions.factories.SessionFactory;
 
 /**
  *
@@ -69,7 +85,7 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel{
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
@@ -357,32 +373,174 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel{
         getBtnFacturar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                facturarLote();
+                try {
+                    List<ComprobanteDataInterface> comprobantes=facturarLote();
+                    
+                    ClienteInterfaceComprobanteLote cic=new ClienteFacturaLoteImplComprobante();                     
+                    
+                    ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobanteLote(comprobantes,session.getUsuario(),cic);
+                    
+                    
+                    DialogoCodefac.mensaje("Correcto","Las facturas se estan autorizando", DialogoCodefac.MENSAJE_CORRECTO);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FacturaAcademicoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
        
     }
     
-    private void facturarLote()
+    /**
+     * Obtiene todos los detalles de las facturas para facturar
+     * @return 
+     */
+    private List<ComprobanteDataInterface> facturarLote()
     {
         //mapDatosFacturar;
+        List<ComprobanteDataInterface> comprobantesLista=new ArrayList<ComprobanteDataInterface>();
+        
         for (Map.Entry<NivelAcademico, Map<EstudianteInscrito, List<RubroEstudiante>>> entry : mapDatosFacturar.entrySet()) {
             NivelAcademico nivelAcademico = entry.getKey();
             Map<EstudianteInscrito, List<RubroEstudiante>> rubrosEstudianteMap = entry.getValue();
         
-            
+            for (Map.Entry<EstudianteInscrito, List<RubroEstudiante>> entry1 : rubrosEstudianteMap.entrySet()) {
+                EstudianteInscrito estudianteInscrito = entry1.getKey();
+                List<RubroEstudiante> rubrosEstudiantes = entry1.getValue();
+                
+                ///Generar los datos de la factura
+                Factura factura = generarFactura(estudianteInscrito, rubrosEstudiantes);
+                ComprobanteDataFactura comprobanteData = new ComprobanteDataFactura(factura);
+                comprobantesLista.add(comprobanteData);
+                
+            }
             
         }
+        return comprobantesLista;
     }
     
-    private void generarFactura(EstudianteInscrito estudianteInscrito,List<RubroEstudiante> listaRubros)
+    private Factura generarFactura(EstudianteInscrito estudianteInscrito,List<RubroEstudiante> listaRubros)
     {
         Factura factura=new Factura();
         //factura.setClaveAcceso(title);
         factura.setCliente(estudianteInscrito.getEstudiante().getRepresentante());
-        factura.setCodigoDocumento(IS_ICON_PROPERTY);
-        //ComprobanteDataFactura comprobanteData=new ComprobanteDataFactura();
+        factura.setCodigoDocumento(DocumentoEnum.FACTURA.getCodigo());
+        factura.setDescuentoImpuestos(BigDecimal.ZERO);
+        factura.setDescuentoSinImpuestos(BigDecimal.ONE);
+        factura.setDireccion(estudianteInscrito.getEstudiante().getRepresentante().getDireccion());
+        factura.setEmpresaId(1l);
+        factura.setEstado(FacturaEnumEstado.SIN_AUTORIZAR.getEstado());
+        factura.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+        factura.setFechaFactura(UtilidadesFecha.getFechaHoy());
+        factura.setIdentificacion(estudianteInscrito.getEstudiante().getRepresentante().getIdentificacion());
+        
+        factura.setPuntoEmision(session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor);
+        factura.setPuntoEstablecimiento(session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor);
+        
+        //Cuando la facturacion es electronica
+        if (session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(TipoFacturacionEnumEstado.ELECTRONICA.getLetra())) {
+            factura.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_FACTURA).valor));
+        } else //cuando la facturacion es normal
+        {
+            factura.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_FACTURA_FISICA).valor));
+        }
+        
+        factura.setRazonSocial(session.getEmpresa().getRazonSocial());
+        factura.setTelefono(estudianteInscrito.getEstudiante().getRepresentante().getTelefonoConvencional());
+        agregarDetallesFactura(factura,listaRubros);
+        
+        calcularTotalesFactura(factura);
+        return factura;
     }
+    
+    private void agregarDetallesFactura(Factura factura,List<RubroEstudiante> listaRubros)
+    {
+        for (RubroEstudiante rubro : listaRubros) {
+            FacturaDetalle facturaDetalle=new FacturaDetalle();
+            facturaDetalle.setCantidad(BigDecimal.ONE);
+            facturaDetalle.setDescripcion(rubro.getRubroNivel().getNombre());
+            facturaDetalle.setDescuento(BigDecimal.ZERO);
+           
+            facturaDetalle.setPrecioUnitario(rubro.getRubroNivel().getValor());
+
+            facturaDetalle.setReferenciaId(rubro.getId());
+            facturaDetalle.setTipoReferencia(TipoReferenciaEnum.ACADEMICO.getCodigo());
+            facturaDetalle.setTotal(facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()));
+            facturaDetalle.setValorIce(BigDecimal.ZERO);
+            
+            if (rubro.getRubroNivel().getProducto().getIva().getTarifa().equals(0)) {
+                facturaDetalle.setIva(BigDecimal.ZERO);
+            } else {
+
+                BigDecimal iva = facturaDetalle.getTotal().multiply(obtenerIvaDefault()).setScale(2, BigDecimal.ROUND_HALF_UP);
+                facturaDetalle.setIva(iva);
+            }
+            
+            //Agregar el detalle a la factura
+            factura.addDetalle(facturaDetalle);
+            
+        }
+    }
+    
+    /*
+    Calcula los totales y subtotales de la facturas
+    */
+    private void calcularTotalesFactura(Factura factura)
+    {
+        BigDecimal subtotalSinImpuestos=BigDecimal.ZERO;
+        BigDecimal subtotalConImpuestos=BigDecimal.ZERO;
+        BigDecimal ivaTotal=BigDecimal.ZERO;
+
+        
+        for (FacturaDetalle facturaDetalle : factura.getDetalles()) {
+            try {
+                //TODO: Verificar si se puede optimizar para no hacer una segunda llamada a la base de datos para consultar la referencia del detalle de la factura
+                RubroEstudiante rubroEstudiante=ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                if(rubroEstudiante.getRubroNivel().getProducto().getIva().getTarifa().equals(0))
+                {
+                    subtotalSinImpuestos=subtotalSinImpuestos.add(facturaDetalle.getTotal());
+                }
+                else
+                {
+                    subtotalConImpuestos=subtotalConImpuestos.add(facturaDetalle.getTotal());
+                    ivaTotal=ivaTotal.add(facturaDetalle.getIva());
+                }
+            } catch (RemoteException ex) {
+                Logger.getLogger(FacturaAcademicoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        //Setear los subtotales
+        factura.setSubtotalImpuestos(subtotalConImpuestos);
+        factura.setSubtotalSinImpuestos(subtotalSinImpuestos);
+        factura.setIva(ivaTotal);
+
+        //Por defecto los descuentos van en 0 en esta pantalla
+        factura.setDescuentoImpuestos(BigDecimal.ZERO);
+        factura.setDescuentoSinImpuestos(BigDecimal.ZERO);
+        
+        //Calcular el total
+        factura.setTotal(
+                factura.getSubtotalImpuestos().subtract(factura.getDescuentoImpuestos()).
+                add(factura.getSubtotalSinImpuestos().subtract(factura.getDescuentoSinImpuestos())).
+                add(factura.getIva()));
+        
+        System.out.println(factura.getSubtotalImpuestos());
+        System.out.println(factura.getDescuentoImpuestos());
+        System.out.println(factura.getSubtotalSinImpuestos());
+        System.out.println(factura.getDescuentoSinImpuestos());
+        System.out.println(factura.getIva());
+        
+        
+        System.out.println(factura.getTotal());
+
+    }
+    
+    private BigDecimal obtenerIvaDefault()
+    {
+        String ivaStr=session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).getValor();
+        return new BigDecimal(ivaStr).divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP);
+    }
+    
     
     private void cargarRubrosLista()
     {
