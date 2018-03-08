@@ -68,7 +68,11 @@ public abstract class CompraReportePanel extends ControladorCodefacInterface {
         lblIva12 = new javax.swing.JLabel();
         lblTotal = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
+        setTitle("COMPRA REPORTE");
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         dateFechaInicio.setDateFormatString("yyyy-MM-dd");

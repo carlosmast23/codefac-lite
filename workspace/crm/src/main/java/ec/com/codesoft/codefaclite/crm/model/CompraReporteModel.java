@@ -8,19 +8,27 @@ package ec.com.codesoft.codefaclite.crm.model;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.crm.busqueda.ProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.crm.panel.CompraReportePanel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.rmi.RemoteException;
 import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -49,16 +57,30 @@ public class CompraReporteModel extends CompraReportePanel
     private BigDecimal iva;
     private BigDecimal total;
     
+    //Servicio que me permite realizar la busqueda según los filtros de la ventana
+    private CompraServiceIf compraServiceIf;
+    
+    //Lista que permite almacenar los datos de la busqueda
+    private List<Compra> compras;
+    
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         iniciarValoresVentana();
         agregarListener();
         crearVariables();
+        this.compraServiceIf = ServiceFactory.getFactory().getCompraServiceIf();
     }
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Si desea continuar se perderan los cambios realizados?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+        if (!respuesta) {
+            throw new ExcepcionCodefacLite("Cancelacion usuario");
+        }else
+        {
+            iniciarValoresVentana();
+            crearVariables();
+        }
     }
 
     @Override
@@ -93,12 +115,15 @@ public class CompraReporteModel extends CompraReportePanel
 
     @Override
     public void limpiar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        getDateFechaInicio().setDate(new java.util.Date());
+        getDateFechaFinal().setDate(new java.util.Date());
+        
+        
     }
 
     @Override
     public String getNombre() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "Compra Reporte";
     }
 
     @Override
@@ -108,14 +133,20 @@ public class CompraReporteModel extends CompraReportePanel
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
+        permisos.put(GeneralPanelInterface.BOTON_GRABAR, false);
+        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, false);
+        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, false);
+        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
+        return permisos;
     }
 
     @Override
     public List<String> getPerfilesPermisos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
     
     //Permiten inicializar las variables
     private void crearVariables()
@@ -202,12 +233,16 @@ public class CompraReporteModel extends CompraReportePanel
         getBtcConsultar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setearValores();
+                try {
+                    setearValores();
+                } catch (RemoteException ex) {
+                    Logger.getLogger(CompraReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
     
-    public void setearValores()
+    public void setearValores() throws RemoteException
     {
         //Obtener valores de combos
         this.documentoEnum = (DocumentoEnum) getCmbDocumento().getSelectedItem();
@@ -218,13 +253,15 @@ public class CompraReporteModel extends CompraReportePanel
         
         if(banderaBusqueda)
         {
-            
+            this.compras = compraServiceIf.obtenerTodos();
+            mostrarDatosEncontrados(this.compras);
         }
         else
         {
             if(proveedor != null)
             {
-                
+                this.compras = compraServiceIf.obtenerCompraReporte(proveedor, fechaInicio, fechaFinal, documentoEnum, tipoDocumentoEnum);
+                mostrarDatosEncontrados(this.compras);
             }
             else
             {
@@ -233,6 +270,14 @@ public class CompraReporteModel extends CompraReportePanel
         }
             
         
+    }
+    
+    public void mostrarDatosEncontrados(List<Compra> compras)
+    {
+        for(Compra compra : compras)
+        {
+            System.out.println("-->" + compra.toString());
+        }
     }
     
 }

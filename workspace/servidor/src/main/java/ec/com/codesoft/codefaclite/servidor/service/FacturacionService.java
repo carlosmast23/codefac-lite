@@ -44,7 +44,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     FacturaFacade facturaFacade;
     FacturaDetalleFacade facturaDetalleFacade;
     ParametroCodefacService parametroService;
-
+    
     public FacturacionService() throws RemoteException {
         super(FacturaFacade.class);
         this.facturaFacade = new FacturaFacade();
