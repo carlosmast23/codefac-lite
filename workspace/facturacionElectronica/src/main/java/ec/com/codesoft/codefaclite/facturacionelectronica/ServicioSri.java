@@ -58,7 +58,7 @@ public class ServicioSri {
     private AutorizacionComprobantesOfflineService servicioAutorizacion;
     
     private List<Mensaje> mensajes;
-    private List<Autorizacion> autorizacion ;
+    private List<Autorizacion> autorizaciones ;
     /**
      * El modo con el que va a trabajar el web service
      */
@@ -173,20 +173,20 @@ public class ServicioSri {
                try {
                    AutorizacionComprobantesOffline port= servicioAutorizacion.getAutorizacionComprobantesOfflinePort();
                    RespuestaComprobante respuesta=port.autorizacionComprobante(claveAcceso);
-                   autorizacion=respuesta.getAutorizaciones().getAutorizacion();
-                   if(autorizacion.size()==0)
+                   autorizaciones=respuesta.getAutorizaciones().getAutorizacion();
+                   if(autorizaciones.size()==0)
                    {
                         Thread.sleep(TIEMPO_ESPERA_AUTORIZACION);                        
                    }
                    else
                    {
-                       if(autorizacion.get(0).getEstado().equals(AUTORIZADO))
+                       if(autorizaciones.get(0).getEstado().equals(AUTORIZADO))
                        {
                             return true;
                        }
                        else
                        {
-                           Autorizacion.Mensajes mensajes=autorizacion.get(0).getMensajes();
+                           Autorizacion.Mensajes mensajes=autorizaciones.get(0).getMensajes();
                            String mensajeError="";
                            for (autorizacion.ws.sri.gob.ec.Mensaje mensaje : mensajes.getMensaje()) {
                                System.out.println(mensaje.getIdentificador());
@@ -218,15 +218,15 @@ public class ServicioSri {
                try {
                    AutorizacionComprobantesOffline port= servicioAutorizacion.getAutorizacionComprobantesOfflinePort();
                    RespuestaLote respuesta=port.autorizacionComprobanteLote(claveAcceso);
-                   autorizacion=respuesta.getAutorizaciones().getAutorizacion();
-                   if(autorizacion.size()==0)
+                   autorizaciones=respuesta.getAutorizaciones().getAutorizacion();
+                   if(autorizaciones.size()==0)
                    {
                         Thread.sleep(TIEMPO_ESPERA_AUTORIZACION);                        
                    }
                    else
                    {
                        Boolean autorizadoAlguno=false;
-                       for (Autorizacion autorizacion : autorizacion) {
+                       for (Autorizacion autorizacion : autorizaciones) {
                            if (autorizacion.getEstado().equals("AUTORIZADO")) {
 
                                autorizadoAlguno=true;
@@ -252,7 +252,7 @@ public class ServicioSri {
      */
     public Autorizacion buscarAutorizacion(String claveAcceso)
     {
-        for (Autorizacion autorizacion : autorizacion) {
+        for (Autorizacion autorizacion : autorizaciones) {
             if(autorizacion.getNumeroAutorizacion()!=null && autorizacion.getNumeroAutorizacion().equals(claveAcceso))
             {
                 return autorizacion;
@@ -269,7 +269,7 @@ public class ServicioSri {
     public String obtenerRespuestaAutorizacion() throws ComprobanteElectronicoException
     {
         try {
-            Autorizacion item=autorizacion.get(0);
+            Autorizacion item=autorizaciones.get(0);
             //System.out.println(item.getFechaAutorizacion());
             item.setComprobante("<![CDATA[" + item.getComprobante() + "]]>");            
             XStream xstream = XStreamUtil.getRespuestaXStream();
@@ -368,8 +368,9 @@ public class ServicioSri {
     }
 
     public List<Autorizacion> getAutorizacion() {
-        return autorizacion;
+        return autorizaciones;
     }
+    
     
     
     

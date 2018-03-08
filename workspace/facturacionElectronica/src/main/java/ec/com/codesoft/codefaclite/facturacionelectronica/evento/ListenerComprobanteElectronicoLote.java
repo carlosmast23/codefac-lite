@@ -5,9 +5,11 @@
  */
 package ec.com.codesoft.codefaclite.facturacionelectronica.evento;
 
+import autorizacion.ws.sri.gob.ec.Autorizacion;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import java.util.List;
 
 /**
  *
@@ -17,5 +19,5 @@ public interface ListenerComprobanteElectronicoLote {
     public abstract void iniciado();       
     public abstract void procesando(int etapa);
     public abstract void error();
-    public abstract void termino();
+    public abstract void termino(List<Autorizacion> autorizaciones);
 }

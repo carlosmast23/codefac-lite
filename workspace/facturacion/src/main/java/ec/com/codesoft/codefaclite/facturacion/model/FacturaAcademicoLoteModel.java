@@ -69,6 +69,8 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel{
      */
     private Map<EstudianteInscrito,List<RubroEstudiante>> mapEstudianteRubros;
     
+    private FacturaAcademicoLoteModel instancia=this;
+    
    
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
@@ -376,7 +378,7 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel{
                 try {
                     List<ComprobanteDataInterface> comprobantes=facturarLote();
                     
-                    ClienteInterfaceComprobanteLote cic=new ClienteFacturaLoteImplComprobante();                     
+                    ClienteInterfaceComprobanteLote cic=new ClienteFacturaLoteImplComprobante(instancia);                     
                     
                     ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobanteLote(comprobantes,session.getUsuario(),cic);
                     

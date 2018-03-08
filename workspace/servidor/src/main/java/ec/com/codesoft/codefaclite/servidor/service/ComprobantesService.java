@@ -5,6 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
+import autorizacion.ws.sri.gob.ec.Autorizacion;
+import autorizacion.ws.sri.gob.ec.Mensaje;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.FirmaElectronica;
@@ -20,8 +22,10 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobanteLote;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteData;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataFactura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteMensaje;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.CorreoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
@@ -335,9 +339,9 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             }
 
             @Override
-            public void termino() {
-                try {
-                    callbackClientObject.termino();
+            public void termino(List<Autorizacion> autorizaciones) {
+                try {                    
+                    callbackClientObject.termino(castDatosComprobanteElectronico(autorizaciones));
                 } catch (RemoteException ex) {
                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -346,6 +350,39 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         
     
         comprobanteElectronico.procesar(true);
+    }
+    
+    private List<ComprobanteData> castDatosComprobanteElectronico(List<Autorizacion> autorizaciones)
+    {
+        List<ComprobanteData> comprobantes=new ArrayList<ComprobanteData>();
+        
+        for (Autorizacion autorizacion : autorizaciones) {
+            ComprobanteData comprobanteData=new ComprobanteData();
+            comprobanteData.setAmbiente(autorizacion.getAmbiente());
+            comprobanteData.setComprobante(autorizacion.getComprobante());
+            comprobanteData.setEstado(autorizacion.getEstado());
+            comprobanteData.setFechaAutorizacion(autorizacion.getFechaAutorizacion()+"");
+            comprobanteData.setNumeroAutorizacion(autorizacion.getNumeroAutorizacion());
+            
+            //Compiar los mensajes
+            Autorizacion.Mensajes mensajes=autorizacion.getMensajes();
+            List<ComprobanteMensaje> mensajesData=new ArrayList<ComprobanteMensaje>();
+                    
+            for (Mensaje mensajeAutorizacion : mensajes.getMensaje()) 
+            {
+                ComprobanteMensaje comprobanteMensaje=new ComprobanteMensaje();
+                comprobanteMensaje.setIdentificador(mensajeAutorizacion.getIdentificador());
+                comprobanteMensaje.setInformacionAdicional(mensajeAutorizacion.getInformacionAdicional());
+                comprobanteMensaje.setMensaje(mensajeAutorizacion.getMensaje());
+                comprobanteMensaje.setTipo(mensajeAutorizacion.getTipo());
+                
+                mensajesData.add(comprobanteMensaje);
+            }
+            comprobanteData.setMensajes(mensajesData);
+            comprobantes.add(comprobanteData);
+        }
+        
+        return comprobantes;
     }
     
     /**
