@@ -1,0 +1,44 @@
+INSERT INTO PRODUCTO(NOMBRE,VALOR_UNITARIO,IVA_ID,ESTADO) 
+VALUES ('Matricula',85,1,'A'),
+('Pension',100,1,'A'),
+('Certificado',50,1,'A'),
+('Excursion',50,1,'A')
+;
+
+
+INSERT INTO NIVEL(NOMBRE,DESCRIPCION,ORDEN,ESTADO) 
+VALUES ('Primer grado','primer grado',4,'A'),
+('Primer grado','primer grado',4,'A'),
+('Basica','basica',3,'A'),
+('Inicia1 2','Inicial 2',2,'A'),
+('Inicia1 1','Inicial 1',1,'A')
+;
+
+INSERT INTO PERIODO (NOMBRE, FECHA_INICIO, FECHA_FIN, ESTADO) 
+VALUES 
+('2017 enero - 2018 junio', '2017-01-01', '2017-06-30', 'A'),
+('2017 julio - 2018 diciembre', '2017-07-01', '2017-12-24', 'A'),
+('2018 enero - 2018 junio', '2018-01-01', '2018-06-30', 'A'),
+('2018 julio - 2018 diciembre', '2018-07-01', '2018-12-24', 'A')
+;
+
+INSERT INTO AULA (NOMBRE, UBICACION, ESTADO) 
+VALUES ('Aula 1', 'Primer piso', 'A'),
+('Aula 2', 'Primer piso', 'A'),
+('Aula 3', 'Segundo piso', 'A')
+;
+
+INSERT INTO CLIENTE (NOMBRES, APELLIDOS, TIPO_OPERADOR, RAZON_SOCIAL, NOMBRE_LEGAL, TIPO_IDENTIFICACION, IDENTIFICACION, TIPO_CLIENTE, DIRECCION, TELEFONO_CONVENCIONAL, EXTENSION_TELEFONO, TELEFONO_CELULAR, CORREO_ELECTRONICO, ACTIVIDAD_COMERCIAL, ESTADO) 
+VALUES 
+('Carlos', 'Perez', 'C', 'Carlos Perez', NULL, '04', '1719468108001', 'CLIENTE', 'Sangolqui', '022087044', '0', '0983528439', 'jcp_computer@hotmail.com', NULL, 'A'),
+('Juan', 'Loya', 'C', 'JUAN Loya', NULL, '04', '1724218951001', 'CLIENTE', 'Conocoto', '022087065', '0', '0983528439', 'juancarlos100pl@hotmail.com', NULL, 'A')
+;
+
+INSERT INTO ESTUDIANTE(PERSONA_ID,CODSISTEMA,CODAUXILIAR,CEDULA,EMAIL,NOMBRES,APELLIDOS,GENERO,FECHA_NACIMIENTO,TELEFONO,CELULAR,ESTADO) 
+VALUES (2,'C001','X001','1717171717','jperez@gmail.com','JUAN','PEREZ','M','1991-05-02','022087044','0983528439','A'),
+(2,'C002','X002','1616161616','dperez@gmail.com','DIEGO','PEREZ','F','1991-06-22','022087044','0983528439','A'),
+(2,'C003','X003','1414141414','lperez@gmail.com','LUIS','PEREZ','M','1991-11-12','022087044','0983528439','A'),
+(3,'C004','X004','1313131313','asuarez@gmail.com','ALFONSO','SUAREZ','M','1991-11-02','022087044','0983528439','A'),
+(3,'C005','X005','1212121212','csuarez@gmail.com','CARMEN','SUAREZ','F','1991-08-02','022087044','0983528439','A')
+;
+

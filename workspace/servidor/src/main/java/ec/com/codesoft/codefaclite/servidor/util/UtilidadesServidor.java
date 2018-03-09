@@ -72,6 +72,7 @@ public class UtilidadesServidor {
         RecursoCodefac.SQL.getResourceInputStream("create_empresa.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_modulo_academico.sql"),
         RecursoCodefac.SQL.getResourceInputStream("insert_usuario.sql"),
+        RecursoCodefac.SQL.getResourceInputStream("insert_default_academico.sql"),
         
         
     };
