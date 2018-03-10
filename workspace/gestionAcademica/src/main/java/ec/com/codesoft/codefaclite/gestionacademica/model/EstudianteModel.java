@@ -7,6 +7,8 @@ package ec.com.codesoft.codefaclite.gestionacademica.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.gestionacademica.busqueda.EstudianteBusquedaDialogo;
@@ -76,6 +78,21 @@ public class EstudianteModel extends EstudiantePanel {
                     String nombre = representante.getRazonSocial();
                     getTxtRepresentante().setText(identificacion + " - " + nombre);
                 }
+            }
+        });
+        
+        getBtnAgregarRepresentante().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<Persona>() {
+                    @Override
+                    public void updateInterface(Persona entity) {
+                        if (entity != null) {
+                            representante=entity;
+                            getTxtRepresentante().setText(representante.getIdentificacion() + " - " +representante.getNombresCompletos());
+                        }
+                    }
+                }, DialogInterfacePanel.CLIENTE_PANEL, false);
             }
         });
     }

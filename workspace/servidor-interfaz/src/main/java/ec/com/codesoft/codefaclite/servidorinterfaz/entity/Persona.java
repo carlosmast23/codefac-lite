@@ -188,6 +188,11 @@ public class Persona implements Serializable {
         this.tipo = tipo;
     }
     
+    ///Metodos personalizados
+    public String getNombresCompletos()
+    {
+        return nombres+" "+apellidos;
+    }
     
        
 
