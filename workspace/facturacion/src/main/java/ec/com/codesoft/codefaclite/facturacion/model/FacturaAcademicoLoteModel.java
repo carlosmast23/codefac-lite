@@ -400,7 +400,8 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel{
             try {
                 ComprobanteDataFactura comprobanteFactura=(ComprobanteDataFactura) comprobante;
                 Factura factura=comprobanteFactura.getFactura();
-                ServiceFactory.getFactory().getFacturacionServiceIf().grabar(factura);
+                factura=ServiceFactory.getFactory().getFacturacionServiceIf().grabar(factura);
+                comprobanteFactura.setFactura(factura);
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(FacturaAcademicoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (RemoteException ex) {

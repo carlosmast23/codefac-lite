@@ -243,5 +243,10 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
     public ListenerComprobanteElectronico getListenerComprobanteElectronico() {
         return listener;
     }
+
+    @Override
+    public Long getComprobanteId() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

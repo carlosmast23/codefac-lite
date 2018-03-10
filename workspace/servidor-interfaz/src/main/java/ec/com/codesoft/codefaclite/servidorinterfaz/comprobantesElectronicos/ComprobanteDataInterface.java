@@ -30,5 +30,10 @@ public interface ComprobanteDataInterface {
     public ComprobanteElectronico getComprobante();
 
     public ListenerComprobanteElectronico getListenerComprobanteElectronico();
+    
+    /**
+     * Devuelve el id fisico del comprobante que se esta procesando para cambiar de estados
+     */
+    public Long getComprobanteId();
 
 }

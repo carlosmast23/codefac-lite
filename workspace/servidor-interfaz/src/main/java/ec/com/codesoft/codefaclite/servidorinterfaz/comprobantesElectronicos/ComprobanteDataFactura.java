@@ -73,15 +73,7 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
     
         @Override
     public String getSecuencial() {
-        try {
-            //String secuencial= this.session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_FACTURA).getValor();
-            Integer secuencial=ServiceFactory.getFactory().getComprobanteServiceIf().obtenerSecuencialFacturaYAvanzar();
-            //String secuencial= factura.getSecuencial().toString();
-            return UtilidadesTextos.llenarCarateresIzquierda(secuencial.toString(),9,"0");
-        } catch (RemoteException ex) {
-            Logger.getLogger(ComprobanteDataFactura.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return "";
+        return UtilidadesTextos.llenarCarateresIzquierda(factura.getSecuencial()+"",9,"0");
     }
 
     @Override
@@ -286,6 +278,11 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
 
     public void setListener(ListenerComprobanteElectronico listener) {
         this.listener = listener;
+    }
+
+    @Override
+    public Long getComprobanteId() {
+        return this.factura.getId();
     }
    
     

@@ -121,6 +121,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             /**
              * Aumentar el codigo de la numeracion en los parametros
              */            
+            factura.setSecuencial(Integer.parseInt(parametro.valor));
             
             parametro.valor = (Integer.parseInt(parametro.valor) + 1) + "";
             //parametroService.editar(parametro);

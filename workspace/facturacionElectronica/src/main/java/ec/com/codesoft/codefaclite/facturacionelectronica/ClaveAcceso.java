@@ -41,7 +41,7 @@ public class ClaveAcceso implements Serializable{
        //this.identificacion=claveTemporal.substring(0,13);
        //this.tipoAmbiente=claveTemporal.substring(0,1);
        //this.valorDefecto=claveTemporal.substring(0,6);
-       //this.secuencial=claveTemporal.substring(0,9);
+       this.secuencial=claveTemporal.substring(30,39);
        //this.codigoBatch=claveTemporal.substring(0,8);
        
    }
@@ -54,6 +54,11 @@ public class ClaveAcceso implements Serializable{
    public ComprobanteEnum getTipoComprobante()
    {    
        return ComprobanteEnum.getEnumByCodigo(tipoComprobante);
+   }
+   
+   public Integer getSecuencialInteger()
+   {
+       return Integer.parseInt(secuencial);
    }
     
     

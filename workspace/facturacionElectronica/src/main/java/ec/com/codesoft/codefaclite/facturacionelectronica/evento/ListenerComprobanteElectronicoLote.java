@@ -16,7 +16,8 @@ import java.util.List;
  * @author Carlos
  */
 public interface ListenerComprobanteElectronicoLote {
-    public abstract void iniciado();       
+    public abstract void iniciado();     
+    public abstract void clavesGeneradas(List<ClaveAcceso> listaClaves);       
     public abstract void procesando(int etapa);
     public abstract void error();
     public abstract void termino(List<Autorizacion> autorizaciones);

@@ -9,6 +9,7 @@ import autorizacion.ws.sri.gob.ec.Autorizacion;
 import autorizacion.ws.sri.gob.ec.Mensaje;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.FirmaElectronica;
 import ec.com.codesoft.codefaclite.facturacionelectronica.MetodosEnvioInterface;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ServicioSri;
@@ -315,6 +316,8 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             @Override
             public void iniciado() {
                  try {
+                     //Seteado las claves de acceso                     
+                    cambiarEstadoLotes(comprobantesData,FacturaEnumEstado.SIN_AUTORIZAR);
                     callbackClientObject.iniciado();
                 } catch (RemoteException ex) {
                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
@@ -324,6 +327,13 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             @Override
             public void procesando(int etapa) {
                 try {
+                   
+                    //Si pasa la etapa de autorizar cambia el estado del dpcumento
+                    if(etapa==ComprobanteElectronicoService.ETAPA_AUTORIZAR)
+                    {
+                        cambiarEstadoLotes(comprobantesData,FacturaEnumEstado.FACTURADO);
+                    }
+                    
                     callbackClientObject.procesando(etapa);
                 } catch (RemoteException ex) {
                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
@@ -343,16 +353,95 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             public void termino(List<Autorizacion> autorizaciones) {
                 try {
                     //comprobanteElectronico.getServicioSri();
+                    cambiarEstadoLotes(comprobantesData,FacturaEnumEstado.FACTURADO);
                     callbackClientObject.termino(castDatosComprobanteElectronico(autorizaciones,comprobanteElectronico.getServicioSri()));
                 } catch (RemoteException ex) {
                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
                 }
+            }
+
+            @Override
+            public void clavesGeneradas(List<ClaveAcceso> listaClaves) {
+                setClaveAccesoLotes(comprobantesData,listaClaves);
             }
         });
         
     
         comprobanteElectronico.procesar(true);
     }
+    
+        /**
+     * Setear los valores del las claves de acceso con su comprobante en la base de datos
+     * @param comprobantesData
+     * @param listaClaves 
+     */
+    protected void setClaveAccesoLotes(List<ComprobanteDataInterface> comprobantesData,List<ClaveAcceso> listaClaves)
+    {
+        for (ComprobanteDataInterface comprobanteDataInterface : comprobantesData) {
+            try {
+                String codigoComprobante=comprobanteDataInterface.getCodigoComprobante();
+                ComprobanteEnum comprobanteEnum=ComprobanteEnum.getEnumByCodigo(codigoComprobante);
+   
+                switch(comprobanteEnum)
+                {
+                    case  FACTURA:
+                        Long id=comprobanteDataInterface.getComprobanteId();
+                        FacturacionService servicio=new FacturacionService();
+                        Factura factura=servicio.buscarPorId(id);
+                        ClaveAcceso claveAcceso=buscarClaveAccesoPorFactura(factura, listaClaves);
+                        factura.setClaveAcceso(claveAcceso.clave);
+                        servicio.editar(factura);
+                }
+            } catch (RemoteException ex) {
+                Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }        
+    }
+    
+    
+    /**
+     * Busca una clave
+     * @param factura
+     * @param listaClaves
+     * @return 
+     */
+    protected ClaveAcceso buscarClaveAccesoPorFactura(Factura factura,List<ClaveAcceso> listaClaves)
+    {
+        //TODO: Falta implementar una busqueda mas detallada por punto de emision, sucursal y tipo de documento
+        for (ClaveAcceso claveAcceso : listaClaves) {
+            System.out.println(claveAcceso.getSecuencialInteger());
+            System.out.println(factura.getSecuencial());
+            if(claveAcceso.getSecuencialInteger().equals(factura.getSecuencial()))
+            {
+                return claveAcceso;
+            }
+        }
+        return null;
+    }
+    
+    protected void cambiarEstadoLotes(List<ComprobanteDataInterface> comprobantesData,FacturaEnumEstado estado)
+    {
+        for (ComprobanteDataInterface comprobanteDataInterface : comprobantesData) {
+            try {
+                String codigoComprobante=comprobanteDataInterface.getCodigoComprobante();
+                ComprobanteEnum comprobanteEnum=ComprobanteEnum.getEnumByCodigo(codigoComprobante);
+                
+                switch(comprobanteEnum)
+                {
+                    case  FACTURA:
+                        Long id=comprobanteDataInterface.getComprobanteId();
+                        FacturacionService servicio=new FacturacionService();
+                        Factura factura=servicio.buscarPorId(id);
+                        factura.setEstado(estado.getEstado());
+                        servicio.editar(factura);
+                }
+            } catch (RemoteException ex) {
+                Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    
     
     private List<ComprobanteData> castDatosComprobanteElectronico(List<Autorizacion> autorizaciones,ServicioSri servicioSri)
     {

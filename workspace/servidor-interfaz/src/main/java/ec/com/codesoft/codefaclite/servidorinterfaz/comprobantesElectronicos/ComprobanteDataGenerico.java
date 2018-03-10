@@ -55,5 +55,10 @@ public class ComprobanteDataGenerico implements ComprobanteDataInterface,Seriali
     public ListenerComprobanteElectronico getListenerComprobanteElectronico() {
         return null;
     }
+
+    @Override
+    public Long getComprobanteId() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
