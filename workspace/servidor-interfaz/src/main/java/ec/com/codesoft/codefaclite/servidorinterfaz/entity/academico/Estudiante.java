@@ -188,6 +188,11 @@ public class Estudiante implements Serializable {
         this.representante = representante;
     }
 
+    ///Metodos personalizados 
+    public String getNombreCompleto()
+    {
+        return nombres+" "+apellidos;
+    }
     
 
     @Override

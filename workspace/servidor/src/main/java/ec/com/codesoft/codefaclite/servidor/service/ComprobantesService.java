@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.FirmaElectronica;
 import ec.com.codesoft.codefaclite.facturacionelectronica.MetodosEnvioInterface;
+import ec.com.codesoft.codefaclite.facturacionelectronica.ServicioSri;
 import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronicoLote;
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
@@ -340,8 +341,9 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
 
             @Override
             public void termino(List<Autorizacion> autorizaciones) {
-                try {                    
-                    callbackClientObject.termino(castDatosComprobanteElectronico(autorizaciones));
+                try {
+                    //comprobanteElectronico.getServicioSri();
+                    callbackClientObject.termino(castDatosComprobanteElectronico(autorizaciones,comprobanteElectronico.getServicioSri()));
                 } catch (RemoteException ex) {
                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -352,17 +354,31 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         comprobanteElectronico.procesar(true);
     }
     
-    private List<ComprobanteData> castDatosComprobanteElectronico(List<Autorizacion> autorizaciones)
+    private List<ComprobanteData> castDatosComprobanteElectronico(List<Autorizacion> autorizaciones,ServicioSri servicioSri)
     {
         List<ComprobanteData> comprobantes=new ArrayList<ComprobanteData>();
         
         for (Autorizacion autorizacion : autorizaciones) {
             ComprobanteData comprobanteData=new ComprobanteData();
             comprobanteData.setAmbiente(autorizacion.getAmbiente());
-            comprobanteData.setComprobante(autorizacion.getComprobante());
             comprobanteData.setEstado(autorizacion.getEstado());
             comprobanteData.setFechaAutorizacion(autorizacion.getFechaAutorizacion()+"");
-            comprobanteData.setNumeroAutorizacion(autorizacion.getNumeroAutorizacion());
+            //comprobanteData.setNumeroAutorizacion(autorizacion.getNumeroAutorizacion());
+            
+            //Convertir de texto a un comprobante fisico
+            ComprobanteElectronico comprobanteElectronico=servicioSri.castComprobanteToAutorizacion(autorizacion);
+                        
+            if(comprobanteElectronico!=null)
+            {
+                comprobanteData.setNumeroAutorizacion(comprobanteElectronico.getInformacionTributaria().getClaveAcceso());
+                comprobanteData.setPreimpreso(comprobanteElectronico.getInformacionTributaria().getPreimpreso());
+                comprobanteData.setComprobante(comprobanteElectronico);
+            }
+            else
+            {
+                System.out.println("No se puede transformar el comprobante");
+                System.out.println(autorizacion.getComprobante());
+            }
             
             //Compiar los mensajes
             Autorizacion.Mensajes mensajes=autorizacion.getMensajes();

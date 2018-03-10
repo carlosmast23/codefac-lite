@@ -116,7 +116,6 @@ public class ClienteFacturaLoteImplComprobante extends UnicastRemoteObject imple
             monitorData.getBtnAbrir().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    DialogoCodefac.mensaje("Correcto","bien",DialogoCodefac.MENSAJE_CORRECTO);
                     ResultadoLoteAcademicoModel resultadoLote=new ResultadoLoteAcademicoModel(comprobantes);
                     controlador.panelPadre.crearVentanaCodefac(resultadoLote, true);
                     

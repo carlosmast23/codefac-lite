@@ -10,8 +10,11 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.facturacion.panel.ResultadoLoteAcademicoDialog;
 import ec.com.codesoft.codefaclite.facturacion.panel.ResultadoLoteAcademicoPanel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteData;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.ws.recepcion.Comprobante;
 import ec.com.codesoft.ejemplo.utilidades.rmi.UtilidadesRmi;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -43,21 +46,43 @@ public class ResultadoLoteAcademicoModel extends ResultadoLoteAcademicoPanel{
     
     private void cargarDatos()
     {
-        String[] titulo={"Clave Acceso","Estado"};
+        String[] titulo={"Clave Acceso","Preimpreso","Cliente","Estudiante","Estado"};
         DefaultTableModel modeloTabla=new DefaultTableModel(titulo,0);
         
         for (ComprobanteData comprobanteData : comprobantes) 
         {
             Vector<String> fila=new Vector<String>();
             fila.add(comprobanteData.getNumeroAutorizacion());
+            fila.add(comprobanteData.getPreimpreso());
+            
+            ComprobanteElectronico comprobante= comprobanteData.getComprobante();
+            if(comprobante!=null)
+            {
+                fila.add(comprobante.getInformacionTributaria().getRazonSocial());
+                
+                fila.add(buscarInfoAdicionalPorTitulo(comprobante.getInformacionAdicional(),"Estudiante"));
+            }
+            else
+            {
+                fila.add("");
+                fila.add("");
+            }
+                
             fila.add(comprobanteData.getEstado());
-            
-            
-            
             modeloTabla.addRow(fila);
         }
         
         getTblComprobantes().setModel(modeloTabla);        
+    }
+    
+    private String buscarInfoAdicionalPorTitulo(List<InformacionAdicional> detalles, String titulo) {
+        for (InformacionAdicional infoAdicional : detalles) {
+            if(infoAdicional.getNombre().equals(titulo))
+            {
+                return infoAdicional.getValor();
+            }
+        }
+        return "";
     }
 
     private void iniciarListener() {

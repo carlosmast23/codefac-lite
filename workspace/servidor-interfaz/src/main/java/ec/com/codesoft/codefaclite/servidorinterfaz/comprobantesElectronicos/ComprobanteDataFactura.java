@@ -228,7 +228,8 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
          * Informacion adicional
          */
         facturaComprobante.setCorreos(getCorreos());
-        
+                
+                
         return facturaComprobante;
     }
 

@@ -37,6 +37,12 @@ public abstract class ResultadoLoteAcademicoPanel extends ControladorCodefacInte
         btnAbrir = new javax.swing.JButton();
         btnRide = new javax.swing.JButton();
 
+        setClosable(true);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
+        setTitle("Resultado Comprobantes Lote");
+
         tblComprobantes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},

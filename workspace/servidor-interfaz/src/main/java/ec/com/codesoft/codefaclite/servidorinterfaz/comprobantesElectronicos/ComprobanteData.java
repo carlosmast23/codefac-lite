@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos;
 
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import java.io.Serializable;
 import java.util.List;
 
@@ -17,7 +18,8 @@ public class ComprobanteData implements Serializable{
     private String numeroAutorizacion;
     private String fechaAutorizacion;
     private String ambiente;
-    private String comprobante;
+    private String preimpreso;
+    private ComprobanteElectronico comprobante;
     private List<ComprobanteMensaje> mensajes;
 
     public ComprobanteData() {
@@ -25,7 +27,7 @@ public class ComprobanteData implements Serializable{
     
     
 
-    public ComprobanteData(String estado, String numeroAutorizacion, String fechaAutorizacion, String ambiente, String comprobante, List<ComprobanteMensaje> mensajes) {
+    public ComprobanteData(String estado, String numeroAutorizacion, String fechaAutorizacion, String ambiente, ComprobanteElectronico comprobante, List<ComprobanteMensaje> mensajes) {
         this.estado = estado;
         this.numeroAutorizacion = numeroAutorizacion;
         this.fechaAutorizacion = fechaAutorizacion;
@@ -66,13 +68,15 @@ public class ComprobanteData implements Serializable{
         this.ambiente = ambiente;
     }
 
-    public String getComprobante() {
+    public ComprobanteElectronico getComprobante() {
         return comprobante;
     }
 
-    public void setComprobante(String comprobante) {
+    public void setComprobante(ComprobanteElectronico comprobante) {
         this.comprobante = comprobante;
     }
+
+    
 
     public List<ComprobanteMensaje> getMensajes() {
         return mensajes;
@@ -81,6 +85,15 @@ public class ComprobanteData implements Serializable{
     public void setMensajes(List<ComprobanteMensaje> mensajes) {
         this.mensajes = mensajes;
     }
+
+    public String getPreimpreso() {
+        return preimpreso;
+    }
+
+    public void setPreimpreso(String preimpreso) {
+        this.preimpreso = preimpreso;
+    }
+    
     
     
     

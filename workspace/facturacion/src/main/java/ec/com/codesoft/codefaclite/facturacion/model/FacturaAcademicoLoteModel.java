@@ -377,19 +377,36 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel{
             public void actionPerformed(ActionEvent e) {
                 try {
                     List<ComprobanteDataInterface> comprobantes=facturarLote();
+                    grabarFacturas(comprobantes);
+                    DialogoCodefac.mensaje("Correcto","Las facturas se están autorizando", DialogoCodefac.MENSAJE_CORRECTO);
                     
                     ClienteInterfaceComprobanteLote cic=new ClienteFacturaLoteImplComprobante(instancia);                     
                     
                     ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobanteLote(comprobantes,session.getUsuario(),cic);
                     
                     
-                    DialogoCodefac.mensaje("Correcto","Las facturas se estan autorizando", DialogoCodefac.MENSAJE_CORRECTO);
+                    
                 } catch (RemoteException ex) {
                     Logger.getLogger(FacturaAcademicoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
        
+    }
+    
+    private void grabarFacturas(List<ComprobanteDataInterface> comprobantes) 
+    {
+        for (ComprobanteDataInterface comprobante : comprobantes) {
+            try {
+                ComprobanteDataFactura comprobanteFactura=(ComprobanteDataFactura) comprobante;
+                Factura factura=comprobanteFactura.getFactura();
+                ServiceFactory.getFactory().getFacturacionServiceIf().grabar(factura);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(FacturaAcademicoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(FacturaAcademicoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
     
     /**
@@ -412,6 +429,10 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel{
                 ///Generar los datos de la factura
                 Factura factura = generarFactura(estudianteInscrito, rubrosEstudiantes);
                 ComprobanteDataFactura comprobanteData = new ComprobanteDataFactura(factura);
+                Map<String,String> datosAdicionalesMap=new HashMap<String,String>();
+                datosAdicionalesMap.put("Estudiante",estudianteInscrito.getEstudiante().getNombreCompleto());
+                datosAdicionalesMap.put("Codigo",estudianteInscrito.getEstudiante().getIdEstudiante().toString());                        
+                comprobanteData.setMapInfoAdicional(datosAdicionalesMap);
                 comprobantesLista.add(comprobanteData);
                 
             }

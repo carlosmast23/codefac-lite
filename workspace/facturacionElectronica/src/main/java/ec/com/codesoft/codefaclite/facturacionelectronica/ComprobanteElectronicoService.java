@@ -1366,6 +1366,11 @@ public class ComprobanteElectronicoService implements Runnable {
     public void setSecuencialLote(Integer secuencialLote) {
         this.secuencialLote = secuencialLote;
     }
+
+    public ServicioSri getServicioSri() {
+        return servicioSri;
+    }
+    
     
     
     

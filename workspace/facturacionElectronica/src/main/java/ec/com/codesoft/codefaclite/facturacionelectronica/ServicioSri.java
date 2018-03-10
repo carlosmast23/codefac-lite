@@ -12,9 +12,13 @@ import autorizacion.ws.sri.gob.ec.AutorizacionComprobantesOfflineService;
 import autorizacion.ws.sri.gob.ec.RespuestaComprobante;
 import autorizacion.ws.sri.gob.ec.RespuestaLote;
 import com.thoughtworks.xstream.XStream;
+import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.CARPETA_AUTORIZADOS;
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
 import static ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil.archivoToByte;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.UtilidadesComprobantes;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.XStreamUtil;
 import ec.com.codesoft.codefaclite.ws.recepcion.Mensaje;
 import ec.com.codesoft.codefaclite.ws.recepcion.RecepcionComprobantesOffline;
@@ -24,13 +28,18 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
 import javax.xml.ws.WebServiceException;
 
@@ -306,6 +315,28 @@ public class ServicioSri {
             throw  new ComprobanteElectronicoException(ex.getMessage(),"Leyendo respuesta autorizado",ComprobanteElectronicoException.ERROR_COMPROBANTE);
         }
 
+    }
+    
+    public ComprobanteElectronico castComprobanteToAutorizacion(Autorizacion autorizacion)
+    {
+        try {
+            
+            JAXBContext jaxbContext = JAXBContext.newInstance(ComprobanteEnum.FACTURA.getClase());
+            String comprobanteStr=autorizacion.getComprobante();
+            //Quitar etiquetas de cdata
+            comprobanteStr=comprobanteStr.replaceAll("<!\\[CDATA\\[","");
+            comprobanteStr=comprobanteStr.replaceAll("\\]\\]>","");
+                    
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();      
+            StringReader reader = new StringReader(comprobanteStr);
+            
+            ComprobanteElectronico comprobanteElectronico=(ComprobanteElectronico)jaxbUnmarshaller.unmarshal(reader);
+            return comprobanteElectronico;
+            
+        } catch (JAXBException ex) {
+            Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     /**
