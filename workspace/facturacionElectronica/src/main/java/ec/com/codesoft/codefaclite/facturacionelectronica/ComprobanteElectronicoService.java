@@ -337,6 +337,7 @@ public class ComprobanteElectronicoService implements Runnable {
             if (etapaActual.equals(ETAPA_AUTORIZAR)) {
                 autorizarSriLote();
                 if(escuchaLote!=null)escuchaLote.procesando(etapaActual);
+                if(escuchaLote!=null)escuchaLote.datosAutorizados(servicioSri.getAutorizacion());
                 System.out.println("autorizarSri lote()");
                 if(etapaLimiteProcesar<=ETAPA_AUTORIZAR) {
                     if(escuchaLote!=null)escuchaLote.termino(servicioSri.getAutorizacion());

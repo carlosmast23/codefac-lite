@@ -327,13 +327,6 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             @Override
             public void procesando(int etapa) {
                 try {
-                   
-                    //Si pasa la etapa de autorizar cambia el estado del dpcumento
-                    if(etapa==ComprobanteElectronicoService.ETAPA_AUTORIZAR)
-                    {
-                        cambiarEstadoLotes(comprobantesData,FacturaEnumEstado.FACTURADO);
-                    }
-                    
                     callbackClientObject.procesando(etapa);
                 } catch (RemoteException ex) {
                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
@@ -363,6 +356,11 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             @Override
             public void clavesGeneradas(List<ClaveAcceso> listaClaves) {
                 setClaveAccesoLotes(comprobantesData,listaClaves);
+            }
+
+            @Override
+            public void datosAutorizados(List<Autorizacion> autorizaciones) {
+                    cambiarAutorizadoLotes(autorizaciones);
             }
         });
         
@@ -441,7 +439,30 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         }
     }
     
-    
+    protected void cambiarAutorizadoLotes(List<Autorizacion> autorizaciones)
+    {
+        for (Autorizacion autorizacion : autorizaciones) {
+            if (autorizacion.getEstado().equals("AUTORIZADO")) 
+            {
+                try {
+                    FacturacionService servicio = new FacturacionService();
+                    Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    mapParametros.put("claveAcceso",autorizacion.getNumeroAutorizacion());
+                    List<Factura> facturas= servicio.obtenerPorMap(mapParametros);
+                    if(facturas.size()>0)
+                    {
+                        Factura facturaEditar=facturas.get(0);
+                        facturaEditar.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
+                        servicio.editar(facturaEditar);
+                    }
+                    
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }            
+        }
+    }
+
     
     private List<ComprobanteData> castDatosComprobanteElectronico(List<Autorizacion> autorizaciones,ServicioSri servicioSri)
     {
