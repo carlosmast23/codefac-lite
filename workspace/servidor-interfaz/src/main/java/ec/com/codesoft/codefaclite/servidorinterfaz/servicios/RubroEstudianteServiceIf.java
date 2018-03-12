@@ -19,6 +19,8 @@ import java.util.List;
 public interface RubroEstudianteServiceIf extends ServiceAbstractIf<RubroEstudiante> {
 
     public void crearRubrosEstudiantes(List<EstudianteInscrito> estudiantes, RubrosNivel rubroNivel) throws RemoteException;
+    
+    public void crearRubrosEstudiantes(List<RubroEstudiante> rubrosEstudiantes) throws RemoteException;
 
     public List<RubroEstudiante> obtenerDeudasEstudiante(NivelAcademico nivel) throws java.rmi.RemoteException;
 
