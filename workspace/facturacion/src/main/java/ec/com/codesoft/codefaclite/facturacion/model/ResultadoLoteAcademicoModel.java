@@ -14,6 +14,9 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectr
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteData;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.ws.recepcion.Comprobante;
 import ec.com.codesoft.ejemplo.utilidades.rmi.UtilidadesRmi;
 import java.awt.Frame;
@@ -21,6 +24,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -89,30 +93,75 @@ public class ResultadoLoteAcademicoModel extends ResultadoLoteAcademicoPanel{
         getBtnRide().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int fila=getTblComprobantes().getSelectedRow();
-                String claveAcceso=getTblComprobantes().getValueAt(fila,0).toString();
-                
-                if(fila>0)
-                {
-                    try {
-                        byte[] reporteByte=ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso);
-                        JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(reporteByte);
-                        panelPadre.crearReportePantalla(jasperPrint,claveAcceso);
-                        
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(ResultadoLoteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IOException ex) {
-                        Logger.getLogger(ResultadoLoteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (ClassNotFoundException ex) {
-                        Logger.getLogger(ResultadoLoteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                else
-                {
-                    DialogoCodefac.mensaje("Error","Seleccione una fila para imprimir",DialogoCodefac.MENSAJE_INCORRECTO);
-                }
+                generarRide();
             }
         });
+        
+        getBtnAbrir().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                abrirPantallaFactura();
+            }
+        });
+    }
+    
+    private void abrirPantallaFactura()
+    {
+        int fila = getTblComprobantes().getSelectedRow();
+        String claveAcceso = getTblComprobantes().getValueAt(fila, 0).toString();
+        
+        if (fila >= 0) {
+            try {
+                
+                FacturacionServiceIf servicio=ServiceFactory.getFactory().getFacturacionServiceIf();
+                Map<String,Object> mapParametros=new HashMap<String,Object>();
+                List<Factura> facturas=servicio.obtenerPorMap(mapParametros);
+                
+                if(facturas.size()>0)
+                {
+                    FacturacionModel facturacionModel = new FacturacionModel();
+                    Factura factura = facturas.get(0);
+                    panelPadre.crearVentanaCodefac(facturacionModel, true);
+                    //facturacionModel.iniciarValoresIniciales();
+                    facturacionModel.setFactura(factura);
+
+                }
+                
+            } catch (RemoteException ex) {
+                Logger.getLogger(ResultadoLoteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(ResultadoLoteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ExcepcionCodefacLite ex) {
+                Logger.getLogger(ResultadoLoteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+        else 
+        {
+            DialogoCodefac.mensaje("Error", "Seleccione una fila para abrir", DialogoCodefac.MENSAJE_INCORRECTO);
+        }
+    }
+    
+    private void generarRide() {
+        int fila = getTblComprobantes().getSelectedRow();
+        String claveAcceso = getTblComprobantes().getValueAt(fila, 0).toString();
+
+        if (fila >= 0) {
+            try {
+                byte[] reporteByte = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso);
+                JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(reporteByte);
+                panelPadre.crearReportePantalla(jasperPrint, claveAcceso);
+
+            } catch (RemoteException ex) {
+                Logger.getLogger(ResultadoLoteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(ResultadoLoteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(ResultadoLoteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            DialogoCodefac.mensaje("Error", "Seleccione una fila para imprimir", DialogoCodefac.MENSAJE_INCORRECTO);
+        }
     }
 
     @Override

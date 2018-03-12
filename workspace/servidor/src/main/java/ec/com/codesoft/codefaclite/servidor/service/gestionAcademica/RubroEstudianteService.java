@@ -43,6 +43,17 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         transaccion.commit();
 
     }
+    
+    public void crearRubrosEstudiantes(List<RubroEstudiante> rubrosEstudiantes) throws RemoteException {
+        EntityTransaction transaccion = getTransaccion();
+        transaccion.begin();
+        for (RubroEstudiante rubroEstudiante : rubrosEstudiantes) {
+            entityManager.persist(rubroEstudiante);
+        }
+        entityManager.flush();
+        transaccion.commit();
+
+    }
 
     @Override
     public List<RubroEstudiante> obtenerDeudasEstudiante(NivelAcademico nivel) throws RemoteException {
