@@ -58,6 +58,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleSer
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DatosAdicionalesComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoReferenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
@@ -1061,12 +1062,14 @@ public class FacturacionModel extends FacturacionPanel{
             datosAdicionales.put("email", factura.getCliente().getCorreoElectronico());
         }
         
-        cargarDatosAdicionales();
         //Agregar el nombre del estudiante
-        
-        //Agregae el codigo el estudiante
-        
-        
+        datosAdicionales.put(DatosAdicionalesComprobanteEnum.NOMBRE_ESTUDIANTE.getNombre(), estudiante.getNombreCompleto());
+
+        //Agregando el codigo del estudiante
+        datosAdicionales.put(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre(), estudiante.getIdEstudiante() + "");
+
+        cargarDatosAdicionales();
+
     }
 
     private void setearValoresCliente() {
