@@ -49,6 +49,8 @@ public class ProveedorBusquedaDialogo implements InterfaceModelFind<Persona>
         dato.add(t.getCorreoElectronico());
    
     }
+    
+    /*
     @Override
     public Boolean buscarObjeto(Persona t, Object valor) 
     {
@@ -60,7 +62,7 @@ public class ProveedorBusquedaDialogo implements InterfaceModelFind<Persona>
         {
             return false;
         }       
-    }
+    }*/
 
     @Override
     public QueryDialog getConsulta(String filter) {

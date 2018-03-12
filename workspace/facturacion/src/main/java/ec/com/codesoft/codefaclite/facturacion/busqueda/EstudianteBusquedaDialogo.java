@@ -45,9 +45,10 @@ public class EstudianteBusquedaDialogo implements InterfaceModelFind<Estudiante>
        dato.add(e.getEmail());
     }
 
+    /*
     @Override
     public Boolean buscarObjeto(Estudiante e, Object valor) {
         return e.getApellidos().equals(valor.toString());
-    }
+    }*/
 
 }

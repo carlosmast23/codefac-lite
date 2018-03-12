@@ -46,9 +46,10 @@ public class NivelBusquedaDialogo implements InterfaceModelFind<Nivel> {
             dato.add("S/N");
     }
 
+    /*
     @Override
     public Boolean buscarObjeto(Nivel n, Object valor) {
         return n.getNombre().equals(valor.toString());
-    }
+    }*/
 
 }

@@ -43,9 +43,10 @@ public class PeriodoBusquedaDialogo implements InterfaceModelFind<Periodo> {
         dato.add(p.getFechaFin());
     }
 
+    /*
     @Override
     public Boolean buscarObjeto(Periodo p, Object valor) {
         return p.getNombre().equals(valor.toString());
-    }
+    }*/
 
 }

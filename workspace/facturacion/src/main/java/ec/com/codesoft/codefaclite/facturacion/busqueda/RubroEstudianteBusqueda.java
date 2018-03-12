@@ -1,0 +1,63 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package ec.com.codesoft.codefaclite.facturacion.busqueda;
+
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ProductoEnumEstado;
+import java.util.Vector;
+
+/**
+ *
+ * @author Carlos
+ */
+public class RubroEstudianteBusqueda implements InterfaceModelFind<RubroEstudiante>{
+
+    /**
+     * Variable para filtrar por el estudiante
+     */
+    private Estudiante estudiante;
+
+    public RubroEstudianteBusqueda(Estudiante estudiante) {
+        this.estudiante = estudiante;
+    }
+    
+    
+    
+    
+    @Override
+    public Vector<ColumnaDialogo> getColumnas() {
+        Vector<ColumnaDialogo> titulo = new Vector<>();
+        titulo.add(new ColumnaDialogo("Nombre", 0.2d));
+        titulo.add(new ColumnaDialogo("Precio", 0.3d));
+        return titulo;
+    }
+
+    @Override
+    public QueryDialog getConsulta(String filter) {
+        String queryString = "SELECT u FROM RubroEstudiante u WHERE u.estudianteInscrito.estudiante=?1 and ";
+        queryString += " ( LOWER(u.rubroNivel.nombre) like " + filter + " )";
+        QueryDialog queryDialog = new QueryDialog(queryString);
+        queryDialog.agregarParametro(1, estudiante);
+        return queryDialog;
+    }
+
+    @Override
+    public void agregarObjeto(RubroEstudiante t, Vector dato) {
+        dato.add(t.getRubroNivel().getNombre());
+        dato.add(t.getRubroNivel().getValor());
+    }
+
+    /*
+    @Override
+    public Boolean buscarObjeto(RubroEstudiante t, Object valor) {
+        return t.getRubroNivel().getNombre().equals(t);   
+    }*/
+    
+}

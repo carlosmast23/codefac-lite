@@ -51,9 +51,10 @@ public class NotaCreditoBusqueda implements InterfaceModelFind <NotaCredito>
         dato.add(t.getTotal());
     }
 
+    /*
     @Override
     public Boolean buscarObjeto(NotaCredito t, Object valor) {
         return true;
-    }
+    }*/
     
 }

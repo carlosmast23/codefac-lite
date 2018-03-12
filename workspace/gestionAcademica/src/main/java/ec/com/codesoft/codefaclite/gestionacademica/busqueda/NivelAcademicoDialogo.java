@@ -41,9 +41,10 @@ public class NivelAcademicoDialogo implements InterfaceModelFind<NivelAcademico>
         dato.add(t.getNivel().getNombre());
     }
 
+    /*
     @Override
     public Boolean buscarObjeto(NivelAcademico t, Object valor) {
         return t.getNombre().equals(valor.toString());
-    }
+    }*/
     
 }

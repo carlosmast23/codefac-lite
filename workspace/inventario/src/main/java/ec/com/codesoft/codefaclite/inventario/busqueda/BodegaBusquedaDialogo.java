@@ -43,9 +43,11 @@ public class BodegaBusquedaDialogo implements InterfaceModelFind<Bodega> {
         dato.add(t.getEncargado());
     }
 
+    /*
     @Override
     public Boolean buscarObjeto(Bodega t, Object valor) {
         return t.getNombre().equals(valor.toString());
     }
+*/
 
 }

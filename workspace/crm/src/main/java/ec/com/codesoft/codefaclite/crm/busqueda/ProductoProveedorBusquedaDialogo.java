@@ -47,11 +47,12 @@ public class ProductoProveedorBusquedaDialogo implements InterfaceModelFind<Prod
 
     }
 
+    /*
     @Override
     public Boolean buscarObjeto(ProductoProveedor t, Object valor) 
     {
         return t.getProducto().getNombre().equals(valor.toString());   
-    }
+    }*/
 
     @Override
     public QueryDialog getConsulta(String filter) {

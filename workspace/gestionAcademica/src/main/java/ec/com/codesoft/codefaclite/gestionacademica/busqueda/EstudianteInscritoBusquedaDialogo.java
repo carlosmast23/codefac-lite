@@ -45,9 +45,10 @@ public class EstudianteInscritoBusquedaDialogo implements InterfaceModelFind<Est
        dato.add(e.getNivelAcademico().getNombre());
     }
 
+    /*
     @Override
     public Boolean buscarObjeto(EstudianteInscrito e, Object valor) {
         return e.getEstudiante().getApellidos().equals(valor.toString());
-    }
+    }*/
 
 }

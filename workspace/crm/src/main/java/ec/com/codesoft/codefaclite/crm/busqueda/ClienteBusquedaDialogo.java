@@ -45,6 +45,7 @@ public class ClienteBusquedaDialogo implements InterfaceModelFind<Persona>
         dato.add(t.getCorreoElectronico());
    
     }
+    /*
     @Override
     public Boolean buscarObjeto(Persona t, Object valor) 
     {
@@ -56,7 +57,7 @@ public class ClienteBusquedaDialogo implements InterfaceModelFind<Persona>
         {
             return false;
         }       
-    }
+    }*/
 
     @Override
     public QueryDialog getConsulta(String filter) {
