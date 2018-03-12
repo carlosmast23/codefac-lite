@@ -191,7 +191,9 @@ public class Persona implements Serializable {
     ///Metodos personalizados
     public String getNombresCompletos()
     {
-        return nombres+" "+apellidos;
+        String nombresTmp=(nombres!=null)?nombres:"";
+        String apellidosTmp=(apellidos!=null)?apellidos:"";
+        return nombresTmp+" "+apellidosTmp;
     }
     
        

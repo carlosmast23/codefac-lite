@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.ClienteFacturacionBusqueda;
+import ec.com.codesoft.codefaclite.facturacion.busqueda.EstudianteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.facturacion.callback.ClienteFacturaImplComprobante;
@@ -54,6 +55,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteFisicoD
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoReferenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
@@ -98,6 +100,7 @@ public class FacturacionModel extends FacturacionPanel{
 
     //private Persona persona;
     private Factura factura;
+    private Estudiante estudiante;
     private DefaultTableModel modeloTablaFormasPago;
     private DefaultTableModel modeloTablaDetallesProductos;
     private DefaultTableModel modeloTablaDatosAdicionales;
@@ -122,6 +125,7 @@ public class FacturacionModel extends FacturacionPanel{
     public FacturacionModel() {
         setearFechas();
         addListenerButtons();
+        addListenerCombos();
         initComponenesGraficos();
         initModelTablaFormaPago();
         initModelTablaDetalleFactura();
@@ -194,6 +198,57 @@ public class FacturacionModel extends FacturacionPanel{
     }
 
     private void addListenerButtons() {
+        
+        getBtnBuscarRepresentante().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda();
+                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
+                buscarDialogoModel.setVisible(true);
+                
+                Persona represetanteTmp=(Persona) buscarDialogoModel.getResultado();
+                
+                if(represetanteTmp!=null)
+                {
+                    try {
+                        Map<String,Object> parametrosMap=new HashMap<String,Object>();
+                        parametrosMap.put("representante",represetanteTmp);
+                        
+                        List<Estudiante> estudiantes=ServiceFactory.getFactory().getEstudianteServiceIf().obtenerPorMap(parametrosMap);
+                        if(estudiantes.size()>0)
+                        {
+                            factura.setCliente(represetanteTmp);
+                            estudiante=estudiantes.get(0);      
+                            setearValoresAcademicos();
+                        }
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+
+            }
+        });
+        
+        getBtnBuscarEstudiante().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                EstudianteBusquedaDialogo clienteBusquedaDialogo = new EstudianteBusquedaDialogo();
+                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
+                buscarDialogoModel.setVisible(true);
+                Estudiante estudianteTmp=(Estudiante) buscarDialogoModel.getResultado();
+                
+                if(estudianteTmp!=null)
+                {
+                    estudiante=estudianteTmp;
+                    factura.setCliente(estudianteTmp.getRepresentante());
+                    setearValoresAcademicos();                    
+                }
+                
+                
+            }
+        });
 
         getBtnBuscarCliente().addActionListener(new ActionListener() {
             @Override
@@ -961,6 +1016,24 @@ public class FacturacionModel extends FacturacionPanel{
         getLblSubTotalDescuentoSinImpuesto().setText("" + factura.getDescuentoSinImpuestos());
         getLblTotalDescuento().setText("" + factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()));
     }
+    
+    private void setearValoresAcademicos()
+    {
+        getTxtEstudiante().setText(estudiante.getNombreCompleto());
+        getTxtRepresentante().setText(estudiante.getRepresentante().getNombresCompletos());
+        
+        //Cargar el correo solo cuando exista 
+        if (factura.getCliente().getCorreoElectronico() != null) {
+            datosAdicionales.put("email", factura.getCliente().getCorreoElectronico());
+        }
+        
+        cargarDatosAdicionales();
+        //Agregar el nombre del estudiante
+        
+        //Agregae el codigo el estudiante
+        
+        
+    }
 
     private void setearValoresCliente() {
         getTxtCliente().setText(factura.getCliente().getIdentificacion());
@@ -1306,6 +1379,55 @@ public class FacturacionModel extends FacturacionPanel{
         for (DocumentoEnum tipoDocumentoEnum : tiposDocumento) {
             getCmbDocumento().addItem(tipoDocumentoEnum);
         }
+        
+        
+        //Agregar los tipos de documentos disponibles
+
+        getCmbTipoDocumento().removeAllItems();
+        List<TipoDocumentoEnum> tipoDocumentos= TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloEnum.VENTAS);
+        for (TipoDocumentoEnum tipoDocumento : tipoDocumentos) {
+            getCmbTipoDocumento().addItem(tipoDocumento);
+        }
+    }
+
+    private void addListenerCombos() {
+        getCmbTipoDocumento().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+                if(tipoDocumentoEnum!=null)
+                {
+                    if(tipoDocumentoEnum.equals(tipoDocumentoEnum.ACADEMICO))
+                    {
+                        activarTabDatos(1);
+                    }
+                    else
+                    {
+                        //Todo: Seguir armando el tab de los otros datos
+                        activarTabDatos(0);
+                    }
+                    
+                }                
+            }
+        });
+    }
+    
+    
+    private void activarTabDatos(int indice)
+    {
+        for (int i = 0; i < getPanelTabDatos().getTabCount(); i++) {
+            if(i==indice)
+            {
+                getPanelTabDatos().setEnabledAt(i,true);
+                getPanelTabDatos().setSelectedIndex(i);
+            }
+            else
+            {
+                getPanelTabDatos().setEnabledAt(i,false);
+            }
+        }
+            
+        
     }
 
 }
