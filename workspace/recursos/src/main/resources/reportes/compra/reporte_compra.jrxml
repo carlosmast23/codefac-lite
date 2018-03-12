@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
+	<property name="ireport.zoom" value="0.75"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="pl_fecha_hora" class="java.lang.String"/>
+	<parameter name="pl_direccion" class="java.lang.String"/>
+	<parameter name="pl_nombre_empresa" class="java.lang.String"/>
+	<parameter name="pl_telefonos" class="java.lang.String"/>
+	<parameter name="pl_usuario" class="java.lang.String"/>
+	<parameter name="pl_titulo" class="java.lang.String"/>
+	<parameter name="pl_url_img1" class="java.io.InputStream"/>
+	<parameter name="pl_img_facebook" class="java.io.InputStream"/>
+	<parameter name="pl_img_whatsapp" class="java.io.InputStream"/>
+	<parameter name="pl_img_telefono" class="java.io.InputStream"/>
+	<parameter name="pl_img_logo_pie" class="java.io.InputStream"/>
+	<parameter name="pl_url_cabecera" class="java.lang.String"/>
+	<parameter name="pl_url_piepagina" class="java.lang.String"/>
+	<parameter name="nombre" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="nombre" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="75" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="555" height="50" uuid="35826285-2ba3-4374-a880-47d8b954ac17"/>
+				<subreportParameter name="pl_direccion">
+					<subreportParameterExpression><![CDATA[$P{pl_direccion}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_nombre_empresa">
+					<subreportParameterExpression><![CDATA[$P{pl_nombre_empresa}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_titulo">
+					<subreportParameterExpression><![CDATA[$P{pl_titulo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_fecha_hora">
+					<subreportParameterExpression><![CDATA[$P{pl_fecha_hora}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_usuario">
+					<subreportParameterExpression><![CDATA[$P{pl_usuario}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_url_img1">
+					<subreportParameterExpression><![CDATA[$P{pl_url_img1}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{pl_url_cabecera}]]></subreportExpression>
+			</subreport>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="109" splitType="Stretch">
+			<staticText>
+				<reportElement x="4" y="4" width="70" height="14" forecolor="#000000" uuid="0bf2bc0b-a2df-4239-82ab-28031ec0b824"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Identificación:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="23" width="70" height="14" forecolor="#000000" uuid="1487524d-4592-4191-b4cb-ab5be3e6a0b5"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="248" y="4" width="72" height="14" forecolor="#000000" uuid="790e107c-8a87-4ef2-99d6-7c3d4f9757c7"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo Documento:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="248" y="23" width="72" height="14" forecolor="#000000" uuid="c6c738a0-201b-4e93-b9b6-9c4dcab0f15d"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Documento: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="410" y="4" width="73" height="14" forecolor="#000000" uuid="370f7842-9bbd-4186-b264-184f432e8e31"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha inicio: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="410" y="23" width="73" height="14" forecolor="#000000" uuid="eccb1b04-75f7-41a7-9ed1-e7855dd05916"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha final: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="5" width="100" height="13" uuid="4120cc87-3b49-4f08-b153-ee55e85fe569"/>
+				<textFieldExpression><![CDATA[$P{nombre}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="168" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="30" uuid="06e24f8b-90d7-4251-8fc2-adc50cb9e167">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="cc029215-3f20-40ad-821d-ba7dd540a032"/>
+				</reportElement>
+				<text><![CDATA[nombre]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="34" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="30" uuid="d184f951-2d15-4382-ba1d-c5e941bac8ca">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="cc029215-3f20-40ad-821d-ba7dd540a032"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="555" height="54" uuid="7968d49c-a764-40cd-8900-3f9f7f1947c8"/>
+				<subreportParameter name="pl_img_whatsapp">
+					<subreportParameterExpression><![CDATA[$P{pl_img_whatsapp}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_img_logo_pie">
+					<subreportParameterExpression><![CDATA[$P{pl_img_logo_pie}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_img_telefono">
+					<subreportParameterExpression><![CDATA[$P{pl_img_telefono}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_img_facebook">
+					<subreportParameterExpression><![CDATA[$P{pl_img_facebook}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{pl_url_piepagina}]]></subreportExpression>
+			</subreport>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
