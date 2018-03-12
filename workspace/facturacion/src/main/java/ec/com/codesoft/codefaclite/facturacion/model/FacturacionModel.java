@@ -54,6 +54,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteFisicoD
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoReferenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.ejemplo.utilidades.rmi.UtilidadesRmi;
@@ -784,8 +785,24 @@ public class FacturacionModel extends FacturacionPanel{
         this.modeloTablaDetallesProductos = new DefaultTableModel(titulo, 0);
         for (FacturaDetalle detalle : detalles) {
             try {
+                
+                TipoReferenciaEnum tipoReferenciaEnum=detalle.getTipoReferenciaEnum();
+                
+                Producto producto=null;
+                if(tipoReferenciaEnum.equals(TipoReferenciaEnum.ACADEMICO))
+                {
+                    producto=ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(detalle.getReferenciaId()).getRubroNivel().getProducto();
+                }
+                else
+                {
+                    if(tipoReferenciaEnum.equals(TipoReferenciaEnum.INVENTARIO)) 
+                    {
+                        producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
+                    }
+                }
+                
                 Vector<String> fila = new Vector<String>();
-                Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
+                //Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
                 fila.add(producto.getCodigoPersonalizado());
                 fila.add(producto.getValorUnitario().toString());
                 fila.add(detalle.getCantidad().toString());
@@ -855,8 +872,24 @@ public class FacturacionModel extends FacturacionPanel{
 
         for (FacturaDetalle facturaDetalle : facturaDetalles) {
             try {
+                
+                TipoReferenciaEnum tipoReferenciaEnum=facturaDetalle.getTipoReferenciaEnum();
+                Producto producto=null;
+                
+                if(tipoReferenciaEnum.equals(TipoReferenciaEnum.ACADEMICO))
+                {
+                    producto=ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getRubroNivel().getProducto();
+                }
+                else
+                {
+                    if(tipoReferenciaEnum.equals(TipoReferenciaEnum.ACADEMICO))
+                    {
+                        producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                    }
+                }
+                
                 //TODO este valor esta quemado toca parametrizar
-                Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+
                 if (producto.getIva().getTarifa() == 12) { //esta parametro de 12 debe estar parametrizado
                     this.factura.setSubtotalImpuestos(factura.getSubtotalImpuestos().add(facturaDetalle.getPrecioUnitario().multiply(facturaDetalle.getCantidad())));
                     //this.factura.setDescuentoImpuestos(this.factura.getDescuentoImpuestos().add(facturaDetalle.getTotal()));
@@ -1257,7 +1290,7 @@ public class FacturacionModel extends FacturacionPanel{
         }
     }
 
-    private void iniciarValoresIniciales() {
+    public void iniciarValoresIniciales() {
         List<DocumentoEnum> tiposDocumento=null;
         //cuando la factura es electronica
         if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).valor.equals(TipoFacturacionEnumEstado.ELECTRONICA.getLetra()))
@@ -1274,6 +1307,5 @@ public class FacturacionModel extends FacturacionPanel{
             getCmbDocumento().addItem(tipoDocumentoEnum);
         }
     }
-
 
 }
