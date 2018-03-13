@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexItemEspecificoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NacionalidadServiceIf;
 //import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.MatriculaEstudianteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelServiceIf;
@@ -119,6 +120,7 @@ public abstract class ServiceFactory {
     public PermisoVentanaServiceIf getPermisoVentanaServiceIf(){return (PermisoVentanaServiceIf) getRecursosRMI(PermisoVentanaServiceIf.class);};
     public EstudianteInscritoServiceIf getEstudianteInscritoServiceIf(){return (EstudianteInscritoServiceIf) getRecursosRMI(EstudianteInscritoServiceIf.class);};
     public RubroEstudianteServiceIf getRubroEstudianteServiceIf(){return (RubroEstudianteServiceIf) getRecursosRMI(RubroEstudianteServiceIf.class);};
+    public NacionalidadServiceIf getNacionalidadServiceIf(){return (NacionalidadServiceIf) getRecursosRMI(NacionalidadServiceIf.class);};
     
     
     
