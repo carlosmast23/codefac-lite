@@ -10,6 +10,7 @@ create table AULA(
 create table ESTUDIANTE( 
     ESTUDIANTE_ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
     PERSONA_ID bigint,    
+    NACIONALIDAD_ID bigint,    
     CODSISTEMA varchar(100),
     CODAUXILIAR varchar(100),    
     CEDULA varchar(13),
@@ -21,7 +22,13 @@ create table ESTUDIANTE(
     TELEFONO varchar(15),
     CELULAR varchar(15),
     DIRECCION varchar(150),  
-    ADICIONALES varchar(256),   
+    ADICIONALES varchar(256),
+    ETNIA varchar(100),      
+    DISCAPACIDAD varchar(1),     
+    CONADIS varchar(10),     
+    TIPO_DISCAPACIDAD varchar(1),  
+    OBS_DISCAPACIDAD varchar(256),  
+    PORCENTAJE_DISCAPACIDAD integer,   
     ESTADO varchar(1),
     primary key (ESTUDIANTE_ID)
 );
@@ -80,4 +87,12 @@ create table RUBRO_ESTUDIANTE(
     RUBRO_NIVEL_ID BIGINT,
     ESTUDIANTE_INSCRITO_ID BIGINT,
     primary key (ID)
+);
+
+create table NACIONALIDAD( 
+    NACIONALIDAD_ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
+    PAIS_NAC varchar(50),
+    GENTILICIO_NAC varchar(50),  
+    ISO_NAC varchar(3),  
+    primary key (NACIONALIDAD_ID)
 );

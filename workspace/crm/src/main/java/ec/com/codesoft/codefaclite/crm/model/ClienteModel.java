@@ -27,6 +27,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEn
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Nacionalidad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
 import java.awt.event.ActionEvent;
@@ -72,9 +73,9 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     private PersonaServiceIf personaService;
     private Persona persona;
     private String razonSocial;
-    private String comboIdentificacion [] = {"CEDULA","RUC","PASAPORTE","IDENTIFICACION DEL EXTERIOR","PLACA"};
-    private String comboTipoCliente [] = {"CLIENTE","SUJETO RETENIDO","DESTINATARIO"};
-   
+    private String comboIdentificacion[] = {"CEDULA", "RUC", "PASAPORTE", "IDENTIFICACION DEL EXTERIOR", "PLACA"};
+    private String comboTipoCliente[] = {"CLIENTE", "SUJETO RETENIDO", "DESTINATARIO"};
+
     private int opcionIdentificacion = 4;
 
     public ClienteModel() {
@@ -82,7 +83,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         getjTextExtension().setText("0");
         this.razonSocial = "";
         cargarClientes();
-        cargarDatosIniciales();        
+        cargarDatosIniciales();
         addListenerTexts();
         addListenerCombos();
     }
@@ -94,7 +95,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
                 //Cancela el evento guardar porque no prevalido
                 throw new ExcepcionCodefacLite("Error al prevalidar");
             }
-            
+
             persona = new Persona();
             persona.setNombres(getjTextNombres().getText());
             persona.setApellidos(getjTextApellidos().getText());
@@ -108,12 +109,14 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             persona.setTelefonoCelular(getjTextCelular().getText());
             persona.setCorreoElectronico(getjTextCorreo().getText());
             persona.setEstado(((ClienteEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
-            persona.setTipo(((OperadorNegocioEnum)getCmbTipoOperador().getSelectedItem()).getLetra());
-            persona=personaService.grabar(persona);
+            persona.setTipo(((OperadorNegocioEnum) getCmbTipoOperador().getSelectedItem()).getLetra());
+            persona.setNacionalidad(((Nacionalidad) getCmbNacionalidad().getSelectedItem()));
+
+            persona = personaService.grabar(persona);
             DialogoCodefac.mensaje("Datos correctos", "El cliente se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
             System.err.println("Se grabo correctamente");
         } catch (ServicioCodefacException ex) {
-            DialogoCodefac.mensaje("Error", ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+            DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite("Error al prevalidar");
         } catch (RemoteException ex) {
             Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -135,10 +138,11 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             persona.setExtensionTelefono(getjTextExtension().getText());
             persona.setTelefonoCelular(getjTextCelular().getText());
             persona.setCorreoElectronico(getjTextCorreo().getText());
-            persona.setTipo(((OperadorNegocioEnum)getCmbTipoOperador().getSelectedItem()).getLetra());
-            
+            persona.setTipo(((OperadorNegocioEnum) getCmbTipoOperador().getSelectedItem()).getLetra());
+            persona.setNacionalidad(((Nacionalidad) getCmbNacionalidad().getSelectedItem()));
+
             personaService.editar(persona);
-            
+
             System.out.println("Se edito correctamente");
         } catch (RemoteException ex) {
             Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -147,9 +151,8 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
 
     @Override
     public void eliminar() {
-        Boolean confirmacion=DialogoCodefac.dialogoPregunta("Alerta","Está seguro que desea eliminar el cliente?",DialogoCodefac.MENSAJE_ADVERTENCIA);
-        if(confirmacion)
-        {
+        Boolean confirmacion = DialogoCodefac.dialogoPregunta("Alerta", "Está seguro que desea eliminar el cliente?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+        if (confirmacion) {
             try {
                 personaService.eliminar(persona);
                 System.out.println("Se elimino correctamente");
@@ -157,7 +160,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
                 Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+
     }
 
     @Override
@@ -228,78 +231,63 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         getjTextCorreo().setText(persona.getCorreoElectronico());
         getCmbEstado().setSelectedItem(ClienteEnumEstado.getEnum(persona.getEstado()));
         getCmbTipoOperador().setSelectedItem(persona.getTipoEnum());
-        
 
         System.out.println("Datos cargados ");
     }
 
     @validacionPersonalizadaAnotacion(errorTitulo = "Formato de identificacion")
-    public boolean validarIdentificacionSegunOpcionEstablecida()
-    {
+    public boolean validarIdentificacionSegunOpcionEstablecida() {
         boolean verificador = false;
-        switch(this.opcionIdentificacion)
-        {
+        switch (this.opcionIdentificacion) {
             case 4:
                 verificador = validarRUC(getjTextIdentificacion().getText());
-            break;
+                break;
             case 5:
                 verificador = validarCedula(getjTextIdentificacion().getText());
-            break;
+                break;
             case 6:
                 verificador = true;
-            break;
+                break;
             default:
-                 verificador = false;
-            break;
+                verificador = false;
+                break;
         }
         return verificador;
-    }        
-            
-    public boolean validarCedula(String cedula)
-    {          
+    }
+
+    public boolean validarCedula(String cedula) {
         try {
-            int suma=0;
-            if(cedula.length()==9)
-            {
+            int suma = 0;
+            if (cedula.length() == 9) {
                 return false;
-            }
-            else
-            {
-                int a[]=new int [cedula.length()/2];
-                int b[]=new int [(cedula.length()/2)];
-                int c=0;
-                int d=1;
-                for (int i = 0; i < cedula.length()/2; i++)
-                {
-                    a[i]=Integer.parseInt(String.valueOf(cedula.charAt(c)));
-                    c=c+2;
-                    if (i < (cedula.length()/2)-1) 
-                    {
-                        b[i]=Integer.parseInt(String.valueOf(cedula.charAt(d)));
-                        d=d+2;
+            } else {
+                int a[] = new int[cedula.length() / 2];
+                int b[] = new int[(cedula.length() / 2)];
+                int c = 0;
+                int d = 1;
+                for (int i = 0; i < cedula.length() / 2; i++) {
+                    a[i] = Integer.parseInt(String.valueOf(cedula.charAt(c)));
+                    c = c + 2;
+                    if (i < (cedula.length() / 2) - 1) {
+                        b[i] = Integer.parseInt(String.valueOf(cedula.charAt(d)));
+                        d = d + 2;
                     }
                 }
 
-                for (int i = 0; i < a.length; i++) 
-                {
-                    a[i]=a[i]*2;
-                    if (a[i] >9)
-                    {
-                        a[i]=a[i]-9;
+                for (int i = 0; i < a.length; i++) {
+                    a[i] = a[i] * 2;
+                    if (a[i] > 9) {
+                        a[i] = a[i] - 9;
                     }
-                    suma=suma+a[i]+b[i];
-                } 
-                int aux=suma/10;
-                int dec=(aux+1)*10;
-                if ((dec - suma) == Integer.parseInt(String.valueOf(cedula.charAt(cedula.length()-1))))
-                    return true;
-                else
-                if(suma%10==0 && cedula.charAt(cedula.length()-1)=='0')
-                {
-                    return true;
+                    suma = suma + a[i] + b[i];
                 }
-                else
-                {
+                int aux = suma / 10;
+                int dec = (aux + 1) * 10;
+                if ((dec - suma) == Integer.parseInt(String.valueOf(cedula.charAt(cedula.length() - 1)))) {
+                    return true;
+                } else if (suma % 10 == 0 && cedula.charAt(cedula.length() - 1) == '0') {
+                    return true;
+                } else {
                     return false;
                 }
             }
@@ -337,24 +325,23 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     public void limpiar() {
         try {
             /**
-             * Seleccionando valores por defecto que se deben seleccionar despues de
-             * limpiar
+             * Seleccionando valores por defecto que se deben seleccionar
+             * despues de limpiar
              *
              * @author carlos
              */
-            
-            SriIdentificacionServiceIf  service=ServiceFactory.getFactory().getSriIdentificacionServiceIf();
+
+            SriIdentificacionServiceIf service = ServiceFactory.getFactory().getSriIdentificacionServiceIf();
             SriIdentificacion id;
-            Map<String,Object> parametros=new HashMap<String,Object>();
-            parametros.put("codigo","05");
-            SriIdentificacion identificacion=service.obtenerPorMap(parametros).get(0);
+            Map<String, Object> parametros = new HashMap<String, Object>();
+            parametros.put("codigo", "05");
+            SriIdentificacion identificacion = service.obtenerPorMap(parametros).get(0);
             getjComboIdentificacion().setSelectedItem(identificacion);
-            
-            
+
             getjComboTipoCliente().setSelectedIndex(0);
             getCmbTipoOperador().setSelectedIndex(0);
             getjTextExtension().setText("0");
-            
+
             //Setear el valor por defecto
             getCmbEstado().setSelectedItem(ClienteEnumEstado.ACTIVO);
             this.razonSocial = "";
@@ -363,6 +350,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+        getCmbNacionalidad().setSelectedIndex(52);
 
     }
 
@@ -374,19 +362,17 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             /**
              * Cargar los valores por defecto de las identificaciones
              */
-            SriServiceIf servicioSri =ServiceFactory.getFactory().getSriServiceIf();
+            SriServiceIf servicioSri = ServiceFactory.getFactory().getSriServiceIf();
             identificaciones = servicioSri.obtenerIdentificaciones(SriIdentificacion.CLIENTE);
             getjComboIdentificacion().removeAllItems();
             for (SriIdentificacion identificacion : identificaciones) {
-                if(!(identificacion.getCodigo().equals("07") || identificacion.getCodigo().equals("19")))
-                {
+                if (!(identificacion.getCodigo().equals("07") || identificacion.getCodigo().equals("19"))) {
                     getjComboIdentificacion().addItem(identificacion);
                 }
             }
         } catch (RemoteException ex) {
             Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
 
     }
 
@@ -427,9 +413,19 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
          * Cargar los datos por defecto de los tipos de operadores
          */
         getCmbTipoOperador().removeAllItems();
-        OperadorNegocioEnum list[]= OperadorNegocioEnum.values();
+        OperadorNegocioEnum list[] = OperadorNegocioEnum.values();
         for (OperadorNegocioEnum operadorNegocioEnum : list) {
-            getCmbTipoOperador().addItem(operadorNegocioEnum);        
+            getCmbTipoOperador().addItem(operadorNegocioEnum);
+        }
+
+        try {
+            List<Nacionalidad> nacion = ServiceFactory.getFactory().getNacionalidadServiceIf().obtenerTodos();
+            getCmbNacionalidad().removeAllItems();
+            for (Nacionalidad n : nacion) {
+                getCmbNacionalidad().addItem(n);
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -438,47 +434,41 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-
-    public void addListenerCombos()
-    {
+    public void addListenerCombos() {
         getjComboIdentificacion().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                opcionIdentificacion = Integer.parseInt(((SriIdentificacion)getjComboIdentificacion().getSelectedItem()).getCodigo());
-                System.out.println("Info combo: " +((SriIdentificacion)getjComboIdentificacion().getSelectedItem()).getCodigo());
+                opcionIdentificacion = Integer.parseInt(((SriIdentificacion) getjComboIdentificacion().getSelectedItem()).getCodigo());
+                System.out.println("Info combo: " + ((SriIdentificacion) getjComboIdentificacion().getSelectedItem()).getCodigo());
                 //Validario comonente cuando sea diferente de vacio dependiendo la opcion de identificacion
-                if(!getjTextIdentificacion().getText().equals(""))
-                    panelPadre.validarPorGrupo(ValidacionCodefacAnotacion.GRUPO_FORMULARIO,NOMBRE_VALIDADOR_IDENTIFICACION);
+                if (!getjTextIdentificacion().getText().equals("")) {
+                    panelPadre.validarPorGrupo(ValidacionCodefacAnotacion.GRUPO_FORMULARIO, NOMBRE_VALIDADOR_IDENTIFICACION);
+                }
             }
         });
-        
-    }       
 
-    private boolean validarRUC(String RUC) 
-    {
+    }
+
+    private boolean validarRUC(String RUC) {
         System.out.println("Longitud de RUC" + RUC.length());
-        if(RUC.length() == 13)
-        {
-            String cedula = RUC.substring(0,10);
+        if (RUC.length() == 13) {
+            String cedula = RUC.substring(0, 10);
             System.out.println("CEDULA: " + cedula);
-            String ruc = RUC.substring(10,13);
+            String ruc = RUC.substring(10, 13);
             System.out.println("RUC: " + ruc);
-            System.out.println("VALor cedula " +  validarCedula(cedula));
-            System.out.println("VALor ruc " +  isNumeric(ruc));
-            if(validarCedula(cedula) && isNumeric(ruc))
-            {
+            System.out.println("VALor cedula " + validarCedula(cedula));
+            System.out.println("VALor ruc " + isNumeric(ruc));
+            if (validarCedula(cedula) && isNumeric(ruc)) {
                 return true;
             }
         }
-        
+
         return false;
     }
-    
-    public boolean isNumeric(String cadena) 
-    {
+
+    public boolean isNumeric(String cadena) {
         boolean resultado;
-        try
-        {
+        try {
             Integer.parseInt(cadena);
             resultado = true;
         } catch (NumberFormatException excepcion) {
@@ -486,29 +476,28 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         }
         return resultado;
     }
-           
-    public void addListenerTexts()
-    {      
+
+    public void addListenerTexts() {
         getjTextNombres().addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent evt) {
-                    
+
             }
+
             @Override
-            public void focusLost(FocusEvent evt)
-            {
+            public void focusLost(FocusEvent evt) {
                 getjTextNombreSocial().setText(getjTextNombres().getText() + " " + getjTextApellidos().getText());
             }
         });
-        
+
         getjTextApellidos().addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent evt) {
-                  
+
             }
+
             @Override
-            public void focusLost(FocusEvent evt)
-            {
+            public void focusLost(FocusEvent evt) {
                 getjTextNombreSocial().setText(getjTextNombres().getText() + " " + getjTextApellidos().getText());
             }
         });
@@ -516,7 +505,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
 
     @Override
     public List<String> getPerfilesPermisos() {
-        List<String> permisos=new ArrayList<String>();
+        List<String> permisos = new ArrayList<String>();
         permisos.add(Perfil.PERFIl_ADMINISTRADOR);
         permisos.add(Perfil.PERFIl_OPERADOR);
         return permisos;

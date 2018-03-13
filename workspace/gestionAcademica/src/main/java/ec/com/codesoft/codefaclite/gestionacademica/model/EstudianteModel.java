@@ -15,11 +15,14 @@ import ec.com.codesoft.codefaclite.gestionacademica.busqueda.EstudianteBusquedaD
 import ec.com.codesoft.codefaclite.gestionacademica.panel.EstudiantePanel;
 import ec.com.codesoft.codefaclite.inventario.busqueda.RepresentanteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Nacionalidad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneroEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDiscapacidadEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteServiceIf;
 import static ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha.hoy;
 import java.awt.event.ActionEvent;
@@ -53,51 +56,85 @@ public class EstudianteModel extends EstudiantePanel {
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
-        getDateFechaNacimiento().setDate(hoy());
+        try {
+            getDateFechaNacimiento().setDate(hoy());
 
-        getCmbEstado().removeAllItems();
-        for (GeneralEnumEstado enumerador : GeneralEnumEstado.values()) {
-            getCmbEstado().addItem(enumerador);
-        }
-
-        getCmbGenero().removeAllItems();
-        for (GeneroEnum generoEnum : GeneroEnum.values()) {
-            getCmbGenero().addItem(generoEnum);
-        }
-
-        getBtnBuscarRepresentante().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                RepresentanteBusquedaDialogo buscarBusquedaDialogo = new RepresentanteBusquedaDialogo();
-                BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
-                buscarDialogo.setVisible(true);
-                representante = (Persona) buscarDialogo.getResultado();
-
-                if (representante != null) {
-                    String identificacion = representante.getIdentificacion();
-                    String nombre = representante.getRazonSocial();
-                    getTxtRepresentante().setText(identificacion + " - " + nombre);
-                }
+            List<Nacionalidad> nacion = ServiceFactory.getFactory().getNacionalidadServiceIf().obtenerTodos();
+            getCmbNacionalidad().removeAllItems();
+            for (Nacionalidad n : nacion) {
+                getCmbNacionalidad().addItem(n);
             }
-        });
-        
-        getBtnAgregarRepresentante().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<Persona>() {
-                    @Override
-                    public void updateInterface(Persona entity) {
-                        if (entity != null) {
-                            representante=entity;
-                            getTxtRepresentante().setText(representante.getIdentificacion() + " - " +representante.getNombresCompletos());
-                        }
+
+            getCmbTipoDiscapacidad().removeAllItems();
+            for (TipoDiscapacidadEnum tipo : TipoDiscapacidadEnum.values()) {
+                getCmbTipoDiscapacidad().addItem(tipo);
+            }
+
+            getCmbDiscapacidad().removeAllItems();
+            for (EnumSiNo sino : EnumSiNo.values()) {
+                getCmbDiscapacidad().addItem(sino);
+            }
+
+            getCmbEstado().removeAllItems();
+            for (GeneralEnumEstado enumerador : GeneralEnumEstado.values()) {
+                getCmbEstado().addItem(enumerador);
+            }
+
+            getCmbGenero().removeAllItems();
+            for (GeneroEnum generoEnum : GeneroEnum.values()) {
+                getCmbGenero().addItem(generoEnum);
+            }
+
+            getBtnBuscarRepresentante().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    RepresentanteBusquedaDialogo buscarBusquedaDialogo = new RepresentanteBusquedaDialogo();
+                    BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
+                    buscarDialogo.setVisible(true);
+                    representante = (Persona) buscarDialogo.getResultado();
+
+                    if (representante != null) {
+                        String identificacion = representante.getIdentificacion();
+                        String nombre = representante.getRazonSocial();
+                        getTxtRepresentante().setText(identificacion + " - " + nombre);
                     }
-                }, DialogInterfacePanel.CLIENTE_PANEL, false);
-            }
-        });
+                }
+            });
+
+            getBtnAgregarRepresentante().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<Persona>() {
+                        @Override
+                        public void updateInterface(Persona entity) {
+                            if (entity != null) {
+                                representante = entity;
+                                getTxtRepresentante().setText(representante.getIdentificacion() + " - " + representante.getNombresCompletos());
+                            }
+                        }
+                    }, DialogInterfacePanel.CLIENTE_PANEL, false);
+                }
+            });
+
+            getCmbDiscapacidad().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String disc = ((EnumSiNo) getCmbDiscapacidad().getSelectedItem()).getLetra();
+                    if (disc == "n") {
+                        getTxtConadis().setText("");
+                        getTxtObsDiscapacidad().setText("");
+                        getCmbTipoDiscapacidad().setSelectedIndex(0);
+                        getTxtPorcentajeDiscapacidad().setText("0");
+                    }
+                }
+            });
+        } catch (RemoteException ex) {
+            Logger.getLogger(EstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
+
     public void nuevo() throws ExcepcionCodefacLite {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -128,9 +165,16 @@ public class EstudianteModel extends EstudiantePanel {
         estudiante.setCelular(getTxtCelular().getText());
         estudiante.setDireccion(getTxtDireccion().getText());
         estudiante.setDatosAdicionales(getTxtAdicionales().getText());
+        estudiante.setNacionalidad(((Nacionalidad) getCmbNacionalidad().getSelectedItem()));
+        estudiante.setObsDiscapacidad(getTxtObsDiscapacidad().getText());
+        estudiante.setConadis(getTxtConadis().getText());
+        estudiante.setEtnia(getTxtEtnia().getText());
+        estudiante.setPorcentajeDiscapacidad(Integer.parseInt(getTxtPorcentajeDiscapacidad().getText()));
 
+        estudiante.setTipoDiscapacidad(((TipoDiscapacidadEnum) getCmbTipoDiscapacidad().getSelectedItem()).getLetra());
         estudiante.setGenero(((GeneroEnum) getCmbGenero().getSelectedItem()).getEstado());
         estudiante.setEstado(((GeneralEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
+        estudiante.setDiscapacidad(((EnumSiNo) getCmbDiscapacidad().getSelectedItem()).getLetra());
 
         if (getDateFechaNacimiento().getDate() != null) {
             fechaNacimiento = new Date(getDateFechaNacimiento().getDate().getTime());
@@ -198,9 +242,16 @@ public class EstudianteModel extends EstudiantePanel {
         getTxtCelular().setText(estudiante.getCelular());
         getTxtDireccion().setText(estudiante.getDireccion());
         getTxtAdicionales().setText(estudiante.getDatosAdicionales());
+        getTxtEtnia().setText(estudiante.getEtnia());
+        getTxtConadis().setText(estudiante.getConadis());
+        getTxtObsDiscapacidad().setText(estudiante.getObsDiscapacidad());
+        getTxtPorcentajeDiscapacidad().setText(String.valueOf(estudiante.getPorcentajeDiscapacidad()));
+        
 
         getCmbGenero().setSelectedItem(estudiante.getGenero());
+        getCmbNacionalidad().setSelectedItem(estudiante.getNacionalidad());
         getCmbEstado().setSelectedItem(estudiante.getEstado());
+        getCmbDiscapacidad().setSelectedItem(estudiante.getDiscapacidad());
         getDateFechaNacimiento().setDate(estudiante.getFechaNacimiento());
         if (estudiante.getRepresentante() != null) {
             String identificacion = estudiante.getRepresentante().getIdentificacion();
@@ -216,7 +267,10 @@ public class EstudianteModel extends EstudiantePanel {
         getDateFechaNacimiento().setDate(hoy());
         getCmbEstado().setSelectedIndex(0);
         getCmbGenero().setSelectedIndex(0);
-
+        getCmbTipoDiscapacidad().setSelectedIndex(0);
+        getCmbDiscapacidad().setSelectedIndex(0);
+        getTxtPorcentajeDiscapacidad().setText("0");
+        getCmbNacionalidad().setSelectedIndex(52);
     }
 
     @Override

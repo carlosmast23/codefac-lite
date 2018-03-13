@@ -13,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -58,10 +60,14 @@ public class Persona implements Serializable {
     @Column(name = "CORREO_ELECTRONICO")
     private String correoElectronico;
     @Column(name = "ESTADO")
-    private String estado;    
-    
+    private String estado;
+    @JoinColumn(name = "NACIONALIDAD_ID")
+    @ManyToOne
+    private Nacionalidad nacionalidad;
+
     /**
-     *  Variable para identificar el tipo de la persona, si es proveedor , cliente, o ambos
+     * Variable para identificar el tipo de la persona, si es proveedor ,
+     * cliente, o ambos
      */
     @Column(name = "TIPO_OPERADOR")
     private String tipo;
@@ -105,8 +111,6 @@ public class Persona implements Serializable {
     public void setNombreLegal(String nombreLegal) {
         this.nombreLegal = nombreLegal;
     }
-
-    
 
     public String getTipCliente() {
         return tipCliente;
@@ -187,16 +191,21 @@ public class Persona implements Serializable {
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
-    
-    ///Metodos personalizados
-    public String getNombresCompletos()
-    {
-        String nombresTmp=(nombres!=null)?nombres:"";
-        String apellidosTmp=(apellidos!=null)?apellidos:"";
-        return nombresTmp+" "+apellidosTmp;
+
+    public Nacionalidad getNacionalidad() {
+        return nacionalidad;
     }
-    
-       
+
+    public void setNacionalidad(Nacionalidad nacionalidad) {
+        this.nacionalidad = nacionalidad;
+    }
+
+    ///Metodos personalizados
+    public String getNombresCompletos() {
+        String nombresTmp = (nombres != null) ? nombres : "";
+        String apellidosTmp = (apellidos != null) ? apellidos : "";
+        return nombresTmp + " " + apellidosTmp;
+    }
 
     @Override
     public int hashCode() {
@@ -217,14 +226,13 @@ public class Persona implements Serializable {
         }
         return true;
     }
-    
+
     /**
      * Datos adicionales
-     * @return 
+     *
+     * @return
      */
-    
-    public OperadorNegocioEnum getTipoEnum()
-    {
+    public OperadorNegocioEnum getTipoEnum() {
         return OperadorNegocioEnum.getEnum(tipo);
     }
 

@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Nacionalidad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import java.io.Serializable;
 import java.sql.Date;
@@ -59,11 +60,26 @@ public class Estudiante implements Serializable {
     private String datosAdicionales;
     @Column(name = "ESTADO")
     private String estado;
-
+    @Column(name = "DISCAPACIDAD")
+    private String discapacidad;
+    @Column(name = "CONADIS")
+    private String conadis;
+    @Column(name = "TIPO_DISCAPACIDAD")
+    private String tipoDiscapacidad;
+    @Column(name = "PORCENTAJE_DISCAPACIDAD")
+    private int porcentajeDiscapacidad;
+    @Column(name = "OBS_DISCAPACIDAD")
+    private String obsDiscapacidad;
+    @Column(name = "ETNIA")
+    private String etnia;
     @JoinColumn(name = "PERSONA_ID")
-    @ManyToOne    
+    @ManyToOne
     private Persona representante;
-    
+
+    @JoinColumn(name = "NACIONALIDAD_ID")
+    @ManyToOne
+    private Nacionalidad nacionalidad;
+
     public Estudiante() {
     }
 
@@ -139,7 +155,6 @@ public class Estudiante implements Serializable {
         this.fechaNacimiento = fechaNacimiento;
     }
 
- 
     public String getTelefono() {
         return telefono;
     }
@@ -188,16 +203,72 @@ public class Estudiante implements Serializable {
         this.representante = representante;
     }
 
-    ///Metodos personalizados 
-    public String getNombreCompleto()
-    {
-        return nombres+" "+apellidos;
+    public String getDiscapacidad() {
+        return discapacidad;
+    }
+
+    public void setDiscapacidad(String discapacidad) {
+        this.discapacidad = discapacidad;
+    }
+
+    public String getConadis() {
+        return conadis;
+    }
+
+    public void setConadis(String conadis) {
+        this.conadis = conadis;
+    }
+
+    public String getTipoDiscapacidad() {
+        return tipoDiscapacidad;
+    }
+
+    public void setTipoDiscapacidad(String tipoDiscapacidad) {
+        this.tipoDiscapacidad = tipoDiscapacidad;
+    }
+
+    public int getPorcentajeDiscapacidad() {
+        return porcentajeDiscapacidad;
+    }
+
+    public void setPorcentajeDiscapacidad(int porcentajeDiscapacidad) {
+        this.porcentajeDiscapacidad = porcentajeDiscapacidad;
+    }
+
+
+    public String getEtnia() {
+        return etnia;
+    }
+
+    public void setEtnia(String etnia) {
+        this.etnia = etnia;
+    }
+
+    public String getObsDiscapacidad() {
+        return obsDiscapacidad;
+    }
+
+    public void setObsDiscapacidad(String obsDiscapacidad) {
+        this.obsDiscapacidad = obsDiscapacidad;
+    }
+
+    public Nacionalidad getNacionalidad() {
+        return nacionalidad;
+    }
+
+    public void setNacionalidad(Nacionalidad nacionalidad) {
+        this.nacionalidad = nacionalidad;
     }
     
+        ///Metodos personalizados 
+
+    public String getNombreCompleto() {
+        return nombres + " " + apellidos;
+    }
 
     @Override
     public String toString() {
-        return nombres+" "+apellidos;
+        return nombres + " " + apellidos;
     }
 
     @Override
@@ -224,8 +295,5 @@ public class Estudiante implements Serializable {
         }
         return true;
     }
-    
-    
-    
 
 }

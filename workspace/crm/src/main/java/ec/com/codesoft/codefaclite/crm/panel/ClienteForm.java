@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.crm.panel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Nacionalidad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ClienteEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
@@ -71,6 +72,8 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         lblEspacio = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         cmbTipoOperador = new javax.swing.JComboBox<>();
+        jLabel15 = new javax.swing.JLabel();
+        cmbNacionalidad = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -299,6 +302,19 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         jPanelCaracteristicasGenerales.add(cmbTipoOperador, gridBagConstraints);
 
+        jLabel15.setText("Nacionalidad:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
+        jPanelCaracteristicasGenerales.add(jLabel15, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        jPanelCaracteristicasGenerales.add(cmbNacionalidad, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -319,6 +335,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<ClienteEnumEstado> cmbEstado;
+    private javax.swing.JComboBox<Nacionalidad> cmbNacionalidad;
     private javax.swing.JComboBox<OperadorNegocioEnum> cmbTipoOperador;
     private javax.swing.JComboBox<SriIdentificacion> jComboIdentificacion;
     private javax.swing.JComboBox<String> jComboTipoCliente;
@@ -328,6 +345,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -475,6 +493,14 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
 
     public void setCmbTipoOperador(JComboBox<OperadorNegocioEnum> cmbTipoOperador) {
         this.cmbTipoOperador = cmbTipoOperador;
+    }
+
+    public JComboBox<Nacionalidad> getCmbNacionalidad() {
+        return cmbNacionalidad;
+    }
+
+    public void setCmbNacionalidad(JComboBox<Nacionalidad> cmbNacionalidad) {
+        this.cmbNacionalidad = cmbNacionalidad;
     }
 
     
