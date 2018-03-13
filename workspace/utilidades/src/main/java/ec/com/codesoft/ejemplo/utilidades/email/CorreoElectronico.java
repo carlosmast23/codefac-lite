@@ -94,6 +94,15 @@ public class CorreoElectronico {
             /**
              * Agregar varios destinatarios
              */
+            
+            String correosStr=String.join(",",to);
+            System.out.println(correosStr);
+            
+            //InternetAddress.parse(correosStr);
+            message.setRecipients(Message.RecipientType.TO,
+                            InternetAddress.parse(correosStr));
+            //TODO: Analizar si depues necesito separa para enviar con cc o directo al usuario
+            /*
             for(int i=0;i<to.size();i++)
             {
                 if(i==0)
@@ -110,7 +119,7 @@ public class CorreoElectronico {
                     //    InternetAddress.parse(to.get(i)));
                     System.out.println("Correo "+(i+1)+":"+to.get(i));
                 }
-            }
+            }*/
             
             
             message.setSubject(subject);
