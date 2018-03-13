@@ -344,13 +344,11 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
         getCmbPeriodo().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 /*if (estudianteInscrito != null) {
                     Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
                     if (periodo != null) {
                         cargarRubrosAsociados(estudianteInscrito, periodo);
                     }
-
                 }*/
             }
         });

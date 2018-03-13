@@ -44,12 +44,12 @@ public class EmpresaBusquedaDialogo implements InterfaceModelFind<Empresa>
         dato.add(t.getObligadoLlevarContabilidad());
         dato.add(t.getNombreLegal());
     }
-
+/*
     @Override
     public Boolean buscarObjeto(Empresa t, Object valor) 
     {
         return t.getIdentificacion().equals(valor.toString());   
-    }
+    }*/
 
     @Override
     public QueryDialog getConsulta(String filter) {       

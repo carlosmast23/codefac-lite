@@ -41,9 +41,11 @@ public class CategoriaProductoBusquedaDialogo implements InterfaceModelFind<Cate
         dato.add(c.getDescripcion());
     }
 
+    /*
     @Override
     public Boolean buscarObjeto(CategoriaProducto c, Object valor) {
         return c.getNombre().equals(valor.toString());
     }
+*/
 
 }

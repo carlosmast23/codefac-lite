@@ -28,6 +28,6 @@ public interface InterfaceModelFind<T>
     
     
     public abstract void agregarObjeto(T t,Vector dato);
-    public abstract Boolean buscarObjeto(T t,Object valor);
+    //public abstract Boolean buscarObjeto(T t,Object valor);
     
 }

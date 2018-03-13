@@ -7,23 +7,20 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.enumerados;
 
 /**
  *
- * @author Carlos
+ * @author CodesoftDesarrollo
  */
-public enum TipoProductoEnum {
-    /**
-     * Si el producto es un producto fisico y debe manejarse control del stock
-     */
-    PRODUCTO("Producto", "p"),
-    /**
-     * Si el producto es de un servicio intangible
-     */
-    SERVICIO("Servicio", "s"),
-    /**
-     * Si el producto es una mescla o esta compuesto de otros productos
-     */
-    EMSAMBLE("Ensamble", "e");
+public enum TipoDiscapacidadEnum {
 
-    private TipoProductoEnum(String nombre, String letra) {
+    NINGUNA("Ninguna", "n"),
+    AUDITIVA("Auditiva", "a"),
+    FISICA("Fisica", "f"),
+    INTELECTUAL("Intelectual", "i"),
+    LENGUAJE("Lenguaje", "l"),
+    PSICOSOCIAL("Psicosocial", "p"),
+    VISUAL("Visual", "v")
+    ;
+
+    private TipoDiscapacidadEnum(String nombre, String letra) {
         this.nombre = nombre;
         this.letra = letra;
     }
@@ -39,9 +36,9 @@ public enum TipoProductoEnum {
         return letra;
     }
 
-    public static TipoProductoEnum getEnumByLetra(String letra) {
+    public static TipoDiscapacidadEnum getEnumByLetra(String letra) {
 
-        for (TipoProductoEnum enumerador : TipoProductoEnum.values()) {
+        for (TipoDiscapacidadEnum enumerador : TipoDiscapacidadEnum.values()) {
             if (enumerador.getLetra().equals(letra)) {
                 return enumerador;
             }

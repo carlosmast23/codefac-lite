@@ -46,12 +46,13 @@ public class CompraBusquedaDialogo implements InterfaceModelFind<Compra>
         dato.add(t.getFechaFactura()+"");
 
     }
+    /*
 
     @Override
     public Boolean buscarObjeto(Compra t, Object valor) 
     {
         return t.getPreimpreso().equals(valor.toString());   
-    }
+    }*/
 
     @Override
     public QueryDialog getConsulta(String filter) {

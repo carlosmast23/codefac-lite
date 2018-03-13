@@ -53,6 +53,7 @@ public class FacturaBusquedaNotaCredito implements InterfaceModelFind<Factura> {
         dato.add(t.getTotal());
     }
 
+    /*
     @Override
     public Boolean buscarObjeto(Factura t, Object valor) {
         //if(t.getCliente().getIdentificacion().indexOf(valor.toString())>=0 || t.getPreimpreso().indexOf(valor.toString())>=0)
@@ -67,6 +68,6 @@ public class FacturaBusquedaNotaCredito implements InterfaceModelFind<Factura> {
             return false;
         }  
         //return true;
-    }
+    }*/
     
 }

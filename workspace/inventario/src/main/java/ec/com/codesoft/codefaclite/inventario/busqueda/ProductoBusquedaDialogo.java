@@ -48,11 +48,12 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto>
         }
     }
 
+    /*
     @Override
     public Boolean buscarObjeto(Producto t, Object valor) 
     {
         return t.getNombre().equals(valor.toString());   
-    }
+    }*/
 
     @Override
     public QueryDialog getConsulta(String filter) {

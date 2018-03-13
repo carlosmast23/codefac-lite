@@ -43,9 +43,10 @@ public class AulaBusquedaDialogo implements InterfaceModelFind<Aula> {
         dato.add(a.getCapacidad());
     }
 
+    /*
     @Override
     public Boolean buscarObjeto(Aula a, Object valor) {
         return a.getNombre().equals(valor.toString());
-    }
+    }*/
 
 }

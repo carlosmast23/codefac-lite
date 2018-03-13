@@ -37,9 +37,10 @@ public class PerfilBusquedaDialogo implements InterfaceModelFind<Perfil>{
         dato.add(t.getNombre());
     }
 
+    /*
     @Override
     public Boolean buscarObjeto(Perfil t, Object valor) {
         return t.getNombre().equals(valor.toString());
-    }
+    }*/
     
 }

@@ -81,6 +81,7 @@ import ec.com.codesoft.codefaclite.servidor.service.ImpuestoService;
 import ec.com.codesoft.codefaclite.servidor.service.KardexDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.KardexItemEspecificoService;
 import ec.com.codesoft.codefaclite.servidor.service.KardexService;
+import ec.com.codesoft.codefaclite.servidor.service.NacionalidadService;
 import ec.com.codesoft.codefaclite.servidor.service.NotaCreditoService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
 import ec.com.codesoft.codefaclite.servidor.service.PerfilServicio;
@@ -133,6 +134,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteInscritoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NacionalidadServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PeriodoServiceIf;
@@ -337,6 +339,7 @@ public class Main {
             mapRecursos.put(EstudianteInscritoService.class,EstudianteInscritoServiceIf.class);
             mapRecursos.put(RubrosNivelService.class,RubrosNivelServiceIf.class);
             mapRecursos.put(RubroEstudianteService.class,RubroEstudianteServiceIf.class);
+            mapRecursos.put(NacionalidadService.class,NacionalidadServiceIf.class);
             
             ServiceControllerServer.cargarRecursos(mapRecursos);
             System.out.println("servidor iniciado");

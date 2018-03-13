@@ -40,7 +40,12 @@ public enum TipoDocumentoEnum {
      /**
      *  Tipo de documento cuando se hace un egreso de los ensambles
      */
-    ENSAMBLE_EGRESO(ModuloEnum.INVENTARIO,"INE","Egreso Inventario Ensamble",TipoDocumentoEnum.AFECTA_INVENTARIO_NEGATIVO);
+    ENSAMBLE_EGRESO(ModuloEnum.INVENTARIO,"INE","Egreso Inventario Ensamble",TipoDocumentoEnum.AFECTA_INVENTARIO_NEGATIVO),
+    
+    /**
+     * Tipo de documento utilizado para facturar desde el modulo acaemico
+     */
+    ACADEMICO(ModuloEnum.VENTAS,"VAC","Académico",TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO);
     
     public static final String AFECTA_INVENTARIO_POSITIVO="+";
     public static final String AFECTA_INVENTARIO_NEGATIVO="-";

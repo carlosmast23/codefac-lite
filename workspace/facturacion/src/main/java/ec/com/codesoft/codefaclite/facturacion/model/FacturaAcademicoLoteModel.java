@@ -26,6 +26,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DatosAdicionalesComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
@@ -431,8 +432,8 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel{
                 Factura factura = generarFactura(estudianteInscrito, rubrosEstudiantes);
                 ComprobanteDataFactura comprobanteData = new ComprobanteDataFactura(factura);
                 Map<String,String> datosAdicionalesMap=new HashMap<String,String>();
-                datosAdicionalesMap.put("Estudiante",estudianteInscrito.getEstudiante().getNombreCompleto());
-                datosAdicionalesMap.put("Codigo",estudianteInscrito.getEstudiante().getIdEstudiante().toString());                        
+                datosAdicionalesMap.put(DatosAdicionalesComprobanteEnum.NOMBRE_ESTUDIANTE.getNombre(),estudianteInscrito.getEstudiante().getNombreCompleto());
+                datosAdicionalesMap.put(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre(),estudianteInscrito.getEstudiante().getIdEstudiante().toString());                        
                 comprobanteData.setMapInfoAdicional(datosAdicionalesMap);
                 comprobantesLista.add(comprobanteData);
                 

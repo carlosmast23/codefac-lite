@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.gestionacademica.busqueda;
+package ec.com.codesoft.codefaclite.facturacion.busqueda;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Vector;
 
@@ -16,37 +16,39 @@ import java.util.Vector;
  *
  * @author CodesoftDesarrollo
  */
-public class PeriodoBusquedaDialogo implements InterfaceModelFind<Periodo> {
+public class EstudianteBusquedaDialogo implements InterfaceModelFind<Estudiante> {
 
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<>();
-        titulo.add(new ColumnaDialogo("Nombre", 0.3d));
-        titulo.add(new ColumnaDialogo("Fecha inicio", 0.2d));
-        titulo.add(new ColumnaDialogo("Fecha fin", 0.2d));
+        titulo.add(new ColumnaDialogo("Cedula", 0.2d));
+        titulo.add(new ColumnaDialogo("Nombres", 0.3d));
+        titulo.add(new ColumnaDialogo("Apellidos", 0.3d));
+        titulo.add(new ColumnaDialogo("Correo", 0.2d));
         return titulo;
     }
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        String queryString = "SELECT u FROM Periodo u WHERE (u.estado=?1) and";
-        queryString += " ( LOWER(u.nombre) LIKE " + filter + " )";
+        String queryString = "SELECT u FROM Estudiante u WHERE (u.estado=?1) and";
+        queryString += " ( LOWER(u.apellidos) LIKE " + filter + " )";
         QueryDialog queryDialog = new QueryDialog(queryString);
         queryDialog.agregarParametro(1, GeneralEnumEstado.ACTIVO.getEstado());
         return queryDialog;
     }
 
     @Override
-    public void agregarObjeto(Periodo p, Vector dato) {
-        dato.add(p.getNombre());
-        dato.add(p.getFechaInicio());
-        dato.add(p.getFechaFin());
+    public void agregarObjeto(Estudiante e, Vector dato) {
+       dato.add(e.getCedula());
+       dato.add(e.getNombres());
+       dato.add(e.getApellidos());
+       dato.add(e.getEmail());
     }
 
     /*
     @Override
-    public Boolean buscarObjeto(Periodo p, Object valor) {
-        return p.getNombre().equals(valor.toString());
+    public Boolean buscarObjeto(Estudiante e, Object valor) {
+        return e.getApellidos().equals(valor.toString());
     }*/
 
 }

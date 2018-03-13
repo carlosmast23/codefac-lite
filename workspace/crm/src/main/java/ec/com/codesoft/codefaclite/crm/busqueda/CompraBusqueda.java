@@ -52,9 +52,10 @@ public class CompraBusqueda implements InterfaceModelFind<Compra>
         dato.add(t.getTotal());
     }
 
+    /*
     @Override
     public Boolean buscarObjeto(Compra t, Object valor) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    }*/
     
 }

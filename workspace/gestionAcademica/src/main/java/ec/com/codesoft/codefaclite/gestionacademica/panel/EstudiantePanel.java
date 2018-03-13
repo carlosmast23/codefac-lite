@@ -9,8 +9,11 @@ import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Nacionalidad;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneroEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDiscapacidadEnum;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JTextArea;
@@ -72,6 +75,20 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         jScrollPane2 = new javax.swing.JScrollPane();
         txtDireccion = new javax.swing.JTextArea();
         btnAgregarRepresentante = new javax.swing.JButton();
+        lblDiscapacidad = new javax.swing.JLabel();
+        cmbDiscapacidad = new javax.swing.JComboBox<>();
+        lblConadis = new javax.swing.JLabel();
+        lblTipo = new javax.swing.JLabel();
+        lblPorcentaje = new javax.swing.JLabel();
+        txtConadis = new javax.swing.JTextField();
+        txtPorcentajeDiscapacidad = new javax.swing.JTextField();
+        lblNacionalidad = new javax.swing.JLabel();
+        cmbNacionalidad = new javax.swing.JComboBox<>();
+        lblEtnia = new javax.swing.JLabel();
+        txtEtnia = new javax.swing.JTextField();
+        cmbTipoDiscapacidad = new javax.swing.JComboBox<>();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        txtObsDiscapacidad = new javax.swing.JTextArea();
 
         setClosable(true);
         setIconifiable(true);
@@ -127,6 +144,28 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
 
         btnAgregarRepresentante.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add_user.png"))); // NOI18N
 
+        lblDiscapacidad.setText("Discapacidad:");
+
+        lblConadis.setText("Conadis:");
+
+        lblTipo.setText("Tipo discapacidad:");
+
+        lblPorcentaje.setText("Porcentaje discapacidad:");
+
+        txtConadis.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtConadisActionPerformed(evt);
+            }
+        });
+
+        lblNacionalidad.setText("Nacionalidad:");
+
+        lblEtnia.setText("Etnia: ");
+
+        txtObsDiscapacidad.setColumns(20);
+        txtObsDiscapacidad.setRows(5);
+        jScrollPane3.setViewportView(txtObsDiscapacidad);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -138,33 +177,42 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblRepresentante)
+                                .addGap(41, 41, 41)
+                                .addComponent(txtRepresentante, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblDiscapacidad)
+                            .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lblCodSistema)
                                     .addComponent(lblGenero)
                                     .addComponent(lblTelefono)
                                     .addComponent(lblDireccion)
-                                    .addComponent(lblCedula)
-                                    .addComponent(lblEstado))
+                                    .addComponent(lblCedula))
                                 .addGap(40, 40, 40)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(txtTelefono)
-                                        .addComponent(txtCodSistema)
-                                        .addComponent(txtNombres)
-                                        .addComponent(cmbGenero, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(txtCedula)
-                                        .addComponent(cmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblRepresentante)
-                                .addGap(41, 41, 41)
-                                .addComponent(txtRepresentante, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(cmbDiscapacidad, javax.swing.GroupLayout.Alignment.LEADING, 0, 135, Short.MAX_VALUE)
+                                        .addComponent(txtTelefono, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(txtCodSistema, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(txtNombres, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(cmbGenero, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txtCedula, javax.swing.GroupLayout.Alignment.LEADING))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(29, 29, 29)
+                                                .addComponent(txtPorcentajeDiscapacidad, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                .addComponent(cmbTipoDiscapacidad, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(txtConadis, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)))
+                                        .addGap(38, 38, 38)
+                                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(lblConadis)
+                            .addComponent(lblPorcentaje)
+                            .addComponent(lblTipo))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblAdicionales)
-                                .addGap(18, 18, 18)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(lblFechaNacimiento)
                                 .addGap(23, 23, 23)
@@ -190,8 +238,28 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
                                 .addGap(18, 18, 18)
                                 .addComponent(btnBuscarRepresentante)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnAgregarRepresentante)))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(btnAgregarRepresentante))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(lblNacionalidad)
+                                            .addGap(42, 42, 42))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                            .addComponent(lblAdicionales)
+                                            .addGap(18, 18, 18)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(lblEtnia)
+                                            .addComponent(lblEstado))
+                                        .addGap(69, 69, 69)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(txtEtnia, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(cmbNacionalidad, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(cmbEstado, javax.swing.GroupLayout.Alignment.LEADING, 0, 135, Short.MAX_VALUE)))))))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -208,7 +276,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
                     .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblCorreo)
                     .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 27, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblNombres)
                     .addComponent(txtNombres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -237,24 +305,44 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
                     .addComponent(txtCelular, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(58, Short.MAX_VALUE))
+                        .addGap(6, 6, 6)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane1)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblDireccion)
-                                    .addComponent(lblAdicionales))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(lblDireccion)
+                            .addComponent(lblAdicionales))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 113, Short.MAX_VALUE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblDiscapacidad)
+                    .addComponent(cmbDiscapacidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblNacionalidad)
+                    .addComponent(cmbNacionalidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(31, 31, 31)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblConadis)
+                            .addComponent(txtConadis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblEtnia)
+                            .addComponent(txtEtnia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblEstado)
-                            .addComponent(cmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(50, Short.MAX_VALUE))))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(lblTipo)
+                                .addComponent(cmbTipoDiscapacidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(lblEstado)
+                                .addComponent(cmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(31, 31, 31)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblPorcentaje)
+                            .addComponent(txtPorcentajeDiscapacidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         pack();
@@ -264,38 +352,56 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNombresActionPerformed
 
+    private void txtConadisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtConadisActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtConadisActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarRepresentante;
     private javax.swing.JButton btnBuscarRepresentante;
+    private javax.swing.JComboBox<EnumSiNo> cmbDiscapacidad;
     private javax.swing.JComboBox<GeneralEnumEstado> cmbEstado;
     private javax.swing.JComboBox<GeneroEnum> cmbGenero;
+    private javax.swing.JComboBox<Nacionalidad> cmbNacionalidad;
+    private javax.swing.JComboBox<TipoDiscapacidadEnum> cmbTipoDiscapacidad;
     private com.toedter.calendar.JDateChooser dateFechaNacimiento;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblAdicionales;
     private javax.swing.JLabel lblApellidos;
     private javax.swing.JLabel lblCedula;
     private javax.swing.JLabel lblCelular;
     private javax.swing.JLabel lblCodAuxiliar;
     private javax.swing.JLabel lblCodSistema;
+    private javax.swing.JLabel lblConadis;
     private javax.swing.JLabel lblCorreo;
     private javax.swing.JLabel lblDireccion;
+    private javax.swing.JLabel lblDiscapacidad;
     private javax.swing.JLabel lblEstado;
+    private javax.swing.JLabel lblEtnia;
     private javax.swing.JLabel lblFechaNacimiento;
     private javax.swing.JLabel lblGenero;
+    private javax.swing.JLabel lblNacionalidad;
     private javax.swing.JLabel lblNombres;
+    private javax.swing.JLabel lblPorcentaje;
     private javax.swing.JLabel lblRepresentante;
     private javax.swing.JLabel lblTelefono;
+    private javax.swing.JLabel lblTipo;
     private javax.swing.JTextArea txtAdicionales;
     private javax.swing.JTextField txtApellidos;
     private javax.swing.JTextField txtCedula;
     private javax.swing.JTextField txtCelular;
     private javax.swing.JTextField txtCodAuxiliar;
     private javax.swing.JTextField txtCodSistema;
+    private javax.swing.JTextField txtConadis;
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextArea txtDireccion;
+    private javax.swing.JTextField txtEtnia;
     private javax.swing.JTextField txtNombres;
+    private javax.swing.JTextArea txtObsDiscapacidad;
+    private javax.swing.JTextField txtPorcentajeDiscapacidad;
     private javax.swing.JTextField txtRepresentante;
     private javax.swing.JTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
@@ -447,7 +553,66 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
     public void setBtnAgregarRepresentante(JButton btnAgregarRepresentante) {
         this.btnAgregarRepresentante = btnAgregarRepresentante;
     }
-    
-    
+
+    public JComboBox<EnumSiNo> getCmbDiscapacidad() {
+        return cmbDiscapacidad;
+    }
+
+    public void setCmbDiscapacidad(JComboBox<EnumSiNo> cmbDiscapacidad) {
+        this.cmbDiscapacidad = cmbDiscapacidad;
+    }
+
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = false, min = 0, max = 10, expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\,\\ ]*$", nombre = "Conadis", expresionRegularMensaje = "No se permite la letra ñ, ni tildes")
+    public JTextField getTxtConadis() {
+        return txtConadis;
+    }
+
+    public void setTxtConadis(JTextField txtConadis) {
+        this.txtConadis = txtConadis;
+    }
+
+    @LimpiarAnotacion
+    public JTextField getTxtPorcentajeDiscapacidad() {
+        return txtPorcentajeDiscapacidad;
+    }
+
+    public void setTxtPorcentajeDiscapacidad(JTextField txtPorcentajeDiscapacidad) {
+        this.txtPorcentajeDiscapacidad = txtPorcentajeDiscapacidad;
+    }
+
+    public JComboBox<Nacionalidad> getCmbNacionalidad() {
+        return cmbNacionalidad;
+    }
+
+    public void setCmbNacionalidad(JComboBox<Nacionalidad> cmbNacionalidad) {
+        this.cmbNacionalidad = cmbNacionalidad;
+    }
+
+    @LimpiarAnotacion
+    public JTextField getTxtEtnia() {
+        return txtEtnia;
+    }
+
+    public void setTxtEtnia(JTextField txtEtnia) {
+        this.txtEtnia = txtEtnia;
+    }
+
+    public JComboBox<TipoDiscapacidadEnum> getCmbTipoDiscapacidad() {
+        return cmbTipoDiscapacidad;
+    }
+
+    public void setCmbTipoDiscapacidad(JComboBox<TipoDiscapacidadEnum> cmbTipoDiscapacidad) {
+        this.cmbTipoDiscapacidad = cmbTipoDiscapacidad;
+    }
+
+    @LimpiarAnotacion
+    public JTextArea getTxtObsDiscapacidad() {
+        return txtObsDiscapacidad;
+    }
+
+    public void setTxtObsDiscapacidad(JTextArea txtObsDiscapacidad) {
+        this.txtObsDiscapacidad = txtObsDiscapacidad;
+    }
 
 }

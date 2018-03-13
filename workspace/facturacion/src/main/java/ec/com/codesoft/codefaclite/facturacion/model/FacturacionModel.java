@@ -16,8 +16,10 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.ClienteFacturacionBusqueda;
+import ec.com.codesoft.codefaclite.facturacion.busqueda.EstudianteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.ProductoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.facturacion.busqueda.RubroEstudianteBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.callback.ClienteFacturaImplComprobante;
 import ec.com.codesoft.codefaclite.facturacion.model.disenador.ManagerReporteFacturaFisica;
 import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
@@ -54,6 +56,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteFisicoD
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DatosAdicionalesComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoReferenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
@@ -98,10 +103,12 @@ public class FacturacionModel extends FacturacionPanel{
 
     //private Persona persona;
     private Factura factura;
+    private Estudiante estudiante;
     private DefaultTableModel modeloTablaFormasPago;
     private DefaultTableModel modeloTablaDetallesProductos;
     private DefaultTableModel modeloTablaDatosAdicionales;
     private Producto productoSeleccionado;
+    private RubroEstudiante rubroSeleccionado;
     private int fila;
     private int filaFP;
     private boolean bandera;
@@ -122,6 +129,7 @@ public class FacturacionModel extends FacturacionPanel{
     public FacturacionModel() {
         setearFechas();
         addListenerButtons();
+        addListenerCombos();
         initComponenesGraficos();
         initModelTablaFormaPago();
         initModelTablaDetalleFactura();
@@ -194,6 +202,57 @@ public class FacturacionModel extends FacturacionPanel{
     }
 
     private void addListenerButtons() {
+        
+        getBtnBuscarRepresentante().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda();
+                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
+                buscarDialogoModel.setVisible(true);
+                
+                Persona represetanteTmp=(Persona) buscarDialogoModel.getResultado();
+                
+                if(represetanteTmp!=null)
+                {
+                    try {
+                        Map<String,Object> parametrosMap=new HashMap<String,Object>();
+                        parametrosMap.put("representante",represetanteTmp);
+                        
+                        List<Estudiante> estudiantes=ServiceFactory.getFactory().getEstudianteServiceIf().obtenerPorMap(parametrosMap);
+                        if(estudiantes.size()>0)
+                        {
+                            factura.setCliente(represetanteTmp);
+                            estudiante=estudiantes.get(0);      
+                            setearValoresAcademicos();
+                        }
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+
+            }
+        });
+        
+        getBtnBuscarEstudiante().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                EstudianteBusquedaDialogo clienteBusquedaDialogo = new EstudianteBusquedaDialogo();
+                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
+                buscarDialogoModel.setVisible(true);
+                Estudiante estudianteTmp=(Estudiante) buscarDialogoModel.getResultado();
+                
+                if(estudianteTmp!=null)
+                {
+                    estudiante=estudianteTmp;
+                    factura.setCliente(estudianteTmp.getRepresentante());
+                    setearValoresAcademicos();                    
+                }
+                
+                
+            }
+        });
 
         getBtnBuscarCliente().addActionListener(new ActionListener() {
             @Override
@@ -249,16 +308,17 @@ public class FacturacionModel extends FacturacionPanel{
         getBtnAgregarProducto().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo();
-                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
-                buscarDialogoModel.setVisible(true);
-                productoSeleccionado = (Producto) buscarDialogoModel.getResultado();
-                if (productoSeleccionado == null) {
-                    return;
-                    //throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar producto vacio");
+                TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+                //Si el tipo de documento es academico , agrega rubros
+                if(tipoDocumentoEnum.equals(TipoDocumentoEnum.ACADEMICO))
+                {
+                    agregarRubroAcademico();
                 }
-                setearValoresProducto();
-                banderaAgregar = true;
+                else //Si el tipo de documento es productos , agrega productos
+                {
+                    agregarProducto();
+                }
+                
             }
         });
 
@@ -353,7 +413,7 @@ public class FacturacionModel extends FacturacionPanel{
                     public void updateInterface(Producto entity) {
                         if (entity != null) {
                             productoSeleccionado = entity;
-                            setearValoresProducto();
+                            setearValoresProducto(productoSeleccionado.getValorUnitario(),productoSeleccionado.getNombre());
                             banderaAgregar = true;
                         }
                     }
@@ -389,6 +449,35 @@ public class FacturacionModel extends FacturacionPanel{
             }
         });
 
+    }
+    
+    private void agregarRubroAcademico()
+    {
+        RubroEstudianteBusqueda rubroBusquedaDialogo = new RubroEstudianteBusqueda(estudiante);
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(rubroBusquedaDialogo);
+        buscarDialogoModel.setVisible(true);
+        RubroEstudiante rubroEstudianteTmp = (RubroEstudiante) buscarDialogoModel.getResultado();
+
+        if (rubroEstudianteTmp != null) {
+            rubroSeleccionado=rubroEstudianteTmp;
+            setearValoresProducto(rubroEstudianteTmp.getRubroNivel().getValor(),rubroEstudianteTmp.getRubroNivel().getNombre());
+            banderaAgregar = true;
+        }
+
+        
+    }
+    
+    private void agregarProducto() {
+        ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo();
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
+        buscarDialogoModel.setVisible(true);
+        productoSeleccionado = (Producto) buscarDialogoModel.getResultado();
+        if (productoSeleccionado == null) {
+            return;
+            //throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar producto vacio");
+        }
+        setearValoresProducto(productoSeleccionado.getValorUnitario(),productoSeleccionado.getNombre());
+        banderaAgregar = true;
     }
 
     @Override
@@ -961,6 +1050,27 @@ public class FacturacionModel extends FacturacionPanel{
         getLblSubTotalDescuentoSinImpuesto().setText("" + factura.getDescuentoSinImpuestos());
         getLblTotalDescuento().setText("" + factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()));
     }
+    
+    private void setearValoresAcademicos()
+    {
+       
+        getTxtEstudiante().setText(estudiante.getNombreCompleto());
+        getTxtRepresentante().setText(estudiante.getRepresentante().getNombresCompletos());
+        
+        //Cargar el correo solo cuando exista 
+        if (factura.getCliente().getCorreoElectronico() != null) {
+            datosAdicionales.put("email", factura.getCliente().getCorreoElectronico());
+        }
+        
+        //Agregar el nombre del estudiante
+        datosAdicionales.put(DatosAdicionalesComprobanteEnum.NOMBRE_ESTUDIANTE.getNombre(), estudiante.getNombreCompleto());
+
+        //Agregando el codigo del estudiante
+        datosAdicionales.put(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre(), estudiante.getIdEstudiante() + "");
+
+        cargarDatosAdicionales();
+
+    }
 
     private void setearValoresCliente() {
         getTxtCliente().setText(factura.getCliente().getIdentificacion());
@@ -991,9 +1101,11 @@ public class FacturacionModel extends FacturacionPanel{
         cargarDatosAdicionales();
     }
 
-    private void setearValoresProducto() {
-        getTxtValorUnitario().setText(productoSeleccionado.getValorUnitario().toString());
-        getTxtDescripcion().setText(productoSeleccionado.getNombre());
+    private void setearValoresProducto(BigDecimal valorUnitario,String descripcion) {
+        getTxtValorUnitario().setText(valorUnitario+"");
+        getTxtDescripcion().setText(descripcion);
+        //getTxtValorUnitario().setText(productoSeleccionado.getValorUnitario().toString());
+        //getTxtDescripcion().setText(productoSeleccionado.getNombre());
         //Dar foco a la cantidad a ingresar
         getTxtCantidad().requestFocus();
     }
@@ -1214,7 +1326,26 @@ public class FacturacionModel extends FacturacionPanel{
                 facturaDetalle.setDescripcion(getTxtDescripcion().getText());
                 BigDecimal valorTotalUnitario = new BigDecimal(getTxtValorUnitario().getText());
                 facturaDetalle.setPrecioUnitario(valorTotalUnitario.setScale(2, BigDecimal.ROUND_HALF_UP));
-                facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
+                
+                //Variable del producto para verificar otros datos como el iva
+                Producto producto=null;
+                //Seleccionar la referencia dependiendo del tipo de documento
+                TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+                if(tipoDocumentoEnum.equals(TipoDocumentoEnum.ACADEMICO))
+                {
+                    facturaDetalle.setReferenciaId(rubroSeleccionado.getId());
+                    facturaDetalle.setTipoReferencia(TipoReferenciaEnum.ACADEMICO.getCodigo());
+                    producto=rubroSeleccionado.getRubroNivel().getProducto();
+                }
+                else
+                {
+                    facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
+                    facturaDetalle.setTipoReferencia(TipoReferenciaEnum.INVENTARIO.getCodigo());
+                    producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                }
+                
+                
+                
                 facturaDetalle.setValorIce(BigDecimal.ZERO);
                 
                 BigDecimal descuento;
@@ -1242,7 +1373,7 @@ public class FacturacionModel extends FacturacionPanel{
                 /**
                  * Revisar este calculo del iva para no calcular 2 veces al mostrar
                  */
-                Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                
                 if (producto.getIva().getTarifa().equals(0)) {
                     facturaDetalle.setIva(BigDecimal.ZERO);
                 } else {
@@ -1306,6 +1437,55 @@ public class FacturacionModel extends FacturacionPanel{
         for (DocumentoEnum tipoDocumentoEnum : tiposDocumento) {
             getCmbDocumento().addItem(tipoDocumentoEnum);
         }
+        
+        
+        //Agregar los tipos de documentos disponibles
+
+        getCmbTipoDocumento().removeAllItems();
+        List<TipoDocumentoEnum> tipoDocumentos= TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloEnum.VENTAS);
+        for (TipoDocumentoEnum tipoDocumento : tipoDocumentos) {
+            getCmbTipoDocumento().addItem(tipoDocumento);
+        }
+    }
+
+    private void addListenerCombos() {
+        getCmbTipoDocumento().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+                if(tipoDocumentoEnum!=null)
+                {
+                    if(tipoDocumentoEnum.equals(tipoDocumentoEnum.ACADEMICO))
+                    {
+                        activarTabDatos(1);
+                    }
+                    else
+                    {
+                        //Todo: Seguir armando el tab de los otros datos
+                        activarTabDatos(0);
+                    }
+                    
+                }                
+            }
+        });
+    }
+    
+    
+    private void activarTabDatos(int indice)
+    {
+        for (int i = 0; i < getPanelTabDatos().getTabCount(); i++) {
+            if(i==indice)
+            {
+                getPanelTabDatos().setEnabledAt(i,true);
+                getPanelTabDatos().setSelectedIndex(i);
+            }
+            else
+            {
+                getPanelTabDatos().setEnabledAt(i,false);
+            }
+        }
+            
+        
     }
 
 }
