@@ -56,6 +56,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteFisicoD
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DatosAdicionalesComprobanteEnum;
@@ -123,7 +124,7 @@ public class FacturacionModel extends FacturacionPanel{
      * Mapa de datos adicionales que se almacenan temporalmente y sirven para la
      * facturacion electronica como por ejemplo el correo
      */
-    private Map<String, String> datosAdicionales;
+    //private Map<String, String> datosAdicionales;
 
 
     public FacturacionModel() {
@@ -180,7 +181,7 @@ public class FacturacionModel extends FacturacionPanel{
         this.banderaFormaPago = true;
         this.factura.setDescuentoImpuestos(new BigDecimal(0));
         calcularIva12();
-        datosAdicionales = new HashMap<String, String>();
+        //datosAdicionales = new HashMap<String, String>();
     }
 
     private boolean verificarCamposValidados() {
@@ -202,6 +203,40 @@ public class FacturacionModel extends FacturacionPanel{
     }
 
     private void addListenerButtons() {
+        
+        getBtnAgregarDatosAdicionales().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DatoAdicionalModel datoAdicional=new DatoAdicionalModel();
+                datoAdicional.setVisible(true);
+                
+                String valor=datoAdicional.valor;
+                String campo=datoAdicional.campo;
+                
+                FacturaAdicional.Tipo tipoEnum=datoAdicional.tipo;
+                
+                if(factura!=null && valor!=null && tipoEnum!=null)
+                {
+                    if(tipoEnum.equals(FacturaAdicional.Tipo.TIPO_CORREO))
+                    {
+                        factura.addDatosAdicionalCorreo(valor);
+                    }
+                    else
+                    {
+                        FacturaAdicional dato=new FacturaAdicional();
+                        dato.setCampo(campo);
+                        dato.setTipo(tipoEnum.getLetra());
+                        dato.setNumero(0);
+                        dato.setValor(valor);
+                                
+                        factura.addDatoAdicional(dato);
+                    }
+                    cargarDatosAdicionales();
+                }
+                
+                //datosAdicionales.put("", title);
+            }
+        });
         
         getBtnBuscarRepresentante().addActionListener(new ActionListener() {
             @Override
@@ -557,7 +592,7 @@ public class FacturacionModel extends FacturacionPanel{
             
             ComprobanteDataFactura comprobanteData=new ComprobanteDataFactura(factura);
             //comprobanteData.setCorreosAdicionales(correosAdicionales);
-            comprobanteData.setMapInfoAdicional(datosAdicionales);
+            comprobanteData.setMapInfoAdicional(getMapAdicional(factura));
             //MonitorComprobanteData monitorData = MonitorComprobanteModel.getInstance().agregarComprobante();
             ClienteInterfaceComprobante cic=new ClienteFacturaImplComprobante(this, facturaProcesando);
             ComprobanteServiceIf comprobanteServiceIf= ServiceFactory.getFactory().getComprobanteServiceIf();
@@ -570,6 +605,16 @@ public class FacturacionModel extends FacturacionPanel{
         } catch (RemoteException ex) {
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private Map<String,String> getMapAdicional(Factura factura)
+    {
+        Map<String,String> parametroMap=new HashMap<String ,String>();
+        for (FacturaAdicional datoAdicional : factura.getDatosAdicionales()) 
+        {
+            parametroMap.put(datoAdicional.getCampo(),datoAdicional.getValor());
+        }
+        return parametroMap;
     }
     
     public Map<String, Object> getParametroReporte(DocumentoEnum documento)
@@ -694,7 +739,7 @@ public class FacturacionModel extends FacturacionPanel{
         //getLblSecuencial().setText(servicio.getPreimpresoSiguiente());
         getLblEstadoFactura().setText("Procesando");
 
-        datosAdicionales = new HashMap<String, String>();
+        //datosAdicionales = new HashMap<String, String>();
         //facturaElectronica = new FacturacionElectronica(session, this.panelPadre);
 
         //Limpiar los campos del cliente
@@ -850,14 +895,23 @@ public class FacturacionModel extends FacturacionPanel{
      */
     private void cargarDatosAdicionales() {
         initModelTablaDatoAdicional();
-        for (Map.Entry<String, String> entry : datosAdicionales.entrySet()) {
+        
+        for (FacturaAdicional datoAdicional : factura.getDatosAdicionales()) {
+            Vector dato = new Vector();
+            dato.add(datoAdicional.getCampo());
+            dato.add(datoAdicional.getValor());
+            
+            this.modeloTablaDatosAdicionales.addRow(dato);
+        }
+        
+        /*for (Map.Entry<String, String> entry : datosAdicionales.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
             Vector dato = new Vector();
             dato.add(key);
             dato.add(value);
             this.modeloTablaDatosAdicionales.addRow(dato);
-        }
+        }*/
     }
 
     private void cargarDatosDetalles() {
@@ -1058,15 +1112,18 @@ public class FacturacionModel extends FacturacionPanel{
         getTxtRepresentante().setText(estudiante.getRepresentante().getNombresCompletos());
         
         //Cargar el correo solo cuando exista 
-        if (factura.getCliente().getCorreoElectronico() != null) {
-            datosAdicionales.put("email", factura.getCliente().getCorreoElectronico());
-        }
+        factura.addDatosAdicionalCorreo(factura.getCliente().getCorreoElectronico());
+        //if (factura.getCliente().getCorreoElectronico() != null) {
+        //    datosAdicionales.put("email", factura.getCliente().getCorreoElectronico());
+        //}
         
         //Agregar el nombre del estudiante
-        datosAdicionales.put(DatosAdicionalesComprobanteEnum.NOMBRE_ESTUDIANTE.getNombre(), estudiante.getNombreCompleto());
+        factura.addDatoAdicional(DatosAdicionalesComprobanteEnum.NOMBRE_ESTUDIANTE.getNombre(), estudiante.getNombreCompleto());
+        //datosAdicionales.put(DatosAdicionalesComprobanteEnum.NOMBRE_ESTUDIANTE.getNombre(), estudiante.getNombreCompleto());
 
         //Agregando el codigo del estudiante
-        datosAdicionales.put(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre(), estudiante.getIdEstudiante() + "");
+        factura.addDatoAdicional(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre(), estudiante.getIdEstudiante()+"");
+        //datosAdicionales.put(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre(), estudiante.getIdEstudiante() + "");
 
         cargarDatosAdicionales();
 
@@ -1089,7 +1146,8 @@ public class FacturacionModel extends FacturacionPanel{
 
         //Cargar el correo solo cuando exista 
         if (factura.getCliente().getCorreoElectronico() != null) {
-            datosAdicionales.put("email", factura.getCliente().getCorreoElectronico());
+            factura.addDatosAdicionalCorreo(factura.getCliente().getCorreoElectronico());
+            //datosAdicionales.put("email", factura.getCliente().getCorreoElectronico());
         }
 
         factura.setCliente(factura.getCliente());

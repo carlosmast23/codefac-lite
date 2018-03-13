@@ -104,9 +104,11 @@ public class CorreoElectronico {
                 }
                 else
                 {
-                    message.setRecipients(Message.RecipientType.CC,
-                        InternetAddress.parse(to.get(i)));
-                    System.out.println("Correo 2:"+to.get(i));
+                    InternetAddress[] address=InternetAddress.parse(to.get(i));
+                    message.setRecipient(Message.RecipientType.CC,address[0]);
+                    //message.setRecipients(Message.RecipientType.CC,
+                    //    InternetAddress.parse(to.get(i)));
+                    System.out.println("Correo "+(i+1)+":"+to.get(i));
                 }
             }
             

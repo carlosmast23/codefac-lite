@@ -262,8 +262,8 @@ public class ComprobanteElectronicoService implements Runnable {
             }
 
             if (etapaActual.equals(ETAPA_ENVIO_COMPROBANTE)) {
-                if(correosElectronicos!=null && correosElectronicos.size()>0)
-                    enviarComprobante();
+                //if(correosElectronicos!=null && correosElectronicos.size()>0)
+                enviarComprobante();
                 
                 if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
                 if(etapaLimiteProcesar<=ETAPA_ENVIO_COMPROBANTE) {
@@ -378,6 +378,7 @@ public class ComprobanteElectronicoService implements Runnable {
      }
 
     private void enviarComprobante() throws ComprobanteElectronicoException {
+        //enviarComprobanteCorreo(this.claveAcceso);
         try {
             ClaveAcceso claveAcceso=new ClaveAcceso(this.claveAcceso);
             JAXBContext jaxbContext = JAXBContext.newInstance(claveAcceso.getClassTipoComprobante());
@@ -393,7 +394,22 @@ public class ComprobanteElectronicoService implements Runnable {
             
             try {
                 String mensajeGenerado =getMensajeCorreo(claveAcceso.getTipoComprobante(),comprobante);
-                metodoEnvioInterface.enviarCorreo(mensajeGenerado, claveAcceso.getTipoComprobante().getNombre()+":" + comprobante.getInformacionTributaria().getPreimpreso(), correosElectronicos, archivosPath);
+                
+                List<String> correosElectronicosTemp=new ArrayList<String>();
+                
+                if(correosElectronicos!=null)
+                {
+                    //Agregado correos electronicos adicionales
+                    correosElectronicosTemp.addAll(correosElectronicos);
+                }
+                
+                for (InformacionAdicional infoAdicional : comprobante.getInformacionAdicional()) {
+                    if (infoAdicional.getNombre().indexOf("correo") >= 0) {
+                        correosElectronicosTemp.add(infoAdicional.getValor());
+                    }
+                }
+                
+                metodoEnvioInterface.enviarCorreo(mensajeGenerado, claveAcceso.getTipoComprobante().getNombre()+":" + comprobante.getInformacionTributaria().getPreimpreso(), correosElectronicosTemp, archivosPath);
             } catch (Exception ex) {
                 Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
                 ex.printStackTrace();
@@ -446,6 +462,14 @@ public class ComprobanteElectronicoService implements Runnable {
                 
                 ComprobanteElectronico comprobanteElectronico=buscarComprobanteLote(claveAccesoTemp);
                 List<String> correosElectronicosTemp=comprobanteElectronico.getCorreos();
+                
+                //Si la lista de correos adicionales  
+                if(correosElectronicosTemp==null)correosElectronicosTemp=new ArrayList<String>();
+                //Agregar correos adjuntos en el comprobante electronico
+                for (InformacionAdicional infoAdicional : comprobanteElectronico.getInformacionAdicional()) {
+                    if(infoAdicional.getNombre().equals("correo"))
+                        correosElectronicosTemp.add(infoAdicional.getValor());                                           
+                }
                 
                 metodoEnvioInterface.enviarCorreo(mensajeGenerado, claveAcceso.getTipoComprobante().getNombre()+":" + comprobante.getInformacionTributaria().getPreimpreso(), correosElectronicosTemp, archivosPath);
             } catch (Exception ex) {

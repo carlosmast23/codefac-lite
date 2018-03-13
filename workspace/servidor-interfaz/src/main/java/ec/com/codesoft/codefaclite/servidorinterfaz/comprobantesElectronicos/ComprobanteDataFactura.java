@@ -236,6 +236,7 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
 
     @Override
     public List<String> getCorreos() {
+        /*
         List<String> correos=new ArrayList<String>();
         if(factura!=null && factura.getCliente()!=null)
             correos.add(factura.getCliente().getCorreoElectronico());
@@ -251,8 +252,8 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
             }
         }
         
-        
-        return correos;
+        */
+        return new ArrayList<String>(); //TODO: Verificar si se deben usar estos campos porque ya se envian los correos desde la informacion adicional
     }
 
     public Factura getFactura() {

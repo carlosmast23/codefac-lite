@@ -65,4 +65,15 @@ create table FACTURA_FORMA_PAGO
     TOTAL decimal(7,2),
     UNIDAD_TIEMPO varchar(150),
     primary key (ID)
+);
+
+create table FACTURA_ADICIONAL
+(
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1),
+    FACTURA_ID BIGINT,
+    CAMPO varchar(150),
+    VALOR varchar(150),
+    TIPO varchar(1),
+    NUMERO integer ,
+    primary key (ID)
 )

@@ -110,8 +110,11 @@ public class Factura implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura",fetch = FetchType.EAGER)
     private List<FacturaDetalle> detalles;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura",fetch = FetchType.EAGER)
     private List<FormaPago> formaPagos;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura",fetch = FetchType.EAGER)
+    private List<FacturaAdicional> datosAdicionales;
 
     public Factura() {
     }
@@ -363,9 +366,14 @@ public class Factura implements Serializable {
     public void setCodigoDocumento(String codigoDocumento) {
         this.codigoDocumento = codigoDocumento;
     }
-    
-    
-    
+
+    public List<FacturaAdicional> getDatosAdicionales() {
+        return datosAdicionales;
+    }
+
+    public void setDatosAdicionales(List<FacturaAdicional> datosAdicionales) {
+        this.datosAdicionales = datosAdicionales;
+    }
     
     
     /**
@@ -394,6 +402,62 @@ public class Factura implements Serializable {
         formaPago.setFactura(this);
         this.formaPagos.add(formaPago);
         
+    }
+    
+    public void addDatoAdicional(String campo, String valor)
+    {
+        FacturaAdicional dato=new FacturaAdicional();
+        dato.setCampo(campo);
+        dato.setNumero(0);
+        dato.setTipo(FacturaAdicional.Tipo.TIPO_OTRO.getLetra());
+        dato.setValor(valor);
+        
+        addDatoAdicional(dato);
+    }
+    
+    public void addDatoAdicional(FacturaAdicional datoAdicional)
+    {
+        if(this.datosAdicionales==null)
+        {
+            this.datosAdicionales=new ArrayList<FacturaAdicional>();
+        }
+        datoAdicional.setFactura(this);
+        this.datosAdicionales.add(datoAdicional);
+    }
+    
+    public void addDatosAdicionalCorreo(String correo)
+    {
+        FacturaAdicional facturaAdicional=new FacturaAdicional();
+        facturaAdicional.setCampo(FacturaAdicional.NOMBRE_CORREO);
+        facturaAdicional.setFactura(this);
+        facturaAdicional.setTipo(FacturaAdicional.Tipo.TIPO_CORREO.getLetra());
+        facturaAdicional.setValor(correo);
+        
+        if (this.datosAdicionales == null) {
+            this.datosAdicionales = new ArrayList<FacturaAdicional>();
+        }
+        
+        //Buscar si existe un correo anterior para nombrar de forma secuencial
+        Integer numeroMaximo=0;
+        for (FacturaAdicional datoAdicional : datosAdicionales) {            
+            if(datoAdicional.getTipo().equals(FacturaAdicional.Tipo.TIPO_CORREO.getLetra()))
+            {
+                if(datoAdicional.getNumero()>numeroMaximo)
+                {
+                    numeroMaximo=datoAdicional.getNumero();
+                }
+            }
+        }
+        
+        facturaAdicional.setNumero(numeroMaximo+1);
+        //Modificar el nombre si el correo es mas de 2
+        if(facturaAdicional.getNumero()>1)
+        {
+            facturaAdicional.setCampo(FacturaAdicional.NOMBRE_CORREO+" "+facturaAdicional.getNumero());
+        }
+
+        this.datosAdicionales.add(facturaAdicional);
+    
     }
 
     @Override

@@ -1547,6 +1547,22 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         this.txtRepresentante = txtRepresentante;
     }
 
+    public JButton getBtnAgregarDatosAdicionales() {
+        return btnAgregarDatosAdicionales;
+    }
+
+    public void setBtnAgregarDatosAdicionales(JButton btnAgregarDatosAdicionales) {
+        this.btnAgregarDatosAdicionales = btnAgregarDatosAdicionales;
+    }
+
+    public JButton getBtnAgregarRepresentante() {
+        return btnAgregarRepresentante;
+    }
+
+    public void setBtnAgregarRepresentante(JButton btnAgregarRepresentante) {
+        this.btnAgregarRepresentante = btnAgregarRepresentante;
+    }
+
     
     
     
