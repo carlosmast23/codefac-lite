@@ -645,12 +645,21 @@ public class ComprobanteElectronicoService implements Runnable {
             StringReader reader = new StringReader(mapComprobante.get("comprobante"));
             ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(reader);
             ComprobanteElectronicoReporte reporte = getComprobanteReporte(comprobante);
-            List<DetalleReporteData> informacionAdiciona = reporte.getDetalles();
+
+            List<DetalleReporteData> informacionAdicional = reporte.getDetalles();
+            
+            InputStream reporteInfoAdicional = this.reporteInfoAdicional.openStream();
+            InputStream reporteFormaPago = this.reporteFormaPago.openStream();
+            InputStream pathLogoImagen = this.pathLogoImagen.openStream();
 
             Map<String, Object> datosMap = reporte.getMapReporte();
             datosMap.put("SUBREPORT_DIR", pathParentJasper);
             datosMap.put("fecha_hora_autorizacion", mapComprobante.get("fechaAutorizacion"));
             datosMap.put("estado", mapComprobante.get("estado"));
+            
+            datosMap.put("SUBREPORT_INFO_ADICIONAL", reporteInfoAdicional);
+            datosMap.put("SUBREPORT_FORMA_PAGO", reporteFormaPago);
+            datosMap.put("imagen_logo", pathLogoImagen);
 
             /**
              * Agregar datos adicionales como por ejemplo los datos del pide de
@@ -661,9 +670,9 @@ public class ComprobanteElectronicoService implements Runnable {
 
             //datosMap.put("imagen_logo",is);
             //datosMap.put("imagen_logo", UtilidadesComprobantes.getStreamByPath(pathLogoImagen));
-            datosMap.put("imagen_logo",pathLogoImagen.openStream());
+            //datosMap.put("imagen_logo",pathLogoImagen.openStream());
 
-            return UtilidadesComprobantes.generarReporteJasperPrint(getPathJasper(comprobante), datosMap, informacionAdiciona);
+            return UtilidadesComprobantes.generarReporteJasperPrint(getPathJasper(comprobante), datosMap, informacionAdicional);
 
         } catch (JAXBException ex) {
             ex.printStackTrace();

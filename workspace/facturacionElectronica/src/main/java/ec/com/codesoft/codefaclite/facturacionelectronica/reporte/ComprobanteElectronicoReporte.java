@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.facturacionelectronica.reporte;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -67,7 +68,7 @@ public abstract class ComprobanteElectronicoReporte
         return map;
     }
     
-    protected List getListInfoAdifional()
+    public List<InformacionAdicional> getListInfoAdifional()
     {
         return comprobante.getInformacionAdicional();
     }
