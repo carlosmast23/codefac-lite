@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
+import ec.com.codesoft.ejemplo.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.InputStream;
@@ -112,54 +113,65 @@ public class CompraReporteModel extends CompraReportePanel
 
     @Override
     public void imprimir() {
-        try
+        try{
+            if(compras == null)
+            {
+                DialogoCodefac.mensaje("Advertencia", "Se debe realizar una busqueda, para imprimir un reporte", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            }else{
+            
+                InputStream path = RecursoCodefac.JASPER_COMPRA.getResourceInputStream("reporte_compra.jrxml");
+                List<CompraDataReporte> compraDataReportes = new ArrayList<>();
+
+                if(banderaBusqueda)
+                {
+                    parametros.put("identificacion", "TODOS");
+                    parametros.put("nombre", "TODOS");
+                }
+                else
+                {
+                    parametros.put("identificacion", this.proveedor.getIdentificacion()+"");
+                    parametros.put("nombre", this.proveedor.getRazonSocial()+"");
+
+                }
+                
+                //Parametros estaticos que se envian para realizar el Reporte
+                parametros.put("tipodocumento", getCmbTipoDocumento().getSelectedItem() + "");
+                parametros.put("documento", getCmbDocumento().getSelectedItem() + "");
+                parametros.put("fechainicio", this.fechaInicio + "");
+                parametros.put("fechafin", this.fechaFinal + "");
+                parametros.put("subtotal", this.subtotal + "");
+                parametros.put("subtotal12", this.subtotal12 + "");
+                parametros.put("subtotal0", this.subtotal0 + "");
+                parametros.put("descuento", this.descuento + "");
+                parametros.put("iva", this.iva + "");
+                parametros.put("total", this.total + "");
+
+                //Parametros dinámicos que se envian para realizar el Reporte
+                for(Compra compra : this.compras)
+                {
+                    CompraDataReporte cdr = new CompraDataReporte();
+                    cdr.setPreimPreso(compra.getPuntoEmision() + compra.getSecuencial() + compra.getPuntoEstablecimiento()+"");
+                    cdr.setIdentificacion(compra.getProveedor().getIdentificacion());
+                    cdr.setNombre(compra.getProveedor().getRazonSocial());
+                    cdr.setFecha(compra.getFechaFactura()+"");
+                    cdr.setSubtotal(sumarValores(compra.getSubtotalImpuestos(), compra.getSubtotalSinImpuestos())+"");
+                    cdr.setSubtotal0(compra.getSubtotalSinImpuestos()+"");
+                    cdr.setSubtotal12(compra.getSubtotalImpuestos()+"");
+                    cdr.setDescuento(sumarValores(compra.getDescuentoImpuestos(),compra.getDescuentoSinImpuestos())+"");
+                    cdr.setDescuento0(compra.getDescuentoSinImpuestos()+"");
+                    cdr.setDescuento12(compra.getDescuentoImpuestos()+"");
+                    cdr.setIva(compra.getIva()+"");
+                    cdr.setTotal(compra.getTotal()+"");
+                    compraDataReportes.add(cdr);
+                }
+
+                ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, compraDataReportes, panelPadre, "Reporte Compra");
+            }
+        }catch(Exception e)
         {
-            InputStream path = RecursoCodefac.JASPER_COMPRA.getResourceInputStream("reporte_compra.jrxml");
-            List<CompraDataReporte> compraDataReportes = new ArrayList<>();
-            
-            if(banderaBusqueda)
-            {
-                parametros.put("identificacion", "TODOS");
-                parametros.put("nombre", "TODOS");
-            }
-            else
-            {
-                parametros.put("identificacion", this.proveedor.getIdentificacion()+"");
-                parametros.put("nombre", this.proveedor.getRazonSocial());
-              
-            }
-            
-            parametros.put("tipodocumento", getCmbTipoDocumento().getSelectedItem()+"");
-            parametros.put("documento", getCmbDocumento().getSelectedItem()+"");
-            parametros.put("fechainicio", this.fechaInicio.getTime());
-            parametros.put("fechafin", this.fechaFinal.getTime());
-            
-            for(Compra compra : this.compras)
-            {
-                CompraDataReporte cdr = new CompraDataReporte();
-                cdr.setPreimPreso(compra.getPuntoEmision() + compra.getSecuencial() + compra.getPuntoEstablecimiento()+"");
-                cdr.setIdentificacion(compra.getProveedor().getIdentificacion());
-                cdr.setNombre(compra.getProveedor().getRazonSocial());
-                cdr.setFecha(compra.getFechaFactura()+"");
-                cdr.setSubtotal(sumarValores(compra.getSubtotalImpuestos(), compra.getSubtotalSinImpuestos())+"");
-                cdr.setSubtotal0(compra.getSubtotalSinImpuestos()+"");
-                cdr.setSubtotal12(compra.getSubtotalImpuestos()+"");
-                cdr.setDescuento(sumarValores(compra.getDescuentoImpuestos(),compra.getDescuentoSinImpuestos())+"");
-                cdr.setDescuento0(compra.getDescuentoSinImpuestos()+"");
-                cdr.setDescuento12(compra.getDescuentoImpuestos()+"");
-                cdr.setIva(compra.getIva()+"");
-                cdr.setTotal(compra.getTotal()+"");
-                compraDataReportes.add(cdr);
-            }
-            
-            ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, compraDataReportes, panelPadre, "Reporte Compra");
+            DialogoCodefac.mensaje("Error","No se pudo crear el reporte correctamente", DialogoCodefac.MENSAJE_ADVERTENCIA);
         }
-        catch(Exception e)
-        {
-            System.out.println("Algo salio mal en reporte compra");
-        }
-        
-        
+    
     }
 
     @Override
@@ -175,7 +187,7 @@ public class CompraReporteModel extends CompraReportePanel
     @Override
     public void limpiar() {
         getDateFechaInicio().setDate(new java.util.Date());
-        getDateFechaFinal().setDate(new java.util.Date());        
+        getDateFechaFinal().setDate(new java.util.Date());    
     }
 
     @Override
@@ -280,6 +292,7 @@ public class CompraReporteModel extends CompraReportePanel
                 if(getChkTodos().isSelected())
                 {
                     getBtnBuscarProveedor().setEnabled(false);
+                    getTxtProveedor().setText("");
                     banderaBusqueda = true;
                 }
                 else
@@ -294,8 +307,6 @@ public class CompraReporteModel extends CompraReportePanel
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    iniciarValoresVentana();
-                    crearVariables();
                     setearValores();
                     visualizarTotalesComprasIndividuales();
                 } catch (RemoteException ex) {
@@ -341,11 +352,9 @@ public class CompraReporteModel extends CompraReportePanel
     {
         for(Compra compra : compras)
         {
-            //this.subtotal = this.subtotal.add(compra.getSubtotalImpuestos()).add(compra.getSubtotalSinImpuestos());
             this.subtotal = sumarValores(compra.getSubtotalImpuestos(), compra.getSubtotalSinImpuestos());
             this.subtotal0 = this.subtotal0.add(compra.getSubtotalSinImpuestos());
             this.subtotal12 = this.subtotal12.add(compra.getDescuentoImpuestos());
-            //this.descuento = this.descuento.add(compra.getDescuentoImpuestos()).add(compra.getDescuentoSinImpuestos());
             this.descuento = sumarValores(compra.getDescuentoImpuestos(), compra.getDescuentoSinImpuestos());
             this.descuento0 =  this.descuento0.add(compra.getDescuentoSinImpuestos());
             this.descuento12 = this.descuento12.add(compra.getDescuentoImpuestos());
@@ -363,6 +372,7 @@ public class CompraReporteModel extends CompraReportePanel
     {
         String titulos[] = {"Preimpreso", "Identificacion", "Nombre", "Fecha", "Subtotal 12%", "Subtotal 0%", "Descuento", "IVA", "TOTAL"};
         this.modeloTablaDetallesCompras = new DefaultTableModel(titulos, 0);
+       
         for(Compra compra : compras)
         {
             Vector<String> fila = new Vector();
@@ -378,8 +388,16 @@ public class CompraReporteModel extends CompraReportePanel
             fila.add(compra.getIva()+"");
             fila.add(compra.getTotal()+"");
             this.modeloTablaDetallesCompras.addRow(fila);;
-        } 
+        }
         getTableDetalleCompras().setModel(modeloTablaDetallesCompras);
+        alinearColumnasTablas();
+          
+    }
+    
+    public void alinearColumnasTablas()
+    {
+        UtilidadesTablas.alinearTodasColumnasTabla(getTableDetalleCompras(), UtilidadesTablas.alinearIzquierda);
+        UtilidadesTablas.alinearColumnasTabla(getTableDetalleCompras(), UtilidadesTablas.alinearDerecha, new Integer[]{4,5,6,7,8});
     }
     
     public void visualizarTotalesComprasIndividuales()
@@ -402,5 +420,6 @@ public class CompraReporteModel extends CompraReportePanel
         getLblDescuento().setText("0.00");
         getLblIva12().setText("0.00");
         getLblTotal().setText("0.00");
+        getTxtProveedor().setText("");
     }
 }

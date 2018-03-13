@@ -68,6 +68,7 @@ public abstract class CompraReportePanel extends ControladorCodefacInterface {
         lblIva12 = new javax.swing.JLabel();
         lblTotal = new javax.swing.JLabel();
 
+        setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setIconifiable(true);
         setMaximizable(true);
@@ -251,6 +252,7 @@ public abstract class CompraReportePanel extends ControladorCodefacInterface {
 
         lblSubtotal.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 8, 5, 8);
         jPanel1.add(lblSubtotal, gridBagConstraints);
 
@@ -258,6 +260,7 @@ public abstract class CompraReportePanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 8, 5, 8);
         jPanel1.add(lblSubtotal12, gridBagConstraints);
 
@@ -265,6 +268,7 @@ public abstract class CompraReportePanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 8, 5, 8);
         jPanel1.add(lblSubtotal0, gridBagConstraints);
 
@@ -272,6 +276,7 @@ public abstract class CompraReportePanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 8, 5, 8);
         jPanel1.add(lblDescuento, gridBagConstraints);
 
@@ -279,6 +284,7 @@ public abstract class CompraReportePanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 8, 5, 8);
         jPanel1.add(lblIva12, gridBagConstraints);
 
@@ -286,6 +292,7 @@ public abstract class CompraReportePanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 8, 5, 8);
         jPanel1.add(lblTotal, gridBagConstraints);
 
