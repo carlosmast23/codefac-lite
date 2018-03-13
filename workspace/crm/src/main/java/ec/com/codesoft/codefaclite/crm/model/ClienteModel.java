@@ -231,6 +231,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         getjTextCorreo().setText(persona.getCorreoElectronico());
         getCmbEstado().setSelectedItem(ClienteEnumEstado.getEnum(persona.getEstado()));
         getCmbTipoOperador().setSelectedItem(persona.getTipoEnum());
+        getCmbNacionalidad().setSelectedItem(persona.getNacionalidad());
 
         System.out.println("Datos cargados ");
     }
