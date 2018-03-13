@@ -10,8 +10,9 @@
 
 create table CLIENTE( 
     CLIENTE_ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
+    NACIONALIDAD_ID bigint,      
     NOMBRES varchar(256),
-    APELLIDOS varchar(256),    
+    APELLIDOS varchar(256),
     TIPO_OPERADOR varchar(1),
     RAZON_SOCIAL varchar(256),
     NOMBRE_LEGAL varchar(256),
