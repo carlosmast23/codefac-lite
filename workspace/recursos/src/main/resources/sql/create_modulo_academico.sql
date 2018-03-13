@@ -1,3 +1,11 @@
+create table NACIONALIDAD( 
+    NACIONALIDAD_ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
+    PAIS_NAC varchar(50),
+    GENTILICIO_NAC varchar(50),  
+    ISO_NAC varchar(3),  
+    primary key (NACIONALIDAD_ID)
+);
+
 create table AULA( 
     AULA_ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
     NOMBRE varchar(256),
@@ -89,10 +97,3 @@ create table RUBRO_ESTUDIANTE(
     primary key (ID)
 );
 
-create table NACIONALIDAD( 
-    NACIONALIDAD_ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
-    PAIS_NAC varchar(50),
-    GENTILICIO_NAC varchar(50),  
-    ISO_NAC varchar(3),  
-    primary key (NACIONALIDAD_ID)
-);

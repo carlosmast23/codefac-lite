@@ -28,29 +28,29 @@ import java.util.logging.Logger;
  * @author Carlos
  */
 public class UtilidadesServidor {
-    
+
     //Listado de conexiones en el Servidor
-    public static List<String> hostConectados=new ArrayList<String>();
-    
+    public static List<String> hostConectados = new ArrayList<String>();
+
     public static ServidorMonitorUpdateInterface monitorUpdate;
-    
+
     public static TipoLicenciaEnum tipoLicenciaEnum;
-    
+
     public static String usuarioLicencia;
-    
+
     public static String pathRecursos;
-    
+
     public static Integer cantidadUsuarios;
-    
+
     public static Map<ModuloCodefacEnum, Boolean> modulosMap;
-    
-    
-    public static InputStream[] querys={
+
+    public static InputStream[] querys = {
         RecursoCodefac.SQL.getResourceInputStream("create_comprobante_fisico_disenio.sql"),
+        RecursoCodefac.SQL.getResourceInputStream("create_modulo_academico.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_cliente.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_usuario.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_sri_forma_pago.sql"),
-        RecursoCodefac.SQL.getResourceInputStream("create_sri_identificacion.sql"),        
+        RecursoCodefac.SQL.getResourceInputStream("create_sri_identificacion.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_impuesto.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_impuesto_detalle.sql"),
         RecursoCodefac.SQL.getResourceInputStream("insert_impuesto.sql"),
@@ -64,52 +64,43 @@ public class UtilidadesServidor {
         RecursoCodefac.SQL.getResourceInputStream("create_perfil.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_acceso_directo.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_producto_proveedor.sql"),
-        RecursoCodefac.SQL.getResourceInputStream("create_kardex.sql"),        
-        RecursoCodefac.SQL.getResourceInputStream("create_compra.sql"),        
+        RecursoCodefac.SQL.getResourceInputStream("create_kardex.sql"),
+        RecursoCodefac.SQL.getResourceInputStream("create_compra.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_bodega.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_categoria_producto.sql"),
         RecursoCodefac.SQL.getResourceInputStream("insert_default.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_empresa.sql"),
-        RecursoCodefac.SQL.getResourceInputStream("create_modulo_academico.sql"),
         RecursoCodefac.SQL.getResourceInputStream("insert_usuario.sql"),
-        RecursoCodefac.SQL.getResourceInputStream("insert_default_academico.sql"),
-        
-        
-    };
-    
-    public static void crearBaseDatos()
-    {
-         try {
+        RecursoCodefac.SQL.getResourceInputStream("insert_default_academico.sql"),};
+
+    public static void crearBaseDatos() {
+        try {
             Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
             //obtenemos la conexión si no existe crea la base
             Connection conn = DriverManager.getConnection("jdbc:derby:.\\DB\\Derby2.DB;databaseName=codefac;create=true;user=root");
             //Establecer autentificacion en derby
             Statement s = conn.createStatement();
-             s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.connection.requireAuthentication', 'true')");
-             s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.authentication.provider', 'BUILTIN')");
-             s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.user.root', 'Code17bwbtj')");
-             s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.database.propertiesOnly', 'true')");
-             s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.language.sequence.preallocator', '1')");
-             
-            if (conn!=null)
-            {
-                
+            s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.connection.requireAuthentication', 'true')");
+            s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.authentication.provider', 'BUILTIN')");
+            s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.user.root', 'Code17bwbtj')");
+            s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.database.propertiesOnly', 'true')");
+            s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.language.sequence.preallocator', '1')");
+
+            if (conn != null) {
+
                 /**
                  * Busca todos los querys disponibles para ejecutar
                  */
                 for (InputStream query : querys) {
-                    try
-                    {
-                        String sql=UtilidadesTextos.getStringURLFile(query);
-                        String[] sentencias= sql.split(";");
+                    try {
+                        String sql = UtilidadesTextos.getStringURLFile(query);
+                        String[] sentencias = sql.split(";");
                         for (String sentencia : sentencias) {
                             PreparedStatement pstm = conn.prepareStatement(sentencia);
                             pstm.execute();
                             pstm.close();
                         }
-                    }
-                    catch(NullPointerException cpe)
-                    {
+                    } catch (NullPointerException cpe) {
                         System.out.println("Alerta al crear el sql, porfavor revise que los sql no tengan espacios en blanco al final, apesar de esta advertencia el proceso puede continuar sin ningun problema");
                     }
                 }
