@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -43,8 +44,6 @@ public class Producto implements Serializable {
     @Column(name = "CODIGO_UPC")
     private String codigoUPC;
 
-    @Column(name = "TIPO_PRODUCTO")
-    private String tipoProducto;
     @Column(name = "NOMBRE")
     private String nombre;
     @Column(name = "VALOR_UNITARIO")
@@ -75,31 +74,16 @@ public class Producto implements Serializable {
 
     @Column(name = "IMAGEN")
     private String imagen;
-    /*
-    @Column(name = "CATEGORIA")
-    private String categoria;
-     */
+
     @Column(name = "CARACTERISTICAS")
     private String caracteristicas;
 
     @Column(name = "OBSERVACIONES")
     private String observaciones;
 
-    @JoinColumn(name = "IVA_ID")
-    @ManyToOne
-    private ImpuestoDetalle iva;
-
-    @JoinColumn(name = "ICE_ID")
-    @ManyToOne
-    private ImpuestoDetalle ice;
-
-    @JoinColumn(name = "IRBPNR_ID")
-    @ManyToOne
-    private ImpuestoDetalle irbpnr;
-
-    @JoinColumn(name = "CATEGORIA")
-    @ManyToOne
-    private CategoriaProducto categoriaProducto;
+    @JoinColumn(name = "CATALOGO_PRODUCTO_ID")
+    @ManyToOne    
+    private CatalogoProducto catalogoProducto;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productoEnsamble")
     private List<ProductoEnsamble> detallesEnsamble;
@@ -107,33 +91,10 @@ public class Producto implements Serializable {
     public Producto() {
     }
 
-    public ImpuestoDetalle getIva() {
-        return iva;
-    }
-
-    public void setIva(ImpuestoDetalle iva) {
-        this.iva = iva;
-    }
-
-    public ImpuestoDetalle getIce() {
-        return ice;
-    }
-
-    public void setIce(ImpuestoDetalle ice) {
-        this.ice = ice;
-    }
 
     public static final Producto getDEFECTO() {
         Producto p = new Producto();
         return new Producto();
-    }
-
-    public ImpuestoDetalle getIrbpnr() {
-        return irbpnr;
-    }
-
-    public void setIrbpnr(ImpuestoDetalle irbpnr) {
-        this.irbpnr = irbpnr;
     }
 
     public Long getIdProducto() {
@@ -142,14 +103,6 @@ public class Producto implements Serializable {
 
     public void setIdProducto(Long idProducto) {
         this.idProducto = idProducto;
-    }
-
-    public String getTipoProducto() {
-        return tipoProducto;
-    }
-
-    public void setTipoProducto(String tipoProducto) {
-        this.tipoProducto = tipoProducto;
     }
 
     public String getNombre() {
@@ -264,14 +217,6 @@ public class Producto implements Serializable {
         this.imagen = imagen;
     }
 
-    public CategoriaProducto getCategoriaProducto() {
-        return categoriaProducto;
-    }
-
-    public void setCategoriaProducto(CategoriaProducto categoriaProducto) {
-        this.categoriaProducto = categoriaProducto;
-    }
-
     public String getObservaciones() {
         return observaciones;
     }
@@ -295,6 +240,16 @@ public class Producto implements Serializable {
     public void setDetallesEnsamble(List<ProductoEnsamble> detallesEnsamble) {
         this.detallesEnsamble = detallesEnsamble;
     }
+
+    public CatalogoProducto getCatalogoProducto() {
+        return catalogoProducto;
+    }
+
+    public void setCatalogoProducto(CatalogoProducto catalogoProducto) {
+        this.catalogoProducto = catalogoProducto;
+    }
+    
+    
 
     /**
      * Metodos personalizados

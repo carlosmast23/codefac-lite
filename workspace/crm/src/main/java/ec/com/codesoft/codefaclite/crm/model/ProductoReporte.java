@@ -47,9 +47,9 @@ public class ProductoReporte extends ControladorCodefacInterface{
             for (Producto producto : productos) {
                 ProductoData productoData=new ProductoData();
                 productoData.setCodigoPrincipal(producto.getCodigoPersonalizado());
-                productoData.setImpuestoIva(producto.getIva().getNombre());
+                productoData.setImpuestoIva(producto.getCatalogoProducto().getIva().getNombre());
                 productoData.setNombre(producto.getNombre());
-                productoData.setTipoProducto(producto.getTipoProducto());
+                productoData.setTipoProducto(producto.getCatalogoProducto().getTipoProducto());
                 productoData.setValorUnitario(producto.getValorUnitario().toString());
                 data.add(productoData);
             }
@@ -101,7 +101,7 @@ public class ProductoReporte extends ControladorCodefacInterface{
 
     @Override
     public String getNombre() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "Producto Reporte";
     }
 
     @Override

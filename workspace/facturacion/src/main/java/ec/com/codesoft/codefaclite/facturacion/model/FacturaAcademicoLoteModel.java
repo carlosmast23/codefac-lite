@@ -29,6 +29,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DatosAdicionalesComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoReferenciaEnum;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
@@ -488,11 +489,11 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel{
             facturaDetalle.setPrecioUnitario(rubro.getRubroNivel().getValor());
 
             facturaDetalle.setReferenciaId(rubro.getId());
-            facturaDetalle.setTipoReferencia(TipoReferenciaEnum.ACADEMICO.getCodigo());
+            facturaDetalle.setTipoDocumento(TipoDocumentoEnum.ACADEMICO.getCodigo());
             facturaDetalle.setTotal(facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()));
             facturaDetalle.setValorIce(BigDecimal.ZERO);
             
-            if (rubro.getRubroNivel().getProducto().getIva().getTarifa().equals(0)) {
+            if (rubro.getRubroNivel().getCatalogoProducto().getIva().getTarifa().equals(0)) {
                 facturaDetalle.setIva(BigDecimal.ZERO);
             } else {
 
@@ -520,7 +521,7 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel{
             try {
                 //TODO: Verificar si se puede optimizar para no hacer una segunda llamada a la base de datos para consultar la referencia del detalle de la factura
                 RubroEstudiante rubroEstudiante=ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
-                if(rubroEstudiante.getRubroNivel().getProducto().getIva().getTarifa().equals(0))
+                if(rubroEstudiante.getRubroNivel().getCatalogoProducto().getIva().getTarifa().equals(0))
                 {
                     subtotalSinImpuestos=subtotalSinImpuestos.add(facturaDetalle.getTotal());
                 }

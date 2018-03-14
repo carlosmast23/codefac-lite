@@ -2133,11 +2133,23 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     public void setSessionCodefac(SessionCodefac sessionCodefac) {
         this.sessionCodefac = sessionCodefac;
     }
+    
+     @Override
+    public void crearDialogoCodefac(ObserverUpdateInterface panel,VentanaEnum ventanEnum,boolean maximizado)
+    {
+        crearDialogoVentana(ventanEnum.getClase(), panel, maximizado);    
+    }
 
     @Override
     public void crearDialogoCodefac(ObserverUpdateInterface panel,String namePanel, boolean maximizado) {
         
         Class clase=buscarPanelDialog(namePanel);
+        crearDialogoVentana(clase, panel, maximizado);
+                
+    }
+    
+    private void crearDialogoVentana(Class clase,ObserverUpdateInterface panel,boolean maximizado)
+    {
         if(clase!=null)
         {
             try {
@@ -2172,7 +2184,6 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
     }
 
     /**

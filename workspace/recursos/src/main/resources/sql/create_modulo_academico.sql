@@ -84,7 +84,7 @@ create table RUBROS_NIVEL(
     NOMBRE varchar(100),
     PERIODO_ID bigint,
     NIVEL_ID bigint,
-    PRODUCTO_ID bigint,
+    CATALOGO_PRODUCTO_ID BIGINT,
     TIPO_RUBRO varchar(1),
     VALOR decimal(7,2),
     primary key (ID)

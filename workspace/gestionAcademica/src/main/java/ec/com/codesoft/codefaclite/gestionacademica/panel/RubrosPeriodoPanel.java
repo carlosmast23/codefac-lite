@@ -7,9 +7,11 @@ package ec.com.codesoft.codefaclite.gestionacademica.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoRubroEnum;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
@@ -24,6 +26,7 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
      */
     public RubrosPeriodoPanel() {
         initComponents();
+        
     }
 
     /**
@@ -51,6 +54,7 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         cmbTipoRubro = new javax.swing.JComboBox<>();
+        btnAgregarRubro = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -79,6 +83,8 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
         jLabel8.setText("Frecuencia Mensual");
 
         jLabel9.setText("Tipo:");
+
+        btnAgregarRubro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add2.png"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -110,9 +116,11 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
                                     .addComponent(cmbRubro, javax.swing.GroupLayout.Alignment.LEADING, 0, 153, Short.MAX_VALUE)
                                     .addComponent(cmbNivel, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(cmbPeriodo, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(82, 82, 82)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnAgregarRubro)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
                                 .addComponent(jLabel8)))))
-                .addContainerGap(85, Short.MAX_VALUE))
+                .addGap(54, 54, 54))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -133,12 +141,15 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(cmbRubro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8))
+                    .addComponent(btnAgregarRubro)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(2, 2, 2)
+                        .addComponent(jLabel8)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(cmbTipoRubro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(txtValor, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -156,9 +167,10 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregarRubro;
     private javax.swing.JComboBox<Nivel> cmbNivel;
     private javax.swing.JComboBox<Periodo> cmbPeriodo;
-    private javax.swing.JComboBox<Producto> cmbRubro;
+    private javax.swing.JComboBox<CatalogoProducto> cmbRubro;
     private javax.swing.JComboBox<TipoRubroEnum> cmbTipoRubro;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -206,14 +218,7 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
         this.txtValor = txtValor;
     }
 
-    public JComboBox<Producto> getCmbRubro() {
-        return cmbRubro;
-    }
-
-    public void setCmbRubro(JComboBox<Producto> cmbRubro) {
-        this.cmbRubro = cmbRubro;
-    }
-
+    
     public JComboBox<TipoRubroEnum> getCmbTipoRubro() {
         return cmbTipoRubro;
     }
@@ -221,6 +226,24 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
     public void setCmbTipoRubro(JComboBox<TipoRubroEnum> cmbTipoRubro) {
         this.cmbTipoRubro = cmbTipoRubro;
     }
+
+    public JComboBox<CatalogoProducto> getCmbRubro() {
+        return cmbRubro;
+    }
+
+    public void setCmbRubro(JComboBox<CatalogoProducto> cmbRubro) {
+        this.cmbRubro = cmbRubro;
+    }
+
+    public JButton getBtnAgregarRubro() {
+        return btnAgregarRubro;
+    }
+
+    public void setBtnAgregarRubro(JButton btnAgregarRubro) {
+        this.btnAgregarRubro = btnAgregarRubro;
+    }
+    
+    
     
     
 }

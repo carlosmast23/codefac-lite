@@ -98,7 +98,7 @@ public class ClienteReporte extends ControladorCodefacInterface{
 
     @Override
     public String getNombre() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "Cliente Reporte";
     }
 
     @Override

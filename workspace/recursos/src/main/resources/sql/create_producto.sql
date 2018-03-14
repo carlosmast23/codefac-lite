@@ -10,17 +10,13 @@
 create table PRODUCTO
 (
     ID_PRODUCTO BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1),
+    CATALOGO_PRODUCTO_ID BIGINT,
     CODIGO_PERSONALIZADO varchar(70),
     CODIGO_EAN varchar(70),
     CODIGO_UPC varchar(70),
-    TIPO_PRODUCTO varchar(1),
     NOMBRE varchar(100),
     VALOR_UNITARIO decimal(7,3),
-    IVA_ID integer,
-    ICE_ID integer,
-    IRBPNR_ID integer,
     ESTADO varchar(1),
-
     UBICACION varchar(100),
     GARANTIA varchar(1),
     CANTIDAD_MINIMA integer,
@@ -29,7 +25,6 @@ create table PRODUCTO
     STOCK_INICIAL bigint,
     MARCA varchar(50),
     IMAGEN varchar(100),
-    CATEGORIA bigint,
     CARACTERISTICAS varchar(100),
     OBSERVACIONES varchar(100),    
 

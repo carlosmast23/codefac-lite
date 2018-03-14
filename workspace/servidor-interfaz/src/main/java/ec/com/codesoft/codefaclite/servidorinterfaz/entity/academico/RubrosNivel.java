@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -45,9 +46,9 @@ public class RubrosNivel implements Serializable{
     @ManyToOne
     private Periodo periodo;
 
-    @JoinColumn(name = "PRODUCTO_ID")
+    @JoinColumn(name = "CATALOGO_PRODUCTO_ID")
     @ManyToOne    
-    private Producto producto;
+    private CatalogoProducto catalogoProducto;
     
     @Column(name = "TIPO_RUBRO")
     private String tipoRubro;
@@ -98,14 +99,6 @@ public class RubrosNivel implements Serializable{
         this.nombre = nombre;
     }
 
-    public Producto getProducto() {
-        return producto;
-    }
-
-    public void setProducto(Producto producto) {
-        this.producto = producto;
-    }
-
     public BigDecimal getValor() {
         return valor;
     }
@@ -113,6 +106,16 @@ public class RubrosNivel implements Serializable{
     public void setValor(BigDecimal valor) {
         this.valor = valor;
     }
+
+    public CatalogoProducto getCatalogoProducto() {
+        return catalogoProducto;
+    }
+
+    public void setCatalogoProducto(CatalogoProducto catalogoProducto) {
+        this.catalogoProducto = catalogoProducto;
+    }
+
+    
 
     @Override
     public String toString() {

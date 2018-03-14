@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.crm.model;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.crm.busqueda.ProductoBusquedaDialogo;
@@ -27,6 +28,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleSer
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
@@ -62,13 +65,6 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     private Producto productoEnsamble;
 
     public ProductoModel() {
-        productoService = ServiceFactory.getFactory().getProductoServiceIf();
-        impuestoService = ServiceFactory.getFactory().getImpuestoServiceIf();
-        impuestoDetalleService = ServiceFactory.getFactory().getImpuestoDetalleServiceIf();
-        catProdService = ServiceFactory.getFactory().getCategoriaProductoServiceIf();
-        getComboIce().setEnabled(false);
-        getComboIrbpnr().setEnabled(false);
-        iniciarCombosBox();
         listenerComboBox();
         listenerBotones();
     }
@@ -121,25 +117,15 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         producto.setCodigoUPC(getTxtCodigoUPC().getText());
         producto.setEstado(ProductoEnumEstado.ACTIVO.getEstado());
 
-        TipoProductoEnum tipoProductoEnum = (TipoProductoEnum) getComboTipoProducto().getSelectedItem();
-        producto.setTipoProducto(tipoProductoEnum.getLetra());
+        CatalogoProducto catalogoProducto=(CatalogoProducto) getCmbCatalogoProducto().getSelectedItem();
+        producto.setCatalogoProducto(catalogoProducto);
+        //TipoProductoEnum tipoProductoEnum = (TipoProductoEnum) getComboTipoProducto().getSelectedItem();
+        //producto.getCatalogoProducto().setTipoProducto(tipoProductoEnum.getLetra());
 
         producto.setNombre(getTextNombre().getText());
         d = new BigDecimal(getTextValorUnitario().getText());
 
         producto.setValorUnitario(d);
-        if (getComboIce().getSelectedItem() instanceof ImpuestoDetalle) {
-            producto.setIce((ImpuestoDetalle) getComboIce().getSelectedItem());
-        } else {
-            System.out.println("No se puede hacer una grabacion ICE");
-        }
-        producto.setIva((ImpuestoDetalle) getComboIva().getSelectedItem());
-        if (getComboIrbpnr().getSelectedItem() instanceof ImpuestoDetalle) {
-            producto.setIrbpnr((ImpuestoDetalle) getComboIrbpnr().getSelectedItem());
-        } else {
-            System.out.println("No se puede hacer una grabacion IRBPNR");
-        }
-
         /**
          * Setear valores adicionales
          */
@@ -152,8 +138,8 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         producto.setMarca(getTxtMarca().getText());
         producto.setImagen(getTxtImagenProducto().getText());
 
-       catProducto= (CategoriaProducto) getCmbCategoriaProducto().getSelectedItem();
-        producto.setCategoriaProducto(catProducto);
+        //catProducto= (CategoriaProducto) getCmbCategoriaProducto().getSelectedItem();
+        //producto.setCategoriaProducto(catProducto);
         producto.setCaracteristicas(getTxtCaracteristica().getText());
         producto.setObservaciones(getTxtObservaciones().getText());
 
@@ -203,9 +189,9 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getTextNombre().setText(producto.getNombre());
         getTextValorUnitario().setText(producto.getValorUnitario().toString());
 
-        getComboIva().setSelectedItem(producto.getIva());
+        //getComboIva().setSelectedItem(producto.getCatalogoProducto().getIva());
 
-        getComboTipoProducto().setSelectedItem(TipoProductoEnum.getEnumByLetra(producto.getTipoProducto()));
+        //getComboTipoProducto().setSelectedItem(TipoProductoEnum.getEnumByLetra(producto.getCatalogoProducto().getTipoProducto()));
 
         /**
          * Cargar datos adicionales
@@ -219,7 +205,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getTxtStockInicial().setText((producto.getStockInicial() != null) ? producto.getStockInicial() + "" : "");
         getTxtMarca().setText((producto.getMarca() != null) ? producto.getMarca() + "" : "");
         getTxtImagenProducto().setText((producto.getImagen() != null) ? producto.getImagen() + "" : "");
-        getCmbCategoriaProducto().setSelectedItem(producto.getCategoriaProducto());
+        //getCmbCategoriaProducto().setSelectedItem(producto.getCatalogoProducto().getCategoriaProducto());
         getTxtCaracteristica().setText((producto.getCaracteristicas() != null) ? producto.getCaracteristicas() + "" : "");
         getTxtObservaciones().setText((producto.getObservaciones() != null) ? producto.getObservaciones() + "" : "");
 
@@ -230,43 +216,11 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     @Override
     public void limpiar() {
 
-        try {
-            this.producto = new Producto();
-            
-            getComboIva().removeAllItems();
-            getComboIce().removeAllItems();
-            getComboIrbpnr().removeAllItems();
-            
-            List<ImpuestoDetalle> impuestoDetalleList = impuestoDetalleService.obtenerIvaVigente();
-            ImpuestoDetalle impuestoDefault = null;
-            String ivaDefecto = session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).valor;
-            for (ImpuestoDetalle impuesto : impuestoDetalleList) {
-                if (impuesto.getTarifa().toString().equals(ivaDefecto)) {
-                    impuestoDefault = impuesto;
-                }
-                getComboIva().addItem(impuesto);
-            }
-            getComboIva().setSelectedItem(impuestoDefault);
-            
-            Impuesto ice = impuestoService.obtenerImpuestoPorCodigo(Impuesto.ICE);
-            for (ImpuestoDetalle impuesto : ice.getDetalleImpuestos()) {
-                getComboIce().addItem(impuesto);
-            }
-            getComboIce().setEditable(true);
-            getComboIce().setSelectedItem("Seleccione : ");
-            
-            Impuesto irbpnr = impuestoService.obtenerImpuestoPorCodigo(Impuesto.IRBPNR);
-            for (ImpuestoDetalle impuesto : irbpnr.getDetalleImpuestos()) {
-                getComboIrbpnr().addItem(impuesto);
-            }
-            getComboIrbpnr().setEditable(true);
-            getComboIrbpnr().setSelectedItem("Seleccione: ");
-            
-            initModelTablaDatosEnsamble();
-            setearValoresIniciales();
-        } catch (RemoteException ex) {
-            Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        this.producto = new Producto();
+       
+
+        initModelTablaDatosEnsamble();
+        setearValoresIniciales();
 
     }
 
@@ -305,7 +259,11 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
 
     @Override
     public void iniciar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        productoService = ServiceFactory.getFactory().getProductoServiceIf();
+        impuestoService = ServiceFactory.getFactory().getImpuestoServiceIf();
+        impuestoDetalleService = ServiceFactory.getFactory().getImpuestoDetalleServiceIf();
+        catProdService = ServiceFactory.getFactory().getCategoriaProductoServiceIf();
+        iniciarCombosBox();
     }
 
     @Override
@@ -319,12 +277,15 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     }
 
     private void iniciarCombosBox() {
+        
         try {
-            TipoProductoEnum[] tipos = TipoProductoEnum.values();
-            getComboTipoProducto().removeAllItems();
-            for (TipoProductoEnum tipo : tipos) {
-                getComboTipoProducto().addItem(tipo);
+            //Cargar los datos disponibles de la catalogo de producto
+            List<CatalogoProducto> catologoLista=ServiceFactory.getFactory().getCatalogoProductoServiceIf().obtenerTodos();
+            getCmbCatalogoProducto().removeAllItems();
+            for (CatalogoProducto catalogoProducto : catologoLista) {
+                getCmbCatalogoProducto().addItem(catalogoProducto);
             }
+            
             
             //Agregar combo de garantia
             getCmbGarantia().removeAllItems();
@@ -333,30 +294,36 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
                 getCmbGarantia().addItem(garantia);
             }
             
-            getCmbCategoriaProducto().removeAllItems();
-            List<CategoriaProducto> catProdList = catProdService.obtenerTodos();
-            for (CategoriaProducto cat : catProdList) {
-                getCmbCategoriaProducto().addItem(cat);
-            }
+
         } catch (RemoteException ex) {
             Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+
     }
 
     private void listenerComboBox() {
+        getCmbCatalogoProducto().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CatalogoProducto catalogoProducto=(CatalogoProducto) getCmbCatalogoProducto().getSelectedItem();
+                seleccionarTipoProducto(catalogoProducto.getTipoProductoEnum());
+            }
+        });
+        
+        /*
         getComboTipoProducto().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 TipoProductoEnum tipoPorductoEnum = (TipoProductoEnum) getComboTipoProducto().getSelectedItem();
                 seleccionarTipoProducto(tipoPorductoEnum);
             }
-        });
+        });*/
 
     }
 
     private void seleccionarTipoProducto(TipoProductoEnum tipoProducto) {
-        if (tipoProducto.equals(TipoProductoEnum.PRODUCTO)) {
+        if (tipoProducto!=null && tipoProducto.equals(TipoProductoEnum.PRODUCTO)) {
             getTxtCodigoEAN().setEnabled(true);
             getTxtCodigoUPC().setEnabled(true);
         } else {
@@ -367,6 +334,25 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     }
 
     private void listenerBotones() {
+        
+        getBtnAgregarCatalogo().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panelPadre.crearDialogoCodefac(new ObserverUpdateInterface() {
+                    @Override
+                    public void updateInterface(Object entity) {
+                        CatalogoProducto categoria=(CatalogoProducto) entity;
+                        if(categoria!=null)
+                        {
+                            getCmbCatalogoProducto().addItem(categoria);
+                            getCmbCatalogoProducto().setSelectedItem(categoria);
+                        }
+                        
+                    }
+                }, VentanaEnum.CATALOGO_PRODUCTO,false);
+            }
+        });
+        
         getBtnBuscarProductoEnsamble().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

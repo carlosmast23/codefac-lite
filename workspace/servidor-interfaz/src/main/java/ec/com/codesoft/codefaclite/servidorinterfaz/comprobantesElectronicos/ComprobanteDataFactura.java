@@ -23,7 +23,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoReferenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
@@ -136,16 +138,21 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
             try {
                 DetalleFacturaComprobante detalle=new DetalleFacturaComprobante();
                 
-                Producto producto=null;
-                if(facturaDetalle.getTipoReferencia()!=null && facturaDetalle.getTipoReferenciaEnum().equals(TipoReferenciaEnum.ACADEMICO))
+                CatalogoProducto catalogoProducto=null;
+                if(facturaDetalle.getTipoDocumento()!=null && facturaDetalle.getTipoDocumentoEnum().equals(TipoDocumentoEnum.ACADEMICO))
                 {
                     RubroEstudiante rubroEstudiante=ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
-                    producto=rubroEstudiante.getRubroNivel().getProducto();
+                    catalogoProducto=rubroEstudiante.getRubroNivel().getCatalogoProducto();
+                    detalle.setCodigoPrincipal(rubroEstudiante.getId()+"");
                 }
                 else
-                    producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                {
+                    Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                    catalogoProducto=producto.getCatalogoProducto();
+                    detalle.setCodigoPrincipal(producto.getCodigoPersonalizado());
+                }
                 
-                detalle.setCodigoPrincipal(producto.getCodigoPersonalizado());
+                //detalle.setCodigoPrincipal(producto.getCodigoPersonalizado());
                 detalle.setCantidad(facturaDetalle.getCantidad());
                 detalle.setDescripcion(facturaDetalle.getDescripcion());
                 //Establecer el descuento en el aplicativo
@@ -162,16 +169,16 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
                 List<ImpuestoComprobante> listaComprobantes=new ArrayList<ImpuestoComprobante>();
                 
                 ImpuestoComprobante impuesto=new ImpuestoComprobante();
-                impuesto.setCodigo(producto.getIva().getImpuesto().getCodigoSri());
-                impuesto.setCodigoPorcentaje(producto.getIva().getCodigo()+"");
-                impuesto.setTarifa(new BigDecimal(producto.getIva().getTarifa()+""));
+                impuesto.setCodigo(catalogoProducto.getIva().getImpuesto().getCodigoSri());
+                impuesto.setCodigoPorcentaje(catalogoProducto.getIva().getCodigo()+"");
+                impuesto.setTarifa(new BigDecimal(catalogoProducto.getIva().getTarifa()+""));
                 impuesto.setBaseImponible(facturaDetalle.getTotal());
                 impuesto.setValor(facturaDetalle.getIva());
                 
                 /**
                  * Verificar valores para el total de impuesto
                  */
-                if(mapTotalImpuestos.get(producto.getIva())==null)
+                if(mapTotalImpuestos.get(catalogoProducto.getIva())==null)
                 {
                     TotalImpuesto totalImpuesto=new TotalImpuesto();
                     totalImpuesto.setBaseImponible(impuesto.getBaseImponible());
@@ -179,15 +186,15 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
                     totalImpuesto.setCodigoPorcentaje(impuesto.getCodigoPorcentaje());
                     totalImpuesto.setValor(impuesto.getValor());
                     totalImpuesto.setDescuentoAdicional(detalle.getDescuento().toString());
-                    mapTotalImpuestos.put(producto.getIva(), totalImpuesto);
+                    mapTotalImpuestos.put(catalogoProducto.getIva(), totalImpuesto);
                 }
                 else
                 {
-                    TotalImpuesto totalImpuesto=mapTotalImpuestos.get(producto.getIva());
+                    TotalImpuesto totalImpuesto=mapTotalImpuestos.get(catalogoProducto.getIva());
                     totalImpuesto.setBaseImponible(totalImpuesto.getBaseImponible().add(impuesto.getBaseImponible()));
                     totalImpuesto.setValor(totalImpuesto.getValor().add(impuesto.getValor()));
                     totalImpuesto.setDescuentoAdicional(detalle.getDescuento().toString());
-                    mapTotalImpuestos.put(producto.getIva(), totalImpuesto);
+                    mapTotalImpuestos.put(catalogoProducto.getIva(), totalImpuesto);
                     
                 }
                 

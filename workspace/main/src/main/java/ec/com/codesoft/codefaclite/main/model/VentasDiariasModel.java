@@ -234,7 +234,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
              * Revisar este calculo del iva para no calcular 2 veces al mostrar
              */
             Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getId());
-            if (producto.getIva().getTarifa().equals(0)) {
+            if (producto.getCatalogoProducto().getIva().getTarifa().equals(0)) {
                 facturaDetalle.setIva(BigDecimal.ZERO);
             } else {
                 BigDecimal iva = facturaDetalle.getTotal().multiply(obtenerValorIva()).setScale(2, BigDecimal.ROUND_HALF_UP);
@@ -335,7 +335,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
         for (FacturaDetalle facturaDetalle : facturaDetalles) {
             try {
                 Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getId());
-                if (producto.getIva().getTarifa() == 12) {
+                if (producto. getCatalogoProducto().getIva().getTarifa() == 12) {
                     this.factura.setSubtotalImpuestos(factura.getSubtotalImpuestos().add(facturaDetalle.getPrecioUnitario().multiply(facturaDetalle.getCantidad())));      
                 }
                 this.factura.setSubtotalSinImpuestos(this.factura.getSubtotalSinImpuestos().add(facturaDetalle.getPrecioUnitario().multiply(facturaDetalle.getCantidad())));
