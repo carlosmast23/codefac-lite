@@ -17,7 +17,7 @@ create table CATALOGO_PRODUCTO(
     IVA_ID integer,
     ICE_ID integer,
     IRBPNR_ID integer,
-    primary key (CATEGORIAP_ID)
+    primary key (ID)
 )
 
 

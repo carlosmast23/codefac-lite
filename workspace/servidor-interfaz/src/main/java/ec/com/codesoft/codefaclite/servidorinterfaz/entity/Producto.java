@@ -74,10 +74,7 @@ public class Producto implements Serializable {
 
     @Column(name = "IMAGEN")
     private String imagen;
-    /*
-    @Column(name = "CATEGORIA")
-    private String categoria;
-     */
+
     @Column(name = "CARACTERISTICAS")
     private String caracteristicas;
 

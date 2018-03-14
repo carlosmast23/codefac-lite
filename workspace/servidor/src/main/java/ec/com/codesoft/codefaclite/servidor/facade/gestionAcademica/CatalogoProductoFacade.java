@@ -14,8 +14,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoPro
  */
 public class CatalogoProductoFacade extends AbstractFacade<CatalogoProducto>{
     
-    public CatalogoProductoFacade(Class<CatalogoProducto> entityClass) {
-        super(entityClass);
+    public CatalogoProductoFacade() {
+        super(CatalogoProducto.class);
     }    
     
 }

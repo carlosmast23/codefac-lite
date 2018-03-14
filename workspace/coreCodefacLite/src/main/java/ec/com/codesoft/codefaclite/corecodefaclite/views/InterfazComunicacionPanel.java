@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.corecodefaclite.views;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import java.util.Map;
 import net.sf.jasperreports.engine.JasperPrint;
 
@@ -24,6 +25,14 @@ public interface InterfazComunicacionPanel
      * @param maximizado opcion para saber si quieres que se abra maximizado o mimimizado
      */
     public void crearDialogoCodefac(ObserverUpdateInterface panel,String namePanel,boolean maximizado);
+    
+    /**
+     * Me permite crear una un dialogo pasando como referencia un enum con la ventana del formulario
+     * @param ventanEnum
+     * @param namePanel
+     * @param maximizado 
+     */
+    public void crearDialogoCodefac(ObserverUpdateInterface panel,VentanaEnum ventanEnum,boolean maximizado);
     
     public Map<String,Object> mapReportePlantilla();
     /**

@@ -7,7 +7,9 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,7 +25,7 @@ import javax.persistence.Table;
  * @author Carlos
  */
 @Entity
-@Table(name = "PRODUCTO")
+@Table(name = "CATALOGO_PRODUCTO")
 public class CatalogoProducto implements Serializable{
     
     @Id
@@ -112,6 +114,43 @@ public class CatalogoProducto implements Serializable{
 
     public void setCategoriaProducto(CategoriaProducto categoriaProducto) {
         this.categoriaProducto = categoriaProducto;
+    }
+    
+    // Metodos adicionales
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 67 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final CatalogoProducto other = (CatalogoProducto) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return nombre;
+    }
+    
+    
+    public TipoProductoEnum getTipoProductoEnum() {
+        return TipoProductoEnum.getEnumByLetra(tipoProducto);
     }
     
     

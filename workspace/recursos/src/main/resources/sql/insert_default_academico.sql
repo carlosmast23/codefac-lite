@@ -1,8 +1,8 @@
-INSERT INTO PRODUCTO(NOMBRE,VALOR_UNITARIO,IVA_ID,ESTADO) 
-VALUES ('Matricula',85,1,'A'),
-('Pension',100,1,'A'),
-('Certificado',50,1,'A'),
-('Excursion',50,1,'A')
+INSERT INTO PRODUCTO(NOMBRE,VALOR_UNITARIO,ESTADO) 
+VALUES ('Matricula',85,'A'),
+('Pension',100,'A'),
+('Certificado',50,'A'),
+('Excursion',50,'A')
 ;
 
 
