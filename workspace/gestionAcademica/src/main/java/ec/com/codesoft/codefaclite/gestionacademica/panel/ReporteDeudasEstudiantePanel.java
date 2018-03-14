@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.gestionacademica.panel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
@@ -41,6 +42,9 @@ public abstract class ReporteDeudasEstudiantePanel extends ControladorCodefacInt
         btnBuscar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDeudas = new javax.swing.JTable();
+        btnAgregarRubrosNivel = new javax.swing.JButton();
+        cmbRubrosNivel = new javax.swing.JComboBox<>();
+        lblperiodo1 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -74,24 +78,36 @@ public abstract class ReporteDeudasEstudiantePanel extends ControladorCodefacInt
         ));
         jScrollPane1.setViewportView(tblDeudas);
 
+        btnAgregarRubrosNivel.setText("Add");
+
+        lblperiodo1.setText("Rubros de Nivel:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(32, 32, 32)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblperiodo)
+                        .addGap(2, 2, 2)
+                        .addComponent(lblperiodo1)
+                        .addGap(18, 18, 18)
+                        .addComponent(cmbRubrosNivel, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cmbPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(lblBuscar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbNivelAcademico, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnBuscar)))
+                        .addComponent(btnAgregarRubrosNivel))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane1)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(lblperiodo)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(cmbPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(lblBuscar)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(cmbNivelAcademico, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(btnBuscar))))
                 .addContainerGap(54, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -104,9 +120,14 @@ public abstract class ReporteDeudasEstudiantePanel extends ControladorCodefacInt
                     .addComponent(lblBuscar)
                     .addComponent(cmbNivelAcademico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBuscar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbRubrosNivel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAgregarRubrosNivel)
+                    .addComponent(lblperiodo1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(138, Short.MAX_VALUE))
+                .addContainerGap(140, Short.MAX_VALUE))
         );
 
         pack();
@@ -114,12 +135,15 @@ public abstract class ReporteDeudasEstudiantePanel extends ControladorCodefacInt
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregarRubrosNivel;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JComboBox<NivelAcademico> cmbNivelAcademico;
     private javax.swing.JComboBox<Periodo> cmbPeriodo;
+    private javax.swing.JComboBox<RubrosNivel> cmbRubrosNivel;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblBuscar;
     private javax.swing.JLabel lblperiodo;
+    private javax.swing.JLabel lblperiodo1;
     private javax.swing.JTable tblDeudas;
     // End of variables declaration//GEN-END:variables
 
@@ -153,6 +177,22 @@ public abstract class ReporteDeudasEstudiantePanel extends ControladorCodefacInt
 
     public void setTblDeudas(JTable tblDeudas) {
         this.tblDeudas = tblDeudas;
+    }
+
+    public JButton getBtnAgregarRubrosNivel() {
+        return btnAgregarRubrosNivel;
+    }
+
+    public void setBtnAgregarRubrosNivel(JButton btnAgregarRubrosNivel) {
+        this.btnAgregarRubrosNivel = btnAgregarRubrosNivel;
+    }
+
+    public JComboBox<RubrosNivel> getCmbRubrosNivel() {
+        return cmbRubrosNivel;
+    }
+
+    public void setCmbRubrosNivel(JComboBox<RubrosNivel> cmbRubrosNivel) {
+        this.cmbRubrosNivel = cmbRubrosNivel;
     }
 
     
