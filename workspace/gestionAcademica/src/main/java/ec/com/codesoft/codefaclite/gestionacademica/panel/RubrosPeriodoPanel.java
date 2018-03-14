@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.gestionacademica.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoRubroEnum;
@@ -24,6 +25,7 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
      */
     public RubrosPeriodoPanel() {
         initComponents();
+        
     }
 
     /**
@@ -158,7 +160,7 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<Nivel> cmbNivel;
     private javax.swing.JComboBox<Periodo> cmbPeriodo;
-    private javax.swing.JComboBox<Producto> cmbRubro;
+    private javax.swing.JComboBox<CatalogoProducto> cmbRubro;
     private javax.swing.JComboBox<TipoRubroEnum> cmbTipoRubro;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -206,14 +208,7 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
         this.txtValor = txtValor;
     }
 
-    public JComboBox<Producto> getCmbRubro() {
-        return cmbRubro;
-    }
-
-    public void setCmbRubro(JComboBox<Producto> cmbRubro) {
-        this.cmbRubro = cmbRubro;
-    }
-
+    
     public JComboBox<TipoRubroEnum> getCmbTipoRubro() {
         return cmbTipoRubro;
     }
@@ -221,6 +216,16 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
     public void setCmbTipoRubro(JComboBox<TipoRubroEnum> cmbTipoRubro) {
         this.cmbTipoRubro = cmbTipoRubro;
     }
+
+    public JComboBox<CatalogoProducto> getCmbRubro() {
+        return cmbRubro;
+    }
+
+    public void setCmbRubro(JComboBox<CatalogoProducto> cmbRubro) {
+        this.cmbRubro = cmbRubro;
+    }
+    
+    
     
     
 }

@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.RubrosPeriodoPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
@@ -142,8 +143,8 @@ public class RubrosPeriodoModel extends RubrosPeriodoPanel{
             }
             
             //Cargar los productos
-            List<Producto> productos=ServiceFactory.getFactory().getProductoServiceIf().obtenerTodos();
-            for (Producto producto : productos) {
+            List<CatalogoProducto> productos=ServiceFactory.getFactory().getCatalogoProductoServiceIf().obtenerTodos();
+            for (CatalogoProducto producto : productos) {
                 getCmbRubro().addItem(producto);
             }
             
@@ -175,7 +176,7 @@ public class RubrosPeriodoModel extends RubrosPeriodoPanel{
         rubrosNivel.setNivel(nivelSeleccionado);
         
         rubrosNivel.setPeriodo((Periodo) getCmbPeriodo().getSelectedItem());
-        rubrosNivel.setProducto((Producto) getCmbRubro().getSelectedItem());
+        rubrosNivel.setCatalogoProducto((CatalogoProducto) getCmbRubro().getSelectedItem());
         TipoRubroEnum tipoRubroEnum= (TipoRubroEnum) getCmbTipoRubro().getSelectedItem();
         rubrosNivel.setTipoRubro(tipoRubroEnum.getLetra());
         rubrosNivel.setValor(new BigDecimal(getTxtValor().getText()));

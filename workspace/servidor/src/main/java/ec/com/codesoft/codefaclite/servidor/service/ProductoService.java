@@ -42,7 +42,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         try {
                         
             //Si no son ensables remover datos para no tener incoherencias
-            if(!TipoProductoEnum.EMSAMBLE.getLetra().equals(p.getTipoProducto()))
+            if(!TipoProductoEnum.EMSAMBLE.getLetra().equals(p.getCatalogoProducto().getTipoProducto()))
             {          
                 if(p.getDetallesEnsamble()!=null)
                 {

@@ -57,6 +57,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionService
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DatosAdicionalesComprobanteEnum;
@@ -231,7 +232,7 @@ public class FacturacionModel extends FacturacionPanel{
                                 
                         factura.addDatoAdicional(dato);
                     }
-                    cargarDatosAdicionales();
+                    cargarTablaDatosAdicionales();
                 }
                 
                 //datosAdicionales.put("", title);
@@ -259,6 +260,7 @@ public class FacturacionModel extends FacturacionPanel{
                             factura.setCliente(represetanteTmp);
                             estudiante=estudiantes.get(0);      
                             setearValoresAcademicos();
+                            cargarTablaDatosAdicionales();
                         }
                     } catch (RemoteException ex) {
                         Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -282,7 +284,8 @@ public class FacturacionModel extends FacturacionPanel{
                 {
                     estudiante=estudianteTmp;
                     factura.setCliente(estudianteTmp.getRepresentante());
-                    setearValoresAcademicos();                    
+                    setearValoresAcademicos();   
+                    cargarTablaDatosAdicionales();
                 }
                 
                 
@@ -298,6 +301,7 @@ public class FacturacionModel extends FacturacionPanel{
                 factura.setCliente((Persona) buscarDialogoModel.getResultado());
                 if (factura.getCliente() != null) {
                     setearValoresCliente();
+                    cargarTablaDatosAdicionales();
                 };
             }
         });
@@ -434,6 +438,7 @@ public class FacturacionModel extends FacturacionPanel{
                         factura.setCliente(entity);
                         if (factura.getCliente() != null) {
                             setearValoresCliente();
+                            cargarTablaDatosAdicionales();;
                         }
                     }
                 }, DialogInterfacePanel.CLIENTE_PANEL, false);
@@ -713,6 +718,7 @@ public class FacturacionModel extends FacturacionPanel{
         if (factura != null) {
             this.factura = factura;
             ///Cargar los datos de la factura
+            //if(factura.getT)
             setearValoresCliente();
             cargarDatosDetalles();
             setearDetalleFactura();
@@ -893,7 +899,7 @@ public class FacturacionModel extends FacturacionPanel{
     /**
      * Metodo que actualiza los valores en la tabla
      */
-    private void cargarDatosAdicionales() {
+    private void cargarTablaDatosAdicionales() {
         initModelTablaDatoAdicional();
         
         for (FacturaAdicional datoAdicional : factura.getDatosAdicionales()) {
@@ -931,23 +937,28 @@ public class FacturacionModel extends FacturacionPanel{
                 
                 TipoReferenciaEnum tipoReferenciaEnum=detalle.getTipoReferenciaEnum();
                 
-                Producto producto=null;
+                
+                Vector<String> fila = new Vector<String>();
+                 
                 if(tipoReferenciaEnum.equals(TipoReferenciaEnum.ACADEMICO))
                 {
-                    producto=ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(detalle.getReferenciaId()).getRubroNivel().getProducto();
+                    RubroEstudiante rubroEstudiante=ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(detalle.getReferenciaId());
+                    fila.add(rubroEstudiante.getId()+"");
+                    fila.add(rubroEstudiante.getRubroNivel().getValor()+"");
                 }
                 else
                 {
                     if(tipoReferenciaEnum.equals(TipoReferenciaEnum.INVENTARIO)) 
                     {
-                        producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
+                        Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
+                        fila.add(producto.getCodigoPersonalizado());
+                        fila.add(producto.getValorUnitario().toString());
                     }
                 }
                 
-                Vector<String> fila = new Vector<String>();
+               
                 //Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
-                fila.add(producto.getCodigoPersonalizado());
-                fila.add(producto.getValorUnitario().toString());
+
                 fila.add(detalle.getCantidad().toString());
                 fila.add(detalle.getDescripcion());
                 fila.add(detalle.getDescuento().toString());
@@ -1017,23 +1028,23 @@ public class FacturacionModel extends FacturacionPanel{
             try {
                 
                 TipoReferenciaEnum tipoReferenciaEnum=facturaDetalle.getTipoReferenciaEnum();
-                Producto producto=null;
+                CatalogoProducto catalogoProducto=null;
                 
                 if(tipoReferenciaEnum.equals(TipoReferenciaEnum.ACADEMICO))
                 {
-                    producto=ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getRubroNivel().getProducto();
+                    catalogoProducto=ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getRubroNivel().getCatalogoProducto();
                 }
                 else
                 {
                     if(tipoReferenciaEnum.equals(TipoReferenciaEnum.ACADEMICO))
                     {
-                        producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                        catalogoProducto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
                     }
                 }
                 
                 //TODO este valor esta quemado toca parametrizar
 
-                if (producto.getIva().getTarifa() == 12) { //esta parametro de 12 debe estar parametrizado
+                if (catalogoProducto.getIva().getTarifa() == 12) { //esta parametro de 12 debe estar parametrizado
                     this.factura.setSubtotalImpuestos(factura.getSubtotalImpuestos().add(facturaDetalle.getPrecioUnitario().multiply(facturaDetalle.getCantidad())));
                     //this.factura.setDescuentoImpuestos(this.factura.getDescuentoImpuestos().add(facturaDetalle.getTotal()));
                     this.factura.setDescuentoImpuestos(this.factura.getDescuentoImpuestos().add(facturaDetalle.getDescuento()));
@@ -1125,7 +1136,7 @@ public class FacturacionModel extends FacturacionPanel{
         factura.addDatoAdicional(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre(), estudiante.getIdEstudiante()+"");
         //datosAdicionales.put(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre(), estudiante.getIdEstudiante() + "");
 
-        cargarDatosAdicionales();
+        //cargarDatosAdicionales();
 
     }
 
@@ -1156,7 +1167,7 @@ public class FacturacionModel extends FacturacionPanel{
         factura.setDireccion(factura.getCliente().getDireccion());
         factura.setTelefono(factura.getCliente().getTelefonoConvencional());
         //Actualiza la tabla de los datos adicionales
-        cargarDatosAdicionales();
+        //cargarDatosAdicionales();
     }
 
     private void setearValoresProducto(BigDecimal valorUnitario,String descripcion) {
@@ -1386,20 +1397,20 @@ public class FacturacionModel extends FacturacionPanel{
                 facturaDetalle.setPrecioUnitario(valorTotalUnitario.setScale(2, BigDecimal.ROUND_HALF_UP));
                 
                 //Variable del producto para verificar otros datos como el iva
-                Producto producto=null;
+                CatalogoProducto catalogoProducto=null;
                 //Seleccionar la referencia dependiendo del tipo de documento
                 TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
                 if(tipoDocumentoEnum.equals(TipoDocumentoEnum.ACADEMICO))
                 {
                     facturaDetalle.setReferenciaId(rubroSeleccionado.getId());
                     facturaDetalle.setTipoReferencia(TipoReferenciaEnum.ACADEMICO.getCodigo());
-                    producto=rubroSeleccionado.getRubroNivel().getProducto();
+                    catalogoProducto=rubroSeleccionado.getRubroNivel().getCatalogoProducto();
                 }
                 else
                 {
                     facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
                     facturaDetalle.setTipoReferencia(TipoReferenciaEnum.INVENTARIO.getCodigo());
-                    producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                    catalogoProducto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
                 }
                 
                 
@@ -1432,7 +1443,7 @@ public class FacturacionModel extends FacturacionPanel{
                  * Revisar este calculo del iva para no calcular 2 veces al mostrar
                  */
                 
-                if (producto.getIva().getTarifa().equals(0)) {
+                if (catalogoProducto.getIva().getTarifa().equals(0)) {
                     facturaDetalle.setIva(BigDecimal.ZERO);
                 } else {
                     BigDecimal iva = facturaDetalle.getTotal().multiply(obtenerValorIva()).setScale(2, BigDecimal.ROUND_HALF_UP);

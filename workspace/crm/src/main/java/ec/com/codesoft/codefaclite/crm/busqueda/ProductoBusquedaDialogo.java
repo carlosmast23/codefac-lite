@@ -38,9 +38,9 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto>
         dato.add(t.getCodigoPersonalizado());
         dato.add(t.getNombre());
         dato.add(t.getValorUnitario());
-        dato.add(t.getIva().toString());
-        if(t.getIce() != null){
-            dato.add(t.getIce().toString());
+        dato.add(t.getCatalogoProducto().getIva().toString());
+        if(t.getCatalogoProducto().getIce() != null){
+            dato.add(t.getCatalogoProducto().getIce().toString());
         }
     }
 

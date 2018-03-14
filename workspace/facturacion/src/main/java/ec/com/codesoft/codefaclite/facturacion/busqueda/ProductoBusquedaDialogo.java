@@ -43,16 +43,16 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto>
         dato.add(t.getNombre());
         dato.add(t.getValorUnitario());
         
-        if(t.getIva() != null)
+        if(t.getCatalogoProducto().getIva() != null)
         {
-            dato.add(t.getIva().toString());    
+            dato.add(t.getCatalogoProducto().getIva().toString());    
         }else
         {
             dato.add("Sin definir iva");
         }
-        if(t.getIce()!= null )
+        if(t.getCatalogoProducto().getIce()!= null )
         {
-            dato.add(t.getIce().toString());    
+            dato.add(t.getCatalogoProducto().getIce().toString());    
         }else
         {
             dato.add("Sin definir ice");

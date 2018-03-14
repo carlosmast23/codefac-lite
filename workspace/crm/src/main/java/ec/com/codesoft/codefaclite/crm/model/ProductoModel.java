@@ -122,20 +122,20 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         producto.setEstado(ProductoEnumEstado.ACTIVO.getEstado());
 
         TipoProductoEnum tipoProductoEnum = (TipoProductoEnum) getComboTipoProducto().getSelectedItem();
-        producto.setTipoProducto(tipoProductoEnum.getLetra());
+        producto.getCatalogoProducto().setTipoProducto(tipoProductoEnum.getLetra());
 
         producto.setNombre(getTextNombre().getText());
         d = new BigDecimal(getTextValorUnitario().getText());
 
         producto.setValorUnitario(d);
         if (getComboIce().getSelectedItem() instanceof ImpuestoDetalle) {
-            producto.setIce((ImpuestoDetalle) getComboIce().getSelectedItem());
+            producto.getCatalogoProducto().setIce((ImpuestoDetalle) getComboIce().getSelectedItem());
         } else {
             System.out.println("No se puede hacer una grabacion ICE");
         }
-        producto.setIva((ImpuestoDetalle) getComboIva().getSelectedItem());
+        producto.getCatalogoProducto().setIva((ImpuestoDetalle) getComboIva().getSelectedItem());
         if (getComboIrbpnr().getSelectedItem() instanceof ImpuestoDetalle) {
-            producto.setIrbpnr((ImpuestoDetalle) getComboIrbpnr().getSelectedItem());
+            producto.getCatalogoProducto().setIrbpnr((ImpuestoDetalle) getComboIrbpnr().getSelectedItem());
         } else {
             System.out.println("No se puede hacer una grabacion IRBPNR");
         }
@@ -152,8 +152,8 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         producto.setMarca(getTxtMarca().getText());
         producto.setImagen(getTxtImagenProducto().getText());
 
-       catProducto= (CategoriaProducto) getCmbCategoriaProducto().getSelectedItem();
-        producto.setCategoriaProducto(catProducto);
+        //catProducto= (CategoriaProducto) getCmbCategoriaProducto().getSelectedItem();
+        //producto.setCategoriaProducto(catProducto);
         producto.setCaracteristicas(getTxtCaracteristica().getText());
         producto.setObservaciones(getTxtObservaciones().getText());
 
@@ -203,9 +203,9 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getTextNombre().setText(producto.getNombre());
         getTextValorUnitario().setText(producto.getValorUnitario().toString());
 
-        getComboIva().setSelectedItem(producto.getIva());
+        getComboIva().setSelectedItem(producto.getCatalogoProducto().getIva());
 
-        getComboTipoProducto().setSelectedItem(TipoProductoEnum.getEnumByLetra(producto.getTipoProducto()));
+        getComboTipoProducto().setSelectedItem(TipoProductoEnum.getEnumByLetra(producto.getCatalogoProducto().getTipoProducto()));
 
         /**
          * Cargar datos adicionales
@@ -219,7 +219,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getTxtStockInicial().setText((producto.getStockInicial() != null) ? producto.getStockInicial() + "" : "");
         getTxtMarca().setText((producto.getMarca() != null) ? producto.getMarca() + "" : "");
         getTxtImagenProducto().setText((producto.getImagen() != null) ? producto.getImagen() + "" : "");
-        getCmbCategoriaProducto().setSelectedItem(producto.getCategoriaProducto());
+        getCmbCategoriaProducto().setSelectedItem(producto.getCatalogoProducto().getCategoriaProducto());
         getTxtCaracteristica().setText((producto.getCaracteristicas() != null) ? producto.getCaracteristicas() + "" : "");
         getTxtObservaciones().setText((producto.getObservaciones() != null) ? producto.getObservaciones() + "" : "");
 

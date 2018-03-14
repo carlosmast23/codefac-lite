@@ -96,6 +96,7 @@ import ec.com.codesoft.codefaclite.servidor.service.SriService;
 import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
 import ec.com.codesoft.codefaclite.servidor.service.UtilidadesService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.AulaService;
+import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.CatalogoProductoService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.EstudianteInscritoService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.EstudianteService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.NivelAcademicoService;
@@ -131,6 +132,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CatalogoProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteInscritoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteServiceIf;
@@ -340,6 +342,7 @@ public class Main {
             mapRecursos.put(RubrosNivelService.class,RubrosNivelServiceIf.class);
             mapRecursos.put(RubroEstudianteService.class,RubroEstudianteServiceIf.class);
             mapRecursos.put(NacionalidadService.class,NacionalidadServiceIf.class);
+            mapRecursos.put(CatalogoProductoService.class,CatalogoProductoServiceIf.class);
             
             ServiceControllerServer.cargarRecursos(mapRecursos);
             System.out.println("servidor iniciado");

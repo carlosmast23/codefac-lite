@@ -14,11 +14,15 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.notacredito.Infor
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.notacredito.NotaCreditoComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoReferenciaEnum;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -128,10 +132,23 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
         
         for (NotaCreditoDetalle detalleNotaCredito : detallesNotaCredito) {
             try {
-                Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalleNotaCredito.getReferenciaId());
+                
+                CatalogoProducto catalogoProducto=null;
                 DetalleNotaCreditoComprobante detalle=new DetalleNotaCreditoComprobante();
                 
-                detalle.setCodigoInterno(producto.getCodigoPersonalizado());
+                if(detalleNotaCredito.getTipoReferencia().equals(TipoReferenciaEnum.ACADEMICO.getCodigo()))
+                {
+                    RubroEstudiante rubroEstudiante=ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(detalleNotaCredito.getReferenciaId());
+                    catalogoProducto=rubroEstudiante.getRubroNivel().getCatalogoProducto();
+                    detalle.setCodigoInterno(rubroEstudiante.getId()+"");
+                }
+                else
+                {
+                    Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalleNotaCredito.getReferenciaId());
+                    catalogoProducto=producto.getCatalogoProducto();
+                    detalle.setCodigoInterno(producto.getCodigoPersonalizado());
+                }
+                
                 detalle.setCantidad(detalleNotaCredito.getCantidad());
                 detalle.setDescripcion(detalleNotaCredito.getDescripcion());
                 //Establecer el descuento en el aplicativo
@@ -148,30 +165,30 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
                 List<ImpuestoComprobante> listaComprobantes=new ArrayList<ImpuestoComprobante>();
                 
                 ImpuestoComprobante impuesto=new ImpuestoComprobante();
-                impuesto.setCodigo(producto.getIva().getImpuesto().getCodigoSri());
-                impuesto.setCodigoPorcentaje(producto.getIva().getCodigo()+"");
-                impuesto.setTarifa(new BigDecimal(producto.getIva().getTarifa()+""));
+                impuesto.setCodigo(catalogoProducto.getIva().getImpuesto().getCodigoSri());
+                impuesto.setCodigoPorcentaje(catalogoProducto.getIva().getCodigo()+"");
+                impuesto.setTarifa(new BigDecimal(catalogoProducto.getIva().getTarifa()+""));
                 impuesto.setBaseImponible(detalleNotaCredito.getTotal());
                 impuesto.setValor(detalleNotaCredito.getIva());
                 
                 /**
                  * Verificar valores para el total de impuesto
                  */
-                if(mapTotalImpuestos.get(producto.getIva())==null)
+                if(mapTotalImpuestos.get(catalogoProducto.getIva())==null)
                 {
                     TotalImpuesto totalImpuesto=new TotalImpuesto();
                     totalImpuesto.setBaseImponible(impuesto.getBaseImponible());
                     totalImpuesto.setCodigo(impuesto.getCodigo());
                     totalImpuesto.setCodigoPorcentaje(impuesto.getCodigoPorcentaje());
                     totalImpuesto.setValor(impuesto.getValor());
-                    mapTotalImpuestos.put(producto.getIva(), totalImpuesto);
+                    mapTotalImpuestos.put(catalogoProducto.getIva(), totalImpuesto);
                 }
                 else
                 {
-                    TotalImpuesto totalImpuesto=mapTotalImpuestos.get(producto.getIva());
+                    TotalImpuesto totalImpuesto=mapTotalImpuestos.get(catalogoProducto.getIva());
                     totalImpuesto.setBaseImponible(totalImpuesto.getBaseImponible().add(impuesto.getBaseImponible()));
                     totalImpuesto.setValor(totalImpuesto.getValor().add(impuesto.getValor()));
-                    mapTotalImpuestos.put(producto.getIva(), totalImpuesto);
+                    mapTotalImpuestos.put(catalogoProducto.getIva(), totalImpuesto);
                     
                 }
                 
