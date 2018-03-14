@@ -29,6 +29,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DatosAdicionalesComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoReferenciaEnum;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
@@ -488,7 +489,7 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel{
             facturaDetalle.setPrecioUnitario(rubro.getRubroNivel().getValor());
 
             facturaDetalle.setReferenciaId(rubro.getId());
-            facturaDetalle.setTipoReferencia(TipoReferenciaEnum.ACADEMICO.getCodigo());
+            facturaDetalle.setTipoDocumento(TipoDocumentoEnum.ACADEMICO.getCodigo());
             facturaDetalle.setTotal(facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()));
             facturaDetalle.setValorIce(BigDecimal.ZERO);
             

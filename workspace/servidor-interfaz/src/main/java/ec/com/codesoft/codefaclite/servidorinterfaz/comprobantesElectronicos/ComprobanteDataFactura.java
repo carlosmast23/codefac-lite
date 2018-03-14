@@ -25,6 +25,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoReferenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
@@ -138,7 +139,7 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
                 DetalleFacturaComprobante detalle=new DetalleFacturaComprobante();
                 
                 CatalogoProducto catalogoProducto=null;
-                if(facturaDetalle.getTipoReferencia()!=null && facturaDetalle.getTipoReferenciaEnum().equals(TipoReferenciaEnum.ACADEMICO))
+                if(facturaDetalle.getTipoDocumento()!=null && facturaDetalle.getTipoDocumentoEnum().equals(TipoDocumentoEnum.ACADEMICO))
                 {
                     RubroEstudiante rubroEstudiante=ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
                     catalogoProducto=rubroEstudiante.getRubroNivel().getCatalogoProducto();

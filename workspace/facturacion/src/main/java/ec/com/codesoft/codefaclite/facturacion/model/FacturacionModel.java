@@ -261,6 +261,7 @@ public class FacturacionModel extends FacturacionPanel{
                             factura.setCliente(represetanteTmp);
                             estudiante=estudiantes.get(0);      
                             setearValoresAcademicos();
+                            cargarDatosAdicionalesAcademicos();
                             cargarTablaDatosAdicionales();
                         }
                     } catch (RemoteException ex) {
@@ -286,6 +287,7 @@ public class FacturacionModel extends FacturacionPanel{
                     estudiante=estudianteTmp;
                     factura.setCliente(estudianteTmp.getRepresentante());
                     setearValoresAcademicos();   
+                    cargarDatosAdicionalesAcademicos();
                     cargarTablaDatosAdicionales();
                 }
                 
@@ -302,6 +304,7 @@ public class FacturacionModel extends FacturacionPanel{
                 factura.setCliente((Persona) buscarDialogoModel.getResultado());
                 if (factura.getCliente() != null) {
                     setearValoresCliente();
+                    cargarDatosAdicionales();
                     cargarTablaDatosAdicionales();
                 };
             }
@@ -439,6 +442,7 @@ public class FacturacionModel extends FacturacionPanel{
                         factura.setCliente(entity);
                         if (factura.getCliente() != null) {
                             setearValoresCliente();
+                            cargarDatosAdicionales();
                             cargarTablaDatosAdicionales();;
                         }
                     }
@@ -743,12 +747,13 @@ public class FacturacionModel extends FacturacionPanel{
                 getCmbTipoDocumento().getSelectedItem().equals(TipoDocumentoEnum.VENTA);
                 setearValoresCliente();
             }           
-            
+                        
             cargarDatosDetalles();
             setearDetalleFactura();
             cargarTotales();
             cargarValoresAdicionales();
             cargarFormasPagoTabla();
+            cargarTablaDatosAdicionales();
         } else {
             throw new ExcepcionCodefacLite("cancelar ejecucion");
         }
@@ -1157,23 +1162,25 @@ public class FacturacionModel extends FacturacionPanel{
        
         getTxtEstudiante().setText(estudiante.getNombreCompleto());
         getTxtRepresentante().setText(estudiante.getRepresentante().getNombresCompletos());
-        
+
+    }
+    
+    private void cargarDatosAdicionalesAcademicos() {
         //Cargar el correo solo cuando exista 
         factura.addDatosAdicionalCorreo(factura.getCliente().getCorreoElectronico());
-        //if (factura.getCliente().getCorreoElectronico() != null) {
-        //    datosAdicionales.put("email", factura.getCliente().getCorreoElectronico());
-        //}
-        
-        //Agregar el nombre del estudiante
+
         factura.addDatoAdicional(DatosAdicionalesComprobanteEnum.NOMBRE_ESTUDIANTE.getNombre(), estudiante.getNombreCompleto());
-        //datosAdicionales.put(DatosAdicionalesComprobanteEnum.NOMBRE_ESTUDIANTE.getNombre(), estudiante.getNombreCompleto());
 
-        //Agregando el codigo del estudiante
-        factura.addDatoAdicional(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre(), estudiante.getIdEstudiante()+"");
-        //datosAdicionales.put(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre(), estudiante.getIdEstudiante() + "");
-
-        //cargarDatosAdicionales();
-
+        factura.addDatoAdicional(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre(), estudiante.getIdEstudiante() + "");
+    }
+    
+    private void cargarDatosAdicionales()
+    {
+        //Cargar el correo solo cuando exista 
+        if (factura.getCliente().getCorreoElectronico() != null) {
+            factura.addDatosAdicionalCorreo(factura.getCliente().getCorreoElectronico());
+            //datosAdicionales.put("email", factura.getCliente().getCorreoElectronico());
+        }
     }
 
     private void setearValoresCliente() {
@@ -1189,12 +1196,6 @@ public class FacturacionModel extends FacturacionPanel{
         
         if (estadoEnum != null) {
             getLblEstadoFactura().setText(estadoEnum.getNombre());
-        }
-
-        //Cargar el correo solo cuando exista 
-        if (factura.getCliente().getCorreoElectronico() != null) {
-            factura.addDatosAdicionalCorreo(factura.getCliente().getCorreoElectronico());
-            //datosAdicionales.put("email", factura.getCliente().getCorreoElectronico());
         }
 
         factura.setCliente(factura.getCliente());
