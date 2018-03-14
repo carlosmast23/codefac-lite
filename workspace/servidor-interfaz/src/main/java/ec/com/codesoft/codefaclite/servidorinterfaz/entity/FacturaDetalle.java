@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoReferenciaEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -53,7 +54,7 @@ public class FacturaDetalle implements Serializable {
     private Long referenciaId;
     
     @Column(name = "TIPO_REFERENCIA")
-    private String tipoReferencia;
+    private String tipoDocumento;
 
     public FacturaDetalle() {
     }
@@ -142,17 +143,20 @@ public class FacturaDetalle implements Serializable {
         this.referenciaId = referenciaId;
     }
 
-    public String getTipoReferencia() {
-        return tipoReferencia;
+    public String getTipoDocumento() {
+        return tipoDocumento;
     }
 
-    public void setTipoReferencia(String tipoReferencia) {
-        this.tipoReferencia = tipoReferencia;
+    public void setTipoDocumento(String tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
     }
+    
+    
 
-    public TipoReferenciaEnum getTipoReferenciaEnum()
+
+    public TipoDocumentoEnum getTipoDocumentoEnum()
     {
-        return TipoReferenciaEnum.getFindByTipoReferencia(this.tipoReferencia);
+        return TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(this.tipoDocumento);
     }
     
     /**

@@ -59,6 +59,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DatosAdicionalesComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoReferenciaEnum;
@@ -717,9 +718,32 @@ public class FacturacionModel extends FacturacionPanel{
         Factura factura = (Factura) buscarDialogoModel.getResultado();
         if (factura != null) {
             this.factura = factura;
-            ///Cargar los datos de la factura
-            //if(factura.getT)
-            setearValoresCliente();
+            ///Cargar los datos de la factura segun el tipo de datos del primer detalle
+            TipoDocumentoEnum tipoReferenciaEnum=factura.getDetalles().get(0).getTipoDocumentoEnum();
+            if(tipoReferenciaEnum.equals(TipoDocumentoEnum.ACADEMICO))
+            {
+                try {
+                    getCmbTipoDocumento().setSelectedItem(tipoReferenciaEnum);
+                    seleccionarPanelTipoDocumento(tipoReferenciaEnum);
+                    
+                    FacturaAdicional facturaAdicional=buscarCampoAdicionalPorNombre(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre());
+                    Long estudianteInscritoId=Long.parseLong(facturaAdicional.getValor());                    
+                    EstudianteInscrito estudianteInscrito=ServiceFactory.getFactory().getEstudianteInscritoServiceIf().buscarPorId(estudianteInscritoId);
+                    
+                    estudiante=estudianteInscrito.getEstudiante();
+                    
+                    setearValoresAcademicos();
+                    
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            else //Si es otro valor que no sea academico
+            {
+                getCmbTipoDocumento().getSelectedItem().equals(TipoDocumentoEnum.VENTA);
+                setearValoresCliente();
+            }           
+            
             cargarDatosDetalles();
             setearDetalleFactura();
             cargarTotales();
@@ -728,6 +752,18 @@ public class FacturacionModel extends FacturacionPanel{
         } else {
             throw new ExcepcionCodefacLite("cancelar ejecucion");
         }
+    }
+    
+    private FacturaAdicional buscarCampoAdicionalPorNombre(String nombre)
+    {
+        for(FacturaAdicional facturaAdicional : factura.getDatosAdicionales())
+        {
+            if(facturaAdicional.getCampo().equals(nombre))
+            {
+                return facturaAdicional;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -935,12 +971,12 @@ public class FacturacionModel extends FacturacionPanel{
         for (FacturaDetalle detalle : detalles) {
             try {
                 
-                TipoReferenciaEnum tipoReferenciaEnum=detalle.getTipoReferenciaEnum();
+                TipoDocumentoEnum tipoReferenciaEnum=detalle.getTipoDocumentoEnum();
                 
                 
                 Vector<String> fila = new Vector<String>();
                  
-                if(tipoReferenciaEnum.equals(TipoReferenciaEnum.ACADEMICO))
+                if(tipoReferenciaEnum.equals(TipoDocumentoEnum.ACADEMICO))
                 {
                     RubroEstudiante rubroEstudiante=ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(detalle.getReferenciaId());
                     fila.add(rubroEstudiante.getId()+"");
@@ -948,7 +984,7 @@ public class FacturacionModel extends FacturacionPanel{
                 }
                 else
                 {
-                    if(tipoReferenciaEnum.equals(TipoReferenciaEnum.INVENTARIO)) 
+                    if(tipoReferenciaEnum.equals(TipoDocumentoEnum.VENTA)) 
                     {
                         Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
                         fila.add(producto.getCodigoPersonalizado());
@@ -1027,16 +1063,16 @@ public class FacturacionModel extends FacturacionPanel{
         for (FacturaDetalle facturaDetalle : facturaDetalles) {
             try {
                 
-                TipoReferenciaEnum tipoReferenciaEnum=facturaDetalle.getTipoReferenciaEnum();
+                TipoDocumentoEnum tipoReferenciaEnum=facturaDetalle.getTipoDocumentoEnum();
                 CatalogoProducto catalogoProducto=null;
                 
-                if(tipoReferenciaEnum.equals(TipoReferenciaEnum.ACADEMICO))
+                if(tipoReferenciaEnum.equals(TipoDocumentoEnum.ACADEMICO))
                 {
                     catalogoProducto=ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getRubroNivel().getCatalogoProducto();
                 }
                 else
                 {
-                    if(tipoReferenciaEnum.equals(TipoReferenciaEnum.ACADEMICO))
+                    if(tipoReferenciaEnum.equals(TipoDocumentoEnum.VENTA))
                     {
                         catalogoProducto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
                     }
@@ -1403,13 +1439,13 @@ public class FacturacionModel extends FacturacionPanel{
                 if(tipoDocumentoEnum.equals(TipoDocumentoEnum.ACADEMICO))
                 {
                     facturaDetalle.setReferenciaId(rubroSeleccionado.getId());
-                    facturaDetalle.setTipoReferencia(TipoReferenciaEnum.ACADEMICO.getCodigo());
+                    facturaDetalle.setTipoDocumento(TipoDocumentoEnum.ACADEMICO.getCodigo());
                     catalogoProducto=rubroSeleccionado.getRubroNivel().getCatalogoProducto();
                 }
                 else
                 {
                     facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
-                    facturaDetalle.setTipoReferencia(TipoReferenciaEnum.INVENTARIO.getCodigo());
+                    facturaDetalle.setTipoDocumento(TipoDocumentoEnum.VENTA.getCodigo());
                     catalogoProducto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
                 }
                 
@@ -1521,22 +1557,23 @@ public class FacturacionModel extends FacturacionPanel{
         getCmbTipoDocumento().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
-                if(tipoDocumentoEnum!=null)
-                {
-                    if(tipoDocumentoEnum.equals(tipoDocumentoEnum.ACADEMICO))
-                    {
-                        activarTabDatos(1);
-                    }
-                    else
-                    {
-                        //Todo: Seguir armando el tab de los otros datos
-                        activarTabDatos(0);
-                    }
-                    
-                }                
+                TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();                    
+                seleccionarPanelTipoDocumento(tipoDocumentoEnum);                
             }
         });
+    }
+    
+    private void seleccionarPanelTipoDocumento(TipoDocumentoEnum tipoDocumentoEnum)
+    {
+        if (tipoDocumentoEnum != null) {
+            if (tipoDocumentoEnum.equals(tipoDocumentoEnum.ACADEMICO)) {
+                activarTabDatos(1);
+            } else {
+                //Todo: Seguir armando el tab de los otros datos
+                activarTabDatos(0);
+            }
+
+        }      
     }
     
     

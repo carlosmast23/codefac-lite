@@ -190,22 +190,25 @@ public class GestionarDeudasModel extends GestionarDeudasPanel{
                 try {
                     getCmbRubrosNivel().removeAllItems();
                     NivelAcademico nivelSeleccionado=(NivelAcademico) getCmbNivelAcademico().getSelectedItem();
-                    Map<String, Object> mapParametros = new HashMap<String, Object>();
-                    mapParametros.put("nivel",null);
-                    mapParametros.put("periodo",nivelSeleccionado.getPeriodo());
-                    List<RubrosNivel> rubrosSinNivel=ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorMap(mapParametros);
-                    for (RubrosNivel rubrosNivel : rubrosSinNivel) {
-                        getCmbRubrosNivel().addItem(rubrosNivel);
-                    }
-                    
-                    mapParametros.clear();
-                    mapParametros.put("nivel",nivelSeleccionado.getNivel());
-                    mapParametros.put("periodo",nivelSeleccionado.getPeriodo());
-                    List<RubrosNivel> rubros=ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorMap(mapParametros);
-                    
-                    //Agregar todos los rubros disponibles para el nivels
-                    for (RubrosNivel rubro : rubros) {
-                        getCmbRubrosNivel().addItem(rubro);
+                    if(nivelSeleccionado!=null)
+                    {
+                        Map<String, Object> mapParametros = new HashMap<String, Object>();
+                        mapParametros.put("nivel", null);
+                        mapParametros.put("periodo", nivelSeleccionado.getPeriodo());
+                        List<RubrosNivel> rubrosSinNivel = ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorMap(mapParametros);
+                        for (RubrosNivel rubrosNivel : rubrosSinNivel) {
+                            getCmbRubrosNivel().addItem(rubrosNivel);
+                        }
+
+                        mapParametros.clear();
+                        mapParametros.put("nivel", nivelSeleccionado.getNivel());
+                        mapParametros.put("periodo", nivelSeleccionado.getPeriodo());
+                        List<RubrosNivel> rubros = ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorMap(mapParametros);
+
+                        //Agregar todos los rubros disponibles para el nivels
+                        for (RubrosNivel rubro : rubros) {
+                            getCmbRubrosNivel().addItem(rubro);
+                        }
                     }                    
                     
                 } catch (RemoteException ex) {
