@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.Com
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
@@ -431,17 +432,28 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel{
                 
                 ///Generar los datos de la factura
                 Factura factura = generarFactura(estudianteInscrito, rubrosEstudiantes);
+                
+                //Datos adicionales en la factura
+                factura.addDatosAdicionalCorreo(estudianteInscrito.getEstudiante().getRepresentante().getCorreoElectronico());
+                factura.addDatoAdicional(DatosAdicionalesComprobanteEnum.NOMBRE_ESTUDIANTE.getNombre(),estudianteInscrito.getEstudiante().getNombreCompleto());
+                factura.addDatoAdicional(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre(),estudianteInscrito.getEstudiante().getIdEstudiante().toString());
+                
                 ComprobanteDataFactura comprobanteData = new ComprobanteDataFactura(factura);
-                Map<String,String> datosAdicionalesMap=new HashMap<String,String>();
-                datosAdicionalesMap.put(DatosAdicionalesComprobanteEnum.NOMBRE_ESTUDIANTE.getNombre(),estudianteInscrito.getEstudiante().getNombreCompleto());
-                datosAdicionalesMap.put(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre(),estudianteInscrito.getEstudiante().getIdEstudiante().toString());                        
-                comprobanteData.setMapInfoAdicional(datosAdicionalesMap);
+                comprobanteData.setMapInfoAdicional(getMapAdicional(factura));
                 comprobantesLista.add(comprobanteData);
                 
             }
             
         }
         return comprobantesLista;
+    }
+    
+    private Map<String, String> getMapAdicional(Factura factura) {
+        Map<String, String> parametroMap = new HashMap<String, String>();
+        for (FacturaAdicional datoAdicional : factura.getDatosAdicionales()) {
+            parametroMap.put(datoAdicional.getCampo(), datoAdicional.getValor());
+        }
+        return parametroMap;
     }
     
     private Factura generarFactura(EstudianteInscrito estudianteInscrito,List<RubroEstudiante> listaRubros)

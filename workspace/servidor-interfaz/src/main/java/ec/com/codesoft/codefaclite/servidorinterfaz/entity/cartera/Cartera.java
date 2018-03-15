@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -127,6 +128,19 @@ public class Cartera implements Serializable{
 
     public List<CarteraDetalle> getDetalles() {
         return detalles;
+    }
+    
+    //Metodos personalizados
+    
+    public void addDetalle(CarteraDetalle carteraDetalle)
+    {
+        if(detalles==null)
+        {
+            detalles=new ArrayList<CarteraDetalle>();        
+        }
+        
+        carteraDetalle.setCartera(this);
+        detalles.add(carteraDetalle);
     }
     
     

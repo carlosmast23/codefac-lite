@@ -1,0 +1,7 @@
+El modulo de facturacion por lote revisar si sigue funcionando
+En la facturacion por lote agregar la posibilidad de dejar escoger facturas seleccionadas para enviar
+En la pantala de facuturacion agregar un modo para poder procesar luego la factura
+Terminar el modulo de cartera
+Terminar de hacer que muestre el error de cada factura por lote, ahorita solo muestra autorizado o no
+Revisar despues de facturar en lote no carga correctamente la factura
+Revisar porque no se guarda la cartera detalle en la facturacion en lote

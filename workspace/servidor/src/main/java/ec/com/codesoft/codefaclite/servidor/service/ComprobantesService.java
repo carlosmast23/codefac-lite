@@ -38,7 +38,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.Direct
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NotaCreditoEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
@@ -454,6 +457,10 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                         Factura facturaEditar=facturas.get(0);
                         facturaEditar.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
                         servicio.editar(facturaEditar);
+                        
+                        //Crear cartera de los comprobantes autorizados
+                        Cartera cartera=crearCarteraFactura(facturaEditar);
+                        entityManager.persist(cartera);                        
                     }
                     
                 } catch (RemoteException ex) {
@@ -462,6 +469,26 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             }            
         }
     }
+    
+    private Cartera crearCarteraFactura(Factura factura)
+    {
+        Cartera cartera=new Cartera();
+        cartera.setCodigoDocumento(factura.getCodigoDocumento());
+        cartera.setFechaCreacion(new java.sql.Date(new java.util.Date().getTime()));
+        cartera.setPersona(factura.getCliente());
+        cartera.setReferenciaID(factura.getId());
+        cartera.setSaldo(factura.getTotal().subtract(factura.getIva()));
+        cartera.setTotal(factura.getTotal().subtract(factura.getIva()));
+        
+        for (FacturaDetalle detalle : factura.getDetalles()) {
+            CarteraDetalle carteraDetalle=new CarteraDetalle();
+            carteraDetalle.setCartera(cartera);
+            carteraDetalle.setReferenciaId(detalle.getReferenciaId());
+            carteraDetalle.setTipoReferencia(detalle.getTipoDocumento());
+            carteraDetalle.setTotal(detalle.getTotal().subtract(detalle.getIva()));
+        }
+        return cartera;
+    }   
 
     
     private List<ComprobanteData> castDatosComprobanteElectronico(List<Autorizacion> autorizaciones,ServicioSri servicioSri)

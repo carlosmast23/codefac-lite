@@ -7,7 +7,6 @@ package ec.com.codesoft.codefaclite.facturacion.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.facturacion.panel.ResultadoLoteAcademicoDialog;
 import ec.com.codesoft.codefaclite.facturacion.panel.ResultadoLoteAcademicoPanel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
@@ -62,7 +61,7 @@ public class ResultadoLoteAcademicoModel extends ResultadoLoteAcademicoPanel{
             ComprobanteElectronico comprobante= comprobanteData.getComprobante();
             if(comprobante!=null)
             {
-                fila.add(comprobante.getInformacionTributaria().getRazonSocial());
+                fila.add(comprobante.getRazonSocialComprador());
                 
                 fila.add(buscarInfoAdicionalPorTitulo(comprobante.getInformacionAdicional(),"Estudiante"));
             }
