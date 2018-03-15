@@ -12,7 +12,6 @@ import ec.com.codesoft.codefaclite.gestionacademica.panel.ReporteDeudasPanel;
 import ec.com.codesoft.codefaclite.gestionacademica.reportdata.ReporteDeudasData;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
@@ -42,52 +41,169 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author CodesoftDesarrollo
  */
-public class ReporteDeudasEstudianteModel extends ReporteDeudasPanel {
+public class ReporteDeudasModel extends ReporteDeudasPanel {
 
     Map parameters = new HashMap();
     private boolean banderaNiveles = false;
     private boolean banderaRubros = false;
-    Estudiante estudiante=null;
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
+        try {
+            Periodo p1 = new Periodo();
+            p1.setNombre("Seleccione:");
+            List<Periodo> periodos = ServiceFactory.getFactory().getPeriodoServiceIf().obtenerTodos();
+            getCmbPeriodo().removeAllItems();
+            getCmbPeriodo().addItem(p1);
+            for (Periodo periodo : periodos) {
+                getCmbPeriodo().addItem(periodo);
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        //getChkTodosNiveles().setSelected(true);
+        if (getChkTodosNiveles().isSelected()) {
+            banderaNiveles = true;
+            getCmbNivelAcademico().setEnabled(false);
+        }
+
+        getChkTodosNiveles().addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
+                    banderaNiveles = true;
+                    getCmbNivelAcademico().setEnabled(false);
+                } else {
+                    banderaNiveles = false;
+                    getCmbNivelAcademico().setEnabled(true);
+                }
+            }
+        });
+
+        // getChkTodosRubros().setSelected(true);
+        if (getChkTodosRubros().isSelected()) {
+            banderaRubros = true;
+            getCmbRubrosNivel().setEnabled(false);
+        }
+
+        getChkTodosRubros().addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
+                    banderaRubros = true;
+                    getCmbRubrosNivel().setEnabled(false);
+                } else {
+                    banderaRubros = false;
+                    getCmbRubrosNivel().setEnabled(true);
+                }
+            }
+        });
+
+        getCmbPeriodo().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
+                if (periodo != null) {
+                    cargarNivelesPeriodo(periodo, getCmbNivelAcademico());
+                }
+            }
+        });
+
+        getCmbNivelAcademico().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                try {
+                    getCmbRubrosNivel().removeAllItems();
+                    NivelAcademico nivelSeleccionado = (NivelAcademico) getCmbNivelAcademico().getSelectedItem();
+                    Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    //Cargar rubros generales para todos los niveles
+                    mapParametros.put("nivel", null);
+                    //pendiente agregar validado
+                    mapParametros.put("periodo", nivelSeleccionado.getPeriodo());
+                    List<RubrosNivel> rubrosSinNivel = ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorMap(mapParametros);
+                    for (RubrosNivel rubrosNivel : rubrosSinNivel) {
+                        getCmbRubrosNivel().addItem(rubrosNivel);
+                    }
+
+                    //Cargar rubros exclusivos de los niveles actuales
+                    mapParametros.clear();
+                    if (banderaNiveles == false) {
+                        mapParametros.put("nivel", nivelSeleccionado.getNivel());
+                    }
+                    mapParametros.put("periodo", nivelSeleccionado.getPeriodo());
+                    List<RubrosNivel> rubros = ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorMap(mapParametros);
+
+                    //Agregar todos los rubros disponibles para el nivels
+                    for (RubrosNivel rubro : rubros) {
+                        getCmbRubrosNivel().addItem(rubro);
+                    }
+
+                    /*
+                    //Agregar los estudiantes del nivel a la tabla
+                    cargarEstudiantesNuevos();
+                    cargarTabla();*/
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ReporteDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(ReporteDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
 
         getBtnBuscar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
                     Vector<String> titulo = new Vector<>();
+                    titulo.add("Identificación");
+                    titulo.add("Estudiante");
+                    titulo.add("Nivel Académico");
                     titulo.add("Rubro");
                     titulo.add("Valor");
 
                     DefaultTableModel modeloTablaDeudas = new DefaultTableModel(titulo, 0);
-
-                    Map<String, Object> mapParametros2 = new HashMap<String, Object>();
-                    mapParametros2.put("estudianteInscrito", estudiante);
-                    if (banderaRubros == false) {
-                        mapParametros2.put("rubroNivel", (RubrosNivel) getCmbRubrosNivel().getSelectedItem());
+                    Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    if (banderaNiveles == false) {
+                        mapParametros.put("nivelAcademico", (NivelAcademico) getCmbNivelAcademico().getSelectedItem());
                     }
-                    RubroEstudianteServiceIf rs = ServiceFactory.getFactory().getRubroEstudianteServiceIf();
-                    List<RubroEstudiante> dataRubro = rs.obtenerPorMap(mapParametros2);
-                    // comparamos si el estudiante tiene rubros
-                    if (!dataRubro.isEmpty()) {
-                        for (RubroEstudiante re : dataRubro) {
-                            Vector<String> fila2 = new Vector<String>();
-                            fila2.add("-");
-                            fila2.add("-");
-                            fila2.add("-");
-                            fila2.add(re.getRubroNivel().getNombre());
-                            fila2.add(re.getRubroNivel().getValor().toString());
-                            modeloTablaDeudas.addRow(fila2);
+                    EstudianteInscritoServiceIf na = ServiceFactory.getFactory().getEstudianteInscritoServiceIf();
+                    List<EstudianteInscrito> dataEstudiante = na.obtenerPorMap(mapParametros);
+                    for (EstudianteInscrito estudiante : dataEstudiante) {
+                        Vector<String> fila = new Vector<String>();
+
+                        Map<String, Object> mapParametros2 = new HashMap<String, Object>();
+                        mapParametros2.put("estudianteInscrito", estudiante);
+                        if (banderaRubros == false) {
+                            mapParametros2.put("rubroNivel", (RubrosNivel) getCmbRubrosNivel().getSelectedItem());
                         }
-                        getTblDeudas().setModel(modeloTablaDeudas);
+                        RubroEstudianteServiceIf rs = ServiceFactory.getFactory().getRubroEstudianteServiceIf();
+                        List<RubroEstudiante> dataRubro = rs.obtenerPorMap(mapParametros2);
+                        // comparamos si el estudiante tiene rubros
+                        if (!dataRubro.isEmpty()) {
+                            fila.add(estudiante.getEstudiante().getCedula());
+                            fila.add(estudiante.getEstudiante().getNombreCompleto());
+                            fila.add(estudiante.getNivelAcademico().getNombre());
+                            modeloTablaDeudas.addRow(fila);
+                            for (RubroEstudiante re : dataRubro) {
+                                Vector<String> fila2 = new Vector<String>();
+                                fila2.add("-");
+                                fila2.add("-");
+                                fila2.add("-");
+                                fila2.add(re.getRubroNivel().getNombre());
+                                fila2.add(re.getRubroNivel().getValor().toString());
+                                modeloTablaDeudas.addRow(fila2);
+                            }
+                        }
 
                     }
 
+                    getTblDeudas().setModel(modeloTablaDeudas);
                 } catch (RemoteException ex) {
                     Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ServicioCodefacException ex) {
-                    Logger.getLogger(ReporteDeudasEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(ReporteDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
             }
@@ -171,7 +287,7 @@ public class ReporteDeudasEstudianteModel extends ReporteDeudasPanel {
         } catch (RemoteException ex) {
             Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
-            Logger.getLogger(ReporteDeudasEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ReporteDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
