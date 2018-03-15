@@ -95,6 +95,9 @@ import ec.com.codesoft.codefaclite.servidor.service.SriIdentificacionService;
 import ec.com.codesoft.codefaclite.servidor.service.SriService;
 import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
 import ec.com.codesoft.codefaclite.servidor.service.UtilidadesService;
+import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraCruceService;
+import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraDetalleService;
+import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.AulaService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.CatalogoProductoService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.EstudianteInscritoService;
@@ -148,6 +151,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionS
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraCruceServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraDetalleServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraServiceIf;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
 import static java.awt.Frame.MAXIMIZED_BOTH;
@@ -343,6 +349,9 @@ public class Main {
             mapRecursos.put(RubroEstudianteService.class,RubroEstudianteServiceIf.class);
             mapRecursos.put(NacionalidadService.class,NacionalidadServiceIf.class);
             mapRecursos.put(CatalogoProductoService.class,CatalogoProductoServiceIf.class);
+            mapRecursos.put(CarteraService.class,CarteraServiceIf.class);
+            mapRecursos.put(CarteraDetalleService.class,CarteraDetalleServiceIf.class);
+            mapRecursos.put(CarteraCruceService.class,CarteraCruceServiceIf.class);
             
             ServiceControllerServer.cargarRecursos(mapRecursos);
             System.out.println("servidor iniciado");
