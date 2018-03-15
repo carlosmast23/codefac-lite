@@ -68,6 +68,7 @@ public class UtilidadesServidor {
         RecursoCodefac.SQL.getResourceInputStream("create_compra.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_bodega.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_categoria_producto.sql"),
+        RecursoCodefac.SQL.getResourceInputStream("create_catalogo_producto.sql"),
         RecursoCodefac.SQL.getResourceInputStream("insert_default.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_empresa.sql"),
         RecursoCodefac.SQL.getResourceInputStream("insert_usuario.sql"),
@@ -77,7 +78,7 @@ public class UtilidadesServidor {
         try {
             Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
             //obtenemos la conexión si no existe crea la base
-            Connection conn = DriverManager.getConnection("jdbc:derby:.//DB//Derby2.DB;databaseName=codefac;create=true;user=root");
+            Connection conn = DriverManager.getConnection("jdbc:derby:.\\DB\\Derby2.DB;databaseName=codefac;create=true;user=root");
             //Establecer autentificacion en derby
             Statement s = conn.createStatement();
             s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.connection.requireAuthentication', 'true')");

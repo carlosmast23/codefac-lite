@@ -236,7 +236,7 @@
 													"showShadow": true,
 													"containerChangeable": false,
 													"containerExtending": false,
-													"left": 400,
+													"left": 392,
 													"top": 269,
 													"width": 54.078125,
 													"height": 13,
@@ -265,7 +265,7 @@
 													"showShadow": true,
 													"containerChangeable": false,
 													"containerExtending": false,
-													"left": 400,
+													"left": 392,
 													"top": 287,
 													"width": 54.078125,
 													"height": 10,
@@ -281,7 +281,7 @@
 											"showShadow": true,
 											"containerChangeable": false,
 											"containerExtending": false,
-											"left": 400,
+											"left": 392,
 											"top": 264,
 											"width": 54.078125,
 											"height": 33,
@@ -1004,7 +1004,7 @@
 													"showShadow": true,
 													"containerChangeable": false,
 													"containerExtending": false,
-													"left": 489,
+													"left": 485,
 													"top": 289,
 													"width": 0,
 													"height": 13,
@@ -1066,7 +1066,7 @@
 													"showShadow": true,
 													"containerChangeable": false,
 													"containerExtending": false,
-													"left": 478,
+													"left": 470,
 													"top": 288,
 													"width": 0,
 													"height": 13,
@@ -1099,7 +1099,7 @@
 												"$ref": "AAAAAAFhrAe27dQ9yvo="
 											},
 											"lineStyle": 2,
-											"points": "528:280;453:280",
+											"points": "528:280;445:280",
 											"nameLabel": {
 												"$ref": "AAAAAAFhrAwYQ9UXFPY="
 											},
@@ -1135,7 +1135,7 @@
 													"showShadow": true,
 													"containerChangeable": false,
 													"containerExtending": false,
-													"left": 360,
+													"left": 356,
 													"top": 258,
 													"width": 0,
 													"height": 13,
@@ -1197,7 +1197,7 @@
 													"showShadow": true,
 													"containerChangeable": false,
 													"containerExtending": false,
-													"left": 374,
+													"left": 366,
 													"top": 258,
 													"width": 0,
 													"height": 13,
@@ -1230,7 +1230,7 @@
 												"$ref": "AAAAAAFhrAemH9QwzDo="
 											},
 											"lineStyle": 2,
-											"points": "320:279;400:279",
+											"points": "320:279;392:279",
 											"nameLabel": {
 												"$ref": "AAAAAAFhrAwm+9UrFps="
 											},
@@ -1286,7 +1286,7 @@
 												"$ref": "AAAAAAFhrAw2A9U6y3c="
 											},
 											"lineStyle": 1,
-											"points": "575:346;454:292"
+											"points": "575:347;446:292"
 										},
 										{
 											"_type": "RectangleView",
