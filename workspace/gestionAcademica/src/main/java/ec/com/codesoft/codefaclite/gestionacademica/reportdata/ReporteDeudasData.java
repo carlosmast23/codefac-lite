@@ -9,7 +9,7 @@ package ec.com.codesoft.codefaclite.gestionacademica.reportdata;
  *
  * @author CodesoftDesarrollo
  */
-public class ReporteDeudasEstudianteData {
+public class ReporteDeudasData {
 
     private String nivelAcademicoEstudiante;
     private String cedulaEstudiante;
@@ -17,7 +17,7 @@ public class ReporteDeudasEstudianteData {
     private String rubro;
     private String valor;
 
-    public ReporteDeudasEstudianteData(String nivelAcademicoEstudiante, String cedulaEstudiante, String estudiante, String rubro, String valor) {
+    public ReporteDeudasData(String nivelAcademicoEstudiante, String cedulaEstudiante, String estudiante, String rubro, String valor) {
         this.nivelAcademicoEstudiante = nivelAcademicoEstudiante;
         this.cedulaEstudiante = cedulaEstudiante;
         this.estudiante = estudiante;
