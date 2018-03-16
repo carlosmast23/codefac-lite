@@ -106,6 +106,7 @@ import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.NivelAcadem
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.NivelService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.PeriodoService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubroEstudianteService;
+import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubroPlantillaService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubrosNivelService;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
@@ -131,6 +132,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceControllerServer;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
@@ -154,6 +156,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceI
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraCruceServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.gestionacademica.RubroPlantillaEstudianteServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.gestionacademica.RubroPlantillaServiceIf;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
 import static java.awt.Frame.MAXIMIZED_BOTH;
@@ -351,7 +355,9 @@ public class Main {
             mapRecursos.put(CatalogoProductoService.class,CatalogoProductoServiceIf.class);
             mapRecursos.put(CarteraService.class,CarteraServiceIf.class);
             mapRecursos.put(CarteraDetalleService.class,CarteraDetalleServiceIf.class);
-            mapRecursos.put(CarteraCruceService.class,CarteraCruceServiceIf.class);
+            mapRecursos.put(CarteraCruceService.class, CarteraCruceServiceIf.class);
+            mapRecursos.put(RubroPlantillaService.class, RubroPlantillaServiceIf.class);
+            mapRecursos.put(RubroPlantillaEstudiante.class, RubroPlantillaEstudianteServiceIf.class);
             
             ServiceControllerServer.cargarRecursos(mapRecursos);
             System.out.println("servidor iniciado");

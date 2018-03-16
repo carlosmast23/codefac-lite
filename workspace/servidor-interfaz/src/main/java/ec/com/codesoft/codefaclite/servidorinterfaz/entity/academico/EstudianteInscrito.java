@@ -33,12 +33,6 @@ public class EstudianteInscrito implements Serializable{
     @Column(name = "ID")
     private Long id;
     
-    @Column(name = "SALDO")
-    private BigDecimal saldo;
-    
-    @Column(name = "ESTADO_FACTURA")
-    private String estadoFactura;
-    
     @JoinColumn(name = "ESTUDIANTE_ID")
     @ManyToOne
     private Estudiante estudiante;
@@ -71,23 +65,6 @@ public class EstudianteInscrito implements Serializable{
         this.nivelAcademico = nivelAcademico;
     }
 
-    public String getEstadoFactura() {
-        return estadoFactura;
-    }
-
-    public void setEstadoFactura(String estadoFactura) {
-        this.estadoFactura = estadoFactura;
-    }
-
-    public BigDecimal getSaldo() {
-        return saldo;
-    }
-
-    public void setSaldo(BigDecimal saldo) {
-        this.saldo = saldo;
-    }
-    
-    
 
     @Override
     public String toString() {
@@ -95,33 +72,6 @@ public class EstudianteInscrito implements Serializable{
     }
     
     //Metodos personalizados
-    
-    
-    public FacturacionEstadoEnum getEstadoFacturaEnum() {
-        return FacturacionEstadoEnum.buscarPorLetra(estadoFactura);       
-    } 
-    
-    public enum FacturacionEstadoEnum
-    {
-        FACTURADO("f"),
-        SIN_FACTURAR("s"),
-        FACTURA_PARCIAL("p");
-
-        private FacturacionEstadoEnum(String letra) {
-            this.letra = letra;
-        }
-        
-        private String letra;
-        
-        public static FacturacionEstadoEnum buscarPorLetra(String letra) {
-            for (FacturacionEstadoEnum facturacionEstadoEnum : FacturacionEstadoEnum.values()) {
-                if (facturacionEstadoEnum.equals(letra)) {
-                    return facturacionEstadoEnum;
-                }
-            }
-            return null;
-        }
-    }
     
     
 }

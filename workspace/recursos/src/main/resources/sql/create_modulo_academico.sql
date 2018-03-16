@@ -74,8 +74,6 @@ create table NIVEL_ACADEMICO(
 
 create table ESTUDIANTE_INSCRITO( 
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
-    SALDO decimal(7,2),
-    ESTADO_FACTURA varchar(1);
     ESTUDIANTE_ID bigint,
     NIVEL_ACADEMICO_ID bigint,
     primary key (ID)
@@ -84,6 +82,7 @@ create table ESTUDIANTE_INSCRITO(
 create table RUBROS_NIVEL( 
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
     NOMBRE varchar(100),
+    DIAS_CREDITO int,
     PERIODO_ID bigint,
     NIVEL_ID bigint,
     CATALOGO_PRODUCTO_ID BIGINT,
@@ -94,6 +93,8 @@ create table RUBROS_NIVEL(
 
 create table RUBRO_ESTUDIANTE( 
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
+    SALDO decimal(7,2),
+    ESTADO_FACTURA varchar(1),
     RUBRO_NIVEL_ID BIGINT,
     ESTUDIANTE_INSCRITO_ID BIGINT,
     primary key (ID)
