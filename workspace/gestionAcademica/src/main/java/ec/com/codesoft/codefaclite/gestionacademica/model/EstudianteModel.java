@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.gestionacademica.busqueda.EstudianteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.EstudiantePanel;
 import ec.com.codesoft.codefaclite.inventario.busqueda.RepresentanteBusquedaDialogo;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Nacionalidad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
@@ -24,9 +25,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneroEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDiscapacidadEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import static ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha.hoy;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.text.DateFormat;
@@ -44,12 +47,13 @@ import java.util.logging.Logger;
 public class EstudianteModel extends EstudiantePanel {
 
     private Persona representante;
+    private Persona representanteParaFacturar;
     private Estudiante estudiante;
     private EstudianteServiceIf estudianteService;
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     Date fechaNacimiento = null;
     String fechanacimiento = "";
-
+    Boolean banderaNacionalidad;
     public EstudianteModel() {
         estudianteService = ServiceFactory.getFactory().getEstudianteServiceIf();
     }
@@ -58,7 +62,7 @@ public class EstudianteModel extends EstudiantePanel {
     public void iniciar() throws ExcepcionCodefacLite {
         try {
             getDateFechaNacimiento().setDate(hoy());
-
+            this.banderaNacionalidad = false;
             List<Nacionalidad> nacion = ServiceFactory.getFactory().getNacionalidadServiceIf().obtenerTodos();
             getCmbNacionalidad().removeAllItems();
             for (Nacionalidad n : nacion) {
@@ -88,31 +92,28 @@ public class EstudianteModel extends EstudiantePanel {
             getBtnBuscarRepresentante().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    RepresentanteBusquedaDialogo buscarBusquedaDialogo = new RepresentanteBusquedaDialogo();
-                    BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
-                    buscarDialogo.setVisible(true);
-                    representante = (Persona) buscarDialogo.getResultado();
-
-                    if (representante != null) {
-                        String identificacion = representante.getIdentificacion();
-                        String nombre = representante.getRazonSocial();
-                        getTxtRepresentante().setText(identificacion + " - " + nombre);
-                    }
+                    obtenerRepresentante(1);
                 }
             });
 
             getBtnAgregarRepresentante().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<Persona>() {
-                        @Override
-                        public void updateInterface(Persona entity) {
-                            if (entity != null) {
-                                representante = entity;
-                                getTxtRepresentante().setText(representante.getIdentificacion() + " - " + representante.getNombresCompletos());
-                            }
-                        }
-                    }, DialogInterfacePanel.CLIENTE_PANEL, false);
+                    crearRepresentante(1);
+                }
+            });
+            
+            getBtnBuscarPersonaFacturar().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    obtenerRepresentante(2);
+                }
+            });
+            
+            getBtnAgregarPersonaFacturar().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    crearRepresentante(2);
                 }
             });
 
@@ -128,6 +129,26 @@ public class EstudianteModel extends EstudiantePanel {
                     }
                 }
             });
+            
+            getCmbNacionalidad().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String nacionalidad = (String) getCmbNacionalidad().getSelectedItem().toString();
+                    if(nacionalidad.equals("ECUATORIANA"))
+                    {
+                        banderaNacionalidad = true;
+                        getCmbEtnia().setEnabled(true);
+                    }
+                    else
+                    {
+                        banderaNacionalidad = false;
+                        getCmbEtnia().setEnabled(false);
+                    }
+                               
+                }
+            });
+            
+            
         } catch (RemoteException ex) {
             Logger.getLogger(EstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -166,9 +187,14 @@ public class EstudianteModel extends EstudiantePanel {
         estudiante.setDireccion(getTxtDireccion().getText());
         estudiante.setDatosAdicionales(getTxtAdicionales().getText());
         estudiante.setNacionalidad(((Nacionalidad) getCmbNacionalidad().getSelectedItem()));
+        if(banderaNacionalidad){
+            estudiante.setEtnia(getCmbEtnia().getSelectedItem().toString());
+        }
+        else{
+            estudiante.setEtnia("Otro");
+        }
         estudiante.setObsDiscapacidad(getTxtObsDiscapacidad().getText());
         estudiante.setConadis(getTxtConadis().getText());
-        estudiante.setEtnia(getTxtEtnia().getText());
         estudiante.setPorcentajeDiscapacidad(Integer.parseInt(getTxtPorcentajeDiscapacidad().getText()));
 
         estudiante.setTipoDiscapacidad(((TipoDiscapacidadEnum) getCmbTipoDiscapacidad().getSelectedItem()).getLetra());
@@ -215,7 +241,41 @@ public class EstudianteModel extends EstudiantePanel {
 
     @Override
     public void imprimir() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(estudiante != null)
+        {   
+            InputStream path = RecursoCodefac.JASPER_ESTUDIANTE.getResourceInputStream("reporteEstudiante.jrxml");
+            Map parametros = new HashMap();
+            parametros.put("codSistema", estudiante.getCodigoSistema()+"");
+            parametros.put("codAuxiliar", estudiante.getCodigoAuxiliar()+"");
+            parametros.put("cedula", estudiante.getCedula()+"");
+            parametros.put("correo", estudiante.getEmail()+"");
+            parametros.put("nombres", estudiante.getNombres()+"");
+            parametros.put("apellidos", estudiante.getApellidos()+"");
+            parametros.put("telefono", estudiante.getTelefono()+"");
+            parametros.put("celular", estudiante.getCelular()+"");
+            parametros.put("direccion", estudiante.getDireccion()+"");
+            parametros.put("datosAdicionales", estudiante.getDatosAdicionales()+"");
+            parametros.put("etnia", estudiante.getEtnia()+"");
+            parametros.put("conadis", estudiante.getConadis()+"");
+            parametros.put("observacionesDiscapacidad", estudiante.getObsDiscapacidad()+"");
+            parametros.put("porcentajeDiscapacidad", estudiante.getPorcentajeDiscapacidad()+"");
+            parametros.put("genero", estudiante.getGenero()+"");
+            parametros.put("nacionalidad", estudiante.getNacionalidad()+"");
+            parametros.put("estado", estudiante.getEstado()+"");
+            parametros.put("discapacidad", estudiante.getDiscapacidad()+"");
+            parametros.put("fechaNacimiento", estudiante.getFechaNacimiento()+"");
+            if(estudiante.getRepresentante() != null){
+                
+                parametros.put("representante1", estudiante.getRepresentante().getIdentificacion() +" - "+ estudiante.getRepresentante().getRazonSocial());
+                parametros.put("representante2", estudiante.getRepresentante().getIdentificacion() +" - "+ estudiante.getRepresentante().getRazonSocial());
+            }
+            
+            
+        }else
+        {
+            DialogoCodefac.mensaje("Error","Debe buscar un estudiante", DialogoCodefac.MENSAJE_ADVERTENCIA);
+        }
+             
     }
 
     @Override
@@ -242,7 +302,7 @@ public class EstudianteModel extends EstudiantePanel {
         getTxtCelular().setText(estudiante.getCelular());
         getTxtDireccion().setText(estudiante.getDireccion());
         getTxtAdicionales().setText(estudiante.getDatosAdicionales());
-        getTxtEtnia().setText(estudiante.getEtnia());
+        getCmbEtnia().setSelectedItem(estudiante.getEtnia());
         getTxtConadis().setText(estudiante.getConadis());
         getTxtObsDiscapacidad().setText(estudiante.getObsDiscapacidad());
         getTxtPorcentajeDiscapacidad().setText(String.valueOf(estudiante.getPorcentajeDiscapacidad()));
@@ -298,6 +358,54 @@ public class EstudianteModel extends EstudiantePanel {
     @Override
     public List<String> getPerfilesPermisos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public void crearRepresentante(int opc)
+    {
+         panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<Persona>() {
+                        @Override
+                        public void updateInterface(Persona entity) {
+                            if (entity != null) {
+                                Persona representanteGenerico = entity;
+                                switch(opc)
+                                {
+                                    case 1:
+                                        representante = representanteGenerico;
+                                        getTxtRepresentante().setText(representante.getIdentificacion() + " - " + representante.getNombresCompletos());
+                                    break;
+                                    case 2:
+                                        representanteParaFacturar = representanteGenerico;
+                                        getTxtFacturarANombre().setText(representante.getIdentificacion() + " - " + representante.getNombresCompletos());
+                                    break;
+                                }
+                                
+                            }
+                        }
+                    }, DialogInterfacePanel.CLIENTE_PANEL, false);
+    }
+    
+    public void obtenerRepresentante(int opc)
+    {
+        RepresentanteBusquedaDialogo buscarBusquedaDialogo = new RepresentanteBusquedaDialogo();
+                    BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
+                    buscarDialogo.setVisible(true);
+                    Persona representanteGenerico = (Persona) buscarDialogo.getResultado();
+                    if (representanteGenerico != null) {
+                        String identificacion = representanteGenerico.getIdentificacion();
+                        String nombre = representanteGenerico.getRazonSocial();
+                        switch(opc)
+                        {
+                            case 1:
+                                representante = representanteGenerico;
+                                getTxtRepresentante().setText(identificacion + " - " + nombre);
+                            break;
+                            case 2:
+                                representanteParaFacturar = representanteGenerico;
+                                getTxtFacturarANombre().setText(identificacion + " - " + nombre);
+                            break;
+                        }
+                        
+                    }
     }
 
 }

@@ -8,6 +8,8 @@ package ec.com.codesoft.codefaclite.crm.panel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -38,9 +40,11 @@ public abstract class CompraReporteProductoPanel extends ControladorCodefacInter
         txtProducto = new javax.swing.JTextField();
         btnObtenerDatos = new javax.swing.JButton();
         chckTodos = new javax.swing.JCheckBox();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        txtAreaDatosProductos = new javax.swing.JTextArea();
         btnBuscarProducto = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblInformacionReporte = new javax.swing.JTable();
+        cmbTipoReporte = new javax.swing.JComboBox<>();
+        jLabel2 = new javax.swing.JLabel();
 
         setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -49,52 +53,74 @@ public abstract class CompraReporteProductoPanel extends ControladorCodefacInter
         setResizable(true);
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setText("Producto:");
+        jLabel1.setText("Nombre: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.gridy = 1;
         getContentPane().add(jLabel1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 55;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 0.1;
         getContentPane().add(txtProducto, gridBagConstraints);
 
         btnObtenerDatos.setText("Buscar");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 2;
         getContentPane().add(btnObtenerDatos, gridBagConstraints);
 
         chckTodos.setText("Todos");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.gridy = 1;
         getContentPane().add(chckTodos, gridBagConstraints);
-
-        txtAreaDatosProductos.setColumns(20);
-        txtAreaDatosProductos.setRows(5);
-        jScrollPane1.setViewportView(txtAreaDatosProductos);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.weighty = 0.1;
-        getContentPane().add(jScrollPane1, gridBagConstraints);
 
         btnBuscarProducto.setText("Buscar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         getContentPane().add(btnBuscarProducto, gridBagConstraints);
+
+        tblInformacionReporte.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(tblInformacionReporte);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        getContentPane().add(jScrollPane2, gridBagConstraints);
+
+        cmbTipoReporte.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione busqueda", "Producto", "Proveedor" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        getContentPane().add(cmbTipoReporte, gridBagConstraints);
+
+        jLabel2.setText("Reporte:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        getContentPane().add(jLabel2, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -103,9 +129,11 @@ public abstract class CompraReporteProductoPanel extends ControladorCodefacInter
     private javax.swing.JButton btnBuscarProducto;
     private javax.swing.JButton btnObtenerDatos;
     private javax.swing.JCheckBox chckTodos;
+    private javax.swing.JComboBox<String> cmbTipoReporte;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea txtAreaDatosProductos;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable tblInformacionReporte;
     private javax.swing.JTextField txtProducto;
     // End of variables declaration//GEN-END:variables
 
@@ -141,13 +169,20 @@ public abstract class CompraReporteProductoPanel extends ControladorCodefacInter
         this.txtProducto = txtProducto;
     }
 
-    public JTextArea getTxtAreaDatosProductos() {
-        return txtAreaDatosProductos;
+    public JComboBox<String> getCmbTipoReporte() {
+        return cmbTipoReporte;
     }
 
-    public void setTxtAreaDatosProductos(JTextArea txtAreaDatosProductos) {
-        this.txtAreaDatosProductos = txtAreaDatosProductos;
+    public void setCmbTipoReporte(JComboBox<String> cmbTipoReporte) {
+        this.cmbTipoReporte = cmbTipoReporte;
     }
-    
+
+    public JTable getTblInformacionReporte() {
+        return tblInformacionReporte;
+    }
+
+    public void setTblInformacionReporte(JTable tblInformacionReporte) {
+        this.tblInformacionReporte = tblInformacionReporte;
+    }
     
 }

@@ -31,6 +31,7 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
 {
     private Producto producto;
     private Boolean todos;
+    private String opcionReporte;
             
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
@@ -158,6 +159,24 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
                 {
                     todos = false;
                 }
+            }
+        });
+        
+        getCmbTipoReporte().addActionListener( new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                opcionReporte = (String) getCmbTipoReporte().getSelectedItem();
+               
+                switch(opcionReporte)
+                {
+                    case "Proveedor":
+                        break;
+                    case "Producto":
+                        break;
+                    default:
+                        DialogoCodefac.mensaje("Error", "Debe seleccionar un tipo de busqueda para el reporte", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                        break;
+                }                      
             }
         });
     }

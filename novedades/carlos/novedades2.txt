@@ -31,7 +31,7 @@ El codigo sistema debe solo visual
 
 Agregar otro campo adicional para facturar
 
-Las etnias poner un combo
+Las etnias poner un combo --> [Mestizos, Montubios, Afroecuatorianos, Indígenas, Blancos, Otros]
 
 Crear un ficha del estudiante cuando cargo el estudiante
 
