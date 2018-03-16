@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.ProductoFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -40,7 +41,14 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         EntityTransaction transactions= entityManager.getTransaction();
         transactions.begin();
         try {
-                        
+            
+            //Si el catalogo producto no esta creado primero crea la entidad
+            CatalogoProducto catalogoProducto=p.getCatalogoProducto();                        
+            if(catalogoProducto.getId()==null)
+            {
+                entityManager.persist(catalogoProducto);                        
+            }
+            
             //Si no son ensables remover datos para no tener incoherencias
             if(!TipoProductoEnum.EMSAMBLE.getLetra().equals(p.getCatalogoProducto().getTipoProducto()))
             {          

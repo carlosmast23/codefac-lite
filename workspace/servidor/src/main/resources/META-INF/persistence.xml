@@ -50,6 +50,9 @@
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.Nacionalidad</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraDetalle</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraCruce</class>
 
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
   </persistence-unit>

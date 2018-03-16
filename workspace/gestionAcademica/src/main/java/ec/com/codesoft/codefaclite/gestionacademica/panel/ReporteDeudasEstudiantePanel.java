@@ -5,19 +5,11 @@
  */
 package ec.com.codesoft.codefaclite.gestionacademica.panel;
 
-import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JTable;
-
 /**
  *
  * @author CodesoftDesarrollo
  */
-public abstract class ReporteDeudasEstudiantePanel extends ControladorCodefacInterface {
+public class ReporteDeudasEstudiantePanel extends javax.swing.JInternalFrame {
 
     /**
      * Creates new form ReporteDeudasEstudiantePanel
@@ -35,165 +27,93 @@ public abstract class ReporteDeudasEstudiantePanel extends ControladorCodefacInt
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        lblperiodo = new javax.swing.JLabel();
-        cmbPeriodo = new javax.swing.JComboBox<>();
-        cmbNivelAcademico = new javax.swing.JComboBox<>();
-        lblBuscar = new javax.swing.JLabel();
-        btnBuscar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDeudas = new javax.swing.JTable();
-        btnAgregarRubrosNivel = new javax.swing.JButton();
-        cmbRubrosNivel = new javax.swing.JComboBox<>();
-        lblperiodo1 = new javax.swing.JLabel();
-
-        setClosable(true);
-        setIconifiable(true);
-        setMaximizable(true);
-        setResizable(true);
-        setTitle("Reporte Deudas Estudiante");
-
-        lblperiodo.setText("Periodo Matricula:");
-
-        lblBuscar.setText("Nivel:");
-
-        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
-        btnBuscar.setText("Buscar");
+        lblEstudiante = new javax.swing.JLabel();
+        txtEstudiante = new javax.swing.JTextField();
+        btnBuscarEstudiante = new javax.swing.JButton();
 
         tblDeudas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
             },
             new String [] {
-                "Identificación", "Estudiante", "Nivel Academico", "Rubro", "Valor"
+                "Rubro", "Valor"
             }
         ));
         jScrollPane1.setViewportView(tblDeudas);
 
-        btnAgregarRubrosNivel.setText("Add");
+        lblEstudiante.setText("Estudiante");
 
-        lblperiodo1.setText("Rubros de Nivel:");
+        txtEstudiante.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtEstudiante.setText("...");
+        txtEstudiante.setEnabled(false);
+        txtEstudiante.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtEstudianteActionPerformed(evt);
+            }
+        });
+
+        btnBuscarEstudiante.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(lblperiodo1)
-                        .addGap(18, 18, 18)
-                        .addComponent(cmbRubrosNivel, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnAgregarRubrosNivel))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jScrollPane1)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(lblperiodo)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(cmbPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(lblBuscar)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(cmbNivelAcademico, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(btnBuscar))))
-                .addContainerGap(54, Short.MAX_VALUE))
+                .addGap(46, 46, 46)
+                .addComponent(lblEstudiante)
+                .addGap(18, 18, 18)
+                .addComponent(txtEstudiante, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33)
+                .addComponent(btnBuscarEstudiante)
+                .addContainerGap(314, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(48, 48, 48)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 635, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(48, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cmbPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblperiodo)
-                    .addComponent(lblBuscar)
-                    .addComponent(cmbNivelAcademico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBuscar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cmbRubrosNivel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAgregarRubrosNivel)
-                    .addComponent(lblperiodo1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(140, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnBuscarEstudiante)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(41, 41, 41)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtEstudiante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblEstudiante))))
+                .addContainerGap(373, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(106, 106, 106)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(106, Short.MAX_VALUE)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void txtEstudianteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEstudianteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtEstudianteActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAgregarRubrosNivel;
-    private javax.swing.JButton btnBuscar;
-    private javax.swing.JComboBox<NivelAcademico> cmbNivelAcademico;
-    private javax.swing.JComboBox<Periodo> cmbPeriodo;
-    private javax.swing.JComboBox<RubrosNivel> cmbRubrosNivel;
+    private javax.swing.JButton btnBuscarEstudiante;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblBuscar;
-    private javax.swing.JLabel lblperiodo;
-    private javax.swing.JLabel lblperiodo1;
+    private javax.swing.JLabel lblEstudiante;
     private javax.swing.JTable tblDeudas;
+    private javax.swing.JTextField txtEstudiante;
     // End of variables declaration//GEN-END:variables
-
-    public JButton getBtnBuscar() {
-        return btnBuscar;
-    }
-
-    public void setBtnBuscar(JButton btnBuscar) {
-        this.btnBuscar = btnBuscar;
-    }
-
-    public JComboBox<NivelAcademico> getCmbNivelAcademico() {
-        return cmbNivelAcademico;
-    }
-
-    public void setCmbNivelAcademico(JComboBox<NivelAcademico> cmbNivelAcademico) {
-        this.cmbNivelAcademico = cmbNivelAcademico;
-    }
-
-    public JComboBox<Periodo> getCmbPeriodo() {
-        return cmbPeriodo;
-    }
-
-    public void setCmbPeriodo(JComboBox<Periodo> cmbPeriodo) {
-        this.cmbPeriodo = cmbPeriodo;
-    }
-
-    public JTable getTblDeudas() {
-        return tblDeudas;
-    }
-
-    public void setTblDeudas(JTable tblDeudas) {
-        this.tblDeudas = tblDeudas;
-    }
-
-    public JButton getBtnAgregarRubrosNivel() {
-        return btnAgregarRubrosNivel;
-    }
-
-    public void setBtnAgregarRubrosNivel(JButton btnAgregarRubrosNivel) {
-        this.btnAgregarRubrosNivel = btnAgregarRubrosNivel;
-    }
-
-    public JComboBox<RubrosNivel> getCmbRubrosNivel() {
-        return cmbRubrosNivel;
-    }
-
-    public void setCmbRubrosNivel(JComboBox<RubrosNivel> cmbRubrosNivel) {
-        this.cmbRubrosNivel = cmbRubrosNivel;
-    }
-
-    
 }

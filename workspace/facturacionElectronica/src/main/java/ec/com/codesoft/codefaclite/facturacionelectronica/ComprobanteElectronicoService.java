@@ -466,9 +466,12 @@ public class ComprobanteElectronicoService implements Runnable {
                 //Si la lista de correos adicionales  
                 if(correosElectronicosTemp==null)correosElectronicosTemp=new ArrayList<String>();
                 //Agregar correos adjuntos en el comprobante electronico
-                for (InformacionAdicional infoAdicional : comprobanteElectronico.getInformacionAdicional()) {
-                    if(infoAdicional.getNombre().equals("correo"))
-                        correosElectronicosTemp.add(infoAdicional.getValor());                                           
+                if(comprobanteElectronico.getInformacionAdicional()!=null)
+                {
+                    for (InformacionAdicional infoAdicional : comprobanteElectronico.getInformacionAdicional()) {
+                        if(infoAdicional.getNombre().equals("correo"))
+                            correosElectronicosTemp.add(infoAdicional.getValor());                                           
+                    }
                 }
                 
                 metodoEnvioInterface.enviarCorreo(mensajeGenerado, claveAcceso.getTipoComprobante().getNombre()+":" + comprobante.getInformacionTributaria().getPreimpreso(), correosElectronicosTemp, archivosPath);

@@ -44,6 +44,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionS
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraCruceServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraDetalleServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraServiceIf;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.rmi.AccessException;
@@ -123,11 +126,9 @@ public abstract class ServiceFactory {
     public RubroEstudianteServiceIf getRubroEstudianteServiceIf(){return (RubroEstudianteServiceIf) getRecursosRMI(RubroEstudianteServiceIf.class);};
     public NacionalidadServiceIf getNacionalidadServiceIf(){return (NacionalidadServiceIf) getRecursosRMI(NacionalidadServiceIf.class);};
     public CatalogoProductoServiceIf getCatalogoProductoServiceIf(){return (CatalogoProductoServiceIf) getRecursosRMI(CatalogoProductoServiceIf.class);};
-    
-    
-    
-    
-    
+    public CarteraServiceIf getCarteraServiceIf(){return (CarteraServiceIf) getRecursosRMI(CarteraServiceIf.class);};
+    public CarteraDetalleServiceIf getCarteraDetalleServiceIf(){return (CarteraDetalleServiceIf) getRecursosRMI(CarteraDetalleServiceIf.class);};
+    public CarteraCruceServiceIf getCarteraCruceServiceIf(){return (CarteraCruceServiceIf) getRecursosRMI(CarteraCruceServiceIf.class);};
     
     
     /**
