@@ -50,8 +50,8 @@ public class RubrosNivel implements Serializable{
     @ManyToOne    
     private CatalogoProducto catalogoProducto;
     
-    @Column(name = "TIPO_RUBRO")
-    private String tipoRubro;
+    /*@Column(name = "TIPO_RUBRO")
+    private String tipoRubro;*/
 
     @Column(name = "VALOR")    
     private BigDecimal valor;
@@ -83,13 +83,14 @@ public class RubrosNivel implements Serializable{
         this.periodo = periodo;
     }
 
+    /*
     public String getTipoRubro() {
         return tipoRubro;
     }
 
     public void setTipoRubro(String tipoRubro) {
         this.tipoRubro = tipoRubro;
-    }
+    }*/
 
     public String getNombre() {
         return nombre;

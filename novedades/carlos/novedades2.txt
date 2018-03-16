@@ -5,3 +5,11 @@ Terminar el modulo de cartera
 Terminar de hacer que muestre el error de cada factura por lote, ahorita solo muestra autorizado o no
 Revisar despues de facturar en lote no carga correctamente la factura
 Revisar porque no se guarda la cartera detalle en la facturacion en lote
+
+Verificar la modalidad de obligado a llevar contabilidad en las comprobantes electronicos
+Para manejar el pago de un rubro varias veces se puede manejar un campo de saldo en el rubro
+En la pantalla de estudiante agregar un representante secundario o 3
+Adicional ver una pantalla estandar cuando tenga que seleccionar varios resultados como para varios representantes
+Para crear varios rubros mensuales mejor separar una tabla de plantilla para evitar organizacion
+
+
