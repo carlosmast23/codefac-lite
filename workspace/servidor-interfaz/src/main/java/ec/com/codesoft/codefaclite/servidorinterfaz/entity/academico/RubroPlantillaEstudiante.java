@@ -29,5 +29,31 @@ public class RubroPlantillaEstudiante implements Serializable{
     private RubroPlantilla rubroPlantilla;
     
     private EstudianteInscrito estudianteInscrito;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public RubroPlantilla getRubroPlantilla() {
+        return rubroPlantilla;
+    }
+
+    public void setRubroPlantilla(RubroPlantilla rubroPlantilla) {
+        this.rubroPlantilla = rubroPlantilla;
+    }
+
+    public EstudianteInscrito getEstudianteInscrito() {
+        return estudianteInscrito;
+    }
+
+    public void setEstudianteInscrito(EstudianteInscrito estudianteInscrito) {
+        this.estudianteInscrito = estudianteInscrito;
+    }
+    
+    
     
 }
