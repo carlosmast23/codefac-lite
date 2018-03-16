@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,6 +32,12 @@ public class EstudianteInscrito implements Serializable{
     @Basic(optional = false)
     @Column(name = "ID")
     private Long id;
+    
+    @Column(name = "SALDO")
+    private BigDecimal saldo;
+    
+    @Column(name = "ESTADO_FACTURA")
+    private String estadoFactura;
     
     @JoinColumn(name = "ESTUDIANTE_ID")
     @ManyToOne
@@ -64,11 +71,57 @@ public class EstudianteInscrito implements Serializable{
         this.nivelAcademico = nivelAcademico;
     }
 
+    public String getEstadoFactura() {
+        return estadoFactura;
+    }
+
+    public void setEstadoFactura(String estadoFactura) {
+        this.estadoFactura = estadoFactura;
+    }
+
+    public BigDecimal getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(BigDecimal saldo) {
+        this.saldo = saldo;
+    }
+    
+    
+
     @Override
     public String toString() {
         return estudiante.getNombres()+" "+estudiante.getApellidos();
     }
     
+    //Metodos personalizados
+    
+    
+    public FacturacionEstadoEnum getEstadoFacturaEnum() {
+        return FacturacionEstadoEnum.buscarPorLetra(estadoFactura);       
+    } 
+    
+    public enum FacturacionEstadoEnum
+    {
+        FACTURADO("f"),
+        SIN_FACTURAR("s"),
+        FACTURA_PARCIAL("p");
+
+        private FacturacionEstadoEnum(String letra) {
+            this.letra = letra;
+        }
+        
+        private String letra;
+        
+        public static FacturacionEstadoEnum buscarPorLetra(String letra) {
+            for (FacturacionEstadoEnum facturacionEstadoEnum : FacturacionEstadoEnum.values()) {
+                if (facturacionEstadoEnum.equals(letra)) {
+                    return facturacionEstadoEnum;
+                }
+            }
+            return null;
+        }
+    }
     
     
 }

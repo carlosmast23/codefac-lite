@@ -74,6 +74,8 @@ create table NIVEL_ACADEMICO(
 
 create table ESTUDIANTE_INSCRITO( 
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
+    SALDO decimal(7,2),
+    ESTADO_FACTURA varchar(1);
     ESTUDIANTE_ID bigint,
     NIVEL_ACADEMICO_ID bigint,
     primary key (ID)
