@@ -13,3 +13,26 @@ Adicional ver una pantalla estandar cuando tenga que seleccionar varios resultad
 Para crear varios rubros mensuales mejor separar una tabla de plantilla para evitar organizacion
 
 
+Agregar un campo en el representante para la forma de pago
+
+En los rubros nivel agregar un lapso de tiempo para ver que rubros ya fueron vencidos
+
+Agregar un reporte o agregar una pantalla para informar sobre los rubros que sobrepasan el tiempo normal de pago
+
+Agregar estados de eliminado y analisar si se pueden dar de baja
+
+
+Agregar un reporte de pagos vs deudas por curso y estudiantes
+
+Analisar si cambiar el nombre de nivel a academico a curso.
+
+
+El codigo sistema debe solo visual
+
+Agregar otro campo adicional para facturar
+
+Las etnias poner un combo
+
+Crear un ficha del estudiante cuando cargo el estudiante
+
+Toca analizar para grabar la forma de pago en el represntante por defecto y que se carga en la factura
