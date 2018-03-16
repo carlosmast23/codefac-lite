@@ -52,7 +52,7 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
-        setTitle("Reporte Deudas Estudiante");
+        setTitle("Reporte Deudas por Nivel Académico");
 
         lblperiodo.setText("Periodo:");
 

@@ -234,7 +234,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
     @Override
     public void imprimir() {
         try {
-            InputStream path = RecursoCodefac.JASPER_ACADEMICO.getResourceInputStream("reporte_deudas2.jrxml");
+            InputStream path = RecursoCodefac.JASPER_ACADEMICO.getResourceInputStream("reporte_deudas.jrxml");
 
             Map<String, Object> mapParametros = new HashMap<String, Object>();
             if (banderaNiveles == false) {
@@ -250,7 +250,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
                 mapParametros2.put("estudianteInscrito", estudiante);
                 if (banderaRubros == false) {
                     mapParametros2.put("rubroNivel", (RubrosNivel) getCmbRubrosNivel().getSelectedItem());
-                }
+                }               
                 RubroEstudianteServiceIf rs = ServiceFactory.getFactory().getRubroEstudianteServiceIf();
                 List<RubroEstudiante> dataRubro = rs.obtenerPorMap(mapParametros2);
                 // comparamos si el estudiante tiene rubros
@@ -309,7 +309,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
 
     @Override
     public String getNombre() {
-        return "Reporte Deudas por Estudiante";
+        return "Reporte Deudas por Nivel Académico";
     }
 
     @Override

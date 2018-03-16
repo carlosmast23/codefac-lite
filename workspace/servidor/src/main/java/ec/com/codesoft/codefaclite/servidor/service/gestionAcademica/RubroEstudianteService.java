@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.service.gestionAcademica;
 
 import ec.com.codesoft.codefaclite.servidor.facade.gestionAcademica.RubroEstudianteFacade;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
@@ -56,8 +57,10 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
     }
 
     @Override
-    public List<RubroEstudiante> obtenerDeudasEstudiante(NivelAcademico nivel) throws RemoteException {
-        return rubroEstudianteFacade.obtenerDeudasEstudiante(nivel);
+    public List<RubroEstudiante> obtenerDeudasEstudiante(Estudiante est) throws RemoteException {
+        return rubroEstudianteFacade.obtenerDeudasEstudiante(est);
     }
+
+  
 
 }

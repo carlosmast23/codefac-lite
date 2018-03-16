@@ -5,11 +5,17 @@
  */
 package ec.com.codesoft.codefaclite.gestionacademica.panel;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+
 /**
  *
  * @author CodesoftDesarrollo
  */
-public class ReporteDeudasEstudiantePanel extends javax.swing.JInternalFrame {
+public abstract class ReporteDeudasEstudiantePanel extends ControladorCodefacInterface {
 
     /**
      * Creates new form ReporteDeudasEstudiantePanel
@@ -32,6 +38,15 @@ public class ReporteDeudasEstudiantePanel extends javax.swing.JInternalFrame {
         lblEstudiante = new javax.swing.JLabel();
         txtEstudiante = new javax.swing.JTextField();
         btnBuscarEstudiante = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
+        lblDeuda = new javax.swing.JLabel();
+        lblTotalDeuda = new javax.swing.JLabel();
+
+        setClosable(true);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
+        setTitle("Reporte Deudas por Estudiante");
 
         tblDeudas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -65,6 +80,17 @@ public class ReporteDeudasEstudiantePanel extends javax.swing.JInternalFrame {
 
         btnBuscarEstudiante.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
 
+        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
+        btnBuscar.setText("Buscar");
+
+        lblDeuda.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblDeuda.setText("Total Deuda:");
+        lblDeuda.setToolTipText("");
+
+        lblTotalDeuda.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblTotalDeuda.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblTotalDeuda.setText("0");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -76,7 +102,15 @@ public class ReporteDeudasEstudiantePanel extends javax.swing.JInternalFrame {
                 .addComponent(txtEstudiante, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(33, 33, 33)
                 .addComponent(btnBuscarEstudiante)
-                .addContainerGap(314, Short.MAX_VALUE))
+                .addGap(48, 48, 48)
+                .addComponent(btnBuscar)
+                .addContainerGap(181, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblDeuda)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblTotalDeuda, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(51, 51, 51))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(48, 48, 48)
@@ -86,14 +120,18 @@ public class ReporteDeudasEstudiantePanel extends javax.swing.JInternalFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnBuscar)
                     .addComponent(btnBuscarEstudiante)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(41, 41, 41)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtEstudiante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblEstudiante))))
-                .addContainerGap(373, Short.MAX_VALUE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtEstudiante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblEstudiante)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 279, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblDeuda)
+                    .addComponent(lblTotalDeuda))
+                .addGap(80, 80, 80))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(106, 106, 106)
@@ -110,10 +148,55 @@ public class ReporteDeudasEstudiantePanel extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnBuscarEstudiante;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblDeuda;
     private javax.swing.JLabel lblEstudiante;
+    private javax.swing.JLabel lblTotalDeuda;
     private javax.swing.JTable tblDeudas;
     private javax.swing.JTextField txtEstudiante;
     // End of variables declaration//GEN-END:variables
+
+    public JButton getBtnBuscar() {
+        return btnBuscar;
+    }
+
+    public void setBtnBuscar(JButton btnBuscar) {
+        this.btnBuscar = btnBuscar;
+    }
+
+    public JButton getBtnBuscarEstudiante() {
+        return btnBuscarEstudiante;
+    }
+
+    public void setBtnBuscarEstudiante(JButton btnBuscarEstudiante) {
+        this.btnBuscarEstudiante = btnBuscarEstudiante;
+    }
+
+    public JTable getTblDeudas() {
+        return tblDeudas;
+    }
+
+    public void setTblDeudas(JTable tblDeudas) {
+        this.tblDeudas = tblDeudas;
+    }
+
+    public JTextField getTxtEstudiante() {
+        return txtEstudiante;
+    }
+
+    public void setTxtEstudiante(JTextField txtEstudiante) {
+        this.txtEstudiante = txtEstudiante;
+    }
+
+    public JLabel getLblTotalDeuda() {
+        return lblTotalDeuda;
+    }
+
+    public void setLblTotalDeuda(JLabel lblTotalDeuda) {
+        this.lblTotalDeuda = lblTotalDeuda;
+    }
+
+    
 }

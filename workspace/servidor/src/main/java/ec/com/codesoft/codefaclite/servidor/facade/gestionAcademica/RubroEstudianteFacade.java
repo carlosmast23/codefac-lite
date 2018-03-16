@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidor.facade.gestionAcademica;
 
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import java.util.List;
@@ -22,10 +23,10 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
         super(RubroEstudiante.class);
     }
 
-    public List<RubroEstudiante> obtenerDeudasEstudiante(NivelAcademico nivel) {
+    public List<RubroEstudiante> obtenerDeudasEstudiante(Estudiante estudiante) {
         String academico = "";
-        if (nivel != null) {
-            academico = "u.estudianteInscrito.nivelAcademico=?1";
+        if (estudiante != null) {
+            academico = "u.estudianteInscrito.estudiante=?1";
         } else {
             academico = "1=1";
         }
@@ -35,8 +36,8 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
             //String queryString = "SELECT u FROM RubroEstudiante u " ;
             Query query = getEntityManager().createQuery(queryString);
             //System.err.println("QUERY--->"+query.toString());
-            if (nivel != null) {
-                query.setParameter(1, nivel);
+            if (estudiante != null) {
+                query.setParameter(1, estudiante);
             }
             return query.getResultList();
         } catch (NoResultException e) {
