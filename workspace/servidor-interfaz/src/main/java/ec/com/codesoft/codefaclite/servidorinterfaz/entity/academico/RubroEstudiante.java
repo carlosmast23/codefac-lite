@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,6 +31,12 @@ public class RubroEstudiante implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
+        
+    @Column(name = "SALDO")
+    private BigDecimal saldo;
+    
+    @Column(name = "ESTADO_FACTURA")
+    private String estadoFactura;
     
     @JoinColumn(name = "RUBRO_NIVEL_ID")
     @ManyToOne
@@ -66,6 +73,27 @@ public class RubroEstudiante implements Serializable{
         this.estudianteInscrito = estudianteInscrito;
     }
 
+    public BigDecimal getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(BigDecimal saldo) {
+        this.saldo = saldo;
+    }
+
+    public String getEstadoFactura() {
+        return estadoFactura;
+    }
+
+    public void setEstadoFactura(String estadoFactura) {
+        this.estadoFactura = estadoFactura;
+    }
+    
+        
+    public FacturacionEstadoEnum getEstadoFacturaEnum() {
+        return FacturacionEstadoEnum.buscarPorLetra(estadoFactura);       
+    } 
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -91,6 +119,25 @@ public class RubroEstudiante implements Serializable{
         return true;
     }
     
-    
+    public enum FacturacionEstadoEnum {
+        FACTURADO("f"),
+        SIN_FACTURAR("s"),
+        FACTURA_PARCIAL("p");
+
+        private FacturacionEstadoEnum(String letra) {
+            this.letra = letra;
+        }
+
+        private String letra;
+
+        public static FacturacionEstadoEnum buscarPorLetra(String letra) {
+            for (FacturacionEstadoEnum facturacionEstadoEnum : FacturacionEstadoEnum.values()) {
+                if (facturacionEstadoEnum.equals(letra)) {
+                    return facturacionEstadoEnum;
+                }
+            }
+            return null;
+        }
+    }
     
 }

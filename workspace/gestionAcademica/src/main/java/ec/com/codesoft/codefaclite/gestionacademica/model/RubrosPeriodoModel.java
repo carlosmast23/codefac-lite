@@ -6,9 +6,12 @@
 package ec.com.codesoft.codefaclite.gestionacademica.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.gestionacademica.busqueda.PeriodoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.gestionacademica.busqueda.RubroPeriodoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.RubrosPeriodoPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
@@ -90,6 +93,17 @@ public class RubrosPeriodoModel extends RubrosPeriodoPanel{
     @Override
     public void buscar() throws ExcepcionCodefacLite {
         
+        RubroPeriodoBusquedaDialogo busquedaDialogo = new RubroPeriodoBusquedaDialogo();
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialogo);
+        buscarDialogoModel.setVisible(true);
+        RubrosNivel rubroNivelTmp= (RubrosNivel) buscarDialogoModel.getResultado();
+        if (rubroNivelTmp == null) {
+            throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar periodo vacio");
+        }
+        
+        rubrosNivel=rubroNivelTmp;
+        
+        cargarDatos();
     }
 
     @Override
@@ -184,6 +198,7 @@ public class RubrosPeriodoModel extends RubrosPeriodoPanel{
         rubrosNivel.setCatalogoProducto((CatalogoProducto) getCmbRubro().getSelectedItem());
         //TipoRubroEnum tipoRubroEnum= (TipoRubroEnum) getCmbTipoRubro().getSelectedItem();
         //rubrosNivel.setTipoRubro(tipoRubroEnum.getLetra());
+        rubrosNivel.setDiasCredito(Integer.parseInt(getTxtDiasCredito().getText()));
         rubrosNivel.setValor(new BigDecimal(getTxtValor().getText()));
         //rubrosNivel.setProducto(GETCMB);
     }
@@ -203,6 +218,24 @@ public class RubrosPeriodoModel extends RubrosPeriodoPanel{
                }, VentanaEnum.CATALOGO_PRODUCTO,false);
             }
         });
+    }
+
+    private void cargarDatos() {
+        getTxtNombre().setText(rubrosNivel.getNombre());
+        getCmbPeriodo().setSelectedItem(rubrosNivel.getPeriodo());
+        
+        Nivel nivelSeleccionado=rubrosNivel.getNivel();
+        
+        if(nivelSeleccionado==null)
+            getCmbNivel().setSelectedItem(nivelDefecto);
+        else
+            getCmbNivel().setSelectedItem(nivelSeleccionado);
+        
+        
+        getCmbRubro().setSelectedItem(rubrosNivel.getCatalogoProducto());
+        getTxtDiasCredito().setText(rubrosNivel.getDiasCredito().toString());
+        getTxtValor().setText(rubrosNivel.getValor().toString());
+        
     }
     
 }

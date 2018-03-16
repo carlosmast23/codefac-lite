@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -95,4 +96,30 @@ public class Nivel implements Serializable{
         return nombre;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 67 * hash + Objects.hashCode(this.idNivel);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Nivel other = (Nivel) obj;
+        if (!Objects.equals(this.idNivel, other.idNivel)) {
+            return false;
+        }
+        return true;
+    }
+
+    
 }

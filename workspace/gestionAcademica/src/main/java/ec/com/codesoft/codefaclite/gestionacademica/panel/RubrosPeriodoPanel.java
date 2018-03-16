@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.gestionacademica.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
@@ -49,6 +50,8 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
         jLabel5 = new javax.swing.JLabel();
         cmbRubro = new javax.swing.JComboBox<>();
         btnAgregarRubro = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        txtDiasCredito = new javax.swing.JTextField();
 
         setClosable(true);
         setIconifiable(true);
@@ -70,6 +73,8 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
 
         btnAgregarRubro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add2.png"))); // NOI18N
 
+        jLabel6.setText("Días Credito:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -81,10 +86,10 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
                     .addComponent(jLabel3)
                     .addComponent(jLabel4)
                     .addComponent(jLabel5)
-                    .addComponent(jLabel2))
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtValor, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -92,8 +97,11 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
                             .addComponent(cmbNivel, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(cmbPeriodo, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
-                        .addComponent(btnAgregarRubro)))
-                .addContainerGap(58, Short.MAX_VALUE))
+                        .addComponent(btnAgregarRubro))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(txtDiasCredito, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txtValor, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)))
+                .addContainerGap(59, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -116,11 +124,15 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel5)
                         .addComponent(cmbRubro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addContainerGap(70, Short.MAX_VALUE))
+                    .addComponent(jLabel6)
+                    .addComponent(txtDiasCredito, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(14, 14, 14)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(txtValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(47, Short.MAX_VALUE))
         );
 
         pack();
@@ -137,6 +149,8 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JTextField txtDiasCredito;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtValor;
     // End of variables declaration//GEN-END:variables
@@ -157,6 +171,7 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
         this.cmbPeriodo = cmbPeriodo;
     }
 
+    @LimpiarAnotacion
     public JTextField getTxtNombre() {
         return txtNombre;
     }
@@ -165,6 +180,7 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
         this.txtNombre = txtNombre;
     }
 
+    @LimpiarAnotacion
     public JTextField getTxtValor() {
         return txtValor;
     }
@@ -197,8 +213,15 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
     public void setBtnAgregarRubro(JButton btnAgregarRubro) {
         this.btnAgregarRubro = btnAgregarRubro;
     }
-    
-    
+
+    @LimpiarAnotacion
+    public JTextField getTxtDiasCredito() {
+        return txtDiasCredito;
+    }
+
+    public void setTxtDiasCredito(JTextField txtDiasCredito) {
+        this.txtDiasCredito = txtDiasCredito;
+    }
     
     
 }

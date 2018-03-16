@@ -37,6 +37,9 @@ public class RubrosNivel implements Serializable{
     
     @Column(name = "NOMBRE")
     private String nombre;
+    
+    @Column(name = "DIAS_CREDITO")
+    private Integer diasCredito;
 
     @JoinColumn(name = "NIVEL_ID")
     @ManyToOne
@@ -115,6 +118,16 @@ public class RubrosNivel implements Serializable{
     public void setCatalogoProducto(CatalogoProducto catalogoProducto) {
         this.catalogoProducto = catalogoProducto;
     }
+
+    public Integer getDiasCredito() {
+        return diasCredito;
+    }
+
+    public void setDiasCredito(Integer diasCredito) {
+        this.diasCredito = diasCredito;
+    }
+    
+    
 
     
 
