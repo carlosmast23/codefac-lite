@@ -53,6 +53,8 @@
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraDetalle</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraCruce</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantilla</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaEstudiante</class>
 
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
   </persistence-unit>

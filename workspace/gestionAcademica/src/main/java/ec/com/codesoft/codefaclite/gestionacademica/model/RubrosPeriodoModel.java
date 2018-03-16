@@ -154,10 +154,10 @@ public class RubrosPeriodoModel extends RubrosPeriodoPanel{
             }
             
             //Cargar lso tipos de rubros
-            TipoRubroEnum[] tiposRubro= TipoRubroEnum.values();
+            /*TipoRubroEnum[] tiposRubro= TipoRubroEnum.values();
             for (TipoRubroEnum tipoRubroEnum : tiposRubro) {
                 getCmbTipoRubro().addItem(tipoRubroEnum);
-            }
+            }*/
             
         } catch (RemoteException ex) {
             Logger.getLogger(RubrosPeriodoModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -182,8 +182,8 @@ public class RubrosPeriodoModel extends RubrosPeriodoPanel{
         
         rubrosNivel.setPeriodo((Periodo) getCmbPeriodo().getSelectedItem());
         rubrosNivel.setCatalogoProducto((CatalogoProducto) getCmbRubro().getSelectedItem());
-        TipoRubroEnum tipoRubroEnum= (TipoRubroEnum) getCmbTipoRubro().getSelectedItem();
-        rubrosNivel.setTipoRubro(tipoRubroEnum.getLetra());
+        //TipoRubroEnum tipoRubroEnum= (TipoRubroEnum) getCmbTipoRubro().getSelectedItem();
+        //rubrosNivel.setTipoRubro(tipoRubroEnum.getLetra());
         rubrosNivel.setValor(new BigDecimal(getTxtValor().getText()));
         //rubrosNivel.setProducto(GETCMB);
     }
