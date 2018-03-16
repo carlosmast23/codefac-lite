@@ -33,6 +33,7 @@ public enum VentanaEnum {
     FACTURA_DISENIO("ec.com.codesoft.codefaclite.facturacion.model.FacturaDisenioModel","FACD","Factura Diseño",ModuloCodefacEnum.FACTURACION,CategoriaMenuEnum.GESTIONAR),
     COMPRA("ec.com.codesoft.codefaclite.crm.model.CompraModel","COMP","Compra",ModuloCodefacEnum.INVENTARIO,CategoriaMenuEnum.PROCESOS),
     COMPRA_REPORTE("ec.com.codesoft.codefaclite.crm.model.CompraReporteModel","CMPR","Compra Reporte",ModuloCodefacEnum.CRM,CategoriaMenuEnum.REPORTES),
+    COMPRA_REPORTE_PRODUCTO("ec.com.codesoft.codefaclite.crm.model.CompraReporteProductoModel","CRPM","Compra Reporte Producto",ModuloCodefacEnum.CRM,CategoriaMenuEnum.REPORTES),
     ASOCIAR_PRODUCTO("ec.com.codesoft.codefaclite.inventario.model.AsociarProductoProveedorModel","ASOP","Asociar Producto",ModuloCodefacEnum.INVENTARIO,CategoriaMenuEnum.PROCESOS),
     BODEGA("ec.com.codesoft.codefaclite.inventario.model.BodegaModel","BODG","Bodega",ModuloCodefacEnum.INVENTARIO,CategoriaMenuEnum.GESTIONAR),
     CATEGORIA_PRODUCTO("ec.com.codesoft.codefaclite.inventario.model.CategoriaProductoModel","CAPR","categoria",ModuloCodefacEnum.INVENTARIO,CategoriaMenuEnum.GESTIONAR),
