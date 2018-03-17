@@ -106,6 +106,7 @@ import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.NivelAcadem
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.NivelService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.PeriodoService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubroEstudianteService;
+import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubroPlantillaEstudianteService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubroPlantillaService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubrosNivelService;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
@@ -357,7 +358,7 @@ public class Main {
             mapRecursos.put(CarteraDetalleService.class,CarteraDetalleServiceIf.class);
             mapRecursos.put(CarteraCruceService.class, CarteraCruceServiceIf.class);
             mapRecursos.put(RubroPlantillaService.class, RubroPlantillaServiceIf.class);
-            mapRecursos.put(RubroPlantillaEstudiante.class, RubroPlantillaEstudianteServiceIf.class);
+            mapRecursos.put(RubroPlantillaEstudianteService.class, RubroPlantillaEstudianteServiceIf.class);
             
             ServiceControllerServer.cargarRecursos(mapRecursos);
             System.out.println("servidor iniciado");

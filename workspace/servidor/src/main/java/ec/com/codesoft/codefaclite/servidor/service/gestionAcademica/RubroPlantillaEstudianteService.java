@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service.gestionAcademica;
 
+import ec.com.codesoft.codefaclite.servidor.facade.gestionAcademica.RubroPlantillaEstudianteFacade;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.gestionacademica.RubroPlantillaEstudianteServiceIf;
@@ -14,9 +15,9 @@ import java.rmi.RemoteException;
  *
  * @author Carlos
  */
-public class RubroPlantillaEstudianteFacade extends ServiceAbstract<RubroPlantillaEstudiante, RubroPlantillaEstudianteFacade> implements RubroPlantillaEstudianteServiceIf{
+public class RubroPlantillaEstudianteService extends ServiceAbstract<RubroPlantillaEstudiante, RubroPlantillaEstudianteFacade> implements RubroPlantillaEstudianteServiceIf{
 
-    public RubroPlantillaEstudianteFacade() throws RemoteException {
+    public RubroPlantillaEstudianteService() throws RemoteException {
         super(RubroPlantillaEstudianteFacade.class);
     }
     

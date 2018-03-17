@@ -9,12 +9,16 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -30,49 +34,49 @@ public class RubroPlantilla implements Serializable{
     @Column(name = "ID")
     private Long id;
     
-    @Column(name = "nombre")
+    @Column(name = "NOMBRE")
     private String nombre;
     
-    @Column(name = "valor")
+    @Column(name = "VALOR")
     private BigDecimal valor;
     
     @Column(name = "DIAS_CREDITO")
     private Integer diasCredito;
     
-    @Column(name = "enero")
+    @Column(name = "ENERO")
     private String enero;
     
-    @Column(name = "febrero")
+    @Column(name = "FEBRERO")
     private String febrero;
     
-    @Column(name = "marzo")
+    @Column(name = "MARZO")
     private String marzo;
     
-    @Column(name = "abril")
+    @Column(name = "ABRIL")
     private String abril;
     
-    @Column(name = "mayo")
+    @Column(name = "MAYO")
     private String mayo;
     
-    @Column(name = "junio")
+    @Column(name = "JUNIO")
     private String junio;
     
-    @Column(name = "julio")
+    @Column(name = "JULIO")
     private String julio;
     
-    @Column(name = "agosto")
+    @Column(name = "AGOSTO")
     private String agosto;
     
-    @Column(name = "septiembre")
+    @Column(name = "SEPTIEMBRE")
     private String septiembre;
     
-    @Column(name = "octubre")
+    @Column(name = "OCTUBRE")
     private String octubre;
     
-    @Column(name = "noviembre")
+    @Column(name = "NOVIEMBRE")
     private String noviembre;
     
-    @Column(name = "diciembre")
+    @Column(name = "DICIEMBRE")
     private String diciembre;
     
     @JoinColumn(name = "CATALOGO_PRODUCTO_ID")
@@ -81,6 +85,7 @@ public class RubroPlantilla implements Serializable{
     @JoinColumn(name = "PERIODO_ID")
     private Periodo periodo;
  
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rubroPlantilla",fetch = FetchType.EAGER)
     private List<RubroPlantillaEstudiante> detalles;
 
     public Long getId() {
@@ -249,5 +254,32 @@ public class RubroPlantilla implements Serializable{
         detalle.setRubroPlantilla(this);
         detalles.add(detalle);
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 59 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final RubroPlantilla other = (RubroPlantilla) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
     
 }

@@ -100,3 +100,35 @@ create table RUBRO_ESTUDIANTE(
     primary key (ID)
 );
 
+create table RUBRO_PLANTILLA( 
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) ,
+    CATALOGO_PRODUCTO_ID BIGINT,
+    PERIODO_ID BIGINT,
+    NOMBRE varchar(100),
+    VALOR decimal(7,2),
+    DIAS_CREDITO int,
+    ENERO varchar(1),
+    FEBRERO varchar(1),
+    MARZO varchar(1),
+    ABRIL varchar(1),
+    MAYO varchar(1),
+    JUNIO varchar(1),
+    JULIO varchar(1),
+    AGOSTO varchar(1),
+    SEPTIEMBRE varchar(1),
+    OCTUBRE varchar(1),
+    NOVIEMBRE varchar(1),
+    DICIEMBRE varchar(1),
+    ESTADO_FACTURA varchar(1),
+    RUBRO_NIVEL_ID BIGINT,
+    ESTUDIANTE_INSCRITO_ID BIGINT,
+    primary key (ID)
+);
+
+create table RUBRO_PLANTILLA_ESTUDIANTE( 
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
+    RUBRO_PLANTILLA_ID BIGINT,
+    ESTUDIANTE_INSCRITO_ID BIGINT,
+    primary key (ID)
+);
+

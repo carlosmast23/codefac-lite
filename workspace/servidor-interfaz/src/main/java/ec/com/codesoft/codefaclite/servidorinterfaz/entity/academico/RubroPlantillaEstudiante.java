@@ -6,11 +6,13 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 /**
@@ -18,7 +20,7 @@ import javax.persistence.Table;
  * @author Carlos
  */
 @Entity
-@Table(name = "RUBROS_NIVEL")
+@Table(name = "RUBRO_PLANTILLA_ESTUDIANTE")
 public class RubroPlantillaEstudiante implements Serializable{
     
     @Id
@@ -26,8 +28,10 @@ public class RubroPlantillaEstudiante implements Serializable{
     @Column(name = "ID")
     private Long id;
     
+    @JoinColumn(name = "RUBRO_PLANTILLA_ID")
     private RubroPlantilla rubroPlantilla;
     
+    @JoinColumn(name = "ESTUDIANTE_INSCRITO_ID")
     private EstudianteInscrito estudianteInscrito;
 
     public Long getId() {
@@ -52,6 +56,31 @@ public class RubroPlantillaEstudiante implements Serializable{
 
     public void setEstudianteInscrito(EstudianteInscrito estudianteInscrito) {
         this.estudianteInscrito = estudianteInscrito;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 89 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final RubroPlantillaEstudiante other = (RubroPlantillaEstudiante) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
     }
     
     
