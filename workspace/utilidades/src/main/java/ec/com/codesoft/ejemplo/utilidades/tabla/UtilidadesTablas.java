@@ -9,6 +9,7 @@ import java.util.List;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -47,6 +48,17 @@ public abstract class UtilidadesTablas {
             tabla.getColumnModel().getColumn(columna).setCellRenderer(tcr);
         }
 
+    }
+    
+    public static DefaultTableModel crearModeloTabla(String titulos[],Class[] tipoDatoFilas)
+    {
+         DefaultTableModel defaultTableModel=new javax.swing.table.DefaultTableModel(titulos,0) 
+         {
+             public Class getColumnClass(int columnIndex) {
+                return tipoDatoFilas [columnIndex];
+            }
+        };    
+         return defaultTableModel;
     }
    
 }
