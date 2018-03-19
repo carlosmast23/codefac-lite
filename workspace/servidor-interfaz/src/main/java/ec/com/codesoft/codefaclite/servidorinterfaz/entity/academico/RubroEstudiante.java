@@ -138,6 +138,12 @@ public class RubroEstudiante implements Serializable{
             }
             return null;
         }
+
+        public String getLetra() {
+            return letra;
+        }
+        
+        
     }
     
 }
