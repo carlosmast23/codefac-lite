@@ -15,6 +15,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JRadioButton;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
@@ -42,7 +43,7 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
 
         jLabel3 = new javax.swing.JLabel();
         buttonGroup1 = new javax.swing.ButtonGroup();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jTabPanel = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         cmbPeriodo = new javax.swing.JComboBox<>();
@@ -168,7 +169,7 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
                 .addContainerGap(207, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Datos Generales", jPanel2);
+        jTabPanel.addTab("Datos Generales", jPanel2);
 
         jLabel8.setText("Cursos Sin Registrar:");
 
@@ -266,7 +267,7 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
                 .addContainerGap(69, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Registrar Estudiantes", jPanel3);
+        jTabPanel.addTab("Registrar Estudiantes", jPanel3);
 
         jToolBar1.setBorder(javax.swing.BorderFactory.createTitledBorder("Meses Generar"));
 
@@ -397,9 +398,9 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
                 .addContainerGap(318, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Generar Rubros", jPanel4);
+        jTabPanel.addTab("Generar Rubros", jPanel4);
 
-        getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
+        getContentPane().add(jTabPanel, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -445,7 +446,7 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane jTabPanel;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JTable tblDatosRegistrados;
     private javax.swing.JTable tblDatosSinRegistrar;
@@ -697,6 +698,15 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
     public void setCmbMesGenerar(JComboBox<MesEnum> cmbMesGenerar) {
         this.cmbMesGenerar = cmbMesGenerar;
     }
+
+    public JTabbedPane getjTabPanel() {
+        return jTabPanel;
+    }
+
+    public void setjTabPanel(JTabbedPane jTabPanel) {
+        this.jTabPanel = jTabPanel;
+    }
+    
     
     
     

@@ -130,7 +130,10 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
         //Cuando se cargue un dato mandar por defecto el periodo que ya estuvo grabado
         cargarDatos();
         cargarDatosDetallesMap();
+        
         getCmbCursoSinRegistrar().setSelectedIndex(0);
+        //Habilitar la pestaña de generar los rubros porque ya existe un dato
+        this.getjTabPanel().setEnabledAt(2,true);
         //cargarEstudiantesInscritosTabla(rubroPlantilla.get);
         //cargarEstudiantesSinInscribirTabla(nivelAcademico);
     }
@@ -138,7 +141,7 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
     @Override
     public void limpiar() {
         limpiarVariables();        
-        cargarDatosDetallesMap();
+        ///cargarDatosDetallesMap();
                 
     }
 
@@ -217,10 +220,11 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
                 
                 //TODO: Ver como se puede mejorar esta parte
                 //Vuelvo a seleccionar el combo construido
-                if(getCmbCursosRegistrados().getSize().equals(1))
+                int nuevoTamanio=getCmbCursosRegistrados().getModel().getSize();
+                if(getCmbCursosRegistrados().getModel().getSize()==1)
                 {
                     //Si solo existe un dato selecciona el primero
-                    getCmbCursosRegistrados().setSelectedIndex(1);
+                    getCmbCursosRegistrados().setSelectedIndex(0);
                 }
                 else
                 {
@@ -259,6 +263,7 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
                         try {
                             //Solo generar si todavia no se ha generado
                             EnumSiNo enumSiNo=rubroPlantilla.obtenerMesPorEnum(mesEnum);
+                            
                             if(enumSiNo.equals(EnumSiNo.NO))
                             {
                                 rubroPlantilla = ServiceFactory.getFactory().getRubroEstudianteServiceIf().crearRubroEstudiantesDesdePlantila(rubroPlantilla, mesEnum, nombreMes);
@@ -436,6 +441,17 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
     private void limpiarVariables() {
         this.rubroPlantilla=new RubroPlantilla();
         this.rubroPlantilla.setDetalles(new ArrayList<RubroPlantillaEstudiante>());
+        this.estudiantesRegistradosMap=new HashMap<NivelAcademico,List<RubroPlantillaEstudiante>>();
+        
+        //Esta opcion de generar rubros dejo por defecto desabilitada , solo se habilita cuando ya esta grabado el dato
+        this.getjTabPanel().setEnabledAt(2,false);
+        
+        //Limpiar las tablas actuales
+        getCmbCursosRegistrados().removeAllItems();
+        //Limpiar la tabla de los estudiante registrados
+        getTblDatosRegistrados().setModel(new DefaultTableModel());
+        
+        getCmbPeriodo().setSelectedIndex(0);
     }
 
     private void setearVariables() {
