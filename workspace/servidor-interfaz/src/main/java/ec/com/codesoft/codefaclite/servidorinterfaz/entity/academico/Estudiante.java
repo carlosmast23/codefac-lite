@@ -75,7 +75,9 @@ public class Estudiante implements Serializable {
     @JoinColumn(name = "PERSONA_ID")
     @ManyToOne
     private Persona representante;
-
+    @JoinColumn(name = "PERSONA2_ID")
+    @ManyToOne
+    private Persona representante2;
     @JoinColumn(name = "NACIONALIDAD_ID")
     @ManyToOne
     private Nacionalidad nacionalidad;
@@ -258,6 +260,14 @@ public class Estudiante implements Serializable {
 
     public void setNacionalidad(Nacionalidad nacionalidad) {
         this.nacionalidad = nacionalidad;
+    }
+
+    public Persona getRepresentante2() {
+        return representante2;
+    }
+
+    public void setRepresentante2(Persona representante2) {
+        this.representante2 = representante2;
     }
     
         ///Metodos personalizados 

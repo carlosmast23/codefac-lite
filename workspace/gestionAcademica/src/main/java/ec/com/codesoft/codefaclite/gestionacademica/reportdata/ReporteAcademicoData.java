@@ -19,7 +19,7 @@ public class ReporteAcademicoData {
     private String representanteEstudiante;
     private String nivelAcademicoEstudiante;
 
-    public ReporteAcademicoData(String cedulaEstudiante, String nombresEstudiante, String apellidosEstudiante, String emailEstudiante, String telefonoEstudiante, String representanteEstudiante, String nivelAcademicoEstudiante) {
+       public ReporteAcademicoData(String cedulaEstudiante, String nombresEstudiante, String apellidosEstudiante, String emailEstudiante, String telefonoEstudiante, String representanteEstudiante, String nivelAcademicoEstudiante) {
         this.cedulaEstudiante = cedulaEstudiante;
         this.nombresEstudiante = nombresEstudiante;
         this.apellidosEstudiante = apellidosEstudiante;

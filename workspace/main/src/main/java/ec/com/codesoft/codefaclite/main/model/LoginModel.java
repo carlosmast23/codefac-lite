@@ -50,29 +50,21 @@ public class LoginModel extends LoginFormDialog{
         getBtnIngresar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String clave=new String(getTxtClave().getPassword());
-                if(!getTxtUsuario().getText().equals("") && !clave.equals(""))
-                {
-                    try {
-                        usuario=usuarioServicio.login(getTxtUsuario().getText(),clave);
-                        if(usuario!=null)
-                        {
-                            //JOptionPane.showMessageDialog(null,"Usuario correcto");
-                            dispose();
-                        }
-                        else
-                        {
-                            DialogoCodefac.mensaje("Error Login","Datos Incorrectos",DialogoCodefac.MENSAJE_INCORRECTO);
-                        }
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    
-                }
-                else
-                {
-                    DialogoCodefac.mensaje("Advertencia Login","Ingrese todos los campos",DialogoCodefac.MENSAJE_ADVERTENCIA);
-                }
+                ingresarSistema();
+            }
+        });
+        
+        getTxtClave().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ingresarSistema();
+            }
+        });
+        
+        getTxtUsuario().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ingresarSistema();
             }
         });
     }
@@ -80,6 +72,33 @@ public class LoginModel extends LoginFormDialog{
     public Usuario getUsuarioLogin()
     {
         return usuario;
+    }
+    
+    private void ingresarSistema()
+    {
+        String clave=new String(getTxtClave().getPassword());
+        if(!getTxtUsuario().getText().equals("") && !clave.equals(""))
+        {
+            try {
+                usuario=usuarioServicio.login(getTxtUsuario().getText(),clave);
+                if(usuario!=null)
+                {
+                    //JOptionPane.showMessageDialog(null,"Usuario correcto");
+                    dispose();
+                }
+                else
+                {
+                    DialogoCodefac.mensaje("Error Login","Datos Incorrectos",DialogoCodefac.MENSAJE_INCORRECTO);
+                }
+            } catch (RemoteException ex) {
+                Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+        else
+        {
+            DialogoCodefac.mensaje("Advertencia Login","Ingrese todos los campos",DialogoCodefac.MENSAJE_ADVERTENCIA);
+        }
     }
     
 }
