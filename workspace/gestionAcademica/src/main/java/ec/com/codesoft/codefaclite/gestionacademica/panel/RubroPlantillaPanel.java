@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -84,6 +85,8 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
         jLabel10 = new javax.swing.JLabel();
         txtNombreMes = new javax.swing.JTextField();
         btnGenerar = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        cmbMesGenerar = new javax.swing.JComboBox<>();
 
         jLabel3.setText("jLabel3");
 
@@ -265,75 +268,87 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
 
         jTabbedPane1.addTab("Registrar Estudiantes", jPanel3);
 
-        jToolBar1.setBorder(javax.swing.BorderFactory.createTitledBorder("Meses"));
+        jToolBar1.setBorder(javax.swing.BorderFactory.createTitledBorder("Meses Generar"));
 
         chkEnero.setText("Enero");
+        chkEnero.setEnabled(false);
         chkEnero.setFocusable(false);
         chkEnero.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         chkEnero.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(chkEnero);
 
         chkFebrero.setText("Febrero");
+        chkFebrero.setEnabled(false);
         chkFebrero.setFocusable(false);
         chkFebrero.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         chkFebrero.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(chkFebrero);
 
         chkMarzo.setText("Marzo");
+        chkMarzo.setEnabled(false);
         chkMarzo.setFocusable(false);
         chkMarzo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         chkMarzo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(chkMarzo);
 
         chkAbril.setText("Abril");
+        chkAbril.setEnabled(false);
         chkAbril.setFocusable(false);
         chkAbril.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         chkAbril.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(chkAbril);
 
         chkMayo.setText("Mayo");
+        chkMayo.setEnabled(false);
         chkMayo.setFocusable(false);
         chkMayo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         chkMayo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(chkMayo);
 
         chkJunio.setText("Junio");
+        chkJunio.setEnabled(false);
         chkJunio.setFocusable(false);
         chkJunio.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         chkJunio.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(chkJunio);
 
         chkJulio.setText("Julio");
+        chkJulio.setEnabled(false);
         chkJulio.setFocusable(false);
         chkJulio.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         chkJulio.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(chkJulio);
 
         chkAgosto.setText("Agosto");
+        chkAgosto.setEnabled(false);
         chkAgosto.setFocusable(false);
         chkAgosto.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         chkAgosto.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(chkAgosto);
 
         chkSeptiembre.setText("Septiembre");
+        chkSeptiembre.setEnabled(false);
         chkSeptiembre.setFocusable(false);
         chkSeptiembre.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         chkSeptiembre.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(chkSeptiembre);
 
         chkOctubre.setText("Octubre");
+        chkOctubre.setEnabled(false);
         chkOctubre.setFocusable(false);
         chkOctubre.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         chkOctubre.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(chkOctubre);
 
         chkNoviembre.setText("Noviembre");
+        chkNoviembre.setEnabled(false);
         chkNoviembre.setFocusable(false);
         chkNoviembre.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         chkNoviembre.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(chkNoviembre);
 
         chkDiciembre.setText("Diciembre");
+        chkDiciembre.setEnabled(false);
         chkDiciembre.setFocusable(false);
         chkDiciembre.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         chkDiciembre.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -343,19 +358,25 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
 
         btnGenerar.setText("Generar");
 
+        jLabel7.setText("Mes:");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 630, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel10)
+                        .addComponent(jLabel7)
                         .addGap(18, 18, 18)
-                        .addComponent(txtNombreMes, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cmbMesGenerar, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtNombreMes, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addComponent(btnGenerar, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(277, Short.MAX_VALUE))
         );
@@ -365,10 +386,14 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
                 .addGap(20, 20, 20)
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(txtNombreMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnGenerar))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel10)
+                        .addComponent(txtNombreMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnGenerar))
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel7)
+                        .addComponent(cmbMesGenerar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(318, Short.MAX_VALUE))
         );
 
@@ -402,6 +427,7 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
     private javax.swing.JRadioButton chkSeptiembre;
     private javax.swing.JComboBox<NivelAcademico> cmbCursoSinRegistrar;
     private javax.swing.JComboBox<NivelAcademico> cmbCursosRegistrados;
+    private javax.swing.JComboBox<MesEnum> cmbMesGenerar;
     private javax.swing.JComboBox<Periodo> cmbPeriodo;
     private javax.swing.JComboBox<CatalogoProducto> cmbRubro;
     private javax.swing.JLabel jLabel1;
@@ -411,6 +437,7 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel2;
@@ -663,6 +690,15 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
         this.btnAgregarRubro = btnAgregarRubro;
     }
 
+    public JComboBox<MesEnum> getCmbMesGenerar() {
+        return cmbMesGenerar;
+    }
+
+    public void setCmbMesGenerar(JComboBox<MesEnum> cmbMesGenerar) {
+        this.cmbMesGenerar = cmbMesGenerar;
+    }
+    
+    
     
     
 }

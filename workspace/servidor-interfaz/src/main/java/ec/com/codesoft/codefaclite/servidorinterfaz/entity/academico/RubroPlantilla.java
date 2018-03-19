@@ -5,6 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -253,6 +255,59 @@ public class RubroPlantilla implements Serializable{
         
         detalle.setRubroPlantilla(this);
         detalles.add(detalle);
+    }
+    
+    public EnumSiNo obtenerMesPorEnum(MesEnum mesEnum)
+    {
+        switch (mesEnum) {
+            case ENERO: return EnumSiNo.getEnumByLetra(enero);
+            case FEBRERO:return EnumSiNo.getEnumByLetra(febrero);
+            case MARZO:return EnumSiNo.getEnumByLetra(marzo);
+            case ABRIL:return EnumSiNo.getEnumByLetra(abril);
+             case MAYO:return EnumSiNo.getEnumByLetra(mayo);
+            case JUNIO:return EnumSiNo.getEnumByLetra(junio);
+            case JULIO:return EnumSiNo.getEnumByLetra(julio);
+            case AGOSTO:return EnumSiNo.getEnumByLetra(agosto);
+            case SEPTIEMBRE:return EnumSiNo.getEnumByLetra(septiembre);
+            case OCTUBRE:return EnumSiNo.getEnumByLetra(octubre);
+            case NOVIEMBRE:return EnumSiNo.getEnumByLetra(noviembre);
+            case DICIEMBRE:return EnumSiNo.getEnumByLetra(diciembre);
+
+        }
+        return null;
+    }
+    
+    public void cambiarEstadoMes(MesEnum mesEnum,Boolean opcion)
+    {
+        String opcionStr=EnumSiNo.getEnumByBoolean(opcion).getLetra();
+        
+        switch (mesEnum) {
+            case ENERO:enero=opcionStr;
+                break;
+            case FEBRERO:febrero=opcionStr;
+                break;
+            case MARZO:marzo=opcionStr;
+                break;
+            case ABRIL:abril=opcionStr;
+                break;
+            case MAYO:mayo=opcionStr;
+                break;
+            case JUNIO:junio=opcionStr;
+                break;
+            case JULIO:julio=opcionStr;
+                break;
+            case AGOSTO:agosto=opcionStr;
+                break;
+            case SEPTIEMBRE:septiembre=opcionStr;
+                break;
+            case OCTUBRE:octubre=opcionStr;
+                break;
+            case NOVIEMBRE:noviembre=opcionStr;
+                break;
+            case DICIEMBRE:diciembre=opcionStr;
+                break;
+
+        }
     }
 
     @Override

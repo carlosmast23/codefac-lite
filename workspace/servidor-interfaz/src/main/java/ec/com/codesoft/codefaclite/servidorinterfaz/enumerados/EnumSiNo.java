@@ -10,13 +10,16 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.enumerados;
  * @author Carlos
  */
 public enum EnumSiNo {
-    NO("no","n"),
-    SI("si","s");
+    NO("no","n",false),
+    SI("si","s",true);
 
-    private EnumSiNo(String nombre,String letra) {
+    private EnumSiNo(String nombre,String letra,Boolean bool) {
         this.nombre=nombre;
         this.letra = letra;
+        this.bool=bool;
     }
+    
+    private Boolean bool;
     
     private String letra;
     private String nombre;
@@ -28,6 +31,12 @@ public enum EnumSiNo {
     public String getNombre() {
         return nombre;
     }
+
+    public Boolean getBool() {
+        return bool;
+    }
+    
+    
 
     @Override
     public String toString() {
@@ -45,6 +54,14 @@ public enum EnumSiNo {
             }
         }
         return null;
+    }
+    
+    public static EnumSiNo getEnumByBoolean(Boolean opcion)
+    {
+        if(opcion)
+            return EnumSiNo.SI;
+        else
+            return EnumSiNo.NO;
     }
     
 }
