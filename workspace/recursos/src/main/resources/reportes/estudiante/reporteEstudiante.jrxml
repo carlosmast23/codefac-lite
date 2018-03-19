@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
-	<property name="ireport.zoom" value="0.75"/>
+	<property name="ireport.zoom" value="1.3286707500000006"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
@@ -19,6 +19,27 @@
 	<parameter name="pl_img_logo_pie" class="java.io.InputStream"/>
 	<parameter name="pl_url_cabecera" class="java.lang.String"/>
 	<parameter name="pl_url_piepagina" class="java.lang.String"/>
+	<parameter name="codSistema" class="java.lang.String"/>
+	<parameter name="codAuxiliar" class="java.lang.String"/>
+	<parameter name="cedula" class="java.lang.String"/>
+	<parameter name="correo" class="java.lang.String"/>
+	<parameter name="nombres" class="java.lang.String"/>
+	<parameter name="apellidos" class="java.lang.String"/>
+	<parameter name="telefono" class="java.lang.String"/>
+	<parameter name="celular" class="java.lang.String"/>
+	<parameter name="direccion" class="java.lang.String"/>
+	<parameter name="datosAdicionales" class="java.lang.String"/>
+	<parameter name="etnia" class="java.lang.String"/>
+	<parameter name="conadis" class="java.lang.String"/>
+	<parameter name="observacionesDiscapacidad" class="java.lang.String"/>
+	<parameter name="porcentajeDiscapacidad" class="java.lang.String"/>
+	<parameter name="genero" class="java.lang.String"/>
+	<parameter name="nacionalidad" class="java.lang.String"/>
+	<parameter name="estado" class="java.lang.String"/>
+	<parameter name="discapacidad" class="java.lang.String"/>
+	<parameter name="fechaNacimiento" class="java.lang.String"/>
+	<parameter name="representante1" class="java.lang.String"/>
+	<parameter name="representante2" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -56,13 +77,99 @@
 		<band height="64" splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="168" splitType="Stretch"/>
+		<band height="168" splitType="Stretch">
+			<textField>
+				<reportElement x="36" y="14" width="100" height="20" uuid="ead2944a-9abe-4855-9d15-8d9bab007b09"/>
+				<textFieldExpression><![CDATA[$P{codSistema}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="26" y="47" width="100" height="20" uuid="6ea6fdd4-070e-45e9-bff7-7fedb2994227"/>
+				<textFieldExpression><![CDATA[$P{codAuxiliar}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="158" y="14" width="100" height="20" uuid="7eab358a-282e-4f5b-a792-f0b0a8ec96d6"/>
+				<textFieldExpression><![CDATA[$P{cedula}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="158" y="47" width="100" height="20" uuid="b0f1fac2-58bf-42b9-b9a4-d779062f851e"/>
+				<textFieldExpression><![CDATA[$P{correo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="289" y="14" width="100" height="20" uuid="59cff3ba-bb6b-4ecc-ae27-0d3a26eac1d4"/>
+				<textFieldExpression><![CDATA[$P{correo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="289" y="47" width="100" height="20" uuid="9f563510-8216-4849-b297-6c878855a975"/>
+				<textFieldExpression><![CDATA[$P{nombres}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="26" y="88" width="100" height="20" uuid="daecd04c-0199-4bb5-96b6-ff354550e192"/>
+				<textFieldExpression><![CDATA[$P{telefono}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="158" y="74" width="100" height="20" uuid="c8723fad-d7ec-4578-bf93-d2c303763a48"/>
+				<textFieldExpression><![CDATA[$P{celular}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="289" y="74" width="100" height="20" uuid="8d893ea1-4eff-4acc-bc4b-a099e6f92378"/>
+				<textFieldExpression><![CDATA[$P{direccion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="128" width="100" height="20" uuid="8e7e4e47-560b-4c95-8019-efecfedf3923"/>
+				<textFieldExpression><![CDATA[$P{datosAdicionales}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="158" y="108" width="100" height="20" uuid="28088f44-e1ac-4f7e-ab97-5de9f90f608c"/>
+				<textFieldExpression><![CDATA[$P{etnia}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="289" y="108" width="100" height="20" uuid="926c8a57-9b70-4e7a-8fde-170d6271d184"/>
+				<textFieldExpression><![CDATA[$P{conadis}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="158" y="128" width="100" height="20" uuid="9cf80424-0ca6-433f-ba61-45699807cec7"/>
+				<textFieldExpression><![CDATA[$P{observacionesDiscapacidad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="445" y="14" width="100" height="20" uuid="cc219477-ae9b-4796-aec3-12ffa152243c"/>
+				<textFieldExpression><![CDATA[$P{porcentajeDiscapacidad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="453" y="62" width="100" height="20" uuid="86a94b1b-d2c6-420c-817a-d6e20231b1e7"/>
+				<textFieldExpression><![CDATA[$P{genero}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="408" y="141" width="100" height="20" uuid="62eb3727-4610-4b3a-8dd2-49640dbe8ad4"/>
+				<textFieldExpression><![CDATA[$P{nacionalidad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="452" y="104" width="100" height="20" uuid="f64e3754-9686-4dca-adfe-9a284e0d6fcb"/>
+				<textFieldExpression><![CDATA[$P{estado}]]></textFieldExpression>
+			</textField>
+		</band>
 	</columnHeader>
 	<detail>
 		<band height="34" splitType="Stretch"/>
 	</detail>
 	<columnFooter>
-		<band height="45" splitType="Stretch"/>
+		<band height="45" splitType="Stretch">
+			<textField>
+				<reportElement x="74" y="20" width="100" height="20" uuid="ca3af568-2add-4137-bd16-a544a4d0c9ea"/>
+				<textFieldExpression><![CDATA[$P{discapacidad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="228" y="25" width="100" height="20" uuid="320720e0-f742-4b5c-9225-0516b0ec6dc6"/>
+				<textFieldExpression><![CDATA[$P{fechaNacimiento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="357" y="25" width="100" height="20" uuid="8b256abb-5a84-474c-b354-95be80030170"/>
+				<textFieldExpression><![CDATA[$P{representante1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="487" y="13" width="100" height="20" uuid="56566be2-21f7-4bf7-89b4-67f49b7e4fe6"/>
+				<textFieldExpression><![CDATA[$P{representante2}]]></textFieldExpression>
+			</textField>
+		</band>
 	</columnFooter>
 	<pageFooter>
 		<band height="54" splitType="Stretch">
