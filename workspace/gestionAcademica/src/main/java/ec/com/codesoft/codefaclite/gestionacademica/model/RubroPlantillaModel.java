@@ -10,11 +10,13 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.gestionacademica.busqueda.EstudianteInscritoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.gestionacademica.busqueda.NivelBusquedaDialogo;
 import ec.com.codesoft.codefaclite.gestionacademica.busqueda.RubroPlantillaBusquedaDialog;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.RubroPlantillaPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
@@ -212,26 +214,36 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
     private void listenerBotones()
     {
         
+        getBtnAgregarEstudiante().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                EstudianteInscritoBusquedaDialogo busquedaDialogo = new EstudianteInscritoBusquedaDialogo();
+                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialogo);
+                buscarDialogoModel.setVisible(true);
+                EstudianteInscrito estudianteInscrito = (EstudianteInscrito) buscarDialogoModel.getResultado();
+                
+                if (estudianteInscrito != null) {
+                    //Solo agregar si no encuentra en la lista de estudiantes inscritos
+                    if (!verificarExisteEstudianteInscrito(estudianteInscrito)) {
+                        Integer filaSeleccionada = getCmbCursosRegistrados().getSelectedIndex();
+                        pasarEstudiante(estudianteInscrito);
+                        actualizarDatosInscripciones(filaSeleccionada);
+                        DialogoCodefac.mensaje("Correcto","El estudiante se agrego correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+                        
+                    } else {
+                        DialogoCodefac.mensaje("Advertencia", "El estudiante ya se encuentra agregado",DialogoCodefac.MENSAJE_INCORRECTO);
+                    }
+                }
+
+            }
+        });
+        
         getBtnRegresar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Integer filaSeleccionada=getCmbCursosRegistrados().getSelectedIndex();
+                Integer filaSeleccionada = getCmbCursosRegistrados().getSelectedIndex();
                 regresarEstudiantes();
-                cargarComboNivelesInscritos();
-                //Selecciono el mismo dato para que vuelvan a cargar los datos
-                getCmbCursoSinRegistrar().setSelectedIndex(getCmbCursoSinRegistrar().getSelectedIndex());
-                
-                int nuevoTamanio=getCmbCursosRegistrados().getModel().getSize();
-                if(getCmbCursosRegistrados().getModel().getSize()==1)
-                {
-                    //Si solo existe un dato selecciona el primero
-                    getCmbCursosRegistrados().setSelectedIndex(0);
-                }
-                else
-                {
-                    //Selecciona el anterior dato
-                    getCmbCursosRegistrados().setSelectedIndex(filaSeleccionada);
-                }
+                actualizarDatosInscripciones(filaSeleccionada);
                 
             }
         });
@@ -241,27 +253,9 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
             public void actionPerformed(ActionEvent e) {
                 
                 //Guardo la fila seleccionada porque va a recostruir los combos 
-                Integer filaSeleccionada=getCmbCursosRegistrados().getSelectedIndex();
-                
+                Integer filaSeleccionada=getCmbCursosRegistrados().getSelectedIndex();                
                 pasarEstudiantes();
-                cargarComboNivelesInscritos();
-                
-                //Selecciono el mismo dato para que vuelvan a cargar los datos
-                getCmbCursoSinRegistrar().setSelectedIndex(getCmbCursoSinRegistrar().getSelectedIndex());
-                
-                //TODO: Ver como se puede mejorar esta parte
-                //Vuelvo a seleccionar el combo construido
-                int nuevoTamanio=getCmbCursosRegistrados().getModel().getSize();
-                if(getCmbCursosRegistrados().getModel().getSize()==1)
-                {
-                    //Si solo existe un dato selecciona el primero
-                    getCmbCursosRegistrados().setSelectedIndex(0);
-                }
-                else
-                {
-                    //Selecciona el anterior dato
-                    getCmbCursosRegistrados().setSelectedIndex(filaSeleccionada);
-                }
+                actualizarDatosInscripciones(filaSeleccionada);
                 
             }
         });
@@ -316,6 +310,48 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
     }
     
     /**
+     * Verifica si un estudiante inscrito ya esta en el map de estudiantes inscritos
+     * @return 
+     */
+    private boolean verificarExisteEstudianteInscrito(EstudianteInscrito estudianteInscritos)
+    {
+        for (Map.Entry<NivelAcademico, List<RubroPlantillaEstudiante>> entry : estudiantesRegistradosMap.entrySet()) {
+            NivelAcademico nivelAcademico = entry.getKey();
+            List<RubroPlantillaEstudiante> detalles = entry.getValue();
+            
+            for (RubroPlantillaEstudiante detalle : detalles) {
+                if(detalle.getEstudianteInscrito().equals(estudianteInscritos))
+                {
+                    return true;
+                }
+            }
+            
+        }
+        return false;
+    }
+    
+    /**
+     * Actualiza los combos y tablas utilizadas para la inscripcion de los estudiantes
+     * @param filaSeleccionada 
+     */
+    private void actualizarDatosInscripciones(Integer filaSeleccionada) {
+        cargarComboNivelesInscritos();
+        //Selecciono el mismo dato para que vuelvan a cargar los datos
+        getCmbCursoSinRegistrar().setSelectedIndex(getCmbCursoSinRegistrar().getSelectedIndex());
+
+        //TODO: Ver como se puede mejorar esta parte
+        //Vuelvo a seleccionar el combo construido
+        int nuevoTamanio = getCmbCursosRegistrados().getModel().getSize();
+        if (getCmbCursosRegistrados().getModel().getSize() == 1) {
+            //Si solo existe un dato selecciona el primero
+            getCmbCursosRegistrados().setSelectedIndex(0);
+        } else {
+            //Selecciona el anterior dato
+            getCmbCursosRegistrados().setSelectedIndex(filaSeleccionada);
+        }
+    }
+    
+    /**
      * Verifica en la lista de estudiantes para ver si existe el estudiante inscrito
      * @return 
      */
@@ -331,6 +367,17 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
         return false;
     }
     
+    private void pasarEstudiante(EstudianteInscrito estudianteInscrito)
+    {
+        //Si ya existe el dato en la lista de eliminar lo elimino antes de agregar
+        if (containListaEliminados(estudianteInscrito)) {
+            estudiantesEliminar.remove(estudianteInscrito);
+        } else //Si no existe agrego normalmente el dato
+        {
+            inscribirEstudianteMap(estudianteInscrito);
+        }   
+    }
+    
     private void pasarEstudiantes()
     {
         DefaultTableModel modeloTabla=(DefaultTableModel) getTblDatosSinRegistrar().getModel();
@@ -344,15 +391,7 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
             {
                 EstudianteInscrito estudianteInscrito=(EstudianteInscrito) modeloTabla.getValueAt(i,0);
                 
-                //Si ya existe el dato en la lista de eliminar lo elimino antes de agregar
-                if(containListaEliminados(estudianteInscrito))
-                {
-                   estudiantesEliminar.remove(estudianteInscrito);
-                }
-                else //Si no existe agrego normalmente el dato
-                {
-                    inscribirEstudianteMap(estudianteInscrito);
-                }                
+                pasarEstudiante(estudianteInscrito);        
                 
             }
         }        
