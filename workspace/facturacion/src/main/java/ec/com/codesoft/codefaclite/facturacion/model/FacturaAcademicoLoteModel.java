@@ -20,7 +20,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
@@ -60,21 +59,21 @@ import org.eclipse.persistence.sessions.factories.SessionFactory;
  *
  * @author Carlos
  */
-public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel{
+public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel {
 
     /**
-     * Map que permite almacenar todos los datos por curso y luego por estudiante y rubros a facturar
+     * Map que permite almacenar todos los datos por curso y luego por
+     * estudiante y rubros a facturar
      */
-    private Map<NivelAcademico,Map<EstudianteInscrito,List<RubroEstudiante>>> mapDatosFacturar;
-    
+    private Map<NivelAcademico, Map<EstudianteInscrito, List<RubroEstudiante>>> mapDatosFacturar;
+
     /**
      * Informacion del map por defecto cargado
      */
-    private Map<EstudianteInscrito,List<RubroEstudiante>> mapEstudianteRubros;
-    
-    private FacturaAcademicoLoteModel instancia=this;
-    
-   
+    private Map<EstudianteInscrito, List<RubroEstudiante>> mapEstudianteRubros;
+
+    private FacturaAcademicoLoteModel instancia = this;
+
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         cargarValoresIniciales();
@@ -90,7 +89,7 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel{
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
-        
+
     }
 
     @Override
@@ -120,8 +119,8 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel{
 
     @Override
     public void limpiar() {
-        mapDatosFacturar=new HashMap<NivelAcademico,Map<EstudianteInscrito, List<RubroEstudiante>>>();
-        mapEstudianteRubros=new HashMap<EstudianteInscrito, List<RubroEstudiante>>();
+        mapDatosFacturar = new HashMap<NivelAcademico, Map<EstudianteInscrito, List<RubroEstudiante>>>();
+        mapEstudianteRubros = new HashMap<EstudianteInscrito, List<RubroEstudiante>>();
     }
 
     @Override
@@ -151,15 +150,13 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel{
             for (Periodo periodo : periodos) {
                 getCmbPeriodo().addItem(periodo);
             }
-        } 
-        catch (RemoteException ex) {
+        } catch (RemoteException ex) {
             Logger.getLogger(FacturaAcademicoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
-    
-    private void listenerCombos() 
-    {
+
+    private void listenerCombos() {
         getCmbPeriodo().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -167,8 +164,8 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel{
                     Periodo periodoSeleccionado = (Periodo) getCmbPeriodo().getSelectedItem();
                     Map<String, Object> mapParametros = new HashMap<String, Object>();
                     mapParametros.put("periodo", periodoSeleccionado);
-                    List<NivelAcademico> niveles= ServiceFactory.getFactory().getNivelAcademicoServiceIf().obtenerPorMap(mapParametros);
-                    
+                    List<NivelAcademico> niveles = ServiceFactory.getFactory().getNivelAcademicoServiceIf().obtenerPorMap(mapParametros);
+
                     //Cargar todos los niveles disponibles para ese periodo activo
                     getCmbNivelAcademico().removeAllItems();
                     for (NivelAcademico nivel : niveles) {
@@ -179,41 +176,41 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel{
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(FacturaAcademicoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
-               
+
             }
         });
-        
+
         getCmbNivelAcademico().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-              
+
                 try {
                     getCmbRubrosNivel().removeAllItems();
-                    NivelAcademico nivelSeleccionado=(NivelAcademico) getCmbNivelAcademico().getSelectedItem();
+                    NivelAcademico nivelSeleccionado = (NivelAcademico) getCmbNivelAcademico().getSelectedItem();
                     Map<String, Object> mapParametros = new HashMap<String, Object>();
                     //Cargar rubros generales para todos los niveles
-                    mapParametros.put("nivel",null);
-                    mapParametros.put("periodo",nivelSeleccionado.getPeriodo());
-                    List<RubrosNivel> rubrosSinNivel=ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorMap(mapParametros);
+                    mapParametros.put("nivel", null);
+                    mapParametros.put("periodo", nivelSeleccionado.getPeriodo());
+                    List<RubrosNivel> rubrosSinNivel = ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorMap(mapParametros);
                     for (RubrosNivel rubrosNivel : rubrosSinNivel) {
                         getCmbRubrosNivel().addItem(rubrosNivel);
                     }
-                    
+
                     //Cargar rubros exclusivos de los niveles actuales
                     mapParametros.clear();
-                    mapParametros.put("nivel",nivelSeleccionado.getNivel());
-                    mapParametros.put("periodo",nivelSeleccionado.getPeriodo());
-                    List<RubrosNivel> rubros=ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorMap(mapParametros);
-                    
+                    mapParametros.put("nivel", nivelSeleccionado.getNivel());
+                    mapParametros.put("periodo", nivelSeleccionado.getPeriodo());
+                    List<RubrosNivel> rubros = ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorMap(mapParametros);
+
                     //Agregar todos los rubros disponibles para el nivels
                     for (RubrosNivel rubro : rubros) {
                         getCmbRubrosNivel().addItem(rubro);
-                    } 
-                    
+                    }
+
                     //Agregar los estudiantes del nivel a la tabla
                     cargarEstudiantesNuevos();
                     cargarTabla();
-                    
+
                 } catch (RemoteException ex) {
                     Logger.getLogger(FacturaAcademicoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ServicioCodefacException ex) {
@@ -221,33 +218,32 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel{
                 }
             }
         });
-        
+
         getCmbRubrosNivel().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //cargarEstudiantesNuevos();
                 //cargarTabla();
-                
+
             }
         });
-        
+
     }
-    
-    
+
     private void cargarEstudiantesNuevos() {
-        mapEstudianteRubros=new HashMap<EstudianteInscrito, List<RubroEstudiante>>();
-        
+        mapEstudianteRubros = new HashMap<EstudianteInscrito, List<RubroEstudiante>>();
+
         NivelAcademico nivelAcademico = (NivelAcademico) getCmbNivelAcademico().getSelectedItem();
         //RubrosNivel rubroNivel = (RubrosNivel) getCmbRubrosNivel().getSelectedItem();
-        
+
         if (nivelAcademico != null) {
             try {
                 Map<String, Object> mapParametros = new HashMap<String, Object>();
                 mapParametros.put("nivelAcademico", nivelAcademico);
                 List<EstudianteInscrito> estudiantesInscritos = ServiceFactory.getFactory().getEstudianteInscritoServiceIf().obtenerPorMap(mapParametros);
-                
+
                 for (EstudianteInscrito estudiantesInscrito : estudiantesInscritos) {
-                    mapEstudianteRubros.put(estudiantesInscrito,new ArrayList<RubroEstudiante>());
+                    mapEstudianteRubros.put(estudiantesInscrito, new ArrayList<RubroEstudiante>());
                 }
             } catch (RemoteException ex) {
                 Logger.getLogger(FacturaAcademicoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -255,88 +251,79 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel{
                 Logger.getLogger(FacturaAcademicoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
 
     }
-    
-    
+
     private void cargarTabla() {
-        
-        DefaultTableModel modeloTabla = crearModeloTabla(crearTituloTabla(),crearColumnasTabla());
-        
+
+        DefaultTableModel modeloTabla = crearModeloTabla(crearTituloTabla(), crearColumnasTabla());
+
         for (Map.Entry<EstudianteInscrito, List<RubroEstudiante>> entry : mapEstudianteRubros.entrySet()) {
             EstudianteInscrito estudianteInscrito = entry.getKey();
             List<RubroEstudiante> listaRubrosEstudiante = entry.getValue();
-            
-            Vector<Object> datos=new Vector<Object>();
+
+            Vector<Object> datos = new Vector<Object>();
             datos.add(true);
             datos.add(estudianteInscrito);
-            
+
             ListModel<RubrosNivel> rubrosList = getLstRubrosFacturar().getModel();
 
-            for (int i = 0; i < rubrosList.getSize(); i++) 
-            {
-                boolean rubroEncontrado=false;
+            for (int i = 0; i < rubrosList.getSize(); i++) {
+                boolean rubroEncontrado = false;
                 for (RubroEstudiante rubroEstudiante : listaRubrosEstudiante) {
-                    if(rubroEstudiante.getRubroNivel().equals(rubrosList.getElementAt(i)))
-                    {
-                        rubroEncontrado=true;
+                    if (rubroEstudiante.getRubroNivel().equals(rubrosList.getElementAt(i))) {
+                        rubroEncontrado = true;
                         break;
                     }
                 }
-                
-                if(rubroEncontrado)
-                {
+
+                if (rubroEncontrado) {
                     datos.add(true);
-                }
-                else
-                {
+                } else {
                     datos.add(false);
-                }                
+                }
 
             }
-            
+
             modeloTabla.addRow(datos);
-            
+
         }
-        
+
         //Setear los datos creados en la tabla
         getTblEstudiantesFacturar().setModel(modeloTabla);
-        
+
     }
-    
-    private Class[] crearColumnasTabla()
-    {
-        Vector<Class> columnas=new Vector<Class>();
+
+    private Class[] crearColumnasTabla() {
+        Vector<Class> columnas = new Vector<Class>();
         columnas.add(Boolean.class);
         columnas.add(EstudianteInscrito.class);
-        
-        ListModel<RubrosNivel> rubrosList=getLstRubrosFacturar().getModel();
-        
+
+        ListModel<RubrosNivel> rubrosList = getLstRubrosFacturar().getModel();
+
         for (int i = 0; i < rubrosList.getSize(); i++) {
             columnas.add(Boolean.class);
         }
-        
+
         return columnas.toArray(new Class[columnas.size()]);
-    
+
     }
-    
-    private String[] crearTituloTabla()
-    {
-        Vector<String> titulo=new Vector<String>();
+
+    private String[] crearTituloTabla() {
+        Vector<String> titulo = new Vector<String>();
         titulo.add("Opcion");
         titulo.add("Alumno");
-        
-        ListModel<RubrosNivel> rubrosList=getLstRubrosFacturar().getModel();
-        
+
+        ListModel<RubrosNivel> rubrosList = getLstRubrosFacturar().getModel();
+
         for (int i = 0; i < rubrosList.getSize(); i++) {
             titulo.add(rubrosList.getElementAt(i).getNombre());
         }
-        
+
         return titulo.toArray(new String[titulo.size()]);
-        
+
     }
-    
+
     private DefaultTableModel crearModeloTabla(String titulos[], Class[] tipoDatoFilas) {
         DefaultTableModel defaultTableModel = new javax.swing.table.DefaultTableModel(titulos, 0) {
             public Class getColumnClass(int columnIndex) {
@@ -350,60 +337,54 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel{
         getBtnAgregarRubrosNivel().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                RubrosNivel rubrosNivel=(RubrosNivel) getCmbRubrosNivel().getSelectedItem();               
+                RubrosNivel rubrosNivel = (RubrosNivel) getCmbRubrosNivel().getSelectedItem();
                 agregarRubroLista(rubrosNivel);
                 cargarRubrosLista();
                 cargarTabla();
             }
         });
-        
+
         getBtnAgregarCurso().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                NivelAcademico nivelAcademico=(NivelAcademico) getCmbNivelAcademico().getSelectedItem();
-                
-                if(mapEstudianteRubros!=null)
-                {
-                    Map<EstudianteInscrito,List<RubroEstudiante>> mapTemporal= mapDatosFacturar.get(nivelAcademico);
-                    if(mapTemporal==null)
-                    {
+                NivelAcademico nivelAcademico = (NivelAcademico) getCmbNivelAcademico().getSelectedItem();
+
+                if (mapEstudianteRubros != null) {
+                    Map<EstudianteInscrito, List<RubroEstudiante>> mapTemporal = mapDatosFacturar.get(nivelAcademico);
+                    if (mapTemporal == null) {
                         mapDatosFacturar.put(nivelAcademico, mapEstudianteRubros);
                     }
                 }
                 cargarCursosLista();
             }
         });
-        
-        
+
         getBtnFacturar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    List<ComprobanteDataInterface> comprobantes=facturarLote();
+                    List<ComprobanteDataInterface> comprobantes = facturarLote();
                     grabarFacturas(comprobantes);
-                    DialogoCodefac.mensaje("Correcto","Las facturas se están autorizando", DialogoCodefac.MENSAJE_CORRECTO);
-                    
-                    ClienteInterfaceComprobanteLote cic=new ClienteFacturaLoteImplComprobante(instancia);                     
-                    
-                    ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobanteLote(comprobantes,session.getUsuario(),cic);
-                    
-                    
-                    
+                    DialogoCodefac.mensaje("Correcto", "Las facturas se están autorizando", DialogoCodefac.MENSAJE_CORRECTO);
+
+                    ClienteInterfaceComprobanteLote cic = new ClienteFacturaLoteImplComprobante(instancia);
+
+                    ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobanteLote(comprobantes, session.getUsuario(), cic);
+
                 } catch (RemoteException ex) {
                     Logger.getLogger(FacturaAcademicoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
-       
+
     }
-    
-    private void grabarFacturas(List<ComprobanteDataInterface> comprobantes) 
-    {
+
+    private void grabarFacturas(List<ComprobanteDataInterface> comprobantes) {
         for (ComprobanteDataInterface comprobante : comprobantes) {
             try {
-                ComprobanteDataFactura comprobanteFactura=(ComprobanteDataFactura) comprobante;
-                Factura factura=comprobanteFactura.getFactura();
-                factura=ServiceFactory.getFactory().getFacturacionServiceIf().grabar(factura);
+                ComprobanteDataFactura comprobanteFactura = (ComprobanteDataFactura) comprobante;
+                Factura factura = comprobanteFactura.getFactura();
+                factura = ServiceFactory.getFactory().getFacturacionServiceIf().grabar(factura);
                 comprobanteFactura.setFactura(factura);
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(FacturaAcademicoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -412,42 +393,42 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel{
             }
         }
     }
-    
+
     /**
      * Obtiene todos los detalles de las facturas para facturar
-     * @return 
+     *
+     * @return
      */
-    private List<ComprobanteDataInterface> facturarLote()
-    {
+    private List<ComprobanteDataInterface> facturarLote() {
         //mapDatosFacturar;
-        List<ComprobanteDataInterface> comprobantesLista=new ArrayList<ComprobanteDataInterface>();
-        
+        List<ComprobanteDataInterface> comprobantesLista = new ArrayList<ComprobanteDataInterface>();
+
         for (Map.Entry<NivelAcademico, Map<EstudianteInscrito, List<RubroEstudiante>>> entry : mapDatosFacturar.entrySet()) {
             NivelAcademico nivelAcademico = entry.getKey();
             Map<EstudianteInscrito, List<RubroEstudiante>> rubrosEstudianteMap = entry.getValue();
-        
+
             for (Map.Entry<EstudianteInscrito, List<RubroEstudiante>> entry1 : rubrosEstudianteMap.entrySet()) {
                 EstudianteInscrito estudianteInscrito = entry1.getKey();
                 List<RubroEstudiante> rubrosEstudiantes = entry1.getValue();
-                
+
                 ///Generar los datos de la factura
                 Factura factura = generarFactura(estudianteInscrito, rubrosEstudiantes);
-                
+
                 //Datos adicionales en la factura
                 factura.addDatosAdicionalCorreo(estudianteInscrito.getEstudiante().getRepresentante().getCorreoElectronico());
-                factura.addDatoAdicional(DatosAdicionalesComprobanteEnum.NOMBRE_ESTUDIANTE.getNombre(),estudianteInscrito.getEstudiante().getNombreCompleto());
-                factura.addDatoAdicional(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre(),estudianteInscrito.getEstudiante().getIdEstudiante().toString());
-                
+                factura.addDatoAdicional(DatosAdicionalesComprobanteEnum.NOMBRE_ESTUDIANTE.getNombre(), estudianteInscrito.getEstudiante().getNombreCompleto());
+                factura.addDatoAdicional(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre(), estudianteInscrito.getEstudiante().getIdEstudiante().toString());
+
                 ComprobanteDataFactura comprobanteData = new ComprobanteDataFactura(factura);
                 comprobanteData.setMapInfoAdicional(getMapAdicional(factura));
                 comprobantesLista.add(comprobanteData);
-                
+
             }
-            
+
         }
         return comprobantesLista;
     }
-    
+
     private Map<String, String> getMapAdicional(Factura factura) {
         Map<String, String> parametroMap = new HashMap<String, String>();
         for (FacturaAdicional datoAdicional : factura.getDatosAdicionales()) {
@@ -455,10 +436,9 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel{
         }
         return parametroMap;
     }
-    
-    private Factura generarFactura(EstudianteInscrito estudianteInscrito,List<RubroEstudiante> listaRubros)
-    {
-        Factura factura=new Factura();
+
+    private Factura generarFactura(EstudianteInscrito estudianteInscrito, List<RubroEstudiante> listaRubros) {
+        Factura factura = new Factura();
         //factura.setClaveAcceso(title);
         factura.setCliente(estudianteInscrito.getEstudiante().getRepresentante());
         factura.setCodigoDocumento(DocumentoEnum.FACTURA.getCodigo());
@@ -470,10 +450,10 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel{
         factura.setFechaCreacion(UtilidadesFecha.getFechaHoy());
         factura.setFechaFactura(UtilidadesFecha.getFechaHoy());
         factura.setIdentificacion(estudianteInscrito.getEstudiante().getRepresentante().getIdentificacion());
-        
+
         factura.setPuntoEmision(session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor);
         factura.setPuntoEstablecimiento(session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor);
-        
+
         //Cuando la facturacion es electronica
         if (session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(TipoFacturacionEnumEstado.ELECTRONICA.getLetra())) {
             factura.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_FACTURA).valor));
@@ -481,30 +461,29 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel{
         {
             factura.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_FACTURA_FISICA).valor));
         }
-        
+
         factura.setRazonSocial(session.getEmpresa().getRazonSocial());
         factura.setTelefono(estudianteInscrito.getEstudiante().getRepresentante().getTelefonoConvencional());
-        agregarDetallesFactura(factura,listaRubros);
-        
+        agregarDetallesFactura(factura, listaRubros);
+
         calcularTotalesFactura(factura);
         return factura;
     }
-    
-    private void agregarDetallesFactura(Factura factura,List<RubroEstudiante> listaRubros)
-    {
+
+    private void agregarDetallesFactura(Factura factura, List<RubroEstudiante> listaRubros) {
         for (RubroEstudiante rubro : listaRubros) {
-            FacturaDetalle facturaDetalle=new FacturaDetalle();
+            FacturaDetalle facturaDetalle = new FacturaDetalle();
             facturaDetalle.setCantidad(BigDecimal.ONE);
             facturaDetalle.setDescripcion(rubro.getRubroNivel().getNombre());
             facturaDetalle.setDescuento(BigDecimal.ZERO);
-           
+
             facturaDetalle.setPrecioUnitario(rubro.getRubroNivel().getValor());
 
             facturaDetalle.setReferenciaId(rubro.getId());
             facturaDetalle.setTipoDocumento(TipoDocumentoEnum.ACADEMICO.getCodigo());
             facturaDetalle.setTotal(facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()));
             facturaDetalle.setValorIce(BigDecimal.ZERO);
-            
+
             if (rubro.getRubroNivel().getCatalogoProducto().getIva().getTarifa().equals(0)) {
                 facturaDetalle.setIva(BigDecimal.ZERO);
             } else {
@@ -512,41 +491,36 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel{
                 BigDecimal iva = facturaDetalle.getTotal().multiply(obtenerIvaDefault()).setScale(2, BigDecimal.ROUND_HALF_UP);
                 facturaDetalle.setIva(iva);
             }
-            
+
             //Agregar el detalle a la factura
             factura.addDetalle(facturaDetalle);
-            
+
         }
     }
-    
+
     /*
     Calcula los totales y subtotales de la facturas
-    */
-    private void calcularTotalesFactura(Factura factura)
-    {
-        BigDecimal subtotalSinImpuestos=BigDecimal.ZERO;
-        BigDecimal subtotalConImpuestos=BigDecimal.ZERO;
-        BigDecimal ivaTotal=BigDecimal.ZERO;
+     */
+    private void calcularTotalesFactura(Factura factura) {
+        BigDecimal subtotalSinImpuestos = BigDecimal.ZERO;
+        BigDecimal subtotalConImpuestos = BigDecimal.ZERO;
+        BigDecimal ivaTotal = BigDecimal.ZERO;
 
-        
         for (FacturaDetalle facturaDetalle : factura.getDetalles()) {
             try {
                 //TODO: Verificar si se puede optimizar para no hacer una segunda llamada a la base de datos para consultar la referencia del detalle de la factura
-                RubroEstudiante rubroEstudiante=ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
-                if(rubroEstudiante.getRubroNivel().getCatalogoProducto().getIva().getTarifa().equals(0))
-                {
-                    subtotalSinImpuestos=subtotalSinImpuestos.add(facturaDetalle.getTotal());
-                }
-                else
-                {
-                    subtotalConImpuestos=subtotalConImpuestos.add(facturaDetalle.getTotal());
-                    ivaTotal=ivaTotal.add(facturaDetalle.getIva());
+                RubroEstudiante rubroEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                if (rubroEstudiante.getRubroNivel().getCatalogoProducto().getIva().getTarifa().equals(0)) {
+                    subtotalSinImpuestos = subtotalSinImpuestos.add(facturaDetalle.getTotal());
+                } else {
+                    subtotalConImpuestos = subtotalConImpuestos.add(facturaDetalle.getTotal());
+                    ivaTotal = ivaTotal.add(facturaDetalle.getIva());
                 }
             } catch (RemoteException ex) {
                 Logger.getLogger(FacturaAcademicoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+
         //Setear los subtotales
         factura.setSubtotalImpuestos(subtotalConImpuestos);
         factura.setSubtotalSinImpuestos(subtotalSinImpuestos);
@@ -555,87 +529,77 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel{
         //Por defecto los descuentos van en 0 en esta pantalla
         factura.setDescuentoImpuestos(BigDecimal.ZERO);
         factura.setDescuentoSinImpuestos(BigDecimal.ZERO);
-        
+
         //Calcular el total
         factura.setTotal(
                 factura.getSubtotalImpuestos().subtract(factura.getDescuentoImpuestos()).
-                add(factura.getSubtotalSinImpuestos().subtract(factura.getDescuentoSinImpuestos())).
-                add(factura.getIva()));
-        
+                        add(factura.getSubtotalSinImpuestos().subtract(factura.getDescuentoSinImpuestos())).
+                        add(factura.getIva()));
+
         System.out.println(factura.getSubtotalImpuestos());
         System.out.println(factura.getDescuentoImpuestos());
         System.out.println(factura.getSubtotalSinImpuestos());
         System.out.println(factura.getDescuentoSinImpuestos());
         System.out.println(factura.getIva());
-        
-        
+
         System.out.println(factura.getTotal());
 
     }
-    
-    private BigDecimal obtenerIvaDefault()
-    {
-        String ivaStr=session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).getValor();
-        return new BigDecimal(ivaStr).divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP);
+
+    private BigDecimal obtenerIvaDefault() {
+        String ivaStr = session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).getValor();
+        return new BigDecimal(ivaStr).divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP);
     }
-    
-    
-    private void cargarRubrosLista()
-    {
-        DefaultListModel<RubrosNivel> modelList=new DefaultListModel<RubrosNivel>();
-        
+
+    private void cargarRubrosLista() {
+        DefaultListModel<RubrosNivel> modelList = new DefaultListModel<RubrosNivel>();
+
         for (Map.Entry<EstudianteInscrito, List<RubroEstudiante>> entry1 : mapEstudianteRubros.entrySet()) {
             EstudianteInscrito estudianteInscrito = entry1.getKey();
             List<RubroEstudiante> lista = entry1.getValue();
-            
+
             for (RubroEstudiante rubroEstudiante : lista) {
                 //Agregar solo si no existe el rubro en la lista
-                if(!modelList.contains(rubroEstudiante.getRubroNivel()))
-                {
+                if (!modelList.contains(rubroEstudiante.getRubroNivel())) {
                     modelList.addElement(rubroEstudiante.getRubroNivel());
                 }
             }
 
         }
-        
+
         getLstRubrosFacturar().setModel(modelList);
-        
+
     }
-    
-    private void cargarCursosLista()
-    {
-        DefaultListModel<NivelAcademico> modelList=new DefaultListModel<NivelAcademico>();
+
+    private void cargarCursosLista() {
+        DefaultListModel<NivelAcademico> modelList = new DefaultListModel<NivelAcademico>();
         for (Map.Entry<NivelAcademico, Map<EstudianteInscrito, List<RubroEstudiante>>> entry : mapDatosFacturar.entrySet()) {
             NivelAcademico nivelAcademico = entry.getKey();
             Map<EstudianteInscrito, List<RubroEstudiante>> datosCursos = entry.getValue();
-            
-            modelList.addElement(nivelAcademico);            
+
+            modelList.addElement(nivelAcademico);
         }
         getLstCursosFacturar().setModel(modelList);
     }
-   
-    
-    private void agregarRubroLista(RubrosNivel rubroNivel)
-    {
-       
-        for ( Map.Entry<EstudianteInscrito,List<RubroEstudiante>> entry : mapEstudianteRubros.entrySet()) 
-        {
+
+    private void agregarRubroLista(RubrosNivel rubroNivel) {
+
+        for (Map.Entry<EstudianteInscrito, List<RubroEstudiante>> entry : mapEstudianteRubros.entrySet()) {
             try {
                 EstudianteInscrito estudianteInscrito = entry.getKey();
                 List<RubroEstudiante> rubrosLista = entry.getValue();
-                
-                Map<String,Object> mapParametro=new HashMap<String,Object>();
-                mapParametro.put("estudianteInscrito",estudianteInscrito);
-                mapParametro.put("rubroNivel",rubroNivel);
-                
+
+                Map<String, Object> mapParametro = new HashMap<String, Object>();
+                mapParametro.put("estudianteInscrito", estudianteInscrito);
+                mapParametro.put("rubroNivel", rubroNivel);
+
                 List<RubroEstudiante> rubrosEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().obtenerPorMap(mapParametro);
-                
-                if(rubrosEstudiante.size()>0)
-                {
-                    RubroEstudiante rubroEstudiante=rubrosEstudiante.get(0);
+
+                if (rubrosEstudiante.size() > 0) {
+                    RubroEstudiante rubroEstudiante = rubrosEstudiante.get(0);
                     rubrosLista.add(rubroEstudiante);
                 }
-                               
+
             } catch (RemoteException ex) {
                 Logger.getLogger(FacturaAcademicoLoteModel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ServicioCodefacException ex) {
@@ -649,12 +613,12 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel{
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 //int indiceSeleccionado=e.getFirstIndex();
-                NivelAcademico nivelAcademico= getLstCursosFacturar().getSelectedValue();
-                mapEstudianteRubros=mapDatosFacturar.get(nivelAcademico);
+                NivelAcademico nivelAcademico = getLstCursosFacturar().getSelectedValue();
+                mapEstudianteRubros = mapDatosFacturar.get(nivelAcademico);
                 cargarRubrosLista();
                 cargarTabla();
             }
         });
     }
-    
+
 }
