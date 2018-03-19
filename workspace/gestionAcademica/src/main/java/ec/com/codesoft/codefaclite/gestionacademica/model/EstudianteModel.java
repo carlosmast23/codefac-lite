@@ -10,9 +10,11 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.gestionacademica.busqueda.EstudianteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.EstudiantePanel;
+import ec.com.codesoft.codefaclite.gestionacademica.reportdata.ReporteAcademicoData;
 import ec.com.codesoft.codefaclite.inventario.busqueda.RepresentanteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -34,6 +36,7 @@ import java.rmi.RemoteException;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -209,6 +212,7 @@ public class EstudianteModel extends EstudiantePanel {
         }
 
         estudiante.setRepresentante(representante);
+        estudiante.setRepresentante2(representanteParaFacturar);
 
     }
 
@@ -267,10 +271,11 @@ public class EstudianteModel extends EstudiantePanel {
             if(estudiante.getRepresentante() != null){
                 
                 parametros.put("representante1", estudiante.getRepresentante().getIdentificacion() +" - "+ estudiante.getRepresentante().getRazonSocial());
-                parametros.put("representante2", estudiante.getRepresentante().getIdentificacion() +" - "+ estudiante.getRepresentante().getRazonSocial());
+                parametros.put("representante2", estudiante.getRepresentante2().getIdentificacion() +" - "+ estudiante.getRepresentante().getRazonSocial());
             }
             
-            
+            ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, new ArrayList(), panelPadre, "Reporte Datos Estudiantes");
+      
         }else
         {
             DialogoCodefac.mensaje("Error","Debe buscar un estudiante", DialogoCodefac.MENSAJE_ADVERTENCIA);
@@ -313,10 +318,18 @@ public class EstudianteModel extends EstudiantePanel {
         getCmbEstado().setSelectedItem(estudiante.getEstado());
         getCmbDiscapacidad().setSelectedItem(estudiante.getDiscapacidad());
         getDateFechaNacimiento().setDate(estudiante.getFechaNacimiento());
+        String identificacion = "";
+        String nombre = "";
         if (estudiante.getRepresentante() != null) {
-            String identificacion = estudiante.getRepresentante().getIdentificacion();
-            String nombre = estudiante.getRepresentante().getRazonSocial();
+            identificacion = estudiante.getRepresentante().getIdentificacion();
+            nombre = estudiante.getRepresentante().getRazonSocial();
             getTxtRepresentante().setText(identificacion + " - " + nombre);
+        }
+        
+        if(estudiante.getRepresentante2() != null){
+            identificacion = estudiante.getRepresentante2().getIdentificacion();
+            nombre = estudiante.getRepresentante2().getRazonSocial();
+            getTxtFacturarANombre().setText(identificacion + " - " + nombre);
         }
     }
 

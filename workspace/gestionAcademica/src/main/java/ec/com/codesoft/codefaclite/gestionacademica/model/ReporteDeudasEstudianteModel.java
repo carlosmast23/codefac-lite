@@ -158,7 +158,7 @@ public class ReporteDeudasEstudianteModel extends ReporteDeudasEstudiantePanel {
             parameters.put("estudiante", estudiante.getNombreCompleto());
             parameters.put("valorDeuda", acum.toString());
 
-            ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Deudas por Estudiante");
+            ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, null, panelPadre, "Reporte Deudas por Estudiante");
         } catch (RemoteException ex) {
             Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
