@@ -220,6 +220,7 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="btnPasar" min="-2" pref="49" max="-2" attributes="0"/>
                                   <Component id="btnPasarTodo" min="-2" max="-2" attributes="0"/>
+                                  <Component id="btnRegresar" min="-2" pref="49" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -269,6 +270,8 @@
                               <Component id="btnPasar" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="btnPasarTodo" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="btnRegresar" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace pref="69" max="32767" attributes="0"/>
@@ -371,6 +374,11 @@
             <Component class="javax.swing.JButton" name="btnPasarTodo">
               <Properties>
                 <Property name="text" type="java.lang.String" value="&gt;&gt;"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JButton" name="btnRegresar">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="&lt;"/>
               </Properties>
             </Component>
           </SubComponents>

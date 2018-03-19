@@ -6,8 +6,10 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios.gestionacademica;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantilla;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceAbstractIf;
 import java.rmi.RemoteException;
+import java.util.List;
 
 /**
  *
@@ -15,6 +17,6 @@ import java.rmi.RemoteException;
  */
 public interface RubroPlantillaServiceIf extends ServiceAbstractIf<RubroPlantilla>{
     public void grabarConDetalles(RubroPlantilla rubroPlantilla) throws RemoteException;
-    public void editarConDetalles(RubroPlantilla entity) throws java.rmi.RemoteException;
+    public void editarConDetalles(RubroPlantilla entity,List<RubroPlantillaEstudiante> detallesEliminar) throws java.rmi.RemoteException;
             
 }

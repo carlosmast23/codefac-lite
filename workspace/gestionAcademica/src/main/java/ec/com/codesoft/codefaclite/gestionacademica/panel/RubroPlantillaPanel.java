@@ -69,6 +69,7 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
         tblDatosRegistrados = new javax.swing.JTable();
         btnPasar = new javax.swing.JButton();
         btnPasarTodo = new javax.swing.JButton();
+        btnRegresar = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
         chkEnero = new javax.swing.JRadioButton();
@@ -209,6 +210,8 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
 
         btnPasarTodo.setText(">>");
 
+        btnRegresar.setText("<");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -227,7 +230,8 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
                         .addGap(18, 18, 18)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnPasar, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnPasarTodo))))
+                            .addComponent(btnPasarTodo)
+                            .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
@@ -263,7 +267,9 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
                         .addGap(131, 131, 131)
                         .addComponent(btnPasar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnPasarTodo)))
+                        .addComponent(btnPasarTodo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnRegresar)))
                 .addContainerGap(69, Short.MAX_VALUE))
         );
 
@@ -413,6 +419,7 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnGenerar;
     private javax.swing.JButton btnPasar;
     private javax.swing.JButton btnPasarTodo;
+    private javax.swing.JButton btnRegresar;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JRadioButton chkAbril;
     private javax.swing.JRadioButton chkAgosto;
@@ -705,6 +712,14 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
 
     public void setjTabPanel(JTabbedPane jTabPanel) {
         this.jTabPanel = jTabPanel;
+    }
+
+    public JButton getBtnRegresar() {
+        return btnRegresar;
+    }
+
+    public void setBtnRegresar(JButton btnRegresar) {
+        this.btnRegresar = btnRegresar;
     }
     
     

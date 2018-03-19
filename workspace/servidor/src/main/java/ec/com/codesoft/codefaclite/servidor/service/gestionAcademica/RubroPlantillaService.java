@@ -46,7 +46,7 @@ public class RubroPlantillaService extends ServiceAbstract<RubroPlantilla,RubroP
     }
     
     
-    public void editarConDetalles(RubroPlantilla entity) throws java.rmi.RemoteException
+    public void editarConDetalles(RubroPlantilla entity,List<RubroPlantillaEstudiante> detallesEliminar) throws java.rmi.RemoteException
     {
         EntityTransaction transaccion=getTransaccion();
         transaccion.begin();
@@ -59,7 +59,23 @@ public class RubroPlantillaService extends ServiceAbstract<RubroPlantilla,RubroP
             {
                 entityManager.persist(detalle);
             }
+            else
+            {
+                entityManager.merge(detalle);
+            }
         }
+        
+        //Eliminar fisicamente los detalles
+        for (RubroPlantillaEstudiante detalle : detallesEliminar) {
+            
+            //Primero se funciona el objeto con la base antes de borrar
+            detalle=entityManager.merge(detalle);
+            entityManager.remove(detalle);
+            detalles.remove(detalle);
+            //detalles.get(0).set
+            
+        }
+        entity.setDetalles(detalles);
         
         entityManager.merge(entity);
         

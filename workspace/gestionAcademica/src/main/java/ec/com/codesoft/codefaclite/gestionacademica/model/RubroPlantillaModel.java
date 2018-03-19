@@ -56,6 +56,11 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
     private Map<NivelAcademico,List<RubroPlantillaEstudiante>> estudiantesRegistradosMap;
     
     /**
+     * Lista de estudiantes para eliminar
+     */
+    private List<RubroPlantillaEstudiante> estudiantesEliminar;
+    
+    /**
      * Referencia para trabajar con el objeto rubro plantilla
      */
     private RubroPlantilla rubroPlantilla;
@@ -89,9 +94,10 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
     @Override
     public void editar() throws ExcepcionCodefacLite {
         try {
-            DialogoCodefac.mensaje("Correcto","La plantilla se edito correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+            
             setearVariables();
-            ServiceFactory.getFactory().getRubroPlantillaServiceIf().editarConDetalles(rubroPlantilla);
+            ServiceFactory.getFactory().getRubroPlantillaServiceIf().editarConDetalles(rubroPlantilla,estudiantesEliminar);
+            DialogoCodefac.mensaje("Correcto","La plantilla se edito correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         } catch (RemoteException ex) {
             DialogoCodefac.mensaje("Incorrecto","La plantilla se grabo correctamente",DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(RubroPlantillaModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -205,6 +211,31 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
     
     private void listenerBotones()
     {
+        
+        getBtnRegresar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Integer filaSeleccionada=getCmbCursosRegistrados().getSelectedIndex();
+                regresarEstudiantes();
+                cargarComboNivelesInscritos();
+                //Selecciono el mismo dato para que vuelvan a cargar los datos
+                getCmbCursoSinRegistrar().setSelectedIndex(getCmbCursoSinRegistrar().getSelectedIndex());
+                
+                int nuevoTamanio=getCmbCursosRegistrados().getModel().getSize();
+                if(getCmbCursosRegistrados().getModel().getSize()==1)
+                {
+                    //Si solo existe un dato selecciona el primero
+                    getCmbCursosRegistrados().setSelectedIndex(0);
+                }
+                else
+                {
+                    //Selecciona el anterior dato
+                    getCmbCursosRegistrados().setSelectedIndex(filaSeleccionada);
+                }
+                
+            }
+        });
+        
         getBtnPasar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -284,6 +315,22 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
         });
     }
     
+    /**
+     * Verifica en la lista de estudiantes para ver si existe el estudiante inscrito
+     * @return 
+     */
+    private boolean containListaEliminados(EstudianteInscrito estudianteInscrito)
+    {
+        for (RubroPlantillaEstudiante plantillaEstudiante : estudiantesEliminar) {
+            if(plantillaEstudiante.getEstudianteInscrito().equals(estudianteInscrito))
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
     private void pasarEstudiantes()
     {
         DefaultTableModel modeloTabla=(DefaultTableModel) getTblDatosSinRegistrar().getModel();
@@ -296,10 +343,72 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
             if(seleccionado)
             {
                 EstudianteInscrito estudianteInscrito=(EstudianteInscrito) modeloTabla.getValueAt(i,0);
-                inscribirEstudianteMap(estudianteInscrito);
+                
+                //Si ya existe el dato en la lista de eliminar lo elimino antes de agregar
+                if(containListaEliminados(estudianteInscrito))
+                {
+                   estudiantesEliminar.remove(estudianteInscrito);
+                }
+                else //Si no existe agrego normalmente el dato
+                {
+                    inscribirEstudianteMap(estudianteInscrito);
+                }                
+                
+            }
+        }        
+    }
+    
+    private void regresarEstudiantes()
+    {
+        DefaultTableModel modeloTabla=(DefaultTableModel) getTblDatosRegistrados().getModel();
+        
+        for (int i = 0; i < modeloTabla.getRowCount(); i++) {
+            
+            Boolean seleccionado=(Boolean) modeloTabla.getValueAt(i,1);
+            
+            //Agregar a la otra lista solo estudiantes seleccionados
+            if(seleccionado)
+            {
+                RubroPlantillaEstudiante inscrito=(RubroPlantillaEstudiante) modeloTabla.getValueAt(i,0);
+                
+                //Si el id es igual a null significa que aun no esta guardado y solo debo borrar del map temporal de los datos por gragar
+                if(inscrito.getId()==null)
+                {
+                    eliminarEstudianteMap(inscrito.getEstudianteInscrito());
+                }
+                else //Caso contrario aunmento a la lista de elementos para borrar
+                {
+                    //Agrego a la lista para eliminar
+                    estudiantesEliminar.add(inscrito);
+                }
             }
         }
         
+    }
+    
+    private void eliminarEstudianteMap(EstudianteInscrito estudianteInscrito)
+    {
+    
+        for (Map.Entry<NivelAcademico, List<RubroPlantillaEstudiante>> entry : estudiantesRegistradosMap.entrySet()) {
+            NivelAcademico nivelAcademico = entry.getKey();
+            List<RubroPlantillaEstudiante> detalles = entry.getValue();
+            
+            for (RubroPlantillaEstudiante detalle : detalles) {
+                if(estudianteInscrito.equals(detalle.getEstudianteInscrito()))
+                {
+                    detalles.remove(detalle);
+                    
+                    //Si no existen datos para ese nivel lo borro tambien del map
+                    if(detalles.size()==0)
+                    {
+                        estudiantesRegistradosMap.remove(nivelAcademico);
+                    }
+                    
+                    return;
+                }
+            }
+            
+        }
     }
     
     private void inscribirEstudianteMap(EstudianteInscrito estudianteInscrito)
@@ -383,7 +492,13 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
         List<RubroPlantillaEstudiante> estudiantesInscritos= estudiantesRegistradosMap.get(nivelAcademico);
         
         for (RubroPlantillaEstudiante estudianteInscrito : estudiantesInscritos) {
-            modeloTabla.addRow(new Object[]{estudianteInscrito,false,estudianteInscrito.getEstudianteInscrito().getEstudiante().getNombreCompleto()});
+            
+            //Si el rubro esta dentro de la lista de datos a eliminar no lo muestro
+            if(!estudiantesEliminar.contains(estudianteInscrito))
+            {
+                modeloTabla.addRow(new Object[]{estudianteInscrito,false,estudianteInscrito.getEstudianteInscrito().getEstudiante().getNombreCompleto()});
+            }
+            
         }
         
         getTblDatosRegistrados().setModel(modeloTabla);
@@ -424,14 +539,19 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
             List<RubroPlantillaEstudiante> estudiantesInscritos = entry.getValue();
             
             for (RubroPlantillaEstudiante estudianteInscrito : estudiantesInscritos) {
-                
-                //Verifica que en la lista de estudiantes no inscritos no esten ya inscritos
-                if(estudiantesNoInscritos.contains(estudianteInscrito.getEstudianteInscrito()))
+                //Solo hago la verificacion para datos que no esten dentro de la tabla eliminados
+                if(!estudiantesEliminar.contains(estudianteInscrito))
                 {
-                    //Si existe un estudiante ya inscrito lo borro de la lista de no inscritos
-                    estudiantesNoInscritos.remove(estudianteInscrito.getEstudianteInscrito());
+                    
+                    //Verifica que en la lista de estudiantes no inscritos no esten ya inscritos
+                    if (estudiantesNoInscritos.contains(estudianteInscrito.getEstudianteInscrito())) {
+                        //Si existe un estudiante ya inscrito lo borro de la lista de no inscritos
+                        estudiantesNoInscritos.remove(estudianteInscrito.getEstudianteInscrito());
+                    }
+
+
                 }
-                
+                                
             }
             
         }
@@ -442,6 +562,7 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
         this.rubroPlantilla=new RubroPlantilla();
         this.rubroPlantilla.setDetalles(new ArrayList<RubroPlantillaEstudiante>());
         this.estudiantesRegistradosMap=new HashMap<NivelAcademico,List<RubroPlantillaEstudiante>>();
+        this.estudiantesEliminar=new ArrayList<RubroPlantillaEstudiante>();
         
         //Esta opcion de generar rubros dejo por defecto desabilitada , solo se habilita cuando ya esta grabado el dato
         this.getjTabPanel().setEnabledAt(2,false);
