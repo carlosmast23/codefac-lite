@@ -40,6 +40,24 @@ public enum MesEnum {
     public String getNombre() {
         return nombre;
     }
+
+    public int getNumero() {
+        return numero;
+    }
+    
+    
+    
+    public static MesEnum obtenerPorNumero(Integer numero)
+    {
+        for (MesEnum mesEnum : MesEnum.values()) 
+        {
+            if(numero.equals(mesEnum.getNumero()))
+            {
+                return mesEnum;
+            }
+        }
+        return null;
+    }
     
     
 

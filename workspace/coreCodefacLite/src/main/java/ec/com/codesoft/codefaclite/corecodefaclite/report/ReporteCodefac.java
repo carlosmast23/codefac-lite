@@ -87,6 +87,21 @@ public class ReporteCodefac {
         }
     }
     
+    public static Map<String,Object> agregarMapPlantilla(Map<String,Object> parametros,String tituloReporte,InterfazComunicacionPanel panelPadre)
+    {
+            Map<String,Object> mapCompleto=new HashMap<String,Object>(panelPadre.mapReportePlantilla());            
+            //Agregado parametros adicionales
+            for (Map.Entry<String, Object> entry : parametros.entrySet()) {
+                String key = entry.getKey();
+                Object value = entry.getValue();
+                mapCompleto.put(key, value);
+            }
+            
+            mapCompleto.put("pl_titulo",tituloReporte);
+            //mapCompleto.putAll(parametros);
+            return mapCompleto;        
+    }
+    
     public static void generarReporteInternalFramePlantilla(InputStream pathReporte,Map<String,Object> parametros,Collection datos,InterfazComunicacionPanel panelPadre,String tituloReporte)
     {
         try {

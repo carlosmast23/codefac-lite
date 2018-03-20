@@ -3111,8 +3111,8 @@
 													"showShadow": true,
 													"containerChangeable": false,
 													"containerExtending": false,
-													"left": 624,
-													"top": 53,
+													"left": 704,
+													"top": 29,
 													"width": 105,
 													"height": 13,
 													"autoResize": false,
@@ -3140,8 +3140,8 @@
 													"showShadow": true,
 													"containerChangeable": false,
 													"containerExtending": false,
-													"left": 624,
-													"top": 71,
+													"left": 704,
+													"top": 47,
 													"width": 105,
 													"height": 10,
 													"autoResize": false
@@ -3156,8 +3156,8 @@
 											"showShadow": true,
 											"containerChangeable": false,
 											"containerExtending": false,
-											"left": 624,
-											"top": 48,
+											"left": 704,
+											"top": 24,
 											"width": 105,
 											"height": 33,
 											"autoResize": false,
@@ -3194,7 +3194,7 @@
 													"containerChangeable": false,
 													"containerExtending": false,
 													"left": 355,
-													"top": 65,
+													"top": 33,
 													"width": 0,
 													"height": 13,
 													"autoResize": false,
@@ -3224,8 +3224,8 @@
 													"showShadow": true,
 													"containerChangeable": false,
 													"containerExtending": false,
-													"left": 598,
-													"top": 80,
+													"left": 678,
+													"top": 48,
 													"width": 0,
 													"height": 13,
 													"autoResize": false,
@@ -3288,7 +3288,7 @@
 												"$ref": "AAAAAAFhocdM1XEiUcM="
 											},
 											"lineStyle": 2,
-											"points": "624:72;341:72;341:96",
+											"points": "704:40;341:40;341:96",
 											"nameLabel": {
 												"$ref": "AAAAAAFhoceE9nE1jtE="
 											},
@@ -4507,7 +4507,7 @@
 													"height": 13,
 													"autoResize": false,
 													"underline": false,
-													"text": "RubrosEstudiante",
+													"text": "RubroEstudiante",
 													"horizontalAlignment": 2,
 													"verticalAlignment": 5,
 													"wordWrap": false
@@ -4765,7 +4765,7 @@
 													"containerChangeable": false,
 													"containerExtending": false,
 													"left": 911,
-													"top": 57,
+													"top": 33,
 													"width": 0,
 													"height": 13,
 													"autoResize": false,
@@ -4795,8 +4795,8 @@
 													"showShadow": true,
 													"containerChangeable": false,
 													"containerExtending": false,
-													"left": 753,
-													"top": 43,
+													"left": 833,
+													"top": 19,
 													"width": 0,
 													"height": 13,
 													"autoResize": false,
@@ -4859,7 +4859,7 @@
 												"$ref": "AAAAAAFhocdM1XEiUcM="
 											},
 											"lineStyle": 2,
-											"points": "728:64;896:64;896:256",
+											"points": "808:40;896:40;896:256",
 											"nameLabel": {
 												"$ref": "AAAAAAFhoeLkqnN5wbY="
 											},
@@ -6729,7 +6729,7 @@
 									"_parent": {
 										"$ref": "AAAAAAFhocJj9tid4b0="
 									},
-									"name": "RubrosEstudiante",
+									"name": "RubroEstudiante",
 									"ownedElements": [
 										{
 											"_type": "ERDRelationship",

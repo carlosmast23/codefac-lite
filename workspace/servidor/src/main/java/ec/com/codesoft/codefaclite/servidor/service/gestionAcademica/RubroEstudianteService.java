@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantilla;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaEstudiante;
@@ -34,6 +35,11 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         rubroEstudianteFacade= new RubroEstudianteFacade();
     }
     
+    public List<RubroEstudiante> obtenerRubrosEstudiantesPorRubros(List<RubrosNivel> rubros) throws RemoteException
+    {
+        return getFacade().findRubrosEstudiantesPorRubros(rubros);
+    }
+    
     public RubroPlantilla crearRubroEstudiantesDesdePlantila(RubroPlantilla rubroPlantilla,MesEnum mesEnum,String nombreRubroMes) throws RemoteException
     {
         try
@@ -48,6 +54,7 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
             rubroNivel.setNombre(nombreRubroMes);
             rubroNivel.setPeriodo(rubroPlantilla.getPeriodo());
             rubroNivel.setValor(rubroPlantilla.getValor());
+            rubroNivel.setMesNumero(mesEnum.getNumero());
 
             entityManager.persist(rubroNivel);
 

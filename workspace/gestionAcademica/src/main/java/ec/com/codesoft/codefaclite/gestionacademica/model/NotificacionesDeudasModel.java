@@ -5,16 +5,31 @@
  */
 package ec.com.codesoft.codefaclite.gestionacademica.model;
 
+import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
+import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
+import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.CARPETA_RIDE;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.UtilidadesComprobantes;
+import ec.com.codesoft.codefaclite.gestionacademica.other.EstudianteDeudaData;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.NotificacionesDeudasPanel;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.CorreoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.InputStream;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,12 +43,21 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Carlos
  */
-public class NotificacionesDeudasModel extends NotificacionesDeudasPanel{
+public class NotificacionesDeudasModel extends NotificacionesDeudasPanel implements Runnable{
 
+    private static final String PATH_REPORTE_TMP="tmp/reporteDeuda.pdf";
+    
+    private NotificacionesDeudasModel instanceThis=this;
     /**
      * Listado donde van a estar el listado de todos los rubros para enviar al correo
      */
     private List<RubrosNivel> listaRubros;
+    
+    /**
+     * Hilo para procesar el envio de las notificaciones
+     */
+    private Thread hiloNotificaciones;
+    
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
@@ -80,6 +104,7 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel{
     @Override
     public void limpiar() {
         this.listaRubros=new ArrayList<RubrosNivel>();
+        this.getCmbTipoRubroPorRubro().setSelectedIndex(0);
     }
 
     @Override
@@ -176,14 +201,99 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel{
         getTblRubros().setModel(modelo);
         
     }
+    
+    /**
+     * Agrega un rubro a la lista de la tabla individualmente
+     * @param rubrosNivel 
+     */
+    private void agregarRubro(RubrosNivel rubrosNivel)
+    {
+        if(!listaRubros.contains(rubrosNivel))
+        {
+            listaRubros.add(rubrosNivel);
+        }
+    }
+    
+    /**
+     * Agrega un conjunto de rubros a la lista
+     * @param rubros 
+     */
+    private void agregarRubroLista(List<RubrosNivel> rubros)
+    {
+        for (RubrosNivel rubro : rubros) {
+            if(!listaRubros.contains(rubro))
+            {
+                listaRubros.add(rubro);
+            }
+        }
+    }
+    
+   
 
     private void listenerBotones() {
+        
+        getBtnEnviar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               //enviarComunicados();
+                    hiloNotificaciones=new Thread(instanceThis);
+                    hiloNotificaciones.start();
+                    DialogoCodefac.mensaje("Correcto","Las notificaciones se estan enviado , puede revisar en el monitor", DialogoCodefac.MENSAJE_CORRECTO);
+            }
+        });
+        
+        getBtnLimpiar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                listaRubros.clear();                
+                construirTablaRubros();
+            }
+        });
+        
+        getBtnQuitar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int fila=getTblRubros().getSelectedRow();
+                
+                if(fila>=0)
+                {
+                    //RubrosNivel rubroNivel=listaRubros.get(fila);
+                    listaRubros.remove(fila);
+                    construirTablaRubros();
+                }
+                
+                
+            }
+        });
+        
+        getBtnAgregarPorMes().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Periodo periodo=(Periodo) getCmbPeriodo().getSelectedItem();
+                    CatalogoProducto catalogoProducto=(CatalogoProducto) getCmbTipoRubroPorMes().getSelectedItem();
+                    List<MesEnum> mesesSeleccionados=obtenerMesesEnum();
+                    
+                    List<RubrosNivel> listaRubros=ServiceFactory.getFactory().getRubrosNivelServiceIf().buscarPorPeriodoYMeses(periodo, catalogoProducto, mesesSeleccionados);
+                    
+                    agregarRubroLista(listaRubros);
+                    construirTablaRubros();
+                    
+                } catch (RemoteException ex) {
+                    Logger.getLogger(NotificacionesDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+                
+                
+            }
+        });
+        
         getBtnAgregarPorRubro().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 RubrosNivel rubroNivel= (RubrosNivel) getCmbRubro().getSelectedItem();
                 
-                listaRubros.add(rubroNivel);
+                agregarRubro(rubroNivel);
                 construirTablaRubros();                        
             }
         });
@@ -195,12 +305,13 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel{
                     Periodo periodo=(Periodo) getCmbPeriodo().getSelectedItem();
                     CatalogoProducto tipoRubro = (CatalogoProducto) getCmbTipoRubroGrupo().getSelectedItem();
                     
+                   
                     Map<String, Object> mapParametros = new HashMap<String, Object>();
-                    mapParametros.put("periodo", tipoRubro);
+                    mapParametros.put("periodo", periodo);
                     mapParametros.put("catalogoProducto", tipoRubro);
                     
                     List<RubrosNivel> rubros=ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorMap(mapParametros);
-                    listaRubros.addAll(rubros);
+                    agregarRubroLista(rubros);
                     construirTablaRubros();
                     
                 } catch (RemoteException ex) {
@@ -213,6 +324,217 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel{
         });
     }
     
+    private List<MesEnum> obtenerMesesEnum()
+    {
+        List<MesEnum> listaMeses=new ArrayList<MesEnum>();
+        
+        if (getChkEnero().isSelected()) {
+            listaMeses.add(MesEnum.ENERO);
+        }
+
+        if (getChkFebrero().isSelected()) {
+            listaMeses.add(MesEnum.FEBRERO);
+        }
+        
+        if (getChkMarzo().isSelected()) {
+            listaMeses.add(MesEnum.MARZO);
+        }
+
+        if (getChkAbril().isSelected()) {
+            listaMeses.add(MesEnum.ABRIL);
+        }
+
+        if (getChkMayo().isSelected()) {
+            listaMeses.add(MesEnum.MAYO);
+        }
+        if (getChkJunio().isSelected()) {
+            listaMeses.add(MesEnum.JUNIO);
+        }
+
+        if (getChkJulio().isSelected()) {
+            listaMeses.add(MesEnum.JULIO);
+        }
+        if (getChkAgosto().isSelected()) {
+            listaMeses.add(MesEnum.AGOSTO);
+        }
+
+        if (getChkSeptiembre().isSelected()) {
+            listaMeses.add(MesEnum.SEPTIEMBRE);
+        }
+
+        if (getChkOctubre().isSelected()) {
+            listaMeses.add(MesEnum.OCTUBRE);
+        }
+
+        if (getChkNoviembre().isSelected()) {
+            listaMeses.add(MesEnum.NOVIEMBRE);
+        }
+        if (getChkDiciembre().isSelected()) {
+            listaMeses.add(MesEnum.DICIEMBRE);
+        }
+        
+        return listaMeses;
+        
+    }
+    
+    /**
+     * Obtiene una version del monitor del comprobante para mostrar el avance de las notificaciones enviadas
+     * @return 
+     */
+    private MonitorComprobanteData getMonitorComprobanteData() {
+        //Obtener una instancia del monitor para mostrar el avance de los datos
+        MonitorComprobanteData monitorData = MonitorComprobanteModel.getInstance().agregarComprobante();
+
+        monitorData.getLblPreimpreso().setText("enviado notificaciones");
+        monitorData.getBtnAbrir().setEnabled(false);
+        monitorData.getBtnReporte().setEnabled(false);
+        monitorData.getBtnCerrar().setEnabled(false);
+        monitorData.getBarraProgreso().setString("enviando notificaciones");
+        monitorData.getBarraProgreso().setStringPainted(true);
+        
+        return monitorData;
+
+    }
+            
+    
+    private void enviarComunicados()
+    {
+        Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
+        if (listaRubros.size() > 0) {
+            try {
+                List<RubroEstudiante> rubrosEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().obtenerRubrosEstudiantesPorRubros(listaRubros);
+
+                MonitorComprobanteData monitorData=getMonitorComprobanteData();
+                MonitorComprobanteModel.getInstance().mostrar();
+                
+                //Obtiene la lista de rubros agrupada por los estudiantes inscritos
+                Map<EstudianteInscrito, List<RubroEstudiante>> mapRubrosEstudiante = convertirMapRubrosEstudiante(rubrosEstudiante);
+                
+                int contador=0;
+                for (Map.Entry<EstudianteInscrito, List<RubroEstudiante>> entry : mapRubrosEstudiante.entrySet()) {
+                    contador++;
+                    EstudianteInscrito estudianteInscrito = entry.getKey();
+                    List<RubroEstudiante> detalle = entry.getValue();
+                    
+                    //Generar el reporte
+                    generarReporte(estudianteInscrito,detalle, periodo);
+                    //Enviar al correo
+                    enviarCorreo(estudianteInscrito);
+                    System.out.println("estudiante: " + estudianteInscrito.getEstudiante().getNombreCompleto());
+                    
+                    double relacion=(double)contador/(double)mapRubrosEstudiante.size();
+                    int porcentaje=(int) (relacion*100);
+                    monitorData.getBarraProgreso().setValue(porcentaje);
+
+                }
+                
+                //Mostrar el monitor cuando termina
+                monitorData.getBarraProgreso().setForeground(Color.GREEN);
+                monitorData.getBtnAbrir().setEnabled(true);
+                monitorData.getBtnCerrar().setEnabled(true);
+                monitorData.getBtnAbrir().addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        DialogoCodefac.mensaje("Correcto","Se enviaron "+mapRubrosEstudiante.size()+" notificaciones a los correos", DialogoCodefac.MENSAJE_CORRECTO);
+                    }
+                });
+
+            } catch (RemoteException ex) {
+                Logger.getLogger(NotificacionesDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        } else {
+            DialogoCodefac.mensaje("Advertencia", "No existen datos para enviar", DialogoCodefac.MENSAJE_INCORRECTO);
+        }
+    
+    }
+    
+    private void enviarCorreo(EstudianteInscrito estudianteInscrito)
+    {
+        CorreoCodefac correoCodefac=new CorreoCodefac() {
+            @Override
+            public String getMensaje() {
+                return "Mensaje de prueba";
+            }
+
+            @Override
+            public String getTitulo() {
+                return "Comunicado deudas";
+            }
+
+            @Override
+            public Map<String, String> getPathFiles() {
+                HashMap<String,String> mapArchivos=new HashMap<String,String>();
+                mapArchivos.put("comunicado.pdf",PATH_REPORTE_TMP);
+                return mapArchivos;
+            }
+
+            @Override
+            public List<String> getDestinatorios() {
+                List<String> destinatarios=new ArrayList<String>();
+                destinatarios.add(estudianteInscrito.getEstudiante().getRepresentante().getCorreoElectronico());
+                return destinatarios;
+            }
+        };
+        
+        correoCodefac.enviarCorreo();
+    }
+    
+    private void generarReporte(EstudianteInscrito estudianteInscrito,List<RubroEstudiante> detalles,Periodo periodo)
+    {
+        InputStream path = RecursoCodefac.JASPER_ACADEMICO.getResourceInputStream("reporte_estudiante_deuda.jrxml");
+        
+        Map<String,Object> mapParametros=new HashMap<String, Object>();
+        mapParametros.put("periodo",periodo.getNombre());
+        mapParametros.put("curso",estudianteInscrito.getNivelAcademico().getNombre());
+        mapParametros.put("nombres",estudianteInscrito.getEstudiante().getNombreCompleto());
+        mapParametros.put("representante",estudianteInscrito.getEstudiante().getRepresentante().getNombresCompletos());
+        mapParametros.put("nota","");
+               
+        List<EstudianteDeudaData> listaReporte=new ArrayList<EstudianteDeudaData>();
+        
+        BigDecimal total=BigDecimal.ZERO;
+        for (RubroEstudiante detalle : detalles) {
+            total=total.add(detalle.getRubroNivel().getValor());
+            listaReporte.add(new EstudianteDeudaData(detalle.getRubroNivel().getNombre(),detalle.getRubroNivel().getValor().toString()));
+        }
+        
+        mapParametros.put("total",total.toString());
+         
+        mapParametros=ReporteCodefac.agregarMapPlantilla(mapParametros,"Reporte Deuda",panelPadre);
+        
+        UtilidadesComprobantes.generarReporteJasper(path, mapParametros, listaReporte,PATH_REPORTE_TMP);
+        
+        //ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametros, listaReporte, panelPadre, "Reporte Deudas");
+    }
+    
+    private Map<EstudianteInscrito,List<RubroEstudiante>> convertirMapRubrosEstudiante(List<RubroEstudiante> rubrosEstudiante)
+    {
+        Map<EstudianteInscrito,List<RubroEstudiante>> mapRubrosEstudiante=new HashMap<EstudianteInscrito,List<RubroEstudiante>>();
+        
+        for (RubroEstudiante rubroEstudiante : rubrosEstudiante) {
+            
+            List<RubroEstudiante> detalles=mapRubrosEstudiante.get(rubroEstudiante.getEstudianteInscrito());
+            if(detalles==null)
+            {
+                detalles=new ArrayList<RubroEstudiante>();
+                detalles.add(rubroEstudiante);
+                mapRubrosEstudiante.put(rubroEstudiante.getEstudianteInscrito(),detalles);
+            }
+            else
+            {
+                detalles.add(rubroEstudiante);
+            }
+            
+        }
+        
+        return mapRubrosEstudiante;
+    }
+
+    @Override
+    public void run() {
+        enviarComunicados();
+    }
     
     
 }

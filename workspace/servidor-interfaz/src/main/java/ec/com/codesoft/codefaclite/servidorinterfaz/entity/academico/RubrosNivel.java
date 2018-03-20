@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -40,6 +41,9 @@ public class RubrosNivel implements Serializable{
     
     @Column(name = "DIAS_CREDITO")
     private Integer diasCredito;
+    
+    @Column(name = "MES_NUMERO")
+    private Integer mesNumero;
 
     @JoinColumn(name = "NIVEL_ID")
     @ManyToOne
@@ -86,6 +90,16 @@ public class RubrosNivel implements Serializable{
         this.periodo = periodo;
     }
 
+    public Integer getMesNumero() {
+        return mesNumero;
+    }
+
+    public void setMesNumero(Integer mesNumero) {
+        this.mesNumero = mesNumero;
+    }
+    
+    
+
     /*
     public String getTipoRubro() {
         return tipoRubro;
@@ -127,9 +141,14 @@ public class RubrosNivel implements Serializable{
         this.diasCredito = diasCredito;
     }
     
-    
-
-    
+    /**
+     * Metodos personalizados
+     * @return 
+     */
+    public MesEnum getMesEnum()
+    {
+        return MesEnum.obtenerPorNumero(mesNumero);
+    }
 
     @Override
     public String toString() {
