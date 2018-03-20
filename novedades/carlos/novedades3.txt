@@ -1,0 +1,2 @@
+En el catalogo producto agregar un campo para definir a que modulo pertece
+en especial cuando necesito filtrar datos desde el modulo academico
