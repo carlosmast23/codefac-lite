@@ -106,11 +106,30 @@ public class ReporteDeudasGrupoModel extends ReporteDeudasGrupoPanel {
         getCmbPeriodo().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                try {
+                    Periodo periodoSeleccionado = (Periodo) getCmbPeriodo().getSelectedItem();
+                    Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    mapParametros.put("periodo", periodoSeleccionado);
+                    List<NivelAcademico> niveles = ServiceFactory.getFactory().getNivelAcademicoServiceIf().obtenerPorMap(mapParametros);
+
+                    //Cargar todos los niveles disponibles para ese periodo activo
+                    getCmbNivelAcademico().removeAllItems();
+                    for (NivelAcademico nivel : niveles) {
+                        getCmbNivelAcademico().addItem(nivel);
+                    }
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ReporteDeudasGrupoModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(ReporteDeudasGrupoModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+            /*public void actionPerformed(ActionEvent e) {
                 Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
                 if (periodo != null) {
                     cargarNivelesPeriodo(periodo, getCmbNivelAcademico());
                 }
-            }
+            }*/
         });
 
         getBtnAgregarRubrosNivel().addActionListener(new ActionListener() {
@@ -119,7 +138,7 @@ public class ReporteDeudasGrupoModel extends ReporteDeudasGrupoPanel {
                 RubrosNivel rubrosNivel = (RubrosNivel) getCmbRubrosNivel().getSelectedItem();
                 agregarRubroLista(rubrosNivel);
                 cargarRubrosLista();
-                //cargarTabla();
+                cargarTabla();
             }
         });
         getCmbNivelAcademico().addActionListener(new ActionListener() {
@@ -152,9 +171,9 @@ public class ReporteDeudasGrupoModel extends ReporteDeudasGrupoPanel {
                         getCmbRubrosNivel().addItem(rubro);
                     }
 
-                    /*
+                    
                     //Agregar los estudiantes del nivel a la tabla
-                    cargarEstudiantesNuevos();*/
+                    cargarEstudiantesNuevos();
                     cargarTabla();
                 } catch (RemoteException ex) {
                     Logger.getLogger(ReporteDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -235,63 +254,7 @@ public class ReporteDeudasGrupoModel extends ReporteDeudasGrupoPanel {
 
     @Override
     public void imprimir() {
-        try {
-            InputStream path = RecursoCodefac.JASPER_ACADEMICO.getResourceInputStream("reporte_deudas.jrxml");
-
-            Map<String, Object> mapParametros = new HashMap<String, Object>();
-            if (banderaNiveles == false) {
-                mapParametros.put("nivelAcademico", (NivelAcademico) getCmbNivelAcademico().getSelectedItem());
-            }
-            EstudianteInscritoServiceIf na = ServiceFactory.getFactory().getEstudianteInscritoServiceIf();
-            List<EstudianteInscrito> dataEstudiante = na.obtenerPorMap(mapParametros);
-
-            List<ReporteDeudasData> data = new ArrayList<ReporteDeudasData>();
-            for (EstudianteInscrito estudiante : dataEstudiante) {
-
-                Map<String, Object> mapParametros2 = new HashMap<String, Object>();
-                mapParametros2.put("estudianteInscrito", estudiante);
-                if (banderaRubros == false) {
-                    mapParametros2.put("rubroNivel", (RubrosNivel) getCmbRubrosNivel().getSelectedItem());
-                }
-                RubroEstudianteServiceIf rs = ServiceFactory.getFactory().getRubroEstudianteServiceIf();
-                List<RubroEstudiante> dataRubro = rs.obtenerPorMap(mapParametros2);
-                // comparamos si el estudiante tiene rubros
-                if (!dataRubro.isEmpty()) {
-                    for (RubroEstudiante re : dataRubro) {
-                        data.add(new ReporteDeudasData(
-                                estudiante.getNivelAcademico().getNombre(),
-                                estudiante.getEstudiante().getCedula(),
-                                estudiante.getEstudiante().getNombreCompleto(),
-                                re.getRubroNivel().getNombre(),
-                                re.getRubroNivel().getValor().toString()
-                        ));
-                    }
-                }
-
-            }
-//            List<ReporteDeudasEstudianteData> data = new ArrayList<ReporteDeudasEstudianteData>();
-
-            Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
-            NivelAcademico nivela = (NivelAcademico) getCmbNivelAcademico().getSelectedItem();
-            if (periodo != null) {
-                parameters.put("periodo", periodo.getNombre());
-            } else {
-                parameters.put("periodo", "TODOS");
-            }
-
-            if (nivela != null) {
-                parameters.put("nivelacademico", nivela.getNombre());
-            } else {
-                parameters.put("nivelacademico", "TODOS");
-            }
-
-            ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Deudas");
-        } catch (RemoteException ex) {
-            Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(ReporteDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -485,6 +448,30 @@ public class ReporteDeudasGrupoModel extends ReporteDeudasGrupoPanel {
         }
 
         return titulo.toArray(new String[titulo.size()]);
+
+    }
+    
+        private void cargarEstudiantesNuevos() {
+        mapEstudianteRubros = new HashMap<EstudianteInscrito, List<RubroEstudiante>>();
+
+        NivelAcademico nivelAcademico = (NivelAcademico) getCmbNivelAcademico().getSelectedItem();
+        //RubrosNivel rubroNivel = (RubrosNivel) getCmbRubrosNivel().getSelectedItem();
+
+        if (nivelAcademico != null) {
+            try {
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("nivelAcademico", nivelAcademico);
+                List<EstudianteInscrito> estudiantesInscritos = ServiceFactory.getFactory().getEstudianteInscritoServiceIf().obtenerPorMap(mapParametros);
+
+                for (EstudianteInscrito estudiantesInscrito : estudiantesInscritos) {
+                    mapEstudianteRubros.put(estudiantesInscrito, new ArrayList<RubroEstudiante>());
+                }
+            } catch (RemoteException ex) {
+                Logger.getLogger(ReporteDeudasGrupoModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(ReporteDeudasGrupoModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 
     }
 
