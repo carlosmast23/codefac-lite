@@ -297,6 +297,13 @@ public class EstudianteModel extends EstudiantePanel {
         if (estudiante == null) {
             throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar estudiante vacio");
         }
+        
+        cargarDatosPantalla();
+        
+    }
+    
+    private void cargarDatosPantalla()
+    {
         getTxtCodSistema().setText(estudiante.getCodigoSistema());
         getTxtCodAuxiliar().setText(estudiante.getCodigoAuxiliar());
         getTxtCedula().setText(estudiante.getCedula());
@@ -321,16 +328,19 @@ public class EstudianteModel extends EstudiantePanel {
         String identificacion = "";
         String nombre = "";
         if (estudiante.getRepresentante() != null) {
+            representante=estudiante.getRepresentante();
             identificacion = estudiante.getRepresentante().getIdentificacion();
             nombre = estudiante.getRepresentante().getRazonSocial();
             getTxtRepresentante().setText(identificacion + " - " + nombre);
         }
         
         if(estudiante.getRepresentante2() != null){
+            representanteParaFacturar=estudiante.getRepresentante2();
             identificacion = estudiante.getRepresentante2().getIdentificacion();
             nombre = estudiante.getRepresentante2().getRazonSocial();
             getTxtFacturarANombre().setText(identificacion + " - " + nombre);
         }
+        
     }
 
     @Override
@@ -388,7 +398,7 @@ public class EstudianteModel extends EstudiantePanel {
                                     break;
                                     case 2:
                                         representanteParaFacturar = representanteGenerico;
-                                        getTxtFacturarANombre().setText(representante.getIdentificacion() + " - " + representante.getNombresCompletos());
+                                        getTxtFacturarANombre().setText(representanteParaFacturar.getIdentificacion() + " - " + representanteParaFacturar.getNombresCompletos());
                                     break;
                                 }
                                 
