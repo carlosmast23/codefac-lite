@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.crm.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
@@ -22,6 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
 import ec.com.codesoft.ejemplo.utilidades.tabla.UtilidadesTablas;
+import java.awt.Dialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.InputStream;
@@ -165,7 +167,20 @@ public class CompraReporteModel extends CompraReportePanel
                     compraDataReportes.add(cdr);
                 }
 
-                ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, compraDataReportes, panelPadre, "Reporte Compra");
+                
+                DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
+                    @Override
+                    public void excel() {
+                        DialogoCodefac.mensaje("Error","No existe reporte en excel",DialogoCodefac.MENSAJE_INCORRECTO);
+                    }
+
+                    @Override
+                    public void pdf() {
+                        ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, compraDataReportes, panelPadre, "Reporte Compra");
+                    }
+                });
+                
+                
             }
         }catch(Exception e)
         {

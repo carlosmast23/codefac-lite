@@ -5,6 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.controlador.dialog;
 
+import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
+import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogModel;
 import ec.com.codesoft.codefaclite.controlador.panel.DialogoCargando;
 import ec.com.codesoft.codefaclite.controlador.panel.PanelCargando;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
@@ -92,6 +94,13 @@ public abstract class DialogoCodefac {
         } else {
           return false;
         } 
+    }
+    
+    public static void dialogoReporteOpciones(ReporteDialogListener listener)
+    {
+        ReporteDialogModel dialog=new ReporteDialogModel();
+        dialog.addListener(listener);
+        dialog.setVisible(true);
     }
     
     public static int dialogoPreguntaPersonalizada(String titulo, String mensaje, Integer tipoMensaje,String[] opciones) {

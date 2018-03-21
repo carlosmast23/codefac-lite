@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInte
 import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import java.util.Calendar;
@@ -36,7 +37,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
      * Creates new form FacturacionPanel
      */
     public FacturacionPanel() {
-        initComponents();      
+        initComponents();    
     }
     
    
@@ -181,9 +182,9 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         btnBuscarEstudiante = new javax.swing.JButton();
         jLabel32 = new javax.swing.JLabel();
         jLabel33 = new javax.swing.JLabel();
-        txtRepresentante = new javax.swing.JTextField();
         btnBuscarRepresentante = new javax.swing.JButton();
         btnAgregarRepresentante = new javax.swing.JButton();
+        cmbRepresentante = new javax.swing.JComboBox<>();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1052,16 +1053,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.weighty = 0.1;
         panelDatosEmpresa1.add(jLabel33, gridBagConstraints);
 
-        txtRepresentante.setEditable(false);
-        txtRepresentante.setText("...");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 20;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
-        panelDatosEmpresa1.add(txtRepresentante, gridBagConstraints);
-
         btnBuscarRepresentante.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         btnBuscarRepresentante.setText("Buscar");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1077,6 +1068,14 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         panelDatosEmpresa1.add(btnAgregarRepresentante, gridBagConstraints);
+
+        cmbRepresentante.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 20;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
+        panelDatosEmpresa1.add(cmbRepresentante, gridBagConstraints);
 
         panelTabDatos.addTab("Academico", panelDatosEmpresa1);
 
@@ -1133,6 +1132,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnQuitarDetalleFormaPago;
     private javax.swing.JCheckBox checkPorcentaje;
     private javax.swing.JComboBox<DocumentoEnum> cmbDocumento;
+    private javax.swing.JComboBox<Persona> cmbRepresentante;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
     private javax.swing.JCheckBox jCheckBox1;
     private com.toedter.calendar.JDateChooser jDateFechaEmision;
@@ -1216,7 +1216,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtDescripcion;
     private javax.swing.JTextField txtDescuento;
     private javax.swing.JTextField txtEstudiante;
-    private javax.swing.JTextField txtRepresentante;
     private javax.swing.JTextField txtValorTotal;
     private javax.swing.JTextField txtValorUnitario;
     // End of variables declaration//GEN-END:variables
@@ -1539,14 +1538,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         this.txtEstudiante = txtEstudiante;
     }
 
-    public JTextField getTxtRepresentante() {
-        return txtRepresentante;
-    }
-
-    public void setTxtRepresentante(JTextField txtRepresentante) {
-        this.txtRepresentante = txtRepresentante;
-    }
-
     public JButton getBtnAgregarDatosAdicionales() {
         return btnAgregarDatosAdicionales;
     }
@@ -1561,6 +1552,14 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
     public void setBtnAgregarRepresentante(JButton btnAgregarRepresentante) {
         this.btnAgregarRepresentante = btnAgregarRepresentante;
+    }
+
+    public JComboBox<Persona> getCmbRepresentante() {
+        return cmbRepresentante;
+    }
+
+    public void setCmbRepresentante(JComboBox<Persona> cmbRepresentante) {
+        this.cmbRepresentante = cmbRepresentante;
     }
 
     

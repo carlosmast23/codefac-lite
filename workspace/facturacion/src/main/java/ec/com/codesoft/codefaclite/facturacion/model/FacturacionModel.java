@@ -91,6 +91,7 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -251,6 +252,18 @@ public class FacturacionModel extends FacturacionPanel{
                 
                 if(represetanteTmp!=null)
                 {
+                    //Agregar solo si no existe el dato en el combo box
+                    if(!verificaDatoComboRepresentante(represetanteTmp))
+                    {
+                        getCmbRepresentante().addItem(represetanteTmp);
+                        getCmbRepresentante().setSelectedItem(represetanteTmp);
+                    }
+                    else
+                    {
+                        getCmbRepresentante().setSelectedItem(represetanteTmp);
+                    }
+                    
+                    /*
                     try {
                         Map<String,Object> parametrosMap=new HashMap<String,Object>();
                         parametrosMap.put("representante",represetanteTmp);
@@ -260,7 +273,7 @@ public class FacturacionModel extends FacturacionPanel{
                         {
                             factura.setCliente(represetanteTmp);
                             estudiante=estudiantes.get(0);      
-                            setearValoresAcademicos();
+                            setearValoresAcademicos(estudiante);
                             cargarDatosAdicionalesAcademicos();
                             cargarTablaDatosAdicionales();
                         }
@@ -268,7 +281,7 @@ public class FacturacionModel extends FacturacionPanel{
                         Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (ServicioCodefacException ex) {
                         Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    }*/
                 }
 
             }
@@ -284,11 +297,11 @@ public class FacturacionModel extends FacturacionPanel{
                 
                 if(estudianteTmp!=null)
                 {
-                    estudiante=estudianteTmp;
-                    factura.setCliente(estudianteTmp.getRepresentante());
-                    setearValoresAcademicos();   
+                    estudiante=estudianteTmp;                    
+                    setearValoresAcademicos(estudiante);   
                     cargarDatosAdicionalesAcademicos();
                     cargarTablaDatosAdicionales();
+                    factura.setCliente((Persona) getCmbRepresentante().getSelectedItem());
                 }
                 
                 
@@ -494,6 +507,17 @@ public class FacturacionModel extends FacturacionPanel{
             }
         });
 
+    }
+    
+    private boolean verificaDatoComboRepresentante(Persona persona)
+    {
+        DefaultComboBoxModel modelo=(DefaultComboBoxModel) getCmbRepresentante().getModel();
+        
+        if(modelo.getIndexOf(persona)<0)
+        {
+            return false;
+        }
+        return true;
     }
     
     private void agregarRubroAcademico()
@@ -736,7 +760,7 @@ public class FacturacionModel extends FacturacionPanel{
                     
                     estudiante=estudianteInscrito.getEstudiante();
                     
-                    setearValoresAcademicos();
+                    setearValoresAcademicos(estudiante);
                     
                 } catch (RemoteException ex) {
                     Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -829,9 +853,15 @@ public class FacturacionModel extends FacturacionPanel{
         getBtnAgregarDetalleFactura().setEnabled(true);
         getBtnAgregarProducto().setEnabled(true);
         getBtnCrearProducto().setEnabled(true);
+        
+        //Borrar los datos del estudiantes y los representantes
+        getCmbRepresentante().removeAllItems();
+        getTxtEstudiante().setText("");
+        
         //Limpiar las variables de la facturacion
         setearVariablesIniciales();
         cargarSecuencial();
+        
 
     }
     
@@ -1157,15 +1187,30 @@ public class FacturacionModel extends FacturacionPanel{
         getLblTotalDescuento().setText("" + factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()));
     }
     
-    private void setearValoresAcademicos()
+    private void setearValoresAcademicos(Estudiante estudiante)
     {
        
         getTxtEstudiante().setText(estudiante.getNombreCompleto());
-        getTxtRepresentante().setText(estudiante.getRepresentante().getNombresCompletos());
+        
+        //Cargar los representantes por defecto
+        getCmbRepresentante().removeAllItems();
+        if(estudiante.getRepresentante()!=null)
+        {
+            getCmbRepresentante().addItem(estudiante.getRepresentante());
+        }
+        
+        if(estudiante.getRepresentante2()!=null)
+        {
+            getCmbRepresentante().addItem(estudiante.getRepresentante2());
+        }
 
     }
     
     private void cargarDatosAdicionalesAcademicos() {
+        //Quita todos los datos anteriores para cargar los datos del estudiante
+        if(factura.getDatosAdicionales()!=null)
+            factura.getDatosAdicionales().clear();
+        
         //Cargar el correo solo cuando exista 
         factura.addDatosAdicionalCorreo(factura.getCliente().getCorreoElectronico());
 
@@ -1560,6 +1605,18 @@ public class FacturacionModel extends FacturacionPanel{
             public void actionPerformed(ActionEvent e) {
                 TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();                    
                 seleccionarPanelTipoDocumento(tipoDocumentoEnum);                
+            }
+        });
+        
+        getCmbRepresentante().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(factura!=null)
+                {
+                    //Si cambie el combo de representante tambien los seteo en la factura
+                    Persona persona=(Persona) getCmbRepresentante().getSelectedItem();
+                    factura.setCliente(persona);
+                }
             }
         });
     }

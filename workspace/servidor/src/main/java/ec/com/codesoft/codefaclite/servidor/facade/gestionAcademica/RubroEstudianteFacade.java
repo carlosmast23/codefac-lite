@@ -24,6 +24,27 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
     public RubroEstudianteFacade() {
         super(RubroEstudiante.class);
     }
+    public List<RubroEstudiante> findRubrosEstudiantesPorRubros(List<RubrosNivel> rubros)
+    {
+       
+        String queryString = "SELECT u FROM RubroEstudiante u WHERE";
+        
+        for (int i = 1; i <= rubros.size(); i++) {
+            queryString+=" u.rubroNivel=?"+i+" OR";
+        }
+        
+        queryString=queryString.substring(0, queryString.length()-3);
+        
+        Query query = getEntityManager().createQuery(queryString);
+        
+        //Setear las variables con el numero
+        for (int i = 1; i <= rubros.size(); i++) {
+            query.setParameter(i,rubros.get(i-1));
+        }
+        
+        return query.getResultList();
+    
+    }
 
     public List<RubroEstudiante> obtenerDeudasEstudiante(Estudiante estudiante) {
         String academico = "";

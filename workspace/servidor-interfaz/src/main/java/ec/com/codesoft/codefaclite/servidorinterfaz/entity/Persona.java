@@ -238,7 +238,7 @@ public class Persona implements Serializable {
 
     @Override
     public String toString() {
-        return "ec.com.codesoft.codefaclite.servidor.entity.Persona[ cedula=" + identificacion + " ]";
+        return identificacion+" - "+getNombresCompletos();
     }
 
 }

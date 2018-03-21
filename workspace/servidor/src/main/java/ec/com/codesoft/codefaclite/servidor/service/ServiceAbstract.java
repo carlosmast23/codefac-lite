@@ -24,7 +24,7 @@ import org.eclipse.persistence.exceptions.DatabaseException;
  */
 public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
 {
-    private AbstractFacade<Entity> facade;
+    protected AbstractFacade<Entity> facade;
     protected EntityManager entityManager;
 
     public ServiceAbstract() throws RemoteException {
@@ -91,6 +91,10 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
     }
     
 
+    protected Facade getFacade()
+    {
+        return (Facade) this.facade;
+    }
 
     /**
      * Metodo que se encarga de desasoriar una entidad gestionada para poder hacer acciones
