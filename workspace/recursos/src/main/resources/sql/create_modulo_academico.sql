@@ -95,6 +95,7 @@ create table RUBROS_NIVEL(
 
 create table RUBRO_ESTUDIANTE( 
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
+    VALOR decimal(7,2),
     SALDO decimal(7,2),
     ESTADO_FACTURA varchar(1),
     RUBRO_NIVEL_ID BIGINT,

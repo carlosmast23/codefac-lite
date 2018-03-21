@@ -31,7 +31,10 @@ public class RubroEstudiante implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
-        
+    
+    @Column(name = "VALOR")    
+    private BigDecimal valor;
+    
     @Column(name = "SALDO")
     private BigDecimal saldo;
     
@@ -87,6 +90,14 @@ public class RubroEstudiante implements Serializable{
 
     public void setEstadoFactura(String estadoFactura) {
         this.estadoFactura = estadoFactura;
+    }
+
+    public BigDecimal getValor() {
+        return valor;
+    }
+
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
     }
     
         
