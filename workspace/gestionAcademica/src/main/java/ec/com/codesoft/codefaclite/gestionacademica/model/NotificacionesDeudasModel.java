@@ -58,6 +58,9 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
      */
     private Thread hiloNotificaciones;
     
+    public static final String ETIQUETA_NOMBRE_ESTUDIANTE="[nombre_estudiante]";
+    public static final String ETIQUETA_NOMBRE_REPRESENTANTE="[nombre_representante]";
+    
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
@@ -395,6 +398,16 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
         return monitorData;
 
     }
+    
+    private String construirMensaje(EstudianteInscrito estudianteInscrito)
+    {
+        String mensaje=getTxtFormatoMensaje().getText();
+        
+        mensaje=mensaje.replace(ETIQUETA_NOMBRE_ESTUDIANTE,estudianteInscrito.getEstudiante().getNombreCompleto());
+        mensaje=mensaje.replace(ETIQUETA_NOMBRE_REPRESENTANTE,estudianteInscrito.getEstudiante().getRepresentante().getNombresCompletos());
+        
+        return mensaje;
+    }
             
     
     private void enviarComunicados()
@@ -419,7 +432,8 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
                     //Generar el reporte
                     generarReporte(estudianteInscrito,detalle, periodo);
                     //Enviar al correo
-                    enviarCorreo(estudianteInscrito);
+                    String mensaje=construirMensaje(estudianteInscrito);
+                    enviarCorreo(estudianteInscrito,mensaje);
                     System.out.println("estudiante: " + estudianteInscrito.getEstudiante().getNombreCompleto());
                     
                     double relacion=(double)contador/(double)mapRubrosEstudiante.size();
@@ -449,12 +463,12 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
     
     }
     
-    private void enviarCorreo(EstudianteInscrito estudianteInscrito)
+    private void enviarCorreo(EstudianteInscrito estudianteInscrito,String mensaje)
     {
         CorreoCodefac correoCodefac=new CorreoCodefac() {
             @Override
             public String getMensaje() {
-                return "Mensaje de prueba";
+                return mensaje;
             }
 
             @Override
