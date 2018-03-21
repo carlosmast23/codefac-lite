@@ -20,6 +20,9 @@ nb-configuration.xml
 
 #excluir base de datos
 /workspace/main/DB/
+#excluir archivo temporal
+/workspace/main/tmp/
+
 /workspace/servidor/DB/
 derby.log
 /workspace/controlador/target/

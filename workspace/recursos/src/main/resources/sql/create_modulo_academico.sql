@@ -84,6 +84,7 @@ create table ESTUDIANTE_INSCRITO(
 create table RUBROS_NIVEL( 
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
     NOMBRE varchar(100),
+    MES_NUMERO int,
     DIAS_CREDITO int,
     PERIODO_ID bigint,
     NIVEL_ID bigint,

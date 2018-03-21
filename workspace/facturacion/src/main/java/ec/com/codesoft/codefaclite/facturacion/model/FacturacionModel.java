@@ -529,7 +529,7 @@ public class FacturacionModel extends FacturacionPanel{
 
         if (rubroEstudianteTmp != null) {
             rubroSeleccionado=rubroEstudianteTmp;
-            setearValoresProducto(rubroEstudianteTmp.getRubroNivel().getValor(),rubroEstudianteTmp.getRubroNivel().getNombre());
+            setearValoresProducto(rubroEstudianteTmp.getSaldo(),rubroEstudianteTmp.getRubroNivel().getNombre());
             banderaAgregar = true;
         }
 
@@ -1015,7 +1015,7 @@ public class FacturacionModel extends FacturacionPanel{
                 {
                     RubroEstudiante rubroEstudiante=ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(detalle.getReferenciaId());
                     fila.add(rubroEstudiante.getId()+"");
-                    fila.add(rubroEstudiante.getRubroNivel().getValor()+"");
+                    //fila.add(rubroEstudiante.getRubroNivel().getValor()+"");
                 }
                 else
                 {
@@ -1023,10 +1023,11 @@ public class FacturacionModel extends FacturacionPanel{
                     {
                         Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
                         fila.add(producto.getCodigoPersonalizado());
-                        fila.add(producto.getValorUnitario().toString());
+                        //fila.add(producto.getValorUnitario().toString());
                     }
                 }
                 
+                fila.add(detalle.getPrecioUnitario().toString());
                
                 //Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
 
