@@ -143,7 +143,7 @@ public class RubroEstudiante implements Serializable{
 
         public static FacturacionEstadoEnum buscarPorLetra(String letra) {
             for (FacturacionEstadoEnum facturacionEstadoEnum : FacturacionEstadoEnum.values()) {
-                if (facturacionEstadoEnum.equals(letra)) {
+                if (facturacionEstadoEnum.getLetra().equals(letra)) {
                     return facturacionEstadoEnum;
                 }
             }

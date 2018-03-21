@@ -46,6 +46,7 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         for (RubroEstudiante rubrosEstudiante : rubrosEstudiantes) {
             if(rubrosEstudiante.getEstadoFacturaEnum().equals(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR))
             {
+                rubrosEstudiante=entityManager.merge(rubrosEstudiante);
                 entityManager.remove(rubrosEstudiante);
             }
         }

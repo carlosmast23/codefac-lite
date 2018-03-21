@@ -65,7 +65,7 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
     @Override
     public void grabar() throws ExcepcionCodefacLite {
         List<RubroEstudiante> rubrosEstudianteNuevos=getRubroEstudianteSinGrabar();
-        if(rubrosEstudianteNuevos.size()>0)
+        if(rubrosEstudianteNuevos.size()>0 || rubrosEstudianteEliminado.size()>0)
         {
             try {
                 //Graba los nuevos rubros y elimina rubros seleccionados
