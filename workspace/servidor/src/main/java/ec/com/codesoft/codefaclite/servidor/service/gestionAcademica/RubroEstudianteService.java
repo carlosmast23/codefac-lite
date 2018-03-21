@@ -17,7 +17,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlanti
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RubroEstudianteServiceIf;
-import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.List;
 import javax.persistence.EntityTransaction;
@@ -63,7 +62,8 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
                 rubroEstudiante.setEstadoFactura(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR.getLetra());
                 rubroEstudiante.setEstudianteInscrito(estudiateInscrito.getEstudianteInscrito());
                 rubroEstudiante.setRubroNivel(rubroNivel);
-                rubroEstudiante.setSaldo(BigDecimal.ZERO);
+                rubroEstudiante.setSaldo(rubroNivel.getValor());
+                rubroEstudiante.setValor(rubroNivel.getValor());
                 
                 entityManager.persist(rubroEstudiante);
             }
@@ -89,6 +89,9 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         for (EstudianteInscrito estudiante : estudiantes) {
             RubroEstudiante rubroEstudiante = new RubroEstudiante();
             rubroEstudiante.setEstudianteInscrito(estudiante);
+            rubroEstudiante.setSaldo(rubroNivel.getValor());
+            rubroEstudiante.setValor(rubroNivel.getValor());
+            rubroEstudiante.setEstadoFactura(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR.getLetra());
             rubroEstudiante.setRubroNivel(rubroNivel);
 
             entityManager.persist(rubroEstudiante);

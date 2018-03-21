@@ -206,6 +206,9 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
                         RubroEstudiante rubroEstudiante=new RubroEstudiante();
                         rubroEstudiante.setEstudianteInscrito(estudianteInscrito);
                         rubroEstudiante.setRubroNivel(rubroNivel);
+                        rubroEstudiante.setValor(rubroNivel.getValor());
+                        rubroEstudiante.setSaldo(rubroNivel.getValor());
+                        rubroEstudiante.setEstadoFactura(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR.getLetra());
                         
                         //Agregado a la lista de datos sin grabar
                         rubrosEstudiante.add(rubroEstudiante);
