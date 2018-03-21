@@ -31,9 +31,9 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
 
     public RubroEstudianteService() throws RemoteException {
         super(RubroEstudianteFacade.class);
-        rubroEstudianteFacade= new RubroEstudianteFacade();
+        rubroEstudianteFacade = new RubroEstudianteFacade();
     }
-    
+
     public List<RubroEstudiante> obtenerRubrosEstudiantesPorRubros(List<RubrosNivel> rubros) throws RemoteException
     {
         return getFacade().findRubrosEstudiantesPorRubros(rubros);
@@ -57,6 +57,7 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         try
         {
             EntityTransaction transaccion=getTransaccion();
+
             transaccion.begin();
             //Crear el rubro nivel de esa plantilla
             RubrosNivel rubroNivel = new RubrosNivel();
@@ -75,22 +76,21 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
                 rubroEstudiante.setEstadoFactura(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR.getLetra());
                 rubroEstudiante.setEstudianteInscrito(estudiateInscrito.getEstudianteInscrito());
                 rubroEstudiante.setRubroNivel(rubroNivel);
+
                 rubroEstudiante.setSaldo(rubroNivel.getValor());
                 rubroEstudiante.setValor(rubroNivel.getValor());
-                
+
                 entityManager.persist(rubroEstudiante);
             }
-            
+
             //Modificar el valor del mes que se esta generando
-            rubroPlantilla.cambiarEstadoMes(mesEnum,Boolean.TRUE);
+            rubroPlantilla.cambiarEstadoMes(mesEnum, Boolean.TRUE);
             entityManager.merge(rubroPlantilla);
-            
-            
+
             transaccion.commit();
             return rubroPlantilla;
 
-        }catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -112,7 +112,7 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         entityManager.flush();
         transaccion.commit();
     }
-    
+
     public void crearRubrosEstudiantes(List<RubroEstudiante> rubrosEstudiantes) throws RemoteException {
         EntityTransaction transaccion = getTransaccion();
         transaccion.begin();
@@ -129,6 +129,23 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         return rubroEstudianteFacade.obtenerDeudasEstudiante(est);
     }
 
-  
+    @Override
+    public List<Object[]> obtenerRubroPeriodoGrupo(Periodo periodo) throws RemoteException {
+        return rubroEstudianteFacade.obtenerRubroPeriodoGrupo(periodo);
+    }
 
+    @Override
+    public List<NivelAcademico> obtenerRubroPeriodo(Periodo periodo) throws RemoteException {
+        return rubroEstudianteFacade.obtenerRubroPeriodo(periodo);
+    }
+
+    @Override
+    public List<RubrosNivel> obtenerRubroNivel(NivelAcademico nivel) throws RemoteException {
+        return rubroEstudianteFacade.obtenerRubroNivel(nivel);
+    }
+
+    @Override
+    public List<RubroEstudiante> obtenerRubro(NivelAcademico nivel, RubrosNivel rubro) throws RemoteException {
+        return rubroEstudianteFacade.obtenerRubro(nivel, rubro);
+    }
 }
