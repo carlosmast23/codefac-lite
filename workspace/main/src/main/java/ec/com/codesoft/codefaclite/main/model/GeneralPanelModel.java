@@ -806,14 +806,16 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         return;
                     }
                     
-                    String tituloOriginal = getTituloOriginal(frame.getTitle());
-                    frame.setTitle(tituloOriginal + " [Editar]"); 
-                    
+                   
                     try {
                         frameInterface.buscar();
                         frameInterface.estadoFormulario= ControladorCodefacInterface.ESTADO_EDITAR;
                         limpiarCamposValidacion(frameInterface);
                         mostrarPanelSecundario(false);
+                        
+                        String tituloOriginal = getTituloOriginal(frame.getTitle());
+                        frame.setTitle(tituloOriginal + " [Editar]");
+
                     } catch (ExcepcionCodefacLite ex) {
                         //ex.printStackTrace();
                         System.out.println("Cancelado metodo buscar");

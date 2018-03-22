@@ -27,6 +27,7 @@ import ec.com.codesoft.codefaclite.ws.recepcion.Comprobante;
 import ec.com.codesoft.codefaclite.ws.recepcion.Mensaje;
 import ec.com.codesoft.ejemplo.utilidades.email.CorreoElectronico;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.ejemplo.utilidades.xml.UtilidadesXml;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.ByteArrayInputStream;
@@ -73,6 +74,7 @@ public class ComprobanteElectronicoService implements Runnable {
     public static final String CARPETA_AUTORIZADOS = "autorizados";
     public static final String CARPETA_NO_AUTORIZADOS = "no_autorizados";
     public static final String CARPETA_RIDE = "ride";
+    public static final String CARPETA_LOTE = "lote";
     
     public static final String CARPETA_CONFIGURACION = "configuracion";
 
@@ -122,6 +124,16 @@ public class ComprobanteElectronicoService implements Runnable {
      * Conjunto de comprobante cuando se van a procesar por Lotes
      */
     private List<ComprobanteElectronico> comprobantesLote;
+    
+    /**
+     * Ruc de la empresa variable necesaria cuando se trabaja en lote
+     */
+    private String ruc;
+    
+    /**
+     * Lista de las claves de acceso para trabajar en las siguientes etapas despues de generar el comprobante
+     */
+    private List<String> clavesAccesoLote;
 
     /**
      * Clave de acceso del comprobante
@@ -188,7 +200,7 @@ public class ComprobanteElectronicoService implements Runnable {
     }
     
 
-    private void procesarComprobante() {
+    public void procesarComprobante() {
         try {
             if(escucha!=null)escucha.iniciado(comprobante);
             
@@ -284,6 +296,7 @@ public class ComprobanteElectronicoService implements Runnable {
     private void procesarComprobanteLote()
     {
         try {
+            
             if(escuchaLote!=null)escuchaLote.iniciado();
             
             if (etapaActual.equals(ETAPA_GENERAR)){
@@ -312,7 +325,10 @@ public class ComprobanteElectronicoService implements Runnable {
                 etapaActual++;
             }
 
+            //List<String> comprobantesFirmados=new ArrayList<String>();
+            
             if (etapaActual.equals(ETAPA_FIRMAR)) {
+                claveAcceso = obtenerClaveAccesoLote();
                 firmarLote();
                 if(escuchaLote!=null)escuchaLote.procesando(etapaActual);
                 System.out.println("firmar lote()");
@@ -322,6 +338,29 @@ public class ComprobanteElectronicoService implements Runnable {
                 }
                 etapaActual++;
             }
+            else//Si no tiene que firmar los datos entonces tiene que obtener segun las claves de acceso
+            {
+                claveAcceso = obtenerClaveAccesoLote();
+                List<String> comprobantesFirmados = new ArrayList<String>();
+                for (String claveAcceso : clavesAccesoLote) {
+                    String path = getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS, claveAcceso);
+                    String firmaStr = UtilidadesXml.convertirDocumentToString(path);
+                    //System.out.println(firmaStr);
+                    firmaStr="<![CDATA["+firmaStr+"]]>";
+                    comprobantesFirmados.add(firmaStr);
+                }
+
+                StringWriter stringWriter = generarXmlLote(comprobantesFirmados, ruc);
+                ComprobantesElectronicosUtil.generarArchivoXml(stringWriter, getPathComprobante(CARPETA_LOTE));
+                
+            }
+            
+            //Genero siempre la clave de acceso de todo el lote
+            //claveAcceso = obtenerClaveAccesoLote();
+            //Esta etapa es obligatoria para cualquier de los pasos porque tengo que generar el archivo xml del lote
+            //StringWriter stringWriter = generarXmlLote(comprobantesFirmados, ruc);
+            //ComprobantesElectronicosUtil.generarArchivoXml(stringWriter, getPathComprobante(CARPETA_FIRMADOS));
+            
 
             if (etapaActual.equals(ETAPA_ENVIAR)) {
                 enviarSriLote();
@@ -403,9 +442,12 @@ public class ComprobanteElectronicoService implements Runnable {
                     correosElectronicosTemp.addAll(correosElectronicos);
                 }
                 
-                for (InformacionAdicional infoAdicional : comprobante.getInformacionAdicional()) {
-                    if (infoAdicional.getNombre().indexOf("correo") >= 0) {
-                        correosElectronicosTemp.add(infoAdicional.getValor());
+                if(comprobante.getInformacionAdicional()!=null)
+                {
+                    for (InformacionAdicional infoAdicional : comprobante.getInformacionAdicional()) {
+                        if (infoAdicional.getNombre().indexOf("correo") >= 0) {
+                            correosElectronicosTemp.add(infoAdicional.getValor());
+                        }
                     }
                 }
                 
@@ -428,13 +470,13 @@ public class ComprobanteElectronicoService implements Runnable {
     
     private void enviarComprobanteLoteCorreo()
     {
-        for (ComprobanteElectronico comprobanteElectronico : comprobantesLote) {
-             Autorizacion autorizacion = servicioSri.buscarAutorizacion(comprobanteElectronico.getInformacionTributaria().getClaveAcceso());
+        for (String claveAccesoComprobante : clavesAccesoLote) {
+             Autorizacion autorizacion = servicioSri.buscarAutorizacion(claveAccesoComprobante);
 
              //Enviar solo los comprobantes que existen y que fueron autorizados
             if (autorizacion != null && autorizacion.getEstado().equals(ServicioSri.AUTORIZADO)) {
                  try {
-                     enviarComprobanteCorreo(comprobanteElectronico.getInformacionTributaria().getClaveAcceso());
+                     enviarComprobanteCorreo(claveAccesoComprobante);
                  } catch (ComprobanteElectronicoException ex) {
                      Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
                  }
@@ -529,8 +571,8 @@ public class ComprobanteElectronicoService implements Runnable {
     }
     
     private void generarRideLote() throws ComprobanteElectronicoException {
-        for (ComprobanteElectronico comprobanteElectronico : comprobantesLote) {
-            generarRideIndividual(comprobanteElectronico.getInformacionTributaria().getClaveAcceso());
+        for (String claveAccesoComprobante : clavesAccesoLote) {
+            generarRideIndividual(claveAccesoComprobante);
         }
     }
     
@@ -711,21 +753,21 @@ public class ComprobanteElectronicoService implements Runnable {
         List<ClaveAcceso> listaClaves=new ArrayList<ClaveAcceso>();                    
         try {
                     
-            claveAcceso = obtenerClaveAccesoLote();            
-            //String ruc="";
+            //claveAcceso = obtenerClaveAccesoLote();            
+
             //Generar los xml individuales de los comprobantes para procesar en lote
+            clavesAccesoLote=new ArrayList<String>();
             for (ComprobanteElectronico comprobante : comprobantesLote) {
                 String claveAccesoComprobante=obtenerClaveAcceso(comprobante);
                 listaClaves.add(new ClaveAcceso(claveAccesoComprobante));
                         
                 comprobante.getInformacionTributaria().setClaveAcceso(claveAccesoComprobante);
+                clavesAccesoLote.add(claveAccesoComprobante);
                 //ruc=comprobante.getInformacionTributaria().getRuc();
                 StringWriter stringWriter = generarXml(comprobante,claveAccesoComprobante);
                 ComprobantesElectronicosUtil.generarArchivoXml(stringWriter, getPathComprobanteConClaveAcceso(CARPETA_GENERADOS,claveAccesoComprobante));
             }
-            //Genrar el xml del contenedor de los comprobantes para procesar individual
-            //StringWriter stringWriter = generarXmlLote(comprobantesLote,ruc);
-            //ComprobantesElectronicosUtil.generarArchivoXml(stringWriter, getPathComprobante(CARPETA_GENERADOS));
+
         } catch (Exception e) {
             e.printStackTrace();
             throw new ComprobanteElectronicoException(e.getMessage(), "Generando XML", ComprobanteElectronicoException.ERROR_COMPROBANTE);
@@ -751,15 +793,23 @@ public class ComprobanteElectronicoService implements Runnable {
 
     }
     
+    private void obtenerFirmasPorLote()
+    {
+        for (String claveAccesoComprobante : clavesAccesoLote) {
+            
+        }
+    }
+    
+    
     private void firmarLote() throws ComprobanteElectronicoException {
         FirmaElectronica firmaElectronica = new FirmaElectronica(getPathFirma(), claveFirma);
         
-        String ruc="";
+        //String ruc="";
         List<String> comprobantesFirmados=new ArrayList<String>();
         
-        for (ComprobanteElectronico comprobanteElectronico : comprobantesLote) {
-            ruc=comprobanteElectronico.getInformacionTributaria().getRuc();
-            String claveAccesoTemp=comprobanteElectronico.getInformacionTributaria().getClaveAcceso();
+        for (String claveAccesoComprobante : clavesAccesoLote) {
+            //ruc=comprobanteElectronico.getInformacionTributaria().getRuc();
+            String claveAccesoTemp=claveAccesoComprobante;
             Document documentoFirmado = firmaElectronica.firmar(getPathComprobanteConClaveAcceso(CARPETA_GENERADOS,claveAccesoTemp));
             
             if (documentoFirmado != null) {
@@ -779,9 +829,10 @@ public class ComprobanteElectronicoService implements Runnable {
             }
         }
         
-        //Agregar el comprobante firmado a la lista de comprobante en loteas
-        StringWriter stringWriter = generarXmlLote(comprobantesFirmados,ruc);
-        ComprobantesElectronicosUtil.generarArchivoXml(stringWriter, getPathComprobante(CARPETA_FIRMADOS)); 
+        StringWriter stringWriter = generarXmlLote(comprobantesFirmados, ruc);
+        ComprobantesElectronicosUtil.generarArchivoXml(stringWriter, getPathComprobante(CARPETA_LOTE));
+        
+        //return comprobantesFirmados;
 
     }
 
@@ -820,22 +871,22 @@ public class ComprobanteElectronicoService implements Runnable {
             servicioSri = new ServicioSri();
             servicioSri.setUri_autorizacion(uriAutorizacion);
             servicioSri.setUri_recepcion(uriRecepcion);
-            servicioSri.setUrlFile(getPathComprobante(CARPETA_FIRMADOS));
+            servicioSri.setUrlFile(getPathComprobante(CARPETA_LOTE));
 
             if (servicioSri.verificarConexionRecepcion()) {
                 System.out.println("Existe conexion");
                 if (servicioSri.enviar()) {
                     System.out.println("Documento enviados");
-                    for (ComprobanteElectronico comprobanteElectronico : comprobantesLote) {
+                    for (String claveAccesoComprobante : clavesAccesoLote) {
                         //Mover todos los archivos individuales
-                        String claveAccesoTemp=comprobanteElectronico.getInformacionTributaria().getClaveAcceso();
+                        String claveAccesoTemp=claveAccesoComprobante;
                         ComprobantesElectronicosUtil.copiarArchivoXml(getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS,claveAccesoTemp),getPathComprobanteConClaveAcceso(CARPETA_ENVIADOS,claveAccesoTemp));
                         ComprobantesElectronicosUtil.eliminarArchivo(getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS,claveAccesoTemp));
                     }                    
                     
                     //Mover el archivo que contiene todos los archivos en lote a la carpeta de enviados
-                    ComprobantesElectronicosUtil.copiarArchivoXml(getPathComprobante(CARPETA_FIRMADOS),getPathComprobante(CARPETA_ENVIADOS));
-                    ComprobantesElectronicosUtil.eliminarArchivo(getPathComprobante(CARPETA_FIRMADOS));
+                    //ComprobantesElectronicosUtil.copiarArchivoXml(getPathComprobante(CARPETA_FIRMADOS),getPathComprobante(CARPETA_ENVIADOS));
+                    //ComprobantesElectronicosUtil.eliminarArchivo(getPathComprobante(CARPETA_FIRMADOS));
                     
                 } else {
                     String mensajeError = "";
@@ -872,16 +923,16 @@ public class ComprobanteElectronicoService implements Runnable {
         servicioSri = new ServicioSri();
         servicioSri.setUri_autorizacion(uriAutorizacion);
         servicioSri.setUri_recepcion(uriRecepcion);
-        servicioSri.setUrlFile(getPathComprobante(CARPETA_FIRMADOS));
+        servicioSri.setUrlFile(getPathComprobante(CARPETA_LOTE));
         
         /**
          * Recogiendo autorizacion SRI
          */
         if (servicioSri.autorizarLote(claveAcceso)) {
             
-            for (ComprobanteElectronico comprobanteLote : comprobantesLote) {
+            for (String claveAccesoComprobante : clavesAccesoLote) {
                 //Generar los archivos de cada comprobante autorizado
-                Autorizacion autorizacion=servicioSri.buscarAutorizacion(comprobanteLote.getInformacionTributaria().getClaveAcceso());
+                Autorizacion autorizacion=servicioSri.buscarAutorizacion(claveAccesoComprobante);
                 
                 if(autorizacion!=null && autorizacion.getEstado().equals(ServicioSri.AUTORIZADO))
                 {
@@ -893,8 +944,9 @@ public class ComprobanteElectronicoService implements Runnable {
                 
             }
             
-            ComprobantesElectronicosUtil.copiarArchivoXml(getPathComprobante(CARPETA_ENVIADOS), getPathComprobante(CARPETA_FIRMADOS));
-            ComprobantesElectronicosUtil.eliminarArchivo(getPathComprobante(CARPETA_ENVIADOS));
+            //Si el archivo se autoriza correctamente se elimina el archivo del lote
+            //ComprobantesElectronicosUtil.copiarArchivoXml(getPathComprobante(CARPETA_ENVIADOS), getPathComprobante(CARPETA_FIRMADOS));
+            ComprobantesElectronicosUtil.eliminarArchivo(getPathComprobante(CARPETA_LOTE));
 
             //String xmlAutorizado = servicioSri.obtenerRespuestaAutorizacion();
             //ComprobantesElectronicosUtil.generarArchivoXml(xmlAutorizado, getPathComprobanteConClaveAcceso(CARPETA_AUTORIZADOS,claveAcceso));
@@ -1362,6 +1414,23 @@ public class ComprobanteElectronicoService implements Runnable {
     public ServicioSri getServicioSri() {
         return servicioSri;
     }
+
+    public String getRuc() {
+        return ruc;
+    }
+
+    public void setRuc(String ruc) {
+        this.ruc = ruc;
+    }
+
+    public List<String> getClavesAccesoLote() {
+        return clavesAccesoLote;
+    }
+
+    public void setClavesAccesoLote(List<String> clavesAccesoLote) {
+        this.clavesAccesoLote = clavesAccesoLote;
+    }
+    
     
     
     

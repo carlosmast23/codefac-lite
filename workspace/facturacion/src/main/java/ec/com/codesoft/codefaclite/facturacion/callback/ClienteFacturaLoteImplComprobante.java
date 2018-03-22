@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInte
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.facturacion.interfaz.InterfaceCallbakClient;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
 import ec.com.codesoft.codefaclite.facturacion.model.ResultadoLoteAcademicoModel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
@@ -40,11 +41,17 @@ import net.sf.jasperreports.engine.JasperPrint;
  */
 public class ClienteFacturaLoteImplComprobante extends UnicastRemoteObject implements ClienteInterfaceComprobanteLote {
 
+    private InterfaceCallbakClient listener;
     private MonitorComprobanteData monitorData;
     private ControladorCodefacInterface controlador;
 
     public ClienteFacturaLoteImplComprobante(ControladorCodefacInterface controlador) throws RemoteException {
         this.controlador=controlador;
+    }
+    
+    public ClienteFacturaLoteImplComprobante(ControladorCodefacInterface controlador,InterfaceCallbakClient listener) throws RemoteException {
+        this.controlador = controlador;
+        this.listener=listener;
     }
     
     
@@ -97,6 +104,10 @@ public class ClienteFacturaLoteImplComprobante extends UnicastRemoteObject imple
         monitorData.getBarraProgreso().setForeground(Color.GREEN);
         monitorData.getBtnAbrir().setEnabled(true);
         monitorData.getBtnCerrar().setEnabled(true);
+        //Ejecutar listener para informar a la pantalla prinicipal que termino el proceso
+        if(listener!=null)
+            listener.terminoProceso();
+        
         monitorData.getBtnAbrir().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -113,6 +124,10 @@ public class ClienteFacturaLoteImplComprobante extends UnicastRemoteObject imple
             monitorData.getBtnAbrir().setEnabled(true);
             monitorData.getBtnCerrar().setEnabled(true);
             
+            //Ejecutar listener para informar a la pantalla prinicipal que termino el proceso
+            if(listener!=null)
+                listener.terminoProceso();
+            
             monitorData.getBtnAbrir().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -122,6 +137,11 @@ public class ClienteFacturaLoteImplComprobante extends UnicastRemoteObject imple
                     //facturacionModel.panelPadre.crearReportePantalla(jasperPrint, facturaProcesando.getPreimpreso());
                 }
             });
+    }
+    
+    public void addListener(InterfaceCallbakClient listener)
+    {
+        this.listener=listener;
     }
 
 

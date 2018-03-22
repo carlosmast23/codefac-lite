@@ -36,6 +36,7 @@ public class RubroEstudianteBusqueda implements InterfaceModelFind<RubroEstudian
         Vector<ColumnaDialogo> titulo = new Vector<>();
         titulo.add(new ColumnaDialogo("Nombre", 0.2d));
         titulo.add(new ColumnaDialogo("Precio", 0.3d));
+        titulo.add(new ColumnaDialogo("Saldo", 0.3d));
         return titulo;
     }
 
@@ -53,7 +54,8 @@ public class RubroEstudianteBusqueda implements InterfaceModelFind<RubroEstudian
     @Override
     public void agregarObjeto(RubroEstudiante t, Vector dato) {
         dato.add(t.getRubroNivel().getNombre());
-        dato.add(t.getRubroNivel().getValor());
+        dato.add(t.getValor());
+        dato.add(t.getSaldo());
     }
 
     /*

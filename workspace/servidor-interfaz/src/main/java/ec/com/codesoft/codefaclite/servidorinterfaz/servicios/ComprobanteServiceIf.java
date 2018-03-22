@@ -24,6 +24,10 @@ import net.sf.jasperreports.engine.JasperPrint;
  */
 public interface ComprobanteServiceIf extends Remote {
     
+    public boolean procesarComprobantesLotePendiente(Integer etapaInicial,Integer etapaLimite,List<String> clavesAcceso,String ruc,ClienteInterfaceComprobanteLote callbackClientObject) throws RemoteException;
+    
+    public void firmarComprobante(ComprobanteDataInterface comprobanteData,Factura factura,Usuario usuario) throws RemoteException;
+    
     public Integer obtenerSecuencialFacturaYAvanzar() throws RemoteException;
     
     public boolean verificarCredencialesFirma(String claveFirma) throws RemoteException;
@@ -42,5 +46,5 @@ public interface ComprobanteServiceIf extends Remote {
 
     public void unregisterForCallback(ClienteInterfaceComprobante callbackClientObject) throws java.rmi.RemoteException;
     
-    public void procesarComprobanteLote(List<ComprobanteDataInterface> comprobantesData,Usuario usuario,ClienteInterfaceComprobanteLote callbackClientObject) throws RemoteException;
+    public void procesarComprobanteLote(List<ComprobanteDataInterface> comprobantesData,Usuario usuario,String ruc,ClienteInterfaceComprobanteLote callbackClientObject) throws RemoteException;
 }

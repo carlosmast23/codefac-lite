@@ -579,59 +579,37 @@ public class FacturacionModel extends FacturacionPanel{
             factura=servicio.grabar(factura);
             
             facturaProcesando = factura;
-            
-            DialogoCodefac.mensaje("Correcto", "La factura se grabo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+
             
             //Si la factura en manual no continua el proceso de facturacion electronica
             if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(TipoFacturacionEnumEstado.NORMAL.getLetra()))
             {
-                DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();
+                DialogoCodefac.mensaje("Correcto", "La factura se grabo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+                facturaManual();
                 
-                InputStream reporteOriginal=null;
-                if(documentoEnum.NOTA_VENTA.equals(documentoEnum))
-                {
-                    reporteOriginal = RecursoCodefac.JASPER_COMPROBANTES_FISICOS.getResourceInputStream("nota_venta.jrxml");
+            }
+            else
+            {
+
+                ComprobanteDataFactura comprobanteData = new ComprobanteDataFactura(factura);
+                comprobanteData.setMapInfoAdicional(getMapAdicional(factura));
+                ClienteInterfaceComprobante cic = new ClienteFacturaImplComprobante(this, facturaProcesando);
+                ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
+                Boolean repuestaFacturaElectronica = DialogoCodefac.dialogoPregunta("Correcto", "La factura se grabo correctamente,Desea autorizar en el SRI ahora?", DialogoCodefac.MENSAJE_CORRECTO);
+                
+                //Si quiere que se procese en ese momento le ejecuto el proceso normal
+                if (repuestaFacturaElectronica) {
+
+                    comprobanteServiceIf.procesarComprobante(comprobanteData, facturaProcesando, session.getUsuario(), cic);
                 }
                 else
                 {
-                    reporteOriginal = RecursoCodefac.JASPER_COMPROBANTES_FISICOS.getResourceInputStream("factura_fisica.jrxml");
+                    //Solo genera el pdf pero no envia al SRI
+                    comprobanteServiceIf.firmarComprobante(comprobanteData, facturaProcesando, session.getUsuario());
+                    DialogoCodefac.mensaje("Correcto","El comprobante esta firmado , no se olvide de enviar al SRI en un periodo maximo de 48 horas", DialogoCodefac.MENSAJE_CORRECTO);
                 }
-                
-                ManagerReporteFacturaFisica manager = new ManagerReporteFacturaFisica(reporteOriginal);
-                ComprobanteFisicoDisenioServiceIf servicioComprobanteDisenio=ServiceFactory.getFactory().getComprobanteFisicoDisenioServiceIf();;
-                Map<String,Object> parametroComprobanteMap=new HashMap<String,Object>();
-                parametroComprobanteMap.put("codigoDocumento",documentoEnum.getCodigo());
-                ComprobanteFisicoDisenio documento= servicioComprobanteDisenio.obtenerPorMap(parametroComprobanteMap).get(0);
-                manager.setearNuevosValores(documento);
-                InputStream reporteNuevo = manager.generarNuevoDocumento();
-                
-                Map<String, Object> parametros = getParametroReporte(documentoEnum);
-                
-                //Llenar los datos de los detalles
-                List<DetalleFacturaFisicaData> detalles = new ArrayList<DetalleFacturaFisicaData>();
-                
-                for (FacturaDetalle detalleFactura : factura.getDetalles()) {
-                    DetalleFacturaFisicaData detalle = new DetalleFacturaFisicaData();
-                    detalle.setCantidad(detalleFactura.getCantidad()+"");
-                    detalle.setDescripcion(detalleFactura.getDescripcion());
-                    detalle.setValorTotal(detalleFactura.getTotal()+"");
-                    detalle.setValorUnitario(detalleFactura.getPrecioUnitario()+"");
-                    detalles.add(detalle);
-                }
-                
-                ReporteCodefac.generarReporteInternalFrame(reporteNuevo, parametros, detalles, panelPadre, "Muestra Previa");
-                
-                return ;
+
             }
-            
-            ComprobanteDataFactura comprobanteData=new ComprobanteDataFactura(factura);
-            //comprobanteData.setCorreosAdicionales(correosAdicionales);
-            comprobanteData.setMapInfoAdicional(getMapAdicional(factura));
-            //MonitorComprobanteData monitorData = MonitorComprobanteModel.getInstance().agregarComprobante();
-            ClienteInterfaceComprobante cic=new ClienteFacturaImplComprobante(this, facturaProcesando);
-            ComprobanteServiceIf comprobanteServiceIf= ServiceFactory.getFactory().getComprobanteServiceIf();
-            //comprobanteServiceIf.registerForCallback(cic);
-            comprobanteServiceIf.procesarComprobante(comprobanteData,facturaProcesando,session.getUsuario(),cic);
             
      
         } catch (ServicioCodefacException ex) {
@@ -639,6 +617,50 @@ public class FacturacionModel extends FacturacionPanel{
         } catch (RemoteException ex) {
             Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private void facturaManual() throws ServicioCodefacException
+    {
+    
+        try {
+            DocumentoEnum documentoEnum = (DocumentoEnum) getCmbDocumento().getSelectedItem();
+            
+            InputStream reporteOriginal = null;
+            if (documentoEnum.NOTA_VENTA.equals(documentoEnum)) {
+                reporteOriginal = RecursoCodefac.JASPER_COMPROBANTES_FISICOS.getResourceInputStream("nota_venta.jrxml");
+            } else {
+                reporteOriginal = RecursoCodefac.JASPER_COMPROBANTES_FISICOS.getResourceInputStream("factura_fisica.jrxml");
+            }
+            
+            ManagerReporteFacturaFisica manager = new ManagerReporteFacturaFisica(reporteOriginal);
+            ComprobanteFisicoDisenioServiceIf servicioComprobanteDisenio = ServiceFactory.getFactory().getComprobanteFisicoDisenioServiceIf();;
+            Map<String, Object> parametroComprobanteMap = new HashMap<String, Object>();
+            parametroComprobanteMap.put("codigoDocumento", documentoEnum.getCodigo());
+            ComprobanteFisicoDisenio documento = servicioComprobanteDisenio.obtenerPorMap(parametroComprobanteMap).get(0);
+            manager.setearNuevosValores(documento);
+            InputStream reporteNuevo = manager.generarNuevoDocumento();
+            
+            Map<String, Object> parametros = getParametroReporte(documentoEnum);
+            
+            //Llenar los datos de los detalles
+            List<DetalleFacturaFisicaData> detalles = new ArrayList<DetalleFacturaFisicaData>();
+            
+            for (FacturaDetalle detalleFactura : factura.getDetalles()) {
+                DetalleFacturaFisicaData detalle = new DetalleFacturaFisicaData();
+                detalle.setCantidad(detalleFactura.getCantidad() + "");
+                detalle.setDescripcion(detalleFactura.getDescripcion());
+                detalle.setValorTotal(detalleFactura.getTotal() + "");
+                detalle.setValorUnitario(detalleFactura.getPrecioUnitario() + "");
+                detalles.add(detalle);
+            }
+            
+            ReporteCodefac.generarReporteInternalFrame(reporteNuevo, parametros, detalles, panelPadre, "Muestra Previa");
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            throw  ex; //Relanza el error al proceso principal
+        }
+    
     }
     
     private Map<String,String> getMapAdicional(Factura factura)
@@ -743,9 +765,9 @@ public class FacturacionModel extends FacturacionPanel{
         FacturaBusqueda facturaBusqueda = new FacturaBusqueda();
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(facturaBusqueda);
         buscarDialogoModel.setVisible(true);
-        Factura factura = (Factura) buscarDialogoModel.getResultado();
-        if (factura != null) {
-            this.factura = factura;
+        Factura facturaTmp = (Factura) buscarDialogoModel.getResultado();
+        if (facturaTmp != null) {
+            this.factura = facturaTmp;
             ///Cargar los datos de la factura segun el tipo de datos del primer detalle
             TipoDocumentoEnum tipoReferenciaEnum=factura.getDetalles().get(0).getTipoDocumentoEnum();
             if(tipoReferenciaEnum.equals(TipoDocumentoEnum.ACADEMICO))

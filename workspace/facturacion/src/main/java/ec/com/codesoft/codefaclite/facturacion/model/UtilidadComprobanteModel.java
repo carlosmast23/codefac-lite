@@ -10,7 +10,9 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.facturacion.callback.ClienteFacturaLoteImplComprobante;
 import ec.com.codesoft.codefaclite.facturacion.callback.ClienteUtilidadImplComprobante;
+import ec.com.codesoft.codefaclite.facturacion.interfaz.InterfaceCallbakClient;
 import ec.com.codesoft.codefaclite.facturacion.panel.UtilidadComprobantePanel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
@@ -23,6 +25,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectr
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
+import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobanteLote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
@@ -32,7 +35,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NotaCreditoEnumEs
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
+import ec.com.codesoft.ejemplo.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -62,6 +67,8 @@ import javax.swing.table.TableModel;
  */
 public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
 
+    private UtilidadComprobanteModel formThis=this;
+    
     private JInternalFrame frame;
     private DefaultTableModel tableModel;
     private List<ComprobanteElectronico> comprobantes;
@@ -70,6 +77,8 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
     public UtilidadComprobanteModel() {
         iniciarComponentes();
         addBotonListener();
+        addComboListener();
+        addTableListener();
         frame = this;
     }
 
@@ -132,15 +141,13 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
 
     
     private void cargarDatosComprobantesTabla(List<ComprobanteElectronico> comprobantes) {
-        Vector<String> titulo = new Vector<>();
-        titulo.add("Clave Acceso");
-        titulo.add("Preimpreso");
-        titulo.add("Fecha");
+        String[] titulo = new String[]{"Seleccion","Clave Acceso","Preimpreso","Fecha"};
 
-        this.tableModel = new DefaultTableModel(titulo, 0);
-
+        this.tableModel=UtilidadesTablas.crearModeloTabla(titulo,new Class[]{Boolean.class,String.class,String.class,String.class});
+        
         for (ComprobanteElectronico comprobante : comprobantes) {
-            Vector<String> fila = new Vector<>();
+            Vector<Object> fila = new Vector<>();
+            fila.add(false);
             fila.add(comprobante.getInformacionTributaria().getClaveAcceso());
             fila.add(comprobante.getInformacionTributaria().getPreimpreso());
             fila.add(comprobante.getFechaEmision());
@@ -151,6 +158,10 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
     
     private void cargarSiguienteEtapaPorCarpeta(String carpeta)
     {
+        //Por defecto en procesar etapa selecciono todos
+        getCmbEstadoLimiteProcesar().setSelectedIndex(0);
+        //Por defecto estaba seleccionando el siguiente nivel de la carpeta
+        /*
         switch (carpeta) {
 
             case ComprobanteElectronicoService.CARPETA_GENERADOS:
@@ -176,7 +187,7 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
             case ComprobanteElectronicoService.CARPETA_RIDE:
                 getCmbEstadoLimiteProcesar().setSelectedIndex(7);
                 break;
-        }
+        }*/
     
     }
 
@@ -201,65 +212,7 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
             }
         });
         
-        getTblComprobantes().addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-               Integer indice=getTblComprobantes().getSelectedRow();
-               
-               ComprobanteElectronico comprobante=comprobantes.get(indice);
-               listaModel=new DefaultListModel();
-               List<InformacionAdicional> infoAdicional=comprobante.getInformacionAdicional();
-                for (InformacionAdicional informacionAdicional : infoAdicional) {
-                    if(informacionAdicional.getNombre().equals(InformacionAdicional.EMAIL))
-                    {
-                        String[] correos=informacionAdicional.getValor().split(",");
-                        for (String correo : correos) {
-                            listaModel.addElement(correo);
-                        }
-                        break;
-                    }
-                }
-                getjListCorreos().setModel(listaModel);
-            }
 
-            @Override
-            public void mousePressed(MouseEvent e) {                
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {               
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {                
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {                
-            }
-        });
-        
-                
-        getCmbCarpetaComprobante().addActionListener(new ActionListener() {
-            
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                
-                try {
-                    //TODO: Revisar esta validacion temporal porque no existe la carpeta de no autorizado
-                    if(getCmbCarpetaComprobante().getSelectedItem().equals(ComprobanteElectronicoService.CARPETA_NO_AUTORIZADOS))
-                    {
-                        return ;
-                    }
-                    ComprobanteServiceIf comprobanteServiceIf=ServiceFactory.getFactory().getComprobanteServiceIf();
-                    comprobantes= comprobanteServiceIf.getComprobantesObjectByFolder(getCmbCarpetaComprobante().getSelectedItem().toString());
-                    cargarDatosComprobantesTabla(comprobantes);
-                    cargarSiguienteEtapaPorCarpeta(getCmbCarpetaComprobante().getSelectedItem().toString());
-                } catch (RemoteException ex) {
-                    Logger.getLogger(UtilidadComprobanteModel.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
 
         getBtnSiguienteEtapa().addActionListener(new ActionListener() {
             @Override
@@ -282,97 +235,35 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
                 switch (etapa) {
 
                     case ComprobanteElectronicoService.CARPETA_GENERADOS:
-                        procesarComprobante(ComprobanteElectronicoService.ETAPA_GENERAR+1,etapaLimite);
+                        procesarComprobanteLote(ComprobanteElectronicoService.ETAPA_GENERAR+1,etapaLimite);
                         break;
 
                     case ComprobanteElectronicoService.CARPETA_FIRMADOS:
-                        procesarComprobante(ComprobanteElectronicoService.ETAPA_FIRMAR+1,etapaLimite);
+                        procesarComprobanteLote(ComprobanteElectronicoService.ETAPA_FIRMAR+1,etapaLimite);
                         break;
 
                     case ComprobanteElectronicoService.CARPETA_ENVIADOS:
-                        procesarComprobante(ComprobanteElectronicoService.ETAPA_ENVIAR+1,etapaLimite);
+                        procesarComprobanteLote(ComprobanteElectronicoService.ETAPA_ENVIAR+1,etapaLimite);
                         break;
                         
                     case ComprobanteElectronicoService.CARPETA_AUTORIZADOS:
-                        procesarComprobante(ComprobanteElectronicoService.ETAPA_AUTORIZAR+1,etapaLimite);
+                        procesarComprobanteLote(ComprobanteElectronicoService.ETAPA_AUTORIZAR+1,etapaLimite);
                         break;
 
                     case ComprobanteElectronicoService.CARPETA_NO_AUTORIZADOS:
-                        procesarComprobante(ComprobanteElectronicoService.ETAPA_AUTORIZAR+1,etapaLimite);
+                        procesarComprobanteLote(ComprobanteElectronicoService.ETAPA_AUTORIZAR+1,etapaLimite);
                         break;
                         
                     case ComprobanteElectronicoService.CARPETA_RIDE:
-                        procesarComprobante(ComprobanteElectronicoService.ETAPA_RIDE+1,etapaLimite);
+                        procesarComprobanteLote(ComprobanteElectronicoService.ETAPA_RIDE+1,etapaLimite);
                         break;
                 }
-
+                
             }
         });
     }
 
-    /*
-    private ListenerComprobanteElectronico listener = new ListenerComprobanteElectronico() {
-        @Override
-        public void termino() {
-            estadoNormal();
-            DialogoCodefac.mensaje("Dialogo", "Proceso Terminado", 1);
-        }
-
-        @Override
-        public void iniciado(ComprobanteElectronico comprobante) {
-            
-        }
-
-        @Override
-        public void procesando(int etapa,ClaveAcceso clave) {
-            if(etapa == ComprobanteElectronicoService.ETAPA_AUTORIZAR) //Si ya cumple la etapa de autorizar cambio el estado de los comprobantes
-            {
-                try {
-                    ComprobanteEnum comprobante = ComprobanteEnum.getEnumByCodigo(clave.tipoComprobante);
-                    Map<String, Object> map = new HashMap<String, Object>();
-                    map.put("claveAcceso", clave.clave);
-                    switch(comprobante)
-                    {
-                        case FACTURA:
-                            FacturacionServiceIf servicio=ServiceFactory.getFactory().getFacturacionServiceIf();
-                            List<Factura> facturas=servicio.obtenerPorMap(map);
-                            for (Factura factura : facturas) {
-                                try {
-                                    factura.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
-                                    servicio.editar(factura);
-                                } catch (RemoteException ex) {
-                                    Logger.getLogger(UtilidadComprobanteModel.class.getName()).log(Level.SEVERE, null, ex);
-                                }
-                            }
-                            break;
-                            
-                        case NOTA_CREDITO:
-                            NotaCreditoServiceIf servicioNotaCredito=ServiceFactory.getFactory().getNotaCreditoServiceIf();
-                            List<NotaCredito> notasCredito=servicioNotaCredito.obtenerPorMap(map);
-                            for (NotaCredito notaCredito : notasCredito) {
-                                try {
-                                    notaCredito.setClaveAcceso(NotaCreditoEnumEstado.TERMINADO.getEstado());
-                                    servicioNotaCredito.editar(notaCredito);
-                                } catch (RemoteException ex) {
-                                    Logger.getLogger(UtilidadComprobanteModel.class.getName()).log(Level.SEVERE, null, ex);
-                                }
-                            }
-                            break;
-                    }
-                } catch (RemoteException ex) {
-                    Logger.getLogger(UtilidadComprobanteModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ServicioCodefacException ex) {
-                    Logger.getLogger(UtilidadComprobanteModel.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-
-        @Override
-        public void error(ComprobanteElectronicoException cee) {
-            estadoNormal();
-            DialogoCodefac.mensaje("Dialogo", cee.getMessage(), 1);
-        }
-    };*/
+    
     
     private void procesarComprobante(Integer etapaInicial,Integer etapaLimite) 
     {
@@ -391,6 +282,45 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
         }
     }
     
+    private void procesarComprobanteLote(Integer etapaInicial,Integer etapaLimite) 
+    {
+        try {
+            //Buscar todos las filas seleccionadas
+            List<String> clavesAcceso=new ArrayList<String>();
+            for (int i = 0; i < tableModel.getRowCount(); i++)
+            {
+                Boolean opcion=(Boolean) tableModel.getValueAt(i, 0);
+                if(opcion)
+                {
+                    String claveAcceso=tableModel.getValueAt(i, 1).toString();
+                    clavesAcceso.add(claveAcceso);
+                    System.out.println(claveAcceso);
+                }
+            }
+            
+            if(clavesAcceso.size()>0)
+            {
+                estadoCargando();
+                ClienteInterfaceComprobanteLote cic = new ClienteFacturaLoteImplComprobante(this,new InterfaceCallbakClient() {
+                    @Override
+                    public void terminoProceso() {
+                        formThis.estadoNormal();
+                        getCmbCarpetaComprobante().setSelectedIndex(getCmbCarpetaComprobante().getSelectedIndex());
+                    }
+                });                
+                ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobantesLotePendiente(etapaInicial, etapaLimite, clavesAcceso, session.getEmpresa().getIdentificacion(),cic);
+                //estadoNormal();
+            }
+            else
+            {
+                DialogoCodefac.mensaje("Advertencia","Seleccione datos para procesar",DialogoCodefac.MENSAJE_ADVERTENCIA);
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(UtilidadComprobanteModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
     private List<String> obtenerCorreos()
     {
         List<String> correos=new ArrayList<String>();
@@ -402,16 +332,6 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
 
     
 
-    //private void etapaGenerados(Boolean completarTodasEtapas) {
-        /*
-        FacturacionElectronica servicio = new FacturacionElectronica(session, panelPadre);
-        servicio.getServicio().addActionListerComprobanteElectronico(listener);
-        estadoCargando();
-        String claveAcceso = tableModel.getValueAt(getTblComprobantes().getSelectedRow(), 0).toString().replace(".xml", "");
-        servicio.setClaveAcceso(claveAcceso);
-        //servicio.procesarComprobanteEtapa(ComprobanteElectronicoService.ETAPA_GENERAR + 1, completarTodasEtapas);*/
-        
-    //}
 
     private void iniciarComponentes() {
         /**
@@ -463,6 +383,63 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
     @Override
     public List<String> getPerfilesPermisos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void addComboListener() {
+            getCmbCarpetaComprobante().addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                try {
+                    //TODO: Revisar esta validacion temporal porque no existe la carpeta de no autorizado
+                    if (getCmbCarpetaComprobante().getSelectedItem().equals(ComprobanteElectronicoService.CARPETA_NO_AUTORIZADOS)) {
+                        return;
+                    }
+                    ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
+                    comprobantes = comprobanteServiceIf.getComprobantesObjectByFolder(getCmbCarpetaComprobante().getSelectedItem().toString());
+                    cargarDatosComprobantesTabla(comprobantes);
+                    cargarSiguienteEtapaPorCarpeta(getCmbCarpetaComprobante().getSelectedItem().toString());
+                } catch (RemoteException ex) {
+                    Logger.getLogger(UtilidadComprobanteModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+    }
+
+    private void addTableListener() {
+            getTblComprobantes().addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Integer indice = getTblComprobantes().getSelectedRow();
+
+                ComprobanteElectronico comprobante = comprobantes.get(indice);
+                listaModel = new DefaultListModel();
+                List<InformacionAdicional> infoAdicional = comprobante.getInformacionAdicional();
+                for (InformacionAdicional informacionAdicional : infoAdicional) {
+                    if (informacionAdicional.getNombre().indexOf(FacturaAdicional.NOMBRE_CORREO) >= 0) {
+                        listaModel.addElement(informacionAdicional.getValor());
+                    }
+                }
+                getjListCorreos().setModel(listaModel);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
+        });
     }
 
 }

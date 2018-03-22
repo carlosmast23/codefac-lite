@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlValue;
  * @author Carlos
  */
 public class InformacionAdicional implements Serializable{
-    public static final String EMAIL="email";
+    //public static final String EMAIL="email";
     
    private String nombre;
    private String valor;
