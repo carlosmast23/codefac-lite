@@ -37,10 +37,5 @@ public interface RubroEstudianteServiceIf extends ServiceAbstractIf<RubroEstudia
     public List<RubroEstudiante> obtenerDeudasEstudiante(Estudiante estudiante) throws java.rmi.RemoteException;
 
     public List<Object[]> obtenerRubroPeriodoGrupo(Periodo periodo) throws java.rmi.RemoteException;
-    public List<NivelAcademico> obtenerRubroPeriodo(Periodo periodo) throws java.rmi.RemoteException;
-    
-    public List<RubrosNivel> obtenerRubroNivel(NivelAcademico nivel) throws java.rmi.RemoteException;
-    
-    public List<RubroEstudiante> obtenerRubro(NivelAcademico nivel,RubrosNivel rubro) throws java.rmi.RemoteException;
-
+ 
 }
