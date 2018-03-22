@@ -6,7 +6,11 @@
 package ec.com.codesoft.codefaclite.gestionacademica.model;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.ReporteDeudasCursoPanel;
+import ec.com.codesoft.codefaclite.gestionacademica.reportdata.ReporteDeudasCursoData;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
@@ -16,8 +20,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RubroEstudianteServiceIf;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,64 +68,24 @@ public class ReporteDeudasCursoModel extends ReporteDeudasCursoPanel {
                     titulo.add("Rubro");
                     titulo.add("Abono");
                     titulo.add("Deuda");
-                    BigDecimal acumAbono = BigDecimal.ZERO;
-                    BigDecimal acumDeuda = BigDecimal.ZERO;
-                    BigDecimal auxAbono = BigDecimal.ZERO;
-                    BigDecimal auxDeuda = BigDecimal.ZERO;
+
                     DefaultTableModel modeloTablaDeudas = new DefaultTableModel(titulo, 0);
                     RubroEstudianteServiceIf na = ServiceFactory.getFactory().getRubroEstudianteServiceIf();
                     List<Object[]> dataEstudiante = na.obtenerRubroPeriodoGrupo((Periodo) getCmbPeriodo().getSelectedItem());
                     for (Object[] obj : dataEstudiante) {
                         NivelAcademico n = (NivelAcademico) obj[0];
                         RubrosNivel r = (RubrosNivel) obj[1];
-                        BigDecimal b = (BigDecimal) obj[2];
+                        BigDecimal abono = (BigDecimal) obj[2];
+                        BigDecimal deuda = (BigDecimal) obj[3];
                         Vector<String> fila = new Vector<String>();
                         fila.add(n.getNombre());
                         fila.add(r.getNombre());
-                        fila.add(b.toString());
+                        fila.add(abono.toString());
+                        fila.add(deuda.toString());
                         modeloTablaDeudas.addRow(fila);
 
                     }
 
-                    /* List<NivelAcademico> dataEstudiante = na.obtenerRubroPeriodo((Periodo) getCmbPeriodo().getSelectedItem());
-                    //obtengo los niveles del periodo
-                    for (NivelAcademico nivel : dataEstudiante) {
-                        Vector<String> fila = new Vector<String>();
-                        fila.add(nivel.getNombre());
-                        modeloTablaDeudas.addRow(fila);
-
-                        List<RubrosNivel> dataEstudiante2 = na.obtenerRubroNivel(nivel);
-                        for (RubrosNivel rubro2 : dataEstudiante2) {
-                            //aqui obtengo rubros por nivel
-                            Vector<String> fila2 = new Vector<String>();
-                            acumAbono = BigDecimal.ZERO;
-                            acumDeuda = BigDecimal.ZERO;
-                            //modeloTablaDeudas.addRow(fila2);
-                            List<RubroEstudiante> dataEstudiante3 = na.obtenerRubro(nivel, rubro2);
-                            for (RubroEstudiante rubro3 : dataEstudiante3) {
-                                //aqui sumo los ruubros
-
-                                if (rubro3.getEstadoFactura().compareTo("s") == 0) {
-                                    auxAbono = BigDecimal.ZERO;
-                                    auxDeuda = rubro3.getRubroNivel().getValor();
-                                } else if (rubro3.getEstadoFactura().compareTo("p") == 0) {
-                                    auxAbono = rubro3.getSaldo();
-                                    auxDeuda = rubro3.getRubroNivel().getValor().subtract(rubro3.getSaldo());
-                                }
-                                acumAbono = acumAbono.add(auxAbono);
-                                acumDeuda = acumDeuda.add(auxDeuda);
-
-                      
-                            }
-                            fila2.add("-");
-                            fila2.add(rubro2.getNombre());
-                            fila2.add(acumAbono.toString());
-                            fila2.add(acumDeuda.toString());
-                            modeloTablaDeudas.addRow(fila2);
-
-                        }
-
-                    }*/
                     getTblDeudas().setModel(modeloTablaDeudas);
                 } catch (RemoteException ex) {
                     Logger.getLogger(ReporteDeudasCursoModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -152,7 +118,38 @@ public class ReporteDeudasCursoModel extends ReporteDeudasCursoPanel {
 
     @Override
     public void imprimir() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            InputStream path = RecursoCodefac.JASPER_ACADEMICO.getResourceInputStream("reporte_deudas_curso.jrxml");
+
+            RubroEstudianteServiceIf na = ServiceFactory.getFactory().getRubroEstudianteServiceIf();
+            List<Object[]> dataEstudiante = na.obtenerRubroPeriodoGrupo((Periodo) getCmbPeriodo().getSelectedItem());
+            List<ReporteDeudasCursoData> data = new ArrayList<ReporteDeudasCursoData>();
+            for (Object[] obj : dataEstudiante) {
+                NivelAcademico n = (NivelAcademico) obj[0];
+                RubrosNivel r = (RubrosNivel) obj[1];
+                BigDecimal abono = (BigDecimal) obj[2];
+                BigDecimal deuda = (BigDecimal) obj[3];
+
+                data.add(new ReporteDeudasCursoData(
+                        n.getNombre(),
+                        r.getNombre(),
+                        abono,
+                        deuda
+                ));
+            }
+            
+            Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
+            if (periodo != null) {
+                parameters.put("periodo", periodo.getNombre());
+            } else {
+                parameters.put("periodo", "TODOS");
+            }
+             
+            ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Deudas por Curso");
+        } catch (RemoteException ex) {
+            Logger.getLogger(ReporteDeudasCursoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     @Override
@@ -182,7 +179,10 @@ public class ReporteDeudasCursoModel extends ReporteDeudasCursoPanel {
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
+        return permisos;
     }
 
     @Override

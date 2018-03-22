@@ -34,16 +34,13 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         rubroEstudianteFacade = new RubroEstudianteFacade();
     }
 
-    public List<RubroEstudiante> obtenerRubrosEstudiantesPorRubros(List<RubrosNivel> rubros) throws RemoteException
-    {
+    public List<RubroEstudiante> obtenerRubrosEstudiantesPorRubros(List<RubrosNivel> rubros) throws RemoteException {
         return getFacade().findRubrosEstudiantesPorRubros(rubros);
     }
-    
-    public RubroPlantilla crearRubroEstudiantesDesdePlantila(RubroPlantilla rubroPlantilla,MesEnum mesEnum,String nombreRubroMes) throws RemoteException
-    {
-        try
-        {
-            EntityTransaction transaccion=getTransaccion();
+
+    public RubroPlantilla crearRubroEstudiantesDesdePlantila(RubroPlantilla rubroPlantilla, MesEnum mesEnum, String nombreRubroMes) throws RemoteException {
+        try {
+            EntityTransaction transaccion = getTransaccion();
 
             transaccion.begin();
             //Crear el rubro nivel de esa plantilla
@@ -121,18 +118,4 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         return rubroEstudianteFacade.obtenerRubroPeriodoGrupo(periodo);
     }
 
-    @Override
-    public List<NivelAcademico> obtenerRubroPeriodo(Periodo periodo) throws RemoteException {
-        return rubroEstudianteFacade.obtenerRubroPeriodo(periodo);
-    }
-
-    @Override
-    public List<RubrosNivel> obtenerRubroNivel(NivelAcademico nivel) throws RemoteException {
-        return rubroEstudianteFacade.obtenerRubroNivel(nivel);
-    }
-
-    @Override
-    public List<RubroEstudiante> obtenerRubro(NivelAcademico nivel, RubrosNivel rubro) throws RemoteException {
-        return rubroEstudianteFacade.obtenerRubro(nivel, rubro);
-    }
 }

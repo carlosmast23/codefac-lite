@@ -53,7 +53,6 @@ public enum VentanaEnum {
     FACTURA_ACADEMICO_LOTE("ec.com.codesoft.codefaclite.facturacion.model.FacturaAcademicoLoteModel","FACL","",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.PROCESOS),
     REPORTE_MATRICULA("ec.com.codesoft.codefaclite.gestionacademica.model.ReporteAcademicoModel","RMAT","",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.REPORTES),
     REPORTE_DEUDAS("ec.com.codesoft.codefaclite.gestionacademica.model.ReporteDeudasModel","RDES","",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.REPORTES),
-    REPORTE_DEUDASGRUPO("ec.com.codesoft.codefaclite.gestionacademica.model.ReporteDeudasGrupoModel","RDEG","",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.REPORTES),
     REPORTE_DEUDASESTUDIANTE("ec.com.codesoft.codefaclite.gestionacademica.model.ReporteDeudasEstudianteModel","RDEI","",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.REPORTES),
     REPORTE_DEUDASCURSO("ec.com.codesoft.codefaclite.gestionacademica.model.ReporteDeudasCursoModel","RDEC","",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.REPORTES),
     DEUDA_ESTUDIANTE("ec.com.codesoft.codefaclite.gestionacademica.model.DeudaEstudianteModel","DEML","",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.PROCESOS),
