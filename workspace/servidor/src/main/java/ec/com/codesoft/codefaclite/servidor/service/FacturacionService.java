@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.Constrain
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.math.BigDecimal;
@@ -88,33 +89,14 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
              * Actualizar valores del inventario con el kardex
              */
             for (FacturaDetalle detalle : factura.getDetalles()) {
-                
-                Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
-                
-                Map<String,Object> mapParametros=new HashMap<String,Object>();
-                mapParametros.put("producto", producto);
-                KardexService kardexService=new KardexService();
-                List<Kardex> kardexs= kardexService.obtenerPorMap(mapParametros);
-                //TODO: Definir especificamente cual es la bodega principal
-                if(kardexs!=null && kardexs.size()>0)
+                //Verificar a que modulo debe afectar los detalles
+                if(detalle.getTipoDocumentoEnum().equals(TipoDocumentoEnum.ACADEMICO))
                 {
-                    //TODO: Analizar caso cuando se resta un producto especifico
-                    Kardex kardex= kardexs.get(0);
-                    KardexDetalle kardexDetalle=new KardexDetalle();
-                    kardexDetalle.setCantidad(detalle.getCantidad().intValue());
-                    kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.VENTA.getCodigo());
-                    kardexDetalle.setPrecioTotal(detalle.getTotal());
-                    kardexDetalle.setPrecioUnitario(detalle.getPrecioUnitario());
-                    kardexDetalle.setReferenciaDocumentoId(factura.getId());
-                    kardex.addDetalleKardex(kardexDetalle);
-                    
-                    //Actualizar los valores del kardex
-                    kardex.setStock(kardex.getStock() - kardexDetalle.getCantidad());
-                    //kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(kardexDetalle.getPrecioUnitario()).divide(new BigDecimal("2"), 2, RoundingMode.HALF_UP));
-                    kardex.setPrecioTotal(kardex.getPrecioTotal().subtract(kardexDetalle.getPrecioTotal()));
-                    //kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());
-                    
-                    entityManager.merge(kardex);
+                    afectarAcademico(detalle);
+                }
+                else                
+                {
+                    afectarInventario(detalle);
                 }
                 
             }
@@ -135,6 +117,70 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return factura;
+    }
+    
+    private void afectarAcademico(FacturaDetalle detalle)
+    {
+        try {
+            RubroEstudiante rubroEstudiante=ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(detalle.getReferenciaId());
+            //El total es sin impuestos
+            BigDecimal saldoPendiente=rubroEstudiante.getSaldo().subtract(detalle.getTotal());
+            
+            //Cuando el saldo es 0 la factura se factura en su totalidad
+            if(saldoPendiente.compareTo(BigDecimal.ZERO)==0)
+            {
+                rubroEstudiante.setEstadoFactura(RubroEstudiante.FacturacionEstadoEnum.FACTURADO.getLetra());
+                rubroEstudiante.setSaldo(BigDecimal.ZERO);
+            }
+            else
+            {
+                rubroEstudiante.setEstadoFactura(RubroEstudiante.FacturacionEstadoEnum.FACTURA_PARCIAL.getLetra());
+                rubroEstudiante.setSaldo(saldoPendiente);
+            }
+            
+            //Despues de modificar los estados del rubro los modifico segun el caso
+            entityManager.merge(rubroEstudiante);
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    private void afectarInventario(FacturaDetalle detalle)
+    {
+        try {
+            Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
+            
+            Map<String,Object> mapParametros=new HashMap<String,Object>();
+            mapParametros.put("producto", producto);
+            KardexService kardexService=new KardexService();
+            List<Kardex> kardexs= kardexService.obtenerPorMap(mapParametros);
+            //TODO: Definir especificamente cual es la bodega principal
+            if(kardexs!=null && kardexs.size()>0)
+            {
+                //TODO: Analizar caso cuando se resta un producto especifico
+                Kardex kardex= kardexs.get(0);
+                KardexDetalle kardexDetalle=new KardexDetalle();
+                kardexDetalle.setCantidad(detalle.getCantidad().intValue());
+                kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.VENTA.getCodigo());
+                kardexDetalle.setPrecioTotal(detalle.getTotal());
+                kardexDetalle.setPrecioUnitario(detalle.getPrecioUnitario());
+                kardexDetalle.setReferenciaDocumentoId(detalle.getFactura().getId());
+                kardex.addDetalleKardex(kardexDetalle);
+                
+                //Actualizar los valores del kardex
+                kardex.setStock(kardex.getStock() - kardexDetalle.getCantidad());
+                //kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(kardexDetalle.getPrecioUnitario()).divide(new BigDecimal("2"), 2, RoundingMode.HALF_UP));
+                kardex.setPrecioTotal(kardex.getPrecioTotal().subtract(kardexDetalle.getPrecioTotal()));
+                //kardex.setPrecioUltimo(kardexDetalle.getPrecioUnitario());
+                
+                entityManager.merge(kardex);
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
     }
     
     public List<Factura> consultaDialogo(String param,int limiteMinimo,int limiteMaximo)

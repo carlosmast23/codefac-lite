@@ -41,10 +41,12 @@ public class RubroEstudianteBusqueda implements InterfaceModelFind<RubroEstudian
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        String queryString = "SELECT u FROM RubroEstudiante u WHERE u.estudianteInscrito.estudiante=?1 and ";
+        String queryString = "SELECT u FROM RubroEstudiante u WHERE u.estudianteInscrito.estudiante=?1 and ( u.estadoFactura=?2 OR  u.estadoFactura=?3) and ";
         queryString += " ( LOWER(u.rubroNivel.nombre) like " + filter + " )";
         QueryDialog queryDialog = new QueryDialog(queryString);
         queryDialog.agregarParametro(1, estudiante);
+        queryDialog.agregarParametro(2,RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR.getLetra());
+        queryDialog.agregarParametro(3,RubroEstudiante.FacturacionEstadoEnum.FACTURA_PARCIAL.getLetra());
         return queryDialog;
     }
 

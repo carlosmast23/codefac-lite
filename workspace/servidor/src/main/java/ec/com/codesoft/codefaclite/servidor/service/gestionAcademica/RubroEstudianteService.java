@@ -38,9 +38,26 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         return getFacade().findRubrosEstudiantesPorRubros(rubros);
     }
 
-    public RubroPlantilla crearRubroEstudiantesDesdePlantila(RubroPlantilla rubroPlantilla, MesEnum mesEnum, String nombreRubroMes) throws RemoteException {
-        try {
-            EntityTransaction transaccion = getTransaccion();
+    
+    public void eliminarRubrosEstudiantes(List<RubroEstudiante> rubrosEstudiantes) throws RemoteException
+    {
+        EntityTransaction transaccion=getTransaccion();
+        transaccion.begin();
+        for (RubroEstudiante rubrosEstudiante : rubrosEstudiantes) {
+            if(rubrosEstudiante.getEstadoFacturaEnum().equals(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR))
+            {
+                rubrosEstudiante=entityManager.merge(rubrosEstudiante);
+                entityManager.remove(rubrosEstudiante);
+            }
+        }
+        transaccion.commit();
+    }
+    
+    public RubroPlantilla crearRubroEstudiantesDesdePlantila(RubroPlantilla rubroPlantilla,MesEnum mesEnum,String nombreRubroMes) throws RemoteException
+    {
+        try
+        {
+            EntityTransaction transaccion=getTransaccion();
 
             transaccion.begin();
             //Crear el rubro nivel de esa plantilla

@@ -48,6 +48,7 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
      * Guarda el listado de los rubros agregados al estudiante
      */
     private List<RubroEstudiante> rubrosEstudianteEliminado;
+
     
     
     @Override
@@ -64,10 +65,15 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
     @Override
     public void grabar() throws ExcepcionCodefacLite {
         List<RubroEstudiante> rubrosEstudianteNuevos=getRubroEstudianteSinGrabar();
-        if(rubrosEstudianteNuevos.size()>0)
+        if(rubrosEstudianteNuevos.size()>0 || rubrosEstudianteEliminado.size()>0)
         {
             try {
+                //Graba los nuevos rubros y elimina rubros seleccionados
                 ServiceFactory.getFactory().getRubroEstudianteServiceIf().crearRubrosEstudiantes(rubrosEstudianteNuevos);
+                
+                //Elimina rubros seleccionados
+                ServiceFactory.getFactory().getRubroEstudianteServiceIf().eliminarRubrosEstudiantes(rubrosEstudianteEliminado);
+                
                 DialogoCodefac.mensaje("Correcto","El estudiante fue actualizado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
             } catch (RemoteException ex) {
                 Logger.getLogger(DeudaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -97,12 +103,19 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
 
     @Override
     public void editar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       
     }
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(estudianteInscrito!=null)
+        {
+        
+        }
+        else
+        {
+            DialogoCodefac.mensaje("Advetencia","Seleccione un estudiane para elminar los rubros",DialogoCodefac.MENSAJE_ADVERTENCIA);
+        }
     }
 
     @Override
@@ -143,7 +156,6 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
         Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
         permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
         permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
-        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
         permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
         permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
         permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
@@ -210,6 +222,11 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
                         rubroEstudiante.setSaldo(rubroNivel.getValor());
                         rubroEstudiante.setEstadoFactura(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR.getLetra());
                         
+                        //Si el rubro que se va a agregar ya esta en la lista de eliminados le quito de esa lista
+                        if(rubrosEstudianteEliminado.contains(rubroEstudiante))
+                        {
+                            rubrosEstudianteEliminado.remove(rubrosEstudiante);
+                        }
                         //Agregado a la lista de datos sin grabar
                         rubrosEstudiante.add(rubroEstudiante);
                         
@@ -235,6 +252,14 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
                     }
                     else //Esta caso se ejecuta cuando ya existe grabado y toca analizar que rubros se pueden eliminar
                     {
+                        if(rubroEstudiante.getEstadoFacturaEnum().equals(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR))
+                        {
+                            rubrosEstudianteEliminado.add(rubroEstudiante);                        
+                        }
+                        else
+                        {
+                            DialogoCodefac.mensaje("Advertencia","El rubro ya se encuentra facturado no se puede facturar \n Si desea eliminar primero tiene que anular la factura",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                        }
                         //TODO: Verificar en que caso se pueden eliminar rubros ya agegados
                     }
                     cargarDatosTabla();
@@ -246,38 +271,26 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
     
     private void cargarDatosTabla()
     {
-        Object[] titulo={"Objeto","Nombre","Curso","Valor","Accion"};
+        Object[] titulo={"Objeto","Nombre","Curso","Valor"};
         DefaultTableModel modeloTabla=new DefaultTableModel(titulo,0);
         
         if(rubrosEstudiante!=null)
         {
             for (RubroEstudiante rubroEstudiante : rubrosEstudiante) {
                 
-                Vector<Object> fila = new Vector<Object>();
-                fila.add(rubroEstudiante);
-                fila.add(rubroEstudiante.getEstudianteInscrito().getEstudiante().getNombreCompleto());
-                fila.add(rubroEstudiante.getRubroNivel().getNombre());
-                fila.add(rubroEstudiante.getRubroNivel().getValor().toString());
-
                 //Verificar si el elemento se le tiene que eliminar
-                if(rubrosEstudianteEliminado.contains(rubroEstudiante))
+                if(!rubrosEstudianteEliminado.contains(rubroEstudiante))
                 {
-                    fila.add("eliminar");
-                    modeloTabla.addRow(fila);   
-                }
-                else
-                {
-                    if (rubroEstudiante.getId() == null) 
-                    {
-                        fila.add("grabar");
-                    } 
-                    else 
-                    {
-                        fila.add("");
-                    }
+                    Vector<Object> fila = new Vector<Object>();
+                    fila.add(rubroEstudiante);
+                    fila.add(rubroEstudiante.getEstudianteInscrito().getEstudiante().getNombreCompleto());
+                    fila.add(rubroEstudiante.getRubroNivel().getNombre());
+                    fila.add(rubroEstudiante.getRubroNivel().getValor().toString());
+                    
+                     modeloTabla.addRow(fila);
                 }
                 
-                modeloTabla.addRow(fila);
+               
             }
         }
       
