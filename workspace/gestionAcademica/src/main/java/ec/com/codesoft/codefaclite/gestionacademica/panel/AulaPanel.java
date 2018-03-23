@@ -64,6 +64,8 @@ public abstract class AulaPanel extends ControladorCodefacInterface {
             }
         });
 
+        cmbEstado.setEnabled(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(

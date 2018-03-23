@@ -13,21 +13,23 @@ public enum GeneralEnumEstado {
     /**
      * Valor por defecto del cliente
      */
-    ACTIVO("A"),
+    ACTIVO("A","Activo"),
     /**
      * Estado inactivo del cliente seguramente por algun motivo que el usuario
      * cosidere
      */
-    INACTIVO("I"),
+    INACTIVO("I","Inactivo"),
     /**
      * Estado cuando un cliente es eliminado de forma permanente
      */
-    ELIMINADO("E"),;
+    ELIMINADO("E","Eliminado"),;
 
     private String estado;
+    private String nombre;
 
-    private GeneralEnumEstado(String estado) {
+    private GeneralEnumEstado(String estado,String nombre) {
         this.estado = estado;
+        this.nombre=nombre;
     }
 
     public String getEstado() {
@@ -37,6 +39,12 @@ public enum GeneralEnumEstado {
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
+    public String getNombre() {
+        return nombre;
+    }
+    
+    
 
     public static GeneralEnumEstado getEnum(String estado) {
         for (GeneralEnumEstado enumerador : GeneralEnumEstado.values()) {

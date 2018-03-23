@@ -175,7 +175,7 @@ public class NivelAcademicoModel extends NivelAcademicoPanel implements Serializ
     private void cargarCombos() {
 
         try {
-            List<Aula> aulas = ServiceFactory.getFactory().getAulaServiceIf().obtenerTodos();
+            List<Aula> aulas = ServiceFactory.getFactory().getAulaServiceIf().obtenerAulasActivas();
             getCmbAula().removeAllItems();
             for (Aula aula : aulas) {
                 getCmbAula().addItem(aula);

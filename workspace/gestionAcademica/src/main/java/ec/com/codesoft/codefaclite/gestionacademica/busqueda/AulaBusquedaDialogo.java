@@ -24,15 +24,16 @@ public class AulaBusquedaDialogo implements InterfaceModelFind<Aula> {
         titulo.add(new ColumnaDialogo("Nombre", 0.3d));
         titulo.add(new ColumnaDialogo("Ubicacion", 0.3d));
         titulo.add(new ColumnaDialogo("Capacidad", 0.2d));
+        titulo.add(new ColumnaDialogo("Estado", 0.3d));
         return titulo;
     }
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        String queryString = "SELECT u FROM Aula u WHERE (u.estado=?1) and";
+        String queryString = "SELECT u FROM Aula u WHERE ";
         queryString += " ( LOWER(u.nombre) LIKE " + filter + " )";
         QueryDialog queryDialog = new QueryDialog(queryString);
-        queryDialog.agregarParametro(1, GeneralEnumEstado.ACTIVO.getEstado());
+        //queryDialog.agregarParametro(1, GeneralEnumEstado.ACTIVO.getEstado());
         return queryDialog;
     }
 
@@ -41,6 +42,7 @@ public class AulaBusquedaDialogo implements InterfaceModelFind<Aula> {
         dato.add(a.getNombre());
         dato.add(a.getUbicacion());
         dato.add(a.getCapacidad());
+        dato.add(a.getEstadoEnum().getNombre());
     }
 
     /*

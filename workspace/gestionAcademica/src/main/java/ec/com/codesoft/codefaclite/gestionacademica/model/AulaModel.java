@@ -120,7 +120,7 @@ public class AulaModel extends AulaPanel {
         }
         getTxtNombre().setText(aula.getNombre());
         getTxtUbicacion().setText(aula.getUbicacion());
-        getTxtCapacidad().setText(aula.getCapacidad().toString());
+        getTxtCapacidad().setText((aula.getCapacidad()!=null)?aula.getCapacidad().toString():"");
     }
 
     @Override

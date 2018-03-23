@@ -13,6 +13,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
 import java.rmi.RemoteException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.persistence.exceptions.DatabaseException;
@@ -28,6 +31,13 @@ public class AulaService extends ServiceAbstract<Aula, AulaFacade> implements Au
     public AulaService() throws RemoteException {
         super(AulaFacade.class);
         this.aulaFacade = new AulaFacade();
+    }
+    
+    public List<Aula> obtenerAulasActivas() throws RemoteException
+    {
+        Map<String,Object> mapParametros=new HashMap<String, Object>();
+        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        return getFacade().findByMap(mapParametros);
     }
 
     public Aula grabar(Aula a) throws ServicioCodefacException {
