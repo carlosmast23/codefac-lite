@@ -64,7 +64,7 @@ public class PeriodoModel extends PeriodoPanel {
             public void propertyChange(PropertyChangeEvent evt) {
                 if ("date".equals(evt.getPropertyName())) {
                     if (getDateFechaInicio().getDate() != null || getDateFechaFin().getDate() != null) {
-                        getTxtNombre().setText(formatDate(getDateFechaInicio().getDate(), "yyyy MMMMM") + " - " + formatDate(getDateFechaFin().getDate(), "yyyy MMMMM"));
+                        getTxtNombre().setText(formatDate(getDateFechaInicio().getDate(), "yyyy MMMMM") + " - " + formatDate(getDateFechaFin().getDate(), "MMMMM"));
                     }
                 }
             }
@@ -75,7 +75,7 @@ public class PeriodoModel extends PeriodoPanel {
             public void propertyChange(PropertyChangeEvent evt) {
                 if ("date".equals(evt.getPropertyName())) {
                     if (getDateFechaInicio().getDate() != null || getDateFechaFin().getDate() != null) {
-                        getTxtNombre().setText(formatDate(getDateFechaInicio().getDate(), "yyyy MMMMM") + " - " + formatDate(getDateFechaFin().getDate(), "yyyy MMMMM"));
+                        getTxtNombre().setText(formatDate(getDateFechaInicio().getDate(), "yyyy MMMMM") + " - " + formatDate(getDateFechaFin().getDate(), "MMMMM"));
                     }
                 }
             }
