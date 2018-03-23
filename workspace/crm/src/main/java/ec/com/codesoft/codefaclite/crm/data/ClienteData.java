@@ -5,11 +5,21 @@
  */
 package ec.com.codesoft.codefaclite.crm.data;
 
+import ec.com.codesoft.codefaclite.controlador.excel.Excel;
+import ec.com.codesoft.codefaclite.controlador.excel.ExcelDatosInterface;
+import ec.com.codesoft.codefaclite.controlador.excel.TipoDato;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
 /**
  *
  * @author Carlos
  */
-public class ClienteData {
+public class ClienteData implements ExcelDatosInterface
+{
     private String identificacion;
     private String nombresCompletos;
     private String telefono;
@@ -58,7 +68,17 @@ public class ClienteData {
     public void setEmail(String email) {
         this.email = email;
     }
-    
-    
+
+    @Override
+    public List<TipoDato> getDatos() {
+        List<TipoDato> tiposDatos = new ArrayList<TipoDato>();
+        
+        tiposDatos.add(new TipoDato(this.identificacion,Excel.TipoDataEnum.TEXTO));        
+        tiposDatos.add(new TipoDato(this.nombresCompletos, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.telefono, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.direccion, Excel.TipoDataEnum.TEXTO));        
+        tiposDatos.add(new TipoDato(this.email,Excel.TipoDataEnum.TEXTO));
+        return tiposDatos;
+    }   
     
 }
