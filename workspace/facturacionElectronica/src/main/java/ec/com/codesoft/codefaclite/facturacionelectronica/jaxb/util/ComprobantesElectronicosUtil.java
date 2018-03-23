@@ -72,7 +72,7 @@ public abstract class ComprobantesElectronicosUtil {
         }
     }
 
-    public static void copiarArchivoXml(String pathOrigen, String pathDestino) {
+    public static void moverArchivoXml(String pathOrigen, String pathDestino) {
         try {
             Path origenPath = FileSystems.getDefault().getPath(pathOrigen);
             Path destinoPath = FileSystems.getDefault().getPath(pathDestino);
@@ -86,6 +86,24 @@ public abstract class ComprobantesElectronicosUtil {
             
             
             Files.move(origenPath, destinoPath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ex) {
+            Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void copiarArchivoXml(String pathOrigen, String pathDestino) {
+        try {
+            Path origenPath = FileSystems.getDefault().getPath(pathOrigen);
+            Path destinoPath = FileSystems.getDefault().getPath(pathDestino);
+
+            File file = destinoPath.toFile();
+            //crear toda la ruta si no existe
+            if (!file.exists()) {
+                file.getParentFile().mkdirs();
+                //file.mkdir();
+            }
+
+            Files.copy(origenPath, destinoPath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ex) {
             Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);
         }

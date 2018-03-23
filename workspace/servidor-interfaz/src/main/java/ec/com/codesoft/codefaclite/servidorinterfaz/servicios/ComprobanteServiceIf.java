@@ -26,7 +26,7 @@ public interface ComprobanteServiceIf extends Remote {
     
     public boolean procesarComprobantesLotePendiente(Integer etapaInicial,Integer etapaLimite,List<String> clavesAcceso,String ruc,ClienteInterfaceComprobanteLote callbackClientObject) throws RemoteException;
     
-    public void firmarComprobante(ComprobanteDataInterface comprobanteData,Factura factura,Usuario usuario) throws RemoteException;
+    public void procesarComprobanteOffline(ComprobanteDataInterface comprobanteData,Factura factura,Usuario usuario,ClienteInterfaceComprobante callbackClientObject) throws RemoteException ;
     
     public Integer obtenerSecuencialFacturaYAvanzar() throws RemoteException;
     

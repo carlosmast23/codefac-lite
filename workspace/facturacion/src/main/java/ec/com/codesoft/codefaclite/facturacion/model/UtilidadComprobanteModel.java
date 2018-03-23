@@ -241,6 +241,13 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
                     case ComprobanteElectronicoService.CARPETA_FIRMADOS:
                         procesarComprobanteLote(ComprobanteElectronicoService.ETAPA_FIRMAR+1,etapaLimite);
                         break;
+                        
+                    case ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR:
+                        if(getChkEnvioCorreo().isSelected())
+                            procesarComprobanteLote(ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE, etapaLimite);
+                        else
+                            procesarComprobanteLote(ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE + 1, etapaLimite);
+                        break;
 
                     case ComprobanteElectronicoService.CARPETA_ENVIADOS:
                         procesarComprobanteLote(ComprobanteElectronicoService.ETAPA_ENVIAR+1,etapaLimite);
@@ -340,6 +347,7 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
         getCmbCarpetaComprobante().removeAllItems();
         getCmbCarpetaComprobante().addItem(ComprobanteElectronicoService.CARPETA_GENERADOS);
         getCmbCarpetaComprobante().addItem(ComprobanteElectronicoService.CARPETA_FIRMADOS);
+        getCmbCarpetaComprobante().addItem(ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR);
         getCmbCarpetaComprobante().addItem(ComprobanteElectronicoService.CARPETA_ENVIADOS);
         getCmbCarpetaComprobante().addItem(ComprobanteElectronicoService.CARPETA_AUTORIZADOS);
         getCmbCarpetaComprobante().addItem(ComprobanteElectronicoService.CARPETA_NO_AUTORIZADOS);
@@ -372,7 +380,7 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
 
     @Override
     public void iniciar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        getCmbCarpetaComprobante().setSelectedItem(ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR);
     }
 
     @Override

@@ -610,10 +610,61 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         return comprobantes;
     }
     
-    public void firmarComprobante(ComprobanteDataInterface comprobanteData,Factura factura,Usuario usuario) throws RemoteException {
+    public void procesarComprobanteOffline(ComprobanteDataInterface comprobanteData,Factura factura,Usuario usuario,ClienteInterfaceComprobante callbackClientObject) throws RemoteException {
         ComprobanteElectronicoService comprobanteElectronico= cargarConfiguracionesInicialesComprobantes(comprobanteData, usuario);
-        comprobanteElectronico.setEtapaLimiteProcesar(ComprobanteElectronicoService.ETAPA_FIRMAR);
-        comprobanteElectronico.procesarComprobante();
+        //Generar proceso hasta el envio del comprobante
+        comprobanteElectronico.setEtapaLimiteProcesar(ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE);
+        
+        comprobanteElectronico.addActionListerComprobanteElectronico(new ListenerComprobanteElectronico() {
+            @Override
+            public void termino() {
+                try {
+                    //Si la factura termina corectamente grabo el estado y numero de autorizacion
+                    FacturacionService facturacionService=new FacturacionService();
+                   
+                    factura.setClaveAcceso(comprobanteElectronico.getClaveAcceso());
+                    factura.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
+                    entityManager.merge(factura);
+                    byte[] serializedPrint= getReporteComprobante(comprobanteElectronico.getClaveAcceso());                   
+                    callbackClientObject.termino(serializedPrint);
+
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            @Override
+            public void iniciado(ComprobanteElectronico comprobante) {
+                try {
+                    callbackClientObject.iniciado();
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            @Override
+            public void procesando(int etapa, ClaveAcceso clave) {
+                try {
+                    callbackClientObject.procesando(etapa,clave);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            @Override
+            public void error(ComprobanteElectronicoException cee) {
+                try {
+                    callbackClientObject.error(cee, comprobanteElectronico.getClaveAcceso());
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        
+        comprobanteElectronico.procesar(false);
+        
 
     }
             

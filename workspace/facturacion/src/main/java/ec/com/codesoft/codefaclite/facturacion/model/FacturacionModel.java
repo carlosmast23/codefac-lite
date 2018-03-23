@@ -79,6 +79,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -593,19 +594,19 @@ public class FacturacionModel extends FacturacionPanel{
 
                 ComprobanteDataFactura comprobanteData = new ComprobanteDataFactura(factura);
                 comprobanteData.setMapInfoAdicional(getMapAdicional(factura));
-                ClienteInterfaceComprobante cic = new ClienteFacturaImplComprobante(this, facturaProcesando);
+                ClienteInterfaceComprobante cic = new ClienteFacturaImplComprobante(this,facturaProcesando,false);
                 ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
                 Boolean repuestaFacturaElectronica = DialogoCodefac.dialogoPregunta("Correcto", "La factura se grabo correctamente,Desea autorizar en el SRI ahora?", DialogoCodefac.MENSAJE_CORRECTO);
                 
                 //Si quiere que se procese en ese momento le ejecuto el proceso normal
                 if (repuestaFacturaElectronica) {
-
+                    cic = new ClienteFacturaImplComprobante(this,facturaProcesando,true);
                     comprobanteServiceIf.procesarComprobante(comprobanteData, facturaProcesando, session.getUsuario(), cic);
                 }
                 else
                 {
                     //Solo genera el pdf pero no envia al SRI
-                    comprobanteServiceIf.firmarComprobante(comprobanteData, facturaProcesando, session.getUsuario());
+                    comprobanteServiceIf.procesarComprobanteOffline(comprobanteData, facturaProcesando, session.getUsuario(),cic);
                     DialogoCodefac.mensaje("Correcto","El comprobante esta firmado , no se olvide de enviar al SRI en un periodo maximo de 48 horas", DialogoCodefac.MENSAJE_CORRECTO);
                 }
 
@@ -1492,8 +1493,16 @@ public class FacturacionModel extends FacturacionPanel{
         if (!panelPadre.validarPorGrupo("detalles")) {
             return;
         }
+        
 
         if (verificarCamposValidados()) {
+            
+            //Validacion dependiendo de la logica de cada tipo de documento
+            if (!validacionPersonalizadaPorModulos()) {
+                return;
+            }
+            
+            
             try {
                 //FacturaDetalle facturaDetalle = new FacturaDetalle();
                 facturaDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
@@ -1673,6 +1682,34 @@ public class FacturacionModel extends FacturacionPanel{
         }
             
         
+    }
+
+    /**
+     * @author Carlos
+     * Validacion de la la logica dependiendo el modulo
+     * @return 
+     */
+    private boolean validacionPersonalizadaPorModulos() {
+        TipoDocumentoEnum tipoDocEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+        
+        if(tipoDocEnum.equals(TipoDocumentoEnum.ACADEMICO))
+        {
+            BigDecimal cantidad=new BigDecimal(getTxtCantidad().getText());
+            BigDecimal valorUnitario=new BigDecimal(getTxtValorUnitario().getText());
+            //TODO: Analizar para el caso que tenga descuento
+            
+            if(rubroSeleccionado.getSaldo().compareTo(cantidad.multiply(valorUnitario))==-1)
+            {
+                DialogoCodefac.mensaje("Validación","El Total no puede exceder del valor "+rubroSeleccionado.getSaldo()+" del rubro",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                return false;
+            }
+        }
+        else
+        {
+            //PARA LOS DEMAS CASOS
+        }
+        
+        return true;
     }
 
 }

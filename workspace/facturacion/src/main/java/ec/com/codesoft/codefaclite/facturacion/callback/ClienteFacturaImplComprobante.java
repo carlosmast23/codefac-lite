@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.facturacion.callback;
 
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
@@ -42,11 +43,17 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
     private MonitorComprobanteData monitorData;
     //private FacturacionServiceIf servicio;
     private Factura facturaProcesando;
+    
+    /**
+     * Opcion para saber si se se va a mandar a autorizar o solo se va a firmar el comprobante electronica
+     */
+    private Boolean facturacionOffline;
 
-    public ClienteFacturaImplComprobante(FacturacionModel facturacionModel, Factura facturaProcesando) throws RemoteException {
+    public ClienteFacturaImplComprobante(FacturacionModel facturacionModel, Factura facturaProcesando,Boolean facturacionOffline) throws RemoteException {
         this.facturacionModel = facturacionModel;
         //this.servicio = servicio;
         this.facturaProcesando = facturaProcesando;
+        this.facturacionOffline=facturacionOffline;
     }
 
     @Override
@@ -100,25 +107,50 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
         if (etapa == ComprobanteElectronicoService.ETAPA_FIRMAR) {
             monitorData.getBarraProgreso().setValue(50);
         }
+        
+        if (etapa == ComprobanteElectronicoService.ETAPA_RIDE) {
+            monitorData.getBarraProgreso().setValue(65);
+            facturaProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
+            
+            //Generar el ride si la facturacion es offline
+            if (facturacionOffline) {
+                monitorData.getBarraProgreso().setForeground(Color.GREEN);
+                monitorData.getBtnAbrir().setEnabled(true);
+                monitorData.getBtnCerrar().setEnabled(true);
+                monitorData.getBtnReporte().setEnabled(true);
+                
+                //Alerta de facturacion offline
+                monitorData.getBtnReporte().addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        DialogoCodefac.mensaje("Advertencia","Recuerde Autorizar el comprobante en el SRI, \n Si esta sin internet mandar por correo el RIDE", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    }
+                });
+            }
+        }
+        
+        if (etapa == ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE) {
+            monitorData.getBarraProgreso().setValue(80);
+            facturaProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
+            
+            //Alerta de facturacion offline para el correro
+            monitorData.getBtnReporte().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    DialogoCodefac.mensaje("Advertencia", "Recuerde Autorizar el comprobante en el SRI", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                }
+            });
+        }
 
         if (etapa == ComprobanteElectronicoService.ETAPA_ENVIAR) {
-            monitorData.getBarraProgreso().setValue(70);
+            monitorData.getBarraProgreso().setValue(90);
         }
 
         if (etapa == ComprobanteElectronicoService.ETAPA_AUTORIZAR) {
-            monitorData.getBarraProgreso().setValue(90);
-            facturaProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
-        }
-
-        if (etapa == ComprobanteElectronicoService.ETAPA_RIDE) {
-            monitorData.getBarraProgreso().setValue(95);
-            facturaProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
-        }
-
-        if (etapa == ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE) {
             monitorData.getBarraProgreso().setValue(100);
             facturaProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
         }
+
     }
 
     @Override

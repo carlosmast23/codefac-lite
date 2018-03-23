@@ -81,22 +81,24 @@ public class ClienteFacturaLoteImplComprobante extends UnicastRemoteObject imple
         if (etapa == ComprobanteElectronicoService.ETAPA_FIRMAR) {
             monitorData.getBarraProgreso().setValue(50);
         }
-
-        if (etapa == ComprobanteElectronicoService.ETAPA_ENVIAR) {
-            monitorData.getBarraProgreso().setValue(70);
-        }
-
-        if (etapa == ComprobanteElectronicoService.ETAPA_AUTORIZAR) {
-            monitorData.getBarraProgreso().setValue(90);
-        }
-
+        
         if (etapa == ComprobanteElectronicoService.ETAPA_RIDE) {
-            monitorData.getBarraProgreso().setValue(95);
+            monitorData.getBarraProgreso().setValue(65);
         }
 
         if (etapa == ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE) {
+            monitorData.getBarraProgreso().setValue(80);
+        }
+
+        if (etapa == ComprobanteElectronicoService.ETAPA_ENVIAR) {
+            monitorData.getBarraProgreso().setValue(90);
+        }
+
+        if (etapa == ComprobanteElectronicoService.ETAPA_AUTORIZAR) {
             monitorData.getBarraProgreso().setValue(100);
         }
+
+
     }
 
     @Override

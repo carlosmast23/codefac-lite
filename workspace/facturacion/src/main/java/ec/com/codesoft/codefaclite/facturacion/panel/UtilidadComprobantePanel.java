@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.facturacion.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.JTable;
@@ -53,6 +54,7 @@ public abstract class UtilidadComprobantePanel extends ControladorCodefacInterfa
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         lblEspacioUtilidad = new javax.swing.JLabel();
+        chkEnvioCorreo = new javax.swing.JCheckBox();
 
         setClosable(true);
         setIconifiable(true);
@@ -77,7 +79,7 @@ public abstract class UtilidadComprobantePanel extends ControladorCodefacInterfa
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
-        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.gridwidth = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.9;
@@ -199,7 +201,7 @@ public abstract class UtilidadComprobantePanel extends ControladorCodefacInterfa
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.3;
         getContentPane().add(jLabel8, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -207,6 +209,14 @@ public abstract class UtilidadComprobantePanel extends ControladorCodefacInterfa
         gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 14;
         getContentPane().add(lblEspacioUtilidad, gridBagConstraints);
+
+        chkEnvioCorreo.setText("Enviar Correo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        getContentPane().add(chkEnvioCorreo, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -220,6 +230,7 @@ public abstract class UtilidadComprobantePanel extends ControladorCodefacInterfa
     private javax.swing.JButton btnAgregarCorreo;
     private javax.swing.JButton btnEliminarCorreo;
     private javax.swing.JButton btnSiguienteEtapa;
+    private javax.swing.JCheckBox chkEnvioCorreo;
     private javax.swing.JComboBox<String> cmbCarpetaComprobante;
     private javax.swing.JComboBox<String> cmbEstadoLimiteProcesar;
     private javax.swing.JLabel jLabel1;
@@ -285,6 +296,14 @@ public abstract class UtilidadComprobantePanel extends ControladorCodefacInterfa
 
     public JButton getBtnEliminarCorreo() {
         return btnEliminarCorreo;
+    }
+
+    public JCheckBox getChkEnvioCorreo() {
+        return chkEnvioCorreo;
+    }
+
+    public void setChkEnvioCorreo(JCheckBox chkEnvioCorreo) {
+        this.chkEnvioCorreo = chkEnvioCorreo;
     }
     
     

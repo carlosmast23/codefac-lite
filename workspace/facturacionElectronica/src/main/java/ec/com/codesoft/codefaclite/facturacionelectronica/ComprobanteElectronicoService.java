@@ -70,6 +70,7 @@ public class ComprobanteElectronicoService implements Runnable {
     
     public static final String CARPETA_GENERADOS = "generados";
     public static final String CARPETA_FIRMADOS = "firmados";
+    public static final String CARPETA_FIRMADOS_SIN_ENVIAR = "firmados_sin_enviar";
     public static final String CARPETA_ENVIADOS = "enviados";
     public static final String CARPETA_AUTORIZADOS = "autorizados";
     public static final String CARPETA_NO_AUTORIZADOS = "no_autorizados";
@@ -85,10 +86,10 @@ public class ComprobanteElectronicoService implements Runnable {
     public static final Integer ETAPA_GENERAR = 1;
     public static final Integer ETAPA_PRE_VALIDAR = 2;
     public static final Integer ETAPA_FIRMAR = 3;
-    public static final Integer ETAPA_ENVIAR = 4;
-    public static final Integer ETAPA_AUTORIZAR = 5;
-    public static final Integer ETAPA_RIDE = 6;
-    public static final Integer ETAPA_ENVIO_COMPROBANTE = 7;
+    public static final Integer ETAPA_RIDE = 4;
+    public static final Integer ETAPA_ENVIO_COMPROBANTE =5;
+    public static final Integer ETAPA_ENVIAR = 6;
+    public static final Integer ETAPA_AUTORIZAR = 7;
 
     public static final Integer CODIGO_SRI_MODO_PRUEBAS = 1;
     public static final Integer CODIGO_SRI_MODO_PRODUCCION = 2;
@@ -238,6 +239,40 @@ public class ComprobanteElectronicoService implements Runnable {
                 }
                 etapaActual++;
             }
+            
+            if (etapaActual.equals(ETAPA_RIDE)) {
+                generarRide();
+                if (escucha != null) {
+                    escucha.procesando(etapaActual, new ClaveAcceso(claveAcceso));
+                }
+                //generarRide();
+                System.out.println("generarRide()");
+                if (etapaLimiteProcesar <= ETAPA_RIDE) {
+                    if (escucha != null) {
+                        escucha.termino();
+                    }
+                    return;
+                }
+                etapaActual++;
+            }
+            
+            if (etapaActual.equals(ETAPA_ENVIO_COMPROBANTE)) {
+                //if(correosElectronicos!=null && correosElectronicos.size()>0)
+                enviarComprobante();
+
+                if (escucha != null) {
+                    escucha.procesando(etapaActual, new ClaveAcceso(claveAcceso));
+                }
+                if (etapaLimiteProcesar <= ETAPA_ENVIO_COMPROBANTE) {
+                    if (escucha != null) {
+                        escucha.termino();
+                    }
+                    return;
+                }
+                etapaActual++;
+                //generarRide();
+                System.out.println("enviarCorreo()");
+            }
 
             if (etapaActual.equals(ETAPA_ENVIAR)) {
                 enviarSri();
@@ -261,30 +296,6 @@ public class ComprobanteElectronicoService implements Runnable {
                 etapaActual++;
             }
 
-            if (etapaActual.equals(ETAPA_RIDE)) {
-                generarRide();
-                if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
-                //generarRide();
-                System.out.println("generarRide()");
-                if(etapaLimiteProcesar<=ETAPA_RIDE) {
-                    if(escucha!=null)escucha.termino();
-                    return;
-                }
-                etapaActual++;
-            }
-
-            if (etapaActual.equals(ETAPA_ENVIO_COMPROBANTE)) {
-                //if(correosElectronicos!=null && correosElectronicos.size()>0)
-                enviarComprobante();
-                
-                if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
-                if(etapaLimiteProcesar<=ETAPA_ENVIO_COMPROBANTE) {
-                    if(escucha!=null)escucha.termino();
-                    return;
-                }
-                //generarRide();
-                System.out.println("enviarCorreo()");
-            }
 
             if(escucha!=null)escucha.termino();
         } catch (ComprobanteElectronicoException cee) {
@@ -355,12 +366,38 @@ public class ComprobanteElectronicoService implements Runnable {
                 
             }
             
-            //Genero siempre la clave de acceso de todo el lote
-            //claveAcceso = obtenerClaveAccesoLote();
-            //Esta etapa es obligatoria para cualquier de los pasos porque tengo que generar el archivo xml del lote
-            //StringWriter stringWriter = generarXmlLote(comprobantesFirmados, ruc);
-            //ComprobantesElectronicosUtil.generarArchivoXml(stringWriter, getPathComprobante(CARPETA_FIRMADOS));
             
+            
+            if (etapaActual.equals(ETAPA_RIDE)) {
+                generarRideLote();
+                if (escuchaLote != null) {
+                    escuchaLote.procesando(etapaActual);
+                }
+                //generarRide();
+                System.out.println("generarRide()");
+                if (etapaLimiteProcesar <= ETAPA_RIDE) {
+                    if (escuchaLote != null) {
+                        escuchaLote.termino(servicioSri.getAutorizacion());
+                    }
+                    return;
+                }
+                etapaActual++;
+            }
+            
+            
+            if (etapaActual.equals(ETAPA_ENVIO_COMPROBANTE)) {
+                enviarComprobanteLoteCorreo();
+                
+                if(escuchaLote!=null)escuchaLote.procesando(etapaActual);
+                if(etapaLimiteProcesar<=ETAPA_ENVIO_COMPROBANTE) {
+                    if(escuchaLote!=null)escuchaLote.termino(servicioSri.getAutorizacion());
+                    return;
+                }
+                //generarRide();
+                etapaActual++;
+                System.out.println("enviarCorreo()");
+            }
+
 
             if (etapaActual.equals(ETAPA_ENVIAR)) {
                 enviarSriLote();
@@ -385,30 +422,6 @@ public class ComprobanteElectronicoService implements Runnable {
                 etapaActual++;
             }
 
-            if (etapaActual.equals(ETAPA_RIDE)) {
-                generarRideLote();
-                if(escuchaLote!=null)escuchaLote.procesando(etapaActual);
-                //generarRide();
-                System.out.println("generarRide()");
-                if(etapaLimiteProcesar<=ETAPA_RIDE) {
-                    if(escuchaLote!=null)escuchaLote.termino(servicioSri.getAutorizacion());
-                    return;
-                }
-                etapaActual++;
-            }
-
-            if (etapaActual.equals(ETAPA_ENVIO_COMPROBANTE)) {
-                enviarComprobanteLoteCorreo();
-                
-                if(escuchaLote!=null)escuchaLote.procesando(etapaActual);
-                if(etapaLimiteProcesar<=ETAPA_ENVIO_COMPROBANTE) {
-                    if(escuchaLote!=null)escuchaLote.termino(servicioSri.getAutorizacion());
-                    return;
-                }
-                //generarRide();
-                System.out.println("enviarCorreo()");
-            }
-
             if(escuchaLote!=null)escuchaLote.termino(servicioSri.getAutorizacion());
         } catch (ComprobanteElectronicoException cee) {
             if(escuchaLote!=null)escuchaLote.error();
@@ -422,14 +435,17 @@ public class ComprobanteElectronicoService implements Runnable {
             ClaveAcceso claveAcceso=new ClaveAcceso(this.claveAcceso);
             JAXBContext jaxbContext = JAXBContext.newInstance(claveAcceso.getClassTipoComprobante());
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            Map<String, String> mapComprobante = UtilidadesComprobantes.decodificarArchivoBase64Offline(getPathComprobante(CARPETA_AUTORIZADOS), null, null);
-            StringReader reader = new StringReader(mapComprobante.get("comprobante"));
-            ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(reader);
+            //Map<String, String> mapComprobante = UtilidadesComprobantes.decodificarArchivoBase64Offline(getPathComprobante(CARPETA_AUTORIZADOS), null, null);
+            String pathComprobanteFirmado=getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS, this.claveAcceso);
+            File file=new File(pathComprobanteFirmado);
+
+            //StringReader reader = new StringReader(mapComprobante.get("comprobante"));
+            ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(file);
 
             String pathFile = getPathComprobante(CARPETA_RIDE, getNameRide(comprobante));
             Map<String,String> archivosPath=new HashMap<String,String>();
             archivosPath.put(claveAcceso.getTipoComprobante().getPrefijo()+"-"+comprobante.getInformacionTributaria().getPreimpreso()+".pdf",pathFile);
-            archivosPath.put(comprobante.getInformacionTributaria().getPreimpreso()+".xml",getPathComprobante(CARPETA_AUTORIZADOS));
+            archivosPath.put(comprobante.getInformacionTributaria().getPreimpreso()+".xml",getPathComprobante(CARPETA_FIRMADOS));
             
             try {
                 String mensajeGenerado =getMensajeCorreo(claveAcceso.getTipoComprobante(),comprobante);
@@ -471,16 +487,16 @@ public class ComprobanteElectronicoService implements Runnable {
     private void enviarComprobanteLoteCorreo()
     {
         for (String claveAccesoComprobante : clavesAccesoLote) {
-             Autorizacion autorizacion = servicioSri.buscarAutorizacion(claveAccesoComprobante);
+             //Autorizacion autorizacion = servicioSri.buscarAutorizacion(claveAccesoComprobante);
 
-             //Enviar solo los comprobantes que existen y que fueron autorizados
-            if (autorizacion != null && autorizacion.getEstado().equals(ServicioSri.AUTORIZADO)) {
+             //Enviar toso los comprobantes que existen porque segun el SRI ya son validos
+            //if (autorizacion != null && autorizacion.getEstado().equals(ServicioSri.AUTORIZADO)) {
                  try {
-                     enviarComprobanteCorreo(claveAccesoComprobante);
-                 } catch (ComprobanteElectronicoException ex) {
-                     Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
-                 }
+                enviarComprobanteCorreo(claveAccesoComprobante);
+            } catch (ComprobanteElectronicoException ex) {
+                Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
             }
+            //}
         }
     }
     
@@ -489,14 +505,17 @@ public class ComprobanteElectronicoService implements Runnable {
             ClaveAcceso claveAcceso=new ClaveAcceso(claveAccesoTemp);
             JAXBContext jaxbContext = JAXBContext.newInstance(claveAcceso.getClassTipoComprobante());
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            Map<String, String> mapComprobante = UtilidadesComprobantes.decodificarArchivoBase64Offline(getPathComprobanteConClaveAcceso(CARPETA_AUTORIZADOS,claveAccesoTemp), null, null);
-            StringReader reader = new StringReader(mapComprobante.get("comprobante"));
-            ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(reader);
+            //Map<String, String> mapComprobante = UtilidadesComprobantes.decodificarArchivoBase64Offline(getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS,claveAccesoTemp), null, null);
+            //StringReader reader = new StringReader(mapComprobante.get("comprobante"));
+            String pathComprobanteFirmado = getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS,claveAccesoTemp);
+            File file = new File(pathComprobanteFirmado);
+            
+            ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(file);
 
             String pathFile = getPathComprobante(CARPETA_RIDE, getNameRide(comprobante));
             Map<String,String> archivosPath=new HashMap<String,String>();
             archivosPath.put(claveAcceso.getTipoComprobante().getPrefijo()+"-"+comprobante.getInformacionTributaria().getPreimpreso()+".pdf",pathFile);
-            archivosPath.put(comprobante.getInformacionTributaria().getPreimpreso()+".xml",getPathComprobanteConClaveAcceso(CARPETA_AUTORIZADOS,claveAccesoTemp));
+            archivosPath.put(comprobante.getInformacionTributaria().getPreimpreso()+".xml",getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS,claveAccesoTemp));
             
             try {
                 
@@ -586,14 +605,18 @@ public class ComprobanteElectronicoService implements Runnable {
 
             //FIN COPIA ARCHIVOS
             
-            Map<String, String> mapComprobante = UtilidadesComprobantes.decodificarArchivoBase64Offline(getPathComprobanteConClaveAcceso(CARPETA_AUTORIZADOS,claveAccesoTemp), null, null);
+            //Map<String, String> mapComprobante = UtilidadesComprobantes.decodificarArchivoBase64Offline(getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS,claveAccesoTemp), null, null);
             ClaveAcceso claveAcceso=new ClaveAcceso(claveAccesoTemp);
+            
+            //StringReader reader = new StringReader(mapComprobante.get("comprobante"));
+            
+            
+            String pathComprobanteFirmado=getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS, claveAccesoTemp);
+            File file=new File(pathComprobanteFirmado);
             
             JAXBContext jaxbContext = JAXBContext.newInstance(claveAcceso.getClassTipoComprobante());
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            StringReader reader = new StringReader(mapComprobante.get("comprobante"));
-            
-            ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(reader);
+            ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(file);
 
             ComprobanteElectronicoReporte reporte =getComprobanteReporte(comprobante);
             
@@ -602,8 +625,8 @@ public class ComprobanteElectronicoService implements Runnable {
             datosMap.put("SUBREPORT_DIR", pathParentJasper);
             datosMap.put("SUBREPORT_INFO_ADICIONAL", reporteInfoAdicional);
             datosMap.put("SUBREPORT_FORMA_PAGO", reporteFormaPago);
-            datosMap.put("fecha_hora_autorizacion", mapComprobante.get("fechaAutorizacion"));
-            datosMap.put("estado", mapComprobante.get("estado"));
+            datosMap.put("fecha_hora_autorizacion","");
+            datosMap.put("estado","");
 
             /**
              * Agregar datos adicionales como por ejemplo los datos del pide de
@@ -683,12 +706,15 @@ public class ComprobanteElectronicoService implements Runnable {
 
     public JasperPrint getPrintJasper() {
         try {
-            Map<String, String> mapComprobante = UtilidadesComprobantes.decodificarArchivoBase64Offline(getPathComprobante(CARPETA_AUTORIZADOS), null, null);
+            //Map<String, String> mapComprobante = UtilidadesComprobantes.decodificarArchivoBase64Offline(getPathComprobante(CARPETA_AUTORIZADOS), null, null);
             ClaveAcceso claveAcceso=new ClaveAcceso(this.claveAcceso);
             JAXBContext jaxbContext = JAXBContext.newInstance(claveAcceso.getClassTipoComprobante());
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            StringReader reader = new StringReader(mapComprobante.get("comprobante"));
-            ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(reader);
+            //StringReader reader = new StringReader(mapComprobante.get("comprobante"));
+            String pathComprobanteFirmado = getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS, this.claveAcceso);
+            File file = new File(pathComprobanteFirmado);
+            
+            ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(file);
             ComprobanteElectronicoReporte reporte = getComprobanteReporte(comprobante);
 
             List<DetalleReporteData> informacionAdicional = reporte.getDetalles();
@@ -699,8 +725,8 @@ public class ComprobanteElectronicoService implements Runnable {
 
             Map<String, Object> datosMap = reporte.getMapReporte();
             datosMap.put("SUBREPORT_DIR", pathParentJasper);
-            datosMap.put("fecha_hora_autorizacion", mapComprobante.get("fechaAutorizacion"));
-            datosMap.put("estado", mapComprobante.get("estado"));
+            datosMap.put("fecha_hora_autorizacion","");
+            datosMap.put("estado","");
             
             datosMap.put("SUBREPORT_INFO_ADICIONAL", reporteInfoAdicional);
             datosMap.put("SUBREPORT_FORMA_PAGO", reporteFormaPago);
@@ -784,6 +810,7 @@ public class ComprobanteElectronicoService implements Runnable {
         Document documentoFirmado = firmaElectronica.firmar(getPathComprobante(CARPETA_GENERADOS));
         if (documentoFirmado != null) {
             try {
+                ComprobantesElectronicosUtil.generarArchivoXml(documentoFirmado, getPathComprobante(CARPETA_FIRMADOS_SIN_ENVIAR));
                 ComprobantesElectronicosUtil.generarArchivoXml(documentoFirmado, getPathComprobante(CARPETA_FIRMADOS));
                 ComprobantesElectronicosUtil.eliminarArchivo(getPathComprobante(CARPETA_GENERADOS));
             } catch (Exception ex) {
@@ -815,12 +842,10 @@ public class ComprobanteElectronicoService implements Runnable {
             if (documentoFirmado != null) {
                 try {
                     ComprobantesElectronicosUtil.generarArchivoXml(documentoFirmado, getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS,claveAccesoTemp));
+                    ComprobantesElectronicosUtil.generarArchivoXml(documentoFirmado, getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS_SIN_ENVIAR,claveAccesoTemp));
                     ComprobantesElectronicosUtil.eliminarArchivo(getPathComprobanteConClaveAcceso(CARPETA_GENERADOS,claveAccesoTemp));
-                    
-                    //LoteComprobanteCData loteComprobanteData=new LoteComprobanteCData();
+
                     String loteComprobanteData=("<![CDATA["+UtilidadesTextos.documentToString(documentoFirmado)+"]]>");
-                    //String documentoStr=UtilidadesTextos.documentToString(documentoFirmado);
-                    //loteComprobanteData.setcData(documentoStr);
                     
                     comprobantesFirmados.add(loteComprobanteData);
                 } catch (Exception ex) {
@@ -848,8 +873,11 @@ public class ComprobanteElectronicoService implements Runnable {
                 if (servicioSri.enviar()) {
                     
                     System.out.println("Documento enviados");
+                    
+                    //Copiar el archivo al siguiente nivel firmado a los enviados
                     ComprobantesElectronicosUtil.copiarArchivoXml(getPathComprobante(CARPETA_FIRMADOS),getPathComprobante(CARPETA_ENVIADOS));
-                    ComprobantesElectronicosUtil.eliminarArchivo(getPathComprobante(CARPETA_FIRMADOS));
+                    //Elimina la carpeta de los firmados para saber que ya fue enviado
+                    ComprobantesElectronicosUtil.eliminarArchivo(getPathComprobante(CARPETA_FIRMADOS_SIN_ENVIAR));
                     
                 } else {
                     String mensajeError = "";
@@ -881,7 +909,8 @@ public class ComprobanteElectronicoService implements Runnable {
                         //Mover todos los archivos individuales
                         String claveAccesoTemp=claveAccesoComprobante;
                         ComprobantesElectronicosUtil.copiarArchivoXml(getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS,claveAccesoTemp),getPathComprobanteConClaveAcceso(CARPETA_ENVIADOS,claveAccesoTemp));
-                        ComprobantesElectronicosUtil.eliminarArchivo(getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS,claveAccesoTemp));
+                        //ComprobantesElectronicosUtil.eliminarArchivo(getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS,claveAccesoTemp));
+                        ComprobantesElectronicosUtil.eliminarArchivo(getPathComprobanteConClaveAcceso(CARPETA_FIRMADOS_SIN_ENVIAR,claveAccesoTemp));
                     }                    
                     
                     //Mover el archivo que contiene todos los archivos en lote a la carpeta de enviados
