@@ -29,6 +29,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -145,6 +146,8 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         producto.setCaracteristicas(getTxtCaracteristica().getText());
         producto.setObservaciones(getTxtObservaciones().getText());
         
+        TipoProductoEnum tipoProductoEnum=(TipoProductoEnum) getCmbTipoProducto().getSelectedItem();
+        producto.setTipoProductoCodigo(tipoProductoEnum.getLetra());
         /**
          * AGREGAR LOS DATOS ADICIONALES DEL CATALOGO PRODUCTO
          */
@@ -176,7 +179,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         catalogoProducto.setNombre(getTextNombre().getText());
         
         TipoProductoEnum tipoProductoEnum=TipoProductoEnum.PRODUCTO;
-        catalogoProducto.setTipoProducto(tipoProductoEnum.getLetra());
+        catalogoProducto.setModuloCod(ModuloCodefacEnum.INVENTARIO.getCodigo());
         return catalogoProducto;
     }
 
@@ -243,6 +246,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         //getCmbCategoriaProducto().setSelectedItem(producto.getCatalogoProducto().getCategoriaProducto());
         getTxtCaracteristica().setText((producto.getCaracteristicas() != null) ? producto.getCaracteristicas() + "" : "");
         getTxtObservaciones().setText((producto.getObservaciones() != null) ? producto.getObservaciones() + "" : "");
+        getCmbTipoProducto().setSelectedItem(producto.getTipoProductoEnum());
         
         /**
          * Cargar datos de la entidad catalogo producto
@@ -342,6 +346,13 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
             List<CategoriaProducto> catProdList = catProdService.obtenerTodos();
             for (CategoriaProducto cat : catProdList) {
                 getCmbCategoriaProducto().addItem(cat);
+            }
+            
+            //Agregar los tipos de producto
+            getCmbTipoProducto().removeAllItems();
+            TipoProductoEnum[] tipoProductoList=TipoProductoEnum.values();            
+            for (TipoProductoEnum tipoProducto : tipoProductoList) {
+                getCmbTipoProducto().addItem(tipoProducto);
             }
             
              

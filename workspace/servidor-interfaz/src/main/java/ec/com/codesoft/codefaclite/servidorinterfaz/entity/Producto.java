@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -80,6 +81,9 @@ public class Producto implements Serializable {
 
     @Column(name = "OBSERVACIONES")
     private String observaciones;
+    
+    @Column(name = "TIPO_PRODUCTO_COD")
+    private String tipoProductoCodigo;
 
     @JoinColumn(name = "CATALOGO_PRODUCTO_ID")
     @ManyToOne    
@@ -248,8 +252,16 @@ public class Producto implements Serializable {
     public void setCatalogoProducto(CatalogoProducto catalogoProducto) {
         this.catalogoProducto = catalogoProducto;
     }
+
+    public String getTipoProductoCodigo() {
+        return tipoProductoCodigo;
+    }
+
+    public void setTipoProductoCodigo(String tipoProductoCodigo) {
+        this.tipoProductoCodigo = tipoProductoCodigo;
+    }
     
-    
+        
 
     /**
      * Metodos personalizados
@@ -271,6 +283,11 @@ public class Producto implements Serializable {
         this.detallesEnsamble.add(detalle);
 
     }
+    
+    public TipoProductoEnum getTipoProductoEnum()
+    {
+        return TipoProductoEnum.getEnumByLetra(tipoProductoCodigo);
+    }   
 
     @Override
     public String toString() {

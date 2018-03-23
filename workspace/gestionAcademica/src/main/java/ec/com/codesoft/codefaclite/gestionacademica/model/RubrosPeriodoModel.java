@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoRubroEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PeriodoServiceIf;
@@ -162,7 +163,7 @@ public class RubrosPeriodoModel extends RubrosPeriodoPanel{
             }
             
             //Cargar los productos
-            List<CatalogoProducto> productos=ServiceFactory.getFactory().getCatalogoProductoServiceIf().obtenerTodos();
+            List<CatalogoProducto> productos=ServiceFactory.getFactory().getCatalogoProductoServiceIf().obtenerPorModulo(ModuloCodefacEnum.GESTIONA_ACADEMICA);
             for (CatalogoProducto producto : productos) {
                 getCmbRubro().addItem(producto);
             }
@@ -207,15 +208,21 @@ public class RubrosPeriodoModel extends RubrosPeriodoPanel{
         getBtnAgregarRubro().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                
                panelPadre.crearDialogoCodefac(new ObserverUpdateInterface() {
                    @Override
                    public void updateInterface(Object entity) {
-                       CatalogoProducto catalogo=(CatalogoProducto) entity;                       
-                       getCmbRubro().addItem(catalogo);
-                       getCmbRubro().setSelectedItem(catalogo);
+                       CatalogoProducto catalogo=(CatalogoProducto) entity;  
+                       
+                       //Solo agregar si es un producto disponible para el modulo de gestion academico
+                       if(catalogo.getModuloCodefacEnum().equals(ModuloCodefacEnum.GESTIONA_ACADEMICA))
+                       {
+                           getCmbRubro().addItem(catalogo);
+                           getCmbRubro().setSelectedItem(catalogo);
+                       }
                        
                    }
-               }, VentanaEnum.CATALOGO_PRODUCTO,false);
+               }, VentanaEnum.CATALOGO_PRODUCTO,false,new Object[]{ModuloCodefacEnum.GESTIONA_ACADEMICA});
             }
         });
     }
@@ -227,9 +234,13 @@ public class RubrosPeriodoModel extends RubrosPeriodoPanel{
         Nivel nivelSeleccionado=rubrosNivel.getNivel();
         
         if(nivelSeleccionado==null)
+        {
             getCmbNivel().setSelectedItem(nivelDefecto);
+        }
         else
+        {
             getCmbNivel().setSelectedItem(nivelSeleccionado);
+        }
         
         
         getCmbRubro().setSelectedItem(rubrosNivel.getCatalogoProducto());

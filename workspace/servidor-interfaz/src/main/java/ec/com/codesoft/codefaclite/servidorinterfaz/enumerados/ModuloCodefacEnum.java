@@ -57,4 +57,17 @@ public enum ModuloCodefacEnum {
         return nombre;
     }
     
+    //Metodos personalizados
+    
+    public static ModuloCodefacEnum getModuloCodefacEnumByCodigo(String codigo)
+    {
+        for (ModuloCodefacEnum modulo : ModuloCodefacEnum.values()) {
+            if(modulo.getCodigo().equals(codigo))
+            {
+                return modulo;
+            }
+        }
+        return null;
+    }
+    
 }

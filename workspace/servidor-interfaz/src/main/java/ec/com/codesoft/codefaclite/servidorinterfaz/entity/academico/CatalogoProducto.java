@@ -7,6 +7,8 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import java.io.Serializable;
 import java.util.Objects;
@@ -37,8 +39,12 @@ public class CatalogoProducto implements Serializable{
     @Column(name = "NOMBRE")
     private String nombre;
     
-    @Column(name = "TIPO_PRODUCTO")
-    private String tipoProducto;
+    @Column(name = "MODULO_COD")
+    private String moduloCod;
+    
+    @Column(name = "ESTADO")
+    private String estado;
+
     
     @JoinColumn(name = "IVA_ID")
     @ManyToOne
@@ -55,7 +61,7 @@ public class CatalogoProducto implements Serializable{
     @JoinColumn(name = "CATEGORIA_ID")
     @ManyToOne
     private CategoriaProducto categoriaProducto;
-
+    
     public CatalogoProducto() {
     }
     
@@ -76,13 +82,15 @@ public class CatalogoProducto implements Serializable{
         this.nombre = nombre;
     }
 
-    public String getTipoProducto() {
-        return tipoProducto;
+    public String getModuloCod() {
+        return moduloCod;
     }
 
-    public void setTipoProducto(String tipoProducto) {
-        this.tipoProducto = tipoProducto;
+    public void setModuloCod(String moduloCod) {
+        this.moduloCod = moduloCod;
     }
+
+    
 
     public ImpuestoDetalle getIva() {
         return iva;
@@ -149,8 +157,8 @@ public class CatalogoProducto implements Serializable{
     }
     
     
-    public TipoProductoEnum getTipoProductoEnum() {
-        return TipoProductoEnum.getEnumByLetra(tipoProducto);
+    public ModuloCodefacEnum getModuloCodefacEnum() {
+        return ModuloCodefacEnum.getModuloCodefacEnumByCodigo(moduloCod);
     }
     
     

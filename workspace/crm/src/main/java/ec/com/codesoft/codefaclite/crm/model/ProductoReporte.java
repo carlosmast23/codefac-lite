@@ -49,7 +49,7 @@ public class ProductoReporte extends ControladorCodefacInterface{
                 productoData.setCodigoPrincipal(producto.getCodigoPersonalizado());
                 productoData.setImpuestoIva(producto.getCatalogoProducto().getIva().getNombre());
                 productoData.setNombre(producto.getNombre());
-                productoData.setTipoProducto(producto.getCatalogoProducto().getTipoProducto());
+                productoData.setTipoProducto(producto.getTipoProductoEnum().getNombre());
                 productoData.setValorUnitario(producto.getValorUnitario().toString());
                 data.add(productoData);
             }

@@ -14,6 +14,7 @@ create table PRODUCTO
     CODIGO_PERSONALIZADO varchar(70),
     CODIGO_EAN varchar(70),
     CODIGO_UPC varchar(70),
+    TIPO_PRODUCTO_COD varchar(1),
     NOMBRE varchar(100),
     VALOR_UNITARIO decimal(7,3),
     ESTADO varchar(1),
