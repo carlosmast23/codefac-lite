@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.inventario.panel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
@@ -46,7 +47,7 @@ public abstract class CatalogoProductoPanel extends ControladorCodefacInterface 
         jPanel1 = new javax.swing.JPanel();
         txtNombre = new javax.swing.JTextField();
         cmbCategoriaProducto = new javax.swing.JComboBox<>();
-        cmbTipoProducto = new javax.swing.JComboBox<>();
+        cmbModulo = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -111,18 +112,20 @@ public abstract class CatalogoProductoPanel extends ControladorCodefacInterface 
         gridBagConstraints.weightx = 0.6;
         jPanel2.add(lblEspacio2, gridBagConstraints);
 
+        cmbModulo.setToolTipText("");
+
         jLabel1.setText("Nombre:");
 
         jLabel22.setText("Categoria:");
 
-        jLabel4.setText("Tipo de Producto: ");
+        jLabel4.setText("Módulo:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(82, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -134,7 +137,7 @@ public abstract class CatalogoProductoPanel extends ControladorCodefacInterface 
                         .addGap(18, 18, 18)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(txtNombre)
-                    .addComponent(cmbTipoProducto, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cmbModulo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cmbCategoriaProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -144,7 +147,7 @@ public abstract class CatalogoProductoPanel extends ControladorCodefacInterface 
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(cmbTipoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cmbModulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel22)
@@ -163,7 +166,7 @@ public abstract class CatalogoProductoPanel extends ControladorCodefacInterface 
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -183,7 +186,7 @@ public abstract class CatalogoProductoPanel extends ControladorCodefacInterface 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<CategoriaProducto> cmbCategoriaProducto;
-    private javax.swing.JComboBox<TipoProductoEnum> cmbTipoProducto;
+    private javax.swing.JComboBox<ModuloCodefacEnum> cmbModulo;
     private javax.swing.JComboBox<ImpuestoDetalle> comboIce;
     private javax.swing.JComboBox<ImpuestoDetalle> comboIrbpnr;
     private javax.swing.JComboBox<ImpuestoDetalle> comboIva;
@@ -207,13 +210,14 @@ public abstract class CatalogoProductoPanel extends ControladorCodefacInterface 
         this.cmbCategoriaProducto = cmbCategoriaProducto;
     }
 
-    public JComboBox<TipoProductoEnum> getCmbTipoProducto() {
-        return cmbTipoProducto;
+    public JComboBox<ModuloCodefacEnum> getCmbModulo() {
+        return cmbModulo;
     }
 
-    public void setCmbTipoProducto(JComboBox<TipoProductoEnum> cmbTipoProducto) {
-        this.cmbTipoProducto = cmbTipoProducto;
+    public void setCmbModulo(JComboBox<ModuloCodefacEnum> cmbModulo) {
+        this.cmbModulo = cmbModulo;
     }
+    
 
     public JComboBox<ImpuestoDetalle> getComboIce() {
         return comboIce;

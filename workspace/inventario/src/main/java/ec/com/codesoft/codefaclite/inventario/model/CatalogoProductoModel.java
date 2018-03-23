@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 import ec.com.codesoft.codefaclite.inventario.busqueda.CatalogoProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.inventario.panel.CatalogoProductoPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -19,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CatalogoProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CategoriaProductoServiceIf;
@@ -35,7 +37,7 @@ import java.util.logging.Logger;
  *
  * @author Carlos
  */
-public class CatalogoProductoModel extends CatalogoProductoPanel implements DialogInterfacePanel<CatalogoProducto>{
+public class CatalogoProductoModel extends CatalogoProductoPanel implements DialogInterfacePanel<CatalogoProducto>,InterfazPostConstructPanel{
     
     private CatalogoProducto catalogoProducto;
 
@@ -113,7 +115,7 @@ public class CatalogoProductoModel extends CatalogoProductoPanel implements Dial
     
     private void cargarDatos()
     {
-        getCmbTipoProducto().setSelectedItem(catalogoProducto.getTipoProductoEnum());
+        getCmbModulo().setSelectedItem(catalogoProducto.getModuloCodefacEnum());
         getCmbCategoriaProducto().setSelectedItem(catalogoProducto.getCategoriaProducto());
         getTxtNombre().setText(catalogoProducto.getNombre());
         getComboIva().setSelectedItem(catalogoProducto.getIva());
@@ -155,11 +157,12 @@ public class CatalogoProductoModel extends CatalogoProductoPanel implements Dial
 
     private void valoresIniciales() {
         try {
-            TipoProductoEnum[] tipos = TipoProductoEnum.values();
-            getCmbTipoProducto().removeAllItems();
-            for (TipoProductoEnum tipo : tipos) {
-                getCmbTipoProducto().addItem(tipo);
-            }
+            getCmbModulo().removeAllItems();
+            getCmbModulo().addItem(ModuloCodefacEnum.INVENTARIO);
+            getCmbModulo().addItem(ModuloCodefacEnum.GESTIONA_ACADEMICA);
+            //for (TipoProductoEnum tipo : tipos) {
+            //    getCmbModulo().addItem(tipo);
+            //}
             
             //Agregar las categorias disponibles
             getCmbCategoriaProducto().removeAllItems();
@@ -234,8 +237,8 @@ public class CatalogoProductoModel extends CatalogoProductoPanel implements Dial
         
         catalogoProducto.setNombre(getTxtNombre().getText());
         
-        TipoProductoEnum tipoProductoEnum=(TipoProductoEnum) getCmbTipoProducto().getSelectedItem();
-        catalogoProducto.setTipoProducto(tipoProductoEnum.getLetra());
+        ModuloCodefacEnum moduloEnum=(ModuloCodefacEnum) getCmbModulo().getSelectedItem();
+        catalogoProducto.setModuloCod(moduloEnum.getCodigo());
     }
 
     @Override
@@ -247,6 +250,15 @@ public class CatalogoProductoModel extends CatalogoProductoPanel implements Dial
             Logger.getLogger(CatalogoProductoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    
+    @Override
+    public void postConstructorExterno(Object[] parametros)
+    {
+        ModuloCodefacEnum modulo=(ModuloCodefacEnum) parametros[0];
+        getCmbModulo().setSelectedItem(modulo);
+        //DialogoCodefac.mensaje("adasd","post contructor",1);
+        //repaint();
     }
     
 }

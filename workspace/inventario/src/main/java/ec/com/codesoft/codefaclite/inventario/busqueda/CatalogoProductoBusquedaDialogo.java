@@ -40,7 +40,7 @@ public class CatalogoProductoBusquedaDialogo implements InterfaceModelFind<Catal
     @Override
     public void agregarObjeto(CatalogoProducto t, Vector dato) {
         dato.add(t.getNombre());
-        dato.add(t.getTipoProductoEnum().getNombre());
+        dato.add(t.getModuloCodefacEnum().getNombre());
         dato.add(t.getIva().getTarifa());
     }
     

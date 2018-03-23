@@ -27,6 +27,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacA
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.validacionPersonalizadaAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
 import ec.com.codesoft.codefaclite.crm.model.ProductoModel;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
@@ -1884,7 +1885,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     public void crearVentanaCodefac(GeneralPanelInterface panel,boolean maximizado) {
         agregarListenerMenu((ControladorCodefacInterface) panel,maximizado);
     }
-
+    
     public List<VentanaEnum> getVentanasMenuList() {
         return ventanasMenuList;
     }
@@ -2139,18 +2140,24 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
      @Override
     public void crearDialogoCodefac(ObserverUpdateInterface panel,VentanaEnum ventanEnum,boolean maximizado)
     {
-        crearDialogoVentana(ventanEnum.getClase(), panel, maximizado);    
+        crearDialogoVentana(ventanEnum.getClase(), panel, maximizado,null);    
+    }
+    
+    @Override
+    public void crearDialogoCodefac(ObserverUpdateInterface panel,VentanaEnum ventanEnum,boolean maximizado,Object[] parametrosPostConstructor)
+    {
+        crearDialogoVentana(ventanEnum.getClase(), panel, maximizado,parametrosPostConstructor);    
     }
 
     @Override
     public void crearDialogoCodefac(ObserverUpdateInterface panel,String namePanel, boolean maximizado) {
         
         Class clase=buscarPanelDialog(namePanel);
-        crearDialogoVentana(clase, panel, maximizado);
+        crearDialogoVentana(clase, panel, maximizado,null);
                 
     }
     
-    private void crearDialogoVentana(Class clase,ObserverUpdateInterface panel,boolean maximizado)
+    private void crearDialogoVentana(Class clase,ObserverUpdateInterface panel,boolean maximizado,Object[] parametrosPostConstructor)
     {
         if(clase!=null)
         {
@@ -2166,6 +2173,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     agregarListenerMenu(ventana,maximizado);
                     habilitarBotones(false);
                     getBtnGuardar().setEnabled(true);
+                    
+                    //Validacion para verificar si implementa la interfaz del postcostructod
+                    if (ventana instanceof InterfazPostConstructPanel) {
+                        ((InterfazPostConstructPanel) ventana).postConstructorExterno(parametrosPostConstructor);
+                    }
                 }
                 else
                 {
