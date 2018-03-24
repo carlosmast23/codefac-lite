@@ -12,6 +12,9 @@ import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -125,21 +128,71 @@ public abstract class UtilidadesTextos {
     }
     
     public static String documentToString(Document document) {
-    try {
-      TransformerFactory tf = TransformerFactory.newInstance();
-      Transformer trans = tf.newTransformer();
-      StringWriter sw = new StringWriter();
-      trans.transform(new DOMSource(document), new StreamResult(sw));
-      
-      //Covertir a formato utf-8
-      byte[] byteText = sw.toString().getBytes(Charset.forName("UTF-8"));
-      return new String(byteText,"UTF-8");
-    } catch (TransformerException tEx) {
-      tEx.printStackTrace();
-    }   catch (UnsupportedEncodingException ex) {
+        try {
+            TransformerFactory tf = TransformerFactory.newInstance();
+            Transformer trans = tf.newTransformer();
+            StringWriter sw = new StringWriter();
+            trans.transform(new DOMSource(document), new StreamResult(sw));
+
+            //Covertir a formato utf-8
+            byte[] byteText = sw.toString().getBytes(Charset.forName("UTF-8"));
+            return new String(byteText,"UTF-8");
+        }catch (TransformerException tEx) {
+            tEx.printStackTrace();
+        }catch (UnsupportedEncodingException ex) {
             Logger.getLogger(UtilidadesTextos.class.getName()).log(Level.SEVERE, null, ex);
         }
-    return null;
-  }
+        return null;
+    }
 
+    public static Integer transformarStringEntero(String dato)
+    {
+        Integer datoEntero = null;
+        try
+        {
+            datoEntero = Integer.parseInt(dato);
+        }catch(NumberFormatException exc)
+        {
+            System.out.println("Error entero: " + exc);
+        }
+                
+        return datoEntero;
+    }
+    
+    public static Double transformarStringDouble(String dato)
+    {
+        Double datoDouble = null;
+        try
+        {
+            datoDouble = Double.parseDouble(dato);
+        }catch(NumberFormatException exc)
+        {
+            System.out.println("Error double: " + exc);
+        }
+                
+        return datoDouble;
+    }
+    
+    public static Date transformarStringDate(String dato)
+    {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date fechaDate = null;
+        try {
+            fechaDate = dateFormat.parse(dato);
+        } 
+        catch (ParseException ex) 
+        {
+            System.out.println("Error fecha: " + ex);
+        }
+        return fechaDate;
+    }
+    
+    public static String obtenerLetra(int columna)
+    {
+        int numero = 65 + columna;
+        char letra = (char)numero;
+        return letra+"";
+    }
+    
+    
 }

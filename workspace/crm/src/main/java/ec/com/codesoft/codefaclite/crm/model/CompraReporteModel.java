@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.crm.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
@@ -26,6 +27,7 @@ import ec.com.codesoft.ejemplo.utilidades.tabla.UtilidadesTablas;
 import java.awt.Dialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -47,7 +49,6 @@ import javax.swing.table.DefaultTableModel;
 
 public class CompraReporteModel extends CompraReportePanel
 {
-    
     private DefaultTableModel modeloTablaDetallesCompras;
     private Persona proveedor;
     private Date fechaInicio;
@@ -171,7 +172,19 @@ public class CompraReporteModel extends CompraReportePanel
                 DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
                     @Override
                     public void excel() {
-                        DialogoCodefac.mensaje("Error","No existe reporte en excel",DialogoCodefac.MENSAJE_INCORRECTO);
+                        //DialogoCodefac.mensaje("Error","No existe reporte en excel",DialogoCodefac.MENSAJE_INCORRECTO);
+                        Excel <CompraDataReporte>excel = new Excel();
+                        String []cabecera = {"Dato1","Dato2","Dato3","Dato4","Dato5","Dato6","Dato7","Dato8","Dato9","Dato10","Dato11"};
+                        
+                        try {
+                            excel.gestionarIngresoInformacionExcel(cabecera, compraDataReportes);
+                        } catch (IOException ex) {
+                            Logger.getLogger(CompraReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (IllegalArgumentException ex) {
+                            Logger.getLogger(CompraReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (IllegalAccessException ex) {
+                            Logger.getLogger(CompraReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
 
                     @Override

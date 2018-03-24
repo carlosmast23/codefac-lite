@@ -6,6 +6,8 @@
 package ec.com.codesoft.codefaclite.crm.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.excel.Excel;
+import ec.com.codesoft.codefaclite.controlador.excel.ExcelDatosInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.crm.data.ClienteData;
@@ -13,6 +15,8 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -32,7 +36,7 @@ public class ClienteReporte extends ControladorCodefacInterface{
         
     }
     
-    private void imprimirReporte()
+    private void imprimirReporte() throws IOException, FileNotFoundException, IllegalArgumentException, IllegalAccessException
     {
         try {
             InputStream path = RecursoCodefac.JASPER_CRM.getResourceInputStream("reporteClientes.jrxml");
@@ -50,7 +54,10 @@ public class ClienteReporte extends ControladorCodefacInterface{
                 clienteData.setTelefono(cliente.getTelefonoCelular());
                 data.add(clienteData);
             }
-            
+            Excel excel = new Excel();
+            excel.ingresarDatosCeldasHoja2(new ArrayList<ExcelDatosInterface>(data));
+//            String []cabecera ={"Dato 1", "Dato 2", "Dato 3","Dato 4","Dato 5"} ;
+//            excel.gestionarIngresoInformacionExcel(cabecera, data);
             ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Clientes ");
             this.dispose();
             this.setVisible(false);
@@ -78,7 +85,7 @@ public class ClienteReporte extends ControladorCodefacInterface{
 
     @Override
     public void imprimir() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
@@ -113,7 +120,15 @@ public class ClienteReporte extends ControladorCodefacInterface{
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite{
-        imprimirReporte();
+        try {
+            imprimirReporte();
+        } catch (IOException ex) {
+            Logger.getLogger(ClienteReporte.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(ClienteReporte.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(ClienteReporte.class.getName()).log(Level.SEVERE, null, ex);
+        }
         throw new ExcepcionCodefacLite("Cerrar Ventan");
     }
 
