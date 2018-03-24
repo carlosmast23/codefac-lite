@@ -123,7 +123,7 @@ public abstract class AbstractFacade<T>
          */
         if (parametros != null) {
             for (String parametro : parametros.keySet()) {
-                query.setParameter(parametro, parametros.get(parametro));
+                query.setParameter(parametro.replace(".",""), parametros.get(parametro));
             }
         }
         return query.getResultList();
@@ -189,7 +189,7 @@ public abstract class AbstractFacade<T>
 					it.remove();
 				}else
 					query = query + objectName + "." + propertyKey + " = :"
-						+ propertyKey;
+						+ propertyKey.replace(".","");
 			}
 
 			if (i == propertyNumber) {
