@@ -100,3 +100,5 @@ Cosas pendientes:
 	Instalar el servidor de git
 	Ir a conversar con los del consejo provincial para promocionar Codefac
 	
+
+resolver el problema de los ensambles con el producto para el inventario porque necesita tener ese campo para la logica

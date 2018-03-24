@@ -10,8 +10,10 @@ import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteInscritoServiceIf;
 import java.rmi.RemoteException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityTransaction;
@@ -60,4 +62,10 @@ public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrit
         return estudianteInscritoFacade.obtenerEstudiantesInscritos(nivel);
     }
 
+    @Override
+    public List<EstudianteInscrito> obtenerEstudiantesInscritosPorPeriodo(Periodo periodo) throws RemoteException {
+        Map<String,Object> mapParametros=new HashMap<String, Object>();
+        mapParametros.put("nivelAcademico.periodo",periodo);
+        return getFacade().findByMap(mapParametros);
+    }
 }

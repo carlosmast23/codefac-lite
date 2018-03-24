@@ -67,6 +67,8 @@ public abstract class NivelAcademicoPanel extends ControladorCodefacInterface {
 
         lblEstado.setText("Estado:");
 
+        cmbEstado.setEnabled(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(

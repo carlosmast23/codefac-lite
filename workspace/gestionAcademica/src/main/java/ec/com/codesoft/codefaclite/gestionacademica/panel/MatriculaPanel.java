@@ -12,7 +12,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import java.awt.Color;
 import java.awt.Component;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JTable;
 
@@ -42,11 +44,9 @@ public abstract class MatriculaPanel extends ControladorCodefacInterface {
     private void initComponents() {
 
         btnPasar = new javax.swing.JButton();
-        btnPasarTodo = new javax.swing.JButton();
         btnRegresar = new javax.swing.JButton();
-        btnRegresarTodo = new javax.swing.JButton();
         cmbNivel = new javax.swing.JComboBox<>();
-        jLabel1 = new javax.swing.JLabel();
+        lblNivelAnterior = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         cmbPeriodoAnterior = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
@@ -59,6 +59,9 @@ public abstract class MatriculaPanel extends ControladorCodefacInterface {
         tblAlumnosSinMatricula = new javax.swing.JTable();
         jScrollPane4 = new javax.swing.JScrollPane();
         tblAlumnosConMatricula = new javax.swing.JTable();
+        btnAgregarEstudiante = new javax.swing.JButton();
+        chkSeleccionarTodoTblSinMatricula = new javax.swing.JCheckBox();
+        chkSeleccionarTodoTblConMatricula = new javax.swing.JCheckBox();
 
         setClosable(true);
         setIconifiable(true);
@@ -66,28 +69,30 @@ public abstract class MatriculaPanel extends ControladorCodefacInterface {
         setResizable(true);
         setTitle("Matricula por grupo");
 
-        btnPasar.setText(">");
+        btnPasar.setBackground(new java.awt.Color(255, 255, 255));
+        btnPasar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/flechaDer.png"))); // NOI18N
         btnPasar.setToolTipText("Matricular");
 
-        btnPasarTodo.setText(">>");
-        btnPasarTodo.setToolTipText("Matricular Todos");
-
-        btnRegresar.setText("<");
+        btnRegresar.setBackground(new java.awt.Color(255, 255, 255));
+        btnRegresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/flechaIzq.png"))); // NOI18N
         btnRegresar.setToolTipText("Regresar");
 
-        btnRegresarTodo.setText("<<");
-        btnRegresarTodo.setToolTipText("Regresar Todos");
+        lblNivelAnterior.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblNivelAnterior.setText("Nivel:");
 
-        jLabel1.setText("Nivel:");
-
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setText("Buscar Por:");
 
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel3.setText("Periodo Matricula:");
 
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel4.setText("Nivel:");
 
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel5.setText("Lista de Alumnos disponibles");
 
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel6.setText("Lista de Alumnos Matriculados");
 
         tblAlumnosSinMatricula.setModel(new javax.swing.table.DefaultTableModel(
@@ -142,54 +147,79 @@ public abstract class MatriculaPanel extends ControladorCodefacInterface {
             tblAlumnosConMatricula.getColumnModel().getColumn(0).setMaxWidth(30);
         }
 
+        btnAgregarEstudiante.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add2.png"))); // NOI18N
+        btnAgregarEstudiante.setText("Estudiante");
+
+        chkSeleccionarTodoTblSinMatricula.setText("Seleccionar Todo");
+
+        chkSeleccionarTodoTblConMatricula.setText("Seleccionar Todo");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addGap(27, 27, 27)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(cmbNivel, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cmbPeriodoAnterior, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnPasarTodo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnPasar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnRegresar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnRegresarTodo))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(95, 95, 95)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel4)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(cmbNivelMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel3)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(cmbPeriodoSiguiente, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addGap(51, 51, 51)
+                            .addComponent(chkSeleccionarTodoTblConMatricula)
+                            .addGap(326, 326, 326)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnPasar, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(16, 16, 16)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(btnAgregarEstudiante)
+                                .addContainerGap())
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(46, 46, 46)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGap(27, 27, 27)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(cmbNivelMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(cmbPeriodoSiguiente, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblNivelAnterior)
+                                    .addComponent(jLabel2))
+                                .addGap(27, 27, 27)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(cmbNivel, 0, 192, Short.MAX_VALUE)
+                                    .addComponent(cmbPeriodoAnterior, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(chkSeleccionarTodoTblSinMatricula)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addContainerGap()
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnAgregarEstudiante)
+                            .addComponent(chkSeleccionarTodoTblConMatricula))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -198,34 +228,33 @@ public abstract class MatriculaPanel extends ControladorCodefacInterface {
                                     .addComponent(cmbPeriodoAnterior, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(cmbNivel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(cmbNivel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblNivelAnterior)))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(cmbPeriodoSiguiente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel3))
-                                .addGap(21, 21, 21)
+                                .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel4)
-                                    .addComponent(cmbNivelMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(37, 37, 37)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6))
+                                    .addComponent(cmbNivelMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(3, 3, 3)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(60, 60, 60)
+                                .addGap(158, 158, 158)
                                 .addComponent(btnPasar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnPasarTodo)
-                                .addGap(54, 54, 54)
-                                .addComponent(btnRegresar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnRegresarTodo))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnRegresar))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
+                                .addGap(45, 45, 45)
+                                .addComponent(chkSeleccionarTodoTblSinMatricula)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addGap(0, 36, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6))
+                .addGap(0, 22, Short.MAX_VALUE))
         );
 
         pack();
@@ -233,15 +262,15 @@ public abstract class MatriculaPanel extends ControladorCodefacInterface {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregarEstudiante;
     private javax.swing.JButton btnPasar;
-    private javax.swing.JButton btnPasarTodo;
     private javax.swing.JButton btnRegresar;
-    private javax.swing.JButton btnRegresarTodo;
+    private javax.swing.JCheckBox chkSeleccionarTodoTblConMatricula;
+    private javax.swing.JCheckBox chkSeleccionarTodoTblSinMatricula;
     private javax.swing.JComboBox<NivelAcademico> cmbNivel;
     private javax.swing.JComboBox<NivelAcademico> cmbNivelMatricula;
     private javax.swing.JComboBox<Periodo> cmbPeriodoAnterior;
     private javax.swing.JComboBox<Periodo> cmbPeriodoSiguiente;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -249,6 +278,7 @@ public abstract class MatriculaPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JLabel lblNivelAnterior;
     private javax.swing.JTable tblAlumnosConMatricula;
     private javax.swing.JTable tblAlumnosSinMatricula;
     // End of variables declaration//GEN-END:variables
@@ -261,13 +291,6 @@ public abstract class MatriculaPanel extends ControladorCodefacInterface {
         this.btnPasar = btnPasar;
     }
 
-    public JButton getBtnPasarTodo() {
-        return btnPasarTodo;
-    }
-
-    public void setBtnPasarTodo(JButton btnPasarTodo) {
-        this.btnPasarTodo = btnPasarTodo;
-    }
 
     public JButton getBtnRegresar() {
         return btnRegresar;
@@ -277,13 +300,6 @@ public abstract class MatriculaPanel extends ControladorCodefacInterface {
         this.btnRegresar = btnRegresar;
     }
 
-    public JButton getBtnRegresarTodo() {
-        return btnRegresarTodo;
-    }
-
-    public void setBtnRegresarTodo(JButton btnRegresarTodo) {
-        this.btnRegresarTodo = btnRegresarTodo;
-    }
 
     public JComboBox<Periodo> getCmbPeriodoAnterior() {
         return cmbPeriodoAnterior;
@@ -335,6 +351,36 @@ public abstract class MatriculaPanel extends ControladorCodefacInterface {
         this.tblAlumnosSinMatricula = tblAlumnosSinMatricula;
     }
 
+    public JButton getBtnAgregarEstudiante() {
+        return btnAgregarEstudiante;
+    }
+
+    public void setBtnAgregarEstudiante(JButton btnAgregarEstudiante) {
+        this.btnAgregarEstudiante = btnAgregarEstudiante;
+    }
+
+    public JLabel getLblNivelAnterior() {
+        return lblNivelAnterior;
+    }
+
+    public JCheckBox getChkSeleccionarTodoTblConMatricula() {
+        return chkSeleccionarTodoTblConMatricula;
+    }
+
+    public void setChkSeleccionarTodoTblConMatricula(JCheckBox chkSeleccionarTodoTblConMatricula) {
+        this.chkSeleccionarTodoTblConMatricula = chkSeleccionarTodoTblConMatricula;
+    }
+
+    public JCheckBox getChkSeleccionarTodoTblSinMatricula() {
+        return chkSeleccionarTodoTblSinMatricula;
+    }
+
+    public void setChkSeleccionarTodoTblSinMatricula(JCheckBox chkSeleccionarTodoTblSinMatricula) {
+        this.chkSeleccionarTodoTblSinMatricula = chkSeleccionarTodoTblSinMatricula;
+    }
+
+    
+    
     
     
 }
