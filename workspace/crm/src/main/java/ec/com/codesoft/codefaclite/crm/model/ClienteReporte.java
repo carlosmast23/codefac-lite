@@ -60,7 +60,7 @@ public class ClienteReporte extends ControladorCodefacInterface{
                 @Override
                 public void excel() {
                     try{
-                        Excel excel = new Excel("Cliente");
+                        Excel excel = new Excel();
                         String nombreCabeceras[] = {"Identificación", "Nombres completos", "Telefono", "Dirección","Email"};
                         excel.gestionarIngresoInformacionExcel(nombreCabeceras, data);
                         excel.abrirDocumento();

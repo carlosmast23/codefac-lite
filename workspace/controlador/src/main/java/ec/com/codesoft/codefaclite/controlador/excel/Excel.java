@@ -45,12 +45,14 @@ public class Excel<T>
     private String archivo;
     private String nombreArchivExcel;
     
-    public Excel(String nombreArchivoExcel)
+    public Excel()
     {
         this.libro = new XSSFWorkbook(); //H para xls y X para xlsx
         this.crearAyuda = libro.getCreationHelper();
         this.hoja1 = libro.createSheet("Hoja1");
         this.posicionesColumnas = new ArrayList<>();
+        Date date = new Date();
+        String nombreArchivoExcel = "" + date;
         this.archivo = "\\tmp\\"+nombreArchivoExcel+".xlsx";
     }
     

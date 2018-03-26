@@ -173,7 +173,7 @@ public class CompraReporteModel extends CompraReportePanel
                     @Override
                     public void excel() {
                         try{
-                            Excel excel = new Excel("CompraReporte");
+                            Excel excel = new Excel();
                             String[] nombreCabeceras = {"Preimpreso", "Identificación","Nombre","Fecha","Subtotal","Sutotal12","Descuento"};
                             excel.gestionarIngresoInformacionExcel(nombreCabeceras, compraDataReportes);
                             excel.abrirDocumento();
