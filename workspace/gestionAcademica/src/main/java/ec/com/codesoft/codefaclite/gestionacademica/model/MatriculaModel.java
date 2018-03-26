@@ -25,6 +25,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteInscritoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServiceIf;
+import ec.com.codesoft.ejemplo.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.ejemplo.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -264,6 +265,8 @@ public class MatriculaModel extends MatriculaPanel {
     
     private void regresarEstudiantesMatriculadosSinGrabar(NivelAcademico nivelAcademico)
     {
+        List<String> nombresEstudiantes=new ArrayList<String>();
+        
         DefaultTableModel tablaModelo=(DefaultTableModel) getTblAlumnosConMatricula().getModel();
         
         for (int i = 0; i < tablaModelo.getRowCount(); i++) {
@@ -287,10 +290,22 @@ public class MatriculaModel extends MatriculaPanel {
                         eliminarMatriculaEstudiante(estudianteInscrito);
                         estudiantesEliminar.add(estudianteInscrito);
                     }
+                    else //Si tiene restricciones los grabo en una lista para mostrar al usuario
+                    {
+                        nombresEstudiantes.add(estudianteInscrito.getEstudiante().getNombreCompleto());
+                    }
                 }
             }
             
         }
+        
+        //Si existen expeciones para eliminar se muestra una alerta
+        if(nombresEstudiantes.size()>0)
+        {
+            String estudianesStr=UtilidadesLista.castListToString(nombresEstudiantes,"\n");
+            DialogoCodefac.mensaje("Advertencia","Existen problemas con los siguientes estudiantes: \n"+estudianesStr+"\n Elimine las relaciones para borrar el estudiante (Rubros Asignados)",DialogoCodefac.MENSAJE_ADVERTENCIA);
+        }
+        
     }
     
     private Boolean verificarEliminarMatriculaEstudianteGrabado(EstudianteInscrito estudianteInscrito)
