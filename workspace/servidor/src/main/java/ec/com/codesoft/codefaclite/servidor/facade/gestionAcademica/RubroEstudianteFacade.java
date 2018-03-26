@@ -7,10 +7,13 @@ package ec.com.codesoft.codefaclite.servidor.facade.gestionAcademica;
 
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import java.rmi.RemoteException;
 import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -85,6 +88,35 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
             return null;
         }
     }
+    
+    public List<RubroEstudiante> getRubrosActivosPorEstudianteYEstadoFacturado(RubroEstudiante.FacturacionEstadoEnum estadoFacturadoEnum) throws RemoteException
+    {
+       
+        String queryString = "SELECT u FROM RubroEstudiante u WHERE u.estado!=?1 and u.estado!=?2 and u.estadoFactura=?3 ";
+        Query query = getEntityManager().createQuery(queryString);
+        
+        query.setParameter(1,GeneralEnumEstado.ANULADO.getEstado());
+        query.setParameter(2,GeneralEnumEstado.ELIMINADO.getEstado());
+        query.setParameter(3,estadoFacturadoEnum.getLetra());
+        
+        return query.getResultList();
+        
+    }
+    
+    
+    public List<RubroEstudiante> getRubrosActivosPorEstudiante(EstudianteInscrito estudianteInscrito) throws RemoteException
+    {
+
+        String queryString = "SELECT u FROM RubroEstudiante u WHERE u.estado!=?1 and u.estado!=?2 and u.estudianteInscrito=?3  ";
+        Query query = getEntityManager().createQuery(queryString);
+        
+        query.setParameter(1,GeneralEnumEstado.ANULADO.getEstado());
+        query.setParameter(2,GeneralEnumEstado.ELIMINADO.getEstado());
+        query.setParameter(3,estudianteInscrito);
+        
+        return query.getResultList();
+    }
+
 
    
 }

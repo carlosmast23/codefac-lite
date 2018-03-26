@@ -22,7 +22,15 @@ public enum GeneralEnumEstado {
     /**
      * Estado cuando un cliente es eliminado de forma permanente
      */
-    ELIMINADO("E","Eliminado"),;
+    ELIMINADO("E","Eliminado"),
+    
+    /**
+     * Estado cuando se quiere especificar que se anula por el proceso es decir:
+     * (Cuando se anula una factura con nota de credito se anula)
+     */
+    ANULADO("N","Anulado"),
+    
+    ;
 
     private String estado;
     private String nombre;

@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -40,6 +41,12 @@ public class RubroEstudiante implements Serializable{
     
     @Column(name = "ESTADO_FACTURA")
     private String estadoFactura;
+    
+    /**
+     * Estado que contrala si esta activo, anulado , o eliminado
+     */
+    @Column(name = "ESTADO")
+    private String estado;
     
     @JoinColumn(name = "RUBRO_NIVEL_ID")
     @ManyToOne
@@ -99,6 +106,25 @@ public class RubroEstudiante implements Serializable{
     public void setValor(BigDecimal valor) {
         this.valor = valor;
     }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+    
+    /**
+     * Metodos personalizados
+     * @return 
+     */
+    
+    public GeneralEnumEstado getEstadoEnum()
+    {
+        
+        return GeneralEnumEstado.getEnum(estado);
+    }
     
         
     public FacturacionEstadoEnum getEstadoFacturaEnum() {
@@ -130,9 +156,19 @@ public class RubroEstudiante implements Serializable{
         return true;
     }
     
+    
     public enum FacturacionEstadoEnum {
+        /**
+         * Estado cuando exista cancelado en su totalidad el rubro y este facturado
+         */
         FACTURADO("f"),
+        /**
+         * Estado cuando solo esta generado la deuda pero aun no existe factura
+         */
         SIN_FACTURAR("s"),
+        /**
+         * Estado cuando se a pagado una parte de la factura
+         */
         FACTURA_PARCIAL("p");
 
         private FacturacionEstadoEnum(String letra) {

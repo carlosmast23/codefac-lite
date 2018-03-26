@@ -99,6 +99,7 @@ create table RUBRO_ESTUDIANTE(
     VALOR decimal(7,2),
     SALDO decimal(7,2),
     ESTADO_FACTURA varchar(1),
+    ESTADO varchar(1),
     RUBRO_NIVEL_ID BIGINT,
     ESTUDIANTE_INSCRITO_ID BIGINT,
     primary key (ID)
