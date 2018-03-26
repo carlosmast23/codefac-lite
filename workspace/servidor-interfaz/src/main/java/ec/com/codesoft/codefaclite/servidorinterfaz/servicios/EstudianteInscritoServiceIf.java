@@ -18,6 +18,9 @@ import java.util.Map;
  * @author Carlos
  */
 public interface EstudianteInscritoServiceIf extends ServiceAbstractIf<EstudianteInscrito>{
+    
+    public void matriculaEstudianteByList(List<EstudianteInscrito> estudiantesPorMatricular) throws RemoteException;
+    
     public void matricularEstudiantesByMap(Map<NivelAcademico,List<Estudiante>> mapEstudiantes) throws RemoteException;
     
     public List<EstudianteInscrito> obtenerEstudiantesInscritos(NivelAcademico nivel) throws java.rmi.RemoteException;

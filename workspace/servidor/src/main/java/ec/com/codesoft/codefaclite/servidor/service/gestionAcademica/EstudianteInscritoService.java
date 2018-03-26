@@ -31,6 +31,25 @@ public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrit
         this.estudianteInscritoFacade = new EstudianteInscritoFacade();
 
     }
+    
+    public void matriculaEstudianteByList(List<EstudianteInscrito> estudiantesPorMatricular) throws RemoteException
+    {
+        EntityTransaction transaccion = getTransaccion();
+        transaccion.begin();
+        
+        for (EstudianteInscrito estudianteInscrito : estudiantesPorMatricular) {
+            if(estudianteInscrito.getId()==null)
+            {
+                estudianteInscrito=entityManager.merge(estudianteInscrito);
+                entityManager.persist(estudianteInscrito);
+            }
+            else
+            {
+                entityManager.merge(estudianteInscrito);            
+            }
+        }        
+        transaccion.commit();
+    }
 
     /**
      * Permite grabar un conjunto de estudiantes para matricular

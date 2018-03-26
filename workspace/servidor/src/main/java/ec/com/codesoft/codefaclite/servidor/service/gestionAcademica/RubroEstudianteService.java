@@ -33,6 +33,16 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         super(RubroEstudianteFacade.class);
         rubroEstudianteFacade = new RubroEstudianteFacade();
     }
+    
+    public List<RubroEstudiante> obtenerRubrosActivosPorEstudianteYEstadoFacturado(RubroEstudiante.FacturacionEstadoEnum estadoFacturadoEnum) throws RemoteException
+    {
+        return getFacade().getRubrosActivosPorEstudianteYEstadoFacturado(estadoFacturadoEnum);
+    }
+    
+    public List<RubroEstudiante> obtenerRubrosActivosPorEstudiantesInscrito(EstudianteInscrito estudianteInscrito) throws RemoteException
+    {
+        return getFacade().getRubrosActivosPorEstudiante(estudianteInscrito);
+    }
 
     public List<RubroEstudiante> obtenerRubrosEstudiantesPorRubros(List<RubrosNivel> rubros) throws RemoteException {
         return getFacade().findRubrosEstudiantesPorRubros(rubros);

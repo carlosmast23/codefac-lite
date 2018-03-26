@@ -22,6 +22,7 @@ import java.util.List;
  */
 public interface RubroEstudianteServiceIf extends ServiceAbstractIf<RubroEstudiante> {
 
+    public List<RubroEstudiante> obtenerRubrosActivosPorEstudiantesInscrito(EstudianteInscrito estudianteInscrito) throws RemoteException;
     
     public List<RubroEstudiante> obtenerRubrosEstudiantesPorRubros(List<RubrosNivel> rubros) throws RemoteException;
     
