@@ -172,19 +172,17 @@ public class CompraReporteModel extends CompraReportePanel
                 DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
                     @Override
                     public void excel() {
-                        //DialogoCodefac.mensaje("Error","No existe reporte en excel",DialogoCodefac.MENSAJE_INCORRECTO);
-                        Excel <CompraDataReporte>excel = new Excel();
-                        String []cabecera = {"Dato1","Dato2","Dato3","Dato4","Dato5","Dato6","Dato7","Dato8","Dato9","Dato10","Dato11"};
-                        
-                        try {
-                            excel.gestionarIngresoInformacionExcel(cabecera, compraDataReportes);
-                        } catch (IOException ex) {
-                            Logger.getLogger(CompraReporteModel.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (IllegalArgumentException ex) {
-                            Logger.getLogger(CompraReporteModel.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (IllegalAccessException ex) {
-                            Logger.getLogger(CompraReporteModel.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                        try{
+                            Excel excel = new Excel("CompraReporte");
+                            String[] nombreCabeceras = {"Preimpreso", "Identificación","Nombre","Fecha","Subtotal","Sutotal12","Descuento"};
+                            excel.gestionarIngresoInformacionExcel(nombreCabeceras, compraDataReportes);
+                            excel.abrirDocumento();
+                            excel.eliminarDocumento();
+                            
+                        }catch(Exception exc)
+                        {
+                            DialogoCodefac.mensaje("Error","El archivo Excel se encuentra abierto",DialogoCodefac.MENSAJE_INCORRECTO);
+                        }          
                     }
 
                     @Override
