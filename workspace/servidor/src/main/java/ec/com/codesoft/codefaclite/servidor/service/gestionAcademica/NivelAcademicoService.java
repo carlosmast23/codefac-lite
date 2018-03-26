@@ -8,9 +8,13 @@ package ec.com.codesoft.codefaclite.servidor.service.gestionAcademica;
 import ec.com.codesoft.codefaclite.servidor.facade.gestionAcademica.NivelAcademicoFacade;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServiceIf;
 import java.rmi.RemoteException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -19,6 +23,14 @@ import java.rmi.RemoteException;
 public class NivelAcademicoService extends ServiceAbstract<NivelAcademico, NivelAcademicoFacade> implements NivelAcademicoServiceIf {
 
     private NivelAcademicoFacade nivelAcademicoFacade;
+    
+    public List<NivelAcademico> obtenerTodosActivosPorPeriodo(Periodo periodo) throws RemoteException
+    {
+        Map<String,Object> mapParametros=new HashMap<String,Object>();        
+        mapParametros.put("periodo",periodo);
+        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        return getFacade().findByMap(mapParametros);
+    }
 
     public NivelAcademicoService() throws RemoteException {
         super(NivelAcademicoFacade.class);

@@ -26,5 +26,7 @@ public interface EstudianteInscritoServiceIf extends ServiceAbstractIf<Estudiant
     public List<EstudianteInscrito> obtenerEstudiantesInscritos(NivelAcademico nivel) throws java.rmi.RemoteException;
     
     public List<EstudianteInscrito> obtenerEstudiantesInscritosPorPeriodo(Periodo periodo) throws RemoteException;
+    
+    public void eliminarEstudiantesInscrito(List<EstudianteInscrito> estudiantesEliminar) throws RemoteException;
 
 }

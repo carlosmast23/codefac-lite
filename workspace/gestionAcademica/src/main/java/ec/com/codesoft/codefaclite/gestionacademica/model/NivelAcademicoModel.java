@@ -58,6 +58,7 @@ public class NivelAcademicoModel extends NivelAcademicoPanel implements Serializ
         try {
             NivelAcademicoServiceIf servicio = ServiceFactory.getFactory().getNivelAcademicoServiceIf();
             setearVariablesPantalla();
+            nivelAcademico.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
             servicio.grabar(nivelAcademico);
             DialogoCodefac.mensaje("Correcto", "El nivel academico fue creado correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         } catch (ServicioCodefacException ex) {
@@ -181,7 +182,7 @@ public class NivelAcademicoModel extends NivelAcademicoPanel implements Serializ
                 getCmbAula().addItem(aula);
             }
 
-            List<Periodo> periodos = ServiceFactory.getFactory().getPeriodoServiceIf().obtenerTodos();
+            List<Periodo> periodos = ServiceFactory.getFactory().getPeriodoServiceIf().obtenerPeriodoActivo();
             getCmbPeriodo().removeAllItems();
             for (Periodo periodo : periodos) {
                 getCmbPeriodo().addItem(periodo);

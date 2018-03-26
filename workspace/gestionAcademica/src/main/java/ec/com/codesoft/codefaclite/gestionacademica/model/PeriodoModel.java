@@ -166,11 +166,17 @@ public class PeriodoModel extends PeriodoPanel {
         if (periodo == null) {
             throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar periodo vacio");
         }
+    }
+    
+    private void cargarDatos()
+    {
         getTxtNombre().setText(periodo.getNombre());
         getTxtObservacion().setText(periodo.getObservaciones());
 
         getDateFechaInicio().setDate(periodo.getFechaInicio());
         getDateFechaFin().setDate(periodo.getFechaFin());
+        
+        getCmbEstado().setSelectedItem(periodo.getEstado());
     }
 
     @Override

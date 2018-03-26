@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -96,6 +97,13 @@ public class NivelAcademico implements Serializable {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+    
+    ///////Metodos personalizados////////////////////
+    
+    public GeneralEnumEstado getEstadoEnum()
+    {
+        return GeneralEnumEstado.getEnum(this.estado);
     }
 
     @Override

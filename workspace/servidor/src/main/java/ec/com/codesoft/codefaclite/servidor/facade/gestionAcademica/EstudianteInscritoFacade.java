@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -33,8 +34,9 @@ public class EstudianteInscritoFacade extends AbstractFacade<EstudianteInscrito>
         }
 
         try {
-            String queryString = "SELECT u FROM EstudianteInscrito u WHERE " + academico;
+            String queryString = "SELECT u FROM EstudianteInscrito u WHERE u.estado=?2 AND " + academico;
             Query query = getEntityManager().createQuery(queryString);
+            query.setParameter(2,GeneralEnumEstado.ACTIVO.getEstado());
             //System.err.println("QUERY--->"+query.toString());
             if (nivel != null) {
                 query.setParameter(1, nivel);

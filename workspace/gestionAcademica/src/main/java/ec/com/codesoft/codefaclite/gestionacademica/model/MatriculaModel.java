@@ -68,6 +68,7 @@ public class MatriculaModel extends MatriculaPanel {
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
+        limpiarVariables();
         listenerBotones();
         listenerCombos();
         listenerCheckBox();
@@ -85,14 +86,22 @@ public class MatriculaModel extends MatriculaPanel {
         try {
             List<EstudianteInscrito> estudiantes = obtenerEstudiantesPorMatricular();
             
-            if (estudiantes.size() == 0) {
+            if (estudiantes.size() == 0 && estudiantesEliminar.size()==0) {
                 DialogoCodefac.mensaje("Advertencia", "No existen datos para matricular", DialogoCodefac.MENSAJE_ADVERTENCIA);
                 throw new ExcepcionCodefacLite("Cancelado metodo grabar");
             }
             else
             {
-                ServiceFactory.getFactory().getEstudianteInscritoServiceIf().matriculaEstudianteByList(estudiantes);
-                DialogoCodefac.mensaje("Correcto",estudiantes.size()+" estudiantes fueron grabados correctamente", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                if(estudiantes.size()>0)
+                    ServiceFactory.getFactory().getEstudianteInscritoServiceIf().matriculaEstudianteByList(estudiantes);
+                
+                if(estudiantesEliminar.size()>0)
+                    ServiceFactory.getFactory().getEstudianteInscritoServiceIf().eliminarEstudiantesInscrito(estudiantesEliminar);
+                
+                
+                int datosActualizados=estudiantes.size()+estudiantesEliminar.size();
+                
+                DialogoCodefac.mensaje("Correcto",datosActualizados+" estudiantes fueron actualizados correctamente", DialogoCodefac.MENSAJE_ADVERTENCIA);
             }
      
             
@@ -150,7 +159,9 @@ public class MatriculaModel extends MatriculaPanel {
 
     @Override
     public void limpiar() {
-        limpiarVaribles();
+        limpiarVariables();
+        getCmbPeriodoSiguiente().setSelectedIndex(0);
+        getCmbPeriodoAnterior().setSelectedIndex(0);
     }
 
     @Override
@@ -188,7 +199,7 @@ public class MatriculaModel extends MatriculaPanel {
                 {
                     pasarEstudiantesNoMatriculados(nivelAcademico);
                     cargarTablaNoMatriculados();
-                    cargarComboNivelesMatriculados();
+                    getCmbNivelMatricula().setSelectedIndex(getCmbNivelMatricula().getSelectedIndex());
                     
                 }
             }
@@ -207,7 +218,7 @@ public class MatriculaModel extends MatriculaPanel {
                     
                     //Seleccionar el combo principal para volver a cargar los datos
                     cargarTablaNoMatriculados();
-                    cargarComboNivelesMatriculados();
+                    getCmbNivelMatricula().setSelectedIndex(getCmbNivelMatricula().getSelectedIndex());
                     
                 }
             }
@@ -223,7 +234,7 @@ public class MatriculaModel extends MatriculaPanel {
                 cargarTablaNoMatriculados();
                 
                 //Vuelve a generar los combos de los niveles matriculados
-                cargarComboNivelesMatriculados(); 
+                getCmbNivelMatricula().setSelectedIndex(getCmbNivelMatricula().getSelectedIndex());
                 
             }
         });
@@ -312,12 +323,13 @@ public class MatriculaModel extends MatriculaPanel {
             {
                 Estudiante estudiante=(Estudiante) tablaModelo.getValueAt(i, 1);
                 
-                //Si esta dentro de la lista de eliminados solo copio a la otra lista                
-                if(buscarEstudianteEliminado(estudiante)!=null)
+                //Si esta dentro de la lista de eliminados solo copio a la otra lista   
+                EstudianteInscrito estudianteInscrito=buscarEstudianteEliminado(estudiante);
+                if(estudianteInscrito!=null)
                 {
-                    estudiantesEliminar.remove(estudiante);
+                    estudiantesEliminar.remove(estudianteInscrito);
                     //Si ya existe solo copio a la otra lista para que aparezca de nuevo
-                    ingresarEstudianteMapMatricula((NivelAcademico) getCmbPeriodoSiguiente().getSelectedItem(),buscarEstudianteEliminado(estudiante));
+                    ingresarEstudianteMapMatricula((NivelAcademico) getCmbNivelMatricula().getSelectedItem(),estudianteInscrito);
                 }
                 else
                 {
@@ -397,6 +409,7 @@ public class MatriculaModel extends MatriculaPanel {
         if (estudiantesInscritos == null) {
             estudiantesInscritos = new ArrayList<EstudianteInscrito>();
             estudiantesInscritos.add(estudianteInscrito);
+            estudiantesInscritosMap.put(nivelAcademico,estudiantesInscritos);
         } else {
             estudiantesInscritos.add(estudianteInscrito);
         }
@@ -478,7 +491,8 @@ public class MatriculaModel extends MatriculaPanel {
                     
                     //TODO: Analizar que pasa cuando derepente quieren cambiar de periodo y se borran los datos
                     cargarValoresEstudiantesMatriculados(periodo);
-                    cargarComboNivelesMatriculados();
+                    cargarComboNivelesMatricula(periodo);
+                    getCmbNivelMatricula().setSelectedIndex(getCmbNivelMatricula().getSelectedIndex());
                     //cargarNivelesPeriodo(periodo, getCmbNivelMatricula());
                 }
             }
@@ -488,9 +502,7 @@ public class MatriculaModel extends MatriculaPanel {
         getCmbNivel().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                cargarTablaNoMatriculados();
-                
+                cargarTablaNoMatriculados();          
             }
         });
         
@@ -503,6 +515,7 @@ public class MatriculaModel extends MatriculaPanel {
         });
     }
     
+    /*
     private void cargarComboNivelesMatriculados() {
         
         //Esta variable selecciona el nivel seleccionado anterior s existe antes de volver a acargar los datos
@@ -514,9 +527,9 @@ public class MatriculaModel extends MatriculaPanel {
             getCmbNivelMatricula().addItem(nivelAcademico);
         }
         
-        /**
-         * Despues de volver a acatualizar los datos si existe de nuevo el nivel seleccionado los selecciono o por defecto cargo el primer dato del combo
-         */
+        
+        //Despues de volver a acatualizar los datos si existe de nuevo el nivel seleccionado los selecciono o por defecto cargo el primer dato del combo
+         
         if(getCmbNivelMatricula().getItemCount()>0)
         {
             if (nivelSeleccionadoIndice>=0 && nivelSeleccionadoIndice < getCmbNivelMatricula().getItemCount()) {
@@ -526,6 +539,23 @@ public class MatriculaModel extends MatriculaPanel {
             }
         }
         
+    }*/
+    
+    private void cargarComboNivelesMatricula(Periodo periodo)
+    {
+        try {
+            //Cargar los datos de los niveles disponibles
+            List<NivelAcademico> niveles = ServiceFactory.getFactory().getNivelAcademicoServiceIf().obtenerTodosActivosPorPeriodo(periodo);
+            getCmbNivelMatricula().removeAllItems();
+            
+            for (NivelAcademico nivel : niveles) {
+                getCmbNivelMatricula().addItem(nivel);
+            }
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(MatriculaModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                
     }
     
     private void cargarTablaNoMatriculados()
@@ -551,10 +581,10 @@ public class MatriculaModel extends MatriculaPanel {
                 else
                 {
                     //Si no correponden a la ninguna de las opciones anteriores debe estar buscando por un nivel academico anterior
-                    Map<String,Object> mapParametro=new HashMap<String,Object>();
-                    mapParametro.put("nivelAcademico",nivelAcademico);
+                    //Map<String,Object> mapParametro=new HashMap<String,Object>();
+                    //mapParametro.put("nivelAcademico",nivelAcademico);
                    
-                    List<EstudianteInscrito> estudiantesInscrito=ServiceFactory.getFactory().getEstudianteInscritoServiceIf().obtenerPorMap(mapParametro);
+                    List<EstudianteInscrito> estudiantesInscrito=ServiceFactory.getFactory().getEstudianteInscritoServiceIf().obtenerEstudiantesInscritos(nivelAcademico);
                     estudiantesSinMatricular.clear();
                     //Cargar la lista solo de los estudiantes pertenencientes a ese nivel
                     for (EstudianteInscrito estudianteInscrito : estudiantesInscrito) {
@@ -576,8 +606,6 @@ public class MatriculaModel extends MatriculaPanel {
             
 
         } catch (RemoteException ex) {
-            Logger.getLogger(MatriculaModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
             Logger.getLogger(MatriculaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -612,8 +640,6 @@ public class MatriculaModel extends MatriculaPanel {
     private void limpiarVariables() {
         estudiantesInscritosMap=new HashMap<NivelAcademico,List<EstudianteInscrito>>();
         estudiantesEliminar=new ArrayList<EstudianteInscrito>();
-        getCmbPeriodoSiguiente().setSelectedIndex(0);
-        getCmbPeriodoAnterior().setSelectedIndex(0);
         
     }
     
@@ -653,7 +679,7 @@ public class MatriculaModel extends MatriculaPanel {
             List<EstudianteInscrito> estudiantesInscritos=ServiceFactory.getFactory().getEstudianteInscritoServiceIf().obtenerEstudiantesInscritosPorPeriodo(periodoSeleccionado);
             estudiantesInscritosMap=castListToMap(estudiantesInscritos);
             //Crear los combos de los niveles seleccionados segun el nivel
-            cargarComboNivelesMatriculados();
+            
         } catch (RemoteException ex) {
             Logger.getLogger(MatriculaModel.class.getName()).log(Level.SEVERE, null, ex);
         }

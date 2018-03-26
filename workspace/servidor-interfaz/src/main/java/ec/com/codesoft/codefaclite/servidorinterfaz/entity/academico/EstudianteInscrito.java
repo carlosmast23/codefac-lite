@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -33,6 +34,9 @@ public class EstudianteInscrito implements Serializable{
     @Basic(optional = false)
     @Column(name = "ID")
     private Long id;
+    
+    @Column(name = "ESTADO")
+    private String estado;
     
     @JoinColumn(name = "ESTUDIANTE_ID")
     @ManyToOne
@@ -66,6 +70,16 @@ public class EstudianteInscrito implements Serializable{
         this.nivelAcademico = nivelAcademico;
     }
 
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+    
+    
+
 
     @Override
     public String toString() {
@@ -75,6 +89,11 @@ public class EstudianteInscrito implements Serializable{
     
     
     //Metodos personalizados
+    
+    public GeneralEnumEstado getEnumEstado()
+    {
+        return GeneralEnumEstado.getEnum(estado);
+    }
 
     @Override
     public int hashCode() {
