@@ -80,5 +80,5 @@ public class ClienteData implements ExcelDatosInterface
         tiposDatos.add(new TipoDato(this.email,Excel.TipoDataEnum.TEXTO));
         return tiposDatos;
     }   
-    
+
 }

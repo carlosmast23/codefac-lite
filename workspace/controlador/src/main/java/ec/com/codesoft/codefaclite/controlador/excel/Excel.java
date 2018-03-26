@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.controlador.excel;
 
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -41,16 +42,19 @@ public class Excel<T>
     private Row fila;
     private Cell celda;
     private List <Integer> posicionesColumnas;
+    private String archivo;
+    private String nombreArchivExcel;
     
-    public Excel()
+    public Excel(String nombreArchivoExcel)
     {
         this.libro = new XSSFWorkbook(); //H para xls y X para xlsx
         this.crearAyuda = libro.getCreationHelper();
         this.hoja1 = libro.createSheet("Hoja1");
-        posicionesColumnas = new ArrayList<>();
+        this.posicionesColumnas = new ArrayList<>();
+        this.archivo = "\\tmp\\"+nombreArchivoExcel+".xlsx";
     }
     
-    public void gestionarIngresoInformacionExcel(String[] cabeceraDatosDinamicos, List<T> datosDinamicos) throws FileNotFoundException, IOException, IllegalArgumentException, IllegalAccessException
+    public void gestionarIngresoInformacionExcel(String[] cabeceraDatosDinamicos, List<ExcelDatosInterface> datosDinamicos) throws FileNotFoundException, IOException, IllegalArgumentException, IllegalAccessException
     {
         Map<String, CellStyle> obtenerEstilo = crearEstilos(libro);
         int numeroDatos = cabeceraDatosDinamicos.length;
@@ -61,29 +65,28 @@ public class Excel<T>
          * Colocar el valor de los atributos por cada objeto en las celdas correspondientes 
          * y la ultima referencia de filas ingresadas 
         */
-        int f = ingresarDatosCeldasHoja((List<ExcelDatosInterface>) datosDinamicos, obtenerEstilo);
+        int f = ingresarDatosCeldasHoja(datosDinamicos, obtenerEstilo);
         
         fila = hoja1.createRow(f);
-        
-        //Sumar las columnas en base a formula Excel, si las filas lo permiten
-        sumarCeldasHoja(f);
-        
+             
         //Ajustar el tamaño de las celdas en base al tamaño del texto
         for(int i=0;i<numeroDatos;i++)
         {
-            System.out.println("Columna a justar " + i );
             hoja1.autoSizeColumn((short)i);
         }
         
-        File archivoSalida = new File("tmp\\libro.xlsx");
+        //Sumar las columnas en base a formula Excel, si las filas lo permiten
+        sumarCeldasHoja(f);
+                
+        File archivoSalida = new File(archivo);
         if(!archivoSalida.exists())
         {
             archivoSalida.getParentFile().mkdirs();
         }
+        
         FileOutputStream fileOutputStream = new FileOutputStream(archivoSalida);
         libro.write(fileOutputStream);
         fileOutputStream.close();
-
     }
     
     public void crearCabeceraHoja(String[] cabeceraDatosDinamicos, Map<String, CellStyle> obtenerEstilo)
@@ -99,80 +102,22 @@ public class Excel<T>
             }
             
     }
-    
-    public int ingresarDatosCeldasHoja(List<ExcelDatosInterface> datosDinamicos, Map<String, CellStyle> obtenerEstilo) throws IllegalArgumentException, IllegalAccessException
+ 
+    public int ingresarDatosCeldasHoja(List<ExcelDatosInterface> datos, Map<String,CellStyle> estilo) throws FileNotFoundException, IOException
     {
-        Class<?> infoClase;
-        Field[] variables;
-        Object valorVariable = null;
-        int f=1;
-        int c=0;
-        Boolean b = false;
-        Boolean b1 = true;
-        
-        for(Object dato : datosDinamicos)
-        {
-
-            infoClase = dato.getClass();
-            variables = infoClase.getDeclaredFields();
-            fila = hoja1.createRow(f);
-            c=0;
-            for(Field variable : variables)
-            {
-                variable.setAccessible(true);
-                valorVariable = variable.get(dato);
-                celda = fila.createCell(c);
-                
-                if(String.class.equals(devolverTipoDato(valorVariable.toString()).getClass()))
-                {
-                    celda.setCellValue((String)devolverTipoDato(valorVariable.toString()));
-                }else if(Double.class.equals(devolverTipoDato(valorVariable.toString()).getClass()))
-                {
-                    celda.setCellValue((Double)devolverTipoDato(valorVariable.toString()));
-                    b = true;
-                }else if(Date.class.equals(devolverTipoDato(valorVariable.toString()).getClass()))
-                {
-                    celda.setCellValue((Date)devolverTipoDato(valorVariable.toString()));
-                    celda.setCellStyle(obtenerEstilo.get("fecha"));
-                }
-                if(b1)
-                {
-                    if(b)
-                    {
-                        posicionesColumnas.add(c);
-                        b = false;
-                    }
-                }
-                c+=1;    
-            }
-            b1 = false;
-            f+=1;
-        }
-        return f;
-    }
-    
-    public void ingresarDatosCeldasHoja2(List<ExcelDatosInterface> datos) throws FileNotFoundException, IOException
-    {
-        Workbook libro = new XSSFWorkbook(); //H para xls y X para xlsx
-        CreationHelper crearAyuda = libro.getCreationHelper();
-        Sheet hoja1 = libro.createSheet("Hoja1");
-        Row fila;
-        Cell celda;
-        int f = 0;
+        int f = 1;
         int c = 0;
+        boolean b = true;
         for (ExcelDatosInterface dato : datos) 
         {
-            fila = hoja1.createRow(f++); 
+            fila = hoja1.createRow(f); 
             List<TipoDato> valores = dato.getDatos();
-            
             c = 0;
-            System.out.println("-----------------------");
             for (TipoDato valorDato: valores) 
             {
                 celda = fila.createCell(c++);
                 Object valor = valorDato.valor;
                 TipoDataEnum tipo = valorDato.tipoData;
-                System.out.print(valor.toString()+"----");
                 switch(tipo)
                 {
                     case TEXTO:
@@ -180,23 +125,21 @@ public class Excel<T>
                     break;
                     case FECHA:
                         celda.setCellValue((Date) devolverTipoDato(valor.toString()));
+                        celda.setCellStyle(estilo.get("fecha"));
                     break;
                     case NUMERO:
                         celda.setCellValue(Double.parseDouble(valor.toString()));
-                    break;
-                    
+                        if(b)
+                        {
+                            posicionesColumnas.add(c);
+                        }
+                    break; 
                 }  
             }
+            f+=1;
+            b = false;
         }
-        
-        File archivoSalida = new File("tmp\\libroCarlos.xlsx");
-        if(!archivoSalida.exists())
-        {
-            archivoSalida.getParentFile().mkdirs();
-        }
-        FileOutputStream fileOutputStream = new FileOutputStream(archivoSalida);
-        libro.write(fileOutputStream);
-        fileOutputStream.close();
+        return f;
     }
  
     public void sumarCeldasHoja(int f)
@@ -226,13 +169,13 @@ public class Excel<T>
         }
     }
     
-    public static String obtenerFormulaSuma(int columna, int fila)
+    public String obtenerFormulaSuma(int columna, int fila)
     {
         String letraColumna = UtilidadesTextos.obtenerLetra(columna);
         return "SUM("+letraColumna+"2:"+letraColumna+""+fila+")";
     }
     
-    public static Map<String, CellStyle> crearEstilos(Workbook libro)
+    public Map<String, CellStyle> crearEstilos(Workbook libro)
     {
         Map<String,CellStyle> estilos = new HashMap<>();
         CellStyle estiloCelda = libro.createCellStyle();
@@ -257,6 +200,37 @@ public class Excel<T>
         return estilos;
     }
 
+    public void abrirDocumento()
+    {
+        try 
+        {
+            File path = new File (archivo);
+            Desktop.getDesktop().open(path);
+        }
+        catch (IOException ex) 
+        {
+            ex.printStackTrace();
+        }
+    }   
+    
+    public void eliminarDocumento()
+    {
+        File archivo = new File(this.archivo);
+        try{
+            if(archivo.delete())
+            {
+                System.out.println("Se elimino el archivo");
+            }
+            else
+            {
+                System.out.println("No se puede eliminar el archivo");
+            }
+        }catch(Exception exc)
+        {
+            System.out.println("Error al eliminar el archivo");
+        }
+                
+    }
     
     public enum TipoDataEnum
     {
@@ -277,5 +251,6 @@ public class Excel<T>
         }
               
     };
+    
     
 }

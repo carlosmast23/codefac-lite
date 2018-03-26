@@ -5,11 +5,17 @@
  */
 package ec.com.codesoft.codefaclite.crm.reportdata;
 
+import ec.com.codesoft.codefaclite.controlador.excel.Excel;
+import ec.com.codesoft.codefaclite.controlador.excel.ExcelDatosInterface;
+import ec.com.codesoft.codefaclite.controlador.excel.TipoDato;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author CodesoftDesarrollo 1
  */
-public class CompraDataReporte 
+public class CompraDataReporte  implements ExcelDatosInterface
 {
     private String preimPreso;
     private String identificacion;
@@ -122,6 +128,20 @@ public class CompraDataReporte
 
     public void setTotal(String total) {
         this.total = total;
+    }
+
+    @Override
+    public List<TipoDato> getDatos() 
+    {
+        List<TipoDato> tiposDatos = new ArrayList<>();
+        tiposDatos.add(new TipoDato(this.preimPreso,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.identificacion,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.nombre,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.fecha,Excel.TipoDataEnum.FECHA));
+        tiposDatos.add(new TipoDato(this.subtotal,Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.subtotal12,Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.descuento,Excel.TipoDataEnum.NUMERO));
+        return tiposDatos;
     }
     
     

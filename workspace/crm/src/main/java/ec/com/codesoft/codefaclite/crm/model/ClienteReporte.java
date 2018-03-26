@@ -6,8 +6,10 @@
 package ec.com.codesoft.codefaclite.crm.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.excel.Excel;
 import ec.com.codesoft.codefaclite.controlador.excel.ExcelDatosInterface;
+import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.crm.data.ClienteData;
@@ -54,13 +56,30 @@ public class ClienteReporte extends ControladorCodefacInterface{
                 clienteData.setTelefono(cliente.getTelefonoCelular());
                 data.add(clienteData);
             }
-            Excel excel = new Excel();
-            excel.ingresarDatosCeldasHoja2(new ArrayList<ExcelDatosInterface>(data));
-//            String []cabecera ={"Dato 1", "Dato 2", "Dato 3","Dato 4","Dato 5"} ;
-//            excel.gestionarIngresoInformacionExcel(cabecera, data);
-            ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Clientes ");
-            this.dispose();
-            this.setVisible(false);
+            DialogoCodefac.dialogoReporteOpciones( new ReporteDialogListener() {
+                @Override
+                public void excel() {
+                    try{
+                        Excel excel = new Excel("Cliente");
+                        String nombreCabeceras[] = {"Identificación", "Nombres completos", "Telefono", "Dirección","Email"};
+                        excel.gestionarIngresoInformacionExcel(nombreCabeceras, data);
+                        excel.abrirDocumento();
+                    }
+                    catch(Exception exc)
+                    {
+                        DialogoCodefac.mensaje("Error","El archivo Excel se encuentra abierto",DialogoCodefac.MENSAJE_INCORRECTO);
+                    }  
+                }
+
+                @Override
+                public void pdf() {
+                    ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Clientes ");
+                    dispose();
+                    setVisible(false);
+                }
+            });
+            
+            
         } catch (RemoteException ex) {
             Logger.getLogger(ClienteReporte.class.getName()).log(Level.SEVERE, null, ex);
         }
