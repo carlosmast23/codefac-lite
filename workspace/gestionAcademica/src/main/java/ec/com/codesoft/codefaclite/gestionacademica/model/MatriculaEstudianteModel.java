@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.gestionacademica.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.gestionacademica.busqueda.EstudianteBusquedaDialogo;
@@ -25,6 +26,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDescuentoRubroEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
@@ -275,6 +277,22 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
                     getTxtEstudiante().setText(estudianteInscrito.getEstudiante().getNombreCompleto());
                     //getCmbCursoAsignar().setSelectedItem(estudianteInscrito.getNivelAcademico());
                 }
+            }
+        });
+        
+        getBtnNuevoEstudiante().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<Estudiante>() {
+                    @Override
+                    public void updateInterface(Estudiante entity) {
+                        if(entity!=null)
+                        {
+                            estudianteInscrito.setEstudiante(entity);
+                            getTxtEstudiante().setText(entity.getNombreCompleto());
+                       }
+                    }
+                }, VentanaEnum.ESTUDIANTES,false);
             }
         });
     }
