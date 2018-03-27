@@ -5,8 +5,10 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -87,9 +89,42 @@ public class Periodo implements Serializable {
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
     }
+    
+    //Metodos Personalizados
+    public GeneralEnumEstado getEStadoEnum()
+    {
+        return GeneralEnumEstado.getEnum(estado);
+    }
 
     @Override
     public String toString() {
         return nombre;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 17 * hash + Objects.hashCode(this.idPeriodo);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Periodo other = (Periodo) obj;
+        if (!Objects.equals(this.idPeriodo, other.idPeriodo)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 }

@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,14 @@ import java.util.Map;
  * @author Carlos
  */
 public interface EstudianteInscritoServiceIf extends ServiceAbstractIf<EstudianteInscrito>{
+    
+    /**
+     * Metodo que permite registrar un estudiante y crea el rubro de matricula para que pueda facturar posteriormente
+     * @param estudianteInscrito
+     * @param rubroMatricula
+     * @throws RemoteException 
+     */
+    public void matricularEstudiante(EstudianteInscrito estudianteInscrito,RubroEstudiante rubroMatricula) throws RemoteException;
     
     public void matriculaEstudianteByList(List<EstudianteInscrito> estudiantesPorMatricular) throws RemoteException;
     

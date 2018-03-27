@@ -5,11 +5,23 @@
  */
 package ec.com.codesoft.codefaclite.gestionacademica.panel;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JRadioButton;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+
 /**
  *
  * @author Carlos
  */
-public class MatriculaEstudiantePanel extends javax.swing.JInternalFrame {
+public abstract class MatriculaEstudiantePanel extends ControladorCodefacInterface {
 
     /**
      * Creates new form EstudianteInscrito
@@ -27,15 +39,199 @@ public class MatriculaEstudiantePanel extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        jLabel2 = new javax.swing.JLabel();
+        cmbPeriodoActivo = new javax.swing.JComboBox<>();
+        jLabel3 = new javax.swing.JLabel();
+        cmbCursoAsignar = new javax.swing.JComboBox<>();
+        jLabel4 = new javax.swing.JLabel();
+        txtEstudiante = new javax.swing.JTextField();
+        btnBuscarEstudiante = new javax.swing.JButton();
+        btnNuevoEstudiante = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        cmbTipoMatricula = new javax.swing.JComboBox<>();
+        jLabel6 = new javax.swing.JLabel();
+        chkBeca = new javax.swing.JRadioButton();
+        chkOtro = new javax.swing.JRadioButton();
+        jLabel7 = new javax.swing.JLabel();
+        txtNombreDescuento = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        spnPorcentaje = new javax.swing.JSpinner();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        cmbRubroMatricula = new javax.swing.JComboBox<>();
+        chkNinguno = new javax.swing.JRadioButton();
+        jLabel11 = new javax.swing.JLabel();
+        cmbEstudianteTieneBeca = new javax.swing.JComboBox<>();
+
+        setClosable(true);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
+        setTitle("Matricula Estudiante");
+
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel2.setText("Periodo Activo:");
+
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel3.setText("Curso Asignado:");
+
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel4.setText("Estudiante:");
+
+        txtEstudiante.setEditable(false);
+
+        btnBuscarEstudiante.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
+
+        btnNuevoEstudiante.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add_user.png"))); // NOI18N
+
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel5.setText("Tipo Matricula:");
+
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel6.setText("Descuento:");
+
+        buttonGroup1.add(chkBeca);
+        chkBeca.setText("Beca");
+
+        buttonGroup1.add(chkOtro);
+        chkOtro.setText("Otro");
+
+        jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel7.setText("Nombre");
+
+        jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel8.setText("Porcentaje:");
+
+        jLabel9.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel9.setText("%");
+
+        jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel10.setText("Rubro Matricula:");
+
+        buttonGroup1.add(chkNinguno);
+        chkNinguno.setText("Ninguno");
+
+        jLabel11.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel11.setText("Beca:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 394, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel10)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel3)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)))
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtEstudiante, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(cmbPeriodoActivo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cmbCursoAsignar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 110, Short.MAX_VALUE)))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnBuscarEstudiante)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnNuevoEstudiante)
+                        .addGap(54, 54, 54))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(cmbTipoMatricula, 0, 213, Short.MAX_VALUE)
+                            .addComponent(cmbRubroMatricula, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel11)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel8))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(2, 2, 2)
+                                .addComponent(spnPorcentaje, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(147, 147, 147))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(chkNinguno)
+                                .addGap(18, 18, 18)
+                                .addComponent(chkBeca)
+                                .addGap(26, 26, 26)
+                                .addComponent(chkOtro))
+                            .addComponent(txtNombreDescuento, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel9)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(cmbEstudianteTieneBeca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 274, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(cmbPeriodoActivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(8, 8, 8)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnNuevoEstudiante)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel4)
+                                .addComponent(txtEstudiante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnBuscarEstudiante))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(cmbCursoAsignar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cmbTipoMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(cmbRubroMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(91, 91, 91)
+                        .addComponent(jLabel9))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel11)
+                            .addComponent(cmbEstudianteTieneBeca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(24, 24, 24)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(chkOtro)
+                                .addComponent(chkNinguno)
+                                .addComponent(chkBeca))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel7)
+                                    .addComponent(txtNombreDescuento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(spnPorcentaje, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(102, Short.MAX_VALUE))
         );
 
         pack();
@@ -43,5 +239,138 @@ public class MatriculaEstudiantePanel extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscarEstudiante;
+    private javax.swing.JButton btnNuevoEstudiante;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JRadioButton chkBeca;
+    private javax.swing.JRadioButton chkNinguno;
+    private javax.swing.JRadioButton chkOtro;
+    private javax.swing.JComboBox<NivelAcademico> cmbCursoAsignar;
+    private javax.swing.JComboBox<EnumSiNo> cmbEstudianteTieneBeca;
+    private javax.swing.JComboBox<Periodo> cmbPeriodoActivo;
+    private javax.swing.JComboBox<RubrosNivel> cmbRubroMatricula;
+    private javax.swing.JComboBox<EstudianteInscrito.TipoMatriculaEnum> cmbTipoMatricula;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JSpinner spnPorcentaje;
+    private javax.swing.JTextField txtEstudiante;
+    private javax.swing.JTextField txtNombreDescuento;
     // End of variables declaration//GEN-END:variables
+
+    public JComboBox<Periodo> getCmbPeriodoActivo() {
+        return cmbPeriodoActivo;
+    }
+
+    public void setCmbPeriodoActivo(JComboBox<Periodo> cmbPeriodoActivo) {
+        this.cmbPeriodoActivo = cmbPeriodoActivo;
+    }
+
+    public JComboBox<NivelAcademico> getCmbCursoAsignar() {
+        return cmbCursoAsignar;
+    }
+
+    public void setCmbCursoAsignar(JComboBox<NivelAcademico> cmbCursoAsignar) {
+        this.cmbCursoAsignar = cmbCursoAsignar;
+    }
+
+    public JComboBox<EstudianteInscrito.TipoMatriculaEnum> getCmbTipoMatricula() {
+        return cmbTipoMatricula;
+    }
+
+    public void setCmbTipoMatricula(JComboBox<EstudianteInscrito.TipoMatriculaEnum> cmbTipoMatricula) {
+        this.cmbTipoMatricula = cmbTipoMatricula;
+    }
+
+    public JComboBox<RubrosNivel> getCmbRubroMatricula() {
+        return cmbRubroMatricula;
+    }
+
+    public void setCmbRubroMatricula(JComboBox<RubrosNivel> cmbRubroMatricula) {
+        this.cmbRubroMatricula = cmbRubroMatricula;
+    }
+
+    public JButton getBtnBuscarEstudiante() {
+        return btnBuscarEstudiante;
+    }
+
+    public void setBtnBuscarEstudiante(JButton btnBuscarEstudiante) {
+        this.btnBuscarEstudiante = btnBuscarEstudiante;
+    }
+
+    public JButton getBtnNuevoEstudiante() {
+        return btnNuevoEstudiante;
+    }
+
+    public void setBtnNuevoEstudiante(JButton btnNuevoEstudiante) {
+        this.btnNuevoEstudiante = btnNuevoEstudiante;
+    }
+
+    public JTextField getTxtEstudiante() {
+        return txtEstudiante;
+    }
+
+    public void setTxtEstudiante(JTextField txtEstudiante) {
+        this.txtEstudiante = txtEstudiante;
+    }
+
+    public JRadioButton getChkBeca() {
+        return chkBeca;
+    }
+
+    public void setChkBeca(JRadioButton chkBeca) {
+        this.chkBeca = chkBeca;
+    }
+
+    public JRadioButton getChkNinguno() {
+        return chkNinguno;
+    }
+
+    public void setChkNinguno(JRadioButton chkNinguno) {
+        this.chkNinguno = chkNinguno;
+    }
+
+    public JRadioButton getChkOtro() {
+        return chkOtro;
+    }
+
+    public void setChkOtro(JRadioButton chkOtro) {
+        this.chkOtro = chkOtro;
+    }
+
+    public JSpinner getSpnPorcentaje() {
+        return spnPorcentaje;
+    }
+
+    public void setSpnPorcentaje(JSpinner spnPorcentaje) {
+        this.spnPorcentaje = spnPorcentaje;
+    }
+
+    public JTextField getTxtNombreDescuento() {
+        return txtNombreDescuento;
+    }
+
+    public void setTxtNombreDescuento(JTextField txtNombreDescuento) {
+        this.txtNombreDescuento = txtNombreDescuento;
+    }
+
+    public JComboBox<EnumSiNo> getCmbEstudianteTieneBeca() {
+        return cmbEstudianteTieneBeca;
+    }
+
+    public void setCmbEstudianteTieneBeca(JComboBox<EnumSiNo> cmbEstudianteTieneBeca) {
+        this.cmbEstudianteTieneBeca = cmbEstudianteTieneBeca;
+    }
+    
+    
+    
+    
+
 }

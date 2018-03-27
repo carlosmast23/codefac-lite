@@ -12,6 +12,7 @@ create table CATALOGO_PRODUCTO(
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
     CATEGORIA_ID bigint,
     MODULO_COD varchar(4),
+    TIPO_COD varchar(3),
     NOMBRE varchar(100),   
     DESCRIPCION varchar(256),      
     IVA_ID integer,

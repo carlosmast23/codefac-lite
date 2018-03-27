@@ -23,6 +23,7 @@ public class NivelAcademicoDialogo implements InterfaceModelFind<NivelAcademico>
         titulo.add(new ColumnaDialogo("Nombre", 0.3d));
         titulo.add(new ColumnaDialogo("Periodo", 0.3d));
         titulo.add(new ColumnaDialogo("Nivel", 0.3d));
+        titulo.add(new ColumnaDialogo("Estado", 0.2d));
         return titulo;
     }
 
@@ -39,6 +40,7 @@ public class NivelAcademicoDialogo implements InterfaceModelFind<NivelAcademico>
         dato.add(t.getNombre());
         dato.add(t.getPeriodo().getNombre());
         dato.add(t.getNivel().getNombre());
+        dato.add(t.getEstadoEnum().getNombre());
     }
 
     /*

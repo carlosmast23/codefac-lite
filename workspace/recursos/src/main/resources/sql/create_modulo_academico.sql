@@ -78,6 +78,8 @@ create table ESTUDIANTE_INSCRITO(
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
     ESTUDIANTE_ID bigint,
     NIVEL_ACADEMICO_ID bigint,
+    TIPO_MATRICULA_COD varchar(3),
+    BECA varchar(1),
     primary key (ID)
 );
 
@@ -97,6 +99,9 @@ create table RUBROS_NIVEL(
 create table RUBRO_ESTUDIANTE( 
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
     VALOR decimal(7,2),
+    TIPO_DESCUENTO varchar(1),
+    NOMBRE_DESCUENTO varchar(128),
+    PORCENTAJE_DESCUENTO int,  
     SALDO decimal(7,2),
     ESTADO_FACTURA varchar(1),
     ESTADO varchar(1),

@@ -11,6 +11,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -41,6 +43,9 @@ public class CatalogoProducto implements Serializable{
     
     @Column(name = "MODULO_COD")
     private String moduloCod;
+    
+    @Column(name = "TIPO_COD")
+    private String tipoCod;
     
     @Column(name = "ESTADO")
     private String estado;
@@ -90,6 +95,23 @@ public class CatalogoProducto implements Serializable{
         this.moduloCod = moduloCod;
     }
 
+    public String getTipoCod() {
+        return tipoCod;
+    }
+
+    public void setTipoCod(String tipoCod) {
+        this.tipoCod = tipoCod;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    
     
 
     public ImpuestoDetalle getIva() {
@@ -125,6 +147,11 @@ public class CatalogoProducto implements Serializable{
     }
     
     // Metodos adicionales
+    
+    public TipoEnum getTipoCodEnum()
+    {
+        return TipoEnum.obtenerPorCodigo(tipoCod);
+    }
 
     @Override
     public int hashCode() {
@@ -162,6 +189,60 @@ public class CatalogoProducto implements Serializable{
     }
     
     
+    public enum TipoEnum {
+        NORMAL_ACADEMICO("NA", "Normal", ModuloCodefacEnum.INVENTARIO),
+        /**
+         * Este tipo de matricula va a ser necesario para clasifacar los rubros
+         * exlusivos para el proceso de matriculacion
+         */
+        MATRICULA("MA", "Matricula", ModuloCodefacEnum.INVENTARIO);
+
+        private TipoEnum(String codigo, String nombre, ModuloCodefacEnum moduloEnum) {
+            this.codigo = codigo;
+            this.nombre = nombre;
+            this.moduloEnum = moduloEnum;
+        }
+
+        private ModuloCodefacEnum moduloEnum;
+        private String codigo;
+        private String nombre;
+
+        public ModuloCodefacEnum getModuloEnum() {
+            return moduloEnum;
+        }
+
+        public String getCodigo() {
+            return codigo;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+        
+        public static TipoEnum obtenerPorCodigo(String codigo)
+        {
+            for (TipoEnum tipo : TipoEnum.values()) {
+                if (codigo.equals(tipo.getCodigo())) {
+                    return tipo;
+                }
+            }
+            return null;
+        }
+        
+
+        public static List<TipoEnum> obtenerPorModulo(ModuloCodefacEnum moduloEnum) {
+            List<TipoEnum> listaConsulta=new ArrayList<TipoEnum>();
+            
+            for (TipoEnum tipo : TipoEnum.values()) {                
+                if(moduloEnum.equals(tipo.getModuloEnum()))
+                {
+                    listaConsulta.add(tipo);
+                }
+            } 
+            
+            return listaConsulta;
+        }
+    };
     
 
 }

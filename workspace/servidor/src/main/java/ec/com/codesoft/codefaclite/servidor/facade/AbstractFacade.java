@@ -179,7 +179,7 @@ public abstract class AbstractFacade<T>
 							+ propertyKey;
 				} else {
 					query = query + objectName + "." + propertyKey + " = :"
-							+ propertyKey;
+							+ propertyKey.replace(".","");
 				}
 
 			} else {
