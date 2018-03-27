@@ -131,7 +131,7 @@ public class CatalogoProductoModel extends CatalogoProductoPanel implements Dial
     @Override
     public void limpiar() {
         limpiarVariables();
-        getCmbCatalogoTipo().setSelectedIndex(0);
+        //getCmbCatalogoTipo().setSelectedIndex(0);
     }
 
     @Override
