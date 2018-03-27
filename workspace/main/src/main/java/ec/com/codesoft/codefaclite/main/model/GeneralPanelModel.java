@@ -1022,7 +1022,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             //ParametroCodefacServiceIf servicio=ServiceFactory.getFactory().getParametroCodefacServiceIf();
             //sessionCodefac.setParametrosCodefac(servicio.getParametrosMap());
             
-            
+            panel.estadoFormulario= ControladorCodefacInterface.ESTADO_GRABAR;
             panel.panelPadre=generalPanelModel;
             panel.session=sessionCodefac;
             
@@ -1069,7 +1069,6 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         (desktopSize.height - jInternalFrameSize.height) / 2);
             }
             
-            panel.estadoFormulario= ControladorCodefacInterface.ESTADO_GRABAR;
             
             panel.consola=new ConsolaGeneral();
             mostrarConsola(panel.consola,true);

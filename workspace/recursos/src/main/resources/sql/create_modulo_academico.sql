@@ -80,6 +80,7 @@ create table ESTUDIANTE_INSCRITO(
     NIVEL_ACADEMICO_ID bigint,
     TIPO_MATRICULA_COD varchar(3),
     BECA varchar(1),
+    ESTADO varchar(1),
     primary key (ID)
 );
 

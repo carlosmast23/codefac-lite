@@ -172,7 +172,8 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
         getBtnBuscar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                EstudianteInscritoBusquedaDialogo aulaBusquedaDialogo = new EstudianteInscritoBusquedaDialogo();
+                Periodo periodoSeleccionado=(Periodo) getCmbPeriodo().getSelectedItem();
+                EstudianteInscritoBusquedaDialogo aulaBusquedaDialogo = new EstudianteInscritoBusquedaDialogo(periodoSeleccionado);
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(aulaBusquedaDialogo);
                 buscarDialogoModel.setVisible(true);
                 EstudianteInscrito estudiante = (EstudianteInscrito) buscarDialogoModel.getResultado();

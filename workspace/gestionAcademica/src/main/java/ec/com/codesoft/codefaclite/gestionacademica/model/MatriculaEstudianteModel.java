@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.gestionacademica.busqueda.EstudianteBusquedaDialogo;
+import ec.com.codesoft.codefaclite.gestionacademica.busqueda.EstudianteInscritoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.MatriculaEstudiantePanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
@@ -22,6 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDescuentoRubroEnum;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -76,7 +78,13 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
 
     @Override
     public void editar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            setearValores();
+            ServiceFactory.getFactory().getEstudianteInscritoServiceIf().editar(estudianteInscrito);
+            DialogoCodefac.mensaje("Correcto","La matricula fue editada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+        } catch (RemoteException ex) {
+            Logger.getLogger(MatriculaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -96,7 +104,38 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Periodo periodoSeleccionado = (Periodo) getCmbPeriodoActivo().getSelectedItem();
+        EstudianteInscritoBusquedaDialogo busquedaDialogo = new EstudianteInscritoBusquedaDialogo(periodoSeleccionado);
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialogo);
+        buscarDialogoModel.setVisible(true);
+        EstudianteInscrito estudianteInscritoTmp = (EstudianteInscrito) buscarDialogoModel.getResultado();
+        
+        if(estudianteInscritoTmp==null)
+        {
+            throw new ExcepcionCodefacLite("Cancelado buscar");
+        }
+        else
+        {
+            try {
+                estudianteInscrito=estudianteInscritoTmp;
+                //Cargar el rubro de matricula
+                List<RubroEstudiante> matriculas=ServiceFactory.getFactory().getRubroEstudianteServiceIf().obtenerRubroMatriculaPorEstudianteInscrito(estudianteInscritoTmp);
+                
+                if(matriculas.size()>0)
+                {
+                    rubroMatricula=matriculas.get(0);
+                }
+            } catch (RemoteException ex) {
+                Logger.getLogger(MatriculaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            //Cargar los datos en pantalla
+            cargarDatos();   
+        }
+        
+        
+        
+        
     }
 
     @Override
@@ -106,10 +145,15 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
 
         getCmbTipoMatricula().setSelectedItem(EstudianteInscrito.TipoMatriculaEnum.ORDINARIA);
         getCmbPeriodoActivo().setSelectedIndex(0);
-        getCmbEstudianteTieneBeca().setSelectedItem(EnumSiNo.SI);
+        getCmbEstudianteTieneBeca().setSelectedItem(EnumSiNo.NO);
         getChkNinguno().setSelected(true);
         getTxtNombreDescuento().setEnabled(false);
         getSpnPorcentaje().setEnabled(false);
+        
+        getChkBeca().setEnabled(true);
+        getChkNinguno().setEnabled(true);
+        getChkOtro().setEnabled(true);
+
          
     }
 
@@ -182,12 +226,14 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
                     
                     NivelAcademico nivelAcademico=(NivelAcademico)getCmbCursoAsignar().getSelectedItem();
                     //Cargar los rubros disponibles para asignar para la matricula
+                    if(nivelAcademico!=null)
+                    {
+                        List<RubrosNivel> rubrosNivel = ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorCatalogoCatagoriaYNivel(CatalogoProducto.TipoEnum.MATRICULA, nivelAcademico.getNivel());
 
-                    List<RubrosNivel> rubrosNivel=ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorCatalogoCatagoriaYNivel(CatalogoProducto.TipoEnum.MATRICULA, nivelAcademico.getNivel());
-                    
-                    getCmbRubroMatricula().removeAllItems();
-                    for (RubrosNivel rubroNivel : rubrosNivel) {
-                        getCmbRubroMatricula().addItem(rubroNivel);
+                        getCmbRubroMatricula().removeAllItems();
+                        for (RubrosNivel rubroNivel : rubrosNivel) {
+                            getCmbRubroMatricula().addItem(rubroNivel);
+                        }
                     }
                     
                 } catch (RemoteException ex) {
@@ -274,7 +320,7 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
     }
 
     private void setearValores() {
-        estudianteInscrito.setEstado(GeneralEnumEstado.ACTIVO.getNombre());
+        estudianteInscrito.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
         estudianteInscrito.setNivelAcademico((NivelAcademico) getCmbCursoAsignar().getSelectedItem());
         EstudianteInscrito.TipoMatriculaEnum tipoMatriculaEnum=(EstudianteInscrito.TipoMatriculaEnum) getCmbTipoMatricula().getSelectedItem();
         estudianteInscrito.setTipoMatriculaCod(tipoMatriculaEnum.getLetra());
@@ -283,7 +329,7 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
         
         //Setear los valores del rubro de la matricula
 
-        rubroMatricula.setEstado(GeneralEnumEstado.ACTIVO.getNombre());
+        rubroMatricula.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
         rubroMatricula.setEstadoFactura(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR.getLetra());
         rubroMatricula.setEstudianteInscrito(estudianteInscrito);
         rubroMatricula.setNombreDescuento(getTxtNombreDescuento().getText());
@@ -293,6 +339,17 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
         rubroMatricula.setSaldo(rubroNivel.getValor());
         rubroMatricula.setValor(rubroNivel.getValor());
         rubroMatricula.setTipoDescuento( getTipoDescuentoCheck().getLetra());
+        
+    }
+    
+    private void SeleccionaDescuentoRubroEnum(TipoDescuentoRubroEnum tipoDescuentoEnum)
+    {
+        switch(tipoDescuentoEnum)
+        {
+            case BECA:getChkBeca().isSelected();break;
+            case NINGUNO:getChkNinguno().isSelected();break;
+            case OTRO:getChkOtro().isSelected();break;
+        }
         
     }
     
@@ -326,16 +383,47 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 EnumSiNo enumSiNo=(EnumSiNo) getCmbEstudianteTieneBeca().getSelectedItem();
-                if(enumSiNo.equals(EnumSiNo.SI))
+                
+                //Funcionalidad disponible solo cuando esta en el modo de grabar
+                if(estadoFormulario.equals(ESTADO_GRABAR))
                 {
-                    getChkBeca().setSelected(true);
-                }
-                else
-                {
-                    getChkBeca().setSelected(false);
+                    if(enumSiNo.equals(EnumSiNo.SI))
+                    {
+                        getChkBeca().setSelected(true);
+                    }
+                    else
+                    {
+                        getChkBeca().setSelected(false);
+                    }
                 }
             }
         });
+    }
+
+    private void cargarDatos() {
+        getCmbPeriodoActivo().setSelectedItem(estudianteInscrito.getNivelAcademico().getPeriodo());
+        getTxtEstudiante().setText(estudianteInscrito.getEstudiante().getNombreCompleto());
+        getCmbCursoAsignar().setSelectedItem(estudianteInscrito.getNivelAcademico());
+        getCmbTipoMatricula().setSelectedItem(estudianteInscrito.getTipoMatriculaCodEnum());
+        getCmbEstudianteTieneBeca().setSelectedItem(estudianteInscrito.getBecaEnum());
+        
+        //Cargar solo el rubro de la matricula solo si esta gurdada
+        if(rubroMatricula!=null)
+        {
+            getCmbRubroMatricula().setSelectedItem(rubroMatricula);
+            SeleccionaDescuentoRubroEnum(rubroMatricula.getTipoDescuentoEnum());
+            getTxtNombreDescuento().setText(rubroMatricula.getNombreDescuento());
+            getSpnPorcentaje().setValue(rubroMatricula.getProcentajeDescuento());
+        }
+        
+        //Desahabilitar los componentes que ya no puede editar
+        getChkBeca().setEnabled(false);
+        getChkNinguno().setEnabled(false);
+        getChkOtro().setEnabled(false);
+        
+        getTxtNombreDescuento().setEnabled(false);
+        getSpnPorcentaje().setEnabled(false);
+        
     }
     
 }

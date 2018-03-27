@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDescuentoRubroEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -165,6 +166,11 @@ public class RubroEstudiante implements Serializable{
     public FacturacionEstadoEnum getEstadoFacturaEnum() {
         return FacturacionEstadoEnum.buscarPorLetra(estadoFactura);       
     } 
+    
+    public TipoDescuentoRubroEnum getTipoDescuentoEnum()
+    {
+        return TipoDescuentoRubroEnum.buscarPorLetra(tipoDescuento);
+    }
 
     @Override
     public int hashCode() {

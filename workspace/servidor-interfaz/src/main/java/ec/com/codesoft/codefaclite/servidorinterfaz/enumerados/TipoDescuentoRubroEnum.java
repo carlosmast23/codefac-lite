@@ -31,6 +31,16 @@ public enum TipoDescuentoRubroEnum {
         return nombre;
     }
     
+    public static TipoDescuentoRubroEnum buscarPorLetra(String letra)
+    {
+        for (TipoDescuentoRubroEnum enumerador : TipoDescuentoRubroEnum.values()) {
+            if(enumerador.getLetra().equals(letra))
+            {
+                return enumerador;
+            }
+        }
+        return null;
+    }
     
 
     

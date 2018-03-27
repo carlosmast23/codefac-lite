@@ -217,7 +217,8 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
         getBtnAgregarEstudiante().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                EstudianteInscritoBusquedaDialogo busquedaDialogo = new EstudianteInscritoBusquedaDialogo();
+                Periodo periodoSeleccionado=(Periodo) getCmbPeriodo().getSelectedItem();
+                EstudianteInscritoBusquedaDialogo busquedaDialogo = new EstudianteInscritoBusquedaDialogo(periodoSeleccionado);
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialogo);
                 buscarDialogoModel.setVisible(true);
                 EstudianteInscrito estudianteInscrito = (EstudianteInscrito) buscarDialogoModel.getResultado();
