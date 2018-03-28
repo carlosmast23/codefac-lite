@@ -65,13 +65,26 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
             monitorData.getBarraProgreso().setForeground(Color.GREEN);
             monitorData.getBtnAbrir().setEnabled(true);
             monitorData.getBtnCerrar().setEnabled(true);
-            monitorData.getBtnAbrir().addActionListener(new ActionListener() {
+            /*monitorData.getBtnAbrir().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
 
                     facturacionModel.panelPadre.crearReportePantalla(jasperPrint, facturaProcesando.getPreimpreso());
                 }
-            });
+            });*/
+            
+            // Agregado mensaje de advertencia cuando se factura en el modo offline
+            if(facturacionOffline)
+            {
+                monitorData.getBtnReporte().setEnabled(true);
+                monitorData.getBtnReporte().addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        DialogoCodefac.mensaje("Advertencia","Recuerde Autorizar el comprobante en el SRI, \n Si esta sin internet mandar por correo el RIDE", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    }
+                });
+            }
+            
         } catch (IOException ex) {
             Logger.getLogger(ClienteFacturaImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
@@ -111,35 +124,21 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
         if (etapa == ComprobanteElectronicoService.ETAPA_RIDE) {
             monitorData.getBarraProgreso().setValue(65);
             facturaProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
+                        
+            //En esta etapa ya se habilita la opcion de imprimir el ride porque ya esta generado
+            monitorData.getBtnAbrir().setEnabled(true);
+            monitorData.getBtnAbrir().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    generarReportePdf(clave.clave);
+                }
+            });
             
-            //Generar el ride si la facturacion es offline
-            if (facturacionOffline) {
-                monitorData.getBarraProgreso().setForeground(Color.GREEN);
-                monitorData.getBtnAbrir().setEnabled(true);
-                monitorData.getBtnCerrar().setEnabled(true);
-                monitorData.getBtnReporte().setEnabled(true);
-                
-                //Alerta de facturacion offline
-                monitorData.getBtnReporte().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        DialogoCodefac.mensaje("Advertencia","Recuerde Autorizar el comprobante en el SRI, \n Si esta sin internet mandar por correo el RIDE", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                    }
-                });
-            }
         }
         
         if (etapa == ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE) {
             monitorData.getBarraProgreso().setValue(80);
-            facturaProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
-            
-            //Alerta de facturacion offline para el correro
-            monitorData.getBtnReporte().addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    DialogoCodefac.mensaje("Advertencia", "Recuerde Autorizar el comprobante en el SRI", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                }
-            });
+            facturaProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());            
         }
 
         if (etapa == ComprobanteElectronicoService.ETAPA_ENVIAR) {
@@ -168,8 +167,7 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             facturacionModel.panelPadre.crearReportePantalla(jasperPrint, facturaProcesando.getPreimpreso());
-                            //JasperPrint print = facturaElectronica.getServicio().getPrintJasper();
-                            //panelPadre.crearReportePantalla(print, facturaProcesando.getPreimpreso());
+
                         }
                     });
                 }
@@ -190,6 +188,22 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ClienteFacturaImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private void generarReportePdf(String clave) {
+        try {
+            byte[] bytes = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(clave);
+            JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(bytes);
+            facturacionModel.panelPadre.crearReportePantalla(jasperPrint, clave);
+            //facturacionModel.panelPadre.crearReportePantalla(jasperPrint, facturaProcesando.getPreimpreso());
+        } catch (RemoteException ex) {
+            Logger.getLogger(ClienteFacturaImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ClienteFacturaImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ClienteFacturaImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
 }

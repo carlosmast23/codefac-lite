@@ -6,12 +6,14 @@
 package ec.com.codesoft.codefaclite.gestionacademica.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JRadioButton;
 import javax.swing.JTable;
 
 /**
@@ -43,10 +45,23 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
         btnBuscar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDeudas = new javax.swing.JTable();
-        cmbRubrosNivel = new javax.swing.JComboBox<>();
-        lblperiodo1 = new javax.swing.JLabel();
         chkTodosNiveles = new javax.swing.JCheckBox();
         chkTodosRubros = new javax.swing.JCheckBox();
+        jLabel4 = new javax.swing.JLabel();
+        cmbTipoRubroPorMes = new javax.swing.JComboBox<>();
+        jToolBar1 = new javax.swing.JToolBar();
+        chkEnero = new javax.swing.JRadioButton();
+        chkFebrero = new javax.swing.JRadioButton();
+        chkMarzo = new javax.swing.JRadioButton();
+        chkAbril = new javax.swing.JRadioButton();
+        chkMayo = new javax.swing.JRadioButton();
+        chkJunio = new javax.swing.JRadioButton();
+        chkJulio = new javax.swing.JRadioButton();
+        chkAgosto = new javax.swing.JRadioButton();
+        chkSeptiembre = new javax.swing.JRadioButton();
+        chkOctubre = new javax.swing.JRadioButton();
+        chkNoviembre = new javax.swing.JRadioButton();
+        chkDiciembre = new javax.swing.JRadioButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -72,6 +87,16 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
                 {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
                 {null, null, null, null, null}
             },
             new String [] {
@@ -80,66 +105,163 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
         ));
         jScrollPane1.setViewportView(tblDeudas);
 
-        lblperiodo1.setText("Rubros de Nivel:");
-
         chkTodosNiveles.setText("Todos");
 
         chkTodosRubros.setText("Todos");
+
+        jLabel4.setText("Tipo Rubro:");
+
+        jToolBar1.setBorder(javax.swing.BorderFactory.createTitledBorder("Meses Generar"));
+
+        chkEnero.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        chkEnero.setText("Enero");
+        chkEnero.setFocusable(false);
+        chkEnero.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        chkEnero.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(chkEnero);
+
+        chkFebrero.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        chkFebrero.setText("Febrero");
+        chkFebrero.setFocusable(false);
+        chkFebrero.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        chkFebrero.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(chkFebrero);
+
+        chkMarzo.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        chkMarzo.setText("Marzo");
+        chkMarzo.setFocusable(false);
+        chkMarzo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        chkMarzo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(chkMarzo);
+
+        chkAbril.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        chkAbril.setText("Abril");
+        chkAbril.setFocusable(false);
+        chkAbril.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        chkAbril.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(chkAbril);
+
+        chkMayo.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        chkMayo.setText("Mayo");
+        chkMayo.setFocusable(false);
+        chkMayo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        chkMayo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(chkMayo);
+
+        chkJunio.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        chkJunio.setText("Junio");
+        chkJunio.setFocusable(false);
+        chkJunio.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        chkJunio.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(chkJunio);
+
+        chkJulio.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        chkJulio.setText("Julio");
+        chkJulio.setFocusable(false);
+        chkJulio.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        chkJulio.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(chkJulio);
+
+        chkAgosto.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        chkAgosto.setText("Agosto");
+        chkAgosto.setFocusable(false);
+        chkAgosto.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        chkAgosto.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(chkAgosto);
+
+        chkSeptiembre.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        chkSeptiembre.setText("Septiembre");
+        chkSeptiembre.setFocusable(false);
+        chkSeptiembre.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        chkSeptiembre.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(chkSeptiembre);
+
+        chkOctubre.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        chkOctubre.setText("Octubre");
+        chkOctubre.setFocusable(false);
+        chkOctubre.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        chkOctubre.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(chkOctubre);
+
+        chkNoviembre.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        chkNoviembre.setText("Noviembre");
+        chkNoviembre.setFocusable(false);
+        chkNoviembre.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        chkNoviembre.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(chkNoviembre);
+
+        chkDiciembre.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        chkDiciembre.setText("Diciembre");
+        chkDiciembre.setFocusable(false);
+        chkDiciembre.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        chkDiciembre.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(chkDiciembre);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblBuscar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cmbNivelAcademico, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(chkTodosNiveles)
-                        .addGap(18, 18, 18)
-                        .addComponent(lblperiodo1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbRubrosNivel, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(chkTodosRubros)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 635, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(182, 182, 182)
-                                .addComponent(lblperiodo)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cmbPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 64, Short.MAX_VALUE))))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(286, 286, 286)
-                .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(lblBuscar)
+                                                .addGap(39, 39, 39)
+                                                .addComponent(cmbNivelAcademico, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(lblperiodo)
+                                                .addGap(26, 26, 26)
+                                                .addComponent(cmbPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGap(18, 18, 18)
+                                        .addComponent(chkTodosNiveles))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel4)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(cmbTipoRubroPorMes, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(chkTodosRubros))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(205, 205, 205)
+                                .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 549, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 635, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cmbPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblperiodo))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblBuscar)
-                    .addComponent(cmbNivelAcademico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(chkTodosNiveles)
-                    .addComponent(lblperiodo1)
-                    .addComponent(cmbRubrosNivel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(chkTodosRubros))
-                .addGap(18, 18, 18)
-                .addComponent(btnBuscar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(115, Short.MAX_VALUE))
+                .addGap(31, 31, 31)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cmbPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblperiodo))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblBuscar)
+                            .addComponent(cmbNivelAcademico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(chkTodosNiveles))
+                        .addGap(16, 16, 16)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(cmbTipoRubroPorMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(chkTodosRubros))
+                        .addGap(31, 31, 31)
+                        .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
+                        .addComponent(btnBuscar))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
         pack();
@@ -148,15 +270,28 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JRadioButton chkAbril;
+    private javax.swing.JRadioButton chkAgosto;
+    private javax.swing.JRadioButton chkDiciembre;
+    private javax.swing.JRadioButton chkEnero;
+    private javax.swing.JRadioButton chkFebrero;
+    private javax.swing.JRadioButton chkJulio;
+    private javax.swing.JRadioButton chkJunio;
+    private javax.swing.JRadioButton chkMarzo;
+    private javax.swing.JRadioButton chkMayo;
+    private javax.swing.JRadioButton chkNoviembre;
+    private javax.swing.JRadioButton chkOctubre;
+    private javax.swing.JRadioButton chkSeptiembre;
     private javax.swing.JCheckBox chkTodosNiveles;
     private javax.swing.JCheckBox chkTodosRubros;
     private javax.swing.JComboBox<NivelAcademico> cmbNivelAcademico;
     private javax.swing.JComboBox<Periodo> cmbPeriodo;
-    private javax.swing.JComboBox<RubrosNivel> cmbRubrosNivel;
+    private javax.swing.JComboBox<CatalogoProducto> cmbTipoRubroPorMes;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel lblBuscar;
     private javax.swing.JLabel lblperiodo;
-    private javax.swing.JLabel lblperiodo1;
     private javax.swing.JTable tblDeudas;
     // End of variables declaration//GEN-END:variables
 
@@ -192,14 +327,6 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
         this.tblDeudas = tblDeudas;
     }
 
-    public JComboBox<RubrosNivel> getCmbRubrosNivel() {
-        return cmbRubrosNivel;
-    }
-
-    public void setCmbRubrosNivel(JComboBox<RubrosNivel> cmbRubrosNivel) {
-        this.cmbRubrosNivel = cmbRubrosNivel;
-    }
-
     public JCheckBox getChkTodosNiveles() {
         return chkTodosNiveles;
     }
@@ -216,5 +343,108 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
         this.chkTodosRubros = chkTodosRubros;
     }
 
-    
+    public JComboBox<CatalogoProducto> getCmbTipoRubroPorMes() {
+        return cmbTipoRubroPorMes;
+    }
+
+    public void setCmbTipoRubroPorMes(JComboBox<CatalogoProducto> cmbTipoRubroPorMes) {
+        this.cmbTipoRubroPorMes = cmbTipoRubroPorMes;
+    }
+
+    public JRadioButton getChkAbril() {
+        return chkAbril;
+    }
+
+    public void setChkAbril(JRadioButton chkAbril) {
+        this.chkAbril = chkAbril;
+    }
+
+    public JRadioButton getChkAgosto() {
+        return chkAgosto;
+    }
+
+    public void setChkAgosto(JRadioButton chkAgosto) {
+        this.chkAgosto = chkAgosto;
+    }
+
+    public JRadioButton getChkDiciembre() {
+        return chkDiciembre;
+    }
+
+    public void setChkDiciembre(JRadioButton chkDiciembre) {
+        this.chkDiciembre = chkDiciembre;
+    }
+
+    public JRadioButton getChkJunio() {
+        return chkJunio;
+    }
+
+    public void setChkJunio(JRadioButton chkJunio) {
+        this.chkJunio = chkJunio;
+    }
+
+    public JRadioButton getChkMarzo() {
+        return chkMarzo;
+    }
+
+    public void setChkMarzo(JRadioButton chkMarzo) {
+        this.chkMarzo = chkMarzo;
+    }
+
+    public JRadioButton getChkMayo() {
+        return chkMayo;
+    }
+
+    public void setChkMayo(JRadioButton chkMayo) {
+        this.chkMayo = chkMayo;
+    }
+
+    public JRadioButton getChkNoviembre() {
+        return chkNoviembre;
+    }
+
+    public void setChkNoviembre(JRadioButton chkNoviembre) {
+        this.chkNoviembre = chkNoviembre;
+    }
+
+    public JRadioButton getChkOctubre() {
+        return chkOctubre;
+    }
+
+    public void setChkOctubre(JRadioButton chkOctubre) {
+        this.chkOctubre = chkOctubre;
+    }
+
+    public JRadioButton getChkSeptiembre() {
+        return chkSeptiembre;
+    }
+
+    public void setChkSeptiembre(JRadioButton chkSeptiembre) {
+        this.chkSeptiembre = chkSeptiembre;
+    }
+
+    public JRadioButton getChkEnero() {
+        return chkEnero;
+    }
+
+    public void setChkEnero(JRadioButton chkEnero) {
+        this.chkEnero = chkEnero;
+    }
+
+    public JRadioButton getChkFebrero() {
+        return chkFebrero;
+    }
+
+    public void setChkFebrero(JRadioButton chkFebrero) {
+        this.chkFebrero = chkFebrero;
+    }
+
+    public JRadioButton getChkJulio() {
+        return chkJulio;
+    }
+
+    public void setChkJulio(JRadioButton chkJulio) {
+        this.chkJulio = chkJulio;
+    }
+
 }

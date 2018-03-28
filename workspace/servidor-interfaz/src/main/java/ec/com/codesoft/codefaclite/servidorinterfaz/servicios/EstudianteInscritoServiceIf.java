@@ -21,12 +21,13 @@ import java.util.Map;
 public interface EstudianteInscritoServiceIf extends ServiceAbstractIf<EstudianteInscrito>{
     
     /**
-     * Metodo que permite registrar un estudiante y crea el rubro de matricula para que pueda facturar posteriormente
-     * @param estudianteInscrito
-     * @param rubroMatricula
-     * @throws RemoteException 
+     * Obtiene los estudiantes inscritos que pertenescan a ese Estudiante y a el periodo
      */
-    public void matricularEstudiante(EstudianteInscrito estudianteInscrito,RubroEstudiante rubroMatricula) throws RemoteException;
+    public List<EstudianteInscrito> obtenerEstudiantesInscritosPorPeriodoYEstudiante(Periodo periodo,Estudiante estudiante) throws RemoteException ;
+    /**
+     * Metodo que permite registrar un estudiante y crea el rubro de matricula para que pueda facturar posteriormente
+     */
+    public EstudianteInscrito matricularEstudiante(EstudianteInscrito estudianteInscrito,RubroEstudiante rubroMatricula) throws RemoteException;
     
     public void matriculaEstudianteByList(List<EstudianteInscrito> estudiantesPorMatricular) throws RemoteException;
     

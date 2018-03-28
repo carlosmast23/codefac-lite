@@ -18,46 +18,44 @@ import javax.persistence.Query;
  *
  * @author Carlos
  */
-public class RubrosNivelFacade extends AbstractFacade<RubrosNivel>{
+public class RubrosNivelFacade extends AbstractFacade<RubrosNivel> {
 
     public RubrosNivelFacade() {
         super(RubrosNivel.class);
     }
-    
-    public List<RubrosNivel> findPorPeriodoYMeses(Periodo periodo,CatalogoProducto catalogoProducto,List<MesEnum> meses) throws RemoteException {
-        
 
-        String stringQuery="SELECT rn FROM RubrosNivel rn WHERE rn.catalogoProducto=?1 AND rn.periodo=?2 AND ";
+    public List<RubrosNivel> findPorPeriodoYMeses(Periodo periodo, CatalogoProducto catalogoProducto, List<MesEnum> meses) throws RemoteException {
 
-        String stringQueryMeses="";
-        
+        String stringQuery = "SELECT rn FROM RubrosNivel rn WHERE rn.catalogoProducto=?1 AND rn.periodo=?2 AND ";
+
+        String stringQueryMeses = "";
+
         //Solo van entre parentesis si tiene mas datos que 1
-        if(meses.size()>1)
-            stringQueryMeses="( ";
-        
-        
-        for (MesEnum mes : meses) 
-        {
-            stringQueryMeses=stringQueryMeses+" rn.mesNumero="+mes.getNumero()+" OR";
+        if (meses.size() > 1) {
+            stringQueryMeses = "( ";
         }
-        
+
+        if (meses.size() > 0) {
+            for (MesEnum mes : meses) {
+                stringQueryMeses = stringQueryMeses + " rn.mesNumero=" + mes.getNumero() + " OR";
+            }
+        }
+
         //Cortar el ultimo OR que sobra de la candena;
-        stringQueryMeses=stringQueryMeses.substring(0,stringQueryMeses.length()-3);
-        
-        
-        if(meses.size()>1)       
-            stringQueryMeses=stringQueryMeses+")";
-        
-        
+        stringQueryMeses = stringQueryMeses.substring(0, stringQueryMeses.length() - 3);
+
+        if (meses.size() > 1) {
+            stringQueryMeses = stringQueryMeses + ")";
+        }
+
         //Une los querys parciales y genera uno total
-        stringQuery+=stringQueryMeses;
-        
-        
+        stringQuery += stringQueryMeses;
+
         Query query = getEntityManager().createQuery(stringQuery);
-        query.setParameter(1,catalogoProducto);
-        query.setParameter(2,periodo);
-        
+        query.setParameter(1, catalogoProducto);
+        query.setParameter(2, periodo);
+
         return query.getResultList();
     }
-    
+
 }

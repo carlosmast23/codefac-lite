@@ -23,6 +23,7 @@ import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
 /**
@@ -36,6 +37,15 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
     public RubroEstudianteService() throws RemoteException {
         super(RubroEstudianteFacade.class);
         rubroEstudianteFacade = new RubroEstudianteFacade();
+    }
+
+    public void eliminar(RubroEstudiante entity) throws java.rmi.RemoteException
+    {        
+        EntityTransaction transaccion = getTransaccion();
+        transaccion.begin();
+        entity.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
+        entityManager.merge(entity);
+        transaccion.commit();        
     }
     
     public List<RubroEstudiante> obtenerRubroMatriculaPorEstudianteInscrito(EstudianteInscrito estudianteInscrito) throws RemoteException
@@ -51,9 +61,8 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
     {
         return getFacade().getRubrosActivosPorEstudianteYEstadoFacturado(estadoFacturadoEnum);
     }
-    
-    public List<RubroEstudiante> obtenerRubrosActivosPorEstudiantesInscrito(EstudianteInscrito estudianteInscrito) throws RemoteException
-    {
+
+    public List<RubroEstudiante> obtenerRubrosActivosPorEstudiantesInscrito(EstudianteInscrito estudianteInscrito) throws RemoteException {
         return getFacade().getRubrosActivosPorEstudiante(estudianteInscrito);
     }
 
@@ -61,26 +70,21 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         return getFacade().findRubrosEstudiantesPorRubros(rubros);
     }
 
-    
-    public void eliminarRubrosEstudiantes(List<RubroEstudiante> rubrosEstudiantes) throws RemoteException
-    {
-        EntityTransaction transaccion=getTransaccion();
+    public void eliminarRubrosEstudiantes(List<RubroEstudiante> rubrosEstudiantes) throws RemoteException {
+        EntityTransaction transaccion = getTransaccion();
         transaccion.begin();
         for (RubroEstudiante rubrosEstudiante : rubrosEstudiantes) {
-            if(rubrosEstudiante.getEstadoFacturaEnum().equals(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR))
-            {
-                rubrosEstudiante=entityManager.merge(rubrosEstudiante);
+            if (rubrosEstudiante.getEstadoFacturaEnum().equals(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR)) {
+                rubrosEstudiante = entityManager.merge(rubrosEstudiante);
                 entityManager.remove(rubrosEstudiante);
             }
         }
         transaccion.commit();
     }
-    
-    public RubroPlantilla crearRubroEstudiantesDesdePlantila(RubroPlantilla rubroPlantilla,MesEnum mesEnum,String nombreRubroMes) throws RemoteException
-    {
-        try
-        {
-            EntityTransaction transaccion=getTransaccion();
+
+    public RubroPlantilla crearRubroEstudiantesDesdePlantila(RubroPlantilla rubroPlantilla, MesEnum mesEnum, String nombreRubroMes) throws RemoteException {
+        try {
+            EntityTransaction transaccion = getTransaccion();
 
             transaccion.begin();
             //Crear el rubro nivel de esa plantilla
@@ -156,6 +160,10 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
     @Override
     public List<Object[]> obtenerRubroPeriodoGrupo(Periodo periodo) throws RemoteException {
         return rubroEstudianteFacade.obtenerRubroPeriodoGrupo(periodo);
+    }
+
+    public List<RubroEstudiante> buscarRubrosMes(EstudianteInscrito est,Periodo periodo, CatalogoProducto catalogoProducto, List<MesEnum> meses) throws RemoteException {
+        return rubroEstudianteFacade.buscarRubrosMes(est,periodo, catalogoProducto, meses);
     }
 
 }

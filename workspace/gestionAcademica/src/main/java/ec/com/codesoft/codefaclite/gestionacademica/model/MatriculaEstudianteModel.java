@@ -22,10 +22,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDescuentoRubroEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -67,8 +69,28 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
     public void grabar() throws ExcepcionCodefacLite {
         try {
             setearValores();
-            ServiceFactory.getFactory().getEstudianteInscritoServiceIf().matricularEstudiante(estudianteInscrito, rubroMatricula);
-            DialogoCodefac.mensaje("Correcto","El estudiante fue matriculado correctamente",DialogoCodefac.MENSAJE_CORRECTO);            
+            estudianteInscrito=ServiceFactory.getFactory().getEstudianteInscritoServiceIf().matricularEstudiante(estudianteInscrito, rubroMatricula);
+            DialogoCodefac.mensaje("Correcto","El estudiante fue matriculado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+
+            Boolean opcion=DialogoCodefac.dialogoPregunta("Aviso","Desea facturar ahora?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+            
+            if(opcion)
+            {
+                /**
+                 * Preguntar si desea facturar en ese momento
+                 */
+                Object[] paramPostConstruct = new Object[5];
+                paramPostConstruct[0] = DocumentoEnum.FACTURA;
+                paramPostConstruct[1] = TipoDocumentoEnum.ACADEMICO;
+                paramPostConstruct[2] = estudianteInscrito.getEstudiante();
+                paramPostConstruct[3] = estudianteInscrito.getEstudiante().getRepresentante();
+
+                //Lista del rubro para facturar            
+                List<RubroEstudiante> matriculas = ServiceFactory.getFactory().getRubroEstudianteServiceIf().obtenerRubroMatriculaPorEstudianteInscrito(estudianteInscrito);
+                paramPostConstruct[4] = matriculas;
+
+                panelPadre.crearVentanaCodefac(VentanaEnum.FACTURACION, true, paramPostConstruct);
+            }
             
         } catch (RemoteException ex) {
             Logger.getLogger(MatriculaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -91,7 +113,35 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(verificarEliminarMatriculaEstudianteGrabado(estudianteInscrito))
+        {
+            try {
+                //Eliminar el estudiantes
+                ServiceFactory.getFactory().getEstudianteInscritoServiceIf().eliminar(estudianteInscrito);        
+                DialogoCodefac.mensaje("Correcto","El estudiante matriculado fue eliminado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+            } catch (RemoteException ex) {
+                Logger.getLogger(MatriculaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else
+        {
+            DialogoCodefac.mensaje("Advertencia","No se puede eliminar la matricula porque tienen deudas de rubros sin anular",DialogoCodefac.MENSAJE_ADVERTENCIA);
+            throw new ExcepcionCodefacLite("cancelar grabar");
+        }
+    }
+    
+    private Boolean verificarEliminarMatriculaEstudianteGrabado(EstudianteInscrito estudianteInscrito) {
+        try {
+            List<RubroEstudiante> rubros = ServiceFactory.getFactory().getRubroEstudianteServiceIf().obtenerRubrosActivosPorEstudiantesInscrito(estudianteInscrito);
+            if (rubros.size() == 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(MatriculaModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
 
     @Override
@@ -273,8 +323,18 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
                 buscarDialogoModel.setVisible(true);
                 Estudiante estudianteTemp = (Estudiante) buscarDialogoModel.getResultado();
                 if (estudianteTemp != null) {
-                    estudianteInscrito.setEstudiante(estudianteTemp);
-                    getTxtEstudiante().setText(estudianteInscrito.getEstudiante().getNombreCompleto());
+                    
+                    //Solo setear si el estudiante aunnno esta inscrito en ese periodo
+                    //if (verificarEstudianteNoEstaInscrito(estudianteTemp)) 
+                    //{
+                        estudianteInscrito.setEstudiante(estudianteTemp);
+                        getTxtEstudiante().setText(estudianteInscrito.getEstudiante().getNombreCompleto());
+                    //}
+                    //else
+                    //{
+                    //    DialogoCodefac.mensaje("Advertencia","El estudiante ya esta matriculado",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    //}
+
                     //getCmbCursoAsignar().setSelectedItem(estudianteInscrito.getNivelAcademico());
                 }
             }
@@ -335,6 +395,29 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
                 }
             }
         });
+    }
+    
+    private boolean verificarEstudianteNoEstaInscrito(Estudiante estudiante)
+    {
+        try {
+            Periodo periodoSeleccionado=(Periodo) getCmbPeriodoActivo().getSelectedItem();
+            //Verificar que no este inscrito , porque solo puede haber un estudiante inscrito por periodo
+            List<EstudianteInscrito> lista= ServiceFactory.getFactory().getEstudianteInscritoServiceIf().obtenerEstudiantesInscritosPorPeriodoYEstudiante(periodoSeleccionado, estudiante);
+            
+            if(lista.size()==0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(MatriculaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+        return false;
     }
 
     private void setearValores() {

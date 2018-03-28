@@ -44,25 +44,25 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Carlos
  */
-public class NotificacionesDeudasModel extends NotificacionesDeudasPanel implements Runnable{
+public class NotificacionesDeudasModel extends NotificacionesDeudasPanel implements Runnable {
 
-    private static final String PATH_REPORTE_TMP="tmp/reporteDeuda.pdf";
-    
-    private NotificacionesDeudasModel instanceThis=this;
+    private static final String PATH_REPORTE_TMP = "tmp/reporteDeuda.pdf";
+
+    private NotificacionesDeudasModel instanceThis = this;
     /**
-     * Listado donde van a estar el listado de todos los rubros para enviar al correo
+     * Listado donde van a estar el listado de todos los rubros para enviar al
+     * correo
      */
     private List<RubrosNivel> listaRubros;
-    
+
     /**
      * Hilo para procesar el envio de las notificaciones
      */
     private Thread hiloNotificaciones;
-    
-    public static final String ETIQUETA_NOMBRE_ESTUDIANTE="[nombre_estudiante]";
-    public static final String ETIQUETA_NOMBRE_REPRESENTANTE="[nombre_representante]";
-    
-    
+
+    public static final String ETIQUETA_NOMBRE_ESTUDIANTE = "[nombre_estudiante]";
+    public static final String ETIQUETA_NOMBRE_REPRESENTANTE = "[nombre_representante]";
+
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         iniciarCombos();
@@ -107,7 +107,7 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
 
     @Override
     public void limpiar() {
-        this.listaRubros=new ArrayList<RubrosNivel>();
+        this.listaRubros = new ArrayList<RubrosNivel>();
         this.getCmbTipoRubroPorRubro().setSelectedIndex(0);
     }
 
@@ -132,7 +132,7 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
     }
 
     private void iniciarCombos() {
-        
+
         try {
             //Cargar los periodos activos
             List<Periodo> periodosActivos = ServiceFactory.getFactory().getPeriodoServiceIf().obtenerPeriodoActivo();
@@ -140,20 +140,19 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
             for (Periodo periodosActivo : periodosActivos) {
                 getCmbPeriodo().addItem(periodosActivo);
             }
-            
+
             //Cargar los catalogos de los combos
             getCmbTipoRubroGrupo().removeAllItems();
             getCmbTipoRubroPorMes().removeAllItems();
             getCmbTipoRubroPorRubro().removeAllItems();
 
             List<CatalogoProducto> tipoRubros = ServiceFactory.getFactory().getCatalogoProductoServiceIf().obtenerPorModulo(ModuloCodefacEnum.GESTIONA_ACADEMICA);
-
             for (CatalogoProducto catalogo : tipoRubros) {
                 getCmbTipoRubroGrupo().addItem(catalogo);
                 getCmbTipoRubroPorMes().addItem(catalogo);
                 getCmbTipoRubroPorRubro().addItem(catalogo);
             }
-            
+
         } catch (RemoteException ex) {
             Logger.getLogger(NotificacionesDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -164,174 +163,163 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    Periodo periodo=(Periodo) getCmbPeriodo().getSelectedItem();
-                    CatalogoProducto catalogoProducto=(CatalogoProducto) getCmbTipoRubroPorRubro().getSelectedItem();
-                    
-                    Map<String,Object> mapParametros=new HashMap<String,Object>();
+                    Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
+                    CatalogoProducto catalogoProducto = (CatalogoProducto) getCmbTipoRubroPorRubro().getSelectedItem();
+
+                    Map<String, Object> mapParametros = new HashMap<String, Object>();
                     mapParametros.put("periodo", periodo);
                     mapParametros.put("catalogoProducto", catalogoProducto);
-                    
-                    List<RubrosNivel> listaRubros=ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorMap(mapParametros);
-                    
+
+                    List<RubrosNivel> listaRubros = ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorMap(mapParametros);
+
                     //Cargar la lista de rubros segun la seleccion del combo
                     getCmbRubro().removeAllItems();
                     for (RubrosNivel rubro : listaRubros) {
                         getCmbRubro().addItem(rubro);
                     }
-                    
+
                 } catch (RemoteException ex) {
                     Logger.getLogger(NotificacionesDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(NotificacionesDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
+
             }
         });
     }
-    
+
     /**
      * Construye una tabla con los datos segun los rubros ingresados
      */
-    private void construirTablaRubros()
-    {
-        String[] titulo={"Nombre","Valor"};
-        DefaultTableModel modelo=new DefaultTableModel(titulo,0);
-        
+    private void construirTablaRubros() {
+        String[] titulo = {"Nombre", "Valor"};
+        DefaultTableModel modelo = new DefaultTableModel(titulo, 0);
+
         for (RubrosNivel rubroNivel : listaRubros) {
-            String[] fila={rubroNivel.getNombre(),rubroNivel.getValor().toString()};
+            String[] fila = {rubroNivel.getNombre(), rubroNivel.getValor().toString()};
             modelo.addRow(fila);
         }
-        
+
         getTblRubros().setModel(modelo);
-        
+
     }
-    
+
     /**
      * Agrega un rubro a la lista de la tabla individualmente
-     * @param rubrosNivel 
+     *
+     * @param rubrosNivel
      */
-    private void agregarRubro(RubrosNivel rubrosNivel)
-    {
-        if(!listaRubros.contains(rubrosNivel))
-        {
+    private void agregarRubro(RubrosNivel rubrosNivel) {
+        if (!listaRubros.contains(rubrosNivel)) {
             listaRubros.add(rubrosNivel);
         }
     }
-    
+
     /**
      * Agrega un conjunto de rubros a la lista
-     * @param rubros 
+     *
+     * @param rubros
      */
-    private void agregarRubroLista(List<RubrosNivel> rubros)
-    {
+    private void agregarRubroLista(List<RubrosNivel> rubros) {
         for (RubrosNivel rubro : rubros) {
-            if(!listaRubros.contains(rubro))
-            {
+            if (!listaRubros.contains(rubro)) {
                 listaRubros.add(rubro);
             }
         }
     }
-    
-   
 
     private void listenerBotones() {
-        
+
         getBtnEnviar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               //enviarComunicados();
-                    hiloNotificaciones=new Thread(instanceThis);
-                    hiloNotificaciones.start();
-                    DialogoCodefac.mensaje("Correcto","Las notificaciones se estan enviado , puede revisar en el monitor", DialogoCodefac.MENSAJE_CORRECTO);
+                //enviarComunicados();
+                hiloNotificaciones = new Thread(instanceThis);
+                hiloNotificaciones.start();
+                DialogoCodefac.mensaje("Correcto", "Las notificaciones se estan enviado , puede revisar en el monitor", DialogoCodefac.MENSAJE_CORRECTO);
             }
         });
-        
+
         getBtnLimpiar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                listaRubros.clear();                
+                listaRubros.clear();
                 construirTablaRubros();
             }
         });
-        
+
         getBtnQuitar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int fila=getTblRubros().getSelectedRow();
-                
-                if(fila>=0)
-                {
+                int fila = getTblRubros().getSelectedRow();
+
+                if (fila >= 0) {
                     //RubrosNivel rubroNivel=listaRubros.get(fila);
                     listaRubros.remove(fila);
                     construirTablaRubros();
                 }
-                
-                
+
             }
         });
-        
+
         getBtnAgregarPorMes().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    Periodo periodo=(Periodo) getCmbPeriodo().getSelectedItem();
-                    CatalogoProducto catalogoProducto=(CatalogoProducto) getCmbTipoRubroPorMes().getSelectedItem();
-                    List<MesEnum> mesesSeleccionados=obtenerMesesEnum();
-                    
-                    List<RubrosNivel> listaRubros=ServiceFactory.getFactory().getRubrosNivelServiceIf().buscarPorPeriodoYMeses(periodo, catalogoProducto, mesesSeleccionados);
-                    
+                    Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
+                    CatalogoProducto catalogoProducto = (CatalogoProducto) getCmbTipoRubroPorMes().getSelectedItem();
+                    List<MesEnum> mesesSeleccionados = obtenerMesesEnum();
+
+                    List<RubrosNivel> listaRubros = ServiceFactory.getFactory().getRubrosNivelServiceIf().buscarPorPeriodoYMeses(periodo, catalogoProducto, mesesSeleccionados);
+
                     agregarRubroLista(listaRubros);
                     construirTablaRubros();
-                    
+
                 } catch (RemoteException ex) {
                     Logger.getLogger(NotificacionesDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
-                
-                
+
             }
         });
-        
+
         getBtnAgregarPorRubro().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                RubrosNivel rubroNivel= (RubrosNivel) getCmbRubro().getSelectedItem();
-                
+                RubrosNivel rubroNivel = (RubrosNivel) getCmbRubro().getSelectedItem();
+
                 agregarRubro(rubroNivel);
-                construirTablaRubros();                        
+                construirTablaRubros();
             }
         });
-        
+
         getBtnAgregarPorGrupo().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    Periodo periodo=(Periodo) getCmbPeriodo().getSelectedItem();
+                    Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
                     CatalogoProducto tipoRubro = (CatalogoProducto) getCmbTipoRubroGrupo().getSelectedItem();
-                    
-                   
+
                     Map<String, Object> mapParametros = new HashMap<String, Object>();
                     mapParametros.put("periodo", periodo);
                     mapParametros.put("catalogoProducto", tipoRubro);
-                    
-                    List<RubrosNivel> rubros=ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorMap(mapParametros);
+
+                    List<RubrosNivel> rubros = ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorMap(mapParametros);
                     agregarRubroLista(rubros);
                     construirTablaRubros();
-                    
+
                 } catch (RemoteException ex) {
                     Logger.getLogger(NotificacionesDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(NotificacionesDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
+
             }
         });
     }
-    
-    private List<MesEnum> obtenerMesesEnum()
-    {
-        List<MesEnum> listaMeses=new ArrayList<MesEnum>();
-        
+
+    private List<MesEnum> obtenerMesesEnum() {
+        List<MesEnum> listaMeses = new ArrayList<MesEnum>();
+
         if (getChkEnero().isSelected()) {
             listaMeses.add(MesEnum.ENERO);
         }
@@ -339,7 +327,7 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
         if (getChkFebrero().isSelected()) {
             listaMeses.add(MesEnum.FEBRERO);
         }
-        
+
         if (getChkMarzo().isSelected()) {
             listaMeses.add(MesEnum.MARZO);
         }
@@ -376,14 +364,16 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
         if (getChkDiciembre().isSelected()) {
             listaMeses.add(MesEnum.DICIEMBRE);
         }
-        
+
         return listaMeses;
-        
+
     }
-    
+
     /**
-     * Obtiene una version del monitor del comprobante para mostrar el avance de las notificaciones enviadas
-     * @return 
+     * Obtiene una version del monitor del comprobante para mostrar el avance de
+     * las notificaciones enviadas
+     *
+     * @return
      */
     private MonitorComprobanteData getMonitorComprobanteData() {
         //Obtener una instancia del monitor para mostrar el avance de los datos
@@ -395,54 +385,51 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
         monitorData.getBtnCerrar().setEnabled(false);
         monitorData.getBarraProgreso().setString("enviando notificaciones");
         monitorData.getBarraProgreso().setStringPainted(true);
-        
+
         return monitorData;
 
     }
-    
-    private String construirMensaje(EstudianteInscrito estudianteInscrito)
-    {
-        String mensaje=getTxtFormatoMensaje().getText();
-        
-        mensaje=mensaje.replace(ETIQUETA_NOMBRE_ESTUDIANTE,estudianteInscrito.getEstudiante().getNombreCompleto());
-        mensaje=mensaje.replace(ETIQUETA_NOMBRE_REPRESENTANTE,estudianteInscrito.getEstudiante().getRepresentante().getNombresCompletos());
-        
+
+    private String construirMensaje(EstudianteInscrito estudianteInscrito) {
+        String mensaje = getTxtFormatoMensaje().getText();
+
+        mensaje = mensaje.replace(ETIQUETA_NOMBRE_ESTUDIANTE, estudianteInscrito.getEstudiante().getNombreCompleto());
+        mensaje = mensaje.replace(ETIQUETA_NOMBRE_REPRESENTANTE, estudianteInscrito.getEstudiante().getRepresentante().getNombresCompletos());
+
         return mensaje;
     }
-            
-    
-    private void enviarComunicados()
-    {
+
+    private void enviarComunicados() {
         Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
         if (listaRubros.size() > 0) {
             try {
                 List<RubroEstudiante> rubrosEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().obtenerRubrosEstudiantesPorRubros(listaRubros);
 
-                MonitorComprobanteData monitorData=getMonitorComprobanteData();
+                MonitorComprobanteData monitorData = getMonitorComprobanteData();
                 MonitorComprobanteModel.getInstance().mostrar();
-                
+
                 //Obtiene la lista de rubros agrupada por los estudiantes inscritos
                 Map<EstudianteInscrito, List<RubroEstudiante>> mapRubrosEstudiante = convertirMapRubrosEstudiante(rubrosEstudiante);
-                
-                int contador=0;
+
+                int contador = 0;
                 for (Map.Entry<EstudianteInscrito, List<RubroEstudiante>> entry : mapRubrosEstudiante.entrySet()) {
                     contador++;
                     EstudianteInscrito estudianteInscrito = entry.getKey();
                     List<RubroEstudiante> detalle = entry.getValue();
-                    
+
                     //Generar el reporte
-                    generarReporte(estudianteInscrito,detalle, periodo);
+                    generarReporte(estudianteInscrito, detalle, periodo);
                     //Enviar al correo
-                    String mensaje=construirMensaje(estudianteInscrito);
-                    enviarCorreo(estudianteInscrito,mensaje);
+                    String mensaje = construirMensaje(estudianteInscrito);
+                    enviarCorreo(estudianteInscrito, mensaje);
                     System.out.println("estudiante: " + estudianteInscrito.getEstudiante().getNombreCompleto());
-                    
-                    double relacion=(double)contador/(double)mapRubrosEstudiante.size();
-                    int porcentaje=(int) (relacion*100);
+
+                    double relacion = (double) contador / (double) mapRubrosEstudiante.size();
+                    int porcentaje = (int) (relacion * 100);
                     monitorData.getBarraProgreso().setValue(porcentaje);
 
                 }
-                
+
                 //Mostrar el monitor cuando termina
                 monitorData.getBarraProgreso().setForeground(Color.GREEN);
                 monitorData.getBtnAbrir().setEnabled(true);
@@ -450,7 +437,7 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
                 monitorData.getBtnAbrir().addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        DialogoCodefac.mensaje("Correcto","Se enviaron "+mapRubrosEstudiante.size()+" notificaciones a los correos", DialogoCodefac.MENSAJE_CORRECTO);
+                        DialogoCodefac.mensaje("Correcto", "Se enviaron " + mapRubrosEstudiante.size() + " notificaciones a los correos", DialogoCodefac.MENSAJE_CORRECTO);
                     }
                 });
 
@@ -461,12 +448,11 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
         } else {
             DialogoCodefac.mensaje("Advertencia", "No existen datos para enviar", DialogoCodefac.MENSAJE_INCORRECTO);
         }
-    
+
     }
-    
-    private void enviarCorreo(EstudianteInscrito estudianteInscrito,String mensaje)
-    {
-        CorreoCodefac correoCodefac=new CorreoCodefac() {
+
+    private void enviarCorreo(EstudianteInscrito estudianteInscrito, String mensaje) {
+        CorreoCodefac correoCodefac = new CorreoCodefac() {
             @Override
             public String getMensaje() {
                 return mensaje;
@@ -479,70 +465,65 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
 
             @Override
             public Map<String, String> getPathFiles() {
-                HashMap<String,String> mapArchivos=new HashMap<String,String>();
-                mapArchivos.put("comunicado.pdf",PATH_REPORTE_TMP);
+                HashMap<String, String> mapArchivos = new HashMap<String, String>();
+                mapArchivos.put("comunicado.pdf", PATH_REPORTE_TMP);
                 return mapArchivos;
             }
 
             @Override
             public List<String> getDestinatorios() {
-                List<String> destinatarios=new ArrayList<String>();
+                List<String> destinatarios = new ArrayList<String>();
                 destinatarios.add(estudianteInscrito.getEstudiante().getRepresentante().getCorreoElectronico());
                 return destinatarios;
             }
         };
-        
+
         correoCodefac.enviarCorreo();
     }
-    
-    private void generarReporte(EstudianteInscrito estudianteInscrito,List<RubroEstudiante> detalles,Periodo periodo)
-    {
+
+    private void generarReporte(EstudianteInscrito estudianteInscrito, List<RubroEstudiante> detalles, Periodo periodo) {
         InputStream path = RecursoCodefac.JASPER_ACADEMICO.getResourceInputStream("reporte_estudiante_deuda.jrxml");
-        
-        Map<String,Object> mapParametros=new HashMap<String, Object>();
-        mapParametros.put("periodo",periodo.getNombre());
-        mapParametros.put("curso",estudianteInscrito.getNivelAcademico().getNombre());
-        mapParametros.put("nombres",estudianteInscrito.getEstudiante().getNombreCompleto());
-        mapParametros.put("representante",estudianteInscrito.getEstudiante().getRepresentante().getNombresCompletos());
-        mapParametros.put("nota","");
-               
-        List<EstudianteDeudaData> listaReporte=new ArrayList<EstudianteDeudaData>();
-        
-        BigDecimal total=BigDecimal.ZERO;
+
+        Map<String, Object> mapParametros = new HashMap<String, Object>();
+        mapParametros.put("periodo", periodo.getNombre());
+        mapParametros.put("curso", estudianteInscrito.getNivelAcademico().getNombre());
+        mapParametros.put("nombres", estudianteInscrito.getEstudiante().getNombreCompleto());
+        mapParametros.put("representante", estudianteInscrito.getEstudiante().getRepresentante().getNombresCompletos());
+        mapParametros.put("nota", "");
+
+        List<EstudianteDeudaData> listaReporte = new ArrayList<EstudianteDeudaData>();
+
+        BigDecimal total = BigDecimal.ZERO;
         for (RubroEstudiante detalle : detalles) {
-            total=total.add(detalle.getRubroNivel().getValor());
-            listaReporte.add(new EstudianteDeudaData(detalle.getRubroNivel().getNombre(),detalle.getRubroNivel().getValor().toString()));
+            total = total.add(detalle.getRubroNivel().getValor());
+            listaReporte.add(new EstudianteDeudaData(detalle.getRubroNivel().getNombre(), detalle.getRubroNivel().getValor().toString()));
         }
-        
-        mapParametros.put("total",total.toString());
-         
-        mapParametros=ReporteCodefac.agregarMapPlantilla(mapParametros,"Reporte Deuda",panelPadre);
-        
-        UtilidadesComprobantes.generarReporteJasper(path, mapParametros, listaReporte,PATH_REPORTE_TMP);
-        
+
+        mapParametros.put("total", total.toString());
+
+        mapParametros = ReporteCodefac.agregarMapPlantilla(mapParametros, "Reporte Deuda", panelPadre);
+
+        UtilidadesComprobantes.generarReporteJasper(path, mapParametros, listaReporte, PATH_REPORTE_TMP);
+
         //ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametros, listaReporte, panelPadre, "Reporte Deudas");
     }
-    
-    private Map<EstudianteInscrito,List<RubroEstudiante>> convertirMapRubrosEstudiante(List<RubroEstudiante> rubrosEstudiante)
-    {
-        Map<EstudianteInscrito,List<RubroEstudiante>> mapRubrosEstudiante=new HashMap<EstudianteInscrito,List<RubroEstudiante>>();
-        
+
+    private Map<EstudianteInscrito, List<RubroEstudiante>> convertirMapRubrosEstudiante(List<RubroEstudiante> rubrosEstudiante) {
+        Map<EstudianteInscrito, List<RubroEstudiante>> mapRubrosEstudiante = new HashMap<EstudianteInscrito, List<RubroEstudiante>>();
+
         for (RubroEstudiante rubroEstudiante : rubrosEstudiante) {
-            
-            List<RubroEstudiante> detalles=mapRubrosEstudiante.get(rubroEstudiante.getEstudianteInscrito());
-            if(detalles==null)
-            {
-                detalles=new ArrayList<RubroEstudiante>();
+
+            List<RubroEstudiante> detalles = mapRubrosEstudiante.get(rubroEstudiante.getEstudianteInscrito());
+            if (detalles == null) {
+                detalles = new ArrayList<RubroEstudiante>();
                 detalles.add(rubroEstudiante);
-                mapRubrosEstudiante.put(rubroEstudiante.getEstudianteInscrito(),detalles);
-            }
-            else
-            {
+                mapRubrosEstudiante.put(rubroEstudiante.getEstudianteInscrito(), detalles);
+            } else {
                 detalles.add(rubroEstudiante);
             }
-            
+
         }
-        
+
         return mapRubrosEstudiante;
     }
 
@@ -550,6 +531,5 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
     public void run() {
         enviarComunicados();
     }
-    
-    
+
 }

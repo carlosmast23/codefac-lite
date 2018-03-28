@@ -34,7 +34,7 @@ public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrit
 
     }
     
-    public void matricularEstudiante(EstudianteInscrito estudianteInscrito,RubroEstudiante rubroMatricula) throws RemoteException
+    public EstudianteInscrito matricularEstudiante(EstudianteInscrito estudianteInscrito,RubroEstudiante rubroMatricula) throws RemoteException
     {
         EntityTransaction transaccion = getTransaccion();
         transaccion.begin();
@@ -42,7 +42,8 @@ public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrit
         estudianteInscrito=entityManager.merge(estudianteInscrito);
         rubroMatricula.setEstudianteInscrito(estudianteInscrito);
         entityManager.persist(rubroMatricula);
-        transaccion.commit();        
+        transaccion.commit();
+        return estudianteInscrito;
     }
     
     public void eliminarEstudiantesInscrito(List<EstudianteInscrito> estudiantesEliminar) throws RemoteException
@@ -115,6 +116,15 @@ public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrit
         Map<String,Object> mapParametros=new HashMap<String, Object>();
         mapParametros.put("nivelAcademico.periodo",periodo);
         mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        return getFacade().findByMap(mapParametros);
+    }
+    
+    @Override
+    public List<EstudianteInscrito> obtenerEstudiantesInscritosPorPeriodoYEstudiante(Periodo periodo,Estudiante estudiante) throws RemoteException {
+        Map<String, Object> mapParametros = new HashMap<String, Object>();
+        mapParametros.put("nivelAcademico.periodo", periodo);
+        mapParametros.put("estudiante", estudiante);
+        mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
         return getFacade().findByMap(mapParametros);
     }
 }

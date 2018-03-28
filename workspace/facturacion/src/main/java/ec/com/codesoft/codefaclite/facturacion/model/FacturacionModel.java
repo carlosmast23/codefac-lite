@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterfac
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.ClienteFacturacionBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.EstudianteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusqueda;
@@ -79,7 +80,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -104,7 +104,7 @@ import net.sf.jasperreports.engine.JasperPrint;
  *
  * @author Carlos
  */
-public class FacturacionModel extends FacturacionPanel{
+public class FacturacionModel extends FacturacionPanel implements InterfazPostConstructPanel{
 
     //private Persona persona;
     private Factura factura;
@@ -594,13 +594,13 @@ public class FacturacionModel extends FacturacionPanel{
 
                 ComprobanteDataFactura comprobanteData = new ComprobanteDataFactura(factura);
                 comprobanteData.setMapInfoAdicional(getMapAdicional(factura));
-                ClienteInterfaceComprobante cic = new ClienteFacturaImplComprobante(this,facturaProcesando,false);
+                ClienteInterfaceComprobante cic = new ClienteFacturaImplComprobante(this,facturaProcesando,true);
                 ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
                 Boolean repuestaFacturaElectronica = DialogoCodefac.dialogoPregunta("Correcto", "La factura se grabo correctamente,Desea autorizar en el SRI ahora?", DialogoCodefac.MENSAJE_CORRECTO);
                 
                 //Si quiere que se procese en ese momento le ejecuto el proceso normal
                 if (repuestaFacturaElectronica) {
-                    cic = new ClienteFacturaImplComprobante(this,facturaProcesando,true);
+                    cic = new ClienteFacturaImplComprobante(this,facturaProcesando,false);
                     comprobanteServiceIf.procesarComprobante(comprobanteData, facturaProcesando, session.getUsuario(), cic);
                 }
                 else
@@ -1587,6 +1587,87 @@ public class FacturacionModel extends FacturacionPanel{
         }
     }
     
+    //TODO: Para optimizar y mejorar el codigo analizar para utilizar una sola funcion con la anterior
+    public void agregarDetallesFactura(BigDecimal cantidad,BigDecimal valorUnitario,String descripcion,Boolean descuentoPorcentaje,BigDecimal descuento,Object referencia) {
+        FacturaDetalle facturaDetalle = new FacturaDetalle();
+
+            
+            try {
+                //FacturaDetalle facturaDetalle = new FacturaDetalle();
+                facturaDetalle.setCantidad(cantidad);
+                facturaDetalle.setDescripcion(descripcion);
+                BigDecimal valorTotalUnitario =valorUnitario;
+                facturaDetalle.setPrecioUnitario(valorTotalUnitario.setScale(2, BigDecimal.ROUND_HALF_UP));
+                
+                //Variable del producto para verificar otros datos como el iva
+                CatalogoProducto catalogoProducto=null;
+                //Seleccionar la referencia dependiendo del tipo de documento
+                TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+                if(tipoDocumentoEnum.equals(TipoDocumentoEnum.ACADEMICO))
+                {
+                    RubroEstudiante rubroSeleccionado=(RubroEstudiante) referencia;
+                    
+                    facturaDetalle.setReferenciaId(rubroSeleccionado.getId());
+                    facturaDetalle.setTipoDocumento(TipoDocumentoEnum.ACADEMICO.getCodigo());
+                    catalogoProducto=rubroSeleccionado.getRubroNivel().getCatalogoProducto();
+                }
+                else
+                {
+                    Producto productoSeleccionado=(Producto) referencia;
+                    
+                    facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
+                    facturaDetalle.setTipoDocumento(TipoDocumentoEnum.VENTA.getCodigo());
+                    catalogoProducto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
+                }
+                
+                
+                
+                facturaDetalle.setValorIce(BigDecimal.ZERO);
+                
+                if (!descuentoPorcentaje) {
+                    facturaDetalle.setDescuento(descuento);
+                } else {
+                    BigDecimal porcentajeDescuento = descuento;
+                    
+                    porcentajeDescuento = porcentajeDescuento.divide(new BigDecimal(100));
+                    BigDecimal total = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario());
+                    descuento = total.multiply(porcentajeDescuento);
+                    facturaDetalle.setDescuento(descuento.setScale(2, BigDecimal.ROUND_HALF_UP));
+                }
+                
+                //Calular el total despues del descuento porque necesito esa valor para grabar
+                BigDecimal setTotal = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).subtract(facturaDetalle.getDescuento());
+                facturaDetalle.setTotal(setTotal.setScale(2, BigDecimal.ROUND_HALF_UP));
+                /**
+                 * Revisar este calculo del iva para no calcular 2 veces al mostrar
+                 */
+                
+                if (catalogoProducto.getIva().getTarifa().equals(0)) {
+                    facturaDetalle.setIva(BigDecimal.ZERO);
+                } else {
+                    BigDecimal iva = facturaDetalle.getTotal().multiply(obtenerValorIva()).setScale(2, BigDecimal.ROUND_HALF_UP);
+                    facturaDetalle.setIva(iva);
+                }
+                
+                if (facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).compareTo(facturaDetalle.getDescuento()) > 0) {
+                    
+                    factura.addDetalle(facturaDetalle);
+
+                    cargarDatosDetalles();
+                    setearDetalleFactura();
+                    cargarTotales();
+                    banderaAgregar = false;
+                } else {
+                    DialogoCodefac.mensaje("Alerta", "El valor de Descuento excede, el valor de PrecioTotal del Producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    setearDetalleFactura();
+                    banderaAgregar = false;
+                }
+            } catch (RemoteException ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
+    }
+    
     /**
      * Metodo para setear valores de la factura de manera externa
      */
@@ -1710,6 +1791,49 @@ public class FacturacionModel extends FacturacionPanel{
         }
         
         return true;
+    }
+
+    @Override
+    public void postConstructorExterno(Object[] parametros) {
+        DocumentoEnum documentoEnum=(DocumentoEnum) parametros[0];
+        TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) parametros[1];
+        
+        getCmbDocumento().setSelectedItem(documentoEnum);
+        getCmbTipoDocumento().setSelectedItem(tipoDocumentoEnum);
+        
+        
+        estudiante=(Estudiante) parametros[2];
+        factura.setCliente((Persona) parametros[3]);
+        
+        //Agregar los detalles enviados cuando son enviados desde el modulo academicos
+        if(tipoDocumentoEnum.equals(TipoDocumentoEnum.ACADEMICO))
+        {
+            setearValoresAcademicos(estudiante);
+            cargarDatosAdicionalesAcademicos();
+            cargarTablaDatosAdicionales();
+            
+            List<RubroEstudiante> rubrosEstudiantes=(List<RubroEstudiante>) parametros[4];
+            for (RubroEstudiante rubro : rubrosEstudiantes) {
+                
+                String descripcion=rubro.getRubroNivel().getNombre();
+                
+                if(rubro.getProcentajeDescuento()>0)
+                {
+                    descripcion+="("+rubro.getNombreDescuento()+"-"+rubro.getProcentajeDescuento()+"%)";                    
+
+                }                
+                agregarDetallesFactura(BigDecimal.ONE,rubro.getSaldo(),descripcion,true,new BigDecimal(rubro.getProcentajeDescuento()+""),rubro);
+            }        
+
+        }
+        else
+        {
+            //TODO: implementar para el otro caso cuando sea de otros modulos
+        
+        }
+        
+        
+        
     }
 
 }
