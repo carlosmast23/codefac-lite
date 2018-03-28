@@ -57,11 +57,14 @@ public class FacturaElectronicaReporte extends ComprobanteElectronicoReporte{
         for (TotalImpuesto impuesto : impuestos) {
             if(impuesto.getValor().compareTo(BigDecimal.ZERO)==0)
             {
-                subTotalCero=subTotalCero.add(impuesto.getBaseImponible().add(new BigDecimal(impuesto.getDescuentoAdicional())));
+                //subTotalCero=subTotalCero.add(impuesto.getBaseImponible().add(new BigDecimal(impuesto.getDescuentoAdicional())));
+                subTotalCero=subTotalCero.add(impuesto.getBaseImponible());
+                
             }
             else
             {
-                subTotalImpuesto=subTotalImpuesto.add(impuesto.getBaseImponible().add(new BigDecimal(impuesto.getDescuentoAdicional())));
+                //subTotalImpuesto=subTotalImpuesto.add(impuesto.getBaseImponible().add(new BigDecimal(impuesto.getDescuentoAdicional())));
+                subTotalImpuesto=subTotalImpuesto.add(impuesto.getBaseImponible());
                 iva=iva.add(impuesto.getValor());
             }
         }

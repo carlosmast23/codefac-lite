@@ -160,13 +160,14 @@ public class FacturaDetalle implements Serializable {
     }
     
     /**
-     * Metodos adicionales
+     * Metodos personalizados
+     * @return 
      */
-    /*
-    public BigDecimal getIva()
+    public BigDecimal getSubtotalSinDescuentos()
     {
-        return total.multiply(producto.getIva().getPorcentaje());
-    }*/
+        return precioUnitario.multiply(cantidad);
+    }
+
         
     
 }

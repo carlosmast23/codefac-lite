@@ -96,8 +96,13 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
         informacionFactura.setRazonSocialComprador(factura.getCliente().getRazonSocial());
         //informacionFactura.setRazonSocialComprador(factura.getCliente().getRazonSocial());
         informacionFactura.setTipoIdentificacionComprador(factura.getCliente().getTipoIdentificacion());
-        informacionFactura.setTotalDescuento(factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()));
-        informacionFactura.setTotalSinImpuestos(factura.getSubtotalImpuestos().add(factura.getSubtotalSinImpuestos()));
+        
+        BigDecimal descuentoTotal=factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos());
+        informacionFactura.setTotalDescuento(descuentoTotal);
+        
+         BigDecimal subtotalTotalSinDescuentos=factura.getSubtotalImpuestos().add(factura.getSubtotalSinImpuestos());
+        //Esta variable se refiere al subtotal antes de impuesto y menos los descuentos       
+        informacionFactura.setTotalSinImpuestos(subtotalTotalSinDescuentos.subtract(descuentoTotal));
         /**
          * Aqui hay que setear los valores de la base de datos
          */
@@ -185,7 +190,7 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
                     totalImpuesto.setCodigo(impuesto.getCodigo());
                     totalImpuesto.setCodigoPorcentaje(impuesto.getCodigoPorcentaje());
                     totalImpuesto.setValor(impuesto.getValor());
-                    totalImpuesto.setDescuentoAdicional(detalle.getDescuento().toString());
+                    //totalImpuesto.setDescuentoAdicional(detalle.getDescuento().toString());
                     mapTotalImpuestos.put(catalogoProducto.getIva(), totalImpuesto);
                 }
                 else
@@ -193,7 +198,7 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
                     TotalImpuesto totalImpuesto=mapTotalImpuestos.get(catalogoProducto.getIva());
                     totalImpuesto.setBaseImponible(totalImpuesto.getBaseImponible().add(impuesto.getBaseImponible()));
                     totalImpuesto.setValor(totalImpuesto.getValor().add(impuesto.getValor()));
-                    totalImpuesto.setDescuentoAdicional(detalle.getDescuento().toString());
+                    //totalImpuesto.setDescuentoAdicional(detalle.getDescuento().toString());
                     mapTotalImpuestos.put(catalogoProducto.getIva(), totalImpuesto);
                     
                 }

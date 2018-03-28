@@ -504,10 +504,14 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
                     if(enumSiNo.equals(EnumSiNo.SI))
                     {
                         getChkBeca().setSelected(true);
+                        getTxtNombreDescuento().setEnabled(true);
+                        getSpnPorcentaje().setEnabled(true);
                     }
                     else
                     {
                         getChkBeca().setSelected(false);
+                        getTxtNombreDescuento().setEnabled(false);
+                        getSpnPorcentaje().setEnabled(false);
                     }
                 }
             }

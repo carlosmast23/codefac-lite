@@ -23,6 +23,7 @@ public class DetalleFacturaComprobante implements Serializable{
     private BigDecimal cantidad;
     private BigDecimal precioUnitario;
     private BigDecimal descuento;
+    //Precio Unitario*Cantidad-Descuento
     private BigDecimal precioTotalSinImpuesto;
     
     private String codigoPrincipal;

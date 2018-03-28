@@ -33,6 +33,10 @@ public class InformacionFactura implements Serializable{
     private String tipoIdentificacionComprador;
     private String razonSocialComprador;
     private String identificacionComprador;
+    
+    /**
+     * Esta variable se refiere al subtotal antes de impuesto y menos los descuentos
+     */
     private BigDecimal totalSinImpuestos;
     private BigDecimal totalDescuento;
     private BigDecimal importeTotal;
