@@ -62,12 +62,22 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //Habilito campos especiales cuando se va a crear
+        getBtnBuscarEstudiante().setEnabled(true);
+        getBtnNuevoEstudiante().setEnabled(true);
+        getCmbRubroMatricula().setEnabled(true);
     }
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
         try {
+            
+            //Verifica si pasa la validacion de los datos
+            if(!validacionDatosGrabar())
+            {
+                throw  new ExcepcionCodefacLite("Fallo validacion de datos");
+            }
+            
             setearValores();
             estudianteInscrito=ServiceFactory.getFactory().getEstudianteInscritoServiceIf().matricularEstudiante(estudianteInscrito, rubroMatricula);
             DialogoCodefac.mensaje("Correcto","El estudiante fue matriculado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
@@ -183,6 +193,10 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
             
             //Cargar los datos en pantalla
             cargarDatos();   
+            //Desactivar campos en esta modalidad que no puedo editar
+            getBtnBuscarEstudiante().setEnabled(false);
+            getBtnNuevoEstudiante().setEnabled(false);
+            getCmbRubroMatricula().setEnabled(false);
         }
         
         
@@ -205,7 +219,6 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
         getChkBeca().setEnabled(true);
         getChkNinguno().setEnabled(true);
         getChkOtro().setEnabled(true);
-
          
     }
 
@@ -525,6 +538,20 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
         getTxtNombreDescuento().setEnabled(false);
         getSpnPorcentaje().setEnabled(false);
         
+    }
+
+    /**
+     * Validaciones de los datos de la matricula antes de grabar
+     * @return 
+     */
+    private boolean validacionDatosGrabar() {
+        if(estudianteInscrito.getEstudiante()==null)
+        {
+            DialogoCodefac.mensaje("Advertencia","Seleccione un estudiante para matricular",DialogoCodefac.MENSAJE_ADVERTENCIA);
+            return false;
+        }
+        
+        return true;
     }
     
 }
