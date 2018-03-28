@@ -12,12 +12,15 @@ import ec.com.codesoft.codefaclite.gestionacademica.panel.ReporteDeudasPanel;
 import ec.com.codesoft.codefaclite.gestionacademica.reportdata.ReporteDeudasData;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteInscritoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RubroEstudianteServiceIf;
@@ -46,6 +49,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
     Map parameters = new HashMap();
     private boolean banderaNiveles = false;
     private boolean banderaRubros = false;
+    private List<RubrosNivel> listaRubros;
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
@@ -58,6 +62,13 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
             for (Periodo periodo : periodos) {
                 getCmbPeriodo().addItem(periodo);
             }
+
+            getCmbTipoRubroPorMes().removeAllItems();
+            List<CatalogoProducto> tipoRubros = ServiceFactory.getFactory().getCatalogoProductoServiceIf().obtenerPorModulo(ModuloCodefacEnum.GESTIONA_ACADEMICA);
+            for (CatalogoProducto catalogo : tipoRubros) {
+                getCmbTipoRubroPorMes().addItem(catalogo);
+            }
+
         } catch (RemoteException ex) {
             Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -84,7 +95,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
         // getChkTodosRubros().setSelected(true);
         if (getChkTodosRubros().isSelected()) {
             banderaRubros = true;
-            getCmbRubrosNivel().setEnabled(false);
+            getCmbTipoRubroPorMes().setEnabled(false);
         }
 
         getChkTodosRubros().addItemListener(new ItemListener() {
@@ -92,10 +103,34 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
                     banderaRubros = true;
-                    getCmbRubrosNivel().setEnabled(false);
+                    getCmbTipoRubroPorMes().setEnabled(false);
+                    getChkEnero().setEnabled(false);
+                    getChkFebrero().setEnabled(false);
+                    getChkMarzo().setEnabled(false);
+                    getChkAbril().setEnabled(false);
+                    getChkMayo().setEnabled(false);
+                    getChkJunio().setEnabled(false);
+                    getChkJulio().setEnabled(false);
+                    getChkAgosto().setEnabled(false);
+                    getChkSeptiembre().setEnabled(false);
+                    getChkOctubre().setEnabled(false);
+                    getChkNoviembre().setEnabled(false);
+                    getChkDiciembre().setEnabled(false);
                 } else {
                     banderaRubros = false;
-                    getCmbRubrosNivel().setEnabled(true);
+                    getCmbTipoRubroPorMes().setEnabled(true);
+                    getChkEnero().setEnabled(true);
+                    getChkFebrero().setEnabled(true);
+                    getChkMarzo().setEnabled(true);
+                    getChkAbril().setEnabled(true);
+                    getChkMayo().setEnabled(true);
+                    getChkJunio().setEnabled(true);
+                    getChkJulio().setEnabled(true);
+                    getChkAgosto().setEnabled(true);
+                    getChkSeptiembre().setEnabled(true);
+                    getChkOctubre().setEnabled(true);
+                    getChkNoviembre().setEnabled(true);
+                    getChkDiciembre().setEnabled(true);
                 }
             }
         });
@@ -110,52 +145,14 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
             }
         });
 
-        getCmbNivelAcademico().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                try {
-                    getCmbRubrosNivel().removeAllItems();
-                    NivelAcademico nivelSeleccionado = (NivelAcademico) getCmbNivelAcademico().getSelectedItem();
-                    Map<String, Object> mapParametros = new HashMap<String, Object>();
-                    //Cargar rubros generales para todos los niveles
-                    mapParametros.put("nivel", null);
-                    //pendiente agregar validado
-                    mapParametros.put("periodo", nivelSeleccionado.getPeriodo());
-                    List<RubrosNivel> rubrosSinNivel = ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorMap(mapParametros);
-                    for (RubrosNivel rubrosNivel : rubrosSinNivel) {
-                        getCmbRubrosNivel().addItem(rubrosNivel);
-                    }
-
-                    //Cargar rubros exclusivos de los niveles actuales
-                    mapParametros.clear();
-                    if (banderaNiveles == false) {
-                        mapParametros.put("nivel", nivelSeleccionado.getNivel());
-                    }
-                    mapParametros.put("periodo", nivelSeleccionado.getPeriodo());
-                    List<RubrosNivel> rubros = ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorMap(mapParametros);
-
-                    //Agregar todos los rubros disponibles para el nivels
-                    for (RubrosNivel rubro : rubros) {
-                        getCmbRubrosNivel().addItem(rubro);
-                    }
-
-                    /*
-                    //Agregar los estudiantes del nivel a la tabla
-                    cargarEstudiantesNuevos();
-                    cargarTabla();*/
-                } catch (RemoteException ex) {
-                    Logger.getLogger(ReporteDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ServicioCodefacException ex) {
-                    Logger.getLogger(ReporteDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-
         getBtnBuscar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
+                    CatalogoProducto catalogoProducto = (CatalogoProducto) getCmbTipoRubroPorMes().getSelectedItem();
+                    List<MesEnum> mesesSeleccionados = obtenerMesesEnum();
+                    List<RubroEstudiante> dataRubro;
                     Vector<String> titulo = new Vector<>();
                     titulo.add("Identificación");
                     titulo.add("Estudiante");
@@ -172,15 +169,16 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
                     List<EstudianteInscrito> dataEstudiante = na.obtenerPorMap(mapParametros);
                     for (EstudianteInscrito estudiante : dataEstudiante) {
                         Vector<String> fila = new Vector<String>();
-
-                        Map<String, Object> mapParametros2 = new HashMap<String, Object>();
-                        mapParametros2.put("estudianteInscrito", estudiante);
-                        if (banderaRubros == false) {
-                            mapParametros2.put("rubroNivel", (RubrosNivel) getCmbRubrosNivel().getSelectedItem());
-                        }
                         RubroEstudianteServiceIf rs = ServiceFactory.getFactory().getRubroEstudianteServiceIf();
-                        List<RubroEstudiante> dataRubro = rs.obtenerPorMap(mapParametros2);
-                        // comparamos si el estudiante tiene rubros
+                        if (banderaRubros == false) {
+                            dataRubro = rs.buscarRubrosMes(estudiante, periodo, catalogoProducto, mesesSeleccionados);
+                        } else {
+                            Map<String, Object> mapParametros2 = new HashMap<String, Object>();
+                            mapParametros2.put("estudianteInscrito", estudiante);
+                            dataRubro = rs.obtenerPorMap(mapParametros2);
+                        }
+
+// comparamos si el estudiante tiene rubros
                         if (!dataRubro.isEmpty()) {
                             fila.add(estudiante.getEstudiante().getCedula());
                             fila.add(estudiante.getEstudiante().getNombreCompleto());
@@ -196,7 +194,6 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
                                 modeloTablaDeudas.addRow(fila2);
                             }
                         }
-
                     }
 
                     getTblDeudas().setModel(modeloTablaDeudas);
@@ -235,6 +232,10 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
     public void imprimir() {
         try {
             InputStream path = RecursoCodefac.JASPER_ACADEMICO.getResourceInputStream("reporte_deudas.jrxml");
+            Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
+            CatalogoProducto catalogoProducto = (CatalogoProducto) getCmbTipoRubroPorMes().getSelectedItem();
+            List<MesEnum> mesesSeleccionados = obtenerMesesEnum();
+            List<RubroEstudiante> dataRubro;
 
             Map<String, Object> mapParametros = new HashMap<String, Object>();
             if (banderaNiveles == false) {
@@ -246,13 +247,14 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
             List<ReporteDeudasData> data = new ArrayList<ReporteDeudasData>();
             for (EstudianteInscrito estudiante : dataEstudiante) {
 
-                Map<String, Object> mapParametros2 = new HashMap<String, Object>();
-                mapParametros2.put("estudianteInscrito", estudiante);
-                if (banderaRubros == false) {
-                    mapParametros2.put("rubroNivel", (RubrosNivel) getCmbRubrosNivel().getSelectedItem());
-                }               
                 RubroEstudianteServiceIf rs = ServiceFactory.getFactory().getRubroEstudianteServiceIf();
-                List<RubroEstudiante> dataRubro = rs.obtenerPorMap(mapParametros2);
+                if (banderaRubros == false) {
+                    dataRubro = rs.buscarRubrosMes(estudiante, periodo, catalogoProducto, mesesSeleccionados);
+                } else {
+                    Map<String, Object> mapParametros2 = new HashMap<String, Object>();
+                    mapParametros2.put("estudianteInscrito", estudiante);
+                    dataRubro = rs.obtenerPorMap(mapParametros2);
+                }
                 // comparamos si el estudiante tiene rubros
                 if (!dataRubro.isEmpty()) {
                     for (RubroEstudiante re : dataRubro) {
@@ -269,7 +271,6 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
             }
 //            List<ReporteDeudasEstudianteData> data = new ArrayList<ReporteDeudasEstudianteData>();
 
-            Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
             NivelAcademico nivela = (NivelAcademico) getCmbNivelAcademico().getSelectedItem();
             if (periodo != null) {
                 parameters.put("periodo", periodo.getNombre());
@@ -304,7 +305,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
 
     @Override
     public void limpiar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.listaRubros = new ArrayList<RubrosNivel>();
     }
 
     @Override
@@ -354,6 +355,67 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
             Logger.getLogger(MatriculaModel.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
+
+    }
+
+    private void agregarRubroLista(List<RubrosNivel> rubros) {
+        for (RubrosNivel rubro : rubros) {
+            if (!listaRubros.contains(rubro)) {
+                listaRubros.add(rubro);
+                System.out.println("rubro ==============> " + rubro.getNombre());
+            }
+        }
+    }
+
+    private List<MesEnum> obtenerMesesEnum() {
+        List<MesEnum> listaMeses = new ArrayList<MesEnum>();
+
+        if (getChkEnero().isSelected()) {
+            listaMeses.add(MesEnum.ENERO);
+        }
+
+        if (getChkFebrero().isSelected()) {
+            listaMeses.add(MesEnum.FEBRERO);
+        }
+
+        if (getChkMarzo().isSelected()) {
+            listaMeses.add(MesEnum.MARZO);
+        }
+
+        if (getChkAbril().isSelected()) {
+            listaMeses.add(MesEnum.ABRIL);
+        }
+
+        if (getChkMayo().isSelected()) {
+            listaMeses.add(MesEnum.MAYO);
+        }
+        if (getChkJunio().isSelected()) {
+            listaMeses.add(MesEnum.JUNIO);
+        }
+
+        if (getChkJulio().isSelected()) {
+            listaMeses.add(MesEnum.JULIO);
+        }
+        if (getChkAgosto().isSelected()) {
+            listaMeses.add(MesEnum.AGOSTO);
+        }
+
+        if (getChkSeptiembre().isSelected()) {
+            listaMeses.add(MesEnum.SEPTIEMBRE);
+        }
+
+        if (getChkOctubre().isSelected()) {
+            listaMeses.add(MesEnum.OCTUBRE);
+        }
+
+        if (getChkNoviembre().isSelected()) {
+            listaMeses.add(MesEnum.NOVIEMBRE);
+        }
+        if (getChkDiciembre().isSelected()) {
+            listaMeses.add(MesEnum.DICIEMBRE);
+        }
+
+        return listaMeses;
 
     }
 
