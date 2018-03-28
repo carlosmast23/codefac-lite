@@ -23,6 +23,7 @@ import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
 /**
@@ -36,6 +37,15 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
     public RubroEstudianteService() throws RemoteException {
         super(RubroEstudianteFacade.class);
         rubroEstudianteFacade = new RubroEstudianteFacade();
+    }
+    
+    public void eliminar(RubroEstudiante entity) throws java.rmi.RemoteException
+    {        
+        EntityTransaction transaccion = getTransaccion();
+        transaccion.begin();
+        entity.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
+        entityManager.merge(entity);
+        transaccion.commit();        
     }
     
     public List<RubroEstudiante> obtenerRubroMatriculaPorEstudianteInscrito(EstudianteInscrito estudianteInscrito) throws RemoteException

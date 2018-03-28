@@ -91,7 +91,35 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(verificarEliminarMatriculaEstudianteGrabado(estudianteInscrito))
+        {
+            try {
+                //Eliminar el estudiantes
+                ServiceFactory.getFactory().getEstudianteInscritoServiceIf().eliminar(estudianteInscrito);        
+                DialogoCodefac.mensaje("Correcto","El estudiante matriculado fue eliminado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+            } catch (RemoteException ex) {
+                Logger.getLogger(MatriculaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else
+        {
+            DialogoCodefac.mensaje("Advertencia","No se puede eliminar la matricula porque tienen deudas de rubros sin anular",DialogoCodefac.MENSAJE_ADVERTENCIA);
+            throw new ExcepcionCodefacLite("cancelar grabar");
+        }
+    }
+    
+    private Boolean verificarEliminarMatriculaEstudianteGrabado(EstudianteInscrito estudianteInscrito) {
+        try {
+            List<RubroEstudiante> rubros = ServiceFactory.getFactory().getRubroEstudianteServiceIf().obtenerRubrosActivosPorEstudiantesInscrito(estudianteInscrito);
+            if (rubros.size() == 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(MatriculaModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
 
     @Override
