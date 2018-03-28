@@ -117,4 +117,13 @@ public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrit
         mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
         return getFacade().findByMap(mapParametros);
     }
+    
+    @Override
+    public List<EstudianteInscrito> obtenerEstudiantesInscritosPorPeriodoYEstudiante(Periodo periodo,Estudiante estudiante) throws RemoteException {
+        Map<String, Object> mapParametros = new HashMap<String, Object>();
+        mapParametros.put("nivelAcademico.periodo", periodo);
+        mapParametros.put("estudiante", estudiante);
+        mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+        return getFacade().findByMap(mapParametros);
+    }
 }

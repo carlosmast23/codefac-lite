@@ -273,8 +273,18 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
                 buscarDialogoModel.setVisible(true);
                 Estudiante estudianteTemp = (Estudiante) buscarDialogoModel.getResultado();
                 if (estudianteTemp != null) {
-                    estudianteInscrito.setEstudiante(estudianteTemp);
-                    getTxtEstudiante().setText(estudianteInscrito.getEstudiante().getNombreCompleto());
+                    
+                    //Solo setear si el estudiante aunnno esta inscrito en ese periodo
+                    if (verificarEstudianteNoEstaInscrito(estudianteTemp)) 
+                    {
+                        estudianteInscrito.setEstudiante(estudianteTemp);
+                        getTxtEstudiante().setText(estudianteInscrito.getEstudiante().getNombreCompleto());
+                    }
+                    else
+                    {
+                        DialogoCodefac.mensaje("Advertencia","El estudiante ya esta matriculado",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    }
+
                     //getCmbCursoAsignar().setSelectedItem(estudianteInscrito.getNivelAcademico());
                 }
             }
@@ -335,6 +345,29 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
                 }
             }
         });
+    }
+    
+    private boolean verificarEstudianteNoEstaInscrito(Estudiante estudiante)
+    {
+        try {
+            Periodo periodoSeleccionado=(Periodo) getCmbPeriodoActivo().getSelectedItem();
+            //Verificar que no este inscrito , porque solo puede haber un estudiante inscrito por periodo
+            List<EstudianteInscrito> lista= ServiceFactory.getFactory().getEstudianteInscritoServiceIf().obtenerEstudiantesInscritosPorPeriodoYEstudiante(periodoSeleccionado, estudiante);
+            
+            if(lista.size()==0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(MatriculaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+        return false;
     }
 
     private void setearValores() {
