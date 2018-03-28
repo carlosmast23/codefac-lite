@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidor.facade.gestionAcademica;
 
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
@@ -13,6 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import java.rmi.RemoteException;
 import java.util.List;
 import javax.persistence.NoResultException;
@@ -27,26 +29,26 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
     public RubroEstudianteFacade() {
         super(RubroEstudiante.class);
     }
-    public List<RubroEstudiante> findRubrosEstudiantesPorRubros(List<RubrosNivel> rubros)
-    {
-       
+
+    public List<RubroEstudiante> findRubrosEstudiantesPorRubros(List<RubrosNivel> rubros) {
+
         String queryString = "SELECT u FROM RubroEstudiante u WHERE";
-        
+
         for (int i = 1; i <= rubros.size(); i++) {
-            queryString+=" u.rubroNivel=?"+i+" OR";
+            queryString += " u.rubroNivel=?" + i + " OR";
         }
-        
-        queryString=queryString.substring(0, queryString.length()-3);
-        
+
+        queryString = queryString.substring(0, queryString.length() - 3);
+
         Query query = getEntityManager().createQuery(queryString);
-        
+
         //Setear las variables con el numero
         for (int i = 1; i <= rubros.size(); i++) {
-            query.setParameter(i,rubros.get(i-1));
+            query.setParameter(i, rubros.get(i - 1));
         }
-        
+
         return query.getResultList();
-    
+
     }
 
     public List<RubroEstudiante> obtenerDeudasEstudiante(Estudiante estudiante) {
@@ -88,35 +90,71 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
             return null;
         }
     }
-    
-    public List<RubroEstudiante> getRubrosActivosPorEstudianteYEstadoFacturado(RubroEstudiante.FacturacionEstadoEnum estadoFacturadoEnum) throws RemoteException
-    {
-       
+
+    public List<RubroEstudiante> getRubrosActivosPorEstudianteYEstadoFacturado(RubroEstudiante.FacturacionEstadoEnum estadoFacturadoEnum) throws RemoteException {
+
         String queryString = "SELECT u FROM RubroEstudiante u WHERE u.estado!=?1 and u.estado!=?2 and u.estadoFactura=?3 ";
         Query query = getEntityManager().createQuery(queryString);
-        
-        query.setParameter(1,GeneralEnumEstado.ANULADO.getEstado());
-        query.setParameter(2,GeneralEnumEstado.ELIMINADO.getEstado());
-        query.setParameter(3,estadoFacturadoEnum.getLetra());
-        
+
+        query.setParameter(1, GeneralEnumEstado.ANULADO.getEstado());
+        query.setParameter(2, GeneralEnumEstado.ELIMINADO.getEstado());
+        query.setParameter(3, estadoFacturadoEnum.getLetra());
+
         return query.getResultList();
-        
+
     }
-    
-    
-    public List<RubroEstudiante> getRubrosActivosPorEstudiante(EstudianteInscrito estudianteInscrito) throws RemoteException
-    {
+
+    public List<RubroEstudiante> getRubrosActivosPorEstudiante(EstudianteInscrito estudianteInscrito) throws RemoteException {
 
         String queryString = "SELECT u FROM RubroEstudiante u WHERE u.estado!=?1 and u.estado!=?2 and u.estudianteInscrito=?3  ";
         Query query = getEntityManager().createQuery(queryString);
-        
-        query.setParameter(1,GeneralEnumEstado.ANULADO.getEstado());
-        query.setParameter(2,GeneralEnumEstado.ELIMINADO.getEstado());
-        query.setParameter(3,estudianteInscrito);
-        
+
+        query.setParameter(1, GeneralEnumEstado.ANULADO.getEstado());
+        query.setParameter(2, GeneralEnumEstado.ELIMINADO.getEstado());
+        query.setParameter(3, estudianteInscrito);
+
         return query.getResultList();
     }
 
+    public List<RubroEstudiante> buscarRubrosMes(EstudianteInscrito estudiante, Periodo periodo, CatalogoProducto catalogoProducto, List<MesEnum> meses) throws RemoteException {
+        String stringQuery = "(SELECT rn.id FROM RubrosNivel rn WHERE rn.catalogoProducto=?2 AND rn.periodo=?3 AND ";
+        String stringQueryMeses = "";
+        //Solo van entre parentesis si tiene mas datos que 1
+        if (meses.size() > 1) {
+            stringQueryMeses = "( ";
+        }
+        if (meses.size() > 0) {
+            for (MesEnum mes : meses) {
+                stringQueryMeses = stringQueryMeses + " rn.mesNumero=" + mes.getNumero() + " OR";
+            }
+        }
+        //Cortar el ultimo OR que sobra de la candena;
+        stringQueryMeses = stringQueryMeses.substring(0, stringQueryMeses.length() - 3);
+        if (meses.size() > 1) {
+            stringQueryMeses = stringQueryMeses + ")";
+        }
+        //Une los querys parciales y genera uno total
+        stringQuery += stringQueryMeses + ")";
 
-   
+        String academico = "";
+        if (estudiante != null) {
+            academico = "u.estudianteInscrito=?1";
+        } else {
+            academico = "1=1";
+        }
+//VALIDAR DEUDAS
+        try {
+            String queryString = "SELECT u FROM RubroEstudiante u WHERE " + academico + " AND u.rubroNivel.id IN " + stringQuery;
+            Query query = getEntityManager().createQuery(queryString);
+            //System.err.println("QUERY--->" + query.toString());
+            if (estudiante != null) {
+                query.setParameter(1, estudiante);
+                query.setParameter(2, catalogoProducto);
+                query.setParameter(3, periodo);
+            }
+            return query.getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 }

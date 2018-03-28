@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
@@ -38,5 +39,6 @@ public interface RubroEstudianteServiceIf extends ServiceAbstractIf<RubroEstudia
     public List<RubroEstudiante> obtenerDeudasEstudiante(Estudiante estudiante) throws java.rmi.RemoteException;
 
     public List<Object[]> obtenerRubroPeriodoGrupo(Periodo periodo) throws java.rmi.RemoteException;
- 
+
+    public List<RubroEstudiante> buscarRubrosMes(EstudianteInscrito est,Periodo periodo, CatalogoProducto catalogoProducto, List<MesEnum> meses) throws java.rmi.RemoteException;
 }
