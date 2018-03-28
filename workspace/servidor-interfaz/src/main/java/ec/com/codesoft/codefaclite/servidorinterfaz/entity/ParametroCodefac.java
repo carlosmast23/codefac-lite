@@ -56,6 +56,7 @@ public class ParametroCodefac implements Serializable {
     public static final String SECUENCIAL_GUIA_REMISION_FISICA= "secuencial_guia_remision_fisica";
     public static final String SECUENCIAL_RETENCION_FISICA= "secuencial_retencion_fisica";
     public static final String SECUENCIAL_NOTA_VENTA_FISICA= "secuencial_nota_venta_fisica";
+    public static final String DIRECTORIO_RESPALDO = "directorio_respaldo";
     
     public static final String SECUENCIAL_LOTE= "secuencial_lote";
     

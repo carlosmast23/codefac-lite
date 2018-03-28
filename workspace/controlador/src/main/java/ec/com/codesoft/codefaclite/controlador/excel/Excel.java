@@ -53,6 +53,8 @@ public class Excel<T>
         this.posicionesColumnas = new ArrayList<>();
         Date date = new Date();
         String nombreArchivoExcel = "" + date;
+        nombreArchivoExcel = nombreArchivoExcel.replaceAll(" ", "");
+        nombreArchivoExcel = nombreArchivoExcel.replaceAll(":", "");
         this.archivo = "\\tmp\\"+nombreArchivoExcel+".xlsx";
     }
     
