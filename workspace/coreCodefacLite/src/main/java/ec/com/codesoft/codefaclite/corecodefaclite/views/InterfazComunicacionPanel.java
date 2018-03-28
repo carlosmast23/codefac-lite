@@ -18,6 +18,11 @@ public interface InterfazComunicacionPanel
 {
     public void crearReportePantalla(JasperPrint jasperPrint,String nombrePantalla);
     public void crearVentanaCodefac(GeneralPanelInterface panel,boolean maximizado);
+    
+    /**
+     * Agregado metodo que envia parametros al Post Constructor de la ventana a iniciar
+     */
+    public void crearVentanaCodefac(VentanaEnum ventanEnum,boolean maximizado,Object[] parametrosPostConstructor);
     /**
      * 
      * @param panel formulario que se va a actualizar los datos

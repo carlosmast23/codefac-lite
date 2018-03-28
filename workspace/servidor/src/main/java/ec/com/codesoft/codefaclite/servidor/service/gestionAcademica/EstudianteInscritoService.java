@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteInscritoServiceIf;
 import java.rmi.RemoteException;
@@ -31,6 +32,18 @@ public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrit
         super(EstudianteInscritoFacade.class);
         this.estudianteInscritoFacade = new EstudianteInscritoFacade();
 
+    }
+    
+    public EstudianteInscrito matricularEstudiante(EstudianteInscrito estudianteInscrito,RubroEstudiante rubroMatricula) throws RemoteException
+    {
+        EntityTransaction transaccion = getTransaccion();
+        transaccion.begin();
+        entityManager.persist(estudianteInscrito);
+        estudianteInscrito=entityManager.merge(estudianteInscrito);
+        rubroMatricula.setEstudianteInscrito(estudianteInscrito);
+        entityManager.persist(rubroMatricula);
+        transaccion.commit();
+        return estudianteInscrito;
     }
     
     public void eliminarEstudiantesInscrito(List<EstudianteInscrito> estudiantesEliminar) throws RemoteException
@@ -103,6 +116,15 @@ public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrit
         Map<String,Object> mapParametros=new HashMap<String, Object>();
         mapParametros.put("nivelAcademico.periodo",periodo);
         mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        return getFacade().findByMap(mapParametros);
+    }
+    
+    @Override
+    public List<EstudianteInscrito> obtenerEstudiantesInscritosPorPeriodoYEstudiante(Periodo periodo,Estudiante estudiante) throws RemoteException {
+        Map<String, Object> mapParametros = new HashMap<String, Object>();
+        mapParametros.put("nivelAcademico.periodo", periodo);
+        mapParametros.put("estudiante", estudiante);
+        mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
         return getFacade().findByMap(mapParametros);
     }
 }

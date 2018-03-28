@@ -78,7 +78,7 @@ public abstract class MatriculaPanel extends ControladorCodefacInterface {
         btnRegresar.setToolTipText("Regresar");
 
         lblNivelAnterior.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        lblNivelAnterior.setText("Nivel:");
+        lblNivelAnterior.setText("Cursos:");
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setText("Buscar Por:");
@@ -87,7 +87,7 @@ public abstract class MatriculaPanel extends ControladorCodefacInterface {
         jLabel3.setText("Periodo Matricula:");
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel4.setText("Nivel:");
+        jLabel4.setText("Cursos:");
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel5.setText("Lista de Alumnos disponibles");
@@ -254,7 +254,7 @@ public abstract class MatriculaPanel extends ControladorCodefacInterface {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(jLabel6))
-                .addGap(0, 22, Short.MAX_VALUE))
+                .addGap(0, 26, Short.MAX_VALUE))
         );
 
         pack();

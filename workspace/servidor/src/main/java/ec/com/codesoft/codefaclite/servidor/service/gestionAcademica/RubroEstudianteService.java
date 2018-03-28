@@ -16,10 +16,14 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudi
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantilla;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RubroEstudianteServiceIf;
 import java.rmi.RemoteException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
 /**
@@ -35,7 +39,26 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         rubroEstudianteFacade = new RubroEstudianteFacade();
     }
 
-    public List<RubroEstudiante> obtenerRubrosActivosPorEstudianteYEstadoFacturado(RubroEstudiante.FacturacionEstadoEnum estadoFacturadoEnum) throws RemoteException {
+    public void eliminar(RubroEstudiante entity) throws java.rmi.RemoteException
+    {        
+        EntityTransaction transaccion = getTransaccion();
+        transaccion.begin();
+        entity.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
+        entityManager.merge(entity);
+        transaccion.commit();        
+    }
+    
+    public List<RubroEstudiante> obtenerRubroMatriculaPorEstudianteInscrito(EstudianteInscrito estudianteInscrito) throws RemoteException
+    {
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        mapParametros.put("estudianteInscrito",estudianteInscrito);
+        mapParametros.put("rubroNivel.catalogoProducto.tipoCod",CatalogoProducto.TipoEnum.MATRICULA.getCodigo());
+        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        return getFacade().findByMap(mapParametros);
+    }
+    
+    public List<RubroEstudiante> obtenerRubrosActivosPorEstudianteYEstadoFacturado(RubroEstudiante.FacturacionEstadoEnum estadoFacturadoEnum) throws RemoteException
+    {
         return getFacade().getRubrosActivosPorEstudianteYEstadoFacturado(estadoFacturadoEnum);
     }
 

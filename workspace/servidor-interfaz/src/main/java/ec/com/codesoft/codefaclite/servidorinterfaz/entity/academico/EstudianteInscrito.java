@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -38,6 +39,12 @@ public class EstudianteInscrito implements Serializable{
     @Column(name = "ESTADO")
     private String estado;
     
+    @Column(name = "TIPO_MATRICULA_COD")
+    private String tipoMatriculaCod;
+    
+    @Column(name = "BECA")
+    private String beca;
+    
     @JoinColumn(name = "ESTUDIANTE_ID")
     @ManyToOne
     private Estudiante estudiante;
@@ -46,6 +53,9 @@ public class EstudianteInscrito implements Serializable{
     @ManyToOne
     private NivelAcademico nivelAcademico;
 
+    public EstudianteInscrito() {
+    }
+    
     public Long getId() {
         return id;
     }
@@ -78,6 +88,22 @@ public class EstudianteInscrito implements Serializable{
         this.estado = estado;
     }
     
+    public String getTipoMatriculaCod() {
+        return tipoMatriculaCod;
+    }
+
+    public void setTipoMatriculaCod(String tipoMatriculaCod) {
+        this.tipoMatriculaCod = tipoMatriculaCod;
+    }
+
+    public String getBeca() {
+        return beca;
+    }
+
+    public void setBeca(String beca) {
+        this.beca = beca;
+    }
+    
     
 
 
@@ -87,12 +113,21 @@ public class EstudianteInscrito implements Serializable{
     }
     
     
-    
     //Metodos personalizados
     
     public GeneralEnumEstado getEnumEstado()
     {
         return GeneralEnumEstado.getEnum(estado);
+    }
+    
+    public TipoMatriculaEnum getTipoMatriculaCodEnum()
+    {
+        return TipoMatriculaEnum.obtenerPorLetra(tipoMatriculaCod);
+    }
+    
+    public EnumSiNo getBecaEnum()
+    {
+        return EnumSiNo.getEnumByLetra(beca);
     }
 
     @Override
@@ -119,6 +154,46 @@ public class EstudianteInscrito implements Serializable{
         }
         return true;
     }
+    
+    public enum TipoMatriculaEnum {
+        ORDINARIA("o", "Ordinaria"),
+        EXTRAORDINARIA("e", "Extraordinaria");
+
+        private TipoMatriculaEnum(String letra, String nombre) {
+            this.letra = letra;
+            this.nombre = nombre;
+        }
+
+        private String letra;
+        private String nombre;
+
+        public String getLetra() {
+            return letra;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+        
+        
+
+        @Override
+        public String toString() {
+            return nombre;
+        }
+        
+        public static TipoMatriculaEnum obtenerPorLetra(String letra)
+        {
+            for (TipoMatriculaEnum tipoMatriculaEnum : TipoMatriculaEnum.values()) {
+                if(letra.equals(tipoMatriculaEnum.getLetra()))
+                {
+                    return tipoMatriculaEnum;
+                }
+            }
+            return null;
+        }
+
+    };
     
     
 }

@@ -147,7 +147,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
 
     @Override
     public void limpiar() {
-        super.estadoFormulario = GeneralPanelInterface.ESTADO_EDITAR;
+        //super.estadoFormulario = GeneralPanelInterface.ESTADO_EDITAR;
 
         //Validaciones adicionales para validar segun el tipo de usuario Logueado
         if (!session.verificarExistePerfil(Perfil.PERFIl_ADMINISTRADOR)) {

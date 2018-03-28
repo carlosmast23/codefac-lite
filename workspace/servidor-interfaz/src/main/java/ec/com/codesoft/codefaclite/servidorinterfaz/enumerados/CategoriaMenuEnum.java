@@ -16,8 +16,9 @@ import javax.swing.ImageIcon;
 public enum CategoriaMenuEnum {
     GESTIONAR("Gestionar",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("categoriamenu/gestionar.png")),
     PROCESOS("Procesos",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("categoriamenu/proceso.png")),
+    MATRICULA("Matricula",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("categoriamenu/inscripcion.png")),
     REPORTES("Reportes",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("categoriamenu/reporte.png")),
-    UTILIDADES("Utilidades",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("categoriamenu/utilidades.png"));
+    UTILIDADES("Utilidades",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("categoriamenu/utilidades.png"));  ;
     
     private String nombre;
     private ImageIcon icono;

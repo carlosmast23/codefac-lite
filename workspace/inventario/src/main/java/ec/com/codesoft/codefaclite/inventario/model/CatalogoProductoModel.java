@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Impuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
@@ -26,6 +27,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CatalogoProductoSe
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CategoriaProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoServiceIf;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +47,7 @@ public class CatalogoProductoModel extends CatalogoProductoPanel implements Dial
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         valoresIniciales();
+        listenerCombos();
     }
 
     @Override
@@ -120,12 +124,14 @@ public class CatalogoProductoModel extends CatalogoProductoPanel implements Dial
         getTxtNombre().setText(catalogoProducto.getNombre());
         getComboIva().setSelectedItem(catalogoProducto.getIva());
         getComboIrbpnr().setSelectedItem(catalogoProducto.getIrbpnr());
-        getComboIce().setSelectedItem(catalogoProducto.getIce());        
+        getComboIce().setSelectedItem(catalogoProducto.getIce());   
+        getCmbCatalogoTipo().setSelectedItem(catalogoProducto.getTipoCodEnum());
     }
 
     @Override
     public void limpiar() {
         limpiarVariables();
+        //getCmbCatalogoTipo().setSelectedIndex(0);
     }
 
     @Override
@@ -232,6 +238,9 @@ public class CatalogoProductoModel extends CatalogoProductoPanel implements Dial
             catalogoProducto.setIrbpnr(ibpnr);
         }
         
+        CatalogoProducto.TipoEnum tipoEnum=(CatalogoProducto.TipoEnum) getCmbCatalogoTipo().getSelectedItem();
+        catalogoProducto.setTipoCod(tipoEnum.getCodigo());
+        
         ImpuestoDetalle iva= (ImpuestoDetalle) getComboIva().getSelectedItem();
         catalogoProducto.setIva(iva);
         
@@ -259,6 +268,23 @@ public class CatalogoProductoModel extends CatalogoProductoPanel implements Dial
         getCmbModulo().setSelectedItem(modulo);
         //DialogoCodefac.mensaje("adasd","post contructor",1);
         //repaint();
+    }
+
+    private void listenerCombos() {
+        
+        getCmbModulo().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ModuloCodefacEnum modulo=(ModuloCodefacEnum) getCmbModulo().getSelectedItem();
+                List<CatalogoProducto.TipoEnum> tipos=CatalogoProducto.TipoEnum.obtenerPorModulo(modulo);
+                
+                getCmbCatalogoTipo().removeAllItems();
+                for (CatalogoProducto.TipoEnum tipo : tipos) {
+                    getCmbCatalogoTipo().addItem(tipo);
+                }
+            }
+        });        
+
     }
     
 }

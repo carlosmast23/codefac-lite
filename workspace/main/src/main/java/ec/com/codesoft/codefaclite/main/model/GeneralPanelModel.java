@@ -1022,7 +1022,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             //ParametroCodefacServiceIf servicio=ServiceFactory.getFactory().getParametroCodefacServiceIf();
             //sessionCodefac.setParametrosCodefac(servicio.getParametrosMap());
             
-            
+            panel.estadoFormulario= ControladorCodefacInterface.ESTADO_GRABAR;
             panel.panelPadre=generalPanelModel;
             panel.session=sessionCodefac;
             
@@ -1069,7 +1069,6 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         (desktopSize.height - jInternalFrameSize.height) / 2);
             }
             
-            panel.estadoFormulario= ControladorCodefacInterface.ESTADO_GRABAR;
             
             panel.consola=new ConsolaGeneral();
             mostrarConsola(panel.consola,true);
@@ -2156,6 +2155,17 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         crearDialogoVentana(clase, panel, maximizado,null);
                 
     }
+    
+    public void crearVentanaCodefac(VentanaEnum ventanEnum,boolean maximizado,Object[] parametrosPostConstructor)
+    {
+        ControladorCodefacInterface ventana=(ControladorCodefacInterface) ventanEnum.getInstance();
+        agregarListenerMenu(ventana,maximizado);
+        
+        //Validacion para verificar si implementa la interfaz del postcostructod
+        if (ventana instanceof InterfazPostConstructPanel) {
+            ((InterfazPostConstructPanel) ventana).postConstructorExterno(parametrosPostConstructor);
+        }
+    }   
     
     private void crearDialogoVentana(Class clase,ObserverUpdateInterface panel,boolean maximizado,Object[] parametrosPostConstructor)
     {

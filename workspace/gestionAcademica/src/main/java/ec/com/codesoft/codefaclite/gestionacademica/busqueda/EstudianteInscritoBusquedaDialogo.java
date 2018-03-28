@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Vector;
 
@@ -19,6 +20,17 @@ import java.util.Vector;
  */
 public class EstudianteInscritoBusquedaDialogo implements InterfaceModelFind<EstudianteInscrito> {
 
+    /*
+    Periodo Mediante el cual van a filtrar los estudiates inscritos
+    */
+    private Periodo periodo;
+
+    public EstudianteInscritoBusquedaDialogo(Periodo periodo) {
+        this.periodo = periodo;
+    }
+    
+    
+            
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<>();
@@ -31,9 +43,10 @@ public class EstudianteInscritoBusquedaDialogo implements InterfaceModelFind<Est
 
     @Override
     public QueryDialog getConsulta(String filter) {    
-        String queryString = "SELECT u FROM EstudianteInscrito u WHERE ";
+        String queryString = "SELECT u FROM EstudianteInscrito u WHERE u.nivelAcademico.periodo=?1 AND ";
         queryString += " ( LOWER(u.estudiante.apellidos) LIKE " + filter + " )";
         QueryDialog queryDialog = new QueryDialog(queryString);
+        queryDialog.agregarParametro(1,periodo);
         return queryDialog;
     }
 

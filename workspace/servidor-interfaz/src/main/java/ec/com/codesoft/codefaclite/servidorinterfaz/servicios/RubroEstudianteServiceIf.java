@@ -22,6 +22,14 @@ import java.util.List;
  * @author Carlos
  */
 public interface RubroEstudianteServiceIf extends ServiceAbstractIf<RubroEstudiante> {
+    
+    /**
+     * Obtiene los rubros de matricula por el estudiante inscrito y que este activo
+     * @param estudianteInscrito
+     * @return
+     * @throws RemoteException 
+     */
+    public List<RubroEstudiante> obtenerRubroMatriculaPorEstudianteInscrito(EstudianteInscrito estudianteInscrito) throws RemoteException;
 
     public List<RubroEstudiante> obtenerRubrosActivosPorEstudiantesInscrito(EstudianteInscrito estudianteInscrito) throws RemoteException;
     

@@ -47,7 +47,7 @@ import java.util.logging.Logger;
  *
  * @author Carlos
  */
-public class EstudianteModel extends EstudiantePanel {
+public class EstudianteModel extends EstudiantePanel implements DialogInterfacePanel<Estudiante>{
 
     private Persona representante;
     private Persona representanteParaFacturar;
@@ -167,7 +167,7 @@ public class EstudianteModel extends EstudiantePanel {
     public void grabar() throws ExcepcionCodefacLite {
         try {
             setearValoresEstudiante(estudiante);
-            estudianteService.grabar(estudiante);
+            estudiante=estudianteService.grabar(estudiante);
             DialogoCodefac.mensaje("Datos correctos", "El registro de estudiante se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
@@ -429,6 +429,17 @@ public class EstudianteModel extends EstudiantePanel {
                         }
                         
                     }
+    }
+
+    @Override
+    public Estudiante getResult() {
+        try {
+            grabar();
+            return estudiante;
+        } catch (ExcepcionCodefacLite ex) {
+            Logger.getLogger(EstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
 }

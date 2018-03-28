@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDescuentoRubroEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -41,6 +42,15 @@ public class RubroEstudiante implements Serializable{
     
     @Column(name = "ESTADO_FACTURA")
     private String estadoFactura;
+    
+    @Column(name = "TIPO_DESCUENTO ")
+    private String tipoDescuento;    
+
+    @Column(name = "NOMBRE_DESCUENTO  ")
+    private String nombreDescuento;
+
+    @Column(name = "PORCENTAJE_DESCUENTO  ")
+    private Integer procentajeDescuento;
     
     /**
      * Estado que contrala si esta activo, anulado , o eliminado
@@ -114,6 +124,32 @@ public class RubroEstudiante implements Serializable{
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
+    public String getTipoDescuento() {
+        return tipoDescuento;
+    }
+
+    public void setTipoDescuento(String tipoDescuento) {
+        this.tipoDescuento = tipoDescuento;
+    }
+
+    public String getNombreDescuento() {
+        return nombreDescuento;
+    }
+
+    public void setNombreDescuento(String nombreDescuento) {
+        this.nombreDescuento = nombreDescuento;
+    }
+
+    public Integer getProcentajeDescuento() {
+        return procentajeDescuento;
+    }
+
+    public void setProcentajeDescuento(Integer procentajeDescuento) {
+        this.procentajeDescuento = procentajeDescuento;
+    }
+    
+    
     
     /**
      * Metodos personalizados
@@ -130,6 +166,11 @@ public class RubroEstudiante implements Serializable{
     public FacturacionEstadoEnum getEstadoFacturaEnum() {
         return FacturacionEstadoEnum.buscarPorLetra(estadoFactura);       
     } 
+    
+    public TipoDescuentoRubroEnum getTipoDescuentoEnum()
+    {
+        return TipoDescuentoRubroEnum.buscarPorLetra(tipoDescuento);
+    }
 
     @Override
     public int hashCode() {
