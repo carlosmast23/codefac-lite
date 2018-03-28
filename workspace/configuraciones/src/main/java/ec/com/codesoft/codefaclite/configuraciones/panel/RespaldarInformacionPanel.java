@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.configuraciones.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import javax.swing.JButton;
+import javax.swing.JTextField;
 
 /**
  *
@@ -29,6 +30,24 @@ public abstract class RespaldarInformacionPanel extends ControladorCodefacInterf
     public void setBtnRespaldar(JButton btnRespaldar) {
         this.btnRespaldar = btnRespaldar;
     }
+
+    public JButton getBtnGuardarLocalizacion() {
+        return btnGuardarLocalizacion;
+    }
+
+    public void setBtnGuardarLocalizacion(JButton btnGuardarLocalizacion) {
+        this.btnGuardarLocalizacion = btnGuardarLocalizacion;
+    }
+
+    public JTextField getTxtUbicacionRespaldo() {
+        return txtUbicacionRespaldo;
+    }
+
+    public void setTxtUbicacionRespaldo(JTextField txtUbicacionRespaldo) {
+        this.txtUbicacionRespaldo = txtUbicacionRespaldo;
+    }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -37,18 +56,57 @@ public abstract class RespaldarInformacionPanel extends ControladorCodefacInterf
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         btnRespaldar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        btnGuardarLocalizacion = new javax.swing.JButton();
+        txtUbicacionRespaldo = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setClosable(true);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
+        setTitle("Respaldar BD");
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         btnRespaldar.setText("Respaldar");
-        getContentPane().add(btnRespaldar, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        getContentPane().add(btnRespaldar, gridBagConstraints);
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel1.setText("Seleccionar ubicación para respaldos:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        getContentPane().add(jLabel1, gridBagConstraints);
+
+        btnGuardarLocalizacion.setText("Guardar");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        getContentPane().add(btnGuardarLocalizacion, gridBagConstraints);
+
+        txtUbicacionRespaldo.setEditable(false);
+        txtUbicacionRespaldo.setText("                                   ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        getContentPane().add(txtUbicacionRespaldo, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnGuardarLocalizacion;
     private javax.swing.JButton btnRespaldar;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JTextField txtUbicacionRespaldo;
     // End of variables declaration//GEN-END:variables
 }
