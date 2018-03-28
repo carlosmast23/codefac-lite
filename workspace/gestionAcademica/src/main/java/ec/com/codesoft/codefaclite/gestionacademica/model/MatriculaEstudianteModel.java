@@ -22,10 +22,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDescuentoRubroEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -67,8 +69,28 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
     public void grabar() throws ExcepcionCodefacLite {
         try {
             setearValores();
-            ServiceFactory.getFactory().getEstudianteInscritoServiceIf().matricularEstudiante(estudianteInscrito, rubroMatricula);
-            DialogoCodefac.mensaje("Correcto","El estudiante fue matriculado correctamente",DialogoCodefac.MENSAJE_CORRECTO);            
+            estudianteInscrito=ServiceFactory.getFactory().getEstudianteInscritoServiceIf().matricularEstudiante(estudianteInscrito, rubroMatricula);
+            DialogoCodefac.mensaje("Correcto","El estudiante fue matriculado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+
+            Boolean opcion=DialogoCodefac.dialogoPregunta("Aviso","Desea facturar ahora?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+            
+            if(opcion)
+            {
+                /**
+                 * Preguntar si desea facturar en ese momento
+                 */
+                Object[] paramPostConstruct = new Object[5];
+                paramPostConstruct[0] = DocumentoEnum.FACTURA;
+                paramPostConstruct[1] = TipoDocumentoEnum.ACADEMICO;
+                paramPostConstruct[2] = estudianteInscrito.getEstudiante();
+                paramPostConstruct[3] = estudianteInscrito.getEstudiante().getRepresentante();
+
+                //Lista del rubro para facturar            
+                List<RubroEstudiante> matriculas = ServiceFactory.getFactory().getRubroEstudianteServiceIf().obtenerRubroMatriculaPorEstudianteInscrito(estudianteInscrito);
+                paramPostConstruct[4] = matriculas;
+
+                panelPadre.crearVentanaCodefac(VentanaEnum.FACTURACION, true, paramPostConstruct);
+            }
             
         } catch (RemoteException ex) {
             Logger.getLogger(MatriculaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -303,15 +325,15 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
                 if (estudianteTemp != null) {
                     
                     //Solo setear si el estudiante aunnno esta inscrito en ese periodo
-                    if (verificarEstudianteNoEstaInscrito(estudianteTemp)) 
-                    {
+                    //if (verificarEstudianteNoEstaInscrito(estudianteTemp)) 
+                    //{
                         estudianteInscrito.setEstudiante(estudianteTemp);
                         getTxtEstudiante().setText(estudianteInscrito.getEstudiante().getNombreCompleto());
-                    }
-                    else
-                    {
-                        DialogoCodefac.mensaje("Advertencia","El estudiante ya esta matriculado",DialogoCodefac.MENSAJE_ADVERTENCIA);
-                    }
+                    //}
+                    //else
+                    //{
+                    //    DialogoCodefac.mensaje("Advertencia","El estudiante ya esta matriculado",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    //}
 
                     //getCmbCursoAsignar().setSelectedItem(estudianteInscrito.getNivelAcademico());
                 }

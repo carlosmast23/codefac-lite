@@ -27,7 +27,7 @@ public interface EstudianteInscritoServiceIf extends ServiceAbstractIf<Estudiant
     /**
      * Metodo que permite registrar un estudiante y crea el rubro de matricula para que pueda facturar posteriormente
      */
-    public void matricularEstudiante(EstudianteInscrito estudianteInscrito,RubroEstudiante rubroMatricula) throws RemoteException;
+    public EstudianteInscrito matricularEstudiante(EstudianteInscrito estudianteInscrito,RubroEstudiante rubroMatricula) throws RemoteException;
     
     public void matriculaEstudianteByList(List<EstudianteInscrito> estudiantesPorMatricular) throws RemoteException;
     
