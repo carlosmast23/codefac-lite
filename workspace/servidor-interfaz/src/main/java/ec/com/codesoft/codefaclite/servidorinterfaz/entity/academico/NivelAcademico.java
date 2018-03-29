@@ -32,6 +32,9 @@ public class NivelAcademico implements Serializable {
 
     @Column(name = "NOMBRE")
     private String nombre;
+    
+    @Column(name = "DESCRIPCION")
+    private String descripcion;
 
     @JoinColumn(name = "AULA_ID")
     @ManyToOne
@@ -98,11 +101,18 @@ public class NivelAcademico implements Serializable {
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
     
     ///////Metodos personalizados////////////////////
-    
-    public GeneralEnumEstado getEstadoEnum()
-    {
+    public GeneralEnumEstado getEstadoEnum() {
         return GeneralEnumEstado.getEnum(this.estado);
     }
 
@@ -130,8 +140,6 @@ public class NivelAcademico implements Serializable {
         }
         return true;
     }
-    
-    
 
     @Override
     public String toString() {

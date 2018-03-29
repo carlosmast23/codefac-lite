@@ -69,6 +69,7 @@ create table NIVEL_ACADEMICO(
     PERIODO_ID bigint,
     NIVEL_ID bigint,
     MES_NUMERO int,
+    DESCRIPCION varchar(256), 
     ESTADO varchar(1),
     primary key (ID)
 );

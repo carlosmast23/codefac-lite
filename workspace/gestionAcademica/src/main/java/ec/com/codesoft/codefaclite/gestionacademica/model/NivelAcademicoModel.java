@@ -123,10 +123,10 @@ public class NivelAcademicoModel extends NivelAcademicoPanel implements Serializ
 
     private void setearDatosPantalla() {
         getTxtNombre().setText(nivelAcademico.getNombre());
+        getTxtDescripcion().setText(nivelAcademico.getDescripcion());
         getCmbAula().setSelectedItem(nivelAcademico.getAula());
         getCmbNivel().setSelectedItem(nivelAcademico.getNivel());
         getCmbPeriodo().setSelectedItem(nivelAcademico.getPeriodo());
-
     }
 
     @Override
@@ -205,6 +205,7 @@ public class NivelAcademicoModel extends NivelAcademicoPanel implements Serializ
 
     private void setearVariablesPantalla() {
         nivelAcademico.setNombre(getTxtNombre().getText());
+        nivelAcademico.setDescripcion(getTxtDescripcion().getText());
 
         nivelAcademico.setAula((Aula) getCmbAula().getSelectedItem());
         nivelAcademico.setNivel((Nivel) getCmbNivel().getSelectedItem());
