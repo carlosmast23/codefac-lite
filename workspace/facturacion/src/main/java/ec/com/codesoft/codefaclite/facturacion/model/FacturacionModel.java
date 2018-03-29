@@ -303,6 +303,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     cargarDatosAdicionalesAcademicos();
                     cargarTablaDatosAdicionales();
                     factura.setCliente((Persona) getCmbRepresentante().getSelectedItem());
+                    cargarFormaPago();
                 }
                 
                 
@@ -316,7 +317,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
                 buscarDialogoModel.setVisible(true);
                 factura.setCliente((Persona) buscarDialogoModel.getResultado());
-                if (factura.getCliente() != null) {
+                if (factura.getCliente() != null) 
+                {
+                    cargarFormaPago();
                     setearValoresCliente();
                     cargarDatosAdicionales();
                     cargarTablaDatosAdicionales();
@@ -404,6 +407,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             public void actionPerformed(ActionEvent e) {
                 //System.out.println(panelPadre.validarPorGrupo("detalles"));
                 agregarDetallesFactura(null);
+                
             }
         });
 
@@ -455,6 +459,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     public void updateInterface(Persona entity) {
                         factura.setCliente(entity);
                         if (factura.getCliente() != null) {
+                            cargarFormaPago();
                             setearValoresCliente();
                             cargarDatosAdicionales();
                             cargarTablaDatosAdicionales();;
@@ -508,6 +513,23 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
         });
 
+    }
+    
+    private void cargarFormaPago()
+    {
+        if(factura.getFormaPagos()==null || factura.getFormaPagos().size()==0)
+        {
+            if(factura.getCliente()!=null)
+            {
+                FormaPago formaPago=new FormaPago();
+                formaPago.setPlazo(0);
+                formaPago.setSriFormaPago(factura.getCliente().getSriFormaPago());
+                formaPago.setTotal(BigDecimal.ZERO);
+                formaPago.setUnidadTiempo(FormaPago.UnidadTiempoEnum.NINGUNO.getNombre());
+
+                factura.addFormaPago(formaPago);
+            }
+        }        
     }
     
     private boolean verificaDatoComboRepresentante(Persona persona)
@@ -1209,6 +1231,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getLblSubTotalDescuentoConImpuesto().setText("" + factura.getDescuentoImpuestos());
         getLblSubTotalDescuentoSinImpuesto().setText("" + factura.getDescuentoSinImpuestos());
         getLblTotalDescuento().setText("" + factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()));
+        
+        //Verifico que solo exista una forma de pago y si cumple ese requesito actualizo el valor de la forma de pago
+        if (factura.getFormaPagos().size() == 1) {
+            FormaPago formaPago = factura.getFormaPagos().get(0);
+            formaPago.setTotal(factura.getTotal());
+            cargarFormasPagoTabla();
+        }
+
     }
     
     private void setearValoresAcademicos(Estudiante estudiante)
@@ -1729,6 +1759,17 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     //Si cambie el combo de representante tambien los seteo en la factura
                     Persona persona=(Persona) getCmbRepresentante().getSelectedItem();
                     factura.setCliente(persona);
+                    //cargarFormaPago();
+                    
+                    //Verificar si ya esta cargado una forma de pago del representante anterior y si cambia de representante
+                    //Seleccionar la forma de pago de nuevo representante seleccionado                    
+                    if(factura.getFormaPagos()!=null && factura.getFormaPagos().size()==1)
+                    {
+                        FormaPago formaPago=factura.getFormaPagos().get(0);
+                        formaPago.setSriFormaPago(factura.getCliente().getSriFormaPago());
+                        cargarFormasPagoTabla();
+                    }
+                    
                 }
             }
         });

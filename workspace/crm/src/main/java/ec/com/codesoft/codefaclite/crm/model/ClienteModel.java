@@ -122,8 +122,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         }
     }
     
-    private void setearDatos() {
-        persona = new Persona();
+    private void setearDatos() {        
         persona.setNombres(getjTextNombres().getText());
         persona.setApellidos(getjTextApellidos().getText());
         persona.setRazonSocial(getjTextNombreSocial().getText());
@@ -326,6 +325,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     @Override
     public void limpiar() {
         try {
+            persona = new Persona();
             /**
              * Seleccionando valores por defecto que se deben seleccionar
              * despues de limpiar

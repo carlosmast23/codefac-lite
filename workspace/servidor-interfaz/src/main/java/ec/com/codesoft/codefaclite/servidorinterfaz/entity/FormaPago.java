@@ -96,7 +96,25 @@ public class FormaPago implements Serializable {
         this.factura = factura;
     }
 
-    
-    
+    //Metodos perosonalizadas
+    public enum UnidadTiempoEnum
+    {
+        NINGUNO("ninguno"),
+        DIAS("Dias"),
+        MESES("Meses"),
+        ANOS("Años");
+
+        private UnidadTiempoEnum(String nombre) {
+            this.nombre = nombre;
+        }
+        
+        private String nombre;
+
+        public String getNombre() {
+            return nombre;
+        }
+        
+        
+    }
     
 }

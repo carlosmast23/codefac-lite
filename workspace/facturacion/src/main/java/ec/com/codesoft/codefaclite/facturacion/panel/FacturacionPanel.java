@@ -353,7 +353,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
@@ -375,7 +375,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -1561,10 +1561,5 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     public void setCmbRepresentante(JComboBox<Persona> cmbRepresentante) {
         this.cmbRepresentante = cmbRepresentante;
     }
-
-    
-    
-    
-    
     
 }
