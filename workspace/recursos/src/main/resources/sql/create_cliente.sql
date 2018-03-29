@@ -10,7 +10,8 @@
 
 create table CLIENTE( 
     CLIENTE_ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
-    NACIONALIDAD_ID bigint,      
+    NACIONALIDAD_ID bigint,  
+    SRI_FORMA_PAGO_ID bigint,    
     NOMBRES varchar(256),
     APELLIDOS varchar(256),
     TIPO_OPERADOR varchar(1),

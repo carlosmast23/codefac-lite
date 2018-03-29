@@ -338,15 +338,15 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
                 if (estudianteTemp != null) {
                     
                     //Solo setear si el estudiante aunnno esta inscrito en ese periodo
-                    //if (verificarEstudianteNoEstaInscrito(estudianteTemp)) 
-                    //{
+                    if (verificarEstudianteNoEstaInscrito(estudianteTemp)) 
+                    {
                         estudianteInscrito.setEstudiante(estudianteTemp);
                         getTxtEstudiante().setText(estudianteInscrito.getEstudiante().getNombreCompleto());
-                    //}
-                    //else
-                    //{
-                    //    DialogoCodefac.mensaje("Advertencia","El estudiante ya esta matriculado",DialogoCodefac.MENSAJE_ADVERTENCIA);
-                    //}
+                    }
+                    else
+                    {
+                        DialogoCodefac.mensaje("Advertencia","El estudiante ya esta matriculado",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    }
 
                     //getCmbCursoAsignar().setSelectedItem(estudianteInscrito.getNivelAcademico());
                 }

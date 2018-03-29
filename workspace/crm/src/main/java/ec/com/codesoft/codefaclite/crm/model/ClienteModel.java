@@ -27,7 +27,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEn
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Nacionalidad;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
 import java.awt.event.ActionEvent;
@@ -95,23 +97,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
                 //Cancela el evento guardar porque no prevalido
                 throw new ExcepcionCodefacLite("Error al prevalidar");
             }
-
-            persona = new Persona();
-            persona.setNombres(getjTextNombres().getText());
-            persona.setApellidos(getjTextApellidos().getText());
-            persona.setRazonSocial(getjTextNombreSocial().getText());
-            persona.setTipoIdentificacion(((SriIdentificacion) getjComboIdentificacion().getSelectedItem()).getCodigo());
-            persona.setIdentificacion(getjTextIdentificacion().getText());
-            persona.setTipCliente((String) getjComboTipoCliente().getSelectedItem());
-            persona.setDireccion(getjTextAreaDireccion().getText());
-            persona.setTelefonoConvencional(getjTextTelefono().getText());
-            persona.setExtensionTelefono(getjTextExtension().getText());
-            persona.setTelefonoCelular(getjTextCelular().getText());
-            persona.setCorreoElectronico(getjTextCorreo().getText());
-            persona.setEstado(((ClienteEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
-            persona.setTipo(((OperadorNegocioEnum) getCmbTipoOperador().getSelectedItem()).getLetra());
-            persona.setNacionalidad(((Nacionalidad) getCmbNacionalidad().getSelectedItem()));
-
+            setearDatos();
             persona = personaService.grabar(persona);
             DialogoCodefac.mensaje("Datos correctos", "El cliente se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
             System.err.println("Se grabo correctamente");
@@ -127,26 +113,33 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     @Override
     public void editar() throws ExcepcionCodefacLite {
         try {
-            persona.setNombres(getjTextNombres().getText());
-            persona.setApellidos(getjTextApellidos().getText());
-            persona.setRazonSocial(getjTextNombreSocial().getText());
-            persona.setTipoIdentificacion(((SriIdentificacion) getjComboIdentificacion().getSelectedItem()).getCodigo());
-            persona.setIdentificacion(getjTextIdentificacion().getText());
-            persona.setTipCliente((String) getjComboTipoCliente().getSelectedItem());
-            persona.setDireccion(getjTextAreaDireccion().getText());
-            persona.setTelefonoConvencional(getjTextTelefono().getText());
-            persona.setExtensionTelefono(getjTextExtension().getText());
-            persona.setTelefonoCelular(getjTextCelular().getText());
-            persona.setCorreoElectronico(getjTextCorreo().getText());
-            persona.setTipo(((OperadorNegocioEnum) getCmbTipoOperador().getSelectedItem()).getLetra());
-            persona.setNacionalidad(((Nacionalidad) getCmbNacionalidad().getSelectedItem()));
-
+            setearDatos();
             personaService.editar(persona);
 
             System.out.println("Se edito correctamente");
         } catch (RemoteException ex) {
             Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private void setearDatos() {
+        persona = new Persona();
+        persona.setNombres(getjTextNombres().getText());
+        persona.setApellidos(getjTextApellidos().getText());
+        persona.setRazonSocial(getjTextNombreSocial().getText());
+        persona.setTipoIdentificacion(((SriIdentificacion) getjComboIdentificacion().getSelectedItem()).getCodigo());
+        persona.setIdentificacion(getjTextIdentificacion().getText());
+        persona.setTipCliente((String) getjComboTipoCliente().getSelectedItem());
+        persona.setDireccion(getjTextAreaDireccion().getText());
+        persona.setTelefonoConvencional(getjTextTelefono().getText());
+        persona.setExtensionTelefono(getjTextExtension().getText());
+        persona.setTelefonoCelular(getjTextCelular().getText());
+        persona.setCorreoElectronico(getjTextCorreo().getText());
+        persona.setEstado(((ClienteEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
+        persona.setTipo(((OperadorNegocioEnum) getCmbTipoOperador().getSelectedItem()).getLetra());
+        persona.setNacionalidad(((Nacionalidad) getCmbNacionalidad().getSelectedItem()));
+        persona.setSriFormaPago((SriFormaPago) getCmbFormaPagoDefecto().getSelectedItem());
+        
     }
 
     @Override
@@ -211,29 +204,15 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         ClienteBusquedaDialogo clienteBusquedaDialogo = new ClienteBusquedaDialogo();
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
-        persona = (Persona) buscarDialogoModel.getResultado();
+        Persona personaTmp = (Persona) buscarDialogoModel.getResultado();
 
-        if (persona == null) {
+        if (personaTmp == null) {
             throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar");
         }
-        getjTextNombres().setText(persona.getNombres());
-        getjTextApellidos().setText(persona.getApellidos());
-        getjTextNombreSocial().setText(persona.getRazonSocial());
-        getjTextIdentificacion().setText("" + persona.getIdentificacion());
-        persona.setNombreLegal(getjTextNombreSocial().getText());
-        getjComboIdentificacion().setSelectedIndex(comboIdentificacion(persona.getIdentificacion()));
-        getjTextIdentificacion().setText(persona.getIdentificacion());
-        getjComboTipoCliente().setSelectedItem(persona.getTipCliente());
-        getjTextAreaDireccion().setText(persona.getDireccion());
-        getjTextTelefono().setText(persona.getTelefonoConvencional());
-        getjTextExtension().setText(persona.getExtensionTelefono());
-        getjTextCelular().setText(persona.getTelefonoCelular());
-        getjTextCorreo().setText(persona.getCorreoElectronico());
-        getCmbEstado().setSelectedItem(ClienteEnumEstado.getEnum(persona.getEstado()));
-        getCmbTipoOperador().setSelectedItem(persona.getTipoEnum());
-        getCmbNacionalidad().setSelectedItem(persona.getNacionalidad());
-
-        System.out.println("Datos cargados ");
+        
+        persona=personaTmp;
+        cargarDatos();
+    
     }
 
     @validacionPersonalizadaAnotacion(errorTitulo = "Formato de identificacion")
@@ -298,6 +277,28 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             return false;
         }
     }
+    
+    private void cargarDatos() {
+        getjTextNombres().setText(persona.getNombres());
+        getjTextApellidos().setText(persona.getApellidos());
+        getjTextNombreSocial().setText(persona.getRazonSocial());
+        getjTextIdentificacion().setText("" + persona.getIdentificacion());
+        persona.setNombreLegal(getjTextNombreSocial().getText());
+        getjComboIdentificacion().setSelectedIndex(comboIdentificacion(persona.getIdentificacion()));
+        getjTextIdentificacion().setText(persona.getIdentificacion());
+        getjComboTipoCliente().setSelectedItem(persona.getTipCliente());
+        getjTextAreaDireccion().setText(persona.getDireccion());
+        getjTextTelefono().setText(persona.getTelefonoConvencional());
+        getjTextExtension().setText(persona.getExtensionTelefono());
+        getjTextCelular().setText(persona.getTelefonoCelular());
+        getjTextCorreo().setText(persona.getCorreoElectronico());
+        getCmbEstado().setSelectedItem(ClienteEnumEstado.getEnum(persona.getEstado()));
+        getCmbTipoOperador().setSelectedItem(persona.getTipoEnum());
+        getCmbNacionalidad().setSelectedItem(persona.getNacionalidad());
+        getCmbFormaPagoDefecto().setSelectedItem(persona.getSriFormaPago());
+
+        System.out.println("Datos cargados ");
+    }
 
     @validacionPersonalizadaAnotacion(errorTitulo = "formato otra validacion incorrecto")
     public boolean validarOtro() {
@@ -342,6 +343,8 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             getjComboTipoCliente().setSelectedIndex(0);
             getCmbTipoOperador().setSelectedIndex(0);
             getjTextExtension().setText("0");
+            
+            getCmbFormaPagoDefecto().setSelectedIndex(0);
 
             //Setear el valor por defecto
             getCmbEstado().setSelectedItem(ClienteEnumEstado.ACTIVO);
@@ -410,24 +413,38 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
 
     @Override
     public void iniciar() {
-        /**
-         * Cargar los datos por defecto de los tipos de operadores
-         */
-        getCmbTipoOperador().removeAllItems();
-        OperadorNegocioEnum list[] = OperadorNegocioEnum.values();
-        for (OperadorNegocioEnum operadorNegocioEnum : list) {
-            getCmbTipoOperador().addItem(operadorNegocioEnum);
-        }
-
         try {
-            List<Nacionalidad> nacion = ServiceFactory.getFactory().getNacionalidadServiceIf().obtenerTodos();
-            getCmbNacionalidad().removeAllItems();
-            for (Nacionalidad n : nacion) {
-                getCmbNacionalidad().addItem(n);
+            /**
+             * Cargar los datos por defecto de los tipos de operadores
+             */
+            getCmbTipoOperador().removeAllItems();
+            OperadorNegocioEnum list[] = OperadorNegocioEnum.values();
+            for (OperadorNegocioEnum operadorNegocioEnum : list) {
+                getCmbTipoOperador().addItem(operadorNegocioEnum);
             }
+            
+            try {
+                List<Nacionalidad> nacion = ServiceFactory.getFactory().getNacionalidadServiceIf().obtenerTodos();
+                getCmbNacionalidad().removeAllItems();
+                for (Nacionalidad n : nacion) {
+                    getCmbNacionalidad().addItem(n);
+                }
+            } catch (RemoteException ex) {
+                Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            //Cargar las formas de pago vigentes en el SRI
+            List<SriFormaPago> formasPago=ServiceFactory.getFactory().getSriServiceIf().obtenerFormasPagoActivo();
+            getCmbFormaPagoDefecto().removeAllItems();
+            for (SriFormaPago formaPago : formasPago)
+            {
+                getCmbFormaPagoDefecto().addItem(formaPago);
+            }
+            
         } catch (RemoteException ex) {
             Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
 
     @Override

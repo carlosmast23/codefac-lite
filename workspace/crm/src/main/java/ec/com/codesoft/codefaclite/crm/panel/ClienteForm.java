@@ -8,7 +8,9 @@ package ec.com.codesoft.codefaclite.crm.panel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Nacionalidad;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ClienteEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
@@ -28,7 +30,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
      */
     public ClienteForm() {
         initComponents();
-
+        SriFormaPago sriFormaPago;
     }
 
     /**
@@ -42,6 +44,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jPanel2 = new javax.swing.JPanel();
+        jPopupMenu1 = new javax.swing.JPopupMenu();
         jLabel1 = new javax.swing.JLabel();
         jPanelCaracteristicasGenerales = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -74,6 +77,8 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         cmbTipoOperador = new javax.swing.JComboBox<>();
         jLabel15 = new javax.swing.JLabel();
         cmbNacionalidad = new javax.swing.JComboBox<>();
+        jLabel16 = new javax.swing.JLabel();
+        cmbFormaPagoDefecto = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -315,6 +320,19 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         jPanelCaracteristicasGenerales.add(cmbNacionalidad, gridBagConstraints);
 
+        jLabel16.setText("Forma Pago Defecto:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
+        jPanelCaracteristicasGenerales.add(jLabel16, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        jPanelCaracteristicasGenerales.add(cmbFormaPagoDefecto, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -335,6 +353,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<ClienteEnumEstado> cmbEstado;
+    private javax.swing.JComboBox<SriFormaPago> cmbFormaPagoDefecto;
     private javax.swing.JComboBox<Nacionalidad> cmbNacionalidad;
     private javax.swing.JComboBox<OperadorNegocioEnum> cmbTipoOperador;
     private javax.swing.JComboBox<SriIdentificacion> jComboIdentificacion;
@@ -346,6 +365,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -356,6 +376,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanelCaracteristicasGenerales;
+    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextApellidos;
     private javax.swing.JTextArea jTextAreaDireccion;
@@ -503,7 +524,13 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         this.cmbNacionalidad = cmbNacionalidad;
     }
 
-    
+    public JComboBox<SriFormaPago> getCmbFormaPagoDefecto() {
+        return cmbFormaPagoDefecto;
+    }
+
+    public void setCmbFormaPagoDefecto(JComboBox<SriFormaPago> cmbFormaPagoDefecto) {
+        this.cmbFormaPagoDefecto = cmbFormaPagoDefecto;
+    }
     
     
 

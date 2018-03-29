@@ -61,9 +61,13 @@ public class Persona implements Serializable {
     private String correoElectronico;
     @Column(name = "ESTADO")
     private String estado;
+    
     @JoinColumn(name = "NACIONALIDAD_ID")
     @ManyToOne
     private Nacionalidad nacionalidad;
+    
+    @JoinColumn(name = "SRI_FORMA_PAGO_ID")
+    private SriFormaPago sriFormaPago;
 
     /**
      * Variable para identificar el tipo de la persona, si es proveedor ,
@@ -199,6 +203,16 @@ public class Persona implements Serializable {
     public void setNacionalidad(Nacionalidad nacionalidad) {
         this.nacionalidad = nacionalidad;
     }
+
+    public SriFormaPago getSriFormaPago() {
+        return sriFormaPago;
+    }
+
+    public void setSriFormaPago(SriFormaPago sriFormaPago) {
+        this.sriFormaPago = sriFormaPago;
+    }
+    
+    
 
     ///Metodos personalizados
     public String getNombresCompletos() {
