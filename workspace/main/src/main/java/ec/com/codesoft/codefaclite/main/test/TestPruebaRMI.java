@@ -21,7 +21,7 @@ import ec.com.codesoft.codefaclite.servidor.service.KardexItemEspecificoService;
 import ec.com.codesoft.codefaclite.servidor.service.KardexService;
 import ec.com.codesoft.codefaclite.servidor.service.NotaCreditoService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
-import ec.com.codesoft.codefaclite.servidor.service.PerfilServicio;
+import ec.com.codesoft.codefaclite.servidor.service.PerfilService;
 import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoEnsambleService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoProveedorService;
@@ -47,7 +47,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexItemEspecifi
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServicioIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoEnsambleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
@@ -68,6 +67,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.PersistenceException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServiceIf;
 
 /**
  *
@@ -99,7 +99,7 @@ public class TestPruebaRMI {
             mapRecursos.put(KardexService.class,KardexServiceIf.class);
             mapRecursos.put(NotaCreditoService.class,NotaCreditoServiceIf.class);
             mapRecursos.put(ParametroCodefacService.class,ParametroCodefacServiceIf.class);
-            mapRecursos.put(PerfilServicio.class,PerfilServicioIf.class);
+            mapRecursos.put(PerfilService.class,PerfilServiceIf.class);
             mapRecursos.put(ProductoEnsambleService.class,ProductoEnsambleServiceIf.class);            
             mapRecursos.put(ProductoProveedorService.class,ProductoProveedorServiceIf.class);            
             mapRecursos.put(SriIdentificacionService.class,SriIdentificacionServiceIf.class);

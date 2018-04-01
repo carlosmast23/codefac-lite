@@ -190,12 +190,12 @@ public class CatalogoProducto implements Serializable{
     
     
     public enum TipoEnum {
-        NORMAL_ACADEMICO("NA", "Normal", ModuloCodefacEnum.INVENTARIO),
+        NORMAL_ACADEMICO("NA", "Normal", ModuloCodefacEnum.GESTIONA_ACADEMICA),
         /**
          * Este tipo de matricula va a ser necesario para clasifacar los rubros
          * exlusivos para el proceso de matriculacion
          */
-        MATRICULA("MA", "Matricula", ModuloCodefacEnum.INVENTARIO);
+        MATRICULA("MA", "Matricula", ModuloCodefacEnum.GESTIONA_ACADEMICA);
 
         private TipoEnum(String codigo, String nombre, ModuloCodefacEnum moduloEnum) {
             this.codigo = codigo;

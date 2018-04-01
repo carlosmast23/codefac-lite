@@ -30,7 +30,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServ
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServicioIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilUsuarioServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PeriodoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PermisoVentanaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
@@ -64,6 +64,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServiceIf;
 
 /**
  *
@@ -108,7 +109,7 @@ public abstract class ServiceFactory {
     public KardexItemEspecificoServiceIf getItemEspecificoServiceIf(){return (KardexItemEspecificoServiceIf) getRecursosRMI(KardexItemEspecificoServiceIf.class);};
     public KardexServiceIf getKardexServiceIf(){return (KardexServiceIf) getRecursosRMI(KardexServiceIf.class);};
     public NotaCreditoServiceIf getNotaCreditoServiceIf(){return (NotaCreditoServiceIf) getRecursosRMI(NotaCreditoServiceIf.class);};
-    public PerfilServicioIf getPerfilServicioIf(){return (PerfilServicioIf) getRecursosRMI(PerfilServicioIf.class);};
+    public PerfilServiceIf getPerfilServicioIf(){return (PerfilServiceIf) getRecursosRMI(PerfilServiceIf.class);};
     public ProductoEnsambleServiceIf getProductoEnsambleServiceIf(){return (ProductoEnsambleServiceIf) getRecursosRMI(ProductoEnsambleServiceIf.class);};
     public ProductoProveedorServiceIf getProductoProveedorServiceIf(){return (ProductoProveedorServiceIf) getRecursosRMI(ProductoProveedorServiceIf.class);};
     public SriIdentificacionServiceIf getSriIdentificacionServiceIf(){return (SriIdentificacionServiceIf) getRecursosRMI(SriIdentificacionServiceIf.class);};
@@ -133,6 +134,7 @@ public abstract class ServiceFactory {
     public CarteraCruceServiceIf getCarteraCruceServiceIf(){return (CarteraCruceServiceIf) getRecursosRMI(CarteraCruceServiceIf.class);};
     public RubroPlantillaServiceIf getRubroPlantillaServiceIf(){return (RubroPlantillaServiceIf) getRecursosRMI(RubroPlantillaServiceIf.class);};
     public RubroPlantillaEstudianteServiceIf getRubroPlantillaEstudianteServiceIf(){return (RubroPlantillaEstudianteServiceIf) getRecursosRMI(RubroPlantillaEstudianteServiceIf.class);};
+    public PerfilUsuarioServiceIf getPerfilUsuarioServiceIf(){return (PerfilUsuarioServiceIf) getRecursosRMI(PerfilUsuarioServiceIf.class);};
     
     
     /**

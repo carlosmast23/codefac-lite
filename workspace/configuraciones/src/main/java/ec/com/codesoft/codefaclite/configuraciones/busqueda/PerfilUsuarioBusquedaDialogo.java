@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PerfilUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Vector;
 
 /**
@@ -27,9 +28,11 @@ public class PerfilUsuarioBusquedaDialogo implements InterfaceModelFind<Usuario>
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        String queryString = "SELECT u FROM Usuario u WHERE ";
+        String queryString = "SELECT u FROM Usuario u WHERE (u.estado=?1 or u.estado=?2 ) and  ";
         queryString+=" ( LOWER(u.nick) like "+filter+" )";
         QueryDialog queryDialog=new QueryDialog(queryString);
+        queryDialog.agregarParametro(1,GeneralEnumEstado.ACTIVO.getEstado());
+        queryDialog.agregarParametro(2,GeneralEnumEstado.INACTIVO.getEstado());
         return queryDialog;
     }
 

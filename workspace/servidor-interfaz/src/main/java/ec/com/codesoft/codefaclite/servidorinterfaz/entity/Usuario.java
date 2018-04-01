@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,9 @@ public class Usuario implements Serializable{
     
     @Column (name = "CLAVE")
     private String clave;
+    
+    @Column (name = "ESTADO")
+    private String estado;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario",fetch = FetchType.EAGER)
     private List<PerfilUsuario> perfilesUsuario;
@@ -63,6 +67,16 @@ public class Usuario implements Serializable{
         this.clave = clave;
     }
 
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+    
+    
+
     public List<PerfilUsuario> getPerfilesUsuario() {
         return perfilesUsuario;
     }
@@ -91,6 +105,11 @@ public class Usuario implements Serializable{
         
         this.perfilesUsuario.add(perfilUsuario);
         
+    }
+    
+    public GeneralEnumEstado getEstadoEnum()
+    {
+        return GeneralEnumEstado.getEnum(estado);
     }
     
     

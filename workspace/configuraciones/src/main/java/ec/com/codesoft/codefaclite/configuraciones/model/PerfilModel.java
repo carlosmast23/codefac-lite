@@ -13,13 +13,14 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PerfilUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PermisoVentana;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServicioIf;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
@@ -31,6 +32,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServiceIf;
 
 /**
  *
@@ -97,7 +99,7 @@ public class PerfilModel extends PerfilPanel{
     public void grabar() throws ExcepcionCodefacLite {
         try {
             setearValoresPantalla();
-            PerfilServicioIf perfilServiceIf=ServiceFactory.getFactory().getPerfilServicioIf();        
+            PerfilServiceIf perfilServiceIf=ServiceFactory.getFactory().getPerfilServicioIf();
             perfilServiceIf.grabar(perfil);
             DialogoCodefac.mensaje("Correcto","El perfil se grabo correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         } catch (ServicioCodefacException ex) {
@@ -113,7 +115,7 @@ public class PerfilModel extends PerfilPanel{
     public void editar() throws ExcepcionCodefacLite {
         try {
             setearValoresPantalla();
-            PerfilServicioIf perfilServiceIf=ServiceFactory.getFactory().getPerfilServicioIf();
+            PerfilServiceIf perfilServiceIf=ServiceFactory.getFactory().getPerfilServicioIf();
             perfilServiceIf.editar(perfil);
             DialogoCodefac.mensaje("Correcto","El perfil se edito correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         } catch (RemoteException ex) {
@@ -124,12 +126,39 @@ public class PerfilModel extends PerfilPanel{
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        Boolean respuesta=DialogoCodefac.dialogoPregunta("Pregunta","Esta seguro que desea eliminar?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+        if(!respuesta)
+        {
+            throw new ExcepcionCodefacLite("Cancelado eliminar");                        
+        }
+        
+        try {
+            Map<String,Object> mapParametros=new HashMap<String,Object>();
+            mapParametros.put("perfil",perfil);            
+            List<PerfilUsuario> perfilesUsuario=ServiceFactory.getFactory().getPerfilUsuarioServiceIf().obtenerPorMap(mapParametros);
+            //Solo eliminar si ningun usuario tiene activo este perfil
+            if(perfilesUsuario.size()==0)
+            {
+                ServiceFactory.getFactory().getPerfilServicioIf().eliminar(perfil);
+                DialogoCodefac.mensaje("Correcto","El perfil fue eliminado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+            }
+            else
+            {
+                DialogoCodefac.mensaje("Error","Este perfil siendo esta siendo usado por los usuarios\n Para eliminar quite el rol de los usuarios que esten usando este perfil ", DialogoCodefac.MENSAJE_INCORRECTO);
+                throw new ExcepcionCodefacLite("Cancelado eliminar");
+            }
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(PerfilModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(PerfilModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
     public void imprimir() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override

@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author CodesoftDesarrollo 1
  */
-public interface PerfilServicioIf extends ServiceAbstractIf<Perfil>
+public interface PerfilServiceIf extends ServiceAbstractIf<Perfil>
 {
         public List<Perfil> obtenerPerfilesPorUsuario(Usuario usuario) throws java.rmi.RemoteException;
 }

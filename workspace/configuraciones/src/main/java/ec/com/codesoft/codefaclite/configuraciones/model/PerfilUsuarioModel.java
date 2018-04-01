@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PerfilUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
 import java.awt.event.ActionEvent;
@@ -41,6 +42,7 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         agregarListener();
+        valoresIniciales();
     }
 
     @Override
@@ -51,10 +53,18 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
     @Override
     public void grabar() throws ExcepcionCodefacLite {
         try {
-            UsuarioServicioIf usuarioServicioIf= ServiceFactory.getFactory().getUsuarioServicioIf();
-            setearValoresPantalla();
-            usuarioServicioIf.grabar(usuario);
-            DialogoCodefac.mensaje("Correcto","El usuario se grabo correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+            if (validarGrabar()) 
+            {
+                UsuarioServicioIf usuarioServicioIf = ServiceFactory.getFactory().getUsuarioServicioIf();
+                setearValoresPantalla();
+                usuarioServicioIf.grabar(usuario);
+                DialogoCodefac.mensaje("Correcto", "El usuario se grabo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+            }
+            else
+            {
+                //Si no pasa la validacion lanzo una execepcion
+                throw new ExcepcionCodefacLite("Cancelado grabar");                
+            }
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error","No se pueden grabar los datos", DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(PerfilUsuarioModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -64,22 +74,78 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
         }
     }
 
+    private Boolean validarGrabar()
+    {
+        String clave=new String(getTxtClave().getPassword());
+        String claveRepetida=new String(getTxtClaveRepetir().getPassword());
+        if (clave.toString().equals("")) 
+        {
+            DialogoCodefac.mensaje("Advertencia", "Porfavor ingrese una clave valida para grabar", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            return false;
+        }
+        
+        if(!clave.equals(claveRepetida))
+        {
+            DialogoCodefac.mensaje("Advertencia", "Las Claves Ingresadas no son iguales", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            return false;
+        }
+        
+        return true;
+    }
+    
     @Override
     public void editar() throws ExcepcionCodefacLite {
         try {
-            UsuarioServicioIf usuarioServicioIf = ServiceFactory.getFactory().getUsuarioServicioIf();
-            setearValoresPantalla();
-            usuarioServicioIf.editar(usuario);
-            DialogoCodefac.mensaje("Correcto","El usuario se edito correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+            if(validarEditar())
+            {
+                UsuarioServicioIf usuarioServicioIf = ServiceFactory.getFactory().getUsuarioServicioIf();
+                setearValoresPantalla();
+                usuarioServicioIf.editar(usuario);
+                DialogoCodefac.mensaje("Correcto", "El usuario se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+            }
+            else
+            {
+                throw  new ExcepcionCodefacLite("Cancelar editar");
+            }
         } catch (RemoteException ex) {
             DialogoCodefac.mensaje("Error","Ocurrio un error con el servidor", DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(PerfilUsuarioModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    private boolean validarEditar()
+    {
+        String clave = new String(getTxtClave().getPassword());
+        String claveRepetida = new String(getTxtClaveRepetir().getPassword());
+        if(clave.equals(""))
+        {
+            DialogoCodefac.mensaje("Validación", "No se puede ingresar un clave en blanco", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            return false;
+        }
+        
+        if(!usuario.getClave().equals(clave) && !clave.equals(claveRepetida))
+        {
+            DialogoCodefac.mensaje("Validación", "Para modificar la clave ,el campo de repetir clave tienen que ser igual ", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            return false;
+        }
+        
+        return true;
+    }
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            Boolean pregunta=DialogoCodefac.dialogoPregunta("Advertencia","Esta seguro que desea eliminar el usuario?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+            if(!pregunta)
+            {
+                throw new ExcepcionCodefacLite("Usuario no esta seguro de eliminar");
+            }
+            
+            ServiceFactory.getFactory().getUsuarioServicioIf().eliminar(usuario);
+        } catch (RemoteException ex) {
+            Logger.getLogger(PerfilUsuarioModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 
     @Override
@@ -109,6 +175,7 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
         
         getTxtUsuario().setText(usuario.getNick());
         getTxtClave().setText(usuario.getClave());
+        getCmbEstado().setSelectedItem(usuario.getEstadoEnum());
         cargarListaPerfilesUsuario();
     }
 
@@ -207,6 +274,14 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
     private void setearValoresPantalla() {
         usuario.setNick(getTxtUsuario().getText());
         usuario.setClave(new String(getTxtClave().getPassword()));
+        GeneralEnumEstado estadoEnum=(GeneralEnumEstado) getCmbEstado().getSelectedItem();
+        usuario.setEstado(estadoEnum.getEstado());
+    }
+
+    private void valoresIniciales() {
+        getCmbEstado().removeAllItems();
+        getCmbEstado().addItem(GeneralEnumEstado.ACTIVO);
+        getCmbEstado().addItem(GeneralEnumEstado.INACTIVO);
     }
     
 }

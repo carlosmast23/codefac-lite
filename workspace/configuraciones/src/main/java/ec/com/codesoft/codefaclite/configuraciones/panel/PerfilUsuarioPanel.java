@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.configuraciones.panel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JList;
@@ -90,7 +91,6 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jLabel2, gridBagConstraints);
 
-        cmbEstado.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 6;
@@ -126,6 +126,7 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         getContentPane().add(jLabel3, gridBagConstraints);
 
         btnAgregarPerfil.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add2.png"))); // NOI18N
+        btnAgregarPerfil.setToolTipText("Agregar un perfil al usuario");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 8;
@@ -135,6 +136,7 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         getContentPane().add(btnAgregarPerfil, gridBagConstraints);
 
         btnQuitarPerfil.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/cerrar-ico.png"))); // NOI18N
+        btnQuitarPerfil.setToolTipText("Quitar el peril");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 8;
@@ -202,7 +204,7 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarPerfil;
     private javax.swing.JButton btnQuitarPerfil;
-    private javax.swing.JComboBox<String> cmbEstado;
+    private javax.swing.JComboBox<GeneralEnumEstado> cmbEstado;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -233,13 +235,15 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         this.btnQuitarPerfil = btnQuitarPerfil;
     }
 
-    public JComboBox<String> getCmbEstado() {
+    public JComboBox<GeneralEnumEstado> getCmbEstado() {
         return cmbEstado;
     }
 
-    public void setCmbEstado(JComboBox<String> cmbEstado) {
+    public void setCmbEstado(JComboBox<GeneralEnumEstado> cmbEstado) {
         this.cmbEstado = cmbEstado;
     }
+
+    
 
     @LimpiarAnotacion
     @ValidacionCodefacAnotacion(requerido=true ,min=0,nombre = "Clave")
@@ -252,7 +256,7 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true, min = 0, nombre = "Clave")
+    //@ValidacionCodefacAnotacion(requerido = true, min = 0, nombre = "Clave")
     public JPasswordField getTxtClaveRepetir() {
         return txtClaveRepetir;
     }

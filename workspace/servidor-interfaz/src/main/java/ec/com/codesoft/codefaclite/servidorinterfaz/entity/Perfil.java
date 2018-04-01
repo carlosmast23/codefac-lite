@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -103,6 +104,12 @@ public class Perfil implements Serializable{
         permisoVentana.setPerfil(this);
         this.ventanasPermisos.add(permisoVentana);
         
+    }
+    
+    //Metodos personalizados
+    public GeneralEnumEstado getEstadoEnum()
+    {
+        return GeneralEnumEstado.getEnum(estado);
     }
     
     

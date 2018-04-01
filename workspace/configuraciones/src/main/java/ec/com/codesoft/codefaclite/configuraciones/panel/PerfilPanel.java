@@ -46,9 +46,7 @@ public abstract class PerfilPanel extends ControladorCodefacInterface {
 
         jLabel1 = new javax.swing.JLabel();
         txtNombrePerfil = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblDatos = new javax.swing.JTable();
         btnQuitar = new javax.swing.JButton();
@@ -89,15 +87,6 @@ public abstract class PerfilPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         getContentPane().add(txtNombrePerfil, gridBagConstraints);
 
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel2.setText("Estado:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(jLabel2, gridBagConstraints);
-
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel3.setText("Modulo:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -107,15 +96,6 @@ public abstract class PerfilPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jLabel3, gridBagConstraints);
-
-        jComboBox1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.ipadx = 22;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        getContentPane().add(jComboBox1, gridBagConstraints);
 
         tblDatos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -271,9 +251,7 @@ public abstract class PerfilPanel extends ControladorCodefacInterface {
     private javax.swing.JComboBox<CategoriaMenuEnum> cmbCategoria;
     private javax.swing.JComboBox<ModuloCodefacEnum> cmbModulo;
     private javax.swing.JComboBox<VentanaEnum> cmbVentana;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;

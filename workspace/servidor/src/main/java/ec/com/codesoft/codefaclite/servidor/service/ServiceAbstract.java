@@ -75,7 +75,7 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
         return this.facade.find(primaryKey);
     }
     
-    public void editar(Entity entity)
+    public void editar(Entity entity) 
     {
         this.facade.edit(entity);
     }

@@ -776,7 +776,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     }
                 }
                 catch (UnsupportedOperationException ex) {
-                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    System.err.println("Metodo no implementado boton editar");
+                    //Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     //getjButton4().setEnabled(false);
                 }
                                
@@ -881,8 +882,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         return;
                     }
                     
-                    String tituloOriginal=getTituloOriginal(frame.getTitle());
-                    frame.setTitle(tituloOriginal+" [Nuevo]");
+                    String tituloOriginal=getTituloOriginal(frame.getTitle());                    
                     frameInterface.eliminar();
                     frameInterface.estadoFormulario= ControladorCodefacInterface.ESTADO_GRABAR;
                     limpiarAnotaciones(frameInterface);
@@ -891,12 +891,15 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     
                     frameInterface.consola=new ConsolaGeneral();
                     mostrarConsola(frameInterface.consola,true);
+                    frame.setTitle(tituloOriginal+" [Nuevo]");
                 }
                 catch (UnsupportedOperationException ex) {
-                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    System.err.println("Metodo no implementado");
+                   // Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     //getjButton4().setEnabled(false);
                 } catch (ExcepcionCodefacLite ex) {
-                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    //Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    System.err.println(ex.getMessage());
                 }
                                
             }

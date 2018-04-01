@@ -11,4 +11,5 @@ create table
     USUARIO( 
     NICK varchar(120) ,
     CLAVE varchar(120), 
+    ESTADO varchar(1), 
     primary key (NICK))

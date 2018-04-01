@@ -84,7 +84,8 @@ import ec.com.codesoft.codefaclite.servidor.service.KardexService;
 import ec.com.codesoft.codefaclite.servidor.service.NacionalidadService;
 import ec.com.codesoft.codefaclite.servidor.service.NotaCreditoService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
-import ec.com.codesoft.codefaclite.servidor.service.PerfilServicio;
+import ec.com.codesoft.codefaclite.servidor.service.PerfilService;
+import ec.com.codesoft.codefaclite.servidor.service.PerfilUsuarioService;
 import ec.com.codesoft.codefaclite.servidor.service.PermisoVentanaService;
 import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoEnsambleService;
@@ -125,7 +126,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexItemEspecifi
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
-import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServicioIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoEnsambleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
@@ -185,6 +185,8 @@ import javax.swing.JOptionPane;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilUsuarioServiceIf;
 
 /**
  *
@@ -334,7 +336,7 @@ public class Main {
             mapRecursos.put(KardexService.class, KardexServiceIf.class);
             mapRecursos.put(NotaCreditoService.class, NotaCreditoServiceIf.class);
             mapRecursos.put(ParametroCodefacService.class, ParametroCodefacServiceIf.class);
-            mapRecursos.put(PerfilServicio.class, PerfilServicioIf.class);
+            mapRecursos.put(PerfilService.class, PerfilServiceIf.class);
             mapRecursos.put(ProductoEnsambleService.class, ProductoEnsambleServiceIf.class);
             mapRecursos.put(ProductoProveedorService.class, ProductoProveedorServiceIf.class);
             mapRecursos.put(SriIdentificacionService.class, SriIdentificacionServiceIf.class);
@@ -359,6 +361,8 @@ public class Main {
             mapRecursos.put(CarteraCruceService.class, CarteraCruceServiceIf.class);
             mapRecursos.put(RubroPlantillaService.class, RubroPlantillaServiceIf.class);
             mapRecursos.put(RubroPlantillaEstudianteService.class, RubroPlantillaEstudianteServiceIf.class);
+            mapRecursos.put(PerfilService.class, PerfilServiceIf.class);
+            mapRecursos.put(PerfilUsuarioService.class, PerfilUsuarioServiceIf.class);
             
             ServiceControllerServer.cargarRecursos(mapRecursos);
             System.out.println("servidor iniciado");
@@ -919,7 +923,7 @@ public class Main {
 
     public static List<Perfil> obtenerPerfilesUsuario(Usuario usuario) {
         try {
-            PerfilServicioIf servicio = ServiceFactory.getFactory().getPerfilServicioIf();
+            PerfilServiceIf servicio = ServiceFactory.getFactory().getPerfilServicioIf();
             return servicio.obtenerPerfilesPorUsuario(usuario);
         } catch (RemoteException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
