@@ -61,6 +61,7 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
         
         EntityTransaction transaccion=getTransaccion();
         transaccion.begin();
+        
         for (PerfilUsuario perfilUsuario : usuarioOriginal.getPerfilesUsuario()) {
             
             //Si en el nuevo objeto que mando a editar no contiene el perfil usuario lo elimino

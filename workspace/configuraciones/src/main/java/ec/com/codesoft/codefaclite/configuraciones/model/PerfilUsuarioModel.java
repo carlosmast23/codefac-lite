@@ -186,6 +186,7 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
         getTxtClaveRepetir().setText("");
         getTxtUsuario().setText("");
         cargarListaPerfilesUsuario();
+        getCmbEstado().setSelectedItem(GeneralEnumEstado.ACTIVO);
     }
 
     @Override
