@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.CARPETA_RIDE;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.UtilidadesComprobantes;
 import ec.com.codesoft.codefaclite.gestionacademica.other.EstudianteDeudaData;
+import ec.com.codesoft.codefaclite.gestionacademica.other.NotificacionDeudaImprimir;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.NotificacionesDeudasPanel;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.CorreoCodefac;
@@ -59,7 +60,12 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
      * Hilo para procesar el envio de las notificaciones
      */
     private Thread hiloNotificaciones;
-
+    
+    /**
+     *  
+     */
+    private List<NotificacionDeudaImprimir>  notificacionesDeudaImprimir;
+    
     public static final String ETIQUETA_NOMBRE_ESTUDIANTE = "[nombre_estudiante]";
     public static final String ETIQUETA_NOMBRE_REPRESENTANTE = "[nombre_representante]";
 
@@ -68,6 +74,7 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
         iniciarCombos();
         listenerCombos();
         listenerBotones();
+        notificacionesDeudaImprimir = new ArrayList<>();
     }
 
     @Override
@@ -92,7 +99,10 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
 
     @Override
     public void imprimir() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        InputStream path = RecursoCodefac.JASPER_ACADEMICO.getResourceInputStream("reporte_estudiante_deuda.jrxml");
+        //notificacionesDeudaImprimir
+        //UtilidadesComprobantes.generarReporteJasper(path, mapParametros, listaReporte, PATH_REPORTE_TMP);
+        
     }
 
     @Override
@@ -481,7 +491,7 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
         correoCodefac.enviarCorreo();
     }
 
-    private void generarReporte(EstudianteInscrito estudianteInscrito, List<RubroEstudiante> detalles, Periodo periodo) {
+    private void generarReporte(EstudianteInscrito estudianteInscrito, List<RubroEstudiante> detalles, Periodo periodo) { 
         InputStream path = RecursoCodefac.JASPER_ACADEMICO.getResourceInputStream("reporte_estudiante_deuda.jrxml");
 
         Map<String, Object> mapParametros = new HashMap<String, Object>();
@@ -502,11 +512,11 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
         mapParametros.put("total", total.toString());
 
         mapParametros = ReporteCodefac.agregarMapPlantilla(mapParametros, "Reporte Deuda", panelPadre);
-
+        //Agrego parametros y lista, para tener para imprimir
+        notificacionesDeudaImprimir.add(new NotificacionDeudaImprimir(mapParametros, listaReporte));
         UtilidadesComprobantes.generarReporteJasper(path, mapParametros, listaReporte, PATH_REPORTE_TMP);
-
         //ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametros, listaReporte, panelPadre, "Reporte Deudas");
-    }
+    } 
 
     private Map<EstudianteInscrito, List<RubroEstudiante>> convertirMapRubrosEstudiante(List<RubroEstudiante> rubrosEstudiante) {
         Map<EstudianteInscrito, List<RubroEstudiante>> mapRubrosEstudiante = new HashMap<EstudianteInscrito, List<RubroEstudiante>>();
