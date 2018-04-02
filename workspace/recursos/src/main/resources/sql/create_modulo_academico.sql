@@ -17,8 +17,8 @@ create table AULA(
 
 create table ESTUDIANTE( 
     ESTUDIANTE_ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
-    PERSONA_ID bigint,
-    PERSONA2_ID bigint,
+    REPRESENTANTE1_ID bigint,
+    REPRESENTANTE2_ID bigint,
     NACIONALIDAD_ID bigint,    
     CODSISTEMA varchar(100),
     CODAUXILIAR varchar(100),    

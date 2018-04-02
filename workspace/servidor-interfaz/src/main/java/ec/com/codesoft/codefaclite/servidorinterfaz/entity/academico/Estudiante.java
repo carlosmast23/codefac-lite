@@ -72,10 +72,10 @@ public class Estudiante implements Serializable {
     private String obsDiscapacidad;
     @Column(name = "ETNIA")
     private String etnia;
-    @JoinColumn(name = "PERSONA_ID")
+    @JoinColumn(name = "REPRESENTANTE1_ID")
     @ManyToOne
     private Persona representante;
-    @JoinColumn(name = "PERSONA2_ID")
+    @JoinColumn(name = "REPRESENTANTE2_ID")
     @ManyToOne
     private Persona representante2;
     @JoinColumn(name = "NACIONALIDAD_ID")

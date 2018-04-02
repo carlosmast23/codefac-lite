@@ -9,11 +9,11 @@
  */
 
 
-INSERT INTO USUARIO
-     VALUES ('admin', 'Code17bwbtj');
+INSERT INTO USUARIO(NICK,CLAVE,ESTADO)
+     VALUES ('admin', 'Code17bwbtj','A');
 
-INSERT INTO USUARIO
-     VALUES ('root', 'Code17bwbtj');
+INSERT INTO USUARIO(NICK,CLAVE,ESTADO)
+     VALUES ('root', 'Code17bwbtj','A');
 
 INSERT INTO PERFIL(NOMBRE,DESCRIPCION,ESTADO)
     VALUES('ADMIN','Perfil para administrador para cambiar configuraciones del sistema','A');

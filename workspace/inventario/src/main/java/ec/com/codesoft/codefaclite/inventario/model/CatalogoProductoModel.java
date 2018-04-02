@@ -226,13 +226,13 @@ public class CatalogoProductoModel extends CatalogoProductoPanel implements Dial
         catalogoProducto.setCategoriaProducto(categoriaProducto);
         
         
-        if(!getComboIce().getSelectedItem().getClass().equals(String.class))
+        if(getComboIce().getSelectedItem()!=null && !getComboIce().getSelectedItem().getClass().equals(String.class))
         {
             ImpuestoDetalle ice= (ImpuestoDetalle) getComboIce().getSelectedItem();
             catalogoProducto.setIce(ice);
         }
         
-        if(!getComboIrbpnr().getSelectedItem().getClass().equals(String.class))
+        if(getComboIrbpnr().getSelectedItem()!=null && !getComboIrbpnr().getSelectedItem().getClass().equals(String.class))
         {
             ImpuestoDetalle ibpnr=(ImpuestoDetalle) getComboIrbpnr().getSelectedItem();
             catalogoProducto.setIrbpnr(ibpnr);
