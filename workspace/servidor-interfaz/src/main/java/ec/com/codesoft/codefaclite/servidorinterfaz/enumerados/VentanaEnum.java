@@ -46,7 +46,7 @@ public enum VentanaEnum {
     PERFILES("ec.com.codesoft.codefaclite.configuraciones.model.PerfilModel","PERF","Utilidad Comprobante",ModuloCodefacEnum.SISTEMA,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION}),
     USUARIOS("ec.com.codesoft.codefaclite.configuraciones.model.PerfilUsuarioModel","PEUM","Perfil Usuario",ModuloCodefacEnum.SISTEMA,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION}),
     MATRICULA("ec.com.codesoft.codefaclite.gestionacademica.model.MatriculaModel","MATR","",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.MATRICULA),
-    NIVEL_ACADEMICO("ec.com.codesoft.codefaclite.gestionacademica.model.NivelAcademicoModel","NIAC","",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.GESTIONAR),
+    NIVEL_ACADEMICO("ec.com.codesoft.codefaclite.gestionacademica.model.NivelAcademicoModel","NIAC","CURSOS",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.GESTIONAR),
     ESTUDIANTES("ec.com.codesoft.codefaclite.gestionacademica.model.EstudianteModel","ESTU","",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.GESTIONAR),
     RUBRO_ACADEMICO("ec.com.codesoft.codefaclite.gestionacademica.model.RubrosPeriodoModel","RUAC","",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.DEUDAS_ACADEMICOS),
     GESTIONAR_ACADEMICO("ec.com.codesoft.codefaclite.gestionacademica.model.GestionarDeudasModel","RUAC","",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.DEUDAS_ACADEMICOS),

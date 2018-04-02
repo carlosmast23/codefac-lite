@@ -140,7 +140,7 @@ public class NivelAcademicoModel extends NivelAcademicoPanel implements Serializ
 
     @Override
     public String getNombre() {
-        return "Nivel Academico";
+        return "Cursos";
     }
 
     @Override

@@ -59,7 +59,7 @@ public abstract class NivelAcademicoPanel extends ControladorCodefacInterface {
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
-        setTitle("Nivel Académico");
+        setTitle("Cursos");
 
         jLabel1.setText("Nombre:");
 
@@ -203,6 +203,7 @@ public abstract class NivelAcademicoPanel extends ControladorCodefacInterface {
         this.cmbEstado = cmbEstado;
     }
 
+    @LimpiarAnotacion
     public JTextArea getTxtDescripcion() {
         return txtDescripcion;
     }
