@@ -509,7 +509,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getCmbDocumento().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cargarSecuencial();
+                if(getCmbDocumento().getSelectedItem()!=null)
+                {
+                    cargarSecuencial();
+                }
             }
         });
 

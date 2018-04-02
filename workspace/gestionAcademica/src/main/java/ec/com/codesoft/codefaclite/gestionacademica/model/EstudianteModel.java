@@ -190,7 +190,7 @@ public class EstudianteModel extends EstudiantePanel implements DialogInterfaceP
         estudiante.setDireccion(getTxtDireccion().getText());
         estudiante.setDatosAdicionales(getTxtAdicionales().getText());
         estudiante.setNacionalidad(((Nacionalidad) getCmbNacionalidad().getSelectedItem()));
-        if(banderaNacionalidad){
+        if(banderaNacionalidad && getCmbEtnia().getSelectedItem()!=null){
             estudiante.setEtnia(getCmbEtnia().getSelectedItem().toString());
         }
         else{

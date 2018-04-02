@@ -73,7 +73,13 @@ public class RubrosPeriodoModel extends RubrosPeriodoPanel{
 
     @Override
     public void editar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            setearVariablesPantalla();
+            ServiceFactory.getFactory().getRubrosNivelServiceIf().editar(rubrosNivel);
+            DialogoCodefac.mensaje("Correcto","El rubro se edito correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+        } catch (RemoteException ex) {
+            Logger.getLogger(RubrosPeriodoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override

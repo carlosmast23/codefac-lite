@@ -5,3 +5,9 @@ Pensar en hacer una ventana en configuracion para poder cambiar la plantilla de 
 En la pantalla de utilidades verificar que no se envia al correo por el problema del map supongo y verificar cambios de estado en las facturas
 
 Analizar para usar un modo debug en el sistema y en principal manera para cuando utilice este modo que se creen datos por defecto para los desarrolladores
+
+falta implementar el metodo de editar de rubros nivel
+
+Verificar qe puedo hacer en el caso que solo se graba la factura pero no genero el ride 
+
+Revisar que cuando mando a abrir la pantalla desde la matricula no funciona la facturacion parcial
