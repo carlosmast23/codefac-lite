@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.test.CrearBaseDatos;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -98,12 +99,17 @@ public class UtilidadesServidor {
                         String sql = UtilidadesTextos.getStringURLFile(query);
                         String[] sentencias = sql.split(";");
                         for (String sentencia : sentencias) {
-                            PreparedStatement pstm = conn.prepareStatement(sentencia);
+                            //Obtengo en bytes para transformar a utf 8 porque tenia problemas al insertar valores con acentos y ñ
+                            byte ptext[] = sentencia.getBytes();
+                            PreparedStatement pstm = conn.prepareStatement(new String(ptext, "UTF-8"));
+                            //PreparedStatement pstm = conn.prepareStatement(sentencia);
                             pstm.execute();
                             pstm.close();
                         }
                     } catch (NullPointerException cpe) {
                         System.out.println("Alerta al crear el sql, porfavor revise que los sql no tengan espacios en blanco al final, apesar de esta advertencia el proceso puede continuar sin ningun problema");
+                    } catch (UnsupportedEncodingException ex) {
+                        Logger.getLogger(UtilidadesServidor.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
 
