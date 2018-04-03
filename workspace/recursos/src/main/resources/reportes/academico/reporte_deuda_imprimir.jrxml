@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
+	<property name="ireport.zoom" value="1.0980750000000004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\Carlos\\Documents\\GitHub\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\crm\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pl_fecha_hora" class="java.lang.String"/>
+	<parameter name="pl_direccion" class="java.lang.String"/>
+	<parameter name="pl_nombre_empresa" class="java.lang.String"/>
+	<parameter name="pl_telefonos" class="java.lang.String"/>
+	<parameter name="pl_usuario" class="java.lang.String"/>
+	<parameter name="pl_titulo" class="java.lang.String"/>
+	<parameter name="pl_url_img1" class="java.io.InputStream"/>
+	<parameter name="pl_img_facebook" class="java.io.InputStream"/>
+	<parameter name="pl_img_whatsapp" class="java.io.InputStream"/>
+	<parameter name="pl_img_telefono" class="java.io.InputStream"/>
+	<parameter name="pl_img_logo_pie" class="java.io.InputStream"/>
+	<parameter name="pl_url_cabecera" class="java.lang.String"/>
+	<parameter name="pl_url_piepagina" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="periodo" class="java.lang.String"/>
+	<field name="curso" class="java.lang.String"/>
+	<field name="nombres" class="java.lang.String"/>
+	<field name="representante" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="50" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="555" height="50" uuid="35826285-2ba3-4374-a880-47d8b954ac17"/>
+				<subreportParameter name="pl_direccion">
+					<subreportParameterExpression><![CDATA[$P{pl_direccion}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_nombre_empresa">
+					<subreportParameterExpression><![CDATA[$P{pl_nombre_empresa}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_titulo">
+					<subreportParameterExpression><![CDATA[$P{pl_titulo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_fecha_hora">
+					<subreportParameterExpression><![CDATA[$P{pl_fecha_hora}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_usuario">
+					<subreportParameterExpression><![CDATA[$P{pl_usuario}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_url_img1">
+					<subreportParameterExpression><![CDATA[$P{pl_url_img1}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{pl_url_cabecera}]]></subreportExpression>
+			</subreport>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="41" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="309" splitType="Stretch">
+			<textField>
+				<reportElement x="269" y="20" width="100" height="20" uuid="b510025e-11d0-4d96-9ae3-6368668dc310"/>
+				<textFieldExpression><![CDATA[$F{periodo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="269" y="0" width="100" height="20" uuid="18889be0-4e20-4839-a142-bec50c9a5263"/>
+				<textFieldExpression><![CDATA[$F{curso}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="269" y="40" width="100" height="20" uuid="ad6b9b76-c8b7-42b5-9c20-feecf4df7ddf"/>
+				<textFieldExpression><![CDATA[$F{nombres}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="269" y="60" width="100" height="20" uuid="30a594dc-d3c2-402f-b6e7-6830503b201b"/>
+				<textFieldExpression><![CDATA[$F{representante}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="169" y="0" width="100" height="20" uuid="75c939f7-89d4-4ae5-b2cb-3a79dbf22a8c"/>
+				<text><![CDATA[periodo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="169" y="20" width="100" height="20" uuid="a0e76b77-2650-4e97-8185-b3f4d4aa736b"/>
+				<text><![CDATA[curso]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="169" y="40" width="100" height="20" uuid="e75e20e0-ffcf-4657-b774-c6e290d4bf60"/>
+				<text><![CDATA[nombres]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="169" y="60" width="100" height="20" uuid="9093dc08-1abc-4284-be9a-855ca01270fe"/>
+				<text><![CDATA[representante]]></text>
+			</staticText>
+			<subreport>
+				<reportElement x="0" y="80" width="555" height="121" uuid="d6b5d67f-2206-4986-9578-06724023618d"/>
+				<subreportParameter name="SUBREPORT_DIR"/>
+				<subreportParameter name="pl_fecha_hora"/>
+				<subreportParameter name="pl_direccion"/>
+				<subreportParameter name="pl_nombre_empresa"/>
+				<subreportParameter name="pl_telefonos"/>
+				<subreportParameter name="pl_usuario"/>
+				<subreportParameter name="pl_titulo"/>
+				<subreportParameter name="pl_url_img1"/>
+				<subreportParameter name="pl_img_facebook"/>
+				<subreportParameter name="pl_img_whatsapp"/>
+				<subreportParameter name="pl_img_telefono"/>
+				<subreportParameter name="pl_img_logo_pie"/>
+				<subreportParameter name="pl_url_cabecera"/>
+				<subreportParameter name="pl_url_piepagina"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "subreporte_deuda_imprimir.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="46" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="555" height="54" uuid="7968d49c-a764-40cd-8900-3f9f7f1947c8"/>
+				<subreportParameter name="pl_img_whatsapp">
+					<subreportParameterExpression><![CDATA[$P{pl_img_whatsapp}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_img_logo_pie">
+					<subreportParameterExpression><![CDATA[$P{pl_img_logo_pie}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_img_telefono">
+					<subreportParameterExpression><![CDATA[$P{pl_img_telefono}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_img_facebook">
+					<subreportParameterExpression><![CDATA[$P{pl_img_facebook}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{pl_url_piepagina}]]></subreportExpression>
+			</subreport>
+		</band>
+	</pageFooter>
+</jasperReport>
