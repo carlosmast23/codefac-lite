@@ -74,6 +74,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
+        lblEspacio = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         lblRepresentante = new javax.swing.JLabel();
         txtRepresentante = new javax.swing.JTextField();
@@ -126,6 +127,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
+        lblCodSistema.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblCodSistema.setText("Codigo Sistema:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -140,6 +142,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(txtCodSistema, gridBagConstraints);
 
+        lblCodAuxiliar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblCodAuxiliar.setText("Codigo Auxiliar:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -154,6 +157,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(txtCodAuxiliar, gridBagConstraints);
 
+        lblCedula.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblCedula.setText("Cédula:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -168,6 +172,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(txtCedula, gridBagConstraints);
 
+        lblCorreo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblCorreo.setText("Correo electrónico:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -182,6 +187,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(txtCorreo, gridBagConstraints);
 
+        lblNombres.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblNombres.setText("Nombres:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -203,6 +209,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(txtNombres, gridBagConstraints);
 
+        lblApellidos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblApellidos.setText("Apellidos:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -218,6 +225,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(txtApellidos, gridBagConstraints);
 
+        lblGenero.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblGenero.setText("Genero:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -233,6 +241,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(cmbGenero, gridBagConstraints);
 
+        lblFechaNacimiento.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblFechaNacimiento.setText("Fecha nacimiento:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -269,6 +278,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(cmbEstado, gridBagConstraints);
 
+        lblEstado.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblEstado.setText("Estado:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -277,6 +287,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanel1.add(lblEstado, gridBagConstraints);
 
+        lblEtnia.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblEtnia.setText("Etnia: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -285,6 +296,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanel1.add(lblEtnia, gridBagConstraints);
 
+        lblNacionalidad.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblNacionalidad.setText("Nacionalidad:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -322,11 +334,18 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 10;
         jPanel1.add(jLabel12, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 0.5;
+        jPanel1.add(lblEspacio, gridBagConstraints);
 
         jTabbedPane1.addTab("Datos Generales", jPanel1);
 
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
+        lblRepresentante.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblRepresentante.setText("Representante:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -357,6 +376,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         jPanel2.add(btnAgregarRepresentante, gridBagConstraints);
 
+        lblCelular.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblCelular.setText("Celular:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
@@ -371,6 +391,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         jPanel2.add(txtCelular, gridBagConstraints);
 
+        lblFacturarANombre.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblFacturarANombre.setText("Representante 2:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -404,6 +425,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 2;
         jPanel2.add(btnAgregarPersonaFacturar, gridBagConstraints);
 
+        lblAdicionales.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblAdicionales.setText("Datos Adicionales:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
@@ -426,6 +448,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(8, 8, 8, 8);
         jPanel2.add(jScrollPane1, gridBagConstraints);
 
+        lblTelefono.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblTelefono.setText("Teléfono:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -440,6 +463,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         jPanel2.add(txtTelefono, gridBagConstraints);
 
+        lblDireccion.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblDireccion.setText("Direccion:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -500,6 +524,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
 
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
+        lblDiscapacidad.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblDiscapacidad.setText("Discapacidad:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -515,6 +540,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         jPanel3.add(cmbDiscapacidad, gridBagConstraints);
 
+        lblConadis.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblConadis.setText("Conadis:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -535,6 +561,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         jPanel3.add(txtConadis, gridBagConstraints);
 
+        lblTipo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblTipo.setText("Tipo discapacidad:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -550,6 +577,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         jPanel3.add(cmbTipoDiscapacidad, gridBagConstraints);
 
+        lblPorcentaje.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblPorcentaje.setText("Porcentaje discapacidad:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -564,6 +592,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         jPanel3.add(txtPorcentajeDiscapacidad, gridBagConstraints);
 
+        lblObservaciones.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblObservaciones.setText("Observaciones:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -689,6 +718,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblCorreo;
     private javax.swing.JLabel lblDireccion;
     private javax.swing.JLabel lblDiscapacidad;
+    private javax.swing.JLabel lblEspacio;
     private javax.swing.JLabel lblEstado;
     private javax.swing.JLabel lblEtnia;
     private javax.swing.JLabel lblFacturarANombre;
