@@ -21,14 +21,14 @@ public class NotificacionDeudaImprimir
     private String nota;
     private String total;
     
-    private Map<String,Object> parametrosPorAlumno;
+    //private Map<String,Object> parametrosPorAlumno;
     
-    private List<EstudianteDeudaData> listaDatosPorAlumno;
+    private List<EstudianteDeudaData> deudas;
 
-    public NotificacionDeudaImprimir(Map<String, Object> parametrosPorAlumno, List<EstudianteDeudaData> listaDatosPorAlumno) 
+    public NotificacionDeudaImprimir(List<EstudianteDeudaData> deudas) 
     {
-        this.parametrosPorAlumno = parametrosPorAlumno;
-        this.listaDatosPorAlumno = listaDatosPorAlumno;
+        //this.parametrosPorAlumno = parametrosPorAlumno;
+        this.deudas = deudas;
     }
     
     public String getPeriodo() {
@@ -78,26 +78,22 @@ public class NotificacionDeudaImprimir
     public void setTotal(String total) {
         this.total = total;
     }
-    
-    
-    public Map<String, Object> getParametrosPorAlumno()
-    {
-        return parametrosPorAlumno;
+   
+//    public Map<String, Object> getParametrosPorAlumno()
+//    {
+//        return parametrosPorAlumno;
+//    }
+//
+//    public void setParametrosPorAlumno(Map<String, Object> parametrosPorAlumno) 
+//    {
+//        this.parametrosPorAlumno = parametrosPorAlumno;
+//    }
+
+    public List<EstudianteDeudaData> getDeudas() {
+        return deudas;
     }
 
-    public void setParametrosPorAlumno(Map<String, Object> parametrosPorAlumno) 
-    {
-        this.parametrosPorAlumno = parametrosPorAlumno;
+    public void setDeudas(List<EstudianteDeudaData> deudas) {
+        this.deudas = deudas;
     }
-
-    public List<EstudianteDeudaData> getListaDatosPorAlumno() 
-    {
-        return listaDatosPorAlumno;
-    }
-
-    public void setListaDatosPorAlumno(List<EstudianteDeudaData> listaDatosPorAlumno)
-    {
-        this.listaDatosPorAlumno = listaDatosPorAlumno;
-    }
-
 }
