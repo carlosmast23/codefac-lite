@@ -7,8 +7,11 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
+import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
+import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -44,43 +47,7 @@ public class RubroPlantilla implements Serializable{
     
     @Column(name = "DIAS_CREDITO")
     private Integer diasCredito;
-    
-    @Column(name = "ENERO")
-    private String enero;
-    
-    @Column(name = "FEBRERO")
-    private String febrero;
-    
-    @Column(name = "MARZO")
-    private String marzo;
-    
-    @Column(name = "ABRIL")
-    private String abril;
-    
-    @Column(name = "MAYO")
-    private String mayo;
-    
-    @Column(name = "JUNIO")
-    private String junio;
-    
-    @Column(name = "JULIO")
-    private String julio;
-    
-    @Column(name = "AGOSTO")
-    private String agosto;
-    
-    @Column(name = "SEPTIEMBRE")
-    private String septiembre;
-    
-    @Column(name = "OCTUBRE")
-    private String octubre;
-    
-    @Column(name = "NOVIEMBRE")
-    private String noviembre;
-    
-    @Column(name = "DICIEMBRE")
-    private String diciembre;
-    
+ 
     @JoinColumn(name = "CATALOGO_PRODUCTO_ID")
     private CatalogoProducto catalogoProducto;
 
@@ -89,6 +56,9 @@ public class RubroPlantilla implements Serializable{
  
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "rubroPlantilla",fetch = FetchType.EAGER)
     private List<RubroPlantillaEstudiante> detalles;
+ 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rubroPlantilla",fetch = FetchType.EAGER)
+    private List<RubroPlantillaMes> mesesGenerados;
 
     public Long getId() {
         return id;
@@ -114,101 +84,7 @@ public class RubroPlantilla implements Serializable{
         this.valor = valor;
     }
 
-    public String getEnero() {
-        return enero;
-    }
-
-    public void setEnero(String enero) {
-        this.enero = enero;
-    }
-
-    public String getFebrero() {
-        return febrero;
-    }
-
-    public void setFebrero(String febrero) {
-        this.febrero = febrero;
-    }
-
-    public String getMarzo() {
-        return marzo;
-    }
-
-    public void setMarzo(String marzo) {
-        this.marzo = marzo;
-    }
-
-    public String getAbril() {
-        return abril;
-    }
-
-    public void setAbril(String abril) {
-        this.abril = abril;
-    }
-
-    public String getMayo() {
-        return mayo;
-    }
-
-    public void setMayo(String mayo) {
-        this.mayo = mayo;
-    }
-
-    public String getJunio() {
-        return junio;
-    }
-
-    public void setJunio(String junio) {
-        this.junio = junio;
-    }
-
-    public String getJulio() {
-        return julio;
-    }
-
-    public void setJulio(String julio) {
-        this.julio = julio;
-    }
-
-    public String getAgosto() {
-        return agosto;
-    }
-
-    public void setAgosto(String agosto) {
-        this.agosto = agosto;
-    }
-
-    public String getSeptiembre() {
-        return septiembre;
-    }
-
-    public void setSeptiembre(String septiembre) {
-        this.septiembre = septiembre;
-    }
-
-    public String getOctubre() {
-        return octubre;
-    }
-
-    public void setOctubre(String octubre) {
-        this.octubre = octubre;
-    }
-
-    public String getNoviembre() {
-        return noviembre;
-    }
-
-    public void setNoviembre(String noviembre) {
-        this.noviembre = noviembre;
-    }
-
-    public String getDiciembre() {
-        return diciembre;
-    }
-
-    public void setDiciembre(String diciembre) {
-        this.diciembre = diciembre;
-    }
+ 
 
     public CatalogoProducto getCatalogoProducto() {
         return catalogoProducto;
@@ -243,12 +119,22 @@ public class RubroPlantilla implements Serializable{
     public void setDiasCredito(Integer diasCredito) {
         this.diasCredito = diasCredito;
     }
+
+    public List<RubroPlantillaMes> getMesesGenerados() {
+        return mesesGenerados;
+    }
+
+    public void setMesesGenerados(List<RubroPlantillaMes> mesesGenerados) {
+        this.mesesGenerados = mesesGenerados;
+    }
+    
+    
     
     //Metodo personalizados
     
     public void adddDetalle(RubroPlantillaEstudiante detalle)
     {
-        if(detalle==null)
+        if(detalles==null)
         {
             detalles=new ArrayList<RubroPlantillaEstudiante>();
         }
@@ -257,58 +143,88 @@ public class RubroPlantilla implements Serializable{
         detalles.add(detalle);
     }
     
-    public EnumSiNo obtenerMesPorEnum(MesEnum mesEnum)
+    public void addMesGenerado(RubroPlantillaMes mes)
     {
-        switch (mesEnum) {
-            case ENERO: return EnumSiNo.getEnumByLetra(enero);
-            case FEBRERO:return EnumSiNo.getEnumByLetra(febrero);
-            case MARZO:return EnumSiNo.getEnumByLetra(marzo);
-            case ABRIL:return EnumSiNo.getEnumByLetra(abril);
-             case MAYO:return EnumSiNo.getEnumByLetra(mayo);
-            case JUNIO:return EnumSiNo.getEnumByLetra(junio);
-            case JULIO:return EnumSiNo.getEnumByLetra(julio);
-            case AGOSTO:return EnumSiNo.getEnumByLetra(agosto);
-            case SEPTIEMBRE:return EnumSiNo.getEnumByLetra(septiembre);
-            case OCTUBRE:return EnumSiNo.getEnumByLetra(octubre);
-            case NOVIEMBRE:return EnumSiNo.getEnumByLetra(noviembre);
-            case DICIEMBRE:return EnumSiNo.getEnumByLetra(diciembre);
-
+    
+        if(mesesGenerados==null)
+        {
+            mesesGenerados=new ArrayList<RubroPlantillaMes>();            
         }
-        return null;
+        mes.setRubroPlantilla(this);
+        mesesGenerados.add(mes);
     }
     
-    public void cambiarEstadoMes(MesEnum mesEnum,Boolean opcion)
+    public List<RubroPlantillaMes> obtenerTodosMesesGenerar()
     {
-        String opcionStr=EnumSiNo.getEnumByBoolean(opcion).getLetra();
+        List<RubroPlantillaMes> rubrosMes=new ArrayList<RubroPlantillaMes>();
         
-        switch (mesEnum) {
-            case ENERO:enero=opcionStr;
-                break;
-            case FEBRERO:febrero=opcionStr;
-                break;
-            case MARZO:marzo=opcionStr;
-                break;
-            case ABRIL:abril=opcionStr;
-                break;
-            case MAYO:mayo=opcionStr;
-                break;
-            case JUNIO:junio=opcionStr;
-                break;
-            case JULIO:julio=opcionStr;
-                break;
-            case AGOSTO:agosto=opcionStr;
-                break;
-            case SEPTIEMBRE:septiembre=opcionStr;
-                break;
-            case OCTUBRE:octubre=opcionStr;
-                break;
-            case NOVIEMBRE:noviembre=opcionStr;
-                break;
-            case DICIEMBRE:diciembre=opcionStr;
-                break;
+        //Generar todos los meses segun el periodo
+        Date fechaInicio=periodo.getFechaInicio();
+        Date fechaFinal=periodo.getFechaFin();
+        
+        Integer anioInicial=UtilidadesFecha.obtenerAnio(fechaInicio);
+        Integer anioFinal=UtilidadesFecha.obtenerAnio(fechaFinal);
+        
+        Integer mesInicial=UtilidadesFecha.obtenerMes(fechaInicio);
+        Integer mesFinal=UtilidadesFecha.obtenerMes(fechaFinal);
+        
+        for (int anio = anioInicial; anio <= anioFinal; anio++) {
+            for (int mes =mesInicial;mes<=12;mes++) 
+            {
+                RubroPlantillaMes rpm=new RubroPlantillaMes();
+                rpm.setAnio(anio);
+                rpm.setNumeroMes(mes);
+                rpm.setRubroPlantilla(this);
+                
+                rubrosMes.add(rpm);
+                
+                //Comparar si ya termino solo cuando este en el anio final
+                if(anio==anioFinal)
+                {
+                    if(mesFinal==mes)
+                    {
+                        break;
+                    }
+                }                
 
+            }
         }
+        
+        return rubrosMes;
     }
+    
+    
+    public List<RubroPlantillaMes> obtenerMesesSinGenerar()
+    {
+        List<RubroPlantillaMes> rubrosMes=obtenerTodosMesesGenerar();
+        
+        if(rubrosMes!=null)
+        {
+            for (RubroPlantillaMes mes : rubrosMes) {
+                //Si ya existe en la lista los borro
+                if(buscarPorAnioYMes(mes.getAnio(),mes.getNumeroMes()))
+                {
+                    rubrosMes.remove(mes);
+                }
+            }
+        }
+        return rubrosMes;
+    }
+    
+    private Boolean buscarPorAnioYMes(Integer anio, Integer mes)
+    {
+        if(mesesGenerados!=null)
+        {
+            for (RubroPlantillaMes mesPlantilla : mesesGenerados) {
+                if(mesPlantilla.getAnio().equals(anio) && mesPlantilla.getNumeroMes().equals(mes))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 
     @Override
     public int hashCode() {

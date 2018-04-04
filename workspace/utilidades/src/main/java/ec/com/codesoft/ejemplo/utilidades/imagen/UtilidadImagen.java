@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.ejemplo.utilidades.imagen;
 
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -48,7 +49,16 @@ public abstract class UtilidadImagen {
 
     }
     
-    
+    public static Image castInputStreamToImage(InputStream inputStream)
+    {
+        try {
+            return ImageIO.read(inputStream);
+        } catch (IOException ex) {
+            Logger.getLogger(UtilidadImagen.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+            
     public static ImageInputStream castBufferImputStream(InputStream input) {
         
         try {
@@ -58,4 +68,5 @@ public abstract class UtilidadImagen {
         }
         return null;
     }
+    
 }

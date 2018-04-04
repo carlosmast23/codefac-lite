@@ -12,13 +12,13 @@
 	<parameter name="pl_telefonos" class="java.lang.String"/>
 	<parameter name="pl_usuario" class="java.lang.String"/>
 	<parameter name="pl_titulo" class="java.lang.String"/>
-	<parameter name="pl_url_img1" class="java.io.InputStream"/>
-	<parameter name="pl_img_facebook" class="java.io.InputStream"/>
-	<parameter name="pl_img_whatsapp" class="java.io.InputStream"/>
-	<parameter name="pl_img_telefono" class="java.io.InputStream"/>
-	<parameter name="pl_img_logo_pie" class="java.io.InputStream"/>
-	<parameter name="pl_url_cabecera" class="java.io.InputStream"/>
-	<parameter name="pl_url_piepagina" class="java.io.InputStream"/>
+	<parameter name="pl_url_img1" class="java.lang.Object"/>
+	<parameter name="pl_img_facebook" class="java.lang.Object"/>
+	<parameter name="pl_img_whatsapp" class="java.lang.Object"/>
+	<parameter name="pl_img_telefono" class="java.lang.Object"/>
+	<parameter name="pl_img_logo_pie" class="java.lang.Object"/>
+	<parameter name="pl_url_cabecera" class="java.lang.Object"/>
+	<parameter name="pl_url_piepagina" class="java.lang.Object"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -37,11 +37,14 @@
 				<subreportParameter name="pl_direccion">
 					<subreportParameterExpression><![CDATA[$P{pl_direccion}]]></subreportParameterExpression>
 				</subreportParameter>
-				<subreportParameter name="pl_nombre_empresa">
-					<subreportParameterExpression><![CDATA[$P{pl_nombre_empresa}]]></subreportParameterExpression>
+				<subreportParameter name="pl_telefonos">
+					<subreportParameterExpression><![CDATA[$P{pl_telefonos}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="pl_titulo">
 					<subreportParameterExpression><![CDATA[$P{pl_titulo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_nombre_empresa">
+					<subreportParameterExpression><![CDATA[$P{pl_nombre_empresa}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="pl_fecha_hora">
 					<subreportParameterExpression><![CDATA[$P{pl_fecha_hora}]]></subreportParameterExpression>

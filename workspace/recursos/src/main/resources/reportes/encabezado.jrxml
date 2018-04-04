@@ -9,7 +9,7 @@
 	<parameter name="pl_fecha_hora" class="java.lang.String"/>
 	<parameter name="pl_titulo" class="java.lang.String"/>
 	<parameter name="pl_telefonos" class="java.lang.String"/>
-	<parameter name="pl_url_img1" class="java.io.InputStream"/>
+	<parameter name="pl_url_img1" class="java.lang.Object"/>
 	<title>
 		<band height="48" splitType="Stretch">
 			<textField>

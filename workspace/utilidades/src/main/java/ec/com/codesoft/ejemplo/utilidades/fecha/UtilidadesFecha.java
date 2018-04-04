@@ -61,4 +61,53 @@ public class UtilidadesFecha {
         DateFormat dateFormat = new SimpleDateFormat(formato);
         return dateFormat.format(fecha);
     }
+    
+    
+    public static int obtenerAnio(Date date) {
+
+        if (null == date) {
+
+            return 0;
+
+        } else {
+
+            String formato = "yyyy";
+            SimpleDateFormat dateFormat = new SimpleDateFormat(formato);
+            return Integer.parseInt(dateFormat.format(date));
+
+        }
+
+    }
+    
+    public static int obtenerMes(Date date) {
+
+        if (null == date) {
+
+            return 0;
+
+        } else {
+
+            String formato = "MM";
+            SimpleDateFormat dateFormat = new SimpleDateFormat(formato);
+            return Integer.parseInt(dateFormat.format(date));
+
+        }
+
+    }
+    
+    public static int obtenerDia(Date date) {
+
+        if (null == date) {
+
+            return 0;
+
+        } else {
+
+            String formato = "dd";
+            SimpleDateFormat dateFormat = new SimpleDateFormat(formato);
+            return Integer.parseInt(dateFormat.format(date));
+
+        }
+
+    }
 }

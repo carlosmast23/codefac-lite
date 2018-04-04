@@ -90,6 +90,7 @@ create table RUBROS_NIVEL(
     NOMBRE varchar(100),
     MES_NUMERO int,
     DIAS_CREDITO int,
+    ANIO int,
     PERIODO_ID bigint,
     NIVEL_ID bigint,
     CATALOGO_PRODUCTO_ID BIGINT,
@@ -136,6 +137,15 @@ create table RUBRO_PLANTILLA(
     ESTUDIANTE_INSCRITO_ID BIGINT,
     primary key (ID)
 );
+
+create table RUBRO_PLANTILLA_MES( 
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
+    RUBRO_PLANTILLA_ID BIGINT,
+    NUMERO_MES int,
+    ANIO int,
+    primary key (ID)
+);
+
 
 create table RUBRO_PLANTILLA_ESTUDIANTE( 
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 

@@ -35,7 +35,7 @@ public interface RubroEstudianteServiceIf extends ServiceAbstractIf<RubroEstudia
     
     public List<RubroEstudiante> obtenerRubrosEstudiantesPorRubros(List<RubrosNivel> rubros) throws RemoteException;
     
-    public RubroPlantilla crearRubroEstudiantesDesdePlantila(RubroPlantilla rubroPlantilla,MesEnum mesEnum,String nombreRubroMes) throws RemoteException;
+    public RubroPlantilla crearRubroEstudiantesDesdePlantila(RubroPlantilla rubroPlantilla,MesEnum mesEnum,String nombreRubroMes,Integer anio) throws RemoteException;
 
     public void crearRubrosEstudiantes(List<EstudianteInscrito> estudiantes, RubrosNivel rubroNivel) throws RemoteException;
 

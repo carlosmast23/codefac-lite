@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcadem
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantilla;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaMes;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
@@ -39,6 +40,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -194,12 +198,6 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
                 getCmbRubro().addItem(producto);
             }
             
-            //Cargar los meses de los enum disponibles
-            getCmbMesGenerar().removeAllItems();
-            MesEnum[] meses= MesEnum.values();
-            for (MesEnum mes : meses) {
-                getCmbMesGenerar().addItem(mes);
-            }
             
         } catch (RemoteException ex) {
             Logger.getLogger(GestionarDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -209,6 +207,7 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
     private void iniciarListener() {
         listenerBotones();
         listenerCombos();
+        listenerList();
     }
     
     private void listenerBotones()
@@ -279,21 +278,19 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
         getBtnGenerar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MesEnum mesEnum=(MesEnum) getCmbMesGenerar().getSelectedItem();
+               RubroPlantillaMes rubroPlantillaMes=getLstMesesSinGenerar().getSelectedValue();
                 
-                if(mesEnum!=null)
+                if(rubroPlantillaMes!=null)
                 {
                     String nombreMes=getTxtNombreMes().getText();
                     if(!nombreMes.equals(""))
                     {
-                        try {
-                            //Solo generar si todavia no se ha generado
-                            EnumSiNo enumSiNo=rubroPlantilla.obtenerMesPorEnum(mesEnum);
+                        /*try {
                             
                             if(enumSiNo.equals(EnumSiNo.NO))
                             {
-                                rubroPlantilla = ServiceFactory.getFactory().getRubroEstudianteServiceIf().crearRubroEstudiantesDesdePlantila(rubroPlantilla, mesEnum, nombreMes);
-                                DialogoCodefac.mensaje("Correcto", "Las deudas para el mes " + mesEnum.getNombre() + " se generaron correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+                                rubroPlantilla = ServiceFactory.getFactory().getRubroEstudianteServiceIf().crearRubroEstudiantesDesdePlantila(rubroPlantilla,rubroPlantillaMes.getMesEnum(), nombreMes,rubroPlantillaMes.getAnio());
+                                DialogoCodefac.mensaje("Correcto", "Las deudas para el mes " + rubroPlantillaMes.getMesEnum().getNombre() + " se generaron correctamente", DialogoCodefac.MENSAJE_CORRECTO);
                                 cargarDatos();
                             }
                             else
@@ -303,7 +300,7 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
                             
                         } catch (RemoteException ex) {
                             Logger.getLogger(RubroPlantillaModel.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                        }*/
                     }
                 }
             }
@@ -513,15 +510,6 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
             }
         });
         
-        getCmbMesGenerar().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MesEnum mesEnum=(MesEnum) getCmbMesGenerar().getSelectedItem();
-                
-                getTxtNombreMes().setText(rubroPlantilla.getNombre()+" "+mesEnum.getNombre());
-            }
-        });
-        
     }
     
     private void cargarEstudiantesInscritosTabla(NivelAcademico nivelAcademico)
@@ -624,18 +612,6 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
         this.rubroPlantilla.setValor(new BigDecimal(getTxtValor().getText()));
         this.rubroPlantilla.setDiasCredito(new Integer(getTxtDiasCredito().getText()));
         
-        this.rubroPlantilla.setEnero(EnumSiNo.getEnumByBoolean(this.getChkEnero().isSelected()).getLetra());
-        this.rubroPlantilla.setFebrero(EnumSiNo.getEnumByBoolean(this.getChkFebrero().isSelected()).getLetra());
-        this.rubroPlantilla.setMarzo(EnumSiNo.getEnumByBoolean(this.getChkMarzo().isSelected()).getLetra());
-        this.rubroPlantilla.setAbril(EnumSiNo.getEnumByBoolean(this.getChkAbril().isSelected()).getLetra());
-        this.rubroPlantilla.setMayo(EnumSiNo.getEnumByBoolean(this.getChkMayo().isSelected()).getLetra());
-        this.rubroPlantilla.setJunio(EnumSiNo.getEnumByBoolean(this.getChkJunio().isSelected()).getLetra());
-        this.rubroPlantilla.setJulio(EnumSiNo.getEnumByBoolean(this.getChkJunio().isSelected()).getLetra());
-        this.rubroPlantilla.setAgosto(EnumSiNo.getEnumByBoolean(this.getChkAgosto().isSelected()).getLetra());
-        this.rubroPlantilla.setSeptiembre(EnumSiNo.getEnumByBoolean(this.getChkSeptiembre().isSelected()).getLetra());
-        this.rubroPlantilla.setOctubre(EnumSiNo.getEnumByBoolean(this.getChkOctubre().isSelected()).getLetra());
-        this.rubroPlantilla.setNoviembre(EnumSiNo.getEnumByBoolean(this.getChkNoviembre().isSelected()).getLetra());
-        this.rubroPlantilla.setDiciembre(EnumSiNo.getEnumByBoolean(this.getChkDiciembre().isSelected()).getLetra());
         
         List<RubroPlantillaEstudiante> detalles=obtenerDetallesFromMap();
         this.rubroPlantilla.setDetalles(detalles);
@@ -720,20 +696,36 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
         
         cargarDatosCombo(rubroPlantilla.getPeriodo());
         
-        //Cargar los check de los meses
-        getChkEnero().setSelected(EnumSiNo.getEnumByLetra(rubroPlantilla.getEnero()).getBool());
-        getChkFebrero().setSelected(EnumSiNo.getEnumByLetra(rubroPlantilla.getFebrero()).getBool());
-        getChkMarzo().setSelected(EnumSiNo.getEnumByLetra(rubroPlantilla.getMarzo()).getBool());
-        getChkAbril().setSelected(EnumSiNo.getEnumByLetra(rubroPlantilla.getAbril()).getBool());
-        getChkMayo().setSelected(EnumSiNo.getEnumByLetra(rubroPlantilla.getMayo()).getBool());
-        getChkJunio().setSelected(EnumSiNo.getEnumByLetra(rubroPlantilla.getJunio()).getBool());
-        getChkJulio().setSelected(EnumSiNo.getEnumByLetra(rubroPlantilla.getJulio()).getBool());
-        getChkAgosto().setSelected(EnumSiNo.getEnumByLetra(rubroPlantilla.getAgosto()).getBool());
-        getChkSeptiembre().setSelected(EnumSiNo.getEnumByLetra(rubroPlantilla.getSeptiembre()).getBool());
-        getChkOctubre().setSelected(EnumSiNo.getEnumByLetra(rubroPlantilla.getOctubre()).getBool());
-        getChkNoviembre().setSelected(EnumSiNo.getEnumByLetra(rubroPlantilla.getNoviembre()).getBool());
-        getChkDiciembre().setSelected(EnumSiNo.getEnumByLetra(rubroPlantilla.getDiciembre()).getBool());
-        
+        //Cargar los datos de la tabla
+        cargarListMesesSinGenerar();
+        cargarListMesesGenerados();
+   }
+    
+   private void cargarListMesesSinGenerar()
+   {
+       DefaultListModel<RubroPlantillaMes> meses=new DefaultListModel<RubroPlantillaMes>();
+       
+       if(rubroPlantilla.obtenerMesesSinGenerar()!=null)
+       {
+           for (RubroPlantillaMes mes : rubroPlantilla.obtenerMesesSinGenerar()) 
+           {
+               meses.addElement(mes);
+           }
+       }
+       getLstMesesSinGenerar().setModel(meses);
+   }
+   
+   private void cargarListMesesGenerados()
+   {
+       DefaultListModel<RubroPlantillaMes> meses=new DefaultListModel<RubroPlantillaMes>();
+       if(rubroPlantilla.getMesesGenerados()!=null)
+       {
+           for (RubroPlantillaMes mes : rubroPlantilla.getMesesGenerados()) 
+           {
+               meses.addElement(mes);
+           }
+       }
+       getLstMesesGenerados().setModel(meses);
    }
 
     /**
@@ -766,6 +758,16 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
         }
         
         return detalles;
+    }
+
+    private void listenerList() {
+        getLstMesesSinGenerar().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                RubroPlantillaMes rubroPlantillaMes=getLstMesesSinGenerar().getSelectedValue();
+                getTxtNombreMes().setText(rubroPlantilla.getNombre()+" "+rubroPlantillaMes.toString());
+            }
+        });
     }
     
 }

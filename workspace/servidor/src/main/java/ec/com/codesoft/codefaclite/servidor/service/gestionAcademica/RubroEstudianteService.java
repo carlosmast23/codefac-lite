@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantilla;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaMes;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
@@ -82,7 +83,7 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         transaccion.commit();
     }
 
-    public RubroPlantilla crearRubroEstudiantesDesdePlantila(RubroPlantilla rubroPlantilla, MesEnum mesEnum, String nombreRubroMes) throws RemoteException {
+    public RubroPlantilla crearRubroEstudiantesDesdePlantila(RubroPlantilla rubroPlantilla, MesEnum mesEnum, String nombreRubroMes,Integer anio) throws RemoteException {
         try {
             EntityTransaction transaccion = getTransaccion();
 
@@ -96,6 +97,7 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
             rubroNivel.setPeriodo(rubroPlantilla.getPeriodo());
             rubroNivel.setValor(rubroPlantilla.getValor());
             rubroNivel.setMesNumero(mesEnum.getNumero());
+            rubroNivel.setAnio(anio);
 
             entityManager.persist(rubroNivel);
 
@@ -111,8 +113,15 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
                 entityManager.persist(rubroEstudiante);
             }
 
-            //Modificar el valor del mes que se esta generando
-            rubroPlantilla.cambiarEstadoMes(mesEnum, Boolean.TRUE);
+            //Grabar los valores del mes que se estan generando
+            for (RubroPlantillaMes rubroPlantillaMes : rubroPlantilla.getMesesGenerados()) {
+                if(rubroPlantillaMes.getId()==null)
+                {
+                    entityManager.persist(rubroPlantillaMes);
+                }
+            }            
+            
+            //Actualizar el rubroPlantillaMes
             entityManager.merge(rubroPlantilla);
 
             transaccion.commit();

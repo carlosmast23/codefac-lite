@@ -140,7 +140,10 @@ import javax.swing.plaf.SplitPaneUI;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.StyledEditorKit;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.swing.JRViewer;
 /**
  *
@@ -2088,44 +2091,51 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             
             inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_GENERAL, "codefac-logotipo.png"));
             //inputStream = (InputStream) UtilidadesRmi.deserializar(service.getResourceInputStream(RecursoCodefac.IMAGENES_GENERAL, "codefac-logotipo.png"));
-            parametros.put("pl_url_img1",inputStream);
+            //parametros.put("pl_url_img1",UtilidadImagen.castInputStreamToImage(inputStream));
+            parametros.put("pl_url_img1",UtilidadImagen.castInputStreamToImage(inputStream));
             
             inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "facebook.png"));
-            parametros.put("pl_img_facebook",inputStream);
+            parametros.put("pl_img_facebook",UtilidadImagen.castInputStreamToImage(inputStream));
             
             inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "whatsapp.png"));
-            parametros.put("pl_img_whatsapp",inputStream);
+            parametros.put("pl_img_whatsapp",UtilidadImagen.castInputStreamToImage(inputStream));
             
             inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "telefono.png"));
-            parametros.put("pl_img_telefono",inputStream);
+            parametros.put("pl_img_telefono",UtilidadImagen.castInputStreamToImage(inputStream));
             
             inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_GENERAL, "codesoft-logo.png"));
-            parametros.put("pl_img_logo_pie",inputStream);
+            parametros.put("pl_img_logo_pie",UtilidadImagen.castInputStreamToImage(inputStream));
             
             inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_GENERAL, "codefac-logotipo.png"));
-            parametros.put("pl_url_img1_url",inputStream);
+            parametros.put("pl_url_img1_url",UtilidadImagen.castInputStreamToImage(inputStream));
             
             inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "facebook.png"));
-            parametros.put("pl_img_facebook_url",inputStream);
+            parametros.put("pl_img_facebook_url",UtilidadImagen.castInputStreamToImage(inputStream));
             
             inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "whatsapp.png"));
-            parametros.put("pl_img_whatsapp_url",inputStream);
+            parametros.put("pl_img_whatsapp_url",UtilidadImagen.castInputStreamToImage(inputStream));
             
             inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "telefono.png"));
-            parametros.put("pl_img_telefono_url",inputStream);
+            parametros.put("pl_img_telefono_url",UtilidadImagen.castInputStreamToImage(inputStream));
             
             inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_GENERAL, "codesoft-logo.png"));
-            parametros.put("pl_img_logo_pie_url",inputStream);
+            parametros.put("pl_img_logo_pie_url",UtilidadImagen.castInputStreamToImage(inputStream));
             
-            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER, "encabezado.jasper"));
-            parametros.put("pl_url_cabecera",inputStream);
+            inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER, "encabezado.jrxml"));
+            JasperReport reportCabecera = JasperCompileManager.compileReport(inputStream);
             
-            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER, "pie_pagina.jasper"));
-            parametros.put("pl_url_piepagina",inputStream);
+            parametros.put("pl_url_cabecera",reportCabecera);
+            
+            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER, "pie_pagina.jrxml"));
+            JasperReport reportPiePagina = JasperCompileManager.compileReport(inputStream);
+            
+            parametros.put("pl_url_piepagina",reportPiePagina);
             //System.out.println(parametros.get("SUBREPORT_DIR"));            
         } catch (RemoteException ex) {
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JRException ex) {
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         return parametros;
