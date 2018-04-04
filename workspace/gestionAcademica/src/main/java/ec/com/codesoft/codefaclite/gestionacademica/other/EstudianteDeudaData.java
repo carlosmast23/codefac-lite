@@ -12,6 +12,7 @@ package ec.com.codesoft.codefaclite.gestionacademica.other;
 public class EstudianteDeudaData {
     private String rubro;
     private String valor;
+    private String fecha;
 
     public EstudianteDeudaData(String rubro, String valor) {
         this.rubro = rubro;
@@ -33,6 +34,15 @@ public class EstudianteDeudaData {
     public void setValor(String valor) {
         this.valor = valor;
     }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
+    }
+    
     
     
 }
