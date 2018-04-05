@@ -282,25 +282,17 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
                 
                 if(rubroPlantillaMes!=null)
                 {
-                    String nombreMes=getTxtNombreMes().getText();
-                    if(!nombreMes.equals(""))
-                    {
-                        /*try {
-                            
-                            if(enumSiNo.equals(EnumSiNo.NO))
-                            {
-                                rubroPlantilla = ServiceFactory.getFactory().getRubroEstudianteServiceIf().crearRubroEstudiantesDesdePlantila(rubroPlantilla,rubroPlantillaMes.getMesEnum(), nombreMes,rubroPlantillaMes.getAnio());
-                                DialogoCodefac.mensaje("Correcto", "Las deudas para el mes " + rubroPlantillaMes.getMesEnum().getNombre() + " se generaron correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-                                cargarDatos();
-                            }
-                            else
-                            {   
-                                DialogoCodefac.mensaje("Error","El mes seleccionado ya fue generado",DialogoCodefac.MENSAJE_INCORRECTO);
-                            }
-                            
+                    String nombreMes = getTxtNombreMes().getText();
+                    if (!nombreMes.equals("")) {
+                        try {
+
+                            rubroPlantilla = ServiceFactory.getFactory().getRubroEstudianteServiceIf().crearRubroEstudiantesDesdePlantila(rubroPlantilla, rubroPlantillaMes.getMesEnum(), nombreMes, rubroPlantillaMes.getAnio());
+                            DialogoCodefac.mensaje("Correcto", "Las deudas para el mes " + rubroPlantillaMes.getMesEnum().getNombre() + " se generaron correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+                            cargarDatos();
+
                         } catch (RemoteException ex) {
                             Logger.getLogger(RubroPlantillaModel.class.getName()).log(Level.SEVERE, null, ex);
-                        }*/
+                        }
                     }
                 }
             }
@@ -765,7 +757,10 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 RubroPlantillaMes rubroPlantillaMes=getLstMesesSinGenerar().getSelectedValue();
-                getTxtNombreMes().setText(rubroPlantilla.getNombre()+" "+rubroPlantillaMes.toString());
+                if(rubroPlantilla!=null && rubroPlantillaMes!=null)
+                {
+                    getTxtNombreMes().setText(rubroPlantilla.getNombre()+" "+rubroPlantillaMes.toString());
+                }
             }
         });
     }

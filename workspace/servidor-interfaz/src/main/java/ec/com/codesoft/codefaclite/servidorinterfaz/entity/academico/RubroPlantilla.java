@@ -196,18 +196,27 @@ public class RubroPlantilla implements Serializable{
     
     public List<RubroPlantillaMes> obtenerMesesSinGenerar()
     {
-        List<RubroPlantillaMes> rubrosMes=obtenerTodosMesesGenerar();
-        
+        List<RubroPlantillaMes> rubrosMes=obtenerTodosMesesGenerar();       
+   
         if(rubrosMes!=null)
         {
-            for (RubroPlantillaMes mes : rubrosMes) {
+            for (int i=0;i<rubrosMes.size();) {
                 //Si ya existe en la lista los borro
+                RubroPlantillaMes mes=rubrosMes.get(i);
+                
                 if(buscarPorAnioYMes(mes.getAnio(),mes.getNumeroMes()))
                 {
-                    rubrosMes.remove(mes);
+                    rubrosMes.remove(i);
+                }
+                else
+                {
+                    i++;
                 }
             }
         }
+        
+        
+        
         return rubrosMes;
     }
     

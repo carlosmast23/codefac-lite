@@ -114,12 +114,13 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
             }
 
             //Grabar los valores del mes que se estan generando
-            for (RubroPlantillaMes rubroPlantillaMes : rubroPlantilla.getMesesGenerados()) {
-                if(rubroPlantillaMes.getId()==null)
-                {
-                    entityManager.persist(rubroPlantillaMes);
-                }
-            }            
+            RubroPlantillaMes rubroPlantillaMes=new RubroPlantillaMes();
+            rubroPlantillaMes.setAnio(anio);
+            rubroPlantillaMes.setNumeroMes(mesEnum.getNumero());
+            rubroPlantillaMes.setRubroPlantilla(rubroPlantilla);
+            entityManager.persist(rubroPlantillaMes);
+            
+            rubroPlantilla.addMesGenerado(rubroPlantillaMes);
             
             //Actualizar el rubroPlantillaMes
             entityManager.merge(rubroPlantilla);

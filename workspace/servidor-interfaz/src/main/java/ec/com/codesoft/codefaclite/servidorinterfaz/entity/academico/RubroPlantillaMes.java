@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
+import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,7 +22,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "RUBRO_PLANTILLA_MES")
-public class RubroPlantillaMes {
+public class RubroPlantillaMes implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
