@@ -58,6 +58,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionService
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
@@ -123,6 +124,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     private BigDecimal valorTotalFormaDePago;
     private java.util.Date fechaMax;
     private java.util.Date fechaMin;
+    
+    /**
+     * Variable que almacena la forma de pago por defecto cuando no se selecciona ninguna
+     */
+    private SriFormaPago formaPagoDefecto;
 
     /**
      * Mapa de datos adicionales que se almacenan temporalmente y sirven para la
@@ -263,26 +269,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     {
                         getCmbRepresentante().setSelectedItem(represetanteTmp);
                     }
-                    
-                    /*
-                    try {
-                        Map<String,Object> parametrosMap=new HashMap<String,Object>();
-                        parametrosMap.put("representante",represetanteTmp);
-                        
-                        List<Estudiante> estudiantes=ServiceFactory.getFactory().getEstudianteServiceIf().obtenerPorMap(parametrosMap);
-                        if(estudiantes.size()>0)
-                        {
-                            factura.setCliente(represetanteTmp);
-                            estudiante=estudiantes.get(0);      
-                            setearValoresAcademicos(estudiante);
-                            cargarDatosAdicionalesAcademicos();
-                            cargarTablaDatosAdicionales();
-                        }
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (ServicioCodefacException ex) {
-                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                    }*/
+                   
                 }
 
             }
@@ -298,12 +285,20 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 
                 if(estudianteTmp!=null)
                 {
-                    estudiante=estudianteTmp;                    
-                    setearValoresAcademicos(estudiante);   
+                    estudiante=estudianteTmp;     
+                    setearValoresAcademicos(estudiante);
                     cargarDatosAdicionalesAcademicos();
-                    cargarTablaDatosAdicionales();
-                    factura.setCliente((Persona) getCmbRepresentante().getSelectedItem());
-                    cargarFormaPago();
+                    cargarTablaDatosAdicionales();           
+                    if(estudiante.getRepresentante()==null && estudiante.getRepresentante2()==null)
+                    {
+                        DialogoCodefac.mensaje("Advertencia","El estudiante no tienen ningun representante asignado", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    }
+                    else
+                    {
+                        factura.setCliente((Persona) getCmbRepresentante().getSelectedItem());   
+                        getCmbRepresentante().setSelectedIndex(getCmbRepresentante().getSelectedIndex());
+                        cargarFormaPago();
+                    }
                 }
                 
                 
@@ -1028,15 +1023,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             this.modeloTablaDatosAdicionales.addRow(dato);
         }
-        
-        /*for (Map.Entry<String, String> entry : datosAdicionales.entrySet()) {
-            String key = entry.getKey();
-            String value = entry.getValue();
-            Vector dato = new Vector();
-            dato.add(key);
-            dato.add(value);
-            this.modeloTablaDatosAdicionales.addRow(dato);
-        }*/
+
     }
 
     private void cargarDatosDetalles() {
@@ -1236,7 +1223,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getLblTotalDescuento().setText("" + factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()));
         
         //Verifico que solo exista una forma de pago y si cumple ese requesito actualizo el valor de la forma de pago
-        if (factura.getFormaPagos().size() == 1) {
+        if (factura.getFormaPagos()!=null && factura.getFormaPagos().size() == 1) {
             FormaPago formaPago = factura.getFormaPagos().get(0);
             formaPago.setTotal(factura.getTotal());
             cargarFormasPagoTabla();
@@ -1269,7 +1256,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             factura.getDatosAdicionales().clear();
         
         //Cargar el correo solo cuando exista 
-        factura.addDatosAdicionalCorreo(factura.getCliente().getCorreoElectronico());
+        //factura.addDatosAdicionalCorreo(factura.getCliente().getCorreoElectronico());
 
         factura.addDatoAdicional(DatosAdicionalesComprobanteEnum.NOMBRE_ESTUDIANTE.getNombre(), estudiante.getNombreCompleto());
 
@@ -1720,6 +1707,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     public void iniciarValoresIniciales() {
         List<DocumentoEnum> tiposDocumento=null;
+        
+        try {
+            //Obtener la forma de pago
+            formaPagoDefecto=ServiceFactory.getFactory().getSriServiceIf().obtenerFormarPagoDefecto();
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         //cuando la factura es electronica
         if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).valor.equals(TipoFacturacionEnumEstado.ELECTRONICA.getLetra()))
         {
@@ -1761,18 +1756,52 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 {
                     //Si cambie el combo de representante tambien los seteo en la factura
                     Persona persona=(Persona) getCmbRepresentante().getSelectedItem();
-                    factura.setCliente(persona);
-                    //cargarFormaPago();
                     
-                    //Verificar si ya esta cargado una forma de pago del representante anterior y si cambia de representante
-                    //Seleccionar la forma de pago de nuevo representante seleccionado                    
-                    if(factura.getFormaPagos()!=null && factura.getFormaPagos().size()==1)
+                    //Solo ejecutar el listener si existe un persona seleccionada
+                    if(persona!=null)
                     {
-                        FormaPago formaPago=factura.getFormaPagos().get(0);
-                        formaPago.setSriFormaPago(factura.getCliente().getSriFormaPago());
-                        cargarFormasPagoTabla();
+                        factura.setCliente(persona);
+                        
+                        //Modificar el correo principal de los datos adicionales por el del nuevo cliente
+                        FacturaAdicional facturaAdicional=factura.obtenerDatoAdicionalPorCampo(FacturaAdicional.NOMBRE_CORREO);
+                        //Si el campo ya existe solo lo modifico
+                        if(facturaAdicional!=null)
+                        {   
+                            if(persona.getCorreoElectronico()!=null)
+                                facturaAdicional.setValor(persona.getCorreoElectronico());
+                            else//Si no existe correo lo elimina de la lista
+                                factura.getDatosAdicionales().remove(facturaAdicional);
+                        }
+                        else //Si no existe el campo de correo lo crea
+                        {
+                            //Solo agregar si el cliente tiene un correo por defecto
+                            if(persona.getCorreoElectronico()!=null)
+                                factura.addDatosAdicionalCorreo(persona.getCorreoElectronico());
+                        }
+                        
+                        cargarTablaDatosAdicionales();
+
+                        //Verificar si ya esta cargado una forma de pago del representante anterior y si cambia de representante
+                        //Seleccionar la forma de pago de nuevo representante seleccionado                    
+                        if(factura.getFormaPagos()!=null && factura.getFormaPagos().size()==1)
+                        {
+                            FormaPago formaPago=factura.getFormaPagos().get(0);
+
+                            if(factura.getCliente().getSriFormaPago()!=null)
+                            {
+                                formaPago.setSriFormaPago(factura.getCliente().getSriFormaPago());
+                            }
+                            else //Si no esta grabado una forma de pago en el cliente asigno a forma de pago por defecto de las configuraciones
+                            {
+                                if(formaPagoDefecto!=null)
+                                {
+                                    formaPago.setSriFormaPago(formaPagoDefecto);                            
+                                }
+                            }
+
+                            cargarFormasPagoTabla();
+                        }
                     }
-                    
                 }
             }
         });

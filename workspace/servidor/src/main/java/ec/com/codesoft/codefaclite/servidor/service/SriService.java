@@ -12,7 +12,9 @@ import ec.com.codesoft.codefaclite.servidor.facade.SriIdentificacionFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -27,6 +29,22 @@ public class SriService extends UnicastRemoteObject implements SriServiceIf
         super();
         this.sriFormaPagoFacade = new SriFormaPagoFacade();
         this.sriIdentificacionFacade = new SriIdentificacionFacade();
+    }
+    
+    public SriFormaPago obtenerFormarPagoDefecto() throws java.rmi.RemoteException
+    {
+        //Todo:Cambiar por algun parametro del sistema para que sepa cual forma de pago buscar
+        String codigoFormaPago="01";
+        
+        Map<String,Object> mapParametros=new HashMap<String, Object>();
+        mapParametros.put("codigo",codigoFormaPago);
+        
+        List<SriFormaPago> formasPago=sriFormaPagoFacade.findByMap(mapParametros);
+        if(formasPago.size()>0)
+        {
+            return formasPago.get(0);
+        }
+        return null;
     }
     
     public List<SriFormaPago> obtenerFormasPagoActivo() throws java.rmi.RemoteException

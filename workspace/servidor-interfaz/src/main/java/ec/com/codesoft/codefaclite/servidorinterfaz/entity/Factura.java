@@ -459,6 +459,20 @@ public class Factura implements Serializable {
         this.datosAdicionales.add(facturaAdicional);
     
     }
+    
+    public FacturaAdicional obtenerDatoAdicionalPorCampo(String nombre)
+    {
+        if(this.datosAdicionales!=null)
+        {
+            for (FacturaAdicional facturaAdicional : datosAdicionales) {
+                if(facturaAdicional.getCampo().equals(nombre))
+                {
+                    return facturaAdicional;
+                }
+            }
+        }
+        return null;
+    }
 
     @Override
     public int hashCode() {
