@@ -545,8 +545,31 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 formaPago.setUnidadTiempo(FormaPago.UnidadTiempoEnum.NINGUNO.getNombre());
 
                 factura.addFormaPago(formaPago);
+                cargarFormasPagoTabla();
             }
-        }        
+        }
+        else
+        {
+            //Si ya existe un dato ingresado solo edita el dato si se cambia de representante
+            if (factura.getFormaPagos().size() == 1)
+            {
+                FormaPago formaPago = factura.getFormaPagos().get(0);
+                //TODO: Optimizar para que se cambie la forma de pago solo si es un cliente distinto
+                if (factura.getCliente().getSriFormaPago() != null) 
+                {
+                    formaPago.setSriFormaPago(factura.getCliente().getSriFormaPago());
+                } 
+                else //Si no esta grabado una forma de pago en el cliente asigno a forma de pago por defecto de las configuraciones
+                {
+                    if (formaPagoDefecto != null) 
+                    {
+                        formaPago.setSriFormaPago(formaPagoDefecto);
+                    }
+                }
+                
+                cargarFormasPagoTabla();
+            }
+        }
     }
     
     private boolean verificaDatoComboRepresentante(Persona persona)
@@ -1840,31 +1863,15 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         
                         cargarTablaDatosAdicionales();
 
-                        //Verificar si ya esta cargado una forma de pago del representante anterior y si cambia de representante
-                        //Seleccionar la forma de pago de nuevo representante seleccionado                    
-                        if(factura.getFormaPagos()!=null && factura.getFormaPagos().size()==1)
-                        {
-                            FormaPago formaPago=factura.getFormaPagos().get(0);
-
-                            if(factura.getCliente().getSriFormaPago()!=null)
-                            {
-                                formaPago.setSriFormaPago(factura.getCliente().getSriFormaPago());
-                            }
-                            else //Si no esta grabado una forma de pago en el cliente asigno a forma de pago por defecto de las configuraciones
-                            {
-                                if(formaPagoDefecto!=null)
-                                {
-                                    formaPago.setSriFormaPago(formaPagoDefecto);                            
-                                }
-                            }
-
-                            cargarFormasPagoTabla();
-                        }
+                        //Cargar las formas de pago por defecto del cliente
+                        cargarFormaPago();
+                        
                     }
                 }
             }
         });
     }
+    
     
     private void seleccionarPanelTipoDocumento(TipoDocumentoEnum tipoDocumentoEnum)
     {
@@ -1955,7 +1962,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
                 }                
                 agregarDetallesFactura(BigDecimal.ONE,rubro.getSaldo(),descripcion,true,new BigDecimal(rubro.getProcentajeDescuento()+""),rubro);
-            }        
+            }
+            
+            //Cargar los representate seteado en el combo box
+            getCmbRepresentante().setSelectedIndex(getCmbRepresentante().getSelectedIndex());
 
         }
         else
@@ -1963,6 +1973,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             //TODO: implementar para el otro caso cuando sea de otros modulos
         
         }
+        
+        cargarFormaPago();
         
         
         
