@@ -63,6 +63,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoPro
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DatosAdicionalesComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoReferenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
@@ -567,12 +568,49 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         RubroEstudiante rubroEstudianteTmp = (RubroEstudiante) buscarDialogoModel.getResultado();
 
         if (rubroEstudianteTmp != null) {
+            //Verificar que no se puedan agregar rubros que ya estan en los detalles para facturar
+            if(verificarExisteRubroAgregado(rubroEstudianteTmp))
+            {
+                DialogoCodefac.mensaje("Advertencia","EL rubro ya esta agregado, no se puede agregar nuevamente",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                return;
+            }            
+            
             rubroSeleccionado=rubroEstudianteTmp;
             setearValoresProducto(rubroEstudianteTmp.getSaldo(),rubroEstudianteTmp.getRubroNivel().getNombre());
             banderaAgregar = true;
         }
-
         
+    }
+    
+    /**
+     * Funcion que verifica si existe un rubro dentro de la lista de la factura
+     * @param rubroEstudiante
+     * @return 
+     */
+    private boolean verificarExisteRubroAgregado(RubroEstudiante rubroEstudiante)
+    {
+        for (FacturaDetalle facturaDetalle : factura.getDetalles()) 
+        {
+            //Verificar solo los que son de tipo academico
+            if(facturaDetalle.getTipoDocumentoEnum().equals(TipoDocumentoEnum.ACADEMICO))
+            {
+                try {
+                    RubroEstudiante rubroEstudianteTmp=ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                    
+                    if(rubroEstudianteTmp!=null)
+                    {
+                        if(rubroEstudianteTmp.equals(rubroEstudiante))
+                        {
+                            return true;
+                        }
+                    }                    
+                    
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        return false;
     }
     
     private void agregarProducto() {
