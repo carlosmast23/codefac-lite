@@ -278,6 +278,24 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getBtnBuscarEstudiante().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                
+                //Verificar si ya existen detalles cargados se tienen que eliminar se debe preguntar al usuario
+                if(factura!=null && factura.getDetalles()!=null && factura.getDetalles().size()>0)
+                {
+                    Boolean pregunta=DialogoCodefac.dialogoPregunta("Advertencia","Si selecciona otro estudiante se eliminaron los detalles cargados, desea continuar?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    if(pregunta)
+                    {
+                        factura.getDetalles().clear();
+                        //Actualizar los detalles vacios en la vista
+                        cargarDatosDetalles();
+                        
+                    }
+                    else //Si selecciona no termina la ejecucion
+                    {
+                        return;
+                    }
+                }                
+                
                 EstudianteBusquedaDialogo clienteBusquedaDialogo = new EstudianteBusquedaDialogo();
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
                 buscarDialogoModel.setVisible(true);
@@ -1026,6 +1044,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     }
 
+    /**
+     * Cargar los detalles de las facturas agregados
+     */
     private void cargarDatosDetalles() {
         Vector<String> titulo = new Vector<>();
         titulo.add("Codigo");
