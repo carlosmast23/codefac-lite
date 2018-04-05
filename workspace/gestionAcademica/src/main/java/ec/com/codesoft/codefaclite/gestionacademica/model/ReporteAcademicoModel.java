@@ -140,14 +140,19 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
             List<ReporteAcademicoData> data = new ArrayList<ReporteAcademicoData>();
 
             for (EstudianteInscrito est : dataEstudiantes) {
-
+                
+                String nombreRepresentante="s/n";
+                
+                if(est.getEstudiante().getRepresentante()!=null)
+                    nombreRepresentante=est.getEstudiante().getRepresentante().getNombresCompletos();
+                
                 data.add(new ReporteAcademicoData(
                         est.getEstudiante().getCedula(),
                         est.getEstudiante().getNombres(),
                         est.getEstudiante().getApellidos(),
                         est.getEstudiante().getEmail(),
                         est.getEstudiante().getTelefono(),
-                        est.getEstudiante().getRepresentante().getNombres() + " " + est.getEstudiante().getRepresentante().getApellidos(),
+                        nombreRepresentante,
                         est.getNivelAcademico().getNombre()
                 ));
 
