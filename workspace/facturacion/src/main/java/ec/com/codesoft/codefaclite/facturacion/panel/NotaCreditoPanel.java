@@ -101,6 +101,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         btnAgregarDatosAdicionales = new javax.swing.JButton();
         jScrollPane5 = new javax.swing.JScrollPane();
         tblDatosAdicionales = new javax.swing.JTable();
+        btnQuitarDatosAdicionales = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -680,10 +681,19 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         PanelDatosAdicionales.add(jScrollPane5, gridBagConstraints);
+
+        btnQuitarDatosAdicionales.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/cerrar-ico.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        PanelDatosAdicionales.add(btnQuitarDatosAdicionales, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
@@ -712,6 +722,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
     private javax.swing.JPanel PanelValores;
     private javax.swing.JButton btnAgregarDatosAdicionales;
     private javax.swing.JButton btnBuscarFactura;
+    private javax.swing.JButton btnQuitarDatosAdicionales;
     private javax.swing.JCheckBox jCheckBox1;
     private com.toedter.calendar.JDateChooser jDateFechaEmision;
     private javax.swing.JLabel jLabel1;

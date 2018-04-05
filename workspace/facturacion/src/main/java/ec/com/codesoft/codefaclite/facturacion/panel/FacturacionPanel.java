@@ -111,6 +111,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         btnAgregarDatosAdicionales = new javax.swing.JButton();
         jScrollPane5 = new javax.swing.JScrollPane();
         tblDatosAdicionales = new javax.swing.JTable();
+        btnQuitarDatosAdicionales = new javax.swing.JButton();
         PanelValores = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
@@ -353,7 +354,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
@@ -393,7 +394,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.weightx = 0.6;
         gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 2);
         getContentPane().add(PanelFormasPago, gridBagConstraints);
@@ -423,10 +424,19 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         PanelDatosAdicionales.add(jScrollPane5, gridBagConstraints);
+
+        btnQuitarDatosAdicionales.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/cerrar-ico.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        PanelDatosAdicionales.add(btnQuitarDatosAdicionales, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -1083,7 +1093,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 0.8;
+        gridBagConstraints.weightx = 0.7;
         getContentPane().add(panelTabDatos, gridBagConstraints);
 
         pack();
@@ -1128,6 +1138,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnBuscarRepresentante;
     private javax.swing.JButton btnCrearProducto;
     private javax.swing.JButton btnEditarDetalle;
+    private javax.swing.JButton btnQuitarDatosAdicionales;
     private javax.swing.JButton btnQuitarDetalle;
     private javax.swing.JButton btnQuitarDetalleFormaPago;
     private javax.swing.JCheckBox checkPorcentaje;
