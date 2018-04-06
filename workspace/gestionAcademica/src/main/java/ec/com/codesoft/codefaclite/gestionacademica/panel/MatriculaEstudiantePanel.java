@@ -62,7 +62,6 @@ public abstract class MatriculaEstudiantePanel extends ControladorCodefacInterfa
         jLabel11 = new javax.swing.JLabel();
         cmbEstudianteTieneBeca = new javax.swing.JComboBox<>();
         lblEspacio2 = new javax.swing.JLabel();
-        lblEspacio1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
         chkNinguno = new javax.swing.JRadioButton();
@@ -254,12 +253,6 @@ public abstract class MatriculaEstudiantePanel extends ControladorCodefacInterfa
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 0.1;
         getContentPane().add(lblEspacio2, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        getContentPane().add(lblEspacio1, gridBagConstraints);
 
         buttonGroup1.add(chkNinguno);
         chkNinguno.setText("Ninguno");
@@ -283,7 +276,7 @@ public abstract class MatriculaEstudiantePanel extends ControladorCodefacInterfa
                 .addComponent(chkOtro)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel12)
-                .addContainerGap(83, Short.MAX_VALUE))
+                .addContainerGap(113, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -337,7 +330,6 @@ public abstract class MatriculaEstudiantePanel extends ControladorCodefacInterfa
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio2;
     private javax.swing.JLabel lblEspacio3;
     private javax.swing.JSpinner spnPorcentaje;

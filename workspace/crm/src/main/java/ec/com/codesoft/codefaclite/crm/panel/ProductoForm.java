@@ -91,7 +91,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         comboIce = new javax.swing.JComboBox<>();
         jLabel12 = new javax.swing.JLabel();
         comboIrbpnr = new javax.swing.JComboBox<>();
-        lblEspacio3 = new javax.swing.JLabel();
         lblEspacio4 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         cmbTipoProducto = new javax.swing.JComboBox<>();
@@ -257,7 +256,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
 
         jLabel7.setText("                    ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 12;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel1.add(jLabel7, gridBagConstraints);
@@ -329,12 +328,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(comboIrbpnr, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 13;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        jPanel1.add(lblEspacio3, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -784,7 +777,6 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblEspacio2;
-    private javax.swing.JLabel lblEspacio3;
     private javax.swing.JLabel lblEspacio4;
     private javax.swing.JLabel lblEspacioBlanco;
     private javax.swing.JTable tblDatosEnsamble;
