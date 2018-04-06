@@ -86,7 +86,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         setResizable(true);
         setTitle("Cliente");
         setFrameIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/persona-ico.png"))); // NOI18N
-        setPreferredSize(new java.awt.Dimension(850, 387));
+        setPreferredSize(new java.awt.Dimension(800, 467));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -101,6 +101,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         getContentPane().add(jLabel1, gridBagConstraints);
 
         jPanelCaracteristicasGenerales.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos Clientes"));
+        jPanelCaracteristicasGenerales.setPreferredSize(new java.awt.Dimension(607, 353));
         jPanelCaracteristicasGenerales.setLayout(new java.awt.GridBagLayout());
 
         jLabel2.setText("Nombres:");

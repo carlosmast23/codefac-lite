@@ -215,6 +215,30 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     private void addListenerButtons() {
         
+        getBtnAgregarRepresentante().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<Persona>() {
+                    @Override
+                    public void updateInterface(Persona entity) {
+                        factura.setCliente(entity);
+                        if (factura.getCliente() != null) {
+                            if (entity != null) {
+                                //Agregar solo si no existe el dato en el combo box
+                                if (!verificaDatoComboRepresentante(entity)) {
+                                    getCmbRepresentante().addItem(entity);
+                                    getCmbRepresentante().setSelectedItem(entity);
+                                } else {
+                                    getCmbRepresentante().setSelectedItem(entity);
+                                }
+
+                            }
+                        }
+                    }
+                }, DialogInterfacePanel.CLIENTE_PANEL, false);
+            }
+        });
+        
         getBtnAgregarDatosAdicionales().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
