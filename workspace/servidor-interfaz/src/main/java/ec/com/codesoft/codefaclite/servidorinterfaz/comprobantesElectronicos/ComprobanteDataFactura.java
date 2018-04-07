@@ -86,7 +86,7 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
         
         informacionFactura.setFechaEmision(ComprobantesElectronicosUtil.dateToString(factura.getFechaFactura()));
         
-        if(factura.getCliente().getTipoIdentificacion().equals(SriIdentificacion.CEDULA_IDENTIFICACION))
+        if(factura.getCliente().getSriTipoIdentificacion().getCodigo().equals(SriIdentificacion.CEDULA_IDENTIFICACION))
             informacionFactura.setIdentificacionComprador(factura.getCliente().getIdentificacion());
         else
             informacionFactura.setIdentificacionComprador(UtilidadesTextos.llenarCarateresDerecha(factura.getCliente().getIdentificacion(), 13, "0"));
@@ -95,7 +95,7 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
         //Falta manejar este campo al momento de guardar
         informacionFactura.setRazonSocialComprador(factura.getCliente().getRazonSocial());
         //informacionFactura.setRazonSocialComprador(factura.getCliente().getRazonSocial());
-        informacionFactura.setTipoIdentificacionComprador(factura.getCliente().getTipoIdentificacion());
+        informacionFactura.setTipoIdentificacionComprador(factura.getCliente().getSriTipoIdentificacion().getCodigo());
         
         BigDecimal descuentoTotal=factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos());
         informacionFactura.setTotalDescuento(descuentoTotal);

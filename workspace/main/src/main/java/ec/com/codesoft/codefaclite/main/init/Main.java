@@ -92,6 +92,7 @@ import ec.com.codesoft.codefaclite.servidor.service.ProductoEnsambleService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoProveedorService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoService;
 import ec.com.codesoft.codefaclite.servidor.service.RecursosService;
+import ec.com.codesoft.codefaclite.servidor.service.SriFormaPagoService;
 import ec.com.codesoft.codefaclite.servidor.service.SriIdentificacionService;
 import ec.com.codesoft.codefaclite.servidor.service.SriService;
 import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
@@ -187,6 +188,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilUsuarioServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriFormaPagoServiceIf;
 
 /**
  *
@@ -363,6 +365,7 @@ public class Main {
             mapRecursos.put(RubroPlantillaEstudianteService.class, RubroPlantillaEstudianteServiceIf.class);
             mapRecursos.put(PerfilService.class, PerfilServiceIf.class);
             mapRecursos.put(PerfilUsuarioService.class, PerfilUsuarioServiceIf.class);
+            mapRecursos.put(SriFormaPagoService.class, SriFormaPagoServiceIf.class);
             
             ServiceControllerServer.cargarRecursos(mapRecursos);
             System.out.println("servidor iniciado");

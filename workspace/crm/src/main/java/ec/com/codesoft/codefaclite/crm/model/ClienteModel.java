@@ -126,7 +126,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         persona.setNombres(getjTextNombres().getText());
         persona.setApellidos(getjTextApellidos().getText());
         persona.setRazonSocial(getjTextNombreSocial().getText());
-        persona.setTipoIdentificacion(((SriIdentificacion) getjComboIdentificacion().getSelectedItem()).getCodigo());
+        persona.setSriTipoIdentificacion((SriIdentificacion) getjComboIdentificacion().getSelectedItem());
         persona.setIdentificacion(getjTextIdentificacion().getText());
         persona.setTipCliente((String) getjComboTipoCliente().getSelectedItem());
         persona.setDireccion(getjTextAreaDireccion().getText());
@@ -283,7 +283,10 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         getjTextNombreSocial().setText(persona.getRazonSocial());
         getjTextIdentificacion().setText("" + persona.getIdentificacion());
         persona.setNombreLegal(getjTextNombreSocial().getText());
-        getjComboIdentificacion().setSelectedIndex(comboIdentificacion(persona.getIdentificacion()));
+        
+        
+        //getjComboIdentificacion().setSelectedIndex(comboIdentificacion(persona.getIdentificacion()));
+        getjComboIdentificacion().setSelectedItem(persona.getSriTipoIdentificacion());
         getjTextIdentificacion().setText(persona.getIdentificacion());
         getjComboTipoCliente().setSelectedItem(persona.getTipCliente());
         getjTextAreaDireccion().setText(persona.getDireccion());

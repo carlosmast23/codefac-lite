@@ -65,6 +65,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriFormaPagoServiceIf;
 
 /**
  *
@@ -135,6 +136,7 @@ public abstract class ServiceFactory {
     public RubroPlantillaServiceIf getRubroPlantillaServiceIf(){return (RubroPlantillaServiceIf) getRecursosRMI(RubroPlantillaServiceIf.class);};
     public RubroPlantillaEstudianteServiceIf getRubroPlantillaEstudianteServiceIf(){return (RubroPlantillaEstudianteServiceIf) getRecursosRMI(RubroPlantillaEstudianteServiceIf.class);};
     public PerfilUsuarioServiceIf getPerfilUsuarioServiceIf(){return (PerfilUsuarioServiceIf) getRecursosRMI(PerfilUsuarioServiceIf.class);};
+    public SriFormaPagoServiceIf getSriFormaPagoServiceIf(){return (SriFormaPagoServiceIf) getRecursosRMI(SriFormaPagoServiceIf.class);};
     
     
     /**

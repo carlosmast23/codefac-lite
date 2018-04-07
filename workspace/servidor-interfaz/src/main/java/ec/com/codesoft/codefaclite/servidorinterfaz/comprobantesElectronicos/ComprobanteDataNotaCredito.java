@@ -97,7 +97,7 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
         info.setFechaEmision(ComprobantesElectronicosUtil.dateToString(notaCredito.getFechaNotaCredito()));
         info.setFechaEmisionDocSustento(ComprobantesElectronicosUtil.dateToString(notaCredito.getFactura().getFechaFactura()));
         
-        if(notaCredito.getCliente().getTipoIdentificacion().equals(SriIdentificacion.CEDULA_IDENTIFICACION))
+        if(notaCredito.getCliente().getSriTipoIdentificacion().getCodigo().equals(SriIdentificacion.CEDULA_IDENTIFICACION))
             info.setIdentificacionComprador(notaCredito.getCliente().getIdentificacion());
         else
             info.setIdentificacionComprador(UtilidadesTextos.llenarCarateresDerecha(notaCredito.getCliente().getIdentificacion(), 13, "0"));
@@ -116,7 +116,7 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
          */
         //info.setRise(claveAcceso);
         
-        info.setTipoIdentificacionComprador(notaCredito.getCliente().getTipoIdentificacion());
+        info.setTipoIdentificacionComprador(notaCredito.getCliente().getSriTipoIdentificacion().getCodigo());
         //info.setTotalImpuestos(totalImpuestos);
         info.setTotalSinImpuestos(notaCredito.getSubtotalDoce().add(notaCredito.getSubtotalCero()));
         info.setValorModificacion(notaCredito.getTotal());

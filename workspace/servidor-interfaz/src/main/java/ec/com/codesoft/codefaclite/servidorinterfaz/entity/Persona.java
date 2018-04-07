@@ -41,8 +41,6 @@ public class Persona implements Serializable {
     private String apellidos;
     @Column(name = "IDENTIFICACION")
     private String identificacion;
-    @Column(name = "TIPO_IDENTIFICACION")
-    private String tipoIdentificacion;
     @Column(name = "RAZON_SOCIAL")
     private String razonSocial;
     @Column(name = "NOMBRE_LEGAL")
@@ -68,6 +66,9 @@ public class Persona implements Serializable {
     
     @JoinColumn(name = "SRI_FORMA_PAGO_ID")
     private SriFormaPago sriFormaPago;
+    
+    @JoinColumn(name = "SRI_IDENTIFICACION_ID")
+    private SriIdentificacion sriTipoIdentificacion;
 
     /**
      * Variable para identificar el tipo de la persona, si es proveedor ,
@@ -90,14 +91,6 @@ public class Persona implements Serializable {
 
     public void setIdentificacion(String identificacion) {
         this.identificacion = identificacion;
-    }
-
-    public String getTipoIdentificacion() {
-        return tipoIdentificacion;
-    }
-
-    public void setTipoIdentificacion(String tipoIdentificacion) {
-        this.tipoIdentificacion = tipoIdentificacion;
     }
 
     public String getRazonSocial() {
@@ -211,6 +204,16 @@ public class Persona implements Serializable {
     public void setSriFormaPago(SriFormaPago sriFormaPago) {
         this.sriFormaPago = sriFormaPago;
     }
+
+    public SriIdentificacion getSriTipoIdentificacion() {
+        return sriTipoIdentificacion;
+    }
+
+    public void setSriTipoIdentificacion(SriIdentificacion sriTipoIdentificacion) {
+        this.sriTipoIdentificacion = sriTipoIdentificacion;
+    }
+    
+    
     
     
 
