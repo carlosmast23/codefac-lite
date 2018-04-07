@@ -55,4 +55,15 @@ create table NOTA_CREDITO_DETALLE
     TOTAL decimal(7,2),
     DESCRIPCION varchar(150),
     primary key (ID)
+);
+
+create table NOTA_CREDITO_ADICIONAL
+(
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1),
+    NOTA_CREDITO_ID BIGINT,
+    CAMPO varchar(150),
+    VALOR varchar(150),
+    TIPO varchar(1),
+    NUMERO integer ,
+    primary key (ID)
 )

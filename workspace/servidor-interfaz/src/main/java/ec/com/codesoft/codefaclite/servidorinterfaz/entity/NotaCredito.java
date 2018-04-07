@@ -14,6 +14,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -88,8 +89,11 @@ public class NotaCredito implements Serializable {
     @ManyToOne    
     private Persona cliente;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "notaCredito")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "notaCredito",fetch = FetchType.EAGER)
     private List<NotaCreditoDetalle> detalles;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "notaCredito",fetch = FetchType.EAGER)
+    private List<NotaCreditoAdicional> datosAdicionales;
 
     public NotaCredito() {
     }
@@ -301,9 +305,18 @@ public class NotaCredito implements Serializable {
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
+
+    public List<NotaCreditoAdicional> getDatosAdicionales() {
+        return datosAdicionales;
+    }
+
+    public void setDatosAdicionales(List<NotaCreditoAdicional> datosAdicionales) {
+        this.datosAdicionales = datosAdicionales;
+    }
+        
     
         /**
-     * Informacion adicional
+     * Informacion personaliazada
      */
     public void addDetalle(NotaCreditoDetalle detalle)
     {
@@ -314,6 +327,51 @@ public class NotaCredito implements Serializable {
         detalle.setNotaCredito(this);
         this.detalles.add(detalle);
         
+    }    
+    
+    public void addDatoAdicional(NotaCreditoAdicional datoAdicional)
+    {
+        if(this.datosAdicionales==null)
+        {
+            this.datosAdicionales=new ArrayList<NotaCreditoAdicional>();
+        }
+        datoAdicional.setNotaCredito(this);
+        this.datosAdicionales.add(datoAdicional);
+    }
+    
+    public void addDatosAdicionalCorreo(String correo)
+    {
+        NotaCreditoAdicional datoAdicional=new NotaCreditoAdicional();
+        datoAdicional.setCampo(FacturaAdicional.NOMBRE_CORREO);
+        datoAdicional.setNotaCredito(this);
+        datoAdicional.setTipo(FacturaAdicional.Tipo.TIPO_CORREO.getLetra());
+        datoAdicional.setValor(correo);
+        
+        if (this.datosAdicionales == null) {
+            this.datosAdicionales = new ArrayList<NotaCreditoAdicional>();
+        }
+        
+        //Buscar si existe un correo anterior para nombrar de forma secuencial
+        Integer numeroMaximo=0;
+        for (NotaCreditoAdicional datoAdicionalTmp : datosAdicionales) {            
+            if(datoAdicionalTmp.getTipo().equals(FacturaAdicional.Tipo.TIPO_CORREO.getLetra()))
+            {
+                if(datoAdicionalTmp.getNumero()>numeroMaximo)
+                {
+                    numeroMaximo=datoAdicionalTmp.getNumero();
+                }
+            }
+        }
+        
+        datoAdicional.setNumero(numeroMaximo+1);
+        //Modificar el nombre si el correo es mas de 2
+        if(datoAdicional.getNumero()>1)
+        {
+            datoAdicional.setCampo(FacturaAdicional.NOMBRE_CORREO+" "+datoAdicional.getNumero());
+        }
+
+        this.datosAdicionales.add(datoAdicional);
+    
     }
     
     public String getPreimpreso()

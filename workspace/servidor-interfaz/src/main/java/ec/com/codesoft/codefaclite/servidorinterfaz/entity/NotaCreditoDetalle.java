@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Column;
@@ -147,8 +148,11 @@ public class NotaCreditoDetalle implements Serializable {
         this.tipoReferencia = tipoReferencia;
     }
 
-    
-    
+    //Metodos personalizados implementados
+    public TipoDocumentoEnum getTipoDocumentoEnum()
+    {
+        return TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(getTipoReferencia());
+    }
     
     
 }

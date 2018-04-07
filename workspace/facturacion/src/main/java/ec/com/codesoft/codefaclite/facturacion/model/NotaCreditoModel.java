@@ -35,7 +35,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEn
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
 import java.awt.Color;
@@ -232,6 +236,39 @@ public class NotaCreditoModel extends NotaCreditoPanel {
     }
 
     private void addListenerButtons() {
+        
+        getBtnAgregarDatosAdicionales().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DatoAdicionalModel datoAdicional=new DatoAdicionalModel();
+                datoAdicional.setVisible(true);
+                
+                String valor=datoAdicional.valor;
+                String campo=datoAdicional.campo;
+                
+                FacturaAdicional.Tipo tipoEnum=datoAdicional.tipo;
+                
+                if(notaCredito!=null && valor!=null && tipoEnum!=null)
+                {
+                    if(tipoEnum.equals(FacturaAdicional.Tipo.TIPO_CORREO))
+                    {
+                        notaCredito.addDatosAdicionalCorreo(valor);
+                    }
+                    else
+                    {
+                        NotaCreditoAdicional dato=new NotaCreditoAdicional();
+                        dato.setCampo(campo);
+                        dato.setTipo(tipoEnum.getLetra());
+                        dato.setNumero(0);
+                        dato.setValor(valor);
+                        notaCredito.addDatoAdicional(dato);
+                        //factura.addDatoAdicional(dato);
+                    }
+                    cargarTablaDatosAdicionales();
+                }
+            }
+        });
+        
         getBtnBuscarFactura().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -242,6 +279,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
                 if (factura != null) {
                     notaCredito.setFactura(factura);
                     cargarDatosNotaCredito();
+                    cargarTablaDatosAdicionales();
                 }
             }
         });
@@ -257,8 +295,6 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         notaCredito.setSubtotalCero(notaCredito.getFactura().getSubtotalSinImpuestos());
         notaCredito.setSubtotalDoce(notaCredito.getFactura().getSubtotalImpuestos());
         notaCredito.setCliente(notaCredito.getFactura().getCliente());
-
- 
         
         /**
          * CargarDetallesNotaCredito
@@ -275,11 +311,31 @@ public class NotaCreditoModel extends NotaCreditoPanel {
             notaDetalle.setIva(facturaDetalle.getIva());
             notaDetalle.setPrecioUnitario(facturaDetalle.getPrecioUnitario());
             notaDetalle.setReferenciaId(facturaDetalle.getReferenciaId());
+            notaDetalle.setTipoReferencia(facturaDetalle.getTipoDocumento());
             notaDetalle.setTotal(facturaDetalle.getTotal());
             notaDetalle.setValorIce(facturaDetalle.getValorIce());
 
             notaCredito.addDetalle(notaDetalle);
         }
+        
+        /**
+         * Cargar los datos Adicionales
+         */
+         List<FacturaAdicional> datosAdicional=notaCredito.getFactura().getDatosAdicionales();
+         if(datosAdicional!=null)
+         {
+             List<NotaCreditoAdicional> datosAdicionalNotaCredito=new ArrayList<NotaCreditoAdicional>();
+             for (FacturaAdicional facturaDetalle : datosAdicional) {
+                 NotaCreditoAdicional notaCreditoAdicional=new NotaCreditoAdicional();
+                 notaCreditoAdicional.setCampo(facturaDetalle.getCampo());
+                 notaCreditoAdicional.setNotaCredito(notaCredito);
+                 notaCreditoAdicional.setNumero(facturaDetalle.getNumero());
+                 notaCreditoAdicional.setTipo(facturaDetalle.getTipo());
+                 notaCreditoAdicional.setValor(facturaDetalle.getValor());
+                 datosAdicionalNotaCredito.add(notaCreditoAdicional);
+             }
+             notaCredito.setDatosAdicionales(datosAdicionalNotaCredito);
+         }
         
         actualizarDatosTablaDetalle();
         mostrarDatosNotaCredito();
@@ -324,14 +380,32 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         List<NotaCreditoDetalle> detalles = notaCredito.getDetalles();
         for (NotaCreditoDetalle detalle : detalles) {
             try {
-                Producto producto= ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
-                Vector<String> fila = new Vector<String>();
-                fila.add(producto.getCodigoPersonalizado());
-                fila.add(producto.getValorUnitario() + "");
-                fila.add(detalle.getCantidad() + "");
-                fila.add(detalle.getDescripcion());
-                fila.add(detalle.getTotal() + "");
-                this.modeloTablaDetalle.addRow(fila);
+                if(detalle.getTipoDocumentoEnum().equals(TipoDocumentoEnum.ACADEMICO))
+                {
+                    RubroEstudiante rubroEstudiante=ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(detalle.getReferenciaId());
+                    Vector<String> fila = new Vector<String>();
+                    fila.add(rubroEstudiante.getId().toString());
+                    fila.add(rubroEstudiante.getValor().toString());
+                    fila.add(detalle.getCantidad() + "");
+                    fila.add(detalle.getDescripcion());
+                    fila.add(detalle.getTotal() + "");
+                    this.modeloTablaDetalle.addRow(fila);                    
+                }
+                else
+                {
+                    //TODO:Terminar de implementar las otras filas
+                    if (detalle.getTipoDocumentoEnum().equals(TipoDocumentoEnum.VENTA)) {
+                        Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
+                        Vector<String> fila = new Vector<String>();
+                        fila.add((producto.getCodigoPersonalizado() != null) ? producto.getCodigoPersonalizado() : "");
+                        fila.add(producto.getValorUnitario() + "");
+                        fila.add(detalle.getCantidad() + "");
+                        fila.add(detalle.getDescripcion());
+                        fila.add(detalle.getTotal() + "");
+                        this.modeloTablaDetalle.addRow(fila);
+                    }
+
+                }
             } catch (RemoteException ex) {
                 Logger.getLogger(NotaCreditoModel.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -408,6 +482,29 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         
         return validado;
         
+    }
+    
+     /**
+     * Metodo que actualiza los valores en la tabla
+     */    
+    private void cargarTablaDatosAdicionales() 
+    {
+        Vector<String> titulo = new Vector<>();
+        titulo.add("Nombre");
+        titulo.add("Valor");
+
+        DefaultTableModel modeloTablaDatosAdicionales = new DefaultTableModel(titulo, 0);
+       
+        for (NotaCreditoAdicional datoAdicional : notaCredito.getDatosAdicionales()) {
+            Vector dato = new Vector();
+            dato.add(datoAdicional.getCampo());
+            dato.add(datoAdicional.getValor());
+            
+            modeloTablaDatosAdicionales.addRow(dato);
+        }
+        
+        getTblDatosAdicionales().setModel(modeloTablaDatosAdicionales);
+
     }
 
     private void setearDatosEmpresa()

@@ -912,4 +912,31 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         this.jDateFechaEmision = jDateFechaEmision;
     }
 
+    public JTable getTblDatosAdicionales() {
+        return tblDatosAdicionales;
+    }
+
+    public void setTblDatosAdicionales(JTable tblDatosAdicionales) {
+        this.tblDatosAdicionales = tblDatosAdicionales;
+    }
+
+    public JButton getBtnAgregarDatosAdicionales() {
+        return btnAgregarDatosAdicionales;
+    }
+
+    public void setBtnAgregarDatosAdicionales(JButton btnAgregarDatosAdicionales) {
+        this.btnAgregarDatosAdicionales = btnAgregarDatosAdicionales;
+    }
+
+    public JButton getBtnQuitarDatosAdicionales() {
+        return btnQuitarDatosAdicionales;
+    }
+
+    public void setBtnQuitarDatosAdicionales(JButton btnQuitarDatosAdicionales) {
+        this.btnQuitarDatosAdicionales = btnQuitarDatosAdicionales;
+    }
+    
+    
+    
+
 }
