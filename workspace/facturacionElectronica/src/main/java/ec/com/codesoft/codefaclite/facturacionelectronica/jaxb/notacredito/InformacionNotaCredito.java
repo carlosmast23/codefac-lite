@@ -60,8 +60,14 @@ public class InformacionNotaCredito implements Serializable{
 
     private String fechaEmisionDocSustento;
 
+    /**
+     * Es el valor de la nota de credito sin los impuestos
+     */
     private BigDecimal totalSinImpuestos;
 
+    /**
+     * Es el valor total de la nota de credito incluido impuestos
+     */
     private BigDecimal valorModificacion;
 
     private String moneda;
