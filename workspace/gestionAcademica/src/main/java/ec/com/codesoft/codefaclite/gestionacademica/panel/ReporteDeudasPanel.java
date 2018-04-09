@@ -81,16 +81,18 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
         getContentPane().add(lblperiodo, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.ipadx = 156;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(24, 0, 0, 0);
         getContentPane().add(cmbPeriodo, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.ipadx = 156;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         getContentPane().add(cmbNivelAcademico, gridBagConstraints);
 
         lblBuscar.setText("Nivel:");
@@ -106,7 +108,7 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 8;
+        gridBagConstraints.gridwidth = 6;
         gridBagConstraints.ipadx = 15;
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
         getContentPane().add(btnBuscar, gridBagConstraints);
@@ -141,7 +143,7 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
         jScrollPane1.setViewportView(tblDeudas);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridheight = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -155,13 +157,13 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
 
         chkTodosNiveles.setText("Todos");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
         getContentPane().add(chkTodosNiveles, gridBagConstraints);
 
         chkTodosRubros.setText("Todos");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
         getContentPane().add(chkTodosRubros, gridBagConstraints);
 
@@ -174,9 +176,10 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
         getContentPane().add(jLabel4, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.ipadx = 156;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         getContentPane().add(cmbTipoRubroPorMes, gridBagConstraints);
 
         jToolBar1.setBorder(javax.swing.BorderFactory.createTitledBorder("Meses Generar"));
@@ -268,7 +271,7 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 8;
+        gridBagConstraints.gridwidth = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jToolBar1, gridBagConstraints);

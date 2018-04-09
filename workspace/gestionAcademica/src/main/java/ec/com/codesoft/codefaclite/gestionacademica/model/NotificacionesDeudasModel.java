@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.gestionacademica.model;
 
+import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
@@ -28,9 +29,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
@@ -103,7 +106,6 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
         
         try {
             List<RubroEstudiante> rubrosEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().obtenerRubrosEstudiantesPorRubros(listaRubros);
-            
             Map<EstudianteInscrito, List<RubroEstudiante>> mapRubrosEstudiante = convertirMapRubrosEstudiante(rubrosEstudiante);            
             /**
              * Llenar datos
@@ -120,7 +122,6 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
                     listaReporte.add(new EstudianteDeudaData(detalle.getRubroNivel().getNombre(), detalle.getRubroNivel().getValor().toString()));
                 }
 
-                
                 //Agrego parametros y lista, para tener para imprimir
                 NotificacionDeudaImprimir ndi = new NotificacionDeudaImprimir(listaReporte);
                 ndi.setPeriodo(estudianteInscrito.getNivelAcademico().getPeriodo().getNombre());
@@ -130,32 +131,17 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
                 ndi.setNota("");
                 ndi.setTotal(total.toString());
                 notificacionesDeudaImprimir.add(ndi);
-                
-                if(notificacionesDeudaImprimir.size()==2)
-                {
-                    //notificacionesDeudaImprimir.remove(0);
-                    //break;
-                }
-
             }
-            
-
-
-            
-            
             Map<String, Object> Parametros = new HashMap<String, Object>();
-            InputStream path = RecursoCodefac.JASPER_ACADEMICO.getResourceInputStream("reporte_deuda_imprimir.jrxml");
-//        for (NotificacionDeudaImprimir ndi :notificacionesDeudaImprimir) {
-//            System.out.println("-----------Dato-----------");
-//            System.out.println(""+ndi.getNombres());
-//            for (EstudianteDeudaData deuda : ndi.getDeudas()) {
-//                System.out.println("Rubro: "+deuda.getRubro());
-//                System.out.println("Valor: "+deuda.getValor());
-//                        
-//            }
-//        }
-ReporteCodefac.generarReporteInternalFramePlantilla(path, Parametros, notificacionesDeudaImprimir, panelPadre, "Reporte Academico Deudas");
+            RecursosServiceIf service= ServiceFactory.getFactory().getRecursosServiceIf();
+            InputStream path = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_ACADEMICO, "subreporte_deuda_imprimir.jrxml"));
+            path = RecursoCodefac.JASPER_ACADEMICO.getResourceInputStream("reporte_deuda_imprimir.jrxml");
+            //inputStream=RemoteInputStreamClient.wrap();
+            //JasperReport reportPiePagina = JasperCompileManager.compileReport(inputStream);
+            ReporteCodefac.generarReporteInternalFramePlantilla(path, Parametros, notificacionesDeudaImprimir, panelPadre, "Reporte Academico Deudas");           
         } catch (RemoteException ex) {
+            Logger.getLogger(NotificacionesDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
             Logger.getLogger(NotificacionesDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -559,7 +545,7 @@ ReporteCodefac.generarReporteInternalFramePlantilla(path, Parametros, notificaci
     }
 
     private void generarReporte(EstudianteInscrito estudianteInscrito, List<RubroEstudiante> detalles, Periodo periodo) { 
-        //notificacionesDeudaImprimir = new ArrayList<>();
+        
         InputStream path = RecursoCodefac.JASPER_ACADEMICO.getResourceInputStream("reporte_estudiante_deuda.jrxml");
 
         Map<String, Object> mapParametros = new HashMap<String, Object>();
@@ -582,7 +568,6 @@ ReporteCodefac.generarReporteInternalFramePlantilla(path, Parametros, notificaci
         mapParametros = ReporteCodefac.agregarMapPlantilla(mapParametros, "Reporte Deuda", panelPadre);
         
         UtilidadesComprobantes.generarReporteJasper(path, mapParametros, listaReporte, PATH_REPORTE_TMP);
-        //ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametros, listaReporte, panelPadre, "Reporte Deudas");
     } 
 
     private Map<EstudianteInscrito, List<RubroEstudiante>> convertirMapRubrosEstudiante(List<RubroEstudiante> rubrosEstudiante) {

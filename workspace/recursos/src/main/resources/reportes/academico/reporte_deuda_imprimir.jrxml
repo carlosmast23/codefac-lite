@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
-	<property name="ireport.zoom" value="0.7500000000000003"/>
+	<property name="ireport.zoom" value="1.207882500000001"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="106"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\Carlos\\Documents\\GitHub\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\crm\\"]]></defaultValueExpression>
 	</parameter>
@@ -12,13 +12,13 @@
 	<parameter name="pl_telefonos" class="java.lang.String"/>
 	<parameter name="pl_usuario" class="java.lang.String"/>
 	<parameter name="pl_titulo" class="java.lang.String"/>
-	<parameter name="pl_url_img1" class="java.io.InputStream"/>
-	<parameter name="pl_img_facebook" class="java.io.InputStream"/>
-	<parameter name="pl_img_whatsapp" class="java.io.InputStream"/>
-	<parameter name="pl_img_telefono" class="java.io.InputStream"/>
-	<parameter name="pl_img_logo_pie" class="java.io.InputStream"/>
-	<parameter name="pl_url_cabecera" class="java.io.InputStream"/>
-	<parameter name="pl_url_piepagina" class="java.io.InputStream"/>
+	<parameter name="pl_url_img1" class="java.lang.Object"/>
+	<parameter name="pl_img_facebook" class="java.lang.Object"/>
+	<parameter name="pl_img_whatsapp" class="java.lang.Object"/>
+	<parameter name="pl_img_telefono" class="java.lang.Object"/>
+	<parameter name="pl_img_logo_pie" class="java.lang.Object"/>
+	<parameter name="pl_url_cabecera" class="java.lang.Object"/>
+	<parameter name="pl_url_piepagina" class="java.lang.Object"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -62,83 +62,83 @@
 		<band height="41" splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="297" splitType="Stretch">
+		<band height="502" splitType="Stretch">
 			<textField>
-				<reportElement x="269" y="20" width="100" height="20" uuid="b510025e-11d0-4d96-9ae3-6368668dc310"/>
+				<reportElement x="231" y="20" width="273" height="20" uuid="b510025e-11d0-4d96-9ae3-6368668dc310"/>
 				<textFieldExpression><![CDATA[$F{periodo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="269" y="0" width="100" height="20" uuid="18889be0-4e20-4839-a142-bec50c9a5263"/>
+				<reportElement x="231" y="0" width="273" height="20" uuid="18889be0-4e20-4839-a142-bec50c9a5263"/>
 				<textFieldExpression><![CDATA[$F{curso}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="269" y="40" width="100" height="20" uuid="ad6b9b76-c8b7-42b5-9c20-feecf4df7ddf"/>
+				<reportElement x="231" y="40" width="273" height="20" uuid="ad6b9b76-c8b7-42b5-9c20-feecf4df7ddf"/>
 				<textFieldExpression><![CDATA[$F{nombres}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="269" y="60" width="100" height="20" uuid="30a594dc-d3c2-402f-b6e7-6830503b201b"/>
+				<reportElement x="231" y="60" width="273" height="20" uuid="30a594dc-d3c2-402f-b6e7-6830503b201b"/>
 				<textFieldExpression><![CDATA[$F{representante}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="169" y="0" width="100" height="20" uuid="75c939f7-89d4-4ae5-b2cb-3a79dbf22a8c"/>
-				<textElement>
+				<reportElement x="127" y="0" width="100" height="20" uuid="75c939f7-89d4-4ae5-b2cb-3a79dbf22a8c"/>
+				<textElement textAlignment="Right">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Periodo:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="169" y="20" width="100" height="20" uuid="a0e76b77-2650-4e97-8185-b3f4d4aa736b"/>
-				<textElement>
+				<reportElement x="127" y="20" width="100" height="20" uuid="a0e76b77-2650-4e97-8185-b3f4d4aa736b"/>
+				<textElement textAlignment="Right">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Curso:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="169" y="40" width="100" height="20" uuid="e75e20e0-ffcf-4657-b774-c6e290d4bf60"/>
-				<textElement>
+				<reportElement x="127" y="40" width="100" height="20" uuid="e75e20e0-ffcf-4657-b774-c6e290d4bf60"/>
+				<textElement textAlignment="Right">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nombres:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="169" y="60" width="100" height="20" uuid="9093dc08-1abc-4284-be9a-855ca01270fe"/>
-				<textElement>
+				<reportElement x="127" y="60" width="100" height="20" uuid="9093dc08-1abc-4284-be9a-855ca01270fe"/>
+				<textElement textAlignment="Right">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Representante:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="69" y="269" width="100" height="20" uuid="7c1a13a3-be3c-4196-84f3-5329ed88cfe5"/>
+				<reportElement x="69" y="482" width="100" height="20" uuid="7c1a13a3-be3c-4196-84f3-5329ed88cfe5"/>
+				<textElement>
+					<font isItalic="true"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{nota}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="443" y="269" width="89" height="20" uuid="e026e1d9-3559-451e-821e-19ec1ad4d81c"/>
+				<reportElement x="441" y="482" width="75" height="20" uuid="e026e1d9-3559-451e-821e-19ec1ad4d81c"/>
 				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="391" y="269" width="52" height="20" uuid="0fd9a777-6584-4cae-9a50-3b9c14fc07ab"/>
+				<reportElement x="389" y="482" width="52" height="20" uuid="0fd9a777-6584-4cae-9a50-3b9c14fc07ab"/>
 				<textElement textAlignment="Right">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="23" y="269" width="46" height="20" uuid="5f6f6b0d-e230-42bc-9b5c-69d710481a69"/>
+				<reportElement x="23" y="482" width="46" height="20" uuid="5f6f6b0d-e230-42bc-9b5c-69d710481a69"/>
 				<textElement textAlignment="Right">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nota:]]></text>
 			</staticText>
 			<subreport>
-				<reportElement x="153" y="117" width="200" height="100" uuid="c7a5e4c6-8a17-4051-9b05-7757f60ec79f"/>
+				<reportElement x="0" y="90" width="555" height="100" uuid="0d4fa510-16b6-42a9-b3f3-fc053a50a379"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{deudas})]]></dataSourceExpression>
-				<subreportExpression><![CDATA["C:\\Netbeans\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\academico\\subreporte_deuda_imprimir.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "subreporte_deuda_imprimir.jrxml"]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>
-	<columnFooter>
-		<band height="46" splitType="Stretch"/>
-	</columnFooter>
 	<pageFooter>
 		<band height="54" splitType="Stretch">
 			<subreport>

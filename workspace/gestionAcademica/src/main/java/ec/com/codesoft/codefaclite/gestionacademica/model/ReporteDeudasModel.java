@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.gestionacademica.model;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.gestionacademica.other.NotificacionDeudaImprimir;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.ReporteDeudasPanel;
 import ec.com.codesoft.codefaclite.gestionacademica.reportdata.ReporteDeudasData;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
@@ -283,7 +284,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
             } else {
                 parameters.put("nivelacademico", "TODOS");
             }
-
+            
             ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Deudas");
         } catch (RemoteException ex) {
             Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
