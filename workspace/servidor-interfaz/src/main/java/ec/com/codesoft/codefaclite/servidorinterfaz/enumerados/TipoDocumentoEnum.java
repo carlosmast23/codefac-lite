@@ -45,10 +45,11 @@ public enum TipoDocumentoEnum {
     /**
      * Tipo de documento utilizado para facturar desde el modulo acaemico
      */
-    ACADEMICO(ModuloEnum.VENTAS,"VAC","Académico",TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO);
+    ACADEMICO(ModuloEnum.VENTAS,"ACA","Académico",TipoDocumentoEnum.NO_AFECTA_INVETARIO);
     
     public static final String AFECTA_INVENTARIO_POSITIVO="+";
     public static final String AFECTA_INVENTARIO_NEGATIVO="-";
+    public static final String NO_AFECTA_INVETARIO="";
     
     private TipoDocumentoEnum(ModuloEnum moduloEnum,String codigo,String nombre,String signoInventario) {
         this.moduloEnum = moduloEnum;

@@ -84,7 +84,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         notaCredito.setPuntoEmision(session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor);
         notaCredito.setPuntoEstablecimiento(session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor);
         notaCredito.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_NOTA_CREDITO).valor));
-        notaCredito.setSubtotalCero(BigDecimal.ZERO);
+        //notaCredito.setSubtotalCero(BigDecimal.ZERO);
         
         //Verificacion para cambiar el estado de la factura
         if(notaCredito.getTotal().compareTo(notaCredito.getFactura().getTotal())<0)
@@ -99,6 +99,13 @@ public class NotaCreditoModel extends NotaCreditoPanel {
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
+        
+        Boolean pregunta=DialogoCodefac.dialogoPregunta("Alerta","Esta seguro que desea grabar la Nota de Crédito",DialogoCodefac.MENSAJE_ADVERTENCIA);
+        if(!pregunta)
+        {
+            throw new ExcepcionCodefacLite("cancelar el metodo grabar ...");
+        }
+        
         try {
             NotaCredito notaCreditoGrabada;
             NotaCreditoServiceIf servicio=ServiceFactory.getFactory().getNotaCreditoServiceIf();
@@ -151,13 +158,17 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         NotaCreditoBusqueda notaCreditoBusqueda = new NotaCreditoBusqueda();
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(notaCreditoBusqueda);
         buscarDialogoModel.setVisible(true);
-        NotaCredito notaCredito = (NotaCredito) buscarDialogoModel.getResultado();
-        if(notaCredito != null)
+        NotaCredito notaCreditoTmp = (NotaCredito) buscarDialogoModel.getResultado();
+        if(notaCreditoTmp != null)
         {
             crearDetalleTabla();
-            this.notaCredito = notaCredito;
+            this.notaCredito = notaCreditoTmp;
             mostrarDatosNotaCredito(); 
             actualizarDatosTablaDetalle();
+        }
+        else
+        {
+            throw new ExcepcionCodefacLite("Cancelado metodo buscar");
         }
         
         

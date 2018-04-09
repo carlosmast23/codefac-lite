@@ -1643,13 +1643,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 if(tipoDocumentoEnum.equals(TipoDocumentoEnum.ACADEMICO))
                 {
                     facturaDetalle.setReferenciaId(rubroSeleccionado.getId());
-                    facturaDetalle.setTipoDocumento(TipoDocumentoEnum.ACADEMICO.getCodigo());
+                    facturaDetalle.setTipoDocumento(tipoDocumentoEnum.getCodigo());
                     catalogoProducto=rubroSeleccionado.getRubroNivel().getCatalogoProducto();
                 }
                 else
                 {
                     facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
-                    facturaDetalle.setTipoDocumento(TipoDocumentoEnum.VENTA.getCodigo());
+                    facturaDetalle.setTipoDocumento(tipoDocumentoEnum.getCodigo());
                     catalogoProducto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
                 }
                 
