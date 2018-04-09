@@ -11,6 +11,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.NotaCreditoDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.NotaCreditoFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.rmi.RemoteException;
@@ -18,6 +22,7 @@ import java.sql.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.EntityTransaction;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
@@ -38,19 +43,41 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
         parametroCodefacService = new ParametroCodefacService();
     }
 
-    public NotaCredito grabar(NotaCredito notaCredito) {
+    public NotaCredito grabar(NotaCredito notaCredito) {        
         try {
-            notaCreditoFacade.create(notaCredito);
+            EntityTransaction transaccion=getTransaccion();
+            transaccion.begin();
+            
+            entityManager.persist(notaCredito);
+            //notaCreditoFacade.create(notaCredito);
             /**
              * Aumentar el codigo de la numeracion en los parametros
              */
             ParametroCodefac parametro = parametroCodefacService.getParametroByNombre(ParametroCodefac.SECUENCIAL_NOTA_CREDITO);
             parametro.valor = (Integer.parseInt(parametro.valor) + 1) + "";
-            parametroCodefacService.grabar(parametro);
+            entityManager.persist(parametro);
+            //parametroCodefacService.grabar(parametro);
             
+            /**
+             * Actualizar la logica de cada modulo dependiendo del tipo de documento de cada detalle
+             */
             
-        } catch (ConstrainViolationExceptionSQL ex) {
-            Logger.getLogger(NotaCreditoService.class.getName()).log(Level.SEVERE, null, ex);
+            for (NotaCreditoDetalle detalle : notaCredito.getDetalles()) {
+                if(detalle.getTipoDocumentoEnum().equals(TipoDocumentoEnum.ACADEMICO))
+                {
+                    RubroEstudiante rubroEstudiante=ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(detalle.getReferenciaId());
+                    rubroEstudiante.setEstadoFactura(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR.getLetra());
+                    rubroEstudiante.setSaldo(rubroEstudiante.getSaldo().add(detalle.getTotal()));
+                    entityManager.merge(rubroEstudiante);
+                }
+                else
+                {
+                    //TODO: Falta implementar la logica para los otros modulos  
+                }
+            }
+            
+            transaccion.commit();
+
         } catch (DatabaseException ex) {
             Logger.getLogger(NotaCreditoService.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {
