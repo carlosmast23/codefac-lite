@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
 	<property name="ireport.zoom" value="1.207882500000001"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="48"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\Carlos\\Documents\\GitHub\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\crm\\"]]></defaultValueExpression>
 	</parameter>
@@ -29,6 +29,7 @@
 	<field name="nota" class="java.lang.String"/>
 	<field name="total" class="java.lang.String"/>
 	<field name="deudas" class="java.util.Collection"/>
+	<variable name="subReport_COUNT" class="java.lang.Integer"/>
 	<group name="Estudiante" isStartNewPage="true">
 		<groupExpression><![CDATA[$F{nombres}]]></groupExpression>
 		<groupHeader>
@@ -146,6 +147,7 @@
 			<subreport>
 				<reportElement x="0" y="60" width="555" height="51" uuid="a66298dd-6664-4a1b-875f-a1d91e23c7e0"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{deudas})]]></dataSourceExpression>
+				<returnValue subreportVariable="REPORT_COUNT" toVariable="subReport_COUNT"/>
 				<subreportExpression><![CDATA["C:\\Netbeans\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\academico\\subreporte_deuda_imprimir.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
