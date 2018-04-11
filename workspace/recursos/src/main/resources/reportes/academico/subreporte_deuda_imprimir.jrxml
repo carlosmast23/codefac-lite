@@ -3,6 +3,12 @@
 	<property name="ireport.zoom" value="1.3310000000000006"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<style name="fila">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#66CCFF"/>
+		</conditionalStyle>
+	</style>
 	<field name="rubro" class="java.lang.String"/>
 	<field name="fecha" class="java.lang.String"/>
 	<field name="valor" class="java.lang.String"/>
@@ -53,24 +59,31 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="15" splitType="Stretch">
-			<textField>
-				<reportElement x="49" y="0" width="228" height="13" uuid="ac4a956a-8989-409a-96c6-83b7624ba87a"/>
-				<textFieldExpression><![CDATA[$F{rubro}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="294" y="0" width="96" height="13" uuid="001d61a2-2838-4f18-a48b-0c39da45feae"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
-			</textField>
-			<line>
-				<reportElement x="41" y="13" width="473" height="1" uuid="7686383f-c4d5-4b2e-b97e-566f76288f37"/>
-			</line>
-			<textField>
-				<reportElement x="416" y="0" width="90" height="13" uuid="cbd2baa2-5193-4c39-8de7-545c8b090f07"/>
-				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
-			</textField>
+		<band height="14" splitType="Stretch">
+			<frame>
+				<reportElement style="fila" x="41" y="1" width="475" height="13" forecolor="#FFFFCC" uuid="47964b57-1a16-4a32-86ed-1325b7a86b26"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="2.75"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textField>
+					<reportElement x="2" y="0" width="228" height="13" uuid="ac4a956a-8989-409a-96c6-83b7624ba87a"/>
+					<textFieldExpression><![CDATA[$F{rubro}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="263" y="0" width="96" height="13" uuid="001d61a2-2838-4f18-a48b-0c39da45feae"/>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="369" y="0" width="90" height="13" uuid="cbd2baa2-5193-4c39-8de7-545c8b090f07"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
+				</textField>
+			</frame>
 		</band>
 	</detail>
 </jasperReport>
