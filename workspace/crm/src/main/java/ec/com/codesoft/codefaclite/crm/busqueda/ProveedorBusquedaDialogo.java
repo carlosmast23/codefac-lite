@@ -69,9 +69,10 @@ public class ProveedorBusquedaDialogo implements InterfaceModelFind<Persona>
         //Persona p;
         //p.getTipo();
         String queryString = "SELECT u FROM Persona u WHERE ";
-        queryString+=" ( LOWER(u.razonSocial) like "+filter+" and u.tipo = ?1 )";
+        queryString+=" ( LOWER(u.razonSocial) like ?2 and u.tipo = ?1 )";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,OperadorNegocioEnum.PROVEEDOR.getLetra());
+        queryDialog.agregarParametro(2,filter);
         
         return queryDialog;
     }

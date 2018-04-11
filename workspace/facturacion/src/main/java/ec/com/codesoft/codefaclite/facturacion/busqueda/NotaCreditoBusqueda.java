@@ -34,11 +34,12 @@ public class NotaCreditoBusqueda implements InterfaceModelFind <NotaCredito>
     @Override
     public QueryDialog getConsulta(String filter) {
         String queryString = "SELECT u FROM NotaCredito u WHERE u.estado<>?1 AND u.estado<>?2 AND u.estado<>?3 ";
-        queryString+="AND ( u.cliente.razonSocial like "+filter+" )";
+        queryString+="AND ( u.cliente.razonSocial like ?4 )";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,NotaCreditoEnumEstado.TERMINADO.getEstado());
         queryDialog.agregarParametro(2,NotaCreditoEnumEstado.ANULADO.getEstado());
         queryDialog.agregarParametro(3,NotaCreditoEnumEstado.SIN_AUTORIZAR.getEstado());
+        queryDialog.agregarParametro(4,filter);
         return queryDialog;
     }
 

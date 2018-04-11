@@ -119,6 +119,9 @@ public class Factura implements Serializable {
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura",fetch = FetchType.EAGER)
     private List<FacturaAdicional> datosAdicionales;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura", fetch = FetchType.EAGER)
+    private List<NotaCredito> notasCredito;
 
     public Factura() {
     }
@@ -497,6 +500,7 @@ public class Factura implements Serializable {
         }
         return null;
     }
+
 
     @Override
     public int hashCode() {

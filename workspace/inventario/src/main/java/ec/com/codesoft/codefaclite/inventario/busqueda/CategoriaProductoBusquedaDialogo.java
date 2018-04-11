@@ -29,9 +29,11 @@ public class CategoriaProductoBusquedaDialogo implements InterfaceModelFind<Cate
     @Override
     public QueryDialog getConsulta(String filter) {
         String queryString = "SELECT u FROM CategoriaProducto u WHERE (u.estado=?1) and";
-        queryString += " ( LOWER(u.nombre) LIKE " + filter + " )";
+        queryString += " ( LOWER(u.nombre) LIKE ?2 )";
         QueryDialog queryDialog = new QueryDialog(queryString);
-        queryDialog.agregarParametro(1, CategoriaProductoEnumEstado.ACTIVO.getEstado());
+        queryDialog.agregarParametro(1,CategoriaProductoEnumEstado.ACTIVO.getEstado());
+        queryDialog.agregarParametro(2,filter);
+        
         return queryDialog;
     }
 

@@ -78,8 +78,8 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
     {
         try {
             String filtro=getTxtBuscar().getText();
-            QueryDialog queryDialog=this.model.getConsulta(ALIAS_BUSQUEDA);
-            queryDialog.agregarParametro(1000,"%"+filtro+"%");
+            QueryDialog queryDialog=this.model.getConsulta("%"+filtro+"%");
+            //queryDialog.agregarParametro(1000,"%"+filtro+"%");
             
             int limiteInferior=CANTIDAD_FILAS*(paginaActual-1);
             int limiteSuperior=CANTIDAD_FILAS*(paginaActual);
@@ -136,8 +136,8 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
     {
         try {
             String filtro=getTxtBuscar().getText();
-            QueryDialog queryDialog=this.model.getConsulta(ALIAS_BUSQUEDA);
-            queryDialog.agregarParametro(1000,"%"+filtro+"%");
+            QueryDialog queryDialog=this.model.getConsulta("%"+filtro+"%");
+            //queryDialog.agregarParametro(1000,"%"+filtro+"%");
             String query=queryDialog.query;
             query=query.toLowerCase();
             int primerCorte=query.indexOf("select")+"select".length();

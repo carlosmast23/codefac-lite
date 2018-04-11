@@ -63,10 +63,11 @@ public class CompraBusquedaDialogo implements InterfaceModelFind<Compra>
         compra.getCodigoTipoDocumento();*/
                 
         String queryString = "SELECT u FROM Compra u WHERE (u.codigoTipoDocumento=?1) and u.inventarioIngreso=?2 and ";
-        queryString+=" ( LOWER(u.secuencial) like "+filter+" )";
+        queryString+=" ( LOWER(u.secuencial) like ?3 )";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,TipoDocumentoEnum.COMPRA_INVENTARIO.getCodigo());
         queryDialog.agregarParametro(2,EnumSiNo.NO.getLetra());
+        queryDialog.agregarParametro(3,filter);
         
         return queryDialog;
     }

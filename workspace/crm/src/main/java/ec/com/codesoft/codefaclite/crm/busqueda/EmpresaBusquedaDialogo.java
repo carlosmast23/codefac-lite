@@ -54,8 +54,9 @@ public class EmpresaBusquedaDialogo implements InterfaceModelFind<Empresa>
     @Override
     public QueryDialog getConsulta(String filter) {       
         String queryString = "SELECT u FROM Empresa u WHERE ";
-        queryString+=" ( LOWER(u.razonSocial) like "+filter+" )";
+        queryString+=" ( LOWER(u.razonSocial) like ?1 )";
         QueryDialog queryDialog=new QueryDialog(queryString);
+        queryDialog.agregarParametro(1,filter);
         return queryDialog;
     }
     

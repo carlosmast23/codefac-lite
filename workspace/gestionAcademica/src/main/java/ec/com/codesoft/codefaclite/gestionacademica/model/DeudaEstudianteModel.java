@@ -190,6 +190,13 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
                         rubrosEstudiante=listaRubros; 
                         cargarDatosTabla();
                         
+                        getTxtEstudianteMatriculado().setText(estudianteInscrito.getEstudiante().getNombreCompleto() + "-" + estudianteInscrito.getNivelAcademico().getNombre());
+
+                        Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
+                        if (periodo != null) {
+                            cargarRubrosAsociados(estudianteInscrito, periodo);
+                        }
+                        
                     } catch (RemoteException ex) {
                         Logger.getLogger(DeudaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (ServicioCodefacException ex) {
@@ -197,13 +204,7 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
                     }
                     
                 }
-                
-                getTxtEstudianteMatriculado().setText(estudianteInscrito.getEstudiante().getNombreCompleto()+"-"+estudianteInscrito.getNivelAcademico().getNombre());
-                
-                Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
-                if (periodo != null) {
-                    cargarRubrosAsociados(estudianteInscrito, periodo);
-                }
+
 
                 
             }

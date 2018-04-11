@@ -32,8 +32,9 @@ public class CatalogoProductoBusquedaDialogo implements InterfaceModelFind<Catal
     public QueryDialog getConsulta(String filter) {
 
         String queryString = "SELECT u FROM CatalogoProducto u WHERE ";
-        queryString += " ( LOWER(u.nombre) LIKE " + filter + " )";
+        queryString += " ( LOWER(u.nombre) LIKE ?1 )";
         QueryDialog queryDialog = new QueryDialog(queryString);
+        queryDialog.agregarParametro(1,filter);
         return queryDialog;
     }
 

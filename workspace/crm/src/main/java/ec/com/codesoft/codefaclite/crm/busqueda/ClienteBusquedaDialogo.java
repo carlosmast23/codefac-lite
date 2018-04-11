@@ -64,8 +64,9 @@ public class ClienteBusquedaDialogo implements InterfaceModelFind<Persona>
         //Persona p;
         //p.getRazonSocial();
         String queryString = "SELECT u FROM Persona u WHERE ";
-        queryString+=" ( LOWER(u.razonSocial) like "+filter+" )";
+        queryString+=" ( LOWER(u.razonSocial) like ?1 )";
         QueryDialog queryDialog=new QueryDialog(queryString);
+        queryDialog.agregarParametro(1,filter);
         return queryDialog;
     }
     

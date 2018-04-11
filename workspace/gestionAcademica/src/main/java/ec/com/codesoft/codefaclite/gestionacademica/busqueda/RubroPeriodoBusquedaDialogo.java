@@ -29,8 +29,9 @@ public class RubroPeriodoBusquedaDialogo implements InterfaceModelFind<RubrosNiv
     @Override
     public QueryDialog getConsulta(String filter) {
         String queryString = "SELECT u FROM RubrosNivel u WHERE ";
-        queryString += " ( LOWER(u.nombre) like " + filter + " )";
+        queryString += " ( LOWER(u.nombre) like ?1 )";
         QueryDialog queryDialog = new QueryDialog(queryString);
+        queryDialog.agregarParametro(1,filter);
         return queryDialog;
     }
 

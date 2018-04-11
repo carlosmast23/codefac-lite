@@ -30,9 +30,10 @@ public class NivelBusquedaDialogo implements InterfaceModelFind<Nivel> {
     @Override
     public QueryDialog getConsulta(String filter) {
         String queryString = "SELECT u FROM Nivel u WHERE (u.estado=?1) and";
-        queryString += " ( LOWER(u.nombre) LIKE " + filter + " )";
+        queryString += " ( LOWER(u.nombre) LIKE ?2 )";
         QueryDialog queryDialog = new QueryDialog(queryString);
         queryDialog.agregarParametro(1, GeneralEnumEstado.ACTIVO.getEstado());
+        queryDialog.agregarParametro(2, filter);
         return queryDialog;
     }
 

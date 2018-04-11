@@ -31,9 +31,10 @@ public class AulaBusquedaDialogo implements InterfaceModelFind<Aula> {
     @Override
     public QueryDialog getConsulta(String filter) {
         String queryString = "SELECT u FROM Aula u WHERE ";
-        queryString += " ( LOWER(u.nombre) LIKE " + filter + " )";
+        queryString += " ( LOWER(u.nombre) LIKE ?1 )";
         QueryDialog queryDialog = new QueryDialog(queryString);
-        //queryDialog.agregarParametro(1, GeneralEnumEstado.ACTIVO.getEstado());
+        
+        queryDialog.agregarParametro(1, filter);
         return queryDialog;
     }
 

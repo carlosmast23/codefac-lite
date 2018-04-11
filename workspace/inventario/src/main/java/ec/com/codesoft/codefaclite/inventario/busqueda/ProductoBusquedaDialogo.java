@@ -64,9 +64,10 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto>
         }        
         
         String queryString = "SELECT u FROM Producto u WHERE (u.estado=?1) and "+queryExtra;
-        queryString+=" ( LOWER(u.nombre) like "+filter+" )";
+        queryString+=" ( LOWER(u.nombre) like ?2 )";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,ProductoEnumEstado.ACTIVO.getEstado());
+        queryDialog.agregarParametro(2,filter);
         if(tipoProductoEnum!=null)
         {
             queryDialog.agregarParametro(99,tipoProductoEnum.getLetra());

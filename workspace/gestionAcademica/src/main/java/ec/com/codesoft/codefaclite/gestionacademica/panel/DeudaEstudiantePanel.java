@@ -50,8 +50,6 @@ public abstract class DeudaEstudiantePanel extends ControladorCodefacInterface {
         btnQuitar = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         cmbRubro = new javax.swing.JComboBox<>();
-        jLabel4 = new javax.swing.JLabel();
-        txtValor = new javax.swing.JTextField();
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -139,11 +137,6 @@ public abstract class DeudaEstudiantePanel extends ControladorCodefacInterface {
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel3.setText("Rubro:");
 
-        jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel4.setText("Valor:");
-
-        txtValor.setText("0");
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -153,11 +146,7 @@ public abstract class DeudaEstudiantePanel extends ControladorCodefacInterface {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(cmbRubro, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 193, Short.MAX_VALUE)
-                .addComponent(jLabel4)
-                .addGap(18, 18, 18)
-                .addComponent(txtValor, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 333, Short.MAX_VALUE)
                 .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnQuitar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -169,8 +158,6 @@ public abstract class DeudaEstudiantePanel extends ControladorCodefacInterface {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(cmbRubro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel4)
-                        .addComponent(txtValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel3))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(btnQuitar)
@@ -202,12 +189,10 @@ public abstract class DeudaEstudiantePanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblDatos;
     private javax.swing.JTextField txtEstudianteMatriculado;
-    private javax.swing.JTextField txtValor;
     // End of variables declaration//GEN-END:variables
 
     public JButton getBtnAgregar() {
@@ -249,14 +234,6 @@ public abstract class DeudaEstudiantePanel extends ControladorCodefacInterface {
 
     public void setTxtEstudianteMatriculado(JTextField txtEstudianteMatriculado) {
         this.txtEstudianteMatriculado = txtEstudianteMatriculado;
-    }
-
-    public JTextField getTxtValor() {
-        return txtValor;
-    }
-
-    public void setTxtValor(JTextField txtValor) {
-        this.txtValor = txtValor;
     }
 
     public JComboBox<Periodo> getCmbPeriodo() {
