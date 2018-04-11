@@ -76,7 +76,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
     private void setearValoresNotaCredito()
     {
         notaCredito.setEmpresaId(0l);
-        notaCredito.setEstado(Factura.ESTADO_FACTURADO);
+        //notaCredito.setEstado(Factura.ESTADO_FACTURADO);
         notaCredito.setFechaCreacion(UtilidadesFecha.getFechaHoy());
         notaCredito.setRazonModificado(getTxtMotivoAnulacion().getText());
         notaCredito.setFechaNotaCredito(new Date(getjDateFechaEmision().getDate().getTime()));
@@ -87,14 +87,15 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         //notaCredito.setSubtotalCero(BigDecimal.ZERO);
         
         //Verificacion para cambiar el estado de la factura
-        if(notaCredito.getTotal().compareTo(notaCredito.getFactura().getTotal())<0)
+        /*if(notaCredito.getTotal().compareTo(notaCredito.getFactura().getTotal())<0)
         {
+            Factura.EstadoNotaCreditoEnum.ANULADO_TOTAL.getEstado();
             notaCredito.getFactura().setEstado(FacturaEnumEstado.ANULADO_PARCIAL.getEstado());
         }
         else
         {
             notaCredito.getFactura().setEstado(FacturaEnumEstado.ANULADO_TOTAL.getEstado());
-        }
+        }*/
     }
 
     @Override
@@ -170,8 +171,6 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         {
             throw new ExcepcionCodefacLite("Cancelado metodo buscar");
         }
-        
-        
         
     }
 

@@ -57,6 +57,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     public Factura grabar(Factura factura) {
         EntityTransaction transaction= entityManager.getTransaction();
         transaction.begin();
+        
         try {
             ParametroCodefac parametro =null;
             //Cuando la factura es electronica
@@ -68,7 +69,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             else
             {
                 //Estableciendo estado de facturacion manual
-                factura.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
+                factura.setEstado(FacturaEnumEstado.FACTURADO.getEstado());                
                 factura.setTipoFacturacion(TipoFacturacionEnumEstado.NORMAL.getLetra());
                 if(factura.getCodigoDocumento().equals(DocumentoEnum.FACTURA.getCodigo()))
                 {
@@ -80,7 +81,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 }
             }
             
-            
+            factura.setEstadoNotaCredito(Factura.EstadoNotaCreditoEnum.SIN_ANULAR.getEstado());            
             //facturaFacade.create(factura);
             entityManager.persist(factura);
             entityManager.flush();

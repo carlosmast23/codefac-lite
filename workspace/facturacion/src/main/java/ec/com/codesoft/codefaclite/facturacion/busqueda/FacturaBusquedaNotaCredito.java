@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import java.util.Vector;
 
@@ -32,11 +33,17 @@ public class FacturaBusquedaNotaCredito implements InterfaceModelFind<Factura> {
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        String queryString = "SELECT u FROM Factura u WHERE ( u.estado<>?1 and u.estado<>?2 and u.estado<>?3 ) ";
-        queryString+="AND ( LOWER(u.cliente.razonSocial) like "+filter+" OR CONCAT(u.secuencial, '') like "+filter+" )";
+        //NotaCredito nota;
+        //nota.getTotal();
+        //Factura f=new Factura();
+        //f.getTotal();
+        //f.getEstadoNotaCredito()
+        
+        String queryString = "SELECT u FROM Factura u WHERE ( u.estado<>?1 and u.estadoNotaCredito<>?2 and u.estado<>?3 ) AND ";
+        queryString+=" ( LOWER(u.cliente.razonSocial) like "+filter+" OR CONCAT(u.secuencial, '') like "+filter+" )";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,FacturaEnumEstado.ELIMINADO.getEstado());
-        queryDialog.agregarParametro(2,FacturaEnumEstado.ANULADO_TOTAL.getEstado());
+        queryDialog.agregarParametro(2,Factura.EstadoNotaCreditoEnum.ANULADO_TOTAL.getEstado());
         queryDialog.agregarParametro(3,FacturaEnumEstado.SIN_AUTORIZAR.getEstado());
         return queryDialog;
     }

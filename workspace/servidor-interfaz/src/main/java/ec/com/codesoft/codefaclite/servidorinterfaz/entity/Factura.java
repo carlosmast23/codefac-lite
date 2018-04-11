@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -102,6 +103,9 @@ public class Factura implements Serializable {
     private String tipoFacturacion;
     @Column(name = "CODIGO_DOCUMENTO")
     private String codigoDocumento;
+    
+    @Column(name = "ESTADO_NOTA_CREDITO")
+    private String estadoNotaCredito;
     
     @JoinColumn(name = "CLIENTE_ID")
     @ManyToOne    
@@ -374,11 +378,31 @@ public class Factura implements Serializable {
     public void setDatosAdicionales(List<FacturaAdicional> datosAdicionales) {
         this.datosAdicionales = datosAdicionales;
     }
+
+    public String getEstadoNotaCredito() {
+        return estadoNotaCredito;
+    }
+
+    public void setEstadoNotaCredito(String estadoNotaCredito) {
+        this.estadoNotaCredito = estadoNotaCredito;
+    }
     
+        
     
     /**
      * Informacion adicional
      */
+    
+    public FacturaEnumEstado getEstadoEnum()
+    {
+        return FacturaEnumEstado.getEnum(estado);
+    }
+    
+    public EstadoNotaCreditoEnum getEstadoNotaCreditoEnum()
+    {
+        return EstadoNotaCreditoEnum.getEnum(estadoNotaCredito);
+    }
+            
     public void addDetalle(FacturaDetalle detalle)
     {
         if(this.detalles==null)
@@ -506,5 +530,54 @@ public class Factura implements Serializable {
        return UtilidadesTextos.llenarCarateresIzquierda(puntoEmision,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(puntoEstablecimiento,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(secuencial+"",9,"0");
     }
     
+    
+    public enum EstadoNotaCreditoEnum
+    {
+        /**
+         * Estado por defecto cuando no aplique ninguna nota de credito a la factura
+         */
+        SIN_ANULAR("N","Sin anular"),
+        /**
+         * Estado anulado cuando una nota de credito anulo totalmente la factura
+         */
+        ANULADO_TOTAL("A", "Anulado Total"),
+        /**
+         * Estado cuando aplica una nota de credito pero no sobre el total de la
+         * factura
+         */
+        ANULADO_PARCIAL("P", "Anulado Parcial");
+        
+        
+
+        private EstadoNotaCreditoEnum(String estado, String nombre) {
+            this.estado = estado;
+            this.nombre = nombre;
+        }
+
+        private String estado;
+        private String nombre;
+
+        public String getEstado() {
+            return estado;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+        
+        public static EstadoNotaCreditoEnum getEnum(String estado) {
+
+            for (EstadoNotaCreditoEnum enumerador : EstadoNotaCreditoEnum.values()) {
+                if (enumerador.getEstado().equals(estado)) {
+                    return enumerador;
+                }
+            }
+            return null;
+        }
+        
+        
+    
+    }
+            
     
 }

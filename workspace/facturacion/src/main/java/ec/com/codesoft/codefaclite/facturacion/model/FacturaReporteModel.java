@@ -78,8 +78,8 @@ public class FacturaReporteModel extends FacturaReportePanel {
         getCmbTipo().addItem(TipoBusquedaEnum.FACTURAS);
 
         getCmbEstado().addItem(FacturaEnumEstado.FACTURADO);
-        getCmbEstado().addItem(FacturaEnumEstado.ANULADO_PARCIAL);
-        getCmbEstado().addItem(FacturaEnumEstado.ANULADO_TOTAL);
+        //getCmbEstado().addItem(FacturaEnumEstado.ANULADO_PARCIAL);
+        //getCmbEstado().addItem(FacturaEnumEstado.ANULADO_TOTAL);
         getCmbEstado().addItem(FacturaEnumEstado.SIN_AUTORIZAR);
         getCmbEstado().addItem(FacturaEnumEstado.ELIMINADO);
 
