@@ -6,7 +6,7 @@
 	<style name="fila" mode="Opaque">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
-			<style backcolor="#FFCCCC" fill="Solid"/>
+			<style backcolor="#F7F7F7" fill="Solid"/>
 		</conditionalStyle>
 	</style>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
