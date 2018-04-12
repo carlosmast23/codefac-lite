@@ -179,7 +179,7 @@ public class EstudianteModel extends EstudiantePanel implements DialogInterfaceP
     }
 
     private void setearValoresEstudiante(Estudiante estudiante) {
-        estudiante.setCodigoSistema(getTxtCodSistema().getText());
+        //estudiante.setCodigoSistema(getTxtCodSistema().getText());
         estudiante.setCodigoAuxiliar(getTxtCodAuxiliar().getText());
         estudiante.setCedula(getTxtCedula().getText());
         estudiante.setEmail(getTxtCorreo().getText());
@@ -249,7 +249,7 @@ public class EstudianteModel extends EstudiantePanel implements DialogInterfaceP
         {   
             InputStream path = RecursoCodefac.JASPER_ESTUDIANTE.getResourceInputStream("reporteEstudiante.jrxml");
             Map parametros = new HashMap();
-            parametros.put("codSistema", estudiante.getCodigoSistema()+"");
+            //parametros.put("codSistema", estudiante.getCodigoSistema()+"");
             parametros.put("codAuxiliar", estudiante.getCodigoAuxiliar()+"");
             parametros.put("cedula", estudiante.getCedula()+"");
             parametros.put("correo", estudiante.getEmail()+"");
@@ -304,7 +304,7 @@ public class EstudianteModel extends EstudiantePanel implements DialogInterfaceP
     
     private void cargarDatosPantalla()
     {
-        getTxtCodSistema().setText(estudiante.getCodigoSistema());
+        getLblCodigoSistema().setText((estudiante.getIdEstudiante()==null)?"":estudiante.getIdEstudiante().toString());
         getTxtCodAuxiliar().setText(estudiante.getCodigoAuxiliar());
         getTxtCedula().setText(estudiante.getCedula());
         getTxtCorreo().setText(estudiante.getEmail());
@@ -354,6 +354,7 @@ public class EstudianteModel extends EstudiantePanel implements DialogInterfaceP
         getCmbDiscapacidad().setSelectedIndex(0);
         getTxtPorcentajeDiscapacidad().setText("0");
         getCmbNacionalidad().setSelectedIndex(52);
+        getLblCodigoSistema().setText("");
     }
 
     @Override

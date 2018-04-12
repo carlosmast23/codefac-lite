@@ -34,8 +34,6 @@ public class Estudiante implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ESTUDIANTE_ID")
     private Long idEstudiante;
-    @Column(name = "CODSISTEMA")
-    private String codigoSistema;
     @Column(name = "CODAUXILIAR")
     private String codigoAuxiliar;
     @Column(name = "CEDULA")
@@ -91,14 +89,6 @@ public class Estudiante implements Serializable {
 
     public void setIdEstudiante(Long idEstudiante) {
         this.idEstudiante = idEstudiante;
-    }
-
-    public String getCodigoSistema() {
-        return codigoSistema;
-    }
-
-    public void setCodigoSistema(String codigoSistema) {
-        this.codigoSistema = codigoSistema;
     }
 
     public String getCodigoAuxiliar() {
