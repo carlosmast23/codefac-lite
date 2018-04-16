@@ -20,7 +20,6 @@ create table ESTUDIANTE(
     REPRESENTANTE1_ID bigint,
     REPRESENTANTE2_ID bigint,
     NACIONALIDAD_ID bigint,    
-    CODSISTEMA varchar(100),
     CODAUXILIAR varchar(100),    
     CEDULA varchar(13),
     EMAIL varchar(100),    

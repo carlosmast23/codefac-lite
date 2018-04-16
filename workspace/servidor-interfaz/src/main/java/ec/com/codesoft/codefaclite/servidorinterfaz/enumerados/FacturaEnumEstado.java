@@ -11,7 +11,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.enumerados;
  */
 public enum FacturaEnumEstado {
     /**
-     * Cuando la factura se grabo y se autorizo en el SRI
+     * Cuando la factura se grabo y se autorizo en el SRI y no aplica ninguna nota de credito
      */
     FACTURADO("F","Facturado"),    
    /**
@@ -19,15 +19,6 @@ public enum FacturaEnumEstado {
      * autorizado en el SRI
      */
     SIN_AUTORIZAR("S","Sin Autorizar"),
-    /**
-     * Estado anulado cuando una nota de credito anulo totalmente la factura
-     */
-    ANULADO_TOTAL("A","Anulado Total"),
-    /**
-     * Estado cuando aplica una nota de credito pero no sobre el total de la
-     * factura
-     */
-    ANULADO_PARCIAL("P","Anulado Parcial"),
     /**
      * Estado eliminado solo permitido si el comprobante no fue autorizado
      */

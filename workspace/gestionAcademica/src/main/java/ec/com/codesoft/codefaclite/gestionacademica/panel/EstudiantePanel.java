@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDiscapacidadE
 import ec.com.codesoft.ejemplo.utilidades.validadores.ExpresionRegular;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -48,7 +49,6 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         lblCodSistema = new javax.swing.JLabel();
-        txtCodSistema = new javax.swing.JTextField();
         lblCodAuxiliar = new javax.swing.JLabel();
         txtCodAuxiliar = new javax.swing.JTextField();
         lblCedula = new javax.swing.JLabel();
@@ -75,6 +75,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         lblEspacio = new javax.swing.JLabel();
+        lblCodigoSistema = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         lblRepresentante = new javax.swing.JLabel();
         txtRepresentante = new javax.swing.JTextField();
@@ -135,12 +136,6 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanel1.add(lblCodSistema, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        jPanel1.add(txtCodSistema, gridBagConstraints);
 
         lblCodAuxiliar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblCodAuxiliar.setText("Codigo Auxiliar:");
@@ -340,6 +335,14 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 0.5;
         jPanel1.add(lblEspacio, gridBagConstraints);
+
+        lblCodigoSistema.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        lblCodigoSistema.setText("0");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel1.add(lblCodigoSistema, gridBagConstraints);
 
         jTabbedPane1.addTab("Datos Generales", jPanel1);
 
@@ -714,6 +717,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblCelular;
     private javax.swing.JLabel lblCodAuxiliar;
     private javax.swing.JLabel lblCodSistema;
+    private javax.swing.JLabel lblCodigoSistema;
     private javax.swing.JLabel lblConadis;
     private javax.swing.JLabel lblCorreo;
     private javax.swing.JLabel lblDireccion;
@@ -736,7 +740,6 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtCedula;
     private javax.swing.JTextField txtCelular;
     private javax.swing.JTextField txtCodAuxiliar;
-    private javax.swing.JTextField txtCodSistema;
     private javax.swing.JTextField txtConadis;
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextArea txtDireccion;
@@ -813,15 +816,6 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         this.txtCodAuxiliar = txtCodAuxiliar;
     }
 
-    @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Codigo Sistema", expresionRegularMensaje = "No se permiten caracteres especiales")
-    public JTextField getTxtCodSistema() {
-        return txtCodSistema;
-    }
-
-    public void setTxtCodSistema(JTextField txtCodSistema) {
-        this.txtCodSistema = txtCodSistema;
-    }
 
     @LimpiarAnotacion
     @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Nombre", expresionRegularMensaje = "No se permiten caracteres especiales")
@@ -981,6 +975,15 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
     public void setTxtFacturarANombre(JTextField txtFacturarANombre) {
         this.txtFacturarANombre = txtFacturarANombre;
     }
+
+    public JLabel getLblCodigoSistema() {
+        return lblCodigoSistema;
+    }
+
+    public void setLblCodigoSistema(JLabel lblCodigoSistema) {
+        this.lblCodigoSistema = lblCodigoSistema;
+    }
+    
     
     
 

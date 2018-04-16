@@ -69,10 +69,11 @@ public class FacturaFacade extends AbstractFacade<Factura> {
 
     public List<Factura> getFacturaEnable() {
         try {
-            String queryString = "SELECT u FROM Factura u WHERE u.estado<>?1 AND u.estado<>?2 AND u.estado<>?3";
+            
+            String queryString = "SELECT u FROM Factura u WHERE u.estado<>?1 AND u.estadoNotaCredito<>?2 AND u.estado<>?3";
             Query query = getEntityManager().createQuery(queryString);
             query.setParameter(1, FacturaEnumEstado.ELIMINADO.getEstado());
-            query.setParameter(2, FacturaEnumEstado.ANULADO_TOTAL.getEstado());
+            query.setParameter(2, Factura.EstadoNotaCreditoEnum.ANULADO_PARCIAL.getEstado());
             query.setParameter(3, FacturaEnumEstado.SIN_AUTORIZAR.getEstado());
             return (List<Factura>) query.getResultList();
         } catch (NoResultException e) {

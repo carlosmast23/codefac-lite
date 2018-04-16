@@ -62,10 +62,11 @@ public class ClienteFacturacionBusqueda implements InterfaceModelFind<Persona> {
     public QueryDialog getConsulta(String filter) {
         //p.getRazonSocial();
         String queryString = "SELECT u FROM Persona u WHERE (u.estado<>?1) AND u.tipo=?2 AND ";
-        queryString+=" ( LOWER(u.razonSocial) like "+filter+" )";
+        queryString+=" ( LOWER(u.razonSocial) like ?3 )";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,ClienteEnumEstado.ELIMINADO.getEstado());
         queryDialog.agregarParametro(2,OperadorNegocioEnum.CLIENTE.getLetra());
+        queryDialog.agregarParametro(3,filter);
         return queryDialog;
     }
     

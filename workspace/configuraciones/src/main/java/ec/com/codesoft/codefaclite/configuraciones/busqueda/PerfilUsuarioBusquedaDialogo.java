@@ -29,10 +29,11 @@ public class PerfilUsuarioBusquedaDialogo implements InterfaceModelFind<Usuario>
     @Override
     public QueryDialog getConsulta(String filter) {
         String queryString = "SELECT u FROM Usuario u WHERE (u.estado=?1 or u.estado=?2 ) and  ";
-        queryString+=" ( LOWER(u.nick) like "+filter+" )";
+        queryString+=" ( LOWER(u.nick) like ?3 )";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,GeneralEnumEstado.ACTIVO.getEstado());
         queryDialog.agregarParametro(2,GeneralEnumEstado.INACTIVO.getEstado());
+        queryDialog.agregarParametro(3,filter);
         return queryDialog;
     }
 

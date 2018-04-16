@@ -43,10 +43,13 @@ public class EstudianteInscritoBusquedaDialogo implements InterfaceModelFind<Est
 
     @Override
     public QueryDialog getConsulta(String filter) {    
+
         String queryString = "SELECT u FROM EstudianteInscrito u WHERE u.nivelAcademico.periodo=?1 AND ";
-        queryString += " ( LOWER(u.estudiante.apellidos) LIKE " + filter + " )";
+        queryString += " ( LOWER(CONCAT(u.estudiante.nombres,' ',u.estudiante.apellidos)) LIKE ?3 OR LOWER(u.estudiante.cedula) LIKE ?3 )";
+        //queryString += " ( LOWER(u.estudiante.cedula) LIKE ?3 )";
         QueryDialog queryDialog = new QueryDialog(queryString);
         queryDialog.agregarParametro(1,periodo);
+        queryDialog.agregarParametro(3,filter);
         return queryDialog;
     }
 

@@ -41,10 +41,10 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura> {
     @Override
     public QueryDialog getConsulta(String filter) {
         String queryString = "SELECT u FROM Factura u WHERE u.estado<>?1 ";
-        queryString+="AND ( LOWER(u.cliente.razonSocial) like "+filter+" OR CONCAT(u.secuencial, '') like "+filter+" )";
+        queryString+="AND ( LOWER(u.cliente.razonSocial) like ?2 OR CONCAT(u.secuencial, '') like ?2 )";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,FacturaEnumEstado.ELIMINADO.getEstado());
-        //queryDialog.agregarParametro(2,FacturaEnumEstado.ANULADO_TOTAL.getEstado());
+        queryDialog.agregarParametro(2,filter);
         //queryDialog.agregarParametro(3,FacturaEnumEstado.SIN_AUTORIZAR.getEstado());
         return queryDialog;
     }

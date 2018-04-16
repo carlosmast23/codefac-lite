@@ -59,9 +59,9 @@ public class ProductoProveedorBusquedaDialogo implements InterfaceModelFind<Prod
         /*ProductoProveedor productoProveedor;
         productoProveedor.getProducto().getNombre();*/
         String queryString = "SELECT u FROM ProductoProveedor u WHERE ";
-        queryString+=" ( LOWER(u.producto.nombre) like "+filter+" )";
+        queryString+=" ( LOWER(u.producto.nombre) like ?1 )";
         QueryDialog queryDialog=new QueryDialog(queryString);
-        //queryDialog.agregarParametro(1,ProductoEnumEstado.ACTIVO.getEstado());
+        queryDialog.agregarParametro(1,filter);
         //queryDialog.agregarParametro(2,ProductoEnumEstado.INACTIVO.getEstado());
         return queryDialog;
     }

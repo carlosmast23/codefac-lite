@@ -5,7 +5,6 @@
  */
 package ec.com.codesoft.codefaclite.servidor.facade;
 
-import com.sun.org.apache.bcel.internal.generic.INSTANCEOF;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.PersistenciaDuplicadaException;
 import java.lang.reflect.InvocationTargetException;

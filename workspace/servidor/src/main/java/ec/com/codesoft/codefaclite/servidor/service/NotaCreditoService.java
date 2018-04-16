@@ -12,8 +12,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.Constrain
 import ec.com.codesoft.codefaclite.servidor.facade.NotaCreditoDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.NotaCreditoFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
@@ -47,7 +49,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
         try {
             EntityTransaction transaccion=getTransaccion();
             transaccion.begin();
-            
+           
             entityManager.persist(notaCredito);
             //notaCreditoFacade.create(notaCredito);
             /**
@@ -56,7 +58,6 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
             ParametroCodefac parametro = parametroCodefacService.getParametroByNombre(ParametroCodefac.SECUENCIAL_NOTA_CREDITO);
             parametro.valor = (Integer.parseInt(parametro.valor) + 1) + "";
             entityManager.persist(parametro);
-            //parametroCodefacService.grabar(parametro);
             
             /**
              * Actualizar la logica de cada modulo dependiendo del tipo de documento de cada detalle
@@ -68,6 +69,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                     RubroEstudiante rubroEstudiante=ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(detalle.getReferenciaId());
                     rubroEstudiante.setEstadoFactura(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR.getLetra());
                     rubroEstudiante.setSaldo(rubroEstudiante.getSaldo().add(detalle.getTotal()));
+                    
                     entityManager.merge(rubroEstudiante);
                 }
                 else
@@ -75,6 +77,22 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                     //TODO: Falta implementar la logica para los otros modulos  
                 }
             }
+            
+            /**
+             * Actualizar el estado de la nota de credito de la factura dependiendo del tipo anuluacion parcial o total
+             */
+            if (notaCredito.getTotal().compareTo(notaCredito.getFactura().getTotal()) < 0) 
+            {
+                notaCredito.getFactura().setEstadoNotaCredito(Factura.EstadoNotaCreditoEnum.ANULADO_PARCIAL.getEstado());
+            } 
+            else 
+            {
+                notaCredito.getFactura().setEstadoNotaCredito(Factura.EstadoNotaCreditoEnum.ANULADO_TOTAL.getEstado());
+            }
+
+            //Actualizar la referencia de la factura con el nuevo estado
+            entityManager.merge(notaCredito.getFactura());
+            
             
             transaccion.commit();
 

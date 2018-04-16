@@ -30,9 +30,10 @@ public class BodegaBusquedaDialogo implements InterfaceModelFind<Bodega> {
     @Override
     public QueryDialog getConsulta(String filter) {
         String queryString = "SELECT u FROM Bodega u WHERE (u.estado=?1) and";
-        queryString += " ( LOWER(u.nombre) LIKE " + filter + " )";
+        queryString += " ( LOWER(u.nombre) LIKE ?2 )";
         QueryDialog queryDialog = new QueryDialog(queryString);
         queryDialog.agregarParametro(1, BodegaEnumEstado.ACTIVO.getEstado());
+        queryDialog.agregarParametro(2,filter);
         return queryDialog;
     }
 
