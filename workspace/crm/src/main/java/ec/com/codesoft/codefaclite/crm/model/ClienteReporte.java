@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +58,14 @@ public class ClienteReporte extends ControladorCodefacInterface{
                 clienteData.setTelefono(cliente.getTelefonoCelular());
                 data.add(clienteData);
             }
+            
+            Collections.sort(data, new Comparator<ClienteData>(){
+                public int compare(ClienteData obj1, ClienteData obj2)
+                {
+                    return obj1.getNombresCompletos().compareTo(obj2.getNombresCompletos());
+                }
+            });
+            
             DialogoCodefac.dialogoReporteOpciones( new ReporteDialogListener() {
                 @Override
                 public void excel() {

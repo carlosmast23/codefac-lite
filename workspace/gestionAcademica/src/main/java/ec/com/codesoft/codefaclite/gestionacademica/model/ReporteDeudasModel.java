@@ -32,6 +32,8 @@ import java.awt.event.ItemListener;
 import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -284,6 +286,13 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
             } else {
                 parameters.put("nivelacademico", "TODOS");
             }
+            
+            Collections.sort(data, new Comparator<ReporteDeudasData>(){
+                public int compare(ReporteDeudasData obj1, ReporteDeudasData obj2)
+                {
+                    return obj1.getEstudiante().compareTo(obj2.getEstudiante());
+                }
+            });
             
             ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Deudas");
         } catch (RemoteException ex) {

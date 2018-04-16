@@ -23,6 +23,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +63,13 @@ public class ProductoReporte extends ControladorCodefacInterface{
                 
                 data.add(productoData);
             }
+            
+            Collections.sort(data, new Comparator<ProductoData>(){
+                public int compare(ProductoData obj1, ProductoData obj2)
+                {
+                    return obj1.getNombre().compareTo(obj2.getNombre());
+                }
+            });
             
             DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
                 @Override

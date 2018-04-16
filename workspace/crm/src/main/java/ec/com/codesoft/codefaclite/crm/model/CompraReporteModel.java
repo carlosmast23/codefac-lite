@@ -34,6 +34,8 @@ import java.math.BigInteger;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -167,8 +169,14 @@ public class CompraReporteModel extends CompraReportePanel
                     cdr.setTotal(compra.getTotal()+"");
                     compraDataReportes.add(cdr);
                 }
-
                 
+                Collections.sort(compraDataReportes, new Comparator<CompraDataReporte>(){
+                public int compare(CompraDataReporte obj1, CompraDataReporte obj2)
+                {
+                    return obj1.getNombre().compareTo(obj2.getNombre());
+                }
+                });
+                                
                 DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
                     @Override
                     public void excel() {

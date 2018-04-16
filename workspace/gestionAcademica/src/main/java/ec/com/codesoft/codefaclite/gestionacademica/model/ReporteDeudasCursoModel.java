@@ -24,6 +24,8 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -144,7 +146,6 @@ public class ReporteDeudasCursoModel extends ReporteDeudasCursoPanel {
             } else {
                 parameters.put("periodo", "TODOS");
             }
-             
             ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Deudas por Curso");
         } catch (RemoteException ex) {
             Logger.getLogger(ReporteDeudasCursoModel.class.getName()).log(Level.SEVERE, null, ex);

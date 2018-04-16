@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -175,7 +177,16 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
             } else {
                 parameters.put("nivelacademico", "TODOS");
             }
-
+            
+            //Ordenar Datos en base a un parametro establecido
+            Collections.sort(data, new Comparator<ReporteAcademicoData>(){
+                public int compare(ReporteAcademicoData obj1, ReporteAcademicoData obj2)
+                {
+                    return obj1.getNombresEstudiante().compareTo(obj2.getNombresEstudiante());
+                }
+            });
+            //---
+            
             DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
                 @Override
                 public void excel() {
