@@ -5,11 +5,18 @@
  */
 package ec.com.codesoft.codefaclite.crm.data;
 
+import ec.com.codesoft.codefaclite.controlador.excel.Excel;
+import ec.com.codesoft.codefaclite.controlador.excel.ExcelDatosInterface;
+import ec.com.codesoft.codefaclite.controlador.excel.TipoDato;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Carlos
  */
-public class ProductoData {
+public class ProductoData implements ExcelDatosInterface
+{
     private String codigoPrincipal;
     private String tipoProducto;
     private String nombre;
@@ -57,6 +64,18 @@ public class ProductoData {
 
     public void setImpuestoIva(String impuestoIva) {
         this.impuestoIva = impuestoIva;
+    }
+
+    @Override
+    public List<TipoDato> getDatos() 
+    {
+        List<TipoDato> tiposDatos = new ArrayList<>();
+        tiposDatos.add(new TipoDato(this.codigoPrincipal,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.tipoProducto,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.nombre,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.valorUnitario,Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.impuestoIva,Excel.TipoDataEnum.TEXTO));
+        return tiposDatos;
     }
     
     

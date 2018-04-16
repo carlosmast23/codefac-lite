@@ -6,6 +6,9 @@
 package ec.com.codesoft.codefaclite.crm.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.excel.Excel;
+import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.crm.data.ClienteData;
@@ -15,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.rmi.RemoteException;
@@ -43,20 +47,45 @@ public class ProductoReporte extends ControladorCodefacInterface{
             List<ProductoData> data = new ArrayList<ProductoData>();
             ProductoServiceIf service=ServiceFactory.getFactory().getProductoServiceIf();
             List<Producto> productos=service.obtenerTodos();
-            
             for (Producto producto : productos) {
                 ProductoData productoData=new ProductoData();
                 productoData.setCodigoPrincipal(producto.getCodigoPersonalizado());
                 productoData.setImpuestoIva(producto.getCatalogoProducto().getIva().getNombre());
                 productoData.setNombre(producto.getNombre());
                 productoData.setTipoProducto(producto.getTipoProductoEnum().getNombre());
-                productoData.setValorUnitario(producto.getValorUnitario().toString());
+                if(producto.getValorUnitario()!=null){
+                    productoData.setValorUnitario(producto.getValorUnitario().toString());
+                }else{
+                    productoData.setValorUnitario("0.00");
+                }
+                
                 data.add(productoData);
             }
+            
+            DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
+                @Override
+                public void excel() {
+                    try {
+                        Excel excel = new Excel();
+                        String[] nombreCabeceras = {"Codigo", "Tipo", "Nombre","Valor Unit","IVA"};
+                        excel.gestionarIngresoInformacionExcel(nombreCabeceras, data);
+                        excel.abrirDocumento();
+                    } catch (IOException ex) {
+                        Logger.getLogger(ProductoReporte.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IllegalArgumentException ex) {
+                        Logger.getLogger(ProductoReporte.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IllegalAccessException ex) {
+                        Logger.getLogger(ProductoReporte.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+
+                @Override
+                public void pdf() {
+                    ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Productos");
+                }
+            });
             setClosable(true);
-            ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Productos");
-            //this.dispose();
-            //this.setVisible(false);
+
         } catch (RemoteException ex) {
             Logger.getLogger(ProductoReporte.class.getName()).log(Level.SEVERE, null, ex);
         }

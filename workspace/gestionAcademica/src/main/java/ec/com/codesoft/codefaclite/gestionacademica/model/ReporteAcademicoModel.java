@@ -5,6 +5,9 @@
  */
 package ec.com.codesoft.codefaclite.gestionacademica.model;
 
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.excel.Excel;
+import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
@@ -21,6 +24,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteInscrito
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServiceIf;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -172,7 +176,29 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
                 parameters.put("nivelacademico", "TODOS");
             }
 
-            ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Academico");
+            DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
+                @Override
+                public void excel() {
+                    try {
+                        Excel excel = new Excel();
+                        String[] nombreCabeceras = {" Cédula ", " Nombres ", " Apellidos "," Email "," Telefono "," Representante "};
+                        excel.gestionarIngresoInformacionExcel(nombreCabeceras, data);
+                        excel.abrirDocumento();
+                    } catch (IOException ex) {
+                        Logger.getLogger(ReporteAcademicoData.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IllegalArgumentException ex) {
+                        Logger.getLogger(ReporteAcademicoData.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IllegalAccessException ex) {
+                        Logger.getLogger(ReporteAcademicoData.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+
+                @Override
+                public void pdf() {
+                    ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Academico");
+                }
+            });
+            
         } catch (RemoteException ex) {
             Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -195,7 +221,7 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
 
     @Override
     public String getNombre() {
-        return "Reporte Estudiantes Nivel Académico";
+        return "Reporte Estudiantes Nivel Académico"; 
     }
 
     @Override

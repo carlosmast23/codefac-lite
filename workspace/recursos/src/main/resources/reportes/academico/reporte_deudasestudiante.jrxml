@@ -10,13 +10,13 @@
 	<parameter name="pl_telefonos" class="java.lang.String"/>
 	<parameter name="pl_usuario" class="java.lang.String"/>
 	<parameter name="pl_titulo" class="java.lang.String"/>
-	<parameter name="pl_url_img1" class="java.io.InputStream"/>
-	<parameter name="pl_img_facebook" class="java.io.InputStream"/>
-	<parameter name="pl_img_whatsapp" class="java.io.InputStream"/>
-	<parameter name="pl_img_telefono" class="java.io.InputStream"/>
-	<parameter name="pl_img_logo_pie" class="java.io.InputStream"/>
-	<parameter name="pl_url_cabecera" class="java.io.InputStream"/>
-	<parameter name="pl_url_piepagina" class="java.io.InputStream"/>
+	<parameter name="pl_url_img1" class="java.lang.Object"/>
+	<parameter name="pl_img_facebook" class="java.lang.Object"/>
+	<parameter name="pl_img_whatsapp" class="java.lang.Object"/>
+	<parameter name="pl_img_telefono" class="java.lang.Object"/>
+	<parameter name="pl_img_logo_pie" class="java.lang.Object"/>
+	<parameter name="pl_url_cabecera" class="java.lang.Object"/>
+	<parameter name="pl_url_piepagina" class="java.lang.Object"/>
 	<parameter name="nivelacademico" class="java.lang.String"/>
 	<parameter name="cedulaEstudiante" class="java.lang.String"/>
 	<parameter name="estudiante" class="java.lang.String"/>

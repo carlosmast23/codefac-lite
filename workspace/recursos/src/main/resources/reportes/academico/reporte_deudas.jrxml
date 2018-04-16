@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_deudas2" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3613f18e-d7a7-49ca-8ff5-a65d0f82d855">
-	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="397"/>
-	<property name="ireport.y" value="78"/>
+	<property name="ireport.zoom" value="1.1289478601075547"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="periodo" class="java.lang.String"/>
 	<parameter name="pl_fecha_hora" class="java.lang.String"/>
 	<parameter name="pl_direccion" class="java.lang.String"/>
 	<parameter name="pl_nombre_empresa" class="java.lang.String"/>
 	<parameter name="pl_telefonos" class="java.lang.String"/>
 	<parameter name="pl_usuario" class="java.lang.String"/>
-	<parameter name="pl_titulo" class="java.lang.String"/>
-	<parameter name="pl_url_img1" class="java.io.InputStream"/>
-	<parameter name="pl_img_facebook" class="java.io.InputStream"/>
-	<parameter name="pl_img_whatsapp" class="java.io.InputStream"/>
-	<parameter name="pl_img_telefono" class="java.io.InputStream"/>
-	<parameter name="pl_img_logo_pie" class="java.io.InputStream"/>
-	<parameter name="pl_url_cabecera" class="java.io.InputStream"/>
-	<parameter name="pl_url_piepagina" class="java.io.InputStream"/>
+	<parameter name="pl_titulo" class="java.lang.Object"/>
+	<parameter name="pl_url_img1" class="java.lang.Object"/>
+	<parameter name="pl_img_facebook" class="java.lang.Object"/>
+	<parameter name="pl_img_whatsapp" class="java.lang.Object"/>
+	<parameter name="pl_img_telefono" class="java.lang.Object"/>
+	<parameter name="pl_img_logo_pie" class="java.lang.Object"/>
+	<parameter name="pl_url_cabecera" class="java.lang.Object"/>
+	<parameter name="pl_url_piepagina" class="java.lang.Object"/>
 	<parameter name="nivelacademico" class="java.lang.String"/>
 	<field name="cedulaEstudiante" class="java.lang.String"/>
 	<field name="nivelAcademicoEstudiante" class="java.lang.String"/>
