@@ -106,7 +106,7 @@ public class GestionarDeudasModel extends GestionarDeudasPanel{
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override

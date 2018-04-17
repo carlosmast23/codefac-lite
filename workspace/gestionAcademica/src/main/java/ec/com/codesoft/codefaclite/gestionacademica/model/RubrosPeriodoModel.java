@@ -115,7 +115,7 @@ public class RubrosPeriodoModel extends RubrosPeriodoPanel{
 
     @Override
     public void limpiar() {
-        
+        rubrosNivel=new RubrosNivel();
     }
 
     @Override
