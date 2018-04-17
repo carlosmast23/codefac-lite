@@ -826,7 +826,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     @Override
     public void editar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        DialogoCodefac.mensaje("Advertencia","Las facturas no se pueden modificar",DialogoCodefac.MENSAJE_ADVERTENCIA);
+        throw new ExcepcionCodefacLite("cancelar el evento editar");
     }
 
     @Override
