@@ -35,7 +35,7 @@ public class PeriodoBusquedaDialogo implements InterfaceModelFind<Periodo> {
         QueryDialog queryDialog = new QueryDialog(queryString);
         queryDialog.agregarParametro(1, GeneralEnumEstado.ACTIVO.getEstado());
         queryDialog.agregarParametro(2, GeneralEnumEstado.INACTIVO.getEstado());
-        queryDialog.agregarParametro(3, GeneralEnumEstado.INACTIVO.getEstado());
+        queryDialog.agregarParametro(3, filter);
         return queryDialog;
     }
 

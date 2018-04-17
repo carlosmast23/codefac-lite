@@ -49,6 +49,7 @@ public abstract class NivelPanel extends ControladorCodefacInterface {
         lblEstado = new javax.swing.JLabel();
         cmbEstado = new javax.swing.JComboBox<>();
         lblEspacio2 = new javax.swing.JLabel();
+        lblNivel = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -150,6 +151,10 @@ public abstract class NivelPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weighty = 2.5;
         getContentPane().add(lblEspacio2, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        getContentPane().add(lblNivel, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -162,6 +167,7 @@ public abstract class NivelPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblDescripcion;
     private javax.swing.JLabel lblEspacio2;
     private javax.swing.JLabel lblEstado;
+    private javax.swing.JLabel lblNivel;
     private javax.swing.JLabel lblNombre;
     private javax.swing.JLabel lblOrden;
     private javax.swing.JLabel lblPosterior;
