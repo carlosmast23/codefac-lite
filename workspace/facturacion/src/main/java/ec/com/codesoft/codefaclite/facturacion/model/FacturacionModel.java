@@ -899,7 +899,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     Long estudianteInscritoId=Long.parseLong(facturaAdicional.getValor());                    
                     estudiante=ServiceFactory.getFactory().getEstudianteServiceIf().buscarPorId(estudianteInscritoId);
                     
-                    setearValoresAcademicos(estudiante);
+                    //setearValoresAcademicos(estudiante);
+                    getTxtEstudiante().setText(estudiante.getNombreCompleto());
+                    getCmbRepresentante().removeAllItems();
+                    getCmbRepresentante().addItem(factura.getCliente());
                     
                 } catch (RemoteException ex) {
                     Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
