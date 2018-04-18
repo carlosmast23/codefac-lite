@@ -84,6 +84,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
+        setTitle("Reporte Facturas");
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         lblCliente.setText("Cliente:");

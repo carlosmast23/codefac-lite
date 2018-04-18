@@ -31,7 +31,7 @@ public class RubroPlantillaBusquedaDialog implements InterfaceModelFind<RubroPla
         String queryString = "SELECT u FROM RubroPlantilla u WHERE ";
         queryString += " ( LOWER(u.nombre) like ?1 )";
         QueryDialog queryDialog = new QueryDialog(queryString);
-        queryDialog.agregarParametro(1,queryString);
+        queryDialog.agregarParametro(1,filter);
         return queryDialog;
     }
 

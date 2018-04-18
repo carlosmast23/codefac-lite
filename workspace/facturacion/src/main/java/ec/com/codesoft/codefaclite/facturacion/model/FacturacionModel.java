@@ -558,7 +558,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             {
                 FormaPago formaPago=new FormaPago();
                 formaPago.setPlazo(0);
-                formaPago.setSriFormaPago(factura.getCliente().getSriFormaPago());
+                
+                if(factura.getCliente().getSriFormaPago()==null)
+                    formaPago.setSriFormaPago(formaPagoDefecto);
+                else
+                    formaPago.setSriFormaPago(factura.getCliente().getSriFormaPago());
+                    
                 formaPago.setTotal(BigDecimal.ZERO);
                 formaPago.setUnidadTiempo(FormaPago.UnidadTiempoEnum.NINGUNO.getNombre());
 
@@ -1405,6 +1410,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //getTxtValorUnitario().setText(productoSeleccionado.getValorUnitario().toString());
         //getTxtDescripcion().setText(productoSeleccionado.getNombre());
         //Dar foco a la cantidad a ingresar
+        getTxtCantidad().setText("1");
         getTxtCantidad().requestFocus();
     }
 

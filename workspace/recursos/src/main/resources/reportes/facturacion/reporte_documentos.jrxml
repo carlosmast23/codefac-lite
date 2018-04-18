@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_documentos" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="BlankPage" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9cda46cf-cd6e-4c09-b67c-62113b7f5ab2">
-	<property name="ireport.zoom" value="0.9330147604194691"/>
+	<property name="ireport.zoom" value="1.0263162364614207"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="pl_fecha_hora" class="java.lang.String"/>
@@ -9,13 +9,13 @@
 	<parameter name="pl_telefonos" class="java.lang.String"/>
 	<parameter name="pl_usuario" class="java.lang.String"/>
 	<parameter name="pl_titulo" class="java.lang.String"/>
-	<parameter name="pl_url_img1" class="java.io.InputStream"/>
-	<parameter name="pl_img_facebook" class="java.io.InputStream"/>
-	<parameter name="pl_img_whatsapp" class="java.io.InputStream"/>
-	<parameter name="pl_img_telefono" class="java.io.InputStream"/>
-	<parameter name="pl_img_logo_pie" class="java.io.InputStream"/>
-	<parameter name="pl_url_cabecera" class="java.io.InputStream"/>
-	<parameter name="pl_url_piepagina" class="java.io.InputStream"/>
+	<parameter name="pl_url_img1" class="java.lang.Object"/>
+	<parameter name="pl_img_facebook" class="java.lang.Object"/>
+	<parameter name="pl_img_whatsapp" class="java.lang.Object"/>
+	<parameter name="pl_img_telefono" class="java.lang.Object"/>
+	<parameter name="pl_img_logo_pie" class="java.lang.Object"/>
+	<parameter name="pl_url_cabecera" class="java.lang.Object"/>
+	<parameter name="pl_url_piepagina" class="java.lang.Object"/>
 	<parameter name="fechainicio" class="java.lang.String"/>
 	<parameter name="fechafin" class="java.lang.String"/>
 	<parameter name="tipodocumento" class="java.lang.String"/>
@@ -48,11 +48,14 @@
 				<subreportParameter name="pl_direccion">
 					<subreportParameterExpression><![CDATA[$P{pl_direccion}]]></subreportParameterExpression>
 				</subreportParameter>
-				<subreportParameter name="pl_nombre_empresa">
-					<subreportParameterExpression><![CDATA[$P{pl_nombre_empresa}]]></subreportParameterExpression>
+				<subreportParameter name="pl_telefonos">
+					<subreportParameterExpression><![CDATA[$P{pl_telefonos}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="pl_titulo">
 					<subreportParameterExpression><![CDATA[$P{pl_titulo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_nombre_empresa">
+					<subreportParameterExpression><![CDATA[$P{pl_nombre_empresa}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="pl_fecha_hora">
 					<subreportParameterExpression><![CDATA[$P{pl_fecha_hora}]]></subreportParameterExpression>
@@ -69,57 +72,57 @@
 		</band>
 	</title>
 	<pageHeader>
-		<band height="77" splitType="Stretch">
+		<band height="44" splitType="Stretch">
 			<textField>
-				<reportElement x="100" y="34" width="100" height="20" uuid="a679bb78-753d-40b8-824f-856c4a5ff89f"/>
+				<reportElement x="49" y="20" width="100" height="20" uuid="a679bb78-753d-40b8-824f-856c4a5ff89f"/>
 				<textFieldExpression><![CDATA[$P{fechainicio}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="387" y="34" width="100" height="20" uuid="ac6d3bbf-f255-4408-b8fe-7bdf7c66e664"/>
+				<reportElement x="337" y="20" width="100" height="20" uuid="ac6d3bbf-f255-4408-b8fe-7bdf7c66e664"/>
 				<textFieldExpression><![CDATA[$P{fechafin}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="34" width="100" height="20" uuid="7819bba4-eb89-4534-bd86-b8d6b99f6b4a"/>
+				<reportElement x="0" y="22" width="49" height="20" uuid="7819bba4-eb89-4534-bd86-b8d6b99f6b4a"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Desde:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="287" y="34" width="100" height="20" uuid="48d66939-8103-4be0-9ae7-572e71f82c3c"/>
+				<reportElement x="287" y="22" width="50" height="20" uuid="48d66939-8103-4be0-9ae7-572e71f82c3c"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Hasta:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="2" width="44" height="20" uuid="f16db097-36b2-49ca-a514-710cf754642d"/>
+				<reportElement x="0" y="2" width="49" height="20" uuid="f16db097-36b2-49ca-a514-710cf754642d"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[TIPO: ]]></text>
+				<text><![CDATA[Tipo: ]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="44" y="2" width="100" height="20" uuid="fc87f1b5-92b0-4cfa-8d99-ecd9e831181c"/>
+				<reportElement x="49" y="2" width="100" height="20" uuid="fc87f1b5-92b0-4cfa-8d99-ecd9e831181c"/>
 				<textFieldExpression><![CDATA[$P{tipodocumento}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="287" y="0" width="86" height="20" uuid="04ea4e6c-b02b-491b-b21f-ff331861479f"/>
+				<reportElement x="287" y="0" width="50" height="20" uuid="04ea4e6c-b02b-491b-b21f-ff331861479f"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[CLIENTE:]]></text>
+				<text><![CDATA[Cliente:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="373" y="0" width="100" height="20" uuid="5b00f0d0-065f-4bda-a421-0918f5a52a27"/>
+				<reportElement x="337" y="0" width="100" height="20" uuid="5b00f0d0-065f-4bda-a421-0918f5a52a27"/>
 				<textFieldExpression><![CDATA[$P{cliente}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="649" y="34" width="100" height="20" uuid="aaa09409-9617-4a71-9e6d-3baadecb8fa4"/>
+				<reportElement x="600" y="20" width="100" height="20" uuid="aaa09409-9617-4a71-9e6d-3baadecb8fa4"/>
 				<textFieldExpression><![CDATA[$P{estadofactura}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="549" y="34" width="100" height="20" uuid="843c33df-970f-441f-b244-ee2dd6323bbe"/>
+				<reportElement x="549" y="20" width="51" height="20" uuid="843c33df-970f-441f-b244-ee2dd6323bbe"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
@@ -130,7 +133,7 @@
 	<columnHeader>
 		<band height="20" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="100" height="20" uuid="c5ce4063-b8df-4b07-94ea-5a20cff58816"/>
+				<reportElement x="0" y="0" width="88" height="20" uuid="c5ce4063-b8df-4b07-94ea-5a20cff58816"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -144,7 +147,7 @@
 				<text><![CDATA[Preimpreso]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="101" y="0" width="43" height="20" uuid="e8623cbd-b626-424b-b211-5020ae9a712a"/>
+				<reportElement x="89" y="0" width="54" height="20" uuid="e8623cbd-b626-424b-b211-5020ae9a712a"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -172,7 +175,7 @@
 				<text><![CDATA[Total]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="145" y="0" width="68" height="20" uuid="f663f577-9ef5-4db6-ac50-e850d44ddf2d"/>
+				<reportElement x="143" y="0" width="70" height="20" uuid="f663f577-9ef5-4db6-ac50-e850d44ddf2d"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -286,9 +289,9 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="20" splitType="Stretch">
+		<band height="14" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="100" height="20" uuid="8068aa64-dcd3-4647-9789-ad0aeea034d6"/>
+				<reportElement x="0" y="0" width="88" height="14" uuid="8068aa64-dcd3-4647-9789-ad0aeea034d6"/>
 				<box topPadding="3" leftPadding="2" rightPadding="0">
 					<pen lineWidth="0.25"/>
 					<topPen lineWidth="0.25"/>
@@ -298,11 +301,12 @@
 				</box>
 				<textElement>
 					<font size="8"/>
+					<paragraph leftIndent="5" rightIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{numeroFactura}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="101" y="0" width="43" height="20" uuid="e1bb3e61-2b1a-462b-b1cf-0be21d5737ba"/>
+				<reportElement x="88" y="0" width="55" height="14" uuid="e1bb3e61-2b1a-462b-b1cf-0be21d5737ba"/>
 				<box topPadding="3" leftPadding="2" rightPadding="0">
 					<pen lineWidth="0.25"/>
 					<topPen lineWidth="0.25"/>
@@ -312,11 +316,12 @@
 				</box>
 				<textElement>
 					<font size="8"/>
+					<paragraph leftIndent="5" rightIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fechaFactura}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="712" y="0" width="88" height="20" uuid="251e6c9b-7a17-48b4-8124-49e7ad3a15c0"/>
+				<reportElement x="712" y="0" width="88" height="14" uuid="251e6c9b-7a17-48b4-8124-49e7ad3a15c0"/>
 				<box topPadding="3" leftPadding="2" rightPadding="0">
 					<pen lineWidth="0.25"/>
 					<topPen lineWidth="0.25"/>
@@ -326,11 +331,12 @@
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8"/>
+					<paragraph leftIndent="5" rightIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totalFactura}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="145" y="0" width="68" height="20" uuid="1591f487-e6e6-4781-b8b7-df8c2f18a0b0"/>
+				<reportElement x="143" y="0" width="70" height="14" uuid="1591f487-e6e6-4781-b8b7-df8c2f18a0b0"/>
 				<box topPadding="3" leftPadding="2" rightPadding="0">
 					<pen lineWidth="0.25"/>
 					<topPen lineWidth="0.25"/>
@@ -340,11 +346,12 @@
 				</box>
 				<textElement>
 					<font size="8"/>
+					<paragraph leftIndent="5" rightIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{identificacionCliente}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="213" y="0" width="123" height="20" uuid="f5ba4743-45c3-4d90-9bec-139e61850307"/>
+				<reportElement x="213" y="0" width="124" height="14" uuid="f5ba4743-45c3-4d90-9bec-139e61850307"/>
 				<box topPadding="3" leftPadding="2" rightPadding="0">
 					<pen lineWidth="0.25"/>
 					<topPen lineWidth="0.25"/>
@@ -354,11 +361,12 @@
 				</box>
 				<textElement>
 					<font size="8"/>
+					<paragraph leftIndent="5" rightIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{razonSocialCliente}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="337" y="0" width="114" height="20" uuid="2c0f2c9e-2420-4b92-832c-19da41fa9ebe"/>
+				<reportElement x="337" y="0" width="115" height="14" uuid="2c0f2c9e-2420-4b92-832c-19da41fa9ebe"/>
 				<box topPadding="3" leftPadding="2" rightPadding="0">
 					<pen lineWidth="0.25"/>
 					<topPen lineWidth="0.25"/>
@@ -368,11 +376,12 @@
 				</box>
 				<textElement>
 					<font size="8"/>
+					<paragraph leftIndent="5" rightIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nombreLegalCliente}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="507" y="0" width="59" height="20" uuid="0e3a3eac-b9a5-49b1-ba2a-a2c29d7dc7cb"/>
+				<reportElement x="507" y="0" width="59" height="14" uuid="0e3a3eac-b9a5-49b1-ba2a-a2c29d7dc7cb"/>
 				<box topPadding="3" leftPadding="2" rightPadding="0">
 					<pen lineWidth="0.25"/>
 					<topPen lineWidth="0.25"/>
@@ -382,11 +391,12 @@
 				</box>
 				<textElement textAlignment="Right">
 					<font size="8"/>
+					<paragraph leftIndent="5" rightIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{subtotalDoceFactura}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="566" y="0" width="50" height="20" uuid="5200f064-bd8a-4d3d-b493-d6d7bbba70b1"/>
+				<reportElement x="566" y="0" width="50" height="14" uuid="5200f064-bd8a-4d3d-b493-d6d7bbba70b1"/>
 				<box topPadding="3" leftPadding="2" rightPadding="0">
 					<pen lineWidth="0.25"/>
 					<topPen lineWidth="0.25"/>
@@ -396,11 +406,12 @@
 				</box>
 				<textElement textAlignment="Right">
 					<font size="8"/>
+					<paragraph leftIndent="5" rightIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{subtotalCeroFactura}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="661" y="0" width="50" height="20" uuid="9749d0dd-ba37-4608-890c-1a9d559ee80a"/>
+				<reportElement x="661" y="0" width="51" height="14" uuid="9749d0dd-ba37-4608-890c-1a9d559ee80a"/>
 				<box topPadding="3" leftPadding="2" rightPadding="0">
 					<pen lineWidth="0.25"/>
 					<topPen lineWidth="0.25"/>
@@ -410,11 +421,12 @@
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8"/>
+					<paragraph leftIndent="5" rightIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ivaDoceFactura}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="452" y="0" width="54" height="20" uuid="262b0144-cf0a-4706-9d27-318b352beb11"/>
+				<reportElement x="452" y="0" width="55" height="14" uuid="262b0144-cf0a-4706-9d27-318b352beb11"/>
 				<box>
 					<pen lineWidth="0.25"/>
 					<topPen lineWidth="0.25"/>
@@ -424,11 +436,12 @@
 				</box>
 				<textElement>
 					<font size="8"/>
+					<paragraph leftIndent="5" rightIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{estadoFactura}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="616" y="0" width="45" height="20" uuid="0c9975df-69c3-45e9-990f-74880fcebd48"/>
+				<reportElement x="616" y="0" width="45" height="14" uuid="0c9975df-69c3-45e9-990f-74880fcebd48"/>
 				<box>
 					<pen lineWidth="0.25"/>
 					<topPen lineWidth="0.25"/>
@@ -438,6 +451,7 @@
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8"/>
+					<paragraph leftIndent="5" rightIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{descFactura}]]></textFieldExpression>
 			</textField>
@@ -454,7 +468,9 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Right"/>
+				<textElement textAlignment="Right">
+					<paragraph rightIndent="5"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$P{subtotal}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -466,7 +482,9 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Right"/>
+				<textElement textAlignment="Right">
+					<paragraph rightIndent="5"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$P{subtotaliva}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -480,6 +498,7 @@
 				</box>
 				<textElement textAlignment="Right">
 					<font isBold="true"/>
+					<paragraph rightIndent="5"/>
 				</textElement>
 				<text><![CDATA[Subtotal 12%:]]></text>
 			</staticText>
@@ -494,6 +513,7 @@
 				</box>
 				<textElement textAlignment="Right">
 					<font isBold="true"/>
+					<paragraph rightIndent="5"/>
 				</textElement>
 				<text><![CDATA[Subtotal 0%:]]></text>
 			</staticText>
@@ -508,6 +528,7 @@
 				</box>
 				<textElement textAlignment="Right">
 					<font isBold="true"/>
+					<paragraph rightIndent="5"/>
 				</textElement>
 				<text><![CDATA[TOTAL:]]></text>
 			</staticText>
@@ -520,7 +541,9 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Right"/>
+				<textElement textAlignment="Right">
+					<paragraph rightIndent="5"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$P{valoriva}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -534,6 +557,7 @@
 				</box>
 				<textElement textAlignment="Right">
 					<font isBold="true"/>
+					<paragraph rightIndent="5"/>
 				</textElement>
 				<text><![CDATA[IVA 12%:]]></text>
 			</staticText>
@@ -546,7 +570,9 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Right"/>
+				<textElement textAlignment="Right">
+					<paragraph rightIndent="5"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$P{total}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -558,7 +584,9 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Right"/>
+				<textElement textAlignment="Right">
+					<paragraph rightIndent="5"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$P{totalsubtotales}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -572,6 +600,7 @@
 				</box>
 				<textElement textAlignment="Right">
 					<font isBold="true"/>
+					<paragraph rightIndent="5"/>
 				</textElement>
 				<text><![CDATA[Subtotal:]]></text>
 			</staticText>
@@ -586,6 +615,7 @@
 				</box>
 				<textElement textAlignment="Right">
 					<font isBold="true"/>
+					<paragraph rightIndent="5"/>
 				</textElement>
 				<text><![CDATA[Total Descuentos:]]></text>
 			</staticText>
@@ -598,7 +628,9 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Right"/>
+				<textElement textAlignment="Right">
+					<paragraph rightIndent="5"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$P{descuentos}]]></textFieldExpression>
 			</textField>
 		</band>
