@@ -36,6 +36,7 @@ public abstract class AulaPanel extends ControladorCodefacInterface {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        jLabel4 = new javax.swing.JLabel();
         lblNombre = new javax.swing.JLabel();
         lblUbicacion = new javax.swing.JLabel();
         lblCapacidad = new javax.swing.JLabel();
@@ -44,8 +45,11 @@ public abstract class AulaPanel extends ControladorCodefacInterface {
         txtUbicacion = new javax.swing.JTextField();
         txtCapacidad = new javax.swing.JTextField();
         cmbEstado = new javax.swing.JComboBox<>();
-        lblEspacio1 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+
+        jLabel4.setText("jLabel4");
 
         setClosable(true);
         setIconifiable(true);
@@ -58,7 +62,7 @@ public abstract class AulaPanel extends ControladorCodefacInterface {
         lblNombre.setText("Nombre:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(lblNombre, gridBagConstraints);
@@ -67,7 +71,7 @@ public abstract class AulaPanel extends ControladorCodefacInterface {
         lblUbicacion.setText("Ubicacion:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(lblUbicacion, gridBagConstraints);
@@ -76,7 +80,7 @@ public abstract class AulaPanel extends ControladorCodefacInterface {
         lblCapacidad.setText("Capacidad:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(lblCapacidad, gridBagConstraints);
@@ -85,13 +89,13 @@ public abstract class AulaPanel extends ControladorCodefacInterface {
         lblEstado.setText("Estado:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(lblEstado, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 190;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -105,7 +109,7 @@ public abstract class AulaPanel extends ControladorCodefacInterface {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 190;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -113,7 +117,7 @@ public abstract class AulaPanel extends ControladorCodefacInterface {
         getContentPane().add(txtUbicacion, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 190;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -123,24 +127,32 @@ public abstract class AulaPanel extends ControladorCodefacInterface {
         cmbEstado.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 171;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(cmbEstado, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.3;
-        getContentPane().add(lblEspacio1, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 0.1;
         getContentPane().add(jLabel1, gridBagConstraints);
+
+        jLabel3.setText("         ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.7;
+        getContentPane().add(jLabel3, gridBagConstraints);
+
+        jLabel5.setText("           ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        getContentPane().add(jLabel5, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -153,8 +165,10 @@ public abstract class AulaPanel extends ControladorCodefacInterface {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<GeneralEnumEstado> cmbEstado;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel lblCapacidad;
-    private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEstado;
     private javax.swing.JLabel lblNombre;
     private javax.swing.JLabel lblUbicacion;

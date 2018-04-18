@@ -55,6 +55,8 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
         txtDiasCredito = new javax.swing.JTextField();
         lblEspacio3 = new javax.swing.JLabel();
         lblEspacio2 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -80,21 +82,25 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         getContentPane().add(jLabel2, gridBagConstraints);
+
+        txtNombre.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 183;
+        gridBagConstraints.ipadx = 50;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(20, 0, 0, 0);
         getContentPane().add(txtNombre, gridBagConstraints);
 
+        txtValor.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtValor.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.weightx = 0.1;
         getContentPane().add(txtValor, gridBagConstraints);
 
@@ -112,7 +118,6 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 125;
         gridBagConstraints.weightx = 0.1;
         getContentPane().add(cmbNivel, gridBagConstraints);
 
@@ -130,7 +135,6 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 125;
         gridBagConstraints.weightx = 0.1;
         getContentPane().add(cmbPeriodo, gridBagConstraints);
 
@@ -148,7 +152,7 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 125;
+        gridBagConstraints.ipadx = 50;
         gridBagConstraints.weightx = 0.1;
         getContentPane().add(cmbRubro, gridBagConstraints);
 
@@ -156,6 +160,7 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 20);
         getContentPane().add(btnAgregarRubro, gridBagConstraints);
@@ -168,10 +173,13 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         getContentPane().add(jLabel6, gridBagConstraints);
+
+        txtDiasCredito.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.weightx = 0.1;
         getContentPane().add(txtDiasCredito, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -181,11 +189,26 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
         gridBagConstraints.weighty = 0.5;
         getContentPane().add(lblEspacio3, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.4;
         getContentPane().add(lblEspacio2, gridBagConstraints);
+
+        jLabel7.setText("          ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.8;
+        getContentPane().add(jLabel7, gridBagConstraints);
+
+        jLabel8.setText("                                                            ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.ipadx = 10;
+        getContentPane().add(jLabel8, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -202,6 +225,8 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel lblEspacio2;
     private javax.swing.JLabel lblEspacio3;
     private javax.swing.JTextField txtDiasCredito;

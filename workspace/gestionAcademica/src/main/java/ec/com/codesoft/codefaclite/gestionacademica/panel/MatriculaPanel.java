@@ -64,6 +64,7 @@ public abstract class MatriculaPanel extends ControladorCodefacInterface {
         chkSeleccionarTodoTblSinMatricula = new javax.swing.JCheckBox();
         chkSeleccionarTodoTblConMatricula = new javax.swing.JCheckBox();
         jLabel1 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -283,6 +284,14 @@ public abstract class MatriculaPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 2;
         getContentPane().add(jLabel1, gridBagConstraints);
 
+        jLabel7.setText("           ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 20;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        getContentPane().add(jLabel7, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -303,6 +312,7 @@ public abstract class MatriculaPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JLabel lblNivelAnterior;

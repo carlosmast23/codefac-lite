@@ -181,9 +181,9 @@ public abstract class NivelAcademicoPanel extends ControladorCodefacInterface {
         getContentPane().add(lblEspacio2, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.8;
+        gridBagConstraints.weightx = 0.7;
         getContentPane().add(lblEspacio1, gridBagConstraints);
 
         pack();

@@ -48,6 +48,7 @@ public abstract class GestionarDeudasPanel extends ControladorCodefacInterface {
         jLabel4 = new javax.swing.JLabel();
         cmbRubrosNivel = new javax.swing.JComboBox<>();
         lblEspacio1 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -144,6 +145,12 @@ public abstract class GestionarDeudasPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 1.3;
         getContentPane().add(lblEspacio1, gridBagConstraints);
 
+        jLabel1.setText("           ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.7;
+        getContentPane().add(jLabel1, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -152,6 +159,7 @@ public abstract class GestionarDeudasPanel extends ControladorCodefacInterface {
     private javax.swing.JComboBox<NivelAcademico> cmbNivelAcademico;
     private javax.swing.JComboBox<Periodo> cmbPeriodo;
     private javax.swing.JComboBox<RubrosNivel> cmbRubrosNivel;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

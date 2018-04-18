@@ -621,13 +621,17 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         jLabel5.setText("                    ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.3;
         jPanel3.add(jLabel5, gridBagConstraints);
 
         jLabel6.setText("                    ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.3;
         jPanel3.add(jLabel6, gridBagConstraints);
 
         jLabel13.setText("                    ");
