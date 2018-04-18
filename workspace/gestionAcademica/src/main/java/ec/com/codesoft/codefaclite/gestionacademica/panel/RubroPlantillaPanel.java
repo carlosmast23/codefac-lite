@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlanti
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.JRadioButton;
@@ -68,7 +69,6 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
         jPanel3 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         cmbCursoSinRegistrar = new javax.swing.JComboBox<>();
-        btnBuscarEstudianteSinRegistro = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDatosSinRegistrar = new javax.swing.JTable();
         jLabel9 = new javax.swing.JLabel();
@@ -78,6 +78,8 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
         tblDatosRegistrados = new javax.swing.JTable();
         btnPasar = new javax.swing.JButton();
         btnRegresar = new javax.swing.JButton();
+        chkCursoSinRegistrar = new javax.swing.JCheckBox();
+        chkCursoRegistrado = new javax.swing.JCheckBox();
         jPanel4 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         txtNombreMes = new javax.swing.JTextField();
@@ -243,13 +245,6 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(cmbCursoSinRegistrar, gridBagConstraints);
 
-        btnBuscarEstudianteSinRegistro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel3.add(btnBuscarEstudianteSinRegistro, gridBagConstraints);
-
         tblDatosSinRegistrar.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -265,7 +260,7 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.gridheight = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -313,7 +308,7 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.gridheight = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -326,7 +321,7 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
         btnPasar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/general/right.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(btnPasar, gridBagConstraints);
@@ -338,6 +333,20 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(btnRegresar, gridBagConstraints);
+
+        chkCursoSinRegistrar.setText("Seleccionar Todo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel3.add(chkCursoSinRegistrar, gridBagConstraints);
+
+        chkCursoRegistrado.setText("Seleccionar Todo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel3.add(chkCursoRegistrado, gridBagConstraints);
 
         jTabPanel.addTab("Registrar Estudiantes", jPanel3);
 
@@ -429,11 +438,12 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarEstudiante;
     private javax.swing.JButton btnAgregarRubro;
-    private javax.swing.JButton btnBuscarEstudianteSinRegistro;
     private javax.swing.JButton btnGenerar;
     private javax.swing.JButton btnPasar;
     private javax.swing.JButton btnRegresar;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JCheckBox chkCursoRegistrado;
+    private javax.swing.JCheckBox chkCursoSinRegistrar;
     private javax.swing.JComboBox<NivelAcademico> cmbCursoSinRegistrar;
     private javax.swing.JComboBox<NivelAcademico> cmbCursosRegistrados;
     private javax.swing.JComboBox<Periodo> cmbPeriodo;
@@ -631,9 +641,22 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
     public void setLstMesesSinGenerar(JList<RubroPlantillaMes> lstMesesSinGenerar) {
         this.lstMesesSinGenerar = lstMesesSinGenerar;
     }
-    
-    
-    
+
+    public JCheckBox getChkCursoRegistrado() {
+        return chkCursoRegistrado;
+    }
+
+    public void setChkCursoRegistrado(JCheckBox chkCursoRegistrado) {
+        this.chkCursoRegistrado = chkCursoRegistrado;
+    }
+
+    public JCheckBox getChkCursoSinRegistrar() {
+        return chkCursoSinRegistrar;
+    }
+
+    public void setChkCursoSinRegistrar(JCheckBox chkCursoSinRegistrar) {
+        this.chkCursoSinRegistrar = chkCursoSinRegistrar;
+    }
     
     
     

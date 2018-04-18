@@ -67,7 +67,6 @@ public abstract class MatriculaEstudiantePanel extends ControladorCodefacInterfa
         chkNinguno = new javax.swing.JRadioButton();
         chkBeca = new javax.swing.JRadioButton();
         chkOtro = new javax.swing.JRadioButton();
-        lblEspacio3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
         setClosable(true);
@@ -134,7 +133,7 @@ public abstract class MatriculaEstudiantePanel extends ControladorCodefacInterfa
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnBuscarEstudiante, gridBagConstraints);
 
@@ -142,7 +141,7 @@ public abstract class MatriculaEstudiantePanel extends ControladorCodefacInterfa
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnNuevoEstudiante, gridBagConstraints);
 
@@ -263,7 +262,7 @@ public abstract class MatriculaEstudiantePanel extends ControladorCodefacInterfa
                 .addComponent(chkOtro)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel12)
-                .addContainerGap(174, Short.MAX_VALUE))
+                .addContainerGap(246, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -283,17 +282,11 @@ public abstract class MatriculaEstudiantePanel extends ControladorCodefacInterfa
         gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         getContentPane().add(jPanel1, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.3;
-        getContentPane().add(lblEspacio3, gridBagConstraints);
 
         jLabel1.setText("          ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.4;
         getContentPane().add(jLabel1, gridBagConstraints);
@@ -327,7 +320,6 @@ public abstract class MatriculaEstudiantePanel extends ControladorCodefacInterfa
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblEspacio2;
-    private javax.swing.JLabel lblEspacio3;
     private javax.swing.JSpinner spnPorcentaje;
     private javax.swing.JTextField txtEstudiante;
     private javax.swing.JTextField txtNombreDescuento;

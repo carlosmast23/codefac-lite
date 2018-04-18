@@ -232,7 +232,7 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
 
     @Override
     public String getNombre() {
-        return "Reporte Estudiantes Nivel Académico"; 
+        return "Reporte Estudiantes Matriculados"; 
     }
 
     @Override

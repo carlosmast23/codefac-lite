@@ -1,0 +1,2 @@
+En el reporte de Estudiantes Matriculados agregar opcion de sacar lista de todos los estudiantes
+En el reporte de Deudas por Curso el campo de abono no deberia ser aparte o no debe aparecer y se debe agregar otro campo para saber cuanto ya esta pagado

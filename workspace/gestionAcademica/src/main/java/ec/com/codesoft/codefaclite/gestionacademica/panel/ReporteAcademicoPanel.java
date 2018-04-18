@@ -47,7 +47,7 @@ public abstract class ReporteAcademicoPanel extends ControladorCodefacInterface{
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
-        setTitle("Reporte Estudiantes Nivel Académico");
+        setTitle("Reporte Estudiantes Matriculados");
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         lblBuscar.setText("Nivel:");

@@ -41,6 +41,9 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JTable;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -208,6 +211,7 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
         listenerBotones();
         listenerCombos();
         listenerList();
+        listenerCheckBox();
     }
     
     private void listenerBotones()
@@ -336,8 +340,17 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
             //Si solo existe un dato selecciona el primero
             getCmbCursosRegistrados().setSelectedIndex(0);
         } else {
-            //Selecciona el anterior dato
-            getCmbCursosRegistrados().setSelectedIndex(filaSeleccionada);
+            if(getCmbCursosRegistrados().getModel().getSize()>0)
+            {
+                //Selecciona el anterior dato 
+                getCmbCursosRegistrados().setSelectedIndex(filaSeleccionada);
+            }
+            else
+            {
+                //Cuando no existen datos en el combo dejo la tabla vacia
+                getTblDatosRegistrados().setModel(new DefaultTableModel());
+            }
+            
         }
     }
     
@@ -761,6 +774,33 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
                 {
                     getTxtNombreMes().setText(rubroPlantilla.getNombre()+" "+rubroPlantillaMes.toString());
                 }
+            }
+        });
+    }
+    
+    private void cambiarSeleccionaTabla(JTable tabla,Boolean seleccion)
+    {
+        DefaultTableModel tablaModelo=(DefaultTableModel) tabla.getModel();
+        
+        for (int i = 0; i < tablaModelo.getRowCount(); i++) {
+            //Boolean opcion=(Boolean) tablaModelo.getValueAt(i,1);
+            tablaModelo.setValueAt(seleccion,i,1);           
+        }
+    }
+
+    private void listenerCheckBox() {
+        getChkCursoRegistrado().addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                cambiarSeleccionaTabla(getTblDatosRegistrados(),getChkCursoRegistrado().isSelected());
+            }
+        });
+        
+        getChkCursoSinRegistrar().addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                Boolean opcion= getChkCursoSinRegistrar().isSelected();
+                cambiarSeleccionaTabla(getTblDatosSinRegistrar(),opcion);
             }
         });
     }
