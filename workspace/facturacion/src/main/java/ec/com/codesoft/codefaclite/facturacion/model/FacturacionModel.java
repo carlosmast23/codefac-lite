@@ -121,8 +121,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     private boolean bandera;
     private boolean banderaFP;
     private boolean banderaAgregar;
-    private boolean banderaFormaPago;
-    private BigDecimal valorTotalFormaDePago;
     private java.util.Date fechaMax;
     private java.util.Date fechaMin;
     
@@ -189,7 +187,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //this.subtotalSinImpuestosDescuento=BigDecimal.ZERO;
         this.bandera = false;
         this.banderaAgregar = true;
-        this.banderaFormaPago = true;
         this.factura.setDescuentoImpuestos(new BigDecimal(0));
         calcularIva12();
         //datosAdicionales = new HashMap<String, String>();
@@ -373,14 +370,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     dialog.setLocationRelativeTo(null);
                     dialog.setVisible(true);
                     FormaPago formaPago = dialog.getFormaPago();
-                    valorTotalFormaDePago = formaPago.getTotal();
                     try {
 
                         verificarSumaFormaPago();
-                        if (banderaFormaPago) {
-                            factura.addFormaPago(formaPago);
-                            valorTotalFormaDePago = new BigDecimal("0");
-                        }
+                        factura.addFormaPago(formaPago);
+
                         cargarFormasPagoTabla();
                     } catch (Exception ex) {
                         System.out.println("No existe forma de pago");
@@ -677,7 +671,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     public void grabar() throws ExcepcionCodefacLite {
 
         try {
-            if (!banderaFormaPago) {
+            if (!verificarSumaFormaPago()) {
                 throw new ExcepcionCodefacLite("Formas de pago erroneas");
             }
             
@@ -690,6 +684,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 DialogoCodefac.mensaje("Alerta", "No se puede facturar sin detalles", DialogoCodefac.MENSAJE_ADVERTENCIA);
                 throw new ExcepcionCodefacLite("Necesita seleccionar detalles ");
             }
+            
             
             Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea facturar?", DialogoCodefac.MENSAJE_ADVERTENCIA);
             if (!respuesta) {
@@ -831,7 +826,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     @Override
     public void editar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        DialogoCodefac.mensaje("Advertencia","Las facturas no se pueden modificar",DialogoCodefac.MENSAJE_ADVERTENCIA);
+        throw new ExcepcionCodefacLite("cancelar el evento editar");
     }
 
     @Override
@@ -902,11 +898,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     
                     FacturaAdicional facturaAdicional=buscarCampoAdicionalPorNombre(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre());
                     Long estudianteInscritoId=Long.parseLong(facturaAdicional.getValor());                    
-                    EstudianteInscrito estudianteInscrito=ServiceFactory.getFactory().getEstudianteInscritoServiceIf().buscarPorId(estudianteInscritoId);
+                    estudiante=ServiceFactory.getFactory().getEstudianteServiceIf().buscarPorId(estudianteInscritoId);
                     
-                    estudiante=estudianteInscrito.getEstudiante();
-                    
-                    setearValoresAcademicos(estudiante);
+                    //setearValoresAcademicos(estudiante);
+                    getTxtEstudiante().setText(estudiante.getNombreCompleto());
+                    getCmbRepresentante().removeAllItems();
+                    getCmbRepresentante().addItem(factura.getCliente());
                     
                 } catch (RemoteException ex) {
                     Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -1585,24 +1582,35 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void verificarSumaFormaPago() {
-        BigDecimal totalFormasPago = new BigDecimal("0");
+    public boolean verificarSumaFormaPago() {
+        BigDecimal totalFormasPago = BigDecimal.ZERO;
         int res;
         try {
-            for (FormaPago fp : factura.getFormaPagos()) {
-                totalFormasPago = totalFormasPago.add(fp.getTotal());
+            if(factura.getFormaPagos()!=null)
+            {
+                for (FormaPago fp : factura.getFormaPagos()) {
+                    totalFormasPago = totalFormasPago.add(fp.getTotal());
+                }
             }
-            totalFormasPago = totalFormasPago.add(valorTotalFormaDePago);
+            //totalFormasPago = totalFormasPago.add(valorTotalFormaDePago);
         } catch (Exception e) {
             System.out.println("Es la primera vez que se utiliza una forma de pago");
         }
 
         res = factura.getTotal().compareTo(totalFormasPago);
-        if (res == -1) {
+        if (res == -1) 
+        {
             DialogoCodefac.mensaje("Advertencia", "La forma de pago sobrepasa el valor a Facturar", DialogoCodefac.MENSAJE_ADVERTENCIA);
-            banderaFormaPago = false;
-        } else {
-            banderaFormaPago = true;
+            return false;
+        } 
+        else 
+        {
+            if(res==1)
+            {
+                DialogoCodefac.mensaje("Advertencia", "La formas de pago es inferior a el valor a Facturar", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                return false;
+            }
+            return true;
         }
     }
 

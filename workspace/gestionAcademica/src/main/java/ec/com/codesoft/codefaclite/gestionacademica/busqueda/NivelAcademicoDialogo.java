@@ -32,7 +32,7 @@ public class NivelAcademicoDialogo implements InterfaceModelFind<NivelAcademico>
         String queryString = "SELECT u FROM NivelAcademico u WHERE ";
         queryString += " ( LOWER(u.nombre) like ?1 )";
         QueryDialog queryDialog = new QueryDialog(queryString);
-        queryDialog.agregarParametro(1,queryDialog);
+        queryDialog.agregarParametro(1,filter);
         return queryDialog;
     }
 

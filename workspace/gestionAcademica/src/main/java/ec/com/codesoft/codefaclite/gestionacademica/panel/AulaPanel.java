@@ -45,6 +45,7 @@ public abstract class AulaPanel extends ControladorCodefacInterface {
         txtCapacidad = new javax.swing.JTextField();
         cmbEstado = new javax.swing.JComboBox<>();
         lblEspacio1 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -134,6 +135,12 @@ public abstract class AulaPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.3;
         getContentPane().add(lblEspacio1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.weighty = 0.1;
+        getContentPane().add(jLabel1, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -145,6 +152,7 @@ public abstract class AulaPanel extends ControladorCodefacInterface {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<GeneralEnumEstado> cmbEstado;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblCapacidad;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEstado;

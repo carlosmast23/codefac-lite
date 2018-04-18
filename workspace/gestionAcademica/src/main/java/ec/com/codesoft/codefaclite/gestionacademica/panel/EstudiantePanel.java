@@ -777,7 +777,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Apellidos", expresionRegularMensaje = "No se permiten caracteres especiales")
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[a-zA-ñÑáéíóúÁÉÍÓÚ\\s0-9.\\_\\-]*$", nombre = "Apellidos", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextField getTxtApellidos() {
         return txtApellidos;
     }
@@ -818,7 +818,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
 
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Nombre", expresionRegularMensaje = "No se permiten caracteres especiales")
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[a-zA-ñÑáéíóúÁÉÍÓÚ\\s0-9.\\_\\-]*$", nombre = "Nombre", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextField getTxtNombres() {
         return txtNombres;
     }
@@ -865,7 +865,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$", nombre = "Correo Electronico", expresionRegularMensaje = "Ingrese una dirección de correo valida")
+    @ValidacionCodefacAnotacion(requerido = false, expresionRegular = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$", nombre = "Correo Electronico", expresionRegularMensaje = "Ingrese una dirección de correo valida")
     public JTextField getTxtCorreo() {
         return txtCorreo;
     }
