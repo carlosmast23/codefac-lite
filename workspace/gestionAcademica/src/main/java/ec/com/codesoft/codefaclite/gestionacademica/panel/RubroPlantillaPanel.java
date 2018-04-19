@@ -489,7 +489,7 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
     public void setBtnAgregarEstudiante(JButton btnAgregarEstudiante) {
         this.btnAgregarEstudiante = btnAgregarEstudiante;
     }
-
+/*
     public JButton getBtnBuscarEstudianteSinRegistro() {
         return btnBuscarEstudianteSinRegistro;
     }
@@ -497,7 +497,7 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
     public void setBtnBuscarEstudianteSinRegistro(JButton btnBuscarEstudianteSinRegistro) {
         this.btnBuscarEstudianteSinRegistro = btnBuscarEstudianteSinRegistro;
     }
-
+*/
     public JButton getBtnGenerar() {
         return btnGenerar;
     }

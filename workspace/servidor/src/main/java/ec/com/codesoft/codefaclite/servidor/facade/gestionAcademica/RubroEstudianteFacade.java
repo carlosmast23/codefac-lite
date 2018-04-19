@@ -117,24 +117,38 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
     }
 
     public List<RubroEstudiante> buscarRubrosMes(EstudianteInscrito estudiante, Periodo periodo, CatalogoProducto catalogoProducto, List<MesEnum> meses) throws RemoteException {
-        String stringQuery = "(SELECT rn.id FROM RubrosNivel rn WHERE rn.catalogoProducto=?2 AND rn.periodo=?3 AND ";
-        String stringQueryMeses = "";
-        //Solo van entre parentesis si tiene mas datos que 1
-        if (meses.size() > 1) {
-            stringQueryMeses = "( ";
+        String cat, qmes = "";
+        if (catalogoProducto != null) {
+            cat = "rn.catalogoProducto=?2";
+        } else {
+            cat = "1=1";
         }
-        if (meses.size() > 0) {
-            for (MesEnum mes : meses) {
-                stringQueryMeses = stringQueryMeses + " rn.mesNumero=" + mes.getNumero() + " OR";
+        String stringQuery = "";
+        if (meses != null) {
+            stringQuery = "(SELECT rn.id FROM RubrosNivel rn WHERE " + cat + " AND rn.periodo=?3 AND ";
+            String stringQueryMeses = "";
+            //Solo van entre parentesis si tiene mas datos que 1
+            if (meses.size() > 1) {
+                stringQueryMeses = "( ";
             }
+            if (meses.size() > 0) {
+                for (MesEnum mes : meses) {
+                    stringQueryMeses = stringQueryMeses + " rn.mesNumero=" + mes.getNumero() + " OR";
+                }
+            }
+            //Cortar el ultimo OR que sobra de la candena;
+            stringQueryMeses = stringQueryMeses.substring(0, stringQueryMeses.length() - 3);
+            if (meses.size() > 1) {
+                stringQueryMeses = stringQueryMeses + ")";
+            }
+            //Une los querys parciales y genera uno total
+            stringQuery += stringQueryMeses + ")";
+            qmes = "u.rubroNivel.id IN " + stringQuery;
+        } else {
+            stringQuery = "(SELECT rn.id FROM RubrosNivel rn WHERE " + cat + " AND rn.periodo=?3) ";
+            qmes = "u.rubroNivel.id IN " + stringQuery;
+            //qmes = "1=1";
         }
-        //Cortar el ultimo OR que sobra de la candena;
-        stringQueryMeses = stringQueryMeses.substring(0, stringQueryMeses.length() - 3);
-        if (meses.size() > 1) {
-            stringQueryMeses = stringQueryMeses + ")";
-        }
-        //Une los querys parciales y genera uno total
-        stringQuery += stringQueryMeses + ")";
 
         String academico = "";
         if (estudiante != null) {
@@ -143,15 +157,20 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
             academico = "1=1";
         }
 //VALIDAR DEUDAS
+
         try {
-            String queryString = "SELECT u FROM RubroEstudiante u WHERE " + academico + " AND u.rubroNivel.id IN " + stringQuery;
+            String queryString = "SELECT u FROM RubroEstudiante u WHERE (u.estado <> ?4 AND u.estado <> ?5 AND u.saldo > 0) AND " + academico + " AND " + qmes;
             Query query = getEntityManager().createQuery(queryString);
-            //System.err.println("QUERY--->" + query.toString());
+            System.err.println("QUERY--->" + query.toString());
             if (estudiante != null) {
                 query.setParameter(1, estudiante);
-                query.setParameter(2, catalogoProducto);
-                query.setParameter(3, periodo);
             }
+            if (catalogoProducto != null) {
+                query.setParameter(2, catalogoProducto);
+            }
+            query.setParameter(3, periodo);
+            query.setParameter(4, GeneralEnumEstado.ANULADO.getEstado());
+            query.setParameter(5, GeneralEnumEstado.ELIMINADO.getEstado());
             return query.getResultList();
         } catch (NoResultException e) {
             return null;
