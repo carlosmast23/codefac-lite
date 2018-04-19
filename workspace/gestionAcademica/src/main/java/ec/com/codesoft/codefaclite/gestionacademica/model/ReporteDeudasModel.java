@@ -176,9 +176,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
                         if (banderaRubros == false) {
                             dataRubro = rs.buscarRubrosMes(estudiante, periodo, catalogoProducto, mesesSeleccionados);
                         } else {
-                            Map<String, Object> mapParametros2 = new HashMap<String, Object>();
-                            mapParametros2.put("estudianteInscrito", estudiante);
-                            dataRubro = rs.obtenerPorMap(mapParametros2);
+                            dataRubro = rs.buscarRubrosMes(estudiante, periodo, null, null);
                         }
 
 // comparamos si el estudiante tiene rubros
@@ -254,9 +252,10 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
                 if (banderaRubros == false) {
                     dataRubro = rs.buscarRubrosMes(estudiante, periodo, catalogoProducto, mesesSeleccionados);
                 } else {
-                    Map<String, Object> mapParametros2 = new HashMap<String, Object>();
+                    /*Map<String, Object> mapParametros2 = new HashMap<String, Object>();
                     mapParametros2.put("estudianteInscrito", estudiante);
-                    dataRubro = rs.obtenerPorMap(mapParametros2);
+                    dataRubro = rs.obtenerPorMap(mapParametros2);*/
+                    dataRubro = rs.buscarRubrosMes(estudiante, periodo, null, null);
                 }
                 // comparamos si el estudiante tiene rubros
                 if (!dataRubro.isEmpty()) {
@@ -286,14 +285,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
             } else {
                 parameters.put("nivelacademico", "TODOS");
             }
-            
-//            Collections.sort(data, new Comparator<ReporteDeudasData>(){
-//                public int compare(ReporteDeudasData obj1, ReporteDeudasData obj2)
-//                {
-//                    return obj1.getEstudiante().compareTo(obj2.getEstudiante());
-//                }
-//            });
-            
+
             ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Deudas");
         } catch (RemoteException ex) {
             Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
