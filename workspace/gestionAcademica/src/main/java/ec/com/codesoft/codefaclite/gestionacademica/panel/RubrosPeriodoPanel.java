@@ -83,7 +83,7 @@ public abstract class RubrosPeriodoPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         getContentPane().add(jLabel2, gridBagConstraints);
 
-        txtNombre.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtNombre.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;

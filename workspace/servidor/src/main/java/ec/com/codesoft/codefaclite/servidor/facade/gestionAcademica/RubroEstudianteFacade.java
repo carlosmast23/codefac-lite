@@ -73,6 +73,8 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
     }
 
     public List<Object[]> obtenerRubroPeriodoGrupo(Periodo periodo) {
+        //RubroEstudiante rubroEstudiante;
+        //rubroEstudiante.getEstado()
         String academico = "";
         if (periodo != null) {
             academico = "u.estudianteInscrito.nivelAcademico.periodo=?1";
@@ -80,8 +82,12 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
             academico = "1=1";
         }
         try {
-            String queryString = "SELECT u.estudianteInscrito.nivelAcademico,u.rubroNivel,SUM(u.valor)-SUM(u.saldo),SUM(u.saldo) FROM RubroEstudiante u WHERE (u.estadoFactura <> 'f') AND " + academico + " GROUP BY u.estudianteInscrito.nivelAcademico,u.rubroNivel";
+            //String queryString = "SELECT u.estudianteInscrito.nivelAcademico,u.rubroNivel,SUM(u.valor)-SUM(u.saldo),SUM(u.saldo) FROM RubroEstudiante u WHERE (u.estadoFactura <> 'f') AND " + academico + " GROUP BY u.estudianteInscrito.nivelAcademico,u.rubroNivel";
+            String queryString = "SELECT u.estudianteInscrito.nivelAcademico,u.rubroNivel,SUM(u.valor)-SUM(u.saldo),SUM(u.saldo) FROM RubroEstudiante u WHERE (u.estado <> ?2 AND u.estado <> ?3 ) AND " + academico + " GROUP BY u.estudianteInscrito.nivelAcademico,u.rubroNivel";
             Query query = getEntityManager().createQuery(queryString);
+            query.setParameter(2,GeneralEnumEstado.ELIMINADO.getEstado());
+            query.setParameter(3,GeneralEnumEstado.ANULADO.getEstado());
+            
             if (periodo != null) {
                 query.setParameter(1, periodo);
             }

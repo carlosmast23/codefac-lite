@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import java.util.List;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 
@@ -49,6 +50,7 @@ public abstract class GestionarDeudasPanel extends ControladorCodefacInterface {
         cmbRubrosNivel = new javax.swing.JComboBox<>();
         lblEspacio1 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        chkSeleccionarTodo = new javax.swing.JCheckBox();
 
         setClosable(true);
         setIconifiable(true);
@@ -127,18 +129,17 @@ public abstract class GestionarDeudasPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 15, 5);
         getContentPane().add(jLabel4, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 183;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 15, 5);
         getContentPane().add(cmbRubrosNivel, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -151,11 +152,18 @@ public abstract class GestionarDeudasPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.7;
         getContentPane().add(jLabel1, gridBagConstraints);
 
+        chkSeleccionarTodo.setText("Seleccionar Todo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        getContentPane().add(chkSeleccionarTodo, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox chkSeleccionarTodo;
     private javax.swing.JComboBox<NivelAcademico> cmbNivelAcademico;
     private javax.swing.JComboBox<Periodo> cmbPeriodo;
     private javax.swing.JComboBox<RubrosNivel> cmbRubrosNivel;
@@ -200,6 +208,15 @@ public abstract class GestionarDeudasPanel extends ControladorCodefacInterface {
         this.tblEstudiantes = tblEstudiantes;
     }
 
+    public JCheckBox getChkSeleccionarTodo() {
+        return chkSeleccionarTodo;
+    }
+
+    public void setChkSeleccionarTodo(JCheckBox chkSeleccionarTodo) {
+        this.chkSeleccionarTodo = chkSeleccionarTodo;
+    }
+
+    
     
     
 }

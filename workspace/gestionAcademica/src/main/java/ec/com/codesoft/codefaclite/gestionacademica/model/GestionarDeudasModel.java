@@ -27,6 +27,9 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JTable;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
@@ -143,6 +146,7 @@ public class GestionarDeudasModel extends GestionarDeudasPanel{
 
     private void iniciarListener() {
         listenerCombos();
+        listenerCheckBox();
     }
 
     private void cargarValoresIniciales() {
@@ -318,6 +322,28 @@ public class GestionarDeudasModel extends GestionarDeudasPanel{
             }
         };    
          return defaultTableModel;
+    }
+    
+    private void cambiarSeleccionaTabla(JTable tabla, Boolean seleccion) 
+    {
+        DefaultTableModel tablaModelo = (DefaultTableModel) tabla.getModel();
+
+        for (int i = 0; i < tablaModelo.getRowCount(); i++) {
+            //Boolean opcion=(Boolean) tablaModelo.getValueAt(i,1);
+            tablaModelo.setValueAt(seleccion, i, 0);
+        }
+    }
+
+    private void listenerCheckBox() {
+        
+        getChkSeleccionarTodo().addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                Boolean opcion= getChkSeleccionarTodo().isSelected();
+                cambiarSeleccionaTabla(getTblEstudiantes(),opcion);
+            }
+        });
+
     }
 
 }
