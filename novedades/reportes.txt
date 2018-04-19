@@ -1,2 +1,7 @@
 En el reporte de Estudiantes Matriculados agregar opcion de sacar lista de todos los estudiantes
 En el reporte de Deudas por Curso el campo de abono no deberia ser aparte o no debe aparecer y se debe agregar otro campo para saber cuanto ya esta pagado
+En la pantalla de Deudas por Estudiantes , aumentar el reporte pdf y analizar la opcion para seleccionar y poder enviar al correo
+En el reporte deudas por nivel academico aumentar el subtotal por estudiante
+	- En el reporte cuando selecciono todos los cursos el reporte sale desorganizado
+
+Ver la posibilidad de ver busquedas entre fechas en el reporte por cursos

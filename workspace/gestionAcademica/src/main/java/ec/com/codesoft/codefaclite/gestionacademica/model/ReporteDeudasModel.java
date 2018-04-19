@@ -287,12 +287,12 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
                 parameters.put("nivelacademico", "TODOS");
             }
             
-            Collections.sort(data, new Comparator<ReporteDeudasData>(){
-                public int compare(ReporteDeudasData obj1, ReporteDeudasData obj2)
-                {
-                    return obj1.getEstudiante().compareTo(obj2.getEstudiante());
-                }
-            });
+//            Collections.sort(data, new Comparator<ReporteDeudasData>(){
+//                public int compare(ReporteDeudasData obj1, ReporteDeudasData obj2)
+//                {
+//                    return obj1.getEstudiante().compareTo(obj2.getEstudiante());
+//                }
+//            });
             
             ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Deudas");
         } catch (RemoteException ex) {

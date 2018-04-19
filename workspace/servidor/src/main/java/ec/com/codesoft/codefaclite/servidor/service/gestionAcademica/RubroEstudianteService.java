@@ -103,6 +103,8 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
 
             for (RubroPlantillaEstudiante estudiateInscrito : rubroPlantilla.getDetalles()) {
                 RubroEstudiante rubroEstudiante = new RubroEstudiante();
+                
+                rubroEstudiante.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
                 rubroEstudiante.setEstadoFactura(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR.getLetra());
                 rubroEstudiante.setEstudianteInscrito(estudiateInscrito.getEstudianteInscrito());
                 rubroEstudiante.setRubroNivel(rubroNivel);
