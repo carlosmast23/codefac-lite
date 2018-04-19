@@ -62,6 +62,8 @@ public abstract class RespaldarInformacionPanel extends ControladorCodefacInterf
         jLabel1 = new javax.swing.JLabel();
         btnGuardarLocalizacion = new javax.swing.JButton();
         txtUbicacionRespaldo = new javax.swing.JTextField();
+        lblEspacio1 = new javax.swing.JLabel();
+        lblEspacio2 = new javax.swing.JLabel();
 
         setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -71,35 +73,52 @@ public abstract class RespaldarInformacionPanel extends ControladorCodefacInterf
         setTitle("Respaldar BD");
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
+        btnRespaldar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/guardar.png"))); // NOI18N
         btnRespaldar.setText("Respaldar");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnRespaldar, gridBagConstraints);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel1.setText("Seleccionar ubicación para respaldos:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel1, gridBagConstraints);
 
+        btnGuardarLocalizacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/buscar-ico.png"))); // NOI18N
         btnGuardarLocalizacion.setText("Guardar");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
         getContentPane().add(btnGuardarLocalizacion, gridBagConstraints);
 
         txtUbicacionRespaldo.setEditable(false);
         txtUbicacionRespaldo.setText("                                   ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtUbicacionRespaldo, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.4;
+        getContentPane().add(lblEspacio1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 0.1;
+        getContentPane().add(lblEspacio2, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -107,6 +126,8 @@ public abstract class RespaldarInformacionPanel extends ControladorCodefacInterf
     private javax.swing.JButton btnGuardarLocalizacion;
     private javax.swing.JButton btnRespaldar;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel lblEspacio1;
+    private javax.swing.JLabel lblEspacio2;
     private javax.swing.JTextField txtUbicacionRespaldo;
     // End of variables declaration//GEN-END:variables
 }

@@ -40,6 +40,13 @@ public abstract class ReporteDeudasCursoPanel extends ControladorCodefacInterfac
         btnBuscar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDeudas = new javax.swing.JTable();
+        lblFechaInicio = new javax.swing.JLabel();
+        dateFechaInicio = new com.toedter.calendar.JDateChooser();
+        btnLimpiarFechaInicio = new javax.swing.JButton();
+        lblFechaFin = new javax.swing.JLabel();
+        dateFechaFin = new com.toedter.calendar.JDateChooser();
+        btnLimpiarFechaFin = new javax.swing.JButton();
+        lblEspacio12 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -51,25 +58,26 @@ public abstract class ReporteDeudasCursoPanel extends ControladorCodefacInterfac
         lblperiodo.setText("Periodo:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(30, 20, 20, 20);
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(lblperiodo, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.ipadx = 156;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(cmbPeriodo, gridBagConstraints);
 
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         btnBuscar.setText("Buscar");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(10, 5, 0, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnBuscar, gridBagConstraints);
 
         tblDeudas.setModel(new javax.swing.table.DefaultTableModel(
@@ -87,13 +95,69 @@ public abstract class ReporteDeudasCursoPanel extends ControladorCodefacInterfac
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 28;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 30, 10);
         getContentPane().add(jScrollPane1, gridBagConstraints);
+
+        lblFechaInicio.setText("Fecha incial:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(lblFechaInicio, gridBagConstraints);
+
+        dateFechaInicio.setDateFormatString("yyyy-MM-dd");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(dateFechaInicio, gridBagConstraints);
+
+        btnLimpiarFechaInicio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/clear.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(btnLimpiarFechaInicio, gridBagConstraints);
+
+        lblFechaFin.setText("Fecha final:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(lblFechaFin, gridBagConstraints);
+
+        dateFechaFin.setDateFormatString("yyyy-MM-dd");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(dateFechaFin, gridBagConstraints);
+
+        btnLimpiarFechaFin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/clear.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(btnLimpiarFechaFin, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.8;
+        getContentPane().add(lblEspacio12, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -101,8 +165,15 @@ public abstract class ReporteDeudasCursoPanel extends ControladorCodefacInterfac
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnLimpiarFechaFin;
+    private javax.swing.JButton btnLimpiarFechaInicio;
     private javax.swing.JComboBox<Periodo> cmbPeriodo;
+    private com.toedter.calendar.JDateChooser dateFechaFin;
+    private com.toedter.calendar.JDateChooser dateFechaInicio;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblEspacio12;
+    private javax.swing.JLabel lblFechaFin;
+    private javax.swing.JLabel lblFechaInicio;
     private javax.swing.JLabel lblperiodo;
     private javax.swing.JTable tblDeudas;
     // End of variables declaration//GEN-END:variables
