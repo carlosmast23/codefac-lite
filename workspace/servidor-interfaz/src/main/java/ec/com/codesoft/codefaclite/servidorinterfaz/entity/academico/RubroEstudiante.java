@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDescuentoRubroEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -51,6 +52,9 @@ public class RubroEstudiante implements Serializable{
 
     @Column(name = "PORCENTAJE_DESCUENTO  ")
     private Integer procentajeDescuento;
+    
+    @Column(name = "FECHA_GENERADO")
+    private Date fechaGenerado;
     
     /**
      * Estado que contrala si esta activo, anulado , o eliminado
@@ -148,6 +152,15 @@ public class RubroEstudiante implements Serializable{
     public void setProcentajeDescuento(Integer procentajeDescuento) {
         this.procentajeDescuento = procentajeDescuento;
     }
+
+    public Date getFechaGenerado() {
+        return fechaGenerado;
+    }
+
+    public void setFechaGenerado(Date fechaGenerado) {
+        this.fechaGenerado = fechaGenerado;
+    }
+    
     
     
     

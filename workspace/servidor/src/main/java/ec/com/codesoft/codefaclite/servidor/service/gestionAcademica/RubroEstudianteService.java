@@ -20,7 +20,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RubroEstudianteServiceIf;
+import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
 import java.rmi.RemoteException;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -105,6 +107,7 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
                 RubroEstudiante rubroEstudiante = new RubroEstudiante();
                 
                 rubroEstudiante.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
+                rubroEstudiante.setFechaGenerado(UtilidadesFecha.getFechaHoy());
                 rubroEstudiante.setEstadoFactura(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR.getLetra());
                 rubroEstudiante.setEstudianteInscrito(estudiateInscrito.getEstudianteInscrito());
                 rubroEstudiante.setRubroNivel(rubroNivel);
@@ -141,6 +144,8 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         transaccion.begin();
         for (EstudianteInscrito estudiante : estudiantes) {
             RubroEstudiante rubroEstudiante = new RubroEstudiante();
+            rubroEstudiante.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
+            rubroEstudiante.setFechaGenerado(UtilidadesFecha.getFechaHoy());
             rubroEstudiante.setEstudianteInscrito(estudiante);
             rubroEstudiante.setSaldo(rubroNivel.getValor());
             rubroEstudiante.setValor(rubroNivel.getValor());
