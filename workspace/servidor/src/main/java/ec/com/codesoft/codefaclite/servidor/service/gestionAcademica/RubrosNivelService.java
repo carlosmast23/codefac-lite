@@ -30,7 +30,6 @@ public class RubrosNivelService extends ServiceAbstract<RubrosNivel,RubrosNivelF
     
     public List<RubrosNivel> obtenerPorCatalogoCatagoriaYNivel(CatalogoProducto.TipoEnum tipoEnum,Nivel nivel) throws RemoteException
     {
-
         Map<String, Object> mapParametros = new HashMap<String, Object>();
         mapParametros.put("catalogoProducto.tipoCod", tipoEnum.getCodigo());
         mapParametros.put("nivel", nivel);
@@ -43,6 +42,27 @@ public class RubrosNivelService extends ServiceAbstract<RubrosNivel,RubrosNivelF
         List<RubrosNivel> rubrosTodosLosNiveles = getFacade().findByMap(mapParametros);
         rubrosTodosLosNiveles.addAll(rubrosDelNivel);
         return rubrosTodosLosNiveles;
+    }
+    
+    public List<RubrosNivel> obtenerPorCatalogoCatagoriaYNivelPeriodo(CatalogoProducto.TipoEnum tipoEnum,Nivel nivel,Periodo periodo) throws RemoteException
+    {
+
+        Map<String, Object> mapParametros = new HashMap<String, Object>();
+        mapParametros.put("catalogoProducto.tipoCod", tipoEnum.getCodigo());
+        mapParametros.put("nivel", nivel);
+        mapParametros.put("periodo",periodo);
+        
+        List<RubrosNivel> rubrosDelNivel = getFacade().findByMap(mapParametros);
+
+        mapParametros = new HashMap<String, Object>();
+        mapParametros.put("catalogoProducto.tipoCod", tipoEnum.getCodigo());
+        mapParametros.put("nivel", null);
+        mapParametros.put("periodo", periodo);
+
+        List<RubrosNivel> rubrosTodosLosNiveles = getFacade().findByMap(mapParametros);
+        rubrosTodosLosNiveles.addAll(rubrosDelNivel);
+        return rubrosTodosLosNiveles;
+   
     }
     
     public List<RubrosNivel> buscarPorCatalogoYNivel(CatalogoProducto catalogoProducto,Nivel nivel) throws RemoteException

@@ -110,7 +110,9 @@ public class NivelAcademicoModel extends NivelAcademicoPanel implements Serializ
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
-        NivelAcademicoDialogo clienteBusquedaDialogo = new NivelAcademicoDialogo();
+        Periodo periodoSeleccionado=(Periodo) getCmbPeriodo().getSelectedItem();
+                
+        NivelAcademicoDialogo clienteBusquedaDialogo = new NivelAcademicoDialogo(periodoSeleccionado);
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
         NivelAcademico nivelAcademicoTemp = (NivelAcademico) buscarDialogoModel.getResultado();

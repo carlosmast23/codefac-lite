@@ -290,10 +290,11 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
                 try {
                     
                     NivelAcademico nivelAcademico=(NivelAcademico)getCmbCursoAsignar().getSelectedItem();
+                    Periodo periodoSeleccionado=(Periodo) getCmbPeriodoActivo().getSelectedItem();
                     //Cargar los rubros disponibles para asignar para la matricula
                     if(nivelAcademico!=null)
                     {
-                        List<RubrosNivel> rubrosNivel = ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorCatalogoCatagoriaYNivel(CatalogoProducto.TipoEnum.MATRICULA, nivelAcademico.getNivel());
+                        List<RubrosNivel> rubrosNivel = ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorCatalogoCatagoriaYNivelPeriodo(CatalogoProducto.TipoEnum.MATRICULA, nivelAcademico.getNivel(),periodoSeleccionado);
 
                         getCmbRubroMatricula().removeAllItems();
                         for (RubrosNivel rubroNivel : rubrosNivel) {
