@@ -5,6 +5,9 @@
  */
 package ec.com.codesoft.codefaclite.gestionacademica.model;
 
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.excel.Excel;
+import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
@@ -106,7 +109,31 @@ public class ReporteDeudasCursoModel extends ReporteDeudasCursoPanel {
             } else {
                 parameters.put("periodo", "TODOS");
             }
-            ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Deudas por Curso");
+            
+            DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
+                @Override
+                public void excel() {
+                     try{
+                        Excel excel = new Excel();
+                        String nombreCabeceras[] = {"Rubro","Nivel","Abono", "Deuda"};
+                        excel.gestionarIngresoInformacionExcel(nombreCabeceras, data);
+                        excel.abrirDocumento();
+                    }
+                    catch(Exception exc)
+                    {
+                        DialogoCodefac.mensaje("Error","El archivo Excel se encuentra abierto",DialogoCodefac.MENSAJE_INCORRECTO);
+                        exc.printStackTrace();
+                    }  
+                }
+
+                @Override
+                public void pdf() {
+                    ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Deudas por Curso");
+                }
+            });
+            
+            
+            
         } catch (RemoteException ex) {
             Logger.getLogger(ReporteDeudasCursoModel.class.getName()).log(Level.SEVERE, null, ex);
         }

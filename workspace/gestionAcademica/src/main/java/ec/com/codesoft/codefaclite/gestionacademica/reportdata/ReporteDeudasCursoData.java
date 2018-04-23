@@ -5,13 +5,18 @@
  */
 package ec.com.codesoft.codefaclite.gestionacademica.reportdata;
 
+import ec.com.codesoft.codefaclite.controlador.excel.Excel;
+import ec.com.codesoft.codefaclite.controlador.excel.ExcelDatosInterface;
+import ec.com.codesoft.codefaclite.controlador.excel.TipoDato;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author CodesoftDesarrollo
  */
-public class ReporteDeudasCursoData {
+public class ReporteDeudasCursoData implements ExcelDatosInterface {
     private String nivel;
     private String rubro;
     private BigDecimal abono;
@@ -54,6 +59,19 @@ public class ReporteDeudasCursoData {
 
     public void setDeuda(BigDecimal deuda) {
         this.deuda = deuda;
+    }
+
+    @Override
+    public List<TipoDato> getDatos() {
+        
+        List<TipoDato> tiposDatos = new ArrayList<TipoDato>();
+        
+        tiposDatos.add(new TipoDato(this.rubro,Excel.TipoDataEnum.TEXTO));        
+        tiposDatos.add(new TipoDato(this.nivel, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.abono, Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.deuda, Excel.TipoDataEnum.NUMERO));        
+
+        return tiposDatos;
     }
 
     
