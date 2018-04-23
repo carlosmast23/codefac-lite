@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import java.rmi.RemoteException;
+import java.sql.Date;
 import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -72,8 +73,10 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
         }
     }
 
-    public List<Object[]> obtenerRubroPeriodoGrupo(Periodo periodo) {
+    public List<Object[]> obtenerRubroPeriodoGrupo(Periodo periodo,Date fechaInicio,Date fechaFin) 
+    {
         //RubroEstudiante rubroEstudiante;
+        //rubroEstudiante.getFechaGenerado();
         //rubroEstudiante.getEstado()
         String academico = "";
         if (periodo != null) {
@@ -83,14 +86,41 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
         }
         try {
             //String queryString = "SELECT u.estudianteInscrito.nivelAcademico,u.rubroNivel,SUM(u.valor)-SUM(u.saldo),SUM(u.saldo) FROM RubroEstudiante u WHERE (u.estadoFactura <> 'f') AND " + academico + " GROUP BY u.estudianteInscrito.nivelAcademico,u.rubroNivel";
-            String queryString = "SELECT u.estudianteInscrito.nivelAcademico,u.rubroNivel,SUM(u.valor)-SUM(u.saldo),SUM(u.saldo) FROM RubroEstudiante u WHERE (u.estado <> ?2 AND u.estado <> ?3 ) AND " + academico + " GROUP BY u.estudianteInscrito.nivelAcademico,u.rubroNivel";
+            String queryString = "SELECT u.estudianteInscrito.nivelAcademico,u.rubroNivel,SUM(u.valor)-SUM(u.saldo),SUM(u.saldo) FROM RubroEstudiante u WHERE (u.estado <> ?2 AND u.estado <> ?3 ) AND " + academico;
+            
+            String queryStringFecha="";
+            if(fechaInicio!=null)
+            {
+                queryStringFecha+=" AND  u.fechaGenerado>=?4 ";
+            }
+            
+            if(fechaFin!=null)
+            {
+                queryStringFecha+=" AND  u.fechaGenerado<=?5 ";
+            }
+            
+            queryString+=queryStringFecha+" GROUP BY u.estudianteInscrito.nivelAcademico,u.rubroNivel";
+            
             Query query = getEntityManager().createQuery(queryString);
             query.setParameter(2,GeneralEnumEstado.ELIMINADO.getEstado());
             query.setParameter(3,GeneralEnumEstado.ANULADO.getEstado());
             
+            
             if (periodo != null) {
                 query.setParameter(1, periodo);
             }
+            
+            if(fechaInicio!=null)
+            {
+                query.setParameter(4, fechaInicio);
+            }
+            
+            if(fechaFin!=null)
+            {
+                query.setParameter(5, fechaFin);
+            }
+            
+            
             return query.getResultList();
         } catch (NoResultException e) {
             return null;

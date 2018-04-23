@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.gestionacademica.panel;
 
+import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import javax.swing.JButton;
@@ -201,5 +202,38 @@ public abstract class ReporteDeudasCursoPanel extends ControladorCodefacInterfac
     public void setTblDeudas(JTable tblDeudas) {
         this.tblDeudas = tblDeudas;
     }
+
+    public JButton getBtnLimpiarFechaFin() {
+        return btnLimpiarFechaFin;
+    }
+
+    public void setBtnLimpiarFechaFin(JButton btnLimpiarFechaFin) {
+        this.btnLimpiarFechaFin = btnLimpiarFechaFin;
+    }
+
+    public JButton getBtnLimpiarFechaInicio() {
+        return btnLimpiarFechaInicio;
+    }
+
+    public void setBtnLimpiarFechaInicio(JButton btnLimpiarFechaInicio) {
+        this.btnLimpiarFechaInicio = btnLimpiarFechaInicio;
+    }
+
+    public JDateChooser getDateFechaFin() {
+        return dateFechaFin;
+    }
+
+    public void setDateFechaFin(JDateChooser dateFechaFin) {
+        this.dateFechaFin = dateFechaFin;
+    }
+
+    public JDateChooser getDateFechaInicio() {
+        return dateFechaInicio;
+    }
+
+    public void setDateFechaInicio(JDateChooser dateFechaInicio) {
+        this.dateFechaInicio = dateFechaInicio;
+    }
+    
 
 }

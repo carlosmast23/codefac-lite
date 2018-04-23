@@ -47,54 +47,10 @@ public class ReporteDeudasCursoModel extends ReporteDeudasCursoPanel {
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
-        try {
-            Periodo p1 = new Periodo();
-            p1.setNombre("Seleccione:");
-            List<Periodo> periodos = ServiceFactory.getFactory().getPeriodoServiceIf().obtenerTodos();
-            getCmbPeriodo().removeAllItems();
-            getCmbPeriodo().addItem(p1);
-            for (Periodo periodo : periodos) {
-                getCmbPeriodo().addItem(periodo);
-            }
-        } catch (RemoteException ex) {
-            Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        getBtnBuscar().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    Vector<String> titulo = new Vector<>();
-
-                    titulo.add("Nivel Academico");
-                    titulo.add("Rubro");
-                    titulo.add("Abono");
-                    titulo.add("Deuda");
-
-                    DefaultTableModel modeloTablaDeudas = new DefaultTableModel(titulo, 0);
-                    RubroEstudianteServiceIf na = ServiceFactory.getFactory().getRubroEstudianteServiceIf();
-                    List<Object[]> dataEstudiante = na.obtenerRubroPeriodoGrupo((Periodo) getCmbPeriodo().getSelectedItem());
-                    for (Object[] obj : dataEstudiante) {
-                        NivelAcademico n = (NivelAcademico) obj[0];
-                        RubrosNivel r = (RubrosNivel) obj[1];
-                        BigDecimal abono = (BigDecimal) obj[2];
-                        BigDecimal deuda = (BigDecimal) obj[3];
-                        Vector<String> fila = new Vector<String>();
-                        fila.add(n.getNombre());
-                        fila.add(r.getNombre());
-                        fila.add(abono.toString());
-                        fila.add(deuda.toString());
-                        modeloTablaDeudas.addRow(fila);
-
-                    }
-
-                    getTblDeudas().setModel(modeloTablaDeudas);
-                } catch (RemoteException ex) {
-                    Logger.getLogger(ReporteDeudasCursoModel.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-            }
-        });
+        
+        iniciarComponentes();
+        listener();
+        
 
     }
 
@@ -124,7 +80,11 @@ public class ReporteDeudasCursoModel extends ReporteDeudasCursoPanel {
             InputStream path = RecursoCodefac.JASPER_ACADEMICO.getResourceInputStream("reporte_deudas_curso.jrxml");
 
             RubroEstudianteServiceIf na = ServiceFactory.getFactory().getRubroEstudianteServiceIf();
-            List<Object[]> dataEstudiante = na.obtenerRubroPeriodoGrupo((Periodo) getCmbPeriodo().getSelectedItem());
+            
+            java.sql.Date fechaInicial = (getDateFechaInicio().getDate() != null) ? new java.sql.Date(getDateFechaInicio().getDate().getTime()) : null;
+            java.sql.Date fechaFinal = (getDateFechaFin().getDate() != null) ? new java.sql.Date(getDateFechaFin().getDate().getTime()) : null;
+            
+            List<Object[]> dataEstudiante = na.obtenerRubroPeriodoGrupo((Periodo) getCmbPeriodo().getSelectedItem(),fechaInicial,fechaFinal);
             List<ReporteDeudasCursoData> data = new ArrayList<ReporteDeudasCursoData>();
             for (Object[] obj : dataEstudiante) {
                 NivelAcademico n = (NivelAcademico) obj[0];
@@ -189,6 +149,81 @@ public class ReporteDeudasCursoModel extends ReporteDeudasCursoPanel {
     @Override
     public List<String> getPerfilesPermisos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void iniciarComponentes() {
+        try {
+            Periodo p1 = new Periodo();
+            p1.setNombre("Seleccione:");
+            List<Periodo> periodos = ServiceFactory.getFactory().getPeriodoServiceIf().obtenerTodos();
+            getCmbPeriodo().removeAllItems();
+            getCmbPeriodo().addItem(p1);
+            for (Periodo periodo : periodos) {
+                getCmbPeriodo().addItem(periodo);
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void listener() {
+        listenerBotones();
+    }
+
+    private void listenerBotones() {
+        getBtnLimpiarFechaInicio().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getDateFechaInicio().setDate(null);
+            }
+        });
+        
+        getBtnLimpiarFechaFin().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getDateFechaFin().setDate(null);
+            }
+        });
+        
+        getBtnBuscar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Vector<String> titulo = new Vector<>();
+
+                    titulo.add("Nivel Academico");
+                    titulo.add("Rubro");
+                    titulo.add("Abono");
+                    titulo.add("Deuda");
+
+                    DefaultTableModel modeloTablaDeudas = new DefaultTableModel(titulo, 0);
+                    RubroEstudianteServiceIf na = ServiceFactory.getFactory().getRubroEstudianteServiceIf();
+                    
+                    java.sql.Date fechaInicial=(getDateFechaInicio().getDate()!=null)?new java.sql.Date(getDateFechaInicio().getDate().getTime()):null;
+                    java.sql.Date fechaFinal=(getDateFechaFin().getDate()!=null)? new java.sql.Date(getDateFechaFin().getDate().getTime()):null;
+                            
+                    List<Object[]> dataEstudiante = na.obtenerRubroPeriodoGrupo((Periodo) getCmbPeriodo().getSelectedItem(),fechaInicial,fechaFinal);
+                    for (Object[] obj : dataEstudiante) {
+                        NivelAcademico n = (NivelAcademico) obj[0];
+                        RubrosNivel r = (RubrosNivel) obj[1];
+                        BigDecimal abono = (BigDecimal) obj[2];
+                        BigDecimal deuda = (BigDecimal) obj[3];
+                        Vector<String> fila = new Vector<String>();
+                        fila.add(n.getNombre());
+                        fila.add(r.getNombre());
+                        fila.add(abono.toString());
+                        fila.add(deuda.toString());
+                        modeloTablaDeudas.addRow(fila);
+
+                    }
+
+                    getTblDeudas().setModel(modeloTablaDeudas);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ReporteDeudasCursoModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+        });
     }
 
 }

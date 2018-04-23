@@ -175,8 +175,8 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
     }
 
     @Override
-    public List<Object[]> obtenerRubroPeriodoGrupo(Periodo periodo) throws RemoteException {
-        return rubroEstudianteFacade.obtenerRubroPeriodoGrupo(periodo);
+    public List<Object[]> obtenerRubroPeriodoGrupo(Periodo periodo,Date fechaInicio,Date fechaFin) throws RemoteException {
+        return rubroEstudianteFacade.obtenerRubroPeriodoGrupo(periodo,fechaInicio,fechaFin);
     }
 
     public List<RubroEstudiante> buscarRubrosMes(EstudianteInscrito est,Periodo periodo, CatalogoProducto catalogoProducto, List<MesEnum> meses) throws RemoteException {
