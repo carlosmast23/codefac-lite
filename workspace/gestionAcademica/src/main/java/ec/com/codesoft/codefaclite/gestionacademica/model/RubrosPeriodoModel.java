@@ -100,7 +100,9 @@ public class RubrosPeriodoModel extends RubrosPeriodoPanel{
     @Override
     public void buscar() throws ExcepcionCodefacLite {
         
-        RubroPeriodoBusquedaDialogo busquedaDialogo = new RubroPeriodoBusquedaDialogo();
+        Periodo periodoSeleccionado=(Periodo) getCmbPeriodo().getSelectedItem();
+        RubroPeriodoBusquedaDialogo busquedaDialogo = new RubroPeriodoBusquedaDialogo(periodoSeleccionado);
+        
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialogo);
         buscarDialogoModel.setVisible(true);
         RubrosNivel rubroNivelTmp= (RubrosNivel) buscarDialogoModel.getResultado();
