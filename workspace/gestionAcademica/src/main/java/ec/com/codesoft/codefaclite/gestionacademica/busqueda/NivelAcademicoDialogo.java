@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import java.util.Vector;
 
 /**
@@ -17,6 +18,17 @@ import java.util.Vector;
  */
 public class NivelAcademicoDialogo implements InterfaceModelFind<NivelAcademico>{
 
+    /**
+     * Campo para filtrar los datos por el periodo y no se acumulen
+     */
+    private Periodo periodoFiltro;
+
+    public NivelAcademicoDialogo(Periodo periodoFiltro) {
+        this.periodoFiltro = periodoFiltro;
+    }
+    
+    
+    
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<ColumnaDialogo>();
@@ -29,10 +41,15 @@ public class NivelAcademicoDialogo implements InterfaceModelFind<NivelAcademico>
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        String queryString = "SELECT u FROM NivelAcademico u WHERE ";
+
+        String queryString = "SELECT u FROM NivelAcademico u WHERE u.periodo=?2 and ";
         queryString += " ( LOWER(u.nombre) like ?1 )";
+        
+        
         QueryDialog queryDialog = new QueryDialog(queryString);
         queryDialog.agregarParametro(1,filter);
+        queryDialog.agregarParametro(2,periodoFiltro);
+        
         return queryDialog;
     }
 
