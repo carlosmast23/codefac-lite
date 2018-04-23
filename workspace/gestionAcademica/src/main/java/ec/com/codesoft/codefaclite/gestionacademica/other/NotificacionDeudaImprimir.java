@@ -25,10 +25,10 @@ public class NotificacionDeudaImprimir
     
     private List<EstudianteDeudaData> deudas;
 
-    public NotificacionDeudaImprimir(List<EstudianteDeudaData> deudas) 
+    public NotificacionDeudaImprimir() 
     {
         //this.parametrosPorAlumno = parametrosPorAlumno;
-        this.deudas = deudas;
+        //this.deudas = deudas;
     }
     
     public String getPeriodo() {

@@ -44,6 +44,9 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperReport;
 
 /**
  *
@@ -123,7 +126,8 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
                 }
 
                 //Agrego parametros y lista, para tener para imprimir
-                NotificacionDeudaImprimir ndi = new NotificacionDeudaImprimir(listaReporte);
+                NotificacionDeudaImprimir ndi = new NotificacionDeudaImprimir();
+                ndi.setDeudas(listaReporte);
                 ndi.setPeriodo(estudianteInscrito.getNivelAcademico().getPeriodo().getNombre());
                 ndi.setCurso(estudianteInscrito.getNivelAcademico().getNombre());
                 ndi.setNombres(estudianteInscrito.getEstudiante().getNombreCompleto());
@@ -132,16 +136,20 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
                 ndi.setTotal(total.toString());
                 notificacionesDeudaImprimir.add(ndi);
             }
-            Map<String, Object> Parametros = new HashMap<String, Object>();
+            Map<String, Object> parametros = new HashMap<String, Object>();
+            
             RecursosServiceIf service= ServiceFactory.getFactory().getRecursosServiceIf();
-            InputStream path = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_ACADEMICO, "subreporte_deuda_imprimir.jrxml"));
-            path = RecursoCodefac.JASPER_ACADEMICO.getResourceInputStream("reporte_deuda_imprimir.jrxml");
-            //inputStream=RemoteInputStreamClient.wrap();
-            //JasperReport reportPiePagina = JasperCompileManager.compileReport(inputStream);
-            ReporteCodefac.generarReporteInternalFramePlantilla(path, Parametros, notificacionesDeudaImprimir, panelPadre, "Reporte Academico Deudas");           
+            InputStream path =RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_ACADEMICO, "reporte_deuda_imprimir.jrxml"));
+            InputStream pathSubReporte = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_ACADEMICO, "subreporte_deuda_imprimir.jrxml"));
+            JasperReport reportPiePagina = JasperCompileManager.compileReport(pathSubReporte);
+            
+            parametros.put("subreporte_datos",reportPiePagina);
+            ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, notificacionesDeudaImprimir, panelPadre, "Reporte Academico Deudas");           
         } catch (RemoteException ex) {
             Logger.getLogger(NotificacionesDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
+            Logger.getLogger(NotificacionesDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JRException ex) {
             Logger.getLogger(NotificacionesDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
