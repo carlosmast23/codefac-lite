@@ -56,7 +56,35 @@ public class ReporteDeudasEstudianteModel extends ReporteDeudasEstudiantePanel {
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
+        
+        iniciarComponentes();
+        listener();
+        
+    }
+    
+    private void iniciarComponentes() {
+        try {
+            Periodo p1 = new Periodo();
+            p1.setNombre("Seleccione:");
+            List<Periodo> periodos = ServiceFactory.getFactory().getPeriodoServiceIf().obtenerTodos();
+            getCmbPeriodo().removeAllItems();
+            getCmbPeriodo().addItem(p1);
+            for (Periodo periodo : periodos) {
+                getCmbPeriodo().addItem(periodo);
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
+    
+    private void listener()
+    {
+        iniciarBotones();
+    }
+    
+    private void iniciarBotones()
+    {
         getBtnBuscarEstudiante().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -81,7 +109,10 @@ public class ReporteDeudasEstudianteModel extends ReporteDeudasEstudiantePanel {
 
                     DefaultTableModel modeloTablaDeudas = new DefaultTableModel(titulo, 0);
                     RubroEstudianteServiceIf rs = ServiceFactory.getFactory().getRubroEstudianteServiceIf();
-                    List<RubroEstudiante> dataRubro = rs.obtenerDeudasEstudiante(estudiante);
+                    
+                    Periodo periodoSeleccionado=(Periodo) getCmbPeriodo().getSelectedItem();
+                    
+                    List<RubroEstudiante> dataRubro = rs.obtenerDeudasEstudiante(estudiante,periodoSeleccionado);
                     // comparamos si el estudiante tiene rubros
                     if (!dataRubro.isEmpty()) {
                         for (RubroEstudiante re : dataRubro) {
@@ -101,7 +132,6 @@ public class ReporteDeudasEstudianteModel extends ReporteDeudasEstudiantePanel {
 
             }
         });
-
     }
 
     @Override
@@ -136,7 +166,9 @@ public class ReporteDeudasEstudianteModel extends ReporteDeudasEstudiantePanel {
             mapParametros2.put("estudianteInscrito", estudiante);
 
             RubroEstudianteServiceIf rs = ServiceFactory.getFactory().getRubroEstudianteServiceIf();
-            List<RubroEstudiante> dataRubro = rs.obtenerDeudasEstudiante(estudiante);
+            
+            Periodo periodoSeleccionado=(Periodo) getCmbPeriodo().getSelectedItem();
+            List<RubroEstudiante> dataRubro = rs.obtenerDeudasEstudiante(estudiante,periodoSeleccionado);
             List<ReporteDeudasEstudianteData> data = new ArrayList<ReporteDeudasEstudianteData>();
 
             // comparamos si el estudiante tiene rubros

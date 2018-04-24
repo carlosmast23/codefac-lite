@@ -1,12 +1,11 @@
 En el catalogo producto agregar un campo para definir a que modulo pertece
 en especial cuando necesito filtrar datos desde el modulo academico
-Analizar el tema de los descuentos de los rubros en especial para las becas
+
 Pensar en hacer una ventana en configuracion para poder cambiar la plantilla de los correos que llegan con las facturas
 En la pantalla de utilidades verificar que no se envia al correo por el problema del map supongo y verificar cambios de estado en las facturas
 
 Analizar para usar un modo debug en el sistema y en principal manera para cuando utilice este modo que se creen datos por defecto para los desarrolladores
 
-falta implementar el metodo de editar de rubros nivel
 
 Verificar qe puedo hacer en el caso que solo se graba la factura pero no genero el ride 
 

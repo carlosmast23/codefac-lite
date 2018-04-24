@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.gestionacademica.busqueda.EstudianteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.gestionacademica.busqueda.EstudianteInscritoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.gestionacademica.busqueda.EstudianteMatriculaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.MatriculaEstudiantePanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
@@ -332,7 +333,8 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
         getBtnBuscarEstudiante().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                EstudianteBusquedaDialogo busquedaDialog = new EstudianteBusquedaDialogo();
+                Periodo periodoSeleccionado=(Periodo) getCmbPeriodoActivo().getSelectedItem();
+                EstudianteMatriculaBusquedaDialogo busquedaDialog = new EstudianteMatriculaBusquedaDialogo(periodoSeleccionado);
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialog);
                 buscarDialogoModel.setVisible(true);
                 Estudiante estudianteTemp = (Estudiante) buscarDialogoModel.getResultado();

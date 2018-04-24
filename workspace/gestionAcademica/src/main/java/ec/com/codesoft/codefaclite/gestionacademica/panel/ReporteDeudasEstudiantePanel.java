@@ -6,7 +6,9 @@
 package ec.com.codesoft.codefaclite.gestionacademica.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -43,6 +45,9 @@ public abstract class ReporteDeudasEstudiantePanel extends ControladorCodefacInt
         lblDeuda = new javax.swing.JLabel();
         lblTotalDeuda = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        lblperiodo = new javax.swing.JLabel();
+        cmbPeriodo = new javax.swing.JComboBox<>();
+        lblEspacio1 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -72,8 +77,8 @@ public abstract class ReporteDeudasEstudiantePanel extends ControladorCodefacInt
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
@@ -81,12 +86,13 @@ public abstract class ReporteDeudasEstudiantePanel extends ControladorCodefacInt
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jScrollPane1, gridBagConstraints);
 
+        lblEstudiante.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         lblEstudiante.setText("Estudiante");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(30, 20, 20, 20);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(lblEstudiante, gridBagConstraints);
 
         txtEstudiante.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -99,34 +105,34 @@ public abstract class ReporteDeudasEstudiantePanel extends ControladorCodefacInt
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtEstudiante, gridBagConstraints);
 
         btnBuscarEstudiante.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(10, 5, 0, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnBuscarEstudiante, gridBagConstraints);
 
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         btnBuscar.setText("Buscar");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 5, 0, 10);
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnBuscar, gridBagConstraints);
 
         lblDeuda.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblDeuda.setText("Total Deuda:");
         lblDeuda.setToolTipText("");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(23, 78, 0, 0);
         getContentPane().add(lblDeuda, gridBagConstraints);
@@ -135,8 +141,8 @@ public abstract class ReporteDeudasEstudiantePanel extends ControladorCodefacInt
         lblTotalDeuda.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblTotalDeuda.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.ipadx = 94;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(16, 10, 16, 20);
@@ -147,6 +153,30 @@ public abstract class ReporteDeudasEstudiantePanel extends ControladorCodefacInt
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         getContentPane().add(jLabel1, gridBagConstraints);
+
+        lblperiodo.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        lblperiodo.setText("Periodo:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(lblperiodo, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(cmbPeriodo, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.5;
+        getContentPane().add(lblEspacio1, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -159,11 +189,14 @@ public abstract class ReporteDeudasEstudiantePanel extends ControladorCodefacInt
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnBuscarEstudiante;
+    private javax.swing.JComboBox<Periodo> cmbPeriodo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblDeuda;
+    private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEstudiante;
     private javax.swing.JLabel lblTotalDeuda;
+    private javax.swing.JLabel lblperiodo;
     private javax.swing.JTable tblDeudas;
     private javax.swing.JTextField txtEstudiante;
     // End of variables declaration//GEN-END:variables
@@ -208,5 +241,12 @@ public abstract class ReporteDeudasEstudiantePanel extends ControladorCodefacInt
         this.lblTotalDeuda = lblTotalDeuda;
     }
 
+    public JComboBox<Periodo> getCmbPeriodo() {
+        return cmbPeriodo;
+    }
+
+    public void setCmbPeriodo(JComboBox<Periodo> cmbPeriodo) {
+        this.cmbPeriodo = cmbPeriodo;
+    }
     
 }
