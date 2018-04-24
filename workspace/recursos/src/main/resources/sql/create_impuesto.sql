@@ -14,4 +14,28 @@ create table IMPUESTO
     CODIGO_SRI varchar(4),
     DESCRIPCION varchar(60),
     primary key(ID_IMPUESTO)
-)
+);
+
+create table SRI_RETENCION_IVA
+(
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY( START WITH 1),
+    NOMBRE varchar(10),
+    CODIGO_SRI varchar(4),
+    PORCENTAJE integer,
+    DESCRIPCION varchar(60),
+    FECHA_INICIO date,
+    FECHA_FIN date,
+    primary key(ID)
+);
+
+create table SRI_RETENCION_RENTA
+(
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY( START WITH 1),
+    NOMBRE varchar(10),
+    CODIGO_SRI varchar(4),
+    PORCENTAJE integer,
+    DESCRIPCION varchar(60),
+    FECHA_INICIO date,
+    FECHA_FIN date,
+    primary key(ID)
+);

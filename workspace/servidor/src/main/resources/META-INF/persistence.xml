@@ -57,6 +57,8 @@
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaEstudiante</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaMes</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoAdicional</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
   </persistence-unit>
 </persistence>

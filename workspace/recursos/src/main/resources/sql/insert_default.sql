@@ -41,6 +41,25 @@ INSERT INTO SRI_IDENTIFICACION (CODIGO, TIPO_TRANSACCION,TIPO_IDENTIFICACION,FEC
 INSERT INTO SRI_IDENTIFICACION (CODIGO, TIPO_TRANSACCION,TIPO_IDENTIFICACION,FECHA_INICIO)
     VALUES ('19', 'VENTA', 'PLACA o RAMV/CPN ','01/01/2000');
 
+
+INSERT INTO SRI_RETENCION_IVA (NOMBRE, CODIGO_SRI,PORCENTAJE,DESCRIPCION,FECHA_INICIO)
+    VALUES ('10%' , '9' ,10,'','01/01/2000'),
+           ('20%' , '10',20,'','01/01/2000'),
+           ('30%' , '1' ,30,'','01/01/2000'),
+           ('50%' , '11',50,'','01/01/2000'),
+           ('70%' , '2' ,70,'','01/01/2000'),
+           ('100%', '3' ,100,'','01/01/2000'),
+           ('0%'  , '7' ,0,'Retencion en 0%','01/01/2000'),
+           ('0%'  , '8' ,0,'Retencion en 12%','01/01/2000');
+
+
+INSERT INTO SRI_RETENCION_RENTA (CODIGO_SRI, NOMBRE,PORCENTAJE,DESCRIPCION,FECHA_INICIO)
+    VALUES ('520','Pago al exterior - Otros conceptos de ingresos gravados',22,'','01/01/2000'),
+           ('333','CONVENIO DE DÉBITO O RECAUDACIÓN',0,'','01/01/2000'),
+           ('334','PAGO CON TARJETA DE CRÉDITO',0,'','01/01/2000');
+
+
+
 INSERT INTO ACCESO_DIRECTO (NOMBRE, X,Y)
     VALUES  ('ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel', 30, 50),
             ('ec.com.codesoft.codefaclite.crm.model.ClienteModel', 30, 150),
