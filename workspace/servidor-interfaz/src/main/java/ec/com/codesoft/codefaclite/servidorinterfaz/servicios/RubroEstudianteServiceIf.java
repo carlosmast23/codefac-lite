@@ -45,7 +45,7 @@ public interface RubroEstudianteServiceIf extends ServiceAbstractIf<RubroEstudia
     public void eliminarRubrosEstudiantes(List<RubroEstudiante> rubrosEstudiantes) throws RemoteException;
             
 
-    public List<RubroEstudiante> obtenerDeudasEstudiante(Estudiante estudiante) throws java.rmi.RemoteException;
+    public List<RubroEstudiante> obtenerDeudasEstudiante(Estudiante estudiante,Periodo periodo) throws java.rmi.RemoteException;
 
     public List<Object[]> obtenerRubroPeriodoGrupo(Periodo periodo,Date fechaInicio,Date fechaFin) throws RemoteException;
 

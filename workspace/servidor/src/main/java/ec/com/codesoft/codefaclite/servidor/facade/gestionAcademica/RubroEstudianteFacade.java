@@ -52,7 +52,10 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
 
     }
 
-    public List<RubroEstudiante> obtenerDeudasEstudiante(Estudiante estudiante) {
+    public List<RubroEstudiante> obtenerDeudasEstudiante(Estudiante estudiante,Periodo periodo) {
+        //RubroEstudiante rubroEstudiante;
+        //rubroEstudiante.getEstudianteInscrito().getNivelAcademico().getPeriodo();
+            
         String academico = "";
         if (estudiante != null) {
             academico = "u.estudianteInscrito.estudiante=?1";
@@ -60,10 +63,11 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
             academico = "1=1";
         }
         try {
-            String queryString = "SELECT u FROM RubroEstudiante u WHERE " + academico;
+            String queryString = "SELECT u FROM RubroEstudiante u WHERE u.estudianteInscrito.nivelAcademico.periodo=?2 AND " + academico;
             //String queryString = "SELECT u FROM RubroEstudiante u " ;
             Query query = getEntityManager().createQuery(queryString);
-            //System.err.println("QUERY--->"+query.toString());
+            query.setParameter(2,periodo);
+            
             if (estudiante != null) {
                 query.setParameter(1, estudiante);
             }

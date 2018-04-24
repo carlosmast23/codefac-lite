@@ -170,8 +170,8 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
     }
 
     @Override
-    public List<RubroEstudiante> obtenerDeudasEstudiante(Estudiante est) throws RemoteException {
-        return rubroEstudianteFacade.obtenerDeudasEstudiante(est);
+    public List<RubroEstudiante> obtenerDeudasEstudiante(Estudiante estudiante,Periodo periodo) throws RemoteException {
+        return rubroEstudianteFacade.obtenerDeudasEstudiante(estudiante,periodo);
     }
 
     @Override
