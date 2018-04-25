@@ -186,6 +186,7 @@ public abstract class RubroPlantillaPanel extends ControladorCodefacInterface {
         jPanel2.add(jLabel6, gridBagConstraints);
 
         txtDiasCredito.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtDiasCredito.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;

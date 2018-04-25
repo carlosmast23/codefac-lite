@@ -132,7 +132,9 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
     @Override
     public void buscar() throws ExcepcionCodefacLite {
         
-        RubroPlantillaBusquedaDialog busquedaDialogo = new RubroPlantillaBusquedaDialog();
+        Periodo periodoSeleccionado=(Periodo) getCmbPeriodo().getSelectedItem();
+        
+        RubroPlantillaBusquedaDialog busquedaDialogo = new RubroPlantillaBusquedaDialog(periodoSeleccionado);
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialogo);
         buscarDialogoModel.setVisible(true);
         RubroPlantilla rubroPlantillaTmp = (RubroPlantilla) buscarDialogoModel.getResultado();
@@ -599,6 +601,8 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
         
         //Esta opcion de generar rubros dejo por defecto desabilitada , solo se habilita cuando ya esta grabado el dato
         this.getjTabPanel().setEnabledAt(2,false);
+        
+        this.getTxtDiasCredito().setText("0");
         
         //Limpiar las tablas actuales
         getCmbCursosRegistrados().removeAllItems();
