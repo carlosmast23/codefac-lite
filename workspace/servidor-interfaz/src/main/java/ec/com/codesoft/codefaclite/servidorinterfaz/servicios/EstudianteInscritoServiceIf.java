@@ -33,7 +33,7 @@ public interface EstudianteInscritoServiceIf extends ServiceAbstractIf<Estudiant
     
     public void matricularEstudiantesByMap(Map<NivelAcademico,List<Estudiante>> mapEstudiantes) throws RemoteException;
     
-    public List<EstudianteInscrito> obtenerEstudiantesInscritos(NivelAcademico nivel) throws java.rmi.RemoteException;
+    public List<EstudianteInscrito> obtenerEstudiantesInscritos(NivelAcademico nivel,Periodo periodo) throws java.rmi.RemoteException;
     
     public List<EstudianteInscrito> obtenerEstudiantesInscritosPorPeriodo(Periodo periodo) throws RemoteException;
     

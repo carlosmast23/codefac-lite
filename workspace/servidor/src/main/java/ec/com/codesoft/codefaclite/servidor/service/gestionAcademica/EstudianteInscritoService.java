@@ -107,8 +107,8 @@ public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrit
     }
 
     @Override
-    public List<EstudianteInscrito> obtenerEstudiantesInscritos(NivelAcademico nivel) throws RemoteException {
-        return estudianteInscritoFacade.obtenerEstudiantesInscritos(nivel);
+    public List<EstudianteInscrito> obtenerEstudiantesInscritos(NivelAcademico nivel,Periodo periodo) throws RemoteException {
+        return estudianteInscritoFacade.obtenerEstudiantesInscritos(nivel,periodo);
     }
 
     @Override

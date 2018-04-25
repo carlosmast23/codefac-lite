@@ -132,7 +132,9 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
     @Override
     public void buscar() throws ExcepcionCodefacLite {
         
-        RubroPlantillaBusquedaDialog busquedaDialogo = new RubroPlantillaBusquedaDialog();
+        Periodo periodoSeleccionado=(Periodo) getCmbPeriodo().getSelectedItem();
+        
+        RubroPlantillaBusquedaDialog busquedaDialogo = new RubroPlantillaBusquedaDialog(periodoSeleccionado);
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialogo);
         buscarDialogoModel.setVisible(true);
         RubroPlantilla rubroPlantillaTmp = (RubroPlantilla) buscarDialogoModel.getResultado();
@@ -177,7 +179,7 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
         permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
         permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
         permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
-        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, false);
         permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
         return permisos;
     }
@@ -546,7 +548,8 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
             
             DefaultTableModel modeloTabla=UtilidadesTablas.crearModeloTabla(titulo,new Class[]{EstudianteInscrito.class,Boolean.class,String.class});
             
-            List<EstudianteInscrito> estudiantesInscritosTodos=ServiceFactory.getFactory().getEstudianteInscritoServiceIf().obtenerEstudiantesInscritos(nivelAcademico);
+            Periodo periodoSeleccionado = (Periodo) getCmbPeriodo().getSelectedItem();
+            List<EstudianteInscrito> estudiantesInscritosTodos=ServiceFactory.getFactory().getEstudianteInscritoServiceIf().obtenerEstudiantesInscritos(nivelAcademico,periodoSeleccionado);
             
             //Elimina los datos de los estudiantes que ya esten inscritos
             List<EstudianteInscrito> estudiantesNoInscritos= obtenerSoloEstudianesSinRegistro(estudiantesInscritosTodos);
@@ -599,6 +602,8 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
         
         //Esta opcion de generar rubros dejo por defecto desabilitada , solo se habilita cuando ya esta grabado el dato
         this.getjTabPanel().setEnabledAt(2,false);
+        
+        this.getTxtDiasCredito().setText("0");
         
         //Limpiar las tablas actuales
         getCmbCursosRegistrados().removeAllItems();

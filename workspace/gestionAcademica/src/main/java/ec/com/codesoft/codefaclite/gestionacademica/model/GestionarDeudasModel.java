@@ -132,9 +132,9 @@ public class GestionarDeudasModel extends GestionarDeudasPanel{
         Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
         permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
         permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
-        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
-        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
-        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, false);
+        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, false);
+        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, false);
         permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
         return permisos;
     }

@@ -599,7 +599,7 @@ public class MatriculaModel extends MatriculaPanel {
                     //Map<String,Object> mapParametro=new HashMap<String,Object>();
                     //mapParametro.put("nivelAcademico",nivelAcademico);
                    
-                    List<EstudianteInscrito> estudiantesInscrito=ServiceFactory.getFactory().getEstudianteInscritoServiceIf().obtenerEstudiantesInscritos(nivelAcademico);
+                    List<EstudianteInscrito> estudiantesInscrito=ServiceFactory.getFactory().getEstudianteInscritoServiceIf().obtenerEstudiantesInscritos(nivelAcademico,null);
                     estudiantesSinMatricular.clear();
                     //Cargar la lista solo de los estudiantes pertenencientes a ese nivel
                     for (EstudianteInscrito estudianteInscrito : estudiantesInscrito) {

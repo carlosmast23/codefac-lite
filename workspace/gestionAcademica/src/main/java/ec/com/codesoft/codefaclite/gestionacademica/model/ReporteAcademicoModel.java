@@ -45,75 +45,19 @@ import javax.swing.table.DefaultTableModel;
  */
 public class ReporteAcademicoModel extends ReporteAcademicoPanel {
 
+    /**
+     * Referencia que guardar el periodo por defecto todos
+     */
+    private NivelAcademico defaultTodos;
     private DefaultTableModel modeloTablaEstudiantes;
     private List<EstudianteInscrito> dataEstudiantes;
     Map parameters = new HashMap();
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
-
-        try {
-            List<Periodo> periodos = ServiceFactory.getFactory().getPeriodoServiceIf().obtenerTodos();
-            getCmbNivelAcademico().removeAllItems();
-            for (Periodo periodo : periodos) {
-                getCmbPeriodo().addItem(periodo);
-            }
-        } catch (RemoteException ex) {
-            Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        getCmbPeriodo().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
-                if (periodo != null) {
-                    cargarNivelesPeriodo(periodo, getCmbNivelAcademico());
-                }
-            }
-        });
-
-        getBtnBuscar().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    Vector<String> titulo = new Vector<>();
-                    titulo.add("Cedula");
-                    titulo.add("Nombres");
-                    titulo.add("Apellidos");
-                    titulo.add("Email");
-                    titulo.add("Telefono");
-                    titulo.add("Representante");
-                    titulo.add("Nivel Academico");
-
-                    modeloTablaEstudiantes = new DefaultTableModel(titulo, 0);
-
-                    EstudianteInscritoServiceIf na = ServiceFactory.getFactory().getEstudianteInscritoServiceIf();
-                    dataEstudiantes = na.obtenerEstudiantesInscritos((NivelAcademico) getCmbNivelAcademico().getSelectedItem());
-                    for (EstudianteInscrito est : dataEstudiantes) {
-                        Vector<String> fila = new Vector<String>();
-                        fila.add(est.getEstudiante().getCedula());
-                        fila.add(est.getEstudiante().getNombres());
-                        fila.add(est.getEstudiante().getApellidos());
-                        fila.add(est.getEstudiante().getEmail());
-                        fila.add(est.getEstudiante().getTelefono());
-                        if (est.getEstudiante().getRepresentante() != null) {
-                            fila.add(est.getEstudiante().getRepresentante().getNombres() + " " + est.getEstudiante().getRepresentante().getApellidos());
-                        } else {
-                            fila.add("s/n");
-                        }
-                        fila.add(est.getNivelAcademico().getNombre());
-                        modeloTablaEstudiantes.addRow(fila);
-
-                    }
-
-                    getTblEstudiantes().setModel(modeloTablaEstudiantes);
-                } catch (RemoteException ex) {
-                    Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-            }
-        });
-
+        iniciarValores();
+        listenerBotones();
+        cargarDefecto();
     }
 
     @Override
@@ -142,7 +86,13 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
             InputStream path = RecursoCodefac.JASPER_ACADEMICO.getResourceInputStream("reporte_academico.jrxml");
 
             EstudianteInscritoServiceIf na = ServiceFactory.getFactory().getEstudianteInscritoServiceIf();
-            dataEstudiantes = na.obtenerEstudiantesInscritos((NivelAcademico) getCmbNivelAcademico().getSelectedItem());
+            
+            NivelAcademico nivelAcademico = (NivelAcademico) getCmbNivelAcademico().getSelectedItem();
+            
+            Periodo periodo=(Periodo) getCmbPeriodo().getSelectedItem();
+
+            dataEstudiantes = na.obtenerEstudiantesInscritos(nivelAcademico.getNombre().equals("TODOS")?null:nivelAcademico,periodo);
+            
             List<ReporteAcademicoData> data = new ArrayList<ReporteAcademicoData>();
 
             for (EstudianteInscrito est : dataEstudiantes) {
@@ -163,8 +113,8 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
                 ));
 
             }
-   
-            Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
+            
+            //Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
             NivelAcademico nivela = (NivelAcademico) getCmbNivelAcademico().getSelectedItem();
             if (periodo != null) {
                 parameters.put("periodo", periodo.getNombre());
@@ -206,7 +156,7 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
 
                 @Override
                 public void pdf() {
-                    ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Academico");
+                    ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Estudiantes Matriculados");
                 }
             });
             
@@ -255,16 +205,17 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
 
     private void cargarNivelesPeriodo(Periodo periodo, JComboBox<NivelAcademico> comboNivel) {
         try {
-
+            
             NivelAcademicoServiceIf servicio = ServiceFactory.getFactory().getNivelAcademicoServiceIf();
             Map<String, Object> mapBusqueda = new HashMap<String, Object>();
             mapBusqueda.put("periodo", periodo);
+            
             List<NivelAcademico> resultados = servicio.obtenerPorMap(mapBusqueda);
-
             comboNivel.removeAllItems();
+            
+            comboNivel.addItem(defaultTodos);
             for (NivelAcademico resultado : resultados) {
                 comboNivel.addItem(resultado);
-
             }
 
         } catch (RemoteException ex) {
@@ -276,5 +227,83 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
                     .getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    private void listenerBotones() {
+        getCmbPeriodo().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
+                if (periodo != null) {
+                    cargarNivelesPeriodo(periodo, getCmbNivelAcademico());
+                }
+            }
+        });
+
+        getBtnBuscar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Vector<String> titulo = new Vector<>();
+                    titulo.add("Cedula");
+                    titulo.add("Nombres");
+                    titulo.add("Apellidos");
+                    titulo.add("Email");
+                    titulo.add("Telefono");
+                    titulo.add("Representante");
+                    titulo.add("Nivel Academico");
+
+                    modeloTablaEstudiantes = new DefaultTableModel(titulo, 0);
+
+                    EstudianteInscritoServiceIf na = ServiceFactory.getFactory().getEstudianteInscritoServiceIf();
+                    
+                    NivelAcademico nivelAcademico=(NivelAcademico) getCmbNivelAcademico().getSelectedItem();
+                    
+                    Periodo periodo=(Periodo) getCmbPeriodo().getSelectedItem();                    
+                    dataEstudiantes = na.obtenerEstudiantesInscritos(nivelAcademico.getNombre().equals("TODOS")?null:nivelAcademico,periodo);
+                    
+                    for (EstudianteInscrito est : dataEstudiantes) {
+                        Vector<String> fila = new Vector<String>();
+                        fila.add(est.getEstudiante().getCedula());
+                        fila.add(est.getEstudiante().getNombres());
+                        fila.add(est.getEstudiante().getApellidos());
+                        fila.add(est.getEstudiante().getEmail());
+                        fila.add(est.getEstudiante().getTelefono());
+                        if (est.getEstudiante().getRepresentante() != null) {
+                            fila.add(est.getEstudiante().getRepresentante().getNombres() + " " + est.getEstudiante().getRepresentante().getApellidos());
+                        } else {
+                            fila.add("s/n");
+                        }
+                        fila.add(est.getNivelAcademico().getNombre());
+                        modeloTablaEstudiantes.addRow(fila);
+
+                    }
+
+                    getTblEstudiantes().setModel(modeloTablaEstudiantes);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+        });
+    }
+
+    private void cargarDefecto() {
+        try {
+            List<Periodo> periodos = ServiceFactory.getFactory().getPeriodoServiceIf().obtenerTodos();
+            getCmbPeriodo().removeAllItems();
+
+            for (Periodo periodo : periodos) {
+                getCmbPeriodo().addItem(periodo);
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void iniciarValores() {
+        defaultTodos=new NivelAcademico();
+        defaultTodos.setNombre("TODOS");
+        
     }
 }

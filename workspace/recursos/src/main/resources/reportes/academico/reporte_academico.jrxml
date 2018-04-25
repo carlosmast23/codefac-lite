@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_academico" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3613f18e-d7a7-49ca-8ff5-a65d0f82d855">
-	<property name="ireport.zoom" value="1.6934217901613318"/>
+	<property name="ireport.zoom" value="0.8689931392100639"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="periodo" class="java.lang.String"/>
@@ -25,12 +25,13 @@
 	<field name="telefonoEstudiante" class="java.lang.String"/>
 	<field name="representanteEstudiante" class="java.lang.String"/>
 	<field name="nivelAcademicoEstudiante" class="java.lang.String"/>
+	<sortField name="nivelAcademicoEstudiante" order="Descending"/>
 	<group name="nivelAcademico">
 		<groupExpression><![CDATA[$F{nivelAcademicoEstudiante}]]></groupExpression>
 		<groupHeader>
 			<band height="32">
 				<textField>
-					<reportElement x="69" y="1" width="100" height="19" uuid="7efbe04d-7f1d-4b78-a600-99b03684965d"/>
+					<reportElement x="0" y="0" width="555" height="19" uuid="7efbe04d-7f1d-4b78-a600-99b03684965d"/>
 					<box leftPadding="2">
 						<pen lineWidth="0.0"/>
 						<topPen lineWidth="0.0"/>
@@ -38,18 +39,11 @@
 						<bottomPen lineWidth="0.0"/>
 						<rightPen lineWidth="0.0"/>
 					</box>
-					<textElement verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="10" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{nivelAcademicoEstudiante}]]></textFieldExpression>
 				</textField>
-				<staticText>
-					<reportElement x="0" y="0" width="69" height="20" uuid="1d6e60a3-74df-43ce-82fb-b8b1d43d8648"/>
-					<textElement verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Nivel Academico:]]></text>
-				</staticText>
 				<staticText>
 					<reportElement x="69" y="19" width="81" height="13" uuid="8de7b5ea-5994-4f2c-a4dd-b2e0ac52ea95"/>
 					<box>
@@ -173,7 +167,7 @@
 				<textFieldExpression><![CDATA[$P{periodo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="333" y="57" width="100" height="20" uuid="e15dca1f-59b9-4faf-8ae5-d58fb9e2a693"/>
+				<reportElement x="333" y="57" width="100" height="20" forecolor="#FFFFFF" uuid="e15dca1f-59b9-4faf-8ae5-d58fb9e2a693"/>
 				<textFieldExpression><![CDATA[$P{nivelacademico}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -184,7 +178,7 @@
 				<text><![CDATA[Periodo:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="233" y="57" width="100" height="20" uuid="3dcf5022-9343-4891-86ca-e9701b91cdb7"/>
+				<reportElement x="233" y="57" width="100" height="20" forecolor="#FFFFFF" uuid="3dcf5022-9343-4891-86ca-e9701b91cdb7"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
