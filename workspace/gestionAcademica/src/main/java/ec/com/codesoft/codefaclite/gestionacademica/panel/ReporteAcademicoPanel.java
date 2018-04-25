@@ -107,6 +107,7 @@ public abstract class ReporteAcademicoPanel extends ControladorCodefacInterface{
         gridBagConstraints.insets = new java.awt.Insets(30, 20, 20, 20);
         getContentPane().add(lblperiodo, gridBagConstraints);
 
+        cmbPeriodo.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;

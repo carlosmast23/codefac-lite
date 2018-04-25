@@ -29,6 +29,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
 import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import es.mityc.firmaJava.ocsp.config.ServidorOcsp;
@@ -64,6 +70,7 @@ public class CompraModel extends CompraPanel{
     /**
      * Referencia donde se va a almacenar la compra gestionado
      */
+    private Empresa empresa;
     private Compra compra;
     private Producto productoSeleccionado;
     private Persona proveedor;
@@ -87,6 +94,11 @@ public class CompraModel extends CompraPanel{
         this.bandera = false;
         this.banderaIngresoDetallesCompra = false;
         bloquearDesbloquearBotones(true);
+        try {
+            mostrarVentanaRetenciones();
+        } catch (RemoteException ex) {
+            Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -276,6 +288,32 @@ public class CompraModel extends CompraPanel{
             getCmbCobraIva().addItem(enumerador);
         }
         
+        //Agregar los tipos de retencion Iva
+        getCmbRetencionIva().removeAllItems();
+        SriRetencionIvaServiceIf sriRetencionIvaService = ServiceFactory.getFactory().getSriRetencionIvaServiceIf();
+        try{
+            List<SriRetencionIva> tipoRetencionesIva = sriRetencionIvaService.obtenerTodos();
+            for (SriRetencionIva tipoRetencione : tipoRetencionesIva) {
+                getCmbRetencionIva().addItem(tipoRetencione);
+            }
+        }
+        catch(Exception e)
+        {
+                    
+        }
+        //Agregar los tipos de retencion Renta
+        getCmbRetencionRenta().removeAllItems();
+        SriRetencionRentaServiceIf sriRetencionRentaService = ServiceFactory.getFactory().getSriRetencionRentaServiceIf();
+        try{
+            List<SriRetencionRenta> tipoRetencionesRenta = sriRetencionRentaService.obtenerTodos();
+            for (SriRetencionRenta sriRetencionRenta : tipoRetencionesRenta) {
+                getCmbRetencionRenta().addItem(sriRetencionRenta);
+            }
+        }
+        catch(Exception e)
+        {
+            
+        }
     }
 
     private void agregarListenerBotones() {
@@ -561,7 +599,8 @@ public class CompraModel extends CompraPanel{
     }
 
     private void crearVariables() {
-        this.compra=new Compra();        
+        this.compra = new Compra();
+        this.empresa = new Empresa();
     }
     
     private void initModelTablaDetalleCompra() {
@@ -706,5 +745,20 @@ public class CompraModel extends CompraPanel{
         calcularIva12();
         calcularValorTotal();
         mostrarDatosTotales();
+    }
+    
+    public void mostrarVentanaRetenciones() throws RemoteException
+    {
+        EmpresaServiceIf empresaService = ServiceFactory.getFactory().getEmpresaServiceIf();
+        List<Empresa> listadoEmpresas = empresaService.obtenerTodos();
+        this.empresa = listadoEmpresas.get(0);
+        if(this.empresa.getObligadoLlevarContabilidad().equals(Empresa.SI_LLEVA_CONTABILIDAD))
+        {
+            this.getPanelRetencion().setVisible(true);
+        }
+        else
+        {
+            this.getPanelRetencion().setVisible(false);
+        }
     }
 }
