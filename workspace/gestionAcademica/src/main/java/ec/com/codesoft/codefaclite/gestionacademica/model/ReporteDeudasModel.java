@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteI
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaMes;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
@@ -107,6 +108,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
                 if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
                     banderaRubros = true;
                     getCmbTipoRubroPorMes().setEnabled(false);
+                    /*
                     getChkEnero().setEnabled(false);
                     getChkFebrero().setEnabled(false);
                     getChkMarzo().setEnabled(false);
@@ -118,10 +120,11 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
                     getChkSeptiembre().setEnabled(false);
                     getChkOctubre().setEnabled(false);
                     getChkNoviembre().setEnabled(false);
-                    getChkDiciembre().setEnabled(false);
+                    getChkDiciembre().setEnabled(false);*/
                 } else {
                     banderaRubros = false;
                     getCmbTipoRubroPorMes().setEnabled(true);
+                    /*
                     getChkEnero().setEnabled(true);
                     getChkFebrero().setEnabled(true);
                     getChkMarzo().setEnabled(true);
@@ -133,7 +136,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
                     getChkSeptiembre().setEnabled(true);
                     getChkOctubre().setEnabled(true);
                     getChkNoviembre().setEnabled(true);
-                    getChkDiciembre().setEnabled(true);
+                    getChkDiciembre().setEnabled(true);*/
                 }
             }
         });
@@ -144,8 +147,10 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
                 Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
                 if (periodo != null) {
                     cargarNivelesPeriodo(periodo, getCmbNivelAcademico());
+                    cargarMesesPeriodo(periodo);
                 }
             }
+
         });
 
         getBtnBuscar().addActionListener(new ActionListener() {
@@ -207,6 +212,14 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
             }
         });
 
+    }
+    
+    private void cargarMesesPeriodo(Periodo periodo) {
+        List<RubroPlantillaMes> Meses=periodo.obtenerTodosMesesGenerar();
+        getCmbFiltroMes().removeAllItems();
+        for (RubroPlantillaMes mes : Meses) {
+            getCmbFiltroMes().addItem(mes);
+        }
     }
 
     @Override
@@ -371,7 +384,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
 
     private List<MesEnum> obtenerMesesEnum() {
         List<MesEnum> listaMeses = new ArrayList<MesEnum>();
-
+        /*
         if (getChkEnero().isSelected()) {
             listaMeses.add(MesEnum.ENERO);
         }
@@ -416,7 +429,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
         if (getChkDiciembre().isSelected()) {
             listaMeses.add(MesEnum.DICIEMBRE);
         }
-
+        */
         return listaMeses;
 
     }

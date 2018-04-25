@@ -6,8 +6,11 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -94,6 +97,45 @@ public class Periodo implements Serializable {
     public GeneralEnumEstado getEStadoEnum()
     {
         return GeneralEnumEstado.getEnum(estado);
+    }
+    
+    public List<RubroPlantillaMes> obtenerTodosMesesGenerar()
+    {
+        List<RubroPlantillaMes> rubrosMes=new ArrayList<RubroPlantillaMes>();
+        
+        //Generar todos los meses segun el periodo
+        Date fechaInicio=getFechaInicio();
+        Date fechaFinal=getFechaFin();
+        
+        Integer anioInicial=UtilidadesFecha.obtenerAnio(fechaInicio);
+        Integer anioFinal=UtilidadesFecha.obtenerAnio(fechaFinal);
+        
+        Integer mesInicial=UtilidadesFecha.obtenerMes(fechaInicio);
+        Integer mesFinal=UtilidadesFecha.obtenerMes(fechaFinal);
+        
+        for (int anio = anioInicial; anio <= anioFinal; anio++) {
+            for (int mes =mesInicial;mes<=12;mes++) 
+            {
+                RubroPlantillaMes rpm=new RubroPlantillaMes();
+                rpm.setAnio(anio);
+                rpm.setNumeroMes(mes);
+                //rpm.setRubroPlantilla(rpm);
+                
+                rubrosMes.add(rpm);
+                
+                //Comparar si ya termino solo cuando este en el anio final
+                if(anio==anioFinal)
+                {
+                    if(mesFinal==mes)
+                    {
+                        break;
+                    }
+                }                
+
+            }
+        }
+        
+        return rubrosMes;
     }
 
     @Override
