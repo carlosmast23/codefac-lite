@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.gestionacademica.busqueda.EstudianteBusquedaDialogo;
+import ec.com.codesoft.codefaclite.gestionacademica.busqueda.EstudianteInscritoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.ReporteDeudasEstudiantePanel;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.ReporteDeudasPanel;
 import ec.com.codesoft.codefaclite.gestionacademica.reportdata.ReporteDeudasData;
@@ -88,50 +89,52 @@ public class ReporteDeudasEstudianteModel extends ReporteDeudasEstudiantePanel {
         getBtnBuscarEstudiante().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                EstudianteBusquedaDialogo aulaBusquedaDialogo = new EstudianteBusquedaDialogo();
+                Periodo periodoSeleccionado=(Periodo) getCmbPeriodo().getSelectedItem();
+                EstudianteInscritoBusquedaDialogo aulaBusquedaDialogo = new EstudianteInscritoBusquedaDialogo(periodoSeleccionado);
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(aulaBusquedaDialogo);
                 buscarDialogoModel.setVisible(true);
-                estudiante = (Estudiante) buscarDialogoModel.getResultado();
+                estudiante = ((EstudianteInscrito) buscarDialogoModel.getResultado()).getEstudiante();
                 if (estudiante != null) {
                     getTxtEstudiante().setText(estudiante.getNombreCompleto());
+                    buscarDeudas();
                 }
             }
         });
 
-        getBtnBuscar().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    BigDecimal acum = BigDecimal.ZERO;
-                    Vector<String> titulo = new Vector<>();
-                    titulo.add("Rubro");
-                    titulo.add("Valor");
 
-                    DefaultTableModel modeloTablaDeudas = new DefaultTableModel(titulo, 0);
-                    RubroEstudianteServiceIf rs = ServiceFactory.getFactory().getRubroEstudianteServiceIf();
-                    
-                    Periodo periodoSeleccionado=(Periodo) getCmbPeriodo().getSelectedItem();
-                    
-                    List<RubroEstudiante> dataRubro = rs.obtenerDeudasEstudiante(estudiante,periodoSeleccionado);
-                    // comparamos si el estudiante tiene rubros
-                    if (!dataRubro.isEmpty()) {
-                        for (RubroEstudiante re : dataRubro) {
-                            Vector<String> fila2 = new Vector<String>();
-                            fila2.add(re.getRubroNivel().getNombre());
-                            fila2.add(re.getRubroNivel().getValor().toString());
+    }
+    
+    private void buscarDeudas()
+    {
+        try {
+            BigDecimal acum = BigDecimal.ZERO;
+            Vector<String> titulo = new Vector<>();
+            titulo.add("Rubro");
+            titulo.add("Valor");
 
-                            acum = acum.add(re.getRubroNivel().getValor());
-                            modeloTablaDeudas.addRow(fila2);
-                        }
-                    }
-                    getTblDeudas().setModel(modeloTablaDeudas);
-                    getLblTotalDeuda().setText(acum.toString());
-                } catch (RemoteException ex) {
-                    Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
+            DefaultTableModel modeloTablaDeudas = new DefaultTableModel(titulo, 0);
+            RubroEstudianteServiceIf rs = ServiceFactory.getFactory().getRubroEstudianteServiceIf();
+
+            Periodo periodoSeleccionado = (Periodo) getCmbPeriodo().getSelectedItem();
+
+            List<RubroEstudiante> dataRubro = rs.obtenerDeudasEstudiante(estudiante, periodoSeleccionado);
+            // comparamos si el estudiante tiene rubros
+            if (!dataRubro.isEmpty()) {
+                for (RubroEstudiante re : dataRubro) {
+                    Vector<String> fila2 = new Vector<String>();
+                    fila2.add(re.getRubroNivel().getNombre());
+                    fila2.add(re.getRubroNivel().getValor().toString());
+
+                    acum = acum.add(re.getRubroNivel().getValor());
+                    modeloTablaDeudas.addRow(fila2);
                 }
-
             }
-        });
+            getTblDeudas().setModel(modeloTablaDeudas);
+            getLblTotalDeuda().setText(acum.toString());
+        } catch (RemoteException ex) {
+            Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
     }
 
     @Override
@@ -190,7 +193,7 @@ public class ReporteDeudasEstudianteModel extends ReporteDeudasEstudiantePanel {
             parameters.put("estudiante", estudiante.getNombreCompleto());
             parameters.put("valorDeuda", acum.toString());
 
-            ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, null, panelPadre, "Reporte Deudas por Estudiante");
+            ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Deuda Estudiante");
         } catch (RemoteException ex) {
             Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
         }

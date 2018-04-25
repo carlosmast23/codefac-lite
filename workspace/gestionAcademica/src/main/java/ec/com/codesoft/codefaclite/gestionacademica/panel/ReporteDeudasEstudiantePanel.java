@@ -41,7 +41,6 @@ public abstract class ReporteDeudasEstudiantePanel extends ControladorCodefacInt
         lblEstudiante = new javax.swing.JLabel();
         txtEstudiante = new javax.swing.JTextField();
         btnBuscarEstudiante = new javax.swing.JButton();
-        btnBuscar = new javax.swing.JButton();
         lblDeuda = new javax.swing.JLabel();
         lblTotalDeuda = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -119,14 +118,6 @@ public abstract class ReporteDeudasEstudiantePanel extends ControladorCodefacInt
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnBuscarEstudiante, gridBagConstraints);
 
-        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
-        btnBuscar.setText("Buscar");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(btnBuscar, gridBagConstraints);
-
         lblDeuda.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblDeuda.setText("Total Deuda:");
         lblDeuda.setToolTipText("");
@@ -187,7 +178,6 @@ public abstract class ReporteDeudasEstudiantePanel extends ControladorCodefacInt
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnBuscarEstudiante;
     private javax.swing.JComboBox<Periodo> cmbPeriodo;
     private javax.swing.JLabel jLabel1;
@@ -201,13 +191,6 @@ public abstract class ReporteDeudasEstudiantePanel extends ControladorCodefacInt
     private javax.swing.JTextField txtEstudiante;
     // End of variables declaration//GEN-END:variables
 
-    public JButton getBtnBuscar() {
-        return btnBuscar;
-    }
-
-    public void setBtnBuscar(JButton btnBuscar) {
-        this.btnBuscar = btnBuscar;
-    }
 
     public JButton getBtnBuscarEstudiante() {
         return btnBuscarEstudiante;
