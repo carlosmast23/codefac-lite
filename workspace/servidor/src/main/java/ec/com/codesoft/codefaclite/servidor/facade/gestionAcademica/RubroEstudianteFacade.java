@@ -164,7 +164,7 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
             cat = "1=1";
         }
         String stringQuery = "";
-        if (meses != null) {
+        if (meses != null && meses.size()>0) {
             stringQuery = "(SELECT rn.id FROM RubrosNivel rn WHERE " + cat + " AND rn.periodo=?3 AND ";
             String stringQueryMeses = "";
             //Solo van entre parentesis si tiene mas datos que 1
