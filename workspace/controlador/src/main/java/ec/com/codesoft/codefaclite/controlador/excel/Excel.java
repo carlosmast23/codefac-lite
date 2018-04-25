@@ -135,7 +135,7 @@ public class Excel<T>
                         celda.setCellValue(Double.parseDouble(valor.toString()));
                         if(b)
                         {
-                            posicionesColumnas.add(c);
+                            posicionesColumnas.add(c-1);
                         }
                     break; 
                 }  
