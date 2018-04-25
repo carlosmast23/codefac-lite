@@ -179,7 +179,7 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
         permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
         permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
         permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
-        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, false);
         permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
         return permisos;
     }
@@ -548,7 +548,8 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
             
             DefaultTableModel modeloTabla=UtilidadesTablas.crearModeloTabla(titulo,new Class[]{EstudianteInscrito.class,Boolean.class,String.class});
             
-            List<EstudianteInscrito> estudiantesInscritosTodos=ServiceFactory.getFactory().getEstudianteInscritoServiceIf().obtenerEstudiantesInscritos(nivelAcademico);
+            Periodo periodoSeleccionado = (Periodo) getCmbPeriodo().getSelectedItem();
+            List<EstudianteInscrito> estudiantesInscritosTodos=ServiceFactory.getFactory().getEstudianteInscritoServiceIf().obtenerEstudiantesInscritos(nivelAcademico,periodoSeleccionado);
             
             //Elimina los datos de los estudiantes que ya esten inscritos
             List<EstudianteInscrito> estudiantesNoInscritos= obtenerSoloEstudianesSinRegistro(estudiantesInscritosTodos);

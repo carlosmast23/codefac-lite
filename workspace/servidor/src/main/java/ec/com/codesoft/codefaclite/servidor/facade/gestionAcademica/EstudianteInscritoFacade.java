@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.List;
@@ -25,7 +26,10 @@ public class EstudianteInscritoFacade extends AbstractFacade<EstudianteInscrito>
         super(EstudianteInscrito.class);
     }
 
-    public List<EstudianteInscrito> obtenerEstudiantesInscritos(NivelAcademico nivel) {
+    public List<EstudianteInscrito> obtenerEstudiantesInscritos(NivelAcademico nivel,Periodo periodo) {
+        //EstudianteInscrito estudianteInscrito;
+        //estudianteInscrito.getNivelAcademico().getPeriodo();
+        
         String academico = "";
         if (nivel != null) {
             academico = "u.nivelAcademico=?1";
@@ -35,12 +39,25 @@ public class EstudianteInscritoFacade extends AbstractFacade<EstudianteInscrito>
 
         try {
             String queryString = "SELECT u FROM EstudianteInscrito u WHERE u.estado=?2 AND " + academico;
+            
+            if(periodo!=null)
+            {
+                queryString+=" AND u.nivelAcademico.periodo=?3";
+            }
+            
             Query query = getEntityManager().createQuery(queryString);
             query.setParameter(2,GeneralEnumEstado.ACTIVO.getEstado());
+            
+            if(periodo!=null)
+            {
+                query.setParameter(3, periodo);
+            }
+            
             //System.err.println("QUERY--->"+query.toString());
             if (nivel != null) {
                 query.setParameter(1, nivel);
             }
+            
             return query.getResultList();
         } catch (NoResultException e) {
             return null;
