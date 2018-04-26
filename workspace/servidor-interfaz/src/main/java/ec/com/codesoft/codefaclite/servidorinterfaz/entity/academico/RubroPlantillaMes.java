@@ -82,7 +82,7 @@ public class RubroPlantillaMes implements Serializable {
     {
         return MesEnum.obtenerPorNumero(numeroMes);
     }
-
+/*
     @Override
     public int hashCode() {
         int hash = 7;
@@ -107,7 +107,7 @@ public class RubroPlantillaMes implements Serializable {
         }
         return true;
     }
-
+*/
     @Override
     public String toString() {
         return MesEnum.obtenerPorNumero(numeroMes) + "-" + anio;

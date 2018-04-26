@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JList;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
 
@@ -55,9 +56,11 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         lstFiltrosMes = new javax.swing.JList<>();
-        cmbFiltroMes = new javax.swing.JComboBox<>();
         btnAgregarMes = new javax.swing.JButton();
-        bntEliminarMes = new javax.swing.JButton();
+        btnEliminarMes = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        cmbMesFiltro = new javax.swing.JComboBox<>();
+        lblEspacio = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -193,27 +196,17 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.3;
         getContentPane().add(lblEspacio2, gridBagConstraints);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Filtro por Mes"));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         jScrollPane2.setViewportView(lstFiltrosMes);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(jScrollPane2, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(cmbFiltroMes, gridBagConstraints);
 
         btnAgregarMes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/mas-ico.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -222,39 +215,63 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(btnAgregarMes, gridBagConstraints);
 
-        bntEliminarMes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/cancel-ico.png"))); // NOI18N
-        jPanel1.add(bntEliminarMes, new java.awt.GridBagConstraints());
+        btnEliminarMes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/cancel-ico.png"))); // NOI18N
+        jPanel1.add(btnEliminarMes, new java.awt.GridBagConstraints());
+
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel1.setText("Filtro Por Mes:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(cmbMesFiltro, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridheight = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 10, 10);
         getContentPane().add(jPanel1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        getContentPane().add(lblEspacio, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton bntEliminarMes;
     private javax.swing.JButton btnAgregarMes;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnEliminarMes;
     private javax.swing.JCheckBox chkTodosNiveles;
     private javax.swing.JCheckBox chkTodosRubros;
-    private javax.swing.JComboBox<RubroPlantillaMes> cmbFiltroMes;
+    private javax.swing.JComboBox<RubroPlantillaMes> cmbMesFiltro;
     private javax.swing.JComboBox<NivelAcademico> cmbNivelAcademico;
     private javax.swing.JComboBox<Periodo> cmbPeriodo;
     private javax.swing.JComboBox<CatalogoProducto> cmbTipoRubroPorMes;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblBuscar;
+    private javax.swing.JLabel lblEspacio;
     private javax.swing.JLabel lblEspacio2;
     private javax.swing.JLabel lblperiodo;
-    private javax.swing.JList<String> lstFiltrosMes;
+    private javax.swing.JList<RubroPlantillaMes> lstFiltrosMes;
     private javax.swing.JTable tblDeudas;
     // End of variables declaration//GEN-END:variables
 
@@ -314,14 +331,6 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
         this.cmbTipoRubroPorMes = cmbTipoRubroPorMes;
     }
 
-    public JButton getBntEliminarMes() {
-        return bntEliminarMes;
-    }
-
-    public void setBntEliminarMes(JButton bntEliminarMes) {
-        this.bntEliminarMes = bntEliminarMes;
-    }
-
     public JButton getBtnAgregarMes() {
         return btnAgregarMes;
     }
@@ -330,12 +339,28 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
         this.btnAgregarMes = btnAgregarMes;
     }
 
-    public JComboBox<RubroPlantillaMes> getCmbFiltroMes() {
-        return cmbFiltroMes;
+    public JList<RubroPlantillaMes> getLstFiltrosMes() {
+        return lstFiltrosMes;
     }
 
-    public void setCmbFiltroMes(JComboBox<RubroPlantillaMes> cmbFiltroMes) {
-        this.cmbFiltroMes = cmbFiltroMes;
+    public void setLstFiltrosMes(JList<RubroPlantillaMes> lstFiltrosMes) {
+        this.lstFiltrosMes = lstFiltrosMes;
+    }
+
+    public JButton getBtnEliminarMes() {
+        return btnEliminarMes;
+    }
+
+    public void setBtnEliminarMes(JButton btnEliminarMes) {
+        this.btnEliminarMes = btnEliminarMes;
+    }
+
+    public JComboBox<RubroPlantillaMes> getCmbMesFiltro() {
+        return cmbMesFiltro;
+    }
+
+    public void setCmbMesFiltro(JComboBox<RubroPlantillaMes> cmbMesFiltro) {
+        this.cmbMesFiltro = cmbMesFiltro;
     }
     
     

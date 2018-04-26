@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteI
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaMes;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
@@ -156,7 +157,7 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
         return query.getResultList();
     }
 
-    public List<RubroEstudiante> buscarRubrosMes(EstudianteInscrito estudiante, Periodo periodo, CatalogoProducto catalogoProducto, List<MesEnum> meses) throws RemoteException {
+    public List<RubroEstudiante> buscarRubrosMes(EstudianteInscrito estudiante, Periodo periodo, CatalogoProducto catalogoProducto, List<RubroPlantillaMes> meses) throws RemoteException {
         String cat, qmes = "";
         if (catalogoProducto != null) {
             cat = "rn.catalogoProducto=?2";
@@ -168,12 +169,16 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
             stringQuery = "(SELECT rn.id FROM RubrosNivel rn WHERE " + cat + " AND rn.periodo=?3 AND ";
             String stringQueryMeses = "";
             //Solo van entre parentesis si tiene mas datos que 1
-            if (meses.size() > 1) {
+            if (meses.size() > 1) 
+            {
                 stringQueryMeses = "( ";
             }
-            if (meses.size() > 0) {
-                for (MesEnum mes : meses) {
-                    stringQueryMeses = stringQueryMeses + " rn.mesNumero=" + mes.getNumero() + " OR";
+            
+            
+            if (meses.size() > 0) 
+            {
+                for (RubroPlantillaMes mes : meses) {
+                    stringQueryMeses = stringQueryMeses + " ( rn.mesNumero=" + mes.getMesEnum().getNumero() + " AND rn.anio="+mes.getAnio()+" ) OR";
                 }
             }
             //Cortar el ultimo OR que sobra de la candena;

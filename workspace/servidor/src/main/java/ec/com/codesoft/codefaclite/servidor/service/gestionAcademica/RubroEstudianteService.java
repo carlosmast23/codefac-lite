@@ -179,7 +179,8 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         return rubroEstudianteFacade.obtenerRubroPeriodoGrupo(periodo,fechaInicio,fechaFin);
     }
 
-    public List<RubroEstudiante> buscarRubrosMes(EstudianteInscrito est,Periodo periodo, CatalogoProducto catalogoProducto, List<MesEnum> meses) throws RemoteException {
+    public List<RubroEstudiante> buscarRubrosMes(EstudianteInscrito est,Periodo periodo, CatalogoProducto catalogoProducto, List<RubroPlantillaMes> meses) throws RemoteException 
+    {
         return rubroEstudianteFacade.buscarRubrosMes(est,periodo, catalogoProducto, meses);
     }
 
