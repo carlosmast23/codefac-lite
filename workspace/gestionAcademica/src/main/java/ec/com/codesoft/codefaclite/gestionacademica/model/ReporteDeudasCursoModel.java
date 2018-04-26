@@ -157,7 +157,7 @@ public class ReporteDeudasCursoModel extends ReporteDeudasCursoPanel {
 
     @Override
     public String getNombre() {
-        return "Reporte Deudas por Curso";
+        return "Deudas General por Curso";
     }
 
     @Override

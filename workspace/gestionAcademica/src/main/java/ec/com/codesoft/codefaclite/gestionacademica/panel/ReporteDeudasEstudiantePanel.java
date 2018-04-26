@@ -52,7 +52,7 @@ public abstract class ReporteDeudasEstudiantePanel extends ControladorCodefacInt
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
-        setTitle("Reporte Deudas por Estudiante");
+        setTitle("Deudas por Estudiante");
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         tblDeudas.setModel(new javax.swing.table.DefaultTableModel(

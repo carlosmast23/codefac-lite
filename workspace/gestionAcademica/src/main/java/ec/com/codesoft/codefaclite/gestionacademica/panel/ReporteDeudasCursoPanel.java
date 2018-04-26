@@ -53,7 +53,8 @@ public abstract class ReporteDeudasCursoPanel extends ControladorCodefacInterfac
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
-        setTitle("Reporte Deudas por Curso");
+        setTitle("Deudas General por Curso");
+        setToolTipText("");
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         lblperiodo.setText("Periodo:");

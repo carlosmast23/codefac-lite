@@ -66,7 +66,7 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
-        setTitle("Reporte Deudas por Nivel Académico");
+        setTitle("Deudas por Curso");
         setPreferredSize(new java.awt.Dimension(900, 600));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
