@@ -24,6 +24,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoPro
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoReferenciaEnum;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.ejemplo.utilidades.validadores.UtilidadValidador;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
@@ -62,6 +63,12 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
 
     @Override
     public Map<String, String> getMapAdicional() {
+        //Validar el tipo de texto para quitar carcteres especiales
+        for (Map.Entry<String, String> entry : mapInfoAdicional.entrySet()) {
+            String key = entry.getKey();
+            String value = UtilidadValidador.normalizarTexto(entry.getValue());
+            mapInfoAdicional.put(key, value);
+        }
         return mapInfoAdicional;
     }
 
@@ -93,7 +100,7 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
         //Revisar este dato porque solo se debe poner cuando sea contribuyente especial
         //info.setContribuyenteEspecial(claveAcceso);
         
-        info.setDirEstablecimiento(notaCredito.getCliente().getDireccion());
+        info.setDirEstablecimiento(UtilidadValidador.normalizarTexto(notaCredito.getCliente().getDireccion()));
         info.setFechaEmision(ComprobantesElectronicosUtil.dateToString(notaCredito.getFechaNotaCredito()));
         info.setFechaEmisionDocSustento(ComprobantesElectronicosUtil.dateToString(notaCredito.getFactura().getFechaFactura()));
         
@@ -109,14 +116,14 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
         info.setMotivo(notaCredito.getRazonModificado());
         info.setNumDocModificado(notaCredito.getFactura().getPreimpreso());
         info.setObligadoContabilidad("NO");
-        info.setRazonSocialComprador(notaCredito.getCliente().getRazonSocial());
+        info.setRazonSocialComprador(UtilidadValidador.normalizarTexto(notaCredito.getCliente().getRazonSocial()));
         
         /**
          * Consultar para que sirve el rise
          */
         //info.setRise(claveAcceso);
         
-        info.setTipoIdentificacionComprador(notaCredito.getCliente().getSriTipoIdentificacion().getCodigo());
+        info.setTipoIdentificacionComprador(UtilidadValidador.normalizarTexto(notaCredito.getCliente().getSriTipoIdentificacion().getCodigo()));
         //info.setTotalImpuestos(totalImpuestos);
         info.setTotalSinImpuestos(notaCredito.getSubtotalDoce().add(notaCredito.getSubtotalCero()));
         info.setValorModificacion(notaCredito.getTotal());
@@ -150,7 +157,7 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
                 }
                 
                 detalle.setCantidad(detalleNotaCredito.getCantidad());
-                detalle.setDescripcion(detalleNotaCredito.getDescripcion());
+                detalle.setDescripcion(UtilidadValidador.normalizarTexto(detalleNotaCredito.getDescripcion()));
                 //Establecer el descuento en el aplicativo
                 detalle.setDescuento(BigDecimal.ZERO);
                 detalle.setPrecioTotalSinImpuesto(detalleNotaCredito.getTotal());

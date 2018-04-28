@@ -31,6 +31,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
+import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
+import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -127,7 +129,8 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
                 BigDecimal total = BigDecimal.ZERO;
                 for (RubroEstudiante detalle : detalles) {
                     total = total.add(detalle.getRubroNivel().getValor());
-                    listaReporte.add(new EstudianteDeudaData(detalle.getRubroNivel().getNombre(), detalle.getRubroNivel().getValor().toString()));
+                    String fechaReporte=UtilidadesFecha.formatoDiaMesAño(detalle.getFechaGenerado());
+                    listaReporte.add(new EstudianteDeudaData(detalle.getRubroNivel().getNombre(), detalle.getRubroNivel().getValor().toString(),fechaReporte));
                 }
 
                 //Agrego parametros y lista, para tener para imprimir
@@ -190,10 +193,10 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
         Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
-        permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
-        permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
-        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
-        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_NUEVO, false);
+        permisos.put(GeneralPanelInterface.BOTON_GRABAR, false);
+        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, false);
+        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, false);
         permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
         permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
         return permisos;
@@ -566,7 +569,8 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
         BigDecimal total = BigDecimal.ZERO;
         for (RubroEstudiante detalle : detalles) {
             total = total.add(detalle.getRubroNivel().getValor());
-            listaReporte.add(new EstudianteDeudaData(detalle.getRubroNivel().getNombre(), detalle.getRubroNivel().getValor().toString()));
+            String fechaReporte = UtilidadesFecha.formatoDiaMesAño(detalle.getFechaGenerado());
+            listaReporte.add(new EstudianteDeudaData(detalle.getRubroNivel().getNombre(), detalle.getRubroNivel().getValor().toString(),fechaReporte));
         }
 
         mapParametros.put("total", total.toString());

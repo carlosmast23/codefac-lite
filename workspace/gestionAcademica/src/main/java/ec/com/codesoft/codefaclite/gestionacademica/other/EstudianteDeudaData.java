@@ -14,9 +14,10 @@ public class EstudianteDeudaData {
     private String valor;
     private String fecha;
 
-    public EstudianteDeudaData(String rubro, String valor) {
+    public EstudianteDeudaData(String rubro, String valor,String fecha) {
         this.rubro = rubro;
         this.valor = valor;
+        this.fecha=fecha;
     }
 
     public String getRubro() {

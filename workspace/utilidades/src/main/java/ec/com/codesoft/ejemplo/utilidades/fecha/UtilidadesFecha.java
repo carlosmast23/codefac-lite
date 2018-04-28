@@ -110,4 +110,10 @@ public class UtilidadesFecha {
         }
 
     }
+    
+    public static String formatoDiaMesAño(Date date)
+    {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        return dateFormat.format(date);
+    }
 }

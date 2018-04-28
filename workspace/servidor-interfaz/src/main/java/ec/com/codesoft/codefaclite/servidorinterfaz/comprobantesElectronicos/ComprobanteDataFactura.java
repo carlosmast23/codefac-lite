@@ -29,6 +29,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoReferenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.ejemplo.utilidades.validadores.UtilidadValidador;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
@@ -93,7 +94,7 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
             
         informacionFactura.setImporteTotal(factura.getTotal());
         //Falta manejar este campo al momento de guardar
-        informacionFactura.setRazonSocialComprador(factura.getCliente().getRazonSocial());
+        informacionFactura.setRazonSocialComprador(UtilidadValidador.normalizarTexto(factura.getCliente().getRazonSocial()));
         //informacionFactura.setRazonSocialComprador(factura.getCliente().getRazonSocial());
         informacionFactura.setTipoIdentificacionComprador(factura.getCliente().getSriTipoIdentificacion().getCodigo());
         
@@ -159,7 +160,7 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
                 
                 //detalle.setCodigoPrincipal(producto.getCodigoPersonalizado());
                 detalle.setCantidad(facturaDetalle.getCantidad());
-                detalle.setDescripcion(facturaDetalle.getDescripcion());
+                detalle.setDescripcion(UtilidadValidador.normalizarTexto(facturaDetalle.getDescripcion()));
                 //Establecer el descuento en el aplicativo
                 detalle.setDescuento(facturaDetalle.getDescuento());
                 detalle.setPrecioTotalSinImpuesto(facturaDetalle.getTotal());
@@ -239,6 +240,12 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
 
     @Override
     public Map<String, String> getMapAdicional() {
+        //Validar el tipo de texto para quitar carcteres especiales
+        for (Map.Entry<String, String> entry : mapInfoAdicional.entrySet()) {
+            String key = entry.getKey();
+            String value = UtilidadValidador.normalizarTexto(entry.getValue());
+            mapInfoAdicional.put(key, value);
+        }
         return mapInfoAdicional;
     }
 
