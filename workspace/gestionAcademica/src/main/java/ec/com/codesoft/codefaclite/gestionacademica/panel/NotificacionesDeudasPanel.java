@@ -8,9 +8,11 @@ package ec.com.codesoft.codefaclite.gestionacademica.panel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaMes;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JList;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -46,21 +48,15 @@ public abstract class NotificacionesDeudasPanel extends ControladorCodefacInterf
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        jToolBar1 = new javax.swing.JToolBar();
-        chkEnero = new javax.swing.JRadioButton();
-        chkFebrero = new javax.swing.JRadioButton();
-        chkMarzo = new javax.swing.JRadioButton();
-        chkAbril = new javax.swing.JRadioButton();
-        chkMayo = new javax.swing.JRadioButton();
-        chkJunio = new javax.swing.JRadioButton();
-        chkJulio = new javax.swing.JRadioButton();
-        chkAgosto = new javax.swing.JRadioButton();
-        chkSeptiembre = new javax.swing.JRadioButton();
-        chkOctubre = new javax.swing.JRadioButton();
-        chkNoviembre = new javax.swing.JRadioButton();
-        chkDiciembre = new javax.swing.JRadioButton();
         btnAgregarPorMes = new javax.swing.JButton();
         cmbTipoRubroPorMes = new javax.swing.JComboBox<>();
+        cmbMesFiltro = new javax.swing.JComboBox<>();
+        jLabel7 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        lstFiltrosMes = new javax.swing.JList<>();
+        btnAgregarMes = new javax.swing.JButton();
+        btnEliminarMes = new javax.swing.JButton();
+        lblEspacio2 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         cmbTipoRubroGrupo = new javax.swing.JComboBox<>();
@@ -76,6 +72,7 @@ public abstract class NotificacionesDeudasPanel extends ControladorCodefacInterf
         txtFormatoMensaje = new javax.swing.JTextArea();
         jLabel6 = new javax.swing.JLabel();
         btnQuitar = new javax.swing.JButton();
+        lblEspacio1 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -95,8 +92,9 @@ public abstract class NotificacionesDeudasPanel extends ControladorCodefacInterf
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.2;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 25);
         getContentPane().add(cmbPeriodo, gridBagConstraints);
 
@@ -147,107 +145,12 @@ public abstract class NotificacionesDeudasPanel extends ControladorCodefacInterf
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel4, gridBagConstraints);
 
-        jToolBar1.setBorder(javax.swing.BorderFactory.createTitledBorder("Meses Generar"));
-
-        chkEnero.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        chkEnero.setText("Enero");
-        chkEnero.setFocusable(false);
-        chkEnero.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        chkEnero.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(chkEnero);
-
-        chkFebrero.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        chkFebrero.setText("Febrero");
-        chkFebrero.setFocusable(false);
-        chkFebrero.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        chkFebrero.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(chkFebrero);
-
-        chkMarzo.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        chkMarzo.setText("Marzo");
-        chkMarzo.setFocusable(false);
-        chkMarzo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        chkMarzo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(chkMarzo);
-
-        chkAbril.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        chkAbril.setText("Abril");
-        chkAbril.setFocusable(false);
-        chkAbril.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        chkAbril.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(chkAbril);
-
-        chkMayo.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        chkMayo.setText("Mayo");
-        chkMayo.setFocusable(false);
-        chkMayo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        chkMayo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(chkMayo);
-
-        chkJunio.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        chkJunio.setText("Junio");
-        chkJunio.setFocusable(false);
-        chkJunio.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        chkJunio.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(chkJunio);
-
-        chkJulio.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        chkJulio.setText("Julio");
-        chkJulio.setFocusable(false);
-        chkJulio.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        chkJulio.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(chkJulio);
-
-        chkAgosto.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        chkAgosto.setText("Agosto");
-        chkAgosto.setFocusable(false);
-        chkAgosto.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        chkAgosto.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(chkAgosto);
-
-        chkSeptiembre.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        chkSeptiembre.setText("Septiembre");
-        chkSeptiembre.setFocusable(false);
-        chkSeptiembre.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        chkSeptiembre.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(chkSeptiembre);
-
-        chkOctubre.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        chkOctubre.setText("Octubre");
-        chkOctubre.setFocusable(false);
-        chkOctubre.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        chkOctubre.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(chkOctubre);
-
-        chkNoviembre.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        chkNoviembre.setText("Noviembre");
-        chkNoviembre.setFocusable(false);
-        chkNoviembre.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        chkNoviembre.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(chkNoviembre);
-
-        chkDiciembre.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        chkDiciembre.setText("Diciembre");
-        chkDiciembre.setFocusable(false);
-        chkDiciembre.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        chkDiciembre.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(chkDiciembre);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jToolBar1, gridBagConstraints);
-
         btnAgregarPorMes.setText("Agregar");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(btnAgregarPorMes, gridBagConstraints);
 
@@ -259,6 +162,55 @@ public abstract class NotificacionesDeudasPanel extends ControladorCodefacInterf
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbTipoRubroPorMes, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 11;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(cmbMesFiltro, gridBagConstraints);
+
+        jLabel7.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel7.setText("Filtro Por Mes:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel7, gridBagConstraints);
+
+        jScrollPane3.setViewportView(lstFiltrosMes);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 13;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        jPanel1.add(jScrollPane3, gridBagConstraints);
+
+        btnAgregarMes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/mas-ico.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 12;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(btnAgregarMes, gridBagConstraints);
+
+        btnEliminarMes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/cancel-ico.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 11;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(btnEliminarMes, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        jPanel1.add(lblEspacio2, gridBagConstraints);
 
         jTabbedPane1.addTab("Por Mes", jPanel1);
 
@@ -385,30 +337,27 @@ public abstract class NotificacionesDeudasPanel extends ControladorCodefacInterf
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnQuitar, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.3;
+        getContentPane().add(lblEspacio1, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregarMes;
     private javax.swing.JButton btnAgregarPorGrupo;
     private javax.swing.JButton btnAgregarPorMes;
     private javax.swing.JButton btnAgregarPorRubro;
+    private javax.swing.JButton btnEliminarMes;
     private javax.swing.JButton btnEnviar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnQuitar;
-    private javax.swing.JRadioButton chkAbril;
-    private javax.swing.JRadioButton chkAgosto;
-    private javax.swing.JRadioButton chkDiciembre;
-    private javax.swing.JRadioButton chkEnero;
-    private javax.swing.JRadioButton chkFebrero;
-    private javax.swing.JRadioButton chkJulio;
-    private javax.swing.JRadioButton chkJunio;
-    private javax.swing.JRadioButton chkMarzo;
-    private javax.swing.JRadioButton chkMayo;
-    private javax.swing.JRadioButton chkNoviembre;
-    private javax.swing.JRadioButton chkOctubre;
-    private javax.swing.JRadioButton chkSeptiembre;
+    private javax.swing.JComboBox<RubroPlantillaMes> cmbMesFiltro;
     private javax.swing.JComboBox<Periodo> cmbPeriodo;
     private javax.swing.JComboBox<RubrosNivel> cmbRubro;
     private javax.swing.JComboBox<CatalogoProducto> cmbTipoRubroGrupo;
@@ -420,13 +369,17 @@ public abstract class NotificacionesDeudasPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JLabel lblEspacio1;
+    private javax.swing.JLabel lblEspacio2;
+    private javax.swing.JList<RubroPlantillaMes> lstFiltrosMes;
     private javax.swing.JTable tblRubros;
     private javax.swing.JTextArea txtFormatoMensaje;
     // End of variables declaration//GEN-END:variables
@@ -469,102 +422,6 @@ public abstract class NotificacionesDeudasPanel extends ControladorCodefacInterf
 
     public void setBtnLimpiar(JButton btnLimpiar) {
         this.btnLimpiar = btnLimpiar;
-    }
-
-    public JRadioButton getChkAbril() {
-        return chkAbril;
-    }
-
-    public void setChkAbril(JRadioButton chkAbril) {
-        this.chkAbril = chkAbril;
-    }
-
-    public JRadioButton getChkAgosto() {
-        return chkAgosto;
-    }
-
-    public void setChkAgosto(JRadioButton chkAgosto) {
-        this.chkAgosto = chkAgosto;
-    }
-
-    public JRadioButton getChkDiciembre() {
-        return chkDiciembre;
-    }
-
-    public void setChkDiciembre(JRadioButton chkDiciembre) {
-        this.chkDiciembre = chkDiciembre;
-    }
-
-    public JRadioButton getChkEnero() {
-        return chkEnero;
-    }
-
-    public void setChkEnero(JRadioButton chkEnero) {
-        this.chkEnero = chkEnero;
-    }
-
-    public JRadioButton getChkFebrero() {
-        return chkFebrero;
-    }
-
-    public void setChkFebrero(JRadioButton chkFebrero) {
-        this.chkFebrero = chkFebrero;
-    }
-
-    public JRadioButton getChkJulio() {
-        return chkJulio;
-    }
-
-    public void setChkJulio(JRadioButton chkJulio) {
-        this.chkJulio = chkJulio;
-    }
-
-    public JRadioButton getChkJunio() {
-        return chkJunio;
-    }
-
-    public void setChkJunio(JRadioButton chkJunio) {
-        this.chkJunio = chkJunio;
-    }
-
-    public JRadioButton getChkMarzo() {
-        return chkMarzo;
-    }
-
-    public void setChkMarzo(JRadioButton chkMarzo) {
-        this.chkMarzo = chkMarzo;
-    }
-
-    public JRadioButton getChkMayo() {
-        return chkMayo;
-    }
-
-    public void setChkMayo(JRadioButton chkMayo) {
-        this.chkMayo = chkMayo;
-    }
-
-    public JRadioButton getChkNoviembre() {
-        return chkNoviembre;
-    }
-
-    public void setChkNoviembre(JRadioButton chkNoviembre) {
-        this.chkNoviembre = chkNoviembre;
-    }
-
-    public JRadioButton getChkOctubre() {
-        return chkOctubre;
-    }
-
-    public void setChkOctubre(JRadioButton chkOctubre) {
-        this.chkOctubre = chkOctubre;
-    }
-
-    public JRadioButton getChkSeptiembre() {
-        return chkSeptiembre;
-    }
-
-    public void setChkSeptiembre(JRadioButton chkSeptiembre) {
-        this.chkSeptiembre = chkSeptiembre;
     }
 
     public JComboBox<Periodo> getCmbPeriodo() {
@@ -632,6 +489,38 @@ public abstract class NotificacionesDeudasPanel extends ControladorCodefacInterf
 
     public void setBtnQuitar(JButton btnQuitar) {
         this.btnQuitar = btnQuitar;
+    }
+
+    public JButton getBtnAgregarMes() {
+        return btnAgregarMes;
+    }
+
+    public void setBtnAgregarMes(JButton btnAgregarMes) {
+        this.btnAgregarMes = btnAgregarMes;
+    }
+
+    public JButton getBtnEliminarMes() {
+        return btnEliminarMes;
+    }
+
+    public void setBtnEliminarMes(JButton btnEliminarMes) {
+        this.btnEliminarMes = btnEliminarMes;
+    }
+
+    public JComboBox<RubroPlantillaMes> getCmbMesFiltro() {
+        return cmbMesFiltro;
+    }
+
+    public void setCmbMesFiltro(JComboBox<RubroPlantillaMes> cmbMesFiltro) {
+        this.cmbMesFiltro = cmbMesFiltro;
+    }
+
+    public JList<RubroPlantillaMes> getLstFiltrosMes() {
+        return lstFiltrosMes;
+    }
+
+    public void setLstFiltrosMes(JList<RubroPlantillaMes> lstFiltrosMes) {
+        this.lstFiltrosMes = lstFiltrosMes;
     }
     
     

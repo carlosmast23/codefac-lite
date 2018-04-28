@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.facade.gestionAcademica;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaMes;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import java.rmi.RemoteException;
@@ -24,7 +25,7 @@ public class RubrosNivelFacade extends AbstractFacade<RubrosNivel> {
         super(RubrosNivel.class);
     }
 
-    public List<RubrosNivel> findPorPeriodoYMeses(Periodo periodo, CatalogoProducto catalogoProducto, List<MesEnum> meses) throws RemoteException {
+    public List<RubrosNivel> findPorPeriodoYMeses(Periodo periodo, CatalogoProducto catalogoProducto, List<RubroPlantillaMes> meses) throws RemoteException {
 
         String stringQuery = "SELECT rn FROM RubrosNivel rn WHERE rn.catalogoProducto=?1 AND rn.periodo=?2 AND ";
 
@@ -34,15 +35,18 @@ public class RubrosNivelFacade extends AbstractFacade<RubrosNivel> {
         if (meses.size() > 1) {
             stringQueryMeses = "( ";
         }
-
+        
         if (meses.size() > 0) {
-            for (MesEnum mes : meses) {
-                stringQueryMeses = stringQueryMeses + " rn.mesNumero=" + mes.getNumero() + " OR";
+            for (RubroPlantillaMes mes : meses) {
+                stringQueryMeses = stringQueryMeses + " rn.mesNumero=" + mes.getMesEnum().getNumero() + " AND rn.anio="+mes.getAnio()+ " OR";
             }
         }
 
         //Cortar el ultimo OR que sobra de la candena;
-        stringQueryMeses = stringQueryMeses.substring(0, stringQueryMeses.length() - 3);
+        if(stringQueryMeses.length()>0)
+        {
+            stringQueryMeses = stringQueryMeses.substring(0, stringQueryMeses.length() - 3);
+        }
 
         if (meses.size() > 1) {
             stringQueryMeses = stringQueryMeses + ")";

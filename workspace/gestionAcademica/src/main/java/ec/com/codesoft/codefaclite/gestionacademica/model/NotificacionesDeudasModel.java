@@ -25,6 +25,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoPro
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaMes;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
@@ -43,6 +44,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -75,9 +77,12 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
     
     public static final String ETIQUETA_NOMBRE_ESTUDIANTE = "[nombre_estudiante]";
     public static final String ETIQUETA_NOMBRE_REPRESENTANTE = "[nombre_representante]";
+    
+    private DefaultListModel<RubroPlantillaMes> modeloLista;
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
+        iniciarVariables();
         iniciarCombos();
         listenerCombos();
         listenerBotones();
@@ -169,6 +174,7 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
     public void limpiar() {
         this.listaRubros = new ArrayList<RubrosNivel>();
         this.getCmbTipoRubroPorRubro().setSelectedIndex(0);
+        this.getCmbPeriodo().setSelectedIndex(0);
     }
 
     @Override
@@ -226,6 +232,18 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
     }
 
     private void listenerCombos() {
+        
+        getCmbPeriodo().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Periodo periodo=(Periodo) getCmbPeriodo().getSelectedItem();
+                if(periodo!=null)
+                {
+                    cargarMesesPeriodo(periodo);
+                }
+            }
+        });
+        
         getCmbTipoRubroPorRubro().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -296,6 +314,29 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
     }
 
     private void listenerBotones() {
+        
+        getBtnAgregarMes().addActionListener(new ActionListener() 
+        {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                RubroPlantillaMes rubroPlantillaMeS=(RubroPlantillaMes) getCmbMesFiltro().getSelectedItem();
+                modeloLista.addElement(rubroPlantillaMeS);
+                getLstFiltrosMes().setModel(modeloLista);                
+            }
+        });
+        
+        getBtnEliminarMes().addActionListener(new ActionListener() 
+        {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(getLstFiltrosMes().getSelectedIndex()>=0)
+                {
+                    RubroPlantillaMes rubroPlantillaMes=(RubroPlantillaMes) modeloLista.get(getLstFiltrosMes().getSelectedIndex());
+                    modeloLista.removeElement(rubroPlantillaMes);
+                    getLstFiltrosMes().setModel(modeloLista);
+                }
+            }
+        });
 
         getBtnEnviar().addActionListener(new ActionListener() {
             @Override
@@ -335,7 +376,7 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
                 try {
                     Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
                     CatalogoProducto catalogoProducto = (CatalogoProducto) getCmbTipoRubroPorMes().getSelectedItem();
-                    List<MesEnum> mesesSeleccionados = obtenerMesesEnum();
+                    List<RubroPlantillaMes> mesesSeleccionados = obtenerMesesEnum();
 
                     List<RubrosNivel> listaRubros = ServiceFactory.getFactory().getRubrosNivelServiceIf().buscarPorPeriodoYMeses(periodo, catalogoProducto, mesesSeleccionados);
 
@@ -384,54 +425,11 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
         });
     }
 
-    private List<MesEnum> obtenerMesesEnum() {
-        List<MesEnum> listaMeses = new ArrayList<MesEnum>();
-
-        if (getChkEnero().isSelected()) {
-            listaMeses.add(MesEnum.ENERO);
+    private List<RubroPlantillaMes> obtenerMesesEnum() {
+        List<RubroPlantillaMes> listaMeses = new ArrayList<RubroPlantillaMes>();
+        for (int i = 0; i < getLstFiltrosMes().getModel().getSize(); i++) {
+            listaMeses.add(getLstFiltrosMes().getModel().getElementAt(i));
         }
-
-        if (getChkFebrero().isSelected()) {
-            listaMeses.add(MesEnum.FEBRERO);
-        }
-
-        if (getChkMarzo().isSelected()) {
-            listaMeses.add(MesEnum.MARZO);
-        }
-
-        if (getChkAbril().isSelected()) {
-            listaMeses.add(MesEnum.ABRIL);
-        }
-
-        if (getChkMayo().isSelected()) {
-            listaMeses.add(MesEnum.MAYO);
-        }
-        if (getChkJunio().isSelected()) {
-            listaMeses.add(MesEnum.JUNIO);
-        }
-
-        if (getChkJulio().isSelected()) {
-            listaMeses.add(MesEnum.JULIO);
-        }
-        if (getChkAgosto().isSelected()) {
-            listaMeses.add(MesEnum.AGOSTO);
-        }
-
-        if (getChkSeptiembre().isSelected()) {
-            listaMeses.add(MesEnum.SEPTIEMBRE);
-        }
-
-        if (getChkOctubre().isSelected()) {
-            listaMeses.add(MesEnum.OCTUBRE);
-        }
-
-        if (getChkNoviembre().isSelected()) {
-            listaMeses.add(MesEnum.NOVIEMBRE);
-        }
-        if (getChkDiciembre().isSelected()) {
-            listaMeses.add(MesEnum.DICIEMBRE);
-        }
-
         return listaMeses;
 
     }
@@ -596,10 +594,22 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
 
         return mapRubrosEstudiante;
     }
+    
+    private void cargarMesesPeriodo(Periodo periodo) {
+        List<RubroPlantillaMes> Meses=periodo.obtenerTodosMesesGenerar();
+        getCmbMesFiltro().removeAllItems();
+        for (RubroPlantillaMes mes : Meses) {
+            getCmbMesFiltro().addItem(mes);
+        }
+    }
 
     @Override
     public void run() {
         enviarComunicados();
+    }
+
+    private void iniciarVariables() {
+        modeloLista=new DefaultListModel();
     }
 
 }
