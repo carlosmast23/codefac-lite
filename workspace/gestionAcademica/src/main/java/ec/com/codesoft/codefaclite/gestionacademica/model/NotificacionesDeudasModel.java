@@ -130,7 +130,7 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
                 for (RubroEstudiante detalle : detalles) {
                     total = total.add(detalle.getRubroNivel().getValor());
                     String fechaReporte=UtilidadesFecha.formatoDiaMesAño(detalle.getFechaGenerado());
-                    listaReporte.add(new EstudianteDeudaData(detalle.getRubroNivel().getNombre(), detalle.getRubroNivel().getValor().toString(),fechaReporte));
+                    listaReporte.add(new EstudianteDeudaData(detalle.getRubroNivel().getNombre(), detalle.getSaldo().toString(),fechaReporte));
                 }
 
                 //Agrego parametros y lista, para tener para imprimir
@@ -570,7 +570,7 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
         for (RubroEstudiante detalle : detalles) {
             total = total.add(detalle.getRubroNivel().getValor());
             String fechaReporte = UtilidadesFecha.formatoDiaMesAño(detalle.getFechaGenerado());
-            listaReporte.add(new EstudianteDeudaData(detalle.getRubroNivel().getNombre(), detalle.getRubroNivel().getValor().toString(),fechaReporte));
+            listaReporte.add(new EstudianteDeudaData(detalle.getRubroNivel().getNombre(), detalle.getSaldo().toString(),fechaReporte));
         }
 
         mapParametros.put("total", total.toString());

@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlanti
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.List;
@@ -34,15 +35,28 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
 
     public List<RubroEstudiante> findRubrosEstudiantesPorRubros(List<RubrosNivel> rubros) {
 
-        String queryString = "SELECT u FROM RubroEstudiante u WHERE";
+        //RubroEstudiante re;
+        //re.getSaldo()
+        String queryString = "SELECT u FROM RubroEstudiante u WHERE (u.estado <> ?9000 AND u.estado <> ?9001 AND u.saldo>?9002 ) AND";
 
-        for (int i = 1; i <= rubros.size(); i++) {
-            queryString += " u.rubroNivel=?" + i + " OR";
+        if(rubros.size()>0)
+        {
+            queryString += "(";
+
+            for (int i = 1; i <= rubros.size(); i++) {
+                queryString += " u.rubroNivel=?" + i + " OR";
+            }
+
+            queryString = queryString.substring(0, queryString.length() - 3);
+            
+            queryString += ")";
         }
 
-        queryString = queryString.substring(0, queryString.length() - 3);
-
         Query query = getEntityManager().createQuery(queryString);
+        
+        query.setParameter(9000, GeneralEnumEstado.ELIMINADO.getEstado());
+        query.setParameter(9001, GeneralEnumEstado.ANULADO.getEstado());
+        query.setParameter(9002, BigDecimal.ZERO);
 
         //Setear las variables con el numero
         for (int i = 1; i <= rubros.size(); i++) {
