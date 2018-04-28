@@ -115,35 +115,9 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
     public void imprimir() {
         
         try {
-            List<RubroEstudiante> rubrosEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().obtenerRubrosEstudiantesPorRubros(listaRubros);
-            Map<EstudianteInscrito, List<RubroEstudiante>> mapRubrosEstudiante = convertirMapRubrosEstudiante(rubrosEstudiante);            
-            /**
-             * Llenar datos
-             */
-            for (Map.Entry<EstudianteInscrito, List<RubroEstudiante>> entry : mapRubrosEstudiante.entrySet()) {
-                EstudianteInscrito estudianteInscrito = entry.getKey();
-                List<RubroEstudiante> detalles = entry.getValue();
-                
-                List<EstudianteDeudaData> listaReporte = new ArrayList<EstudianteDeudaData>();
-
-                BigDecimal total = BigDecimal.ZERO;
-                for (RubroEstudiante detalle : detalles) {
-                    total = total.add(detalle.getRubroNivel().getValor());
-                    String fechaReporte=UtilidadesFecha.formatoDiaMesAño(detalle.getFechaGenerado());
-                    listaReporte.add(new EstudianteDeudaData(detalle.getRubroNivel().getNombre(), detalle.getSaldo().toString(),fechaReporte));
-                }
-
-                //Agrego parametros y lista, para tener para imprimir
-                NotificacionDeudaImprimir ndi = new NotificacionDeudaImprimir();
-                ndi.setDeudas(listaReporte);
-                ndi.setPeriodo(estudianteInscrito.getNivelAcademico().getPeriodo().getNombre());
-                ndi.setCurso(estudianteInscrito.getNivelAcademico().getNombre());
-                ndi.setNombres(estudianteInscrito.getEstudiante().getNombreCompleto());
-                ndi.setRepresentante((estudianteInscrito.getEstudiante().getRepresentante() == null) ? "" : estudianteInscrito.getEstudiante().getRepresentante().getNombresCompletos());
-                ndi.setNota("");
-                ndi.setTotal(total.toString());
-                notificacionesDeudaImprimir.add(ndi);
-            }
+            
+            cargarDatosReporte();
+                        
             Map<String, Object> parametros = new HashMap<String, Object>();
             
             RecursosServiceIf service= ServiceFactory.getFactory().getRecursosServiceIf();
@@ -161,6 +135,43 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
             Logger.getLogger(NotificacionesDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+    }
+    
+    private void cargarDatosReporte()
+    {
+        try {
+            List<RubroEstudiante> rubrosEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().obtenerRubrosEstudiantesPorRubros(listaRubros);            
+            Map<EstudianteInscrito, List<RubroEstudiante>> mapRubrosEstudiante = convertirMapRubrosEstudiante(rubrosEstudiante);
+            /**
+             * Llenar datos
+             */
+            for (Map.Entry<EstudianteInscrito, List<RubroEstudiante>> entry : mapRubrosEstudiante.entrySet()) {
+                EstudianteInscrito estudianteInscrito = entry.getKey();
+                List<RubroEstudiante> detalles = entry.getValue();
+                
+                List<EstudianteDeudaData> listaReporte = new ArrayList<EstudianteDeudaData>();
+
+                BigDecimal total = BigDecimal.ZERO;
+                for (RubroEstudiante detalle : detalles) {
+                    total = total.add(detalle.getSaldo());
+                    String fechaReporte=UtilidadesFecha.formatoDiaMesAño(detalle.getFechaGenerado());
+                    listaReporte.add(new EstudianteDeudaData(detalle.getRubroNivel().getNombre(), detalle.getSaldo().toString(),fechaReporte));
+                }
+
+                //Agrego parametros y lista, para tener para imprimir
+                NotificacionDeudaImprimir ndi = new NotificacionDeudaImprimir();
+                ndi.setDeudas(listaReporte);
+                ndi.setPeriodo(estudianteInscrito.getNivelAcademico().getPeriodo().getNombre());
+                ndi.setCurso(estudianteInscrito.getNivelAcademico().getNombre());
+                ndi.setNombres(estudianteInscrito.getEstudiante().getNombreCompleto());
+                ndi.setRepresentante((estudianteInscrito.getEstudiante().getRepresentante() == null) ? "" : estudianteInscrito.getEstudiante().getRepresentante().getNombresCompletos());
+                ndi.setNota("");
+                ndi.setTotal(total.toString());
+                notificacionesDeudaImprimir.add(ndi);
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(NotificacionesDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -568,7 +579,7 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
 
         BigDecimal total = BigDecimal.ZERO;
         for (RubroEstudiante detalle : detalles) {
-            total = total.add(detalle.getRubroNivel().getValor());
+            total = total.add(detalle.getSaldo());
             String fechaReporte = UtilidadesFecha.formatoDiaMesAño(detalle.getFechaGenerado());
             listaReporte.add(new EstudianteDeudaData(detalle.getRubroNivel().getNombre(), detalle.getSaldo().toString(),fechaReporte));
         }
