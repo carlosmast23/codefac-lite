@@ -31,10 +31,10 @@ create table SRI_RETENCION_IVA
 create table SRI_RETENCION_RENTA
 (
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY( START WITH 1),
-    NOMBRE varchar(10),
+    NOMBRE varchar(60),
     CODIGO_SRI varchar(4),
     PORCENTAJE integer,
-    DESCRIPCION varchar(60),
+    DESCRIPCION varchar(120),
     FECHA_INICIO date,
     FECHA_FIN date,
     primary key(ID)
