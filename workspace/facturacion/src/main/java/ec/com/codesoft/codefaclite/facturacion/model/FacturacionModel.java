@@ -6,7 +6,6 @@
 package ec.com.codesoft.codefaclite.facturacion.model;
 
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
-import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteInterface;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
@@ -1858,6 +1857,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         for (TipoDocumentoEnum tipoDocumento : tipoDocumentos) {
             getCmbTipoDocumento().addItem(tipoDocumento);
         }
+        
+        //Seleccionar el tipo de documento configurado por defecto
+        ParametroCodefac parametroCodefac=session.getParametrosCodefac().get(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_FACTURA);
+        TipoDocumentoEnum tipoDocumentoEnumDefault=TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(parametroCodefac.getValor());
+        getCmbTipoDocumento().setSelectedItem(tipoDocumentoEnumDefault);
     }
 
     private void addListenerCombos() {

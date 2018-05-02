@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.configuraciones.model;
 
 import ec.com.codesoft.codefaclite.configuraciones.panel.ConfiguracionDefectoPanel;
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -45,7 +46,15 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel{
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
-        setearVariable();
+        try {
+            setearVariable();
+            ParametroCodefacServiceIf service=ServiceFactory.getFactory().getParametroCodefacServiceIf();
+            service.editarParametros(parametros);
+            DialogoCodefac.mensaje("Actualizado datos", "Los parametros fueron actualizados correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ConfiguracionDefectoModel.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje("Error","No se pueden grabar los parametros",DialogoCodefac.MENSAJE_INCORRECTO);
+        }
         
     }
 
@@ -128,7 +137,8 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel{
 
     private void setearVariable() {
         TipoDocumentoEnum tipoDocumento=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
-        parametros.put(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_FACTURA, (ParametroCodefac) getCmbTipoDocumento().getSelectedItem());
+        parametros.get(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_FACTURA).setValor(tipoDocumento.getCodigo());
+        ///parametros.put(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_FACTURA, (ParametroCodefac) getCmbTipoDocumento().getSelectedItem());
         
     }
     
