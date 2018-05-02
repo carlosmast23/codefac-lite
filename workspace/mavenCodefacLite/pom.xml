@@ -22,6 +22,7 @@
         <module>../inventario</module>
         <module>../gestionAcademica</module>
         <module>../servidor-interfaz</module>
+        <module>../compra</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

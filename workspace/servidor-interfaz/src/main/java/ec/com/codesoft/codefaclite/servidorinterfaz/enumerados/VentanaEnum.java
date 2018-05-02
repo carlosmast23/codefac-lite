@@ -61,8 +61,9 @@ public enum VentanaEnum {
     NOTIFICACION_DEUDAS("ec.com.codesoft.codefaclite.gestionacademica.model.NotificacionesDeudasModel","NODE","",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.UTILIDADES),
     MATRICULA_ESTUDIANTE("ec.com.codesoft.codefaclite.gestionacademica.model.MatriculaEstudianteModel","MAES","",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.MATRICULA),
     RESPALDAR_INFORMACION("ec.com.codesoft.codefaclite.configuraciones.model.RespaldarInformacionModel","RESP","Respaldar Informacion",ModuloCodefacEnum.SISTEMA,CategoriaMenuEnum.PROCESOS),
-    CONFIGURACION_DEFECTO("ec.com.codesoft.codefaclite.configuraciones.model.ConfiguracionDefectoModel","CFDF","Configuraciones por Defecto",ModuloCodefacEnum.SISTEMA,CategoriaMenuEnum.PROCESOS);
-                //
+    CONFIGURACION_DEFECTO("ec.com.codesoft.codefaclite.configuraciones.model.ConfiguracionDefectoModel","CFDF","Configuraciones por Defecto",ModuloCodefacEnum.SISTEMA,CategoriaMenuEnum.PROCESOS),
+    RETENCIONES("ec.com.codesoft.codefaclite.compra.model.RetencionesModel","RETC","Retenciones",ModuloCodefacEnum.COMPRA,CategoriaMenuEnum.PROCESOS);
+
     private VentanaEnum(String clase, String codigo, String nombre, ModuloCodefacEnum modulo, CategoriaMenuEnum categoriaMenu) {
         this.claseNombre = clase;
         this.codigo = codigo;
