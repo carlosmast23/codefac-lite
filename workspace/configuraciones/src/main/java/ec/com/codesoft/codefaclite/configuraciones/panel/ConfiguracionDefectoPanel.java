@@ -37,6 +37,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         lblEspacio1 = new javax.swing.JLabel();
         lblEspacio2 = new javax.swing.JLabel();
 
+        setClosable(true);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
         setTitle("Configuraciones por Defecto");
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
