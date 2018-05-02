@@ -36,6 +36,9 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         cmbTipoDocumento = new javax.swing.JComboBox<>();
         lblEspacio1 = new javax.swing.JLabel();
         lblEspacio2 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        cmbTipoDocumentoCompra = new javax.swing.JComboBox<>();
+        lblEspacio3 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -44,6 +47,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         setTitle("Configuraciones por Defecto");
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel1.setText("Tipo Documento Defecto Factura:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -67,7 +71,31 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(lblEspacio2, gridBagConstraints);
+
+        jLabel12.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel12.setText("Tipo Documento:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jLabel12, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(cmbTipoDocumentoCompra, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.weighty = 0.1;
+        getContentPane().add(lblEspacio3, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -75,9 +103,12 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
+    private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumentoCompra;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio2;
+    private javax.swing.JLabel lblEspacio3;
     // End of variables declaration//GEN-END:variables
 
     public JComboBox<TipoDocumentoEnum> getCmbTipoDocumento() {
@@ -88,5 +119,14 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         this.cmbTipoDocumento = cmbTipoDocumento;
     }
 
+    public JComboBox<TipoDocumentoEnum> getCmbTipoDocumentoCompra() {
+        return cmbTipoDocumentoCompra;
+    }
+
+    public void setCmbTipoDocumentoCompra(JComboBox<TipoDocumentoEnum> cmbTipoDocumentoCompra) {
+        this.cmbTipoDocumentoCompra = cmbTipoDocumentoCompra;
+    }
+
+    
     
 }
