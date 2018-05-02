@@ -51,7 +51,21 @@ public class CompraDetalle implements Serializable {
     @JoinColumn(name = "PRODUCTO_PROVEEDOR_ID")
     @ManyToOne
     private ProductoProveedor productoProveedor;
-
+    
+    @JoinColumn(name = "SRI_RETENCION_IVA_ID")
+    @ManyToOne
+    private SriRetencionIva sriRetencionIva;
+    
+    @JoinColumn(name= "SRI_RETENCION_RENTA_IVA_ID")
+    @ManyToOne
+    private SriRetencionRenta sriRetencionRenta;
+    
+    @Column(name="VALOR_RETENCION_IVA")
+    private BigDecimal valorSriRetencionIVA;
+    
+    @Column(name="VALOR_RETENCION_RENTA")
+    private BigDecimal valorSriRetencionRenta;
+    
     public CompraDetalle() {
     }
     
@@ -164,6 +178,38 @@ public class CompraDetalle implements Serializable {
     public BigDecimal calcularTotal()
     {
         return getSubtotal().multiply(new BigDecimal("1.12"));
+    }
+
+    public SriRetencionIva getSriRetencionIva() {
+        return sriRetencionIva;
+    }
+
+    public void setSriRetencionIva(SriRetencionIva sriRetencionIva) {
+        this.sriRetencionIva = sriRetencionIva;
+    }
+
+    public SriRetencionRenta getSriRetencionRenta() {
+        return sriRetencionRenta;
+    }
+
+    public void setSriRetencionRenta(SriRetencionRenta sriRetencionRenta) {
+        this.sriRetencionRenta = sriRetencionRenta;
+    }
+
+    public BigDecimal getValorSriRetencionIVA() {
+        return valorSriRetencionIVA;
+    }
+
+    public void setValorSriRetencionIVA(BigDecimal valorSriRetencionIVA) {
+        this.valorSriRetencionIVA = valorSriRetencionIVA;
+    }
+
+    public BigDecimal getValorSriRetencionRenta() {
+        return valorSriRetencionRenta;
+    }
+
+    public void setValorSriRetencionRenta(BigDecimal valorSriRetencionRenta) {
+        this.valorSriRetencionRenta = valorSriRetencionRenta;
     }
     
     /**

@@ -102,6 +102,6 @@ public class ProductoProveedor implements Serializable{
     public void setProveedor(Persona proveedor) {
         this.proveedor = proveedor;
     }
-    
+     
     
 }
