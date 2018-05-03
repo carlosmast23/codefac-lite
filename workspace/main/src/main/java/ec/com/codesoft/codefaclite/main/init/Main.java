@@ -624,7 +624,7 @@ public class Main {
                 String fechaStr = parametroFechaValidacion.getValor();
                 if (!fechaStr.equals("")) {
                     try {
-                        SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
+                        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
                         Date fechaUltimaRevision = formato.parse(fechaStr);
                         int dias = UtilidadesFecha.obtenerDistanciaDias(fechaUltimaRevision, UtilidadesFecha.hoy());
 
@@ -702,7 +702,7 @@ public class Main {
             }
 
             ParametroCodefacServiceIf servicio = ServiceFactory.getFactory().getParametroCodefacServiceIf();
-            SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             Date fechaHoy = UtilidadesFecha.getFechaHoy();
             parametroFechaValidacion.setValor(format.format(fechaHoy));
             if (crear) {

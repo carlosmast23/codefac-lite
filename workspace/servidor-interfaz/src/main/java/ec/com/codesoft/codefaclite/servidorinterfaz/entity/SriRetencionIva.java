@@ -111,9 +111,9 @@ public class SriRetencionIva implements Serializable{
     {
         if(getDescripcion().equals(""))
         {
-            return this.codigo + " - " + this.porcentaje;
+            return this.codigo + " - " + this.porcentaje+"%";
         }
-        return this.codigo+" - "+this.descripcion+" - "+this.porcentaje;
+        return this.codigo+" - "+this.descripcion+" - "+this.porcentaje+"%";
     }
     
     @Override
