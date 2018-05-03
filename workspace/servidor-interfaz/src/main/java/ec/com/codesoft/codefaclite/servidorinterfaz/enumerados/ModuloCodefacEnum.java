@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.enumerados;
 
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import java.net.URL;
 import javax.swing.ImageIcon;
 
@@ -14,6 +15,7 @@ import javax.swing.ImageIcon;
  * @author Carlos
  */
 public enum ModuloCodefacEnum {
+    COMPRA("Compra","COM","modulo_compra",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/compra.png")),
     INVENTARIO("Inventario","INVS","modulo_inventario",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/inventario.png")),
     FACTURACION("Facturacion","FAC","modulo_facturacion",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/facturacion.png")),
     CRM("Crm","CRM","modulo_crm",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/crm.png")),

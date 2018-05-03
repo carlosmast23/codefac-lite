@@ -119,6 +119,13 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel{
         for (TipoDocumentoEnum tipoDocumento : tipoDocumentos) {
             getCmbTipoDocumento().addItem(tipoDocumento);
         }
+        
+        //Agregar los tipos de documentos disponibles para las compras
+        getCmbTipoDocumentoCompra().removeAllItems();
+        List<TipoDocumentoEnum> tipoDocumentosCompra= TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloEnum.COMPRAS);
+        for (TipoDocumentoEnum tipoDocumento : tipoDocumentosCompra) {
+            getCmbTipoDocumentoCompra().addItem(tipoDocumento);
+        }
     }
 
     private void cargarDatos() {
@@ -130,6 +137,11 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel{
             TipoDocumentoEnum tipoDocumentoEnum=TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(parametroTipoDocumento.getValor());            
             getCmbTipoDocumento().setSelectedItem(tipoDocumentoEnum);
             
+            //Cargar el documento de la compra
+            ParametroCodefac parametroTipoDocumentoCompra= parametros.get(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_COMPRA);
+            TipoDocumentoEnum tipoDocumentoCompraEnum=TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(parametroTipoDocumentoCompra.getValor());            
+            getCmbTipoDocumentoCompra().setSelectedItem(tipoDocumentoCompraEnum);
+            
         } catch (RemoteException ex) {
             Logger.getLogger(ConfiguracionDefectoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -138,7 +150,11 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel{
     private void setearVariable() {
         TipoDocumentoEnum tipoDocumento=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
         parametros.get(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_FACTURA).setValor(tipoDocumento.getCodigo());
-        ///parametros.put(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_FACTURA, (ParametroCodefac) getCmbTipoDocumento().getSelectedItem());
+        
+        TipoDocumentoEnum tipoDocumentoCompra=(TipoDocumentoEnum) getCmbTipoDocumentoCompra().getSelectedItem();
+        parametros.get(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_COMPRA).setValor(tipoDocumentoCompra.getCodigo());
+        
+
         
     }
     

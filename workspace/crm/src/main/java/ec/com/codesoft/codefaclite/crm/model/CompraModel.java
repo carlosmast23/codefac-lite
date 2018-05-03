@@ -30,6 +30,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
@@ -94,6 +95,8 @@ public class CompraModel extends CompraPanel{
         this.bandera = false;
         this.banderaIngresoDetallesCompra = false;
         bloquearDesbloquearBotones(true);
+        setearVariblesIniciales();
+        
         try {
             mostrarVentanaRetenciones();
         } catch (RemoteException ex) {
@@ -784,5 +787,13 @@ public class CompraModel extends CompraPanel{
         {
             this.getPanelRetencion().setVisible(false);
         }
+    }
+
+    private void setearVariblesIniciales() {
+        
+        //Seleccionar el tipo de documento configurado por defecto para la compra
+        ParametroCodefac parametroCodefac=session.getParametrosCodefac().get(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_COMPRA);
+        TipoDocumentoEnum tipoDocumentoEnumDefault=TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(parametroCodefac.getValor());
+        getCmbTipoDocumento().setSelectedItem(tipoDocumentoEnumDefault);
     }
 }
