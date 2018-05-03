@@ -299,8 +299,9 @@ public class CompraModel extends CompraPanel{
         }
         catch(Exception e)
         {
-                    
+            e.printStackTrace();
         }
+        
         //Agregar los tipos de retencion Renta
         getCmbRetencionRenta().removeAllItems();
         SriRetencionRentaServiceIf sriRetencionRentaService = ServiceFactory.getFactory().getSriRetencionRentaServiceIf();
@@ -312,7 +313,7 @@ public class CompraModel extends CompraPanel{
         }
         catch(Exception e)
         {
-            
+            e.printStackTrace();
         }
     }
 
@@ -570,13 +571,15 @@ public class CompraModel extends CompraPanel{
      */
     private void mostrarDatosTabla()
     {
-        String[] titulo={"Cantidad","Descripción","Valor Unitario","Valor Total"};
+        String[] titulo={"Cantidad","Descripción","ValorRetIVA","ValorRetRent","Valor Unitario","Valor Total"};
         this.modeloTablaDetallesCompra = new DefaultTableModel(titulo,0);
         List<CompraDetalle> detalles= compra.getDetalles();
         for (CompraDetalle detalle : detalles) {
             Vector<String> fila=new Vector<String>();
             fila.add(detalle.getCantidad()+"");
             fila.add(detalle.getDescripcion()+"");
+            fila.add(detalle.getValorSriRetencionIVA()+"");
+            fila.add(detalle.getValorSriRetencionRenta()+"");
             fila.add(detalle.getPrecioUnitario()+"");
             fila.add(detalle.getSubtotal()+"");
             this.modeloTablaDetallesCompra.addRow(fila);
@@ -607,8 +610,11 @@ public class CompraModel extends CompraPanel{
         Vector<String> titulo = new Vector<>();
         titulo.add("Cantidad");
         titulo.add("Descripción");
+        titulo.add("Valor Ret. Iva.");
+        titulo.add("Valor Ret. Rent.");
         titulo.add("Valor Unitario");
         titulo.add("Valor Total");
+        
         this.modeloTablaDetallesCompra = new DefaultTableModel(titulo, 0);
         //this.modeloTablaDetallesProductos.isCellEditable
         getTblDetalleProductos().setModel(modeloTablaDetallesCompra);
@@ -657,7 +663,6 @@ public class CompraModel extends CompraPanel{
         }
         else{
             compraDetalle = new CompraDetalle();
-            
         }
         
         if (!panelPadre.validarPorGrupo("detalles")) {
@@ -685,8 +690,27 @@ public class CompraModel extends CompraPanel{
             {
                 compraDetalle.setIva(BigDecimal.ZERO);
             }
+            
+            SriRetencionIva sriRetencionIva = (SriRetencionIva) getCmbRetencionIva().getSelectedItem();
+            SriRetencionRenta sriRetencionRenta = (SriRetencionRenta) getCmbRetencionRenta().getSelectedItem();
+            
+            compraDetalle.setSriRetencionIva(sriRetencionIva);
+            compraDetalle.setSriRetencionRenta(sriRetencionRenta);
+            
             compraDetalle.setProductoProveedor(productoProveedor);
             compraDetalle.setTotal(compraDetalle.getSubtotal());
+            
+            BigDecimal valorRetencionIVA = compraDetalle.getIva().multiply(new BigDecimal(sriRetencionIva.getPorcentaje()+"")).divide(new BigDecimal("100"));
+            BigDecimal valorRetencionRenta = compraDetalle.getTotal().multiply(new BigDecimal(sriRetencionRenta.getPorcentaje()+"")).divide(new BigDecimal("100"));
+            
+            
+            compraDetalle.setValorSriRetencionIVA(valorRetencionIVA.setScale(2,BigDecimal.ROUND_HALF_UP));
+            compraDetalle.setValorSriRetencionRenta(valorRetencionRenta.setScale(2,BigDecimal.ROUND_HALF_UP));
+            
+            BigDecimal valorTotalRetencion = valorRetencionIVA.add(valorRetencionRenta);
+            
+            //compraDetalle.setTotal(compraDetalle.getTotal().subtract(valorTotalRetencion));
+            
             compraDetalle.setValorIce(BigDecimal.ZERO);
 
             if(agregar)

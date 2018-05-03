@@ -39,8 +39,6 @@ public class SriFormaPago implements Serializable{
     {
         
     }
-    
-    
 
     public long getId() {
         return id;

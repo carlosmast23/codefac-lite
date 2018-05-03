@@ -5,14 +5,16 @@
  */
 package ec.com.codesoft.codefaclite.servidor.facade;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
+
 /**
  *
  * @author Carlos
  */
-public class SriRetencionIvaFacade extends AbstractFacade<SriRetencionIvaFacade>{
+public class SriRetencionIvaFacade extends AbstractFacade<SriRetencionIva>{
 
     public SriRetencionIvaFacade() {
-        super(SriRetencionIvaFacade.class);
+        super(SriRetencionIva.class);
     }
     
 }

@@ -107,6 +107,16 @@ public class SriRetencionIva implements Serializable{
     }
 
     @Override
+    public String toString()
+    {
+        if(getDescripcion().equals(""))
+        {
+            return this.codigo + " - " + this.porcentaje;
+        }
+        return this.codigo+" - "+this.descripcion+" - "+this.porcentaje;
+    }
+    
+    @Override
     public int hashCode() {
         int hash = 3;
         hash = 97 * hash + Objects.hashCode(this.id);

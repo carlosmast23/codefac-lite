@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.Objects;
@@ -21,7 +22,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "SRI_RETENCION_RENTA")
-public class SriRetencionRenta {
+public class SriRetencionRenta implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -102,6 +103,12 @@ public class SriRetencionRenta {
         this.fechaFin = fechaFin;
     }
 
+    @Override
+    public String toString()
+    {
+        return this.codigo + " - " + this.nombre + " - " + this.porcentaje; 
+    }
+    
     @Override
     public int hashCode() {
         int hash = 7;
