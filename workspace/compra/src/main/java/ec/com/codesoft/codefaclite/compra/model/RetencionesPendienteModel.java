@@ -5,20 +5,28 @@
  */
 package ec.com.codesoft.codefaclite.compra.model;
 
-import ec.com.codesoft.codefaclite.compra.panel.RetencionesPanel;
+import ec.com.codesoft.codefaclite.compra.panel.RetencionesPendientePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
+import ec.com.codesoft.ejemplo.utilidades.tabla.UtilidadesTablas;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Carlos
  */
-public class RetencionesModel extends RetencionesPanel{
+public class RetencionesPendienteModel extends RetencionesPendientePanel{
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        cargarComprasPendientes();
     }
 
     @Override
@@ -63,7 +71,7 @@ public class RetencionesModel extends RetencionesPanel{
 
     @Override
     public String getNombre() {
-        return "Retenciones";
+        return "Retenciones Pendientes";
     }
 
     @Override
@@ -79,6 +87,25 @@ public class RetencionesModel extends RetencionesPanel{
     @Override
     public List<String> getPerfilesPermisos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void cargarComprasPendientes() {
+        try {
+            CompraServiceIf service=ServiceFactory.getFactory().getCompraServiceIf();
+            //todo: Falta seleccionar que solo se carguen las compras sin enviar retenciones
+            List<Compra> compras= service.obtenerTodos();
+            
+            DefaultTableModel datos=UtilidadesTablas.crearModeloTabla(new String[]{"obj","Preimpreso","Ruc","Proveedor"},new Class[]{Compra.class,String.class,String.class,String.class});
+            for (Compra compra : compras) {
+                Object fila=new Object[]{compra,compra.getPreimpreso(),compra.getProveedor().getIdentificacion(),compra.getProveedor().getNombresCompletos()};
+            }
+            
+            getTblComprasPendientes().setModel(datos);
+            UtilidadesTablas.ocultarColumna(getTblComprasPendientes(), 0);
+        } catch (RemoteException ex) {
+            Logger.getLogger(RetencionesPendienteModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
     
 }

@@ -6,17 +6,18 @@
 package ec.com.codesoft.codefaclite.compra.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import javax.swing.JTable;
 
 /**
  *
  * @author Carlos
  */
-public abstract class RetencionesPanel extends ControladorCodefacInterface {
+public abstract class RetencionesPendientePanel extends ControladorCodefacInterface {
 
     /**
      * Creates new form RetencionesPanel
      */
-    public RetencionesPanel() {
+    public RetencionesPendientePanel() {
         initComponents();
     }
 
@@ -33,11 +34,11 @@ public abstract class RetencionesPanel extends ControladorCodefacInterface {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblComprasPendientes = new javax.swing.JTable();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jButton1 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tblDetalleRetenciones = new javax.swing.JTable();
         lblEspacio1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
 
@@ -45,7 +46,7 @@ public abstract class RetencionesPanel extends ControladorCodefacInterface {
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
-        setTitle("Retenciones");
+        setTitle("Retenciones Pendientes");
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
@@ -62,7 +63,7 @@ public abstract class RetencionesPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel2, gridBagConstraints);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblComprasPendientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -73,7 +74,7 @@ public abstract class RetencionesPanel extends ControladorCodefacInterface {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblComprasPendientes);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -99,7 +100,7 @@ public abstract class RetencionesPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jButton1, gridBagConstraints);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tblDetalleRetenciones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -110,7 +111,7 @@ public abstract class RetencionesPanel extends ControladorCodefacInterface {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(tblDetalleRetenciones);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -150,8 +151,25 @@ public abstract class RetencionesPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JLabel lblEspacio1;
+    private javax.swing.JTable tblComprasPendientes;
+    private javax.swing.JTable tblDetalleRetenciones;
     // End of variables declaration//GEN-END:variables
+
+    public JTable getTblComprasPendientes() {
+        return tblComprasPendientes;
+    }
+
+    public void setTblComprasPendientes(JTable tblComprasPendientes) {
+        this.tblComprasPendientes = tblComprasPendientes;
+    }
+
+    public JTable getTblDetalleRetenciones() {
+        return tblDetalleRetenciones;
+    }
+
+    public void setTblDetalleRetenciones(JTable tblDetalleRetenciones) {
+        this.tblDetalleRetenciones = tblDetalleRetenciones;
+    }
+    
 }
