@@ -37,8 +37,14 @@ public class Retencion implements Serializable
     @Column(name = "ID")
     private Long id;
     
+    @Column(name = "TIPO_IDENTIFICACION_ID")
+    private Long tipoClienteId;
+    
     @Column(name = "CLAVE_ACCESO")
     private String claveAcceso;
+    
+    @Column(name = "EMPRESA_ID")
+    private Long empresaId;
     
     @Column(name = "SECUENCIAL")
     private Integer secuencial;
@@ -49,19 +55,33 @@ public class Retencion implements Serializable
     @Column(name = "PUNTO_EMISION")
     private String puntoEmision;    
     
-    @JoinColumn(name = "PROVEEDOR")
-    @ManyToOne    
-    private Persona proveedor;
-    
     @Column(name = "FECHA_EMISION")
     private Date fechaEmision;
     
     @Column(name = "FECHA_CREACION")
     private Date fechaCreacion;
+    
+    @Column(name = "USUARIO_ID")
+    private Long usuarioId;
+    
+    @Column(name = "ESTADO")
+    private String estado;
 
+    @Column(name = "RAZON_SOCIAL")
+    private String razonSocial;
+    @Column(name = "IDENTIFICACION")
+    private String identificacion;
+    @Column(name = "DIRECCION")
+    private String direccion;
+    @Column(name = "telefono")
+    private String telefono;
     
 
-    @JoinColumn(name = "")
+    @JoinColumn(name = "PROVEEDOR_ID")
+    @ManyToOne    
+    private Persona proveedor;
+
+    @JoinColumn(name = "COMPRA_ID")
     @ManyToOne        
     private Compra compra;
     

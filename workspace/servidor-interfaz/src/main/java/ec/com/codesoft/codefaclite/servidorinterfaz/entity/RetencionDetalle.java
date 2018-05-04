@@ -15,6 +15,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -32,12 +34,23 @@ public class RetencionDetalle implements Serializable{
     @Column(name = "ID")
     private Long id;
 
+    @Column(name = "BASE_IMPONIBLE")
     private BigDecimal baseImponible;
+    
+    @Column(name = "PORCENTAJE_RETENER")
     private BigDecimal porcentajeRetener;
+    
+    @Column(name = "VALOR_RETENIDO")
     private BigDecimal valorRetenido;
+    
+    @Column(name = "CODIGO_SRI")
     private String codigoSri;
+    
+    @Column(name = "CODIGO_RETENCION_SRI")
     private String codigoRetencionSri;
     
+    @JoinColumn(name = "RETENCION_ID")
+    @ManyToOne
     private Retencion retencion;
 
     public RetencionDetalle() {
