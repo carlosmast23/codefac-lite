@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.compra.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 
 /**
@@ -41,6 +42,12 @@ public abstract class RetencionesPendientePanel extends ControladorCodefacInterf
         tblDetalleRetenciones = new javax.swing.JTable();
         lblEspacio1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        labelTotalRetencionRenta = new javax.swing.JLabel();
+        labelTotalRetenciones = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        labelTotalRetencionIva = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -139,6 +146,69 @@ public abstract class RetencionesPendientePanel extends ControladorCodefacInterf
         gridBagConstraints.insets = new java.awt.Insets(20, 5, 1, 5);
         getContentPane().add(jLabel3, gridBagConstraints);
 
+        labelTotalRetencionRenta.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        labelTotalRetencionRenta.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        labelTotalRetencionRenta.setText("0.00");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
+        getContentPane().add(labelTotalRetencionRenta, gridBagConstraints);
+
+        labelTotalRetenciones.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        labelTotalRetenciones.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        labelTotalRetenciones.setText("0.00");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
+        getContentPane().add(labelTotalRetenciones, gridBagConstraints);
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel6.setText("TOTAL");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
+        getContentPane().add(jLabel6, gridBagConstraints);
+
+        labelTotalRetencionIva.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        labelTotalRetencionIva.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        labelTotalRetencionIva.setText("0.00");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
+        getContentPane().add(labelTotalRetencionIva, gridBagConstraints);
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel8.setText("TOTAL RETENCION RENTA");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
+        getContentPane().add(jLabel8, gridBagConstraints);
+
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel9.setText("TOTAL RETENCON IVA");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
+        getContentPane().add(jLabel9, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -149,8 +219,14 @@ public abstract class RetencionesPendientePanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel labelTotalRetencionIva;
+    private javax.swing.JLabel labelTotalRetencionRenta;
+    private javax.swing.JLabel labelTotalRetenciones;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JTable tblComprasPendientes;
     private javax.swing.JTable tblDetalleRetenciones;
@@ -171,5 +247,30 @@ public abstract class RetencionesPendientePanel extends ControladorCodefacInterf
     public void setTblDetalleRetenciones(JTable tblDetalleRetenciones) {
         this.tblDetalleRetenciones = tblDetalleRetenciones;
     }
+
+    public JLabel getLabelTotalRetencionIva() {
+        return labelTotalRetencionIva;
+    }
+
+    public void setLabelTotalRetencionIva(JLabel labelTotalRetencionIva) {
+        this.labelTotalRetencionIva = labelTotalRetencionIva;
+    }
+
+    public JLabel getLabelTotalRetencionRenta() {
+        return labelTotalRetencionRenta;
+    }
+
+    public void setLabelTotalRetencionRenta(JLabel labelTotalRetencionRenta) {
+        this.labelTotalRetencionRenta = labelTotalRetencionRenta;
+    }
+
+    public JLabel getLabelTotalRetenciones() {
+        return labelTotalRetenciones;
+    }
+
+    public void setLabelTotalRetenciones(JLabel labelTotalRetenciones) {
+        this.labelTotalRetenciones = labelTotalRetenciones;
+    }
+    
     
 }
