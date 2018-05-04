@@ -9,16 +9,26 @@ import ec.com.codesoft.codefaclite.compra.busqueda.CompraBusquedaDialogo;
 import ec.com.codesoft.codefaclite.compra.panel.RetencionPanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -36,6 +46,7 @@ public class RetencionModel extends RetencionPanel{
     public void iniciar() throws ExcepcionCodefacLite {
         listener();
         cargarDatosEmpresa();
+        cargarDatosIniciales();
     }
 
     @Override
@@ -75,7 +86,10 @@ public class RetencionModel extends RetencionPanel{
 
     @Override
     public void limpiar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        getTxtReferenciaFactura().setText("");
+        getLblNombreCliente().setText("");
+        getLblTelefonoCliente().setText("");
+        getLblDireccionCliente().setText("");
     }
 
     @Override
@@ -90,7 +104,14 @@ public class RetencionModel extends RetencionPanel{
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
+        permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
+        return permisos;
     }
 
     @Override
@@ -114,8 +135,7 @@ public class RetencionModel extends RetencionPanel{
                 if (compraTmp != null) 
                 {                    
                     compra=compraTmp;
-                    cargarDatosCompra(compra);
-                    
+                    cargarDatosCompra(compra);                    
                 }
             }
             
@@ -130,8 +150,8 @@ public class RetencionModel extends RetencionPanel{
     {
         getTxtReferenciaFactura().setText(compra.getPreimpreso());
         getLblNombreCliente().setText(compra.getProveedor().getNombresCompletos());
-        getLblTelefonos().setText(compra.getProveedor().getTelefonoCelular());
-        getLblDireccion().setText(compra.getProveedor().getDireccion());
+        getLblTelefonoCliente().setText(compra.getProveedor().getTelefonoCelular());
+        getLblDireccionCliente().setText(compra.getProveedor().getDireccion());
         
         ///Cargar los detalles de la compra
         List<CompraDetalle> detalles=compra.getDetalles();
@@ -182,6 +202,34 @@ public class RetencionModel extends RetencionPanel{
         preimpreso=puntoEmision + "-" + establecimiento + "-" + preimpreso;
         
         return preimpreso;
+    }
+
+    private void cargarDatosIniciales() {
+        
+        try {
+            //Agregar los tipos de retencion Iva
+            getCmbRetencionIva().removeAllItems();
+            SriRetencionIvaServiceIf sriRetencionIvaService = ServiceFactory.getFactory().getSriRetencionIvaServiceIf();
+            List<SriRetencionIva> tipoRetencionesIva = sriRetencionIvaService.obtenerTodos();
+            for (SriRetencionIva tipoRetencione : tipoRetencionesIva)
+            {
+                getCmbRetencionIva().addItem(tipoRetencione);
+            }
+            
+            //Agregar los tipos de retencion renta
+            getCmbRetencionRenta().removeAllItems();
+            SriRetencionRentaServiceIf sriRetencionRentaService = ServiceFactory.getFactory().getSriRetencionRentaServiceIf();
+            List<SriRetencionRenta> tipoRetencionesRenta = sriRetencionRentaService.obtenerTodos();
+            for (SriRetencionRenta sriRetencionRenta : tipoRetencionesRenta) 
+            {
+                getCmbRetencionRenta().addItem(sriRetencionRenta);
+            }
+            
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 
 }

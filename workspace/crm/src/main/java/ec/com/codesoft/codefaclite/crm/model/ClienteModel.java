@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.validacionPersonalizadaAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 import ec.com.codesoft.codefaclite.crm.busqueda.ClienteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.crm.panel.ClienteForm;
 import ec.com.codesoft.codefaclite.crm.reportdata.DataEjemploReporte;
@@ -64,7 +65,7 @@ import net.sf.jasperreports.view.JasperViewer;
  *
  * @author PC
  */
-public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Persona> {
+public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Persona>, InterfazPostConstructPanel {
 
     /**
      * Modelo para manejar las identificaciones del sri
@@ -530,5 +531,14 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         permisos.add(Perfil.PERFIl_ADMINISTRADOR);
         permisos.add(Perfil.PERFIl_OPERADOR);
         return permisos;
+    }
+
+    @Override
+    public void postConstructorExterno(Object[] parametros) {        
+        
+        //Cargar el tipo de operador de negocio : cliente , proveedor, ambos          
+        OperadorNegocioEnum operadorNegocioEnum=(OperadorNegocioEnum) parametros[0];
+        getCmbTipoOperador().setSelectedItem(operadorNegocioEnum);
+        
     }
 }
