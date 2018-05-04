@@ -224,6 +224,7 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
         }
         notaCreditoComprobante.getInfoNotaCredito().setTotalImpuestos(totalImpuestos);
         
+        //Todo: Ver si se elimina el correo porque esta opcion no se esta usando para generar el comprobante
         notaCreditoComprobante.setCorreos(getCorreos());
         
         return notaCreditoComprobante;

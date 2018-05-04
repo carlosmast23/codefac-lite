@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import java.io.Serializable;
 import javax.persistence.Basic;
@@ -59,6 +60,9 @@ public class Persona implements Serializable {
     private String correoElectronico;
     @Column(name = "ESTADO")
     private String estado;
+    
+    @Column(name = "OBLIGADO_LLEVAR_CONTABILIDAD")
+    private String obligadoLlevarContabilidad;    
     
     @JoinColumn(name = "NACIONALIDAD_ID")
     @ManyToOne
@@ -212,7 +216,14 @@ public class Persona implements Serializable {
     public void setSriTipoIdentificacion(SriIdentificacion sriTipoIdentificacion) {
         this.sriTipoIdentificacion = sriTipoIdentificacion;
     }
-    
+
+    public String getObligadoLlevarContabilidad() {
+        return obligadoLlevarContabilidad;
+    }
+
+    public void setObligadoLlevarContabilidad(String obligadoLlevarContabilidad) {
+        this.obligadoLlevarContabilidad = obligadoLlevarContabilidad;
+    }
     
     
     
@@ -223,6 +234,11 @@ public class Persona implements Serializable {
         String apellidosTmp = (apellidos != null) ? apellidos : "";
         return nombresTmp + " " + apellidosTmp;
     }
+    
+    public EnumSiNo getObligadoLlevarContabilidadEnum() {
+        return EnumSiNo.getEnumByLetra(obligadoLlevarContabilidad);
+    }
+
 
     @Override
     public int hashCode() {

@@ -16,9 +16,19 @@ create table IMPUESTO
     primary key(ID_IMPUESTO)
 );
 
+create table SRI_RETENCION
+(
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY( START WITH 1),
+    NOMBRE varchar(60),
+    CODIGO_SRI varchar(4),
+    primary key(ID)
+);
+
+
 create table SRI_RETENCION_IVA
 (
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY( START WITH 1),
+    RETENCION_ID BIGINT,
     NOMBRE varchar(10),
     CODIGO_SRI varchar(4),
     PORCENTAJE integer,
@@ -31,6 +41,7 @@ create table SRI_RETENCION_IVA
 create table SRI_RETENCION_RENTA
 (
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY( START WITH 1),
+    RETENCION_ID BIGINT,
     NOMBRE varchar(60),
     CODIGO_SRI varchar(4),
     PORCENTAJE integer,

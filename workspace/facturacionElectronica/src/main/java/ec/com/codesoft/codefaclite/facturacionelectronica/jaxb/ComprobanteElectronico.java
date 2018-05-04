@@ -25,6 +25,9 @@ public abstract class ComprobanteElectronico implements Serializable{
 
     public static final String FACTURA = "factura";
     public static final String NOTA_CREDITO = "notaCredito";
+    public static final String RETENCION = "comprobanteRetencion";
+    
+    
     public static final String LOTE = "lote";
 
     public static final String MODO_FACTURACION_NORMAL = "1";

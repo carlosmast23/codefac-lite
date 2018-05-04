@@ -14,6 +14,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -46,6 +48,10 @@ public class SriRetencionRenta implements Serializable {
 
     @Column(name = "FECHA_FIN")
     private Date fechaFin;
+    
+    @JoinColumn(name = "RETENCION_ID")
+    @ManyToOne    
+    private SriRetencion retencion;
 
     public Long getId() {
         return id;
@@ -102,6 +108,16 @@ public class SriRetencionRenta implements Serializable {
     public void setFechaFin(Date fechaFin) {
         this.fechaFin = fechaFin;
     }
+
+    public SriRetencion getRetencion() {
+        return retencion;
+    }
+
+    public void setRetencion(SriRetencion retencion) {
+        this.retencion = retencion;
+    }
+    
+    
 
     @Override
     public String toString()

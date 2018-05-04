@@ -31,6 +31,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Nacionalidad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
 import java.awt.event.ActionEvent;
@@ -139,6 +140,14 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         persona.setTipo(((OperadorNegocioEnum) getCmbTipoOperador().getSelectedItem()).getLetra());
         persona.setNacionalidad(((Nacionalidad) getCmbNacionalidad().getSelectedItem()));
         persona.setSriFormaPago((SriFormaPago) getCmbFormaPagoDefecto().getSelectedItem());
+        
+        //Grabar la variable de obligado a llevar contabilidad
+        if(getChkObligadoLlevarContabilidad().isSelected())
+            persona.setObligadoLlevarContabilidad(EnumSiNo.SI.getLetra());
+        else
+            persona.setObligadoLlevarContabilidad(EnumSiNo.NO.getLetra());
+        
+        
         
     }
 
@@ -299,6 +308,19 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         getCmbTipoOperador().setSelectedItem(persona.getTipoEnum());
         getCmbNacionalidad().setSelectedItem(persona.getNacionalidad());
         getCmbFormaPagoDefecto().setSelectedItem(persona.getSriFormaPago());
+        
+        //Seleccionar si es obligado a llevar contabilidad
+        if(persona.getObligadoLlevarContabilidadEnum()!=null)
+        {
+            if(persona.getObligadoLlevarContabilidadEnum().equals(EnumSiNo.SI))
+            {
+                getChkObligadoLlevarContabilidad().setSelected(true);
+            }
+            else
+            {
+                getChkObligadoLlevarContabilidad().setSelected(false);
+            }
+        }
 
         System.out.println("Datos cargados ");
     }
@@ -465,6 +487,27 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
                 //Validario comonente cuando sea diferente de vacio dependiendo la opcion de identificacion
                 if (!getjTextIdentificacion().getText().equals("")) {
                     panelPadre.validarPorGrupo(ValidacionCodefacAnotacion.GRUPO_FORMULARIO, NOMBRE_VALIDADOR_IDENTIFICACION);
+                }
+            }
+        });
+        
+        getCmbTipoOperador().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                OperadorNegocioEnum enumerador=(OperadorNegocioEnum) getCmbTipoOperador().getSelectedItem();
+                
+                if(enumerador!=null)
+                {
+                    if(enumerador.equals(OperadorNegocioEnum.CLIENTE))
+                    {
+                        getLblOligadoLlevarContabilidad().setVisible(false);
+                        getChkObligadoLlevarContabilidad().setVisible(false);
+                    }
+                    else
+                    {
+                        getLblOligadoLlevarContabilidad().setVisible(true);
+                        getChkObligadoLlevarContabilidad().setVisible(true);                    
+                    }
                 }
             }
         });
