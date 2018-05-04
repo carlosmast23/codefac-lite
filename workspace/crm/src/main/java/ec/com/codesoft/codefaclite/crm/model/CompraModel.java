@@ -8,6 +8,8 @@ package ec.com.codesoft.codefaclite.crm.model;
 import java.awt.Color;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.crm.busqueda.CompraBusqueda;
@@ -33,6 +35,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
@@ -321,6 +325,51 @@ public class CompraModel extends CompraPanel{
     }
 
     private void agregarListenerBotones() {
+        
+        getBtnCrearProducto().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ObserverUpdateInterface observer = new ObserverUpdateInterface<Producto>() {
+                    @Override
+                    public void updateInterface(Producto entity) {
+                        if (entity != null) {
+                            String identificacion = proveedor.getIdentificacion();
+                            String nombre = proveedor.getRazonSocial();
+                            getTxtProveedor().setText(identificacion + " - " + nombre);
+                            desbloquearIngresoDetalleProducto();
+                        }
+                    }
+                };
+
+                panelPadre.crearDialogoCodefac(observer, DialogInterfacePanel.PRODUCTO_PANEL, false);
+            }
+        });
+        
+        getBtnAgregarProveedor().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Object[] paramPostConstruct = new Object[1];
+                paramPostConstruct[0] = OperadorNegocioEnum.PROVEEDOR;
+                
+                panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<Persona>() {
+                    @Override
+                    public void updateInterface(Persona entity) {
+                        proveedor=entity;
+                        compra.setProveedor(entity);
+                        if (compra.getProveedor() != null) {
+                            String identificacion = proveedor.getIdentificacion();
+                            String nombre = proveedor.getRazonSocial();
+                            getTxtProveedor().setText(identificacion + " - " + nombre);
+                            desbloquearIngresoDetalleProducto();
+                        }
+                    }
+                }, VentanaEnum.CLIENTE, false,paramPostConstruct);
+         
+                //panelPadre.crearVentanaCodefac(VentanaEnum.CLIENTE,true,paramPostConstruct);
+                
+            }
+        });
+        
         getBtnProveedorBuscar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

@@ -106,7 +106,8 @@ public class SriRetencionRenta implements Serializable {
     @Override
     public String toString()
     {
-        return this.codigo + " - " + this.nombre + " - " + this.porcentaje+"%"; 
+        String nombreFormato=(this.nombre.length()>40)?this.nombre.substring(0,40)+"...":this.nombre;
+        return this.codigo + " - " + nombreFormato + " - " + this.porcentaje+"%"; 
     }
     
     @Override
