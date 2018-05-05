@@ -10,3 +10,6 @@ Analizar para usar un modo debug en el sistema y en principal manera para cuando
 Verificar qe puedo hacer en el caso que solo se graba la factura pero no genero el ride 
 
 Revisar que cuando mando a abrir la pantalla desde la matricula no funciona la facturacion parcial
+
+grabar el tipo de documento segun el sri del tipo de documento en cada tabla porque seguramente voy a necesitar para los ats
+

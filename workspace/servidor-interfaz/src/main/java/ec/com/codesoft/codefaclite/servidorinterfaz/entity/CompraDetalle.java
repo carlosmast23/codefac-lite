@@ -157,6 +157,17 @@ public class CompraDetalle implements Serializable {
      * Metodo personalizados
      */
     
+    public BigDecimal getBaseImponibleRenta()
+    {
+        return getSubtotal();
+    }
+    
+    
+    public BigDecimal getBaseImponibleIva()
+    {
+        return calcularValorIva();
+    }
+
     
     /**
      * Metodo que devuelve el subtotal de la cantidad por el precio unitario y menos el descuento
@@ -172,11 +183,13 @@ public class CompraDetalle implements Serializable {
      */
     public BigDecimal calcularValorIva()
     {
+        //Todo: revisar el valor del iva 12 que esta quemado
         return getSubtotal().multiply(new BigDecimal("0.12"));
     }
     
     public BigDecimal calcularTotal()
     {
+        //Todo: revisar el valor del iva 12 que esta quemado
         return getSubtotal().multiply(new BigDecimal("1.12"));
     }
 
@@ -216,10 +229,13 @@ public class CompraDetalle implements Serializable {
      * Metodos adicionales
      */
     /*
+    
     public BigDecimal getIva()
     {
         return total.multiply(producto.getIva().getPorcentaje());
     }*/
+    
+    
     
     
     

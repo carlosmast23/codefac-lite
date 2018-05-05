@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.compra.model;
 
 import ec.com.codesoft.codefaclite.compra.busqueda.CompraBusquedaDialogo;
 import ec.com.codesoft.codefaclite.compra.panel.RetencionPanel;
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
@@ -15,14 +16,20 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
+import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +47,7 @@ public class RetencionModel extends RetencionPanel{
      * Compra seleccionado para enviar la retencion
      */
     private Compra compra;
+    private Retencion retencion;
     
     
     @Override
@@ -56,7 +64,17 @@ public class RetencionModel extends RetencionPanel{
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            setearDatos();
+            ServiceFactory.getFactory().getRetencionServiceIf().grabar(retencion);
+            DialogoCodefac.mensaje("Correcto","La retenecion fue grabada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+        } catch (ServicioCodefacException ex) {
+            DialogoCodefac.mensaje("Error","Error al grabar los datos",DialogoCodefac.MENSAJE_INCORRECTO);
+            Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            DialogoCodefac.mensaje("Error","No existe comunicación con el servidor",DialogoCodefac.MENSAJE_INCORRECTO);
+            Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -230,6 +248,56 @@ public class RetencionModel extends RetencionPanel{
             Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+    }
+
+    private void setearDatos() {
+        retencion=new Retencion();
+        retencion.setCompra(compra);
+        retencion.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+        retencion.setFechaEmision(new java.sql.Date(getjDateFechaEmision().getDate().getTime()));
+        retencion.setProveedor(compra.getProveedor());
+        
+        retencion.setPuntoEmision(session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor);
+        retencion.setPuntoEstablecimiento(session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor);
+        
+        
+        //Cuando la facturacion es electronica
+        if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(TipoFacturacionEnumEstado.ELECTRONICA.getLetra()))
+        {
+            retencion.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_RETENCION).valor));
+        }
+        else //cuando la facturacion es normal
+        {
+            retencion.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_RETENCION_FISICA).valor));
+        }
+        
+        //Llenar los detalles de la retencion
+        for (CompraDetalle compraDetalle : compra.getDetalles()) {
+            
+            //Todo: Falta hacer validaciones cuando hay detalles que no requerien enviar retencion con iva 0
+            
+            //Detalle para la retencion del iva
+            RetencionDetalle retencionDetalleIva=new RetencionDetalle();
+            retencionDetalleIva.setBaseImponible(compraDetalle.getBaseImponibleIva());
+            retencionDetalleIva.setCodigoSri(compraDetalle.getSriRetencionIva().getRetencion().getCodigo());
+            retencionDetalleIva.setCodigoRetencionSri(compraDetalle.getSriRetencionIva().getCodigo().toString());
+            retencionDetalleIva.setPorcentajeRetener(compraDetalle.getSriRetencionIva().getPorcentaje().setScale(2,BigDecimal.ROUND_HALF_UP));
+            retencionDetalleIva.setRetencion(retencion);
+            retencionDetalleIva.setValorRetenido(compraDetalle.getValorSriRetencionIVA());
+            
+            //Detalle para la retencion de la renta
+            RetencionDetalle retencionDetalleRenta=new RetencionDetalle();
+            retencionDetalleRenta.setBaseImponible(compraDetalle.getBaseImponibleRenta());
+            retencionDetalleRenta.setCodigoSri(compraDetalle.getSriRetencionRenta().getRetencion().getCodigo());
+            retencionDetalleRenta.setCodigoRetencionSri(compraDetalle.getSriRetencionRenta().getCodigo().toString());
+            retencionDetalleRenta.setPorcentajeRetener(compraDetalle.getSriRetencionRenta().getPorcentaje().setScale(2,BigDecimal.ROUND_HALF_UP));
+            retencionDetalleRenta.setRetencion(retencion);
+            retencionDetalleRenta.setValorRetenido(compraDetalle.getValorSriRetencionRenta());
+            
+            retencion.addDetalle(retencionDetalleIva);
+            retencion.addDetalle(retencionDetalleRenta);
+        }
+                
     }
 
 }

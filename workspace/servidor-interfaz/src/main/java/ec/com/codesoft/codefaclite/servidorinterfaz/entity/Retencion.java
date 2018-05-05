@@ -10,15 +10,19 @@ import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -85,10 +89,11 @@ public class Retencion implements Serializable
     @ManyToOne        
     private Compra compra;
     
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "retencion",fetch = FetchType.EAGER)
     private List<RetencionDetalle> detalles;
 
-    public Retencion(Long id) {
-        this.id = id;
+    public Retencion() {
+
     }
 
     public Integer getSecuencial() {
@@ -176,6 +181,21 @@ public class Retencion implements Serializable
     /**
      *Metodos personalizados
      */
+         /**
+     * Formas de pago adicional
+     */
+    public void addDetalle(RetencionDetalle DetalleRetencion)
+    {
+        if(this.detalles==null)
+        {
+            this.detalles=new ArrayList<RetencionDetalle>();
+        }
+        DetalleRetencion.setRetencion(this);
+        this.detalles.add(DetalleRetencion);
+        
+    }
+    
+    
     public String getPeriodoFiscal()
     {
         return UtilidadesFecha.obtenerMesStr(fechaEmision)+"/"+UtilidadesFecha.obtenerAnioStr(fechaEmision);

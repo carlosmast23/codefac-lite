@@ -60,6 +60,8 @@
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencion</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
   </persistence-unit>
 </persistence>

@@ -108,7 +108,7 @@ public class EmpresaModel extends EmpresaForm
         if(session.getEmpresa()==null)
         {
             try {
-                empresaService.grabar(setDatosEmisor());
+                empresa=empresaService.grabar(setDatosEmisor());
                 session.setEmpresa(empresa);
                 moverArchivo();
                 DialogoCodefac.mensaje("Exito","Empresa grabada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
