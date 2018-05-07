@@ -63,7 +63,8 @@ public enum VentanaEnum {
     RESPALDAR_INFORMACION("ec.com.codesoft.codefaclite.configuraciones.model.RespaldarInformacionModel","RESP","Respaldar Informacion",ModuloCodefacEnum.SISTEMA,CategoriaMenuEnum.PROCESOS),
     CONFIGURACION_DEFECTO("ec.com.codesoft.codefaclite.configuraciones.model.ConfiguracionDefectoModel","CFDF","Configuraciones por Defecto",ModuloCodefacEnum.SISTEMA,CategoriaMenuEnum.PROCESOS),
     RETENCIONES_PENDIENTES("ec.com.codesoft.codefaclite.compra.model.RetencionesPendienteModel","RETP","Retenciones Pendientes",ModuloCodefacEnum.COMPRA,CategoriaMenuEnum.PROCESOS),
-    RETENCIONES("ec.com.codesoft.codefaclite.compra.model.RetencionModel","RETC","Retención",ModuloCodefacEnum.COMPRA,CategoriaMenuEnum.PROCESOS);
+    RETENCIONES("ec.com.codesoft.codefaclite.compra.model.RetencionModel","RETC","Retención",ModuloCodefacEnum.COMPRA,CategoriaMenuEnum.PROCESOS),
+    REPORTE_COMPRAS("ec.com.codesoft.codefaclite.compra.model.ReporteComprasModel","RECG","Reporte Compras",ModuloCodefacEnum.COMPRA,CategoriaMenuEnum.REPORTES);
 
     private VentanaEnum(String clase, String codigo, String nombre, ModuloCodefacEnum modulo, CategoriaMenuEnum categoriaMenu) {
         this.claseNombre = clase;
