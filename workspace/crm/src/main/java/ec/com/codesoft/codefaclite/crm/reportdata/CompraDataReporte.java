@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class CompraDataReporte  implements ExcelDatosInterface
 {
-    private String preimPreso;
+    private String preimpreso;
     private String identificacion;
     private String nombre;
     private String fecha;
@@ -34,12 +34,12 @@ public class CompraDataReporte  implements ExcelDatosInterface
        
     }
    
-    public String getPreimPreso() {
-        return preimPreso;
+    public String getPreimpreso() {
+        return preimpreso;
     }
 
-    public void setPreimPreso(String preimPreso) {
-        this.preimPreso = preimPreso;
+    public void setPreimpreso(String preimpreso) {
+        this.preimpreso = preimpreso;
     }
 
     public String getIdentificacion() {
@@ -134,12 +134,12 @@ public class CompraDataReporte  implements ExcelDatosInterface
     public List<TipoDato> getDatos() 
     {
         List<TipoDato> tiposDatos = new ArrayList<>();
-        tiposDatos.add(new TipoDato(this.preimPreso,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.preimpreso,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.identificacion,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.nombre,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.fecha,Excel.TipoDataEnum.FECHA));
-        tiposDatos.add(new TipoDato(this.subtotal,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.subtotal12,Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.subtotal0,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.descuento,Excel.TipoDataEnum.NUMERO));
         return tiposDatos;
     }

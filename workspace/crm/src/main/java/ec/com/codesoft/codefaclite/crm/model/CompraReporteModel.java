@@ -155,7 +155,7 @@ public class CompraReporteModel extends CompraReportePanel
                 for(Compra compra : this.compras)
                 {
                     CompraDataReporte cdr = new CompraDataReporte();
-                    cdr.setPreimPreso(compra.getPuntoEmision() + compra.getSecuencial() + compra.getPuntoEstablecimiento()+"");
+                    cdr.setPreimpreso(compra.getPuntoEmision() + compra.getSecuencial() + compra.getPuntoEstablecimiento()+"");
                     cdr.setIdentificacion(compra.getProveedor().getIdentificacion());
                     cdr.setNombre(compra.getProveedor().getRazonSocial());
                     cdr.setFecha(compra.getFechaFactura()+"");
@@ -182,10 +182,9 @@ public class CompraReporteModel extends CompraReportePanel
                     public void excel() {
                         try{
                             Excel excel = new Excel();
-                            String[] nombreCabeceras = {"Preimpreso", "Identificación","Nombre","Fecha","Subtotal","Sutotal12","Descuento"};
+                            String[] nombreCabeceras = {"Preimpreso", "Identificación","Nombre","Fecha","Subtotal12","Sutotal0","Descuento"};
                             excel.gestionarIngresoInformacionExcel(nombreCabeceras, compraDataReportes);
                             excel.abrirDocumento();
-                            excel.eliminarDocumento();
                             
                         }catch(Exception exc)
                         {
@@ -195,7 +194,12 @@ public class CompraReporteModel extends CompraReportePanel
 
                     @Override
                     public void pdf() {
-                        ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, compraDataReportes, panelPadre, "Reporte Compra");
+                        try{
+                            ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, compraDataReportes, panelPadre, "Reporte Compra");
+                        }catch(Exception e)
+                        {
+                            e.printStackTrace();
+                        }
                     }
                 });
                 

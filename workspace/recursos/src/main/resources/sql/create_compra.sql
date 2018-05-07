@@ -29,6 +29,7 @@ create table COMPRA
     TOTAL decimal(7,2),
     USUARIO_ID decimal,
     ESTADO varchar(1),
+    ESTADO_RETENCION varchar(1),
     RAZON_SOCIAL varchar(256),
     IDENTIFICACION varchar(15),
     DIRECCION varchar(1024),

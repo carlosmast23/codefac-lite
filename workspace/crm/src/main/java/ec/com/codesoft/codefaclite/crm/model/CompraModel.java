@@ -86,7 +86,7 @@ public class CompraModel extends CompraPanel{
     private Boolean bandera;
     private int filaDP;
     private Boolean banderaIngresoDetallesCompra;
-    
+    private Compra.RetencionEnumCompras estadoRetencion;
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
@@ -156,6 +156,8 @@ public class CompraModel extends CompraPanel{
         TipoDocumentoEnum tipoDocumentoEnum= (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
         compra.setCodigoTipoDocumento(tipoDocumentoEnum.getCodigo());
         
+        estadoRetencion = Compra.RetencionEnumCompras.NO_EMITIDO;
+        compra.setEstadoRetencion(estadoRetencion.getEstado());
     }
 
     @Override

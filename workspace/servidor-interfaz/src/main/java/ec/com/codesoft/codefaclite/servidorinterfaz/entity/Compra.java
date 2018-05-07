@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -16,6 +17,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -32,9 +35,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "COMPRA")
 public class Compra implements Serializable {    
-    public static final String ESTADO_FACTURADO="F";
-    public static final String ESTADO_ANULADO="A";
-    public static final String ESTADO_PENDIENTE_FACTURA_ELECTRONICA="P";
+    //public static final String ESTADO_FACTURADO="F";
+    //public static final String ESTADO_ANULADO="A";
+    //public static final String ESTADO_PENDIENTE_FACTURA_ELECTRONICA="P";
     
     
     @Id
@@ -102,12 +105,14 @@ public class Compra implements Serializable {
     private String tipoFacturacion;
     @Column(name = "CODIGO_DOCUMENTO")
     private String codigoDocumento;
-    
     @Column(name ="CODIGO_TIPO_DOCUMENTO")
     private String codigoTipoDocumento;
- 
+    
     @Column(name ="INVENTARIO_INGRESO")
     private String inventarioIngreso;
+    
+    @Column(name ="ESTADO_RETENCION")
+    private String estadoRetencion;
     
     @JoinColumn(name = "PROVEEDOR_ID")
     @ManyToOne    
@@ -349,10 +354,15 @@ public class Compra implements Serializable {
     public void setInventarioIngreso(String inventarioIngreso) {
         this.inventarioIngreso = inventarioIngreso;
     }
-    
-    
-    
-    
+
+    public String getEstadoRetencion() {
+        return estadoRetencion;
+    }
+
+    public void setEstadoRetencion(String estadoRetencion) {
+        this.estadoRetencion = estadoRetencion;
+    }
+   
     /**
      * Informacion adicional
      */
@@ -378,5 +388,37 @@ public class Compra implements Serializable {
        return UtilidadesTextos.llenarCarateresIzquierda(puntoEmision,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(puntoEstablecimiento,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(secuencial+"",9,"0");
     }
     
-    
+    public enum RetencionEnumCompras
+    {
+        EMITIDO("E", "Emitido"), NO_EMITIDO("N", "No emitido");
+        
+        private final String estado;
+        private final String nombre;
+
+        private RetencionEnumCompras(String estado, String nombre)
+        {
+            this.estado = estado;
+            this.nombre = nombre;
+        }
+        
+        public String getEstado()
+        {
+            return this.estado;
+        }
+        
+        public String getNombre()
+        {
+            return this.nombre;
+        }
+        
+        public static RetencionEnumCompras getEnum(String estado) {
+
+            for (RetencionEnumCompras enumerador : RetencionEnumCompras.values()) {
+                if (enumerador.getEstado().equals(estado)) {
+                    return enumerador;
+                }
+            }
+            return null;
+        }
+    }    
 }
