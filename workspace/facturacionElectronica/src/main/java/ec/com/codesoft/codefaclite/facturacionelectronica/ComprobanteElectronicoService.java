@@ -1275,6 +1275,13 @@ public class ComprobanteElectronicoService implements Runnable {
             if (ComprobanteEnum.NOTA_CREDITO.getCodigo().equals(comprobante.getInformacionTributaria().getCodigoDocumento())) {
                 prefijo = ComprobanteEnum.NOTA_CREDITO.getPrefijo();
             }
+            else
+            {
+                if(ComprobanteEnum.COMPROBANTE_RETENCION.getCodigo().equals(comprobante.getInformacionTributaria().getCodigoDocumento()))
+                {
+                    prefijo=ComprobanteEnum.COMPROBANTE_RETENCION.getPrefijo();
+                }
+            }
         }
         comprobante.getTipoDocumento();
         return prefijo + "-" + comprobante.getInformacionTributaria().getPreimpreso() +"_"+claveAcceso+ ".pdf";
