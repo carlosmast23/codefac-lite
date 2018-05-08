@@ -1,47 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="pie_pagina" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="f53d2141-f2f6-49f7-92d8-b84d6335680c">
-	<property name="ireport.zoom" value="2.3579476910000072"/>
+	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="pl_img_facebook" class="java.lang.Object"/>
 	<parameter name="pl_img_whatsapp" class="java.lang.Object"/>
 	<parameter name="pl_img_telefono" class="java.lang.Object"/>
 	<parameter name="pl_img_logo_pie" class="java.lang.Object"/>
+	<parameter name="pl_telefonos" class="java.lang.String"/>
+	<parameter name="pl_celular" class="java.lang.String"/>
+	<parameter name="pl_adicional" class="java.lang.String"/>
+	<parameter name="pl_facebook" class="java.lang.String"/>
 	<pageFooter>
 		<band height="49" splitType="Stretch">
 			<image isLazy="true">
 				<reportElement x="0" y="23" width="90" height="25" uuid="16aef6e5-330e-474c-baeb-1f2d83947753"/>
 				<imageExpression><![CDATA[$P{pl_img_logo_pie}]]></imageExpression>
 			</image>
-			<staticText>
-				<reportElement x="199" y="0" width="150" height="14" uuid="707a7767-2a22-4e83-8e67-73e463fe2b39"/>
-				<textElement>
-					<font isBold="true" isItalic="true"/>
-				</textElement>
-				<text><![CDATA[Reporte generado en Codefac]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="137" y="28" width="62" height="20" uuid="ab22bff6-c2bb-4287-85cf-f3035e4d6d7b"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[/codefact]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="262" y="28" width="60" height="20" uuid="36186e48-c30f-4ac4-b6a1-cffaf2c25e77"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[/0994905332]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="393" y="28" width="55" height="20" uuid="e5e9dceb-bfd1-47e9-bd59-27bd2b3127c7"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[022339487]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="178" y="14" width="198" height="14" uuid="a138bd4f-6f3e-4ec5-bfa1-cf1e16d22c70"/>
-				<textElement>
-					<font size="8" isBold="true" isItalic="true"/>
-				</textElement>
-				<text><![CDATA[Todos los derechos reservados @ Codesoft  2017]]></text>
-			</staticText>
 			<image isLazy="true">
 				<reportElement x="114" y="28" width="23" height="21" uuid="2f5a8d90-0aac-44a5-b6a6-2c9036ede6c2"/>
 				<imageExpression><![CDATA[$P{pl_img_facebook}]]></imageExpression>
@@ -60,6 +35,28 @@
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Pagina:"+ $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="397" y="28" width="100" height="20" uuid="1bddc1b7-413c-418e-afbe-e211bef8ac46"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{pl_telefonos}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="262" y="29" width="100" height="20" uuid="973d8834-2369-46c3-bcac-24e3a1c51816"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{pl_celular}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="247" y="3" width="100" height="20" uuid="2493a00c-db4f-407e-8462-4afde06650b2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true" isItalic="true" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{pl_adicional}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="138" y="28" width="100" height="20" uuid="4977bff5-ebf7-4c9f-b1d7-0e2d50ecfac5"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{pl_facebook}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>

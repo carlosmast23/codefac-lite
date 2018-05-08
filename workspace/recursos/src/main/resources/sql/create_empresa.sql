@@ -19,5 +19,8 @@ create table EMPRESA
     LOGO_IMAGEN_PATH varchar(512),
     OBLIGADO_LLEVAR_CONTABILIDAD varchar(3),
     CONTRIBUYENTE_ESPECIAL varchar(50),
+    CELULAR varchar(10),
+    FACEBOOK varchar(50),
+    TEXTO1 varchar(100),
     primary key (ID)
 )
