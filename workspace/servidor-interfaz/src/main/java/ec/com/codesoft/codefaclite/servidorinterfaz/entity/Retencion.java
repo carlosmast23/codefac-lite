@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "RETENCION")
 @XmlRootElement
-public class Retencion implements Serializable
+public class Retencion extends Comprobante  implements Serializable
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,43 +44,6 @@ public class Retencion implements Serializable
     @Column(name = "TIPO_IDENTIFICACION_ID")
     private Long tipoClienteId;
     
-    @Column(name = "CLAVE_ACCESO")
-    private String claveAcceso;
-    
-    @Column(name = "EMPRESA_ID")
-    private Long empresaId;
-    
-    @Column(name = "SECUENCIAL")
-    private Integer secuencial;
-    
-    @Column(name = "PUNTO_ESTABLECIMIENTO")
-    private String puntoEstablecimiento;
-    
-    @Column(name = "PUNTO_EMISION")
-    private String puntoEmision;    
-    
-    @Column(name = "FECHA_EMISION")
-    private Date fechaEmision;
-    
-    @Column(name = "FECHA_CREACION")
-    private Date fechaCreacion;
-    
-    @Column(name = "USUARIO_ID")
-    private Long usuarioId;
-    
-    @Column(name = "ESTADO")
-    private String estado;
-
-    @Column(name = "RAZON_SOCIAL")
-    private String razonSocial;
-    @Column(name = "IDENTIFICACION")
-    private String identificacion;
-    @Column(name = "DIRECCION")
-    private String direccion;
-    @Column(name = "telefono")
-    private String telefono;
-    
-
     @JoinColumn(name = "PROVEEDOR_ID")
     @ManyToOne    
     private Persona proveedor;
@@ -112,13 +75,6 @@ public class Retencion implements Serializable
         this.proveedor = proveedor;
     }
 
-    public Date getFechaEmision() {
-        return fechaEmision;
-    }
-
-    public void setFechaEmision(Date fechaEmision) {
-        this.fechaEmision = fechaEmision;
-    }
 
     public List<RetencionDetalle> getDetalles() {
         return detalles;
@@ -136,38 +92,7 @@ public class Retencion implements Serializable
         this.id = id;
     }
 
-    public String getClaveAcceso() {
-        return claveAcceso;
-    }
-
-    public void setClaveAcceso(String claveAcceso) {
-        this.claveAcceso = claveAcceso;
-    }
-
-    public String getPuntoEstablecimiento() {
-        return puntoEstablecimiento;
-    }
-
-    public void setPuntoEstablecimiento(String puntoEstablecimiento) {
-        this.puntoEstablecimiento = puntoEstablecimiento;
-    }
-
-    public String getPuntoEmision() {
-        return puntoEmision;
-    }
-
-    public void setPuntoEmision(String puntoEmision) {
-        this.puntoEmision = puntoEmision;
-    }
-
-    public Date getFechaCreacion() {
-        return fechaCreacion;
-    }
-
-    public void setFechaCreacion(Date fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
-    }
-
+    
     public Compra getCompra() {
         return compra;
     }
@@ -175,8 +100,14 @@ public class Retencion implements Serializable
     public void setCompra(Compra compra) {
         this.compra = compra;
     }
-    
-    
+
+    public Long getTipoClienteId() {
+        return tipoClienteId;
+    }
+
+    public void setTipoClienteId(Long tipoClienteId) {
+        this.tipoClienteId = tipoClienteId;
+    }
     
     /**
      *Metodos personalizados
@@ -195,16 +126,15 @@ public class Retencion implements Serializable
         
     }
     
-    
     public String getPeriodoFiscal()
     {
         return UtilidadesFecha.obtenerMesStr(fechaEmision)+"/"+UtilidadesFecha.obtenerAnioStr(fechaEmision);
     }
     
-    public String getPreimpreso() {
+    public String getPreimpreso() 
+    {
         return UtilidadesTextos.llenarCarateresIzquierda(puntoEmision, 3, "0") + "-" + UtilidadesTextos.llenarCarateresIzquierda(puntoEstablecimiento, 3, "0") + "-" + UtilidadesTextos.llenarCarateresIzquierda(secuencial + "", 8, "0");
     }
 
-    
     
 }

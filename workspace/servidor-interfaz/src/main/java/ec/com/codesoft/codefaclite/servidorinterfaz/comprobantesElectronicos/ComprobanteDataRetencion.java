@@ -144,5 +144,11 @@ public class ComprobanteDataRetencion implements ComprobanteDataInterface,Serial
     public Long getComprobanteId() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    public void setMapInfoAdicional(Map<String, String> mapInfoAdicional) {
+        this.mapInfoAdicional = mapInfoAdicional;
+    }
+    
+    
     
 }

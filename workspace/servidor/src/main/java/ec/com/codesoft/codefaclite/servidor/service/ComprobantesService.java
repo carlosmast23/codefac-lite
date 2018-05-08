@@ -674,14 +674,14 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
      * @param comprobante el comprobante a procesar facturas, notas de credito
      * con los datos finales implementados
      */
-    public void procesarComprobante(ComprobanteDataInterface comprobanteData,Factura factura,Usuario usuario,ClienteInterfaceComprobante callbackClientObject) throws RemoteException {
+    public void procesarComprobante(ComprobanteDataInterface comprobanteData,ec.com.codesoft.codefaclite.servidorinterfaz.entity.Comprobante comprobante,Usuario usuario,ClienteInterfaceComprobante callbackClientObject) throws RemoteException {
                 
         ComprobanteElectronicoService comprobanteElectronico= cargarConfiguracionesInicialesComprobantes(comprobanteData, usuario);
-        procesarComprobanteExtend(comprobanteElectronico, factura, callbackClientObject);
+        procesarComprobanteExtend(comprobanteElectronico, comprobante, callbackClientObject);
 
     }
     
-    private void procesarComprobanteExtend(ComprobanteElectronicoService comprobanteElectronico,Factura factura,ClienteInterfaceComprobante callbackClientObject)
+    private void procesarComprobanteExtend(ComprobanteElectronicoService comprobanteElectronico,ec.com.codesoft.codefaclite.servidorinterfaz.entity.Comprobante comprobante,ClienteInterfaceComprobante callbackClientObject)
     {
                 //Agregar el listener
         comprobanteElectronico.addActionListerComprobanteElectronico(new ListenerComprobanteElectronico() {
@@ -691,9 +691,9 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                     //Si la factura termina corectamente grabo el estado y numero de autorizacion
                     FacturacionService facturacionService=new FacturacionService();
                    
-                    factura.setClaveAcceso(comprobanteElectronico.getClaveAcceso());
-                    factura.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
-                    entityManager.merge(factura);
+                    comprobante.setClaveAcceso(comprobanteElectronico.getClaveAcceso());
+                    comprobante.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
+                    entityManager.merge(comprobante);
                     byte[] serializedPrint= getReporteComprobante(comprobanteElectronico.getClaveAcceso());                   
                     callbackClientObject.termino(serializedPrint);
 

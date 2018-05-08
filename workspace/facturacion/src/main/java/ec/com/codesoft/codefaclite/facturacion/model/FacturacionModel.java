@@ -799,7 +799,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     public Map<String, Object> getParametroReporte(DocumentoEnum documento)
     {
         Map<String, Object> parametros = new HashMap<String, Object>();
-        parametros.put("fechaEmision", factura.getFechaFactura().toString());
+        parametros.put("fechaEmision", factura.getFechaEmision().toString());
         parametros.put("razonSocial", factura.getCliente().getRazonSocial());
         parametros.put("direccion", factura.getCliente().getDireccion());
         parametros.put("telefono", factura.getCliente().getTelefonoConvencional());
@@ -1418,7 +1418,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         factura.setEmpresaId(0l);
         factura.setEstado(Factura.ESTADO_FACTURADO);
         factura.setFechaCreacion(UtilidadesFecha.getFechaHoy());
-        factura.setFechaFactura(new Date(getjDateFechaEmision().getDate().getTime()));
+        factura.setFechaEmision(new Date(getjDateFechaEmision().getDate().getTime()));
         //factura.setIvaSriId(iva);
         factura.setPuntoEmision(session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor);
         factura.setPuntoEstablecimiento(session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor);
@@ -1526,7 +1526,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     private void cargarValoresAdicionales() {
         getLblSecuencial().setText(factura.getPreimpreso());
-        getjDateFechaEmision().setDate(factura.getFechaFactura());
+        getjDateFechaEmision().setDate(factura.getFechaEmision());
     }
 
     private boolean validacionParametrosCodefac() {

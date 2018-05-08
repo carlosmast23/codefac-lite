@@ -301,7 +301,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
     public void cargarFecha()
     {
         factura.setFechaCreacion(UtilidadesFecha.getFechaHoy());
-        factura.setFechaFactura((Date) UtilidadesFecha.hoy());
+        factura.setFechaEmision((Date) UtilidadesFecha.hoy());
     }
     
     private void cargarDatosDetalles() {
@@ -401,7 +401,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
     
     public void definirFechaFacturacion()
     {   
-        factura.setFechaFactura(UtilidadesFecha.getFechaHoy());
+        factura.setFechaEmision(UtilidadesFecha.getFechaHoy());
     }
     
     private void initModelTablaDetalleFactura() 

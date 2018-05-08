@@ -157,7 +157,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
                             DocumentoEnum tipoDocumentoEnum=DocumentoEnum.obtenerDocumentoPorCodigo(factura.getCodigoDocumento());
                             TipoFacturacionEnumEstado tf=TipoFacturacionEnumEstado.getEnumByEstado(factura.getTipoFacturacion());
                             fila.add(factura.getPreimpreso());
-                            fila.add(dateFormat.format(factura.getFechaFactura()));
+                            fila.add(dateFormat.format(factura.getFechaEmision()));
                             fila.add(factura.getCliente().getIdentificacion());
                             fila.add(factura.getCliente().getRazonSocial());
                             fila.add(factura.getCliente().getNombreLegal());
@@ -323,7 +323,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
                     
                     data.add(new ReporteFacturaData(
                             factura.getPreimpreso(),
-                            dateFormat.format(factura.getFechaFactura()),
+                            dateFormat.format(factura.getFechaEmision()),
                             factura.getCliente().getIdentificacion(),
                             factura.getCliente().getRazonSocial(),
                             factura.getCliente().getNombreLegal(),

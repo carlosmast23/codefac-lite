@@ -5,16 +5,21 @@
  */
 package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.retencion;
 
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  *
  * @author Carlos
  */
+@XmlRootElement(name = ComprobanteElectronico.RETENCION)
+@XmlType(propOrder = {"informacionTributaria","infoRetencion","detalles","informacionAdicional"})
 public class RetencionComprobante extends ComprobanteElectronico {
     private InformacionRetencion infoRetencion;
     private List<DetalleRetencionComprobante> detalles;
@@ -45,7 +50,7 @@ public class RetencionComprobante extends ComprobanteElectronico {
     
     @Override
     public String getTipoDocumento() {
-        return ComprobanteElectronico.NOTA_CREDITO;
+        return ComprobanteEnum.COMPROBANTE_RETENCION.getCodigo();
     }
 
     @Override

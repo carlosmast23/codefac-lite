@@ -6,11 +6,14 @@
 package ec.com.codesoft.codefaclite.compra.model;
 
 import ec.com.codesoft.codefaclite.compra.busqueda.CompraBusquedaDialogo;
+import ec.com.codesoft.codefaclite.compra.busqueda.RetencionBusquedaDialogo;
+import ec.com.codesoft.codefaclite.compra.callback.RetencionImplCallBack;
 import ec.com.codesoft.codefaclite.compra.panel.RetencionPanel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataRetencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
@@ -22,6 +25,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
@@ -68,6 +72,17 @@ public class RetencionModel extends RetencionPanel{
             setearDatos();
             ServiceFactory.getFactory().getRetencionServiceIf().grabar(retencion);
             DialogoCodefac.mensaje("Correcto","La retenecion fue grabada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+                    
+            RetencionImplCallBack ric=new RetencionImplCallBack(retencion, this);
+            ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
+            
+            ComprobanteDataRetencion comprobanteData = new ComprobanteDataRetencion(retencion);
+            comprobanteData.setMapInfoAdicional(new HashMap<String,String>());
+            
+            comprobanteServiceIf.procesarComprobante(comprobanteData, retencion, session.getUsuario(), ric);
+            
+            
+                    
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error","Error al grabar los datos",DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -99,7 +114,19 @@ public class RetencionModel extends RetencionPanel{
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        RetencionBusquedaDialogo retencionBusqueda = new RetencionBusquedaDialogo();
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(retencionBusqueda);
+        buscarDialogoModel.setVisible(true);
+
+        Retencion retencionTmp = (Retencion) buscarDialogoModel.getResultado();
+        if (retencionTmp != null) {
+            retencion = retencionTmp;
+            //Todo: Completar la funcionalidad para busqueda
+        }
+        else
+        {
+            throw new ExcepcionCodefacLite("Cancelado abrir dato editar");
+        }
     }
 
     @Override

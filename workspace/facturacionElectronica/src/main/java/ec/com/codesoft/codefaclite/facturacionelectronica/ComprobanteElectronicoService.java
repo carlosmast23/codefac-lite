@@ -1050,7 +1050,8 @@ public class ComprobanteElectronicoService implements Runnable {
         String fechaFormat = ComprobantesElectronicosUtil.formatSimpleDate(comprobante.getFechaEmision());
         claveAcceso.add(fechaFormat);
 
-        claveAcceso.add(getTipoComprobante());
+        //claveAcceso.add(compborgetTipoComprobante());
+        claveAcceso.add(comprobante.getTipoDocumento());
 
         //String identificacionFormat=UtilidadesTextos.llenarCarateresDerecha(comprobante.getIdentificacion(),12, "0");
         claveAcceso.add(comprobante.getIdentificacion());
@@ -1153,12 +1154,16 @@ public class ComprobanteElectronicoService implements Runnable {
     }
 
     private String getTipoComprobante() {
+        System.out.println(comprobante.getTipoDocumento());
         switch (comprobante.getTipoDocumento()) {
             case ComprobanteElectronico.FACTURA:
                 return "01";
 
             case ComprobanteElectronico.NOTA_CREDITO:
                 return "04";
+                
+            case ComprobanteElectronico.RETENCION:
+                return ComprobanteEnum.COMPROBANTE_RETENCION.getCodigo();
 
             default:
                 return "00";
@@ -1172,6 +1177,9 @@ public class ComprobanteElectronicoService implements Runnable {
 
             case ComprobanteElectronico.NOTA_CREDITO:
                 return "04";
+                
+            case ComprobanteElectronico.RETENCION:
+                return "07";
 
             default:
                 return "00";

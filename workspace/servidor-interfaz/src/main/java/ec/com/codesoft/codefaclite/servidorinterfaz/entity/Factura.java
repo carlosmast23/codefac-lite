@@ -32,7 +32,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "FACTURA")
-public class Factura implements Serializable {    
+public class Factura extends Comprobante implements Serializable {    
     public static final String ESTADO_FACTURADO="F";
     public static final String ESTADO_ANULADO="A";
     public static final String ESTADO_PENDIENTE_FACTURA_ELECTRONICA="P";
@@ -42,23 +42,10 @@ public class Factura implements Serializable {
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "CLAVE_ACCESO")
-    private String claveAcceso;
-    @Column(name = "EMPRESA_ID")
-    private Long empresaId;
+
     @Column(name = "TIPO_IDENTIFICACION_ID")
     private Long tipoClienteId;
-    @Column(name = "SECUENCIAL")
-    private Integer secuencial;
-    @Column(name = "PUNTO_ESTABLECIMIENTO")
-    private String puntoEstablecimiento;
-    @Column(name = "PUNTO_EMISION")
-    private String puntoEmision;
-    @Column(name = "FECHA_FACTURA")
-    private Date fechaFactura;
-    @Column(name = "FECHA_CREACION")
-    private Date fechaCreacion;
-    
+   
     /**
      * Valor del descuento de los productos que cobran iva
      */
@@ -73,6 +60,7 @@ public class Factura implements Serializable {
     
     @Column(name = "SUBTOTAL_IVA")
     private BigDecimal subtotalImpuestos;
+    
     @Column(name = "SUBTOTAL_IVA_CERO")
     private BigDecimal subtotalSinImpuestos;
     
@@ -84,23 +72,13 @@ public class Factura implements Serializable {
 
     @Column(name = "IVA_SRI_ID")
     private Long ivaSriId;
+    
     @Column(name = "TOTAL")
     private BigDecimal total;
-    @Column(name = "USUARIO_ID")
-    private Long usuarioId;
-    @Column(name = "ESTADO")
-    private String estado;
-   
-    @Column(name = "RAZON_SOCIAL")
-    private String razonSocial;
-    @Column(name = "IDENTIFICACION")
-    private String identificacion;
-    @Column(name = "DIRECCION")
-    private String direccion;
-    @Column(name = "TELEFONO")
-    private String telefono;
+  
     @Column(name = "TIPO_FACTURACION")
     private String tipoFacturacion;
+    
     @Column(name = "CODIGO_DOCUMENTO")
     private String codigoDocumento;
     
@@ -125,71 +103,17 @@ public class Factura implements Serializable {
 
     public Factura() {
     }
-/*
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 83 * hash + Objects.hashCode(this.id);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Factura other = (Factura) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        return true;
-    }
-    */
-    
     
     
     public Long getId() {
         return id;
     }
 
-    public String getClaveAcceso() {
-        return claveAcceso;
-    }
-
-    public Long getEmpresaId() {
-        return empresaId;
-    }
 
     public Long getTipoClienteId() {
         return tipoClienteId;
     }
     
-    public Integer getSecuencial() {
-        return secuencial;
-    }
-
-    public String getPuntoEstablecimiento() {
-        return puntoEstablecimiento;
-    }
-    
-    public String getPuntoEmision() {
-        return puntoEmision;
-    }
-
-    public Date getFechaFactura() {
-        return fechaFactura;
-    }
-
-    public Date getFechaCreacion() {
-        return fechaCreacion;
-    }
-
 
     public Long getIvaSriId() {
         return ivaSriId;
@@ -199,13 +123,6 @@ public class Factura implements Serializable {
         return total;
     }
 
-    public Long getUsuarioId() {
-        return usuarioId;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
 
     public Persona getCliente() {
         return cliente;
@@ -217,36 +134,10 @@ public class Factura implements Serializable {
         this.id = id;
     }
 
-    public void setClaveAcceso(String claveAcceso) {
-        this.claveAcceso = claveAcceso;
-    }
 
-    public void setEmpresaId(Long empresaId) {
-        this.empresaId = empresaId;
-    }
 
     public void setTipoClienteId(Long tipoClienteId) {
         this.tipoClienteId = tipoClienteId;
-    }
-
-    public void setSecuencial(Integer secuencial) {
-        this.secuencial = secuencial;
-    }
-
-    public void setPuntoEstablecimiento(String puntoEstablecimiento) {
-        this.puntoEstablecimiento = puntoEstablecimiento;
-    }
-
-    public void setPuntoEmision(String puntoEmision) {
-        this.puntoEmision = puntoEmision;
-    }
-
-    public void setFechaFactura(Date fechaFactura) {
-        this.fechaFactura = fechaFactura;
-    }
-
-    public void setFechaCreacion(Date fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
     }
 
 
@@ -258,13 +149,6 @@ public class Factura implements Serializable {
         this.total = total;
     }
 
-    public void setUsuarioId(Long usuarioId) {
-        this.usuarioId = usuarioId;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
 
     public void setCliente(Persona cliente) {
         this.cliente = cliente;
@@ -276,38 +160,6 @@ public class Factura implements Serializable {
 
     public void setDetalles(List<FacturaDetalle> detalles) {
         this.detalles = detalles;
-    }
-    
-    public String getRazonSocial() {
-        return razonSocial;
-    }
-
-    public void setRazonSocial(String razonSocial) {
-        this.razonSocial = razonSocial;
-    }
-
-    public String getIdentificacion() {
-        return identificacion;
-    }
-
-    public void setIdentificacion(String identificacion) {
-        this.identificacion = identificacion;
-    }
-
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
     }
 
     public BigDecimal getDescuentoImpuestos() {
@@ -528,11 +380,6 @@ public class Factura implements Serializable {
     }
    
     
-    
-    public String getPreimpreso()
-    {
-       return UtilidadesTextos.llenarCarateresIzquierda(puntoEmision,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(puntoEstablecimiento,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(secuencial+"",9,"0");
-    }
     
     
     public enum EstadoNotaCreditoEnum

@@ -18,7 +18,7 @@ create table FACTURA
     SECUENCIAL varchar(100),
     PUNTO_ESTABLECIMIENTO decimal,
     PUNTO_EMISION decimal,
-    FECHA_FACTURA date,
+    FECHA_EMISION date,
     FECHA_CREACION date,
     DESCUENTO_IVA decimal(7,2),
     DESCUENTO_IVA_CERO decimal(7,2),

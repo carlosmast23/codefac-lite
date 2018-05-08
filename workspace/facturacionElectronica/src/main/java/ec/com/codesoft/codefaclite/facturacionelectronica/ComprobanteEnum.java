@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.facturacionelectronica;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.notacredito.NotaCreditoComprobante;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.retencion.RetencionComprobante;
 
 /**
  *
@@ -17,7 +18,7 @@ public enum ComprobanteEnum {
     NOTA_CREDITO("NOTA DE CRÉDITO","04","CRE",NotaCreditoComprobante.class),
     NOTA_DEBITO("NOTA DEBITO","05","",null),
     GUIA_REMISION("GUIA REMISION","06","",null),
-    COMPROBANTE_RETENCION("COMPROBANTE RETENCION","07","",null);
+    COMPROBANTE_RETENCION("COMPROBANTE RETENCION","07","",RetencionComprobante.class);
     
     private String nombre;
     private String codigo;
@@ -40,8 +41,8 @@ public enum ComprobanteEnum {
             if(NOTA_CREDITO.codigo.equals(codigo))
                 return NOTA_CREDITO;
             else
-                if(NOTA_CREDITO.codigo.equals(codigo))
-                    return null;
+                if(COMPROBANTE_RETENCION.codigo.equals(codigo))
+                    return COMPROBANTE_RETENCION;
         
         return null;
     }

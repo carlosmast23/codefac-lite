@@ -61,7 +61,7 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura> {
         TipoFacturacionEnumEstado tipoFactura=TipoFacturacionEnumEstado.getEnumByEstado(t.getTipoFacturacion());
         dato.add(tipoFactura.getNombre());
         
-        dato.add(t.getFechaFactura());
+        dato.add(t.getFechaEmision());
         dato.add(t.getTotal());
     }
 /*

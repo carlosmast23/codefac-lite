@@ -57,7 +57,7 @@ public class FacturaBusquedaNotaCredito implements InterfaceModelFind<Factura> {
         dato.add(t.getCliente().getRazonSocial());
         FacturaEnumEstado estadoEnum= FacturaEnumEstado.getEnum(t.getEstado());
         dato.add(estadoEnum.getNombre());
-        dato.add(t.getFechaFactura());
+        dato.add(t.getFechaEmision());
         dato.add(t.getTotal());
     }
 

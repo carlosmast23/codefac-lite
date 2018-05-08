@@ -448,7 +448,7 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel {
         factura.setEmpresaId(1l);
         factura.setEstado(FacturaEnumEstado.SIN_AUTORIZAR.getEstado());
         factura.setFechaCreacion(UtilidadesFecha.getFechaHoy());
-        factura.setFechaFactura(UtilidadesFecha.getFechaHoy());
+        factura.setFechaEmision(UtilidadesFecha.getFechaHoy());
         factura.setIdentificacion(estudianteInscrito.getEstudiante().getRepresentante().getIdentificacion());
 
         factura.setPuntoEmision(session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor);

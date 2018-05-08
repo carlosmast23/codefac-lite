@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceCom
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobanteLote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataFactura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Comprobante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
@@ -38,7 +39,7 @@ public interface ComprobanteServiceIf extends Remote {
     
     public byte[] getReporteComprobante(String claveAcceso) throws RemoteException;
 
-    public void procesarComprobante(ComprobanteDataInterface comprobanteData,Factura factura, Usuario usuario,ClienteInterfaceComprobante callbackClientObject) throws RemoteException;
+    public void procesarComprobante(ComprobanteDataInterface comprobanteData,Comprobante comprobante, Usuario usuario,ClienteInterfaceComprobante callbackClientObject) throws RemoteException;
     
     public void procesarComprobanteNotaCredito(ComprobanteDataInterface comprobanteData,NotaCredito notaCredito,Usuario usuario,ClienteInterfaceComprobante callbackClientObject) throws RemoteException;
 
