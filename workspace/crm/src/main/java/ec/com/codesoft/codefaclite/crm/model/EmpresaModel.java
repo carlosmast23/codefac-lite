@@ -89,6 +89,9 @@ public class EmpresaModel extends EmpresaForm
             getjTextNombreComercial().setText(e.getNombreLegal());
             getTxtDireccion().setText(e.getDireccion());
             getjTextTelefono().setText(e.getTelefonos());
+            getTxtCelular().setText(e.getCelular());
+            getTxtFacebook().setText(e.getFacebook());
+            getTxtAdicional().setText(e.getAdicional());
             getjTextNumContribuyente().setText(e.getContribuyenteEspecial());
             if(e.getObligadoLlevarContabilidad().equals(Empresa.SI_LLEVA_CONTABILIDAD))
             {
@@ -197,6 +200,9 @@ public class EmpresaModel extends EmpresaForm
         empresa.setDireccion(getTxtDireccion().getText());
         empresa.setIdentificacion(getjTextRuc().getText());
         empresa.setContribuyenteEspecial(getjTextNumContribuyente().getText());
+        empresa.setCelular(getTxtCelular().getText());
+        empresa.setFacebook(getTxtFacebook().getText());
+        empresa.setAdicional(getTxtAdicional().getText());
         
         if(getjCheckBLlevaContabilidad().isSelected())
         {
