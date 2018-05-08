@@ -40,6 +40,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
@@ -908,6 +910,29 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                 mapFormasPago.put(sriFormaPago.getCodigo(), sriFormaPago.getNombre());
             }
             servicio.setMapCodeAndNameFormaPago(mapFormasPago);
+            
+            /**
+             * Cargar los tipos de documentos para las facturas
+             */
+            
+            List<SriRetencion> retenciones=ServiceFactory.getFactory().getSriRetencionServiceIf().obtenerTodos();
+            Map<String, String> mapTipoRetencion = new HashMap<String, String>();
+            for (SriRetencion retencion : retenciones) {
+                mapTipoRetencion.put(retencion.getCodigo(), retencion.getNombre());
+            }
+            servicio.setMapCodeAndNameTipoRetecion(mapTipoRetencion);
+            
+            /**
+             * Cargar el nombre de los documentos
+             */
+            ComprobanteEnum[] codigosComprobante= ComprobanteEnum.values();
+            Map<String, String> mapTipoDocumento = new HashMap<String, String>();
+            for (ComprobanteEnum comprobanteEnum : codigosComprobante) 
+            {
+                mapTipoDocumento.put(comprobanteEnum.getCodigo(),comprobanteEnum.getNombre());
+            }
+            servicio.setMapCodeAndNameTipoDocumento(mapTipoDocumento);
+            
         } catch (RemoteException ex) {
             Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -924,6 +949,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
          */
         servicio.setPathFacturaJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceURL("facturaReporte.jrxml"));
         servicio.setPathNotaCreditoJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceURL("notaCreditoReporte.jrxml"));
+        servicio.setPathRetencionJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceURL("retencion.jrxml"));
         //String imagenLogo=session.getParametrosCodefac().get(ParametroCodefac.LOGO_EMPRESA).getValor();
         //TODO Este parametro debe ser configurable cuando se la version de pago para que permita seleccionar la imagen del cliente
         //servicio.setLogoImagen(DirectorioCodefac.IMAGENES.getArchivoStream(session,imagenLogo));

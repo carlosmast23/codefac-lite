@@ -84,9 +84,9 @@ public class FacturaElectronicaReporte extends ComprobanteElectronicoReporte{
     }
     
     @Override
-    public List<DetalleReporteData> getDetalles()
+    public List<Object> getDetalles()
     {
-        List<DetalleReporteData> detalles=new ArrayList<DetalleReporteData>();
+        List<Object> detalles=new ArrayList<Object>();
         List<DetalleFacturaComprobante> detalleComprobante=facturaComprobante.getDetalles();
         for (DetalleFacturaComprobante detalleFacturaComprobante : detalleComprobante) {
             DetalleReporteData data=new DetalleReporteData();

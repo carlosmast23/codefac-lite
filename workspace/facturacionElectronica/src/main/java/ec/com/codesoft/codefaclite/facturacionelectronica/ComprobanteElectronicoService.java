@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.Informaci
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.lote.LoteComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.lote.LoteComprobanteCData;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.notacredito.NotaCreditoComprobante;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.retencion.RetencionComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.JaxbCharacterEscapeHandler;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.UtilidadesComprobantes;
@@ -23,6 +24,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.ComprobanteEle
 import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.DetalleReporteData;
 import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.FacturaElectronicaReporte;
 import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.NotaCreditoReporte;
+import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.RetencionElectronicaReporte;
 import ec.com.codesoft.codefaclite.ws.recepcion.Comprobante;
 import ec.com.codesoft.codefaclite.ws.recepcion.Mensaje;
 import ec.com.codesoft.ejemplo.utilidades.email.CorreoElectronico;
@@ -149,6 +151,8 @@ public class ComprobanteElectronicoService implements Runnable {
     private URL pathFacturaJasper;
 
     private URL pathNotaCreditoJasper;
+    
+    private URL pathRetencionJasper;
         
     private String pathParentJasper;
     public URL pathLogoImagen;
@@ -178,6 +182,10 @@ public class ComprobanteElectronicoService implements Runnable {
      * @return 
      */
     private Map<String,String> mapCodeAndNameFormaPago;
+    
+    private Map<String,String> mapCodeAndNameTipoRetecion;
+        
+    private Map<String,String> mapCodeAndNameTipoDocumento;
 
     public ComprobanteElectronicoService() {
         this.etapaLimiteProcesar = 100;
@@ -620,7 +628,7 @@ public class ComprobanteElectronicoService implements Runnable {
 
             ComprobanteElectronicoReporte reporte =getComprobanteReporte(comprobante);
             
-            List<DetalleReporteData> informacionAdiciona = reporte.getDetalles();
+            List<Object> informacionAdiciona = reporte.getDetalles();
             Map<String, Object> datosMap = reporte.getMapReporte();
             datosMap.put("SUBREPORT_DIR", pathParentJasper);
             datosMap.put("SUBREPORT_INFO_ADICIONAL", reporteInfoAdicional);
@@ -692,11 +700,23 @@ public class ComprobanteElectronicoService implements Runnable {
         }
         else
             if(comprobante.getClass().equals(NotaCreditoComprobante.class))
+            {
                 return new NotaCreditoReporte(comprobante);
+            }
             else
             {
-                System.out.println("no esta comparando clases");
-                return null;
+                if(comprobante.getClass().equals(RetencionComprobante.class))
+                {
+                    RetencionElectronicaReporte retencionReporte=new RetencionElectronicaReporte(comprobante);
+                    retencionReporte.setMapCodeAndNameTipoDocumento(mapCodeAndNameTipoDocumento);
+                    retencionReporte.setMapCodeAndNameTipoRetecion(mapCodeAndNameTipoRetecion);
+                    return retencionReporte;
+                }
+                else
+                {
+                    System.out.println("no esta comparando clases");
+                    return null;
+                }
             }
     }
 
@@ -717,7 +737,7 @@ public class ComprobanteElectronicoService implements Runnable {
             ComprobanteElectronico comprobante = (ComprobanteElectronico) jaxbUnmarshaller.unmarshal(file);
             ComprobanteElectronicoReporte reporte = getComprobanteReporte(comprobante);
 
-            List<DetalleReporteData> informacionAdicional = reporte.getDetalles();
+            List<Object> informacionAdicional = reporte.getDetalles();
             
             InputStream reporteInfoAdicional = this.reporteInfoAdicional.openStream();
             InputStream reporteFormaPago = this.reporteFormaPago.openStream();
@@ -1394,6 +1414,16 @@ public class ComprobanteElectronicoService implements Runnable {
         this.pathNotaCreditoJasper = pathNotaCreditoJasper;
     }
 
+    public URL getPathRetencionJasper() {
+        return pathRetencionJasper;
+    }
+
+    public void setPathRetencionJasper(URL pathRetencionJasper) {
+        this.pathRetencionJasper = pathRetencionJasper;
+    }
+    
+    
+
     public void setMapCodeAndNameFormaPago(Map<String, String> mapCodeAndNameFormaPago) {
         this.mapCodeAndNameFormaPago = mapCodeAndNameFormaPago;
     }
@@ -1435,6 +1465,9 @@ public class ComprobanteElectronicoService implements Runnable {
 
             } else if (ComprobanteEnum.NOTA_CREDITO.getCodigo().equals(clave.tipoComprobante)) {
                 path = pathNotaCreditoJasper.openStream();
+            } else if (ComprobanteEnum.COMPROBANTE_RETENCION.getCodigo().equals(clave.tipoComprobante))
+            {
+                path=pathRetencionJasper.openStream();
             }
             //comprobante.getTipoDocumento();
             //return path + "-" + comprobante.getInformacionTributaria().getPreimpreso() +"_"+claveAcceso+ ".pdf";
@@ -1467,6 +1500,23 @@ public class ComprobanteElectronicoService implements Runnable {
     public void setClavesAccesoLote(List<String> clavesAccesoLote) {
         this.clavesAccesoLote = clavesAccesoLote;
     }
+
+    public Map<String, String> getMapCodeAndNameTipoRetecion() {
+        return mapCodeAndNameTipoRetecion;
+    }
+
+    public void setMapCodeAndNameTipoRetecion(Map<String, String> mapCodeAndNameTipoRetecion) {
+        this.mapCodeAndNameTipoRetecion = mapCodeAndNameTipoRetecion;
+    }
+
+    public Map<String, String> getMapCodeAndNameTipoDocumento() {
+        return mapCodeAndNameTipoDocumento;
+    }
+
+    public void setMapCodeAndNameTipoDocumento(Map<String, String> mapCodeAndNameTipoDocumento) {
+        this.mapCodeAndNameTipoDocumento = mapCodeAndNameTipoDocumento;
+    }
+    
     
     
     

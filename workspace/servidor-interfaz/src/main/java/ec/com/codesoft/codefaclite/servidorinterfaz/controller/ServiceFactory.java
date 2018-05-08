@@ -69,6 +69,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RetencionServiceIf
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriFormaPagoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionServiceIf;
 
 /**
  *
@@ -143,6 +144,7 @@ public abstract class ServiceFactory {
     public SriRetencionIvaServiceIf getSriRetencionIvaServiceIf(){return (SriRetencionIvaServiceIf) getRecursosRMI(SriRetencionIvaServiceIf.class);};
     public SriRetencionRentaServiceIf getSriRetencionRentaServiceIf(){return (SriRetencionRentaServiceIf) getRecursosRMI(SriRetencionRentaServiceIf.class);};
     public RetencionServiceIf getRetencionServiceIf(){return (RetencionServiceIf) getRecursosRMI(RetencionServiceIf.class);};
+    public SriRetencionServiceIf getSriRetencionServiceIf(){return (SriRetencionServiceIf) getRecursosRMI(SriRetencionServiceIf.class);};
     
     
     /**

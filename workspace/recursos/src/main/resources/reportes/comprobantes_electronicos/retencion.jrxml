@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d9c21352-f760-4e3a-b774-88dde93e1e8b">
-	<property name="ireport.zoom" value="1.3310000000000064"/>
+	<property name="ireport.zoom" value="1.0000000000000173"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="445"/>
+	<property name="ireport.y" value="136"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -38,12 +38,6 @@
 	<parameter name="cliente_nombres" class="java.lang.String"/>
 	<parameter name="cliente_identificacion" class="java.lang.String"/>
 	<parameter name="fecha_emision" class="java.lang.String"/>
-	<parameter name="subtotal_cero" class="java.lang.String"/>
-	<parameter name="subtotal" class="java.lang.String"/>
-	<parameter name="descuento" class="java.lang.String"/>
-	<parameter name="total" class="java.lang.String"/>
-	<parameter name="iva" class="java.lang.String"/>
-	<parameter name="iva_porcentaje" class="java.lang.String"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\Carlos\\Documents\\Ejemplos\\"]]></defaultValueExpression>
 	</parameter>
@@ -67,12 +61,15 @@
 	<parameter name="pl_url_piepagina_1" class="java.lang.String"/>
 	<parameter name="SUBREPORT_INFO_ADICIONAL" class="java.io.InputStream"/>
 	<parameter name="SUBREPORT_FORMA_PAGO" class="java.io.InputStream"/>
+	<field name="comprobante" class="java.lang.String"/>
+	<field name="numero" class="java.lang.String"/>
+	<field name="fechaEmision" class="java.lang.String"/>
+	<field name="ejercicioFiscal" class="java.lang.String"/>
+	<field name="baseImponible" class="java.lang.String"/>
+	<field name="impuesto" class="java.lang.String"/>
 	<field name="codigo" class="java.lang.String"/>
-	<field name="descripcion" class="java.lang.String"/>
-	<field name="precio_unitario" class="java.lang.String"/>
-	<field name="descuento" class="java.lang.String"/>
-	<field name="precio_total" class="java.lang.String"/>
-	<field name="cantidad" class="java.lang.String"/>
+	<field name="porcentajeRetencion" class="java.lang.String"/>
+	<field name="valorRetenido" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -281,77 +278,128 @@
 	<columnHeader>
 		<band height="24" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="1" width="100" height="20" uuid="b9fc8cd1-b8d2-43f7-a73c-ffa567fa0552"/>
+				<reportElement x="0" y="1" width="60" height="20" uuid="b9fc8cd1-b8d2-43f7-a73c-ffa567fa0552"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center"/>
-				<text><![CDATA[código]]></text>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Comprobante]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="100" y="1" width="153" height="20" uuid="e2e445cc-53d4-4f16-bbf4-8aa1de7fd349"/>
+				<reportElement x="60" y="1" width="80" height="20" uuid="e2e445cc-53d4-4f16-bbf4-8aa1de7fd349"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center"/>
-				<text><![CDATA[descripción]]></text>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Número]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="333" y="1" width="68" height="20" uuid="ded570a6-d87a-4359-81bf-c90066375d55"/>
+				<reportElement x="210" y="1" width="55" height="20" uuid="ded570a6-d87a-4359-81bf-c90066375d55"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center"/>
-				<text><![CDATA[p.unitario]]></text>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Ejerc.Fiscal]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="401" y="1" width="76" height="20" uuid="b80621a6-801a-4d71-a947-2029175ab4a1"/>
+				<reportElement x="265" y="1" width="73" height="20" uuid="b80621a6-801a-4d71-a947-2029175ab4a1"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center"/>
-				<text><![CDATA[descuento]]></text>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Base Imponible]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="477" y="1" width="78" height="20" uuid="8aebd3e8-8268-46af-a1c9-8f7a19514cdf"/>
+				<reportElement x="338" y="1" width="45" height="20" uuid="8aebd3e8-8268-46af-a1c9-8f7a19514cdf"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center"/>
-				<text><![CDATA[precio total]]></text>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Impuesto]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="253" y="1" width="80" height="20" uuid="eb9ec666-cb14-47c4-b340-108dc1b564bc"/>
+				<reportElement x="140" y="1" width="70" height="20" uuid="eb9ec666-cb14-47c4-b340-108dc1b564bc"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center"/>
-				<text><![CDATA[cantidad]]></text>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Fecha Emisión]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="383" y="1" width="35" height="20" uuid="c674403f-2885-4389-9e7b-797c055cf0c7"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Código]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="418" y="1" width="55" height="20" uuid="bb7a8360-fe8d-4f68-a03f-b297500b592e"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[% Retención]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="473" y="1" width="82" height="20" uuid="242628b2-f925-4da3-8435-ef2a7e06743d"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Valor Retenido]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="23" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="100" height="20" uuid="96aacd30-59f9-4ce5-9542-5691ac80b57c"/>
+				<reportElement x="0" y="0" width="60" height="20" uuid="96aacd30-59f9-4ce5-9542-5691ac80b57c"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -359,27 +407,97 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{comprobante}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="60" y="0" width="80" height="20" uuid="677d9c87-3285-432c-9a45-934987635c8e"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numero}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="210" y="0" width="55" height="20" uuid="b9027efb-483c-46a3-b02e-f93b08a69209"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ejercicioFiscal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="265" y="0" width="73" height="20" uuid="28c3899a-a321-4517-924f-f8862eae2ada"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{baseImponible}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="338" y="0" width="45" height="20" uuid="32520322-fa84-4e83-be32-85abfc7658e8"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{impuesto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="140" y="0" width="70" height="20" uuid="cfc15e5e-ab7b-4e72-ae28-10cd519ff378"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fechaEmision}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="383" y="0" width="35" height="20" uuid="786463da-807c-4f05-a8f8-9fa2c472acb2"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8"/>
 					<paragraph leftIndent="3" rightIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="100" y="0" width="153" height="20" uuid="677d9c87-3285-432c-9a45-934987635c8e"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement verticalAlignment="Middle">
-					<font size="8"/>
-					<paragraph leftIndent="3" rightIndent="3"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="333" y="0" width="68" height="20" uuid="b9027efb-483c-46a3-b02e-f93b08a69209"/>
+				<reportElement x="418" y="0" width="55" height="20" uuid="9a5537ff-85b6-40af-bec2-dbc8b53f375b"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -390,10 +508,10 @@
 					<font size="8"/>
 					<paragraph leftIndent="3" rightIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{precio_unitario}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{porcentajeRetencion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="401" y="0" width="76" height="20" uuid="28c3899a-a321-4517-924f-f8862eae2ada"/>
+				<reportElement x="473" y="0" width="82" height="20" uuid="79706938-7368-41bc-8ce2-288c8d8c8be9"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -404,35 +522,7 @@
 					<font size="8"/>
 					<paragraph leftIndent="3" rightIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{descuento}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="477" y="0" width="78" height="20" uuid="32520322-fa84-4e83-be32-85abfc7658e8"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="8"/>
-					<paragraph leftIndent="3" rightIndent="3"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{precio_total}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="253" y="0" width="80" height="20" uuid="cfc15e5e-ab7b-4e72-ae28-10cd519ff378"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="8"/>
-					<paragraph leftIndent="3" rightIndent="3"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{porcentajeRetencion}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
