@@ -36,7 +36,7 @@ public class RetencionElectronicaReporte extends ComprobanteElectronicoReporte{
             
             DetalleRetencionReporteData reporteData=new DetalleRetencionReporteData();
             
-            reporteData.setComprobante(mapCodeAndNameTipoRetecion.get(detalleComprobante.getCodDocSustento()));
+            reporteData.setComprobante(mapCodeAndNameTipoDocumento.get(detalleComprobante.getCodDocSustento()));
             reporteData.setNumero(detalleComprobante.getNumDocSustento());
             reporteData.setFechaEmision(detalleComprobante.getFechaEmisionDocSustento());
             reporteData.setEjercicioFiscal(retencionComprobante.getInfoRetencion().getPeriodoFiscal());
