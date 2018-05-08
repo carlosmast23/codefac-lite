@@ -311,6 +311,7 @@ public class RetencionModel extends RetencionPanel{
             retencionDetalleIva.setPorcentajeRetener(compraDetalle.getSriRetencionIva().getPorcentaje().setScale(2,BigDecimal.ROUND_HALF_UP));
             retencionDetalleIva.setRetencion(retencion);
             retencionDetalleIva.setValorRetenido(compraDetalle.getValorSriRetencionIVA());
+            System.out.println(compraDetalle.getValorSriRetencionIVA());
             
             //Detalle para la retencion de la renta
             RetencionDetalle retencionDetalleRenta=new RetencionDetalle();

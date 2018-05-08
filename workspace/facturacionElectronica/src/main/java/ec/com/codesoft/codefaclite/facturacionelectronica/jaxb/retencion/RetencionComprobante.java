@@ -65,7 +65,7 @@ public class RetencionComprobante extends ComprobanteElectronico {
     
     @XmlAttribute(name = "version")
     public String getVersionAttribute() {
-        return "1.0";
+        return "1.0.0";
     }
     
     
