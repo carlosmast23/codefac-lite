@@ -56,8 +56,7 @@ public class RetencionModel extends RetencionPanel{
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
-        listener();
-        cargarDatosEmpresa();
+        listener();        
         cargarDatosIniciales();
     }
 
@@ -135,6 +134,8 @@ public class RetencionModel extends RetencionPanel{
         getLblNombreCliente().setText("");
         getLblTelefonoCliente().setText("");
         getLblDireccionCliente().setText("");
+        
+        cargarDatosEmpresa();
     }
 
     @Override
