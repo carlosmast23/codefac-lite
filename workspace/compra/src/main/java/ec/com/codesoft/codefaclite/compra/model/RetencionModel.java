@@ -30,12 +30,14 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteService
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.ejemplo.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.ejemplo.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
@@ -47,6 +49,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JasperPrint;
 
 /**
  *
@@ -110,7 +113,23 @@ public class RetencionModel extends RetencionPanel{
 
     @Override
     public void imprimir() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        //Solo imprimir en el modo de editar
+        if(estadoFormulario==ESTADO_EDITAR)
+        {
+            try {
+                String claveAceeso = this.retencion.getClaveAcceso();
+                byte[] byteReporte = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAceeso);
+                JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(byteReporte);
+                panelPadre.crearReportePantalla(jasperPrint,retencion.getPreimpreso());
+            } catch (RemoteException ex) {
+                Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     @Override
