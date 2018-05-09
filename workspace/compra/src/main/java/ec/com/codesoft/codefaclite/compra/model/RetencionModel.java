@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
@@ -56,7 +57,7 @@ public class RetencionModel extends RetencionPanel{
     /**
      * Compra seleccionado para enviar la retencion
      */
-    private Compra compra;
+    //private Compra compra;
     private Retencion retencion;
     
     
@@ -126,20 +127,37 @@ public class RetencionModel extends RetencionPanel{
         Retencion retencionTmp = (Retencion) buscarDialogoModel.getResultado();
         if (retencionTmp != null) {
             retencion = retencionTmp;
-            //Todo: Completar la funcionalidad para busqueda
+            //Todo: Completar la funcionalidad para la busqueda
+            cargarDatosRetencion();
+            
         }
         else
         {
             throw new ExcepcionCodefacLite("Cancelado abrir dato editar");
         }
     }
+    
+    private void cargarDatosRetencion() {
+        getLblSecuencial().setText(retencion.getPreimpreso());
+        getjDateFechaEmision().setDate(retencion.getFechaEmision());
+        
+        cargarDatosCompra(retencion.getCompra());
+        cargarTablaDatosAdicionales(retencion);
+    }
 
     @Override
     public void limpiar() {
+        retencion=new Retencion();
+        
+        getTblDatosAdicionales().setModel(new DefaultTableModel());
+        getTblDetalleRetenciones().setModel(new DefaultTableModel());
+        
         getTxtReferenciaFactura().setText("");
         getLblNombreCliente().setText("");
         getLblTelefonoCliente().setText("");
         getLblDireccionCliente().setText("");
+        
+        getjDateFechaEmision().setDate(UtilidadesFecha.getFechaHoy());
         
         cargarDatosEmpresa();
     }
@@ -187,12 +205,44 @@ public class RetencionModel extends RetencionPanel{
                 Compra compraTmp = (Compra) buscarDialogoModel.getResultado();
                 if (compraTmp != null) 
                 {                    
-                    compra=compraTmp;
-                    cargarDatosCompra(compra);                    
+                    retencion.setCompra(compraTmp);
+                    cargarDatosCompra(compraTmp);
+                    //Cargar dato por defecto del correo
+                    cargarCorreoPorDefecto(compraTmp);
+                    cargarTablaDatosAdicionales(retencion);
+                    
+                    
                 }
             }
             
         });
+    }
+    
+    private void cargarCorreoPorDefecto(Compra compra)
+    {
+        //limpiar el detalle de datos adicionales
+        if(retencion.getDatosAdicionales()!=null)
+            retencion.getDatosAdicionales().clear();
+        
+        //Solo cargar si existe el correo y es distinto de vacio        
+        if(compra.getProveedor().getCorreoElectronico()!=null && !compra.getProveedor().getCorreoElectronico().equals(""))
+        {
+            retencion.addDatosAdicionalCorreo(compra.getProveedor().getCorreoElectronico());
+        }
+    }
+    
+    private void cargarTablaDatosAdicionales(Retencion retencion)
+    {
+        String[] titulo={"Nombre","Valor"};
+        DefaultTableModel modelTable=new DefaultTableModel(titulo,0);
+        
+        for (RetencionAdicional retencionAdicional :  retencion.getDatosAdicionales())
+        {
+            String[] fila={retencionAdicional.getCampo(),retencionAdicional.getValor()};
+            modelTable.addRow(fila);
+        }
+        
+        getTblDatosAdicionales().setModel(modelTable);
     }
     
     /**
@@ -322,11 +372,11 @@ public class RetencionModel extends RetencionPanel{
     }
 
     private void setearDatos() {
-        retencion=new Retencion();
-        retencion.setCompra(compra);
+        //retencion=new Retencion();
+        //retencion.setCompra(compra);
         retencion.setFechaCreacion(UtilidadesFecha.getFechaHoy());
         retencion.setFechaEmision(new java.sql.Date(getjDateFechaEmision().getDate().getTime()));
-        retencion.setProveedor(compra.getProveedor());
+        retencion.setProveedor(retencion.getCompra().getProveedor());
         
         retencion.setPuntoEmision(session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor);
         retencion.setPuntoEstablecimiento(session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor);
@@ -343,7 +393,7 @@ public class RetencionModel extends RetencionPanel{
         }
         
         //Llenar los detalles de la retencion
-        for (CompraDetalle compraDetalle : compra.getDetalles()) {
+        for (CompraDetalle compraDetalle : retencion.getCompra().getDetalles()) {
             
             //Todo: Falta hacer validaciones cuando hay detalles que no requerien enviar retencion con iva 0
             
