@@ -29,17 +29,23 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteService
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.ejemplo.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -167,6 +173,7 @@ public class RetencionModel extends RetencionPanel{
 
     private void listener() {
         listenerBotones();
+        listenerTabla();
     }
 
     private void listenerBotones() {
@@ -200,14 +207,50 @@ public class RetencionModel extends RetencionPanel{
         getLblDireccionCliente().setText(compra.getProveedor().getDireccion());
         
         ///Cargar los detalles de la compra
-        List<CompraDetalle> detalles=compra.getDetalles();
-        
-        for (CompraDetalle detalle : detalles) 
-        {
-            
-        }
+        cargarTablayTotalesRetenciones(compra);
         
        
+    }
+    
+    private void cargarTablayTotalesRetenciones(Compra compra)
+    {
+        List<CompraDetalle> compraDetalles = compra.getDetalles();
+        DefaultTableModel datos = UtilidadesTablas.crearModeloTabla(new String[]{"Obj", "Nombre", "Retencia Iva", "Retención Renta"},
+                new Class[]{CompraDetalle.class, String.class, String.class, String.class});
+
+        BigDecimal totalRetencionIva = new BigDecimal(BigInteger.ZERO);
+        BigDecimal totalRetencionRenta = new BigDecimal(BigInteger.ZERO);
+        BigDecimal totalRetenciones = new BigDecimal(BigInteger.ZERO);
+
+        for (CompraDetalle compraDetalle : compraDetalles) {
+            Vector<Object> fila = new Vector<>();
+            fila.add(compraDetalle);
+            fila.add(compraDetalle.getDescripcion());
+            fila.add(compraDetalle.getValorSriRetencionIVA());
+            fila.add(compraDetalle.getValorSriRetencionRenta());
+            totalRetencionIva = totalRetencionIva.add(compraDetalle.getValorSriRetencionIVA());
+            totalRetencionRenta = totalRetencionRenta.add(compraDetalle.getValorSriRetencionRenta());
+            datos.addRow(fila);
+        }
+
+        //Suma de retencion Iva y retencion Renta
+        totalRetenciones = totalRetenciones.add(totalRetencionIva).add(totalRetencionRenta);
+
+        //Redondear valores a mostrar en pantalla a dos decimales
+        totalRetencionIva = totalRetencionIva.setScale(2, BigDecimal.ROUND_HALF_UP);
+        totalRetencionRenta = totalRetencionRenta.setScale(2, BigDecimal.ROUND_HALF_UP);
+        totalRetenciones = totalRetenciones.setScale(2, BigDecimal.ROUND_HALF_UP);
+
+        //Mostrar valores de retencion en pantall
+        getLblSubtotalRetencionIva().setText(totalRetencionIva + "");
+        getLblSubtotalRetencionRenta().setText(totalRetencionRenta + "");
+        getLblRetencionTotal().setText(totalRetenciones + "");
+
+        //Cargar detalles de cada compra y valores de retencion en las tablas
+        getTblDetalleRetenciones().setModel(datos);
+
+        //Ocultar la primera columna de la tabla
+        UtilidadesTablas.ocultarColumna(getTblDetalleRetenciones(), 0);
     }
 
     private void cargarDatosEmpresa() {
@@ -327,6 +370,36 @@ public class RetencionModel extends RetencionPanel{
             retencion.addDetalle(retencionDetalleRenta);
         }
                 
+    }
+
+    private void listenerTabla() {
+        getTblDetalleRetenciones().addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int filaSeleccionada=getTblDetalleRetenciones().getSelectedRow();
+                if(filaSeleccionada>=0)
+                {
+                    DefaultTableModel modeloTabla=(DefaultTableModel) getTblDetalleRetenciones().getModel();
+                    for (int i = 0; i < modeloTabla.getRowCount(); i++) {
+                        CompraDetalle compraDetalle=(CompraDetalle) modeloTabla.getValueAt(0,i);
+                        getCmbRetencionIva().setSelectedItem(compraDetalle.getSriRetencionIva());
+                        getCmbRetencionRenta().setSelectedItem(compraDetalle.getSriRetencionRenta());
+                    }
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
     }
 
 }

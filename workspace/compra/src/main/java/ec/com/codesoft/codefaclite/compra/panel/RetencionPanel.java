@@ -75,12 +75,12 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         lblValorTotal = new javax.swing.JLabel();
-        lblSubtotal12 = new javax.swing.JLabel();
-        lblSubtotalSinImpuesto = new javax.swing.JLabel();
-        txtValorTotal = new javax.swing.JTextField();
+        lblSubtotalRetencionRenta = new javax.swing.JLabel();
+        lblSubtotalRetencionIva = new javax.swing.JLabel();
+        lblRetencionTotal = new javax.swing.JTextField();
         lblEspacio4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblDetalleNotaCredito = new javax.swing.JTable();
+        tblDetalleRetenciones = new javax.swing.JTable();
         PanelDatosAdicionales = new javax.swing.JPanel();
         btnAgregarDatosAdicionales = new javax.swing.JButton();
         jScrollPane5 = new javax.swing.JScrollPane();
@@ -370,7 +370,7 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         PanelValores.setLayout(new java.awt.GridBagLayout());
 
         jLabel9.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel9.setText("SUBTOTAL IVA:");
+        jLabel9.setText("SUBTOTAL RET IVA:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.weightx = 0.8;
@@ -378,7 +378,7 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         PanelValores.add(jLabel9, gridBagConstraints);
 
         jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel10.setText("SUBTOTAL RENTA:");
+        jLabel10.setText("SUBTOTAL RET RENTA:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -397,31 +397,31 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 2);
         PanelValores.add(lblValorTotal, gridBagConstraints);
 
-        lblSubtotal12.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        lblSubtotal12.setText("0.00");
+        lblSubtotalRetencionRenta.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblSubtotalRetencionRenta.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 2);
-        PanelValores.add(lblSubtotal12, gridBagConstraints);
+        PanelValores.add(lblSubtotalRetencionRenta, gridBagConstraints);
 
-        lblSubtotalSinImpuesto.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        lblSubtotalSinImpuesto.setText("0.00");
+        lblSubtotalRetencionIva.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblSubtotalRetencionIva.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 2);
-        PanelValores.add(lblSubtotalSinImpuesto, gridBagConstraints);
+        PanelValores.add(lblSubtotalRetencionIva, gridBagConstraints);
 
-        txtValorTotal.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        txtValorTotal.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtValorTotal.setText("0.00");
-        txtValorTotal.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 51, 255)));
-        txtValorTotal.addActionListener(new java.awt.event.ActionListener() {
+        lblRetencionTotal.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblRetencionTotal.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        lblRetencionTotal.setText("0.00");
+        lblRetencionTotal.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 51, 255)));
+        lblRetencionTotal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtValorTotalActionPerformed(evt);
+                lblRetencionTotalActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -431,7 +431,7 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 2);
-        PanelValores.add(txtValorTotal, gridBagConstraints);
+        PanelValores.add(lblRetencionTotal, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 11;
@@ -448,8 +448,8 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 2);
         getContentPane().add(PanelValores, gridBagConstraints);
 
-        tblDetalleNotaCredito.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        tblDetalleNotaCredito.setModel(new javax.swing.table.DefaultTableModel(
+        tblDetalleRetenciones.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        tblDetalleRetenciones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -460,7 +460,7 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(tblDetalleNotaCredito);
+        jScrollPane1.setViewportView(tblDetalleRetenciones);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -564,9 +564,9 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtValorTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtValorTotalActionPerformed
+    private void lblRetencionTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lblRetencionTotalActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtValorTotalActionPerformed
+    }//GEN-LAST:event_lblRetencionTotalActionPerformed
 
     private void btnBuscarFacturaCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarFacturaCompraActionPerformed
         // TODO add your handling code here:
@@ -611,18 +611,18 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblEspacio4;
     private javax.swing.JLabel lblNombreCliente;
     private javax.swing.JLabel lblNombreComercial;
+    private javax.swing.JTextField lblRetencionTotal;
     private javax.swing.JLabel lblRuc;
     private javax.swing.JLabel lblSecuencial;
-    private javax.swing.JLabel lblSubtotal12;
-    private javax.swing.JLabel lblSubtotalSinImpuesto;
+    private javax.swing.JLabel lblSubtotalRetencionIva;
+    private javax.swing.JLabel lblSubtotalRetencionRenta;
     private javax.swing.JLabel lblTelefonoCliente;
     private javax.swing.JLabel lblTelefonos;
     private javax.swing.JLabel lblValorTotal;
     private javax.swing.JPanel panelDatosGenerales;
     private javax.swing.JTable tblDatosAdicionales;
-    private javax.swing.JTable tblDetalleNotaCredito;
+    private javax.swing.JTable tblDetalleRetenciones;
     private javax.swing.JTextField txtReferenciaFactura;
-    private javax.swing.JTextField txtValorTotal;
     // End of variables declaration//GEN-END:variables
 
     public JLabel getLblDireccion() {
@@ -677,32 +677,14 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         return lblTelefonoCliente;
     }
 
-    public JTable getTblDetalleNotaCredito() {
-        return tblDetalleNotaCredito;
-    }
-
 
     public JLabel getLblSecuencial() {
         return lblSecuencial;
     }
 
 
-    public JLabel getLblSubtotal12() {
-        return lblSubtotal12;
-    }
-
-
-    public JLabel getLblSubtotalSinImpuesto() {
-        return lblSubtotalSinImpuesto;
-    }
-
-
-    public JLabel getLblValorTotal() {
-        return lblValorTotal;
-    }
-
     public JTextField getTxtValorTotal() {
-        return txtValorTotal;
+        return lblRetencionTotal;
     }
 
 
@@ -761,6 +743,27 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
     public void setCmbRetencionRenta(JComboBox<SriRetencionRenta> cmbRetencionRenta) {
         this.cmbRetencionRenta = cmbRetencionRenta;
     }
+
+    public JTable getTblDetalleRetenciones() {
+        return tblDetalleRetenciones;
+    }
+
+    public void setTblDetalleRetenciones(JTable tblDetalleRetenciones) {
+        this.tblDetalleRetenciones = tblDetalleRetenciones;
+    }
+
+    public JTextField getLblRetencionTotal() {
+        return lblRetencionTotal;
+    }
+
+    public JLabel getLblSubtotalRetencionIva() {
+        return lblSubtotalRetencionIva;
+    }
+
+    public JLabel getLblSubtotalRetencionRenta() {
+        return lblSubtotalRetencionRenta;
+    }
+    
     
     
     

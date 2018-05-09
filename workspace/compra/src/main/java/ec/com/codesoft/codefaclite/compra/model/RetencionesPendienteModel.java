@@ -32,11 +32,10 @@ import org.eclipse.jdt.internal.compiler.lookup.MostSpecificExceptionMethodBindi
 public class RetencionesPendienteModel extends RetencionesPendientePanel{
     
     private DefaultTableModel modeloTablaComprasPendientes;
-    private int filaComprasPendientes;
+  
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
-        this.filaComprasPendientes = 0;
         cargarComprasPendientes();
         addListener();
     }
@@ -130,7 +129,7 @@ public class RetencionesPendienteModel extends RetencionesPendientePanel{
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) 
             {
-                filaComprasPendientes = getTblComprasPendientes().getSelectedRow();
+                int filaComprasPendientes = getTblComprasPendientes().getSelectedRow();
                 Compra compra = (Compra) getTblComprasPendientes().getValueAt(filaComprasPendientes,0);
                 List<CompraDetalle> compraDetalles = compra.getDetalles();
                 DefaultTableModel datos= UtilidadesTablas.crearModeloTabla( new String[]{"Obj","Nombre","Retencia Iva","Retención Renta"},
@@ -156,9 +155,9 @@ public class RetencionesPendienteModel extends RetencionesPendientePanel{
                 totalRetenciones = totalRetenciones.add(totalRetencionIva).add(totalRetencionRenta);
                 
                 //Redondear valores a mostrar en pantalla a dos decimales
-                totalRetencionIva.setScale(2,BigDecimal.ROUND_HALF_UP);
-                totalRetencionRenta.setScale(2,BigDecimal.ROUND_HALF_UP);
-                totalRetenciones.setScale(2,BigDecimal.ROUND_HALF_UP);
+                totalRetencionIva=totalRetencionIva.setScale(2,BigDecimal.ROUND_HALF_UP);
+                totalRetencionRenta= totalRetencionRenta.setScale(2,BigDecimal.ROUND_HALF_UP);
+                totalRetenciones=totalRetenciones.setScale(2,BigDecimal.ROUND_HALF_UP);
                 
                 //Mostrar valores de retencion en pantall
                 getLabelTotalRetencionIva().setText(totalRetencionIva+"");
