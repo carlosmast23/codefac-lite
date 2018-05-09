@@ -691,7 +691,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             public void termino() {
                 try {
                     //Si la factura termina corectamente grabo el estado y numero de autorizacion
-                    FacturacionService facturacionService=new FacturacionService();
+                    //FacturacionService facturacionService=new FacturacionService();
                    
                     comprobante.setClaveAcceso(comprobanteElectronico.getClaveAcceso());
                     comprobante.setEstado(FacturaEnumEstado.FACTURADO.getEstado());

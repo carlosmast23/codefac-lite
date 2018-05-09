@@ -18,6 +18,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionAdicional;
@@ -79,14 +81,14 @@ public class RetencionModel extends RetencionPanel{
     public void grabar() throws ExcepcionCodefacLite {
         try {
             setearDatos();
-            ServiceFactory.getFactory().getRetencionServiceIf().grabar(retencion);
+            retencion=ServiceFactory.getFactory().getRetencionServiceIf().grabar(retencion);
             DialogoCodefac.mensaje("Correcto","La retenecion fue grabada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
                     
             RetencionImplCallBack ric=new RetencionImplCallBack(retencion, this);
             ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
             
             ComprobanteDataRetencion comprobanteData = new ComprobanteDataRetencion(retencion);
-            comprobanteData.setMapInfoAdicional(new HashMap<String,String>());
+            comprobanteData.setMapInfoAdicional(getMapAdicional(retencion));
             
             comprobanteServiceIf.procesarComprobante(comprobanteData, retencion, session.getUsuario(), ric);
             
@@ -99,6 +101,16 @@ public class RetencionModel extends RetencionPanel{
             DialogoCodefac.mensaje("Error","No existe comunicación con el servidor",DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private Map<String,String> getMapAdicional(Retencion retencion)
+    {
+        Map<String,String> parametroMap=new HashMap<String ,String>();
+        for (RetencionAdicional datoAdicional : retencion.getDatosAdicionales()) 
+        {
+            parametroMap.put(datoAdicional.getCampo(),datoAdicional.getValor());
+        }
+        return parametroMap;
     }
 
     @Override
@@ -175,6 +187,10 @@ public class RetencionModel extends RetencionPanel{
         getLblNombreCliente().setText("");
         getLblTelefonoCliente().setText("");
         getLblDireccionCliente().setText("");
+        
+        getLblSubtotalRetencionIva().setText("0.00");
+        getLblSubtotalRetencionRenta().setText("0.00");
+        getLblRetencionTotal().setText("0.00");
         
         getjDateFechaEmision().setDate(UtilidadesFecha.getFechaHoy());
         
