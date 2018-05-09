@@ -22,7 +22,7 @@ import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.ValidadorC
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
 import ec.com.codesoft.codefaclite.crm.model.ClienteReporte;
-import ec.com.codesoft.codefaclite.crm.model.CompraModel;
+import ec.com.codesoft.codefaclite.compra.model.CompraModel;
 import ec.com.codesoft.codefaclite.crm.model.EmpresaModel;
 import ec.com.codesoft.codefaclite.crm.model.ProductoModel;
 import ec.com.codesoft.codefaclite.crm.model.ProductoReporte;
