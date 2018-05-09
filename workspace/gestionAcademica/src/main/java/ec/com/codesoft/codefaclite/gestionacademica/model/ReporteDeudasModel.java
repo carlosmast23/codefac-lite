@@ -55,12 +55,12 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
     private boolean banderaNiveles = false;
     private boolean banderaRubros = false;
     private List<RubrosNivel> listaRubros;
-    
+
     private DefaultListModel<RubroPlantillaMes> modeloLista;
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
-        modeloLista=new DefaultListModel();
+        modeloLista = new DefaultListModel();
         listener();
         try {
             Periodo p1 = new Periodo();
@@ -133,11 +133,10 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
 
         });
 
-        
     }
-    
+
     private void cargarMesesPeriodo(Periodo periodo) {
-        List<RubroPlantillaMes> Meses=periodo.obtenerTodosMesesGenerar();
+        List<RubroPlantillaMes> Meses = periodo.obtenerTodosMesesGenerar();
         getCmbMesFiltro().removeAllItems();
         for (RubroPlantillaMes mes : Meses) {
             getCmbMesFiltro().addItem(mes);
@@ -305,14 +304,14 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
     }
 
     private List<RubroPlantillaMes> obtenerMesesEnum() {
-        
+
         List<RubroPlantillaMes> listaMeses = new ArrayList<RubroPlantillaMes>();
-   
+
         for (int i = 0; i < modeloLista.getSize(); i++) {
-            RubroPlantillaMes rubroPlantillaMes=modeloLista.get(i);
+            RubroPlantillaMes rubroPlantillaMes = modeloLista.get(i);
             listaMeses.add(rubroPlantillaMes);
         }
-        
+
         return listaMeses;
 
     }
@@ -325,25 +324,24 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
         getBtnAgregarMes().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                RubroPlantillaMes rubroPlantillaMeS=(RubroPlantillaMes) getCmbMesFiltro().getSelectedItem();
+                RubroPlantillaMes rubroPlantillaMeS = (RubroPlantillaMes) getCmbMesFiltro().getSelectedItem();
                 modeloLista.addElement(rubroPlantillaMeS);
                 getLstFiltrosMes().setModel(modeloLista);
-                
+
             }
         });
-        
+
         getBtnEliminarMes().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(getLstFiltrosMes().getSelectedIndex()>=0)
-                {
-                    RubroPlantillaMes rubroPlantillaMes=(RubroPlantillaMes) modeloLista.get(getLstFiltrosMes().getSelectedIndex());
+                if (getLstFiltrosMes().getSelectedIndex() >= 0) {
+                    RubroPlantillaMes rubroPlantillaMes = (RubroPlantillaMes) modeloLista.get(getLstFiltrosMes().getSelectedIndex());
                     modeloLista.removeElement(rubroPlantillaMes);
                     getLstFiltrosMes().setModel(modeloLista);
                 }
             }
         });
-       
+
         getBtnBuscar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -400,6 +398,15 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
                     Logger.getLogger(ReporteDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
+            }
+        });
+
+        getBtnLimpiar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DefaultListModel model = new DefaultListModel();
+                model.clear();
+                getLstFiltrosMes().setModel(model);
             }
         });
     }

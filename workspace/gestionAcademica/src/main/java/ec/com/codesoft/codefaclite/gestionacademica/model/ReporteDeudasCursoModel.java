@@ -21,6 +21,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudi
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RubroEstudianteServiceIf;
+import static ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha.fechaInicioMes;
+import static ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha.hoy;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.InputStream;
@@ -50,10 +52,11 @@ public class ReporteDeudasCursoModel extends ReporteDeudasCursoPanel {
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
-        
+        getDateFechaInicio().setDate(fechaInicioMes(hoy()));
+        getDateFechaFin().setDate(hoy());
+
         iniciarComponentes();
         listener();
-        
 
     }
 
@@ -83,11 +86,11 @@ public class ReporteDeudasCursoModel extends ReporteDeudasCursoPanel {
             InputStream path = RecursoCodefac.JASPER_ACADEMICO.getResourceInputStream("reporte_deudas_curso.jrxml");
 
             RubroEstudianteServiceIf na = ServiceFactory.getFactory().getRubroEstudianteServiceIf();
-            
+
             java.sql.Date fechaInicial = (getDateFechaInicio().getDate() != null) ? new java.sql.Date(getDateFechaInicio().getDate().getTime()) : null;
             java.sql.Date fechaFinal = (getDateFechaFin().getDate() != null) ? new java.sql.Date(getDateFechaFin().getDate().getTime()) : null;
-            
-            List<Object[]> dataEstudiante = na.obtenerRubroPeriodoGrupo((Periodo) getCmbPeriodo().getSelectedItem(),fechaInicial,fechaFinal);
+
+            List<Object[]> dataEstudiante = na.obtenerRubroPeriodoGrupo((Periodo) getCmbPeriodo().getSelectedItem(), fechaInicial, fechaFinal);
             List<ReporteDeudasCursoData> data = new ArrayList<ReporteDeudasCursoData>();
             for (Object[] obj : dataEstudiante) {
                 NivelAcademico n = (NivelAcademico) obj[0];
@@ -102,28 +105,26 @@ public class ReporteDeudasCursoModel extends ReporteDeudasCursoPanel {
                         deuda
                 ));
             }
-            
+
             Periodo periodo = (Periodo) getCmbPeriodo().getSelectedItem();
             if (periodo != null) {
                 parameters.put("periodo", periodo.getNombre());
             } else {
                 parameters.put("periodo", "TODOS");
             }
-            
+
             DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
                 @Override
                 public void excel() {
-                     try{
+                    try {
                         Excel excel = new Excel();
-                        String nombreCabeceras[] = {"Rubro","Nivel","Abono", "Deuda"};
+                        String nombreCabeceras[] = {"Rubro", "Nivel", "Abono", "Deuda"};
                         excel.gestionarIngresoInformacionExcel(nombreCabeceras, data);
                         excel.abrirDocumento();
-                    }
-                    catch(Exception exc)
-                    {
-                        DialogoCodefac.mensaje("Error","El archivo Excel se encuentra abierto",DialogoCodefac.MENSAJE_INCORRECTO);
+                    } catch (Exception exc) {
+                        DialogoCodefac.mensaje("Error", "El archivo Excel se encuentra abierto", DialogoCodefac.MENSAJE_INCORRECTO);
                         exc.printStackTrace();
-                    }  
+                    }
                 }
 
                 @Override
@@ -131,9 +132,7 @@ public class ReporteDeudasCursoModel extends ReporteDeudasCursoPanel {
                     ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Deudas por Curso");
                 }
             });
-            
-            
-            
+
         } catch (RemoteException ex) {
             Logger.getLogger(ReporteDeudasCursoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -204,14 +203,14 @@ public class ReporteDeudasCursoModel extends ReporteDeudasCursoPanel {
                 getDateFechaInicio().setDate(null);
             }
         });
-        
+
         getBtnLimpiarFechaFin().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 getDateFechaFin().setDate(null);
             }
         });
-        
+
         getBtnBuscar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -225,11 +224,11 @@ public class ReporteDeudasCursoModel extends ReporteDeudasCursoPanel {
 
                     DefaultTableModel modeloTablaDeudas = new DefaultTableModel(titulo, 0);
                     RubroEstudianteServiceIf na = ServiceFactory.getFactory().getRubroEstudianteServiceIf();
-                    
-                    java.sql.Date fechaInicial=(getDateFechaInicio().getDate()!=null)?new java.sql.Date(getDateFechaInicio().getDate().getTime()):null;
-                    java.sql.Date fechaFinal=(getDateFechaFin().getDate()!=null)? new java.sql.Date(getDateFechaFin().getDate().getTime()):null;
-                            
-                    List<Object[]> dataEstudiante = na.obtenerRubroPeriodoGrupo((Periodo) getCmbPeriodo().getSelectedItem(),fechaInicial,fechaFinal);
+
+                    java.sql.Date fechaInicial = (getDateFechaInicio().getDate() != null) ? new java.sql.Date(getDateFechaInicio().getDate().getTime()) : null;
+                    java.sql.Date fechaFinal = (getDateFechaFin().getDate() != null) ? new java.sql.Date(getDateFechaFin().getDate().getTime()) : null;
+
+                    List<Object[]> dataEstudiante = na.obtenerRubroPeriodoGrupo((Periodo) getCmbPeriodo().getSelectedItem(), fechaInicial, fechaFinal);
                     for (Object[] obj : dataEstudiante) {
                         NivelAcademico n = (NivelAcademico) obj[0];
                         RubrosNivel r = (RubrosNivel) obj[1];
