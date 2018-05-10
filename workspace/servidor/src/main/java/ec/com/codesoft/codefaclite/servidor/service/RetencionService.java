@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.facade.RetencionFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -15,6 +16,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RetencionServiceIf;
 import java.rmi.RemoteException;
+import java.sql.Date;
+import java.util.List;
 import javax.persistence.EntityTransaction;
 
 /**
@@ -22,9 +25,11 @@ import javax.persistence.EntityTransaction;
  * @author Carlos
  */
 public class RetencionService extends ServiceAbstract<Retencion,RetencionFacade> implements RetencionServiceIf{
+    RetencionFacade retencionFacade;
 
     public RetencionService() throws RemoteException {
         super(RetencionFacade.class);
+        retencionFacade= new RetencionFacade();
     }
 
     
@@ -60,6 +65,11 @@ public class RetencionService extends ServiceAbstract<Retencion,RetencionFacade>
         transaction.commit();
         return entity;
     }
+    
+    public List<RetencionDetalle> obtenerRetencionesReporte(Persona persona,Date fi,Date ff,String estado) {
+        return retencionFacade.lista(persona,fi,ff,estado);
+    }
+
     
     
     
