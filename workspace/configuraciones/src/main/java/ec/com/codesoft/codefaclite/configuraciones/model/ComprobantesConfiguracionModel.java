@@ -100,6 +100,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
              */
             if(dialogoCopiarFondoEscritorio.origen!=null && dialogoCopiarFondoEscritorio.destino!=null)
             {
+                //Todo:Analizar esta parte porque con em metodo moverArchivo hace una copia local , no en el servidor.
                 dialogoCopiarFondoEscritorio.moverArchivo();
                 ParametroCodefac parametro = parametros.get(ParametroCodefac.IMAGEN_FONDO);
                 parametro.setValor(dialogoCopiarFondoEscritorio.destino.getFileName().toString());
@@ -317,19 +318,10 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             
             ServiceFactory.getFactory().getRecursosServiceIf().uploadFileServer(DirectorioCodefac.CONFIGURACION, istream,origen.getFileName().toString());
             
-            //try {
-            //Files.copy(origen, destino, StandardCopyOption.REPLACE_EXISTING);
-            //RemoteInput
-            //    SimpleRemoteInputStream istream = new SimpleRemoteInputStream(
-            //    new FileInputStream(fileName));
-            //ServiceFactory.getFactory().getRecursosServiceIf().uploadFileServer(DirectorioCodefac.FIRMA, ERROR,"firma","p12");
             getTxtNombreFirma().setText("" + destino.getFileName());
             ParametroCodefac parametro = parametros.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA);
             parametro.setValor(destino.getFileName().toString());
-            /*} catch (IOException ex) {
-            ex.printStackTrace();
-            DialogoCodefac.mensaje("Firma", "Problema en guardar firma", DialogoCodefac.MENSAJE_INCORRECTO);
-            }*/
+
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {

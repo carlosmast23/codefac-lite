@@ -2090,9 +2090,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         
         try {    
             RecursosServiceIf service= ServiceFactory.getFactory().getRecursosServiceIf();
+            String nombreImagen=sessionCodefac.getEmpresa().getImagenLogoPath();
             //service.getResourceInputStream(RecursoCodefac.AYUDA, file);
             
-            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_GENERAL, "codesoft-logo.png"));
+            //inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_GENERAL, "codesoft-logo.png"));
+            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStreamByFile(DirectorioCodefac.IMAGENES, nombreImagen));
             //inputStream = (InputStream) UtilidadesRmi.deserializar(service.getResourceInputStream(RecursoCodefac.IMAGENES_GENERAL, "codefac-logotipo.png"));
             //parametros.put("pl_url_img1",UtilidadImagen.castInputStreamToImage(inputStream));
             parametros.put("pl_url_img1",UtilidadImagen.castInputStreamToImage(inputStream));
