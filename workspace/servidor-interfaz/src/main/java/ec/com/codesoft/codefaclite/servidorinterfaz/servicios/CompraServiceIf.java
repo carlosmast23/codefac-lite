@@ -23,4 +23,5 @@ public interface CompraServiceIf extends ServiceAbstractIf<Compra>
     public void grabarCompra(Compra compra) throws ServicioCodefacException,java.rmi.RemoteException;
     public List<Compra> obtenerTodos() throws java.rmi.RemoteException;
     public List<Compra> obtenerCompraReporte(Persona proveedor, Date fechaInicial, Date fechaFin, DocumentoEnum de, TipoDocumentoEnum tde) throws java.rmi.RemoteException;
+    public List<Compra> obtenerCompraDisenable() throws java.rmi.RemoteException;
 }

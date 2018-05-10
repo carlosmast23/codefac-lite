@@ -5,7 +5,9 @@
  */
 package ec.com.codesoft.codefaclite.compra.panel;
 
+import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 
@@ -22,6 +24,22 @@ public abstract class RetencionesPendientePanel extends ControladorCodefacInterf
         initComponents();
     }
 
+    public JButton getBtnEnviarRetencion() {
+        return btnEnviarRetencion;
+    }
+
+    public JDateChooser getjDateFechaEmision() {
+        return jDateFechaEmision;
+    }
+
+    public void setjDateFechaEmision(JDateChooser jDateFechaEmision) {
+        this.jDateFechaEmision = jDateFechaEmision;
+    }
+
+    public void setBtnEnviarRetencion(JButton btnEnviarRetencion) {
+        this.btnEnviarRetencion = btnEnviarRetencion;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -36,8 +54,8 @@ public abstract class RetencionesPendientePanel extends ControladorCodefacInterf
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblComprasPendientes = new javax.swing.JTable();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
-        jButton1 = new javax.swing.JButton();
+        jDateFechaEmision = new com.toedter.calendar.JDateChooser();
+        btnEnviarRetencion = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblDetalleRetenciones = new javax.swing.JTable();
         lblEspacio1 = new javax.swing.JLabel();
@@ -96,16 +114,16 @@ public abstract class RetencionesPendientePanel extends ControladorCodefacInterf
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jDateChooser1, gridBagConstraints);
+        getContentPane().add(jDateFechaEmision, gridBagConstraints);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/general/right.png"))); // NOI18N
-        jButton1.setText("Enviar");
+        btnEnviarRetencion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/general/right.png"))); // NOI18N
+        btnEnviarRetencion.setText("Enviar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jButton1, gridBagConstraints);
+        getContentPane().add(btnEnviarRetencion, gridBagConstraints);
 
         tblDetalleRetenciones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -214,8 +232,8 @@ public abstract class RetencionesPendientePanel extends ControladorCodefacInterf
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
+    private javax.swing.JButton btnEnviarRetencion;
+    private com.toedter.calendar.JDateChooser jDateFechaEmision;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -390,7 +390,7 @@ public class Compra implements Serializable {
     
     public enum RetencionEnumCompras
     {
-        EMITIDO("E", "Emitido"), NO_EMITIDO("N", "No emitido");
+        EMITIDO("E", "Emitido"), NO_EMITIDO("N", "No emitido"), SIN_CONTABILIDAD("S","Sin contabilidad");
         
         private final String estado;
         private final String nombre;

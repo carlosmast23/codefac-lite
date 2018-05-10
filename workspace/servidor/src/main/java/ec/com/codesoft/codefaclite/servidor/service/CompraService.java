@@ -68,14 +68,21 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
     }
     
 
+    @Override
     public List<Compra> obtenerTodos()
     {
         return compraFacade.findAll();
     }
     
+    @Override
     public List<Compra> obtenerCompraReporte(Persona proveedor, Date fechaInicial, Date fechaFin, DocumentoEnum de, TipoDocumentoEnum tde)
     {
         return compraFacade.obtenerCompraReporte(proveedor, fechaInicial, fechaFin, de, tde);
     }    
     
+    @Override
+    public List<Compra> obtenerCompraDisenable()
+    {
+        return compraFacade.getCompraRetencionDisenable();
+    }
 }
