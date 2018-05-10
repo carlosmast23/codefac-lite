@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -54,6 +55,9 @@ public class Retencion extends Comprobante  implements Serializable
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "retencion",fetch = FetchType.EAGER)
     private List<RetencionDetalle> detalles;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "retencion",fetch = FetchType.EAGER)
+    private List<RetencionAdicional> datosAdicionales;
 
     public Retencion() {
 
@@ -108,6 +112,113 @@ public class Retencion extends Comprobante  implements Serializable
     public void setTipoClienteId(Long tipoClienteId) {
         this.tipoClienteId = tipoClienteId;
     }
+
+    public List<RetencionAdicional> getDatosAdicionales() {
+        return datosAdicionales;
+    }
+
+    public void setDatosAdicionales(List<RetencionAdicional> datosAdicionales) {
+        this.datosAdicionales = datosAdicionales;
+    }
+    
+    
+    
+       public void addDatoAdicional(String campo, String valor)
+    {
+        RetencionAdicional dato=new RetencionAdicional();
+        dato.setCampo(campo);
+        dato.setNumero(0);
+        dato.setTipo(FacturaAdicional.Tipo.TIPO_OTRO.getLetra());
+        dato.setValor(valor);
+        
+        addDatoAdicional(dato);
+    }
+    
+    public void addDatoAdicional(RetencionAdicional datoAdicional)
+    {
+        if(this.datosAdicionales==null)
+        {
+            this.datosAdicionales=new ArrayList<RetencionAdicional>();
+        }
+        datoAdicional.setRetencion(this);
+        this.datosAdicionales.add(datoAdicional);
+    }
+    
+    public void addDatosAdicionalCorreo(String correo)
+    {
+        RetencionAdicional retencionAdicional=new RetencionAdicional();
+        retencionAdicional.setCampo(FacturaAdicional.NOMBRE_CORREO);
+        retencionAdicional.setRetencion(this);
+        retencionAdicional.setTipo(FacturaAdicional.Tipo.TIPO_CORREO.getLetra());
+        retencionAdicional.setValor(correo);
+        
+        if (this.datosAdicionales == null) {
+            this.datosAdicionales = new ArrayList<RetencionAdicional>();
+        }
+        
+        //Buscar si existe un correo anterior para nombrar de forma secuencial
+        Integer numeroMaximo=0;
+        for (RetencionAdicional datoAdicional : datosAdicionales) {            
+            if(datoAdicional.getTipo().equals(FacturaAdicional.Tipo.TIPO_CORREO.getLetra()))
+            {
+                if(datoAdicional.getNumero()>numeroMaximo)
+                {
+                    numeroMaximo=datoAdicional.getNumero();
+                }
+            }
+        }
+        
+        retencionAdicional.setNumero(numeroMaximo+1);
+        //Modificar el nombre si el correo es mas de 2
+        if(retencionAdicional.getNumero()>1)
+        {
+            retencionAdicional.setCampo(FacturaAdicional.NOMBRE_CORREO+" "+retencionAdicional.getNumero());
+        }
+
+        this.datosAdicionales.add(retencionAdicional);
+    
+    }
+    
+    public RetencionAdicional obtenerDatoAdicionalPorCampo(String nombre)
+    {
+        if(this.datosAdicionales!=null)
+        {
+            for (RetencionAdicional retencionAdicional : datosAdicionales) {
+                if(retencionAdicional.getCampo().equals(nombre))
+                {
+                    return retencionAdicional;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 23 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Retencion other = (Retencion) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
     
     /**
      *Metodos personalizados

@@ -27,7 +27,7 @@ public abstract class ComprobanteElectronicoReporte
     public ComprobanteElectronico comprobante;
     public InputStream imagenEmpresa;
     
-    public abstract List<DetalleReporteData> getDetalles();
+    public abstract List<Object> getDetalles();
     protected abstract Map<String,Object> getMapTotales();
     protected abstract List getListFormasPago();
     protected abstract Map<String,Object> getMapInfoCliente();

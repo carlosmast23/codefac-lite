@@ -2084,6 +2084,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         parametros.put("pl_direccion", sessionCodefac.getEmpresa().getDireccion());
         parametros.put("pl_nombre_empresa", sessionCodefac.getEmpresa().getNombreLegal());
         parametros.put("pl_telefonos", sessionCodefac.getEmpresa().getTelefonos());
+        parametros.put("pl_celular", sessionCodefac.getEmpresa().getCelular());
+        parametros.put("pl_facebook", sessionCodefac.getEmpresa().getFacebook());
+        parametros.put("pl_adicional", sessionCodefac.getEmpresa().getAdicional());
         
         try {    
             RecursosServiceIf service= ServiceFactory.getFactory().getRecursosServiceIf();

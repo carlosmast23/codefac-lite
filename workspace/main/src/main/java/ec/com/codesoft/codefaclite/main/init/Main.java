@@ -22,7 +22,7 @@ import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.ValidadorC
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
 import ec.com.codesoft.codefaclite.crm.model.ClienteReporte;
-import ec.com.codesoft.codefaclite.crm.model.CompraModel;
+import ec.com.codesoft.codefaclite.compra.model.CompraModel;
 import ec.com.codesoft.codefaclite.crm.model.EmpresaModel;
 import ec.com.codesoft.codefaclite.crm.model.ProductoModel;
 import ec.com.codesoft.codefaclite.crm.model.ProductoReporte;
@@ -97,6 +97,7 @@ import ec.com.codesoft.codefaclite.servidor.service.SriFormaPagoService;
 import ec.com.codesoft.codefaclite.servidor.service.SriIdentificacionService;
 import ec.com.codesoft.codefaclite.servidor.service.SriRetencionIvaService;
 import ec.com.codesoft.codefaclite.servidor.service.SriRetencionRentaService;
+import ec.com.codesoft.codefaclite.servidor.service.SriRetencionService;
 import ec.com.codesoft.codefaclite.servidor.service.SriService;
 import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
 import ec.com.codesoft.codefaclite.servidor.service.UtilidadesService;
@@ -195,6 +196,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RetencionServiceIf
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriFormaPagoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionServiceIf;
 
 /**
  *
@@ -375,6 +377,7 @@ public class Main {
             mapRecursos.put(SriRetencionIvaService.class, SriRetencionIvaServiceIf.class);
             mapRecursos.put(SriRetencionRentaService.class, SriRetencionRentaServiceIf.class);
             mapRecursos.put(RetencionService.class, RetencionServiceIf.class);
+            mapRecursos.put(SriRetencionService.class,SriRetencionServiceIf.class);
                     
             
             ServiceControllerServer.cargarRecursos(mapRecursos);

@@ -25,6 +25,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JasperPrint;
 
 /**
@@ -135,7 +136,28 @@ public class RetencionImplCallBack extends UnicastRemoteObject implements Client
 
     @Override
     public void error(ComprobanteElectronicoException cee, String claveAcceso) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        monitorData.getBtnReporte().setEnabled(true);
+        monitorData.getBtnCerrar().setEnabled(true);
+        monitorData.getBtnReporte().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "Etapa: " + cee.getEtapa() + "\n" + cee.getMessage());
+                /*
+                monitorData.getBtnAbrir().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                facturacionModel.panelPadre.crearReportePantalla(jasperPrint, facturaProcesando.getPreimpreso());
+                
+                }
+                });*/
+            }
+        });
+        if (cee.getTipoError().equals(ComprobanteElectronicoException.ERROR_ENVIO_CLIENTE)) {
+            monitorData.getBtnAbrir().setEnabled(true);
+            monitorData.getBarraProgreso().setForeground(Color.YELLOW);
+        } else {
+            monitorData.getBarraProgreso().setForeground(Color.ORANGE);
+        }
     }
     
     private void generarReportePdf(String clave) {

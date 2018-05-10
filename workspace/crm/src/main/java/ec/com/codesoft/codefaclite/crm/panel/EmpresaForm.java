@@ -126,6 +126,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanelConfiguracionEmisor = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jTextRuc = new javax.swing.JTextField();
@@ -147,6 +148,14 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         lblEspacio1 = new javax.swing.JLabel();
         lblEspacio2 = new javax.swing.JLabel();
         btnCargarImagen = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        txtCelular = new javax.swing.JTextField();
+        txtFacebook = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtAdicional = new javax.swing.JTextArea();
 
         setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -156,7 +165,6 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         setTitle("Empresa");
         setToolTipText("");
         setFrameIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/edit-icon.png"))); // NOI18N
-        getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jPanelConfiguracionEmisor.setBorder(javax.swing.BorderFactory.createTitledBorder("Características Generales"));
         jPanelConfiguracionEmisor.setName(""); // NOI18N
@@ -303,16 +311,69 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
         jPanelConfiguracionEmisor.add(btnCargarImagen, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.weighty = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(jPanelConfiguracionEmisor, gridBagConstraints);
+        jTabbedPane1.addTab("Datos generales", jPanelConfiguracionEmisor);
+
+        jLabel6.setText("WhatsApp:");
+
+        jLabel5.setText("Facebook:");
+
+        txtCelular.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCelularActionPerformed(evt);
+            }
+        });
+
+        jLabel11.setText("Texto Adicional:");
+
+        txtAdicional.setColumns(20);
+        txtAdicional.setRows(5);
+        jScrollPane2.setViewportView(txtAdicional);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(41, 41, 41)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel11)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6))
+                .addGap(36, 36, 36)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(txtCelular)
+                        .addComponent(txtFacebook, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(txtCelular, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addComponent(txtFacebook, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel11)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+
+        jTabbedPane1.addTab("Datos adicionales", jPanel1);
+
+        getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtCelularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCelularActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCelularActionPerformed
 
     public JTextField getjTextLogo() {
         return jTextLogo;
@@ -321,20 +382,51 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     public void setjTextLogo(JTextField jTextLogo) {
         this.jTextLogo = jTextLogo;
     }
+    @ValidacionCodefacAnotacion(requerido= false, min=7, max=10,expresionRegularMensaje = "Ingrese un numero valido", expresionRegular = "\\d+")
+    public JTextField getTxtCelular() {
+        return txtCelular;
+    }
+
+    public void setTxtCelular(JTextField txtCelular) {
+        this.txtCelular = txtCelular;
+    }
+    @ValidacionCodefacAnotacion(requerido=false , min=5 ,max = 50,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\,\\ ]*$",nombre = "Direccion Matriz")
+    public JTextField getTxtFacebook() {
+        return txtFacebook;
+    }
+
+    public void setTxtFacebook(JTextField txtFacebook) {
+        this.txtFacebook = txtFacebook;
+    }
+    @ValidacionCodefacAnotacion(requerido=false , min=5 ,max = 100,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\,\\ ]*$",nombre = "Direccion Matriz")
+    public JTextArea getTxtAdicional() {
+        return txtAdicional;
+    }
+
+    public void setTxtAdicional(JTextArea txtAdicional) {
+        this.txtAdicional = txtAdicional;
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCargarImagen;
     private javax.swing.JCheckBox jCheckBLlevaContabilidad;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanelConfiguracionEmisor;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField jTextLogo;
     private javax.swing.JTextField jTextNombreComercial;
     private javax.swing.JTextField jTextNombreSocial;
@@ -343,7 +435,10 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     private javax.swing.JTextField jTextTelefono;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio2;
+    private javax.swing.JTextArea txtAdicional;
+    private javax.swing.JTextField txtCelular;
     private javax.swing.JTextArea txtDireccion;
+    private javax.swing.JTextField txtFacebook;
     // End of variables declaration//GEN-END:variables
 
     public JButton getBtnCargarImagen() {

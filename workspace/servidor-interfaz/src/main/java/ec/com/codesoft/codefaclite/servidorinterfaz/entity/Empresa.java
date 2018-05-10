@@ -18,35 +18,40 @@ import javax.persistence.Table;
  *
  * @author Carlos
  */
-
 @Entity
 @Table(name = "EMPRESA")
-public class Empresa implements Serializable{
-    
-    public static final String NO_LLEVA_CONTABILIDAD="NO";
-    public static final String SI_LLEVA_CONTABILIDAD="SI";
-    
+public class Empresa implements Serializable {
+
+    public static final String NO_LLEVA_CONTABILIDAD = "NO";
+    public static final String SI_LLEVA_CONTABILIDAD = "SI";
+
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     public long id;
-    @Column (name = "TELEFONOS")
+    @Column(name = "TELEFONOS")
     private String telefonos;
-    @Column (name = "RAZON_SOCIAL")
+    @Column(name = "RAZON_SOCIAL")
     private String razonSocial;
-    @Column (name = "NOMBRE_LEGAL")
+    @Column(name = "NOMBRE_LEGAL")
     private String nombreLegal;
-    @Column (name = "DIRECCION")
+    @Column(name = "DIRECCION")
     private String direccion;
-    @Column (name = "IDENTIFICACION")
+    @Column(name = "IDENTIFICACION")
     private String identificacion;
-    @Column (name = "OBLIGADO_LLEVAR_CONTABILIDAD")
+    @Column(name = "OBLIGADO_LLEVAR_CONTABILIDAD")
     private String obligadoLlevarContabilidad;
-    @Column (name = "CONTRIBUYENTE_ESPECIAL")
+    @Column(name = "CONTRIBUYENTE_ESPECIAL")
     private String contribuyenteEspecial;
-    @Column (name = "LOGO_IMAGEN_PATH")
+    @Column(name = "LOGO_IMAGEN_PATH")
     private String imagenLogoPath;
+    @Column(name = "CELULAR")
+    private String celular;
+    @Column(name = "FACEBOOK")
+    private String facebook;
+    @Column(name = "TEXTO1")
+    private String adicional;
 
     public String getTelefonos() {
         return telefonos;
@@ -56,7 +61,7 @@ public class Empresa implements Serializable{
         this.telefonos = telefonos;
     }
 
-     public String getDireccion() {
+    public String getDireccion() {
         return direccion;
     }
 
@@ -111,9 +116,31 @@ public class Empresa implements Serializable{
     public void setImagenLogoPath(String imagenLogoPath) {
         this.imagenLogoPath = imagenLogoPath;
     }
+
+    public String getCelular() {
+        return celular;
+    }
+
+    public void setCelular(String celular) {
+        this.celular = celular;
+    }
+
+    public String getFacebook() {
+        return facebook;
+    }
+
+    public void setFacebook(String facebook) {
+        this.facebook = facebook;
+    }
+
+    public String getAdicional() {
+        return adicional;
+    }
+
+    public void setAdicional(String adicional) {
+        this.adicional = adicional;
+    }
     
     
-    
-    
-    
+
 }

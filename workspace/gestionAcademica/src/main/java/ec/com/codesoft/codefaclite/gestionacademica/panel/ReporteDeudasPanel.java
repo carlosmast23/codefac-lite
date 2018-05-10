@@ -60,6 +60,7 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
         btnEliminarMes = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         cmbMesFiltro = new javax.swing.JComboBox<>();
+        btnLimpiar = new javax.swing.JButton();
         lblEspacio = new javax.swing.JLabel();
 
         setClosable(true);
@@ -234,6 +235,12 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cmbMesFiltro, gridBagConstraints);
 
+        btnLimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/clear.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        jPanel1.add(btnLimpiar, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 0;
@@ -256,6 +263,7 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnAgregarMes;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnEliminarMes;
+    private javax.swing.JButton btnLimpiar;
     private javax.swing.JCheckBox chkTodosNiveles;
     private javax.swing.JCheckBox chkTodosRubros;
     private javax.swing.JComboBox<RubroPlantillaMes> cmbMesFiltro;
@@ -361,6 +369,14 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
 
     public void setCmbMesFiltro(JComboBox<RubroPlantillaMes> cmbMesFiltro) {
         this.cmbMesFiltro = cmbMesFiltro;
+    }
+
+    public JButton getBtnLimpiar() {
+        return btnLimpiar;
+    }
+
+    public void setBtnLimpiar(JButton btnLimpiar) {
+        this.btnLimpiar = btnLimpiar;
     }
     
     

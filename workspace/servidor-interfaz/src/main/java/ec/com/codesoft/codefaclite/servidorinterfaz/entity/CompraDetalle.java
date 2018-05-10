@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -159,13 +160,13 @@ public class CompraDetalle implements Serializable {
     
     public BigDecimal getBaseImponibleRenta()
     {
-        return getSubtotal();
+        return getSubtotal().setScale(2,BigDecimal.ROUND_HALF_UP);
     }
     
     
     public BigDecimal getBaseImponibleIva()
     {
-        return calcularValorIva();
+        return calcularValorIva().setScale(2,BigDecimal.ROUND_HALF_UP);
     }
 
     

@@ -31,9 +31,9 @@ public enum VentanaEnum {
     CLIENTE_REPORTE("ec.com.codesoft.codefaclite.crm.model.ClienteReporte","CLIR","Cliente reporte",ModuloCodefacEnum.CRM,CategoriaMenuEnum.REPORTES),
     PRODUCTO_REPORTE("ec.com.codesoft.codefaclite.crm.model.ProductoReporte","PROD","Producto Reporte",ModuloCodefacEnum.CRM,CategoriaMenuEnum.REPORTES),
     FACTURA_DISENIO("ec.com.codesoft.codefaclite.facturacion.model.FacturaDisenioModel","FACD","Factura Diseño",ModuloCodefacEnum.FACTURACION,CategoriaMenuEnum.GESTIONAR),
-    COMPRA("ec.com.codesoft.codefaclite.crm.model.CompraModel","COMP","Compra",ModuloCodefacEnum.INVENTARIO,CategoriaMenuEnum.PROCESOS),
-    COMPRA_REPORTE("ec.com.codesoft.codefaclite.crm.model.CompraReporteModel","CMPR","Compra Reporte",ModuloCodefacEnum.CRM,CategoriaMenuEnum.REPORTES),
-    COMPRA_REPORTE_PRODUCTO("ec.com.codesoft.codefaclite.crm.model.CompraReporteProductoModel","CRPM","Compra Reporte Producto",ModuloCodefacEnum.CRM,CategoriaMenuEnum.REPORTES),
+    COMPRA("ec.com.codesoft.codefaclite.compra.model.CompraModel","COMP","Compra",ModuloCodefacEnum.COMPRA,CategoriaMenuEnum.PROCESOS),
+    COMPRA_REPORTE("ec.com.codesoft.codefaclite.compra.model.CompraReporteModel","CMPR","Compra Reporte",ModuloCodefacEnum.COMPRA,CategoriaMenuEnum.REPORTES),
+    COMPRA_REPORTE_PRODUCTO("ec.com.codesoft.codefaclite.compra.model.CompraReporteProductoModel","CRPM","Compra Reporte Producto",ModuloCodefacEnum.COMPRA,CategoriaMenuEnum.REPORTES),
     ASOCIAR_PRODUCTO("ec.com.codesoft.codefaclite.inventario.model.AsociarProductoProveedorModel","ASOP","Asociar Producto",ModuloCodefacEnum.INVENTARIO,CategoriaMenuEnum.PROCESOS),
     BODEGA("ec.com.codesoft.codefaclite.inventario.model.BodegaModel","BODG","Bodega",ModuloCodefacEnum.INVENTARIO,CategoriaMenuEnum.GESTIONAR),
     CATEGORIA_PRODUCTO("ec.com.codesoft.codefaclite.inventario.model.CategoriaProductoModel","CAPR","categoria",ModuloCodefacEnum.INVENTARIO,CategoriaMenuEnum.GESTIONAR),
@@ -63,8 +63,7 @@ public enum VentanaEnum {
     RESPALDAR_INFORMACION("ec.com.codesoft.codefaclite.configuraciones.model.RespaldarInformacionModel","RESP","Respaldar Informacion",ModuloCodefacEnum.SISTEMA,CategoriaMenuEnum.PROCESOS),
     CONFIGURACION_DEFECTO("ec.com.codesoft.codefaclite.configuraciones.model.ConfiguracionDefectoModel","CFDF","Configuraciones por Defecto",ModuloCodefacEnum.SISTEMA,CategoriaMenuEnum.PROCESOS),
     RETENCIONES_PENDIENTES("ec.com.codesoft.codefaclite.compra.model.RetencionesPendienteModel","RETP","Retenciones Pendientes",ModuloCodefacEnum.COMPRA,CategoriaMenuEnum.PROCESOS),
-    RETENCIONES("ec.com.codesoft.codefaclite.compra.model.RetencionModel","RETC","Retención",ModuloCodefacEnum.COMPRA,CategoriaMenuEnum.PROCESOS),
-    REPORTE_COMPRAS("ec.com.codesoft.codefaclite.compra.model.ReporteComprasModel","RECG","Reporte Compras",ModuloCodefacEnum.COMPRA,CategoriaMenuEnum.REPORTES);
+    RETENCIONES("ec.com.codesoft.codefaclite.compra.model.RetencionModel","RETC","Retención",ModuloCodefacEnum.COMPRA,CategoriaMenuEnum.PROCESOS);
 
     private VentanaEnum(String clase, String codigo, String nombre, ModuloCodefacEnum modulo, CategoriaMenuEnum categoriaMenu) {
         this.claseNombre = clase;
