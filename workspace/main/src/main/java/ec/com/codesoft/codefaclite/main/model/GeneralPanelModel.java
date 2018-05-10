@@ -2077,7 +2077,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     public Map<String, Object> mapReportePlantilla() {
         InputStream inputStream = null;
 
-        SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat formateador = new SimpleDateFormat("d MMM yyyy HH:mm:ss");
         Map<String, Object> parametros = new HashMap<String, Object>();
         parametros.put("pl_fecha_hora", formateador.format(new Date()));
         parametros.put("pl_usuario", sessionCodefac.getUsuario().getNick());
@@ -2092,7 +2092,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             RecursosServiceIf service= ServiceFactory.getFactory().getRecursosServiceIf();
             //service.getResourceInputStream(RecursoCodefac.AYUDA, file);
             
-            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_GENERAL, "codefac-logotipo.png"));
+            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_GENERAL, "codesoft-logo.png"));
             //inputStream = (InputStream) UtilidadesRmi.deserializar(service.getResourceInputStream(RecursoCodefac.IMAGENES_GENERAL, "codefac-logotipo.png"));
             //parametros.put("pl_url_img1",UtilidadImagen.castInputStreamToImage(inputStream));
             parametros.put("pl_url_img1",UtilidadImagen.castInputStreamToImage(inputStream));
@@ -2106,9 +2106,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "telefono.png"));
             parametros.put("pl_img_telefono",UtilidadImagen.castInputStreamToImage(inputStream));
             
-            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_GENERAL, "codesoft-logo.png"));
-            parametros.put("pl_img_logo_pie",UtilidadImagen.castInputStreamToImage(inputStream));
+            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_GENERAL, "codefac-logotipo.png"));
+            //parametros.put("pl_img_logo_pie",UtilidadImagen.castInputStreamToImage(inputStream));
+            parametros.put("pl_img_logo_pie",null);
             
+            /*
             inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_GENERAL, "codefac-logotipo.png"));
             parametros.put("pl_url_img1_url",UtilidadImagen.castInputStreamToImage(inputStream));
             
@@ -2123,6 +2125,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             
             inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_GENERAL, "codesoft-logo.png"));
             parametros.put("pl_img_logo_pie_url",UtilidadImagen.castInputStreamToImage(inputStream));
+            */
             
             inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER, "encabezado.jrxml"));
             JasperReport reportCabecera = JasperCompileManager.compileReport(inputStream);
