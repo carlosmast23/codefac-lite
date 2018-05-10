@@ -100,7 +100,7 @@ public class CompraModel extends CompraPanel{
         this.banderaIngresoDetallesCompra = false;
         bloquearDesbloquearBotones(true);
         setearVariblesIniciales();
-        
+        getTxtFPreimpreso().setText("001001000");
         try {
             mostrarVentanaRetenciones();
         } catch (RemoteException ex) {
@@ -133,6 +133,7 @@ public class CompraModel extends CompraPanel{
     
     private void setearValores()
     {
+        String preimpreso = "";
         compra.setClaveAcceso("");
         DocumentoEnum documentoEnum= (DocumentoEnum) getCmbDocumento().getSelectedItem();
         compra.setCodigoDocumento(documentoEnum.getCodigo());
@@ -143,9 +144,12 @@ public class CompraModel extends CompraPanel{
         compra.setIdentificacion("");
         compra.setProveedor(proveedor);
         
-        compra.setPuntoEmision(getTxtPuntoEmision().getText());
-        compra.setPuntoEstablecimiento(getTxtEstablecimiento().getText());
-        compra.setSecuencial(Integer.parseInt(getTxtSecuencial().getText()));
+//        compra.setPuntoEmision(getTxtPuntoEmision().getText());
+//        compra.setPuntoEstablecimiento(getTxtEstablecimiento().getText());
+//        compra.setSecuencial(Integer.parseInt(getTxtSecuencial().getText()));
+        compra.setPuntoEmision(getTxtFPreimpreso().getText().substring(0,2));
+        compra.setPuntoEstablecimiento(getTxtFPreimpreso().getText().substring(4,6));
+        compra.setSecuencial(Integer.parseInt(getTxtFPreimpreso().getText().substring(8, 10)));
         
         compra.setRazonSocial("");
         compra.setTelefono("");
@@ -195,9 +199,11 @@ public class CompraModel extends CompraPanel{
             //Observacion
             this.getTxtObservacion().setText("Por Defecto");
             //Preimpreso
-            this.getTxtEstablecimiento().setText(this.compra.getPuntoEstablecimiento());
-            this.getTxtPuntoEmision().setText(this.compra.getPuntoEmision());
-            this.getTxtSecuencial().setText(this.compra.getSecuencial()+"");
+            String preimpreso = "00"+this.compra.getPuntoEstablecimiento() +"00"+ this.compra.getPuntoEmision();
+            String secuencial = ""+this.compra.getSecuencial();
+            preimpreso += establecerSecuencial(secuencial);
+
+            this.getTxtFPreimpreso().setText(preimpreso);
             //Autorizacion
             this.getTxtAutorizacion().setText("Por Defecto"); 
             //Fecha
@@ -219,14 +225,31 @@ public class CompraModel extends CompraPanel{
         }
         
     }
-
+    
+    public String establecerSecuencial(String secuencial)
+    {
+        switch(secuencial.length())
+        {
+            case 1:
+                secuencial = "00"+this.compra.getSecuencial();
+            break;
+            case 2:
+                secuencial = "0"+this.compra.getSecuencial();
+            break;
+            case 3:
+                secuencial = ""+this.compra.getSecuencial();
+            break;
+        }
+        return  secuencial;
+    }
+    
     @Override
     public void limpiar() {
         getTxtCantidadItem().setText("1");
         getTxtOrdenCompra().setText("");
         getTxtProveedor().setText("");
         getTxtObservacion().setText("");
-        getTxtSecuencial().setText("");
+        getTxtFPreimpreso().setText("001001");
         getTxtAutorizacion().setText("");
         //Limpiar Detalles de Producto
         getTxtProductoItem().setText("");

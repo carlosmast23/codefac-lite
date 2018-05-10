@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -89,9 +90,15 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     public void setCmbRetencionRenta(JComboBox<SriRetencionRenta> cmbRetencionRenta) {
         this.cmbRetencionRenta = cmbRetencionRenta;
     }
-    
-    
 
+    public JFormattedTextField getTxtFPreimpreso() {
+        return txtFPreimpreso;
+    }
+
+    public void setTxtFPreimpreso(JFormattedTextField txtFPreimpreso) {
+        this.txtFPreimpreso = txtFPreimpreso;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -111,7 +118,6 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         jLabel3 = new javax.swing.JLabel();
         txtObservacion = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        txtEstablecimiento = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         txtAutorizacion = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
@@ -156,8 +162,6 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         tblDetalleProductos = new javax.swing.JTable();
         jLabel13 = new javax.swing.JLabel();
         cmbDocumento = new javax.swing.JComboBox<>();
-        txtPuntoEmision = new javax.swing.JTextField();
-        txtSecuencial = new javax.swing.JTextField();
         lblEspacio10 = new javax.swing.JLabel();
         lblEspacio12 = new javax.swing.JLabel();
         panelRetencion = new javax.swing.JPanel();
@@ -166,6 +170,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         jLabel18 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
         btnAgregarProveedor = new javax.swing.JButton();
+        txtFPreimpreso = new javax.swing.JFormattedTextField();
 
         setClosable(true);
         setIconifiable(true);
@@ -253,14 +258,6 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel5, gridBagConstraints);
 
-        txtEstablecimiento.setText("001");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        getContentPane().add(txtEstablecimiento, gridBagConstraints);
-
         jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel6.setText("Autorizacion");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -272,7 +269,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         getContentPane().add(txtAutorizacion, gridBagConstraints);
@@ -675,28 +672,14 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(cmbDocumento, gridBagConstraints);
-
-        txtPuntoEmision.setText("001");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        getContentPane().add(txtPuntoEmision, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.6;
-        getContentPane().add(txtSecuencial, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.3;
         getContentPane().add(lblEspacio10, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.3;
@@ -760,6 +743,19 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnAgregarProveedor, gridBagConstraints);
 
+        try {
+            txtFPreimpreso.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###-###-###")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        getContentPane().add(txtFPreimpreso, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -821,14 +817,12 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtDescripcionItem;
     private javax.swing.JTextField txtDescuentoImpuestos;
     private javax.swing.JTextField txtDescuentoSinImpuestos;
-    private javax.swing.JTextField txtEstablecimiento;
+    private javax.swing.JFormattedTextField txtFPreimpreso;
     private javax.swing.JTextField txtObservacion;
     private javax.swing.JTextField txtOrdenCompra;
     private javax.swing.JTextField txtPrecionUnitarioItem;
     private javax.swing.JTextField txtProductoItem;
     private javax.swing.JTextField txtProveedor;
-    private javax.swing.JTextField txtPuntoEmision;
-    private javax.swing.JTextField txtSecuencial;
     // End of variables declaration//GEN-END:variables
 
     public JComboBox<DocumentoEnum> getCmbDocumento() {
@@ -952,15 +946,15 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         this.txtOrdenCompra = txtOrdenCompra;
     }
 
-    @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0-9]+$",nombre = "Preimpreso")
-    public JTextField getTxtPreimpreso() {
-        return txtEstablecimiento;
-    }
-
-    public void setTxtPreimpreso(JTextField txtPreimpreso) {
-        this.txtEstablecimiento = txtPreimpreso;
-    }
+//    @LimpiarAnotacion
+//    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0-9]+$",nombre = "Preimpreso")
+//    public JTextField getTxtPreimpreso() {
+//        return txtEstablecimiento;
+//    }
+//
+//    public void setTxtPreimpreso(JTextField txtPreimpreso) {
+//        this.txtEstablecimiento = txtPreimpreso;
+//    }
 
     @LimpiarAnotacion
     @ValidacionCodefacAnotacion(requerido=false, expresionRegular = "^[0-9]+([.][0-9]+)?$", nombre = "DescuentoImpuestos")
@@ -1030,35 +1024,35 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         this.cmbFechaCompra = cmbFechaCompra;
     }
     
-    @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[0-9]+$", nombre = "Codigo establecimiento")
-    public JTextField getTxtEstablecimiento() {
-        return txtEstablecimiento;
-    }
-
-    public void setTxtEstablecimiento(JTextField txtEstablecimiento) {
-        this.txtEstablecimiento = txtEstablecimiento;
-    }
+//    @LimpiarAnotacion
+//    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[0-9]+$", nombre = "Codigo establecimiento")
+//    public JTextField getTxtEstablecimiento() {
+//        return txtEstablecimiento;
+//    }
+//
+//    public void setTxtEstablecimiento(JTextField txtEstablecimiento) {
+//        this.txtEstablecimiento = txtEstablecimiento;
+//    }
     
-    @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0-9]+$",nombre = "Codigo punto emisión")
-    public JTextField getTxtPuntoEmision() {
-        return txtPuntoEmision;
-    }
-
-    public void setTxtPuntoEmision(JTextField txtPuntoEmision) {
-        this.txtPuntoEmision = txtPuntoEmision;
-    }
+//    @LimpiarAnotacion
+//    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0-9]+$",nombre = "Codigo punto emisión")
+//    public JTextField getTxtPuntoEmision() {
+//        return txtPuntoEmision;
+//    }
+//
+//    public void setTxtPuntoEmision(JTextField txtPuntoEmision) {
+//        this.txtPuntoEmision = txtPuntoEmision;
+//    }
     
-    @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0-9]+$",nombre = "Codigo secuencial")
-    public JTextField getTxtSecuencial() {
-        return txtSecuencial;
-    }
-
-    public void setTxtSecuencial(JTextField txtSecuencial) {
-        this.txtSecuencial = txtSecuencial;
-    }
+//    @LimpiarAnotacion
+//    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0-9]+$",nombre = "Codigo secuencial")
+//    public JTextField getTxtSecuencial() {
+//        return txtSecuencial;
+//    }
+//
+//    public void setTxtSecuencial(JTextField txtSecuencial) {
+//        this.txtSecuencial = txtSecuencial;
+//    }
 
     public JComboBox<EnumSiNo> getCmbCobraIva() {
         return cmbCobraIva;
