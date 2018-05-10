@@ -147,10 +147,9 @@ public class CompraModel extends CompraPanel{
 //        compra.setPuntoEmision(getTxtPuntoEmision().getText());
 //        compra.setPuntoEstablecimiento(getTxtEstablecimiento().getText());
 //        compra.setSecuencial(Integer.parseInt(getTxtSecuencial().getText()));
-        compra.setPuntoEmision(getTxtFPreimpreso().getText().substring(0,2));
-        compra.setPuntoEstablecimiento(getTxtFPreimpreso().getText().substring(4,6));
-        compra.setSecuencial(Integer.parseInt(getTxtFPreimpreso().getText().substring(8, 10)));
-        
+        compra.setPuntoEmision(getTxtFPreimpreso().getText().substring(0,3));
+        compra.setPuntoEstablecimiento(getTxtFPreimpreso().getText().substring(4,7));
+        compra.setSecuencial(Integer.parseInt(getTxtFPreimpreso().getText().substring(8, 11)));
         compra.setRazonSocial("");
         compra.setTelefono("");
         compra.setTipoFacturacion(""); //TODO: Establecer el metodo de facturacion manual y electronica
@@ -160,7 +159,13 @@ public class CompraModel extends CompraPanel{
         TipoDocumentoEnum tipoDocumentoEnum= (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
         compra.setCodigoTipoDocumento(tipoDocumentoEnum.getCodigo());
         
-        estadoRetencion = Compra.RetencionEnumCompras.NO_EMITIDO;
+        if(session.getEmpresa().getObligadoLlevarContabilidad().equals(Empresa.SI_LLEVA_CONTABILIDAD)){
+            estadoRetencion = Compra.RetencionEnumCompras.NO_EMITIDO;
+        }else{
+            estadoRetencion = Compra.RetencionEnumCompras.SIN_CONTABILIDAD;
+        }
+        
+        
         compra.setEstadoRetencion(estadoRetencion.getEstado());
     }
 

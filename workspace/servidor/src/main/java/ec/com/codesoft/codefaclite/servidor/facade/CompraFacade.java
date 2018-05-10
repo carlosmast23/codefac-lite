@@ -6,8 +6,10 @@
 package ec.com.codesoft.codefaclite.servidor.facade;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import java.sql.Date;
 import java.util.List;
@@ -84,6 +86,18 @@ public class CompraFacade extends AbstractFacade<Compra>{
         } catch (NoResultException e) {
             return null;
         }    
+    }
+    
+     public List<Compra> getCompraRetencionDisenable() {
+        try {
+            
+            String queryString = "SELECT u FROM Compra u WHERE u.estadoRetencion=?1";
+            Query query = getEntityManager().createQuery(queryString);
+            query.setParameter(1, Compra.RetencionEnumCompras.NO_EMITIDO.getEstado());
+            return (List<Compra>) query.getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
     
 }
