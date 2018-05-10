@@ -19,83 +19,84 @@ import javax.swing.JMenuItem;
  * @author Carlos
  */
 public enum VentanaEnum {
-    
-    CLIENTE("ec.com.codesoft.codefaclite.crm.model.ClienteModel","CLIE","Cliente",ModuloCodefacEnum.CRM,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION}),
-    PRODUCTO("ec.com.codesoft.codefaclite.crm.model.ProductoModel","PROD","Producto",ModuloCodefacEnum.CRM,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION}),
-    FACTURACION("ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel","FACT","facturacion",ModuloCodefacEnum.FACTURACION,CategoriaMenuEnum.PROCESOS),
-    EMPRESA("ec.com.codesoft.codefaclite.crm.model.EmpresaModel","EMPR","Empresa",ModuloCodefacEnum.SISTEMA,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION}),
-    COMPROBANTE_CONFIGURACION("ec.com.codesoft.codefaclite.configuraciones.model.ComprobantesConfiguracionModel","CONF","Comprobante",ModuloCodefacEnum.FACTURACION,CategoriaMenuEnum.GESTIONAR),
-    UTILIDAD_COMPROBANTE("ec.com.codesoft.codefaclite.facturacion.model.UtilidadComprobanteModel","UTIL","Utilidad Comprobante",ModuloCodefacEnum.FACTURACION,CategoriaMenuEnum.UTILIDADES),    
-    NOTA_CREDITO("ec.com.codesoft.codefaclite.facturacion.model.NotaCreditoModel","NOTC","Nota de credito",ModuloCodefacEnum.FACTURACION,CategoriaMenuEnum.PROCESOS),
-    FACTURA_REPORTE("ec.com.codesoft.codefaclite.facturacion.model.FacturaReporteModel","FACR","Factura Reporte",ModuloCodefacEnum.FACTURACION,CategoriaMenuEnum.REPORTES),
-    CLIENTE_REPORTE("ec.com.codesoft.codefaclite.crm.model.ClienteReporte","CLIR","Cliente reporte",ModuloCodefacEnum.CRM,CategoriaMenuEnum.REPORTES),
-    PRODUCTO_REPORTE("ec.com.codesoft.codefaclite.crm.model.ProductoReporte","PROD","Producto Reporte",ModuloCodefacEnum.CRM,CategoriaMenuEnum.REPORTES),
-    FACTURA_DISENIO("ec.com.codesoft.codefaclite.facturacion.model.FacturaDisenioModel","FACD","Factura Diseño",ModuloCodefacEnum.FACTURACION,CategoriaMenuEnum.GESTIONAR),
-    COMPRA("ec.com.codesoft.codefaclite.compra.model.CompraModel","COMP","Compra",ModuloCodefacEnum.COMPRA,CategoriaMenuEnum.PROCESOS),
-    COMPRA_REPORTE("ec.com.codesoft.codefaclite.compra.model.CompraReporteModel","CMPR","Compra Reporte",ModuloCodefacEnum.COMPRA,CategoriaMenuEnum.REPORTES),
-    COMPRA_REPORTE_PRODUCTO("ec.com.codesoft.codefaclite.compra.model.CompraReporteProductoModel","CRPM","Compra Reporte Producto",ModuloCodefacEnum.COMPRA,CategoriaMenuEnum.REPORTES),
-    ASOCIAR_PRODUCTO("ec.com.codesoft.codefaclite.inventario.model.AsociarProductoProveedorModel","ASOP","Asociar Producto",ModuloCodefacEnum.INVENTARIO,CategoriaMenuEnum.PROCESOS),
-    BODEGA("ec.com.codesoft.codefaclite.inventario.model.BodegaModel","BODG","Bodega",ModuloCodefacEnum.INVENTARIO,CategoriaMenuEnum.GESTIONAR),
-    CATEGORIA_PRODUCTO("ec.com.codesoft.codefaclite.inventario.model.CategoriaProductoModel","CAPR","categoria",ModuloCodefacEnum.INVENTARIO,CategoriaMenuEnum.GESTIONAR),
-    INGRESO_INVENTARIO("ec.com.codesoft.codefaclite.inventario.model.IngresoInventarioModel","ININ","Cliente model",ModuloCodefacEnum.INVENTARIO,CategoriaMenuEnum.PROCESOS),
-    KARDEX("ec.com.codesoft.codefaclite.inventario.model.KardexModel","KARD","Kardex",ModuloCodefacEnum.INVENTARIO,CategoriaMenuEnum.REPORTES),
-    INVENTARIO_ENSAMBLE("ec.com.codesoft.codefaclite.inventario.model.InventarioEnsambleModel","INVE","Cliente model",ModuloCodefacEnum.INVENTARIO,CategoriaMenuEnum.PROCESOS),
-    AULA("ec.com.codesoft.codefaclite.gestionacademica.model.AulaModel","AULA","Aula",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.GESTIONAR),
-    NIVEL("ec.com.codesoft.codefaclite.gestionacademica.model.NivelModel","NIVE","Nivel",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.GESTIONAR),
-    PERIODO("ec.com.codesoft.codefaclite.gestionacademica.model.PeriodoModel","PERI","Periodo",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.GESTIONAR),
-    PERFILES("ec.com.codesoft.codefaclite.configuraciones.model.PerfilModel","PERF","Utilidad Comprobante",ModuloCodefacEnum.SISTEMA,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION}),
-    USUARIOS("ec.com.codesoft.codefaclite.configuraciones.model.PerfilUsuarioModel","PEUM","Perfil Usuario",ModuloCodefacEnum.SISTEMA,CategoriaMenuEnum.GESTIONAR,true,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION}),
-    MATRICULA("ec.com.codesoft.codefaclite.gestionacademica.model.MatriculaModel","MATR","",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.MATRICULA),
-    NIVEL_ACADEMICO("ec.com.codesoft.codefaclite.gestionacademica.model.NivelAcademicoModel","NIAC","CURSOS",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.GESTIONAR),
-    ESTUDIANTES("ec.com.codesoft.codefaclite.gestionacademica.model.EstudianteModel","ESTU","",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.GESTIONAR),
-    RUBRO_ACADEMICO("ec.com.codesoft.codefaclite.gestionacademica.model.RubrosPeriodoModel","RUAC","",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.DEUDAS_ACADEMICOS),
-    GESTIONAR_ACADEMICO("ec.com.codesoft.codefaclite.gestionacademica.model.GestionarDeudasModel","RUAC","",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.DEUDAS_ACADEMICOS),
-    FACTURA_ACADEMICO_LOTE("ec.com.codesoft.codefaclite.facturacion.model.FacturaAcademicoLoteModel","FACL","",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.PROCESOS),
-    REPORTE_MATRICULA("ec.com.codesoft.codefaclite.gestionacademica.model.ReporteAcademicoModel","RMAT","",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.REPORTES),
-    REPORTE_DEUDAS("ec.com.codesoft.codefaclite.gestionacademica.model.ReporteDeudasModel","RDES","",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.REPORTES),
-    REPORTE_DEUDASESTUDIANTE("ec.com.codesoft.codefaclite.gestionacademica.model.ReporteDeudasEstudianteModel","RDEI","",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.REPORTES),
-    REPORTE_DEUDASCURSO("ec.com.codesoft.codefaclite.gestionacademica.model.ReporteDeudasCursoModel","RDEC","",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.REPORTES),
-    DEUDA_ESTUDIANTE("ec.com.codesoft.codefaclite.gestionacademica.model.DeudaEstudianteModel","DEML","",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.DEUDAS_ACADEMICOS),
-    CATALOGO_PRODUCTO("ec.com.codesoft.codefaclite.inventario.model.CatalogoProductoModel","CAPR","",ModuloCodefacEnum.INVENTARIO,CategoriaMenuEnum.GESTIONAR),
-    RUBRO_PLANTILLA("ec.com.codesoft.codefaclite.gestionacademica.model.RubroPlantillaModel","RUBR","",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.DEUDAS_ACADEMICOS),
-    NOTIFICACION_DEUDAS("ec.com.codesoft.codefaclite.gestionacademica.model.NotificacionesDeudasModel","NODE","",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.UTILIDADES),
-    MATRICULA_ESTUDIANTE("ec.com.codesoft.codefaclite.gestionacademica.model.MatriculaEstudianteModel","MAES","",ModuloCodefacEnum.GESTIONA_ACADEMICA,CategoriaMenuEnum.MATRICULA),
-    RESPALDAR_INFORMACION("ec.com.codesoft.codefaclite.configuraciones.model.RespaldarInformacionModel","RESP","Respaldar Informacion",ModuloCodefacEnum.SISTEMA,CategoriaMenuEnum.PROCESOS),
-    CONFIGURACION_DEFECTO("ec.com.codesoft.codefaclite.configuraciones.model.ConfiguracionDefectoModel","CFDF","Configuraciones por Defecto",ModuloCodefacEnum.SISTEMA,CategoriaMenuEnum.PROCESOS),
-    RETENCIONES_PENDIENTES("ec.com.codesoft.codefaclite.compra.model.RetencionesPendienteModel","RETP","Retenciones Pendientes",ModuloCodefacEnum.COMPRA,CategoriaMenuEnum.PROCESOS),
-    RETENCIONES("ec.com.codesoft.codefaclite.compra.model.RetencionModel","RETC","Retención",ModuloCodefacEnum.COMPRA,CategoriaMenuEnum.PROCESOS);
+
+    CLIENTE("ec.com.codesoft.codefaclite.crm.model.ClienteModel", "CLIE", "Cliente", ModuloCodefacEnum.CRM, CategoriaMenuEnum.GESTIONAR, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION}),
+    PRODUCTO("ec.com.codesoft.codefaclite.crm.model.ProductoModel", "PROD", "Producto", ModuloCodefacEnum.CRM, CategoriaMenuEnum.GESTIONAR, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION}),
+    FACTURACION("ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel", "FACT", "facturacion", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.PROCESOS),
+    EMPRESA("ec.com.codesoft.codefaclite.crm.model.EmpresaModel", "EMPR", "Empresa", ModuloCodefacEnum.SISTEMA, CategoriaMenuEnum.GESTIONAR, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION}),
+    COMPROBANTE_CONFIGURACION("ec.com.codesoft.codefaclite.configuraciones.model.ComprobantesConfiguracionModel", "CONF", "Comprobante", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.GESTIONAR),
+    UTILIDAD_COMPROBANTE("ec.com.codesoft.codefaclite.facturacion.model.UtilidadComprobanteModel", "UTIL", "Utilidad Comprobante", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.UTILIDADES),
+    NOTA_CREDITO("ec.com.codesoft.codefaclite.facturacion.model.NotaCreditoModel", "NOTC", "Nota de credito", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.PROCESOS),
+    FACTURA_REPORTE("ec.com.codesoft.codefaclite.facturacion.model.FacturaReporteModel", "FACR", "Factura Reporte", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.REPORTES),
+    CLIENTE_REPORTE("ec.com.codesoft.codefaclite.crm.model.ClienteReporte", "CLIR", "Cliente reporte", ModuloCodefacEnum.CRM, CategoriaMenuEnum.REPORTES),
+    PRODUCTO_REPORTE("ec.com.codesoft.codefaclite.crm.model.ProductoReporte", "PROD", "Producto Reporte", ModuloCodefacEnum.CRM, CategoriaMenuEnum.REPORTES),
+    FACTURA_DISENIO("ec.com.codesoft.codefaclite.facturacion.model.FacturaDisenioModel", "FACD", "Factura Diseño", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.GESTIONAR),
+    COMPRA("ec.com.codesoft.codefaclite.compra.model.CompraModel", "COMP", "Compra", ModuloCodefacEnum.COMPRA, CategoriaMenuEnum.PROCESOS),
+    COMPRA_REPORTE("ec.com.codesoft.codefaclite.compra.model.CompraReporteModel", "CMPR", "Compra Reporte", ModuloCodefacEnum.COMPRA, CategoriaMenuEnum.REPORTES),
+    COMPRA_REPORTE_PRODUCTO("ec.com.codesoft.codefaclite.compra.model.CompraReporteProductoModel", "CRPM", "Compra Reporte Producto", ModuloCodefacEnum.COMPRA, CategoriaMenuEnum.REPORTES),
+    ASOCIAR_PRODUCTO("ec.com.codesoft.codefaclite.inventario.model.AsociarProductoProveedorModel", "ASOP", "Asociar Producto", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.PROCESOS),
+    BODEGA("ec.com.codesoft.codefaclite.inventario.model.BodegaModel", "BODG", "Bodega", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.GESTIONAR),
+    CATEGORIA_PRODUCTO("ec.com.codesoft.codefaclite.inventario.model.CategoriaProductoModel", "CAPR", "categoria", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.GESTIONAR),
+    INGRESO_INVENTARIO("ec.com.codesoft.codefaclite.inventario.model.IngresoInventarioModel", "ININ", "Cliente model", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.PROCESOS),
+    KARDEX("ec.com.codesoft.codefaclite.inventario.model.KardexModel", "KARD", "Kardex", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.REPORTES),
+    INVENTARIO_ENSAMBLE("ec.com.codesoft.codefaclite.inventario.model.InventarioEnsambleModel", "INVE", "Cliente model", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.PROCESOS),
+    AULA("ec.com.codesoft.codefaclite.gestionacademica.model.AulaModel", "AULA", "Aula", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.GESTIONAR),
+    NIVEL("ec.com.codesoft.codefaclite.gestionacademica.model.NivelModel", "NIVE", "Nivel", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.GESTIONAR),
+    PERIODO("ec.com.codesoft.codefaclite.gestionacademica.model.PeriodoModel", "PERI", "Periodo", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.GESTIONAR),
+    PERFILES("ec.com.codesoft.codefaclite.configuraciones.model.PerfilModel", "PERF", "Utilidad Comprobante", ModuloCodefacEnum.SISTEMA, CategoriaMenuEnum.GESTIONAR, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION}),
+    USUARIOS("ec.com.codesoft.codefaclite.configuraciones.model.PerfilUsuarioModel", "PEUM", "Perfil Usuario", ModuloCodefacEnum.SISTEMA, CategoriaMenuEnum.GESTIONAR, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION}),
+    MATRICULA("ec.com.codesoft.codefaclite.gestionacademica.model.MatriculaModel", "MATR", "", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.MATRICULA),
+    NIVEL_ACADEMICO("ec.com.codesoft.codefaclite.gestionacademica.model.NivelAcademicoModel", "NIAC", "CURSOS", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.GESTIONAR),
+    ESTUDIANTES("ec.com.codesoft.codefaclite.gestionacademica.model.EstudianteModel", "ESTU", "", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.GESTIONAR),
+    RUBRO_ACADEMICO("ec.com.codesoft.codefaclite.gestionacademica.model.RubrosPeriodoModel", "RUAC", "", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.DEUDAS_ACADEMICOS),
+    GESTIONAR_ACADEMICO("ec.com.codesoft.codefaclite.gestionacademica.model.GestionarDeudasModel", "RUAC", "", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.DEUDAS_ACADEMICOS),
+    FACTURA_ACADEMICO_LOTE("ec.com.codesoft.codefaclite.facturacion.model.FacturaAcademicoLoteModel", "FACL", "", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.PROCESOS),
+    REPORTE_MATRICULA("ec.com.codesoft.codefaclite.gestionacademica.model.ReporteAcademicoModel", "RMAT", "", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.REPORTES),
+    REPORTE_DEUDAS("ec.com.codesoft.codefaclite.gestionacademica.model.ReporteDeudasModel", "RDES", "", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.REPORTES),
+    REPORTE_DEUDASESTUDIANTE("ec.com.codesoft.codefaclite.gestionacademica.model.ReporteDeudasEstudianteModel", "RDEI", "", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.REPORTES),
+    REPORTE_DEUDASCURSO("ec.com.codesoft.codefaclite.gestionacademica.model.ReporteDeudasCursoModel", "RDEC", "", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.REPORTES),
+    DEUDA_ESTUDIANTE("ec.com.codesoft.codefaclite.gestionacademica.model.DeudaEstudianteModel", "DEML", "", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.DEUDAS_ACADEMICOS),
+    CATALOGO_PRODUCTO("ec.com.codesoft.codefaclite.inventario.model.CatalogoProductoModel", "CAPR", "", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.GESTIONAR),
+    RUBRO_PLANTILLA("ec.com.codesoft.codefaclite.gestionacademica.model.RubroPlantillaModel", "RUBR", "", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.DEUDAS_ACADEMICOS),
+    NOTIFICACION_DEUDAS("ec.com.codesoft.codefaclite.gestionacademica.model.NotificacionesDeudasModel", "NODE", "", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.UTILIDADES),
+    MATRICULA_ESTUDIANTE("ec.com.codesoft.codefaclite.gestionacademica.model.MatriculaEstudianteModel", "MAES", "", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.MATRICULA),
+    RESPALDAR_INFORMACION("ec.com.codesoft.codefaclite.configuraciones.model.RespaldarInformacionModel", "RESP", "Respaldar Informacion", ModuloCodefacEnum.SISTEMA, CategoriaMenuEnum.PROCESOS),
+    CONFIGURACION_DEFECTO("ec.com.codesoft.codefaclite.configuraciones.model.ConfiguracionDefectoModel", "CFDF", "Configuraciones por Defecto", ModuloCodefacEnum.SISTEMA, CategoriaMenuEnum.PROCESOS),
+    RETENCIONES_PENDIENTES("ec.com.codesoft.codefaclite.compra.model.RetencionesPendienteModel", "RETP", "Retenciones Pendientes", ModuloCodefacEnum.COMPRA, CategoriaMenuEnum.PROCESOS),
+    RETENCIONES("ec.com.codesoft.codefaclite.compra.model.RetencionModel", "RETC", "Retención", ModuloCodefacEnum.COMPRA, CategoriaMenuEnum.PROCESOS),
+    RETENCION_REPORTE("ec.com.codesoft.codefaclite.compra.model.RetencionReporteModel", "CRET", "Reporte Retenciones", ModuloCodefacEnum.COMPRA, CategoriaMenuEnum.REPORTES);
 
     private VentanaEnum(String clase, String codigo, String nombre, ModuloCodefacEnum modulo, CategoriaMenuEnum categoriaMenu) {
         this.claseNombre = clase;
         this.codigo = codigo;
         this.nombre = nombre;
         this.modulo = modulo;
-        this.categoriaMenu=categoriaMenu;
-        this.maximizado=true;
+        this.categoriaMenu = categoriaMenu;
+        this.maximizado = true;
     }
-    
+
     private VentanaEnum(String clase, String codigo, String nombre, ModuloCodefacEnum modulo, CategoriaMenuEnum categoriaMenu, boolean maximizado) {
         this.claseNombre = clase;
         this.codigo = codigo;
         this.nombre = nombre;
         this.modulo = modulo;
-        this.categoriaMenu=categoriaMenu;
+        this.categoriaMenu = categoriaMenu;
         this.maximizado = maximizado;
     }
-    
-    private VentanaEnum(String clase, String codigo, String nombre, ModuloCodefacEnum modulo, CategoriaMenuEnum categoriaMenu,boolean maximizado,ModuloCodefacEnum[] modulosPermitidos) {
+
+    private VentanaEnum(String clase, String codigo, String nombre, ModuloCodefacEnum modulo, CategoriaMenuEnum categoriaMenu, boolean maximizado, ModuloCodefacEnum[] modulosPermitidos) {
         this.claseNombre = clase;
         this.codigo = codigo;
         this.nombre = nombre;
         this.modulo = modulo;
-        this.maximizado=true;
-        this.categoriaMenu=categoriaMenu;
+        this.maximizado = true;
         this.categoriaMenu = categoriaMenu;
-        this.modulosPermitidos=modulosPermitidos;
+        this.categoriaMenu = categoriaMenu;
+        this.modulosPermitidos = modulosPermitidos;
     }
-        
+
     private String claseNombre;
-    private String codigo;    
+    private String codigo;
     private String nombre;
     private ModuloCodefacEnum modulo;
     private CategoriaMenuEnum categoriaMenu;
@@ -103,9 +104,8 @@ public enum VentanaEnum {
     private ModuloCodefacEnum[] modulosPermitidos;
     private JMenuItem jmenuItem;
     private Object instance;
-    
-    public Class getClase()
-    {
+
+    public Class getClase() {
         try {
             return Class.forName(claseNombre);
         } catch (ClassNotFoundException ex) {
@@ -145,13 +145,13 @@ public enum VentanaEnum {
     public boolean isMaximizado() {
         return maximizado;
     }
-    
-        public Boolean verificarPermisoModuloAdicional(Map<ModuloCodefacEnum, Boolean> modulos) {
+
+    public Boolean verificarPermisoModuloAdicional(Map<ModuloCodefacEnum, Boolean> modulos) {
         //Si no existe ningun dato en modulo permitidos asumo que tiene acceso para todos los modulos
-        
-        if(modulosPermitidos==null)
+
+        if (modulosPermitidos == null) {
             return false;
-        
+        }
 
         for (Map.Entry<ModuloCodefacEnum, Boolean> entry : modulos.entrySet()) {
             ModuloCodefacEnum moduloSistema = entry.getKey();
@@ -171,36 +171,32 @@ public enum VentanaEnum {
         }
         return false;
     }
-        
-    public static List<VentanaEnum> getVentanaByModuloAndCategoria(ModuloCodefacEnum modulo,CategoriaMenuEnum categoria)
-    {
-        List<VentanaEnum> listaVentanas=new ArrayList<VentanaEnum>();
+
+    public static List<VentanaEnum> getVentanaByModuloAndCategoria(ModuloCodefacEnum modulo, CategoriaMenuEnum categoria) {
+        List<VentanaEnum> listaVentanas = new ArrayList<VentanaEnum>();
         for (VentanaEnum ventana : VentanaEnum.values()) {
-            if(ventana.getModulo().equals(modulo) && ventana.getCategoriaMenu().equals(categoria))
-            {
+            if (ventana.getModulo().equals(modulo) && ventana.getCategoriaMenu().equals(categoria)) {
                 listaVentanas.add(ventana);
             }
         }
         return listaVentanas;
     }
-    
-    public static VentanaEnum buscarPorCodigo(String codigo)
-    {
+
+    public static VentanaEnum buscarPorCodigo(String codigo) {
         for (VentanaEnum ventana : VentanaEnum.values()) {
-            if(ventana.getCodigo().equals(codigo))
-            {
-               return ventana;
+            if (ventana.getCodigo().equals(codigo)) {
+                return ventana;
             }
         }
         return null;
     }
-    
-     public Object getInstance() {
+
+    public Object getInstance() {
         try {
 
             if (instance == null) {
-                Class clase=getClase();
-                Constructor constructor= clase.getConstructor();
+                Class clase = getClase();
+                Constructor constructor = clase.getConstructor();
                 instance = constructor.newInstance();
             }
 
@@ -221,7 +217,7 @@ public enum VentanaEnum {
         }
         return null;
     }
-    
+
     public Object createNewInstance() {
         try {
             instance = this.getClase().getConstructor().newInstance();
@@ -241,15 +237,12 @@ public enum VentanaEnum {
         return instance;
     }
 
-    
-    public static List<VentanaEnum> getListValues()
-    {
-        List<VentanaEnum> lista=new ArrayList<VentanaEnum>();
+    public static List<VentanaEnum> getListValues() {
+        List<VentanaEnum> lista = new ArrayList<VentanaEnum>();
         for (VentanaEnum enumerador : VentanaEnum.values()) {
-            lista.add(enumerador);            
+            lista.add(enumerador);
         }
         return lista;
     }
-    
 
 }
