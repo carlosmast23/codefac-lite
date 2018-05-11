@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import static ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface.ESTADO_EDITAR;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusquedaNotaCredito;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.NotaCreditoBusqueda;
@@ -42,9 +43,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudi
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.ejemplo.utilidades.rmi.UtilidadesRmi;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.rmi.RemoteException;
@@ -152,7 +155,23 @@ public class NotaCreditoModel extends NotaCreditoPanel {
 
     @Override
     public void imprimir() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                
+        //Solo imprimir en el modo de editar
+        if(estadoFormulario==ESTADO_EDITAR)
+        {
+            try {
+                String claveAceeso = this.notaCredito.getClaveAcceso();
+                byte[] byteReporte = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAceeso);
+                JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(byteReporte);
+                panelPadre.crearReportePantalla(jasperPrint,notaCredito.getPreimpreso());
+            } catch (RemoteException ex) {
+                Logger.getLogger(NotaCreditoModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(NotaCreditoModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(NotaCreditoModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     @Override
@@ -172,6 +191,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
             this.notaCredito = notaCreditoTmp;
             mostrarDatosNotaCredito(); 
             actualizarDatosTablaDetalle();
+            cargarTablaDatosAdicionales();
         }
         else
         {

@@ -105,7 +105,7 @@
 				<textElement>
 					<font size="22" isBold="true"/>
 				</textElement>
-				<text><![CDATA[ssss DE CRÉDITO]]></text>
+				<text><![CDATA[NOTA DE CRÉDITO]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="333" y="36" width="36" height="20" uuid="eb119e44-1fd0-4d1a-a344-b88c7bfc3494"/>
