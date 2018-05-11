@@ -35,9 +35,11 @@ public class CompraBusquedaDialogo implements InterfaceModelFind<Compra>
     @Override
     public QueryDialog getConsulta(String filter) {
         String queryString = "SELECT c FROM Compra c WHERE ";
-        queryString+=" ( LOWER(c.secuencial) like ?1 )";
+        queryString+= " ( LOWER(c.secuencial) like ?1 )";
+        queryString+= " and c.estadoRetencion=?2"; 
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,filter);
+        queryDialog.agregarParametro(2,Compra.RetencionEnumCompras.NO_EMITIDO.getEstado());
         return queryDialog;
     }
 
