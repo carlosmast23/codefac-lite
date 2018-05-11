@@ -30,6 +30,7 @@ import ec.com.codesoft.codefaclite.ws.recepcion.Mensaje;
 import ec.com.codesoft.ejemplo.utilidades.email.CorreoElectronico;
 import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.ejemplo.utilidades.xml.UtilidadesXml;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.ByteArrayInputStream;
@@ -61,6 +62,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Document;
 
@@ -155,7 +157,7 @@ public class ComprobanteElectronicoService implements Runnable {
     private URL pathRetencionJasper;
         
     private String pathParentJasper;
-    public URL pathLogoImagen;
+    public Image pathLogoImagen;
 
     private Map<String, Object> mapAdicionalReporte;
     private ListenerComprobanteElectronico escucha;
@@ -168,8 +170,8 @@ public class ComprobanteElectronicoService implements Runnable {
     private Integer etapaLimiteProcesar;
     
     
-    private URL reporteInfoAdicional;
-    private URL reporteFormaPago;
+    private JasperReport reporteInfoAdicional;
+    private JasperReport reporteFormaPago;
     
     private boolean enviarPorLotes;
     
@@ -607,9 +609,9 @@ public class ComprobanteElectronicoService implements Runnable {
     {
         try {            
             //COPIAR RECURSOS//
-            InputStream reporteInfoAdicional = this.reporteInfoAdicional.openStream();
-            InputStream reporteFormaPago = this.reporteFormaPago.openStream();
-            InputStream pathLogoImagen = this.pathLogoImagen.openStream();
+            //InputStream reporteInfoAdicional = this.reporteInfoAdicional.openStream();
+            //InputStream reporteFormaPago = this.reporteFormaPago.openStream();
+            //InputStream pathLogoImagen = this.pathLogoImagen.openStream();
 
             //FIN COPIA ARCHIVOS
             
@@ -654,9 +656,6 @@ public class ComprobanteElectronicoService implements Runnable {
             
 
         } catch (JAXBException ex) {
-            Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
-            throw new ComprobanteElectronicoException(ex.getMessage(), "Generando RIDE", ComprobanteElectronicoException.ERROR_COMPROBANTE);
-        } catch (IOException ex) {
             Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
             throw new ComprobanteElectronicoException(ex.getMessage(), "Generando RIDE", ComprobanteElectronicoException.ERROR_COMPROBANTE);
         } catch (Exception ex) {
@@ -739,9 +738,9 @@ public class ComprobanteElectronicoService implements Runnable {
 
             List<Object> informacionAdicional = reporte.getDetalles();
             
-            InputStream reporteInfoAdicional = this.reporteInfoAdicional.openStream();
-            InputStream reporteFormaPago = this.reporteFormaPago.openStream();
-            InputStream pathLogoImagen = this.pathLogoImagen.openStream();
+            //InputStream reporteInfoAdicional = this.reporteInfoAdicional.openStream();
+            //InputStream reporteFormaPago = this.reporteFormaPago.openStream();
+            //InputStream pathLogoImagen = this.pathLogoImagen.openStream();
 
             Map<String, Object> datosMap = reporte.getMapReporte();
             datosMap.put("SUBREPORT_DIR", pathParentJasper);
@@ -1435,11 +1434,11 @@ public class ComprobanteElectronicoService implements Runnable {
         this.mapCodeAndNameFormaPago = mapCodeAndNameFormaPago;
     }
 
-    public void setReporteInfoAdicional(URL reporteInfoAdicional) {
+    public void setReporteInfoAdicional(JasperReport reporteInfoAdicional) {
         this.reporteInfoAdicional = reporteInfoAdicional;
     }
 
-    public void setReporteFormaPago(URL reporteFormaPago) {
+    public void setReporteFormaPago(JasperReport reporteFormaPago) {
         this.reporteFormaPago = reporteFormaPago;
     }
 

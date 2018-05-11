@@ -115,12 +115,8 @@ public class NotaCreditoModel extends NotaCreditoPanel {
             notaCreditoGrabada=notaCredito;//graba una referencia con ambiento del metodo para los listener
             
             ComprobanteDataNotaCredito comprobanteData=new ComprobanteDataNotaCredito(notaCredito);
-            Map<String,String> datosAdicionales=new HashMap<String,String>();
-            if (datosAdicionales.size() > 0) {
-                datosAdicionales.put("correo", notaCredito.getCliente().getCorreoElectronico());
-                comprobanteData.setMapInfoAdicional(datosAdicionales);
-            }
-            comprobanteData.setCorreosAdicionales(new ArrayList<String>());
+
+            comprobanteData.setMapInfoAdicional(getMapAdicional(notaCredito));
              
             ClienteInterfaceComprobante cic=new ClienteNotaCreditoImplComprobante(this, notaCreditoGrabada);
             ComprobanteServiceIf comprobanteServiceIf=ServiceFactory.getFactory().getComprobanteServiceIf();
@@ -132,6 +128,16 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         } catch (RemoteException ex) {
             Logger.getLogger(NotaCreditoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private Map<String,String> getMapAdicional(NotaCredito notaCredito)
+    {
+        Map<String,String> parametroMap=new HashMap<String ,String>();
+        for (NotaCreditoAdicional datoAdicional : notaCredito.getDatosAdicionales()) 
+        {
+            parametroMap.put(datoAdicional.getCampo(),datoAdicional.getValor());
+        }
+        return parametroMap;
     }
 
     @Override
@@ -289,10 +295,35 @@ public class NotaCreditoModel extends NotaCreditoPanel {
                 if (factura != null) {
                     notaCredito.setFactura(factura);
                     cargarDatosNotaCredito();
+                    cargarDatosAdicionales();
                     cargarTablaDatosAdicionales();
                 }
             }
         });
+    }
+    
+    private void cargarDatosAdicionales()
+    {
+        //Si vuelve a escoger otra factura se borran los datos adicionales
+         if(notaCredito.getDatosAdicionales()!=null)
+            notaCredito.getDatosAdicionales().clear();
+        
+         List<FacturaAdicional> datosAdicional=notaCredito.getFactura().getDatosAdicionales();
+         if(datosAdicional!=null)
+         {
+             List<NotaCreditoAdicional> datosAdicionalNotaCredito=new ArrayList<NotaCreditoAdicional>();
+             for (FacturaAdicional facturaDetalle : datosAdicional) {
+                 NotaCreditoAdicional notaCreditoAdicional=new NotaCreditoAdicional();
+                 notaCreditoAdicional.setCampo(facturaDetalle.getCampo());
+                 notaCreditoAdicional.setNotaCredito(notaCredito);
+                 notaCreditoAdicional.setNumero(facturaDetalle.getNumero());
+                 notaCreditoAdicional.setTipo(facturaDetalle.getTipo());
+                 notaCreditoAdicional.setValor(facturaDetalle.getValor());
+                 datosAdicionalNotaCredito.add(notaCreditoAdicional);
+             }
+             notaCredito.setDatosAdicionales(datosAdicionalNotaCredito);
+         }
+
     }
 
     private void cargarDatosNotaCredito() {
@@ -331,6 +362,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         /**
          * Cargar los datos Adicionales
          */
+        /*
          List<FacturaAdicional> datosAdicional=notaCredito.getFactura().getDatosAdicionales();
          if(datosAdicional!=null)
          {
@@ -346,6 +378,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
              }
              notaCredito.setDatosAdicionales(datosAdicionalNotaCredito);
          }
+        */
         
         actualizarDatosTablaDetalle();
         mostrarDatosNotaCredito();

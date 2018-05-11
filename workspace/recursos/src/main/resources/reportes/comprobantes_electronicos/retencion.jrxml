@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d9c21352-f760-4e3a-b774-88dde93e1e8b">
-	<property name="ireport.zoom" value="1.0000000000000173"/>
+	<property name="ireport.zoom" value="1.2100000000000255"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="261"/>
+	<property name="ireport.y" value="288"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -44,23 +44,26 @@
 	<parameter name="informacionAdicionalList" class="java.util.Collection"/>
 	<parameter name="formaPagoList" class="java.util.Collection"/>
 	<parameter name="direccion_sucursal" class="java.lang.String"/>
-	<parameter name="imagen_logo" class="java.io.InputStream"/>
-	<parameter name="pl_url_piepagina" class="java.io.InputStream"/>
+	<parameter name="imagen_logo" class="java.lang.Object"/>
+	<parameter name="pl_url_piepagina" class="java.lang.Object"/>
 	<parameter name="pl_fecha_hora" class="java.lang.String"/>
 	<parameter name="pl_direccion" class="java.lang.String"/>
 	<parameter name="pl_nombre_empresa" class="java.lang.String"/>
 	<parameter name="pl_telefonos" class="java.lang.String"/>
 	<parameter name="pl_usuario" class="java.lang.String"/>
 	<parameter name="pl_titulo" class="java.lang.String"/>
-	<parameter name="pl_url_img1" class="java.io.InputStream"/>
-	<parameter name="pl_img_facebook" class="java.io.InputStream"/>
-	<parameter name="pl_img_whatsapp" class="java.io.InputStream"/>
-	<parameter name="pl_img_telefono" class="java.io.InputStream"/>
-	<parameter name="pl_img_logo_pie" class="java.io.InputStream"/>
-	<parameter name="pl_url_cabecera" class="java.lang.String"/>
-	<parameter name="pl_url_piepagina_1" class="java.lang.String"/>
-	<parameter name="SUBREPORT_INFO_ADICIONAL" class="java.io.InputStream"/>
-	<parameter name="SUBREPORT_FORMA_PAGO" class="java.io.InputStream"/>
+	<parameter name="pl_url_img1" class="java.lang.Object"/>
+	<parameter name="pl_img_facebook" class="java.lang.Object"/>
+	<parameter name="pl_img_whatsapp" class="java.lang.Object"/>
+	<parameter name="pl_img_telefono" class="java.lang.Object"/>
+	<parameter name="pl_img_logo_pie" class="java.lang.Object"/>
+	<parameter name="pl_url_cabecera" class="java.lang.Object"/>
+	<parameter name="pl_url_piepagina_1" class="java.lang.Object"/>
+	<parameter name="SUBREPORT_INFO_ADICIONAL" class="java.lang.Object"/>
+	<parameter name="SUBREPORT_FORMA_PAGO" class="java.lang.Object"/>
+	<parameter name="pl_celular" class="java.lang.String"/>
+	<parameter name="pl_adicional" class="java.lang.String"/>
+	<parameter name="pl_facebook" class="java.lang.String"/>
 	<field name="comprobante" class="java.lang.String"/>
 	<field name="numero" class="java.lang.String"/>
 	<field name="fechaEmision" class="java.lang.String"/>
@@ -526,33 +529,18 @@
 			</textField>
 		</band>
 	</detail>
-	<columnFooter>
-		<band height="134" splitType="Stretch">
-			<rectangle radius="10">
-				<reportElement x="0" y="1" width="555" height="127" uuid="4c480e46-a4e3-400a-b74b-706a025f3078"/>
-			</rectangle>
-			<staticText>
-				<reportElement x="5" y="9" width="540" height="20" uuid="72acdd4c-a8e5-4703-9a75-cddfeb3b5ef8"/>
-				<textElement verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Información Adicional]]></text>
-			</staticText>
-			<subreport>
-				<reportElement stretchType="RelativeToTallestObject" x="5" y="29" width="540" height="89" uuid="78a52071-cfc2-461a-a6c3-299d9151537a">
-					<printWhenExpression><![CDATA[$P{SUBREPORT_INFO_ADICIONAL}!=null]]></printWhenExpression>
-				</reportElement>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{informacionAdicionalList})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_INFO_ADICIONAL}]]></subreportExpression>
-			</subreport>
-		</band>
-	</columnFooter>
 	<pageFooter>
-		<band height="54" splitType="Stretch">
+		<band height="54">
 			<subreport isUsingCache="true">
 				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="555" height="54" uuid="d9f98cfb-fec9-488b-be52-471b067a0280"/>
+				<subreportParameter name="pl_telefonos">
+					<subreportParameterExpression><![CDATA[$P{pl_telefonos}]]></subreportParameterExpression>
+				</subreportParameter>
 				<subreportParameter name="pl_img_whatsapp">
 					<subreportParameterExpression><![CDATA[$P{pl_img_whatsapp}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_facebook">
+					<subreportParameterExpression><![CDATA[$P{pl_facebook}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="pl_img_logo_pie">
 					<subreportParameterExpression><![CDATA[$P{pl_img_logo_pie}]]></subreportParameterExpression>
@@ -563,9 +551,50 @@
 				<subreportParameter name="pl_img_facebook">
 					<subreportParameterExpression><![CDATA[$P{pl_img_facebook}]]></subreportParameterExpression>
 				</subreportParameter>
+				<subreportParameter name="pl_celular">
+					<subreportParameterExpression><![CDATA[$P{pl_celular}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_adicional">
+					<subreportParameterExpression><![CDATA[$P{pl_adicional}]]></subreportParameterExpression>
+				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 				<subreportExpression><![CDATA[$P{pl_url_piepagina}]]></subreportExpression>
 			</subreport>
+			<textField>
+				<reportElement x="433" y="34" width="79" height="20" uuid="519d994a-b11d-42b2-8c2e-bff26428a7d7"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pagina "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="515" y="34" width="40" height="20" uuid="c66232b0-55d2-4b00-97d4-ae8d508fc1ea"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageFooter>
+	<summary>
+		<band height="140">
+			<rectangle radius="10">
+				<reportElement x="0" y="0" width="555" height="127" uuid="4c480e46-a4e3-400a-b74b-706a025f3078"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="5" y="0" width="540" height="20" uuid="72acdd4c-a8e5-4703-9a75-cddfeb3b5ef8"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Información Adicional]]></text>
+			</staticText>
+			<subreport>
+				<reportElement stretchType="RelativeToTallestObject" x="5" y="20" width="540" height="89" uuid="78a52071-cfc2-461a-a6c3-299d9151537a">
+					<printWhenExpression><![CDATA[$P{SUBREPORT_INFO_ADICIONAL}!=null]]></printWhenExpression>
+				</reportElement>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{informacionAdicionalList})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_INFO_ADICIONAL}]]></subreportExpression>
+			</subreport>
+		</band>
+	</summary>
 </jasperReport>

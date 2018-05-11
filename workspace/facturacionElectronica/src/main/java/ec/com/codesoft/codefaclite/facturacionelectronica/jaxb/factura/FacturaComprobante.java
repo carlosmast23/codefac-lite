@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura;
 
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionTributaria;
@@ -32,7 +33,7 @@ public class FacturaComprobante extends ComprobanteElectronico{
     
     @Override
     public String getTipoDocumento() {
-        return ComprobanteElectronico.FACTURA;
+        return ComprobanteEnum.FACTURA.getCodigo();
     }
     
 
