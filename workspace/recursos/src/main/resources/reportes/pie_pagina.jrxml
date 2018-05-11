@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="pie_pagina" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="f53d2141-f2f6-49f7-92d8-b84d6335680c">
-	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="1.4641000000000022"/>
+	<property name="ireport.x" value="22"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="pl_img_facebook" class="java.lang.Object"/>
 	<parameter name="pl_img_whatsapp" class="java.lang.Object"/>
@@ -18,7 +18,7 @@
 				<imageExpression><![CDATA[$P{pl_img_logo_pie}]]></imageExpression>
 			</image>
 			<image isLazy="true">
-				<reportElement x="114" y="28" width="23" height="21" uuid="2f5a8d90-0aac-44a5-b6a6-2c9036ede6c2"/>
+				<reportElement x="103" y="28" width="23" height="21" uuid="2f5a8d90-0aac-44a5-b6a6-2c9036ede6c2"/>
 				<imageExpression><![CDATA[$P{pl_img_facebook}]]></imageExpression>
 			</image>
 			<image isLazy="true">
@@ -30,14 +30,7 @@
 				<imageExpression><![CDATA[$P{pl_img_telefono}]]></imageExpression>
 			</image>
 			<textField>
-				<reportElement x="512" y="33" width="59" height="15" uuid="491d703a-6b2d-492f-a92e-359be9959587"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Pagina:"+ $V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="397" y="28" width="100" height="20" uuid="1bddc1b7-413c-418e-afbe-e211bef8ac46"/>
+				<reportElement x="397" y="29" width="100" height="20" uuid="1bddc1b7-413c-418e-afbe-e211bef8ac46"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{pl_telefonos}]]></textFieldExpression>
 			</textField>
@@ -47,14 +40,14 @@
 				<textFieldExpression><![CDATA[$P{pl_celular}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="247" y="5" width="100" height="20" uuid="2493a00c-db4f-407e-8462-4afde06650b2"/>
+				<reportElement x="90" y="5" width="433" height="20" uuid="2493a00c-db4f-407e-8462-4afde06650b2"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true" isItalic="true" isUnderline="true"/>
+					<font size="9" isBold="true" isItalic="true" isUnderline="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pl_adicional}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="138" y="28" width="100" height="20" uuid="4977bff5-ebf7-4c9f-b1d7-0e2d50ecfac5"/>
+				<reportElement x="126" y="28" width="100" height="20" uuid="4977bff5-ebf7-4c9f-b1d7-0e2d50ecfac5"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{pl_facebook}]]></textFieldExpression>
 			</textField>

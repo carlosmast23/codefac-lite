@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import static ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface.ESTADO_EDITAR;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusquedaNotaCredito;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.NotaCreditoBusqueda;
@@ -42,9 +43,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudi
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.ejemplo.utilidades.rmi.UtilidadesRmi;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.rmi.RemoteException;
@@ -115,12 +118,8 @@ public class NotaCreditoModel extends NotaCreditoPanel {
             notaCreditoGrabada=notaCredito;//graba una referencia con ambiento del metodo para los listener
             
             ComprobanteDataNotaCredito comprobanteData=new ComprobanteDataNotaCredito(notaCredito);
-            Map<String,String> datosAdicionales=new HashMap<String,String>();
-            if (datosAdicionales.size() > 0) {
-                datosAdicionales.put("correo", notaCredito.getCliente().getCorreoElectronico());
-                comprobanteData.setMapInfoAdicional(datosAdicionales);
-            }
-            comprobanteData.setCorreosAdicionales(new ArrayList<String>());
+
+            comprobanteData.setMapInfoAdicional(getMapAdicional(notaCredito));
              
             ClienteInterfaceComprobante cic=new ClienteNotaCreditoImplComprobante(this, notaCreditoGrabada);
             ComprobanteServiceIf comprobanteServiceIf=ServiceFactory.getFactory().getComprobanteServiceIf();
@@ -132,6 +131,16 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         } catch (RemoteException ex) {
             Logger.getLogger(NotaCreditoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private Map<String,String> getMapAdicional(NotaCredito notaCredito)
+    {
+        Map<String,String> parametroMap=new HashMap<String ,String>();
+        for (NotaCreditoAdicional datoAdicional : notaCredito.getDatosAdicionales()) 
+        {
+            parametroMap.put(datoAdicional.getCampo(),datoAdicional.getValor());
+        }
+        return parametroMap;
     }
 
     @Override
@@ -146,7 +155,23 @@ public class NotaCreditoModel extends NotaCreditoPanel {
 
     @Override
     public void imprimir() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                
+        //Solo imprimir en el modo de editar
+        if(estadoFormulario==ESTADO_EDITAR)
+        {
+            try {
+                String claveAceeso = this.notaCredito.getClaveAcceso();
+                byte[] byteReporte = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAceeso);
+                JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(byteReporte);
+                panelPadre.crearReportePantalla(jasperPrint,notaCredito.getPreimpreso());
+            } catch (RemoteException ex) {
+                Logger.getLogger(NotaCreditoModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(NotaCreditoModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(NotaCreditoModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     @Override
@@ -166,6 +191,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
             this.notaCredito = notaCreditoTmp;
             mostrarDatosNotaCredito(); 
             actualizarDatosTablaDetalle();
+            cargarTablaDatosAdicionales();
         }
         else
         {
@@ -289,10 +315,35 @@ public class NotaCreditoModel extends NotaCreditoPanel {
                 if (factura != null) {
                     notaCredito.setFactura(factura);
                     cargarDatosNotaCredito();
+                    cargarDatosAdicionales();
                     cargarTablaDatosAdicionales();
                 }
             }
         });
+    }
+    
+    private void cargarDatosAdicionales()
+    {
+        //Si vuelve a escoger otra factura se borran los datos adicionales
+         if(notaCredito.getDatosAdicionales()!=null)
+            notaCredito.getDatosAdicionales().clear();
+        
+         List<FacturaAdicional> datosAdicional=notaCredito.getFactura().getDatosAdicionales();
+         if(datosAdicional!=null)
+         {
+             List<NotaCreditoAdicional> datosAdicionalNotaCredito=new ArrayList<NotaCreditoAdicional>();
+             for (FacturaAdicional facturaDetalle : datosAdicional) {
+                 NotaCreditoAdicional notaCreditoAdicional=new NotaCreditoAdicional();
+                 notaCreditoAdicional.setCampo(facturaDetalle.getCampo());
+                 notaCreditoAdicional.setNotaCredito(notaCredito);
+                 notaCreditoAdicional.setNumero(facturaDetalle.getNumero());
+                 notaCreditoAdicional.setTipo(facturaDetalle.getTipo());
+                 notaCreditoAdicional.setValor(facturaDetalle.getValor());
+                 datosAdicionalNotaCredito.add(notaCreditoAdicional);
+             }
+             notaCredito.setDatosAdicionales(datosAdicionalNotaCredito);
+         }
+
     }
 
     private void cargarDatosNotaCredito() {
@@ -331,6 +382,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         /**
          * Cargar los datos Adicionales
          */
+        /*
          List<FacturaAdicional> datosAdicional=notaCredito.getFactura().getDatosAdicionales();
          if(datosAdicional!=null)
          {
@@ -346,6 +398,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
              }
              notaCredito.setDatosAdicionales(datosAdicionalNotaCredito);
          }
+        */
         
         actualizarDatosTablaDetalle();
         mostrarDatosNotaCredito();

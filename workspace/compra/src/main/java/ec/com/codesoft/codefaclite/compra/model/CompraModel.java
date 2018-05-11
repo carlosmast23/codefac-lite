@@ -93,7 +93,12 @@ public class CompraModel extends CompraPanel{
         iniciarCombos();
         agregarListenerBotones();
         crearVariables();
-        initModelTablaDetalleCompra();
+        if(session.getEmpresa().getObligadoLlevarContabilidad().equalsIgnoreCase(Empresa.SI_LLEVA_CONTABILIDAD))
+        {
+            initModelTablaDetalleCompra();
+        }else{
+            initModelTablaDetalleCompraSinRetencion();
+        }
         getCmbFechaCompra().setDate(new java.util.Date());
         desbloquearIngresoDetalleProducto();
         this.bandera = false;
@@ -224,7 +229,12 @@ public class CompraModel extends CompraPanel{
             this.getLblSubtotalImpuesto().setText(this.subtotal12 + "");
             this.getLblSubtotalSinImpuesto().setText(this.subtotal0 + "");
             //actualizarDatosMostrarVentana();
-            mostrarDatosTabla();
+            if(session.getEmpresa().getObligadoLlevarContabilidad().equals(Empresa.SI_LLEVA_CONTABILIDAD)){
+                mostrarDatosTabla();
+            }
+            else{
+                mostrarDatosTablaSinRetencion();
+            }
             mostrarDatosTotales();
             desbloquearIngresoDetalleProducto();
         }
@@ -261,8 +271,13 @@ public class CompraModel extends CompraPanel{
         getTxtDescripcionItem().setText("");
         getTxtPrecionUnitarioItem().setText("");
         getTxtCantidadItem().setText("");
-        //Limpiar Tabla de Detalles Producto
-        initModelTablaDetalleCompra();
+        //Limpiar Tabla de Detalles Producto 
+        if(session.getEmpresa().getObligadoLlevarContabilidad().equalsIgnoreCase(Empresa.SI_LLEVA_CONTABILIDAD))
+        {
+            initModelTablaDetalleCompra();
+        }else{
+            initModelTablaDetalleCompraSinRetencion();
+        }
         //Limpiar totales
         getLblSubtotalImpuesto().setText("0.00");
         getLblSubtotalSinImpuesto().setText("0.00");
@@ -671,6 +686,25 @@ public class CompraModel extends CompraPanel{
         
     }
     
+    private void mostrarDatosTablaSinRetencion()
+    {
+        String[] titulo={"Cantidad","Descripción","Valor Unitario","Valor Total"};
+        this.modeloTablaDetallesCompra = new DefaultTableModel(titulo,0);
+        List<CompraDetalle> detalles= compra.getDetalles();
+        for (CompraDetalle detalle : detalles) {
+            Vector<String> fila=new Vector<String>();
+            fila.add(detalle.getCantidad()+"");
+            fila.add(detalle.getDescripcion()+"");
+            fila.add(detalle.getPrecioUnitario()+"");
+            fila.add(detalle.getSubtotal()+"");
+            this.modeloTablaDetallesCompra.addRow(fila);
+        }
+        
+        getTblDetalleProductos().setModel(this.modeloTablaDetallesCompra);
+    }
+    
+    
+    
     private void mostrarDatosTotales()
     {
         getLblSubtotalSinImpuesto().setText(this.subtotal0 + "");
@@ -694,6 +728,18 @@ public class CompraModel extends CompraPanel{
         titulo.add("Descripción");
         titulo.add("Valor Ret. Iva.");
         titulo.add("Valor Ret. Rent.");
+        titulo.add("Valor Unitario");
+        titulo.add("Valor Total");
+        
+        this.modeloTablaDetallesCompra = new DefaultTableModel(titulo, 0);
+        //this.modeloTablaDetallesProductos.isCellEditable
+        getTblDetalleProductos().setModel(modeloTablaDetallesCompra);
+    }
+    
+    private void initModelTablaDetalleCompraSinRetencion() {
+        Vector<String> titulo = new Vector<>();
+        titulo.add("Cantidad");
+        titulo.add("Descripción");
         titulo.add("Valor Unitario");
         titulo.add("Valor Total");
         
@@ -810,7 +856,12 @@ public class CompraModel extends CompraPanel{
     private void actualizarDatosMostrarVentana()
     {
         actualizarTotales();
-        mostrarDatosTabla();
+        if(session.getEmpresa().getObligadoLlevarContabilidad().equals(Empresa.SI_LLEVA_CONTABILIDAD)){
+            mostrarDatosTabla();
+        }
+        else{
+            mostrarDatosTablaSinRetencion();
+        }
         mostrarDatosTotales();
         limpiarCampos();
     }

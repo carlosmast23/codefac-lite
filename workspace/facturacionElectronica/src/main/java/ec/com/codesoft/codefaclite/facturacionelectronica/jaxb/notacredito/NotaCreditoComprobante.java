@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.notacredito;
 
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import java.sql.Date;
 import java.util.List;
@@ -31,7 +32,7 @@ public class NotaCreditoComprobante extends ComprobanteElectronico {
     
     @Override
     public String getTipoDocumento() {
-        return ComprobanteElectronico.NOTA_CREDITO;
+        return ComprobanteEnum.NOTA_CREDITO.getCodigo();
     }
 
     @XmlElement(name = "infoNotaCredito")

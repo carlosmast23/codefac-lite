@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.crm.model;
 
+import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
@@ -22,6 +23,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -46,7 +49,7 @@ public class EmpresaModel extends EmpresaForm
     private EmpresaServiceIf empresaService;
     private JFileChooser jFileChooser;
     private Path origen = null;
-    private Path destino = null;
+    //private Path destino = null;
 
 
     public EmpresaModel() 
@@ -93,6 +96,7 @@ public class EmpresaModel extends EmpresaForm
             getTxtFacebook().setText(e.getFacebook());
             getTxtAdicional().setText(e.getAdicional());
             getjTextNumContribuyente().setText(e.getContribuyenteEspecial());
+            
             if(e.getObligadoLlevarContabilidad().equals(Empresa.SI_LLEVA_CONTABILIDAD))
             {
                 getjCheckBLlevaContabilidad().setSelected(true);
@@ -100,6 +104,7 @@ public class EmpresaModel extends EmpresaForm
             {
                 getjCheckBLlevaContabilidad().setSelected(false);
             }
+            
             getjTextLogo().setText(e.getImagenLogoPath());
             
         }  
@@ -277,17 +282,14 @@ public class EmpresaModel extends EmpresaForm
         String rutaArchivo = archivo.getPath();
         String nombreArchivo = archivo.getName();
         getjTextLogo().setText(nombreArchivo);
+        origen=archivoEscogido.toPath();
         //TODO:Cambiar la copia de archivos por un servicio de transferencia de archivos
-        String rutaDestino ="";
+        //String rutaDestino ="";
         //String rutaDestino = session.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + DirectorioCodefac.IMAGENES.getNombre() + "/";
-        rutaDestino += nombreArchivo;
-        establecerDondeMoverArchivo(rutaArchivo, rutaDestino);
+        //rutaDestino += nombreArchivo;
+        //establecerDondeMoverArchivo(rutaArchivo, rutaDestino);
     }
-    
-    public void establecerDondeMoverArchivo(String rutaArchivo, String rutaDestino) {
-        this.origen = FileSystems.getDefault().getPath(rutaArchivo);
-        this.destino = FileSystems.getDefault().getPath(rutaDestino);
-    }
+
     
     @validacionPersonalizadaAnotacion(errorTitulo = "Formato de ruc")
     public boolean validarRuc()
@@ -374,24 +376,24 @@ public class EmpresaModel extends EmpresaForm
     }
     
     public void moverArchivo() {
-        //Verifica que solo cuando exista un origen y destino exista se copien los datos
-        if (origen == null || destino == null) {
-            return;
-        }
-
-        File file = destino.toFile();
-        //crear toda la ruta si no existe
-        if (!file.exists()) {
-            file.getParentFile().mkdirs();
-            //file.mkdir();
-        }
-
         try {
-            Files.copy(origen, destino, StandardCopyOption.REPLACE_EXISTING);
-            getjTextLogo().setText("" + destino.getFileName());
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            DialogoCodefac.mensaje("Firma", "Problema en guardar firma", DialogoCodefac.MENSAJE_INCORRECTO);
+            //Verifica que solo cuando exista un origen y destino exista se copien los datos
+            if (origen == null) {
+                return;
+            }
+            
+            SimpleRemoteInputStream istream = new SimpleRemoteInputStream(
+                    new FileInputStream(origen.toFile()));
+            
+            ServiceFactory.getFactory().getRecursosServiceIf().uploadFileServer(DirectorioCodefac.IMAGENES, istream,origen.getFileName().toString());
+            
+            getjTextLogo().setText(origen.getFileName().toString());
+            
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

@@ -25,7 +25,7 @@ import org.apache.commons.io.IOUtils;
 public abstract class ComprobanteElectronicoReporte 
 {
     public ComprobanteElectronico comprobante;
-    public InputStream imagenEmpresa;
+    //public InputStream imagenEmpresa;
     
     public abstract List<Object> getDetalles();
     protected abstract Map<String,Object> getMapTotales();
@@ -76,21 +76,21 @@ public abstract class ComprobanteElectronicoReporte
 
     public Map<String,Object> getMapReporte()
     {
-        try {
+        //try {
             Map<String,Object> map=new HashMap<String,Object>();
             map.putAll(getMapInfoTributaria());
             map.putAll(getMapInfoEmpresa());
             map.putAll(getMapTotales());
             map.putAll(getMapInfoCliente());
             
-            map.put("imagen_logo",(imagenEmpresa!=null)?IOUtils.toBufferedInputStream(imagenEmpresa):null);
+            //map.put("imagen_logo",(imagenEmpresa!=null)?IOUtils.toBufferedInputStream(imagenEmpresa):null);
             map.put("formaPagoList", getListFormasPago());
             map.put("informacionAdicionalList", getListInfoAdifional());
             return map;
-        } catch (IOException ex) {
-            Logger.getLogger(ComprobanteElectronicoReporte.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+        //} catch (IOException ex) {
+        //    Logger.getLogger(ComprobanteElectronicoReporte.class.getName()).log(Level.SEVERE, null, ex);
+        //}
+        //return null;
     }
     
 }

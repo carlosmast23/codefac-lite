@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 
 import autorizacion.ws.sri.gob.ec.Autorizacion;
 import autorizacion.ws.sri.gob.ec.Mensaje;
+import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
@@ -47,6 +48,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraDetall
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NotaCreditoEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
 import ec.com.codesoft.codefaclite.ws.recepcion.Comprobante;
 import ec.com.codesoft.ejemplo.utilidades.imagen.UtilidadImagen;
@@ -54,6 +56,7 @@ import ec.com.codesoft.ejemplo.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
 import java.awt.event.ActionListener;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -72,7 +75,10 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 
 /**
  *
@@ -941,6 +947,8 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
 
     private void cargarDatosRecursos(ComprobanteElectronicoService servicio) throws RemoteException {
         ParametroCodefacService parametroCodefacService = new ParametroCodefacService();
+        RecursosServiceIf service= ServiceFactory.getFactory().getRecursosServiceIf();
+        
         EmpresaService empresaService = new EmpresaService();
         Empresa empresa = empresaService.obtenerTodos().get(0);
         Map<String, ParametroCodefac> parametroCodefacMap = parametroCodefacService.getParametrosMap();
@@ -956,20 +964,44 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         //BufferedImage image = ImageIO.read(RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg"));
         //servicio.setLogoImagen(image);
         servicio.setPathParentJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourcesParentPath("facturaReporte.jrxml"));
-        servicio.setReporteFormaPago(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceURL("forma_pago.jasper"));
-        servicio.setReporteInfoAdicional(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceURL("datos_adicionales.jasper"));
+        
+        InputStream inputStreamJasper=null;    
+        JasperReport reportFormaPago=null;
+        try {
+            inputStreamJasper = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "forma_pago.jrxml"));
+            reportFormaPago = JasperCompileManager.compileReport(inputStreamJasper);
+        } catch (IOException ex) {
+            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JRException ex) {
+            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        servicio.setReporteFormaPago(reportFormaPago);
+        //servicio.setReporteFormaPago(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceURL("forma_pago.jasper"));
+        
+        JasperReport reportDatosAdicionales=null;
+        try {
+            inputStreamJasper = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "datos_adicionales.jrxml"));
+            reportDatosAdicionales = JasperCompileManager.compileReport(inputStreamJasper);
+        } catch (IOException ex) {
+            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JRException ex) {
+            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        servicio.setReporteInfoAdicional(reportDatosAdicionales);
         servicio.setMapAdicionalReporte(mapReportePlantilla(null));
         //servicio.pathLogoImagen = RecursoCodefac.IMAGENES_GENERAL.getResourceURL("sin_imagen.jpg").getPath();
         //Segun el tipo de licencia cargar los recursos
-        servicio.pathLogoImagen = RecursoCodefac.IMAGENES_GENERAL.getResourceURL("sin_imagen.jpg");
-        if (UtilidadesServidor.tipoLicenciaEnum.equals(TipoLicenciaEnum.GRATIS)) {
+        servicio.pathLogoImagen = UtilidadImagen.castInputStreamToImage(RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg"));
+        if (UtilidadesServidor.tipoLicenciaEnum.equals(TipoLicenciaEnum.PRO)) {
 
             InputStream inputStream = null;
             try {
 
                 String imagenLogo = empresa.getImagenLogoPath();
                 //String pathImagen = parametroCodefacMap.get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + DirectorioCodefac.IMAGENES.getNombre() + "/" + imagenLogo;
-                String pathImagen = UtilidadesServidor.pathRecursos+ DirectorioCodefac.IMAGENES.getNombre() + "/" + imagenLogo;
+                String pathImagen = UtilidadesServidor.pathRecursos+"/"+ DirectorioCodefac.IMAGENES.getNombre() + "/" + imagenLogo;
+                
 
                 inputStream = new FileInputStream(pathImagen);
                 //Si no existe imagen en la version de pago setea un imagen por defecto
@@ -978,11 +1010,10 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                 }
                 //BufferedInputStream bufferStream=new BufferedInputStream(inputStream);
                 //servicio.pathLogoImagen = UtilidadImagen.castImputStreamForReport(inputStream);
-                servicio.pathLogoImagen = new URL(pathImagen);
+                servicio.pathLogoImagen =UtilidadImagen.castInputStreamToImage(inputStream);
+                //servicio.pathLogoImagen = new File(pathImagen.get;
             } catch (FileNotFoundException ex) {
-                servicio.pathLogoImagen = RecursoCodefac.IMAGENES_GENERAL.getResourceURL("sin_imagen.jpg");
-                Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (MalformedURLException ex) {
+                servicio.pathLogoImagen = UtilidadImagen.castInputStreamToImage(RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg"));
                 Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
                 try {
@@ -998,6 +1029,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
     }
 
     private Map<String, Object> mapReportePlantilla(Usuario usuario) throws RemoteException {
+        RecursosServiceIf service= ServiceFactory.getFactory().getRecursosServiceIf();
         ParametroCodefacService parametroCodefacService = new ParametroCodefacService();
         EmpresaService empresaService = new EmpresaService();
         Empresa empresa = empresaService.obtenerTodos().get(0);
@@ -1010,22 +1042,45 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         parametros.put("pl_direccion", empresa.getDireccion());
         parametros.put("pl_nombre_empresa", empresa.getNombreLegal());
         parametros.put("pl_telefonos", empresa.getTelefonos());
-
-        parametros.put("pl_url_img1", (RecursoCodefac.IMAGENES_GENERAL.getResourceURL("codefac-logotipo.png")));
-        parametros.put("pl_img_facebook", (RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceURL("facebook.png")));
-        parametros.put("pl_img_whatsapp", (RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceURL("whatsapp.png")));
-        parametros.put("pl_img_telefono", (RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceURL("telefono.png")));
-        parametros.put("pl_img_logo_pie", (RecursoCodefac.IMAGENES_GENERAL.getResourceURL("codesoft-logo.png")));
         
-        /*
-        parametros.put("pl_url_img1_url", (RecursoCodefac.IMAGENES_GENERAL.getResourceURL("codefac-logotipo.png").getPath()));
-        parametros.put("pl_img_facebook_url", (RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceURL("facebook.png").getPath()));
-        parametros.put("pl_img_whatsapp_url", (RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceURL("whatsapp.png").getPath()));
-        parametros.put("pl_img_telefono_url", (RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceURL("telefono.png").getPath()));
-        parametros.put("pl_img_logo_pie_url", (RecursoCodefac.IMAGENES_GENERAL.getResourceURL("codesoft-logo.png").getPath()));*/
+        parametros.put("pl_celular", empresa.getCelular());
+        parametros.put("pl_facebook", empresa.getFacebook());
+        parametros.put("pl_adicional", empresa.getAdicional());
 
-        parametros.put("pl_url_cabecera", RecursoCodefac.JASPER.getResourceURL("encabezado.jasper"));
-        parametros.put("pl_url_piepagina", RecursoCodefac.JASPER.getResourceURL("pie_pagina.jasper"));
+
+        InputStream input=null;
+        try {
+            input = RemoteInputStreamClient.wrap(service.getResourceInputStreamByFile(DirectorioCodefac.IMAGENES, empresa.getImagenLogoPath()));
+        } catch (IOException ex) {
+            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+        parametros.put("pl_url_img1", UtilidadImagen.castInputStreamToImage(input));
+        //parametros.put("pl_url_img1", (RecursoCodefac.IMAGENES_GENERAL.getResourceURL("codefac-logotipo.png")));
+        
+        parametros.put("pl_img_facebook", (UtilidadImagen.castInputStreamToImage(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("facebook.png"))));
+        parametros.put("pl_img_whatsapp", (UtilidadImagen.castInputStreamToImage(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("whatsapp.png"))));
+        parametros.put("pl_img_telefono", (UtilidadImagen.castInputStreamToImage(RecursoCodefac.IMAGENES_REDES_SOCIALES.getResourceInputStream("telefono.png"))));
+        //parametros.put("pl_img_logo_pie", (RecursoCodefac.IMAGENES_GENERAL.getResourceURL("codesoft-logo.png")));
+        
+        //parametros.put("pl_url_cabecera", RecursoCodefac.JASPER.getResourceURL("encabezado.jasper"));
+        
+        InputStream inputStream=null;
+        JasperReport reportPiePagina=null;
+        try {
+            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER, "pie_pagina.jrxml"));
+            reportPiePagina = JasperCompileManager.compileReport(inputStream);
+            
+        } catch (IOException ex) {
+            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JRException ex) {
+            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        parametros.put("pl_url_piepagina", reportPiePagina);
+        //parametros.put("pl_url_piepagina", RecursoCodefac.JASPER.getResourceURL("pie_pagina.jasper"));
+        
+        
 
         //System.out.println(parametros.get("SUBREPORT_DIR"));
         return parametros;
