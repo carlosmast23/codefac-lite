@@ -34,35 +34,47 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "RETENCION")
 @XmlRootElement
-public class Retencion extends Comprobante  implements Serializable
-{
+public class Retencion extends Comprobante implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "ID")
     private Long id;
-    
+
     @Column(name = "TIPO_IDENTIFICACION_ID")
     private Long tipoClienteId;
-    
+
+    @Column(name = "FECHA_EMISION")
+    private Date fechaEmision;
+
     @JoinColumn(name = "PROVEEDOR_ID")
-    @ManyToOne    
+    @ManyToOne
     private Persona proveedor;
 
     @JoinColumn(name = "COMPRA_ID")
-    @ManyToOne        
+    @ManyToOne
     private Compra compra;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "retencion",fetch = FetchType.EAGER)
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "retencion", fetch = FetchType.EAGER)
     private List<RetencionDetalle> detalles;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "retencion",fetch = FetchType.EAGER)
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "retencion", fetch = FetchType.EAGER)
     private List<RetencionAdicional> datosAdicionales;
 
     public Retencion() {
 
     }
 
+    public Date getFechaEmision() {
+        return fechaEmision;
+    }
+
+    public void setFechaEmision(Date fechaEmision) {
+        this.fechaEmision = fechaEmision;
+    }
+
+    
     public Integer getSecuencial() {
         return secuencial;
     }
@@ -78,7 +90,6 @@ public class Retencion extends Comprobante  implements Serializable
     public void setProveedor(Persona proveedor) {
         this.proveedor = proveedor;
     }
-
 
     public List<RetencionDetalle> getDetalles() {
         return detalles;
@@ -96,7 +107,6 @@ public class Retencion extends Comprobante  implements Serializable
         this.id = id;
     }
 
-    
     public Compra getCompra() {
         return compra;
     }
@@ -120,72 +130,60 @@ public class Retencion extends Comprobante  implements Serializable
     public void setDatosAdicionales(List<RetencionAdicional> datosAdicionales) {
         this.datosAdicionales = datosAdicionales;
     }
-    
-    
-    
-       public void addDatoAdicional(String campo, String valor)
-    {
-        RetencionAdicional dato=new RetencionAdicional();
+
+    public void addDatoAdicional(String campo, String valor) {
+        RetencionAdicional dato = new RetencionAdicional();
         dato.setCampo(campo);
         dato.setNumero(0);
         dato.setTipo(FacturaAdicional.Tipo.TIPO_OTRO.getLetra());
         dato.setValor(valor);
-        
+
         addDatoAdicional(dato);
     }
-    
-    public void addDatoAdicional(RetencionAdicional datoAdicional)
-    {
-        if(this.datosAdicionales==null)
-        {
-            this.datosAdicionales=new ArrayList<RetencionAdicional>();
+
+    public void addDatoAdicional(RetencionAdicional datoAdicional) {
+        if (this.datosAdicionales == null) {
+            this.datosAdicionales = new ArrayList<RetencionAdicional>();
         }
         datoAdicional.setRetencion(this);
         this.datosAdicionales.add(datoAdicional);
     }
-    
-    public void addDatosAdicionalCorreo(String correo)
-    {
-        RetencionAdicional retencionAdicional=new RetencionAdicional();
+
+    public void addDatosAdicionalCorreo(String correo) {
+        RetencionAdicional retencionAdicional = new RetencionAdicional();
         retencionAdicional.setCampo(FacturaAdicional.NOMBRE_CORREO);
         retencionAdicional.setRetencion(this);
         retencionAdicional.setTipo(FacturaAdicional.Tipo.TIPO_CORREO.getLetra());
         retencionAdicional.setValor(correo);
-        
+
         if (this.datosAdicionales == null) {
             this.datosAdicionales = new ArrayList<RetencionAdicional>();
         }
-        
+
         //Buscar si existe un correo anterior para nombrar de forma secuencial
-        Integer numeroMaximo=0;
-        for (RetencionAdicional datoAdicional : datosAdicionales) {            
-            if(datoAdicional.getTipo().equals(FacturaAdicional.Tipo.TIPO_CORREO.getLetra()))
-            {
-                if(datoAdicional.getNumero()>numeroMaximo)
-                {
-                    numeroMaximo=datoAdicional.getNumero();
+        Integer numeroMaximo = 0;
+        for (RetencionAdicional datoAdicional : datosAdicionales) {
+            if (datoAdicional.getTipo().equals(FacturaAdicional.Tipo.TIPO_CORREO.getLetra())) {
+                if (datoAdicional.getNumero() > numeroMaximo) {
+                    numeroMaximo = datoAdicional.getNumero();
                 }
             }
         }
-        
-        retencionAdicional.setNumero(numeroMaximo+1);
+
+        retencionAdicional.setNumero(numeroMaximo + 1);
         //Modificar el nombre si el correo es mas de 2
-        if(retencionAdicional.getNumero()>1)
-        {
-            retencionAdicional.setCampo(FacturaAdicional.NOMBRE_CORREO+" "+retencionAdicional.getNumero());
+        if (retencionAdicional.getNumero() > 1) {
+            retencionAdicional.setCampo(FacturaAdicional.NOMBRE_CORREO + " " + retencionAdicional.getNumero());
         }
 
         this.datosAdicionales.add(retencionAdicional);
-    
+
     }
-    
-    public RetencionAdicional obtenerDatoAdicionalPorCampo(String nombre)
-    {
-        if(this.datosAdicionales!=null)
-        {
+
+    public RetencionAdicional obtenerDatoAdicionalPorCampo(String nombre) {
+        if (this.datosAdicionales != null) {
             for (RetencionAdicional retencionAdicional : datosAdicionales) {
-                if(retencionAdicional.getCampo().equals(nombre))
-                {
+                if (retencionAdicional.getCampo().equals(nombre)) {
                     return retencionAdicional;
                 }
             }
@@ -217,35 +215,28 @@ public class Retencion extends Comprobante  implements Serializable
         }
         return true;
     }
-    
-    
-    
+
     /**
-     *Metodos personalizados
+     * Metodos personalizados
      */
-         /**
+    /**
      * Formas de pago adicional
      */
-    public void addDetalle(RetencionDetalle DetalleRetencion)
-    {
-        if(this.detalles==null)
-        {
-            this.detalles=new ArrayList<RetencionDetalle>();
+    public void addDetalle(RetencionDetalle DetalleRetencion) {
+        if (this.detalles == null) {
+            this.detalles = new ArrayList<RetencionDetalle>();
         }
         DetalleRetencion.setRetencion(this);
         this.detalles.add(DetalleRetencion);
-        
+
     }
-    
-    public String getPeriodoFiscal()
-    {
-        return UtilidadesFecha.obtenerMesStr(fechaEmision)+"/"+UtilidadesFecha.obtenerAnioStr(fechaEmision);
+
+    public String getPeriodoFiscal() {
+        return UtilidadesFecha.obtenerMesStr(fechaEmision) + "/" + UtilidadesFecha.obtenerAnioStr(fechaEmision);
     }
-    
-    public String getPreimpreso() 
-    {
+
+    public String getPreimpreso() {
         return UtilidadesTextos.llenarCarateresIzquierda(puntoEmision, 3, "0") + "-" + UtilidadesTextos.llenarCarateresIzquierda(puntoEstablecimiento, 3, "0") + "-" + UtilidadesTextos.llenarCarateresIzquierda(secuencial + "", 8, "0");
     }
 
-    
 }

@@ -8,11 +8,17 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RetencionServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
 import static ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha.fechaInicioMes;
 import static ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha.hoy;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.text.DateFormat;
@@ -36,7 +42,10 @@ import javax.swing.table.DefaultTableModel;
  */
 public class RetencionReporteModel extends RetencionReportePanel {
 
-    private Persona proveedor;
+    private Persona proveedor = null;
+    SriRetencionIva sriRetencionIva = null;
+    SriRetencionRenta sriRetencionRenta = null;
+
     Map<String, Object> parameters = new HashMap<String, Object>();
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private DefaultTableModel modeloTablaRetenciones;
@@ -50,6 +59,50 @@ public class RetencionReporteModel extends RetencionReportePanel {
     public void iniciar() throws ExcepcionCodefacLite {
         getDateFechaInicio().setDate(fechaInicioMes(hoy()));
         getDateFechaFin().setDate(hoy());
+
+        getChkTodos().setSelected(true);
+        if (getChkTodos().isSelected()) {
+            proveedor = null;
+            getTxtProveedor().setText("...");
+            getBtnBuscarProveedor().setEnabled(false);
+        }
+
+        //Agregar los tipos de retencion Iva
+        getCmbRetencionIva().removeAllItems();
+        SriRetencionIvaServiceIf sriRetencionIvaService = ServiceFactory.getFactory().getSriRetencionIvaServiceIf();
+        try {
+            List<SriRetencionIva> tipoRetencionesIva = sriRetencionIvaService.obtenerTodos();
+            for (SriRetencionIva tipoRetencione : tipoRetencionesIva) {
+                getCmbRetencionIva().addItem(tipoRetencione);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //Agregar los tipos de retencion Renta
+        getCmbRetencionRenta().removeAllItems();
+        SriRetencionRentaServiceIf sriRetencionRentaService = ServiceFactory.getFactory().getSriRetencionRentaServiceIf();
+        try {
+            List<SriRetencionRenta> tipoRetencionesRenta = sriRetencionRentaService.obtenerTodos();
+            for (SriRetencionRenta sriRetencionRenta : tipoRetencionesRenta) {
+                getCmbRetencionRenta().addItem(sriRetencionRenta);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        getChkTodos().addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
+                    proveedor = null;
+                    getTxtProveedor().setText("...");
+                    getBtnBuscarProveedor().setEnabled(false);
+                } else {
+                    getBtnBuscarProveedor().setEnabled(true);
+                }
+            }
+        });
 
         getBtnBuscarProveedor().addActionListener(new ActionListener() {
             @Override
@@ -76,6 +129,8 @@ public class RetencionReporteModel extends RetencionReportePanel {
                     if (getDateFechaFin().getDate() != null) {
                         fechaFin = new Date(getDateFechaFin().getDate().getTime());
                     }
+                    sriRetencionIva = (SriRetencionIva) getCmbRetencionIva().getSelectedItem();
+                    sriRetencionRenta = (SriRetencionRenta) getCmbRetencionRenta().getSelectedItem();
 
                     Vector<String> titulo = new Vector<>();
                     titulo.add("Proveedor");
@@ -88,14 +143,14 @@ public class RetencionReporteModel extends RetencionReportePanel {
                     modeloTablaRetenciones = new DefaultTableModel(titulo, 0);
 
                     RetencionServiceIf fs = ServiceFactory.getFactory().getRetencionServiceIf();
-                    dataretencion = fs.obtenerRetencionesReporte(null, null, null, null);
+                    dataretencion = fs.obtenerRetencionesReporte(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta);
                     for (RetencionDetalle retencion : dataretencion) {
                         Vector<String> fila = new Vector<String>();
                         fila.add(retencion.getRetencion().getProveedor().getRazonSocial());
                         fila.add(retencion.getRetencion().getCompra().getPreimpreso());
                         fila.add(retencion.getBaseImponible().toString());
                         fila.add(retencion.getPorcentajeRetener().toString());
-                        fila.add(retencion.getCodigoRetencionSri());
+                        fila.add(retencion.getCodigoSri() + " - " + retencion.getCodigoRetencionSri());
                         fila.add(retencion.getValorRetenido().toString());
 
                         modeloTablaRetenciones.addRow(fila);
