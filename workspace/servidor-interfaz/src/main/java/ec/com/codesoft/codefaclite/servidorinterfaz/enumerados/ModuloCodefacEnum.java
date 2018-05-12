@@ -15,6 +15,8 @@ import javax.swing.ImageIcon;
  * @author Carlos
  */
 public enum ModuloCodefacEnum {
+    SERVICIOS("Servicios","SER","modulo_servicios",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/servicios.png")),
+    CARTERA("Cartera","CAR","modulo_cartera",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/cartera.png")),
     COMPRA("Compra","COM","modulo_compra",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/compra.png")),
     INVENTARIO("Inventario","INVS","modulo_inventario",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/inventario.png")),
     FACTURACION("Facturacion","FAC","modulo_facturacion",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/facturacion.png")),

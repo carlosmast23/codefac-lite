@@ -37,3 +37,5 @@ derby.log
 workspace/main/codefac.ini
 /workspace/gestionAcademica/target/
 /workspace/compra/target/
+/workspace/cartera/target/
+/workspace/servicios/target/

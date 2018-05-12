@@ -23,6 +23,8 @@
         <module>../gestionAcademica</module>
         <module>../servidor-interfaz</module>
         <module>../compra</module>
+        <module>../cartera</module>
+        <module>../servicios</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
