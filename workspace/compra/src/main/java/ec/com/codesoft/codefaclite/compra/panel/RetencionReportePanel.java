@@ -53,6 +53,12 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         btnBuscar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblRetenciones = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblRetIva = new javax.swing.JTable();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tblRetRenta = new javax.swing.JTable();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -63,9 +69,9 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.ipadx = 256;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(14, 13, 0, 0);
@@ -73,7 +79,7 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.ipadx = 256;
@@ -83,10 +89,10 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
 
         dateFechaInicio.setDateFormatString("yyyy-MM-dd");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.ipadx = 147;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(12, 10, 0, 18);
@@ -94,8 +100,8 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
 
         dateFechaFin.setDateFormatString("yyyy-MM-dd");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.ipadx = 147;
@@ -105,7 +111,7 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
 
         jLabel1.setText("Fecha inicial:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(15, 34, 0, 0);
@@ -115,7 +121,6 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
         gridBagConstraints.ipadx = 23;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(16, 10, 0, 0);
@@ -126,15 +131,15 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 6;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(11, 10, 0, 0);
         getContentPane().add(btnBuscarProveedor, gridBagConstraints);
 
         jLabel3.setText("Fecha final:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.ipadx = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(14, 37, 0, 0);
@@ -142,7 +147,7 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 4;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.ipadx = 168;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(13, 10, 0, 0);
@@ -152,8 +157,8 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.gridheight = 5;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(12, 11, 0, 0);
         getContentPane().add(chkTodos, gridBagConstraints);
@@ -161,7 +166,7 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         jLabel4.setText("IVA:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.ipadx = 56;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -171,7 +176,7 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         jLabel5.setText("Renta:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.ipadx = 44;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(11, 10, 0, 0);
@@ -180,9 +185,9 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         btnBuscar.setText("Buscar Compra");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(12, 37, 0, 0);
@@ -190,6 +195,7 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
 
         tblRetenciones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
+                {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
@@ -203,16 +209,66 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 12;
-        gridBagConstraints.gridwidth = 11;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 678;
-        gridBagConstraints.ipady = 148;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.ipadx = 5;
+        gridBagConstraints.ipady = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(18, 10, 291, 18);
+        gridBagConstraints.insets = new java.awt.Insets(18, 10, 10, 18);
         getContentPane().add(jScrollPane1, gridBagConstraints);
+
+        tblRetIva.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2"
+            }
+        ));
+        jScrollPane2.setViewportView(tblRetIva);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        getContentPane().add(jScrollPane2, gridBagConstraints);
+
+        tblRetRenta.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2"
+            }
+        ));
+        jScrollPane3.setViewportView(tblRetRenta);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        getContentPane().add(jScrollPane3, gridBagConstraints);
+
+        jLabel6.setText("IVA");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 7;
+        getContentPane().add(jLabel6, gridBagConstraints);
+
+        jLabel7.setText("RETENCION");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 7;
+        getContentPane().add(jLabel7, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -288,6 +344,22 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
     public void setTblRetenciones(JTable tblRetenciones) {
         this.tblRetenciones = tblRetenciones;
     }
+
+    public JTable getTblRetIva() {
+        return tblRetIva;
+    }
+
+    public void setTblRetIva(JTable tblRetIva) {
+        this.tblRetIva = tblRetIva;
+    }
+
+    public JTable getTblRetRenta() {
+        return tblRetRenta;
+    }
+
+    public void setTblRetRenta(JTable tblRetRenta) {
+        this.tblRetRenta = tblRetRenta;
+    }
     
     
 
@@ -304,7 +376,13 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTable tblRetIva;
+    private javax.swing.JTable tblRetRenta;
     private javax.swing.JTable tblRetenciones;
     private javax.swing.JTextField txtProveedor;
     // End of variables declaration//GEN-END:variables
