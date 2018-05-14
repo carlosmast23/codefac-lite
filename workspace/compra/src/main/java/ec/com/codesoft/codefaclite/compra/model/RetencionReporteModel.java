@@ -6,7 +6,6 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.crm.busqueda.ProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
@@ -19,6 +18,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.text.DateFormat;
@@ -48,7 +48,6 @@ public class RetencionReporteModel extends RetencionReportePanel {
 
     Map<String, Object> parameters = new HashMap<String, Object>();
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    private DefaultTableModel modeloTablaRetenciones;
     private List<RetencionDetalle> dataretencion;
     Date fechaInicio = null;
     Date fechaFin = null;
@@ -140,7 +139,7 @@ public class RetencionReporteModel extends RetencionReportePanel {
                     titulo.add("Código");
                     titulo.add("valor");
 
-                    modeloTablaRetenciones = new DefaultTableModel(titulo, 0);
+                    DefaultTableModel modeloTablaRetenciones = new DefaultTableModel(titulo, 0);
 
                     RetencionServiceIf fs = ServiceFactory.getFactory().getRetencionServiceIf();
                     dataretencion = fs.obtenerRetencionesReporte(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta);
@@ -157,6 +156,38 @@ public class RetencionReporteModel extends RetencionReportePanel {
 
                     }
                     getTblRetenciones().setModel(modeloTablaRetenciones);
+
+                    Vector<String> titulo2 = new Vector<>();
+                    titulo2.add("Código");
+                    titulo2.add("Valor");
+                    DefaultTableModel modeloTablaRetIva = new DefaultTableModel(titulo2, 0);
+                    List<Object[]> dataRetencionCodigo = fs.obtenerRetencionesCodigo(proveedor, fechaFin, fechaFin, sriRetencionIva, sriRetencionRenta,"C");
+                    for (Object[] obj : dataRetencionCodigo) {
+                        Vector<String> fila = new Vector<String>();
+                        String r = (String) obj[0];
+                        BigDecimal valor = (BigDecimal) obj[1];
+                        fila.add(r);
+                        fila.add(valor.toString());
+                        modeloTablaRetIva.addRow(fila);
+                        System.out.println("PRIMER CICLO "+r);
+                    }
+                    getTblRetIva().setModel(modeloTablaRetIva);
+
+                    
+                    Vector<String> titulo3 = new Vector<>();
+                    titulo3.add("Código");
+                    titulo3.add("Valor");
+                    DefaultTableModel modeloTablaRetRenta = new DefaultTableModel(titulo3, 0);
+                    List<Object[]> dataRetencionCodigoRenta = fs.obtenerRetencionesCodigo(proveedor, fechaFin, fechaFin, sriRetencionIva, sriRetencionRenta,"R");
+                    for (Object[] obj : dataRetencionCodigoRenta) {
+                        Vector<String> fila = new Vector<String>();
+                        String r = (String) obj[0];
+                        BigDecimal valor = (BigDecimal) obj[1];
+                        fila.add(r);
+                        fila.add(valor.toString());
+                        modeloTablaRetRenta.addRow(fila);
+                    }
+                    getTblRetRenta().setModel(modeloTablaRetRenta);
 
                 } catch (RemoteException ex) {
                     Logger.getLogger(RetencionReporteModel.class.getName()).log(Level.SEVERE, null, ex);

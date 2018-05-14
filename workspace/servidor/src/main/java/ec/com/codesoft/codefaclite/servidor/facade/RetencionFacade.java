@@ -79,5 +79,66 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
             return null;
         }
     }
+    
+    
+    public List<Object[]> retencionesCodigo(Persona persona, Date fi, Date ff, SriRetencionIva iva,SriRetencionRenta renta,String tipo) {
+        String proveedor = "", fecha = "", retiva = "",retrenta="",tipoc="";
+        if(tipo.compareTo("C")==0)
+            tipoc="d.codigoSri";
+        else if(tipo.compareTo("R")==0)
+            tipoc="d.codigoRetencionSri";
+        
+        if (persona != null) {
+            proveedor = "r.proveedor=?1";
+        } else {
+            proveedor = "1=1";
+        }
+        if (fi == null && ff != null) {
+            fecha = " AND r.fechaEmision <= ?3";
+        } else if (fi != null && ff == null) {
+            fecha = " AND r.fechaEmision <= ?2";
+        } else if (fi == null && ff == null) {
+            fecha = "";
+        } else {
+            fecha = " AND (r.fechaEmision BETWEEN ?2 AND ?3)";
+        }
+
+        if (iva != null) {
+            retiva = "e.sriRetencionIva=?4";
+        } else {
+            retiva = "1=1";
+        }
+        
+         if (renta != null) {
+            retrenta = "e.sriRetencionRenta=?5";
+        } else {
+            retrenta = "1=1";
+        }
+        
+        try {
+            String queryString = "SELECT "+tipoc+",SUM(d.valorRetenido) FROM RetencionDetalle d WHERE d.retencion.id IN(SELECT r.id FROM Retencion r WHERE " + proveedor + fecha +" AND r.compra.id IN(SELECT e.compra.id FROM CompraDetalle e WHERE "+retiva+" AND "+retrenta+")) GROUP BY "+tipoc;
+            //String queryString = "SELECT d.codigoSri,SUM(d.valorRetenido) FROM RetencionDetalle d GROUP BY d.codigoSri";
+            Query query = getEntityManager().createQuery(queryString);
+            System.err.println("QUERY 2 --->" + query.toString());
+            if (persona != null) {
+                query.setParameter(1, persona);
+            }
+            if (fi != null) {
+                query.setParameter(2, fi);
+            }
+            if (ff != null) {
+                query.setParameter(3, ff);
+            }
+            if (iva != null) {
+                query.setParameter(4, iva);
+            }
+            if (renta != null) {
+                query.setParameter(5, renta);
+            }
+            return query.getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 
 }

@@ -68,5 +68,8 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
     public List<RetencionDetalle> obtenerRetencionesReporte(Persona persona, Date fi, Date ff, SriRetencionIva iva, SriRetencionRenta renta) {
         return retencionFacade.lista(persona, fi, ff, iva, renta);
     }
+    public List<Object[]> obtenerRetencionesCodigo(Persona persona, Date fi, Date ff, SriRetencionIva iva, SriRetencionRenta renta,String tipo) {
+        return retencionFacade.retencionesCodigo(persona, fi, ff, iva, renta, tipo);
+    }
 
 }
