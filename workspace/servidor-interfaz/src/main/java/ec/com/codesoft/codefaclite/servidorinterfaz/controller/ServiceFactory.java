@@ -29,6 +29,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NacionalidadServic
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilUsuarioServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PeriodoServiceIf;
@@ -145,7 +146,7 @@ public abstract class ServiceFactory {
     public SriRetencionRentaServiceIf getSriRetencionRentaServiceIf(){return (SriRetencionRentaServiceIf) getRecursosRMI(SriRetencionRentaServiceIf.class);};
     public RetencionServiceIf getRetencionServiceIf(){return (RetencionServiceIf) getRecursosRMI(RetencionServiceIf.class);};
     public SriRetencionServiceIf getSriRetencionServiceIf(){return (SriRetencionServiceIf) getRecursosRMI(SriRetencionServiceIf.class);};
-    
+    public OrdenTrabajoServiceIf getOrdenTrabajoServiceIf(){return (OrdenTrabajoServiceIf) getRecursosRMI(OrdenTrabajoServiceIf.class);};
     
     /**
      * Crea una nueva instancia el controlados para manejar por el cliente
