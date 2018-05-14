@@ -151,7 +151,7 @@ public class CompraModel extends CompraPanel{
         
 //        compra.setPuntoEmision(getTxtPuntoEmision().getText());
 //        compra.setPuntoEstablecimiento(getTxtEstablecimiento().getText());
-//        compra.setSecuencial(Integer.parseInt(getTxtSecuencial().getText()));
+//        compra.setSecuencial(Integer.parseInt(getTcmbTipoDocumentoxtSecuencial().getText()));
         compra.setPuntoEmision(getTxtFPreimpreso().getText().substring(0,3));
         compra.setPuntoEstablecimiento(getTxtFPreimpreso().getText().substring(4,7));
         compra.setSecuencial(Integer.parseInt(getTxtFPreimpreso().getText().substring(8, 11)));

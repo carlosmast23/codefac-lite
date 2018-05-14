@@ -104,6 +104,8 @@ import ec.com.codesoft.codefaclite.servidor.service.UtilidadesService;
 import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraCruceService;
 import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraService;
+import ec.com.codesoft.codefaclite.servidor.service.compra.OrdenCompraDetalleService;
+import ec.com.codesoft.codefaclite.servidor.service.compra.OrdenCompraService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.AulaService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.CatalogoProductoService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.EstudianteInscritoService;
@@ -140,6 +142,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceController
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
@@ -150,6 +153,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteServiceI
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NacionalidadServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenCompraDetalleServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenCompraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PeriodoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PermisoVentanaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
@@ -378,6 +383,8 @@ public class Main {
             mapRecursos.put(SriRetencionRentaService.class, SriRetencionRentaServiceIf.class);
             mapRecursos.put(RetencionService.class, RetencionServiceIf.class);
             mapRecursos.put(SriRetencionService.class,SriRetencionServiceIf.class);
+            mapRecursos.put(OrdenCompraService.class,OrdenCompraServiceIf.class);
+            mapRecursos.put(OrdenCompraDetalleService.class,OrdenCompraDetalleServiceIf.class);
                     
             
             ServiceControllerServer.cargarRecursos(mapRecursos);

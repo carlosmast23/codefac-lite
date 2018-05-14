@@ -87,7 +87,7 @@ public abstract class OrdenCompraPanel extends ControladorCodefacInterface {
         jLabel3 = new javax.swing.JLabel();
         txtObservacion = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        cmbFechaCompra = new com.toedter.calendar.JDateChooser();
+        cmbFechaIngreso = new com.toedter.calendar.JDateChooser();
         jLabel12 = new javax.swing.JLabel();
         cmbTipoDocumento = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
@@ -217,7 +217,7 @@ public abstract class OrdenCompraPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(cmbFechaCompra, gridBagConstraints);
+        getContentPane().add(cmbFechaIngreso, gridBagConstraints);
 
         jLabel12.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel12.setText("Tipo Documento:");
@@ -630,7 +630,7 @@ public abstract class OrdenCompraPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnEliminarItem;
     private javax.swing.JButton btnProveedorBuscar;
     private javax.swing.JComboBox<EnumSiNo> cmbCobraIva;
-    private com.toedter.calendar.JDateChooser cmbFechaCompra;
+    private com.toedter.calendar.JDateChooser cmbFechaIngreso;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -846,43 +846,15 @@ public abstract class OrdenCompraPanel extends ControladorCodefacInterface {
         this.tblDetalleProductos = tblDetalleProductos;
     }
 
-    public JDateChooser getCmbFechaCompra() {
-        return cmbFechaCompra;
+    public JDateChooser getCmbFechaIngreso() {
+        return cmbFechaIngreso;
     }
 
-    public void setCmbFechaCompra(JDateChooser cmbFechaCompra) {
-        this.cmbFechaCompra = cmbFechaCompra;
+    public void setCmbFechaIngreso(JDateChooser cmbFechaIngreso) {
+        this.cmbFechaIngreso = cmbFechaIngreso;
     }
+
     
-//    @LimpiarAnotacion
-//    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[0-9]+$", nombre = "Codigo establecimiento")
-//    public JTextField getTxtEstablecimiento() {
-//        return txtEstablecimiento;
-//    }
-//
-//    public void setTxtEstablecimiento(JTextField txtEstablecimiento) {
-//        this.txtEstablecimiento = txtEstablecimiento;
-//    }
-    
-//    @LimpiarAnotacion
-//    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0-9]+$",nombre = "Codigo punto emisión")
-//    public JTextField getTxtPuntoEmision() {
-//        return txtPuntoEmision;
-//    }
-//
-//    public void setTxtPuntoEmision(JTextField txtPuntoEmision) {
-//        this.txtPuntoEmision = txtPuntoEmision;
-//    }
-    
-//    @LimpiarAnotacion
-//    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0-9]+$",nombre = "Codigo secuencial")
-//    public JTextField getTxtSecuencial() {
-//        return txtSecuencial;
-//    }
-//
-//    public void setTxtSecuencial(JTextField txtSecuencial) {
-//        this.txtSecuencial = txtSecuencial;
-//    }
 
     public JComboBox<EnumSiNo> getCmbCobraIva() {
         return cmbCobraIva;

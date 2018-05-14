@@ -62,6 +62,45 @@ create table COMPRA_DETALLE
     primary key (ID)
 );
 
+create table ORDEN_COMPRA
+(
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1,INCREMENT BY 1),
+    PROVEEDOR_ID BIGINT,
+    EMPRESA_ID BIGINT,
+    ESTADO varchar(1),
+    USUARIO_ID decimal,
+    FECHA_INGRESO date,
+    FECHA_CREACION date,
+    OBSERVACION varchar(256),
+    CODIGO_TIPO_DOCUMENTO varchar(3),
+    IVA_SRI_ID decimal,
+    IVA decimal(7,2),
+    TOTAL decimal(7,2),
+    DESCUENTO_IVA decimal(7,2),
+    DESCUENTO_IVA_CERO decimal(7,2),
+    SUBTOTAL_IVA decimal(7,2),
+    SUBTOTAL_IVA_CERO decimal(7,2),
+
+    primary key (ID),
+    CONSTRAINT id_cliente_orden_compra_fk FOREIGN KEY (PROVEEDOR_ID) REFERENCES CLIENTE(CLIENTE_ID)
+
+);
+
+create table ORDEN_COMPRA_DETALLE
+(
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1,INCREMENT BY 1),
+    ORDEN_COMPRA_ID BIGINT,
+    CANTIDAD integer ,  
+    PRECIO_UNITARIO decimal(7,3),  
+    DESCUENTO decimal(7,2),
+    VALOR_ICE decimal,
+    DESCRIPCION varchar(150),
+    TOTAL decimal(7,2),
+    IVA decimal(7,2),
+
+    primary key (ID)
+);
+
 
 
 

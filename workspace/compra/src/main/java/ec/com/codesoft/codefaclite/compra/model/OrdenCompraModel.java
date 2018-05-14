@@ -7,6 +7,11 @@ package ec.com.codesoft.codefaclite.compra.model;
 
 import ec.com.codesoft.codefaclite.compra.panel.OrdenCompraPanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +23,7 @@ public class OrdenCompraModel extends OrdenCompraPanel{
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        iniciarVariables();
     }
 
     @Override
@@ -58,7 +63,17 @@ public class OrdenCompraModel extends OrdenCompraPanel{
 
     @Override
     public void limpiar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //Resetar a la fecha actual
+        getCmbFechaIngreso().setDate(UtilidadesFecha.getFechaHoy());
+        getLblIva().setText("0.00");
+        getLblSubtotalImpuesto().setText("0.00");
+        getLblSubtotalImpuestos().setText("0.00");
+        getLblSubtotalSinImpuesto().setText("0.00");
+        getLblSubtotalSinImpuestos().setText("0.00");
+        getLblTotal().setText("0.00");
+        getTxtDescuentoImpuestos().setText("0.00");
+        getTxtDescuentoSinImpuestos().setText("0.00");
+        
     }
 
     @Override
@@ -80,5 +95,16 @@ public class OrdenCompraModel extends OrdenCompraPanel{
     public List<String> getPerfilesPermisos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    private void iniciarVariables() {
+        //Agregar los tipos de documentos disponibles
+        getCmbTipoDocumento().removeAllItems();
+        List<TipoDocumentoEnum> tipoDocumentos = TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloEnum.COMPRAS);
+        for (TipoDocumentoEnum tipoDocumento : tipoDocumentos) 
+        {
+            getCmbTipoDocumento().addItem(tipoDocumento);
+        }
+    }
+
     
 }

@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.controller;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PermisoVentana;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
@@ -29,6 +30,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NacionalidadServic
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenCompraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilUsuarioServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PeriodoServiceIf;
@@ -145,6 +147,7 @@ public abstract class ServiceFactory {
     public SriRetencionRentaServiceIf getSriRetencionRentaServiceIf(){return (SriRetencionRentaServiceIf) getRecursosRMI(SriRetencionRentaServiceIf.class);};
     public RetencionServiceIf getRetencionServiceIf(){return (RetencionServiceIf) getRecursosRMI(RetencionServiceIf.class);};
     public SriRetencionServiceIf getSriRetencionServiceIf(){return (SriRetencionServiceIf) getRecursosRMI(SriRetencionServiceIf.class);};
+    public OrdenCompraServiceIf getOrdenCompraServiceIf(){return (OrdenCompraServiceIf) getRecursosRMI(OrdenCompraServiceIf.class);};
     
     
     /**
