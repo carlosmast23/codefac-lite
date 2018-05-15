@@ -75,7 +75,8 @@ public class UtilidadesServidor {
         RecursoCodefac.SQL.getResourceInputStream("insert_default.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_empresa.sql"),
         RecursoCodefac.SQL.getResourceInputStream("insert_usuario.sql"),
-        RecursoCodefac.SQL.getResourceInputStream("insert_default_academico.sql"),};
+        RecursoCodefac.SQL.getResourceInputStream("insert_default_academico.sql"),
+        RecursoCodefac.SQL.getResourceInputStream("create_servicios.sql"),};
 
     public static void crearBaseDatos() {
         try {
