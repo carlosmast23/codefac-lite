@@ -65,7 +65,8 @@
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionAdicional</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompra</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompraDetalle</class>
-    
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
   </persistence-unit>
 </persistence>
