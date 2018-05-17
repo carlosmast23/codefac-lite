@@ -27,9 +27,9 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.NotaCreditoRep
 import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.RetencionElectronicaReporte;
 import ec.com.codesoft.codefaclite.ws.recepcion.Comprobante;
 import ec.com.codesoft.codefaclite.ws.recepcion.Mensaje;
-import ec.com.codesoft.ejemplo.utilidades.email.CorreoElectronico;
-import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
-import ec.com.codesoft.ejemplo.utilidades.xml.UtilidadesXml;
+import ec.com.codesoft.codefaclite.utilidades.email.CorreoElectronico;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.xml.UtilidadesXml;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;

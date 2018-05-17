@@ -6,7 +6,7 @@
 package ec.com.codesoft.codefaclite.main.model;
 
 import ec.com.codesoft.codefaclite.main.panel.AcercaDialog;
-import ec.com.codesoft.ejemplo.utilidades.web.UtilidadesWeb;
+import ec.com.codesoft.codefaclite.utilidades.web.UtilidadesWeb;
 import java.awt.Frame;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
