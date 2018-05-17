@@ -135,7 +135,7 @@ public class ValidacionLicenciaCodefac{
 
             //String licencia=usuario+":"+UtilidadVarios.obtenerMac()+":"+tipoLicencia+":"+cantidadUsuarios;            
             String modulosStr=licencia.getModulosStr();
-            String licenciaStr=licencia.getUsuario()+":"+UtilidadVarios.obtenerMac()+":"+licencia.getTipoLicenciaEnum().getLetra()+":"+licencia.getCantidadClientes()+":"+modulosStr;            
+            String licenciaStr=licencia.getUsuario()+":"+UtilidadVarios.obtenerMacSinInternet()+":"+licencia.getTipoLicenciaEnum().getLetra()+":"+licencia.getCantidadClientes()+":"+modulosStr;            
             licenciaStr=BCrypt.hashpw(licenciaStr,BCrypt.gensalt(12));
             Properties prop = new Properties();
             prop.setProperty(Licencia.PROPIEDAD_USUARIO,licencia.getUsuario());
