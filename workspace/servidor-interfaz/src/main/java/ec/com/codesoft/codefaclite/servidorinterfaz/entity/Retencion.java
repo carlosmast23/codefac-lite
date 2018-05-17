@@ -5,8 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
-import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
-import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.io.Serializable;
 import java.sql.Date;

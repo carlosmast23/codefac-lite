@@ -24,7 +24,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NotaCreditoEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
-import ec.com.codesoft.ejemplo.utilidades.rmi.UtilidadesRmi;
+import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

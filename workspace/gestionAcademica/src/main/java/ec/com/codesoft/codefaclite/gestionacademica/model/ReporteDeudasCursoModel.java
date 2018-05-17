@@ -21,8 +21,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudi
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RubroEstudianteServiceIf;
-import static ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha.fechaInicioMes;
-import static ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha.hoy;
+import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.fechaInicioMes;
+import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.hoy;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.InputStream;

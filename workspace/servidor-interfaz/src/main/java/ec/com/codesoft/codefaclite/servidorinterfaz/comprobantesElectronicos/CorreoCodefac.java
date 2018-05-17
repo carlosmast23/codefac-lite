@@ -7,8 +7,8 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
-import ec.com.codesoft.ejemplo.utilidades.email.CorreoElectronico;
-import ec.com.codesoft.ejemplo.utilidades.email.SmtpNoExisteException;
+import ec.com.codesoft.codefaclite.utilidades.email.CorreoElectronico;
+import ec.com.codesoft.codefaclite.utilidades.email.SmtpNoExisteException;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
