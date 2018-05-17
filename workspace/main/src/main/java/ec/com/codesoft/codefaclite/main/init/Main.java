@@ -74,6 +74,8 @@ import ec.com.codesoft.codefaclite.servidor.service.CompraDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.CompraService;
 import ec.com.codesoft.codefaclite.servidor.service.ComprobanteFisicoDisenioService;
 import ec.com.codesoft.codefaclite.servidor.service.ComprobantesService;
+import ec.com.codesoft.codefaclite.servidor.service.DepartamentoService;
+import ec.com.codesoft.codefaclite.servidor.service.EmpleadoService;
 import ec.com.codesoft.codefaclite.servidor.service.EmpresaService;
 import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
@@ -139,6 +141,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorS
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceControllerServer;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
@@ -148,6 +152,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CatalogoProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.DepartamentoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpleadoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteInscritoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NacionalidadServiceIf;
@@ -385,6 +391,8 @@ public class Main {
             mapRecursos.put(SriRetencionService.class,SriRetencionServiceIf.class);
             mapRecursos.put(OrdenCompraService.class,OrdenCompraServiceIf.class);
             mapRecursos.put(OrdenCompraDetalleService.class,OrdenCompraDetalleServiceIf.class);
+            mapRecursos.put(DepartamentoService.class,DepartamentoServiceIf.class);
+            mapRecursos.put(EmpleadoService.class,EmpleadoServiceIf.class);
                     
             
             ServiceControllerServer.cargarRecursos(mapRecursos);
