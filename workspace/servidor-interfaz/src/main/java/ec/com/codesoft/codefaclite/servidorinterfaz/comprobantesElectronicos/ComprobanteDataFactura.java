@@ -243,7 +243,7 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
         //Validar el tipo de texto para quitar carcteres especiales
         for (Map.Entry<String, String> entry : mapInfoAdicional.entrySet()) {
             String key = entry.getKey();
-            String value = UtilidadValidador.normalizarTexto(entry.getValue());
+            String value = UtilidadValidador.normalizarTextoCorreo(entry.getValue());
             mapInfoAdicional.put(key, value);
         }
         return mapInfoAdicional;

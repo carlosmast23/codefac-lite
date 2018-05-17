@@ -61,7 +61,9 @@ public abstract class UtilidadVarios {
     public static  String obtenerMacSinInternet()
     {
         Vector<String> excepcionesMac=new Vector<String>();
+        excepcionesMac.add("VirtualBox Host-Only Ethernet Adapter");
         excepcionesMac.add("Microsoft Wi-Fi Direct Virtual Adapter");
+        excepcionesMac.add("Bluetooth Device (Personal Area Network)");
         
         try {
             final Enumeration<NetworkInterface> e = NetworkInterface.getNetworkInterfaces();
