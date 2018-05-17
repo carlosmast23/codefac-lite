@@ -7,6 +7,11 @@ package ec.com.codesoft.codefaclite.servicios.panel;
 
 import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenTrabajoEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PrioridadEnumEstado;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -59,11 +64,11 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         this.btnEliminarDetalle = btnEliminarDetalle;
     }
 
-    public JComboBox<String> getCmbAsignadoADetalle() {
+    public JComboBox<Persona> getCmbAsignadoADetalle() {
         return cmbAsignadoADetalle;
     }
 
-    public void setCmbAsignadoADetalle(JComboBox<String> cmbAsignadoADetalle) {
+    public void setCmbAsignadoADetalle(JComboBox<Persona> cmbAsignadoADetalle) {
         this.cmbAsignadoADetalle = cmbAsignadoADetalle;
     }
 
@@ -75,35 +80,35 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         this.cmbDateFechaIngreso = cmbDateFechaIngreso;
     }
 
-    public JComboBox<String> getCmbEstadoDetalle() {
+    public JComboBox<OrdenTrabajoEnumEstado> getCmbEstadoDetalle() {
         return cmbEstadoDetalle;
     }
 
-    public void setCmbEstadoDetalle(JComboBox<String> cmbEstadoDetalle) {
+    public void setCmbEstadoDetalle(JComboBox<OrdenTrabajoEnumEstado> cmbEstadoDetalle) {
         this.cmbEstadoDetalle = cmbEstadoDetalle;
     }
 
-    public JComboBox<String> getCmbEstadoOrdenTrabajo() {
+    public JComboBox<GeneralEnumEstado> getCmbEstadoOrdenTrabajo() {
         return cmbEstadoOrdenTrabajo;
     }
 
-    public void setCmbEstadoOrdenTrabajo(JComboBox<String> cmbEstadoOrdenTrabajo) {
+    public void setCmbEstadoOrdenTrabajo(JComboBox<GeneralEnumEstado> cmbEstadoOrdenTrabajo) {
         this.cmbEstadoOrdenTrabajo = cmbEstadoOrdenTrabajo;
     }
 
-    public JComboBox<String> getCmbPrioridadDetalle() {
+    public JComboBox<PrioridadEnumEstado> getCmbPrioridadDetalle() {
         return cmbPrioridadDetalle;
     }
 
-    public void setCmbPrioridadDetalle(JComboBox<String> cmbPrioridadDetalle) {
+    public void setCmbPrioridadDetalle(JComboBox<PrioridadEnumEstado> cmbPrioridadDetalle) {
         this.cmbPrioridadDetalle = cmbPrioridadDetalle;
     }
 
-    public JComboBox<String> getCmbTipoOrdenDetalle() {
+    public JComboBox<Departamento> getCmbTipoOrdenDetalle() {
         return cmbTipoOrdenDetalle;
     }
 
-    public void setCmbTipoOrdenDetalle(JComboBox<String> cmbTipoOrdenDetalle) {
+    public void setCmbTipoOrdenDetalle(JComboBox<Departamento> cmbTipoOrdenDetalle) {
         this.cmbTipoOrdenDetalle = cmbTipoOrdenDetalle;
     }
 
@@ -553,13 +558,13 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
     private javax.swing.JButton btnAgregarDetalle;
     private javax.swing.JButton btnCliente;
     private javax.swing.JButton btnEliminarDetalle;
-    private javax.swing.JComboBox<String> cmbAsignadoADetalle;
+    private javax.swing.JComboBox<Persona> cmbAsignadoADetalle;
     private com.toedter.calendar.JDateChooser cmbDateFechaEntrega;
     private com.toedter.calendar.JDateChooser cmbDateFechaIngreso;
-    private javax.swing.JComboBox<String> cmbEstadoDetalle;
-    private javax.swing.JComboBox<String> cmbEstadoOrdenTrabajo;
-    private javax.swing.JComboBox<String> cmbPrioridadDetalle;
-    private javax.swing.JComboBox<String> cmbTipoOrdenDetalle;
+    private javax.swing.JComboBox<OrdenTrabajoEnumEstado> cmbEstadoDetalle;
+    private javax.swing.JComboBox<GeneralEnumEstado> cmbEstadoOrdenTrabajo;
+    private javax.swing.JComboBox<PrioridadEnumEstado> cmbPrioridadDetalle;
+    private javax.swing.JComboBox<Departamento> cmbTipoOrdenDetalle;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

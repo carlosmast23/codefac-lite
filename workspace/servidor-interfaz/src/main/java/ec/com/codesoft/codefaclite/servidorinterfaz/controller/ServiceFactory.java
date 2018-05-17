@@ -16,6 +16,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraDetalleServi
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteFisicoDisenioServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.DepartamentoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpleadoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteInscritoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteServiceIf;
@@ -150,6 +152,8 @@ public abstract class ServiceFactory {
     public SriRetencionServiceIf getSriRetencionServiceIf(){return (SriRetencionServiceIf) getRecursosRMI(SriRetencionServiceIf.class);};
     public OrdenCompraServiceIf getOrdenCompraServiceIf(){return (OrdenCompraServiceIf) getRecursosRMI(OrdenCompraServiceIf.class);};
     public OrdenTrabajoServiceIf getOrdenTrabajoServiceIf(){return (OrdenTrabajoServiceIf) getRecursosRMI(OrdenTrabajoServiceIf.class);};
+    public EmpleadoServiceIf getEmpleadoServiceIf(){return (EmpleadoServiceIf) getRecursosRMI(EmpleadoServiceIf.class);};
+    public DepartamentoServiceIf getDepartamentoServiceIf(){return (DepartamentoServiceIf) getRecursosRMI(DepartamentoServiceIf.class);};
     
     /**
      * Crea una nueva instancia el controlados para manejar por el cliente
