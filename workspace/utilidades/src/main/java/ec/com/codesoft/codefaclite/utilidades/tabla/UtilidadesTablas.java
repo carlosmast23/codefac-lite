@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.ejemplo.utilidades.tabla;
+package ec.com.codesoft.codefaclite.utilidades.tabla;
 
 import java.util.List;
 import javax.swing.JTable;

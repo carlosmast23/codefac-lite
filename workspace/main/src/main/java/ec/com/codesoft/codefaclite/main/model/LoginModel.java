@@ -26,6 +26,8 @@ import javax.swing.JOptionPane;
  */
 public class LoginModel extends LoginFormDialog{
 
+    private static final Logger LOG = Logger.getLogger(LoginModel.class.getName());
+    
     UsuarioServicioIf usuarioServicio;
     Usuario usuario;
 
@@ -83,11 +85,12 @@ public class LoginModel extends LoginFormDialog{
                 usuario=usuarioServicio.login(getTxtUsuario().getText(),clave);
                 if(usuario!=null)
                 {
-                    //JOptionPane.showMessageDialog(null,"Usuario correcto");
+                    LOG.log(Level.INFO, "Ingresando con el usuario: "+getTxtUsuario().getText());
                     dispose();
                 }
                 else
                 {
+                    LOG.log(Level.WARNING, "Error al ingresar con el usuario: "+getTxtUsuario().getText());
                     DialogoCodefac.mensaje("Error Login","Datos Incorrectos",DialogoCodefac.MENSAJE_INCORRECTO);
                 }
             } catch (RemoteException ex) {

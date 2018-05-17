@@ -5,8 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.main.test;
 
-import ec.com.codesoft.ejemplo.utilidades.email.CorreoElectronico;
-import ec.com.codesoft.ejemplo.utilidades.email.SmtpNoExisteException;
+import ec.com.codesoft.codefaclite.utilidades.email.CorreoElectronico;
+import ec.com.codesoft.codefaclite.utilidades.email.SmtpNoExisteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;

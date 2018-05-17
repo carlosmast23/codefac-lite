@@ -8,7 +8,7 @@ package ec.com.codesoft.codefaclite.main.license;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
-import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import java.io.FileWriter;
 import java.net.InetAddress;
 import java.net.NetworkInterface;

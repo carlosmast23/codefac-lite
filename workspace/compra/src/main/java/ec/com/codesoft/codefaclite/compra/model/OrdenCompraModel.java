@@ -6,12 +6,18 @@
 package ec.com.codesoft.codefaclite.compra.model;
 
 import ec.com.codesoft.codefaclite.compra.panel.OrdenCompraPanel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.crm.busqueda.ProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Map;
 
@@ -20,9 +26,13 @@ import java.util.Map;
  * @author Carlos
  */
 public class OrdenCompraModel extends OrdenCompraPanel{
+    
+    private OrdenCompra ordenCompra;
+        
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
+        listener();
         iniciarVariables();
     }
 
@@ -63,6 +73,8 @@ public class OrdenCompraModel extends OrdenCompraPanel{
 
     @Override
     public void limpiar() {
+        //IniciarVariables
+        ordenCompra=new OrdenCompra();        
         //Resetar a la fecha actual
         getCmbFechaIngreso().setDate(UtilidadesFecha.getFechaHoy());
         getLblIva().setText("0.00");
@@ -104,6 +116,28 @@ public class OrdenCompraModel extends OrdenCompraPanel{
         {
             getCmbTipoDocumento().addItem(tipoDocumento);
         }
+    }
+
+    private void listener() {
+        listenerBotones();
+    }
+
+    private void listenerBotones() {
+        getBtnProveedorBuscar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ProveedorBusquedaDialogo buscarBusquedaDialogo = new ProveedorBusquedaDialogo();
+                BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
+                buscarDialogo.setVisible(true);
+                Persona proveedor = (Persona) buscarDialogo.getResultado();
+                if (proveedor != null) {
+                    String identificacion = proveedor.getIdentificacion();
+                    String nombre = proveedor.getRazonSocial();
+                    getTxtProveedor().setText(identificacion + " - " + nombre);
+                    //desbloquearIngresoDetalleProducto();
+                }
+            }
+        });
     }
 
     

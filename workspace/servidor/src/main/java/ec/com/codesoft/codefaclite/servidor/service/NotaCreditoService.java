@@ -18,7 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudi
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
-import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.List;

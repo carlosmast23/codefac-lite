@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.ejemplo.utilidades.xml;
+package ec.com.codesoft.codefaclite.utilidades.xml;
 
-import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;

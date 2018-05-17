@@ -19,7 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.KardexFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
-import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;

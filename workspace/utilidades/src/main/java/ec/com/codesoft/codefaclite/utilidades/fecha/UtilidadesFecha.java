@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.ejemplo.utilidades.fecha;
+package ec.com.codesoft.codefaclite.utilidades.fecha;
 
 import java.sql.Date;
 import java.text.DateFormat;

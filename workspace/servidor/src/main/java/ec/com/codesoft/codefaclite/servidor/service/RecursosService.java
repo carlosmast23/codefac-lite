@@ -13,7 +13,7 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
-import ec.com.codesoft.ejemplo.utilidades.rmi.UtilidadesRmi;
+import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
