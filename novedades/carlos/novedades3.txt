@@ -13,3 +13,5 @@ Revisar que cuando mando a abrir la pantalla desde la matricula no funciona la f
 
 grabar el tipo de documento segun el sri del tipo de documento en cada tabla porque seguramente voy a necesitar para los ats
 
+agregar una opcion para configurar correos con dominios personalizados
+

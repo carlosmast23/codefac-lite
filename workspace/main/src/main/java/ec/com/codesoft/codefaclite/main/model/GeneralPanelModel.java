@@ -2329,6 +2329,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             public void actionPerformed(ActionEvent e) {
                 String usuarioLicencia=sessionCodefac.getUsuarioLicencia();
                 String tipoLicencia=WebServiceCodefac.getTipoLicencia(usuarioLicencia);
+                //TODO: Analizar la opcion para comparar tambien el numero de usuario y modulos para generar una nueva licencia
                 
                 if(sessionCodefac.getTipoLicenciaEnum().getLetra().equals(tipoLicencia))
                 {
