@@ -5,7 +5,14 @@
  */
 package ec.com.codesoft.codefaclite.servicios.panel;
 
+import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 /**
  *
@@ -20,6 +27,150 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         initComponents();
     }
 
+    public JButton getBtnActualizarDetalle() {
+        return btnActualizarDetalle;
+    }
+
+    public void setBtnActualizarDetalle(JButton btnActualizarDetalle) {
+        this.btnActualizarDetalle = btnActualizarDetalle;
+    }
+
+    public JButton getBtnAgregarDetalle() {
+        return btnAgregarDetalle;
+    }
+
+    public void setBtnAgregarDetalle(JButton btnAgregarDetalle) {
+        this.btnAgregarDetalle = btnAgregarDetalle;
+    }
+
+    public JButton getBtnCliente() {
+        return btnCliente;
+    }
+
+    public void setBtnCliente(JButton btnCliente) {
+        this.btnCliente = btnCliente;
+    }
+
+    public JButton getBtnEliminarDetalle() {
+        return btnEliminarDetalle;
+    }
+
+    public void setBtnEliminarDetalle(JButton btnEliminarDetalle) {
+        this.btnEliminarDetalle = btnEliminarDetalle;
+    }
+
+    public JComboBox<String> getCmbAsignadoADetalle() {
+        return cmbAsignadoADetalle;
+    }
+
+    public void setCmbAsignadoADetalle(JComboBox<String> cmbAsignadoADetalle) {
+        this.cmbAsignadoADetalle = cmbAsignadoADetalle;
+    }
+
+    public JDateChooser getCmbDateFechaIngreso() {
+        return cmbDateFechaIngreso;
+    }
+
+    public void setCmbDateFechaIngreso(JDateChooser cmbDateFechaIngreso) {
+        this.cmbDateFechaIngreso = cmbDateFechaIngreso;
+    }
+
+    public JComboBox<String> getCmbEstadoDetalle() {
+        return cmbEstadoDetalle;
+    }
+
+    public void setCmbEstadoDetalle(JComboBox<String> cmbEstadoDetalle) {
+        this.cmbEstadoDetalle = cmbEstadoDetalle;
+    }
+
+    public JComboBox<String> getCmbEstadoOrdenTrabajo() {
+        return cmbEstadoOrdenTrabajo;
+    }
+
+    public void setCmbEstadoOrdenTrabajo(JComboBox<String> cmbEstadoOrdenTrabajo) {
+        this.cmbEstadoOrdenTrabajo = cmbEstadoOrdenTrabajo;
+    }
+
+    public JComboBox<String> getCmbPrioridadDetalle() {
+        return cmbPrioridadDetalle;
+    }
+
+    public void setCmbPrioridadDetalle(JComboBox<String> cmbPrioridadDetalle) {
+        this.cmbPrioridadDetalle = cmbPrioridadDetalle;
+    }
+
+    public JComboBox<String> getCmbTipoOrdenDetalle() {
+        return cmbTipoOrdenDetalle;
+    }
+
+    public void setCmbTipoOrdenDetalle(JComboBox<String> cmbTipoOrdenDetalle) {
+        this.cmbTipoOrdenDetalle = cmbTipoOrdenDetalle;
+    }
+
+    public JTable getTableDetallesOrdenTrabajo() {
+        return tableDetallesOrdenTrabajo;
+    }
+
+    public void setTableDetallesOrdenTrabajo(JTable tableDetallesOrdenTrabajo) {
+        this.tableDetallesOrdenTrabajo = tableDetallesOrdenTrabajo;
+    }
+
+    public JTextArea getTxtAreaDescripcion() {
+        return txtAreaDescripcion;
+    }
+
+    public void setTxtAreaDescripcion(JTextArea txtAreaDescripcion) {
+        this.txtAreaDescripcion = txtAreaDescripcion;
+    }
+
+    public JTextArea getTxtAreaNotas() {
+        return txtAreaNotas;
+    }
+
+    public void setTxtAreaNotas(JTextArea txtAreaNotas) {
+        this.txtAreaNotas = txtAreaNotas;
+    }
+
+    public JTextField getTxtCliente() {
+        return txtCliente;
+    }
+
+    public void setTxtCliente(JTextField txtCliente) {
+        this.txtCliente = txtCliente;
+    }
+
+    public JTextField getTxtCodigo() {
+        return txtCodigo;
+    }
+
+    public void setTxtCodigo(JTextField txtCodigo) {
+        this.txtCodigo = txtCodigo;
+    }
+
+    public JTextField getTxtDescripcion() {
+        return txtDescripcion;
+    }
+
+    public void setTxtDescripcion(JTextField txtDescripcion) {
+        this.txtDescripcion = txtDescripcion;
+    }
+
+    public JLabel getLblTotalDetalles() {
+        return lblTotalDetalles;
+    }
+
+    public void setLblTotalDetalles(JLabel lblTotalDetalles) {
+        this.lblTotalDetalles = lblTotalDetalles;
+    }
+
+    public JDateChooser getCmbDateFechaEntrega() {
+        return cmbDateFechaEntrega;
+    }
+
+    public void setCmbDateFechaEntrega(JDateChooser cmbDateFechaEntrega) {
+        this.cmbDateFechaEntrega = cmbDateFechaEntrega;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -30,43 +181,44 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtCodigo = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cmbEstadoOrdenTrabajo = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        txtCliente = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jTextField3 = new javax.swing.JTextField();
-        jDateChooser2 = new com.toedter.calendar.JDateChooser();
+        btnCliente = new javax.swing.JButton();
+        txtDescripcion = new javax.swing.JTextField();
+        cmbDateFechaIngreso = new com.toedter.calendar.JDateChooser();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tableDetallesOrdenTrabajo = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
-        jComboBox4 = new javax.swing.JComboBox<>();
         jLabel10 = new javax.swing.JLabel();
-        jComboBox5 = new javax.swing.JComboBox<>();
+        cmbTipoOrdenDetalle = new javax.swing.JComboBox<>();
         jLabel11 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        txtAreaDescripcion = new javax.swing.JTextArea();
         jLabel12 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTextArea3 = new javax.swing.JTextArea();
+        txtAreaNotas = new javax.swing.JTextArea();
         jLabel4 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        cmbAsignadoADetalle = new javax.swing.JComboBox<>();
         jLabel13 = new javax.swing.JLabel();
-        jComboBox6 = new javax.swing.JComboBox<>();
+        cmbEstadoDetalle = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox<>();
+        cmbPrioridadDetalle = new javax.swing.JComboBox<>();
         jToolBar1 = new javax.swing.JToolBar();
-        jButton4 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnAgregarDetalle = new javax.swing.JButton();
+        btnActualizarDetalle = new javax.swing.JButton();
+        btnEliminarDetalle = new javax.swing.JButton();
+        cmbDateFechaEntrega = new com.toedter.calendar.JDateChooser();
         lblEspacio1 = new javax.swing.JLabel();
         lblEspacio2 = new javax.swing.JLabel();
+        lblTotalDetalles = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -89,7 +241,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jTextField1, gridBagConstraints);
+        getContentPane().add(txtCodigo, gridBagConstraints);
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setText("Cliente:");
@@ -107,7 +259,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.05;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jComboBox1, gridBagConstraints);
+        getContentPane().add(cmbEstadoOrdenTrabajo, gridBagConstraints);
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel3.setText("Descripción:");
@@ -124,7 +276,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jTextField2, gridBagConstraints);
+        getContentPane().add(txtCliente, gridBagConstraints);
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel5.setText("Estado:");
@@ -144,14 +296,14 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel6, gridBagConstraints);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/persona-ico.png"))); // NOI18N
-        jButton1.setToolTipText("Agregar Cliente");
+        btnCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/persona-ico.png"))); // NOI18N
+        btnCliente.setToolTipText("Agregar Cliente");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jButton1, gridBagConstraints);
+        getContentPane().add(btnCliente, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -159,16 +311,16 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jTextField3, gridBagConstraints);
+        getContentPane().add(txtDescripcion, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jDateChooser2, gridBagConstraints);
+        getContentPane().add(cmbDateFechaIngreso, gridBagConstraints);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tableDetallesOrdenTrabajo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -179,13 +331,13 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(jTable1);
+        jScrollPane2.setViewportView(tableDetallesOrdenTrabajo);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
-        gridBagConstraints.gridheight = java.awt.GridBagConstraints.REMAINDER;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
@@ -205,14 +357,6 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel9, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jComboBox4, gridBagConstraints);
-
         jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel10.setText("Fecha Entrega:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -229,7 +373,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jComboBox5, gridBagConstraints);
+        jPanel1.add(cmbTipoOrdenDetalle, gridBagConstraints);
 
         jLabel11.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel11.setText("Descripción:");
@@ -240,9 +384,9 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel11, gridBagConstraints);
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane3.setViewportView(jTextArea2);
+        txtAreaDescripcion.setColumns(20);
+        txtAreaDescripcion.setRows(5);
+        jScrollPane3.setViewportView(txtAreaDescripcion);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -264,9 +408,9 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel12, gridBagConstraints);
 
-        jTextArea3.setColumns(20);
-        jTextArea3.setRows(5);
-        jScrollPane4.setViewportView(jTextArea3);
+        txtAreaNotas.setColumns(20);
+        txtAreaNotas.setRows(5);
+        jScrollPane4.setViewportView(txtAreaNotas);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -295,7 +439,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jComboBox2, gridBagConstraints);
+        jPanel1.add(cmbAsignadoADetalle, gridBagConstraints);
 
         jLabel13.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel13.setText("Estado:");
@@ -313,7 +457,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jComboBox6, gridBagConstraints);
+        jPanel1.add(cmbEstadoDetalle, gridBagConstraints);
 
         jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel8.setText("Prioridad:");
@@ -330,34 +474,41 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jComboBox3, gridBagConstraints);
+        jPanel1.add(cmbPrioridadDetalle, gridBagConstraints);
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/nuevo-icono.png"))); // NOI18N
-        jButton4.setFocusable(false);
-        jButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton4);
+        btnAgregarDetalle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/nuevo-icono.png"))); // NOI18N
+        btnAgregarDetalle.setFocusable(false);
+        btnAgregarDetalle.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAgregarDetalle.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnAgregarDetalle);
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/edit-icon.png"))); // NOI18N
-        jButton3.setFocusable(false);
-        jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton3);
+        btnActualizarDetalle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/edit-icon.png"))); // NOI18N
+        btnActualizarDetalle.setFocusable(false);
+        btnActualizarDetalle.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnActualizarDetalle.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnActualizarDetalle);
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/delete-icon.png"))); // NOI18N
-        jButton2.setFocusable(false);
-        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton2);
+        btnEliminarDetalle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/delete-icon.png"))); // NOI18N
+        btnEliminarDetalle.setFocusable(false);
+        btnEliminarDetalle.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnEliminarDetalle.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnEliminarDetalle);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         jPanel1.add(jToolBar1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
+        gridBagConstraints.weightx = 0.1;
+        jPanel1.add(cmbDateFechaEntrega, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -379,23 +530,36 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         gridBagConstraints.weightx = 0.1;
         getContentPane().add(lblEspacio2, gridBagConstraints);
 
+        lblTotalDetalles.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblTotalDetalles.setText("0.00");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 6;
+        getContentPane().add(lblTotalDetalles, gridBagConstraints);
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel7.setText("TOTAL:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 6;
+        getContentPane().add(jLabel7, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
-    private javax.swing.JComboBox<String> jComboBox4;
-    private javax.swing.JComboBox<String> jComboBox5;
-    private javax.swing.JComboBox<String> jComboBox6;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
-    private com.toedter.calendar.JDateChooser jDateChooser2;
+    private javax.swing.JButton btnActualizarDetalle;
+    private javax.swing.JButton btnAgregarDetalle;
+    private javax.swing.JButton btnCliente;
+    private javax.swing.JButton btnEliminarDetalle;
+    private javax.swing.JComboBox<String> cmbAsignadoADetalle;
+    private com.toedter.calendar.JDateChooser cmbDateFechaEntrega;
+    private com.toedter.calendar.JDateChooser cmbDateFechaIngreso;
+    private javax.swing.JComboBox<String> cmbEstadoDetalle;
+    private javax.swing.JComboBox<String> cmbEstadoOrdenTrabajo;
+    private javax.swing.JComboBox<String> cmbPrioridadDetalle;
+    private javax.swing.JComboBox<String> cmbTipoOrdenDetalle;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -406,20 +570,22 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextArea jTextArea2;
-    private javax.swing.JTextArea jTextArea3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio2;
+    private javax.swing.JLabel lblTotalDetalles;
+    private javax.swing.JTable tableDetallesOrdenTrabajo;
+    private javax.swing.JTextArea txtAreaDescripcion;
+    private javax.swing.JTextArea txtAreaNotas;
+    private javax.swing.JTextField txtCliente;
+    private javax.swing.JTextField txtCodigo;
+    private javax.swing.JTextField txtDescripcion;
     // End of variables declaration//GEN-END:variables
 }

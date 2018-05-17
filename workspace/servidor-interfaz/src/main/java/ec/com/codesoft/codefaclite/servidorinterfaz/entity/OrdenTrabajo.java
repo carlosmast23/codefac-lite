@@ -15,6 +15,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -42,6 +44,10 @@ public class OrdenTrabajo implements Serializable
     
     @Column(name = "FECHA_INGRESO")
     private Date fechaIngreso;
+    
+    @JoinColumn(name = "CLIENTE_ID")
+    @ManyToOne    
+    private Persona cliente;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "ordenTrabajo",fetch = FetchType.EAGER)
     private List<OrdenTrabajoDetalle> detalles;
@@ -93,6 +99,13 @@ public class OrdenTrabajo implements Serializable
     public void setFechaIngreso(Date fechaIngreso) {
         this.fechaIngreso = fechaIngreso;
     }
-    
-    
+
+    public Persona getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Persona cliente) {
+        this.cliente = cliente;
+    }
+   
 }

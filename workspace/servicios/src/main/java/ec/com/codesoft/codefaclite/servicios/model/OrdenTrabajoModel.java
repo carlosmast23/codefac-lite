@@ -5,8 +5,19 @@
  */
 package ec.com.codesoft.codefaclite.servicios.model;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteBusquedaDialogo;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.servicios.panel.OrdenTrabajoPanel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Map;
 
@@ -16,9 +27,13 @@ import java.util.Map;
  */
 public class OrdenTrabajoModel extends OrdenTrabajoPanel{
 
+    private OrdenTrabajo ordenTrabajo;
+    private Persona proveedor;
+    
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.ordenTrabajo = new OrdenTrabajo();
+        addListenerBotones();
     }
 
     @Override
@@ -81,4 +96,67 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
+    public void addListenerBotones()
+    {
+        getBtnCliente().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {               
+                ClienteBusquedaDialogo buscarBusquedaDialogo = new ClienteBusquedaDialogo();
+                BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
+                buscarDialogo.setVisible(true);
+                Persona persona = (Persona) buscarDialogo.getResultado();
+                if(persona != null)
+                {
+                    getTxtCliente().setText(persona.getRazonSocial()+" - "+persona.getIdentificacion());
+                }
+            }
+        });
+        
+        getBtnAgregarDetalle().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        });
+        
+        getBtnActualizarDetalle().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        });
+ 
+        getBtnEliminarDetalle().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        });
+    }
+    
+    public void addListenerCombos()
+    {
+        
+    }
+    
+    public void cargarCombos()
+    {
+        getCmbAsignadoADetalle().removeAllItems();
+        getCmbEstadoDetalle().removeAllItems();
+        getCmbEstadoOrdenTrabajo().removeAllItems();
+        getCmbPrioridadDetalle().removeAllItems();
+        getCmbTipoOrdenDetalle().removeAllItems();
+    }
+    
+    public void limpiarCampos()
+    {
+        //Orden trabajo
+        getTxtCodigo().setText("");
+        getTxtCliente().setText("");
+        getTxtDescripcion().setText("");
+        //Detalle Orden trabajo
+        getTxtAreaDescripcion().setText("");
+        getTxtAreaNotas().setText("");
+  
+    }    
 }
