@@ -1,28 +1,39 @@
 package ec.com.codesoft.codefaclite.compra.model;
 
+import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import ec.com.codesoft.codefaclite.compra.panel.RetencionReportePanel;
+import ec.com.codesoft.codefaclite.compra.reportdata.ReporteRetencionesData;
+import ec.com.codesoft.codefaclite.compra.reportdata.ValorRetencionesData;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.crm.busqueda.ProveedorBusquedaDialogo;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RetencionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
 import static ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha.fechaInicioMes;
+import static ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha.formatDate;
 import static ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha.hoy;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +41,9 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperReport;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -66,6 +80,55 @@ public class RetencionReporteModel extends RetencionReportePanel {
             getBtnBuscarProveedor().setEnabled(false);
         }
 
+        getChkTodos().addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
+                    proveedor = null;
+                    getTxtProveedor().setText("...");
+                    getBtnBuscarProveedor().setEnabled(false);
+                } else {
+                    getBtnBuscarProveedor().setEnabled(true);
+                }
+            }
+        });
+
+        getChkTodosIva().setSelected(true);
+        if (getChkTodosIva().isSelected()) {
+            sriRetencionIva = null;
+            getCmbRetencionIva().setEnabled(false);
+        }
+
+        getChkTodosIva().addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
+                    sriRetencionIva = null;
+                    getCmbRetencionIva().setEnabled(false);
+                } else {
+                    getCmbRetencionIva().setEnabled(true);
+                }
+            }
+        });
+
+        getChkTodosRenta().setSelected(true);
+        if (getChkTodosRenta().isSelected()) {
+            sriRetencionRenta = null;
+            getCmbRetencionRenta().setEnabled(false);
+        }
+
+        getChkTodosRenta().addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
+                    sriRetencionRenta = null;
+                    getCmbRetencionRenta().setEnabled(false);
+                } else {
+                    getCmbRetencionRenta().setEnabled(true);
+                }
+            }
+        });
+
         //Agregar los tipos de retencion Iva
         getCmbRetencionIva().removeAllItems();
         SriRetencionIvaServiceIf sriRetencionIvaService = ServiceFactory.getFactory().getSriRetencionIvaServiceIf();
@@ -89,19 +152,6 @@ public class RetencionReporteModel extends RetencionReportePanel {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        getChkTodos().addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
-                    proveedor = null;
-                    getTxtProveedor().setText("...");
-                    getBtnBuscarProveedor().setEnabled(false);
-                } else {
-                    getBtnBuscarProveedor().setEnabled(true);
-                }
-            }
-        });
 
         getBtnBuscarProveedor().addActionListener(new ActionListener() {
             @Override
@@ -161,7 +211,7 @@ public class RetencionReporteModel extends RetencionReportePanel {
                     titulo2.add("Código");
                     titulo2.add("Valor");
                     DefaultTableModel modeloTablaRetIva = new DefaultTableModel(titulo2, 0);
-                    List<Object[]> dataRetencionCodigo = fs.obtenerRetencionesCodigo(proveedor, fechaFin, fechaFin, sriRetencionIva, sriRetencionRenta,"C");
+                    List<Object[]> dataRetencionCodigo = fs.obtenerRetencionesCodigo(proveedor, fechaFin, fechaFin, sriRetencionIva, sriRetencionRenta, "C");
                     for (Object[] obj : dataRetencionCodigo) {
                         Vector<String> fila = new Vector<String>();
                         String r = (String) obj[0];
@@ -169,16 +219,14 @@ public class RetencionReporteModel extends RetencionReportePanel {
                         fila.add(r);
                         fila.add(valor.toString());
                         modeloTablaRetIva.addRow(fila);
-                        System.out.println("PRIMER CICLO "+r);
                     }
                     getTblRetIva().setModel(modeloTablaRetIva);
 
-                    
                     Vector<String> titulo3 = new Vector<>();
                     titulo3.add("Código");
                     titulo3.add("Valor");
                     DefaultTableModel modeloTablaRetRenta = new DefaultTableModel(titulo3, 0);
-                    List<Object[]> dataRetencionCodigoRenta = fs.obtenerRetencionesCodigo(proveedor, fechaFin, fechaFin, sriRetencionIva, sriRetencionRenta,"R");
+                    List<Object[]> dataRetencionCodigoRenta = fs.obtenerRetencionesCodigo(proveedor, fechaFin, fechaFin, sriRetencionIva, sriRetencionRenta, "R");
                     for (Object[] obj : dataRetencionCodigoRenta) {
                         Vector<String> fila = new Vector<String>();
                         String r = (String) obj[0];
@@ -219,7 +267,59 @@ public class RetencionReporteModel extends RetencionReportePanel {
 
     @Override
     public void imprimir() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        try {
+            if (getDateFechaInicio().getDate() != null) {
+                fechaInicio = new Date(getDateFechaInicio().getDate().getTime());
+            }
+            if (getDateFechaFin().getDate() != null) {
+                fechaFin = new Date(getDateFechaFin().getDate().getTime());
+            }
+            sriRetencionIva = (SriRetencionIva) getCmbRetencionIva().getSelectedItem();
+            sriRetencionRenta = (SriRetencionRenta) getCmbRetencionRenta().getSelectedItem();
+
+            InputStream path = RecursoCodefac.JASPER_COMPRA.getResourceInputStream("reporte_retenciones.jrxml");
+            RetencionServiceIf fs = ServiceFactory.getFactory().getRetencionServiceIf();
+            dataretencion = fs.obtenerRetencionesReporte(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta);
+            List<ReporteRetencionesData> data = new ArrayList<ReporteRetencionesData>();
+            for (RetencionDetalle retencion : dataretencion) {
+                data.add(new ReporteRetencionesData(
+                        retencion.getRetencion().getCompra().getPreimpreso(),
+                        retencion.getBaseImponible().toString(),
+                        retencion.getPorcentajeRetener().toString(),
+                        retencion.getCodigoSri() + " - " + retencion.getCodigoRetencionSri(),
+                        retencion.getValorRetenido().toString()
+                ));
+            }
+            List<Object[]> dataRetencionCodigoRenta = fs.obtenerRetencionesCodigo(proveedor, fechaFin, fechaFin, sriRetencionIva, sriRetencionRenta, "R");
+            List<ValorRetencionesData> datav = new ArrayList<ValorRetencionesData>();
+            for (Object[] obj : dataRetencionCodigoRenta) {
+                String r = (String) obj[0];
+                BigDecimal valor = (BigDecimal) obj[1];
+                datav.add(new ValorRetencionesData(
+                        r, valor.toString()
+                ));
+            }
+
+             RecursosServiceIf service= ServiceFactory.getFactory().getRecursosServiceIf();
+             InputStream pathSubReporte = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPRA, "subreporte_retencion.jrxml"));
+            JasperReport reportPiePagina = JasperCompileManager.compileReport(pathSubReporte);
+            
+            parameters.put("SUBREPORTE_RUTA",reportPiePagina);
+            
+            parameters.put("fechainicio", formatDate(fechaInicio, "yyyy-MM-dd"));
+            parameters.put("fechafin", formatDate(fechaFin, "yyyy-MM-dd"));
+            parameters.put("listaIva", datav);
+            ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte de retenciones");
+
+        } catch (RemoteException ex) {
+            Logger.getLogger(RetencionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(RetencionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JRException ex) {
+            Logger.getLogger(RetencionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     @Override
@@ -249,7 +349,10 @@ public class RetencionReporteModel extends RetencionReportePanel {
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
+        return permisos;
     }
 
     @Override

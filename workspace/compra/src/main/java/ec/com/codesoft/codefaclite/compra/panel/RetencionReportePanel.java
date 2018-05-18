@@ -59,6 +59,8 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         tblRetRenta = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        chkTodosIva = new javax.swing.JCheckBox();
+        chkTodosRenta = new javax.swing.JCheckBox();
 
         setClosable(true);
         setIconifiable(true);
@@ -70,8 +72,7 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 256;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(14, 13, 0, 0);
@@ -80,8 +81,7 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 256;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(11, 13, 0, 0);
@@ -89,10 +89,9 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
 
         dateFechaInicio.setDateFormatString("yyyy-MM-dd");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.gridheight = 2;
         gridBagConstraints.ipadx = 147;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(12, 10, 0, 18);
@@ -100,10 +99,9 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
 
         dateFechaFin.setDateFormatString("yyyy-MM-dd");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.gridheight = 2;
         gridBagConstraints.ipadx = 147;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(11, 10, 0, 18);
@@ -111,7 +109,7 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
 
         jLabel1.setText("Fecha inicial:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(15, 34, 0, 0);
@@ -138,7 +136,7 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
 
         jLabel3.setText("Fecha final:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.ipadx = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -147,7 +145,6 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
         gridBagConstraints.ipadx = 168;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(13, 10, 0, 0);
@@ -157,10 +154,11 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.gridheight = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(12, 11, 0, 0);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
         getContentPane().add(chkTodos, gridBagConstraints);
 
         jLabel4.setText("IVA:");
@@ -185,10 +183,8 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         btnBuscar.setText("Buscar Compra");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.gridheight = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(12, 37, 0, 0);
         getContentPane().add(btnBuscar, gridBagConstraints);
@@ -234,7 +230,7 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         jScrollPane2.setViewportView(tblRetIva);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         getContentPane().add(jScrollPane2, gridBagConstraints);
@@ -253,22 +249,34 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         jScrollPane3.setViewportView(tblRetRenta);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridx = 9;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         getContentPane().add(jScrollPane3, gridBagConstraints);
 
         jLabel6.setText("IVA");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 7;
         getContentPane().add(jLabel6, gridBagConstraints);
 
         jLabel7.setText("RETENCION");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridx = 9;
         gridBagConstraints.gridy = 7;
         getContentPane().add(jLabel7, gridBagConstraints);
+
+        chkTodosIva.setText("Todos");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        getContentPane().add(chkTodosIva, gridBagConstraints);
+
+        chkTodosRenta.setText("Todos");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 4;
+        getContentPane().add(chkTodosRenta, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -360,13 +368,29 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
     public void setTblRetRenta(JTable tblRetRenta) {
         this.tblRetRenta = tblRetRenta;
     }
-    
-    
 
+    public JCheckBox getChkTodosIva() {
+        return chkTodosIva;
+    }
+
+    public void setChkTodosIva(JCheckBox chkTodosIva) {
+        this.chkTodosIva = chkTodosIva;
+    }
+
+    public JCheckBox getChkTodosRenta() {
+        return chkTodosRenta;
+    }
+
+    public void setChkTodosRenta(JCheckBox chkTodosRenta) {
+        this.chkTodosRenta = chkTodosRenta;
+    }
+        
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnBuscarProveedor;
     private javax.swing.JCheckBox chkTodos;
+    private javax.swing.JCheckBox chkTodosIva;
+    private javax.swing.JCheckBox chkTodosRenta;
     private javax.swing.JComboBox<SriRetencionIva> cmbRetencionIva;
     private javax.swing.JComboBox<SriRetencionRenta> cmbRetencionRenta;
     private com.toedter.calendar.JDateChooser dateFechaFin;

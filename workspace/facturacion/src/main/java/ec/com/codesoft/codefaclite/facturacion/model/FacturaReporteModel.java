@@ -289,7 +289,8 @@ public class FacturaReporteModel extends FacturaReportePanel {
             }   if (getDateFechaFin().getDate() != null) {
                 fechaFin = new Date(getDateFechaFin().getDate().getTime());
                 fechafin = dateFormat.format(getDateFechaFin().getDate());
-            }   InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_documentos.jrxml");
+            }   
+            InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_documentos.jrxml");
             FacturacionServiceIf fs = ServiceFactory.getFactory().getFacturacionServiceIf();
             datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFact);
             NotaCreditoServiceIf nc = ServiceFactory.getFactory().getNotaCreditoServiceIf();

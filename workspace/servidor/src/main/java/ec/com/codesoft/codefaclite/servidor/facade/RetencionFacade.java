@@ -116,11 +116,11 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
         }
         
         try {
-            String queryString = "SELECT "+tipoc+",SUM(d.valorRetenido) FROM RetencionDetalle d WHERE d.retencion.id IN(SELECT r.id FROM Retencion r WHERE " + proveedor + fecha +" AND r.compra.id IN(SELECT e.compra.id FROM CompraDetalle e WHERE "+retiva+" AND "+retrenta+")) GROUP BY "+tipoc;
-            //String queryString = "SELECT d.codigoSri,SUM(d.valorRetenido) FROM RetencionDetalle d GROUP BY d.codigoSri";
+            //String queryString = "SELECT "+tipoc+",SUM(d.valorRetenido) FROM RetencionDetalle d WHERE d.retencion.id IN(SELECT r.id FROM Retencion r WHERE " + proveedor + fecha +" AND r.compra.id IN(SELECT e.compra.id FROM CompraDetalle e WHERE "+retiva+" AND "+retrenta+")) GROUP BY "+tipoc;
+            String queryString = "SELECT d.codigoSri,SUM(d.valorRetenido) FROM RetencionDetalle d GROUP BY d.codigoSri";
             Query query = getEntityManager().createQuery(queryString);
             System.err.println("QUERY 2 --->" + query.toString());
-            if (persona != null) {
+            /*if (persona != null) {
                 query.setParameter(1, persona);
             }
             if (fi != null) {
@@ -134,7 +134,7 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
             }
             if (renta != null) {
                 query.setParameter(5, renta);
-            }
+            }*/
             return query.getResultList();
         } catch (NoResultException e) {
             return null;
