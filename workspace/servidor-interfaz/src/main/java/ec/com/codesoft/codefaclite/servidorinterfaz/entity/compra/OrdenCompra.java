@@ -11,14 +11,19 @@ import es.mityc.firmaJava.ocsp.config.ProveedorInfo;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -84,6 +89,9 @@ public class OrdenCompra implements Serializable{
     @JoinColumn(name = "PROVEEDOR_ID")
     @ManyToOne    
     private Persona proveedor;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ordenCompra", fetch = FetchType.EAGER)
+    private List<OrdenCompraDetalle> detalles;
 
     public OrdenCompra() {
     }
@@ -207,10 +215,37 @@ public class OrdenCompra implements Serializable{
     public void setProveedor(Persona proveedor) {
         this.proveedor = proveedor;
     }
+
+    public List<OrdenCompraDetalle> getDetalles() {
+        return detalles;
+    }
+
+    public void setDetalles(List<OrdenCompraDetalle> detalles) {
+        this.detalles = detalles;
+    }
+
+    public Long getEmpresa_id() {
+        return empresa_id;
+    }
+
+    public void setEmpresa_id(Long empresa_id) {
+        this.empresa_id = empresa_id;
+    }
+    
+    
     
     public GeneralEnumEstado getEstadoEnum()
     {
         return GeneralEnumEstado.getEnum(estado);
+    }
+    
+    public void addDetalle(OrdenCompraDetalle detalle) {
+        if (this.detalles == null) {
+            this.detalles = new ArrayList<OrdenCompraDetalle>();
+        }
+        detalle.setOrdenCompra(this);
+        this.detalles.add(detalle);
+
     }
     
     @Override
@@ -241,5 +276,6 @@ public class OrdenCompra implements Serializable{
     
     //Metodos Personalizados
 
+    
     
 }
