@@ -30,6 +30,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDescuentoRubroEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
@@ -451,6 +452,7 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
         rubroMatricula.setEstudianteInscrito(estudianteInscrito);
         rubroMatricula.setNombreDescuento(getTxtNombreDescuento().getText());
         rubroMatricula.setProcentajeDescuento((Integer) getSpnPorcentaje().getValue());
+        rubroMatricula.setFechaGenerado(UtilidadesFecha.getFechaHoy());
         RubrosNivel rubroNivel=(RubrosNivel) getCmbRubroMatricula().getSelectedItem();
         rubroMatricula.setRubroNivel(rubroNivel);
         rubroMatricula.setSaldo(rubroNivel.getValor());

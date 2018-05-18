@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.EntityTransaction;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
@@ -35,12 +36,18 @@ public class PersonaService extends ServiceAbstract<Persona,PersonaFacade> imple
 
     public Persona grabar(Persona p) throws ServicioCodefacException,java.rmi.RemoteException
     {
+        EntityTransaction transaccion=getTransaccion();
+        transaccion.begin();
         try {
-            personaFacade.create(p);
-        } catch (ConstrainViolationExceptionSQL ex) {
-            Logger.getLogger(PersonaService.class.getName()).log(Level.SEVERE, null, ex);
-            throw new ServicioCodefacException(ex.getMessage());
+            entityManager.persist(p);
+            //personaFacade.create(p);
+            transaccion.commit();
+            
+        //} catch (ConstrainViolationExceptionSQL ex) {
+        //    Logger.getLogger(PersonaService.class.getName()).log(Level.SEVERE, null, ex);
+        //    throw new ServicioCodefacException(ex.getMessage());
         } catch (DatabaseException ex) {
+            transaccion.rollback();
             Logger.getLogger(PersonaService.class.getName()).log(Level.SEVERE, null, ex);
             throw  new ServicioCodefacException("Error sql");
         }
