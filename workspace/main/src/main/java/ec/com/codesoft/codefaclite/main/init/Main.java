@@ -600,6 +600,10 @@ public class Main {
                 hiloPublicidad.start();
                 panel.setHiloPublicidadCodefac(hiloPublicidad);
             }
+            
+            panel.getLblNombreEmpresa().setText("Empresa: "+session.getEmpresa().getNombreLegal()+" | Usuario:"+session.getUsuario().getNick());
+            
+            
             panel.iniciarComponentesGenerales();
             panel.setVisible(true);
 

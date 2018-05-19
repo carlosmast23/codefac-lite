@@ -12,6 +12,7 @@ import java.awt.Dimension;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDesktopPane;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -66,7 +67,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         lblPiePagina = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        lblNombreEmpresa = new javax.swing.JLabel();
         jSplitPanel = new javax.swing.JSplitPane();
         jDesktopPane1 = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -194,6 +195,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
         jPanel1.setBackground(new java.awt.Color(62, 93, 162));
 
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Licencia:Gratis");
         jPanel1.add(jLabel1);
@@ -206,11 +208,11 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         lblPiePagina.setText("Todos los derechos reservador por @Codesoft 2017       ");
         JPanelPiePagina.add(lblPiePagina, java.awt.BorderLayout.CENTER);
 
-        jLabel2.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("   Empresa: Codesoft");
-        JPanelPiePagina.add(jLabel2, java.awt.BorderLayout.LINE_START);
+        lblNombreEmpresa.setBackground(new java.awt.Color(255, 255, 255));
+        lblNombreEmpresa.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        lblNombreEmpresa.setForeground(new java.awt.Color(255, 255, 255));
+        lblNombreEmpresa.setText("   Empresa: Codesoft");
+        JPanelPiePagina.add(lblNombreEmpresa, java.awt.BorderLayout.LINE_START);
 
         getContentPane().add(JPanelPiePagina, java.awt.BorderLayout.PAGE_END);
 
@@ -383,7 +385,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JButton btnSalirPantallaPublicidad;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenuAyuda;
     private javax.swing.JMenuBar jMenuBar1;
@@ -401,6 +402,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JTabbedPane jPanelSeleccion;
     private javax.swing.JSplitPane jSplitPanel;
     private javax.swing.JSplitPane jSplitPanelVerticalSecundario;
+    private javax.swing.JLabel lblNombreEmpresa;
     private javax.swing.JLabel lblPiePagina;
     // End of variables declaration//GEN-END:variables
 
@@ -620,5 +622,14 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         this.jMenuUtilidades = jMenuUtilidades;
     }
 
+    public JLabel getLblNombreEmpresa() {
+        return lblNombreEmpresa;
+    }
+
+    public void setLblNombreEmpresa(JLabel lblNombreEmpresa) {
+        this.lblNombreEmpresa = lblNombreEmpresa;
+    }
+
+    
     
 }
