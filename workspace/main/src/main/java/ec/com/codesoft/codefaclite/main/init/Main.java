@@ -226,6 +226,8 @@ public class Main {
     private static final String NOMBRE_ARCHIVO_CONFIGURACION = "codefac.ini";
 
     private static final String CAMPO_MODO_APLICATIVO = "modo";
+    
+    private static final String CAMPO_IP_ULTIMO_ACCESO_SERVIDOR="servidorip";
     /**
      * Variable para saber el modo que inicia el aplicativo
      */
@@ -477,10 +479,19 @@ public class Main {
 
             } else {
                 if (modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE)) {
+                    
+                    //Consultar si existe grabado la ip del servidor para cargar por defecto la ultima
+                    String ipServidorDefecto=propiedadesIniciales.getProperty(CAMPO_IP_ULTIMO_ACCESO_SERVIDOR);
+                    
                     //Cargar los recursos para funcionar en modo cliente
-                    String ipServidor = JOptionPane.showInputDialog("Ingresa la Ip del servidor: ");
+                    String ipServidor = JOptionPane.showInputDialog("Ingresa la Ip del servidor: ",(ipServidorDefecto==null)?"":ipServidorDefecto);
                     cargarRecursosCliente(ipServidor);
                     verificarConexionesPermitidas();
+                    
+                    //Grabar la ip del ultimo servidor accedido para no ingresar nuevamente el dato
+                    propiedadesIniciales.put(CAMPO_IP_ULTIMO_ACCESO_SERVIDOR, ipServidor + "");
+                    propiedadesIniciales.store(new FileWriter(NOMBRE_ARCHIVO_CONFIGURACION), "");
+                    
                     LOG.log(Level.INFO, "Modo Cliente Activado");
 
                 } else {
@@ -488,6 +499,7 @@ public class Main {
                         //Cargar los recursos para funcionar en modo cliente y le p
                         componentesBaseDatos();
                         cargarRecursosServidor();
+                        //Todo: Veriicar este metodo que obtiene la ip del servidor, porque cuando tienen varias interfaces o una virtual puede levantarse el servicio en una IP que no se desea
                         String ipServidor = InetAddress.getLocalHost().getHostAddress();
                         cargarRecursosCliente(ipServidor);
                         //Valida la licencia antes de ejecutar el servidor
@@ -594,6 +606,8 @@ public class Main {
         } catch (RemoteException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         } catch (UnknownHostException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
 
