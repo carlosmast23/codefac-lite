@@ -91,8 +91,6 @@ public abstract class OrdenCompraPanel extends ControladorCodefacInterface {
         jLabel12 = new javax.swing.JLabel();
         cmbTipoDocumento = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
-        txtProductoItem = new javax.swing.JTextField();
         btnBuscarProductoProveedor = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         txtDescripcionItem = new javax.swing.JTextField();
@@ -240,29 +238,11 @@ public abstract class OrdenCompraPanel extends ControladorCodefacInterface {
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Detalles"));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel7.setText("Producto:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel2.add(jLabel7, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 0.4;
-        jPanel2.add(txtProductoItem, gridBagConstraints);
-
         btnBuscarProductoProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/list.png"))); // NOI18N
         btnBuscarProductoProveedor.setText("Producto");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(btnBuscarProductoProveedor, gridBagConstraints);
@@ -270,15 +250,15 @@ public abstract class OrdenCompraPanel extends ControladorCodefacInterface {
         jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel8.setText("Descripcion:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(jLabel8, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 7;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.weightx = 0.1;
@@ -287,7 +267,7 @@ public abstract class OrdenCompraPanel extends ControladorCodefacInterface {
         jLabel9.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel9.setText("Cantidad");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -295,9 +275,8 @@ public abstract class OrdenCompraPanel extends ControladorCodefacInterface {
 
         txtCantidadItem.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.weightx = 0.1;
@@ -306,7 +285,7 @@ public abstract class OrdenCompraPanel extends ControladorCodefacInterface {
         jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel10.setText("P.Unitario:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 11;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -314,7 +293,7 @@ public abstract class OrdenCompraPanel extends ControladorCodefacInterface {
 
         txtPrecionUnitarioItem.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 14;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
@@ -348,15 +327,15 @@ public abstract class OrdenCompraPanel extends ControladorCodefacInterface {
         jLabel17.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel17.setText("Cobra Iva:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 11;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(jLabel17, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 14;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.weightx = 0.1;
@@ -366,7 +345,7 @@ public abstract class OrdenCompraPanel extends ControladorCodefacInterface {
         btnCrearProducto.setText("Crear");
         btnCrearProducto.setToolTipText("Crear un nuevo producto");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -647,7 +626,6 @@ public abstract class OrdenCompraPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -674,7 +652,6 @@ public abstract class OrdenCompraPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtObservacion;
     private javax.swing.JTextField txtOrdenCompra;
     private javax.swing.JTextField txtPrecionUnitarioItem;
-    private javax.swing.JTextField txtProductoItem;
     private javax.swing.JTextField txtProveedor;
     // End of variables declaration//GEN-END:variables
 
@@ -712,12 +689,6 @@ public abstract class OrdenCompraPanel extends ControladorCodefacInterface {
         this.btnBuscarProductoProveedor = btnBuscarProductoProveedor;
     }
 
-    @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Producto",grupo = "detalles")
-    public JTextField getTxtProductoItem() {
-        return txtProductoItem;
-    }
-    
     @LimpiarAnotacion
     @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Descripción",grupo = "detalles")
     public JTextField getTxtDescripcionItem() {

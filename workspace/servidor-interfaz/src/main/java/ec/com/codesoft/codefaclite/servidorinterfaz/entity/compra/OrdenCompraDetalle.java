@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -52,6 +53,10 @@ public class OrdenCompraDetalle implements Serializable{
 
     @Column(name = "IVA")
     private BigDecimal iva;
+    
+    @JoinColumn(name = "PRODUCTO_PROVEEDOR_ID")
+    @ManyToOne
+    private ProductoProveedor productoProveedor;
     
     @JoinColumn(name="ORDEN_COMPRA_ID")
     @ManyToOne(optional = false)
@@ -133,7 +138,63 @@ public class OrdenCompraDetalle implements Serializable{
         this.ordenCompra = ordenCompra;
     }
 
+    public ProductoProveedor getProductoProveedor() {
+        return productoProveedor;
+    }
+
+    public void setProductoProveedor(ProductoProveedor productoProveedor) {
+        this.productoProveedor = productoProveedor;
+    }
     
     
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 97 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final OrdenCompraDetalle other = (OrdenCompraDetalle) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+
     
+    //Metodos personalizados
+    
+    /**
+     * Metodo que devuelve el subtotal de la cantidad por el precio unitario y
+     * menos el descuento
+     *
+     * @return
+     */
+    public BigDecimal getSubtotal() {
+        return new BigDecimal(cantidad + "").multiply(precioUnitario).subtract(descuento);
+    }
+
+    public BigDecimal calcularValorIva() {
+        //Todo: revisar el valor del iva 12 que esta quemado
+        return getSubtotal().multiply(new BigDecimal("0.12"));
+    }
+    
+    public BigDecimal calcularTotal()
+    {
+        //Todo: revisar el valor del iva 12 que esta quemado
+        return getSubtotal().multiply(new BigDecimal("1.12"));
+    }
+
 }

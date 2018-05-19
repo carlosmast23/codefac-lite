@@ -64,7 +64,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             throw  new ServicioCodefacException("Error al grabar la compra");       
             
         }
-        
+        //TODO: Falta retornar el tipo de dato por ejemplo en los dialogos necesita obtener el nuevo dato modificado.
     }
     
 

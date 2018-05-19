@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteInscritoServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -41,6 +42,7 @@ public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrit
         entityManager.persist(estudianteInscrito);
         estudianteInscrito=entityManager.merge(estudianteInscrito);
         rubroMatricula.setEstudianteInscrito(estudianteInscrito);
+        rubroMatricula.setFechaGenerado(UtilidadesFecha.getFechaHoy());
         entityManager.persist(rubroMatricula);
         transaccion.commit();
         return estudianteInscrito;

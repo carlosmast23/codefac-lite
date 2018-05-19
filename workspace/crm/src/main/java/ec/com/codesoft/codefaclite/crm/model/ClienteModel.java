@@ -68,6 +68,9 @@ import net.sf.jasperreports.view.JasperViewer;
  */
 public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Persona>, InterfazPostConstructPanel {
 
+    private static final Logger LOG = Logger.getLogger(ClienteModel.class.getName());
+
+    
     /**
      * Modelo para manejar las identificaciones del sri
      */
@@ -117,10 +120,12 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         try {
             setearDatos();
             personaService.editar(persona);
-
-            System.out.println("Se edito correctamente");
+            
+            DialogoCodefac.mensaje("Correcto","La persona fue editada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+            
         } catch (RemoteException ex) {
             Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje("Error","Error de comunicacion con el servidor",DialogoCodefac.MENSAJE_INCORRECTO);
         }
     }
     

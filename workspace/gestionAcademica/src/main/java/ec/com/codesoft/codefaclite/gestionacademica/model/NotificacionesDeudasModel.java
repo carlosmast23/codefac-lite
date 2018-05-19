@@ -154,7 +154,12 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
                 BigDecimal total = BigDecimal.ZERO;
                 for (RubroEstudiante detalle : detalles) {
                     total = total.add(detalle.getSaldo());
-                    String fechaReporte=UtilidadesFecha.formatoDiaMesAño(detalle.getFechaGenerado());
+                    String fechaReporte="";
+                    
+                    if(detalle.getFechaGenerado()!=null)
+                    {
+                        fechaReporte=UtilidadesFecha.formatoDiaMesAño(detalle.getFechaGenerado());
+                    }
                     listaReporte.add(new EstudianteDeudaData(detalle.getRubroNivel().getNombre(), detalle.getSaldo().toString(),fechaReporte));
                 }
 
