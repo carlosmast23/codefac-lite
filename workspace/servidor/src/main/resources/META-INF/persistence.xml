@@ -67,6 +67,8 @@
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompraDetalle</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
   </persistence-unit>
 </persistence>

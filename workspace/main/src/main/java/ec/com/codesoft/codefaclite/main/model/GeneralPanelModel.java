@@ -54,9 +54,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
-import ec.com.codesoft.ejemplo.utilidades.imagen.UtilidadImagen;
-import ec.com.codesoft.ejemplo.utilidades.rmi.UtilidadesRmi;
-import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
+import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
+import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import es.mityc.firmaJava.ocsp.config.ServidorOcsp;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -2329,6 +2329,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             public void actionPerformed(ActionEvent e) {
                 String usuarioLicencia=sessionCodefac.getUsuarioLicencia();
                 String tipoLicencia=WebServiceCodefac.getTipoLicencia(usuarioLicencia);
+                //TODO: Analizar la opcion para comparar tambien el numero de usuario y modulos para generar una nueva licencia
                 
                 if(sessionCodefac.getTipoLicenciaEnum().getLetra().equals(tipoLicencia))
                 {

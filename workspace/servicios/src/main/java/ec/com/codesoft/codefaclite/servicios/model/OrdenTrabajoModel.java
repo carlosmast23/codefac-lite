@@ -11,15 +11,27 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.servicios.panel.OrdenTrabajoPanel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenTrabajoEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PrioridadEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -31,9 +43,11 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
     private Persona proveedor;
     
     @Override
-    public void iniciar() throws ExcepcionCodefacLite {
-        this.ordenTrabajo = new OrdenTrabajo();
-        addListenerBotones();
+    public void iniciar() {
+            this.ordenTrabajo = new OrdenTrabajo();
+            addListenerBotones();
+            addListenerCombos();
+            cargarCombos();
     }
 
     @Override
@@ -136,16 +150,74 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
     
     public void addListenerCombos()
     {
-        
+        getCmbTipoOrdenDetalle().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) 
+            {
+                try {
+                    getCmbAsignadoADetalle().removeAllItems();
+                    Departamento departamento = (Departamento)getCmbTipoOrdenDetalle().getSelectedItem();
+                    Map<String, Object> parametroMap = new HashMap<String, Object>();
+                    parametroMap.put("departamento", departamento);
+                    List<Empleado> empleados = ServiceFactory.getFactory().getEmpleadoServiceIf().obtenerPorMap(parametroMap);
+                    for (Empleado empleado : empleados) {
+                        getCmbAsignadoADetalle().addItem(empleado.getCliente());
+                    }
+                } catch (RemoteException ex) {
+                    Logger.getLogger(OrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(OrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
     }
     
     public void cargarCombos()
     {
-        getCmbAsignadoADetalle().removeAllItems();
-        getCmbEstadoDetalle().removeAllItems();
+        /**
+         * Estado general de orden trabajo
+         */
         getCmbEstadoOrdenTrabajo().removeAllItems();
+        for(GeneralEnumEstado generalEnumEstado : GeneralEnumEstado.values())
+        {
+            getCmbEstadoOrdenTrabajo().addItem(generalEnumEstado);
+        }
+        
+        /**
+         * Estado por detalle de Orden de trabajo
+         */
+        getCmbEstadoDetalle().removeAllItems();
+        for(OrdenTrabajoEnumEstado ordenTrabajoEnumEstado : OrdenTrabajoEnumEstado.values())
+        {
+            getCmbEstadoDetalle().addItem(ordenTrabajoEnumEstado);
+        }
+        
+        getCmbAsignadoADetalle().removeAllItems();
+        
+        /**
+         * Prioridad por detalle de orden trabajo
+         */
         getCmbPrioridadDetalle().removeAllItems();
+        for(PrioridadEnumEstado prioridadEnumEstado : PrioridadEnumEstado.values())
+        {
+            getCmbPrioridadDetalle().addItem(prioridadEnumEstado);
+        }
+        
         getCmbTipoOrdenDetalle().removeAllItems();
+        try{
+            List<Departamento> departamentos = ServiceFactory.getFactory().getDepartamentoServiceIf().obtenerTodos();
+            for(Departamento departamento : departamentos)
+            {
+                getCmbTipoOrdenDetalle().addItem(departamento);
+            }
+        }
+        catch(RemoteException e)
+        {
+            e.printStackTrace();
+        }
+                   
+
+        
     }
     
     public void limpiarCampos()

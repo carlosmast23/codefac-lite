@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
 import ec.com.codesoft.codefaclite.crm.model.ClienteReporte;
 import ec.com.codesoft.codefaclite.compra.model.CompraModel;
+import ec.com.codesoft.codefaclite.controlador.logs.LogControlador;
 import ec.com.codesoft.codefaclite.crm.model.EmpresaModel;
 import ec.com.codesoft.codefaclite.crm.model.ProductoModel;
 import ec.com.codesoft.codefaclite.crm.model.ProductoReporte;
@@ -74,6 +75,8 @@ import ec.com.codesoft.codefaclite.servidor.service.CompraDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.CompraService;
 import ec.com.codesoft.codefaclite.servidor.service.ComprobanteFisicoDisenioService;
 import ec.com.codesoft.codefaclite.servidor.service.ComprobantesService;
+import ec.com.codesoft.codefaclite.servidor.service.DepartamentoService;
+import ec.com.codesoft.codefaclite.servidor.service.EmpleadoService;
 import ec.com.codesoft.codefaclite.servidor.service.EmpresaService;
 import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
 import ec.com.codesoft.codefaclite.servidor.service.ImpuestoDetalleService;
@@ -139,6 +142,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorS
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceControllerServer;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
@@ -148,6 +153,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CatalogoProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.DepartamentoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpleadoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteInscritoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NacionalidadServiceIf;
@@ -170,7 +177,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraSer
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.gestionacademica.RubroPlantillaEstudianteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.gestionacademica.RubroPlantillaServiceIf;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
-import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -209,6 +216,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionServic
  */
 public class Main {
 
+    private static final Logger LOG = Logger.getLogger(Main.class.getName());
+    
+
     private static Properties propiedadesIniciales;
     /**
      * Nombre del archivo de configuraciones iniciales
@@ -222,7 +232,11 @@ public class Main {
     public static Integer modoAplicativo;
 
     public static void main(String[] args) {
-
+        
+        configurarLogs();
+        /**
+         * Configura el archivo para guardar la configuracion inicial en propertys de como va a iniciar el aplicativo
+         */
         cargarConfiguracionesIniciales();
 
         /**
@@ -237,6 +251,13 @@ public class Main {
          */
         iniciarComponentes();
     }
+    
+    private static void configurarLogs()
+    {
+        LogControlador logControlador=new LogControlador();    
+        LOG.log(Level.INFO,"Iniciado configuracion de los logs");
+                
+    }
 
     //Lee el archivo de configuraciones de cada computador como por ejemplo
     //para saber la modalidad por defecto que se debe ejcutar el aplicativo
@@ -247,7 +268,7 @@ public class Main {
 
         } catch (FileNotFoundException ex) {
             //Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            System.err.println("Archivo de configuracion inicial no existe");
+            LOG.log(Level.INFO,"Archivo de configuracion inicial no existe");
 
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
@@ -304,7 +325,7 @@ public class Main {
                 return; //sio existe no continua buscando el modo de aplicativo
             }
         }
-
+        
         /**
          * Seleccionar el modo de inicio de Codefac si no selecciona un modo no
          * le permite acceder a los siguiente funcionalidad
@@ -385,10 +406,12 @@ public class Main {
             mapRecursos.put(SriRetencionService.class,SriRetencionServiceIf.class);
             mapRecursos.put(OrdenCompraService.class,OrdenCompraServiceIf.class);
             mapRecursos.put(OrdenCompraDetalleService.class,OrdenCompraDetalleServiceIf.class);
+            mapRecursos.put(DepartamentoService.class,DepartamentoServiceIf.class);
+            mapRecursos.put(EmpleadoService.class,EmpleadoServiceIf.class);
                     
             
             ServiceControllerServer.cargarRecursos(mapRecursos);
-            System.out.println("servidor iniciado");
+            LOG.log(Level.INFO,"Servidor Iniciado");
 
         } catch (PersistenceException ex) {
             Logger.getLogger(TestPruebaRMI.class.getName()).log(Level.SEVERE, null, ex);
@@ -450,6 +473,7 @@ public class Main {
                 //splashScren.siguiente();
                 //splashScren.termino();
                 //return;
+                LOG.log(Level.INFO, "Modo Servidor activado");
 
             } else {
                 if (modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE)) {
@@ -457,6 +481,7 @@ public class Main {
                     String ipServidor = JOptionPane.showInputDialog("Ingresa la Ip del servidor: ");
                     cargarRecursosCliente(ipServidor);
                     verificarConexionesPermitidas();
+                    LOG.log(Level.INFO, "Modo Cliente Activado");
 
                 } else {
                     if (modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE_SERVIDOR)) {
@@ -472,6 +497,7 @@ public class Main {
                         UtilidadesServidor.pathRecursos = parametroDirectorioRecursos.getValor();
 
                         verificarConexionesPermitidas();
+                        LOG.log(Level.INFO, "Modo Cliente Servidor Activado");
                     }
 
                 }
@@ -545,7 +571,7 @@ public class Main {
              */
             Usuario usuarioLogin= cargarLoginUsuario();
             if (usuarioLogin == null) {
-                System.out.println("aplicacion terminada");
+                LOG.log(Level.WARNING, "Error en la licencia ");
                 return;
             }
 

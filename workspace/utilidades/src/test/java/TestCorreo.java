@@ -1,5 +1,5 @@
 
-import ec.com.codesoft.ejemplo.utilidades.email.CorreoElectronico;
+import ec.com.codesoft.codefaclite.utilidades.email.CorreoElectronico;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;

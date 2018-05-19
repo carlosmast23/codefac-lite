@@ -28,7 +28,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneroEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDiscapacidadEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
-import static ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha.hoy;
+import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.hoy;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.InputStream;

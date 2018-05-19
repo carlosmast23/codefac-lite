@@ -10,7 +10,7 @@ import ec.com.codesoft.codefaclite.main.license.excepcion.ValidacionLicenciaExce
 import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
-import ec.com.codesoft.ejemplo.utilidades.varios.UtilidadVarios;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;

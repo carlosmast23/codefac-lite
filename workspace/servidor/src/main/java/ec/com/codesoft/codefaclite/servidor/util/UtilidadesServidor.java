@@ -10,7 +10,7 @@ import ec.com.codesoft.codefaclite.servidor.service.interfacePanel.ServidorMonit
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.test.CrearBaseDatos;
-import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
@@ -76,7 +76,8 @@ public class UtilidadesServidor {
         RecursoCodefac.SQL.getResourceInputStream("create_empresa.sql"),
         RecursoCodefac.SQL.getResourceInputStream("insert_usuario.sql"),
         RecursoCodefac.SQL.getResourceInputStream("insert_default_academico.sql"),
-        RecursoCodefac.SQL.getResourceInputStream("create_servicios.sql"),};
+        RecursoCodefac.SQL.getResourceInputStream("create_servicios.sql"),
+        RecursoCodefac.SQL.getResourceInputStream("insert_servicio.sql")};
 
     public static void crearBaseDatos() {
         try {

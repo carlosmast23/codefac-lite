@@ -7,7 +7,7 @@ package ec.com.codesoft.codefaclite.configuraciones.model;
 
 import ec.com.codesoft.codefaclite.configuraciones.panel.CalculadoraPanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.ejemplo.utilidades.calculos.UtilidadesCalculo;
+import ec.com.codesoft.codefaclite.utilidades.calculos.UtilidadesCalculo;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;

@@ -16,9 +16,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
-import ec.com.codesoft.ejemplo.utilidades.fecha.UtilidadesFecha;
-import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
-import ec.com.codesoft.ejemplo.utilidades.validadores.UtilidadValidador;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadValidador;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -56,7 +56,7 @@ public class ComprobanteDataRetencion implements ComprobanteDataInterface,Serial
     public Map<String, String> getMapAdicional() {
         for (Map.Entry<String, String> entry : mapInfoAdicional.entrySet()) {
             String key = entry.getKey();
-            String value = UtilidadValidador.normalizarTexto(entry.getValue());
+            String value = UtilidadValidador.normalizarTextoCorreo(entry.getValue());
             mapInfoAdicional.put(key, value);
         }
         return mapInfoAdicional;

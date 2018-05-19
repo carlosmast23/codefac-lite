@@ -28,8 +28,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudi
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoReferenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
-import ec.com.codesoft.ejemplo.utilidades.texto.UtilidadesTextos;
-import ec.com.codesoft.ejemplo.utilidades.validadores.UtilidadValidador;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadValidador;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
@@ -243,7 +243,7 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
         //Validar el tipo de texto para quitar carcteres especiales
         for (Map.Entry<String, String> entry : mapInfoAdicional.entrySet()) {
             String key = entry.getKey();
-            String value = UtilidadValidador.normalizarTexto(entry.getValue());
+            String value = UtilidadValidador.normalizarTextoCorreo(entry.getValue());
             mapInfoAdicional.put(key, value);
         }
         return mapInfoAdicional;
