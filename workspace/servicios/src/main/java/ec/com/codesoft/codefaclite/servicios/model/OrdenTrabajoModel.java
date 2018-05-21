@@ -6,10 +6,12 @@
 package ec.com.codesoft.codefaclite.servicios.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.servicios.panel.OrdenTrabajoPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
@@ -25,9 +27,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEn
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenTrabajoEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PrioridadEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.HashMap;
@@ -48,22 +52,46 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
     
     @Override
     public void iniciar() {
-            this.ordenTrabajo = new OrdenTrabajo();
-            addListenerBotones();
-            addListenerCombos();
-            cargarCombos();
+        this.ordenTrabajo = new OrdenTrabajo();
+        cargarValoresIniciales();
+        initDatosTabla();
     }
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        cargarValoresIniciales();
+        limpiarCampos();
+        initDatosTabla();
     }
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            if (ordenTrabajo.getCliente() == null) {
+                DialogoCodefac.mensaje("Alerta", "Necesita seleccionar un cliente", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                throw new ExcepcionCodefacLite("Necesita seleccionar un Cliente");
+            }
+            
+            if (ordenTrabajo.getDetalles().isEmpty()) {
+                DialogoCodefac.mensaje("Alerta", "No existen detalles para la Orden", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                throw new ExcepcionCodefacLite("Necesita crear detalles ");
+            }
+            
+            
+            Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea realizar la Orden de trabajo?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            if (!respuesta) {
+                throw new ExcepcionCodefacLite("Cancelacion usuario");
+            }
+            
+            OrdenTrabajoServiceIf servicio = ServiceFactory.getFactory().getOrdenTrabajoServiceIf();
+            servicio.grabar(ordenTrabajo);        
+            }catch (ServicioCodefacException ex) {
+                Logger.getLogger(OrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
+            }catch (RemoteException ex) {
+                Logger.getLogger(OrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
     }
-
+    
     @Override
     public void editar() throws ExcepcionCodefacLite {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -106,12 +134,27 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
+        permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
+        return permisos;
     }
 
     @Override
     public List<String> getPerfilesPermisos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public void cargarValoresIniciales()
+    {
+        addListenerBotones();
+        addListenerCombos();
+        addListenerTablas();
+        cargarCombos();
     }
     
     public void addListenerBotones()
@@ -135,6 +178,8 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             public void actionPerformed(ActionEvent e) 
             {
                 agregarDetallesOrdenTrabajo(null);
+                limpiarCampos();
+                cargarCombos();
             }
         });
         
@@ -143,7 +188,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             public void actionPerformed(ActionEvent e) {
                 int fila = getTableDetallesOrdenTrabajo().getSelectedRow();
                 OrdenTrabajoDetalle ordenTrabajoDetalle = ordenTrabajo.getDetalles().get(fila);
-                mostrarDatosTabla();
+                agregarDetallesOrdenTrabajo(ordenTrabajoDetalle);
             }
         });
  
@@ -177,6 +222,31 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
                 } catch (ServicioCodefacException ex) {
                     Logger.getLogger(OrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
+            }
+        });
+    }
+    
+    public void addListenerTablas()
+    {
+        getTableDetallesOrdenTrabajo().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int fila = getTableDetallesOrdenTrabajo().getSelectedRow();
+                OrdenTrabajoDetalle ordenTrabajoDetalle = ordenTrabajo.getDetalles().get(fila);
+                getTxtAreaDescripcion().setText(ordenTrabajoDetalle.getDescripcion());
+                getTxtAreaNotas().setText(ordenTrabajoDetalle.getNotas());
+                /**
+                 * Cargar información a los combos
+                 */
+                OrdenTrabajoEnumEstado ordenTrabajoEnumEstado = OrdenTrabajoEnumEstado.getEnum(ordenTrabajoDetalle.getEstado());
+                getCmbEstadoDetalle().setSelectedItem(ordenTrabajoEnumEstado);
+                getCmbDateFechaEntrega().setDate(ordenTrabajoDetalle.getFechaEntrega());
+                PrioridadEnumEstado prioridadEnumEstado = PrioridadEnumEstado.getEnum(ordenTrabajoDetalle.getPrioridad());
+                getCmbPrioridadDetalle().setSelectedItem(prioridadEnumEstado);
+                Departamento departamento = ordenTrabajoDetalle.getEmpleado().getDepartamento();
+                getCmbTipoOrdenDetalle().setSelectedItem(departamento);
+                getCmbAsignadoADetalle().setSelectedItem(ordenTrabajoDetalle.getEmpleado());
+                
             }
         });
     }
@@ -227,22 +297,14 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
    
     }
     
-    public void limpiarCampos()
+    public void initDatosTabla()
     {
-        //Orden trabajo
-        getTxtCodigo().setText("");
-        getTxtCliente().setText("");
-        getTxtDescripcion().setText("");
-        //Detalle Orden trabajo
-        getTxtAreaDescripcion().setText("");
-        getTxtAreaNotas().setText("");
-  
+        DefaultTableModel modeloTablaDetallesCompra = UtilidadesTablas.crearModeloTabla(new String[]{"Descripción","Estado","Tipo Orden","Asignado"}, new Class[]{OrdenTrabajoDetalle.class,String.class,String.class,String.class,String.class});
+        getTableDetallesOrdenTrabajo().setModel(modeloTablaDetallesCompra);
     }
-
+    
     public void mostrarDatosTabla(OrdenTrabajo ordenTrabajo)
     {
-        
-        String[] titulo={"Descripción","Estado","Tipo Orden","Asignado"};
         DefaultTableModel modeloTablaDetallesCompra = UtilidadesTablas.crearModeloTabla(new String[]{"obj","Descripción","Estado","Tipo Orden","Asignado"}, new Class[]{OrdenTrabajoDetalle.class,String.class,String.class,String.class,String.class});
         List<OrdenTrabajoDetalle> detalles = ordenTrabajo.getDetalles();
         for (OrdenTrabajoDetalle detalle : detalles) 
@@ -284,5 +346,17 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
         }
         
         mostrarDatosTabla(ordenTrabajo);
+    }
+    
+    public void limpiarCampos()
+    {
+        //Orden trabajo
+        getTxtCodigo().setText("");
+        getTxtCliente().setText("");
+        getTxtDescripcion().setText("");
+        //Detalle Orden trabajo
+        getTxtAreaDescripcion().setText("");
+        getTxtAreaNotas().setText("");
+  
     }
 }
