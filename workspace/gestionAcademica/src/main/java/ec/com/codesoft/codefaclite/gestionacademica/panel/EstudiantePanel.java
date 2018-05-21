@@ -811,7 +811,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Codigo Auxiliar", expresionRegularMensaje = "No se permiten caracteres especiales")
+    @ValidacionCodefacAnotacion(requerido = false, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Codigo Auxiliar", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextField getTxtCodAuxiliar() {
         return txtCodAuxiliar;
     }
