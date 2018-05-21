@@ -199,6 +199,7 @@ public abstract class AbstractFacade<T>
     {
         try 
         {
+            //Esta linea se ejecuta si existe la base de datos
             entityManager=Persistence.createEntityManagerFactory(namePersistence).createEntityManager();
         }
         catch(PersistenceException e)
