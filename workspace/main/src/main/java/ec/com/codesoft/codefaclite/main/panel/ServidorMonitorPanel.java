@@ -248,7 +248,7 @@ public class ServidorMonitorPanel extends javax.swing.JFrame {
         return lblDireccionIp;
     }
 
-    public void setLblDireccionIp(JLabel lblDireccionIp) {
+    public void lblDireccionIp(JLabel lblDireccionIp) {
         this.lblDireccionIp = lblDireccionIp;
     }
 

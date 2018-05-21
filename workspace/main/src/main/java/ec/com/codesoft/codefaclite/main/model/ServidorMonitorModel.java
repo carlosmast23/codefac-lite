@@ -46,6 +46,7 @@ public class ServidorMonitorModel extends ServidorMonitorPanel implements Servid
 
     private void valoresIniciales() {
         try {
+            //Todo: Este valor esta de revisar porque esta cogiendo por defecto el primero de la interfaz y cuando tenga varias interfacez va a generar error
             String ipServidor=InetAddress.getLocalHost().getHostAddress();
             getLblDireccionIp().setText(ipServidor);
             

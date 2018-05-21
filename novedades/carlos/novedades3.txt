@@ -15,3 +15,7 @@ grabar el tipo de documento segun el sri del tipo de documento en cada tabla por
 
 agregar una opcion para configurar correos con dominios personalizados
 
+Aumentar una opcion para anular facturas electronicas , cuando la eliminacion se la realiza desde el SRI
+
+Al momento de cargar la ip del servidor existen problemas con interfaces virtuales , mejorar esta parte para que solo obtenga un direccion de una red ethernet o wifi
+
