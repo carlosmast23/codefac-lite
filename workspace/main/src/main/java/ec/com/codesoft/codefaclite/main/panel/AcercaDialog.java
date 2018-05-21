@@ -44,7 +44,7 @@ public class AcercaDialog extends javax.swing.JDialog {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        lblVersion = new javax.swing.JLabel();
         lblLicencia = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         lblPaginaOficial = new javax.swing.JLabel();
@@ -112,15 +112,15 @@ public class AcercaDialog extends javax.swing.JDialog {
         gridBagConstraints.ipadx = 10;
         jPanel1.add(jLabel5, gridBagConstraints);
 
-        jLabel6.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        jLabel6.setText("Codefac Lite versión 1.0.0");
+        lblVersion.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        lblVersion.setText("Codefac Lite versión 1.0.0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 30;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        jPanel1.add(jLabel6, gridBagConstraints);
+        jPanel1.add(lblVersion, gridBagConstraints);
 
         lblLicencia.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         lblLicencia.setText("Gratis");
@@ -272,7 +272,6 @@ public class AcercaDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -283,6 +282,7 @@ public class AcercaDialog extends javax.swing.JDialog {
     private javax.swing.JLabel lblPaginaDesarrolladores;
     private javax.swing.JLabel lblPaginaOficial;
     private javax.swing.JLabel lblUsuario;
+    private javax.swing.JLabel lblVersion;
     // End of variables declaration//GEN-END:variables
 
     public JLabel getLblPaginaDesarrolladores() {
@@ -315,6 +315,14 @@ public class AcercaDialog extends javax.swing.JDialog {
 
     public void setLblUsuario(JLabel lblUsuario) {
         this.lblUsuario = lblUsuario;
+    }
+
+    public JLabel getLblVersion() {
+        return lblVersion;
+    }
+
+    public void setLblVersion(JLabel lblVersion) {
+        this.lblVersion = lblVersion;
     }
     
     

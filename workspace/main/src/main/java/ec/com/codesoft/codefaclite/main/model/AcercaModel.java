@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.main.model;
 
 import ec.com.codesoft.codefaclite.main.panel.AcercaDialog;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.web.UtilidadesWeb;
 import java.awt.Frame;
 import java.awt.event.MouseEvent;
@@ -26,11 +27,13 @@ public class AcercaModel extends AcercaDialog{
             objStatic=new AcercaModel(null, true);
         }
         return objStatic;
+        
     }
     
     public AcercaModel(Frame parent, boolean modal) {
         super(parent, modal);
         addListener();
+        cargarValoresIniciales();
     }
 
     private void addListener() {
@@ -86,6 +89,10 @@ public class AcercaModel extends AcercaDialog{
     public void setUsuario(String usuario)
     {
         getLblUsuario().setText(usuario);
+    }
+
+    private void cargarValoresIniciales() {
+        getLblVersion().setText("Codefac Lite "+ParametrosSistemaCodefac.VERSION);
     }
     
 }
