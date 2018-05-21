@@ -211,7 +211,7 @@ public class RetencionReporteModel extends RetencionReportePanel {
                     titulo2.add("Código");
                     titulo2.add("Valor");
                     DefaultTableModel modeloTablaRetIva = new DefaultTableModel(titulo2, 0);
-                    List<Object[]> dataRetencionCodigo = fs.obtenerRetencionesCodigo(proveedor, fechaFin, fechaFin, sriRetencionIva, sriRetencionRenta, "C");
+                    List<Object[]> dataRetencionCodigo = fs.obtenerRetencionesCodigo(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, "IVA");
                     for (Object[] obj : dataRetencionCodigo) {
                         Vector<String> fila = new Vector<String>();
                         String r = (String) obj[0];
@@ -226,7 +226,7 @@ public class RetencionReporteModel extends RetencionReportePanel {
                     titulo3.add("Código");
                     titulo3.add("Valor");
                     DefaultTableModel modeloTablaRetRenta = new DefaultTableModel(titulo3, 0);
-                    List<Object[]> dataRetencionCodigoRenta = fs.obtenerRetencionesCodigo(proveedor, fechaFin, fechaFin, sriRetencionIva, sriRetencionRenta, "R");
+                    List<Object[]> dataRetencionCodigoRenta = fs.obtenerRetencionesCodigo(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, "RENTA");
                     for (Object[] obj : dataRetencionCodigoRenta) {
                         Vector<String> fila = new Vector<String>();
                         String r = (String) obj[0];
@@ -291,7 +291,18 @@ public class RetencionReporteModel extends RetencionReportePanel {
                         retencion.getValorRetenido().toString()
                 ));
             }
-            List<Object[]> dataRetencionCodigoRenta = fs.obtenerRetencionesCodigo(proveedor, fechaFin, fechaFin, sriRetencionIva, sriRetencionRenta, "R");
+
+            List<Object[]> dataRetencionCodigo = fs.obtenerRetencionesCodigo(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, "IVA");
+            List<ValorRetencionesData> datavc = new ArrayList<ValorRetencionesData>();
+            for (Object[] obj : dataRetencionCodigo) {
+                String r = (String) obj[0];
+                BigDecimal valor = (BigDecimal) obj[1];
+                datavc.add(new ValorRetencionesData(
+                        r, valor.toString()
+                ));
+            }
+
+            List<Object[]> dataRetencionCodigoRenta = fs.obtenerRetencionesCodigo(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, "RENTA");
             List<ValorRetencionesData> datav = new ArrayList<ValorRetencionesData>();
             for (Object[] obj : dataRetencionCodigoRenta) {
                 String r = (String) obj[0];
@@ -301,15 +312,20 @@ public class RetencionReporteModel extends RetencionReportePanel {
                 ));
             }
 
-             RecursosServiceIf service= ServiceFactory.getFactory().getRecursosServiceIf();
-             InputStream pathSubReporte = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPRA, "subreporte_retencion.jrxml"));
+            RecursosServiceIf service = ServiceFactory.getFactory().getRecursosServiceIf();
+            InputStream pathSubReporte = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPRA, "subreporte_retencion.jrxml"));
             JasperReport reportPiePagina = JasperCompileManager.compileReport(pathSubReporte);
-            
-            parameters.put("SUBREPORTE_RUTA",reportPiePagina);
-            
+            RecursosServiceIf service2 = ServiceFactory.getFactory().getRecursosServiceIf();
+            InputStream pathSubReporte2 = RemoteInputStreamClient.wrap(service2.getResourceInputStream(RecursoCodefac.JASPER_COMPRA, "subreporte_retencion_renta.jrxml"));
+            JasperReport reportPiePagina2 = JasperCompileManager.compileReport(pathSubReporte2);
+
+            parameters.put("SUBREPORTE_RUTA", reportPiePagina);
+            parameters.put("SUBREPORTE_RUTA_RENTA", reportPiePagina2);
+
             parameters.put("fechainicio", formatDate(fechaInicio, "yyyy-MM-dd"));
             parameters.put("fechafin", formatDate(fechaFin, "yyyy-MM-dd"));
-            parameters.put("listaIva", datav);
+            parameters.put("listaIva", datavc);
+            parameters.put("listaRenta", datav);
             ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte de retenciones");
 
         } catch (RemoteException ex) {

@@ -58,7 +58,7 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
         try {//INNER JOIN Retencion r ON d.retencion=r.id  
             String queryString = "SELECT d FROM RetencionDetalle d WHERE d.retencion.id IN(SELECT r.id FROM Retencion r WHERE " + proveedor + fecha +" AND r.compra.id IN(SELECT e.compra.id FROM CompraDetalle e WHERE "+retiva+" AND "+retrenta+") )";
             Query query = getEntityManager().createQuery(queryString);
-            System.err.println("QUERY--->" + query.toString());
+            //System.err.println("QUERY--->" + query.toString());
             if (persona != null) {
                 query.setParameter(1, persona);
             }
@@ -83,9 +83,9 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
     
     public List<Object[]> retencionesCodigo(Persona persona, Date fi, Date ff, SriRetencionIva iva,SriRetencionRenta renta,String tipo) {
         String proveedor = "", fecha = "", retiva = "",retrenta="",tipoc="";
-        if(tipo.compareTo("C")==0)
+        if(tipo.compareTo("IVA")==0)
             tipoc="d.codigoSri";
-        else if(tipo.compareTo("R")==0)
+        else if(tipo.compareTo("RENTA")==0)
             tipoc="d.codigoRetencionSri";
         
         if (persona != null) {
@@ -116,11 +116,11 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
         }
         
         try {
-            //String queryString = "SELECT "+tipoc+",SUM(d.valorRetenido) FROM RetencionDetalle d WHERE d.retencion.id IN(SELECT r.id FROM Retencion r WHERE " + proveedor + fecha +" AND r.compra.id IN(SELECT e.compra.id FROM CompraDetalle e WHERE "+retiva+" AND "+retrenta+")) GROUP BY "+tipoc;
-            String queryString = "SELECT d.codigoSri,SUM(d.valorRetenido) FROM RetencionDetalle d GROUP BY d.codigoSri";
+            String queryString = "SELECT "+tipoc+",SUM(d.valorRetenido) FROM RetencionDetalle d WHERE d.retencion.id IN(SELECT r.id FROM Retencion r WHERE " + proveedor + fecha +" AND r.compra.id IN(SELECT e.compra.id FROM CompraDetalle e WHERE "+retiva+" AND "+retrenta+")) GROUP BY "+tipoc;
+            //String queryString = "SELECT d.codigoSri,SUM(d.valorRetenido) FROM RetencionDetalle d GROUP BY d.codigoSri";
             Query query = getEntityManager().createQuery(queryString);
             System.err.println("QUERY 2 --->" + query.toString());
-            /*if (persona != null) {
+            if (persona != null) {
                 query.setParameter(1, persona);
             }
             if (fi != null) {
@@ -134,7 +134,7 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
             }
             if (renta != null) {
                 query.setParameter(5, renta);
-            }*/
+            }
             return query.getResultList();
         } catch (NoResultException e) {
             return null;
