@@ -424,20 +424,7 @@ public class Main {
     }
 
     public static void cargarRecursosCliente(String ipServidor) {
-        try {
             ServiceFactory.newController(ipServidor);
-            List<Class> listaServicios = new ArrayList<Class>();
-            PersonaServiceIf personaServiceIf = ServiceFactory.getFactory().getPersonaServiceIf();
-            List<Persona> buscarList = personaServiceIf.buscar();
-
-            for (Persona persona : buscarList) {
-                System.out.println(persona.getIdentificacion());
-            }
-
-        } catch (RemoteException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
     }
 
     public static void iniciarComponentes() {

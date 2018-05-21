@@ -145,11 +145,15 @@ import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.swing.JRViewer;
+import org.jfree.util.Log;
 /**
  *
  * @author Carlos
  */
 public class GeneralPanelModel extends GeneralPanelForm implements InterfazComunicacionPanel{
+
+    private static final Logger LOG = Logger.getLogger(GeneralPanelModel.class.getName());
+    
     private GeneralPanelModel generalPanelModel=this;
     private ControladorVista controladorVista;
     private ControladorCodefacInterface panelActual;
@@ -1930,7 +1934,6 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         return false;
     
     }
-    private static final Logger LOG = Logger.getLogger(GeneralPanelModel.class.getName());
     
     private List<JMenu> construirMenuDinamico()
     {
@@ -1998,10 +2001,10 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             existenMenuItem = true;
                             String nombreVentana = "Sin nombre";
                             try {
-                                System.out.println(moduloSistema.getNombre()+":"+categoriaEnum.getNombre()+"->"+menuControlador.getNombre());
+                                LOG.log(Level.INFO,moduloSistema.getNombre()+":"+categoriaEnum.getNombre()+"->"+menuControlador.getNombre());
                                 nombreVentana =((GeneralPanelInterface)(menuControlador.getInstance())).getNombre();
                             } catch (java.lang.UnsupportedOperationException uoe) {
-                                System.err.println(menuControlador.getClass().getSimpleName() + ": Ventana sin implementar nombre");
+                                LOG.log(Level.WARNING,menuControlador.getClass().getSimpleName() + ": Ventana sin implementar nombre");
                             }
 
                             JMenuItem menuVentana = new JMenuItem(nombreVentana);

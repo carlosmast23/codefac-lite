@@ -139,15 +139,7 @@ public abstract class AbstractFacade<T>
             String where =buildWhere(parametros, objectName);
             queryString += " where " + where;
         }
-        System.out.println("query:" + queryString);
         return queryString;
-        /*
-		 * SelectQuery select = new SelectQuery(); Table table = new
-		 * Table(clase); select.addObject(table); if (parametros != null &&
-		 * parametros.size() > 0) addParameters(select, table, parametros);
-		 * select.addOrder(new Order(new Column(table, "id"), true)); return
-		 * select.getQueryString();
-         */
     }
     
     //Convierte el Mapa a string(estructura query) del string objeto que se envia
