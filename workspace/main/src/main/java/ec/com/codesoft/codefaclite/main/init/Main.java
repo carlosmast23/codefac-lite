@@ -150,6 +150,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CatalogoProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
@@ -608,7 +609,7 @@ public class Main {
             UtilidadesServiceIf utilidadesService=ServiceFactory.getFactory().getUtilidadesServiceIf();
             TipoLicenciaEnum tipoLicenciaEnum=utilidadesService.getTipoLicencia();
             
-            panel.getLblTextoSecundario().setText("Servidor IP: "+ipServidor+" | Licencia: "+tipoLicenciaEnum.getNombre());
+            panel.getLblTextoSecundario().setText("Servidor IP: "+ipServidor+" | Licencia: "+tipoLicenciaEnum.getNombre()+" | Versión: "+ParametrosSistemaCodefac.VERSION);
             
             
             panel.iniciarComponentesGenerales();
