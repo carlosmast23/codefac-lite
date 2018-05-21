@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -106,6 +107,17 @@ public class OrdenTrabajo implements Serializable
 
     public void setCliente(Persona cliente) {
         this.cliente = cliente;
+    }
+    
+     public void addDetalle(OrdenTrabajoDetalle detalle)
+    {
+        if(this.detalles==null)
+        {
+            this.detalles= new ArrayList<>();
+        }
+        detalle.setOrdenTrabajo(this);
+        this.detalles.add(detalle);
+        
     }
    
 }

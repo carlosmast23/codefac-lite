@@ -603,7 +603,7 @@ public class Main {
                 panel.setHiloPublicidadCodefac(hiloPublicidad);
             }
             
-            panel.getLblNombreEmpresa().setText(" Empresa: "+session.getEmpresa().getNombreLegal()+" | Usuario: "+session.getUsuario().getNick());
+            panel.getLblNombreEmpresa().setText(" Empresa: "+ ((session.getEmpresa()!= null)? session.getEmpresa().getNombreLegal():"Sin asignar") + " | Usuario: "+session.getUsuario().getNick());
             //Obtener el tipo de licencia para imprimir en la pantalla inicio
             UtilidadesServiceIf utilidadesService=ServiceFactory.getFactory().getUtilidadesServiceIf();
             TipoLicenciaEnum tipoLicenciaEnum=utilidadesService.getTipoLicencia();

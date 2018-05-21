@@ -50,6 +50,10 @@ public class OrdenTrabajoDetalle implements Serializable
     @JoinColumn(name = "ORDEN_TRABAJO_ID")
     @ManyToOne(optional = false)
     private OrdenTrabajo ordenTrabajo;
+    
+    @JoinColumn(name = "EMPLEADO_ID")
+    @ManyToOne(optional = false)
+    private Empleado empleado;        
 
     public Long getId() {
         return id;
@@ -114,6 +118,13 @@ public class OrdenTrabajoDetalle implements Serializable
     public void setOrdenTrabajo(OrdenTrabajo ordenTrabajo) {
         this.ordenTrabajo = ordenTrabajo;
     }
-    
-    
+
+    public Empleado getEmpleado() {
+        return empleado;
+    }
+
+    public void setEmpleado(Empleado empleado) {
+        this.empleado = empleado;
+    }
+        
 }

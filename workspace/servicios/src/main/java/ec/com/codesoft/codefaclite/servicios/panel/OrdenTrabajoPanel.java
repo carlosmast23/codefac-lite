@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servicios.panel;
 import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenTrabajoEnumEstado;
@@ -64,11 +65,11 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         this.btnEliminarDetalle = btnEliminarDetalle;
     }
 
-    public JComboBox<Persona> getCmbAsignadoADetalle() {
+    public JComboBox<Empleado> getCmbAsignadoADetalle() {
         return cmbAsignadoADetalle;
     }
 
-    public void setCmbAsignadoADetalle(JComboBox<Persona> cmbAsignadoADetalle) {
+    public void setCmbAsignadoADetalle(JComboBox<Empleado> cmbAsignadoADetalle) {
         this.cmbAsignadoADetalle = cmbAsignadoADetalle;
     }
 
@@ -558,7 +559,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
     private javax.swing.JButton btnAgregarDetalle;
     private javax.swing.JButton btnCliente;
     private javax.swing.JButton btnEliminarDetalle;
-    private javax.swing.JComboBox<Persona> cmbAsignadoADetalle;
+    private javax.swing.JComboBox<Empleado> cmbAsignadoADetalle;
     private com.toedter.calendar.JDateChooser cmbDateFechaEntrega;
     private com.toedter.calendar.JDateChooser cmbDateFechaIngreso;
     private javax.swing.JComboBox<OrdenTrabajoEnumEstado> cmbEstadoDetalle;
