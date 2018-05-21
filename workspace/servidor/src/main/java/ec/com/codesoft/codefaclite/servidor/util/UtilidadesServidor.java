@@ -9,6 +9,8 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.service.interfacePanel.ServidorMonitorUpdateInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.test.CrearBaseDatos;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.InputStream;
@@ -44,6 +46,15 @@ public class UtilidadesServidor {
     public static Integer cantidadUsuarios;
 
     public static Map<ModuloCodefacEnum, Boolean> modulosMap;
+    
+    /**
+     * Querys que solo se ejecutaran en el modo de desarrollo
+     * Ejemplo:
+     * Querys de datos para hacer pruebas con los modulos del sistema
+     */
+    public static InputStream[] queryDevelopment={
+        RecursoCodefac.SQL.getResourceInputStream("insert_default_academico.sql"),
+    };
 
     public static InputStream[] querys = {
         RecursoCodefac.SQL.getResourceInputStream("create_comprobante_fisico_disenio.sql"),
@@ -74,10 +85,10 @@ public class UtilidadesServidor {
         RecursoCodefac.SQL.getResourceInputStream("create_modulo_cartera.sql"),
         RecursoCodefac.SQL.getResourceInputStream("insert_default.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_empresa.sql"),
-        RecursoCodefac.SQL.getResourceInputStream("insert_usuario.sql"),
-        RecursoCodefac.SQL.getResourceInputStream("insert_default_academico.sql"),
+        RecursoCodefac.SQL.getResourceInputStream("insert_usuario.sql"),        
         RecursoCodefac.SQL.getResourceInputStream("create_servicios.sql"),
         RecursoCodefac.SQL.getResourceInputStream("insert_servicio.sql")};
+    
 
     public static void crearBaseDatos() {
         try {
@@ -101,7 +112,8 @@ public class UtilidadesServidor {
                     try {
                         String sql = UtilidadesTextos.getStringURLFile(query);
                         String[] sentencias = sql.split(";");
-                        for (String sentencia : sentencias) {
+                        for (String sentencia : sentencias) 
+                        {
                             //Obtengo en bytes para transformar a utf 8 porque tenia problemas al insertar valores con acentos y ñ
                             byte ptext[] = sentencia.getBytes();
                             PreparedStatement pstm = conn.prepareStatement(new String(ptext, "UTF-8"));
@@ -115,6 +127,24 @@ public class UtilidadesServidor {
                         Logger.getLogger(UtilidadesServidor.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
+                
+                //Solo ejecutar estos querys si el modo es desarrollo para hacer pruebas
+                if(ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.DESARROLLO))
+                {
+                    for (InputStream query : queryDevelopment) //TODO: Optimizar el codigo para reuutilizar para los querys anteriores
+                    {
+                        String sql=UtilidadesTextos.getStringURLFile(query);
+                        String[] sentencias=sql.split(";");
+                        for (String sentencia : sentencias) {
+                            //Obtengo en bytes para transformar a utf 8 porque tenia problemas al insertar valores con acentos y ñ
+                            byte ptext[] = sentencia.getBytes();
+                            PreparedStatement pstm = conn.prepareStatement(new String(ptext, "UTF-8"));
+                            //PreparedStatement pstm = conn.prepareStatement(sentencia);
+                            pstm.execute();
+                            pstm.close();
+                        }
+                    }
+                }
 
             }
             conn.close();
@@ -122,6 +152,8 @@ public class UtilidadesServidor {
             Logger.getLogger(CrearBaseDatos.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(CrearBaseDatos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(UtilidadesServidor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

@@ -22,6 +22,9 @@ import java.util.logging.Logger;
  * @author Carlos
  */
 public class ServiceControllerServer {
+
+    private static final Logger LOG = Logger.getLogger(ServiceControllerServer.class.getName());    
+    
     
     public static final int PUERTO_SERVIDOR=1099;
        /**
@@ -36,7 +39,7 @@ public class ServiceControllerServer {
             
             for (Map.Entry<Class, Class> entry : mapRecursos.entrySet()) {
                 Class claseImplementacion=entry.getKey();
-                System.out.println("Cargando RMI: "+claseImplementacion.getName());
+                LOG.log(Level.INFO,"Cargando RMI: "+claseImplementacion.getName());
                 UnicastRemoteObject remoteObject=(UnicastRemoteObject) claseImplementacion.newInstance();
                 
                 Class claseInterfaz=entry.getValue();
