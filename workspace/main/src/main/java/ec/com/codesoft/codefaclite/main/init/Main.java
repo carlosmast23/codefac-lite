@@ -449,6 +449,8 @@ public class Main {
             splashScren.agregarPorcentaje(100, "Cargando ventanas");
             splashScren.setVisible(true);
             splashScren.iniciar();
+            
+            String ipServidor ="";
 
             /**
              * *
@@ -458,7 +460,7 @@ public class Main {
             if (modoAplicativo.equals(ModoAplicativoModel.MODO_SERVIDOR)) {
                 componentesBaseDatos();
                 cargarRecursosServidor();
-                String ipServidor = InetAddress.getLocalHost().getHostAddress();
+                ipServidor = InetAddress.getLocalHost().getHostAddress();
                 cargarRecursosCliente(ipServidor);
 
                 //Valida la licencia antes de ejecutar el servidor
@@ -484,7 +486,7 @@ public class Main {
                     String ipServidorDefecto=propiedadesIniciales.getProperty(CAMPO_IP_ULTIMO_ACCESO_SERVIDOR);
                     
                     //Cargar los recursos para funcionar en modo cliente
-                    String ipServidor = JOptionPane.showInputDialog("Ingresa la Ip del servidor: ",(ipServidorDefecto==null)?"":ipServidorDefecto);
+                    ipServidor = JOptionPane.showInputDialog("Ingresa la Ip del servidor: ",(ipServidorDefecto==null)?"":ipServidorDefecto);
                     cargarRecursosCliente(ipServidor);
                     verificarConexionesPermitidas();
                     
@@ -500,7 +502,7 @@ public class Main {
                         componentesBaseDatos();
                         cargarRecursosServidor();
                         //Todo: Veriicar este metodo que obtiene la ip del servidor, porque cuando tienen varias interfaces o una virtual puede levantarse el servicio en una IP que no se desea
-                        String ipServidor = InetAddress.getLocalHost().getHostAddress();
+                        ipServidor = InetAddress.getLocalHost().getHostAddress();
                         cargarRecursosCliente(ipServidor);
                         //Valida la licencia antes de ejecutar el servidor
                         ParametroCodefac parametroDirectorioRecursos = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS);
@@ -601,7 +603,12 @@ public class Main {
                 panel.setHiloPublicidadCodefac(hiloPublicidad);
             }
             
-            panel.getLblNombreEmpresa().setText("Empresa: "+session.getEmpresa().getNombreLegal()+" | Usuario:"+session.getUsuario().getNick());
+            panel.getLblNombreEmpresa().setText(" Empresa: "+session.getEmpresa().getNombreLegal()+" | Usuario: "+session.getUsuario().getNick());
+            //Obtener el tipo de licencia para imprimir en la pantalla inicio
+            UtilidadesServiceIf utilidadesService=ServiceFactory.getFactory().getUtilidadesServiceIf();
+            TipoLicenciaEnum tipoLicenciaEnum=utilidadesService.getTipoLicencia();
+            
+            panel.getLblTextoSecundario().setText("Servidor IP: "+ipServidor+" | Licencia: "+tipoLicenciaEnum.getNombre());
             
             
             panel.iniciarComponentesGenerales();
