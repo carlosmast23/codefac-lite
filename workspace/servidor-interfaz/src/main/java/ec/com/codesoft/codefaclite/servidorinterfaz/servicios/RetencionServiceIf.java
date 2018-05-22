@@ -19,7 +19,7 @@ import java.util.List;
  */
 public interface RetencionServiceIf extends ServiceAbstractIf<Retencion> {
 
-    public List<RetencionDetalle> obtenerRetencionesReporte(Persona persona, Date fi, Date ff, SriRetencionIva iva,SriRetencionRenta renta) throws java.rmi.RemoteException;
+    public List<RetencionDetalle> obtenerRetencionesReporte(Persona persona, Date fi, Date ff, SriRetencionIva iva,SriRetencionRenta renta,String tipo) throws java.rmi.RemoteException;
     public List<Object[]> obtenerRetencionesCodigo(Persona persona, Date fi, Date ff, SriRetencionIva iva,SriRetencionRenta renta,String tipo) throws java.rmi.RemoteException;
 
 }
