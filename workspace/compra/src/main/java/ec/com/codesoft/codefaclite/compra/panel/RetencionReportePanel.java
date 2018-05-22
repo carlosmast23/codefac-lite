@@ -61,6 +61,8 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         jLabel7 = new javax.swing.JLabel();
         chkTodosIva = new javax.swing.JCheckBox();
         chkTodosRenta = new javax.swing.JCheckBox();
+        cmbTipo = new javax.swing.JComboBox<>();
+        chkTodosTipo = new javax.swing.JCheckBox();
 
         setClosable(true);
         setIconifiable(true);
@@ -183,7 +185,7 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         btnBuscar.setText("Buscar Compra");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 9;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(12, 37, 0, 0);
@@ -277,6 +279,17 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 4;
         getContentPane().add(chkTodosRenta, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 4;
+        getContentPane().add(cmbTipo, gridBagConstraints);
+
+        chkTodosTipo.setText("Todos");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 4;
+        getContentPane().add(chkTodosTipo, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -384,6 +397,22 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
     public void setChkTodosRenta(JCheckBox chkTodosRenta) {
         this.chkTodosRenta = chkTodosRenta;
     }
+
+    public JCheckBox getChkTodosTipo() {
+        return chkTodosTipo;
+    }
+
+    public void setChkTodosTipo(JCheckBox chkTodosTipo) {
+        this.chkTodosTipo = chkTodosTipo;
+    }
+
+    public JComboBox<String> getCmbTipo() {
+        return cmbTipo;
+    }
+
+    public void setCmbTipo(JComboBox<String> cmbTipo) {
+        this.cmbTipo = cmbTipo;
+    }
         
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
@@ -391,8 +420,10 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
     private javax.swing.JCheckBox chkTodos;
     private javax.swing.JCheckBox chkTodosIva;
     private javax.swing.JCheckBox chkTodosRenta;
+    private javax.swing.JCheckBox chkTodosTipo;
     private javax.swing.JComboBox<SriRetencionIva> cmbRetencionIva;
     private javax.swing.JComboBox<SriRetencionRenta> cmbRetencionRenta;
+    private javax.swing.JComboBox<String> cmbTipo;
     private com.toedter.calendar.JDateChooser dateFechaFin;
     private com.toedter.calendar.JDateChooser dateFechaInicio;
     private javax.swing.JLabel jLabel1;
