@@ -39,7 +39,7 @@ public abstract class UtilidadesTextos {
             BufferedReader br = new BufferedReader(reader);
             String line = null;        
             while ((line = br.readLine()) != null) {
-                System.out.println(line);
+                //System.out.println(line);
                 text += line;
             }
         } catch (IOException ex) {

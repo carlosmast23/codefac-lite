@@ -143,7 +143,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             public void actionPerformed(ActionEvent e) {
                 int fila = getTableDetallesOrdenTrabajo().getSelectedRow();
                 OrdenTrabajoDetalle ordenTrabajoDetalle = ordenTrabajo.getDetalles().get(fila);
-                mostrarDatosTabla();
+                //mostrarDatosTabla();
             }
         });
  
@@ -251,8 +251,8 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             fila.add(detalle);
             fila.add(detalle.getDescripcion()+"");
             fila.add(detalle.getEstado()+"");
-            fila.add(detalle.getEmpleado().getDepartamento()+"");
-            fila.add(detalle.getEmpleado().getCliente());
+            //fila.add(detalle.getEmpleado().getDepartamento()+"");
+            //fila.add(detalle.getEmpleado().getCliente());
             modeloTablaDetallesCompra.addRow(fila);
         }
         getTableDetallesOrdenTrabajo().setModel(modeloTablaDetallesCompra);
@@ -276,7 +276,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
         ordenTrabajoDetalle.setFechaEntrega(new Date(getCmbDateFechaEntrega().getDate().getTime()));
         PrioridadEnumEstado prioridadEnumEstado = (PrioridadEnumEstado) getCmbPrioridadDetalle().getSelectedItem();
         ordenTrabajoDetalle.setPrioridad(prioridadEnumEstado.getLetra());
-        ordenTrabajoDetalle.setEmpleado((Empleado) getCmbAsignadoADetalle().getSelectedItem());
+        //ordenTrabajoDetalle.setEmpleado((Empleado) getCmbAsignadoADetalle().getSelectedItem());
         
         if(agregar)
         {

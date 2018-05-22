@@ -210,6 +210,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriFormaPagoServic
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 
 /**
  *
@@ -229,6 +230,8 @@ public class Main {
     private static final String CAMPO_MODO_APLICATIVO = "modo";
     
     private static final String CAMPO_IP_ULTIMO_ACCESO_SERVIDOR="servidorip";
+    
+    private static final String CAMPO_VERSION="version";
     /**
      * Variable para saber el modo que inicia el aplicativo
      */
@@ -241,6 +244,11 @@ public class Main {
          * Configura el archivo para guardar la configuracion inicial en propertys de como va a iniciar el aplicativo
          */
         cargarConfiguracionesIniciales();
+        
+        /**
+         * Verificar si estan actualizaciones pendientes de una nueva version
+         */
+        verificarActualizacionVersion();
 
         /**
          * Seleccionar el modo de inicio de Codefac si no selecciona un modo no
@@ -350,6 +358,46 @@ public class Main {
             }
         }
 
+    }
+    
+    
+    //Funcion que verifica si se instalo una nueva version y ejecuta los scripts para actualizar la base de datos
+    private static void verificarActualizacionVersion()
+    {
+        String versionGrabada=propiedadesIniciales.getProperty(CAMPO_VERSION);
+        
+        if(versionGrabada!=null)
+        {
+            if(!versionGrabada.equals(""))
+            {
+                //Solo si existe el dato en el archivo , verifico que el dato almacenado sea diferente y superior a la version ejecutada para actualizar
+                if(UtilidadesSistema.compareVersion(versionGrabada,ParametrosSistemaCodefac.VERSION)==-1)
+                {
+                    try {
+                        //TODO: Metodo que ejecuta los scripts para actualizar el sistema
+                        UtilidadesServidor.actualizarBaseDatos(versionGrabada);
+                        
+                        //Actualizo el archivo de propiedades del sistema con la ultima version
+                        propiedadesIniciales.put(CAMPO_VERSION,ParametrosSistemaCodefac.VERSION);
+                        propiedadesIniciales.store(new FileWriter(NOMBRE_ARCHIVO_CONFIGURACION), "");
+                    } catch (IOException ex) {
+                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                }
+            }
+        }
+        else
+        {
+            try {
+                //Si no hay dato no se actualiza porque asumo que es la primera vez que se usa el sistema
+                propiedadesIniciales.put(CAMPO_VERSION, ParametrosSistemaCodefac.VERSION);
+                propiedadesIniciales.store(new FileWriter(NOMBRE_ARCHIVO_CONFIGURACION), "");
+            } catch (IOException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
     }
 
     public static void cargarRecursosServidor() {
