@@ -86,6 +86,8 @@ import ec.com.codesoft.codefaclite.servidor.service.KardexItemEspecificoService;
 import ec.com.codesoft.codefaclite.servidor.service.KardexService;
 import ec.com.codesoft.codefaclite.servidor.service.NacionalidadService;
 import ec.com.codesoft.codefaclite.servidor.service.NotaCreditoService;
+import ec.com.codesoft.codefaclite.servidor.service.OrdenTrabajoDetalleService;
+import ec.com.codesoft.codefaclite.servidor.service.OrdenTrabajoService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
 import ec.com.codesoft.codefaclite.servidor.service.PerfilService;
 import ec.com.codesoft.codefaclite.servidor.service.PerfilUsuarioService;
@@ -144,6 +146,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceControllerServer;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
@@ -163,6 +166,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServ
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenCompraDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenCompraServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PeriodoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PermisoVentanaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
@@ -459,6 +463,8 @@ public class Main {
             mapRecursos.put(OrdenCompraDetalleService.class,OrdenCompraDetalleServiceIf.class);
             mapRecursos.put(DepartamentoService.class,DepartamentoServiceIf.class);
             mapRecursos.put(EmpleadoService.class,EmpleadoServiceIf.class);
+            mapRecursos.put(OrdenTrabajoService.class,OrdenTrabajoServiceIf.class);
+            mapRecursos.put(OrdenTrabajoDetalleService.class,OrdenTrabajoDetalleService.class);
                     
             
             ServiceControllerServer.cargarRecursos(mapRecursos);

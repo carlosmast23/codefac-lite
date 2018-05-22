@@ -28,6 +28,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.io.InputStream;
+import static java.lang.Boolean.FALSE;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -67,9 +68,13 @@ public class RetencionReporteModel extends RetencionReportePanel {
     Date fechaFin = null;
     String fechainicio = "";
     String fechafin = "";
+    boolean banderaTipo = false;
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
+        getCmbTipo().addItem("IVA");
+        getCmbTipo().addItem("RENTA");
+
         getDateFechaInicio().setDate(fechaInicioMes(hoy()));
         getDateFechaFin().setDate(hoy());
 
@@ -129,6 +134,25 @@ public class RetencionReporteModel extends RetencionReportePanel {
             }
         });
 
+        getChkTodosTipo().setSelected(true);
+        if (getChkTodosTipo().isSelected()) {
+            banderaTipo = true;
+            getCmbTipo().setEnabled(false);
+        }
+
+        getChkTodosTipo().addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
+                    banderaTipo = true;
+                    getCmbTipo().setEnabled(false);
+                } else {
+                    banderaTipo = false;
+                    getCmbTipo().setEnabled(true);
+                }
+            }
+        });
+
         //Agregar los tipos de retencion Iva
         getCmbRetencionIva().removeAllItems();
         SriRetencionIvaServiceIf sriRetencionIvaService = ServiceFactory.getFactory().getSriRetencionIvaServiceIf();
@@ -181,25 +205,32 @@ public class RetencionReporteModel extends RetencionReportePanel {
                     sriRetencionIva = (SriRetencionIva) getCmbRetencionIva().getSelectedItem();
                     sriRetencionRenta = (SriRetencionRenta) getCmbRetencionRenta().getSelectedItem();
 
+                    String tipo = "";
+                    if (banderaTipo == true) {
+                        tipo = null;
+                    } else {
+                        tipo = getCmbTipo().getSelectedItem().toString();
+                    }
+
                     Vector<String> titulo = new Vector<>();
                     titulo.add("Proveedor");
                     titulo.add("Preimpreso");
                     titulo.add("Base imponble");
-                    titulo.add("Prorcentaje");
+                    titulo.add("Porcentaje");
                     titulo.add("Código");
                     titulo.add("valor");
 
                     DefaultTableModel modeloTablaRetenciones = new DefaultTableModel(titulo, 0);
 
                     RetencionServiceIf fs = ServiceFactory.getFactory().getRetencionServiceIf();
-                    dataretencion = fs.obtenerRetencionesReporte(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta);
+                    dataretencion = fs.obtenerRetencionesReporte(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, tipo);
                     for (RetencionDetalle retencion : dataretencion) {
                         Vector<String> fila = new Vector<String>();
                         fila.add(retencion.getRetencion().getProveedor().getRazonSocial());
                         fila.add(retencion.getRetencion().getCompra().getPreimpreso());
                         fila.add(retencion.getBaseImponible().toString());
-                        fila.add(retencion.getPorcentajeRetener().toString());
-                        fila.add(retencion.getCodigoSri() + " - " + retencion.getCodigoRetencionSri());
+                        fila.add(retencion.getPorcentajeRetener().toString() + " %");
+                        fila.add(retencion.getCodigoRetencionSri());
                         fila.add(retencion.getValorRetenido().toString());
 
                         modeloTablaRetenciones.addRow(fila);
@@ -211,7 +242,7 @@ public class RetencionReporteModel extends RetencionReportePanel {
                     titulo2.add("Código");
                     titulo2.add("Valor");
                     DefaultTableModel modeloTablaRetIva = new DefaultTableModel(titulo2, 0);
-                    List<Object[]> dataRetencionCodigo = fs.obtenerRetencionesCodigo(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, "IVA");
+                    List<Object[]> dataRetencionCodigo = fs.obtenerRetencionesCodigo(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, "2");
                     for (Object[] obj : dataRetencionCodigo) {
                         Vector<String> fila = new Vector<String>();
                         String r = (String) obj[0];
@@ -226,7 +257,7 @@ public class RetencionReporteModel extends RetencionReportePanel {
                     titulo3.add("Código");
                     titulo3.add("Valor");
                     DefaultTableModel modeloTablaRetRenta = new DefaultTableModel(titulo3, 0);
-                    List<Object[]> dataRetencionCodigoRenta = fs.obtenerRetencionesCodigo(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, "RENTA");
+                    List<Object[]> dataRetencionCodigoRenta = fs.obtenerRetencionesCodigo(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, "1");
                     for (Object[] obj : dataRetencionCodigoRenta) {
                         Vector<String> fila = new Vector<String>();
                         String r = (String) obj[0];
@@ -277,22 +308,28 @@ public class RetencionReporteModel extends RetencionReportePanel {
             }
             sriRetencionIva = (SriRetencionIva) getCmbRetencionIva().getSelectedItem();
             sriRetencionRenta = (SriRetencionRenta) getCmbRetencionRenta().getSelectedItem();
+            String tipo = "";
+            if (banderaTipo == true) {
+                tipo = null;
+            } else {
+                tipo = getCmbTipo().getSelectedItem().toString();
+            }
 
             InputStream path = RecursoCodefac.JASPER_COMPRA.getResourceInputStream("reporte_retenciones.jrxml");
             RetencionServiceIf fs = ServiceFactory.getFactory().getRetencionServiceIf();
-            dataretencion = fs.obtenerRetencionesReporte(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta);
+            dataretencion = fs.obtenerRetencionesReporte(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, tipo);
             List<ReporteRetencionesData> data = new ArrayList<ReporteRetencionesData>();
             for (RetencionDetalle retencion : dataretencion) {
                 data.add(new ReporteRetencionesData(
                         retencion.getRetencion().getCompra().getPreimpreso(),
                         retencion.getBaseImponible().toString(),
-                        retencion.getPorcentajeRetener().toString(),
-                        retencion.getCodigoSri() + " - " + retencion.getCodigoRetencionSri(),
+                        retencion.getPorcentajeRetener().toString()+" %",
+                        retencion.getCodigoRetencionSri(),
                         retencion.getValorRetenido().toString()
                 ));
             }
 
-            List<Object[]> dataRetencionCodigo = fs.obtenerRetencionesCodigo(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, "IVA");
+            List<Object[]> dataRetencionCodigo = fs.obtenerRetencionesCodigo(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, "2");
             List<ValorRetencionesData> datavc = new ArrayList<ValorRetencionesData>();
             for (Object[] obj : dataRetencionCodigo) {
                 String r = (String) obj[0];
@@ -302,7 +339,7 @@ public class RetencionReporteModel extends RetencionReportePanel {
                 ));
             }
 
-            List<Object[]> dataRetencionCodigoRenta = fs.obtenerRetencionesCodigo(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, "RENTA");
+            List<Object[]> dataRetencionCodigoRenta = fs.obtenerRetencionesCodigo(proveedor, fechaInicio, fechaFin, sriRetencionIva, sriRetencionRenta, "1");
             List<ValorRetencionesData> datav = new ArrayList<ValorRetencionesData>();
             for (Object[] obj : dataRetencionCodigoRenta) {
                 String r = (String) obj[0];

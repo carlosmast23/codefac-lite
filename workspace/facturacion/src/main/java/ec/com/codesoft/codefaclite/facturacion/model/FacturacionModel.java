@@ -521,7 +521,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
         getjDateFechaEmision().addPropertyChangeListener("date", new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent e) {
-                System.out.println("Fecha : ------->" + e.getNewValue());
                 java.util.Date fecha = getjDateFechaEmision().getDate();
                 if (!ComprobarRangoDeFechaPermitido(fecha)) {
                     DialogoCodefac.mensaje("Advertencia fecha", "La fecha seleccionada esta fuera del rango de autorizaciòn del SRI", DialogoCodefac.MENSAJE_ADVERTENCIA);
@@ -1414,8 +1413,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
 
     private void setearValoresDefaultFactura() {
-        //factura.setCliente(persona);
-        factura.setEmpresaId(0l);
+        /**
+         * Todo: Carlos Pato
+         */
+        factura.setEmpresaId(session.getEmpresa().getId());
         factura.setEstado(Factura.ESTADO_FACTURADO);
         factura.setFechaCreacion(UtilidadesFecha.getFechaHoy());
         factura.setFechaEmision(new Date(getjDateFechaEmision().getDate().getTime()));

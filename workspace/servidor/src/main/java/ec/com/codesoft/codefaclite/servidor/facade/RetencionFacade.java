@@ -26,8 +26,8 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
         super(Retencion.class);
     }
 
-    public List<RetencionDetalle> lista(Persona persona, Date fi, Date ff, SriRetencionIva iva,SriRetencionRenta renta) {
-        String proveedor = "", fecha = "", retiva = "",retrenta="";
+    public List<RetencionDetalle> lista(Persona persona, Date fi, Date ff, SriRetencionIva iva, SriRetencionRenta renta, String tipo) {
+        String proveedor = "", fecha = "", retiva = "", retrenta = "", tipor = "";
         if (persona != null) {
             proveedor = "r.proveedor=?1";
         } else {
@@ -48,15 +48,26 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
         } else {
             retiva = "1=1";
         }
-        
-         if (renta != null) {
+
+        if (renta != null) {
             retrenta = "e.sriRetencionRenta=?5";
         } else {
             retrenta = "1=1";
         }
-        
+        if (tipo != null) {
+            if (tipo.compareTo("IVA")==0) {
+                tipo = "2";
+            }
+            if (tipo.compareTo("RENTA")==0) {
+                tipo = "1";
+            }
+            tipor = "d.codigoSri=?6";
+        } else {
+            tipor = "1=1";
+        }
+
         try {//INNER JOIN Retencion r ON d.retencion=r.id  
-            String queryString = "SELECT d FROM RetencionDetalle d WHERE d.retencion.id IN(SELECT r.id FROM Retencion r WHERE " + proveedor + fecha +" AND r.compra.id IN(SELECT e.compra.id FROM CompraDetalle e WHERE "+retiva+" AND "+retrenta+") )";
+            String queryString = "SELECT d FROM RetencionDetalle d WHERE " + tipor + " AND d.retencion.id IN(SELECT r.id FROM Retencion r WHERE " + proveedor + fecha + " AND r.compra.id IN(SELECT e.compra.id FROM CompraDetalle e WHERE " + retiva + " AND " + retrenta + ") )";
             Query query = getEntityManager().createQuery(queryString);
             //System.err.println("QUERY--->" + query.toString());
             if (persona != null) {
@@ -74,20 +85,17 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
             if (renta != null) {
                 query.setParameter(5, renta);
             }
+            if (tipo != null) {
+                query.setParameter(6, tipo);
+            }
             return query.getResultList();
         } catch (NoResultException e) {
             return null;
         }
     }
-    
-    
-    public List<Object[]> retencionesCodigo(Persona persona, Date fi, Date ff, SriRetencionIva iva,SriRetencionRenta renta,String tipo) {
-        String proveedor = "", fecha = "", retiva = "",retrenta="",tipoc="";
-        if(tipo.compareTo("IVA")==0)
-            tipoc="d.codigoSri";
-        else if(tipo.compareTo("RENTA")==0)
-            tipoc="d.codigoRetencionSri";
-        
+
+    public List<Object[]> retencionesCodigo(Persona persona, Date fi, Date ff, SriRetencionIva iva, SriRetencionRenta renta, String tipo) {
+        String proveedor = "", fecha = "", retiva = "", retrenta = "", tipoc = "";
         if (persona != null) {
             proveedor = "r.proveedor=?1";
         } else {
@@ -108,15 +116,20 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
         } else {
             retiva = "1=1";
         }
-        
-         if (renta != null) {
+
+        if (renta != null) {
             retrenta = "e.sriRetencionRenta=?5";
         } else {
             retrenta = "1=1";
         }
-        
+        if (tipo != null) {
+            tipoc = "d.codigoSri=?6";
+        } else {
+            tipoc = "1=1";
+        }
+
         try {
-            String queryString = "SELECT "+tipoc+",SUM(d.valorRetenido) FROM RetencionDetalle d WHERE d.retencion.id IN(SELECT r.id FROM Retencion r WHERE " + proveedor + fecha +" AND r.compra.id IN(SELECT e.compra.id FROM CompraDetalle e WHERE "+retiva+" AND "+retrenta+")) GROUP BY "+tipoc;
+            String queryString = "SELECT d.codigoRetencionSri,SUM(d.valorRetenido) FROM RetencionDetalle d WHERE " + tipoc + " AND d.retencion.id IN(SELECT r.id FROM Retencion r WHERE " + proveedor + fecha + " AND r.compra.id IN(SELECT e.compra.id FROM CompraDetalle e WHERE " + retiva + " AND " + retrenta + ")) GROUP BY d.codigoRetencionSri";
             //String queryString = "SELECT d.codigoSri,SUM(d.valorRetenido) FROM RetencionDetalle d GROUP BY d.codigoSri";
             Query query = getEntityManager().createQuery(queryString);
             System.err.println("QUERY 2 --->" + query.toString());
@@ -134,6 +147,9 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
             }
             if (renta != null) {
                 query.setParameter(5, renta);
+            }
+            if (tipo != null) {
+                query.setParameter(6, tipo);
             }
             return query.getResultList();
         } catch (NoResultException e) {
