@@ -513,7 +513,6 @@ public class CompraModel extends CompraPanel{
                 getTxtPrecionUnitarioItem().setText(compraDetalle.getPrecioUnitario()+"");
                 //compraDetalle.setPrecioUnitario
                 compraDetalle.getPrecioUnitario();
-                System.out.println("---------------->" + compraDetalle.getPrecioUnitario());
                 bloquearDesbloquearBotones(false);
                 //----------------------------------------------------------------------
                 productoSeleccionado = compraDetalle.getProductoProveedor().getProducto();
@@ -543,8 +542,6 @@ public class CompraModel extends CompraPanel{
                 if(bandera)
                 {
                     bandera = false;
-                    System.out.println("Fila numero: " +filaDP );
-                    System.out.println("Compra: "+compra.getDetalles().toString());
                     modeloTablaDetallesCompra.removeRow(filaDP);
                     compra.getDetalles().remove(filaDP);                   
                     actualizarDatosMostrarVentana();
