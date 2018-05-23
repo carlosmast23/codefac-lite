@@ -62,16 +62,18 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
         
         Usuario usuarioOriginal=getFacade().find(entity.getNick());
         
-               
-        for (PerfilUsuario perfilUsuario : usuarioOriginal.getPerfilesUsuario()) {
-            
-            //Si en el nuevo objeto que mando a editar no contiene el perfil usuario lo elimino
-            if(!entity.getPerfilesUsuario().contains(perfilUsuario))
-            {
-                //Elimino de la persistencia
-                entityManager.remove(perfilUsuario);
+        if(usuarioOriginal.getPerfilesUsuario()!=null)
+        {
+            for (PerfilUsuario perfilUsuario : usuarioOriginal.getPerfilesUsuario()) {
+
+                //Si en el nuevo objeto que mando a editar no contiene el perfil usuario lo elimino
+                if(!entity.getPerfilesUsuario().contains(perfilUsuario))
+                {
+                    //Elimino de la persistencia
+                    entityManager.remove(perfilUsuario);
+                }
+
             }
-            
         }
         
         //Actualizo las referencia del nuevo objecto a editar
