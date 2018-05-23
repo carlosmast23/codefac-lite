@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="encabezado" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="58e2b8e6-fde5-4ef1-90e6-cb1dd3f4a182">
-	<property name="ireport.zoom" value="2.1435888100000224"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="2.357947691000029"/>
+	<property name="ireport.x" value="696"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="pl_direccion" class="java.lang.String"/>
 	<parameter name="pl_nombre_empresa" class="java.lang.String"/>
@@ -21,8 +21,8 @@
 			</textField>
 			<textField>
 				<reportElement x="384" y="0" width="171" height="23" uuid="957c3dc5-2b07-45d2-bd7b-2b90920bf27c"/>
-				<textElement textAlignment="Right" verticalAlignment="Bottom">
-					<font size="18" isBold="false" isItalic="true"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="15" isBold="false" isItalic="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pl_nombre_empresa}]]></textFieldExpression>
 			</textField>

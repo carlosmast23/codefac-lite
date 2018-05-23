@@ -398,7 +398,7 @@ public abstract class EmpresaForm extends ControladorCodefacInterface{
     public void setTxtFacebook(JTextField txtFacebook) {
         this.txtFacebook = txtFacebook;
     }
-    @ValidacionCodefacAnotacion(requerido=false , min=5 ,max = 100,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\,\\ ]*$",nombre = "Direccion Matriz")
+    @ValidacionCodefacAnotacion(requerido=false , min=5 ,max = 100,nombre = "Direccion Matriz")
     public JTextArea getTxtAdicional() {
         return txtAdicional;
     }
