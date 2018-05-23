@@ -119,6 +119,31 @@ public class EstudianteModel extends EstudiantePanel implements DialogInterfaceP
                     crearRepresentante(2);
                 }
             });
+            
+            getBtnEliminarRepre1().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Boolean siNo = DialogoCodefac.dialogoPregunta("Advertencia", "Deseea eliminar el representante 1", DialogoCodefac.MENSAJE_ADVERTENCIA);                    
+                    if(siNo)
+                    {
+                        representante = null;
+                        getTxtRepresentante().setText("");
+                    }
+                }
+            });
+            
+            getBtnEliminarRepre2().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                   
+                    Boolean siNo = DialogoCodefac.dialogoPregunta("Advertencia", "Deseea eliminar el representante 2", DialogoCodefac.MENSAJE_ADVERTENCIA);                    
+                    if(siNo)
+                    {
+                        representanteParaFacturar = null;
+                        getTxtFacturarANombre().setText("");
+                    }
+                }
+            });
 
             getCmbDiscapacidad().addActionListener(new ActionListener() {
                 @Override
@@ -340,13 +365,13 @@ public class EstudianteModel extends EstudiantePanel implements DialogInterfaceP
             nombre = estudiante.getRepresentante2().getRazonSocial();
             getTxtFacturarANombre().setText(identificacion + " - " + nombre);
         }
-        
     }
 
     @Override
     public void limpiar() {
         this.estudiante = new Estudiante();
-
+        this.representante = null;
+        this.representanteParaFacturar = null;
         getDateFechaNacimiento().setDate(hoy());
         getCmbEstado().setSelectedIndex(0);
         getCmbGenero().setSelectedIndex(0);

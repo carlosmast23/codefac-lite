@@ -16,10 +16,10 @@ import java.util.List;
 public class OrdenTrabajoDataReporte implements ExcelDatosInterface
 {
     private String id;
-    private String descripcion;
+    private String descripciond;
     private String notas;
     private String fechaEntrega;
-    private String estado;
+    private String estadod;
     private String tipoOrdenTrabajo;
     private String prioridad;
     private String departamento;
@@ -36,12 +36,12 @@ public class OrdenTrabajoDataReporte implements ExcelDatosInterface
         this.id = id;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getDescripciond() {
+        return descripciond;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setDescripciond(String descripciond) {
+        this.descripciond = descripciond;
     }
 
     public String getNotas() {
@@ -58,14 +58,6 @@ public class OrdenTrabajoDataReporte implements ExcelDatosInterface
 
     public void setFechaEntrega(String fechaEntrega) {
         this.fechaEntrega = fechaEntrega;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
     }
 
     public String getTipoOrdenTrabajo() {
@@ -99,7 +91,15 @@ public class OrdenTrabajoDataReporte implements ExcelDatosInterface
     public void setPersona(String persona) {
         this.persona = persona;
     }
-    
+
+    public String getEstadod() {
+        return estadod;
+    }
+
+    public void setEstadod(String estadod) {
+        this.estadod = estadod;
+    }
+     
     @Override
     public List<TipoDato> getDatos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
