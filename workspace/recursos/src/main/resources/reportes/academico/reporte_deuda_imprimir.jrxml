@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
-	<property name="ireport.zoom" value="1.207882500000001"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="1.6076916075000105"/>
+	<property name="ireport.x" value="97"/>
+	<property name="ireport.y" value="202"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\Carlos\\Documents\\GitHub\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\crm\\"]]></defaultValueExpression>
 	</parameter>
@@ -48,7 +48,7 @@
 			</band>
 		</groupHeader>
 		<groupFooter>
-			<band height="31">
+			<band height="154">
 				<staticText>
 					<reportElement x="36" y="10" width="46" height="20" uuid="5f6f6b0d-e230-42bc-9b5c-69d710481a69"/>
 					<textElement textAlignment="Right">
@@ -77,6 +77,82 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
 				</textField>
+				<line>
+					<reportElement x="0" y="67" width="555" height="1" uuid="776eb5fe-cb10-48ce-9bc4-5fa041ae4d36"/>
+				</line>
+				<staticText>
+					<reportElement x="0" y="48" width="555" height="20" uuid="895f759e-635c-49fd-aca3-0a3358521723"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Información de Cobro]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="68" width="115" height="15" uuid="50a30e32-92b3-485a-9341-3544300d3a89"/>
+					<text><![CDATA[Fecha de cobro:]]></text>
+				</staticText>
+				<line>
+					<reportElement x="120" y="82" width="156" height="1" uuid="8d62fd12-409b-43d8-a407-9cd4948b555d"/>
+				</line>
+				<line>
+					<reportElement x="120" y="97" width="156" height="1" uuid="ad9d7176-78a0-4b1c-adba-031b132930cc"/>
+				</line>
+				<staticText>
+					<reportElement x="0" y="83" width="115" height="15" uuid="a4ac68fe-cafb-4a07-9d8b-a92bc59a84c4"/>
+					<text><![CDATA[Valor Efectivo:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="98" width="115" height="15" uuid="d2d274ad-7b0b-4251-9a93-9f6f2961ec28"/>
+					<text><![CDATA[Código Transferencia:]]></text>
+				</staticText>
+				<line>
+					<reportElement x="120" y="112" width="156" height="1" uuid="ee05a9f3-5efc-4c9c-a2e0-6fcba5ce33b4"/>
+				</line>
+				<staticText>
+					<reportElement x="0" y="113" width="115" height="15" uuid="cffa2e00-8903-4d8e-bc11-b7f76aac9fc7"/>
+					<text><![CDATA[Banco - Cheque No:]]></text>
+				</staticText>
+				<line>
+					<reportElement x="120" y="127" width="156" height="1" uuid="57cf13ef-fa14-4ff1-9e05-b8a8e026ad75"/>
+				</line>
+				<staticText>
+					<reportElement x="0" y="128" width="115" height="15" uuid="b36bf790-7ba7-40c1-9cf7-09aea9219e71"/>
+					<text><![CDATA[Cod. Depósito en cuenta:]]></text>
+				</staticText>
+				<line>
+					<reportElement x="120" y="142" width="156" height="1" uuid="4c466bad-45ed-4fd2-821a-5f34071c2aa3"/>
+				</line>
+				<line>
+					<reportElement x="479" y="96" width="66" height="1" uuid="a52c609e-f9ed-462c-b6fc-93c30817c565"/>
+				</line>
+				<staticText>
+					<reportElement x="433" y="82" width="37" height="15" uuid="55f5ee88-90c1-49c7-9431-4e253410ab9c"/>
+					<text><![CDATA[Valor:]]></text>
+				</staticText>
+				<line>
+					<reportElement x="479" y="124" width="66" height="1" uuid="2a3df84a-20f9-46a5-9c3b-5c07defa37c0"/>
+				</line>
+				<line>
+					<reportElement x="479" y="110" width="66" height="1" uuid="825a213e-6ca1-4112-aa8a-1c6b919c2b5c"/>
+				</line>
+				<staticText>
+					<reportElement x="433" y="96" width="37" height="15" uuid="35a72381-fd47-4f5e-855a-b5b7d7e37956"/>
+					<text><![CDATA[Valor:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="433" y="110" width="37" height="15" uuid="15fae112-2600-409e-a1f5-4fb8419e17f9"/>
+					<text><![CDATA[Valor:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="433" y="125" width="37" height="15" uuid="04a16904-300e-499c-ae8f-f8abc155801e"/>
+					<text><![CDATA[Valor:]]></text>
+				</staticText>
+				<line>
+					<reportElement x="479" y="139" width="66" height="1" uuid="38865758-cb7d-4457-8301-f8ea1d5740de"/>
+				</line>
 			</band>
 		</groupFooter>
 	</group>
