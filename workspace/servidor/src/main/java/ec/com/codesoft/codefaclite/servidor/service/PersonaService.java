@@ -11,6 +11,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.Constrain
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.PersonaFacade;
+import ec.com.codesoft.codefaclite.servidor.util.ExcepcionDataBaseEnum;
+import ec.com.codesoft.codefaclite.servidor.util.UtilidadesExcepciones;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
@@ -18,6 +20,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceException;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
@@ -46,9 +49,18 @@ public class PersonaService extends ServiceAbstract<Persona,PersonaFacade> imple
         //} catch (ConstrainViolationExceptionSQL ex) {
         //    Logger.getLogger(PersonaService.class.getName()).log(Level.SEVERE, null, ex);
         //    throw new ServicioCodefacException(ex.getMessage());
-        } catch (DatabaseException ex) {
+        } catch (PersistenceException ex) {
+            ExcepcionDataBaseEnum excepcionEnum=UtilidadesExcepciones.analizarExcepcionDataBase(ex);
             transaccion.rollback();
             Logger.getLogger(PersonaService.class.getName()).log(Level.SEVERE, null, ex);
+            if(excepcionEnum.equals(ExcepcionDataBaseEnum.CLAVE_DUPLICADO))
+            {
+            
+            }
+            else
+            {
+            
+            }            
             throw  new ServicioCodefacException("Error sql");
         }
         return p;
