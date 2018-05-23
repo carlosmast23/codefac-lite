@@ -101,6 +101,8 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
+        btnEliminarRepre2 = new javax.swing.JButton();
+        btnEliminarRepre1 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         lblDiscapacidad = new javax.swing.JLabel();
         cmbDiscapacidad = new javax.swing.JComboBox<>();
@@ -382,13 +384,13 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         lblCelular.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblCelular.setText("Celular:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
         jPanel2.add(lblCelular, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
@@ -431,7 +433,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         lblAdicionales.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblAdicionales.setText("Datos Adicionales:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(8, 20, 8, 20);
@@ -442,7 +444,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         jScrollPane1.setViewportView(txtAdicionales);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -495,7 +497,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
 
         jLabel4.setText("                    ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 1;
         jPanel2.add(jLabel4, gridBagConstraints);
 
@@ -522,6 +524,23 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
         jPanel2.add(jLabel16, gridBagConstraints);
+
+        btnEliminarRepre2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/clear.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 2;
+        jPanel2.add(btnEliminarRepre2, gridBagConstraints);
+
+        btnEliminarRepre1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/clear.png"))); // NOI18N
+        btnEliminarRepre1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarRepre1ActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 1;
+        jPanel2.add(btnEliminarRepre1, gridBagConstraints);
 
         jTabbedPane1.addTab("Datos Secundarios", jPanel2);
 
@@ -679,12 +698,18 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAgregarPersonaFacturarActionPerformed
 
+    private void btnEliminarRepre1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarRepre1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEliminarRepre1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarPersonaFacturar;
     private javax.swing.JButton btnAgregarRepresentante;
     private javax.swing.JButton btnBuscarPersonaFacturar;
     private javax.swing.JButton btnBuscarRepresentante;
+    private javax.swing.JButton btnEliminarRepre1;
+    private javax.swing.JButton btnEliminarRepre2;
     private javax.swing.JComboBox<EnumSiNo> cmbDiscapacidad;
     private javax.swing.JComboBox<GeneralEnumEstado> cmbEstado;
     private javax.swing.JComboBox<String> cmbEtnia;
@@ -986,6 +1011,22 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
 
     public void setLblCodigoSistema(JLabel lblCodigoSistema) {
         this.lblCodigoSistema = lblCodigoSistema;
+    }
+
+    public JButton getBtnEliminarRepre1() {
+        return btnEliminarRepre1;
+    }
+
+    public void setBtnEliminarRepre1(JButton btnEliminarRepre1) {
+        this.btnEliminarRepre1 = btnEliminarRepre1;
+    }
+
+    public JButton getBtnEliminarRepre2() {
+        return btnEliminarRepre2;
+    }
+
+    public void setBtnEliminarRepre2(JButton btnEliminarRepre2) {
+        this.btnEliminarRepre2 = btnEliminarRepre2;
     }
     
     
