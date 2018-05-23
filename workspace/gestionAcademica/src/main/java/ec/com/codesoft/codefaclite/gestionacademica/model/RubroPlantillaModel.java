@@ -162,7 +162,7 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
                 
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Rubros Plantilla";
     }

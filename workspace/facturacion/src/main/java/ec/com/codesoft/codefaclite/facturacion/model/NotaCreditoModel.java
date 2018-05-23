@@ -249,7 +249,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Nota de Credito";
     }

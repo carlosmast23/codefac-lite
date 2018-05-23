@@ -224,7 +224,7 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
          
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Matricula Estudiante";
     }

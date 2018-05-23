@@ -357,7 +357,7 @@ public class EstudianteModel extends EstudiantePanel implements DialogInterfaceP
         getLblCodigoSistema().setText("");
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Estudiantes";
     }

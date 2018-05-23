@@ -158,7 +158,7 @@ public class NivelModel extends NivelPanel {
         getCmbNivelPosterior().setSelectedIndex(0);
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Nivel";
     }

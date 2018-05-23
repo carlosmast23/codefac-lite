@@ -204,7 +204,7 @@ public class OrdenCompraModel extends OrdenCompraPanel{
         
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Orden de Compra";
     }

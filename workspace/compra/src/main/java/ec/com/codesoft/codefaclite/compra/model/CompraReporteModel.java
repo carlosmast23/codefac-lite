@@ -224,7 +224,7 @@ public class CompraReporteModel extends CompraReportePanel {
         getDateFechaFinal().setDate(new java.util.Date());
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Compra Reporte";
     }

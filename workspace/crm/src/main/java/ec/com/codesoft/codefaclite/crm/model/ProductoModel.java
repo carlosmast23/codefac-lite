@@ -278,7 +278,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
 
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Producto";
     }

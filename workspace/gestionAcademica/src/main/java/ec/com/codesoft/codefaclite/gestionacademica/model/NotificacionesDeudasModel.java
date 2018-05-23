@@ -196,7 +196,7 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
         this.getCmbPeriodo().setSelectedIndex(0);
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Notificacion Deudas";
     }

@@ -244,7 +244,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
         this.listaRubros = new ArrayList<RubrosNivel>();
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Deudas por Curso";
     }

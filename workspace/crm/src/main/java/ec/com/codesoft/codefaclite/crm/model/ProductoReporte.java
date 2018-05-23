@@ -137,7 +137,7 @@ public class ProductoReporte extends ControladorCodefacInterface{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Producto Reporte";
     }

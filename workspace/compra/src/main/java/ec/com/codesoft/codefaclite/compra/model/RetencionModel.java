@@ -197,7 +197,7 @@ public class RetencionModel extends RetencionPanel{
         cargarDatosEmpresa();
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Retención";
     }

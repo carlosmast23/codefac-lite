@@ -134,7 +134,7 @@ public class CatalogoProductoModel extends CatalogoProductoPanel implements Dial
         //getCmbCatalogoTipo().setSelectedIndex(0);
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Catalogo Producto";
     }

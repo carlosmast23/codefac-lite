@@ -400,7 +400,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
     public void limpiar() {
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Reporte Facturación";
     }

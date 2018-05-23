@@ -130,7 +130,7 @@ public class AulaModel extends AulaPanel {
 
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Aula";
     }

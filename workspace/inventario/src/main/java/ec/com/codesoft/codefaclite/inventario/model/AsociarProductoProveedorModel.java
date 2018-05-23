@@ -132,7 +132,7 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
         initModelTablaProductoProveedor();
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Asociar Proveedor Producto";
     }

@@ -122,7 +122,7 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
         limpiarVariables();
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Inventario Ensamble";
     }

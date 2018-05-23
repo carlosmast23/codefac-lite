@@ -170,7 +170,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
 
     }
 
-    @Override
+    //@Override
     public String getNombre() {
         return "Cliente";
     }

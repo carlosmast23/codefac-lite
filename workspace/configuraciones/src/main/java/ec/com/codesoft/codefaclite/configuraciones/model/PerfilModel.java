@@ -191,7 +191,7 @@ public class PerfilModel extends PerfilPanel{
         limpiarPantalla();
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Perfiles";
     }

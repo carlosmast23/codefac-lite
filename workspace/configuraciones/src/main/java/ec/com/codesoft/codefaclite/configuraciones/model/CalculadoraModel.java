@@ -160,7 +160,7 @@ public class CalculadoraModel extends CalculadoraPanel{
         
     }
 
-    @Override
+    //@Override
     public String getNombre() {
         return "Calculadora";
     }

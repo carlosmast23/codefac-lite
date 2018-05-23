@@ -117,7 +117,7 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
 
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Utilidades Comprobante";
     }

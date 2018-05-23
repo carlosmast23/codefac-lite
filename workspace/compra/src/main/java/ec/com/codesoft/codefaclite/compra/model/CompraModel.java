@@ -292,7 +292,7 @@ public class CompraModel extends CompraPanel{
         bloquearIngresoDetalleProducto();    
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Compra";
     }

@@ -189,7 +189,7 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
         getCmbEstado().setSelectedItem(GeneralEnumEstado.ACTIVO);
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Usuario y Roles";
     }

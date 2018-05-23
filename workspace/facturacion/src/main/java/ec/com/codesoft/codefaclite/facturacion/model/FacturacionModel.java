@@ -1040,7 +1040,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getLblSecuencial().setText(preimpreso);
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Facturacion";
     }

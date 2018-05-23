@@ -192,7 +192,7 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
         
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Diseño Comprobantes";
     }

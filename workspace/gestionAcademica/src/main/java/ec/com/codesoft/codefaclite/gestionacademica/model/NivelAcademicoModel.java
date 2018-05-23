@@ -140,7 +140,7 @@ public class NivelAcademicoModel extends NivelAcademicoPanel implements Serializ
         getCmbPeriodo().setSelectedIndex(0);
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Cursos";
     }

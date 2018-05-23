@@ -120,7 +120,7 @@ public class RubrosPeriodoModel extends RubrosPeriodoPanel{
         rubrosNivel=new RubrosNivel();
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Rubros Periodo";
     }

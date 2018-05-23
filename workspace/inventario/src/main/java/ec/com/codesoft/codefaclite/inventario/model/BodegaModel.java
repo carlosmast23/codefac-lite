@@ -139,7 +139,7 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
         bodega = new Bodega();
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Bodega";
     }

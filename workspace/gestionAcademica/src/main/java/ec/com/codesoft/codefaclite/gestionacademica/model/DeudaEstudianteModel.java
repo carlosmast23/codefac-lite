@@ -141,7 +141,7 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
         getCmbRubro().removeAllItems();
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Deudas de Estudiante";
     }

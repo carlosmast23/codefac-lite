@@ -191,7 +191,7 @@ public class PeriodoModel extends PeriodoPanel {
 
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Periodo";
     }

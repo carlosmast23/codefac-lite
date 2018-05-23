@@ -157,7 +157,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
         initDatosTabla();
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Orden de Trabajo";
     }

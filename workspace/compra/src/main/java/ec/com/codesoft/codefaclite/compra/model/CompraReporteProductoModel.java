@@ -78,7 +78,7 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Compra Reporte Producto";
     }

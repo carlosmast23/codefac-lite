@@ -165,7 +165,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
         limpiarVariables();
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Ingreso Inventario";
     }

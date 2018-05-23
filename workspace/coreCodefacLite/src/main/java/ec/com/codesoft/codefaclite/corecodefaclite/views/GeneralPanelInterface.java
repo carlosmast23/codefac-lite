@@ -97,7 +97,7 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
      * Nombre del formulario 
      * @return nombre del formulario
      */
-    public abstract String getNombre();
+    //public abstract String getNombre();
     
     /**
      * URL de la ayuda que se mostrara en la pantalla auxiliar cuando presionesn

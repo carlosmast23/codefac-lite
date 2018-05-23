@@ -157,7 +157,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         }
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Configuración de comprobantes";
     }

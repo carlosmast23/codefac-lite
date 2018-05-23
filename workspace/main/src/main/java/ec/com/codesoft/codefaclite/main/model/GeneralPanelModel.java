@@ -2002,7 +2002,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             String nombreVentana = "Sin nombre";
                             try {
                                 LOG.log(Level.INFO,moduloSistema.getNombre()+":"+categoriaEnum.getNombre()+"->"+menuControlador.getNombre());
-                                nombreVentana =((GeneralPanelInterface)(menuControlador.getInstance())).getNombre();
+                                nombreVentana =menuControlador.getNombre();
                             } catch (java.lang.UnsupportedOperationException uoe) {
                                 LOG.log(Level.WARNING,menuControlador.getClass().getSimpleName() + ": Ventana sin implementar nombre");
                             }

@@ -117,7 +117,7 @@ public class GestionarDeudasModel extends GestionarDeudasPanel{
         
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Gestionar Deudas";
     }

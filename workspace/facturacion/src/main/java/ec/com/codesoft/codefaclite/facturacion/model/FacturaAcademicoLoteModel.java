@@ -123,7 +123,7 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel {
         mapEstudianteRubros = new HashMap<EstudianteInscrito, List<RubroEstudiante>>();
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Factura Académica por Lote";
     }

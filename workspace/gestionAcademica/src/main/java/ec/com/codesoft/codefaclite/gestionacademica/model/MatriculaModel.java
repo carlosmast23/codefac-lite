@@ -165,7 +165,7 @@ public class MatriculaModel extends MatriculaPanel {
         getCmbPeriodoAnterior().setSelectedIndex(0);
     }
 
-    @Override
+//    @Override
     public String getNombre() {
         return "Matricula en Grupo";
     }
