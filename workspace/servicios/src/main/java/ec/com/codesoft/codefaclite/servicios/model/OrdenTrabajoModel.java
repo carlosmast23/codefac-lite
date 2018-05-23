@@ -121,8 +121,8 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             {
                 OrdenTrabajoDataReporte dataReporte = new OrdenTrabajoDataReporte();
                 dataReporte.setDepartamento(""+otd.getEmpleado().getDepartamento());;
-                dataReporte.setDescripcion(""+otd.getDescripcion());
-                dataReporte.setEstado(""+otd.getEstado());
+                dataReporte.setDescripciond(""+otd.getDescripcion());
+                dataReporte.setEstadod(""+otd.getEstado());
                 dataReporte.setFechaEntrega(""+otd.getFechaEntrega());
                 dataReporte.setId(""+otd.getId());
                 dataReporte.setNotas(""+otd.getNotas());
