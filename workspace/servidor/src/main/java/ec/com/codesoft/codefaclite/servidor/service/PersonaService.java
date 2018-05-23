@@ -50,18 +50,25 @@ public class PersonaService extends ServiceAbstract<Persona,PersonaFacade> imple
         //    Logger.getLogger(PersonaService.class.getName()).log(Level.SEVERE, null, ex);
         //    throw new ServicioCodefacException(ex.getMessage());
         } catch (PersistenceException ex) {
+            
+            //verifica que la transaccion esta activa para hacer un rollback
+            //Nota: Algunas veces el commit automaticamente hace un rollback es decir no es necesario hacer rollback y la sesion ya no esta activa
+            if(transaccion.isActive())
+            {
+                transaccion.rollback();
+            }
+            
             ExcepcionDataBaseEnum excepcionEnum=UtilidadesExcepciones.analizarExcepcionDataBase(ex);
-            transaccion.rollback();
             Logger.getLogger(PersonaService.class.getName()).log(Level.SEVERE, null, ex);
             if(excepcionEnum.equals(ExcepcionDataBaseEnum.CLAVE_DUPLICADO))
             {
-            
+                throw new ServicioCodefacException(ExcepcionDataBaseEnum.CLAVE_DUPLICADO.getMensaje());
             }
             else
             {
-            
+                throw new ServicioCodefacException(ExcepcionDataBaseEnum.DESCONOCIDO.getMensaje());
             }            
-            throw  new ServicioCodefacException("Error sql");
+            //throw  new ServicioCodefacException("Error sql desconocido");
         }
         return p;
     }

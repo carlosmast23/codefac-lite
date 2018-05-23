@@ -66,11 +66,13 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
                 throw new ExcepcionCodefacLite("Cancelado grabar");                
             }
         } catch (ServicioCodefacException ex) {
-            DialogoCodefac.mensaje("Error","No se pueden grabar los datos", DialogoCodefac.MENSAJE_INCORRECTO);
+            DialogoCodefac.mensaje("Error",ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(PerfilUsuarioModel.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ExcepcionCodefacLite("cancelado guardar");
         } catch (RemoteException ex) {
             DialogoCodefac.mensaje("Error","Ocurrio un error con el servidor", DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(PerfilUsuarioModel.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ExcepcionCodefacLite("cancelado guardar");
         }
     }
 

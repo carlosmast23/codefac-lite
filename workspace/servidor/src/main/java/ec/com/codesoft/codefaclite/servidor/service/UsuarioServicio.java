@@ -13,6 +13,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidor.facade.PerfilFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.PerfilUsuarioFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.UsuarioFacade;
+import ec.com.codesoft.codefaclite.servidor.util.ExcepcionDataBaseEnum;
+import ec.com.codesoft.codefaclite.servidor.util.UtilidadesExcepciones;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
 import java.rmi.RemoteException;
@@ -22,7 +24,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.Entity;
 import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceException;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
@@ -80,6 +84,34 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
         entityManager.merge(entity);
         transaccion.commit();
         
+    }
+    
+    public Usuario grabar(Usuario entity) throws ServicioCodefacException,java.rmi.RemoteException
+    {
+        EntityTransaction transaccion = getTransaccion();
+        try {            
+            transaccion.begin();
+
+            entityManager.persist(entity);
+            transaccion.commit();
+            return entity;
+        } 
+        catch (PersistenceException ex) 
+        {
+            if (transaccion.isActive()) {
+                transaccion.rollback();
+            }
+
+            ExcepcionDataBaseEnum excepcionEnum = UtilidadesExcepciones.analizarExcepcionDataBase(ex);
+            Logger.getLogger(PersonaService.class.getName()).log(Level.SEVERE, null, ex);
+            if (excepcionEnum.equals(ExcepcionDataBaseEnum.CLAVE_DUPLICADO)) {
+                throw new ServicioCodefacException(ExcepcionDataBaseEnum.CLAVE_DUPLICADO.getMensaje());
+            } else {
+                throw new ServicioCodefacException(ExcepcionDataBaseEnum.DESCONOCIDO.getMensaje());
+            }
+        }        
+        
+    
     }
     
     public void grabarUsuario(Usuario usuario,String nombrePerfil) throws ServicioCodefacException
