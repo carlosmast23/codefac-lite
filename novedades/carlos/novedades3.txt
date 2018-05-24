@@ -19,3 +19,5 @@ Aumentar una opcion para anular facturas electronicas , cuando la eliminacion se
 
 Al momento de cargar la ip del servidor existen problemas con interfaces virtuales , mejorar esta parte para que solo obtenga un direccion de una red ethernet o wifi
 
+En las compras agregar un campo para saber si son electronicas o manuales
+
