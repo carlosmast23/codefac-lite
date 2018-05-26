@@ -101,6 +101,7 @@ public class UtilidadesWeb {
             out.close();
             in.close();
         } catch (IOException ex) {
+            LOG.log(Level.WARNING, "No se puede descargar el archivo: "+url);
             Logger.getLogger(UtilidadesWeb.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }

@@ -23,9 +23,17 @@ import java.util.logging.Logger;
  * @author Carlos
  */
 public class DescargaModel extends DescargaDialog implements Runnable{
-    
+    /**
+     * Nombre del archivo que se va a grabar
+     */
     private String nombreArchivo;
+    /**
+     * Carpeta donde se va a almacenar la descarga
+     */
     private String carpeta;
+    /**
+     * Url donde esta el recurso para descargar 
+     */
     private String url;
 
     public DescargaModel(String nombreArchivo, String carpeta, String url) {

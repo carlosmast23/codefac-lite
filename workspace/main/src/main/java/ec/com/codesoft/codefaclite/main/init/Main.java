@@ -210,6 +210,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriFormaPagoServic
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.email.PropiedadesCorreoEnum;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import ec.com.codesoft.codefaclite.utilidades.web.UtilidadesWeb;
 import java.io.File;
@@ -243,7 +244,7 @@ public class Main {
     public static void main(String[] args) {
         
         //Verifica si se esta ejecutando la ultima version o manda a aactualizar
-        //verificarUltimaVersionCodefac();
+        verificarUltimaVersionCodefac();
         
         configurarLogs();
         /**
@@ -294,45 +295,66 @@ public class Main {
     
     private static void verificarUltimaVersionCodefac()
     {
-        String path="http://localhost/java/recursos/";
-        String nombreArchivo="codefac.jar";
-        String carpeta="tmp";
+        String path="http://localhost/java/recursos/"; //directorio principal desde donde se van a bajar los archivos para actualizar
+        String carpetaDescarga="tmp"; //nombre de la carpeta para almacenar en el directoro TODO: Crear una variable global paa hacer referenca al directorio temporal
         
-        String url=path+"codefac.jar";        
-        String urlPropiedades=path+"ultimaVersion.codefac";
-        String urlUpdater=path+"updater.jar";
+        String nameUltimaVersion="codefac.jar"; //Nombre del archivo de la nueva version de Codefac para descargar        
+        String nameVersionPropiedades="ultimaVersion.codefac"; //Nombe del archivo de las propiedades para comparar si tenemos al ultima versions
+        String nameUpdater="updater.jar"; //Nombre del archivo updater que se encarga de hacer la actualizacion
         
         //Descargar el archivo de propiedades de la ultima version viginte
-        UtilidadesWeb.descargarArchivo("ultimaVersion.codefac", urlPropiedades, carpeta);
-        LOG.log(Level.INFO,"Descarga archivo de que contiene el numero de la ultima version");
-        
-        //Descargar el archivo updater que es el encargado de instalar la nueva version descargada
-        //el updater debe descargarse en la raiz
-        UtilidadesWeb.descargarArchivo("updater.jar", urlUpdater, "");
-        LOG.log(Level.INFO,"Descargado updater para instalar las actualizaciones");
-        
-                
-        //DescargaModel descargaModel=new DescargaModel(nombreArchivo, carpeta, url);
-        //descargaModel.empezarDescarga();
-        //descargaModel.setVisible(true);
-        
-        //Ejecutar el updater para que se encargue de actualizar
-        try {
-            //String carpeta = "";
-            List<String> comando = Arrays.asList(
-                    "java",
-                    "-jar",
-                    "updater.jar");
-            ProcessBuilder pb = new ProcessBuilder()
-                    .command(comando);
+        if(UtilidadesWeb.descargarArchivo(nameVersionPropiedades, path+nameVersionPropiedades, carpetaDescarga))
+        {
+            LOG.log(Level.INFO,"Descarga archivo de que contiene el numero de la ultima version");
+            propiedadesIniciales = new Properties();
+            try {
+                propiedadesIniciales.load(new FileReader(carpetaDescarga+"/"+nameVersionPropiedades));
+                String ultimaVersion=propiedadesIniciales.getProperty("version");
+                //Solo actualizar si la version instalada es menor a la disponible en internet
+                if(UtilidadesSistema.compareVersion(ParametrosSistemaCodefac.VERSION,ultimaVersion)==-1)
+                {
+                    if(!DialogoCodefac.dialogoPregunta("Actualizar Codefac","Existe una nueva versión disponible , desea actualizar ahora?", DialogoCodefac.MENSAJE_CORRECTO))
+                    {
+                        //Si el usuario no desea actualizar la version se termina la funcion si actualizar
+                        return;
+                    }
+                    
+                    //Descargar el archivo updater que es el encargado de instalar la nueva version descargada
+                    //el updater debe descargarse en la raiz
+                    UtilidadesWeb.descargarArchivo(nameUpdater, path + nameUpdater, "");
+                    LOG.log(Level.INFO, "Descargado updater para instalar las actualizaciones");
+                    
+                    //Descargar la ultima version disponible en el repositorio web
+                    DescargaModel descargaModel=new DescargaModel(nameUltimaVersion, carpetaDescarga,path+nameUltimaVersion);
+                    descargaModel.empezarDescarga();
+                    descargaModel.setVisible(true);
+                    
+                    //Ejecutar el updater para que se encargue de hacer la actualicacion de la nueva version
+                    try {
+                        //String carpeta = "";
+                        List<String> comando = Arrays.asList("java","-jar","updater.jar");
+                        ProcessBuilder pb = new ProcessBuilder()
+                                .command(comando);
+                        Process p = pb.start();
+                        System.exit(0); //Terminar la ejecucion del hilo actual , porque el updater se encargara de lanzar la nueva version
 
-            Process p = pb.start();
-
-            System.exit(0);
-
-        } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                    
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
         }
+        else
+        {
+            LOG.log(Level.WARNING,"No se puede descargar el archivo que contiene el numero de version");
+        }
+        
         
     }
 
