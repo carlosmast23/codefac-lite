@@ -45,3 +45,4 @@ workspace/main/codefac.ini
 /workspace/main/tmp/
 /workspace/main/codefac.jar
 /workspace/main/updater.jar
+/workspace/updaterCodefac/target/
