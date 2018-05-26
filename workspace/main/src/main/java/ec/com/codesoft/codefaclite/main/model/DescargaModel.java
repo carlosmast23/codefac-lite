@@ -3,62 +3,65 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.utilidades.web;
+package ec.com.codesoft.codefaclite.main.model;
 
-import java.awt.Desktop;
+import ec.com.codesoft.codefaclite.main.panel.DescargaDialog;
+import java.awt.Frame;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sun.applet.Main;
 
 /**
  *
  * @author Carlos
  */
-public class UtilidadesWeb {
-
-    private static final Logger LOG = Logger.getLogger(UtilidadesWeb.class.getName());
+public class DescargaModel extends DescargaDialog implements Runnable{
     
+    private String nombreArchivo;
+    private String carpeta;
+    private String url;
 
-    public static void abrirPaginaWebNavigador(String url) {
-        try {
-            Desktop dk = Desktop.getDesktop();
-            dk.browse(new URI(url));
-        } catch (URISyntaxException ex) {
-            Logger.getLogger(UtilidadesWeb.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(UtilidadesWeb.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public DescargaModel(String nombreArchivo, String carpeta, String url) {
+        super(null,true);
+        this.nombreArchivo = nombreArchivo;
+        this.carpeta = carpeta;
+        this.url = url;
+        setLocationRelativeTo(null);
     }
     
-    public static boolean descargarArchivo(String nombreArchivo,String url, String carpeta)
+    
+    
+    public DescargaModel(Frame parent, boolean modal) {
+        super(parent, modal);
+    }
+    
+    public void empezarDescarga()
     {
-         try {
-            //String url = this.url; //dirección url del recurso a descargar
+        new Thread(this).start(); //Empezar hilo para comenzar el proceso de descarga
+    }
+    
+    private void empezarDescargaHilo()
+    {
+        try {
+            String url = this.url; //dirección url del recurso a descargar
             String name = nombreArchivo;//nombre del archivo destino
 
             //Directorio destino para las descargas
-            String folder = "";
-            
-            if(!carpeta.equals(""))
-            {
-                folder = carpeta+"/";
-                //Crea el directorio de destino en caso de que no exista
-                File dir = new File(folder);
+            String folder = carpeta+"/";
 
-                if (!dir.exists()) {
-                    if (!dir.mkdir()) {
-                        return false; // no se pudo crear la carpeta de destino
-                    }
+            //Crea el directorio de destino en caso de que no exista
+            File dir = new File(folder);
+
+            if (!dir.exists()) {
+                if (!dir.mkdir()) {
+                    return; // no se pudo crear la carpeta de destino
                 }
             }
 
@@ -70,10 +73,9 @@ public class UtilidadesWeb {
             
             BigDecimal tamanioArchivo = new BigDecimal((float) tamanioTotal / (float) (1024));
             
-            LOG.log(Level.INFO,"\nempezando descarga: \n");
-            LOG.log(Level.INFO,">> URL: " + url);
-            LOG.log(Level.INFO,">> Nombre: " + name);
-            LOG.log(Level.INFO,">> tamaño: " + tamanioArchivo + " kb");
+            getLblNombreArchivo().setText(name);
+            getLblTamanio().setText(tamanioArchivo.setScale(2,BigDecimal.ROUND_HALF_UP)+" kb");
+            getLblSitio().setText(url);
             
             InputStream in = conn.getInputStream();
             FileOutputStream out = new FileOutputStream(file);
@@ -94,18 +96,21 @@ public class UtilidadesWeb {
                     BigDecimal tamanio = new BigDecimal((float) size / (float) (1024));
                     //System.out.println(tamanio.setScale(3, RoundingMode.HALF_UP) + " kb");
                     int porcentaje=(int) ((float) size * 100 / (float) tamanioTotal);
-                    //getBarraProgreso().setValue(porcentaje);
+                    getBarraProgreso().setValue(porcentaje);
                 }
             }
 
             out.close();
             in.close();
         } catch (IOException ex) {
-            Logger.getLogger(UtilidadesWeb.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
+            Logger.getLogger(DescargaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-           
-         return true;
-
     }
+
+    @Override
+    public void run() {
+        empezarDescargaHilo();
+        dispose();
+    }
+    
 }

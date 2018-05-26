@@ -1,0 +1,9 @@
+mvn dependency:tree -> visualiza todas las dependencias
+
+mvn dependency:analyze -> me permite verificar si existe dependecias declaradas que no usa para poder borrar
+
+du -sh * -> lista los archivos del sistema con su tamanio
+
+
+
+

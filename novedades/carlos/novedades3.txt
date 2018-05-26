@@ -21,3 +21,7 @@ Al momento de cargar la ip del servidor existen problemas con interfaces virtual
 
 En las compras agregar un campo para saber si son electronicas o manuales
 
+
+revisar porque la forma de pagos cuando se agrega o elimina sale el mensaje de saldo insuficiente
+
+

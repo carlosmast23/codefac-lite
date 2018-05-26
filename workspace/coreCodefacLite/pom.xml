@@ -11,11 +11,11 @@
             <artifactId>recursos</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
+        <!-- <dependency>
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
-            <version>6.5.1</version>
-        </dependency>
+            <version>6.5.1</version> 
+        </dependency> -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>servidor-interfaz</artifactId>

@@ -5,11 +5,6 @@
  */
 package ec.com.codesoft.codefaclite.main.init;
 
-import com.jgoodies.looks.plastic.Plastic3DLookAndFeel;
-import com.jgoodies.looks.plastic.PlasticLookAndFeel;
-import com.jgoodies.looks.plastic.PlasticXPLookAndFeel;
-import com.jtattoo.plaf.AbstractLookAndFeel;
-import com.seaglasslookandfeel.SeaGlassLookAndFeel;
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
 import com.sun.xml.internal.ws.client.ClientTransportException;
 import ec.com.codesoft.codefaclite.configuraciones.model.CalculadoraModel;
@@ -46,6 +41,7 @@ import ec.com.codesoft.codefaclite.main.license.Licencia;
 import ec.com.codesoft.codefaclite.main.license.ValidacionLicenciaCodefac;
 import ec.com.codesoft.codefaclite.main.license.excepcion.NoExisteLicenciaException;
 import ec.com.codesoft.codefaclite.main.license.excepcion.ValidacionLicenciaExcepcion;
+import ec.com.codesoft.codefaclite.main.model.DescargaModel;
 import ec.com.codesoft.codefaclite.main.model.GeneralPanelModel;
 import ec.com.codesoft.codefaclite.main.model.HiloPublicidadCodefac;
 import ec.com.codesoft.codefaclite.main.model.LoginModel;
@@ -215,6 +211,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaSer
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
+import ec.com.codesoft.codefaclite.utilidades.web.UtilidadesWeb;
+import java.io.File;
+import java.util.Arrays;
 
 /**
  *
@@ -242,6 +241,9 @@ public class Main {
     public static Integer modoAplicativo;
 
     public static void main(String[] args) {
+        
+        //Verifica si se esta ejecutando la ultima version o manda a aactualizar
+        //verificarUltimaVersionCodefac();
         
         configurarLogs();
         /**
@@ -288,6 +290,50 @@ public class Main {
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private static void verificarUltimaVersionCodefac()
+    {
+        String path="http://localhost/java/recursos/";
+        String nombreArchivo="codefac.jar";
+        String carpeta="tmp";
+        
+        String url=path+"codefac.jar";        
+        String urlPropiedades=path+"ultimaVersion.codefac";
+        String urlUpdater=path+"updater.jar";
+        
+        //Descargar el archivo de propiedades de la ultima version viginte
+        UtilidadesWeb.descargarArchivo("ultimaVersion.codefac", urlPropiedades, carpeta);
+        LOG.log(Level.INFO,"Descarga archivo de que contiene el numero de la ultima version");
+        
+        //Descargar el archivo updater que es el encargado de instalar la nueva version descargada
+        //el updater debe descargarse en la raiz
+        UtilidadesWeb.descargarArchivo("updater.jar", urlUpdater, "");
+        LOG.log(Level.INFO,"Descargado updater para instalar las actualizaciones");
+        
+                
+        //DescargaModel descargaModel=new DescargaModel(nombreArchivo, carpeta, url);
+        //descargaModel.empezarDescarga();
+        //descargaModel.setVisible(true);
+        
+        //Ejecutar el updater para que se encargue de actualizar
+        try {
+            //String carpeta = "";
+            List<String> comando = Arrays.asList(
+                    "java",
+                    "-jar",
+                    "updater.jar");
+            ProcessBuilder pb = new ProcessBuilder()
+                    .command(comando);
+
+            Process p = pb.start();
+
+            System.exit(0);
+
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 
     /**

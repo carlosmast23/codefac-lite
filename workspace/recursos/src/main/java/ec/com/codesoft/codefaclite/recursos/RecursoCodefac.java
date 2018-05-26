@@ -31,6 +31,7 @@ public enum RecursoCodefac {
     JASPER_ESTUDIANTE("reportes/estudiante"),
     JASPER_COMPROBANTES_ELECTRONICOS("reportes/comprobantes_electronicos"),
     JASPER_COMPROBANTES_FISICOS("reportes/comprobantes_fisicos"),
+    JASPER_SERVICIO("reportes/servicio"),
     JASPER("reportes"),
     HTML("html/factura_electronica"),
     AYUDA("ayuda");

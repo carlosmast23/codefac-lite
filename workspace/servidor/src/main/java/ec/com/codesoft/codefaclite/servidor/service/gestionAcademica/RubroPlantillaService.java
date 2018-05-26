@@ -13,7 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.gestionacademica.R
 import java.rmi.RemoteException;
 import java.util.List;
 import javax.persistence.EntityTransaction;
-import org.apache.derby.iapi.store.raw.Transaction;
+
 
 /**
  *
