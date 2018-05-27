@@ -255,7 +255,7 @@ public class Main {
         /**
          * Verificar si estan actualizaciones pendientes de una nueva version
          */
-        verificarActualizacionVersion();
+        verificarActualizacionBaseDatosVersion();
 
         /**
          * Seleccionar el modo de inicio de Codefac si no selecciona un modo no
@@ -434,7 +434,7 @@ public class Main {
     
     
     //Funcion que verifica si se instalo una nueva version y ejecuta los scripts para actualizar la base de datos
-    private static void verificarActualizacionVersion()
+    private static void verificarActualizacionBaseDatosVersion()
     {
         String versionGrabada=propiedadesIniciales.getProperty(CAMPO_VERSION);
         
@@ -561,38 +561,9 @@ public class Main {
             splashScren.iniciar();
             
             String ipServidor ="";
-
-            /**
-             * *
-             * Cargar componentes de la base de datos si se carga en modo de
-             * servidor
-             */
-            if (modoAplicativo.equals(ModoAplicativoModel.MODO_SERVIDOR)) {
-                componentesBaseDatos();
-                cargarRecursosServidor();
-                ipServidor = InetAddress.getLocalHost().getHostAddress();
-                cargarRecursosCliente(ipServidor);
-
-                //Valida la licencia antes de ejecutar el servidor
-                ParametroCodefac parametroDirectorioRecursos = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS);
-                verificarLicencia(parametroDirectorioRecursos.getValor());
-                //Seteo el path de los directorio como una referencia global de todo el sistema
-                UtilidadesServidor.pathRecursos = parametroDirectorioRecursos.getValor();
-
-                //Crear el pantalla que va a manterner encedidad la conexion con los clientes
-                ServidorMonitorModel monitor = new ServidorMonitorModel();
-                UtilidadesServidor.monitorUpdate = monitor;
-                monitor.setLocationRelativeTo(null);
-                monitor.setVisible(true);
-                //splashScren.siguiente();
-                //splashScren.termino();
-                //return;
-                LOG.log(Level.INFO, "Modo Servidor activado");
-
-            } else {
-                if (modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE)) {
-                    
-                    //Consultar si existe grabado la ip del servidor para cargar por defecto la ultima
+            
+            if (modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE)) {
+                  //Consultar si existe grabado la ip del servidor para cargar por defecto la ultima
                     String ipServidorDefecto=propiedadesIniciales.getProperty(CAMPO_IP_ULTIMO_ACCESO_SERVIDOR);
                     
                     //Cargar los recursos para funcionar en modo cliente
@@ -605,29 +576,62 @@ public class Main {
                     propiedadesIniciales.store(new FileWriter(NOMBRE_ARCHIVO_CONFIGURACION), "");
                     
                     LOG.log(Level.INFO, "Modo Cliente Activado");
-
-                } else {
+            }
+            else
+            {
+                /**
+                 * Componentes iniciales que utilizo tanto para modo servidor y modo cliente-servidor
+                 */
+                componentesBaseDatos();
+                cargarRecursosServidor();
+                //Todo: Veriicar este metodo que obtiene la ip del servidor, porque cuando tienen varias interfaces o una virtual puede levantarse el servicio en una IP que no se desea
+                ipServidor = InetAddress.getLocalHost().getHostAddress();
+                cargarRecursosCliente(ipServidor);
+                
+                ParametroCodefac parametroDirectorioRecursos = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS);
+                //Si no existe el parametro seteo la ruta por defecto que va a ser el directorio del usuario para no tener problemas de permisos                
+                if(parametroDirectorioRecursos==null || parametroDirectorioRecursos.getValor().equals(""))
+                {                 
+                    String directorioUsuario=System.getProperty("user.home")+"/codefacRecursos";                    
+                    if(parametroDirectorioRecursos==null)
+                    {
+                        parametroDirectorioRecursos=new ParametroCodefac();
+                        parametroDirectorioRecursos.setValor(directorioUsuario);
+                        ServiceFactory.getFactory().getParametroCodefacServiceIf().grabar(parametroDirectorioRecursos);                        
+                    }
+                    else
+                    {
+                        parametroDirectorioRecursos.setValor(directorioUsuario);
+                        ServiceFactory.getFactory().getParametroCodefacServiceIf().editar(parametroDirectorioRecursos);
+                    }
+                }
+                
+                verificarLicencia(parametroDirectorioRecursos.getValor());
+                
+                //Seteo el path de los directorio como una referencia global de todo el sistema
+                UtilidadesServidor.pathRecursos = parametroDirectorioRecursos.getValor();    
+                
+                if (modoAplicativo.equals(ModoAplicativoModel.MODO_SERVIDOR)) {
+                    //Crear el pantalla que va a manterner encendida la conexion con los clientes
+                    ServidorMonitorModel monitor = new ServidorMonitorModel();
+                    UtilidadesServidor.monitorUpdate = monitor;
+                    monitor.setLocationRelativeTo(null);
+                    monitor.setVisible(true);
+                    LOG.log(Level.INFO, "Modo Servidor activado");
+                }
+                else
+                {
                     if (modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE_SERVIDOR)) {
-                        //Cargar los recursos para funcionar en modo cliente y le p
-                        componentesBaseDatos();
-                        cargarRecursosServidor();
-                        //Todo: Veriicar este metodo que obtiene la ip del servidor, porque cuando tienen varias interfaces o una virtual puede levantarse el servicio en una IP que no se desea
-                        ipServidor = InetAddress.getLocalHost().getHostAddress();
-                        cargarRecursosCliente(ipServidor);
-                        //Valida la licencia antes de ejecutar el servidor
-                        ParametroCodefac parametroDirectorioRecursos = ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS);
-                        verificarLicencia(parametroDirectorioRecursos.getValor());
-                        //Seteo el path de los directorio como una referencia global de todo el sistema
-                        UtilidadesServidor.pathRecursos = parametroDirectorioRecursos.getValor();
-
                         verificarConexionesPermitidas();
                         LOG.log(Level.INFO, "Modo Cliente Servidor Activado");
                     }
-
                 }
-            }
 
-            //Si el aplicativo debe iniciar en modo servidor se cierra la pantalla de carga del slashScreen
+                
+            
+            }            
+
+            //Si el aplicativo debe iniciar en modo servidor se cierra la pantalla de carga del slashScreen de codefac porque no necesita cargar mas modulos
             if (modoAplicativo.equals(ModoAplicativoModel.MODO_SERVIDOR)) {
                 splashScren.termino();
                 return;

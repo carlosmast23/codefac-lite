@@ -200,6 +200,7 @@ public abstract class AbstractFacade<T>
         try 
         {
             //Esta linea se ejecuta si existe la base de datos
+            //TODO: Utilizar propertys para cambiar el url cuando es en Linux porque no funciona y tiene otra sintaxis
             entityManager=Persistence.createEntityManagerFactory(namePersistence).createEntityManager();
         }
         catch(PersistenceException e)
