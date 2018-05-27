@@ -3,3 +3,6 @@
 3.- copiar el archivo jar de la version generada de codefac en este directorio  y renombralo a "codefac.jar"
 4.- ejecutar el boton run del programa inno_setup
 5.- se va a generar una carpeta en este directorio con el nombre "Output" y hay dentro esta el instalador generado 
+
+Nota: Para cambiar la version en el instalador , aunque solo es informativo(no afecta)
+Se tiene que abrir el archivo "script_instalador_codefa.iss" con un editor de texto y modificar la linea "#define MyAppVersion"
