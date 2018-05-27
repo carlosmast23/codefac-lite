@@ -1,0 +1,5 @@
+1.- instalar el programa inno_setup que esta la carpeta de herramientas
+2.- abrir en el programa inno_setup el archivo que dice "script_instalador_codefac.iss"
+3.- copiar el archivo jar de la version generada de codefac en este directorio  y renombralo a "codefac.jar"
+4.- ejecutar el boton run del programa inno_setup
+5.- se va a generar una carpeta en este directorio con el nombre "Output" y hay dentro esta el instalador generado 
