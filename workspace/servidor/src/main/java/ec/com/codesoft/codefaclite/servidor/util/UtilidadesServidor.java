@@ -106,7 +106,7 @@ public class UtilidadesServidor {
         try {
             Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
             //obtenemos la conexión si no existe crea la base
-            Connection conn = DriverManager.getConnection("jdbc:derby:.\\DB\\Derby2.DB;databaseName=codefac;create=true;user=root");
+            Connection conn = DriverManager.getConnection("jdbc:derby:Derby2.DB;databaseName=codefac;create=true;user=root");
             //Establecer autentificacion en derby
             Statement s = conn.createStatement();
             s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.connection.requireAuthentication', 'true')");
@@ -120,9 +120,10 @@ public class UtilidadesServidor {
                 /**
                  * Busca todos los querys disponibles para ejecutar
                  */
-                for (InputStream query : querys) {
+                for (InputStream query : querys) {                    
                     try {
                         String sql = UtilidadesTextos.getStringURLFile(query);
+                        LOG.log(Level.INFO,sql);
                         String[] sentencias = sql.split(";");
                         for (String sentencia : sentencias) {
                             //Obtengo en bytes para transformar a utf 8 porque tenia problemas al insertar valores con acentos y ñ
@@ -183,7 +184,7 @@ public class UtilidadesServidor {
         
         try {
             Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-            Connection conn = DriverManager.getConnection("jdbc:derby:.\\DB\\Derby2.DB;databaseName=codefac;user=root;password=Code17bwbtj");
+            Connection conn = DriverManager.getConnection("jdbc:derby:Derby2.DB;databaseName=codefac;user=root;password=Code17bwbtj");
             Statement s = conn.createStatement();
             
             if (conn != null) {
