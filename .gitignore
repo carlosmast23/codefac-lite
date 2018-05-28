@@ -42,6 +42,7 @@ workspace/main/codefac.ini
 /workspace/servicios/target/
 
 #Excluir carpeta de logs y temporales
+/workspace/main/*.log
 /workspace/main/log/
 /workspace/main/tmp/
 /workspace/main/codefac.jar
