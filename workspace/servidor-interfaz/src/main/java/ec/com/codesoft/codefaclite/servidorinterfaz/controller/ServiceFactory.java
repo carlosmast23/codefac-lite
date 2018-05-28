@@ -70,6 +70,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoDetalleServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RetencionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriFormaPagoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
@@ -154,7 +156,8 @@ public abstract class ServiceFactory {
     public OrdenTrabajoServiceIf getOrdenTrabajoServiceIf(){return (OrdenTrabajoServiceIf) getRecursosRMI(OrdenTrabajoServiceIf.class);};
     public EmpleadoServiceIf getEmpleadoServiceIf(){return (EmpleadoServiceIf) getRecursosRMI(EmpleadoServiceIf.class);};
     public DepartamentoServiceIf getDepartamentoServiceIf(){return (DepartamentoServiceIf) getRecursosRMI(DepartamentoServiceIf.class);};
-    
+    public PresupuestoServiceIf getPresupuestoServiceIf(){return (PresupuestoServiceIf) getRecursosRMI(PresupuestoServiceIf.class);};
+    public PresupuestoDetalleServiceIf getPresupuestoDetalleServiceIf(){return (PresupuestoDetalleServiceIf) getRecursosRMI(PresupuestoDetalleServiceIf.class);};
     /**
      * Crea una nueva instancia el controlados para manejar por el cliente
      * @param ipServidor 
