@@ -63,7 +63,7 @@ create table PRESUPUESTO
     DESCRIPCION varchar(150),
     OBSERVACIONES varchar(150),
     ESTADO varchar(1),
-    FECHA_INGRESO date,
+    FECHA_CREACION date,
     FECHA_PRESUPUESTO date,
     FECHA_VALIDEZ date,
     DESCUENTO_COMPRA decimal(7,2),

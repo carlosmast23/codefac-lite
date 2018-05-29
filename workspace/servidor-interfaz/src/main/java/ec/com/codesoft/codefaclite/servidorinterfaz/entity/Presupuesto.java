@@ -59,8 +59,8 @@ public class Presupuesto implements Serializable
     private String estado;
     
     //Todo: Cambiar el nombre por fecha creacion , para saber que es la fecha cuando se creo
-    @Column(name = "FECHA_INGRESO")
-    private Date fechaIngreso;
+    @Column(name = "FECHA_CREACION")
+    private Date fechaCreacion;
     
     @Column(name = "FECHA_PRESUPUESTO")
     private Date fechaPresupuesto;    
@@ -135,13 +135,15 @@ public class Presupuesto implements Serializable
         this.estado = estado;
     }
 
-    public Date getFechaIngreso() {
-        return fechaIngreso;
+    public Date getFechaCreacion() {
+        return fechaCreacion;
     }
 
-    public void setFechaIngreso(Date fechaIngreso) {
-        this.fechaIngreso = fechaIngreso;
+    public void setFechaCreacion(Date fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
     }
+
+    
     
     public OrdenTrabajoDetalle getOrdenTrabajoDetalle() {
         return ordenTrabajoDetalle;
