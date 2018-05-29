@@ -638,7 +638,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     
     private void agregarPresupuesto()
     {
-        FacturaBusquedaPresupuesto presupuestoDialog = new FacturaBusquedaPresupuesto();
+        FacturaBusquedaPresupuesto presupuestoDialog=null;
+        if(getChkFiltroPresupuestoCliente().isSelected())
+        {
+            presupuestoDialog = new FacturaBusquedaPresupuesto(factura.getCliente());
+        }
+        else
+        {
+            presupuestoDialog = new FacturaBusquedaPresupuesto();
+        }
+        
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(presupuestoDialog);
         buscarDialogoModel.setVisible(true);
 
@@ -973,13 +982,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             ///Cargar los datos de la factura segun el tipo de datos del primer detalle
             TipoDocumentoEnum tipoReferenciaEnum=factura.getDetalles().get(0).getTipoDocumentoEnum();
             getCmbTipoDocumento().setSelectedItem(tipoReferenciaEnum);
+            seleccionarPanelTipoDocumento(tipoReferenciaEnum);
             
             switch(tipoReferenciaEnum)
             {
                 case ACADEMICO:
                     try {
-                        //getCmbTipoDocumento().setSelectedItem(tipoReferenciaEnum);
-                        seleccionarPanelTipoDocumento(tipoReferenciaEnum);
+                        //getCmbTipoDocumento().setSelectedItem(tipoReferenciaEnum)                        
 
                         FacturaAdicional facturaAdicional = buscarCampoAdicionalPorNombre(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre());
                         Long estudianteInscritoId = Long.parseLong(facturaAdicional.getValor());
@@ -997,7 +1006,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     break;
                     
                 case PRESUPUESTOS:
-                    //Falta implementar
+                    getLblNombresClientePresupuesto().setText(factura.getCliente().getNombresCompletos());                    
                     break;
                     
                 case INVENTARIO: case LIBRE:
@@ -1238,28 +1247,31 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             try {
                 
                 TipoDocumentoEnum tipoReferenciaEnum=detalle.getTipoDocumentoEnum();
-                
-                
                 Vector<String> fila = new Vector<String>();
-                 
-                if(tipoReferenciaEnum.equals(TipoDocumentoEnum.ACADEMICO))
-                {
-                    RubroEstudiante rubroEstudiante=ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(detalle.getReferenciaId());
-                    fila.add(rubroEstudiante.getId()+"");
-                    //fila.add(rubroEstudiante.getRubroNivel().getValor()+"");
-                }
-                else
-                {
-                    if(tipoReferenciaEnum.equals(TipoDocumentoEnum.INVENTARIO)) 
-                    {
-                        Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
-                        fila.add(producto.getCodigoPersonalizado());
-                        //fila.add(producto.getValorUnitario().toString());
-                    }
-                }
                 
-                fila.add(detalle.getPrecioUnitario().toString());
-               
+                switch(tipoReferenciaEnum)
+                {
+                    case ACADEMICO:
+                        RubroEstudiante rubroEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(detalle.getReferenciaId());
+                        fila.add(rubroEstudiante.getId() + "");
+                        break;
+                        
+                    case PRESUPUESTOS:
+                        //Presupuesto presupuesto=ServiceFactory.getFactory().getPresupuestoServiceIf().buscarPorId(detalle.getReferenciaId());
+                        fila.add(detalle.getReferenciaId().toString());
+                        break;
+                    
+                    case INVENTARIO: case LIBRE:
+                        Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
+                        fila.add(producto.getCodigoPersonalizado());
+                        break;
+
+                        
+                }
+                 
+
+                //Cargar los totales
+                fila.add(detalle.getPrecioUnitario().toString());               
                 //Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
 
                 fila.add(detalle.getCantidad().toString());
@@ -1333,18 +1345,21 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 TipoDocumentoEnum tipoReferenciaEnum=facturaDetalle.getTipoDocumentoEnum();
                 CatalogoProducto catalogoProducto=null;
                 
-                if(tipoReferenciaEnum.equals(TipoDocumentoEnum.ACADEMICO))
+                switch(tipoReferenciaEnum)
                 {
-                    catalogoProducto=ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getRubroNivel().getCatalogoProducto();
-                }
-                else
-                {
-                    if(tipoReferenciaEnum.equals(TipoDocumentoEnum.INVENTARIO))
-                    {
+                    case ACADEMICO:
+                        catalogoProducto=ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getRubroNivel().getCatalogoProducto();
+                        break;
+                        
+                    case PRESUPUESTOS:
+                        catalogoProducto=ServiceFactory.getFactory().getPresupuestoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
+                        break;
+                        
+                    case INVENTARIO:case LIBRE:
                         catalogoProducto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
-                    }
+                        break;
                 }
-                
+                                
                 //TODO este valor esta quemado toca parametrizar
 
                 if (catalogoProducto.getIva().getTarifa() == 12) { //esta parametro de 12 debe estar parametrizado
@@ -1755,7 +1770,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
                     case PRESUPUESTOS:
                         facturaDetalle.setReferenciaId(presupuestoSeleccionado.getId());
-                        catalogoProducto=
+                        catalogoProducto=presupuestoSeleccionado.getCatalogoProducto();
                         break;
                         
                     //Para invetario o para libre es la misma logica    
@@ -1842,30 +1857,30 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 CatalogoProducto catalogoProducto=null;
                 //Seleccionar la referencia dependiendo del tipo de documento
                 TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
-                if(tipoDocumentoEnum.equals(TipoDocumentoEnum.ACADEMICO))
-                {
-                    RubroEstudiante rubroSeleccionado=(RubroEstudiante) referencia;
-                    
-                    facturaDetalle.setReferenciaId(rubroSeleccionado.getId());
-                    facturaDetalle.setTipoDocumento(TipoDocumentoEnum.ACADEMICO.getCodigo());
-                    catalogoProducto=rubroSeleccionado.getRubroNivel().getCatalogoProducto();
-                }
-                else
-                {
-                    if(tipoDocumentoEnum.equals(TipoDocumentoEnum.PRESUPUESTOS))
-                    {
-                        
-                    }
-                    else
-                    {
-                        Producto productoSeleccionado=(Producto) referencia;                    
+                
+                switch (tipoDocumentoEnum) {
+                    case ACADEMICO:
+                        RubroEstudiante rubroSeleccionado = (RubroEstudiante) referencia;
+                        facturaDetalle.setReferenciaId(rubroSeleccionado.getId());
+                        facturaDetalle.setTipoDocumento(TipoDocumentoEnum.ACADEMICO.getCodigo());
+                        catalogoProducto = rubroSeleccionado.getRubroNivel().getCatalogoProducto();
+                        break;
+
+                    case PRESUPUESTOS:
+                        Presupuesto presupuesto=(Presupuesto)referencia;
+                        facturaDetalle.setReferenciaId(presupuesto.getId());
+                        facturaDetalle.setTipoDocumento(TipoDocumentoEnum.PRESUPUESTOS.getCodigo());
+                        catalogoProducto = ServiceFactory.getFactory().getPresupuestoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
+                        break;
+
+                    case INVENTARIO:
+                    case LIBRE:
+                        Producto productoSeleccionado = (Producto) referencia;
                         facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
                         facturaDetalle.setTipoDocumento(TipoDocumentoEnum.INVENTARIO.getCodigo());
-                        catalogoProducto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
-                    }
-                    
+                        catalogoProducto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
+                        break;
                 }
-                
                 
                 
                 facturaDetalle.setValorIce(BigDecimal.ZERO);
@@ -2066,22 +2081,26 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
      */
     private boolean validacionPersonalizadaPorModulos() {
         TipoDocumentoEnum tipoDocEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
-        
-        if(tipoDocEnum.equals(TipoDocumentoEnum.ACADEMICO))
+        BigDecimal cantidad = new BigDecimal(getTxtCantidad().getText());
+        BigDecimal valorUnitario = new BigDecimal(getTxtValorUnitario().getText());
+
+        switch(tipoDocEnum)
         {
-            BigDecimal cantidad=new BigDecimal(getTxtCantidad().getText());
-            BigDecimal valorUnitario=new BigDecimal(getTxtValorUnitario().getText());
-            //TODO: Analizar para el caso que tenga descuento
+            case ACADEMICO:
+                //TODO: Analizar para el caso que tenga descuento
+                if (rubroSeleccionado.getSaldo().compareTo(cantidad.multiply(valorUnitario)) == -1) {
+                    DialogoCodefac.mensaje("Validación", "El Total no puede exceder del valor " + rubroSeleccionado.getSaldo() + " del rubro", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    return false;
+                }
+                break;
+                
+            case PRESUPUESTOS:
+                if (presupuestoSeleccionado.getTotalVenta().compareTo(cantidad.multiply(valorUnitario)) == -1) {
+                    DialogoCodefac.mensaje("Validación", "El Total no puede exceder del valor " + rubroSeleccionado.getSaldo() + " del rubro", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    return false;
+                }
+                break;
             
-            if(rubroSeleccionado.getSaldo().compareTo(cantidad.multiply(valorUnitario))==-1)
-            {
-                DialogoCodefac.mensaje("Validación","El Total no puede exceder del valor "+rubroSeleccionado.getSaldo()+" del rubro",DialogoCodefac.MENSAJE_ADVERTENCIA);
-                return false;
-            }
-        }
-        else
-        {
-            //PARA LOS DEMAS CASOS
         }
         
         return true;

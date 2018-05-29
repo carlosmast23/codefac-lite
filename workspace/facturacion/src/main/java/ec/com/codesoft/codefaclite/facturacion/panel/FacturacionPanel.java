@@ -192,7 +192,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         txtClientePresupuesto = new javax.swing.JTextField();
         btnBuscarClientePresupuesto = new javax.swing.JButton();
         btnAgregarClientePresupuesto = new javax.swing.JButton();
-        jCheckBox2 = new javax.swing.JCheckBox();
+        chkFiltroPresupuestoCliente = new javax.swing.JCheckBox();
         lblNombresClientePresupuesto = new javax.swing.JLabel();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -1143,15 +1143,15 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         panelDatosPresupuestos.add(btnAgregarClientePresupuesto, gridBagConstraints);
 
-        jCheckBox2.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        jCheckBox2.setText("filtrar presupuesto por cliente");
-        jCheckBox2.setToolTipText("Permite filtrar presupuesto solo pertenecientes al cliente seleccionado para la factura");
+        chkFiltroPresupuestoCliente.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        chkFiltroPresupuestoCliente.setText("filtrar presupuesto por cliente");
+        chkFiltroPresupuestoCliente.setToolTipText("Permite filtrar presupuesto solo pertenecientes al cliente seleccionado para la factura");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 23;
         gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        panelDatosPresupuestos.add(jCheckBox2, gridBagConstraints);
+        panelDatosPresupuestos.add(chkFiltroPresupuestoCliente, gridBagConstraints);
 
         lblNombresClientePresupuesto.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblNombresClientePresupuesto.setText("lblNombreCliente");
@@ -1218,11 +1218,11 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnQuitarDetalle;
     private javax.swing.JButton btnQuitarDetalleFormaPago;
     private javax.swing.JCheckBox checkPorcentaje;
+    private javax.swing.JCheckBox chkFiltroPresupuestoCliente;
     private javax.swing.JComboBox<DocumentoEnum> cmbDocumento;
     private javax.swing.JComboBox<Persona> cmbRepresentante;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
     private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
     private com.toedter.calendar.JDateChooser jDateFechaEmision;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -1673,6 +1673,10 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
     public JLabel getLblNombresClientePresupuesto() {
         return lblNombresClientePresupuesto;
+    }
+
+    public JCheckBox getChkFiltroPresupuestoCliente() {
+        return chkFiltroPresupuestoCliente;
     }
 
     
