@@ -102,7 +102,7 @@ public class UtilidadesServidor {
         RecursoCodefac.SQL.getResourceInputStream("create_servicios.sql"),
         RecursoCodefac.SQL.getResourceInputStream("insert_servicio.sql")};
     
-    public static void crearBaseDatos() {
+    public static void crearBaseDatos() throws SQLException {
         try {
             Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
             //obtenemos la conexión si no existe crea la base
@@ -122,10 +122,10 @@ public class UtilidadesServidor {
                  */
                 for (InputStream query : querys) {                    
                     try {
-                        String sql = UtilidadesTextos.getStringURLFile(query);
-                        LOG.log(Level.INFO,sql);
+                        String sql = UtilidadesTextos.getStringURLFile(query);                        
                         String[] sentencias = sql.split(";");
                         for (String sentencia : sentencias) {
+                            LOG.log(Level.INFO,sentencia);
                             //Obtengo en bytes para transformar a utf 8 porque tenia problemas al insertar valores con acentos y ñ
                             byte ptext[] = sentencia.getBytes();
                             PreparedStatement pstm = conn.prepareStatement(new String(ptext, "UTF-8"));
@@ -160,8 +160,6 @@ public class UtilidadesServidor {
             }
             conn.close();
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(CrearBaseDatos.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
             Logger.getLogger(CrearBaseDatos.class.getName()).log(Level.SEVERE, null, ex);
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(UtilidadesServidor.class.getName()).log(Level.SEVERE, null, ex);

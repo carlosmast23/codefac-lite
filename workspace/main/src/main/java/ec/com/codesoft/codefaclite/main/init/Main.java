@@ -219,6 +219,7 @@ import ec.com.codesoft.codefaclite.utilidades.email.PropiedadesCorreoEnum;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import ec.com.codesoft.codefaclite.utilidades.web.UtilidadesWeb;
 import java.io.File;
+import java.sql.SQLException;
 import java.util.Arrays;
 
 /**
@@ -1065,6 +1066,10 @@ public class Main {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             } catch (PersistenciaDuplicadaException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                DialogoCodefac.mensaje("Error al crear la base de datos",ex.getMessage()+"\n Se recomienda eliminar y volver a crear la db",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                //TODO: Mejorar esta parte eliminando la base de datos para evitar que ejecuten con problemas en la base
             }
 
         } catch (PersistenciaDuplicadaException ex) {
