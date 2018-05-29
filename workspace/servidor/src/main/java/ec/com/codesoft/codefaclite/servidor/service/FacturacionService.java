@@ -91,13 +91,21 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
              */
             for (FacturaDetalle detalle : factura.getDetalles()) {
                 //Verificar a que modulo debe afectar los detalles
-                if(detalle.getTipoDocumentoEnum().equals(TipoDocumentoEnum.ACADEMICO))
+                switch(detalle.getTipoDocumentoEnum())
                 {
-                    afectarAcademico(detalle);
-                }
-                else                
-                {
-                    afectarInventario(detalle);
+                    case ACADEMICO:
+                        afectarAcademico(detalle);
+                        break;
+                    case INVENTARIO:
+                        afectarInventario(detalle);
+                        break;
+                    case LIBRE:
+                        //NO DEBE AFECTAR A NADA;
+                        break;
+                    case PRESUPUESTOS:
+                        //Todo: Falta implementar
+                        break;
+                        
                 }
                 
             }
@@ -164,7 +172,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 Kardex kardex= kardexs.get(0);
                 KardexDetalle kardexDetalle=new KardexDetalle();
                 kardexDetalle.setCantidad(detalle.getCantidad().intValue());
-                kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.VENTA.getCodigo());
+                kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.INVENTARIO.getCodigo());
                 kardexDetalle.setPrecioTotal(detalle.getTotal());
                 kardexDetalle.setPrecioUnitario(detalle.getPrecioUnitario());
                 kardexDetalle.setReferenciaDocumentoId(detalle.getFactura().getId());

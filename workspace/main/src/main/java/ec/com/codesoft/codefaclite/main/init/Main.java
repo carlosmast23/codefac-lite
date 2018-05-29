@@ -89,6 +89,8 @@ import ec.com.codesoft.codefaclite.servidor.service.PerfilService;
 import ec.com.codesoft.codefaclite.servidor.service.PerfilUsuarioService;
 import ec.com.codesoft.codefaclite.servidor.service.PermisoVentanaService;
 import ec.com.codesoft.codefaclite.servidor.service.PersonaService;
+import ec.com.codesoft.codefaclite.servidor.service.PresupuestoDetalleService;
+import ec.com.codesoft.codefaclite.servidor.service.PresupuestoService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoEnsambleService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoProveedorService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoService;
@@ -162,6 +164,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServ
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenCompraDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenCompraServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PeriodoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PermisoVentanaServiceIf;
@@ -205,6 +208,8 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilUsuarioServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoDetalleServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RetencionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriFormaPagoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
@@ -532,8 +537,9 @@ public class Main {
             mapRecursos.put(DepartamentoService.class,DepartamentoServiceIf.class);
             mapRecursos.put(EmpleadoService.class,EmpleadoServiceIf.class);
             mapRecursos.put(OrdenTrabajoService.class,OrdenTrabajoServiceIf.class);
-            mapRecursos.put(OrdenTrabajoDetalleService.class,OrdenTrabajoDetalleService.class);
-                    
+            mapRecursos.put(OrdenTrabajoDetalleService.class,OrdenTrabajoDetalleServiceIf.class);
+            mapRecursos.put(PresupuestoService.class, PresupuestoServiceIf.class);
+            mapRecursos.put(PresupuestoDetalleService.class, PresupuestoDetalleServiceIf.class);
             
             ServiceControllerServer.cargarRecursos(mapRecursos);
             LOG.log(Level.INFO,"Servidor Iniciado");

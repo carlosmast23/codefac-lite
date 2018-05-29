@@ -343,21 +343,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 
             }
         });
+        
+        getBtnBuscarClientePresupuesto().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                btnListenerBuscarCliente();
+            }
+        });
 
         getBtnBuscarCliente().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda();
-                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
-                buscarDialogoModel.setVisible(true);
-                factura.setCliente((Persona) buscarDialogoModel.getResultado());
-                if (factura.getCliente() != null) 
-                {
-                    cargarFormaPago();
-                    setearValoresCliente();
-                    cargarDatosAdicionales();
-                    cargarTablaDatosAdicionales();
-                };
+                btnListenerBuscarCliente();
             }
         });
 
@@ -407,7 +404,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 }
                 else //Si el tipo de documento es productos , agrega productos
                 {
-                    agregarProducto();
+                    if(tipoDocumentoEnum.equals(TipoDocumentoEnum.PRESUPUESTOS))
+                    {
+                        
+                    }
+                    else
+                    {
+                        agregarProducto();
+                    }
                 }
                 
             }
@@ -481,22 +485,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 }
             }
         });
+        
+        getBtnAgregarClientePresupuesto().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                btnListenerAgregarCliente();
+            }
+        });
 
         getBtnAgregarCliente().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<Persona>() {
-                    @Override
-                    public void updateInterface(Persona entity) {
-                        factura.setCliente(entity);
-                        if (factura.getCliente() != null) {
-                            cargarFormaPago();
-                            setearValoresCliente();
-                            cargarDatosAdicionales();
-                            cargarTablaDatosAdicionales();;
-                        }
-                    }
-                }, DialogInterfacePanel.CLIENTE_PANEL, false);
+                btnListenerAgregarCliente();
             }
         });
 
@@ -546,6 +546,35 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
         });
 
+    }
+    
+    private void btnListenerAgregarCliente()
+    {
+        panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<Persona>() {
+            @Override
+            public void updateInterface(Persona entity) {
+                factura.setCliente(entity);
+                if (factura.getCliente() != null) {
+                    cargarFormaPago();
+                    setearValoresCliente();
+                    cargarDatosAdicionales();
+                    cargarTablaDatosAdicionales();;
+                }
+            }
+        }, DialogInterfacePanel.CLIENTE_PANEL, false);
+    }
+    
+    private void btnListenerBuscarCliente() {
+        ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda();
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
+        buscarDialogoModel.setVisible(true);
+        factura.setCliente((Persona) buscarDialogoModel.getResultado());
+        if (factura.getCliente() != null) {
+            cargarFormaPago();
+            setearValoresCliente();
+            cargarDatosAdicionales();
+            cargarTablaDatosAdicionales();
+        };
     }
     
     private void cargarFormaPago()
@@ -893,30 +922,41 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             this.factura = facturaTmp;
             ///Cargar los datos de la factura segun el tipo de datos del primer detalle
             TipoDocumentoEnum tipoReferenciaEnum=factura.getDetalles().get(0).getTipoDocumentoEnum();
-            if(tipoReferenciaEnum.equals(TipoDocumentoEnum.ACADEMICO))
+            getCmbTipoDocumento().setSelectedItem(tipoReferenciaEnum);
+            
+            switch(tipoReferenciaEnum)
             {
-                try {
-                    getCmbTipoDocumento().setSelectedItem(tipoReferenciaEnum);
-                    seleccionarPanelTipoDocumento(tipoReferenciaEnum);
+                case ACADEMICO:
+                    try {
+                        //getCmbTipoDocumento().setSelectedItem(tipoReferenciaEnum);
+                        seleccionarPanelTipoDocumento(tipoReferenciaEnum);
+
+                        FacturaAdicional facturaAdicional = buscarCampoAdicionalPorNombre(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre());
+                        Long estudianteInscritoId = Long.parseLong(facturaAdicional.getValor());
+                        estudiante = ServiceFactory.getFactory().getEstudianteServiceIf().buscarPorId(estudianteInscritoId);
+
+                        //setearValoresAcademicos(estudiante);
+                        getTxtEstudiante().setText(estudiante.getNombreCompleto());
+                        getCmbRepresentante().removeAllItems();
+                        getCmbRepresentante().addItem(factura.getCliente());
+
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     
-                    FacturaAdicional facturaAdicional=buscarCampoAdicionalPorNombre(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre());
-                    Long estudianteInscritoId=Long.parseLong(facturaAdicional.getValor());                    
-                    estudiante=ServiceFactory.getFactory().getEstudianteServiceIf().buscarPorId(estudianteInscritoId);
+                    break;
                     
-                    //setearValoresAcademicos(estudiante);
-                    getTxtEstudiante().setText(estudiante.getNombreCompleto());
-                    getCmbRepresentante().removeAllItems();
-                    getCmbRepresentante().addItem(factura.getCliente());
+                case PRESUPUESTOS:
+                    //Falta implementar
+                    break;
                     
-                } catch (RemoteException ex) {
-                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            else //Si es otro valor que no sea academico
-            {
-                getCmbTipoDocumento().getSelectedItem().equals(TipoDocumentoEnum.VENTA);
-                setearValoresCliente();
-            }           
+                case INVENTARIO: case LIBRE:
+                    //getCmbTipoDocumento().getSelectedItem().equals(TipoDocumentoEnum.INVENTARIO);
+                    setearValoresCliente();
+                    break;
+            
+            }            
+            
                         
             cargarDatosDetalles();
             setearDetalleFactura();
@@ -1160,7 +1200,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 }
                 else
                 {
-                    if(tipoReferenciaEnum.equals(TipoDocumentoEnum.VENTA)) 
+                    if(tipoReferenciaEnum.equals(TipoDocumentoEnum.INVENTARIO)) 
                     {
                         Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
                         fila.add(producto.getCodigoPersonalizado());
@@ -1249,7 +1289,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 }
                 else
                 {
-                    if(tipoReferenciaEnum.equals(TipoDocumentoEnum.VENTA))
+                    if(tipoReferenciaEnum.equals(TipoDocumentoEnum.INVENTARIO))
                     {
                         catalogoProducto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
                     }
@@ -1654,19 +1694,28 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 CatalogoProducto catalogoProducto=null;
                 //Seleccionar la referencia dependiendo del tipo de documento
                 TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
-                if(tipoDocumentoEnum.equals(TipoDocumentoEnum.ACADEMICO))
+
+                switch (tipoDocumentoEnum) 
                 {
-                    facturaDetalle.setReferenciaId(rubroSeleccionado.getId());
-                    facturaDetalle.setTipoDocumento(tipoDocumentoEnum.getCodigo());
-                    catalogoProducto=rubroSeleccionado.getRubroNivel().getCatalogoProducto();
+                    case ACADEMICO:
+                        facturaDetalle.setReferenciaId(rubroSeleccionado.getId());
+                        facturaDetalle.setTipoDocumento(tipoDocumentoEnum.getCodigo());
+                        catalogoProducto = rubroSeleccionado.getRubroNivel().getCatalogoProducto();
+                        break;
+
+                    case PRESUPUESTOS:
+                        //Todo: Falta implementar
+                        break;
+                        
+                    //Para invetario o para libre es la misma logica    
+                    case INVENTARIO: case LIBRE:
+                        facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
+                        facturaDetalle.setTipoDocumento(tipoDocumentoEnum.getCodigo());
+                        catalogoProducto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
+                        break;
+
                 }
-                else
-                {
-                    facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
-                    facturaDetalle.setTipoDocumento(tipoDocumentoEnum.getCodigo());
-                    catalogoProducto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
-                }
-                
+
                 
                 
                 facturaDetalle.setValorIce(BigDecimal.ZERO);
@@ -1753,11 +1802,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 }
                 else
                 {
-                    Producto productoSeleccionado=(Producto) referencia;
+                    if(tipoDocumentoEnum.equals(TipoDocumentoEnum.PRESUPUESTOS))
+                    {
+                        
+                    }
+                    else
+                    {
+                        Producto productoSeleccionado=(Producto) referencia;                    
+                        facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
+                        facturaDetalle.setTipoDocumento(TipoDocumentoEnum.INVENTARIO.getCodigo());
+                        catalogoProducto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
+                    }
                     
-                    facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
-                    facturaDetalle.setTipoDocumento(TipoDocumentoEnum.VENTA.getCodigo());
-                    catalogoProducto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
                 }
                 
                 
@@ -1919,14 +1975,20 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     private void seleccionarPanelTipoDocumento(TipoDocumentoEnum tipoDocumentoEnum)
     {
         if (tipoDocumentoEnum != null) {
-            if (tipoDocumentoEnum.equals(tipoDocumentoEnum.ACADEMICO)) {
-                activarTabDatos(1);
-            } else {
-                //Todo: Seguir armando el tab de los otros datos
-                activarTabDatos(0);
+            switch(tipoDocumentoEnum)
+            {
+                case ACADEMICO:
+                    activarTabDatos(1);
+                    break;
+                case PRESUPUESTOS:
+                    activarTabDatos(2);
+                    break;
+                case INVENTARIO: case LIBRE:
+                    activarTabDatos(0);
+                    break;
             }
-
-        }      
+        }        
+        
     }
     
     

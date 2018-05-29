@@ -457,7 +457,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
                 else
                 {
                     //TODO:Terminar de implementar las otras filas
-                    if (detalle.getTipoDocumentoEnum().equals(TipoDocumentoEnum.VENTA)) {
+                    if (detalle.getTipoDocumentoEnum().equals(TipoDocumentoEnum.INVENTARIO)) {
                         Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
                         Vector<String> fila = new Vector<String>();
                         fila.add((producto.getCodigoPersonalizado() != null) ? producto.getCodigoPersonalizado() : "");
