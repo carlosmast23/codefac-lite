@@ -603,6 +603,7 @@ public class Main {
                     if(parametroDirectorioRecursos==null)
                     {
                         parametroDirectorioRecursos=new ParametroCodefac();
+                        parametroDirectorioRecursos.setNombre(ParametroCodefac.DIRECTORIO_RECURSOS);
                         parametroDirectorioRecursos.setValor(directorioUsuario);
                         ServiceFactory.getFactory().getParametroCodefacServiceIf().grabar(parametroDirectorioRecursos);                        
                     }
