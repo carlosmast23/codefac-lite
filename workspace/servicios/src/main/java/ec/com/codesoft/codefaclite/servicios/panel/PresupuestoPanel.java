@@ -104,6 +104,9 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         lblEspacio6 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         cmbDetallesOrdenTrabajo = new javax.swing.JComboBox<>();
+        jLabel14 = new javax.swing.JLabel();
+        txtDiasPresupuesto = new javax.swing.JTextField();
+        jCheckBox2 = new javax.swing.JCheckBox();
 
         setClosable(true);
         setIconifiable(true);
@@ -138,8 +141,9 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         getContentPane().add(jLabel2, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.05;
@@ -166,16 +170,16 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel5.setText("Estado:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel5, gridBagConstraints);
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel6.setText("Fecha Presupuesto:");
+        jLabel6.setText("Fecha Creación:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -198,8 +202,9 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtDescripcion, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -497,6 +502,8 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         lblSubtotalCompra.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         lblSubtotalCompra.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(lblSubtotalCompra, gridBagConstraints);
 
@@ -523,6 +530,8 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(lblDescuentoCompra, gridBagConstraints);
 
@@ -531,6 +540,8 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(lblTotalCompra, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -560,6 +571,8 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         lblSubtotalVenta.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         lblSubtotalVenta.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel5.add(lblSubtotalVenta, gridBagConstraints);
 
@@ -586,6 +599,8 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel5.add(lblSubtotaDescuentoVenta, gridBagConstraints);
 
@@ -594,6 +609,8 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel5.add(lblTotalVenta, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -615,6 +632,8 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         gridBagConstraints.gridx = 9;
         gridBagConstraints.gridy = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jPanel2, gridBagConstraints);
 
@@ -633,6 +652,27 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(cmbDetallesOrdenTrabajo, gridBagConstraints);
 
+        jLabel14.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel14.setText("Presupuestar:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jLabel14, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(txtDiasPresupuesto, gridBagConstraints);
+
+        jCheckBox2.setText("Meses");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 2;
+        getContentPane().add(jCheckBox2, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -650,12 +690,14 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     private javax.swing.JComboBox<OrdenTrabajoDetalle> cmbDetallesOrdenTrabajo;
     private javax.swing.JComboBox<GeneralEnumEstado> cmbEstadoPresupuesto;
     private com.toedter.calendar.JDateChooser cmbFechaPresupuesto;
+    private javax.swing.JCheckBox jCheckBox2;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
@@ -698,6 +740,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     private javax.swing.JTextField txtDescripcion;
     private javax.swing.JTextField txtDescuentoPrecioCompra;
     private javax.swing.JTextField txtDescuentoPrecioVenta;
+    private javax.swing.JTextField txtDiasPresupuesto;
     private javax.swing.JTextField txtOrdenTrabajo;
     private javax.swing.JTextField txtPrecioCompra;
     private javax.swing.JTextField txtPrecioVenta;
