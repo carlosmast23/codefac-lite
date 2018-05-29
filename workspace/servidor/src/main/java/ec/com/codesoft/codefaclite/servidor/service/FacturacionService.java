@@ -164,7 +164,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 Kardex kardex= kardexs.get(0);
                 KardexDetalle kardexDetalle=new KardexDetalle();
                 kardexDetalle.setCantidad(detalle.getCantidad().intValue());
-                kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.VENTA.getCodigo());
+                kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.INVENTARIO.getCodigo());
                 kardexDetalle.setPrecioTotal(detalle.getTotal());
                 kardexDetalle.setPrecioUnitario(detalle.getPrecioUnitario());
                 kardexDetalle.setReferenciaDocumentoId(detalle.getFactura().getId());

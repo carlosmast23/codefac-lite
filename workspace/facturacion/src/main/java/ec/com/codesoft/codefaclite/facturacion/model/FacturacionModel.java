@@ -949,7 +949,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 }
                 else
                 {
-                    getCmbTipoDocumento().getSelectedItem().equals(TipoDocumentoEnum.VENTA);
+                    getCmbTipoDocumento().getSelectedItem().equals(TipoDocumentoEnum.INVENTARIO);
                     setearValoresCliente();
                 }
             }           
@@ -1196,7 +1196,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 }
                 else
                 {
-                    if(tipoReferenciaEnum.equals(TipoDocumentoEnum.VENTA)) 
+                    if(tipoReferenciaEnum.equals(TipoDocumentoEnum.INVENTARIO)) 
                     {
                         Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
                         fila.add(producto.getCodigoPersonalizado());
@@ -1285,7 +1285,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 }
                 else
                 {
-                    if(tipoReferenciaEnum.equals(TipoDocumentoEnum.VENTA))
+                    if(tipoReferenciaEnum.equals(TipoDocumentoEnum.INVENTARIO))
                     {
                         catalogoProducto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
                     }
@@ -1804,7 +1804,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     {
                         Producto productoSeleccionado=(Producto) referencia;                    
                         facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
-                        facturaDetalle.setTipoDocumento(TipoDocumentoEnum.VENTA.getCodigo());
+                        facturaDetalle.setTipoDocumento(TipoDocumentoEnum.INVENTARIO.getCodigo());
                         catalogoProducto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
                     }
                     

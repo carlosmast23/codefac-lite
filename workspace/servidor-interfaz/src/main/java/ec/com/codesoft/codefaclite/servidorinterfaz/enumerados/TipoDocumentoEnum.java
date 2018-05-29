@@ -14,7 +14,7 @@ import java.util.List;
  */
 public enum TipoDocumentoEnum {
             
-    VENTA(ModuloEnum.VENTAS,"VET","Ventas",TipoDocumentoEnum.AFECTA_INVENTARIO_NEGATIVO),
+    INVENTARIO(ModuloEnum.VENTAS,"VET","Inventario",TipoDocumentoEnum.AFECTA_INVENTARIO_NEGATIVO),
     /**
      * Tipo de compra que va a ingresar productos al inventario
      */
