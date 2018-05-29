@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FechaFormatoEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -93,6 +94,10 @@ public class Presupuesto implements Serializable
     @ManyToOne
     private Persona persona;
     
+    @JoinColumn(name = "CATALOGO_PRODUCTO_ID")
+    @ManyToOne
+    private CatalogoProducto catalogoProducto;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "presupuesto", fetch = FetchType.EAGER)
     private List<PresupuestoDetalle>  presupuestoDetalles;
     
@@ -112,13 +117,6 @@ public class Presupuesto implements Serializable
         this.codigo = codigo;
     }
 
-    public String getDescipcion() {
-        return descripcion;
-    }
-
-    public void setDescipcion(String descipcion) {
-        this.descripcion = descipcion;
-    }
 
     public String getObservaciones() {
         return observaciones;
@@ -241,6 +239,15 @@ public class Presupuesto implements Serializable
     public void setTotalVenta(BigDecimal totalVenta) {
         this.totalVenta = totalVenta;
     }
+
+    public CatalogoProducto getCatalogoProducto() {
+        return catalogoProducto;
+    }
+
+    public void setCatalogoProducto(CatalogoProducto catalogoProducto) {
+        this.catalogoProducto = catalogoProducto;
+    }
+    
     
     
     

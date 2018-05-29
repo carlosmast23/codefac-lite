@@ -28,4 +28,7 @@ Cuando no exista internet levantar el aplicativo como localhost para cliente-ser
 
 Verificar el tipo de documento libre , con el cliente final no estaba funcionando
 
+Verificar porque los logs se estan creando 2 veces
+
+Analizar el codigo private boolean validacionPersonalizadaPorModulos() en facturacion para validar correctamente con descuentos para los distintos modulos
 
