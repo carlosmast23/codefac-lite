@@ -300,7 +300,7 @@ public class Main {
     
     private static void verificarUltimaVersionCodefac()
     {
-        String path="http://localhost/java/recursos/"; //directorio principal desde donde se van a bajar los archivos para actualizar
+        String path="http://www.cf.codesoft-ec.com/uploads/versiones/"; //directorio principal desde donde se van a bajar los archivos para actualizar
         String carpetaDescarga="tmp"; //nombre de la carpeta para almacenar en el directoro TODO: Crear una variable global paa hacer referenca al directorio temporal
         
         String nameUltimaVersion="codefac.jar"; //Nombre del archivo de la nueva version de Codefac para descargar        
