@@ -13,7 +13,15 @@ import java.util.List;
  * @author Carlos
  */
 public enum TipoDocumentoEnum {
-            
+    
+    /**
+     * Tipo de documento que vincula a un producto pero sin afectar el stock
+     */
+    LIBRE(ModuloEnum.VENTAS, "LIB", "Libre", TipoDocumentoEnum.NO_AFECTA_INVETARIO),
+    
+    /**
+     * Tipo de documento que afecta al stock de los productos
+     */
     INVENTARIO(ModuloEnum.VENTAS,"VET","Inventario",TipoDocumentoEnum.AFECTA_INVENTARIO_NEGATIVO),
     /**
      * Tipo de compra que va a ingresar productos al inventario
@@ -51,6 +59,7 @@ public enum TipoDocumentoEnum {
      * Tipo de documento utilizado para facturar desde los presupuestos
      */
     PRESUPUESTOS(ModuloEnum.VENTAS,"PRE","Presupuestos",TipoDocumentoEnum.NO_AFECTA_INVETARIO);
+
     
     public static final String AFECTA_INVENTARIO_POSITIVO="+";
     public static final String AFECTA_INVENTARIO_NEGATIVO="-";

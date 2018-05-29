@@ -91,13 +91,21 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
              */
             for (FacturaDetalle detalle : factura.getDetalles()) {
                 //Verificar a que modulo debe afectar los detalles
-                if(detalle.getTipoDocumentoEnum().equals(TipoDocumentoEnum.ACADEMICO))
+                switch(detalle.getTipoDocumentoEnum())
                 {
-                    afectarAcademico(detalle);
-                }
-                else                
-                {
-                    afectarInventario(detalle);
+                    case ACADEMICO:
+                        afectarAcademico(detalle);
+                        break;
+                    case INVENTARIO:
+                        afectarInventario(detalle);
+                        break;
+                    case LIBRE:
+                        //NO DEBE AFECTAR A NADA;
+                        break;
+                    case PRESUPUESTOS:
+                        //Todo: Falta implementar
+                        break;
+                        
                 }
                 
             }

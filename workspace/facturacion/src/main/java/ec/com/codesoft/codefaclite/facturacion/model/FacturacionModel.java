@@ -922,37 +922,41 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             this.factura = facturaTmp;
             ///Cargar los datos de la factura segun el tipo de datos del primer detalle
             TipoDocumentoEnum tipoReferenciaEnum=factura.getDetalles().get(0).getTipoDocumentoEnum();
-            if(tipoReferenciaEnum.equals(TipoDocumentoEnum.ACADEMICO))
+            getCmbTipoDocumento().setSelectedItem(tipoReferenciaEnum);
+            
+            switch(tipoReferenciaEnum)
             {
-                try {
-                    getCmbTipoDocumento().setSelectedItem(tipoReferenciaEnum);
-                    seleccionarPanelTipoDocumento(tipoReferenciaEnum);
+                case ACADEMICO:
+                    try {
+                        //getCmbTipoDocumento().setSelectedItem(tipoReferenciaEnum);
+                        seleccionarPanelTipoDocumento(tipoReferenciaEnum);
+
+                        FacturaAdicional facturaAdicional = buscarCampoAdicionalPorNombre(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre());
+                        Long estudianteInscritoId = Long.parseLong(facturaAdicional.getValor());
+                        estudiante = ServiceFactory.getFactory().getEstudianteServiceIf().buscarPorId(estudianteInscritoId);
+
+                        //setearValoresAcademicos(estudiante);
+                        getTxtEstudiante().setText(estudiante.getNombreCompleto());
+                        getCmbRepresentante().removeAllItems();
+                        getCmbRepresentante().addItem(factura.getCliente());
+
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     
-                    FacturaAdicional facturaAdicional=buscarCampoAdicionalPorNombre(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre());
-                    Long estudianteInscritoId=Long.parseLong(facturaAdicional.getValor());                    
-                    estudiante=ServiceFactory.getFactory().getEstudianteServiceIf().buscarPorId(estudianteInscritoId);
+                    break;
                     
-                    //setearValoresAcademicos(estudiante);
-                    getTxtEstudiante().setText(estudiante.getNombreCompleto());
-                    getCmbRepresentante().removeAllItems();
-                    getCmbRepresentante().addItem(factura.getCliente());
+                case PRESUPUESTOS:
+                    //Falta implementar
+                    break;
                     
-                } catch (RemoteException ex) {
-                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            else //Si es otro valor que no sea academico
-            {
-                if(tipoReferenciaEnum.equals(TipoDocumentoEnum.PRESUPUESTOS))
-                {
-                    //
-                }
-                else
-                {
-                    getCmbTipoDocumento().getSelectedItem().equals(TipoDocumentoEnum.INVENTARIO);
+                case INVENTARIO: case LIBRE:
+                    //getCmbTipoDocumento().getSelectedItem().equals(TipoDocumentoEnum.INVENTARIO);
                     setearValoresCliente();
-                }
-            }           
+                    break;
+            
+            }            
+            
                         
             cargarDatosDetalles();
             setearDetalleFactura();
@@ -1690,26 +1694,28 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 CatalogoProducto catalogoProducto=null;
                 //Seleccionar la referencia dependiendo del tipo de documento
                 TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
-                if(tipoDocumentoEnum.equals(TipoDocumentoEnum.ACADEMICO))
+
+                switch (tipoDocumentoEnum) 
                 {
-                    facturaDetalle.setReferenciaId(rubroSeleccionado.getId());
-                    facturaDetalle.setTipoDocumento(tipoDocumentoEnum.getCodigo());
-                    catalogoProducto=rubroSeleccionado.getRubroNivel().getCatalogoProducto();
-                }
-                else
-                {
-                    if(tipoDocumentoEnum.equals(TipoDocumentoEnum.PRESUPUESTOS))
-                    {
-                        //implmentar
-                    }
-                    else
-                    {
+                    case ACADEMICO:
+                        facturaDetalle.setReferenciaId(rubroSeleccionado.getId());
+                        facturaDetalle.setTipoDocumento(tipoDocumentoEnum.getCodigo());
+                        catalogoProducto = rubroSeleccionado.getRubroNivel().getCatalogoProducto();
+                        break;
+
+                    case PRESUPUESTOS:
+                        //Todo: Falta implementar
+                        break;
+                        
+                    //Para invetario o para libre es la misma logica    
+                    case INVENTARIO: case LIBRE:
                         facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
                         facturaDetalle.setTipoDocumento(tipoDocumentoEnum.getCodigo());
-                        catalogoProducto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
-                    }
+                        catalogoProducto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
+                        break;
+
                 }
-                
+
                 
                 
                 facturaDetalle.setValorIce(BigDecimal.ZERO);
@@ -1969,23 +1975,20 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     private void seleccionarPanelTipoDocumento(TipoDocumentoEnum tipoDocumentoEnum)
     {
         if (tipoDocumentoEnum != null) {
-            if (tipoDocumentoEnum.equals(tipoDocumentoEnum.ACADEMICO)) {
-                activarTabDatos(1);
-            } 
-            else 
+            switch(tipoDocumentoEnum)
             {
-                if(tipoDocumentoEnum.equals(tipoDocumentoEnum.PRESUPUESTOS))
-                {
+                case ACADEMICO:
+                    activarTabDatos(1);
+                    break;
+                case PRESUPUESTOS:
                     activarTabDatos(2);
-                }
-                else
-                {
-                    //Todo: Seguir armando el tab de los otros datos
+                    break;
+                case INVENTARIO: case LIBRE:
                     activarTabDatos(0);
-                }
+                    break;
             }
-
-        }      
+        }        
+        
     }
     
     
