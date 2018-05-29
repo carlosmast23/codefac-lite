@@ -12,7 +12,7 @@ create table COMPRA
 (
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1,INCREMENT BY 1),
     CLAVE_ACCESO varchar(70),
-    EMPRESA_ID varchar(70),
+    EMPRESA_ID BIGINT,
     PROVEEDOR_ID BIGINT,
     TIPO_IDENTIFICACION_ID varchar(1),
     SECUENCIAL varchar(100),
@@ -68,7 +68,7 @@ create table ORDEN_COMPRA
     PROVEEDOR_ID BIGINT,
     EMPRESA_ID BIGINT,
     ESTADO varchar(1),
-    USUARIO_ID decimal,
+    USUARIO_ID BIGINT,
     FECHA_INGRESO date,
     FECHA_CREACION date,
     OBSERVACION varchar(256),
