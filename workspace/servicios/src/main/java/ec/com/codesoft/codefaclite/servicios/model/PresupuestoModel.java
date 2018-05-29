@@ -26,11 +26,16 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PrioridadEnumEsta
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -41,10 +46,15 @@ public class PresupuestoModel extends PresupuestoPanel{
 
     private Presupuesto presupuesto;
     
+    private Producto producto;
+    private Persona persona;
+    
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         presupuesto = new Presupuesto();
         cargarCombos();
+        addListenerBotones();
+        initDatosTabla();
     }
 
     @Override
@@ -127,7 +137,7 @@ public class PresupuestoModel extends PresupuestoPanel{
     
     public void initDatosTabla()
     {
-        DefaultTableModel modeloTablaDetallesPresupuesto = UtilidadesTablas.crearModeloTabla(new String[]{"Proveedor","Producto","Precio compra","Precio venta","Cantidad"}, new Class[]{String.class,String.class,String.class,String.class,String.class});
+        DefaultTableModel modeloTablaDetallesPresupuesto = UtilidadesTablas.crearModeloTabla(new String[]{"Proveedor","Producto","Valor compra","Valor venta","Cantidad"}, new Class[]{String.class,String.class,String.class,String.class,String.class});
         getTableDetallesPresupuesto().setModel(modeloTablaDetallesPresupuesto);
     }
     
@@ -144,7 +154,7 @@ public class PresupuestoModel extends PresupuestoPanel{
                 if(persona != null)
                 {
                     presupuesto.setPersona(persona);
-                    getTxtCliente().setText(persona.getRazonSocial()+" - "+persona.getIdentificacion());
+                    getTxtCliente().setText(persona.getIdentificacion()+" - "+persona.getRazonSocial());
                 }
             }
         });
@@ -189,10 +199,11 @@ public class PresupuestoModel extends PresupuestoPanel{
                 ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo();
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
                 buscarDialogoModel.setVisible(true);
-                Producto producto = (Producto) buscarDialogoModel.getResultado();
-                if(producto != null)
+                Producto productoD = (Producto) buscarDialogoModel.getResultado();
+                if(productoD != null)
                 {
-                    getTxtProductoDetalle().setText(producto.getCodigoEAN()+" - "+ producto.getNombre());
+                    producto = productoD;
+                    getTxtProductoDetalle().setText(productoD.getCodigoEAN()+" - "+ productoD.getNombre());
                 }
             }
         });
@@ -203,10 +214,11 @@ public class PresupuestoModel extends PresupuestoPanel{
                 ClienteBusquedaDialogo buscarBusquedaDialogo = new ClienteBusquedaDialogo();
                 BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
                 buscarDialogo.setVisible(true);
-                Persona persona = (Persona) buscarDialogo.getResultado();
-                if(persona != null)
+                Persona personaD = (Persona) buscarDialogo.getResultado();
+                if(personaD != null)
                 {
-                    getTxtProveedorDetalle().setText(persona.getRazonSocial()+" - "+persona.getIdentificacion());
+                    getTxtProveedorDetalle().setText(personaD.getRazonSocial()+" - "+personaD.getIdentificacion());
+                    persona = personaD;
                 }
             }
         });
@@ -214,21 +226,29 @@ public class PresupuestoModel extends PresupuestoPanel{
         getBtnAgregarDetalle().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                agregarDetallesPresupuesto(null);
+                limpiarDetalles();
             }
         });
         
         getBtnEditarDetalle().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                int fila = getTableDetallesPresupuesto().getSelectedRow();
+                PresupuestoDetalle presupuestoDetalle = presupuesto.getPresupuestoDetalles().get(fila);
+                agregarDetallesPresupuesto(presupuestoDetalle);
+                getBtnAgregarDetalle().setEnabled(true);
+                
             }
         });
         
         getBtnEliminarDetalle().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                int fila = getTableDetallesPresupuesto().getSelectedRow();
+                presupuesto.getPresupuestoDetalles().remove(fila);
+                mostrarDatosTabla();
+                getBtnAgregarDetalle().setEnabled(true);
             }
         });
     }
@@ -240,12 +260,22 @@ public class PresupuestoModel extends PresupuestoPanel{
     
     public void addListenerTablas()
     {
+        getTableDetallesPresupuesto().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int fila = getTableDetallesPresupuesto().getSelectedRow();
+                getBtnAgregarDetalle().setEnabled(false);
+                PresupuestoDetalle presupuestoDetalle = presupuesto.getPresupuestoDetalles().get(fila);
+                cargarInformacionDetallePresupuesto( presupuestoDetalle);
+                getBtnAgregarDetalle().setEnabled(false);
+            }
+        });
         
     }
     
-    public void mostrarDatosTabla(Presupuesto presupuesto)
+    public void mostrarDatosTabla()
     {
-        DefaultTableModel modeloTablaDetallesPresupuesto = UtilidadesTablas.crearModeloTabla(new String[]{"obj","Proveedor","Producto","Precio compra","Precio venta","Cantidad"}, new Class[]{PresupuestoDetalle.class,String.class,String.class,String.class,String.class,String.class});
+        DefaultTableModel modeloTablaDetallesPresupuesto = UtilidadesTablas.crearModeloTabla(new String[]{"obj","Proveedor","Producto","Valor compra","Valor venta","Cantidad"}, new Class[]{PresupuestoDetalle.class,String.class,String.class,String.class,String.class,String.class});
         List<PresupuestoDetalle> detalles = presupuesto.getPresupuestoDetalles();
         for (PresupuestoDetalle detalle : detalles) 
         {
@@ -253,14 +283,13 @@ public class PresupuestoModel extends PresupuestoPanel{
             fila.add(detalle);
             fila.add(detalle.getPersona().getNombresCompletos()+"");
             fila.add(detalle.getProducto().getNombre()+"");
-            fila.add(detalle.getPrecioCompra()+"");
-            fila.add(detalle.getPrecioVenta()+"");
-            fila.add(detalle.getCantidad());
+            fila.add(detalle.getPrecioCompra().subtract(detalle.getDescuentoCompra())+"");
+            fila.add(detalle.getPrecioVenta().subtract(detalle.getDescuentoVenta())+"");
+            fila.add(detalle.getCantidad().toString());
             modeloTablaDetallesPresupuesto.addRow(fila);
         }
         getTableDetallesPresupuesto().setModel(modeloTablaDetallesPresupuesto);
         UtilidadesTablas.ocultarColumna(getTableDetallesPresupuesto(), 0);
-
     }
     
     public void agregarDetallesPresupuesto(PresupuestoDetalle presupuestoDetalle)
@@ -271,26 +300,109 @@ public class PresupuestoModel extends PresupuestoPanel{
             presupuestoDetalle = new PresupuestoDetalle();
             agregar = true;
         }
-//        ordenTrabajoDetalle.setNotas(""+getTxtAreaNotas().getText());
-//        OrdenTrabajoEnumEstado ordenTrabajoEnumEstado = (OrdenTrabajoEnumEstado) getCmbEstadoDetalle().getSelectedItem();
-//        ordenTrabajoDetalle.setEstado(ordenTrabajoEnumEstado.getLetra());
-//        if(getCmbDateFechaEntrega()!=null){
-//            ordenTrabajoDetalle.setFechaEntrega(new Date(getCmbDateFechaEntrega().getDate().getTime()));
-//        }
-//        PrioridadEnumEstado prioridadEnumEstado = (PrioridadEnumEstado) getCmbPrioridadDetalle().getSelectedItem();
-//        ordenTrabajoDetalle.setPrioridad(prioridadEnumEstado.getLetra());
-//        ordenTrabajoDetalle.setEmpleado((Empleado) getCmbAsignadoADetalle().getSelectedItem());
-//        
-//        if(agregar && getCmbDateFechaEntrega()!=null)
-//        {
-//            ordenTrabajo.addDetalle(ordenTrabajoDetalle);
-//            mostrarDatosTabla(ordenTrabajo);
-//        }
-//        else{
-//            DialogoCodefac.mensaje("Advertencia", "Debe ingresar una fecha", DialogoCodefac.MENSAJE_ADVERTENCIA);
-//        }
-//            
         
+        try{
+            if(this.persona == null){
+                DialogoCodefac.mensaje("Advertencia", "Debe seleccionar un proveedor", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                throw new ExcepcionCodefacLite("Necesita seleccionar un Cliente");
+            }
+            else{
+                presupuestoDetalle.setPersona(this.persona);
+            }
+                    
+            if(this.producto == null)
+            {
+                presupuestoDetalle.setProducto(this.producto);
+                DialogoCodefac.mensaje("Advertencia", "Debe seleccionar un producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                throw new ExcepcionCodefacLite("Necesita seleccionar un Cliente");
+            }
+            else
+            {
+                presupuestoDetalle.setProducto(this.producto);
+            }
+            
+            BigDecimal precioCompra = new BigDecimal(getTxtPrecioCompra().getText());
+            presupuestoDetalle.setPrecioCompra(precioCompra.setScale(2,BigDecimal.ROUND_HALF_UP));
+            BigDecimal descuentoCompra = new BigDecimal(getTxtDescuentoPrecioCompra().getText());
+            presupuestoDetalle.setDescuentoCompra(descuentoCompra.setScale(2,BigDecimal.ROUND_HALF_UP));
+            BigDecimal precioVenta = new BigDecimal(getTxtPrecioVenta().getText());
+            presupuestoDetalle.setPrecioVenta(precioVenta.setScale(2,BigDecimal.ROUND_HALF_UP));
+            BigDecimal descuentoVenta = new BigDecimal(getTxtDescuentoPrecioVenta().getText());
+            presupuestoDetalle.setDescuentoVenta(descuentoVenta.setScale(2,BigDecimal.ROUND_HALF_UP));
+            presupuestoDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
+            
+        }catch(ExcepcionCodefacLite e)
+        {
+             Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, e);
+        }
+
+        if(agregar)
+        {
+            this.presupuesto.addDetalle(presupuestoDetalle);
+            mostrarDatosTabla();
+        }
+        else{
+            DialogoCodefac.mensaje("Advertencia", "Debe ingresar una fecha", DialogoCodefac.MENSAJE_ADVERTENCIA);
+        }
+     }
+    
+    public void cargarInformacionDetallePresupuesto(PresupuestoDetalle presupuestoDetalle)
+    {
+        this.producto = presupuestoDetalle.getProducto();
+        this.persona = presupuestoDetalle.getPersona();
+        getTxtProveedorDetalle().setText(presupuestoDetalle.getPersona().getIdentificacion()+" - "+presupuestoDetalle.getPersona().getRazonSocial() );
+        getTxtProductoDetalle().setText(presupuestoDetalle.getProducto().getCodigoEAN()+" - "+presupuestoDetalle.getProducto().getNombre());
+        getTxtPrecioCompra().setText(presupuestoDetalle.getPrecioCompra()+"");
+        getTxtDescuentoPrecioCompra().setText(presupuestoDetalle.getDescuentoCompra()+"");
+        getTxtPrecioVenta().setText(presupuestoDetalle.getPrecioVenta()+"");
+        getTxtDescuentoPrecioVenta().setText(presupuestoDetalle.getDescuentoVenta()+"");
+        getTxtCantidad().setText(presupuestoDetalle.getCantidad()+"");
         
+    }
+    
+    public void calcularTotales()
+    {
+        List<PresupuestoDetalle> detalles = this.presupuesto.getPresupuestoDetalles();
+        BigDecimal subtotalCompra = new BigDecimal(BigInteger.ZERO);
+        BigDecimal descuentoCompra = new BigDecimal(BigInteger.ZERO);
+        BigDecimal subtotalVenta = new BigDecimal(BigInteger.ZERO);
+        BigDecimal descuentoVenta = new BigDecimal(BigInteger.ZERO);
+        for (PresupuestoDetalle detalle : detalles) {
+            subtotalCompra.add(detalle.getPrecioCompra());
+            descuentoCompra.add(detalle.getDescuentoCompra());
+            subtotalVenta.add(detalle.getPrecioVenta());
+            descuentoVenta.add(detalle.getDescuentoVenta());
+        }
+        
+        getLblSubtotalCompra().setText(subtotalVenta.toString());
+        getLblDescuentoCompra().setText(descuentoCompra.toString());
+        getLblSubtotalVenta().setText(subtotalVenta.toString());
+        getLblSubtotaDescuentoVenta().setText(descuentoCompra.toString());
+        getLblTotalCompra().setText(subtotalCompra.subtract(descuentoCompra).toString());
+        getLblTotalVenta().setText(subtotalVenta.subtract(descuentoVenta).toString());
+       
+    }
+    
+    public void limpiarDetalles()
+    {
+        this.getTxtProveedorDetalle().setText("");
+        this.getTxtProductoDetalle().setText("");
+        this.getTxtPrecioCompra().setText("");
+        this.getTxtDescuentoPrecioCompra().setText("");
+        this.getTxtPrecioVenta().setText("");
+        this.getTxtDescuentoPrecioVenta().setText("");
+        this.getTxtCantidad().setText("");
+        this.persona = null;
+        this.producto = null;
+    }
+    
+    public void limpiarTotales()
+    {
+        this.getLblDescuentoCompra().setText("");
+        this.getLblSubtotaDescuentoVenta().setText("");
+        this.getLblSubtotalCompra().setText("");
+        this.getLblSubtotalVenta().setText("");
+        this.getLblTotalCompra().setText("");
+        this.getLblTotalVenta().setText("");
     }
 }

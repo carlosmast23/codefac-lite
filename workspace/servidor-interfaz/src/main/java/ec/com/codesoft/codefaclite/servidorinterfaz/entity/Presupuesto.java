@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FechaFormatoEnum;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -145,6 +146,15 @@ public class Presupuesto implements Serializable
         this.presupuestoDetalles = presupuestoDetalles;
     }
     
+    public void addDetalle(PresupuestoDetalle detalle)
+    {
+        if(this.presupuestoDetalles == null)
+        {
+            this.presupuestoDetalles = new ArrayList<>();
+        }
+        detalle.setPresupuesto(this);
+        this.presupuestoDetalles.add(detalle);
+    }
     
     @Override
     public int hashCode() {
@@ -178,4 +188,8 @@ public class Presupuesto implements Serializable
         }
         return true;
     }    
+
+    public Object getDetalles() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
