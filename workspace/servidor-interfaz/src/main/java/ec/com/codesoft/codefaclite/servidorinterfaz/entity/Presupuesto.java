@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FechaFormatoEnum;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
 import java.util.Objects;
@@ -39,6 +40,12 @@ public class Presupuesto implements Serializable
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    @Column(name = "EMPRESA_ID")
+    private Long empresaId;
+    
+    @Column(name = "USUARIO_ID")
+    private Long usuarioId;
+    
     @Column(name = "CODIGO")
     private String codigo;
     
@@ -51,8 +58,31 @@ public class Presupuesto implements Serializable
     @Column(name = "ESTADO")
     private String estado;
     
-    @Column(name = "FECHA_INGRESO")
-    private Date fechaIngreso;
+    //Todo: Cambiar el nombre por fecha creacion , para saber que es la fecha cuando se creo
+    @Column(name = "FECHA_CREACION")
+    private Date fechaCreacion;
+    
+    @Column(name = "FECHA_PRESUPUESTO")
+    private Date fechaPresupuesto;    
+    
+    /**
+     * Fecha que establece hasta cuando es valido el presupuesto
+     */
+    @Column(name = "FECHA_VALIDEZ")
+    private Date fechaValidez;
+    
+    @Column(name = "DESCUENTO_COMPRA")
+    private BigDecimal descuentoCompra;
+
+    @Column(name = "DESCUENTO_VENTA")
+    private BigDecimal descuentoVenta;
+
+    @Column(name = "TOTAL_COMPRA")
+    private BigDecimal totalCompra;
+
+    @Column(name = "TOTAL_VENTA")
+    private BigDecimal totalVenta;            
+            
     
     @JoinColumn(name = "ORDEN_TRABAJO_DETALLE_ID")
     @OneToOne
@@ -105,13 +135,15 @@ public class Presupuesto implements Serializable
         this.estado = estado;
     }
 
-    public Date getFechaIngreso() {
-        return fechaIngreso;
+    public Date getFechaCreacion() {
+        return fechaCreacion;
     }
 
-    public void setFechaIngreso(Date fechaIngreso) {
-        this.fechaIngreso = fechaIngreso;
+    public void setFechaCreacion(Date fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
     }
+
+    
     
     public OrdenTrabajoDetalle getOrdenTrabajoDetalle() {
         return ordenTrabajoDetalle;
@@ -144,6 +176,73 @@ public class Presupuesto implements Serializable
     public void setPresupuestoDetalles(List<PresupuestoDetalle> presupuestoDetalles) {
         this.presupuestoDetalles = presupuestoDetalles;
     }
+
+    public Date getFechaPresupuesto() {
+        return fechaPresupuesto;
+    }
+
+    public void setFechaPresupuesto(Date fechaPresupuesto) {
+        this.fechaPresupuesto = fechaPresupuesto;
+    }
+
+    public Date getFechaValidez() {
+        return fechaValidez;
+    }
+
+    public void setFechaValidez(Date fechaValidez) {
+        this.fechaValidez = fechaValidez;
+    }
+
+    public Long getEmpresaId() {
+        return empresaId;
+    }
+
+    public void setEmpresaId(Long empresaId) {
+        this.empresaId = empresaId;
+    }
+
+    public Long getUsuarioId() {
+        return usuarioId;
+    }
+
+    public void setUsuarioId(Long usuarioId) {
+        this.usuarioId = usuarioId;
+    }
+
+    public BigDecimal getDescuentoCompra() {
+        return descuentoCompra;
+    }
+
+    public void setDescuentoCompra(BigDecimal descuentoCompra) {
+        this.descuentoCompra = descuentoCompra;
+    }
+
+    public BigDecimal getDescuentoVenta() {
+        return descuentoVenta;
+    }
+
+    public void setDescuentoVenta(BigDecimal descuentoVenta) {
+        this.descuentoVenta = descuentoVenta;
+    }
+
+    public BigDecimal getTotalCompra() {
+        return totalCompra;
+    }
+
+    public void setTotalCompra(BigDecimal totalCompra) {
+        this.totalCompra = totalCompra;
+    }
+
+    public BigDecimal getTotalVenta() {
+        return totalVenta;
+    }
+
+    public void setTotalVenta(BigDecimal totalVenta) {
+        this.totalVenta = totalVenta;
+    }
+    
+    
+    
     
     
     @Override
