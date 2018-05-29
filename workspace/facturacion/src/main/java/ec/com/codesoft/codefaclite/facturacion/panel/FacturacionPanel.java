@@ -186,6 +186,15 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         btnBuscarRepresentante = new javax.swing.JButton();
         btnAgregarRepresentante = new javax.swing.JButton();
         cmbRepresentante = new javax.swing.JComboBox<>();
+        panelDatosPresupuestos = new javax.swing.JPanel();
+        jLabel29 = new javax.swing.JLabel();
+        txtPresupuestos = new javax.swing.JTextField();
+        btnBuscarPresupuesto = new javax.swing.JButton();
+        jLabel31 = new javax.swing.JLabel();
+        txtClientePresupuesto = new javax.swing.JTextField();
+        btnBuscarClientePresupuesto = new javax.swing.JButton();
+        btnAgregarClientePresupuesto = new javax.swing.JButton();
+        jCheckBox2 = new javax.swing.JCheckBox();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1017,7 +1026,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.weighty = 0.1;
         panelDatosEmpresa.add(jLabel20, gridBagConstraints);
 
-        panelTabDatos.addTab("Normal", panelDatosEmpresa);
+        panelTabDatos.addTab("Productos", panelDatosEmpresa);
 
         panelDatosEmpresa1.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         panelDatosEmpresa1.setLayout(new java.awt.GridBagLayout());
@@ -1089,6 +1098,80 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
         panelTabDatos.addTab("Academico", panelDatosEmpresa1);
 
+        panelDatosPresupuestos.setLayout(new java.awt.GridBagLayout());
+
+        jLabel29.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel29.setText("Presupuesto:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 10);
+        panelDatosPresupuestos.add(jLabel29, gridBagConstraints);
+
+        txtPresupuestos.setText("                                       ...");
+        txtPresupuestos.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 19;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
+        panelDatosPresupuestos.add(txtPresupuestos, gridBagConstraints);
+
+        btnBuscarPresupuesto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
+        btnBuscarPresupuesto.setText("Buscar");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 23;
+        gridBagConstraints.gridy = 7;
+        panelDatosPresupuestos.add(btnBuscarPresupuesto, gridBagConstraints);
+
+        jLabel31.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel31.setText("Cliente:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(15, 2, 10, 10);
+        panelDatosPresupuestos.add(jLabel31, gridBagConstraints);
+
+        txtClientePresupuesto.setText("                                       ...");
+        txtClientePresupuesto.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 19;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
+        panelDatosPresupuestos.add(txtClientePresupuesto, gridBagConstraints);
+
+        btnBuscarClientePresupuesto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
+        btnBuscarClientePresupuesto.setText("Buscar");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 23;
+        gridBagConstraints.gridy = 6;
+        panelDatosPresupuestos.add(btnBuscarClientePresupuesto, gridBagConstraints);
+
+        btnAgregarClientePresupuesto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add_user.png"))); // NOI18N
+        btnAgregarClientePresupuesto.setToolTipText("Nuevo Representante");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 24;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        panelDatosPresupuestos.add(btnAgregarClientePresupuesto, gridBagConstraints);
+
+        jCheckBox2.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jCheckBox2.setText("filtro por cliente");
+        jCheckBox2.setToolTipText("Permite filtrar presupuesto solo pertenecientes al cliente seleccionado para la factura");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 24;
+        gridBagConstraints.gridy = 7;
+        panelDatosPresupuestos.add(jCheckBox2, gridBagConstraints);
+
+        panelTabDatos.addTab("Presupuestos", panelDatosPresupuestos);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -1128,13 +1211,16 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JPanel PanelFormasPago;
     private javax.swing.JPanel PanelValores;
     private javax.swing.JButton btnAgregarCliente;
+    private javax.swing.JButton btnAgregarClientePresupuesto;
     private javax.swing.JButton btnAgregarDatosAdicionales;
     private javax.swing.JButton btnAgregarDetalleFactura;
     private javax.swing.JButton btnAgregarFormaPago;
     private javax.swing.JButton btnAgregarProducto;
     private javax.swing.JButton btnAgregarRepresentante;
     private javax.swing.JButton btnBuscarCliente;
+    private javax.swing.JButton btnBuscarClientePresupuesto;
     private javax.swing.JButton btnBuscarEstudiante;
+    private javax.swing.JButton btnBuscarPresupuesto;
     private javax.swing.JButton btnBuscarRepresentante;
     private javax.swing.JButton btnCrearProducto;
     private javax.swing.JButton btnEditarDetalle;
@@ -1146,6 +1232,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JComboBox<Persona> cmbRepresentante;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
     private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JCheckBox jCheckBox2;
     private com.toedter.calendar.JDateChooser jDateFechaEmision;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -1168,8 +1255,10 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel35;
@@ -1218,15 +1307,18 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JPanel panelDatosEmpresa;
     private javax.swing.JPanel panelDatosEmpresa1;
     private javax.swing.JPanel panelDatosFactura;
+    private javax.swing.JPanel panelDatosPresupuestos;
     private javax.swing.JTabbedPane panelTabDatos;
     private javax.swing.JTable tblDatosAdicionales;
     private javax.swing.JTable tblDetalleFactura;
     private javax.swing.JTable tblFormasPago;
     private javax.swing.JTextField txtCantidad;
     private javax.swing.JTextField txtCliente;
+    private javax.swing.JTextField txtClientePresupuesto;
     private javax.swing.JTextField txtDescripcion;
     private javax.swing.JTextField txtDescuento;
     private javax.swing.JTextField txtEstudiante;
+    private javax.swing.JTextField txtPresupuestos;
     private javax.swing.JTextField txtValorTotal;
     private javax.swing.JTextField txtValorUnitario;
     // End of variables declaration//GEN-END:variables
@@ -1572,5 +1664,31 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     public void setCmbRepresentante(JComboBox<Persona> cmbRepresentante) {
         this.cmbRepresentante = cmbRepresentante;
     }
+
+    public JButton getBtnAgregarClientePresupuesto() {
+        return btnAgregarClientePresupuesto;
+    }
+
+    public void setBtnAgregarClientePresupuesto(JButton btnAgregarClientePresupuesto) {
+        this.btnAgregarClientePresupuesto = btnAgregarClientePresupuesto;
+    }
+
+    public JButton getBtnBuscarClientePresupuesto() {
+        return btnBuscarClientePresupuesto;
+    }
+
+    public void setBtnBuscarClientePresupuesto(JButton btnBuscarClientePresupuesto) {
+        this.btnBuscarClientePresupuesto = btnBuscarClientePresupuesto;
+    }
+
+    public JButton getBtnBuscarPresupuesto() {
+        return btnBuscarPresupuesto;
+    }
+
+    public void setBtnBuscarPresupuesto(JButton btnBuscarPresupuesto) {
+        this.btnBuscarPresupuesto = btnBuscarPresupuesto;
+    }
+    
+    
     
 }

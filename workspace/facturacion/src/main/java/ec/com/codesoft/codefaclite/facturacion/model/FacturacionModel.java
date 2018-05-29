@@ -343,21 +343,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 
             }
         });
+        
+        getBtnBuscarClientePresupuesto().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                btnListenerBuscarCliente();
+            }
+        });
 
         getBtnBuscarCliente().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda();
-                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
-                buscarDialogoModel.setVisible(true);
-                factura.setCliente((Persona) buscarDialogoModel.getResultado());
-                if (factura.getCliente() != null) 
-                {
-                    cargarFormaPago();
-                    setearValoresCliente();
-                    cargarDatosAdicionales();
-                    cargarTablaDatosAdicionales();
-                };
+                btnListenerBuscarCliente();
             }
         });
 
@@ -407,7 +404,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 }
                 else //Si el tipo de documento es productos , agrega productos
                 {
-                    agregarProducto();
+                    if(tipoDocumentoEnum.equals(TipoDocumentoEnum.PRESUPUESTOS))
+                    {
+                        
+                    }
+                    else
+                    {
+                        agregarProducto();
+                    }
                 }
                 
             }
@@ -481,22 +485,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 }
             }
         });
+        
+        getBtnAgregarClientePresupuesto().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                btnListenerAgregarCliente();
+            }
+        });
 
         getBtnAgregarCliente().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<Persona>() {
-                    @Override
-                    public void updateInterface(Persona entity) {
-                        factura.setCliente(entity);
-                        if (factura.getCliente() != null) {
-                            cargarFormaPago();
-                            setearValoresCliente();
-                            cargarDatosAdicionales();
-                            cargarTablaDatosAdicionales();;
-                        }
-                    }
-                }, DialogInterfacePanel.CLIENTE_PANEL, false);
+                btnListenerAgregarCliente();
             }
         });
 
@@ -546,6 +546,35 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
         });
 
+    }
+    
+    private void btnListenerAgregarCliente()
+    {
+        panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<Persona>() {
+            @Override
+            public void updateInterface(Persona entity) {
+                factura.setCliente(entity);
+                if (factura.getCliente() != null) {
+                    cargarFormaPago();
+                    setearValoresCliente();
+                    cargarDatosAdicionales();
+                    cargarTablaDatosAdicionales();;
+                }
+            }
+        }, DialogInterfacePanel.CLIENTE_PANEL, false);
+    }
+    
+    private void btnListenerBuscarCliente() {
+        ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda();
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
+        buscarDialogoModel.setVisible(true);
+        factura.setCliente((Persona) buscarDialogoModel.getResultado());
+        if (factura.getCliente() != null) {
+            cargarFormaPago();
+            setearValoresCliente();
+            cargarDatosAdicionales();
+            cargarTablaDatosAdicionales();
+        };
     }
     
     private void cargarFormaPago()
@@ -914,8 +943,15 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
             else //Si es otro valor que no sea academico
             {
-                getCmbTipoDocumento().getSelectedItem().equals(TipoDocumentoEnum.VENTA);
-                setearValoresCliente();
+                if(tipoReferenciaEnum.equals(TipoDocumentoEnum.PRESUPUESTOS))
+                {
+                    //
+                }
+                else
+                {
+                    getCmbTipoDocumento().getSelectedItem().equals(TipoDocumentoEnum.VENTA);
+                    setearValoresCliente();
+                }
             }           
                         
             cargarDatosDetalles();
@@ -1662,9 +1698,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 }
                 else
                 {
-                    facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
-                    facturaDetalle.setTipoDocumento(tipoDocumentoEnum.getCodigo());
-                    catalogoProducto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
+                    if(tipoDocumentoEnum.equals(TipoDocumentoEnum.PRESUPUESTOS))
+                    {
+                        //implmentar
+                    }
+                    else
+                    {
+                        facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
+                        facturaDetalle.setTipoDocumento(tipoDocumentoEnum.getCodigo());
+                        catalogoProducto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
+                    }
                 }
                 
                 
@@ -1753,11 +1796,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 }
                 else
                 {
-                    Producto productoSeleccionado=(Producto) referencia;
+                    if(tipoDocumentoEnum.equals(TipoDocumentoEnum.PRESUPUESTOS))
+                    {
+                        
+                    }
+                    else
+                    {
+                        Producto productoSeleccionado=(Producto) referencia;                    
+                        facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
+                        facturaDetalle.setTipoDocumento(TipoDocumentoEnum.VENTA.getCodigo());
+                        catalogoProducto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
+                    }
                     
-                    facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
-                    facturaDetalle.setTipoDocumento(TipoDocumentoEnum.VENTA.getCodigo());
-                    catalogoProducto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
                 }
                 
                 
@@ -1921,9 +1971,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         if (tipoDocumentoEnum != null) {
             if (tipoDocumentoEnum.equals(tipoDocumentoEnum.ACADEMICO)) {
                 activarTabDatos(1);
-            } else {
-                //Todo: Seguir armando el tab de los otros datos
-                activarTabDatos(0);
+            } 
+            else 
+            {
+                if(tipoDocumentoEnum.equals(tipoDocumentoEnum.PRESUPUESTOS))
+                {
+                    activarTabDatos(2);
+                }
+                else
+                {
+                    //Todo: Seguir armando el tab de los otros datos
+                    activarTabDatos(0);
+                }
             }
 
         }      

@@ -55,7 +55,11 @@ public class PresupuestoDetalle implements Serializable
     
     @JoinColumn(name = "PRODUCTO_ID")
     @ManyToOne
-    private Producto producto;
+    private Producto producto;    
+
+    @JoinColumn(name = "PRESUPUESTO_ID")
+    @ManyToOne    
+    private Presupuesto presupuesto;
 
     public Long getId() {
         return id;
