@@ -131,6 +131,28 @@ public class CatalogoProductoModel extends CatalogoProductoPanel implements Dial
     @Override
     public void limpiar() {
         limpiarVariables();
+        if(getCmbModulo().getModel().getSize()>0)
+        {
+            getCmbModulo().setSelectedIndex(0);
+        }
+        
+        if(getCmbCatalogoTipo().getModel().getSize()>0)
+        {
+            getCmbCatalogoTipo().setSelectedIndex(0);
+        }
+        
+        if(getCmbCategoriaProducto().getModel().getSize()>0)
+        {
+            getCmbCategoriaProducto().setSelectedIndex(0);
+        }
+        
+        getComboIva().setSelectedIndex(0);
+        
+        getComboIce().setEditable(true);
+        getComboIce().setSelectedItem("Seleccione : ");
+        
+        getComboIrbpnr().setEditable(true);
+        getComboIrbpnr().setSelectedItem("Seleccione: ");
         //getCmbCatalogoTipo().setSelectedIndex(0);
     }
 
@@ -166,6 +188,7 @@ public class CatalogoProductoModel extends CatalogoProductoPanel implements Dial
             getCmbModulo().removeAllItems();
             getCmbModulo().addItem(ModuloCodefacEnum.INVENTARIO);
             getCmbModulo().addItem(ModuloCodefacEnum.GESTIONA_ACADEMICA);
+            getCmbModulo().addItem(ModuloCodefacEnum.SERVICIOS);
             //for (TipoProductoEnum tipo : tipos) {
             //    getCmbModulo().addItem(tipo);
             //}
@@ -239,7 +262,7 @@ public class CatalogoProductoModel extends CatalogoProductoPanel implements Dial
         }
         
         CatalogoProducto.TipoEnum tipoEnum=(CatalogoProducto.TipoEnum) getCmbCatalogoTipo().getSelectedItem();
-        catalogoProducto.setTipoCod(tipoEnum.getCodigo());
+        catalogoProducto.setTipoCod((tipoEnum!=null)?tipoEnum.getCodigo():"");
         
         ImpuestoDetalle iva= (ImpuestoDetalle) getComboIva().getSelectedItem();
         catalogoProducto.setIva(iva);

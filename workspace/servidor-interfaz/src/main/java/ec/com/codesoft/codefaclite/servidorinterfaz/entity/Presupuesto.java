@@ -111,13 +111,6 @@ public class Presupuesto implements Serializable
         this.codigo = codigo;
     }
 
-    public String getDescipcion() {
-        return descripcion;
-    }
-
-    public void setDescipcion(String descipcion) {
-        this.descripcion = descipcion;
-    }
 
     public String getObservaciones() {
         return observaciones;

@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPa
 import ec.com.codesoft.codefaclite.facturacion.busqueda.ClienteFacturacionBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.EstudianteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusqueda;
+import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusquedaPresupuesto;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.RubroEstudianteBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.callback.ClienteFacturaImplComprobante;
@@ -57,6 +58,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionService
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
@@ -115,6 +117,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     private DefaultTableModel modeloTablaDatosAdicionales;
     private Producto productoSeleccionado;
     private RubroEstudiante rubroSeleccionado;
+    private Presupuesto presupuestoSeleccionado;
     private int fila;
     private int filaFP;
     private boolean bandera;
@@ -348,6 +351,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             @Override
             public void actionPerformed(ActionEvent e) {
                 btnListenerBuscarCliente();
+                getLblNombresClientePresupuesto().setText((factura.getCliente()!=null)?factura.getCliente().getNombresCompletos():"");
             }
         });
 
@@ -397,21 +401,19 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             @Override
             public void actionPerformed(ActionEvent e) {
                 TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
-                //Si el tipo de documento es academico , agrega rubros
-                if(tipoDocumentoEnum.equals(TipoDocumentoEnum.ACADEMICO))
+                
+                switch(tipoDocumentoEnum)
                 {
-                    agregarRubroAcademico();
-                }
-                else //Si el tipo de documento es productos , agrega productos
-                {
-                    if(tipoDocumentoEnum.equals(TipoDocumentoEnum.PRESUPUESTOS))
-                    {
-                        
-                    }
-                    else
-                    {
+                    case ACADEMICO:
+                        agregarRubroAcademico();
+                        break;
+                    case PRESUPUESTOS:
+                        agregarPresupuesto();
+                        break;
+                    case INVENTARIO: case LIBRE:
                         agregarProducto();
-                    }
+                        break;
+                
                 }
                 
             }
@@ -490,6 +492,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             @Override
             public void actionPerformed(ActionEvent e) {
                 btnListenerAgregarCliente();
+                getLblNombresClientePresupuesto().setText((factura.getCliente()!=null)?factura.getCliente().getNombresCompletos():"");
             }
         });
 
@@ -633,6 +636,27 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         return true;
     }
     
+    private void agregarPresupuesto()
+    {
+        FacturaBusquedaPresupuesto presupuestoDialog = new FacturaBusquedaPresupuesto();
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(presupuestoDialog);
+        buscarDialogoModel.setVisible(true);
+
+        Presupuesto presupuestoTmp = (Presupuesto) buscarDialogoModel.getResultado();
+
+        if (presupuestoTmp != null) {
+
+            if(verificarExistePresupuestoAgregado(presupuestoTmp))
+            {
+                 DialogoCodefac.mensaje("Advertencia","EL presupuesto ya esta agregado, no se puede agregar nuevamente",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                 return;
+            }            
+            presupuestoSeleccionado=presupuestoTmp;
+            setearValoresProducto(presupuestoSeleccionado.getTotalVenta(), presupuestoSeleccionado.getDescripcion());
+            banderaAgregar=true;
+        }
+    }
+    
     private void agregarRubroAcademico()
     {
         RubroEstudianteBusqueda rubroBusquedaDialogo = new RubroEstudianteBusqueda(estudiante);
@@ -673,6 +697,32 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     if(rubroEstudianteTmp!=null)
                     {
                         if(rubroEstudianteTmp.equals(rubroEstudiante))
+                        {
+                            return true;
+                        }
+                    }                    
+                    
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        return false;
+    }
+    
+    private boolean verificarExistePresupuestoAgregado(Presupuesto presupuesto)
+    {
+        for (FacturaDetalle facturaDetalle : factura.getDetalles()) 
+        {
+            //Verificar solo los que son de tipo academico
+            if(facturaDetalle.getTipoDocumentoEnum().equals(TipoDocumentoEnum.PRESUPUESTOS))
+            {
+                try {
+                    Presupuesto presupuestoTmp=ServiceFactory.getFactory().getPresupuestoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                    
+                    if(presupuestoTmp!=null)
+                    {
+                        if(presupuestoTmp.equals(presupuesto))
                         {
                             return true;
                         }
@@ -1694,23 +1744,23 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 CatalogoProducto catalogoProducto=null;
                 //Seleccionar la referencia dependiendo del tipo de documento
                 TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
-
+                facturaDetalle.setTipoDocumento(tipoDocumentoEnum.getCodigo());
+                
                 switch (tipoDocumentoEnum) 
                 {
                     case ACADEMICO:
-                        facturaDetalle.setReferenciaId(rubroSeleccionado.getId());
-                        facturaDetalle.setTipoDocumento(tipoDocumentoEnum.getCodigo());
+                        facturaDetalle.setReferenciaId(rubroSeleccionado.getId());                        
                         catalogoProducto = rubroSeleccionado.getRubroNivel().getCatalogoProducto();
                         break;
 
                     case PRESUPUESTOS:
-                        //Todo: Falta implementar
+                        facturaDetalle.setReferenciaId(presupuestoSeleccionado.getId());
+                        catalogoProducto=
                         break;
                         
                     //Para invetario o para libre es la misma logica    
                     case INVENTARIO: case LIBRE:
                         facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
-                        facturaDetalle.setTipoDocumento(tipoDocumentoEnum.getCodigo());
                         catalogoProducto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
                         break;
 
