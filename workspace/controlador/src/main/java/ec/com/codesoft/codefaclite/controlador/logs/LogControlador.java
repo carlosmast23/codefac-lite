@@ -77,7 +77,7 @@ public class LogControlador {
             fileHandler.setFormatter(new SimpleFormatter());
             
             //Permite mostrar los logs en la consola
-            LOG_RAIZ.addHandler(consoleHandler);
+            //LOG_RAIZ.addHandler(consoleHandler);
             //Permite grabar los logs en archivos
             LOG_RAIZ.addHandler(fileHandler);
             
