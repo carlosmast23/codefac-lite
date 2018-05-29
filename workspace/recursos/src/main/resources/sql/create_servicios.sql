@@ -55,21 +55,30 @@ create table DEPARTAMENTO
 /*@AGREGAR_TABLA(VERSION_SISTEMA=1.2)*/
 create table PRESUPUESTO
 (
-    ID BIGINT not null GENERATED ALWAYS AS IDENTIFY(START WITH 1),
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY(START WITH 1),
+    EMPRESA_ID BIGINT,
+    USUARIO_ID BIGINT,
+    CLIENTE_ID BIGINT,
     CODIGO varchar(10),
     DESCRIPCION varchar(150),
     OBSERVACIONES varchar(150),
     ESTADO varchar(1),
-    FECHA_INGRESO date,
+    FECHA_CREACION date,
+    FECHA_PRESUPUESTO date,
+    FECHA_VALIDEZ date,
+    DESCUENTO_COMPRA decimal(7,2),
+    DESCUENTO_VENTA decimal(7,2),
+    TOTAL_COMPRA decimal(7,2),
+    TOTAL_VENTA decimal(7,2),
+    
     ORDEN_TRABAJO_DETALLE_ID BIGINT,
-    CLIENTE_ID BIGINT,
     primary key(ID)
 );
 
 /*@AGREGAR_TABLA(VERSION_SISTEMA=1.2)*/
 create table PRESUPUESTO_DETALLE
 (
-    ID BIGINT not null generated always as identify(start with 1),
+    ID BIGINT not null generated always as IDENTITY(start with 1),
     PRECIO_COMPRA decimal(7,2),
     DESCUENTO_COMPRA decimal(7,2),
     PRECIO_VENTA decimal(7,2),

@@ -219,6 +219,7 @@ import ec.com.codesoft.codefaclite.utilidades.email.PropiedadesCorreoEnum;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import ec.com.codesoft.codefaclite.utilidades.web.UtilidadesWeb;
 import java.io.File;
+import java.sql.SQLException;
 import java.util.Arrays;
 
 /**
@@ -300,7 +301,7 @@ public class Main {
     
     private static void verificarUltimaVersionCodefac()
     {
-        String path="http://localhost/java/recursos/"; //directorio principal desde donde se van a bajar los archivos para actualizar
+        String path="http://www.cf.codesoft-ec.com/uploads/versiones/"; //directorio principal desde donde se van a bajar los archivos para actualizar
         String carpetaDescarga="tmp"; //nombre de la carpeta para almacenar en el directoro TODO: Crear una variable global paa hacer referenca al directorio temporal
         
         String nameUltimaVersion="codefac.jar"; //Nombre del archivo de la nueva version de Codefac para descargar        
@@ -1065,6 +1066,10 @@ public class Main {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             } catch (PersistenciaDuplicadaException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                DialogoCodefac.mensaje("Error al crear la base de datos",ex.getMessage()+"\n Se recomienda eliminar y volver a crear la db",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                //TODO: Mejorar esta parte eliminando la base de datos para evitar que ejecuten con problemas en la base
             }
 
         } catch (PersistenciaDuplicadaException ex) {
