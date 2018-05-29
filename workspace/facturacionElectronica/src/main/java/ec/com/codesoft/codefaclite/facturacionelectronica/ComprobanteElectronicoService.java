@@ -879,6 +879,23 @@ public class ComprobanteElectronicoService implements Runnable {
         //return comprobantesFirmados;
 
     }
+    
+    public boolean disponibilidadServidorSri()
+    {
+        servicioSri = new ServicioSri();
+        servicioSri.setUri_autorizacion(uriAutorizacion);
+        servicioSri.setUri_recepcion(uriRecepcion);
+        try {
+            if (!servicioSri.verificarConexionRecepcion() || !servicioSri.verificarConexionAutorizar())
+            {
+                return false;
+            }
+        } catch (ComprobanteElectronicoException ex) {
+            Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+        return true;
+    }
 
     private void enviarSri() throws ComprobanteElectronicoException {
         try {

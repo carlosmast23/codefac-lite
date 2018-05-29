@@ -1,11 +1,6 @@
-En el catalogo producto agregar un campo para definir a que modulo pertece
-en especial cuando necesito filtrar datos desde el modulo academico
 
 Pensar en hacer una ventana en configuracion para poder cambiar la plantilla de los correos que llegan con las facturas
 En la pantalla de utilidades verificar que no se envia al correo por el problema del map supongo y verificar cambios de estado en las facturas
-
-Analizar para usar un modo debug en el sistema y en principal manera para cuando utilice este modo que se creen datos por defecto para los desarrolladores
-
 
 Verificar qe puedo hacer en el caso que solo se graba la factura pero no genero el ride 
 
@@ -25,10 +20,6 @@ En las compras agregar un campo para saber si son electronicas o manuales
 revisar porque la forma de pagos cuando se agrega o elimina sale el mensaje de saldo insuficiente
 
 Cuando no exista internet levantar el aplicativo como localhost para cliente-servidor
-
-Verificar el tipo de documento libre , con el cliente final no estaba funcionando
-
-Verificar porque los logs se estan creando 2 veces
 
 Analizar el codigo private boolean validacionPersonalizadaPorModulos() en facturacion para validar correctamente con descuentos para los distintos modulos
 

@@ -675,7 +675,13 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         
 
     }
-            
+    
+    public boolean verificarDisponibilidadSri() throws RemoteException
+    {
+        ComprobanteElectronicoService comprobanteElectronico=new ComprobanteElectronicoService();
+        cargarDirectoriosWebService(comprobanteElectronico);
+        return comprobanteElectronico.disponibilidadServidorSri();
+    }
     
     /**
      *
@@ -864,6 +870,37 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             }
         }
         return listaInfoAdicional;
+    }
+    
+    private void cargarDirectoriosWebService(ComprobanteElectronicoService servicio) {
+        
+        try {
+            ParametroCodefacService parametroCodefacService = new ParametroCodefacService();
+            Map<String, ParametroCodefac> parametroCodefacMap = parametroCodefacService.getParametrosMap();
+            
+            String modoFacturacion = parametroCodefacMap.get(ParametroCodefac.MODO_FACTURACION).valor;
+            servicio.setModoFacturacion(modoFacturacion);
+            /**
+             * Cargar los web services dependiendo el modo de facturacion
+             */
+            if (ComprobanteElectronicoService.MODO_PRODUCCION.equals(modoFacturacion)) {
+                String autorizacion = parametroCodefacMap.get(ParametroCodefac.SRI_WS_AUTORIZACION).valor;
+                servicio.setUriAutorizacion(autorizacion);
+                
+                String recepcion = parametroCodefacMap.get(ParametroCodefac.SRI_WS_RECEPCION).valor;
+                servicio.setUriRecepcion(recepcion);
+                
+            } else {
+                String autorizacion = parametroCodefacMap.get(ParametroCodefac.SRI_WS_AUTORIZACION_PRUEBA).valor;
+                servicio.setUriAutorizacion(autorizacion);
+                
+                String recepcion = parametroCodefacMap.get(ParametroCodefac.SRI_WS_RECEPCION_PRUEBA).valor;
+                servicio.setUriRecepcion(recepcion);
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     private void cargarConfiguraciones(ComprobanteElectronicoService servicio) {

@@ -805,20 +805,28 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 comprobanteData.setMapInfoAdicional(getMapAdicional(factura));
                 ClienteInterfaceComprobante cic = new ClienteFacturaImplComprobante(this,facturaProcesando,true);
                 ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
-                Boolean repuestaFacturaElectronica = DialogoCodefac.dialogoPregunta("Correcto", "La factura se grabo correctamente,Desea autorizar en el SRI ahora?", DialogoCodefac.MENSAJE_CORRECTO);
                 
-                //Si quiere que se procese en ese momento le ejecuto el proceso normal
-                if (repuestaFacturaElectronica) {
-                    cic = new ClienteFacturaImplComprobante(this,facturaProcesando,false);
-                    comprobanteServiceIf.procesarComprobante(comprobanteData, facturaProcesando, session.getUsuario(), cic);
-                }
-                else
-                {
-                    //Solo genera el pdf pero no envia al SRI
-                    comprobanteServiceIf.procesarComprobanteOffline(comprobanteData, facturaProcesando, session.getUsuario(),cic);
-                    DialogoCodefac.mensaje("Correcto","El comprobante esta firmado , no se olvide de enviar al SRI en un periodo maximo de 48 horas", DialogoCodefac.MENSAJE_CORRECTO);
+                if (ServiceFactory.getFactory().getComprobanteServiceIf().verificarDisponibilidadSri()) {
+                    Boolean repuestaFacturaElectronica = DialogoCodefac.dialogoPregunta("Correcto", "La factura se grabo correctamente,Desea autorizar en el SRI ahora?", DialogoCodefac.MENSAJE_CORRECTO);
+
+                    //Si quiere que se procese en ese momento le ejecuto el proceso normal
+                    if (repuestaFacturaElectronica) {
+                        //Verificar que existe comunicacion con el Sri
+                        cic = new ClienteFacturaImplComprobante(this, facturaProcesando, false);
+                        comprobanteServiceIf.procesarComprobante(comprobanteData, facturaProcesando, session.getUsuario(), cic);
+
+                    } else {
+                        //Solo genera el pdf pero no envia al SRI
+                        comprobanteServiceIf.procesarComprobanteOffline(comprobanteData, facturaProcesando, session.getUsuario(), cic);
+                        DialogoCodefac.mensaje("Correcto", "El comprobante esta firmado , no se olvide de enviar al SRI en un periodo maximo de 48 horas", DialogoCodefac.MENSAJE_CORRECTO);
+                    }
+
+                } else { //Si el servidor del sri no esta disponible solo existe un camino
+                    DialogoCodefac.mensaje("Advertencia", "El servidor del Sri no esta disponible\n El comprobante esta firmado , no se olvide de enviar al SRI en un periodo maximo de 48 horas", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    comprobanteServiceIf.procesarComprobanteOffline(comprobanteData, facturaProcesando, session.getUsuario(), cic);
                 }
 
+                
             }
             
      
