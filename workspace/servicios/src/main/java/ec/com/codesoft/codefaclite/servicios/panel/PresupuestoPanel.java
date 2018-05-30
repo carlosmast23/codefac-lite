@@ -106,7 +106,8 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         cmbDetallesOrdenTrabajo = new javax.swing.JComboBox<>();
         jLabel14 = new javax.swing.JLabel();
         txtDiasPresupuesto = new javax.swing.JTextField();
-        jCheckBox2 = new javax.swing.JCheckBox();
+        cmbOpcionDiaMes = new javax.swing.JComboBox<>();
+        lblIndicarFechaValidez = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -653,7 +654,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         getContentPane().add(cmbDetallesOrdenTrabajo, gridBagConstraints);
 
         jLabel14.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel14.setText("Presupuestar:");
+        jLabel14.setText("Tiempo Validez:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 2;
@@ -661,17 +662,31 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel14, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtDiasPresupuesto, gridBagConstraints);
 
-        jCheckBox2.setText("Meses");
+        cmbOpcionDiaMes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dia", "Mes" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(cmbOpcionDiaMes, gridBagConstraints);
+
+        lblIndicarFechaValidez.setText("----------------------");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 2;
-        getContentPane().add(jCheckBox2, gridBagConstraints);
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(lblIndicarFechaValidez, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -690,7 +705,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     private javax.swing.JComboBox<OrdenTrabajoDetalle> cmbDetallesOrdenTrabajo;
     private javax.swing.JComboBox<GeneralEnumEstado> cmbEstadoPresupuesto;
     private com.toedter.calendar.JDateChooser cmbFechaPresupuesto;
-    private javax.swing.JCheckBox jCheckBox2;
+    private javax.swing.JComboBox<String> cmbOpcionDiaMes;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -727,6 +742,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     private javax.swing.JLabel lblEspacio3;
     private javax.swing.JLabel lblEspacio5;
     private javax.swing.JLabel lblEspacio6;
+    private javax.swing.JLabel lblIndicarFechaValidez;
     private javax.swing.JLabel lblSubtotaDescuentoVenta;
     private javax.swing.JLabel lblSubtotalCompra;
     private javax.swing.JLabel lblSubtotalVenta;
@@ -1003,7 +1019,29 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     public void setTxtPrecioVenta(JTextField txtPrecioVenta) {
         this.txtPrecioVenta = txtPrecioVenta;
     }
-    
-    
+
+    public JComboBox<String> getCmbOpcionDiaMes() {
+        return cmbOpcionDiaMes;
+    }
+
+    public void setCmbOpcionDiaMes(JComboBox<String> cmbOpcionDiaMes) {
+        this.cmbOpcionDiaMes = cmbOpcionDiaMes;
+    }
+
+    public JTextField getTxtDiasPresupuesto() {
+        return txtDiasPresupuesto;
+    }
+
+    public void setTxtDiasPresupuesto(JTextField txtDiasPresupuesto) {
+        this.txtDiasPresupuesto = txtDiasPresupuesto;
+    }
+
+    public JLabel getLblIndicarFechaValidez() {
+        return lblIndicarFechaValidez;
+    }
+
+    public void setLblIndicarFechaValidez(JLabel lblIndicarFechaValidez) {
+        this.lblIndicarFechaValidez = lblIndicarFechaValidez;
+    }
 
 }

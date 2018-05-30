@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterfac
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.servicios.panel.PresupuestoPanel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
@@ -22,15 +23,19 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenTrabajoEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PrioridadEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -56,6 +61,7 @@ public class PresupuestoModel extends PresupuestoPanel{
         presupuesto = new Presupuesto();
         cargarCombos();
         addListenerBotones();
+        addListenerCombos();
         addListenerTablas();
         initDatosTabla();
     }
@@ -67,7 +73,36 @@ public class PresupuestoModel extends PresupuestoPanel{
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            if (presupuesto.getPersona() == null) {
+                DialogoCodefac.mensaje("Alerta", "Necesita seleccionar un cliente", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                throw new ExcepcionCodefacLite("Necesita seleccionar un Cliente");
+            }
+            if(presupuesto.getOrdenTrabajoDetalle() == null)
+            {
+                DialogoCodefac.mensaje("Alerta", "Necesita seleccionar una Orden de Trabajo y seleccionar un detalle de la Orden", SOMEBITS);
+                throw new ExcepcionCodefacLite("Necesita seleccionar una Orden de Trabajo y seleccionar un detalle de la Orden");
+            }    
+            if (presupuesto.getFechaCreacion() == null)
+            {
+                DialogoCodefac.mensaje("Alerta","Necesita seleccionar una Fecha de creación", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                throw new ExcepcionCodefacLite("Necesita seleccionar una Fecha de creación");
+            }
+            
+            
+            Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea realizar el presupuesto?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            if (!respuesta) {
+                throw new ExcepcionCodefacLite("Cancelacion usuario de Presupuesto");
+            }
+            
+            PresupuestoServiceIf servicio = ServiceFactory.getFactory().getPresupuestoServiceIf();
+            setearDatos();
+            servicio.grabar(presupuesto);        
+            }catch (ServicioCodefacException ex) {
+                Logger.getLogger(Presupuesto.class.getName()).log(Level.SEVERE, null, ex);
+            }catch (RemoteException ex) {
+                Logger.getLogger(Presupuesto.class.getName()).log(Level.SEVERE, null, ex);
+            }
     }
 
     @Override
@@ -277,9 +312,30 @@ public class PresupuestoModel extends PresupuestoPanel{
     
     public void addListenerCombos()
     {
+        getCmbOpcionDiaMes().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {             
+                calcularFechaProxima();
+            }
+        });
         
+        getTxtDiasPresupuesto().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                calcularFechaProxima();
+            }
+        });
     }
     
+    public void calcularFechaProxima()
+    {
+        java.util.Date Fecha;
+        if(!getTxtDiasPresupuesto().getText().equals("") || getCmbFechaPresupuesto().getDate() != null){
+           Fecha = UtilidadesFecha.fechaProxima(getCmbFechaPresupuesto().getDate(),Integer.parseInt(getTxtDiasPresupuesto().getText()), getCmbOpcionDiaMes().getSelectedItem().toString());
+           presupuesto.setFechaValidez(new Date(Fecha.getTime()));
+           getLblIndicarFechaValidez().setText("Fecha: "+presupuesto.getFechaValidez());
+        }
+    }
     public void addListenerTablas()
     {
         getTableDetallesPresupuesto().addMouseListener(new MouseAdapter() {
@@ -427,5 +483,20 @@ public class PresupuestoModel extends PresupuestoPanel{
         this.getLblSubtotalVenta().setText("");
         this.getLblTotalCompra().setText("");
         this.getLblTotalVenta().setText("");
+    }
+
+    private void setearDatos() 
+    {
+        try{
+            this.presupuesto.setFechaCreacion(new Date(getCmbFechaPresupuesto().getDate().getTime()));
+            this.presupuesto.setDescripcion(getTxtDescripcion().getText());
+            this.presupuesto.setObservaciones(getTxtAreaObservaciones().getText());
+            GeneralEnumEstado generalEnumEstado = (GeneralEnumEstado) getCmbEstadoPresupuesto().getSelectedItem();
+            this.presupuesto.setEstado(generalEnumEstado.getEstado());
+        }
+        catch(Exception e)
+        {
+            DialogoCodefac.mensaje("Alerta", "Seleccione la fecha de ingreso para Orden Trabajo", DialogoCodefac.MENSAJE_ADVERTENCIA);
+        }
     }
 }

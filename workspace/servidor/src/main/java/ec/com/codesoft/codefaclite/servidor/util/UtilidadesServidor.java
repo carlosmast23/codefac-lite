@@ -66,12 +66,8 @@ public class UtilidadesServidor {
      * Querys de datos para hacer pruebas con los modulos del sistema
      */
     public static InputStream[] queryDevelopment={
-        RecursoCodefac.SQL.getResourceInputStream("insert_default_academico.sql"),
-<<<<<<< HEAD
-        RecursoCodefac.SQL.getResourceInputStream("insert_default_compras.sql"),
-=======
-        RecursoCodefac.SQL.getResourceInputStream("insert_servicio.sql")
->>>>>>> 39eda1f3125627d6b18df0ec3d8dfdc9a34b0ad8
+        //RecursoCodefac.SQL.getResourceInputStream("insert_default_academico.sql"),
+        //RecursoCodefac.SQL.getResourceInputStream("insert_default_compras.sql")
     };
 
     public static InputStream[] querys = {

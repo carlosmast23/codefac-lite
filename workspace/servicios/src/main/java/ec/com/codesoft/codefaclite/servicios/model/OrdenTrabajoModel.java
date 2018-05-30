@@ -190,11 +190,6 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
         initDatosTabla();
     }
 
-//    @Override
-    public String getNombre() {
-        return "Orden de Trabajo";
-    }
-
     @Override
     public String getURLAyuda() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -371,6 +366,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
         }
         catch(RemoteException e)
         {
+            System.out.println("Aqui ocurrio el problema");
             e.printStackTrace();
         }
    
