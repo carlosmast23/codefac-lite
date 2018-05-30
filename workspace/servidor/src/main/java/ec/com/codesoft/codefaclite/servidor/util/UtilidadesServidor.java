@@ -63,9 +63,10 @@ public class UtilidadesServidor {
      * Querys que solo se ejecutaran en el modo de desarrollo Ejemplo: Querys de
      * datos para hacer pruebas con los modulos del sistema
      */
-    public static InputStream[] queryDevelopment = { //RecursoCodefac.SQL.getResourceInputStream("insert_default_academico.sql"),
-    //RecursoCodefac.SQL.getResourceInputStream("insert_default_compras.sql"),
-    //RecursoCodefac.SQL.getResourceInputStream("insert_servicio.sql")
+    public static InputStream[] queryDevelopment = { 
+      RecursoCodefac.SQL.getResourceInputStream("insert_default_academico.sql"),
+      RecursoCodefac.SQL.getResourceInputStream("insert_default_compras.sql"),
+      RecursoCodefac.SQL.getResourceInputStream("insert_servicio.sql")
     };
 
     public static InputStream[] querys = {
@@ -99,8 +100,6 @@ public class UtilidadesServidor {
         RecursoCodefac.SQL.getResourceInputStream("create_empresa.sql"),
         RecursoCodefac.SQL.getResourceInputStream("insert_usuario.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_servicios.sql"),
-       RecursoCodefac.SQL.getResourceInputStream("insert_servicio.sql"),
-       RecursoCodefac.SQL.getResourceInputStream("insert_default_compras.sql")
     };
 
     public static void crearBaseDatos() throws SQLException {
