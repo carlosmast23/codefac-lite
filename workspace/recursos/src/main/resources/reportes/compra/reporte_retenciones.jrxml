@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_retenciones" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3427f0d5-5413-4d72-9b07-663b8c826977">
 	<property name="ireport.zoom" value="1.7684607682500024"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="79"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -48,6 +48,11 @@
 	<parameter name="SUBREPORTE_RUTA" class="java.lang.Object"/>
 	<parameter name="listaRenta" class="java.util.Collection"/>
 	<parameter name="SUBREPORTE_RUTA_RENTA" class="java.lang.Object"/>
+	<parameter name="fechainicio" class="java.lang.String"/>
+	<parameter name="fechafin" class="java.lang.String"/>
+	<parameter name="proveedor" class="java.lang.String"/>
+	<parameter name="niva" class="java.lang.String"/>
+	<parameter name="nretencion" class="java.lang.String"/>
 	<field name="preimpresoRetencion" class="java.lang.String"/>
 	<field name="baseRetencion" class="java.lang.String"/>
 	<field name="porcentajeRetencion" class="java.lang.String"/>
@@ -90,39 +95,74 @@
 		<band height="35" splitType="Stretch">
 			<staticText>
 				<reportElement x="393" y="1" width="73" height="14" forecolor="#000000" uuid="916b6121-20d2-4951-a3dd-3270d013d389"/>
-				<textElement textAlignment="Right">
-					<font isBold="true"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Fecha inicio: ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="231" y="20" width="72" height="14" forecolor="#000000" uuid="f44ab110-dfd3-4c5a-ae68-ed4ae51bda83"/>
-				<textElement textAlignment="Right">
-					<font isBold="true"/>
+				<reportElement x="157" y="20" width="48" height="14" forecolor="#000000" uuid="f44ab110-dfd3-4c5a-ae68-ed4ae51bda83"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Retención:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="202" y="1" width="101" height="14" forecolor="#000000" uuid="12bbdd81-9286-436c-93c4-c8c2c34bacbb"/>
-				<textElement textAlignment="Right">
-					<font isBold="true"/>
+				<reportElement x="157" y="1" width="48" height="14" forecolor="#000000" uuid="12bbdd81-9286-436c-93c4-c8c2c34bacbb"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[IVA:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="393" y="20" width="73" height="14" forecolor="#000000" uuid="834b58c1-57de-4789-ad52-9944fc7b9b3e"/>
-				<textElement textAlignment="Right">
-					<font isBold="true"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Fecha fin: ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="5" y="10" width="78" height="14" forecolor="#000000" uuid="3466edcb-f194-4238-bda4-6223a3dea4f6"/>
-				<textElement textAlignment="Right">
-					<font isBold="true"/>
+				<reportElement x="5" y="10" width="46" height="14" forecolor="#000000" uuid="3466edcb-f194-4238-bda4-6223a3dea4f6"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Proveedor:]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="51" y="10" width="100" height="14" uuid="9e322192-ebf2-48d1-90be-042e7ddac290"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{proveedor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="466" y="0" width="87" height="15" uuid="f468c553-b97d-40bb-8730-e268e7e525b8"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fechainicio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="466" y="20" width="87" height="14" uuid="114f2e6e-dd4c-4501-9464-c26259a7548a"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fechafin}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="205" y="1" width="179" height="14" uuid="55511b8e-2239-4864-bc95-f9754147799a"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{niva}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="205" y="20" width="179" height="14" uuid="6703adb2-1b48-45c3-adb5-b2d427316c0c"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{nretencion}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>

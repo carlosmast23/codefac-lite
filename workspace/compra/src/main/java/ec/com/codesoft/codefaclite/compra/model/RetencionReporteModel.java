@@ -323,7 +323,7 @@ public class RetencionReporteModel extends RetencionReportePanel {
                 data.add(new ReporteRetencionesData(
                         retencion.getRetencion().getCompra().getPreimpreso(),
                         retencion.getBaseImponible().toString(),
-                        retencion.getPorcentajeRetener().toString()+" %",
+                        retencion.getPorcentajeRetener().toString() + " %",
                         retencion.getCodigoRetencionSri(),
                         retencion.getValorRetenido().toString()
                 ));
@@ -359,6 +359,15 @@ public class RetencionReporteModel extends RetencionReportePanel {
             parameters.put("SUBREPORTE_RUTA", reportPiePagina);
             parameters.put("SUBREPORTE_RUTA_RENTA", reportPiePagina2);
 
+            String cliente = "";
+            if (proveedor == null) {
+                cliente = "TODOS";
+            } else {
+                cliente = proveedor.getRazonSocial();
+            }
+            parameters.put("niva",sriRetencionIva.getNombre());
+            parameters.put("nretencion",sriRetencionRenta.getNombre());
+            parameters.put("proveedor", cliente);
             parameters.put("fechainicio", formatDate(fechaInicio, "yyyy-MM-dd"));
             parameters.put("fechafin", formatDate(fechaFin, "yyyy-MM-dd"));
             parameters.put("listaIva", datavc);

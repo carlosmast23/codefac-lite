@@ -39,12 +39,11 @@ import java.util.logging.Logger;
 public class UtilidadesServidor {
 
     private static final Logger LOG = Logger.getLogger(UtilidadesServidor.class.getName());
-    
-    public static final String ETIQUETA_AGREGAR_COLUMNA="@AGREGAR_COLUMNA";
-    public static final String ETIQUETA_AGREGAR_TABLA="@AGREGAR_TABLA";
-    public static final String ETIQUETA_VERSION="VERSION_SISTEMA";
 
-    
+    public static final String ETIQUETA_AGREGAR_COLUMNA = "@AGREGAR_COLUMNA";
+    public static final String ETIQUETA_AGREGAR_TABLA = "@AGREGAR_TABLA";
+    public static final String ETIQUETA_VERSION = "VERSION_SISTEMA";
+
     //Listado de conexiones en el Servidor
     public static List<String> hostConectados = new ArrayList<String>();
 
@@ -59,15 +58,15 @@ public class UtilidadesServidor {
     public static Integer cantidadUsuarios;
 
     public static Map<ModuloCodefacEnum, Boolean> modulosMap;
-    
+
     /**
-     * Querys que solo se ejecutaran en el modo de desarrollo
-     * Ejemplo:
-     * Querys de datos para hacer pruebas con los modulos del sistema
+     * Querys que solo se ejecutaran en el modo de desarrollo Ejemplo: Querys de
+     * datos para hacer pruebas con los modulos del sistema
      */
-    public static InputStream[] queryDevelopment={
-        //RecursoCodefac.SQL.getResourceInputStream("insert_default_academico.sql"),
-        //RecursoCodefac.SQL.getResourceInputStream("insert_default_compras.sql")
+    public static InputStream[] queryDevelopment = { 
+      RecursoCodefac.SQL.getResourceInputStream("insert_default_academico.sql"),
+      RecursoCodefac.SQL.getResourceInputStream("insert_default_compras.sql"),
+      RecursoCodefac.SQL.getResourceInputStream("insert_servicio.sql")
     };
 
     public static InputStream[] querys = {
@@ -99,10 +98,10 @@ public class UtilidadesServidor {
         RecursoCodefac.SQL.getResourceInputStream("create_modulo_cartera.sql"),
         RecursoCodefac.SQL.getResourceInputStream("insert_default.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_empresa.sql"),
-        RecursoCodefac.SQL.getResourceInputStream("insert_usuario.sql"),        
+        RecursoCodefac.SQL.getResourceInputStream("insert_usuario.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_servicios.sql"),
-        RecursoCodefac.SQL.getResourceInputStream("insert_servicio.sql")};
-    
+    };
+
     public static void crearBaseDatos() throws SQLException {
         try {
             Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
@@ -121,12 +120,12 @@ public class UtilidadesServidor {
                 /**
                  * Busca todos los querys disponibles para ejecutar
                  */
-                for (InputStream query : querys) {                    
+                for (InputStream query : querys) {
                     try {
-                        String sql = UtilidadesTextos.getStringURLFile(query);                        
+                        String sql = UtilidadesTextos.getStringURLFile(query);
                         String[] sentencias = sql.split(";");
                         for (String sentencia : sentencias) {
-                            LOG.log(Level.INFO,sentencia);
+                            LOG.log(Level.INFO, sentencia);
                             //Obtengo en bytes para transformar a utf 8 porque tenia problemas al insertar valores con acentos y ñ
                             byte ptext[] = sentencia.getBytes();
                             PreparedStatement pstm = conn.prepareStatement(new String(ptext, "UTF-8"));
@@ -166,26 +165,25 @@ public class UtilidadesServidor {
             Logger.getLogger(UtilidadesServidor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     /*
     Actualiza los campos de una version anterior a los campos en las nuevas versiones
-    */
-    public static void actualizarBaseDatos(String versionPropiedades)
-    {    
+     */
+    public static void actualizarBaseDatos(String versionPropiedades) {
         //Map donde almacenar todos los querys que se encuentre para actualiazar
         //Implemento un ordenador para que se ordene de la version mas antigua a la moderna
-        TreeMap<String,List<ScriptCodefac>> mapQuerysVersion=new TreeMap<String,List<ScriptCodefac>>(new Comparator<String>() {
+        TreeMap<String, List<ScriptCodefac>> mapQuerysVersion = new TreeMap<String, List<ScriptCodefac>>(new Comparator<String>() {
             @Override
             public int compare(String o1, String o2) {
-                return UtilidadesSistema.compareVersion(o1,o2);
+                return UtilidadesSistema.compareVersion(o1, o2);
             }
         });
-        
+
         try {
             Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
             Connection conn = DriverManager.getConnection("jdbc:derby:Derby2.DB;databaseName=codefac;user=root;password=Code17bwbtj");
             Statement s = conn.createStatement();
-            
+
             if (conn != null) {
                 /**
                  * Busca todos los querys disponibles para ejecutar
@@ -194,37 +192,34 @@ public class UtilidadesServidor {
                     try {
                         String sql = UtilidadesTextos.getStringURLFile(query);
                         String[] sentencias = sql.split(";");
-                        for (String sentencia : sentencias) 
-                        {
+                        for (String sentencia : sentencias) {
                             //Obtengo en bytes para transformar a utf 8 porque tenia problemas al insertar valores con acentos y ñ
                             byte ptext[] = sentencia.getBytes();
-                            String queryTabla=new String(ptext, "UTF-8");
-                            
+                            String queryTabla = new String(ptext, "UTF-8");
+
                             //Buscar todas las etiquetas de agregar tablas
                             String[] etiquetasAgregarTabla = queryTabla.split(ETIQUETA_AGREGAR_TABLA);
-                            if(etiquetasAgregarTabla.length>1)
-                            {
+                            if (etiquetasAgregarTabla.length > 1) {
                                 for (int i = 1; i < etiquetasAgregarTabla.length; i++) {
                                     String etiqueta = etiquetasAgregarTabla[i];
                                     String version = obtenerPropiedad(etiqueta, ETIQUETA_VERSION);
-                                    String queryNuevo=etiqueta.substring(etiqueta.indexOf("*/")+2);
-                                    
+                                    String queryNuevo = etiqueta.substring(etiqueta.indexOf("*/") + 2);
+
                                     //Agregar al Map los querys si no existe ninguno con ese numero de version
                                     if (mapQuerysVersion.get(version) == null) {
                                         List<ScriptCodefac> listaQuerys = new ArrayList<ScriptCodefac>();
-                                        listaQuerys.add(new ScriptCodefac(queryNuevo,ScriptCodefac.PrioridadQueryEnum.CREATE_TABLE));
+                                        listaQuerys.add(new ScriptCodefac(queryNuevo, ScriptCodefac.PrioridadQueryEnum.CREATE_TABLE));
                                         mapQuerysVersion.put(version, listaQuerys);
                                     } else //Obtiene la lista de los querys anteriormente agregados para ingresar el nuevo query
                                     {
                                         List<ScriptCodefac> listaQuerys = mapQuerysVersion.get(version);
-                                        listaQuerys.add(new ScriptCodefac(queryNuevo,ScriptCodefac.PrioridadQueryEnum.CREATE_TABLE));
+                                        listaQuerys.add(new ScriptCodefac(queryNuevo, ScriptCodefac.PrioridadQueryEnum.CREATE_TABLE));
                                         mapQuerysVersion.put(version, listaQuerys);
                                     }
-                                    
+
                                 }
-                                
-                            }
-                            else //Si no se crea la tabla en sus totalidad busco columnas para agregar , porque se supone que si crea la tabla no tiene sentido agregar columnas luego que van a generar error
+
+                            } else //Si no se crea la tabla en sus totalidad busco columnas para agregar , porque se supone que si crea la tabla no tiene sentido agregar columnas luego que van a generar error
                             {
                                 //Buscar todas las etiquetas de agregar columnas
                                 String[] etiquetas = queryTabla.split(ETIQUETA_AGREGAR_COLUMNA);
@@ -254,9 +249,7 @@ public class UtilidadesServidor {
                                     }
                                 }
 
-                            }                       
-                            
-                        
+                            }
 
                         }
                     } catch (NullPointerException cpe) {
@@ -265,31 +258,28 @@ public class UtilidadesServidor {
                         Logger.getLogger(UtilidadesServidor.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-                
+
                 /**
                  * Ejecutar todos los scripts pendientes en el map
                  */
-                if(mapQuerysVersion.size()>0)
-                {
+                if (mapQuerysVersion.size() > 0) {
                     for (Map.Entry<String, List<ScriptCodefac>> entry : mapQuerysVersion.entrySet()) {
                         String versionGrabada = entry.getKey();
                         List<ScriptCodefac> lista = entry.getValue();
-                        
+
                         //Orden de mayor a menor para ejecutar en orden los scripts de mayor importancia
                         //TODO: Verificar esta funcion posteriormente porque actualmente no habian casos para revisar
-                        
-                        Collections.sort(lista,new Comparator<ScriptCodefac>() {
+                        Collections.sort(lista, new Comparator<ScriptCodefac>() {
                             @Override
                             public int compare(ScriptCodefac o1, ScriptCodefac o2) {
                                 return o1.getPrioridad().compareTo(o2.getPrioridad());
                             }
-                        } );
-                        
+                        });
+
                         //Solo ejecutar los scripts si la version para modificar es mayor la version actual, y menor e igual que la version a actualizar
-                        if(UtilidadesSistema.compareVersion(versionGrabada,versionPropiedades)==1 && UtilidadesSistema.compareVersion(versionGrabada,ParametrosSistemaCodefac.VERSION)<=0)
-                        {
+                        if (UtilidadesSistema.compareVersion(versionGrabada, versionPropiedades) == 1 && UtilidadesSistema.compareVersion(versionGrabada, ParametrosSistemaCodefac.VERSION) <= 0) {
                             for (ScriptCodefac query : lista) {
-                                LOG.log(Level.INFO,"Query Actualizado:"+query.getQuery());
+                                LOG.log(Level.INFO, "Query Actualizado:" + query.getQuery());
                                 try {
                                     PreparedStatement pstm = conn.prepareStatement(query.getQuery());
                                     pstm.execute();
@@ -299,12 +289,11 @@ public class UtilidadesServidor {
                                 }
                             }
                         }
-                        
+
                     }
 
                 }
-                
-                
+
             }
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(UtilidadesServidor.class.getName()).log(Level.SEVERE, null, ex);
@@ -312,10 +301,8 @@ public class UtilidadesServidor {
             Logger.getLogger(UtilidadesServidor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
-    public static String obtenerNombreTabla(String query) 
-    {
+
+    public static String obtenerNombreTabla(String query) {
         //replaceAll("\\s","")
         String querySinEspacios = query.replaceAll("\\s", "").toLowerCase();
 
@@ -331,8 +318,7 @@ public class UtilidadesServidor {
 
     }
 
-    public static String obtenerQueryEdit(String str, String nombreTabla) 
-    {
+    public static String obtenerQueryEdit(String str, String nombreTabla) {
         //Todo : Buscar una metodologia para encontrar el nombre de la tabla que le contiene al Query
         //Procedimiento:
         //1.- quitar todos los espacios
@@ -361,8 +347,7 @@ public class UtilidadesServidor {
         return queryEditar;
     }
 
-    public static String obtenerPropiedad(String str, String propiedad) 
-    {
+    public static String obtenerPropiedad(String str, String propiedad) {
         //Posiciones de los parentesis
         int posInicial = str.indexOf("(");
         int posFinal = str.indexOf(")");
@@ -374,12 +359,12 @@ public class UtilidadesServidor {
             String[] dato = prop.split("=");
             String clave = dato[0];
             String valor = dato[1];
-            
+
             if (clave.equals(propiedad)) {
                 return valor;
             }
         }
         return "";
     }
-    
+
 }
