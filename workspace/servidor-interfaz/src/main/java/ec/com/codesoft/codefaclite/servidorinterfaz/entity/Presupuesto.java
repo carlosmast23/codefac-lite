@@ -5,10 +5,12 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FechaFormatoEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -92,6 +94,10 @@ public class Presupuesto implements Serializable
     @ManyToOne
     private Persona persona;
     
+    @JoinColumn(name = "CATALOGO_PRODUCTO_ID")
+    @ManyToOne
+    private CatalogoProducto catalogoProducto;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "presupuesto", fetch = FetchType.EAGER)
     private List<PresupuestoDetalle>  presupuestoDetalles;
     
@@ -111,13 +117,6 @@ public class Presupuesto implements Serializable
         this.codigo = codigo;
     }
 
-    public String getDescipcion() {
-        return descripcion;
-    }
-
-    public void setDescipcion(String descipcion) {
-        this.descripcion = descipcion;
-    }
 
     public String getObservaciones() {
         return observaciones;
@@ -240,10 +239,28 @@ public class Presupuesto implements Serializable
     public void setTotalVenta(BigDecimal totalVenta) {
         this.totalVenta = totalVenta;
     }
+
+    public CatalogoProducto getCatalogoProducto() {
+        return catalogoProducto;
+    }
+
+    public void setCatalogoProducto(CatalogoProducto catalogoProducto) {
+        this.catalogoProducto = catalogoProducto;
+    }
     
     
     
     
+    
+    public void addDetalle(PresupuestoDetalle detalle)
+    {
+        if(this.presupuestoDetalles == null)
+        {
+            this.presupuestoDetalles = new ArrayList<>();
+        }
+        detalle.setPresupuesto(this);
+        this.presupuestoDetalles.add(detalle);
+    }
     
     @Override
     public int hashCode() {
@@ -277,4 +294,8 @@ public class Presupuesto implements Serializable
         }
         return true;
     }    
+
+    public Object getDetalles() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

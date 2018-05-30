@@ -15,8 +15,6 @@ En los comprobantes electronicos los descuentos no se estan considerando toca im
 
 Implementar el metodo de prevalidacion en la facturacion electronica
 
------------------------------------------------
-Agregar metodo que de formato a los campos ingresados para que no causen conflicto al momento de facturar
 
 -----------------------------------------------
 Revisar el campo de dETALLE COMPROBATE en las notas de credito

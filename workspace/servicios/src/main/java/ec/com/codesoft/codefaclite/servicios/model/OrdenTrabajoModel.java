@@ -176,7 +176,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             this.getCmbDateFechaIngreso().setDate(this.ordenTrabajo.getFechaIngreso());
             GeneralEnumEstado generalEnumEstado = GeneralEnumEstado.getEnum(this.ordenTrabajo.getEstado());
             getCmbEstadoOrdenTrabajo().setSelectedItem(generalEnumEstado);
-            mostrarDatosTabla(this.ordenTrabajo);
+            mostrarDatosTabla();
         }
         
     }
@@ -269,7 +269,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             public void actionPerformed(ActionEvent e) {
                 int fila = getTableDetallesOrdenTrabajo().getSelectedRow();
                 ordenTrabajo.getDetalles().remove(fila);
-                mostrarDatosTabla(ordenTrabajo);
+                mostrarDatosTabla();
                 getBtnAgregarDetalle().setEnabled(true);
             }
         });
@@ -382,7 +382,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
         getTableDetallesOrdenTrabajo().setModel(modeloTablaDetallesCompra);
     }
     
-    public void mostrarDatosTabla(OrdenTrabajo ordenTrabajo)
+    public void mostrarDatosTabla()
     {
         DefaultTableModel modeloTablaDetallesCompra = UtilidadesTablas.crearModeloTabla(new String[]{"obj","Descripción","Estado","Tipo Orden","Asignado"}, new Class[]{OrdenTrabajoDetalle.class,String.class,String.class,String.class,String.class});
         List<OrdenTrabajoDetalle> detalles = ordenTrabajo.getDetalles();
@@ -436,7 +436,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
         if(agregar && getCmbDateFechaEntrega()!=null)
         {
             ordenTrabajo.addDetalle(ordenTrabajoDetalle);
-            mostrarDatosTabla(ordenTrabajo);
+            mostrarDatosTabla();
         }
         else{
             DialogoCodefac.mensaje("Advertencia", "Debe ingresar una fecha", DialogoCodefac.MENSAJE_ADVERTENCIA);
@@ -463,15 +463,17 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
     
     public void setearDatos() throws ExcepcionCodefacLite
     {
-        if(null == new Date(getCmbDateFechaIngreso().getDate().getTime()))
+        try{ 
+            this.ordenTrabajo.setFechaIngreso(new Date(getCmbDateFechaIngreso().getDate().getTime()));
+            this.ordenTrabajo.setCodigo(""+getTxtCodigo().getText());
+            this.ordenTrabajo.setDescripcion(""+getTxtDescripcion().getText());
+            GeneralEnumEstado generalEnumEstado = (GeneralEnumEstado) getCmbEstadoOrdenTrabajo().getSelectedItem();
+            this.ordenTrabajo.setEstado(generalEnumEstado.getEstado());
+        }
+        catch(Exception e)
         {
             DialogoCodefac.mensaje("Alerta", "Seleccione la fecha de ingreso para Orden Trabajo", DialogoCodefac.MENSAJE_ADVERTENCIA);
-            throw new ExcepcionCodefacLite("Necesita seleccionar una fecha de ingreso para Orden Trabajo ");
-        } 
-        this.ordenTrabajo.setFechaIngreso(new Date(getCmbDateFechaIngreso().getDate().getTime()));
-        this.ordenTrabajo.setCodigo(""+getTxtCodigo().getText());
-        this.ordenTrabajo.setDescripcion(""+getTxtDescripcion().getText());
-        GeneralEnumEstado generalEnumEstado = (GeneralEnumEstado) getCmbEstadoOrdenTrabajo().getSelectedItem();
-        this.ordenTrabajo.setEstado(generalEnumEstado.getEstado());
+        }
+                
     }
 }

@@ -132,5 +132,13 @@ public class PresupuestoDetalle implements Serializable
     public void setProducto(Producto producto) {
         this.producto = producto;
     }
-  
+
+    public Presupuesto getPresupuesto() {
+        return presupuesto;
+    }
+
+    public void setPresupuesto(Presupuesto presupuesto) {
+        this.presupuesto = presupuesto;
+    }
+     
 }

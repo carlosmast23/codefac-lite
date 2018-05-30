@@ -28,6 +28,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.RetencionElect
 import ec.com.codesoft.codefaclite.ws.recepcion.Comprobante;
 import ec.com.codesoft.codefaclite.ws.recepcion.Mensaje;
 import ec.com.codesoft.codefaclite.utilidades.email.CorreoElectronico;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.xml.UtilidadesXml;
 import java.awt.Image;
@@ -50,6 +51,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -879,6 +881,23 @@ public class ComprobanteElectronicoService implements Runnable {
         //return comprobantesFirmados;
 
     }
+    
+    public boolean disponibilidadServidorSri()
+    {
+        servicioSri = new ServicioSri();
+        servicioSri.setUri_autorizacion(uriAutorizacion);
+        servicioSri.setUri_recepcion(uriRecepcion);
+        try {
+            if (!servicioSri.verificarConexionRecepcion() || !servicioSri.verificarConexionAutorizar())
+            {
+                return false;
+            }
+        } catch (ComprobanteElectronicoException ex) {
+            Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+        return true;
+    }
 
     private void enviarSri() throws ComprobanteElectronicoException {
         try {
@@ -1030,16 +1049,18 @@ public class ComprobanteElectronicoService implements Runnable {
         Vector<String> claveAcceso = new Vector<>();
         
         //Fecha cuando se va a enviar los archivos por lote
-        claveAcceso.add("01032018");
+        SimpleDateFormat formateador = new SimpleDateFormat("ddMMyyyy");
+        String fechaFormat = formateador.format(new Date());
+        claveAcceso.add(fechaFormat);
         
         //Tipo de comprobante (por defecto le dejo 01 que corresponde a factura)
-        claveAcceso.add("01");
+        claveAcceso.add("01"); //Todo: Verificar que se pone en tipo de comprobante porque creo que se pueden enviar archivos de cualquier tipo
         
         //Identificacion de ruc mia supongo
-        claveAcceso.add("1724218951001");
+        claveAcceso.add(ruc); 
         
         //Tipo de ambiente de la facturacion
-        claveAcceso.add("1"); //por defecto en pruebas
+        claveAcceso.add(getTipoCodigoAmbiente()); //por defecto en pruebas
         
         //Numero de serie , asumo que es un valor que se genera automaticamente 
         claveAcceso.add("001001");
@@ -1069,12 +1090,13 @@ public class ComprobanteElectronicoService implements Runnable {
         String fechaFormat = ComprobantesElectronicosUtil.formatSimpleDate(comprobante.getFechaEmision());
         claveAcceso.add(fechaFormat);
 
-        //claveAcceso.add(compborgetTipoComprobante());
-        claveAcceso.add(comprobante.getTipoDocumento());
+        //Tipo de documento a enviar ejemplo:factura
+        claveAcceso.add(comprobante.getTipoDocumento()); 
 
-        //String identificacionFormat=UtilidadesTextos.llenarCarateresDerecha(comprobante.getIdentificacion(),12, "0");
+        //identificacion de el ruc de la empresa
         claveAcceso.add(comprobante.getIdentificacion());
 
+        //Tipo del ambiente que esta configurado pruebas o produccion
         claveAcceso.add(getTipoCodigoAmbiente());
 
         /**

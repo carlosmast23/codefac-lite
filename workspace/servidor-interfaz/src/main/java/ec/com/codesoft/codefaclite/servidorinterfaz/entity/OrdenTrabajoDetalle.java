@@ -126,5 +126,11 @@ public class OrdenTrabajoDetalle implements Serializable
     public void setEmpleado(Empleado empleado) {
         this.empleado = empleado;
     }
+
+    @Override
+    public String toString() {
+        return ""+ id + " - " + descripcion;
+    }
         
+    
 }
