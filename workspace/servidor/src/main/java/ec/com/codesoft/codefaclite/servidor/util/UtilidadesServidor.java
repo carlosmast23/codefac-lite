@@ -99,7 +99,7 @@ public class UtilidadesServidor {
         RecursoCodefac.SQL.getResourceInputStream("create_empresa.sql"),
         RecursoCodefac.SQL.getResourceInputStream("insert_usuario.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_servicios.sql"),
-       // RecursoCodefac.SQL.getResourceInputStream("insert_servicio.sql"),
+       RecursoCodefac.SQL.getResourceInputStream("insert_servicio.sql"),
        RecursoCodefac.SQL.getResourceInputStream("insert_default_compras.sql")
     };
 
