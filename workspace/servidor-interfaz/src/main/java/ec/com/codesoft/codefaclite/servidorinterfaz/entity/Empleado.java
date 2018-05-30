@@ -89,7 +89,7 @@ public class Empleado implements Serializable
 
     @Override
     public String toString() {
-        return ""+departamento.getNombre()+" - "+cliente.getNombresCompletos();
+        return "";//+departamento.getNombre()+" - "+cliente.getNombresCompletos();
     }
 
     @Override
