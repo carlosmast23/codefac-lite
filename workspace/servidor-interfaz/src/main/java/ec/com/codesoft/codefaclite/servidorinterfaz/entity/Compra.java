@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
@@ -113,6 +114,9 @@ public class Compra implements Serializable {
     
     @Column(name ="ESTADO_RETENCION")
     private String estadoRetencion;
+    
+    @JoinColumn(name ="ORDEN_COMPRA_ID")
+    private OrdenCompra ordenCompra;
     
     @JoinColumn(name = "PROVEEDOR_ID")
     @ManyToOne    
@@ -362,6 +366,16 @@ public class Compra implements Serializable {
     public void setEstadoRetencion(String estadoRetencion) {
         this.estadoRetencion = estadoRetencion;
     }
+
+    public OrdenCompra getOrdenCompra() {
+        return ordenCompra;
+    }
+
+    public void setOrdenCompra(OrdenCompra ordenCompra) {
+        this.ordenCompra = ordenCompra;
+    }
+    
+    
    
     /**
      * Informacion adicional

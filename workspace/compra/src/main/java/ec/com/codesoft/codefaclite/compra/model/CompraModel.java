@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterfac
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.compra.busqueda.CompraBusqueda;
+import ec.com.codesoft.codefaclite.compra.busqueda.OrdenCompraBusqueda;
 import ec.com.codesoft.codefaclite.crm.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.crm.busqueda.ProductoProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.crm.busqueda.ProveedorBusquedaDialogo;
@@ -35,6 +36,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
@@ -202,43 +204,54 @@ public class CompraModel extends CompraPanel{
         Compra compra = (Compra)buscarDialogoModel.getResultado();
         if(compra != null)
         {
-            this.compra = compra;
-            String identificacion = this.compra.getProveedor().getIdentificacion();
-            String nombre = this.compra.getProveedor().getRazonSocial();
-            getTxtProveedor().setText(identificacion+" - "+nombre);
-            //Observacion
-            this.getTxtObservacion().setText("Por Defecto");
-            //Preimpreso
-            String preimpreso = "00"+this.compra.getPuntoEstablecimiento() +"00"+ this.compra.getPuntoEmision();
-            String secuencial = ""+this.compra.getSecuencial();
-            preimpreso += establecerSecuencial(secuencial);
-
-            this.getTxtFPreimpreso().setText(preimpreso);
-            //Autorizacion
-            this.getTxtAutorizacion().setText("Por Defecto"); 
-            //Fecha
-            this.getCmbFechaCompra().setDate(this.compra.getFechaFactura());
-            //Descuentos
-            this.getTxtDescuentoImpuestos().setText(this.compra.getDescuentoImpuestos()+"");
-            this.getTxtDescuentoSinImpuestos().setText(this.compra.getDescuentoSinImpuestos()+"");
-            //Valores a mostrar del subtotal
-            this.subtotal0 = new BigDecimal(BigInteger.ZERO) ;
-            this.subtotal0 = this.subtotal0.add(this.compra.getDescuentoSinImpuestos()).add(this.compra.getSubtotalSinImpuestos());      
-            this.subtotal12 = new BigDecimal(BigInteger.ZERO) ;
-            this.subtotal12 = this.subtotal12.add(this.compra.getDescuentoImpuestos()).add(this.compra.getSubtotalImpuestos());
-            this.getLblSubtotalImpuesto().setText(this.subtotal12 + "");
-            this.getLblSubtotalSinImpuesto().setText(this.subtotal0 + "");
-            //actualizarDatosMostrarVentana();
-            if(session.getEmpresa().getObligadoLlevarContabilidad().equals(Empresa.SI_LLEVA_CONTABILIDAD)){
-                mostrarDatosTabla();
-            }
-            else{
-                mostrarDatosTablaSinRetencion();
-            }
-            mostrarDatosTotales();
-            desbloquearIngresoDetalleProducto();
+            cargarDatosCompra();
         }
         
+    }
+    
+    private void cargarDatosCompra()
+    {
+        this.compra = compra;
+        String identificacion = this.compra.getProveedor().getIdentificacion();
+        String nombre = this.compra.getProveedor().getRazonSocial();
+        getTxtProveedor().setText(identificacion + " - " + nombre);
+        //Observacion
+        this.getTxtObservacion().setText("Por Defecto");
+        //Preimpreso
+        String preimpreso = "00" + this.compra.getPuntoEstablecimiento() + "00" + this.compra.getPuntoEmision();
+        String secuencial = "" + this.compra.getSecuencial();
+        preimpreso += establecerSecuencial(secuencial);
+
+        this.getTxtFPreimpreso().setText(preimpreso);
+        //Autorizacion
+        this.getTxtAutorizacion().setText("Por Defecto");
+        //Fecha
+        this.getCmbFechaCompra().setDate(this.compra.getFechaFactura());
+        //Descuentos
+        this.getTxtDescuentoImpuestos().setText(this.compra.getDescuentoImpuestos() + "");
+        this.getTxtDescuentoSinImpuestos().setText(this.compra.getDescuentoSinImpuestos() + "");
+        //Valores a mostrar del subtotal
+        this.subtotal0 = new BigDecimal(BigInteger.ZERO);
+        this.subtotal0 = this.subtotal0.add(this.compra.getDescuentoSinImpuestos()).add(this.compra.getSubtotalSinImpuestos());
+        this.subtotal12 = new BigDecimal(BigInteger.ZERO);
+        this.subtotal12 = this.subtotal12.add(this.compra.getDescuentoImpuestos()).add(this.compra.getSubtotalImpuestos());
+        this.getLblSubtotalImpuesto().setText(this.subtotal12 + "");
+        this.getLblSubtotalSinImpuesto().setText(this.subtotal0 + "");
+        
+        //Cargar la orden de compra si existe referencia
+        if(this.compra.getOrdenCompra()!=null)
+        {
+            this.getTxtOrdenCompra().setText(this.compra.getOrdenCompra().getId()+"-"+this.compra.getOrdenCompra().getObservacion());
+        }
+        
+        //actualizarDatosMostrarVentana();
+        if (session.getEmpresa().getObligadoLlevarContabilidad().equals(Empresa.SI_LLEVA_CONTABILIDAD)) {
+            mostrarDatosTabla();
+        } else {
+            mostrarDatosTablaSinRetencion();
+        }
+        mostrarDatosTotales();
+        desbloquearIngresoDetalleProducto();
     }
     
     public String establecerSecuencial(String secuencial)
@@ -370,6 +383,20 @@ public class CompraModel extends CompraPanel{
     }
 
     private void agregarListenerBotones() {
+        
+        getBtnOrdenCompraBuscar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                OrdenCompraBusqueda ordenCompraBusqueda = new OrdenCompraBusqueda();
+                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(ordenCompraBusqueda);
+                buscarDialogoModel.setVisible(true);
+                OrdenCompra ordenCompra = (OrdenCompra) buscarDialogoModel.getResultado();
+                if (ordenCompra != null) {
+                    compra.setOrdenCompra(ordenCompra);
+                    getTxtOrdenCompra().setText(ordenCompra.getId()+"-"+ordenCompra.getObservacion());
+                }
+            }
+        });
         
         getBtnCrearProducto().addActionListener(new ActionListener() {
             @Override
