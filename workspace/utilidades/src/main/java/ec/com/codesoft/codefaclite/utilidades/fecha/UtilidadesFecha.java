@@ -130,4 +130,20 @@ public class UtilidadesFecha {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         return dateFormat.format(date);
     }
+    
+    public static java.util.Date fechaProxima(java.util.Date date, int numero, String opc)
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        switch(opc)
+        {
+            case "Dia":
+                calendar.add(Calendar.DAY_OF_YEAR, numero);
+                break;
+            case "Mes":
+                calendar.add(Calendar.MONTH, numero);
+                break;
+        };
+        return calendar.getTime();
+    }
 }

@@ -89,7 +89,13 @@ public class Empleado implements Serializable
 
     @Override
     public String toString() {
-        return "";//+departamento.getNombre()+" - "+cliente.getNombresCompletos();
+        try{
+        if(departamento!=null || cliente != null){
+            return ""+departamento.getNombre()+" - "+cliente.getNombresCompletos();
+        }}catch(Exception e){
+            
+        }
+        return "Sin personal asignado";
     }
 
     @Override
