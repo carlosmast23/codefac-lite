@@ -40,6 +40,8 @@ create table COMPRA
     CODIGO_DOCUMENTO varchar(3),
     CODIGO_TIPO_DOCUMENTO varchar(3),
     INVENTARIO_INGRESO varchar(1),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2)*/
+    OBSERVACION varchar(512),
     primary key (ID),
     CONSTRAINT id_cliente_compra_fk FOREIGN KEY (PROVEEDOR_ID) REFERENCES CLIENTE(CLIENTE_ID)
 

@@ -37,6 +37,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompra;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
@@ -161,6 +162,7 @@ public class CompraModel extends CompraPanel{
         compra.setTelefono("");
         compra.setTipoFacturacion(""); //TODO: Establecer el metodo de facturacion manual y electronica
         compra.setInventarioIngreso(EnumSiNo.NO.getLetra());
+        compra.setObservacion(getTxtObservacion().getText());
         
         //Seteando el tipo de documento 
         TipoDocumentoEnum tipoDocumentoEnum= (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
@@ -211,12 +213,12 @@ public class CompraModel extends CompraPanel{
     
     private void cargarDatosCompra()
     {
-        this.compra = compra;
+        //this.compra = compra;
         String identificacion = this.compra.getProveedor().getIdentificacion();
         String nombre = this.compra.getProveedor().getRazonSocial();
         getTxtProveedor().setText(identificacion + " - " + nombre);
         //Observacion
-        this.getTxtObservacion().setText("Por Defecto");
+        this.getTxtObservacion().setText(this.compra.getObservacion());
         //Preimpreso
         String preimpreso = "00" + this.compra.getPuntoEstablecimiento() + "00" + this.compra.getPuntoEmision();
         String secuencial = "" + this.compra.getSecuencial();
@@ -381,6 +383,45 @@ public class CompraModel extends CompraPanel{
             e.printStackTrace();
         }
     }
+    
+    private void cargarCompraDesdeOrdenCompra()
+    {
+        OrdenCompra ordenCompra=compra.getOrdenCompra();
+        
+        compra=new Compra();
+        compra.setFechaFactura(UtilidadesFecha.getFechaHoy());
+        compra.setObservacion(ordenCompra.getObservacion());
+        compra.setProveedor(ordenCompra.getProveedor());
+        compra.setCodigoTipoDocumento(ordenCompra.getCodigoTipoDocumento());
+        
+        compra.setDescuentoImpuestos(ordenCompra.getDescuentoImpuestos());
+        compra.setDescuentoSinImpuestos(ordenCompra.getDescuentoSinImpuestos());
+        compra.setEmpresaId(ordenCompra.getEmpresa_id());
+        compra.setIva(ordenCompra.getIva());
+        compra.setIvaSriId(ordenCompra.getIvaSriId());
+        compra.setSubtotalImpuestos(ordenCompra.getSubtotalImpuestos());
+        compra.setSubtotalSinImpuestos(ordenCompra.getSubtotalSinImpuestos());
+        compra.setTotal(ordenCompra.getTotal());
+        compra.setUsuarioId(ordenCompra.getUsuarioId());
+        
+        //Cargar los detalles
+        for (OrdenCompraDetalle detalleOrden : ordenCompra.getDetalles()) {
+            CompraDetalle compraDetalle=new CompraDetalle();
+            compraDetalle.setCantidad(detalleOrden.getCantidad());
+            compraDetalle.setDescripcion(detalleOrden.getDescripcion());
+            compraDetalle.setDescuento(detalleOrden.getDescuento());
+            compraDetalle.setIva(detalleOrden.getIva());
+            compraDetalle.setPrecioUnitario(detalleOrden.getPrecioUnitario()); //Todo: Segun el proceso normal se deben crear otros datos para relacionar el producto con el precio y sacar una lista de precios
+            compraDetalle.setProductoProveedor(detalleOrden.getProductoProveedor());
+            compraDetalle.setTotal(detalleOrden.getTotal());
+            compraDetalle.setValorIce(detalleOrden.getValorIce());       
+            compra.addDetalle(compraDetalle);
+        }
+        
+        //Cargar los datos en la vista
+        cargarDatosCompra();
+        
+    }
 
     private void agregarListenerBotones() {
         
@@ -394,6 +435,7 @@ public class CompraModel extends CompraPanel{
                 if (ordenCompra != null) {
                     compra.setOrdenCompra(ordenCompra);
                     getTxtOrdenCompra().setText(ordenCompra.getId()+"-"+ordenCompra.getObservacion());
+                    cargarCompraDesdeOrdenCompra();
                 }
             }
         });

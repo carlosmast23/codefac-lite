@@ -112,6 +112,9 @@ public class Compra implements Serializable {
     @Column(name ="INVENTARIO_INGRESO")
     private String inventarioIngreso;
     
+    @Column(name ="OBSERVACION")
+    private String observacion;
+    
     @Column(name ="ESTADO_RETENCION")
     private String estadoRetencion;
     
@@ -374,6 +377,15 @@ public class Compra implements Serializable {
     public void setOrdenCompra(OrdenCompra ordenCompra) {
         this.ordenCompra = ordenCompra;
     }
+
+    public String getObservacion() {
+        return observacion;
+    }
+
+    public void setObservacion(String observacion) {
+        this.observacion = observacion;
+    }
+    
     
     
    
