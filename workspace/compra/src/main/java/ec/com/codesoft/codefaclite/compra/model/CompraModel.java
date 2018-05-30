@@ -873,7 +873,7 @@ public class CompraModel extends CompraPanel{
             camposValidar.add(getTxtProductoItem());
             for(JTextField campo : camposValidar)
             {
-                System.out.println("Color: -->" + campo.getBackground());
+                //System.out.println("Color: -->" + campo.getBackground());
                 if(!campo.getBackground().equals(Color.WHITE))
                 {
                     b = false;

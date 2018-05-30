@@ -8,18 +8,22 @@ package ec.com.codesoft.codefaclite.compra.model;
 import ec.com.codesoft.codefaclite.compra.busqueda.CompraBusqueda;
 import ec.com.codesoft.codefaclite.compra.busqueda.OrdenCompraBusqueda;
 import ec.com.codesoft.codefaclite.compra.panel.OrdenCompraPanel;
+import ec.com.codesoft.codefaclite.compra.reportdata.OrdenCompraDataReporte;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.crm.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.crm.busqueda.ProveedorBusquedaDialogo;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
@@ -30,8 +34,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompraDet
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenTrabajoEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PrioridadEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
@@ -41,6 +48,7 @@ import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
@@ -90,8 +98,8 @@ public class OrdenCompraModel extends OrdenCompraPanel{
     }
 
     @Override
-    public void nuevo() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void nuevo() throws ExcepcionCodefacLite {        
+        
     }
 
     @Override
@@ -99,8 +107,13 @@ public class OrdenCompraModel extends OrdenCompraPanel{
         try {
             OrdenCompraServiceIf servicio=ServiceFactory.getFactory().getOrdenCompraServiceIf();
             setearValores();
-            servicio.grabar(ordenCompra);
-            DialogoCodefac.mensaje("Correcto","La compra fue guardada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+            ordenCompra=servicio.grabar(ordenCompra); //me devuelve la nueva orden para tener el id
+            //DialogoCodefac.mensaje("Correcto","La compra fue guardada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+            if(DialogoCodefac.dialogoPregunta("Correcto","La compra fue guardada correctamente,desea imprimir el reporte ? ",DialogoCodefac.MENSAJE_CORRECTO))
+            {
+                generarReportePdf();
+            }
+            
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Incorrecto","No se puede gurdar la compra",DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(CompraModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -116,6 +129,7 @@ public class OrdenCompraModel extends OrdenCompraPanel{
         ordenCompra.setEstado("a"); //TODO: cambiar el estado de las ordenes de compra
         ordenCompra.setFechaCreacion(UtilidadesFecha.getFechaHoy());
         ordenCompra.setFechaIngreso(new Date(getCmbFechaIngreso().getDate().getTime()));
+        ordenCompra.setObservacion(getTxtObservacion().getText());
         //ordenCompra.setProveedor(proveedor);
                 
         //Seteando el tipo de documento 
@@ -137,7 +151,51 @@ public class OrdenCompraModel extends OrdenCompraPanel{
 
     @Override
     public void imprimir() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        //Solo imprimir si se encuentra en modo de editar
+        if(!estadoFormulario.equals(ESTADO_EDITAR))
+        {
+            return ;// solo permite imprimir el reporte en el modo editar
+        }
+        
+        generarReportePdf();
+    }
+    
+    private void generarReportePdf()
+    {
+        Map parametros =  new HashMap();
+        List<OrdenCompraDataReporte> dataReportes = new ArrayList<>();
+        if(this.ordenCompra.getDetalles() != null)
+        {
+            parametros.put("codigo", this.ordenCompra.getId().toString());
+            parametros.put("proveedor", this.ordenCompra.getProveedor().getNombresCompletos());
+            parametros.put("descripcion", this.ordenCompra.getObservacion());
+            parametros.put("estado", "no definido");
+            parametros.put("fecha", "" + this.ordenCompra.getFechaIngreso());
+
+            parametros.put("subtotal12", "" + this.ordenCompra.getSubtotalImpuestos().subtract(this.ordenCompra.getDescuentoImpuestos()));
+            parametros.put("subtotal0", "" + this.ordenCompra.getSubtotalSinImpuestos().subtract(this.ordenCompra.getDescuentoSinImpuestos()));
+            parametros.put("descuento12", "" + this.ordenCompra.getDescuentoImpuestos());
+            parametros.put("descuento0", "" + this.ordenCompra.getDescuentoSinImpuestos());
+            parametros.put("subtotalImpuestos", "" + this.ordenCompra.getSubtotalImpuestos());
+            parametros.put("subtotalSinImpuestos", "" + this.ordenCompra.getSubtotalSinImpuestos());
+            parametros.put("iva", "" + this.ordenCompra.getIva());
+            parametros.put("total", "" + this.ordenCompra.getTotal());
+            
+            for(OrdenCompraDetalle otd : this.ordenCompra.getDetalles())
+            {
+                OrdenCompraDataReporte dataReporte = new OrdenCompraDataReporte();
+                dataReporte.setCantidad(otd.getCantidad().toString());
+                dataReporte.setDescripcion(otd.getDescripcion());
+                dataReporte.setValorUnitario(otd.getPrecioUnitario().toString());
+                dataReporte.setValorTotal(otd.getTotal().toString());
+                
+                dataReportes.add(dataReporte);
+                
+            }
+            InputStream path = RecursoCodefac.JASPER_COMPRA.getResourceInputStream("orden_compra.jrxml");
+            ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, dataReportes, panelPadre, "Orden de Compra");
+        }
     }
 
     @Override
@@ -154,34 +212,46 @@ public class OrdenCompraModel extends OrdenCompraPanel{
         if(ordenCompra != null)
         {
             this.ordenCompra = ordenCompra;
-            String identificacion = this.ordenCompra.getProveedor().getIdentificacion();
-            String nombre = this.ordenCompra.getProveedor().getRazonSocial();
-            getTxtProveedor().setText(identificacion+" - "+nombre);
-            //Observacion
-            this.getTxtObservacion().setText("Por Defecto");
-
-            //Fecha
-            this.getCmbFechaIngreso().setDate(this.ordenCompra.getFechaIngreso());
-            //Descuentos
-            this.getTxtDescuentoImpuestos().setText(this.ordenCompra.getDescuentoImpuestos()+"");
-            this.getTxtDescuentoSinImpuestos().setText(this.ordenCompra.getDescuentoSinImpuestos()+"");
-            //Valores a mostrar del subtotal
-            this.subtotal0 = new BigDecimal(BigInteger.ZERO) ;
-            this.subtotal0 = this.subtotal0.add(this.ordenCompra.getDescuentoSinImpuestos()).add(this.ordenCompra.getSubtotalSinImpuestos());      
-            this.subtotal12 = new BigDecimal(BigInteger.ZERO) ;
-            this.subtotal12 = this.subtotal12.add(this.ordenCompra.getDescuentoImpuestos()).add(this.ordenCompra.getSubtotalImpuestos());
-            this.getLblSubtotalImpuesto().setText(this.subtotal12 + "");
-            this.getLblSubtotalSinImpuesto().setText(this.subtotal0 + "");
             //actualizarDatosMostrarVentana();
+            cargarOrdenCompra();
             mostrarDatosTotales();
+            mostrarDatosTabla();
         }
+    }
+    
+    private void cargarOrdenCompra()
+    {
+        String identificacion = this.ordenCompra.getProveedor().getIdentificacion();
+        String nombre = this.ordenCompra.getProveedor().getRazonSocial();
+        getTxtProveedor().setText(identificacion + " - " + nombre);
+        //Observacion
+        this.getLblCodigoOrdenCompra().setText(this.ordenCompra.getId().toString());
+        this.getTxtObservacion().setText(this.ordenCompra.getObservacion());
+
+        //Fecha
+        this.getCmbFechaIngreso().setDate(this.ordenCompra.getFechaIngreso());
+        //Descuentos
+        this.getTxtDescuentoImpuestos().setText(this.ordenCompra.getDescuentoImpuestos() + "");
+        this.getTxtDescuentoSinImpuestos().setText(this.ordenCompra.getDescuentoSinImpuestos() + "");
+        //Valores a mostrar del subtotal
+        this.subtotal0 = new BigDecimal(BigInteger.ZERO);
+        this.subtotal0 = this.subtotal0.add(this.ordenCompra.getDescuentoSinImpuestos()).add(this.ordenCompra.getSubtotalSinImpuestos());
+        this.subtotal12 = new BigDecimal(BigInteger.ZERO);
+        this.subtotal12 = this.subtotal12.add(this.ordenCompra.getDescuentoImpuestos()).add(this.ordenCompra.getSubtotalImpuestos());
+        this.getLblSubtotalImpuesto().setText(this.subtotal12 + "");
+        this.getLblSubtotalSinImpuesto().setText(this.subtotal0 + "");
+        
+        TipoDocumentoEnum tipoDocumentoEnum=TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(this.ordenCompra.getCodigoTipoDocumento());
+        getCmbTipoDocumento().setSelectedItem(tipoDocumentoEnum);
+        //cmbTipoDocumento.
+    
     }
 
     @Override
     public void limpiar() {
         
         getTxtCantidadItem().setText("1");
-        getTxtOrdenCompra().setText("");
+        getLblCodigoOrdenCompra().setText("");
         getTxtProveedor().setText("");
         getTxtObservacion().setText("");
         //Limpiar Detalles de Producto
@@ -199,9 +269,8 @@ public class OrdenCompraModel extends OrdenCompraPanel{
         getLblTotal().setText("0.00");
         getCmbFechaIngreso().setDate(new java.util.Date());
         
-        ordenCompra=new OrdenCompra();        
-
-        
+        ordenCompra=new OrdenCompra();
+         mostrarDatosTabla(); //Carga nuevamente los datos con la tabla vacia
     }
 
 //    @Override
@@ -306,6 +375,7 @@ public class OrdenCompraModel extends OrdenCompraPanel{
                     String identificacion = proveedor.getIdentificacion();
                     String nombre = proveedor.getRazonSocial();
                     getTxtProveedor().setText(identificacion + " - " + nombre);
+                    ordenCompra.setProveedor(proveedor);
                     //desbloquearIngresoDetalleProducto();
                 }
             }
@@ -483,13 +553,15 @@ public class OrdenCompraModel extends OrdenCompraPanel{
         String[] titulo={"Cantidad","Descripción","Valor Unitario","Valor Total"};
         this.modeloTablaDetallesCompra = new DefaultTableModel(titulo,0);
         List<OrdenCompraDetalle> detalles= ordenCompra.getDetalles();
-        for (OrdenCompraDetalle detalle : detalles) {
-            Vector<String> fila=new Vector<String>();
-            fila.add(detalle.getCantidad()+"");
-            fila.add(detalle.getDescripcion()+"");
-            fila.add(detalle.getPrecioUnitario()+"");
-            fila.add(detalle.getSubtotal()+"");
-            this.modeloTablaDetallesCompra.addRow(fila);
+        if (detalles != null) {
+            for (OrdenCompraDetalle detalle : detalles) {
+                Vector<String> fila = new Vector<String>();
+                fila.add(detalle.getCantidad() + "");
+                fila.add(detalle.getDescripcion() + "");
+                fila.add(detalle.getPrecioUnitario() + "");
+                fila.add(detalle.getSubtotal() + "");
+                this.modeloTablaDetallesCompra.addRow(fila);
+            }
         }
         
         getTblDetalleProductos().setModel(this.modeloTablaDetallesCompra);
@@ -530,7 +602,7 @@ public class OrdenCompraModel extends OrdenCompraPanel{
         camposValidar.add(getTxtPrecionUnitarioItem());
         camposValidar.add(getTxtDescripcionItem());
         for (JTextField campo : camposValidar) {
-            System.out.println("Color: -->" + campo.getBackground());
+            //System.out.println("Color: -->" + campo.getBackground());
             if (!campo.getBackground().equals(Color.WHITE)) {
                 b = false;
             }

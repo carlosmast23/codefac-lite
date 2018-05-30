@@ -83,7 +83,6 @@ public abstract class OrdenCompraPanel extends ControladorCodefacInterface {
         txtProveedor = new javax.swing.JTextField();
         btnProveedorBuscar = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        txtOrdenCompra = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         txtObservacion = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
@@ -130,6 +129,7 @@ public abstract class OrdenCompraPanel extends ControladorCodefacInterface {
         lblEspacio2 = new javax.swing.JLabel();
         lblEspacio4 = new javax.swing.JLabel();
         lblEspacio6 = new javax.swing.JLabel();
+        lblCodigoOrdenCompra = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -175,13 +175,6 @@ public abstract class OrdenCompraPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel2, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        getContentPane().add(txtOrdenCompra, gridBagConstraints);
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel3.setText("Observación:");
@@ -596,6 +589,15 @@ public abstract class OrdenCompraPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.3;
         getContentPane().add(lblEspacio6, gridBagConstraints);
 
+        lblCodigoOrdenCompra.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        lblCodigoOrdenCompra.setText("00");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(lblCodigoOrdenCompra, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -632,6 +634,7 @@ public abstract class OrdenCompraPanel extends ControladorCodefacInterface {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollBar jScrollBar1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblCodigoOrdenCompra;
     private javax.swing.JLabel lblEspacio10;
     private javax.swing.JLabel lblEspacio12;
     private javax.swing.JLabel lblEspacio15;
@@ -650,7 +653,6 @@ public abstract class OrdenCompraPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtDescuentoImpuestos;
     private javax.swing.JTextField txtDescuentoSinImpuestos;
     private javax.swing.JTextField txtObservacion;
-    private javax.swing.JTextField txtOrdenCompra;
     private javax.swing.JTextField txtPrecionUnitarioItem;
     private javax.swing.JTextField txtProveedor;
     // End of variables declaration//GEN-END:variables
@@ -739,13 +741,6 @@ public abstract class OrdenCompraPanel extends ControladorCodefacInterface {
         this.txtObservacion = txtObservacion;
     }
 
-    public JTextField getTxtOrdenCompra() {
-        return txtOrdenCompra;
-    }
-
-    public void setTxtOrdenCompra(JTextField txtOrdenCompra) {
-        this.txtOrdenCompra = txtOrdenCompra;
-    }
 
 //    @LimpiarAnotacion
 //    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[0-9]+$",nombre = "Preimpreso")
@@ -850,6 +845,15 @@ public abstract class OrdenCompraPanel extends ControladorCodefacInterface {
     public void setBtnCrearProducto(JButton btnCrearProducto) {
         this.btnCrearProducto = btnCrearProducto;
     }
+
+    public JLabel getLblCodigoOrdenCompra() {
+        return lblCodigoOrdenCompra;
+    }
+
+    public void setLblCodigoOrdenCompra(JLabel lblCodigoOrdenCompra) {
+        this.lblCodigoOrdenCompra = lblCodigoOrdenCompra;
+    }
+    
     
     
     
