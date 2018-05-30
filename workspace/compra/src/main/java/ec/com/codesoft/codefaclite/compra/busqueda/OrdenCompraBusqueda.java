@@ -31,8 +31,9 @@ public class OrdenCompraBusqueda implements InterfaceModelFind<OrdenCompra>
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        String queryString = "SELECT c FROM OrdenCompra c WHERE ";
-        queryString+=" ( LOWER(c.id) like ?1 )";
+        OrdenCompra oc;
+        String queryString = "SELECT c FROM OrdenCompra c WHERE CAST(c.id CHAR(64) ) like ?1";
+        //queryString+="  c.id = ?1 ";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,filter);
         return queryDialog;
@@ -41,7 +42,7 @@ public class OrdenCompraBusqueda implements InterfaceModelFind<OrdenCompra>
     @Override
     public void agregarObjeto(OrdenCompra t, Vector dato) {
         dato.add(t.getId());
-        dato.add(t.getProveedor().getRazonSocial());
+        dato.add((t.getProveedor()!=null)?t.getProveedor().getRazonSocial():"");
         dato.add(t.getCodigoTipoDocumento()); 
         dato.add(t.getFechaIngreso());
         dato.add(t.getTotal());
