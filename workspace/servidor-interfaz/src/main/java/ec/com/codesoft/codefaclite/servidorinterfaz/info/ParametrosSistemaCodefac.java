@@ -5,6 +5,10 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.info;
 
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import java.awt.Image;
+import javax.swing.ImageIcon;
+
 /**
  * Clase que contiene los parametros generales del sistema 
  * @author Carlos
@@ -19,4 +23,12 @@ public abstract class ParametrosSistemaCodefac {
      */
     public static final ModoSistemaEnum MODO=ModoSistemaEnum.PRODUCCION;
     
+    /**
+     * 
+     */
+    public static final Image iconoSistema=new javax.swing.ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("logoCodefac-ico.png")).getImage();
+    /**
+     * Icono del sistema 
+     */
+    //public static fin  new javax.swing.ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("logoCodefac-ico.png")).getImage()
 }
