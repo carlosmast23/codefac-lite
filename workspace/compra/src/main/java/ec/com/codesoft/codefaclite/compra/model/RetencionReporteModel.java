@@ -68,7 +68,9 @@ public class RetencionReporteModel extends RetencionReportePanel {
     Date fechaFin = null;
     String fechainicio = "";
     String fechafin = "";
-    boolean banderaTipo = false;
+    boolean banderaTipo = true, banderaIva = true, banderaRenta = true;
+
+    private static final Logger LOG = Logger.getLogger(RetencionReporteModel.class.getName());
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
@@ -101,6 +103,7 @@ public class RetencionReporteModel extends RetencionReportePanel {
         getChkTodosIva().setSelected(true);
         if (getChkTodosIva().isSelected()) {
             sriRetencionIva = null;
+            banderaIva = true;
             getCmbRetencionIva().setEnabled(false);
         }
 
@@ -109,8 +112,10 @@ public class RetencionReporteModel extends RetencionReportePanel {
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
                     sriRetencionIva = null;
+                    banderaIva = true;
                     getCmbRetencionIva().setEnabled(false);
                 } else {
+                    banderaIva = false;
                     getCmbRetencionIva().setEnabled(true);
                 }
             }
@@ -119,6 +124,7 @@ public class RetencionReporteModel extends RetencionReportePanel {
         getChkTodosRenta().setSelected(true);
         if (getChkTodosRenta().isSelected()) {
             sriRetencionRenta = null;
+            banderaRenta = true;
             getCmbRetencionRenta().setEnabled(false);
         }
 
@@ -127,8 +133,10 @@ public class RetencionReporteModel extends RetencionReportePanel {
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
                     sriRetencionRenta = null;
+                    banderaRenta = true;
                     getCmbRetencionRenta().setEnabled(false);
                 } else {
+                    banderaRenta = false;
                     getCmbRetencionRenta().setEnabled(true);
                 }
             }
@@ -202,8 +210,12 @@ public class RetencionReporteModel extends RetencionReportePanel {
                     if (getDateFechaFin().getDate() != null) {
                         fechaFin = new Date(getDateFechaFin().getDate().getTime());
                     }
-                    sriRetencionIva = (SriRetencionIva) getCmbRetencionIva().getSelectedItem();
-                    sriRetencionRenta = (SriRetencionRenta) getCmbRetencionRenta().getSelectedItem();
+                    if (banderaIva == false) {
+                        sriRetencionIva = (SriRetencionIva) getCmbRetencionIva().getSelectedItem();
+                    }
+                    if (banderaRenta == false) {
+                        sriRetencionRenta = (SriRetencionRenta) getCmbRetencionRenta().getSelectedItem();
+                    }
 
                     String tipo = "";
                     if (banderaTipo == true) {
@@ -218,7 +230,7 @@ public class RetencionReporteModel extends RetencionReportePanel {
                     titulo.add("Base imponble");
                     titulo.add("Porcentaje");
                     titulo.add("Código");
-                    titulo.add("valor");
+                    titulo.add("Valor");
 
                     DefaultTableModel modeloTablaRetenciones = new DefaultTableModel(titulo, 0);
 
@@ -306,8 +318,13 @@ public class RetencionReporteModel extends RetencionReportePanel {
             if (getDateFechaFin().getDate() != null) {
                 fechaFin = new Date(getDateFechaFin().getDate().getTime());
             }
-            sriRetencionIva = (SriRetencionIva) getCmbRetencionIva().getSelectedItem();
-            sriRetencionRenta = (SriRetencionRenta) getCmbRetencionRenta().getSelectedItem();
+            if (banderaIva == false) {
+                sriRetencionIva = (SriRetencionIva) getCmbRetencionIva().getSelectedItem();
+            }
+            if (banderaRenta == false) {
+                sriRetencionRenta = (SriRetencionRenta) getCmbRetencionRenta().getSelectedItem();
+            }
+
             String tipo = "";
             if (banderaTipo == true) {
                 tipo = null;
@@ -361,12 +378,33 @@ public class RetencionReporteModel extends RetencionReportePanel {
 
             String cliente = "";
             if (proveedor == null) {
-                cliente = "TODOS";
+                cliente = "Todos";
             } else {
                 cliente = proveedor.getRazonSocial();
             }
-            parameters.put("niva",sriRetencionIva.getNombre());
-            parameters.put("nretencion",sriRetencionRenta.getNombre());
+            String niva = "";
+            if (sriRetencionIva == null) {
+                niva = "Todos";
+            } else {
+                niva = sriRetencionIva.getNombre();
+            }
+            String nrenta = "";
+            if (sriRetencionIva == null) {
+                nrenta = "Todos";
+            } else {
+                nrenta = sriRetencionRenta.getNombre();
+            }
+
+            String ntipo = "";
+            if (banderaTipo == true) {
+                ntipo = "Todos";
+            } else {
+                ntipo = getCmbTipo().getSelectedItem().toString();
+            }
+
+            parameters.put("tipo", ntipo);
+            parameters.put("niva", niva);
+            parameters.put("nretencion", nrenta);
             parameters.put("proveedor", cliente);
             parameters.put("fechainicio", formatDate(fechaInicio, "yyyy-MM-dd"));
             parameters.put("fechafin", formatDate(fechaFin, "yyyy-MM-dd"));

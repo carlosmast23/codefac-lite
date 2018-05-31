@@ -81,7 +81,7 @@ public class CompraModel extends CompraPanel{
     private Empresa empresa;
     private Compra compra;
     private Producto productoSeleccionado;
-    private Persona proveedor;
+    //private Persona proveedor;
     private ProductoProveedor productoProveedor;
     private DefaultTableModel modeloTablaDetallesCompra;
     private BigDecimal subtotal12;
@@ -150,7 +150,7 @@ public class CompraModel extends CompraPanel{
         compra.setFechaCreacion(UtilidadesFecha.getFechaHoy());
         compra.setFechaFactura(new Date(getCmbFechaCompra().getDate().getTime()));
         compra.setIdentificacion("");
-        compra.setProveedor(proveedor);
+        //compra.setProveedor(proveedor);
         
 //        compra.setPuntoEmision(getTxtPuntoEmision().getText());
 //        compra.setPuntoEstablecimiento(getTxtEstablecimiento().getText());
@@ -206,6 +206,7 @@ public class CompraModel extends CompraPanel{
         Compra compra = (Compra)buscarDialogoModel.getResultado();
         if(compra != null)
         {
+            this.compra=compra;
             cargarDatosCompra();
         }
         
@@ -279,7 +280,7 @@ public class CompraModel extends CompraPanel{
         getTxtOrdenCompra().setText("");
         getTxtProveedor().setText("");
         getTxtObservacion().setText("");
-        getTxtFPreimpreso().setText("001001");
+        getTxtFPreimpreso().setText("001001000000000");
         getTxtAutorizacion().setText("");
         //Limpiar Detalles de Producto
         getTxtProductoItem().setText("");
@@ -447,8 +448,8 @@ public class CompraModel extends CompraPanel{
                     @Override
                     public void updateInterface(Producto entity) {
                         if (entity != null) {
-                            String identificacion = proveedor.getIdentificacion();
-                            String nombre = proveedor.getRazonSocial();
+                            String identificacion = compra.getProveedor().getIdentificacion();
+                            String nombre = compra.getProveedor().getRazonSocial();
                             getTxtProveedor().setText(identificacion + " - " + nombre);
                             desbloquearIngresoDetalleProducto();
                         }
@@ -468,7 +469,7 @@ public class CompraModel extends CompraPanel{
                 panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<Persona>() {
                     @Override
                     public void updateInterface(Persona entity) {
-                        proveedor=entity;
+                        Persona proveedor=entity;
                         compra.setProveedor(entity);
                         if (compra.getProveedor() != null) {
                             String identificacion = proveedor.getIdentificacion();
@@ -490,7 +491,8 @@ public class CompraModel extends CompraPanel{
                 ProveedorBusquedaDialogo buscarBusquedaDialogo = new ProveedorBusquedaDialogo();
                 BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
                 buscarDialogo.setVisible(true);
-                proveedor = (Persona) buscarDialogo.getResultado();
+                Persona proveedor = (Persona) buscarDialogo.getResultado();
+                compra.setProveedor(proveedor);
                 if (proveedor != null) {
                     String identificacion=proveedor.getIdentificacion();
                     String nombre =proveedor.getRazonSocial();
@@ -629,7 +631,7 @@ public class CompraModel extends CompraPanel{
                         ProductoProveedorServiceIf serviceProductoProveedor = ServiceFactory.getFactory().getProductoProveedorServiceIf();
                         Map<String, Object> mapParametros = new HashMap<String, Object>();
                         mapParametros.put("producto", productoSeleccionado);
-                        mapParametros.put("proveedor", proveedor);
+                        mapParametros.put("proveedor", compra.getProveedor());
                         List<ProductoProveedor> resultados = serviceProductoProveedor.obtenerPorMap(mapParametros);
                         if (resultados != null && resultados.size() > 0) {
                             productoProveedor = resultados.get(0); //Si existe el proveedor solo seteo la variale
@@ -643,7 +645,7 @@ public class CompraModel extends CompraPanel{
                             productoProveedor.setDescripcion("");
                             productoProveedor.setEstado("a");
                             productoProveedor.setProducto(productoSeleccionado);
-                            productoProveedor.setProveedor(proveedor);
+                            productoProveedor.setProveedor(compra.getProveedor());
                             getTxtPrecionUnitarioItem().setText("0"); //Seteo con el valor de 0 porque no existe el costo grabado
                             getCmbCobraIva().setSelectedItem(EnumSiNo.SI); //Seteo por defecto el valor de SI cuando no existe en la base de datos
                         }

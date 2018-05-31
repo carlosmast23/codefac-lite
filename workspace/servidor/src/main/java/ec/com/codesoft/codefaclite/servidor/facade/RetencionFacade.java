@@ -69,7 +69,7 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
         try {//INNER JOIN Retencion r ON d.retencion=r.id  
             String queryString = "SELECT d FROM RetencionDetalle d WHERE " + tipor + " AND d.retencion.id IN(SELECT r.id FROM Retencion r WHERE " + proveedor + fecha + " AND r.compra.id IN(SELECT e.compra.id FROM CompraDetalle e WHERE " + retiva + " AND " + retrenta + ") )";
             Query query = getEntityManager().createQuery(queryString);
-            //System.err.println("QUERY--->" + query.toString());
+            //System.err.println("QUERYD---JC--->" + query.toString());
             if (persona != null) {
                 query.setParameter(1, persona);
             }
@@ -79,12 +79,13 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
             if (ff != null) {
                 query.setParameter(3, ff);
             }
+           
             if (iva != null) {
                 query.setParameter(4, iva);
             }
-            if (renta != null) {
+           /* if (renta != null) {
                 query.setParameter(5, renta);
-            }
+            }*/
             if (tipo != null) {
                 query.setParameter(6, tipo);
             }
@@ -132,7 +133,7 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
             String queryString = "SELECT d.codigoRetencionSri,SUM(d.valorRetenido) FROM RetencionDetalle d WHERE " + tipoc + " AND d.retencion.id IN(SELECT r.id FROM Retencion r WHERE " + proveedor + fecha + " AND r.compra.id IN(SELECT e.compra.id FROM CompraDetalle e WHERE " + retiva + " AND " + retrenta + ")) GROUP BY d.codigoRetencionSri";
             //String queryString = "SELECT d.codigoSri,SUM(d.valorRetenido) FROM RetencionDetalle d GROUP BY d.codigoSri";
             Query query = getEntityManager().createQuery(queryString);
-            System.err.println("QUERY 2 --->" + query.toString());
+            //System.err.println("QUERY 2 --->" + query.toString());
             if (persona != null) {
                 query.setParameter(1, persona);
             }

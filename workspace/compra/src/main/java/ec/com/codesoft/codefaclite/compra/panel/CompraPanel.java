@@ -745,7 +745,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
         getContentPane().add(btnAgregarProveedor, gridBagConstraints);
 
         try {
-            txtFPreimpreso.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###-###-###")));
+            txtFPreimpreso.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###-###-#########")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
@@ -910,7 +910,7 @@ public abstract class CompraPanel extends ControladorCodefacInterface {
     }
     
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=false ,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Autorización")
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Autorización")
     public JTextField getTxtAutorizacion() {
         return txtAutorizacion;
     }
