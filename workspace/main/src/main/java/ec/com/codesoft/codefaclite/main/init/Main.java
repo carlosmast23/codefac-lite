@@ -218,6 +218,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionServic
 import ec.com.codesoft.codefaclite.utilidades.email.PropiedadesCorreoEnum;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import ec.com.codesoft.codefaclite.utilidades.web.UtilidadesWeb;
+import java.awt.Font;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -257,6 +258,9 @@ public class Main {
         frameAplicacion.setUndecorated(true);
         frameAplicacion.setIconImage(ParametrosSistemaCodefac.iconoSistema);
         frameAplicacion.setVisible(true);
+        
+        //Configurar diferente tipo de letra para los dialogos
+        UIManager.put("OptionPane.messageFont", new Font("Arial", Font.PLAIN, 14));
         
         
         //Verifica si se esta ejecutando la ultima version o manda a aactualizar
@@ -616,6 +620,16 @@ public class Main {
                     if(parametroDirectorioRecursos==null)
                     {
                         //Abrir un dialogo para preguntar si desea cambiar de ubicacion de la carpeta de recursos
+                        if(DialogoCodefac.dialogoPregunta("Directorio Recursos","Por defecto la carpeta de recursos se creará en el directorio del usuario \n Desea cambiar el directorio por defecto? ",DialogoCodefac.MENSAJE_ADVERTENCIA))
+                        {
+                            JFileChooser f = new JFileChooser();
+                            f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                            f.showSaveDialog(null);
+                            if(f.getSelectedFile()!=null)
+                            {
+                                directorioUsuario=f.getSelectedFile().getPath();
+                            }                            
+                        }
                         
                         parametroDirectorioRecursos=new ParametroCodefac();
                         parametroDirectorioRecursos.setNombre(ParametroCodefac.DIRECTORIO_RECURSOS);
