@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "PRESUPUESTO_DETALLE")
 @XmlRootElement
-public class PresupuestoDetalle implements Serializable
+public class PresupuestoDetalle implements Serializable, Comparable<PresupuestoDetalle>
 {   
     @Id
     @Column(name="ID")
@@ -140,5 +140,14 @@ public class PresupuestoDetalle implements Serializable
     public void setPresupuesto(Presupuesto presupuesto) {
         this.presupuesto = presupuesto;
     }
-     
+
+    @Override
+    public int compareTo(PresupuestoDetalle o) {
+        if(!o.getPersona().equals(this.getPersona()))
+        {
+            return -1;
+        }
+        return 0;
+    }
+
 }

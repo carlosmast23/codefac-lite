@@ -16,7 +16,7 @@ import java.util.GregorianCalendar;
  * @author Carlos
  */
 public class UtilidadesFecha {
-
+   
     public static java.sql.Date getFechaHoy() {
         java.util.Date fechaHoy = new java.util.Date();
         return new java.sql.Date(fechaHoy.getTime());
@@ -131,11 +131,11 @@ public class UtilidadesFecha {
         return dateFormat.format(date);
     }
     
-    public static java.util.Date fechaProxima(java.util.Date date, int numero, String opc)
+    public static java.util.Date fechaProxima(java.util.Date date, int numero, String e)
     {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        switch(opc)
+        switch(e)
         {
             case "Dia":
                 calendar.add(Calendar.DAY_OF_YEAR, numero);

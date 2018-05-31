@@ -32,14 +32,20 @@ import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.rmi.RemoteException;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -55,6 +61,7 @@ public class PresupuestoModel extends PresupuestoPanel{
     
     private Producto producto;
     private Persona persona;
+    private Map<Persona,List<PresupuestoDetalle>> clientes = new TreeMap<>();
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
@@ -63,6 +70,7 @@ public class PresupuestoModel extends PresupuestoPanel{
         addListenerBotones();
         addListenerCombos();
         addListenerTablas();
+        addListenerTextos();
         initDatosTabla();
     }
 
@@ -318,13 +326,28 @@ public class PresupuestoModel extends PresupuestoPanel{
                 calcularFechaProxima();
             }
         });
-        
-        getTxtDiasPresupuesto().addActionListener(new ActionListener() {
+  
+    }
+    
+    public void addListenerTextos()
+    {
+         getTxtDiasPresupuesto().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 calcularFechaProxima();
             }
         });
+        getTxtDiasPresupuesto().addFocusListener(new FocusListener() {
+             @Override
+             public void focusGained(FocusEvent e) {
+     
+             }
+
+             @Override
+             public void focusLost(FocusEvent e) {
+                calcularFechaProxima();
+             }
+         });
     }
     
     public void calcularFechaProxima()
@@ -417,6 +440,7 @@ public class PresupuestoModel extends PresupuestoPanel{
         {
             this.presupuesto.addDetalle(presupuestoDetalle);
         }
+        Collections.sort(this.presupuesto.getPresupuestoDetalles());
         mostrarDatosTabla();
      }
     
@@ -498,5 +522,15 @@ public class PresupuestoModel extends PresupuestoPanel{
         {
             DialogoCodefac.mensaje("Alerta", "Seleccione la fecha de ingreso para Orden Trabajo", DialogoCodefac.MENSAJE_ADVERTENCIA);
         }
+    }
+    
+    public void ordenarDetallesEnFuncionDeCliente()
+    {
+        List<PresupuestoDetalle> presupuestoDetalles = new ArrayList<>();
+        for(PresupuestoDetalle pd : presupuesto.getPresupuestoDetalles()){
+            
+            //clientes.put(persona,new ArrayList<>().add());
+        }
+        
     }
 }
