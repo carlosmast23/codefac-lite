@@ -521,8 +521,10 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         getContentPane().add(PanelDatosAdicionales, gridBagConstraints);
 
         PanelDatosAdicionales1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Retenciones", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 11))); // NOI18N
+        PanelDatosAdicionales1.setEnabled(false);
         PanelDatosAdicionales1.setLayout(new java.awt.GridBagLayout());
 
+        cmbRetencionIva.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -547,6 +549,7 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         PanelDatosAdicionales1.add(jLabel19, gridBagConstraints);
 
+        cmbRetencionRenta.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
