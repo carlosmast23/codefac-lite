@@ -23,3 +23,11 @@ Cuando no exista internet levantar el aplicativo como localhost para cliente-ser
 
 Analizar el codigo private boolean validacionPersonalizadaPorModulos() en facturacion para validar correctamente con descuentos para los distintos modulos
 
+
+Es poder eliminar cuando se tiene algun error del usuario en las facturas electronicas
+Revisar el instalador se instalo en la flash no tiene sentido
+Revisar los productos que no haya tantos datos
+Ver un modo para que el administrador pueda cambiar al modo produccion por su propia responsabilidad
+Al momento de crear productos seguidos parese que salio error  (no se actualizo)
+
+
