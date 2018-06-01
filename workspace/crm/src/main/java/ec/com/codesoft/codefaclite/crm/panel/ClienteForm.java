@@ -47,14 +47,13 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
 
         jPanel2 = new javax.swing.JPanel();
         jPopupMenu1 = new javax.swing.JPopupMenu();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanelCaracteristicasGenerales = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jTextNombres = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jComboIdentificacion = new javax.swing.JComboBox<>();
         jTextIdentificacion = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        jComboTipoCliente = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextAreaDireccion = new javax.swing.JTextArea();
@@ -74,17 +73,22 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jTextApellidos = new javax.swing.JTextField();
         jTextNombreSocial = new javax.swing.JTextField();
         lblEspacio = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        cmbTipoOperador = new javax.swing.JComboBox<>();
         jLabel15 = new javax.swing.JLabel();
         cmbNacionalidad = new javax.swing.JComboBox<>();
+        lblEspacio5 = new javax.swing.JLabel();
+        lblEspacio8 = new javax.swing.JLabel();
+        lblEspacio6 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        jComboTipoCliente = new javax.swing.JComboBox<>();
+        jLabel12 = new javax.swing.JLabel();
+        cmbTipoOperador = new javax.swing.JComboBox<>();
         jLabel16 = new javax.swing.JLabel();
         cmbFormaPagoDefecto = new javax.swing.JComboBox<>();
         lblOligadoLlevarContabilidad = new javax.swing.JLabel();
         chkObligadoLlevarContabilidad = new javax.swing.JCheckBox();
-        lblEspacio5 = new javax.swing.JLabel();
-        lblEspacio8 = new javax.swing.JLabel();
-        lblEspacio6 = new javax.swing.JLabel();
+        lblEspacio7 = new javax.swing.JLabel();
+        lblEspacio4 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -92,10 +96,8 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         setResizable(true);
         setTitle("Cliente");
         setFrameIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/persona-ico.png"))); // NOI18N
-        setPreferredSize(new java.awt.Dimension(800, 467));
-        getContentPane().setLayout(new java.awt.GridBagLayout());
+        setPreferredSize(new java.awt.Dimension(800, 380));
 
-        jPanelCaracteristicasGenerales.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos Clientes"));
         jPanelCaracteristicasGenerales.setPreferredSize(new java.awt.Dimension(607, 353));
         jPanelCaracteristicasGenerales.setLayout(new java.awt.GridBagLayout());
 
@@ -134,25 +136,8 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.2;
+        gridBagConstraints.weightx = 0.4;
         jPanelCaracteristicasGenerales.add(jTextIdentificacion, gridBagConstraints);
-
-        jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel5.setText("Tipo Cliente:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        jPanelCaracteristicasGenerales.add(jLabel5, gridBagConstraints);
-
-        jComboTipoCliente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CLIENTE", "SUJETO RETENIDO", "DESTINATARIO" }));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        jPanelCaracteristicasGenerales.add(jComboTipoCliente, gridBagConstraints);
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel6.setText("Dirección:");
@@ -304,22 +289,6 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(10, 20, 10, 20);
         jPanelCaracteristicasGenerales.add(lblEspacio, gridBagConstraints);
 
-        jLabel12.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel12.setText("Tipo:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        jPanelCaracteristicasGenerales.add(jLabel12, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        jPanelCaracteristicasGenerales.add(cmbTipoOperador, gridBagConstraints);
-
         jLabel15.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel15.setText("Nacionalidad:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -333,34 +302,6 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         jPanelCaracteristicasGenerales.add(cmbNacionalidad, gridBagConstraints);
-
-        jLabel16.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel16.setText("Forma Pago Defecto:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        jPanelCaracteristicasGenerales.add(jLabel16, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        jPanelCaracteristicasGenerales.add(cmbFormaPagoDefecto, gridBagConstraints);
-
-        lblOligadoLlevarContabilidad.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        lblOligadoLlevarContabilidad.setText("Obligado a Llevar Contabilidad:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        jPanelCaracteristicasGenerales.add(lblOligadoLlevarContabilidad, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        jPanelCaracteristicasGenerales.add(chkObligadoLlevarContabilidad, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
@@ -380,15 +321,87 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.8;
         jPanelCaracteristicasGenerales.add(lblEspacio6, gridBagConstraints);
 
+        jTabbedPane1.addTab("Datos Principales", jPanelCaracteristicasGenerales);
+
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel5.setText("Tipo Cliente:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(jPanelCaracteristicasGenerales, gridBagConstraints);
+        jPanel1.add(jLabel5, gridBagConstraints);
+
+        jComboTipoCliente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CLIENTE", "SUJETO RETENIDO", "DESTINATARIO" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        jPanel1.add(jComboTipoCliente, gridBagConstraints);
+
+        jLabel12.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel12.setText("Tipo:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(jLabel12, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        jPanel1.add(cmbTipoOperador, gridBagConstraints);
+
+        jLabel16.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel16.setText("Forma Pago Defecto:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(jLabel16, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        jPanel1.add(cmbFormaPagoDefecto, gridBagConstraints);
+
+        lblOligadoLlevarContabilidad.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblOligadoLlevarContabilidad.setText("Obligado a Llevar Contabilidad:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(lblOligadoLlevarContabilidad, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel1.add(chkObligadoLlevarContabilidad, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridwidth = 9;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.weighty = 0.1;
+        jPanel1.add(lblEspacio7, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.4;
+        jPanel1.add(lblEspacio4, gridBagConstraints);
+
+        jTabbedPane1.addTab("Datos Adicionales", jPanel1);
+
+        getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -421,10 +434,12 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanelCaracteristicasGenerales;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField jTextApellidos;
     private javax.swing.JTextArea jTextAreaDireccion;
     private javax.swing.JTextField jTextCelular;
@@ -435,8 +450,10 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JTextField jTextNombres;
     private javax.swing.JTextField jTextTelefono;
     private javax.swing.JLabel lblEspacio;
+    private javax.swing.JLabel lblEspacio4;
     private javax.swing.JLabel lblEspacio5;
     private javax.swing.JLabel lblEspacio6;
+    private javax.swing.JLabel lblEspacio7;
     private javax.swing.JLabel lblEspacio8;
     private javax.swing.JLabel lblOligadoLlevarContabilidad;
     // End of variables declaration//GEN-END:variables

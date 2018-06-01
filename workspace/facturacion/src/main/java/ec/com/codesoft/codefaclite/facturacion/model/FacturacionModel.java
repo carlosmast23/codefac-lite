@@ -931,26 +931,32 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     @Override
     public void eliminar() {
+        //Varible 
+        boolean respuesta =false;
+        
         //Eliminar solo si ha cargado un dato para editar
         if (estadoFormulario.equals(ESTADO_EDITAR)) {
             if (factura != null) {
-                //Eliminar solo si el estado es sin autorizar, o esta en el modo de facturacion normal y esta con estado facturado
+                //Eliminar solo si el estado esta en sin autorizar, o esta en el modo de facturacion normal y esta con estado facturado
                 if (factura.getEstado().equals(FacturaEnumEstado.SIN_AUTORIZAR.getEstado()) || 
                         (factura.getTipoFacturacion().equals(TipoFacturacionEnumEstado.NORMAL.getLetra()) && factura.getEstado().equals(FacturaEnumEstado.FACTURADO.getEstado()) )) {
                     
-                    boolean respuesta = DialogoCodefac.dialogoPregunta("Advertencia", "Esta seguro que desea eliminar la factura? ", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                    if (respuesta) {
-                        try {
-                            FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
-                            servicio.eliminarFactura(factura);
-                            DialogoCodefac.mensaje("Exitoso", "La factura se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-                            getLblEstadoFactura().setText(FacturaEnumEstado.ELIMINADO.getNombre());
-                        } catch (RemoteException ex) {
-                            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
+                    respuesta = DialogoCodefac.dialogoPregunta("Advertencia", "Esta seguro que desea eliminar la factura? ", DialogoCodefac.MENSAJE_ADVERTENCIA);
+
                 } else {
-                    DialogoCodefac.mensaje("Alerta", "Solo se pueden eliminar facturas no autorizadas", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    respuesta=DialogoCodefac.dialogoPregunta("Alerta", "La factura se encuentra autorizada en el SRI , \nPorfavor elimine la factura solo si tambien esta anulado en el SRI\nDesea eliminar la factura de todos modos?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                }
+                
+                //Eliminar la factura si eligen la respuesta si
+                if (respuesta) {
+                    try {
+                        FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
+                        servicio.eliminarFactura(factura);
+                        DialogoCodefac.mensaje("Exitoso", "La factura se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+                        getLblEstadoFactura().setText(FacturaEnumEstado.ELIMINADO.getNombre());
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             }
         }

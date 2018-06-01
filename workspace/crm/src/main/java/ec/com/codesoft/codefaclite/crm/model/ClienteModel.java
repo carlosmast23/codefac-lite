@@ -84,6 +84,8 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     private String comboTipoCliente[] = {"CLIENTE", "SUJETO RETENIDO", "DESTINATARIO"};
 
     private int opcionIdentificacion = 4;
+    
+    protected OperadorNegocioEnum operadorNegocioDefault;
 
     public ClienteModel() {
         this.personaService = ServiceFactory.getFactory().getPersonaServiceIf();
@@ -372,7 +374,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             getjComboIdentificacion().setSelectedItem(identificacion);
 
             getjComboTipoCliente().setSelectedIndex(0);
-            getCmbTipoOperador().setSelectedIndex(0);
+            getCmbTipoOperador().setSelectedItem(operadorNegocioDefault);
             getjTextExtension().setText("0");
             
             getCmbFormaPagoDefecto().setSelectedIndex(0);
@@ -424,6 +426,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     }
 
     private void cargarDatosIniciales() {
+        operadorNegocioDefault=OperadorNegocioEnum.CLIENTE;
         /**
          * Cargando los estados por defecto
          */
@@ -586,6 +589,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         
         //Cargar el tipo de operador de negocio : cliente , proveedor, ambos          
         OperadorNegocioEnum operadorNegocioEnum=(OperadorNegocioEnum) parametros[0];
+        operadorNegocioDefault=operadorNegocioEnum;
         getCmbTipoOperador().setSelectedItem(operadorNegocioEnum);
         
     }

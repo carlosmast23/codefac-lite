@@ -34,7 +34,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -58,7 +57,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     private ImpuestoServiceIf impuestoService;
     private ImpuestoDetalleServiceIf impuestoDetalleService;
     private CategoriaProductoServiceIf catProdService;
-    private BigDecimal d;
+    //private BigDecimal d;
 
     /*
     Referencia sobre el producto seleccionado para el ensamble
@@ -124,11 +123,19 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         //producto.getCatalogoProducto().setTipoProducto(tipoProductoEnum.getLetra());
         
         
-
+        BigDecimal valorUnitario=BigDecimal.ZERO;
         producto.setNombre(getTextNombre().getText());
-        d = new BigDecimal(getTextValorUnitario().getText());
+        valorUnitario = new BigDecimal(getTextValorUnitario().getText());
 
-        producto.setValorUnitario(d);
+        //Si el valor esta incluido el iva calculo el valor sin iva
+        if(getCmbIvaOpcionPrecioVentaPublico().getSelectedItem().equals(IvaOpcionEnum.CON_IVA))
+        {            
+            BigDecimal ivaDefecto=new BigDecimal(session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO).getValor());
+            BigDecimal ivaTmp=ivaDefecto.divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP).add(BigDecimal.ONE);            
+            valorUnitario=valorUnitario.divide(ivaTmp,3,BigDecimal.ROUND_HALF_UP);
+            
+        }
+        producto.setValorUnitario(valorUnitario);
         /**
          * Setear valores adicionales
          */
@@ -475,5 +482,23 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         String[] titulo = {"Cantidad","Nombre","Precio Venta"};
         DefaultTableModel tableModel = new DefaultTableModel(titulo, 0);
         getTblDatosEnsamble().setModel(tableModel);
+    }
+    
+    public enum IvaOpcionEnum
+    {
+        SIN_IVA("Sin Iva"),
+        CON_IVA("Con Iva");
+        
+        private String nombre;
+
+        private IvaOpcionEnum(String nombre) {
+            this.nombre = nombre;
+        }
+
+        @Override
+        public String toString() {
+            return nombre;
+        }
+        
     }
 }
