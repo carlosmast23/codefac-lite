@@ -213,13 +213,13 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     public void actualizar() {
         cargarClientes();
     }
-
+/*
     @Override
     public void buscar() throws ExcepcionCodefacLite {
         //this.panelPadre.crearVentanaCodefac(new ClienteModel(),true);
         ClienteBusquedaDialogo clienteBusquedaDialogo = new ClienteBusquedaDialogo();
-        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
-        buscarDialogoModel.setVisible(true);
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);        
+        buscarDialogoModel.setVisible(true);        
         Persona personaTmp = (Persona) buscarDialogoModel.getResultado();
 
         if (personaTmp == null) {
@@ -230,6 +230,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         cargarDatos();
     
     }
+    */
 
     @validacionPersonalizadaAnotacion(errorTitulo = "Formato de identificacion")
     public boolean validarIdentificacionSegunOpcionEstablecida() {
@@ -592,5 +593,18 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         operadorNegocioDefault=operadorNegocioEnum;
         getCmbTipoOperador().setSelectedItem(operadorNegocioEnum);
         
+    }
+
+    @Override
+    public BuscarDialogoModel obtenerDialogoBusqueda() {
+        ClienteBusquedaDialogo clienteBusquedaDialogo = new ClienteBusquedaDialogo();
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
+        return buscarDialogoModel;
+    }
+
+    @Override
+    public void cargarDatosPantalla(Object entidad) {
+        persona=(Persona) entidad;
+        cargarDatos();
     }
 }

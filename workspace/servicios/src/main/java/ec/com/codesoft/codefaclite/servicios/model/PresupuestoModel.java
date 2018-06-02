@@ -499,4 +499,14 @@ public class PresupuestoModel extends PresupuestoPanel{
             DialogoCodefac.mensaje("Alerta", "Seleccione la fecha de ingreso para Orden Trabajo", DialogoCodefac.MENSAJE_ADVERTENCIA);
         }
     }
+
+    @Override
+    public BuscarDialogoModel obtenerDialogoBusqueda() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void cargarDatosPantalla(Object entidad) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

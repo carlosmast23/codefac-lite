@@ -483,6 +483,16 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         DefaultTableModel tableModel = new DefaultTableModel(titulo, 0);
         getTblDatosEnsamble().setModel(tableModel);
     }
+
+    @Override
+    public BuscarDialogoModel obtenerDialogoBusqueda() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void cargarDatosPantalla(Object entidad) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     public enum IvaOpcionEnum
     {

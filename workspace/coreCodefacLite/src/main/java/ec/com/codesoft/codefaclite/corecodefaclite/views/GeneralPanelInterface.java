@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.corecodefaclite.views;
 
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ConsolaGeneral;
@@ -40,6 +41,10 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
     public static final int BOTON_REFRESCAR = 6;
     public static final int BOTON_BUSCAR = 7;
     
+    /**
+     * Rererencia que va a almacenar cual es el dialogo principal  de la aplicacion para interfacturar con los campos de busqueda
+     */
+   // private BuscarDialogoModel dialogoBusqueda;
     
     public InterfazComunicacionPanel panelPadre;
     public ConsolaGeneral consola;
@@ -78,7 +83,13 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
      * Metodo que se ejecuta despues de presionar el boton de buscar     * 
      * Es recomendable usar este metodo solo para buscar datos de la propia clase
      */
-    public abstract void buscar() throws ExcepcionCodefacLite;
+    public void buscar() throws ExcepcionCodefacLite
+    {
+        //Esto lo pongo de esta manera porque Codefac construye automaticamente el metodo buscar desde el controlador
+        //y ya no ahy necesidad de implementar, pero si en ultimo caso el usuario tiene la necesidad de escribir su
+        //metodo personalizado de busqueda puede sobrescribir este metodo 
+        throw new UnsupportedOperationException("Metodo no implementado"); //To change body of generated methods, choose Tools | Templates.
+    }
     
     /**
      * Este metodo se ejecutara despues de grabar o borrar los datos
@@ -127,6 +138,22 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
      * @return 
      */
     public abstract List<String> getPerfilesPermisos();
+    
+    /**
+     * Obtiene el dialogo que se va a usar para consultar los datos de
+     * formulario
+     *
+     * @return
+     */
+    public abstract BuscarDialogoModel obtenerDialogoBusqueda();
+
+    /**
+     * Metodo donde se establece como se van a cargar los datos en pantalla
+     * despues que se abra el dialogo
+     *
+     * @param entidad
+     */
+    public abstract void cargarDatosPantalla(Object entidad);
     
     /**
      * Metodo que establece si deseas controlar el ciclo de vida de la pantalla
@@ -195,6 +222,7 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
         this.setCursor(Cursor.getDefaultCursor());
         //this.setVisible(true);
     }
+
     
     
     

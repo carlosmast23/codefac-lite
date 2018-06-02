@@ -431,4 +431,14 @@ public class CompraReporteModel extends CompraReportePanel {
         getLblTotal().setText("0.00");
         getTxtProveedor().setText("");
     }
+
+    @Override
+    public BuscarDialogoModel obtenerDialogoBusqueda() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void cargarDatosPantalla(Object entidad) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

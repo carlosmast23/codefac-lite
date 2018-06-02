@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.configuraciones.model;
 
 import ec.com.codesoft.codefaclite.configuraciones.panel.CalculadoraPanel;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.utilidades.calculos.UtilidadesCalculo;
 import java.awt.event.ActionEvent;
@@ -94,6 +95,16 @@ public class CalculadoraModel extends CalculadoraPanel{
 
     @Override
     public List<String> getPerfilesPermisos() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public BuscarDialogoModel obtenerDialogoBusqueda() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void cargarDatosPantalla(Object entidad) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

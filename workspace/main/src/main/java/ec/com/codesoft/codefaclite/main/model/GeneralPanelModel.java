@@ -18,9 +18,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.Direct
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecundarioAbstract;
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecundarioListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.CampoBuscarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ConsolaGeneral;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
@@ -33,6 +35,7 @@ import ec.com.codesoft.codefaclite.crm.model.ProductoModel;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.main.init.Main;
+import ec.com.codesoft.codefaclite.main.interfaces.BusquedaCodefacInterface;
 import ec.com.codesoft.codefaclite.main.license.ValidacionLicenciaCodefac;
 import ec.com.codesoft.codefaclite.main.panel.GeneralPanelForm;
 import ec.com.codesoft.codefaclite.main.panel.WidgetVentasDiarias;
@@ -76,6 +79,8 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -796,46 +801,25 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         getBtnBuscar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
-                try
-                {
-                    JInternalFrame frame= getjDesktopPane1().getSelectedFrame();
-                    ControladorCodefacInterface frameInterface=(ControladorCodefacInterface) frame;
-                    
-                    /**
-                     * Si ciclo de vida esta desactivado controlo manualmente el
-                     * ciclo de vida
-                     */
-                    if (!frameInterface.cicloVida) {
-                        try {
-                            frameInterface.buscar();
-                        } catch (ExcepcionCodefacLite ex) {
-                            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        return;
-                    }
-                    
-                   
-                    try {
-                        frameInterface.buscar();
-                        frameInterface.estadoFormulario= ControladorCodefacInterface.ESTADO_EDITAR;
-                        limpiarCamposValidacion(frameInterface);
-                        mostrarPanelSecundario(false);
+                JInternalFrame frame= getjDesktopPane1().getSelectedFrame();
+                ControladorCodefacInterface frameInterface=(ControladorCodefacInterface) frame;
+
+                listenerBuscar(frame, new BusquedaCodefacInterface() {
+                    @Override
+                    public void buscar() throws ExcepcionCodefacLite {
                         
-                        String tituloOriginal = getTituloOriginal(frame.getTitle());
-                        frame.setTitle(tituloOriginal + " [Editar]");
-
-                    } catch (ExcepcionCodefacLite ex) {
-                        //ex.printStackTrace();
-                        System.out.println("Cancelado metodo buscar");
-                        //JOptionPane.showMessageDialog(null,ex.getMessage());
+                        try {
+                            //Si existe implementado el metodo buscar por defecto se ejecuta este metodo
+                            frameInterface.buscar();
+                        } catch (UnsupportedOperationException ex) {
+                            //Este metodo se ejecuta si no existe implementacion del metodo buscar
+                            ejectutarDialogoBusqueda(frameInterface.obtenerDialogoBusqueda(), frameInterface,false);
+                        }catch (ExcepcionCodefacLite ex) {
+                            throw ex;
+                        }
                     }
+                });
 
-                }
-                catch (UnsupportedOperationException ex) {
-                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                    //getjButton4().setEnabled(false);
-                }
                                
             }
         });
@@ -961,7 +945,78 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 }
             });
         
-    }   
+    }
+    
+    private void listenerBuscar(JInternalFrame frame,BusquedaCodefacInterface busquedaInterface)
+    {
+        try
+                {
+                    //JInternalFrame frame= getjDesktopPane1().getSelectedFrame();
+                    ControladorCodefacInterface frameInterface=(ControladorCodefacInterface) frame;
+                    
+                    /**
+                     * Si ciclo de vida esta desactivado controlo manualmente el
+                     * ciclo de vida
+                     */
+                    if (!frameInterface.cicloVida) {
+                       busquedaInterface.buscar();
+                        return;
+                    }
+                    
+                   
+                    busquedaInterface.buscar();
+                    frameInterface.estadoFormulario= ControladorCodefacInterface.ESTADO_EDITAR;
+                    limpiarCamposValidacion(frameInterface);
+                    mostrarPanelSecundario(false);
+                    String tituloOriginal = getTituloOriginal(frame.getTitle());
+                    frame.setTitle(tituloOriginal + " [Editar]");
+
+                }
+                catch (ExcepcionCodefacLite ex) 
+                {
+                    LOG.log(Level.WARNING,ex.getMessage());
+                    //Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+    }
+    
+    /**
+     * 
+     * @param dialogModel
+     * @param frameInterface
+     * @param cargarDirecto //si esta en tru y existe un solo dato carga directamente sin confirmacion del usuario
+     * @throws ExcepcionCodefacLite 
+     */
+    private void ejectutarDialogoBusqueda(BuscarDialogoModel dialogModel,ControladorCodefacInterface frameInterface,boolean cargarDirecto) throws ExcepcionCodefacLite
+    {   
+        //Si no existe datos no muestro nada
+        if (dialogModel.getTamanioConsulta() == 0) {
+            DialogoCodefac.mensaje("Info", "No existe resultados en la busqueda", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            throw new ExcepcionCodefacLite("No existen datos en la consulta para abrir el dialogo de busqueda");
+        } 
+        
+        //Si desea cargar directo , lo hace cuando existe un solo resultado
+        if(cargarDirecto)
+        {
+            if(dialogModel.getTamanioConsulta() == 1)
+            {
+                Object resultado=dialogModel.obtenerResultadoLista(0); //obtiene el primer resultado para cargar en la pantalla
+                frameInterface.cargarDatosPantalla(resultado);
+                return ;
+            }
+        }
+
+        //Si no carga directo el dato se abre la pantalla normal de seleccion para el usuario
+        dialogModel.setVisible(true);
+        Object resultado=dialogModel.getResultado();                
+        if(resultado!=null)
+        {
+            frameInterface.cargarDatosPantalla(resultado);
+        }
+        else
+        {
+            throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar, no selecciono ningun dato");
+        }
+    }
     
     private void mostrarPanelSecundario(boolean  opcion)
     {
@@ -1122,7 +1177,37 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         }
     }
     
-    private void limpiarAnotaciones(ControladorCodefacInterface panel)
+    //Metodo que permite agregar un metodo para la pantalla de busqueda directo desde el formulario
+    //TODO: Ver si se puede optimizar de mejor manera con los otros validadores porque es muchas repeticiones
+    private void agregarListenerBusqueda(ControladorCodefacInterface panel)
+    {
+       boolean validado=true;
+       
+       Class classVentana=panel.getClass();
+        Method[] metodos=classVentana.getMethods();
+        for (Method metodo : metodos) {
+            LimpiarAnotacion validacion=metodo.getAnnotation(LimpiarAnotacion.class);
+
+            if(validacion!=null)
+            {
+                validado=false;
+                try {
+                    JTextComponent componente=(JTextComponent) metodo.invoke(panel);
+                    componente.setText("");
+                    
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalArgumentException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InvocationTargetException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+
+    }
+    
+        private void limpiarAnotaciones(ControladorCodefacInterface panel)
     {
        boolean validado=true;
        
@@ -1414,7 +1499,13 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 {                    
                     try {
                         JTextComponent componente=(JTextComponent) metodo.invoke(panel);
-                        componente.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(122, 138, 153)));
+                        
+                        //Poner un borde doble solo cuando el campo es requerido para el usuario
+                        if(validacion.requerido())
+                        {                            
+                            componente.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(122, 138, 153)));                                                    
+                        }
+                        
                         componente.addFocusListener(new FocusListener() {
                             @Override
                             public void focusGained(FocusEvent e) {
@@ -1473,6 +1564,70 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     } catch (InvocationTargetException ex) {
                         Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                }
+            }
+            
+            //Buscar Anotaciones para la etiqueta de busque por campo
+            CampoBuscarAnotacion buscarAnotacion=metodo.getAnnotation(CampoBuscarAnotacion.class);
+            if(buscarAnotacion!=null)
+            {
+                try {
+                    JTextComponent componente=(JTextComponent) metodo.invoke(panel);
+                    ImageIcon icon = new ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("find2-ico.png"));
+                    componente.setBorder(BorderFactory.createMatteBorder(0, 16, 0, 0, icon));
+                    componente.addKeyListener(new KeyListener() {
+                        @Override
+                        public void keyTyped(KeyEvent e) {}
+
+                        @Override
+                        public void keyPressed(KeyEvent e) {
+                            if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                                JInternalFrame frame = getjDesktopPane1().getSelectedFrame();
+                                
+                                listenerBuscar(frame, new BusquedaCodefacInterface() {
+                                    @Override
+                                    public void buscar() throws ExcepcionCodefacLite {
+
+                                        try
+                                        {
+                                            BuscarDialogoModel dialogBuscar=panel.obtenerDialogoBusqueda();
+                                            //Ejecutar la pantalla de dialogo solo si algo de texto
+                                            if (!componente.getText().equals("")) {
+                                                try {
+                                                    dialogBuscar.getTxtBuscar().setText(componente.getText());
+                                                    dialogBuscar.ejecutarConsulta();
+                                                    //Verifico que exista coincidencias con el dato ingreso o cancelo la busquda
+                                                     ejectutarDialogoBusqueda(dialogBuscar, panel,true);                                                   
+                                                    
+                                                } catch (ExcepcionCodefacLite ex) {
+                                                    throw ex;
+                                                }
+                                            } else {
+                                                throw new ExcepcionCodefacLite("No existen datos en los campos para abrir el dialogo de busqueda");
+                                            }
+                                        }
+                                        catch(UnsupportedOperationException ex) {
+                                            //si no existe implentada la funcion no se muestra nada
+                                            LOG.log(Level.INFO,"No se puede mostrar la busqueda desde un campo porque no esta implementado el dialogo de busqueda");
+                                        }
+
+                                    }
+                                });
+                
+                            }
+                        }
+
+                        @Override
+                        public void keyReleased(KeyEvent e) {}
+                    });
+                }
+                //Verificar tambien para ver si implementa el etiqueta de busqueda por  campo
+                catch (IllegalAccessException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalArgumentException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InvocationTargetException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }

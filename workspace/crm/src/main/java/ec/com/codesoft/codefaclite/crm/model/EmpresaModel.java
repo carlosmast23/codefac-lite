@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.crm.model;
 
 import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.validacionPersonalizadaAnotacion;
@@ -395,6 +396,16 @@ public class EmpresaModel extends EmpresaForm
         } catch (RemoteException ex) {
             Logger.getLogger(EmpresaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public BuscarDialogoModel obtenerDialogoBusqueda() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void cargarDatosPantalla(Object entidad) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     

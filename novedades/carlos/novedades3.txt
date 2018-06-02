@@ -31,4 +31,9 @@ Al momento de crear productos seguidos parese que salio error  (no se actualizo)
 Ver si al momento de buscar en la pantalla de cliente , producto como cumple dos funcione filtra los datos al momento de buscar
 
 Al momento de grabar los datos de la empresa en red no se mostrababa en la vista del otro usuario
+Ver si en una variable global del sistema se establece un metodo general de redondeo
+
+Poner una excepcion para que cuando no haya conexion de os clientes con el servidor se salga y buscar na manera para que al escribir en un campo y presionar enter llame a la venta de buscar
+
+Ver la opcion de hacer una especie de servidor proxy y que el servidor de codefac se encargue de proporcionar el archivo actual
 

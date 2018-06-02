@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.crm.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.CampoBuscarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
@@ -474,6 +475,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         this.jPanelCaracteristicasGenerales = jPanelCaracteristicasGenerales;
     }
 
+  
     @LimpiarAnotacion
     @ValidacionCodefacAnotacion(requerido=false ,min=0, expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\,\\ ]*$",nombre = "Direccion", expresionRegularMensaje = "No se permite la letra ñ, ni tildes")
     public JTextArea getjTextAreaDireccion() {
@@ -514,6 +516,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         this.jTextExtension = jTextExtension;
     }
 
+    @CampoBuscarAnotacion
     @LimpiarAnotacion
     @ValidacionCodefacAnotacion(requerido=true, personalizado ={"validarIdentificacionSegunOpcionEstablecida"} , min=0 ,max = 13,expresionRegular = "",nombre = NOMBRE_VALIDADOR_IDENTIFICACION)
     public JTextField getjTextIdentificacion() {
@@ -524,6 +527,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         this.jTextIdentificacion = jTextIdentificacion;
     }
 
+    @CampoBuscarAnotacion
     @LimpiarAnotacion
     @ValidacionCodefacAnotacion(requerido=true , min=0 ,max = 100,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Nombre Social", expresionRegularMensaje = "No se permite la letra ñ, ni tildes")
     public JTextField getjTextNombreSocial() {
