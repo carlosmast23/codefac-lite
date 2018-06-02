@@ -593,6 +593,9 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         operadorNegocioDefault=operadorNegocioEnum;
         getCmbTipoOperador().setSelectedItem(operadorNegocioEnum);
         
+        String identificacion=(String) parametros[1];
+        getjTextIdentificacion().setText(identificacion);
+        
     }
 
     @Override

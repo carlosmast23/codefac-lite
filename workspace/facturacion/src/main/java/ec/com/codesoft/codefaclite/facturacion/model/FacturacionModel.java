@@ -66,7 +66,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteI
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DatosAdicionalesComprobanteEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoReferenciaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
@@ -76,6 +78,8 @@ import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -102,6 +106,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JasperPrint;
+import org.apache.commons.collections4.map.HashedMap;
 
 /**
  *
@@ -142,6 +147,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         setearFechas();
         addListenerButtons();
         addListenerCombos();
+        addListenerCamposTexto();
         initComponenesGraficos();
         initModelTablaFormaPago();
         initModelTablaDetalleFactura();
@@ -553,6 +559,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     
     private void btnListenerAgregarCliente()
     {
+        Object[] parametros={OperadorNegocioEnum.CLIENTE,getTxtCliente().getText()};
         panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<Persona>() {
             @Override
             public void updateInterface(Persona entity) {
@@ -564,20 +571,15 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     cargarTablaDatosAdicionales();;
                 }
             }
-        }, DialogInterfacePanel.CLIENTE_PANEL, false);
+        },VentanaEnum.CLIENTE, false,parametros);
     }
     
     private void btnListenerBuscarCliente() {
         ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda();
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
-        factura.setCliente((Persona) buscarDialogoModel.getResultado());
-        if (factura.getCliente() != null) {
-            cargarFormaPago();
-            setearValoresCliente();
-            cargarDatosAdicionales();
-            cargarTablaDatosAdicionales();
-        };
+        //factura.setCliente((Persona) buscarDialogoModel.getResultado());        
+        cargarCliente((Persona) buscarDialogoModel.getResultado());
     }
     
     private void cargarFormaPago()
@@ -623,6 +625,17 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 cargarFormasPagoTabla();
             }
         }
+    }
+    
+    private void cargarCliente(Persona cliente)
+    {
+        if (cliente != null) {
+            factura.setCliente(cliente);
+            cargarFormaPago();
+            setearValoresCliente();
+            cargarDatosAdicionales();
+            cargarTablaDatosAdicionales();
+        };
     }
     
     private boolean verificaDatoComboRepresentante(Persona persona)
@@ -2176,6 +2189,50 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     @Override
     public void cargarDatosPantalla(Object entidad) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void addListenerCamposTexto() {
+        //Evento para buscar y cargar un cliente o abrir una nueva ventana para crear el cliente
+        getTxtCliente().addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                String identificacion=getTxtCliente().getText();
+                if(!identificacion.equals(""))
+                {
+                    //mapParametros.put("tipo",OperadorNegocioEnum.CLIENTE); //TODO: Falta optimizar cuando sean clientes y proveedores o ambos 
+
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                        try {
+                            Map<String, Object> mapParametros = new HashedMap<String, Object>();
+                            mapParametros.put("identificacion", identificacion);
+                            List<Persona> resultados=ServiceFactory.getFactory().getPersonaServiceIf().obtenerPorMap(mapParametros); //Todo crear mejor un metodo que ya obtener filtrado los datos
+                            if(resultados.size()==0)
+                            {
+                                if(DialogoCodefac.dialogoPregunta("Crear Cliente","No existe el Cliente, lo desea crear?",DialogoCodefac.MENSAJE_ADVERTENCIA))
+                                {
+                                    btnListenerAgregarCliente();
+                                }
+                            }
+                            else
+                            {
+                                cargarCliente(resultados.get(0));
+                            }
+                        } catch (RemoteException ex) {
+                            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ServicioCodefacException ex) {
+                            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        
+                    }
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
+        });
     }
 
 }

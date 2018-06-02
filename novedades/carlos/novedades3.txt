@@ -37,3 +37,7 @@ Poner una excepcion para que cuando no haya conexion de os clientes con el servi
 
 Ver la opcion de hacer una especie de servidor proxy y que el servidor de codefac se encargue de proporcionar el archivo actual
 
+En la pantalla de factura, al momento de escribir la cedula del cliente esta solo buscando todos, crear un metodo en el servicio que obtenga filtrado clientes
+
+revisar que cuando cambio los clientes no se estan borrando los datos adicionales
+

@@ -148,12 +148,15 @@ public class EstudianteModel extends EstudiantePanel implements DialogInterfaceP
             getCmbDiscapacidad().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    String disc = ((EnumSiNo) getCmbDiscapacidad().getSelectedItem()).getLetra();
-                    if (disc == "n") {
-                        getTxtConadis().setText("");
-                        getTxtObsDiscapacidad().setText("");
-                        getCmbTipoDiscapacidad().setSelectedIndex(0);
-                        getTxtPorcentajeDiscapacidad().setText("0");
+                    if(getCmbDiscapacidad().getSelectedItem()!=null)
+                    {
+                        String disc = ((EnumSiNo) getCmbDiscapacidad().getSelectedItem()).getLetra();
+                        if (disc == "n") {
+                            getTxtConadis().setText("");
+                            getTxtObsDiscapacidad().setText("");
+                            getCmbTipoDiscapacidad().setSelectedIndex(0);
+                            getTxtPorcentajeDiscapacidad().setText("0");
+                        }
                     }
                 }
             });
@@ -161,16 +164,16 @@ public class EstudianteModel extends EstudiantePanel implements DialogInterfaceP
             getCmbNacionalidad().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    String nacionalidad = (String) getCmbNacionalidad().getSelectedItem().toString();
-                    if(nacionalidad.equals("ECUATORIANA"))
+                    if(getCmbNacionalidad().getSelectedItem()!=null)
                     {
-                        banderaNacionalidad = true;
-                        getCmbEtnia().setEnabled(true);
-                    }
-                    else
-                    {
-                        banderaNacionalidad = false;
-                        getCmbEtnia().setEnabled(false);
+                        String nacionalidad = (String) getCmbNacionalidad().getSelectedItem().toString();
+                        if (nacionalidad.equals("ECUATORIANA")) {
+                            banderaNacionalidad = true;
+                            getCmbEtnia().setEnabled(true);
+                        } else {
+                            banderaNacionalidad = false;
+                            getCmbEtnia().setEnabled(false);
+                        }
                     }
                                
                 }
@@ -312,7 +315,7 @@ public class EstudianteModel extends EstudiantePanel implements DialogInterfaceP
     public void actualizar() throws ExcepcionCodefacLite {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+/*
     @Override
     public void buscar() throws ExcepcionCodefacLite {
         EstudianteBusquedaDialogo aulaBusquedaDialogo = new EstudianteBusquedaDialogo();
@@ -325,9 +328,9 @@ public class EstudianteModel extends EstudiantePanel implements DialogInterfaceP
         
         cargarDatosPantalla();
         
-    }
+    }*/
     
-    private void cargarDatosPantalla()
+    private void cargarDatos()
     {
         getLblCodigoSistema().setText((estudiante.getIdEstudiante()==null)?"":estudiante.getIdEstudiante().toString());
         getTxtCodAuxiliar().setText(estudiante.getCodigoAuxiliar());
@@ -346,9 +349,9 @@ public class EstudianteModel extends EstudiantePanel implements DialogInterfaceP
         
 
         getCmbGenero().setSelectedItem(estudiante.getGenero());
-        getCmbNacionalidad().setSelectedItem(estudiante.getNacionalidad());
+        getCmbNacionalidad().setSelectedItem((estudiante.getNacionalidad()!=null)?estudiante.getNacionalidad():null);
         getCmbEstado().setSelectedItem(estudiante.getEstado());
-        getCmbDiscapacidad().setSelectedItem(estudiante.getDiscapacidad());
+        getCmbDiscapacidad().setSelectedItem((estudiante.getDiscapacidad()!=null)?estudiante.getDiscapacidad():null);
         getDateFechaNacimiento().setDate(estudiante.getFechaNacimiento());
         String identificacion = "";
         String nombre = "";
@@ -470,12 +473,15 @@ public class EstudianteModel extends EstudiantePanel implements DialogInterfaceP
 
     @Override
     public BuscarDialogoModel obtenerDialogoBusqueda() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        EstudianteBusquedaDialogo aulaBusquedaDialogo = new EstudianteBusquedaDialogo();
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(aulaBusquedaDialogo);
+        return buscarDialogoModel;
     }
 
     @Override
     public void cargarDatosPantalla(Object entidad) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        estudiante=(Estudiante) entidad;
+        cargarDatos();
     }
 
 }
