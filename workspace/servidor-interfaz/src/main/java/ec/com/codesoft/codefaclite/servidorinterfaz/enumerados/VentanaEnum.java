@@ -150,6 +150,27 @@ public enum VentanaEnum {
     public boolean isMaximizado() {
         return maximizado;
     }
+    
+    /**
+     * Metodo que devuelve una lista de categorias por un modulo pero solo de los que tienen datos
+     * @param moduloEnum
+     * @return 
+     */
+    public static List<CategoriaMenuEnum> obtenerCategoriasConDatosPorModulo(ModuloCodefacEnum moduloEnum)
+    {
+        List<CategoriaMenuEnum> categorias=new ArrayList<CategoriaMenuEnum>();
+        
+        for (VentanaEnum ventanaEnum : VentanaEnum.values()) {
+            if(ventanaEnum.getModulo().equals(moduloEnum))
+            {
+                if(!categorias.contains(ventanaEnum.getCategoriaMenu()))
+                {
+                    categorias.add(ventanaEnum.getCategoriaMenu());
+                }
+            }            
+        }
+        return categorias;
+    }
 
     public Boolean verificarPermisoModuloAdicional(Map<ModuloCodefacEnum, Boolean> modulos) {
         //Si no existe ningun dato en modulo permitidos asumo que tiene acceso para todos los modulos

@@ -55,16 +55,8 @@ public class PerfilModel extends PerfilPanel{
         for (ModuloCodefacEnum modulo :modulos) 
         {
             getCmbModulo().addItem(modulo);
-        }
-        
-        //Cargar las categorias disponibles
-        CategoriaMenuEnum[] categorias= CategoriaMenuEnum.values();
-        getCmbCategoria().removeAllItems();
-        
-        for (CategoriaMenuEnum categoria : categorias) {
-            getCmbCategoria().addItem(categoria);
-        }
-        
+        }        
+       
         cargarVentanasSeleccionadas();
         
     }
@@ -223,6 +215,7 @@ public class PerfilModel extends PerfilPanel{
         getCmbModulo().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                cargarCategoriasDisponibles();
                 cargarVentanasSeleccionadas();
             }
         });
@@ -237,8 +230,16 @@ public class PerfilModel extends PerfilPanel{
        getBtnAgregar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                perfil.addPermisoVentana(getPermisoAgregar());
-                construirTabla();
+                PermisoVentana permisoVentana=getPermisoAgregar();
+                if(!verificarDuplicadoPermisoVentana(permisoVentana))
+                {
+                    perfil.addPermisoVentana(permisoVentana);
+                    construirTabla();
+                }
+                else
+                {
+                    DialogoCodefac.mensaje("Advertencia","La ventana ya se encuentra agregada",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                }
             }
         });
        
@@ -250,6 +251,32 @@ public class PerfilModel extends PerfilPanel{
                 construirTabla();
             }
         });
+    }
+    
+    //TODO: este metodo creo que se puede mejorar porque como son datos fijos mejor se puede trabajar con un map y tener cargado todos los datos
+    private void cargarCategoriasDisponibles()
+    {
+        ModuloCodefacEnum moduloEnum=(ModuloCodefacEnum) getCmbModulo().getSelectedItem();
+        List<CategoriaMenuEnum> categorias=VentanaEnum.obtenerCategoriasConDatosPorModulo(moduloEnum);        
+        getCmbCategoria().removeAllItems();
+
+        for (CategoriaMenuEnum categoria : categorias) {
+            getCmbCategoria().addItem(categoria);
+        }
+    }
+    
+    private boolean verificarDuplicadoPermisoVentana(PermisoVentana ventana)
+    {
+        if(perfil.getVentanasPermisos()!=null)
+        {
+            for (PermisoVentana permisoVentana : perfil.getVentanasPermisos()) {
+                if(permisoVentana.getNombreClase().equals(ventana.getNombreClase()))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
     
     private void construirTabla()
