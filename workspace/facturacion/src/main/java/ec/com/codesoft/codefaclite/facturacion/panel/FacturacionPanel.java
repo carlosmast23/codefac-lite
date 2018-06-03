@@ -98,11 +98,14 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         txtDescripcion = new javax.swing.JTextField();
         btnEditarDetalle = new javax.swing.JButton();
         btnQuitarDetalle = new javax.swing.JButton();
-        btnAgregarProducto = new javax.swing.JButton();
-        btnCrearProducto = new javax.swing.JButton();
         jLabel19 = new javax.swing.JLabel();
         txtDescuento = new javax.swing.JTextField();
         checkPorcentaje = new javax.swing.JCheckBox();
+        jToolBar2 = new javax.swing.JToolBar();
+        txtCodigoDetalle = new javax.swing.JTextField();
+        btnAgregarProducto = new javax.swing.JButton();
+        btnCrearProducto = new javax.swing.JButton();
+        jLabel37 = new javax.swing.JLabel();
         PanelFormasPago = new javax.swing.JPanel();
         btnAgregarFormaPago = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -257,11 +260,12 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.weighty = 0.1;
         PanelDetalleFactura.add(jScrollPane2, gridBagConstraints);
 
+        jLabel40.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel40.setText("Valor Unitario:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 2);
+        gridBagConstraints.insets = new java.awt.Insets(1, 10, 1, 2);
         PanelDetalleFactura.add(jLabel40, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -271,29 +275,32 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 2);
         PanelDetalleFactura.add(txtValorUnitario, gridBagConstraints);
 
+        jLabel41.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel41.setText("Cantidad:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 2);
         PanelDetalleFactura.add(jLabel41, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 2);
         PanelDetalleFactura.add(txtCantidad, gridBagConstraints);
 
+        jLabel42.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel42.setText("Descripcion:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 2);
         PanelDetalleFactura.add(jLabel42, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 2);
@@ -313,38 +320,55 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 2);
         PanelDetalleFactura.add(btnQuitarDetalle, gridBagConstraints);
 
-        btnAgregarProducto.setText("Producto");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 2);
-        PanelDetalleFactura.add(btnAgregarProducto, gridBagConstraints);
-
-        btnCrearProducto.setText("+");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 2);
-        PanelDetalleFactura.add(btnCrearProducto, gridBagConstraints);
-
+        jLabel19.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel19.setText("Descuento:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(1, 10, 1, 2);
         PanelDetalleFactura.add(jLabel19, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 2);
         PanelDetalleFactura.add(txtDescuento, gridBagConstraints);
 
+        checkPorcentaje.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         checkPorcentaje.setText("Porcentaje");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 1;
         PanelDetalleFactura.add(checkPorcentaje, gridBagConstraints);
+
+        jToolBar2.setBorder(null);
+        jToolBar2.setRollover(true);
+
+        txtCodigoDetalle.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jToolBar2.add(txtCodigoDetalle);
+
+        btnAgregarProducto.setText("Producto");
+        jToolBar2.add(btnAgregarProducto);
+
+        btnCrearProducto.setText("+");
+        jToolBar2.add(btnCrearProducto);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 2);
+        PanelDetalleFactura.add(jToolBar2, gridBagConstraints);
+
+        jLabel37.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel37.setText("Código:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        PanelDetalleFactura.add(jLabel37, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1010,7 +1034,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         jToolBar1.setRollover(true);
         jToolBar1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
-        txtCliente.setBackground(new java.awt.Color(255, 255, 255));
         txtCliente.setColumns(15);
         txtCliente.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jToolBar1.add(txtCliente);
@@ -1258,6 +1281,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel37;
     private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
@@ -1278,6 +1302,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JTable jTable1;
     private javax.swing.JTextPane jTextPane1;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JToolBar jToolBar2;
     private javax.swing.JLabel lblDireccion;
     private javax.swing.JLabel lblDireccionCliente;
     private javax.swing.JLabel lblEstadoFactura;
@@ -1312,6 +1337,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtCantidad;
     private javax.swing.JTextField txtCliente;
     private javax.swing.JTextField txtClientePresupuesto;
+    private javax.swing.JTextField txtCodigoDetalle;
     private javax.swing.JTextField txtDescripcion;
     private javax.swing.JTextField txtDescuento;
     private javax.swing.JTextField txtEstudiante;
@@ -1683,6 +1709,14 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
     public JCheckBox getChkFiltroPresupuestoCliente() {
         return chkFiltroPresupuestoCliente;
+    }
+
+    public JTextField getTxtCodigoDetalle() {
+        return txtCodigoDetalle;
+    }
+
+    public void setTxtCodigoDetalle(JTextField txtCodigoDetalle) {
+        this.txtCodigoDetalle = txtCodigoDetalle;
     }
 
     

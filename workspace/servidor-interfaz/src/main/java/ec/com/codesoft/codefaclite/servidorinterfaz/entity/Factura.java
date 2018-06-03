@@ -352,6 +352,15 @@ public class Factura extends Comprobante implements Serializable {
         }
         return null;
     }
+    
+    
+    public void eliminarTodosDatosAdicionales()
+    {
+        if(this.datosAdicionales!=null)
+        {
+            this.datosAdicionales.clear();
+        }
+    }
 
 
     @Override

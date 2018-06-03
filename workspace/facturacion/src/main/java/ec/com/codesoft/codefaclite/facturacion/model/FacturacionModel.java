@@ -512,19 +512,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getBtnCrearProducto().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ObserverUpdateInterface observer = new ObserverUpdateInterface<Producto>() {
-                    @Override
-                    public void updateInterface(Producto entity) {
-                        if (entity != null) {
-                            productoSeleccionado = entity;
-                            setearValoresProducto(productoSeleccionado.getValorUnitario(),productoSeleccionado.getNombre());
-                            banderaAgregar = true;
-                        }
-                    }
-                };
-
-                panelPadre.crearDialogoCodefac(observer, DialogInterfacePanel.PRODUCTO_PANEL, false);
-
+                btnListenerCrearProducto();
             }
         });
 
@@ -557,6 +545,21 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     }
     
+    private void btnListenerCrearProducto() {
+        ObserverUpdateInterface observer = new ObserverUpdateInterface<Producto>() {
+            @Override
+            public void updateInterface(Producto entity) {
+                if (entity != null) {
+                    productoSeleccionado = entity;
+                    setearValoresProducto(productoSeleccionado.getValorUnitario(), productoSeleccionado.getNombre());
+                    banderaAgregar = true;
+                }
+            }
+        };
+
+        panelPadre.crearDialogoCodefac(observer, DialogInterfacePanel.PRODUCTO_PANEL, false);
+    }
+
     private void btnListenerAgregarCliente()
     {
         Object[] parametros={OperadorNegocioEnum.CLIENTE,getTxtCliente().getText()};
@@ -579,7 +582,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
         //factura.setCliente((Persona) buscarDialogoModel.getResultado());        
-        cargarCliente((Persona) buscarDialogoModel.getResultado());
+        cargarCliente((Persona) buscarDialogoModel.getResultado());        
     }
     
     private void cargarFormaPago()
@@ -631,6 +634,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     {
         if (cliente != null) {
             factura.setCliente(cliente);
+            //Elimino datos adicionales del anterior cliente si estaba seleccionado
+            factura.eliminarTodosDatosAdicionales();
+            
             cargarFormaPago();
             setearValoresCliente();
             cargarDatosAdicionales();
@@ -763,11 +769,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
         productoSeleccionado = (Producto) buscarDialogoModel.getResultado();
+        agregarProductoVista(productoSeleccionado);
+    }
+    
+    private void agregarProductoVista(Producto productoSeleccionado) {
         if (productoSeleccionado == null) {
             return;
-            //throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar producto vacio");
         }
-        setearValoresProducto(productoSeleccionado.getValorUnitario(),productoSeleccionado.getNombre());
+        setearValoresProducto(productoSeleccionado.getValorUnitario(), productoSeleccionado.getNombre());
         banderaAgregar = true;
     }
 
@@ -2233,6 +2242,66 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             @Override
             public void keyReleased(KeyEvent e) {}
         });
+        
+        
+        getTxtCodigoDetalle().addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                
+                //Solo validar si existe datos ingresados en el combo
+                if(getTxtCodigoDetalle().equals(""))
+                    return;
+                
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+
+                    try {
+                        TipoDocumentoEnum tipoDocumentoEnum = (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+                        
+                        switch (tipoDocumentoEnum) {
+                            case ACADEMICO:
+                                //agregarRubroAcademico();
+                                break;
+                            case PRESUPUESTOS:
+                                //agregarPresupuesto();
+                                break;
+                            case INVENTARIO:
+                            case LIBRE:
+                                
+                                Map<String,Object> mapParametros=new HashMap<String,Object>();
+                                mapParametros.put("codigoPersonalizado", getTxtCodigoDetalle().getText()); //TODO: VER COMO MANEJAR TODOS LOS TIPOS DE CODIGO, VER UNA OPCION DE PARAMETRIZAR POR QUE CODIGO SE QUIERE TRABAJAR
+                                List<Producto> productos=ServiceFactory.getFactory().getProductoServiceIf().obtenerPorMap(mapParametros);
+                                if(productos.size()==0)
+                                {
+                                    if (DialogoCodefac.dialogoPregunta("Crear Producto", "No existe el Producto, lo desea crear?", DialogoCodefac.MENSAJE_ADVERTENCIA)) {
+                                       btnListenerCrearProducto();
+                                    }
+                                }
+                                else
+                                {
+                                    agregarProductoVista(productos.get(0));
+                                }
+
+                                break;
+                                
+                        }
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
+        });
     }
+    
+    
+    
 
 }
