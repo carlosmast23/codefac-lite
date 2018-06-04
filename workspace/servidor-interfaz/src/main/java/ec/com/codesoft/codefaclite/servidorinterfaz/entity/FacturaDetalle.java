@@ -46,6 +46,13 @@ public class FacturaDetalle implements Serializable {
     @Column(name = "IVA")
     private BigDecimal iva;
     
+    @Column(name = "IVA_PORCENTAJE")
+    private Integer ivaPorcentaje;
+    
+    @Column(name = "ICE_PORCENTAJE")
+    private BigDecimal icePorcentaje;
+    
+    
     @JoinColumn(name="FACTURA_ID")
     @ManyToOne(optional = false)
     private Factura factura;
@@ -55,6 +62,7 @@ public class FacturaDetalle implements Serializable {
     
     @Column(name = "TIPO_REFERENCIA")
     private String tipoDocumento;
+    
 
     public FacturaDetalle() {
     }
@@ -150,6 +158,24 @@ public class FacturaDetalle implements Serializable {
     public void setTipoDocumento(String tipoDocumento) {
         this.tipoDocumento = tipoDocumento;
     }
+
+    public Integer getIvaPorcentaje() {
+        return ivaPorcentaje;
+    }
+
+    public void setIvaPorcentaje(Integer ivaPorcentaje) {
+        this.ivaPorcentaje = ivaPorcentaje;
+    }
+
+    public BigDecimal getIcePorcentaje() {
+        return icePorcentaje;
+    }
+
+    public void setIcePorcentaje(BigDecimal icePorcentaje) {
+        this.icePorcentaje = icePorcentaje;
+    }
+    
+    
     
     
 

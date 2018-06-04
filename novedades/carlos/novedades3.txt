@@ -41,3 +41,7 @@ En la pantalla de factura, al momento de escribir la cedula del cliente esta sol
 
 revisar que cuando cambio los clientes no se estan borrando los datos adicionales
 
+Ver como hacer un descuento global
+
+Analizar una opcion para hacer un casting entre las unidades de un producto y otras medias de venta (por ejemplo cuando voy a clavos por libras) 
+

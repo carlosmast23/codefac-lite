@@ -87,6 +87,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -196,7 +197,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         this.bandera = false;
         this.banderaAgregar = true;
         this.factura.setDescuentoImpuestos(new BigDecimal(0));
-        calcularIva12();
+        //calcularIva12();
         //datosAdicionales = new HashMap<String, String>();
     }
 
@@ -551,7 +552,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             public void updateInterface(Producto entity) {
                 if (entity != null) {
                     productoSeleccionado = entity;
-                    setearValoresProducto(productoSeleccionado.getValorUnitario(), productoSeleccionado.getNombre());
+                    setearValoresProducto(productoSeleccionado.getValorUnitario(), productoSeleccionado.getNombre(),productoSeleccionado.getCodigoPersonalizado());
                     banderaAgregar = true;
                 }
             }
@@ -680,7 +681,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                  return;
             }            
             presupuestoSeleccionado=presupuestoTmp;
-            setearValoresProducto(presupuestoSeleccionado.getTotalVenta(), presupuestoSeleccionado.getDescripcion());
+            setearValoresProducto(presupuestoSeleccionado.getTotalVenta(), presupuestoSeleccionado.getDescripcion(),presupuestoSeleccionado.getId().toString());
             banderaAgregar=true;
         }
     }
@@ -701,7 +702,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }            
             
             rubroSeleccionado=rubroEstudianteTmp;
-            setearValoresProducto(rubroEstudianteTmp.getSaldo(),rubroEstudianteTmp.getRubroNivel().getNombre());
+            setearValoresProducto(rubroEstudianteTmp.getSaldo(),rubroEstudianteTmp.getRubroNivel().getNombre(),rubroEstudianteTmp.getId().toString());
             banderaAgregar = true;
         }
         
@@ -776,7 +777,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         if (productoSeleccionado == null) {
             return;
         }
-        setearValoresProducto(productoSeleccionado.getValorUnitario(), productoSeleccionado.getNombre());
+        setearValoresProducto(productoSeleccionado.getValorUnitario(), productoSeleccionado.getNombre(),productoSeleccionado.getCodigoPersonalizado());
         banderaAgregar = true;
     }
 
@@ -1334,23 +1335,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getTxtDescuento().setText("0");
     }
 
-    public void calcularSubtotalSinImpuestos(List<FacturaDetalle> facturaDetalles) {
-        this.factura.setSubtotalSinImpuestos(BigDecimal.ZERO);
-        this.factura.setDescuentoSinImpuestos(new BigDecimal(0));
-
-        for (FacturaDetalle facturaDetalle : facturaDetalles) {
-            //Solo sumar los subt
-            System.out.println(facturaDetalle.getIva());
-            if (facturaDetalle.getIva().compareTo(BigDecimal.ZERO) == 0) {
-                this.factura.setSubtotalSinImpuestos(this.factura.getSubtotalSinImpuestos().add(facturaDetalle.getPrecioUnitario().multiply(facturaDetalle.getCantidad())));
-                this.factura.setDescuentoSinImpuestos(this.factura.getDescuentoSinImpuestos().add(facturaDetalle.getDescuento()));
-            }
-        }
-
-        this.factura.setSubtotalSinImpuestos(this.factura.getSubtotalSinImpuestos().setScale(2, BigDecimal.ROUND_HALF_UP));
-        this.factura.setDescuentoSinImpuestos(this.factura.getDescuentoSinImpuestos().setScale(2, BigDecimal.ROUND_HALF_UP));
-    }
-
     public void calcularTotalDescuento(List<FacturaDetalle> facturaDetalles) {
         /*
         //this.descuento = new BigDecimal(0);
@@ -1371,68 +1355,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         this.subTotalDescuentoSinImpuesto = this.subTotalDescuentoSinImpuesto.setScale(2, BigDecimal.ROUND_HALF_UP);*/
     }
 
-    public void calcularSubtotal12(List<FacturaDetalle> facturaDetalles) {
-        this.factura.setSubtotalImpuestos(BigDecimal.ZERO);
-        this.factura.setDescuentoImpuestos(new BigDecimal(0));
-
-        for (FacturaDetalle facturaDetalle : facturaDetalles) {
-            try {
-                
-                TipoDocumentoEnum tipoReferenciaEnum=facturaDetalle.getTipoDocumentoEnum();
-                CatalogoProducto catalogoProducto=null;
-                
-                switch(tipoReferenciaEnum)
-                {
-                    case ACADEMICO:
-                        catalogoProducto=ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getRubroNivel().getCatalogoProducto();
-                        break;
-                        
-                    case PRESUPUESTOS:
-                        catalogoProducto=ServiceFactory.getFactory().getPresupuestoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
-                        break;
-                        
-                    case INVENTARIO:case LIBRE:
-                        catalogoProducto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
-                        break;
-                }
-                                
-                //TODO este valor esta quemado toca parametrizar
-
-                if (catalogoProducto.getIva().getTarifa() == 12) { //esta parametro de 12 debe estar parametrizado
-                    this.factura.setSubtotalImpuestos(factura.getSubtotalImpuestos().add(facturaDetalle.getPrecioUnitario().multiply(facturaDetalle.getCantidad())));
-                    //this.factura.setDescuentoImpuestos(this.factura.getDescuentoImpuestos().add(facturaDetalle.getTotal()));
-                    this.factura.setDescuentoImpuestos(this.factura.getDescuentoImpuestos().add(facturaDetalle.getDescuento()));
-                    System.out.println(facturaDetalle.getDescuento());
-                }
-            } catch (RemoteException ex) {
-                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-        //Escalar valores
-        this.factura.setSubtotalImpuestos(factura.getSubtotalImpuestos().setScale(2, BigDecimal.ROUND_HALF_UP));
-        this.factura.setDescuentoImpuestos(this.factura.getDescuentoImpuestos().setScale(2, BigDecimal.ROUND_HALF_UP));
-        System.out.println(this.factura.getDescuentoImpuestos());
-    }
-
+    
     public void calcularSubtotales() {
         this.factura.setSubtotalSinImpuestos(this.factura.getSubtotalSinImpuestos().subtract(this.factura.getSubtotalImpuestos()));
         this.factura.setDescuentoSinImpuestos(this.factura.getSubtotalImpuestos().add(this.factura.getSubtotalSinImpuestos()).subtract(factura.getSubtotalImpuestos()));
     }
 
-    public void calcularIva12() {
-        //this.factura.setIva(this.factura.getDescuentoImpuestos().multiply(obtenerValorIva()));
-        //this.factura.setIva(this.factura.getIva().setScale(2, BigDecimal.ROUND_HALF_UP));
-        this.factura.setIva(this.factura.getSubtotalImpuestos().subtract(this.factura.getDescuentoImpuestos()).multiply(obtenerValorIva()));
-        this.factura.setIva(this.factura.getIva().setScale(2, BigDecimal.ROUND_HALF_UP));
-    }
-
-    public void calcularValorTotal() {
-        this.factura.setTotal(
-                factura.getSubtotalImpuestos().subtract(this.factura.getDescuentoImpuestos()).
-                        add(factura.getSubtotalSinImpuestos().subtract(factura.getDescuentoSinImpuestos())).
-                        add(factura.getIva()));
-    }
 
     public BigDecimal obtenerValorIva() {
         try {
@@ -1451,12 +1379,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
 
     public void cargarTotales() {
-        calcularSubtotalSinImpuestos(factura.getDetalles());
-        calcularSubtotal12(factura.getDetalles());
-        //calcularTotalDescuento(factura.getDetalles()); esta de revisar porque ya calcula en los subtotales
-        //calcularSubtotales();
-        calcularIva12();
-        calcularValorTotal();
+        factura.calcularTotalesDesdeDetalles();
         /**
          * Setear los componentes graficos despues de los calculos
          */
@@ -1543,13 +1466,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //cargarDatosAdicionales();
     }
 
-    private void setearValoresProducto(BigDecimal valorUnitario,String descripcion) {
+    private void setearValoresProducto(BigDecimal valorUnitario,String descripcion,String codigo) {
         getTxtValorUnitario().setText(valorUnitario+"");
         getTxtDescripcion().setText(descripcion);
         //getTxtValorUnitario().setText(productoSeleccionado.getValorUnitario().toString());
         //getTxtDescripcion().setText(productoSeleccionado.getNombre());
         //Dar foco a la cantidad a ingresar
         getTxtCantidad().setText("1");
+        getTxtCodigoDetalle().setText(codigo);
         getTxtCantidad().requestFocus();
     }
 
@@ -1588,6 +1512,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();
         factura.setCodigoDocumento(documentoEnum.getCodigo());
+        
+        /**
+         * Redondeo los valores de los precios unitario de los detalles de la factura
+         * Nota: este proceso lo hago al final porque para los totales necesitaba tener los valores exactos de los precios unitarios, pero como ya va a generar la factura puedo redondeal los valores unitario
+         */
+        for (FacturaDetalle facturaDetalle : factura.getDetalles()) {
+            facturaDetalle.setPrecioUnitario(facturaDetalle.getPrecioUnitario().setScale(2,RoundingMode.HALF_UP));
+        }
 
     }
 
@@ -1788,8 +1720,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 //FacturaDetalle facturaDetalle = new FacturaDetalle();
                 facturaDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
                 facturaDetalle.setDescripcion(getTxtDescripcion().getText());
+                
+                
                 BigDecimal valorTotalUnitario = new BigDecimal(getTxtValorUnitario().getText());
-                facturaDetalle.setPrecioUnitario(valorTotalUnitario.setScale(2, BigDecimal.ROUND_HALF_UP));
+                facturaDetalle.setPrecioUnitario(valorTotalUnitario);
                 
                 //Variable del producto para verificar otros datos como el iva
                 CatalogoProducto catalogoProducto=null;
@@ -1822,7 +1756,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 facturaDetalle.setValorIce(BigDecimal.ZERO);
                 
                 BigDecimal descuento;
-                if (!getCheckPorcentaje().isSelected()) {
+                if (!getCheckPorcentaje().isSelected()) { //Cuando no es porcentaje el valor se setea directo
                     if (!getTxtDescuento().getText().equals("")) {
                         descuento = new BigDecimal(getTxtDescuento().getText());
                     } else {
@@ -1830,11 +1764,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     }
                     
                     facturaDetalle.setDescuento(descuento);
-                } else {
+                } else { //Cuando es porcentaje se calcula el valor directo
                     if (!getTxtDescuento().getText().equals("")) {
                         BigDecimal porcentajeDescuento = new BigDecimal(getTxtDescuento().getText());
                         porcentajeDescuento = porcentajeDescuento.divide(new BigDecimal(100));
-                        BigDecimal total = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario());
+                        BigDecimal total = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario().setScale(2,BigDecimal.ROUND_HALF_UP)); //Escala a 2 decimales el valor del valor unitario porque algunos proveedores tienen 3 decimales
                         descuento = total.multiply(porcentajeDescuento);
                         facturaDetalle.setDescuento(descuento.setScale(2, BigDecimal.ROUND_HALF_UP));
                     }
@@ -1846,6 +1780,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 /**
                  * Revisar este calculo del iva para no calcular 2 veces al mostrar
                  */
+                facturaDetalle.setIvaPorcentaje(catalogoProducto.getIva().getTarifa());
                 
                 if (catalogoProducto.getIva().getTarifa().equals(0)) {
                     facturaDetalle.setIva(BigDecimal.ZERO);
@@ -1935,6 +1870,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 //Calular el total despues del descuento porque necesito esa valor para grabar
                 BigDecimal setTotal = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).subtract(facturaDetalle.getDescuento());
                 facturaDetalle.setTotal(setTotal.setScale(2, BigDecimal.ROUND_HALF_UP));
+                facturaDetalle.setIvaPorcentaje(catalogoProducto.getIva().getTarifa());
                 /**
                  * Revisar este calculo del iva para no calcular 2 veces al mostrar
                  */
