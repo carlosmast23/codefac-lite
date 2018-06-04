@@ -24,6 +24,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenTrabajoEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PrioridadEnumEstado;
@@ -34,7 +35,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.rmi.RemoteException;
@@ -49,6 +54,8 @@ import java.util.TreeMap;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -66,6 +73,7 @@ public class PresupuestoModel extends PresupuestoPanel{
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         presupuesto = new Presupuesto();
+        getTxtCodigo().setText(""+presupuesto.getId());
         cargarCombos();
         addListenerBotones();
         addListenerCombos();
@@ -76,7 +84,7 @@ public class PresupuestoModel extends PresupuestoPanel{
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        limpiar();
     }
 
     @Override
@@ -91,13 +99,7 @@ public class PresupuestoModel extends PresupuestoPanel{
                 DialogoCodefac.mensaje("Alerta", "Necesita seleccionar una Orden de Trabajo y seleccionar un detalle de la Orden", SOMEBITS);
                 throw new ExcepcionCodefacLite("Necesita seleccionar una Orden de Trabajo y seleccionar un detalle de la Orden");
             }    
-            if (presupuesto.getFechaCreacion() == null)
-            {
-                DialogoCodefac.mensaje("Alerta","Necesita seleccionar una Fecha de creación", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                throw new ExcepcionCodefacLite("Necesita seleccionar una Fecha de creación");
-            }
-            
-            
+                       
             Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea realizar el presupuesto?", DialogoCodefac.MENSAJE_ADVERTENCIA);
             if (!respuesta) {
                 throw new ExcepcionCodefacLite("Cancelacion usuario de Presupuesto");
@@ -140,7 +142,12 @@ public class PresupuestoModel extends PresupuestoPanel{
 
     @Override
     public void limpiar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.presupuesto = new Presupuesto();
+        this.producto = null;
+        this.persona = null;
+        this.mapClientes = null;
+        limpiarDetalles();
+        limpiarTotales();
     }
 
     public String getNombre() {
@@ -179,6 +186,8 @@ public class PresupuestoModel extends PresupuestoPanel{
         {
             getCmbEstadoPresupuesto().addItem(gem);
         }
+        
+        
     }
     
     public void initDatosTabla()
@@ -233,7 +242,7 @@ public class PresupuestoModel extends PresupuestoPanel{
                 public void updateInterface(Persona entity) {
                         persona = entity;
                         if (persona != null) {
-                            getTxtCliente().setText(persona.getIdentificacion()+" - "+persona.getRazonSocial());
+                            getTxtProveedorDetalle().setText(persona.getIdentificacion()+" - "+persona.getRazonSocial());
                         }
                 }
                 }, DialogInterfacePanel.CLIENTE_PANEL, false);
@@ -261,10 +270,9 @@ public class PresupuestoModel extends PresupuestoPanel{
                 ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo();
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
                 buscarDialogoModel.setVisible(true);
-                Producto productoD = (Producto) buscarDialogoModel.getResultado();
-                if(productoD != null)
+                producto = (Producto) buscarDialogoModel.getResultado();
+                if(producto != null)
                 {
-                    producto = productoD;
                     getTxtProductoDetalle().setText(producto.getCodigoEAN()+" - "+ producto.getNombre());
                 }
             }
@@ -276,7 +284,6 @@ public class PresupuestoModel extends PresupuestoPanel{
                 ClienteBusquedaDialogo buscarBusquedaDialogo = new ClienteBusquedaDialogo();
                 BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
                 buscarDialogo.setVisible(true);
-                persona = null;
                 persona = (Persona) buscarDialogo.getResultado();
                 if(persona != null)
                 {
@@ -285,10 +292,14 @@ public class PresupuestoModel extends PresupuestoPanel{
             }
         });
         
+        /**
+         * Agregar, Editar y Eliminar Detalles de Presupuesto
+         */
+        
         getBtnAgregarDetalle().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                agregarDetallesPresupuesto(null);
+                agregarDetallesPresupuesto(null,false);
                 limpiarDetalles();
                 calcularTotales();
             }
@@ -297,11 +308,21 @@ public class PresupuestoModel extends PresupuestoPanel{
         getBtnEditarDetalle().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                try{
                 int fila = getTableDetallesPresupuesto().getSelectedRow();
-                PresupuestoDetalle presupuestoDetalle = presupuesto.getPresupuestoDetalles().get(fila);
-                agregarDetallesPresupuesto(presupuestoDetalle);
-                calcularTotales();
-                getBtnAgregarDetalle().setEnabled(true);
+                PresupuestoDetalle presupuestoDetalle = (PresupuestoDetalle) getTableDetallesPresupuesto().getValueAt(fila, 0);
+                if(presupuestoDetalle != null)
+                {
+                    boolean b = (boolean) getTableDetallesPresupuesto().getValueAt(fila,7);
+                    agregarDetallesPresupuesto(presupuestoDetalle,b);
+                    limpiarDetalles();
+                    calcularTotales();                    
+                    getBtnAgregarDetalle().setEnabled(true);
+                }
+                }catch(Exception exc)
+                {
+                    exc.printStackTrace();
+                }
                 
             }
         });
@@ -309,10 +330,18 @@ public class PresupuestoModel extends PresupuestoPanel{
         getBtnEliminarDetalle().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int fila = getTableDetallesPresupuesto().getSelectedRow();
-                presupuesto.getPresupuestoDetalles().remove(fila);
-                mostrarDatosTabla();
+                int filaTabla = getTableDetallesPresupuesto().getSelectedRow();
+                PresupuestoDetalle presupuestoDetalle = (PresupuestoDetalle) getTableDetallesPresupuesto().getValueAt(filaTabla,0);
+                if(presupuestoDetalle != null){
+                    for(PresupuestoDetalle pd : presupuesto.getPresupuestoDetalles())
+                    {
+                        if(pd.equals(presupuestoDetalle)){
+                            presupuesto.getPresupuestoDetalles().remove(pd);
+                        }
+                    }
+                }
                 getBtnAgregarDetalle().setEnabled(true);
+                mostrarDatosTabla();
                 calcularTotales();
             }
         });
@@ -326,7 +355,33 @@ public class PresupuestoModel extends PresupuestoPanel{
                 calcularFechaProxima();
             }
         });
-  
+                
+        
+        getCmbDetallesOrdenTrabajo().addMouseListener(new MouseAdapter()
+        {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(getCmbDetallesOrdenTrabajo().getItemCount()==0)
+                {
+                    DialogoCodefac.mensaje("Advertencia", "Seleccione una Orden de Trabajo", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                }else
+                {
+                    presupuesto.setOrdenTrabajoDetalle((OrdenTrabajoDetalle) getCmbDetallesOrdenTrabajo().getSelectedItem());
+                            
+                }
+            }    
+        });  
+        
+        getCmbDetallesOrdenTrabajo().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                OrdenTrabajoDetalle otd = (OrdenTrabajoDetalle) getCmbDetallesOrdenTrabajo().getSelectedItem();
+                if(otd != null){
+                    presupuesto.setOrdenTrabajoDetalle((OrdenTrabajoDetalle) getCmbDetallesOrdenTrabajo().getSelectedItem());
+                    System.out.println("Ingrese orden detalle");
+                }
+            }
+        });
     }
     
     public void addListenerTextos()
@@ -355,8 +410,8 @@ public class PresupuestoModel extends PresupuestoPanel{
         java.util.Date Fecha;
         if(!getTxtDiasPresupuesto().getText().equals("") || getCmbFechaPresupuesto().getDate() != null){
            Fecha = UtilidadesFecha.fechaProxima(getCmbFechaPresupuesto().getDate(),Integer.parseInt(getTxtDiasPresupuesto().getText()), getCmbOpcionDiaMes().getSelectedItem().toString());
-           presupuesto.setFechaValidez(new Date(Fecha.getTime()));
-           getLblIndicarFechaValidez().setText("Fecha: "+presupuesto.getFechaValidez());
+           presupuesto.setFechaValidez(new Date(Fecha.getTime()));          
+           getLblIndicarFechaValidez().setText("Fecha: " + presupuesto.getFechaValidez());
         }
     }
     public void addListenerTablas()
@@ -400,7 +455,7 @@ public class PresupuestoModel extends PresupuestoPanel{
         UtilidadesTablas.ocultarColumna(getTableDetallesPresupuesto(), 0);
     }
     
-    public void agregarDetallesPresupuesto(PresupuestoDetalle presupuestoDetalle)
+    public void agregarDetallesPresupuesto(PresupuestoDetalle presupuestoDetalle,boolean estado)
     {
         Boolean agregar = false;
         if(presupuestoDetalle == null)
@@ -414,21 +469,15 @@ public class PresupuestoModel extends PresupuestoPanel{
                 DialogoCodefac.mensaje("Advertencia", "Debe seleccionar un proveedor", DialogoCodefac.MENSAJE_ADVERTENCIA);
                 throw new ExcepcionCodefacLite("Necesita seleccionar un Cliente");
             }
-            else{
-                presupuestoDetalle.setPersona(this.persona);
-            }
-                    
+         
             if(this.producto == null)
             {
-                presupuestoDetalle.setProducto(this.producto);
                 DialogoCodefac.mensaje("Advertencia", "Debe seleccionar un producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
                 throw new ExcepcionCodefacLite("Necesita seleccionar un Cliente");
             }
-            else
-            {
-                presupuestoDetalle.setProducto(this.producto);
-            }
-            
+                      
+            presupuestoDetalle.setProducto(this.producto);
+            presupuestoDetalle.setPersona(this.persona);
             BigDecimal precioCompra = new BigDecimal(getTxtPrecioCompra().getText());
             presupuestoDetalle.setPrecioCompra(precioCompra.setScale(2,BigDecimal.ROUND_HALF_UP));
             BigDecimal descuentoCompra = new BigDecimal(getTxtDescuentoPrecioCompra().getText());
@@ -438,6 +487,15 @@ public class PresupuestoModel extends PresupuestoPanel{
             BigDecimal descuentoVenta = new BigDecimal(getTxtDescuentoPrecioVenta().getText());
             presupuestoDetalle.setDescuentoVenta(descuentoVenta.setScale(2,BigDecimal.ROUND_HALF_UP));
             presupuestoDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
+            
+            if(estado){
+                presupuestoDetalle.setEstado(EnumSiNo.SI.getLetra());
+            }else{
+            
+                
+                presupuestoDetalle.setEstado(EnumSiNo.NO.getLetra());
+            }
+                
             
         }catch(ExcepcionCodefacLite e)
         {
@@ -487,13 +545,21 @@ public class PresupuestoModel extends PresupuestoPanel{
             totalCompra = subtotalCompra.subtract(descuentoCompra);
             totalVenta = subtotalVenta.subtract(descuentoVenta);
         }
-        
+        /**
+         * Mostrar valores en pantalla
+         */
         getLblSubtotalCompra().setText(subtotalCompra.toString());
         getLblDescuentoCompra().setText(descuentoCompra.toString());
         getLblSubtotalVenta().setText(subtotalVenta.toString());
         getLblSubtotaDescuentoVenta().setText(descuentoVenta.toString());
         getLblTotalCompra().setText(totalCompra.toString());
         getLblTotalVenta().setText(totalVenta.toString());
+        
+        /**
+         * Cargar valores en Presupuesto}
+         */
+        setearValoresPresupuesto(descuentoCompra, descuentoVenta, totalCompra, totalVenta);
+        
        
     }
     
@@ -519,20 +585,39 @@ public class PresupuestoModel extends PresupuestoPanel{
         this.getLblTotalCompra().setText("");
         this.getLblTotalVenta().setText("");
     }
-
+     
     private void setearDatos() 
     {
         try{
-            this.presupuesto.setFechaCreacion(new Date(getCmbFechaPresupuesto().getDate().getTime()));
+            
             this.presupuesto.setDescripcion(getTxtDescripcion().getText());
             this.presupuesto.setObservaciones(getTxtAreaObservaciones().getText());
             GeneralEnumEstado generalEnumEstado = (GeneralEnumEstado) getCmbEstadoPresupuesto().getSelectedItem();
             this.presupuesto.setEstado(generalEnumEstado.getEstado());
+            this.presupuesto.setFechaPresupuesto(new Date(getCmbFechaPresupuesto().getDate().getTime()));
+            this.presupuesto.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+            
+//            /**
+//             * Guardar referencia del detalle de la Orden de trabajo para el presupuesto a realizar 
+//             */
+//            OrdenTrabajoDetalle ordenTrabajoDetalle = (OrdenTrabajoDetalle) getCmbDetallesOrdenTrabajo().getSelectedItem();
+//            if(ordenTrabajoDetalle !=  null){
+//                this.presupuesto.setOrdenTrabajoDetalle(ordenTrabajoDetalle);
+//            }
+            
         }
         catch(Exception e)
         {
             DialogoCodefac.mensaje("Alerta", "Seleccione la fecha de ingreso para Orden Trabajo", DialogoCodefac.MENSAJE_ADVERTENCIA);
         }
+    }
+    
+     public void setearValoresPresupuesto(BigDecimal descuentoCompra, BigDecimal descuentoVenta, BigDecimal totalCompra, BigDecimal totalVenta)
+    {
+        this.presupuesto.setDescuentoCompra(descuentoCompra);
+        this.presupuesto.setDescuentoVenta(descuentoVenta);
+        this.presupuesto.setTotalCompra(totalCompra);
+        this.presupuesto.setTotalVenta(totalVenta);
     }
     
     public void ordenarDetallesEnFuncionDeCliente()
@@ -551,17 +636,6 @@ public class PresupuestoModel extends PresupuestoPanel{
             }
             mapClientes.get(pd.getPersona()).add(pd);
         }
-//        int c=0;
-//        for (Map.Entry<Persona, List<PresupuestoDetalle>> entry : mapClientes.entrySet()) {
-//            c+=1;
-//            System.out.println("Para proveedor: "+c+" existen:");
-//            Persona key = entry.getKey();
-//            List<PresupuestoDetalle> value = entry.getValue();
-//            for (PresupuestoDetalle presupuestoDetalle : value) {
-//                System.out.println("-->"+presupuestoDetalle.getPersona() + " --- " + presupuestoDetalle.getProducto());
-//            }
-//            
-//        }
     }
     
     public void mostrarDatosTabla2()
@@ -580,6 +654,7 @@ public class PresupuestoModel extends PresupuestoPanel{
                     fil1.add(detalle);
                     fil1.add(titulo+"");
                     b = false;
+                    detalle.setNumeroOrdenCompra(c);
                     modeloTablaDetallesPresupuesto.addRow(fil1);
                 }
                     fila.add(detalle);
@@ -589,7 +664,8 @@ public class PresupuestoModel extends PresupuestoPanel{
                     fila.add(detalle.getPrecioCompra().subtract(detalle.getDescuentoCompra())+"");
                     fila.add(detalle.getPrecioVenta().subtract(detalle.getDescuentoVenta())+"");
                     fila.add(detalle.getCantidad().toString());
-                    fila.add(new Boolean(false));
+                    EnumSiNo siNo = EnumSiNo.getEnumByLetra(detalle.getEstado()) ;
+                    fila.add(siNo.getBool());                  
                     modeloTablaDetallesPresupuesto.addRow(fila);
 
             }
