@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -241,7 +242,6 @@ public class Factura extends Comprobante implements Serializable {
     public void setEstadoNotaCredito(String estadoNotaCredito) {
         this.estadoNotaCredito = estadoNotaCredito;
     }
-    
         
     
     /**
@@ -388,6 +388,86 @@ public class Factura extends Comprobante implements Serializable {
         return true;
     }
    
+    public void calcularTotalesDesdeDetalles()
+    {
+        //Solo calcular si la variables de detalles fue creada
+        if(detalles==null || detalles.size()==0)
+        {
+            this.total=BigDecimal.ZERO;
+            this.descuentoSinImpuestos=BigDecimal.ZERO;
+            this.descuentoImpuestos=BigDecimal.ZERO;
+            this.subtotalSinImpuestos=BigDecimal.ZERO;            
+            this.subtotalSinImpuestos=BigDecimal.ZERO;
+            this.iva=BigDecimal.ZERO;
+            return;
+        }
+        
+        BigDecimal total=BigDecimal.ZERO; //total de la factura
+        
+        BigDecimal subTotalSinImpuestos=BigDecimal.ZERO;//Sin el descuento
+        BigDecimal subTotalConImpuestos=BigDecimal.ZERO;//Sin los descuentos
+        
+        BigDecimal descuentoSinImpuestos=BigDecimal.ZERO; //
+        BigDecimal descuentoConImpuestos=BigDecimal.ZERO; //
+        
+        BigDecimal impuestoIva=BigDecimal.ZERO; //
+        
+        BigDecimal ivaDecimal=BigDecimal.ZERO; //Todo: Variable donde se almacena el iva de uno de los detalles (pero si tuviera varias ivas distintos de 0 , se generaria poroblemas)
+        
+        for (FacturaDetalle detalle : detalles) {
+            //Sumar los subtotales
+            if(detalle.getIvaPorcentaje().equals(0))
+            {
+                subTotalSinImpuestos=subTotalSinImpuestos.add(detalle.getPrecioUnitario().multiply(detalle.getCantidad()));
+                descuentoSinImpuestos=descuentoSinImpuestos.add(detalle.getDescuento());
+            }
+            else
+            {                
+                subTotalConImpuestos=subTotalConImpuestos.add(detalle.getPrecioUnitario().multiply(detalle.getCantidad()));
+                descuentoConImpuestos=descuentoConImpuestos.add(detalle.getDescuento());
+                
+                ivaDecimal=new BigDecimal(detalle.getIvaPorcentaje().toString()).divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP);
+                impuestoIva=subTotalConImpuestos.subtract(descuentoConImpuestos).multiply(ivaDecimal);
+            }
+           
+            
+        }
+        
+        //Calcula el total de los totales
+        total=subTotalSinImpuestos.subtract(descuentoSinImpuestos)
+                .add(subTotalConImpuestos.subtract(descuentoConImpuestos))
+                .add(impuestoIva);
+        
+       
+        /**
+         * Recalcular los valores partiendo del total para redondear con 2 cifras y que los valores cuadren
+         */
+        //total=total.setScale(2,BigDecimal.ROUND_HALF_UP);
+        this.total=total.setScale(2,BigDecimal.ROUND_HALF_UP); //valor final con 2 decimales
+        
+        this.descuentoSinImpuestos=descuentoSinImpuestos.setScale(2,BigDecimal.ROUND_HALF_UP); //Este valor no se mueve porque debe ser fijo de 2 decimales segun el sri
+        this.subtotalSinImpuestos=subTotalSinImpuestos.setScale(2,BigDecimal.ROUND_HALF_UP);// Este valor se redondea y tampoco ya no se mueve porque no interfiere con el iva donde se descuadra //TODO: PERO REVISAR ESTA AFIRMACION
+        
+        //---------------- CALCULOS PARA LOS VALORES CON IMPUESTAS QUE ES LA PARTE DONDE GENERAN PROBLEMAS ------------------------///
+        BigDecimal ivaDecimalTmp=ivaDecimal.add(BigDecimal.ONE); //1.12 por ejemplo
+        
+        //Valor total solo de los valores que tienen impuestos
+        BigDecimal totalConImpuestos=this.total.subtract(this.subtotalSinImpuestos).add(this.descuentoSinImpuestos); //esto ya tiene 2 decimales no debo redondear
+        
+        //Estos valores seteo directo porque solo pueden tener 2 decimales en los calculos y no deberia cambiar porque generarian confusion
+        this.descuentoImpuestos = descuentoConImpuestos.setScale(2,BigDecimal.ROUND_HALF_UP);
+        
+        //Calculo el subtotal ya restado el descuento diviendo para 1.12 por ejemplo
+        BigDecimal subtotalMenosImpuestos=totalConImpuestos.divide(ivaDecimalTmp,2,BigDecimal.ROUND_HALF_UP);
+        
+        //Al subtotal menos impuesto le sumo el descuento y ya tengo el subtotal original
+        this.subtotalImpuestos=subtotalMenosImpuestos.add(this.descuentoImpuestos);
+        
+        //Calcular el iva de la resta del del total -subtotal
+        this.iva=totalConImpuestos.subtract(subtotalMenosImpuestos);
+ 
+    
+    }
     
     
     

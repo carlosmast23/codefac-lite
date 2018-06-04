@@ -52,6 +52,10 @@ create table FACTURA_DETALLE
     DESCUENTO decimal(7,2),
     VALOR_ICE decimal,
     IVA decimal(7,2),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.3)*/
+    IVA_PORCENTAJE INT,
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.3)*/
+    ICE_PORCENTAJE INT,
     TOTAL decimal(7,2),
     DESCRIPCION varchar(150),
     primary key (ID)
