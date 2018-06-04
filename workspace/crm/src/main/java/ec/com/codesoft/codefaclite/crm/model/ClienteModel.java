@@ -84,6 +84,8 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     private String comboTipoCliente[] = {"CLIENTE", "SUJETO RETENIDO", "DESTINATARIO"};
 
     private int opcionIdentificacion = 4;
+    
+    protected OperadorNegocioEnum operadorNegocioDefault;
 
     public ClienteModel() {
         this.personaService = ServiceFactory.getFactory().getPersonaServiceIf();
@@ -211,13 +213,13 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     public void actualizar() {
         cargarClientes();
     }
-
+/*
     @Override
     public void buscar() throws ExcepcionCodefacLite {
         //this.panelPadre.crearVentanaCodefac(new ClienteModel(),true);
         ClienteBusquedaDialogo clienteBusquedaDialogo = new ClienteBusquedaDialogo();
-        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
-        buscarDialogoModel.setVisible(true);
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);        
+        buscarDialogoModel.setVisible(true);        
         Persona personaTmp = (Persona) buscarDialogoModel.getResultado();
 
         if (personaTmp == null) {
@@ -228,6 +230,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         cargarDatos();
     
     }
+    */
 
     @validacionPersonalizadaAnotacion(errorTitulo = "Formato de identificacion")
     public boolean validarIdentificacionSegunOpcionEstablecida() {
@@ -372,7 +375,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             getjComboIdentificacion().setSelectedItem(identificacion);
 
             getjComboTipoCliente().setSelectedIndex(0);
-            getCmbTipoOperador().setSelectedIndex(0);
+            getCmbTipoOperador().setSelectedItem(operadorNegocioDefault);
             getjTextExtension().setText("0");
             
             getCmbFormaPagoDefecto().setSelectedIndex(0);
@@ -424,6 +427,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     }
 
     private void cargarDatosIniciales() {
+        operadorNegocioDefault=OperadorNegocioEnum.CLIENTE;
         /**
          * Cargando los estados por defecto
          */
@@ -586,7 +590,24 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         
         //Cargar el tipo de operador de negocio : cliente , proveedor, ambos          
         OperadorNegocioEnum operadorNegocioEnum=(OperadorNegocioEnum) parametros[0];
+        operadorNegocioDefault=operadorNegocioEnum;
         getCmbTipoOperador().setSelectedItem(operadorNegocioEnum);
         
+        String identificacion=(String) parametros[1];
+        getjTextIdentificacion().setText(identificacion);
+        
+    }
+
+    @Override
+    public BuscarDialogoModel obtenerDialogoBusqueda() {
+        ClienteBusquedaDialogo clienteBusquedaDialogo = new ClienteBusquedaDialogo();
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
+        return buscarDialogoModel;
+    }
+
+    @Override
+    public void cargarDatosPantalla(Object entidad) {
+        persona=(Persona) entidad;
+        cargarDatos();
     }
 }

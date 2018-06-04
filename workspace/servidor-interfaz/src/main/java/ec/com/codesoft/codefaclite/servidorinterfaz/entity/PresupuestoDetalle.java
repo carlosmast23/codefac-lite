@@ -49,6 +49,12 @@ public class PresupuestoDetalle implements Serializable
     @Column(name = "ESTADO")
     private String estado;
     
+    /**
+     * Variable usada para agrupar detalles que va a permanecer a una misma orden de compra
+     */
+    @Column(name = "NUMERO_ORDEN_COMPRA")
+    private Integer numeroOrdenCompra;
+    
     @JoinColumn(name = "PROVEEDOR_ID")
     @ManyToOne
     private Persona persona;
@@ -140,4 +146,13 @@ public class PresupuestoDetalle implements Serializable
     public void setPresupuesto(Presupuesto presupuesto) {
         this.presupuesto = presupuesto;
     }
+
+    public Integer getNumeroOrdenCompra() {
+        return numeroOrdenCompra;
+    }
+
+    public void setNumeroOrdenCompra(Integer numeroOrdenCompra) {
+        this.numeroOrdenCompra = numeroOrdenCompra;
+    }
+
 }

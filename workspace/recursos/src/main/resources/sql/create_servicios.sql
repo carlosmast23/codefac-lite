@@ -85,6 +85,7 @@ create table PRESUPUESTO_DETALLE
     PRECIO_VENTA decimal(7,2),
     DESCUENTO_VENTA decimal(7,2),
     CANTIDAD decimal(7,2),
+    NUMERO_ORDEN_COMPRA INT,
     ESTADO varchar(1),
     PROVEEDOR_ID BIGINT,
     PRODUCTO_ID BIGINT,

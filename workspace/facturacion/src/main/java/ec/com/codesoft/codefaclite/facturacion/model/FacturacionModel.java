@@ -66,7 +66,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteI
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DatosAdicionalesComprobanteEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoReferenciaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
@@ -76,6 +78,8 @@ import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -102,6 +106,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JasperPrint;
+import org.apache.commons.collections4.map.HashedMap;
 
 /**
  *
@@ -142,6 +147,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         setearFechas();
         addListenerButtons();
         addListenerCombos();
+        addListenerCamposTexto();
         initComponenesGraficos();
         initModelTablaFormaPago();
         initModelTablaDetalleFactura();
@@ -506,19 +512,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getBtnCrearProducto().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ObserverUpdateInterface observer = new ObserverUpdateInterface<Producto>() {
-                    @Override
-                    public void updateInterface(Producto entity) {
-                        if (entity != null) {
-                            productoSeleccionado = entity;
-                            setearValoresProducto(productoSeleccionado.getValorUnitario(),productoSeleccionado.getNombre());
-                            banderaAgregar = true;
-                        }
-                    }
-                };
-
-                panelPadre.crearDialogoCodefac(observer, DialogInterfacePanel.PRODUCTO_PANEL, false);
-
+                btnListenerCrearProducto();
             }
         });
 
@@ -551,8 +545,24 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     }
     
+    private void btnListenerCrearProducto() {
+        ObserverUpdateInterface observer = new ObserverUpdateInterface<Producto>() {
+            @Override
+            public void updateInterface(Producto entity) {
+                if (entity != null) {
+                    productoSeleccionado = entity;
+                    setearValoresProducto(productoSeleccionado.getValorUnitario(), productoSeleccionado.getNombre());
+                    banderaAgregar = true;
+                }
+            }
+        };
+
+        panelPadre.crearDialogoCodefac(observer, DialogInterfacePanel.PRODUCTO_PANEL, false);
+    }
+
     private void btnListenerAgregarCliente()
     {
+        Object[] parametros={OperadorNegocioEnum.CLIENTE,getTxtCliente().getText()};
         panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<Persona>() {
             @Override
             public void updateInterface(Persona entity) {
@@ -564,20 +574,15 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     cargarTablaDatosAdicionales();;
                 }
             }
-        }, DialogInterfacePanel.CLIENTE_PANEL, false);
+        },VentanaEnum.CLIENTE, false,parametros);
     }
     
     private void btnListenerBuscarCliente() {
         ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda();
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
-        factura.setCliente((Persona) buscarDialogoModel.getResultado());
-        if (factura.getCliente() != null) {
-            cargarFormaPago();
-            setearValoresCliente();
-            cargarDatosAdicionales();
-            cargarTablaDatosAdicionales();
-        };
+        //factura.setCliente((Persona) buscarDialogoModel.getResultado());        
+        cargarCliente((Persona) buscarDialogoModel.getResultado());        
     }
     
     private void cargarFormaPago()
@@ -623,6 +628,20 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 cargarFormasPagoTabla();
             }
         }
+    }
+    
+    private void cargarCliente(Persona cliente)
+    {
+        if (cliente != null) {
+            factura.setCliente(cliente);
+            //Elimino datos adicionales del anterior cliente si estaba seleccionado
+            factura.eliminarTodosDatosAdicionales();
+            
+            cargarFormaPago();
+            setearValoresCliente();
+            cargarDatosAdicionales();
+            cargarTablaDatosAdicionales();
+        };
     }
     
     private boolean verificaDatoComboRepresentante(Persona persona)
@@ -750,11 +769,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
         productoSeleccionado = (Producto) buscarDialogoModel.getResultado();
+        agregarProductoVista(productoSeleccionado);
+    }
+    
+    private void agregarProductoVista(Producto productoSeleccionado) {
         if (productoSeleccionado == null) {
             return;
-            //throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar producto vacio");
         }
-        setearValoresProducto(productoSeleccionado.getValorUnitario(),productoSeleccionado.getNombre());
+        setearValoresProducto(productoSeleccionado.getValorUnitario(), productoSeleccionado.getNombre());
         banderaAgregar = true;
     }
 
@@ -931,26 +953,32 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     @Override
     public void eliminar() {
+        //Varible 
+        boolean respuesta =false;
+        
         //Eliminar solo si ha cargado un dato para editar
         if (estadoFormulario.equals(ESTADO_EDITAR)) {
             if (factura != null) {
-                //Eliminar solo si el estado es sin autorizar, o esta en el modo de facturacion normal y esta con estado facturado
+                //Eliminar solo si el estado esta en sin autorizar, o esta en el modo de facturacion normal y esta con estado facturado
                 if (factura.getEstado().equals(FacturaEnumEstado.SIN_AUTORIZAR.getEstado()) || 
                         (factura.getTipoFacturacion().equals(TipoFacturacionEnumEstado.NORMAL.getLetra()) && factura.getEstado().equals(FacturaEnumEstado.FACTURADO.getEstado()) )) {
                     
-                    boolean respuesta = DialogoCodefac.dialogoPregunta("Advertencia", "Esta seguro que desea eliminar la factura? ", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                    if (respuesta) {
-                        try {
-                            FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
-                            servicio.eliminarFactura(factura);
-                            DialogoCodefac.mensaje("Exitoso", "La factura se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-                            getLblEstadoFactura().setText(FacturaEnumEstado.ELIMINADO.getNombre());
-                        } catch (RemoteException ex) {
-                            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
+                    respuesta = DialogoCodefac.dialogoPregunta("Advertencia", "Esta seguro que desea eliminar la factura? ", DialogoCodefac.MENSAJE_ADVERTENCIA);
+
                 } else {
-                    DialogoCodefac.mensaje("Alerta", "Solo se pueden eliminar facturas no autorizadas", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    respuesta=DialogoCodefac.dialogoPregunta("Alerta", "La factura se encuentra autorizada en el SRI , \nPorfavor elimine la factura solo si tambien esta anulado en el SRI\nDesea eliminar la factura de todos modos?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                }
+                
+                //Eliminar la factura si eligen la respuesta si
+                if (respuesta) {
+                    try {
+                        FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
+                        servicio.eliminarFactura(factura);
+                        DialogoCodefac.mensaje("Exitoso", "La factura se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+                        getLblEstadoFactura().setText(FacturaEnumEstado.ELIMINADO.getNombre());
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             }
         }
@@ -2161,5 +2189,119 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         
     }
+
+    @Override
+    public BuscarDialogoModel obtenerDialogoBusqueda() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void cargarDatosPantalla(Object entidad) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void addListenerCamposTexto() {
+        //Evento para buscar y cargar un cliente o abrir una nueva ventana para crear el cliente
+        getTxtCliente().addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                String identificacion=getTxtCliente().getText();
+                if(!identificacion.equals(""))
+                {
+                    //mapParametros.put("tipo",OperadorNegocioEnum.CLIENTE); //TODO: Falta optimizar cuando sean clientes y proveedores o ambos 
+
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                        try {
+                            Map<String, Object> mapParametros = new HashedMap<String, Object>();
+                            mapParametros.put("identificacion", identificacion);
+                            List<Persona> resultados=ServiceFactory.getFactory().getPersonaServiceIf().obtenerPorMap(mapParametros); //Todo crear mejor un metodo que ya obtener filtrado los datos
+                            if(resultados.size()==0)
+                            {
+                                if(DialogoCodefac.dialogoPregunta("Crear Cliente","No existe el Cliente, lo desea crear?",DialogoCodefac.MENSAJE_ADVERTENCIA))
+                                {
+                                    btnListenerAgregarCliente();
+                                }
+                            }
+                            else
+                            {
+                                cargarCliente(resultados.get(0));
+                            }
+                        } catch (RemoteException ex) {
+                            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ServicioCodefacException ex) {
+                            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        
+                    }
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
+        });
+        
+        
+        getTxtCodigoDetalle().addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                
+                //Solo validar si existe datos ingresados en el combo
+                if(getTxtCodigoDetalle().equals(""))
+                    return;
+                
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+
+                    try {
+                        TipoDocumentoEnum tipoDocumentoEnum = (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+                        
+                        switch (tipoDocumentoEnum) {
+                            case ACADEMICO:
+                                //agregarRubroAcademico();
+                                break;
+                            case PRESUPUESTOS:
+                                //agregarPresupuesto();
+                                break;
+                            case INVENTARIO:
+                            case LIBRE:
+                                
+                                Map<String,Object> mapParametros=new HashMap<String,Object>();
+                                mapParametros.put("codigoPersonalizado", getTxtCodigoDetalle().getText()); //TODO: VER COMO MANEJAR TODOS LOS TIPOS DE CODIGO, VER UNA OPCION DE PARAMETRIZAR POR QUE CODIGO SE QUIERE TRABAJAR
+                                List<Producto> productos=ServiceFactory.getFactory().getProductoServiceIf().obtenerPorMap(mapParametros);
+                                if(productos.size()==0)
+                                {
+                                    if (DialogoCodefac.dialogoPregunta("Crear Producto", "No existe el Producto, lo desea crear?", DialogoCodefac.MENSAJE_ADVERTENCIA)) {
+                                       btnListenerCrearProducto();
+                                    }
+                                }
+                                else
+                                {
+                                    agregarProductoVista(productos.get(0));
+                                }
+
+                                break;
+                                
+                        }
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
+        });
+    }
+    
+    
+    
 
 }

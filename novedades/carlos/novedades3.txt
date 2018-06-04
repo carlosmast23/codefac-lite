@@ -23,3 +23,21 @@ Cuando no exista internet levantar el aplicativo como localhost para cliente-ser
 
 Analizar el codigo private boolean validacionPersonalizadaPorModulos() en facturacion para validar correctamente con descuentos para los distintos modulos
 
+Revisar el instalador, se instalo en el directorio de la flash no tiene sentido
+Revisar los productos que no haya tantos datos
+Ver un modo para que el administrador pueda cambiar al modo produccion por su propia responsabilidad
+Al momento de crear productos seguidos parese que salio error  (no se actualizo)
+
+Ver si al momento de buscar en la pantalla de cliente , producto como cumple dos funcione filtra los datos al momento de buscar
+
+Al momento de grabar los datos de la empresa en red no se mostrababa en la vista del otro usuario
+Ver si en una variable global del sistema se establece un metodo general de redondeo
+
+Poner una excepcion para que cuando no haya conexion de os clientes con el servidor se salga y buscar na manera para que al escribir en un campo y presionar enter llame a la venta de buscar
+
+Ver la opcion de hacer una especie de servidor proxy y que el servidor de codefac se encargue de proporcionar el archivo actual
+
+En la pantalla de factura, al momento de escribir la cedula del cliente esta solo buscando todos, crear un metodo en el servicio que obtenga filtrado clientes
+
+revisar que cuando cambio los clientes no se estan borrando los datos adicionales
+

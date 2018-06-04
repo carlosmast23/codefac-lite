@@ -695,8 +695,10 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
 
     }
     
-    private void procesarComprobanteExtend(ComprobanteElectronicoService comprobanteElectronico,ec.com.codesoft.codefaclite.servidorinterfaz.entity.Comprobante comprobante,ClienteInterfaceComprobante callbackClientObject)
+    private void procesarComprobanteExtend(ComprobanteElectronicoService comprobanteElectronico,ec.com.codesoft.codefaclite.servidorinterfaz.entity.Comprobante comprobanteOriginal,ClienteInterfaceComprobante callbackClientObject)
     {
+        comprobanteOriginal.setEstado(FacturaEnumEstado.SIN_AUTORIZAR.getEstado());
+        entityManager.merge(comprobanteOriginal);
                 //Agregar el listener
         comprobanteElectronico.addActionListerComprobanteElectronico(new ListenerComprobanteElectronico() {
             @Override
@@ -705,9 +707,8 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                     //Si la factura termina corectamente grabo el estado y numero de autorizacion
                     //FacturacionService facturacionService=new FacturacionService();
                    
-                    comprobante.setClaveAcceso(comprobanteElectronico.getClaveAcceso());
-                    comprobante.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
-                    entityManager.merge(comprobante);
+                    //comprobanteOriginal.setClaveAcceso(comprobanteElectronico.getClaveAcceso());                    
+                    //entityManager.merge(comprobanteOriginal);
                     byte[] serializedPrint= getReporteComprobante(comprobanteElectronico.getClaveAcceso());                   
                     callbackClientObject.termino(serializedPrint);
 
@@ -721,6 +722,8 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             @Override
             public void iniciado(ComprobanteElectronico comprobante) {
                 try {
+                    comprobanteOriginal.setClaveAcceso(comprobanteElectronico.getClaveAcceso());
+                    entityManager.merge(comprobanteOriginal);
                     callbackClientObject.iniciado();
                 } catch (RemoteException ex) {
                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
@@ -731,6 +734,15 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             public void procesando(int etapa, ClaveAcceso clave) {
                 try {
                     callbackClientObject.procesando(etapa, clave);
+                    
+                    //Setear el campo de seteado a factura solo si pasa la etapa de autorizar
+                    if(etapa==ComprobanteElectronicoService.ETAPA_AUTORIZAR)
+                    {
+                        comprobanteOriginal.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
+                        entityManager.merge(comprobanteOriginal);
+                    }
+                    
+                    
                 } catch (RemoteException ex) {
                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
                 }

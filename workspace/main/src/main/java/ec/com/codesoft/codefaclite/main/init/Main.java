@@ -218,15 +218,21 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionServic
 import ec.com.codesoft.codefaclite.utilidades.email.PropiedadesCorreoEnum;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import ec.com.codesoft.codefaclite.utilidades.web.UtilidadesWeb;
+import java.awt.Font;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.Arrays;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 
 /**
  *
  * @author Carlos
  */
 public class Main {
+    
+    //Variable que me servira para tener un icono en la barra de tareas porque como solo uso dialogos , por ratos no existe ninguna referencia para que el usuario pueda saber si la aplicacion se esta ejecutando
+    private static JFrame frameAplicacion=new JFrame();
 
     private static final Logger LOG = Logger.getLogger(Main.class.getName());
     
@@ -248,6 +254,14 @@ public class Main {
     public static Integer modoAplicativo;
 
     public static void main(String[] args) {
+        //Desabilito para que no se veo nada de la pantalla que contiene el proceso de inicio
+        frameAplicacion.setUndecorated(true);
+        frameAplicacion.setIconImage(ParametrosSistemaCodefac.iconoSistema);
+        frameAplicacion.setVisible(true);
+        
+        //Configurar diferente tipo de letra para los dialogos
+        UIManager.put("OptionPane.messageFont", new Font("Arial", Font.PLAIN, 14));
+        
         
         //Verifica si se esta ejecutando la ultima version o manda a aactualizar
         verificarUltimaVersionCodefac();
@@ -419,7 +433,7 @@ public class Main {
          * Seleccionar el modo de inicio de Codefac si no selecciona un modo no
          * le permite acceder a los siguiente funcionalidad
          */
-        ModoAplicativoModel dialogAplicativo = new ModoAplicativoModel(null, true);
+        ModoAplicativoModel dialogAplicativo = new ModoAplicativoModel(frameAplicacion, true);
         dialogAplicativo.setLocationRelativeTo(null);
         dialogAplicativo.setVisible(true);
 
@@ -558,7 +572,9 @@ public class Main {
 
     public static void iniciarComponentes() {
         try {
-
+            //Desactivo la pantalla del hilo de ejecuion porque el splashScreen tiene un una pantalla que se muestra en la barra de tareas
+            frameAplicacion.setVisible(false);
+            
             SplashScreenModel splashScren = new SplashScreenModel();
             splashScren.agregarPorcentaje(40, "Cargando base de datos");
             splashScren.agregarPorcentaje(60, "Cargando datos session");
@@ -599,9 +615,22 @@ public class Main {
                 //Si no existe el parametro seteo la ruta por defecto que va a ser el directorio del usuario para no tener problemas de permisos                
                 if(parametroDirectorioRecursos==null || parametroDirectorioRecursos.getValor().equals(""))
                 {                 
-                    String directorioUsuario=System.getProperty("user.home")+"/codefacRecursos";                    
+                    String directorioUsuario=System.getProperty("user.home")+"/codefacRecursos";         
+                    
                     if(parametroDirectorioRecursos==null)
                     {
+                        //Abrir un dialogo para preguntar si desea cambiar de ubicacion de la carpeta de recursos
+                        if(DialogoCodefac.dialogoPregunta("Directorio Recursos","Por defecto la carpeta de recursos se creará en el directorio del usuario \n Desea cambiar el directorio por defecto? ",DialogoCodefac.MENSAJE_ADVERTENCIA))
+                        {
+                            JFileChooser f = new JFileChooser();
+                            f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                            f.showSaveDialog(null);
+                            if(f.getSelectedFile()!=null)
+                            {
+                                directorioUsuario=f.getSelectedFile().getPath();
+                            }                            
+                        }
+                        
                         parametroDirectorioRecursos=new ParametroCodefac();
                         parametroDirectorioRecursos.setNombre(ParametroCodefac.DIRECTORIO_RECURSOS);
                         parametroDirectorioRecursos.setValor(directorioUsuario);
@@ -691,7 +720,7 @@ public class Main {
             /**
              * Establecer propiedades del formulario principal
              */
-            panel.setIconImage(new javax.swing.ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("logoCodefac-ico.png")).getImage()); // NOI18N
+            panel.setIconImage(ParametrosSistemaCodefac.iconoSistema); // NOI18N
             panel.setExtendedState(MAXIMIZED_BOTH);
             splashScren.siguiente();
             splashScren.termino();
@@ -734,7 +763,9 @@ public class Main {
             
             
             panel.iniciarComponentesGenerales();
+            //frameAplicacion.dispose(); //Libero el recurso de la pantalla que tiene el icono en la barra de tareas
             panel.setVisible(true);
+            
 
         } catch (RemoteException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
@@ -747,9 +778,11 @@ public class Main {
     }
     
     public static Usuario cargarLoginUsuario() {
+        frameAplicacion.setVisible(true); //muestro el hilo de ejcucion porque el login es un dialog que no tiene icono en la barra de tareas
         LoginModel loginModel = new LoginModel();
         loginModel.setVisible(true);
         Usuario usuarioLogin = loginModel.getUsuarioLogin();
+        frameAplicacion.dispose();
         return usuarioLogin;
     }
 

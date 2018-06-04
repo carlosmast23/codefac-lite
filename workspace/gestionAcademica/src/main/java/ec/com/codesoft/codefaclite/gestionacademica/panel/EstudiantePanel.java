@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.gestionacademica.panel;
 
 import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.CampoBuscarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Nacionalidad;
@@ -815,6 +816,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         this.txtApellidos = txtApellidos;
     }
 
+    @CampoBuscarAnotacion
     @LimpiarAnotacion
     @ValidacionCodefacAnotacion(requerido = true, personalizado = {"validarIdentificacionSegunOpcionEstablecida"}, min = 0, max = 13, expresionRegular = "", nombre = NOMBRE_VALIDADOR_IDENTIFICACION)
     public JTextField getTxtCedula() {

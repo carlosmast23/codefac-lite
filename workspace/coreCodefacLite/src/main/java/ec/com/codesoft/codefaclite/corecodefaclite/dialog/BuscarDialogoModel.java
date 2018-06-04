@@ -53,12 +53,13 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
     private Object resultado;
     private List<Object> listaResultados;
 
+    /*
     public BuscarDialogoModel(DefaultTableModel modeloTablaBuscar) 
     {
         super(null,true);
         this.modeloTablaBuscar = modeloTablaBuscar;
         this.paginaActual=0;
-    }
+    }*/
     
     public BuscarDialogoModel(InterfaceModelFind model) 
     {
@@ -155,7 +156,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
      * Consulta inicial que establece los parametros como cantidad de datos, numero de paginas
      * y otras configuraciones para costruir el dialogo
      */
-    private void ejecutarConsulta()
+    public void ejecutarConsulta()
     {
         this.tamanioConsulta=obtenerTamanioConsulta();
         this.paginaActual=1;        
@@ -326,6 +327,20 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         setSize(700, 316);
         setLocationRelativeTo(null);
 
+    }
+    
+    public void setearTextoBusqueda(String texto)
+    {
+        getTxtBuscar().setText(texto);
+    }
+
+    public long getTamanioConsulta() {
+        return tamanioConsulta;
+    }
+    
+    public Object obtenerResultadoLista(int indice)
+    {
+        return this.listaResultados.get(indice);
     }
     
 }

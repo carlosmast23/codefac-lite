@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.Persisten
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -201,7 +202,11 @@ public abstract class AbstractFacade<T>
         {
             //Esta linea se ejecuta si existe la base de datos
             //TODO: Utilizar propertys para cambiar el url cuando es en Linux porque no funciona y tiene otra sintaxis
-            entityManager=Persistence.createEntityManagerFactory(namePersistence).createEntityManager();
+            Map<String,String> properties=new HashMap<String,String>();
+            properties.put("javax.persistence.jdbc.user", "root");
+            properties.put("javax.persistence.jdbc.password", "Code17bwbtj");
+            
+            entityManager=Persistence.createEntityManagerFactory(namePersistence,properties).createEntityManager();
         }
         catch(PersistenceException e)
         {

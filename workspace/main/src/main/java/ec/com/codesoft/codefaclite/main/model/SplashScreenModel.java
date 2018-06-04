@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.main.model;
 
 import ec.com.codesoft.codefaclite.main.panel.SplashScreenFrame;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import java.awt.Image;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +36,9 @@ public class SplashScreenModel extends SplashScreenFrame implements Runnable {
         Image fondoImg = new javax.swing.ImageIcon(getClass().getResource("/img/general/fondoInicial.jpg")).getImage();
         getPanelContenedor().setBorder(new Fondo2(fondoImg));
         //setBorder(new Fondo(fondoImg));
+        
+        //setear icono
+        setIconImage(ParametrosSistemaCodefac.iconoSistema);
     }
 
     public void agregarPorcentaje(Integer porcentaje, String mensaje) {

@@ -21,8 +21,9 @@ import javax.swing.JMenuItem;
 public enum VentanaEnum {
 
     CLIENTE("ec.com.codesoft.codefaclite.crm.model.ClienteModel", "CLIE", "Cliente", ModuloCodefacEnum.CRM, CategoriaMenuEnum.GESTIONAR, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION}),
+    PROVEEDOR("ec.com.codesoft.codefaclite.crm.model.ProveedorModel", "PROV", "Proveedor", ModuloCodefacEnum.CRM, CategoriaMenuEnum.GESTIONAR, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION}),
     PRODUCTO("ec.com.codesoft.codefaclite.crm.model.ProductoModel", "PROD", "Producto", ModuloCodefacEnum.CRM, CategoriaMenuEnum.GESTIONAR, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION}),
-    FACTURACION("ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel", "FACT", "facturacion", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.PROCESOS),
+    FACTURACION("ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel", "FACT", "Facturación", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.PROCESOS),
     EMPRESA("ec.com.codesoft.codefaclite.crm.model.EmpresaModel", "EMPR", "Empresa", ModuloCodefacEnum.SISTEMA, CategoriaMenuEnum.GESTIONAR, true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION}),
     COMPROBANTE_CONFIGURACION("ec.com.codesoft.codefaclite.configuraciones.model.ComprobantesConfiguracionModel", "CONF", "Configuración Comprobantes", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.GESTIONAR),
     UTILIDAD_COMPROBANTE("ec.com.codesoft.codefaclite.facturacion.model.UtilidadComprobanteModel", "UTIL", "Utilidad Comprobante", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.UTILIDADES),
@@ -148,6 +149,27 @@ public enum VentanaEnum {
 
     public boolean isMaximizado() {
         return maximizado;
+    }
+    
+    /**
+     * Metodo que devuelve una lista de categorias por un modulo pero solo de los que tienen datos
+     * @param moduloEnum
+     * @return 
+     */
+    public static List<CategoriaMenuEnum> obtenerCategoriasConDatosPorModulo(ModuloCodefacEnum moduloEnum)
+    {
+        List<CategoriaMenuEnum> categorias=new ArrayList<CategoriaMenuEnum>();
+        
+        for (VentanaEnum ventanaEnum : VentanaEnum.values()) {
+            if(ventanaEnum.getModulo().equals(moduloEnum))
+            {
+                if(!categorias.contains(ventanaEnum.getCategoriaMenu()))
+                {
+                    categorias.add(ventanaEnum.getCategoriaMenu());
+                }
+            }            
+        }
+        return categorias;
     }
 
     public Boolean verificarPermisoModuloAdicional(Map<ModuloCodefacEnum, Boolean> modulos) {

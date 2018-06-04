@@ -33,13 +33,13 @@ public class FacturaFacade extends AbstractFacade<Factura> {
             cliente = "1=1";
         }
         if (fi == null && ff != null) {
-            fecha = " AND u.fechaFactura <= ?3";
+            fecha = " AND u.fechaEmision <= ?3";
         } else if (fi != null && ff == null) {
-            fecha = " AND u.fechaFactura <= ?2";
+            fecha = " AND u.fechaEmision <= ?2";
         } else if (fi == null && ff == null) {
             fecha = "";
         } else {
-            fecha = " AND (u.fechaFactura BETWEEN ?2 AND ?3)";
+            fecha = " AND (u.fechaEmision BETWEEN ?2 AND ?3)";
         }
         if (estado != null) {
             estadoFactura = " AND u.estado=?4";
