@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "CLIENTE")
 @XmlRootElement
-public class Persona implements Serializable {
+public class Persona implements Serializable, Comparable<Persona>{
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -272,6 +272,11 @@ public class Persona implements Serializable {
     @Override
     public String toString() {
         return identificacion+" - "+getNombresCompletos();
+    }
+
+    @Override
+    public int compareTo(Persona o) {
+      return this.getIdCliente().compareTo(o.getIdCliente());
     }
 
 }

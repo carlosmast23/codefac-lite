@@ -61,7 +61,7 @@ public class PresupuestoModel extends PresupuestoPanel{
     
     private Producto producto;
     private Persona persona;
-    private Map<Persona,List<PresupuestoDetalle>> clientes = new TreeMap<>();
+    private Map<Persona,List<PresupuestoDetalle>> mapClientes;
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
@@ -276,10 +276,10 @@ public class PresupuestoModel extends PresupuestoPanel{
                 ClienteBusquedaDialogo buscarBusquedaDialogo = new ClienteBusquedaDialogo();
                 BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
                 buscarDialogo.setVisible(true);
-                Persona personaD = (Persona) buscarDialogo.getResultado();
-                if(personaD != null)
+                persona = null;
+                persona = (Persona) buscarDialogo.getResultado();
+                if(persona != null)
                 {
-                    persona = personaD;
                     getTxtProveedorDetalle().setText(persona.getRazonSocial()+" - "+persona.getIdentificacion());
                 }
             }
@@ -366,8 +366,16 @@ public class PresupuestoModel extends PresupuestoPanel{
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 int fila = getTableDetallesPresupuesto().getSelectedRow();
                 getBtnAgregarDetalle().setEnabled(false);
-                PresupuestoDetalle presupuestoDetalle = presupuesto.getPresupuestoDetalles().get(fila);
-                cargarInformacionDetallePresupuesto( presupuestoDetalle);
+                try{
+                    PresupuestoDetalle presupuestoDetalle =  (PresupuestoDetalle) getTableDetallesPresupuesto().getValueAt(fila, 0);
+                    if(presupuestoDetalle != null){
+                        cargarInformacionDetallePresupuesto( presupuestoDetalle);
+                    }
+                }
+                catch(Exception e)
+                {
+                    
+                }
             }
         });
         
@@ -440,8 +448,11 @@ public class PresupuestoModel extends PresupuestoPanel{
         {
             this.presupuesto.addDetalle(presupuestoDetalle);
         }
-        Collections.sort(this.presupuesto.getPresupuestoDetalles());
-        mostrarDatosTabla();
+        //Collections.sort(this.presupuesto.getPresupuestoDetalles());
+        //mostrarDatosTabla();
+        ordenarDetallesEnFuncionDeCliente();
+        mostrarDatosTabla2();
+        
      }
     
     public void cargarInformacionDetallePresupuesto(PresupuestoDetalle presupuestoDetalle)
@@ -526,11 +537,64 @@ public class PresupuestoModel extends PresupuestoPanel{
     
     public void ordenarDetallesEnFuncionDeCliente()
     {
-        List<PresupuestoDetalle> presupuestoDetalles = new ArrayList<>();
-        for(PresupuestoDetalle pd : presupuesto.getPresupuestoDetalles()){
-            
-            //clientes.put(persona,new ArrayList<>().add());
-        }
+        mapClientes = new TreeMap<Persona,List<PresupuestoDetalle>>(new Comparator<Persona>() {
+            @Override
+            public int compare(Persona o1, Persona o2) {
+                return o1.compareTo(o2);
+            }
+        });
         
+        for(PresupuestoDetalle pd : presupuesto.getPresupuestoDetalles()){
+            if(mapClientes.get(pd.getPersona()) == null)
+            {
+                mapClientes.put(pd.getPersona(),new ArrayList<PresupuestoDetalle>());
+            }
+            mapClientes.get(pd.getPersona()).add(pd);
+        }
+//        int c=0;
+//        for (Map.Entry<Persona, List<PresupuestoDetalle>> entry : mapClientes.entrySet()) {
+//            c+=1;
+//            System.out.println("Para proveedor: "+c+" existen:");
+//            Persona key = entry.getKey();
+//            List<PresupuestoDetalle> value = entry.getValue();
+//            for (PresupuestoDetalle presupuestoDetalle : value) {
+//                System.out.println("-->"+presupuestoDetalle.getPersona() + " --- " + presupuestoDetalle.getProducto());
+//            }
+//            
+//        }
+    }
+    
+    public void mostrarDatosTabla2()
+    {
+        int c=0;
+        DefaultTableModel modeloTablaDetallesPresupuesto = UtilidadesTablas.crearModeloTabla(new String[]{"obj","#","Proveedor","Producto","Valor compra","Valor venta","Cantidad","--"}, new Class[]{PresupuestoDetalle.class,String.class,String.class,String.class,String.class,String.class,String.class,Boolean.class});
+        for(Map.Entry<Persona,List<PresupuestoDetalle>> datoMap : mapClientes.entrySet())
+        {
+            boolean b = true; c+=1;
+            String titulo = "Proveedor " + c + " :";
+            List<PresupuestoDetalle> detallesPorProveedor = datoMap.getValue();
+            for (PresupuestoDetalle detalle : detallesPorProveedor) {
+                Vector<Object> fila=new Vector<>();
+                if(b){
+                    Vector<Object> fil1=new Vector<>();
+                    fil1.add(detalle);
+                    fil1.add(titulo+"");
+                    b = false;
+                    modeloTablaDetallesPresupuesto.addRow(fil1);
+                }
+                    fila.add(detalle);
+                    fila.add("");
+                    fila.add(detalle.getPersona().getNombresCompletos()+"");
+                    fila.add(detalle.getProducto().getNombre()+"");
+                    fila.add(detalle.getPrecioCompra().subtract(detalle.getDescuentoCompra())+"");
+                    fila.add(detalle.getPrecioVenta().subtract(detalle.getDescuentoVenta())+"");
+                    fila.add(detalle.getCantidad().toString());
+                    fila.add(new Boolean(false));
+                    modeloTablaDetallesPresupuesto.addRow(fila);
+
+            }
+        }
+        getTableDetallesPresupuesto().setModel(modeloTablaDetallesPresupuesto);
+        UtilidadesTablas.ocultarColumna(getTableDetallesPresupuesto(), 0);
     }
 }
