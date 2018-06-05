@@ -537,12 +537,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         {
             FacturaDetalle facturaDetalle = factura.getDetalles().get(fila);
             agregarDetallesFactura(facturaDetalle);
-            getBtnEditarDetalle().setEnabled(false);
-            getBtnQuitarDetalle().setEnabled(false);
-            getBtnAgregarDetalleFactura().setEnabled(true);
-            getBtnAgregarProducto().setEnabled(true);
-            getBtnCrearProducto().setEnabled(true);
+            habilitarModoIngresoDatos();
         }
+    }
+    
+    private void habilitarModoIngresoDatos() {
+        getBtnEditarDetalle().setEnabled(false);
+        getBtnQuitarDetalle().setEnabled(false);
+        getBtnAgregarDetalleFactura().setEnabled(true);
+        getBtnAgregarProducto().setEnabled(true);
+        getBtnCrearProducto().setEnabled(true);
     }
     
     private void btnListenerEliminar() {
@@ -2312,7 +2316,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         //Evento cuando se desea eliminar un dato de los detalles
                         if (e.getKeyCode() == KeyEvent.VK_DELETE) {
                             btnListenerEliminar();
-                        }                       
+                        }      
+                        
+                        //Permite salir del modo edicion y regresa al modo ingreso
+                        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                            btnListenerEditar();
+                        }
 
                     }
 
