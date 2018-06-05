@@ -154,7 +154,5 @@ public class PresupuestoDetalle implements Serializable
     public void setNumeroOrdenCompra(Integer numeroOrdenCompra) {
         this.numeroOrdenCompra = numeroOrdenCompra;
     }
-    
-    
-     
+
 }
