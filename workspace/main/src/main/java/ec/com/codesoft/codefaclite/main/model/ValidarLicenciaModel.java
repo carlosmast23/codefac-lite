@@ -17,7 +17,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PerfilUsuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ActualizarlicenciaRequestType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ActualizarlicenciaResponseType;
@@ -29,6 +32,7 @@ import ec.com.codesoft.codefaclite.ws.codefac.webservice.ObtenerlicenciaRequestT
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ObtenerlicenciaResponseType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.SOAPServer;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.SOAPServerPortType;
+import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.awt.Desktop;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -40,7 +44,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -126,9 +132,9 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
                 crearLicencia();
                 
                 //Verificar que no exista el usuario admin
-                if(getTxtUsuarioRegistrar().getText().equals("admin"))
+                if(getTxtUsuarioRegistrar().getText().equals("admin") || getTxtUsuarioRegistrar().getText().equals("root"))
                 {
-                    DialogoCodefac.mensaje("Error","No se puede crear un usuario con la palabra admin",DialogoCodefac.MENSAJE_INCORRECTO);
+                    DialogoCodefac.mensaje("Error","No se puede crear un usuario con la palabra admin o root",DialogoCodefac.MENSAJE_INCORRECTO);
                     return;
                 }
                 
@@ -138,9 +144,13 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
                 Usuario usuario=new Usuario();
                 String clave=new String(getTxtClaveRegistrar().getPassword());
                 usuario.setClave(clave);
-                usuario.setNick(getTxtUsuarioRegistrar().getText());                
+                usuario.setNick(getTxtUsuarioRegistrar().getText());    
+                usuario.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
+                                
                 try {
-                    servicio.grabarUsuario(usuario,Perfil.PERFIl_OPERADOR);
+                    
+                    servicio.grabarUsuario(usuario,Perfil.PERFIL_GRATIS);
+                    
                 } catch (ServicioCodefacException ex) {
                     DialogoCodefac.mensaje("Error", ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
                     return;
