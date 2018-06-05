@@ -72,6 +72,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
+import ec.com.codesoft.codefaclite.utilidades.tabla.ButtonColumn;
+import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
@@ -100,10 +102,12 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -124,7 +128,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     private Producto productoSeleccionado;
     private RubroEstudiante rubroSeleccionado;
     private Presupuesto presupuestoSeleccionado;
-    private int fila;
+    //private int fila;
     private int filaFP;
     private boolean bandera;
     private boolean banderaFP;
@@ -149,6 +153,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         addListenerButtons();
         addListenerCombos();
         addListenerCamposTexto();
+        addListenerTablas();
         initComponenesGraficos();
         initModelTablaFormaPago();
         initModelTablaDetalleFactura();
@@ -165,19 +170,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         this.factura = factura;
         setearValoresFactura();
     }
+
     
-    /*setearVariablesIniciales()
-    private void asds()
-    {
-                getLblSubtotalSinImpuesto().setText("" + this.subtotalSinImpuestos);
-        getLblSubtotal12().setText("" + this.subtotal12);
-        getLblSubtotal0().setText("" + this.subtotal0);
-        getLblIva12().setText("" + this.iva);
-        getTxtValorTotal().setText("" + this.valorTotal);
-        getLblSubTotalDescuentoConImpuesto().setText("" + this.subTotalDescuentoConImpuesto);
-        getLblSubTotalDescuentoSinImpuesto().setText("" + this.subTotalDescuentoSinImpuesto);
-        getLblTotalDescuento().setText("" + this.descuento);
-    }*/
     private void setearFechas() {
         //this.fechaMax = new java.util.Date();
         definirFechaMinFacturacion();
@@ -429,20 +423,23 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getTblDetalleFactura().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                fila = getTblDetalleFactura().getSelectedRow();
-                //setear valores para cargar de nuevo en los campos de la factura
-                FacturaDetalle facturaDetalle = factura.getDetalles().get(fila);
-                getTxtValorUnitario().setText(facturaDetalle.getPrecioUnitario() + "");
-                getTxtCantidad().setText(facturaDetalle.getCantidad() + "");
-                getTxtDescripcion().setText(facturaDetalle.getDescripcion());
-                getTxtDescuento().setText(facturaDetalle.getDescuento() + "");
-                getCheckPorcentaje().setSelected(false);
-                bandera = true;
-                getBtnEditarDetalle().setEnabled(true);
-                getBtnQuitarDetalle().setEnabled(true);
-                getBtnAgregarDetalleFactura().setEnabled(false);
-                getBtnAgregarProducto().setEnabled(false);
-                getBtnCrearProducto().setEnabled(false);
+                int fila = getTblDetalleFactura().getSelectedRow();
+                if(fila>=0)
+                {
+                    //setear valores para cargar de nuevo en los campos de la factura
+                    FacturaDetalle facturaDetalle = factura.getDetalles().get(fila);
+                    getTxtValorUnitario().setText(facturaDetalle.getPrecioUnitario() + "");
+                    getTxtCantidad().setText(facturaDetalle.getCantidad() + "");
+                    getTxtDescripcion().setText(facturaDetalle.getDescripcion());
+                    getTxtDescuento().setText(facturaDetalle.getDescuento() + "");
+                    getCheckPorcentaje().setSelected(false);
+                    bandera = true;
+                    getBtnEditarDetalle().setEnabled(true);
+                    getBtnQuitarDetalle().setEnabled(true);
+                    getBtnAgregarDetalleFactura().setEnabled(false);
+                    getBtnAgregarProducto().setEnabled(false);
+                    getBtnCrearProducto().setEnabled(false);
+                }
             }
         });
 
@@ -466,15 +463,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (bandera) {
-                    bandera = false;
-                    modeloTablaDetallesProductos.removeRow(fila);
-                    factura.getDetalles().remove(fila);
-                    cargarTotales();
-                    getBtnEditarDetalle().setEnabled(false);
-                    getBtnQuitarDetalle().setEnabled(false);
-                    getBtnAgregarDetalleFactura().setEnabled(true);
-                    getBtnAgregarProducto().setEnabled(true);
-                    getBtnCrearProducto().setEnabled(true);
+                    btnListenerEliminar();
                 }
             }
         });
@@ -483,7 +472,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (bandera) {
-                    fila = getTblDetalleFactura().getSelectedRow();
+                    int fila = getTblDetalleFactura().getSelectedRow();
                     FacturaDetalle facturaDetalle = factura.getDetalles().get(fila);
                     agregarDetallesFactura(facturaDetalle);
                     getBtnEditarDetalle().setEnabled(false);
@@ -544,6 +533,19 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
         });
 
+    }
+    
+    private void btnListenerEliminar() {
+        int fila = getTblDetalleFactura().getSelectedRow();
+        bandera = false;
+        modeloTablaDetallesProductos.removeRow(fila);
+        factura.getDetalles().remove(fila);
+        cargarTotales();
+        getBtnEditarDetalle().setEnabled(false);
+        getBtnQuitarDetalle().setEnabled(false);
+        getBtnAgregarDetalleFactura().setEnabled(true);
+        getBtnAgregarProducto().setEnabled(true);
+        getBtnCrearProducto().setEnabled(true);
     }
     
     private void btnListenerCrearProducto() {
@@ -1276,6 +1278,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         titulo.add("Descripcion");
         titulo.add("Descuento");
         titulo.add("Valor Total");
+        titulo.add(""); //Columna para el boton de eliminar
 
         List<FacturaDetalle> detalles = factura.getDetalles();
 
@@ -1315,12 +1318,25 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 fila.add(detalle.getDescripcion());
                 fila.add(detalle.getDescuento().toString());
                 fila.add(detalle.getTotal().toString());
+                fila.add("Eliminar"); //Boton de eliminar para la tabla
                 modeloTablaDetallesProductos.addRow(fila);
             } catch (RemoteException ex) {
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         getTblDetalleFactura().setModel(this.modeloTablaDetallesProductos);
+        
+        UtilidadesTablas.definirTamanioColumnas(getTblDetalleFactura(),new Integer[]{100,100,80,600,80,100,100}); //Definir los tamanios definidos para la tabla principal
+        
+        ButtonColumn botonEliminar=new ButtonColumn(getTblDetalleFactura(),new AbstractAction() { //Agregado boton de eliminar a la tabla
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                btnListenerEliminar();
+            }
+        }, 6); 
+        botonEliminar.setMnemonic(KeyEvent.VK_D);
+        
+        
     }
 
     private void agregarFechaEmision() {
@@ -2230,6 +2246,34 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     }
                 }
 
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
+        });
+    }
+
+    private void addListenerTablas() {
+        getTblDetalleFactura().addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                getTblDetalleFactura().addKeyListener(new KeyListener() {
+                    @Override
+                    public void keyTyped(KeyEvent e) {}
+
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                        if (e.getKeyCode() == KeyEvent.VK_DELETE) {
+                            btnListenerEliminar();
+                        }
+                    }
+
+                    @Override
+                    public void keyReleased(KeyEvent e) {}
+                });
             }
 
             @Override

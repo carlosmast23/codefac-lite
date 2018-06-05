@@ -21,6 +21,15 @@ public abstract class UtilidadesTablas {
     public static int alinearDerecha = SwingConstants.RIGHT;
     public static int alinearIzquierda = SwingConstants.LEFT;
     
+    public static void definirTamanioColumnas(JTable jtable,Integer[] tamanios)
+    {
+        for (int i = 0; i < jtable.getColumnCount(); i++) {
+            jtable.getColumnModel().getColumn(i).setMaxWidth(tamanios[i]);
+        }        
+
+    }
+      
+    
     public static void ocultarColumna(JTable jtable,int columna)
     {
         jtable.getColumnModel().getColumn(columna).setMaxWidth(0);
