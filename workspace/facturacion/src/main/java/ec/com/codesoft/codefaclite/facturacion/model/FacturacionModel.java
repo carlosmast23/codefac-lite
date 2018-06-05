@@ -109,6 +109,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JasperPrint;
 import org.apache.commons.collections4.map.HashedMap;
@@ -472,14 +474,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (bandera) {
-                    int fila = getTblDetalleFactura().getSelectedRow();
-                    FacturaDetalle facturaDetalle = factura.getDetalles().get(fila);
-                    agregarDetallesFactura(facturaDetalle);
-                    getBtnEditarDetalle().setEnabled(false);
-                    getBtnQuitarDetalle().setEnabled(false);
-                    getBtnAgregarDetalleFactura().setEnabled(true);
-                    getBtnAgregarProducto().setEnabled(true);
-                    getBtnCrearProducto().setEnabled(true);
+                    btnListenerEditar();
                 }
             }
         });
@@ -533,6 +528,21 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
         });
 
+    }
+    
+    private void btnListenerEditar()
+    {
+        int fila = getTblDetalleFactura().getSelectedRow();
+        if(fila>=0)
+        {
+            FacturaDetalle facturaDetalle = factura.getDetalles().get(fila);
+            agregarDetallesFactura(facturaDetalle);
+            getBtnEditarDetalle().setEnabled(false);
+            getBtnQuitarDetalle().setEnabled(false);
+            getBtnAgregarDetalleFactura().setEnabled(true);
+            getBtnAgregarProducto().setEnabled(true);
+            getBtnCrearProducto().setEnabled(true);
+        }
     }
     
     private void btnListenerEliminar() {
@@ -1339,7 +1349,30 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 btnListenerEliminar();
             }
         }, 6); 
-        botonEliminar.setMnemonic(KeyEvent.VK_D);
+        //botonEliminar.setMnemonic(KeyEvent.VK_D);
+        
+        modeloTablaDetallesProductos.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                int columnaModificada=e.getColumn();
+                int filaModificada=e.getFirstRow();
+                
+                if(filaModificada<0 || columnaModificada<0 || columnaModificada==6) //Si no existe ninguna fila seleccionada no ejecuta ninguna accion o si es lacolumna  6 que es el boton de eliminar
+                    return;
+                
+                Object dato=modeloTablaDetallesProductos.getValueAt(filaModificada, columnaModificada);
+                
+                switch(columnaModificada)
+                {
+                    case 2:
+                        getTxtCantidad().setText(dato.toString());
+                        btnListenerEditar();
+                        break;
+                        
+                }
+                
+            }
+        });
         
         
     }
@@ -2262,6 +2295,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
 
     private void addListenerTablas() {
+       
+          
         getTblDetalleFactura().addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {}
@@ -2274,9 +2309,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
                     @Override
                     public void keyPressed(KeyEvent e) {
+                        //Evento cuando se desea eliminar un dato de los detalles
                         if (e.getKeyCode() == KeyEvent.VK_DELETE) {
                             btnListenerEliminar();
-                        }
+                        }                       
+
                     }
 
                     @Override
