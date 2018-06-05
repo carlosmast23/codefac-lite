@@ -33,6 +33,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PrioridadEnumEsta
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -46,6 +47,8 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -87,10 +90,10 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             if (!respuesta) {
                 throw new ExcepcionCodefacLite("Cancelacion usuario");
             }
-            
-            OrdenTrabajoServiceIf servicio = ServiceFactory.getFactory().getOrdenTrabajoServiceIf();
             setearDatos();
-            servicio.grabar(ordenTrabajo);        
+            OrdenTrabajoServiceIf servicio = ServiceFactory.getFactory().getOrdenTrabajoServiceIf();
+            servicio.grabar(ordenTrabajo);
+            limpiar();
             }catch (ServicioCodefacException ex) {
                 Logger.getLogger(OrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
             }catch (RemoteException ex) {
@@ -105,6 +108,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             OrdenTrabajoServiceIf servicio = ServiceFactory.getFactory().getOrdenTrabajoServiceIf(); 
             servicio.editar(this.ordenTrabajo);
             DialogoCodefac.mensaje("Correcto","La Ordem de Trabajo fue editada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+            limpiar();
             
       } 
       catch (RemoteException ex) 
@@ -418,18 +422,24 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             agregar = true;
         }
         
-        ordenTrabajoDetalle.setDescripcion(""+getTxtAreaDescripcion().getText());
-        ordenTrabajoDetalle.setNotas(""+getTxtAreaNotas().getText());
-        OrdenTrabajoEnumEstado ordenTrabajoEnumEstado = (OrdenTrabajoEnumEstado) getCmbEstadoDetalle().getSelectedItem();
-        ordenTrabajoDetalle.setEstado(ordenTrabajoEnumEstado.getLetra());
-        if(getCmbDateFechaEntrega()!=null){
-            ordenTrabajoDetalle.setFechaEntrega(new Date(getCmbDateFechaEntrega().getDate().getTime()));
-        }
-        PrioridadEnumEstado prioridadEnumEstado = (PrioridadEnumEstado) getCmbPrioridadDetalle().getSelectedItem();
-        ordenTrabajoDetalle.setPrioridad(prioridadEnumEstado.getLetra());
-        ordenTrabajoDetalle.setEmpleado((Empleado) getCmbAsignadoADetalle().getSelectedItem());
+        if(!panelPadre.validarPorGrupo("detalles"))
+        {
+            return;
+        }    
         
-        if(agregar && getCmbDateFechaEntrega()!=null)
+        if(verificarCamposValidados()){
+            ordenTrabajoDetalle.setDescripcion(""+getTxtAreaDescripcion().getText());
+            ordenTrabajoDetalle.setNotas(""+getTxtAreaNotas().getText());
+            OrdenTrabajoEnumEstado ordenTrabajoEnumEstado = (OrdenTrabajoEnumEstado) getCmbEstadoDetalle().getSelectedItem();
+            ordenTrabajoDetalle.setEstado(ordenTrabajoEnumEstado.getLetra());
+            if(getCmbDateFechaEntrega()!=null){
+                ordenTrabajoDetalle.setFechaEntrega(new Date(getCmbDateFechaEntrega().getDate().getTime()));
+            }
+            PrioridadEnumEstado prioridadEnumEstado = (PrioridadEnumEstado) getCmbPrioridadDetalle().getSelectedItem();
+            ordenTrabajoDetalle.setPrioridad(prioridadEnumEstado.getLetra());
+            ordenTrabajoDetalle.setEmpleado((Empleado) getCmbAsignadoADetalle().getSelectedItem());
+        }
+        if(agregar && ordenTrabajoDetalle.getFechaEntrega() != null)
         {
             ordenTrabajo.addDetalle(ordenTrabajoDetalle);
             mostrarDatosTabla();
@@ -471,6 +481,22 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             DialogoCodefac.mensaje("Alerta", "Seleccione la fecha de ingreso para Orden Trabajo", DialogoCodefac.MENSAJE_ADVERTENCIA);
         }
                 
+    }
+    
+    private boolean verificarCamposValidados() {
+        //bandera para comprobar que todos los campos esten validados
+        boolean b = true;
+        List<JTextArea> camposValidar = new ArrayList<JTextArea>();
+        //Ingresar los campos para validar 
+        camposValidar.add(getTxtAreaDescripcion());
+        camposValidar.add(getTxtAreaNotas());
+        //Obtener el estado de validacion de los campos
+        for (JTextArea campo : camposValidar) {
+            if (!campo.getBackground().equals(Color.white)) {
+                b = false;
+            }
+        }
+        return b;
     }
 
     @Override
