@@ -537,15 +537,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     
     private void btnListenerEliminar() {
         int fila = getTblDetalleFactura().getSelectedRow();
-        bandera = false;
-        modeloTablaDetallesProductos.removeRow(fila);
-        factura.getDetalles().remove(fila);
-        cargarTotales();
-        getBtnEditarDetalle().setEnabled(false);
-        getBtnQuitarDetalle().setEnabled(false);
-        getBtnAgregarDetalleFactura().setEnabled(true);
-        getBtnAgregarProducto().setEnabled(true);
-        getBtnCrearProducto().setEnabled(true);
+        if(fila>=0)
+        {
+            bandera = false;
+            modeloTablaDetallesProductos.removeRow(fila);
+            factura.getDetalles().remove(fila);
+            cargarTotales();
+            getBtnEditarDetalle().setEnabled(false);
+            getBtnQuitarDetalle().setEnabled(false);
+            getBtnAgregarDetalleFactura().setEnabled(true);
+            getBtnAgregarProducto().setEnabled(true);
+            getBtnCrearProducto().setEnabled(true);
+        }
     }
     
     private void btnListenerCrearProducto() {
@@ -779,6 +782,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         if (productoSeleccionado == null) {
             return;
         }
+        
+        this.productoSeleccionado=productoSeleccionado;
         setearValoresProducto(productoSeleccionado.getValorUnitario(), productoSeleccionado.getNombre(),productoSeleccionado.getCodigoPersonalizado());
         banderaAgregar = true;
     }
@@ -1349,6 +1354,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getTxtDescripcion().setText("");
         getTxtValorUnitario().setText("");
         getTxtDescuento().setText("0");
+        getTxtCodigoDetalle().requestFocus();
+        getTxtCodigoDetalle().selectAll();
     }
 
     public void calcularTotalDescuento(List<FacturaDetalle> facturaDetalles) {
@@ -1491,6 +1498,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getTxtCantidad().setText("1");
         getTxtCodigoDetalle().setText(codigo);
         getTxtCantidad().requestFocus();
+        getTxtCantidad().selectAll();
     }
 
     private void setearValoresDefaultFactura() {
