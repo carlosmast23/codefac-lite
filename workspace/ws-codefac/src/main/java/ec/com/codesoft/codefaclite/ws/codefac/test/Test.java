@@ -14,6 +14,8 @@ import ec.com.codesoft.codefaclite.ws.codefac.webservice.ComprobarRequestType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ComprobarResponseType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.DevolverlicenciaRequestType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.DevolverlicenciaResponseType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.EstadousuarioRequestType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.EstadousuarioResponseType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.NumaquinasRequestType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.NumaquinasResponseType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ObtenerlicenciaRequestType;
@@ -28,11 +30,12 @@ import ec.com.codesoft.codefaclite.ws.codefac.webservice.SOAPServerPortType;
 public class Test {
     public static void main(String[] args) {
         //obtenerLicencia();
-        setearLicencia();
+        //setearLicencia();
         //obtenerNumeroMaquinasLicencia();
         //setearTipoLicencia();
         //obtenerTipoLicencia();
         //verificar();
+        devolverEstado();
     }
     
     public static void obtenerTipoLicencia()
@@ -100,6 +103,19 @@ public class Test {
         parametros.setC("Codesoft2301");
         parametros.setU("carlosmast2301@hotmail.es");
         ComprobarResponseType respuesta= soapServerPort.comprobar(parametros);
+        //respuesta.get
+        System.out.println(respuesta.getReturn());
+
+    }
+    
+    public static void devolverEstado()
+    {
+        SOAPServer soapServer=new SOAPServer();
+        SOAPServerPortType soapServerPort=soapServer.getSOAPServerPort();
+        
+        EstadousuarioRequestType parametros=new EstadousuarioRequestType();
+        parametros.setEmail("carlosmast2302@gmail.com");
+        EstadousuarioResponseType respuesta= soapServerPort.estadousuario(parametros);
         //respuesta.get
         System.out.println(respuesta.getReturn());
 

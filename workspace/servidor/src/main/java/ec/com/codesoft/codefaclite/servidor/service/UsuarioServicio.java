@@ -127,10 +127,10 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
             {
                 perfil=perfilesList.get(0);
             }
-            else
-            {
-               throw new ServicioCodefacException("No existe el perfil para guardar");
-            }
+            //else
+            //{
+            //   throw new ServicioCodefacException("No existe el perfil para guardar");
+            //}
             
             PerfilUsuario perfilUsuario=new PerfilUsuario();
             

@@ -32,6 +32,8 @@ public class Perfil implements Serializable{
     public static final String PERFIl_ADMINISTRADOR="ADMIN";
     public static final String PERFIl_OPERADOR="OPERADOR";
     
+    public static final String PERFIL_GRATIS="GRATIS";
+    
     private static final long serialVersionUID = 1L;
      
     @Id
