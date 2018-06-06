@@ -45,3 +45,10 @@ Ver como hacer un descuento global
 
 Analizar una opcion para hacer un casting entre las unidades de un producto y otras medias de venta (por ejemplo cuando voy a clavos por libras) 
 
+Al momento de cargar las formas de pago  con el cliente , despues de tener ingresado los detalles que cargue con el monto actual del total en modo libre
+
+Analizar si agregar una variable adicional para saber si algunos productos deben manejarse como inventario o directo
+hacer acuerdo a Robert de la etiqueta de agregar columna , me parece en el campo de numero de orden en el sql para que se genere el campo para la nueva version
+
+
+Hacer un dll en c++ por jni para tener quemado las claves y no me puedan hacer ingenieria inversa

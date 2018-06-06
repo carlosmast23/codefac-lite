@@ -1,0 +1,2 @@
+Agregar un nuevo metodo del web service para consultar si existe el modulo de servicios
+Al momento de verificar la licencia ver si por defecto se deja habilitado alguno modulo

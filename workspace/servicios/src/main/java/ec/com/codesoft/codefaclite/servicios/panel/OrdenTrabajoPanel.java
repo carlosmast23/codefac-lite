@@ -125,7 +125,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
     }
     
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true,expresionRegular = ExpresionRegular.textoSimple, nombre = "Descripción detalle Orden Trabajo" )
+    @ValidacionCodefacAnotacion(requerido=true,expresionRegular = ExpresionRegular.textoSimple, nombre = "Descripción detalle Orden Trabajo", grupo = "detalles")
     public JTextArea getTxtAreaDescripcion() {
         return txtAreaDescripcion;
     }
@@ -135,7 +135,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
     }
     
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=false,expresionRegular = ExpresionRegular.textoSimple ,nombre = "Nota detalle Orden Trabajo")
+    @ValidacionCodefacAnotacion(requerido=false,expresionRegular = ExpresionRegular.textoSimple ,nombre = "Nota detalle Orden Trabajo", grupo = "detalles")
     public JTextArea getTxtAreaNotas() {
         return txtAreaNotas;
     }

@@ -79,6 +79,56 @@
    <xsd:element name="return" type="xsd:string"/>
   </xsd:all>
  </xsd:complexType>
+ <xsd:complexType name="verificarmoduloiRequestType">
+  <xsd:all>
+   <xsd:element name="email" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="verificarmoduloiResponseType">
+  <xsd:all>
+   <xsd:element name="return" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="verificarmoduloaRequestType">
+  <xsd:all>
+   <xsd:element name="email" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="verificarmoduloaResponseType">
+  <xsd:all>
+   <xsd:element name="return" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="verificarmodulofRequestType">
+  <xsd:all>
+   <xsd:element name="email" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="verificarmodulofResponseType">
+  <xsd:all>
+   <xsd:element name="return" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="verificarmodulocRequestType">
+  <xsd:all>
+   <xsd:element name="email" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="verificarmodulocResponseType">
+  <xsd:all>
+   <xsd:element name="return" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="estadousuarioRequestType">
+  <xsd:all>
+   <xsd:element name="email" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="estadousuarioResponseType">
+  <xsd:all>
+   <xsd:element name="return" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
  <xsd:element name="addnumbers" type="tns:addnumbersRequestType"/>
  <xsd:element name="addnumbersResponse" type="tns:addnumbersResponseType"/>
  <xsd:element name="actualizarlicencia" type="tns:actualizarlicenciaRequestType"/>
@@ -93,6 +143,16 @@
  <xsd:element name="actualizartipolicenciaResponse" type="tns:actualizartipolicenciaResponseType"/>
  <xsd:element name="numaquinas" type="tns:numaquinasRequestType"/>
  <xsd:element name="numaquinasResponse" type="tns:numaquinasResponseType"/>
+ <xsd:element name="verificarmoduloi" type="tns:verificarmoduloiRequestType"/>
+ <xsd:element name="verificarmoduloiResponse" type="tns:verificarmoduloiResponseType"/>
+ <xsd:element name="verificarmoduloa" type="tns:verificarmoduloaRequestType"/>
+ <xsd:element name="verificarmoduloaResponse" type="tns:verificarmoduloaResponseType"/>
+ <xsd:element name="verificarmodulof" type="tns:verificarmodulofRequestType"/>
+ <xsd:element name="verificarmodulofResponse" type="tns:verificarmodulofResponseType"/>
+ <xsd:element name="verificarmoduloc" type="tns:verificarmodulocRequestType"/>
+ <xsd:element name="verificarmodulocResponse" type="tns:verificarmodulocResponseType"/>
+ <xsd:element name="estadousuario" type="tns:estadousuarioRequestType"/>
+ <xsd:element name="estadousuarioResponse" type="tns:estadousuarioResponseType"/>
 </xsd:schema>
 </types>
 <message name="addnumbersRequest">
@@ -123,6 +183,26 @@
   <part name="parameters" element="tns:numaquinas" /></message>
 <message name="numaquinasResponse">
   <part name="parameters" element="tns:numaquinasResponse" /></message>
+<message name="verificarmoduloiRequest">
+  <part name="parameters" element="tns:verificarmoduloi" /></message>
+<message name="verificarmoduloiResponse">
+  <part name="parameters" element="tns:verificarmoduloiResponse" /></message>
+<message name="verificarmoduloaRequest">
+  <part name="parameters" element="tns:verificarmoduloa" /></message>
+<message name="verificarmoduloaResponse">
+  <part name="parameters" element="tns:verificarmoduloaResponse" /></message>
+<message name="verificarmodulofRequest">
+  <part name="parameters" element="tns:verificarmodulof" /></message>
+<message name="verificarmodulofResponse">
+  <part name="parameters" element="tns:verificarmodulofResponse" /></message>
+<message name="verificarmodulocRequest">
+  <part name="parameters" element="tns:verificarmoduloc" /></message>
+<message name="verificarmodulocResponse">
+  <part name="parameters" element="tns:verificarmodulocResponse" /></message>
+<message name="estadousuarioRequest">
+  <part name="parameters" element="tns:estadousuario" /></message>
+<message name="estadousuarioResponse">
+  <part name="parameters" element="tns:estadousuarioResponse" /></message>
 <portType name="SOAPServerPortType">
   <operation name="addnumbers">
     <documentation>Addition Of Two Numbers</documentation>
@@ -159,6 +239,31 @@
     <input message="tns:numaquinasRequest"/>
     <output message="tns:numaquinasResponse"/>
   </operation>
+  <operation name="verificarmoduloi">
+    <documentation>Modulo inventario verificar</documentation>
+    <input message="tns:verificarmoduloiRequest"/>
+    <output message="tns:verificarmoduloiResponse"/>
+  </operation>
+  <operation name="verificarmoduloa">
+    <documentation>Modulo academico verificar</documentation>
+    <input message="tns:verificarmoduloaRequest"/>
+    <output message="tns:verificarmoduloaResponse"/>
+  </operation>
+  <operation name="verificarmodulof">
+    <documentation>Modulo facturacion verificar</documentation>
+    <input message="tns:verificarmodulofRequest"/>
+    <output message="tns:verificarmodulofResponse"/>
+  </operation>
+  <operation name="verificarmoduloc">
+    <documentation>Modulo CRM verificar</documentation>
+    <input message="tns:verificarmodulocRequest"/>
+    <output message="tns:verificarmodulocResponse"/>
+  </operation>
+  <operation name="estadousuario">
+    <documentation>Verificar estado</documentation>
+    <input message="tns:estadousuarioRequest"/>
+    <output message="tns:estadousuarioResponse"/>
+  </operation>
 </portType>
 <binding name="SOAPServerBinding" type="tns:SOAPServerPortType">
   <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
@@ -194,6 +299,31 @@
   </operation>
   <operation name="numaquinas">
     <soap:operation soapAction="urn:http://www.cf.codesoft-ec.com/mysoapserver/numaquinas" style="document"/>
+    <input><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></input>
+    <output><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></output>
+  </operation>
+  <operation name="verificarmoduloi">
+    <soap:operation soapAction="urn:http://www.cf.codesoft-ec.com/mysoapserver/verificarmoduloi" style="document"/>
+    <input><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></input>
+    <output><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></output>
+  </operation>
+  <operation name="verificarmoduloa">
+    <soap:operation soapAction="urn:http://www.cf.codesoft-ec.com/mysoapserver/verificarmoduloa" style="document"/>
+    <input><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></input>
+    <output><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></output>
+  </operation>
+  <operation name="verificarmodulof">
+    <soap:operation soapAction="urn:http://www.cf.codesoft-ec.com/mysoapserver/verificarmodulof" style="document"/>
+    <input><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></input>
+    <output><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></output>
+  </operation>
+  <operation name="verificarmoduloc">
+    <soap:operation soapAction="urn:http://www.cf.codesoft-ec.com/mysoapserver/verificarmoduloc" style="document"/>
+    <input><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></input>
+    <output><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></output>
+  </operation>
+  <operation name="estadousuario">
+    <soap:operation soapAction="urn:http://www.cf.codesoft-ec.com/mysoapserver/estadousuario" style="document"/>
     <input><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></input>
     <output><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></output>
   </operation>

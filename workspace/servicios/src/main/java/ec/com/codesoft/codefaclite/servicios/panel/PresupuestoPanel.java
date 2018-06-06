@@ -7,8 +7,11 @@ package ec.com.codesoft.codefaclite.servicios.panel;
 
 import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -347,6 +350,8 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(txtPrecioCompra, gridBagConstraints);
+
+        txtProveedorDetalle.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -378,6 +383,8 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(3, 0, 0, 0);
         jPanel1.add(btnCrearProducto, gridBagConstraints);
+
+        txtProductoDetalle.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -909,6 +916,8 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         this.tableDetallesPresupuesto = tableDetallesPresupuesto;
     }
 
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = false, expresionRegular = ExpresionRegular.textoSimple, nombre = "Observaciones presupuesto")
     public JTextArea getTxtAreaObservaciones() {
         return txtAreaObservaciones;
     }
@@ -916,7 +925,10 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     public void setTxtAreaObservaciones(JTextArea txtAreaObservaciones) {
         this.txtAreaObservaciones = txtAreaObservaciones;
     }
-
+    
+    @LimpiarAnotacion
+    //@ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.soloNumeros2, nombre = "Cantidad", grupo = "detalles")
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[0-9]+$", nombre = "Cantidad", grupo = "detalles")
     public JTextField getTxtCantidad() {
         return txtCantidad;
     }
@@ -940,7 +952,9 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     public void setTxtCodigo(JTextField txtCodigo) {
         this.txtCodigo = txtCodigo;
     }
-
+    
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.textoSimple, nombre = "Descripción presupuesto")
     public JTextField getTxtDescripcion() {
         return txtDescripcion;
     }
@@ -948,7 +962,9 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     public void setTxtDescripcion(JTextField txtDescripcion) {
         this.txtDescripcion = txtDescripcion;
     }
-
+    
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.numerosRealesPositivos, nombre = "Descuento Precio Compra", grupo = "detalles")
     public JTextField getTxtDescuentoPrecioCompra() {
         return txtDescuentoPrecioCompra;
     }
@@ -956,7 +972,9 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     public void setTxtDescuentoPrecioCompra(JTextField txtDescuentoPrecioCompra) {
         this.txtDescuentoPrecioCompra = txtDescuentoPrecioCompra;
     }
-
+    
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.numerosRealesPositivos, nombre = "Descuento Precio Venta", grupo = "detalles")
     public JTextField getTxtDescuentoPrecioVenta() {
         return txtDescuentoPrecioVenta;
     }
@@ -972,7 +990,9 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     public void setTxtOrdenTrabajo(JTextField txtOrdenTrabajo) {
         this.txtOrdenTrabajo = txtOrdenTrabajo;
     }
-
+    
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.numerosRealesPositivos, nombre = "Precio Compra", grupo = "detalles")
     public JTextField getTxtPrecioCompra() {
         return txtPrecioCompra;
     }
@@ -980,7 +1000,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     public void setTxtPrecioCompra(JTextField txtPrecioCompra) {
         this.txtPrecioCompra = txtPrecioCompra;
     }
-
+    
     public JTextField getTxtProductoDetalle() {
         return txtProductoDetalle;
     }
@@ -1021,6 +1041,8 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         this.btnEliminarDetalle = btnEliminarDetalle;
     }
 
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.numerosRealesPositivos, nombre = "Precio Venta", grupo = "detalles")
     public JTextField getTxtPrecioVenta() {
         return txtPrecioVenta;
     }
@@ -1036,7 +1058,9 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     public void setCmbOpcionDiaMes(JComboBox<String> cmbOpcionDiaMes) {
         this.cmbOpcionDiaMes = cmbOpcionDiaMes;
     }
-
+    
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.soloNumeros2, nombre = "Dias presupuesto")
     public JTextField getTxtDiasPresupuesto() {
         return txtDiasPresupuesto;
     }

@@ -1780,9 +1780,14 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 //Adicional de validar si la pantalla tiene disponible la opcion verificar si el usuario tiene permisos para los botones
                 if(value) //Validar solo si el valor es positivo porque solo debo poder desactivar opciones
                 {
-                    Boolean permisoBotonUsuario=permisoBotonesRoles(frameInterface,key);
-                    if(!permisoBotonUsuario)
-                        boton.setEnabled(false); //Descivar si no tiene permisos
+                    //No validar para el boton de ayuda porque siempre tiene que estar activo
+                    if(key!=ControladorCodefacInterface.BOTON_AYUDA)
+                    {
+                        Boolean permisoBotonUsuario = permisoBotonesRoles(frameInterface, key);
+                        if (!permisoBotonUsuario) {
+                            boton.setEnabled(false); //Descivar si no tiene permisos
+                        }
+                    }
                 }
                 
                 
@@ -1807,6 +1812,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             for (PermisoVentana permisoVentana : perfil.getVentanasPermisos()) {
                 if(permisoVentana.getVentanaEnum().getClaseNombre().equals(claseNombre))
                 {
+                    if ((permisoVentana.getPermisoGrabar().equals("s") || permisoVentana.getPermisoEditar().equals("s")) && ControladorCodefacInterface.BOTON_NUEVO == boton) 
+                        return true;                    
+                    
                     if(permisoVentana.getPermisoBuscar().equals("s") && ControladorCodefacInterface.BOTON_BUSCAR==boton)
                         return true;
                     
@@ -2111,46 +2119,64 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         
                         //Verificacion cuando es un modulo habilitado
                         boolean agregarAlMenu=false;
-                        if(isModuloPermitido(moduloSistema))
+                        
+                        //Validacion de las ventanas cuando el usuario es gratis
+                        if(sessionCodefac.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS))
                         {
-                            if(menuControlador.getModulo().equals(moduloSistema))
-                            {
-                                //Verifica si es super usuario carga todos los modulos
-                                if(sessionCodefac.getUsuario().getNick().equals(Usuario.SUPER_USUARIO))
-                                {
-                                    agregarAlMenu=true;
-                                    
+                            //Si el tipo de licencia de la pantala es gratis le activo solo las pantallas disponibles para esta modalidad
+                            if (menuControlador.getModulo().equals(moduloSistema)) {
+                                //Si es super usuario cargo todos los datos 
+                                if (sessionCodefac.getUsuario().getNick().equals(Usuario.SUPER_USUARIO)) {
+                                    agregarAlMenu = true;
+                                } else if (menuControlador.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS)) {
+                                    agregarAlMenu = true;
                                 }
-                                else
-                                {                                
-                                    if(verificarMenuUsuario(menuControlador))
+                            }
+                        }
+                        else //Validacion para usuarios premiun
+                        {                        
+                            if(isModuloPermitido(moduloSistema))
+                            {
+                                if(menuControlador.getModulo().equals(moduloSistema))
+                                {
+                                    //Verifica si es super usuario carga todos los modulos
+                                    if(sessionCodefac.getUsuario().getNick().equals(Usuario.SUPER_USUARIO))
                                     {
                                         agregarAlMenu=true;
+
+                                    }
+                                    else
+                                    {                                
+                                        if(verificarMenuUsuario(menuControlador))
+                                        {
+                                            agregarAlMenu=true;
+                                        }
                                     }
                                 }
                             }
-                        }
-                        else //Verificacion cuando no es un modulo habilitado
-                        {
-                            //Solo agregar otras ventanas de otros modulos si el menu pertenece al modulo actual
-                            //Nota: sin esta linea pueden aparecer varios enlaces a esta ventana desde otros menus de modulos
-                            if (menuControlador.getModulo().equals(moduloSistema)) {
-                                //Verifica si es super usuario carga todos los modulos
-                                if (sessionCodefac.getUsuario().getNick().equals(Usuario.SUPER_USUARIO)) 
-                                {
-                                    agregarAlMenu = true;
-                                } 
-                                else 
-                                    if (menuControlador.verificarPermisoModuloAdicional(sessionCodefac.getModulosMap())) {
-                                    if (verificarMenuUsuario(menuControlador)) {
+                            else //Verificacion cuando no es un modulo habilitado
+                            {
+                                //Solo agregar otras ventanas de otros modulos si el menu pertenece al modulo actual
+                                //Nota: sin esta linea pueden aparecer varios enlaces a esta ventana desde otros menus de modulos
+                                if (menuControlador.getModulo().equals(moduloSistema)) {
+                                    //Verifica si es super usuario carga todos los modulos
+                                    if (sessionCodefac.getUsuario().getNick().equals(Usuario.SUPER_USUARIO)) 
+                                    {
                                         agregarAlMenu = true;
+                                    } 
+                                    else 
+                                        if (menuControlador.verificarPermisoModuloAdicional(sessionCodefac.getModulosMap())) 
+                                        {
+                                            if (verificarMenuUsuario(menuControlador)) {
+                                                agregarAlMenu = true;
+                                            }
                                     }
                                 }
+
+
                             }
 
-                        
                         }
-                        
                         
                         if (menuControlador.getCategoriaMenu().equals(categoriaEnum)&& agregarAlMenu ) {
                             existenMenuItem = true;
