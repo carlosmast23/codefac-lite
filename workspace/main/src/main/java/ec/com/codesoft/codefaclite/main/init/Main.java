@@ -846,24 +846,38 @@ public class Main {
                     try {
                         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
                         Date fechaUltimaRevision = formato.parse(fechaStr);
-                        int dias = UtilidadesFecha.obtenerDistanciaDias(fechaUltimaRevision, UtilidadesFecha.hoy());
+                        
+                        Date fechaRevisar=UtilidadesFecha.hoy(); //Por feecto compara con la hora del sistema
+                        try
+                        {
+                            fechaRevisar=UtilidadesFecha.getFechaNTP(); //Si no existe internet hace el calculo con la hora del sistema
+                        }
+                        catch(java.lang.NoSuchMethodError nse)
+                        {
+                            nse.printStackTrace();
+                        } catch (Exception ex) {
+                            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                                
+                        
+                        int dias = UtilidadesFecha.obtenerDistanciaDias(fechaUltimaRevision, fechaRevisar);//Esta fecha 
 
-                        //Validacion para evitar que cambien fechas del sistema o que corrompan la fecha
+                        //Validacion para evitar que cambien fechas del sistema o que corrompan la fecha poniendo una fecha superior
                         if (dias < 0) {
                             DialogoCodefac.mensaje("Error", "No se puede validar su licencia ,inconsistencia con las fechas", DialogoCodefac.MENSAJE_INCORRECTO);
                             System.exit(0);
 
                         }
 
-                        //Revisar la licencia cada despues de 15 dias con un rango maximo de 30 dias 
-                        if (dias > 15 && dias < 30) {
+                        //Revisar la licencia cada 5 dias con un rango maximo de 8 dias 
+                        if (dias > 5 && dias < 8) {
                             if (verificarLicenciaOnline(validacion)) {
                                 grabarFechaRevision(parametroFechaValidacion, false);
                             }
                         }
 
-                        //Si execde los 30 dias sin validar por internet ya no permite el acceso
-                        if (dias >= 30) {
+                        //Si execede los 7 dias sin validar por internet ya no permite el acceso
+                        if (dias >= 8) {
                             if (verificarLicenciaOnline(validacion)) {
                                 grabarFechaRevision(parametroFechaValidacion, false);
                             } else {
@@ -923,7 +937,7 @@ public class Main {
 
             ParametroCodefacServiceIf servicio = ServiceFactory.getFactory().getParametroCodefacServiceIf();
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            Date fechaHoy = UtilidadesFecha.getFechaHoy();
+            Date fechaHoy = UtilidadesFecha.getFechaNTP();
             parametroFechaValidacion.setValor(format.format(fechaHoy));
             if (crear) {
                 servicio.grabar(parametroFechaValidacion);
@@ -931,6 +945,8 @@ public class Main {
                 servicio.editar(parametroFechaValidacion);
             }
         } catch (RemoteException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

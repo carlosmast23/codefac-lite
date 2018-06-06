@@ -1,2 +1,3 @@
 Agregar un nuevo metodo del web service para consultar si existe el modulo de servicios
 Al momento de verificar la licencia ver si por defecto se deja habilitado alguno modulo
+Cuando se ingresan varios modulos en la base de datos no funciona el web service (solo funciona con 1 modulo)

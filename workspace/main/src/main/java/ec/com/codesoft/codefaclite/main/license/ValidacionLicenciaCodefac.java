@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.jfree.util.Log;
 
 
 /**
@@ -31,6 +32,10 @@ import java.util.logging.Logger;
  * @author Carlos
  */
 public class ValidacionLicenciaCodefac{
+
+    private static final Logger LOG = Logger.getLogger(ValidacionLicenciaCodefac.class.getName());
+    
+    
     
     private static final String NOMBRE_LICENCIA="/licencia/licence.codefac";
     /*public static final String USUARIO="usuario";
@@ -136,6 +141,7 @@ public class ValidacionLicenciaCodefac{
             //String licencia=usuario+":"+UtilidadVarios.obtenerMac()+":"+tipoLicencia+":"+cantidadUsuarios;            
             String modulosStr=licencia.getModulosStr();
             String licenciaStr=licencia.getUsuario()+":"+UtilidadVarios.obtenerMacSinInternet()+":"+licencia.getTipoLicenciaEnum().getLetra()+":"+licencia.getCantidadClientes()+":"+modulosStr;            
+            LOG.log(Level.INFO,"creando="+licenciaStr);
             licenciaStr=BCrypt.hashpw(licenciaStr,BCrypt.gensalt(12));
             Properties prop = new Properties();
             prop.setProperty(Licencia.PROPIEDAD_USUARIO,licencia.getUsuario());

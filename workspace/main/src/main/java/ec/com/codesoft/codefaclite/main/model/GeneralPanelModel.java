@@ -36,6 +36,7 @@ import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.main.init.Main;
 import ec.com.codesoft.codefaclite.main.interfaces.BusquedaCodefacInterface;
+import ec.com.codesoft.codefaclite.main.license.Licencia;
 import ec.com.codesoft.codefaclite.main.license.ValidacionLicenciaCodefac;
 import ec.com.codesoft.codefaclite.main.panel.GeneralPanelForm;
 import ec.com.codesoft.codefaclite.main.panel.WidgetVentasDiarias;
@@ -2115,8 +2116,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     menuCategoria.setFont(new Font("Arial", 0, 13));
                     
                     boolean existenMenuItem=false;
-                    for (VentanaEnum menuControlador : ventanasMenuList) {
-                        
+                    for (VentanaEnum menuControlador : ventanasMenuList) 
+                    {                        
                         //Verificacion cuando es un modulo habilitado
                         boolean agregarAlMenu=false;
                         
@@ -2124,13 +2125,14 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         if(sessionCodefac.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS))
                         {
                             //Si el tipo de licencia de la pantala es gratis le activo solo las pantallas disponibles para esta modalidad
-                            if (menuControlador.getModulo().equals(moduloSistema)) {
-                                //Si es super usuario cargo todos los datos 
-                                if (sessionCodefac.getUsuario().getNick().equals(Usuario.SUPER_USUARIO)) {
-                                    agregarAlMenu = true;
-                                } else if (menuControlador.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS)) {
+                            if (menuControlador.getModulo().equals(moduloSistema)) 
+                            {                                                                
+                                //El acceso es el mismo para cualquier usuario gratis y para el administrador
+                                if(menuControlador.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS)) 
+                                {
                                     agregarAlMenu = true;
                                 }
+
                             }
                         }
                         else //Validacion para usuarios premiun
@@ -2138,7 +2140,15 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             if(isModuloPermitido(moduloSistema))
                             {
                                 if(menuControlador.getModulo().equals(moduloSistema))
-                                {
+                                {                                    
+                                    //if(sessionCodefac.getUsuario().getNick().equals(Usuario.SUPER_USUARIO) || verificarMenuUsuario(menuControlador))
+                                    //{
+                                    //    agregarAlMenu = true;
+                                    //}
+                                    
+                                    
+                                    
+                                    
                                     //Verifica si es super usuario carga todos los modulos
                                     if(sessionCodefac.getUsuario().getNick().equals(Usuario.SUPER_USUARIO))
                                     {
@@ -2512,10 +2522,15 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             @Override
             public void actionPerformed(ActionEvent e) {
                 String usuarioLicencia=sessionCodefac.getUsuarioLicencia();
-                String tipoLicencia=WebServiceCodefac.getTipoLicencia(usuarioLicencia);
-                //TODO: Analizar la opcion para comparar tambien el numero de usuario y modulos para generar una nueva licencia
+                //String tipoLicencia=WebServiceCodefac.getTipoLicencia(usuarioLicencia);
+                Licencia licenciaInternet=new Licencia();
+                licenciaInternet.cargarLicenciaOnline(usuarioLicencia);
                 
-                if(sessionCodefac.getTipoLicenciaEnum().getLetra().equals(tipoLicencia))
+                ValidacionLicenciaCodefac validacionLicencia = new ValidacionLicenciaCodefac(sessionCodefac.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).getValor());
+                
+                //TODO: Analizar la opcion para comparar tambien el numero de usuario y modulos para generar una nueva licencia
+                                
+                if(validacionLicencia.getLicencia().compararOtraLicencia(licenciaInternet))
                 {
                     DialogoCodefac.mensaje("Advertencia","No necesita actualizar su licencia \n Si desea contratar una nueva licencia visite nuestra página Web", DialogoCodefac.MENSAJE_ADVERTENCIA);
                     return;

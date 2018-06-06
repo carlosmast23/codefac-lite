@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PerfilUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
@@ -77,29 +78,15 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
     private void crearLicencia()
     {
         String usuarioTxt=getTxtUsuarioVerificar().getText();
-        String tipoLicencia = getTipoLicencia(usuarioTxt);
-        Integer cantidadUsuarios=WebServiceCodefac.getCantidadClientes(usuarioTxt);
-        
-                
         //Crea la nueva licencia con el usuario
         Licencia licencia=new Licencia();
-        licencia.setUsuario(getTxtUsuarioVerificar().getText());
-        licencia.setTipoLicenciaEnum(TipoLicenciaEnum.getEnumByLetra(tipoLicencia));
-        licencia.setCantidadClientes(cantidadUsuarios);
-        licencia.cargarModulosOnline();
-        
+        licencia.cargarLicenciaOnline(usuarioTxt);
         
         Properties propiedad = validacionLicenciaCodefac.crearLicenciaMaquina(licencia);
 
-        //Actualizar la licencia en la maquina
-        SOAPServer soapServer = new SOAPServer();
-        SOAPServerPortType soapServerPort = soapServer.getSOAPServerPort();
-
-        ActualizarlicenciaRequestType parametros = new ActualizarlicenciaRequestType();
-        parametros.setEmail(getTxtUsuarioVerificar().getText());
-        parametros.setLicencia(propiedad.getProperty(Licencia.PROPIEDAD_LICENCIA));
-
-        ActualizarlicenciaResponseType respuesta = soapServerPort.actualizarlicencia(parametros);
+        
+        //Actualizar la nueva licencia en el servidor
+        WebServiceCodefac.actualizarLicencia(getTxtUsuarioVerificar().getText(), propiedad.getProperty(Licencia.PROPIEDAD_LICENCIA));
                 
     }
     
@@ -169,24 +156,22 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
         getBtnVerificar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(verificarCredenciales())
+                if(WebServiceCodefac.verificarCredenciales(getTxtUsuarioVerificar().getText(),new String(getTxtClaveVerificar().getPassword())))
                 { 
                     //Verificar si existe la licencia para solo descargar
-                    SOAPServer soapServer = new SOAPServer();
-                    SOAPServerPortType soapServerPort = soapServer.getSOAPServerPort();
-
-                    ObtenerlicenciaRequestType parametros = new ObtenerlicenciaRequestType();
-                    parametros.setEmail(getTxtUsuarioVerificar().getText());
-                    ObtenerlicenciaResponseType respuesta = soapServerPort.obtenerlicencia(parametros);
-                    String tipoLicencia=getTipoLicencia(getTxtUsuarioVerificar().getText());
+                    String licencia=WebServiceCodefac.getLicencia(getTxtUsuarioVerificar().getText());
+                    
+                    String tipoLicencia=WebServiceCodefac.getTipoLicencia(getTxtUsuarioVerificar().getText());
                     Integer cantidadUsuarios=WebServiceCodefac.getCantidadClientes(getTxtUsuarioVerificar().getText());
                     
-                    String moduloInventario = WebServiceCodefac.getModuloInventario(getTxtUsuarioVerificar().getText());
-                    String moduloGestionAcademica = WebServiceCodefac.getModuloGestionAcademica(getTxtUsuarioVerificar().getText());
-                    String moduloFacturacion = WebServiceCodefac.getModuloFacturacion(getTxtUsuarioVerificar().getText());
-                    String moduloCRM = WebServiceCodefac.getModuloCrm(getTxtUsuarioVerificar().getText());
+                    /*
+                    String moduloInventario = WebServiceCodefac.getModuloCodefac(getTxtUsuarioVerificar().getText(),ModuloCodefacEnum.INVENTARIO.getLetra());
+                    String moduloGestionAcademica = WebServiceCodefac.getModuloCodefac(getTxtUsuarioVerificar().getText(),ModuloCodefacEnum.GESTIONA_ACADEMICA.getLetra());
+                    String moduloFacturacion = WebServiceCodefac.getModuloCodefac(getTxtUsuarioVerificar().getText(),ModuloCodefacEnum.FACTURACION.getLetra());
+                    String moduloCRM = WebServiceCodefac.getModuloCodefac(getTxtUsuarioVerificar().getText(),ModuloCodefacEnum.CRM.getLetra());
                     
                     //Agregar a una lista solo los modulos activos
+                    
                     List<String> modulosActivos = new ArrayList<String>();
                     if (moduloInventario != null && moduloInventario.equals("s")) {
                         modulosActivos.add(moduloInventario);
@@ -202,7 +187,7 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
 
                     if (moduloCRM != null && moduloCRM.equals("s")) {
                         modulosActivos.add(moduloCRM);
-                    }
+                    }*/
                     
                     //No hace verificaciones porque esta accion solo es accesible desde la pantalla de menu
                     //y se supone que ya esta validando la licencia anterior
@@ -219,13 +204,14 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
                         return; //dtener la ejecucion
                         
                     }
-                                       
-                    if(!respuesta.getReturn().equals("fail"))
+                    
+                    //Si la licencia existe
+                    if(!licencia.equals("fail"))
                     {             
                         //Si existe en el servidor la licencia solo vuelve a descargar
                         Licencia licenciaDescargada=new Licencia();
                         licenciaDescargada.setUsuario(getTxtUsuarioVerificar().getText());
-                        licenciaDescargada.setLicencia(respuesta.getReturn());
+                        licenciaDescargada.setLicencia(licencia);
                         licenciaDescargada.setTipoLicenciaEnum(TipoLicenciaEnum.getEnumByLetra(tipoLicencia));
                         licenciaDescargada.setCantidadClientes(cantidadUsuarios);
                         licenciaDescargada.cargarModulosOnline();
@@ -334,36 +320,6 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
         
     }
     
-    private String getTipoLicencia(String email) {
-        /**
-         * Obtener el tipo de licencia del usuario
-         */
-        SOAPServer soapServer = new SOAPServer();
-        SOAPServerPortType soapServerPort = soapServer.getSOAPServerPort();
-        DevolverlicenciaRequestType parametrosLicencia = new DevolverlicenciaRequestType();
-        parametrosLicencia.setEmail(email);
-        DevolverlicenciaResponseType respuestaLicencia = soapServerPort.devolverlicencia(parametrosLicencia);
-        return respuestaLicencia.getReturn();
-
-    }
-    
-    private boolean verificarCredenciales()
-    {
-        SOAPServer soapServer=new SOAPServer();
-        SOAPServerPortType soapServerPort=soapServer.getSOAPServerPort();
-        ComprobarRequestType parametros=new ComprobarRequestType();
-        parametros.setC(new String(getTxtClaveVerificar().getPassword()));
-        parametros.setU(new String(getTxtUsuarioVerificar().getText()));
-        ComprobarResponseType respuesta= soapServerPort.comprobar(parametros);
-        if("success".equals(respuesta.getReturn()))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
     
     
     public static void main(String[] args)
