@@ -60,7 +60,8 @@ public final class ExpresionRegular
     public static final String numerosRealesPositivos = "^[0-9]+([.][0-9]+)?$"; 
     
     /**
-     * Número     
+     * Número 
+     * Ejm: 15, 1, 100
     */
     public static final String soloNumeros2 = "^[0-9]+$";
 
