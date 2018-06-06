@@ -14,6 +14,14 @@ import ec.com.codesoft.codefaclite.ws.codefac.webservice.ObtenerlicenciaRequestT
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ObtenerlicenciaResponseType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.SOAPServer;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.SOAPServerPortType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarmoduloaRequestType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarmoduloaResponseType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarmodulocRequestType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarmodulocResponseType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarmodulofRequestType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarmodulofResponseType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarmoduloiRequestType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarmoduloiResponseType;
 
 /**
  *
@@ -106,19 +114,59 @@ public abstract class WebServiceCodefac {
      * @return
      */
     public static String getModuloInventario(String email) throws ClientTransportException {
-        return "s";
+        try
+        {
+            SOAPServer soapServer = new SOAPServer();
+            SOAPServerPortType soapServerPort = soapServer.getSOAPServerPort();
+            VerificarmoduloiRequestType parametrosLicencia = new VerificarmoduloiRequestType();
+            parametrosLicencia.setEmail(email);
+            VerificarmoduloiResponseType respuestaLicencia = soapServerPort.verificarmoduloi(parametrosLicencia);
+            return respuestaLicencia.getReturn();
+        }
+        catch(com.sun.xml.internal.ws.client.ClientTransportException cte)
+        {
+            throw cte;
+        }
+        
     }
 
     public static String getModuloGestionAcademica(String email) throws ClientTransportException {
-        return "s";
+        try {
+            SOAPServer soapServer = new SOAPServer();
+            SOAPServerPortType soapServerPort = soapServer.getSOAPServerPort();
+            VerificarmoduloaRequestType parametrosLicencia = new VerificarmoduloaRequestType();
+            parametrosLicencia.setEmail(email);
+            VerificarmoduloaResponseType respuestaLicencia = soapServerPort.verificarmoduloa(parametrosLicencia);
+            return respuestaLicencia.getReturn();
+        } catch (com.sun.xml.internal.ws.client.ClientTransportException cte) {
+            throw cte;
+        }
     }
 
     public static String getModuloFacturacion(String email) throws ClientTransportException {
-        return "s";
+        try {
+            SOAPServer soapServer = new SOAPServer();
+            SOAPServerPortType soapServerPort = soapServer.getSOAPServerPort();
+            VerificarmodulofRequestType parametrosLicencia = new VerificarmodulofRequestType();
+            parametrosLicencia.setEmail(email);
+            VerificarmodulofResponseType respuestaLicencia = soapServerPort.verificarmodulof(parametrosLicencia);
+            return respuestaLicencia.getReturn();
+        } catch (com.sun.xml.internal.ws.client.ClientTransportException cte) {
+            throw cte;
+        }
     }
 
     public static String getModuloCrm(String email) throws ClientTransportException {
-        return "n";
+        try {
+            SOAPServer soapServer = new SOAPServer();
+            SOAPServerPortType soapServerPort = soapServer.getSOAPServerPort();
+            VerificarmodulocRequestType parametrosLicencia = new VerificarmodulocRequestType();
+            parametrosLicencia.setEmail(email);
+            VerificarmodulocResponseType respuestaLicencia = soapServerPort.verificarmoduloc(parametrosLicencia);
+            return respuestaLicencia.getReturn();
+        } catch (com.sun.xml.internal.ws.client.ClientTransportException cte) {
+            throw cte;
+        }
     }
 
 }
