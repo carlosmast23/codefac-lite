@@ -26,8 +26,7 @@ import java.util.logging.Logger;
 public class TestFacturacionElectronica {
     public static void main(String[] args) {
         try {
-            //ComprobanteElectronico comprobante=crearFactura();
-            //ComprobanteElectronicoService servicio=new ComprobanteElectronicoService("E:/codefac", "carlos_alfonso_sanchez_coyago.p12", "Code17bwbtj","pruebas", comprobante);
+            //ComprobanteElectronico comprobante=crearFactura();            
             //servicio.procesarComprobante();
             
             /**
