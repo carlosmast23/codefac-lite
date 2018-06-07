@@ -834,6 +834,15 @@ public class Main {
 
     public static void validacionCodefacOnline(ValidacionLicenciaCodefac validacion) {
 
+        /**
+         * Dias Limite para verificar la licencia en ese periodo de tiempo
+         */
+        int diasLimiteVerificacion=9;
+        /**
+         * Numero de dias antes de empezar a verificar la licencia
+         */
+        int diasToleraciaVerificacion=5;
+        
         try {
             ParametroCodefacServiceIf servicio = ServiceFactory.getFactory().getParametroCodefacServiceIf();
             /**
@@ -870,19 +879,23 @@ public class Main {
                         }
 
                         //Revisar la licencia cada 5 dias con un rango maximo de 8 dias 
-                        if (dias > 5 && dias < 8) {
+                        if (dias > diasToleraciaVerificacion && dias < diasLimiteVerificacion) {
                             if (verificarLicenciaOnline(validacion)) {
                                 grabarFechaRevision(parametroFechaValidacion, false);
                             }
+                            else
+                            {
+                                DialogoCodefac.mensaje("Advertencia", "Le quedan "+(diasLimiteVerificacion-dias)+" días para verificar su licencia por internet. \n\nCausas: \n - No tiene conexion a internet por varios días \n -Esta usando una versión  ilegal \n\n Si el problema persiste comuníquese con un asesor\n Nota: Si no soluciona el problema pasado la fecha limite el programa yo no funcionara" , dias);
+                            }
                         }
 
-                        //Si execede los 7 dias sin validar por internet ya no permite el acceso
-                        if (dias >= 8) {
+                        //Si execede los dias limite sin validar por internet ya no permite el acceso
+                        if (dias >= diasLimiteVerificacion) {
                             if (verificarLicenciaOnline(validacion)) {
                                 grabarFechaRevision(parametroFechaValidacion, false);
                             } else {
                                 //Si no se logro validar la licencia durante 30 dias ya no se abre el software
-                                DialogoCodefac.mensaje("Error", "No se puede validar su licencia , verifique su conexión a internet", DialogoCodefac.MENSAJE_INCORRECTO);
+                                DialogoCodefac.mensaje("Advertencia", "No se puede validar su licencia , verifique su conexión a internet", DialogoCodefac.MENSAJE_ADVERTENCIA);
                                 System.exit(0);
                             }
                         }
@@ -976,27 +989,38 @@ public class Main {
             {
                 return true;
             }
-            else
-            {
-                validacion.crearLicenciaDescargada(licenciaOnline);
+            else //Si existe diferencias con la otra licencia lanza el dialogo para actualizar la licencia
+            {                
+                //validacion.crearLicenciaDescargada(licenciaOnline);a
                 //validacion.crearLicencia(usuario,tipoLicencia,cantidadCliente,modulosActivos);
-                if(validacion.validar())
-                {
-                    return true;
+                //if(validacion.validar())
+                //{
+                //    return true;
+                //}
+                //Pantalla para actualizar la licencia si existe la licencia
+                DialogoCodefac.mensaje("Advertencia","Su licencia esta desactualizada o es incorrecta. \n Porfavor actualice su licencia para continuar", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                ValidarLicenciaModel licenciaDialog = new ValidarLicenciaModel(null, true, true);
+                licenciaDialog.setValidacionLicenciaCodefac(validacion);
+                if (validacion.verificarConexionInternet()) {
+                    licenciaDialog.setVisible(true);
+                    if (licenciaDialog.licenciaCreada) {
+                        return comprobarLicencia(validacion.getPath()); //volver a verificar la licencia
+                    } else {
+                        return false;
+                    }
+                } else {
+                    DialogoCodefac.mensaje("Error", "Para activar su producto conéctese a Internet", DialogoCodefac.MENSAJE_INCORRECTO);
+                    return false;
                 }
-                
+
             }            
 
         }
         catch(com.sun.xml.internal.ws.client.ClientTransportException cte)
         {
             return false;
-        } catch (ValidacionLicenciaExcepcion ex) {
-            return false;
-        } catch (NoExisteLicenciaException ex) {
-            return false;
         }
-        return false;
+
     }
 
     public static Map<String, ParametroCodefac> getParametros() {

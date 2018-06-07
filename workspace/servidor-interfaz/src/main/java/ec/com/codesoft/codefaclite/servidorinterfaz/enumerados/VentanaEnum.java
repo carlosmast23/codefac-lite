@@ -210,7 +210,8 @@ public enum VentanaEnum {
             return false;
         }
 
-        for (Map.Entry<ModuloCodefacEnum, Boolean> entry : modulos.entrySet()) {
+        for (Map.Entry<ModuloCodefacEnum, Boolean> entry : modulos.entrySet()) 
+        {
             ModuloCodefacEnum moduloSistema = entry.getKey();
             Boolean value = entry.getValue();
 

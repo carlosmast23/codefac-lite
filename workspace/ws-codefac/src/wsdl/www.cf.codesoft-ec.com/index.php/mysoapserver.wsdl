@@ -100,6 +100,17 @@
    <xsd:element name="return" type="xsd:string"/>
   </xsd:all>
  </xsd:complexType>
+ <xsd:complexType name="verificarsoporteRequestType">
+  <xsd:all>
+   <xsd:element name="usuario" type="xsd:string"/>
+   <xsd:element name="clave" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="verificarsoporteResponseType">
+  <xsd:all>
+   <xsd:element name="return" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
  <xsd:element name="addnumbers" type="tns:addnumbersRequestType"/>
  <xsd:element name="addnumbersResponse" type="tns:addnumbersResponseType"/>
  <xsd:element name="actualizarlicencia" type="tns:actualizarlicenciaRequestType"/>
@@ -118,6 +129,8 @@
  <xsd:element name="verificarmoduloResponse" type="tns:verificarmoduloResponseType"/>
  <xsd:element name="estadousuario" type="tns:estadousuarioRequestType"/>
  <xsd:element name="estadousuarioResponse" type="tns:estadousuarioResponseType"/>
+ <xsd:element name="verificarsoporte" type="tns:verificarsoporteRequestType"/>
+ <xsd:element name="verificarsoporteResponse" type="tns:verificarsoporteResponseType"/>
 </xsd:schema>
 </types>
 <message name="addnumbersRequest">
@@ -156,6 +169,10 @@
   <part name="parameters" element="tns:estadousuario" /></message>
 <message name="estadousuarioResponse">
   <part name="parameters" element="tns:estadousuarioResponse" /></message>
+<message name="verificarsoporteRequest">
+  <part name="parameters" element="tns:verificarsoporte" /></message>
+<message name="verificarsoporteResponse">
+  <part name="parameters" element="tns:verificarsoporteResponse" /></message>
 <portType name="SOAPServerPortType">
   <operation name="addnumbers">
     <documentation>Addition Of Two Numbers</documentation>
@@ -202,6 +219,11 @@
     <input message="tns:estadousuarioRequest"/>
     <output message="tns:estadousuarioResponse"/>
   </operation>
+  <operation name="verificarsoporte">
+    <documentation>Verificar estado</documentation>
+    <input message="tns:verificarsoporteRequest"/>
+    <output message="tns:verificarsoporteResponse"/>
+  </operation>
 </portType>
 <binding name="SOAPServerBinding" type="tns:SOAPServerPortType">
   <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
@@ -247,6 +269,11 @@
   </operation>
   <operation name="estadousuario">
     <soap:operation soapAction="urn:http://www.cf.codesoft-ec.com/mysoapserver/estadousuario" style="document"/>
+    <input><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></input>
+    <output><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></output>
+  </operation>
+  <operation name="verificarsoporte">
+    <soap:operation soapAction="urn:http://www.cf.codesoft-ec.com/mysoapserver/verificarsoporte" style="document"/>
     <input><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></input>
     <output><soap:body use="literal" namespace="urn:SOAPServerWSDL"/></output>
   </operation>

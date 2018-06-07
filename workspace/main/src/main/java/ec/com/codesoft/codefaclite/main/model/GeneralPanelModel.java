@@ -2086,15 +2086,13 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             ModuloCodefacEnum key = entry.getKey();
             Boolean value = entry.getValue();
             
-            if(value)
+            if(moduloVerificar.equals(key))
             {
-                if(moduloVerificar.equals(key))
-                {
-                    return true;
-                }
+                return value;
             }
-            
+                       
         }
+        //Si no encuentra ninguna coincidencia manda false
         return false;
     
     }
@@ -2110,14 +2108,21 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 menuModulo.setIcon(moduloSistema.getIcono());
                 menuModulo.setFont(new Font("Arial",2,15));
                 boolean existenCategorias=false;
+                
                 for (CategoriaMenuEnum categoriaEnum : CategoriaMenuEnum.values()) {
                     JMenu menuCategoria=new JMenu(categoriaEnum.getNombre());
                     menuCategoria.setIcon(categoriaEnum.getIcono());
                     menuCategoria.setFont(new Font("Arial", 0, 13));
                     
                     boolean existenMenuItem=false;
-                    for (VentanaEnum menuControlador : ventanasMenuList) 
-                    {                        
+                    for (VentanaEnum menuControlador : ventanasMenuList)  //Todo: Analizar para que la variables ventanasMenuList pueda setera cada vez que busco las pantalla que pertence al menu y se vayagn quitando de la lista para acelerar el proceso
+                    {
+                        //Si la venta no pertecene a la categoria no hago mas validaciones
+                        if(!menuControlador.getCategoriaMenu().equals(categoriaEnum))
+                        {
+                            continue; //salta a la siguiente vuelta
+                        }
+                        
                         //Verificacion cuando es un modulo habilitado
                         boolean agregarAlMenu=false;
                         
@@ -2141,28 +2146,13 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             {
                                 if(menuControlador.getModulo().equals(moduloSistema))
                                 {                                    
-                                    //if(sessionCodefac.getUsuario().getNick().equals(Usuario.SUPER_USUARIO) || verificarMenuUsuario(menuControlador))
-                                    //{
-                                    //    agregarAlMenu = true;
-                                    //}
-                                    
-                                    
-                                    
-                                    
-                                    //Verifica si es super usuario carga todos los modulos
-                                    if(sessionCodefac.getUsuario().getNick().equals(Usuario.SUPER_USUARIO))
+                                    if(verificarMenuUsuario(menuControlador) || sessionCodefac.getUsuario().getNick().equals(Usuario.SUPER_USUARIO))
                                     {
                                         agregarAlMenu=true;
 
                                     }
-                                    else
-                                    {                                
-                                        if(verificarMenuUsuario(menuControlador))
-                                        {
-                                            agregarAlMenu=true;
-                                        }
-                                    }
-                                }
+                                    
+                                  }
                             }
                             else //Verificacion cuando no es un modulo habilitado
                             {
@@ -2170,17 +2160,19 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                                 //Nota: sin esta linea pueden aparecer varios enlaces a esta ventana desde otros menus de modulos
                                 if (menuControlador.getModulo().equals(moduloSistema)) {
                                     //Verifica si es super usuario carga todos los modulos
-                                    if (sessionCodefac.getUsuario().getNick().equals(Usuario.SUPER_USUARIO)) 
+                                    
+                                    
+                                    //Verifica si la pantalla adicional deberia agregarse porque esta depende de otra que si se cargo el modulo
+                                    if (menuControlador.verificarPermisoModuloAdicional(sessionCodefac.getModulosMap())) 
                                     {
-                                        agregarAlMenu = true;
-                                    } 
-                                    else 
-                                        if (menuControlador.verificarPermisoModuloAdicional(sessionCodefac.getModulosMap())) 
+                                        //Verifica si el usuario tienes permisos para esa pantalla o son son super usuarios
+                                        if(verificarMenuUsuario(menuControlador) || sessionCodefac.getUsuario().getNick().equals(Usuario.SUPER_USUARIO))
                                         {
-                                            if (verificarMenuUsuario(menuControlador)) {
-                                                agregarAlMenu = true;
-                                            }
-                                    }
+                                            agregarAlMenu = true;
+                                        }
+                                    } 
+                                    
+
                                 }
 
 
@@ -2188,6 +2180,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
                         }
                         
+                        //Esta pantalla filtra que solo se agregue si pertenece al modulo y a la submenu corecto
                         if (menuControlador.getCategoriaMenu().equals(categoriaEnum)&& agregarAlMenu ) {
                             existenMenuItem = true;
                             String nombreVentana = "Sin nombre";
@@ -2549,6 +2542,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         ValidarLicenciaModel dialogo=new ValidarLicenciaModel(null,true,true);
                         dialogo.validacionLicenciaCodefac=validacion;
                         dialogo.setVisible(true);
+                        ec.com.codesoft.codefaclite.main.init.Main.iniciarComponentes();
                     } catch (RemoteException ex) {
                         Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     }

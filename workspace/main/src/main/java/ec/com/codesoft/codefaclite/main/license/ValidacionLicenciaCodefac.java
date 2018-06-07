@@ -188,14 +188,10 @@ public class ValidacionLicenciaCodefac{
     {
         FileOutputStream fr=null;
         try {
-            //String licencia=usuario+":"+UtilidadVarios.obtenerMac();            
-            //licencia=BCrypt.hashpw(licencia,BCrypt.gensalt(12));
             Properties prop = new Properties();
             prop.setProperty(Licencia.PROPIEDAD_USUARIO,licencia.getUsuario());
             prop.setProperty(Licencia.PROPIEDAD_LICENCIA,licencia.getLicencia());
             prop.setProperty(Licencia.PROPIEDAD_CANTIDAD_CLIENTES,licencia.getCantidadClientes().toString());            
-            //setearPropiedadesModulos(prop,modulosActivos); //Setea los modulos activos
-            //TipoLicenciaEnum enumTipoLicencia = TipoLicenciaEnum.getEnumByLetra(licencia.getTipoLicenciaEnum());
             prop.setProperty(Licencia.PROPIEDAD_TIPO_LICENCIA,licencia.getTipoLicenciaEnum().getNombre());
             
             licencia.llenarPropertiesModulo(prop);

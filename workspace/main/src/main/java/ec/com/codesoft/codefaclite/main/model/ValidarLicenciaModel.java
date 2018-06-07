@@ -239,37 +239,14 @@ public class ValidarLicenciaModel extends ValidarLicenciaDialog{
         getBtnActualizarLicencia().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                /*
-                Boolean problemaLicenciaAnterior=false; 
-                try {
-                    if(!validacionLicenciaCodefac.validar())
-                    {
-                        problemaLicenciaAnterior=true;                        
-                    }
-                } catch (ValidacionLicenciaExcepcion ex) {
-                    problemaLicenciaAnterior=true;
-                    Logger.getLogger(ValidarLicenciaModel.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (NoExisteLicenciaException ex) {
-                    problemaLicenciaAnterior=true;
-                    Logger.getLogger(ValidarLicenciaModel.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                
-                //Mostrar mensaje cuando exista algun problema con la licencia anterior
-                if(problemaLicenciaAnterior)
-                {
-                    DialogoCodefac.mensaje("Advertencia","Existe problemas con su licencia anterior, Comuníquese con soporte técnico para resolver este problema",DialogoCodefac.MENSAJE_ADVERTENCIA);
-                }
-                else
-                {*/
                     
-                    //Crear la nueva licencia con los datos de esta maquina
-                    crearLicencia();
-                    DialogoCodefac.mensaje("Felicidades", "Su licencia fue actualizada correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-                    dispose();
-                    ec.com.codesoft.codefaclite.main.init.Main.iniciarComponentes();
-               // }
-                
-                
+                //Crear la nueva licencia con los datos de esta maquina
+                crearLicencia();
+                DialogoCodefac.mensaje("Felicidades", "Su licencia fue actualizada correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+                licenciaCreada=true;//Variable para indicar que la licencia se actualizo correctamente
+                dispose();
+                //ec.com.codesoft.codefaclite.main.init.Main.iniciarComponentes();
+
             }
         });
         

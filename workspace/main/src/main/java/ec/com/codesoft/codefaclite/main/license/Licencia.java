@@ -114,28 +114,6 @@ public class Licencia {
         return modulosStr;
     }
     
-    /*
-    private String getRespuestaModulo(String modulo)
-    {
-        String valorPropiedad= propiedades.getProperty(modulo);
-        
-        String respuesta="n";
-        if(valorPropiedad!=null && valorPropiedad.equals("si"))
-        {
-            respuesta="s";
-        }
-        return respuesta;
-    }*/
-
-    /*
-    public TipoLicenciaEnum getTipoLicenciaPropertyEnum() {
-        //String usuario=propiedades.getProperty(PROPIEDAD_USUARIO);
-        //String licencia=propiedades.getProperty(PROPIEDAD_LICENCIA);
-        String tipoLicencia=propiedades.getProperty(PROPIEDAD_TIPO_LICENCIA);
-        
-        return TipoLicenciaEnum.getEnumByNombre(tipoLicencia);
-        
-    }*/
 
     public void cargarLicenciaOnline(String usuario)
     {
@@ -155,15 +133,7 @@ public class Licencia {
             }
         }
     }
-    /*
-    public void cargarModulosOffline() {
-        this.moduloInventario = castStringBooleanOnline(WebServiceCodefac.getModuloCodefac(usuario,ModuloCodefacEnum.INVENTARIO.getLetra()));
-        this.moduloGestionAcademica = castStringBooleanOnline(WebServiceCodefac.getModuloCodefac(usuario,ModuloCodefacEnum.GESTIONA_ACADEMICA.getLetra()));
-        this.moduloFacturacion = castStringBooleanOnline(WebServiceCodefac.getModuloCodefac(usuario,ModuloCodefacEnum.FACTURACION.getLetra()));
-        this.moduloCrm = castStringBooleanOnline(WebServiceCodefac.getModuloCodefac(usuario,ModuloCodefacEnum.CRM.getLetra()));
-    }*/
-    
-    
+
     public void cargarLicenciaFisica(Properties propiedades)
     {      
         this.usuario = propiedades.getProperty(Licencia.PROPIEDAD_USUARIO);
@@ -229,6 +199,12 @@ public class Licencia {
     public Map<ModuloCodefacEnum,Boolean> getModulosSistema()
     {
         Map<ModuloCodefacEnum,Boolean> modulosMap=new HashMap<ModuloCodefacEnum,Boolean>();
+        
+        //Si la licencia es gratis no tomo en cuenta ningun modulo
+        //if(tipoLicenciaEnum.equals(TipoLicenciaEnum.GRATIS))
+        //    return modulosMap;
+        
+        
         for (ModuloCodefacEnum modulo : ModuloCodefacEnum.values()) {
             //Si el modulo esta dentro de la lista de modulos activos lo pongo true
             if(modulosActivos.contains(modulo))
@@ -283,14 +259,6 @@ public class Licencia {
     public void setLicencia(String licencia) {
         this.licencia = licencia;
     }
-/*
-    public String getTipoLicencia() {
-        return tipoLicencia;
-    }
-
-    public void setTipoLicencia(String tipoLicencia) {
-        this.tipoLicencia = tipoLicencia;
-    }*/
 
     public Integer getCantidadClientes() {
         return cantidadClientes;
@@ -313,33 +281,6 @@ public class Licencia {
         return modulosActivos;
     }
     
-    
-    
-
-    /**
-     * Construir la licencia consultado los datos del servidor
-     */
-    /*
-    public static Licencia construirLicenciaOnline(String usuario)
-    {
-
-        String usuarioTxt=usuario;
-        String tipoLicencia = WebServiceCodefac.getTipoLicencia(usuarioTxt);
-        Integer cantidadUsuarios=WebServiceCodefac.getCantidadClientes(usuarioTxt);
-        
-                
-        //Crea la nueva licencia con el usuario
-        Licencia licencia=new Licencia();
-        licencia.setUsuario(usuario);
-        licencia.setLicencia(WebServiceCodefac.getLicencia(usuario));
-        licencia.setTipoLicenciaEnum(TipoLicenciaEnum.getEnumByLetra(tipoLicencia));
-        licencia.setCantidadClientes(cantidadUsuarios);
-        licencia.cargarModulosOnline();
-        
-        return licencia;
-        
-           
-    }*/
     
 
     
