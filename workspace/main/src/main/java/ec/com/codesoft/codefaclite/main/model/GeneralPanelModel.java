@@ -56,6 +56,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
@@ -2117,7 +2119,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     boolean existenMenuItem=false;
                     for (VentanaEnum menuControlador : ventanasMenuList)  //Todo: Analizar para que la variables ventanasMenuList pueda setera cada vez que busco las pantalla que pertence al menu y se vayagn quitando de la lista para acelerar el proceso
                     {
-                        //Si la venta no pertecene a la categoria no hago mas validaciones
+                        //Si la ventana no pertecene a la categoria no hago mas validaciones
                         if(!menuControlador.getCategoriaMenu().equals(categoriaEnum))
                         {
                             continue; //salta a la siguiente vuelta
@@ -2126,58 +2128,69 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         //Verificacion cuando es un modulo habilitado
                         boolean agregarAlMenu=false;
                         
-                        //Validacion de las ventanas cuando el usuario es gratis
-                        if(sessionCodefac.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS))
+                        //Si esta en modo de desarrollo carga todos las opciones de los menus
+                        if(ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.DESARROLLO))
                         {
-                            //Si el tipo de licencia de la pantala es gratis le activo solo las pantallas disponibles para esta modalidad
                             if (menuControlador.getModulo().equals(moduloSistema)) 
-                            {                                                                
-                                //El acceso es el mismo para cualquier usuario gratis y para el administrador
-                                if(menuControlador.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS)) 
-                                {
-                                    agregarAlMenu = true;
-                                }
-
+                            {
+                                agregarAlMenu=true;
                             }
                         }
-                        else //Validacion para usuarios premiun
+                        else //Si esta en modo de produccion hago las validaciones normales
                         {                        
-                            if(isModuloPermitido(moduloSistema))
+                            //Validacion de las ventanas cuando el usuario es gratis
+                            if(sessionCodefac.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS))
                             {
-                                if(menuControlador.getModulo().equals(moduloSistema))
-                                {                                    
-                                    if(verificarMenuUsuario(menuControlador) || sessionCodefac.getUsuario().getNick().equals(Usuario.SUPER_USUARIO))
+                                //Si el tipo de licencia de la pantala es gratis le activo solo las pantallas disponibles para esta modalidad
+                                if (menuControlador.getModulo().equals(moduloSistema)) 
+                                {                                                                
+                                    //El acceso es el mismo para cualquier usuario gratis y para el administrador
+                                    if(menuControlador.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS)) 
                                     {
-                                        agregarAlMenu=true;
-
+                                        agregarAlMenu = true;
                                     }
-                                    
-                                  }
+
+                                }
                             }
-                            else //Verificacion cuando no es un modulo habilitado
-                            {
-                                //Solo agregar otras ventanas de otros modulos si el menu pertenece al modulo actual
-                                //Nota: sin esta linea pueden aparecer varios enlaces a esta ventana desde otros menus de modulos
-                                if (menuControlador.getModulo().equals(moduloSistema)) {
-                                    //Verifica si es super usuario carga todos los modulos
-                                    
-                                    
-                                    //Verifica si la pantalla adicional deberia agregarse porque esta depende de otra que si se cargo el modulo
-                                    if (menuControlador.verificarPermisoModuloAdicional(sessionCodefac.getModulosMap())) 
-                                    {
-                                        //Verifica si el usuario tienes permisos para esa pantalla o son son super usuarios
+                            else //Validacion para usuarios premiun
+                            {                        
+                                if(isModuloPermitido(moduloSistema))
+                                {
+                                    if(menuControlador.getModulo().equals(moduloSistema))
+                                    {                                    
                                         if(verificarMenuUsuario(menuControlador) || sessionCodefac.getUsuario().getNick().equals(Usuario.SUPER_USUARIO))
                                         {
-                                            agregarAlMenu = true;
+                                            agregarAlMenu=true;
+
                                         }
-                                    } 
-                                    
+
+                                      }
+                                }
+                                else //Verificacion cuando no es un modulo habilitado
+                                {
+                                    //Solo agregar otras ventanas de otros modulos si el menu pertenece al modulo actual
+                                    //Nota: sin esta linea pueden aparecer varios enlaces a esta ventana desde otros menus de modulos
+                                    if (menuControlador.getModulo().equals(moduloSistema)) {
+                                        //Verifica si es super usuario carga todos los modulos
+
+
+                                        //Verifica si la pantalla adicional deberia agregarse porque esta depende de otra que si se cargo el modulo
+                                        if (menuControlador.verificarPermisoModuloAdicional(sessionCodefac.getModulosMap())) 
+                                        {
+                                            //Verifica si el usuario tienes permisos para esa pantalla o son son super usuarios
+                                            if(verificarMenuUsuario(menuControlador) || sessionCodefac.getUsuario().getNick().equals(Usuario.SUPER_USUARIO))
+                                            {
+                                                agregarAlMenu = true;
+                                            }
+                                        } 
+
+
+                                    }
+
 
                                 }
 
-
                             }
-
                         }
                         
                         //Esta pantalla filtra que solo se agregue si pertenece al modulo y a la submenu corecto
