@@ -28,4 +28,9 @@ public abstract class ParametrosSistemaCodefac {
      */
     public static final Image iconoSistema=new javax.swing.ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("logoCodefac-ico.png")).getImage();
 
+    /**
+     * Cadena que contiene la clave para encriptar o desencriptar los datos en codefac
+     */
+    public static final String LLAVE_ENCRIPTAR="codesoft23codefac01"; //Todo: Analizar para obtener esta clave de un ddl en c++ para que no puedan ver con ingeniera inversa, Advertencia: no cambiar porque si hay sistema
+    
 }
