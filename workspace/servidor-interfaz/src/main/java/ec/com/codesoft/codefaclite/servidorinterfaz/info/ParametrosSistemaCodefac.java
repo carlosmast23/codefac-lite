@@ -21,14 +21,11 @@ public abstract class ParametrosSistemaCodefac {
     /**
      * El modo de configuracion del sistema
      */
-    public static final ModoSistemaEnum MODO=ModoSistemaEnum.DESARROLLO;
+    public static final ModoSistemaEnum MODO=ModoSistemaEnum.PRODUCCION;
     
     /**
-     * 
+     * Icono por defecto para usar en todo el sistema
      */
     public static final Image iconoSistema=new javax.swing.ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("logoCodefac-ico.png")).getImage();
-    /**
-     * Icono del sistema 
-     */
-    //public static fin  new javax.swing.ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("logoCodefac-ico.png")).getImage()
+
 }

@@ -78,6 +78,7 @@ public class LoginModel extends LoginFormDialog{
     
     private void ingresarSistema()
     {
+        
         String clave=new String(getTxtClave().getPassword());
         if(!getTxtUsuario().getText().equals("") && !clave.equals(""))
         {
