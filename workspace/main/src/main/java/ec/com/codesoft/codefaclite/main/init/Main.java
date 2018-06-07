@@ -1135,38 +1135,42 @@ public class Main {
         //String pathBase=servicio.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS).valor;
         ValidacionLicenciaCodefac validacion = new ValidacionLicenciaCodefac();
         validacion.setPath(pathBase);
+        
+        Boolean existeLicencia=false;
 
         if (validacion.verificarExisteLicencia()) {
             try {
                 if (validacion.validar()) {
                     return true;
                 } else {//Si la licencia es incorrecta abre el dialogo de verificacion
-                    DialogoCodefac.mensaje("Error", "La licencia es incorrecta para esta maquina", DialogoCodefac.MENSAJE_INCORRECTO);
-                    return false;
+                    DialogoCodefac.mensaje("Error", "No se puede validar la licencia, Posibles causas:\n - La licencia esta desactualizada \n - El archivo de la licencia fue modificado", DialogoCodefac.MENSAJE_INCORRECTO);
+                    existeLicencia=true;
                 }
             } catch (ValidacionLicenciaExcepcion ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             } catch (NoExisteLicenciaException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } else //Cuando no existe la licencia
-        {
-            //Crear un dialogo si no existe la licencia
-            ValidarLicenciaModel licenciaDialog = new ValidarLicenciaModel(null, true, false);
-            licenciaDialog.setValidacionLicenciaCodefac(validacion);
-            if (validacion.verificarConexionInternet()) {
-                licenciaDialog.setVisible(true);
-                if (licenciaDialog.licenciaCreada) {
-                    return comprobarLicencia(pathBase); //volver a verificar la licencia
-                } else {
-                    return false;
-                }
+        }  //Cuando no existe la licencia
+
+        
+        
+        //Crear un dialogo si no existe la licencia o esta desactualizada o con alguna incoherencia
+        //ValidarLicenciaModel licenciaDialog = new ValidarLicenciaModel(null, true, false);
+        ValidarLicenciaModel licenciaDialog = new ValidarLicenciaModel(null, true, existeLicencia);
+        licenciaDialog.setValidacionLicenciaCodefac(validacion);
+        if (validacion.verificarConexionInternet()) {
+            licenciaDialog.setVisible(true);
+            if (licenciaDialog.licenciaCreada) {
+                return comprobarLicencia(pathBase); //volver a verificar la licencia
             } else {
-                DialogoCodefac.mensaje("Error", "Para activar su producto conéctese a Internet", DialogoCodefac.MENSAJE_INCORRECTO);
                 return false;
             }
+        } else {
+            DialogoCodefac.mensaje("Error", "Para activar su producto conéctese a Internet", DialogoCodefac.MENSAJE_INCORRECTO);
+            return false;
         }
-        return false;
+
 
     }
 

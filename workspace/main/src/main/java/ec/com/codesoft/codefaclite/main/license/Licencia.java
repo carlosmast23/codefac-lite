@@ -308,6 +308,12 @@ public class Licencia {
     public TipoLicenciaEnum getTipoLicenciaEnum() {
         return tipoLicenciaEnum;
     }
+
+    public List<ModuloCodefacEnum> getModulosActivos() {
+        return modulosActivos;
+    }
+    
+    
     
 
     /**

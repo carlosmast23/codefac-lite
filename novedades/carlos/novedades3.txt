@@ -52,3 +52,5 @@ hacer acuerdo a Robert de la etiqueta de agregar columna , me parece en el campo
 
 
 Hacer un dll en c++ por jni para tener quemado las claves y no me puedan hacer ingenieria inversa
+
+Analizar si agregado un campo de los datos del servidor para grabar la ultima fecha de verificacion de la licencia para tener mas control sobre las estafas
