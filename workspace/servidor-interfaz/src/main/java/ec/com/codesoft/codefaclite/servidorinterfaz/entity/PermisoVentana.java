@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -118,6 +119,33 @@ public class PermisoVentana implements Serializable{
     public void setPerfil(Perfil perfil) {
         this.perfil = perfil;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 89 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final PermisoVentana other = (PermisoVentana) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
     
     //Metodo que obtiene el enum atravez del codigo
     public VentanaEnum getVentanaEnum()
