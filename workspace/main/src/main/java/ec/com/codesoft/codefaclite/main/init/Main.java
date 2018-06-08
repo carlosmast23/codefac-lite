@@ -248,6 +248,11 @@ public class Main {
     private static final String CAMPO_IP_ULTIMO_ACCESO_SERVIDOR="servidorip";
     
     private static final String CAMPO_VERSION="version";
+    
+    private static final String CAMPO_USUARIO_DB="usuario_db";
+    
+    private static final String CAMPO_CLAVE_DB="clave_db";
+    
     /**
      * Variable para saber el modo que inicia el aplicativo
      */
