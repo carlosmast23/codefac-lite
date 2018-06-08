@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidor.util;
 
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.service.interfacePanel.ServidorMonitorUpdateInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
@@ -107,12 +108,13 @@ public class UtilidadesServidor {
         try {
             Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
             //obtenemos la conexión si no existe crea la base
-            Connection conn = DriverManager.getConnection("jdbc:derby:Derby2.DB;databaseName=codefac;create=true;user=root");
+            Connection conn = DriverManager.getConnection("jdbc:derby:Derby2.DB;databaseName=codefac;create=true;user="+AbstractFacade.usuarioDb);
             //Establecer autentificacion en derby
             Statement s = conn.createStatement();
             s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.connection.requireAuthentication', 'true')");
             s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.authentication.provider', 'BUILTIN')");
-            s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.user.root', 'Code17bwbtj')");
+            //System.out.println("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.user."+AbstractFacade.usuarioDb+", '"+AbstractFacade.claveDb+"')");
+            s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.user."+AbstractFacade.usuarioDb+"','"+AbstractFacade.claveDb+"')");            
             s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.database.propertiesOnly', 'true')");
             s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.language.sequence.preallocator', '1')");
 
@@ -182,7 +184,7 @@ public class UtilidadesServidor {
 
         try {
             Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-            Connection conn = DriverManager.getConnection("jdbc:derby:Derby2.DB;databaseName=codefac;user=root;password=Code17bwbtj");
+            Connection conn = DriverManager.getConnection("jdbc:derby:Derby2.DB;databaseName=codefac;user="+AbstractFacade.usuarioDb+";password="+AbstractFacade.claveDb);
             Statement s = conn.createStatement();
 
             if (conn != null) {

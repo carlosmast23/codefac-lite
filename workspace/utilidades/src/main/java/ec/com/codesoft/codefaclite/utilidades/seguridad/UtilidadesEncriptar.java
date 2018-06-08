@@ -23,7 +23,7 @@ import org.apache.commons.codec.binary.Base64;
  * @author Carlos
  */
 public class UtilidadesEncriptar {
-        public static String Encriptar(String texto,String llave) {
+        public static String encriptar(String texto,String llave) {
  
         String secretKey = llave; //llave para encriptar datos
         String base64EncryptedString = "";
@@ -48,7 +48,7 @@ public class UtilidadesEncriptar {
         return base64EncryptedString;
     }
     
-    public static String Desencriptar(String textoEncriptado,String llave) throws Exception {
+    public static String desencriptar(String textoEncriptado,String llave) throws Exception {
  
         String secretKey = llave; //llave para desenciptar datos
         String base64EncryptedString = "";

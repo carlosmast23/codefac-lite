@@ -47,6 +47,7 @@ workspace/main/codefac.ini
 /workspace/main/tmp/
 /workspace/main/codefac.jar
 /workspace/main/updater.jar
+/workspace/main/key.codefac
 /workspace/updaterCodefac/target/
 
 #Excluir archivos del manual para generar el instalador

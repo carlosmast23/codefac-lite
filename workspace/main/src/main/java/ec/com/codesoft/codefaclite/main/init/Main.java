@@ -5,42 +5,18 @@
  */
 package ec.com.codesoft.codefaclite.main.init;
 
-import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
 import com.sun.xml.internal.ws.client.ClientTransportException;
-import ec.com.codesoft.codefaclite.configuraciones.model.CalculadoraModel;
-import ec.com.codesoft.codefaclite.configuraciones.model.ComprobantesConfiguracionModel;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.AyudaCodefacModel;
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecundarioAbstract;
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.ValidadorCodefacModel;
-import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
-import ec.com.codesoft.codefaclite.crm.model.ClienteReporte;
-import ec.com.codesoft.codefaclite.compra.model.CompraModel;
 import ec.com.codesoft.codefaclite.controlador.logs.LogControlador;
-import ec.com.codesoft.codefaclite.crm.model.EmpresaModel;
-import ec.com.codesoft.codefaclite.crm.model.ProductoModel;
-import ec.com.codesoft.codefaclite.crm.model.ProductoReporte;
-import ec.com.codesoft.codefaclite.facturacion.model.FacturaDisenioModel;
-import ec.com.codesoft.codefaclite.facturacion.model.FacturaReporteModel;
-import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
-import ec.com.codesoft.codefaclite.facturacion.model.NotaCreditoModel;
-import ec.com.codesoft.codefaclite.facturacion.model.UtilidadComprobanteModel;
-import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
-import ec.com.codesoft.codefaclite.gestionacademica.model.AulaModel;
-import ec.com.codesoft.codefaclite.gestionacademica.model.NivelModel;
-import ec.com.codesoft.codefaclite.gestionacademica.model.PeriodoModel;
-import ec.com.codesoft.codefaclite.inventario.model.AsociarProductoProveedorModel;
-import ec.com.codesoft.codefaclite.inventario.model.BodegaModel;
-import ec.com.codesoft.codefaclite.inventario.model.CategoriaProductoModel;
-import ec.com.codesoft.codefaclite.inventario.model.IngresoInventarioModel;
-import ec.com.codesoft.codefaclite.inventario.model.InventarioEnsambleModel;
-import ec.com.codesoft.codefaclite.inventario.model.KardexModel;
 import ec.com.codesoft.codefaclite.main.license.Licencia;
 import ec.com.codesoft.codefaclite.main.license.ValidacionLicenciaCodefac;
 import ec.com.codesoft.codefaclite.main.license.excepcion.NoExisteLicenciaException;
 import ec.com.codesoft.codefaclite.main.license.excepcion.ValidacionLicenciaExcepcion;
+import ec.com.codesoft.codefaclite.main.model.ConfiguracionesInicalesModel;
 import ec.com.codesoft.codefaclite.main.model.DescargaModel;
 import ec.com.codesoft.codefaclite.main.model.GeneralPanelModel;
 import ec.com.codesoft.codefaclite.main.model.HiloPublicidadCodefac;
@@ -49,9 +25,7 @@ import ec.com.codesoft.codefaclite.main.model.ModoAplicativoModel;
 import ec.com.codesoft.codefaclite.main.model.ServidorMonitorModel;
 import ec.com.codesoft.codefaclite.main.model.SplashScreenModel;
 import ec.com.codesoft.codefaclite.main.model.ValidarLicenciaModel;
-import ec.com.codesoft.codefaclite.main.panel.ModoAplicativoDialog;
-import ec.com.codesoft.codefaclite.main.panel.ServidorMonitorPanel;
-import ec.com.codesoft.codefaclite.main.panel.ValidarLicenciaDialog;
+import ec.com.codesoft.codefaclite.main.other.BaseDatosCredenciales;
 import ec.com.codesoft.codefaclite.main.panel.publicidad.Publicidad;
 import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.main.test.TestPruebaRMI;
@@ -59,7 +33,6 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.PersistenciaDuplicadaException;
@@ -142,15 +115,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorS
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceControllerServer;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaEstudiante;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompraDetalle;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CatalogoProductoServiceIf;
@@ -180,7 +144,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraDet
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.gestionacademica.RubroPlantillaEstudianteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.gestionacademica.RubroPlantillaServiceIf;
-import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 import java.io.FileNotFoundException;
@@ -201,11 +164,8 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.PersistenceException;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilUsuarioServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoDetalleServiceIf;
@@ -215,11 +175,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriFormaPagoServic
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionServiceIf;
-import ec.com.codesoft.codefaclite.utilidades.email.PropiedadesCorreoEnum;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import ec.com.codesoft.codefaclite.utilidades.web.UtilidadesWeb;
 import java.awt.Font;
-import java.io.File;
 import java.sql.SQLException;
 import java.util.Arrays;
 import javax.swing.JFileChooser;
@@ -248,10 +206,6 @@ public class Main {
     private static final String CAMPO_IP_ULTIMO_ACCESO_SERVIDOR="servidorip";
     
     private static final String CAMPO_VERSION="version";
-    
-    private static final String CAMPO_USUARIO_DB="usuario_db";
-    
-    private static final String CAMPO_CLAVE_DB="clave_db";
     
     /**
      * Variable para saber el modo que inicia el aplicativo
@@ -499,7 +453,7 @@ public class Main {
 
     public static void cargarRecursosServidor() {
         try {
-            AbstractFacade.cargarEntityManager();
+            //AbstractFacade.cargarEntityManager();
 
             Map<Class, Class> mapRecursos = new HashMap<Class, Class>();
 
@@ -566,9 +520,9 @@ public class Main {
 
         } catch (PersistenceException ex) {
             Logger.getLogger(TestPruebaRMI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (PersistenciaDuplicadaException ex) {
-            Logger.getLogger(TestPruebaRMI.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } //catch (PersistenciaDuplicadaException ex) {
+        //    Logger.getLogger(TestPruebaRMI.class.getName()).log(Level.SEVERE, null, ex);
+        //}
     }
 
     public static void cargarRecursosCliente(String ipServidor) {
@@ -668,9 +622,7 @@ public class Main {
                         LOG.log(Level.INFO, "Modo Cliente Servidor Activado");
                     }
                 }
-
-                
-            
+   
             }            
 
             //Si el aplicativo debe iniciar en modo servidor se cierra la pantalla de carga del slashScreen de codefac porque no necesita cargar mas modulos
@@ -1055,21 +1007,83 @@ public class Main {
      * Verifica y carga el Entity manager
      */
     public static void componentesBaseDatos() {
+        /**
+         * Verificar si existen las credenciales de la base de datos o las genero
+         */
+        BaseDatosCredenciales credenciales=BaseDatosCredenciales.getInstance();
+        boolean ingresarCredenciales=false;
+        //verificar si existen los datos creados
+        if(credenciales.cargarDatos())
+        {
+            String usuarioDb=credenciales.getUsuario();
+            String claveDb=credenciales.getClave();
+            if(usuarioDb==null || claveDb==null)
+            {
+                ingresarCredenciales=true;
+            }
+            else
+            {
+                //Si los datos existen seteo las variables globales e usuario y clave
+                AbstractFacade.usuarioDb = credenciales.getUsuario();
+                AbstractFacade.claveDb = credenciales.getClave();
+                
+            }
+        }
+        else
+        {
+            ingresarCredenciales=true;
+        }
+        
+        //Si no existen o faltan credenciales abro la pantalla para crear
+        if(ingresarCredenciales)
+        {
+                ConfiguracionesInicalesModel configuraciones=new ConfiguracionesInicalesModel(ConfiguracionesInicalesModel.ModoEnum.REGISTRAR);
+                configuraciones.setVisible(true);
+                if(!configuraciones.datosGrabados)
+                {
+                    System.exit(0); //Si no se grabo ningun dato se cierra porque el sistema no puede funcionar sin credenciales
+                }
+                       
+        }
+        
+        //Obtengo los datos para la base de datos
+        credenciales = BaseDatosCredenciales.getInstance();
+        credenciales.cargarDatos();
+        AbstractFacade.usuarioDb = credenciales.getUsuario();
+        AbstractFacade.claveDb = credenciales.getClave();
+
+        
+        /**
+         * Cargar la persistencia del servidor
+         */
         try {
+            
             AbstractFacade.cargarEntityManager();
         } catch (PersistenceException e) {
             try {
                 System.out.println(e.getMessage());
                 UtilidadesServidor.crearBaseDatos();
-                //JOptionPane.showMessageDialog(null,"Creada base de datos");
+                
                 AbstractFacade.cargarEntityManager();
             } catch (PersistenceException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             } catch (PersistenciaDuplicadaException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             } catch (SQLException ex) {
+                //System.out.println(ex.getErrorCode());
+                
+                if(ex.getSQLState().equals("08004")) //Este error es cuando las credenciales son incorrectas
+                {
+                    DialogoCodefac.mensaje("Error base de datos","Las credencias de la base de datos son incorrectas",DialogoCodefac.MENSAJE_ADVERTENCIA);                
+                    
+                    System.exit(0); //Si las credenciales son incorrectas se sale del sistema
+                }
+                else
+                {
+                    DialogoCodefac.mensaje("Error al crear la base de datos",ex.getMessage()+"\n Se recomienda eliminar y volver a crear la db",DialogoCodefac.MENSAJE_ADVERTENCIA);                
+                }
+                
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                DialogoCodefac.mensaje("Error al crear la base de datos",ex.getMessage()+"\n Se recomienda eliminar y volver a crear la db",DialogoCodefac.MENSAJE_ADVERTENCIA);
                 //TODO: Mejorar esta parte eliminando la base de datos para evitar que ejecuten con problemas en la base
             }
 

@@ -5,6 +5,11 @@
  */
 package ec.com.codesoft.codefaclite.main.panel;
 
+import javax.swing.JButton;
+import javax.swing.JPasswordField;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
+
 /**
  *
  * @author Carlos
@@ -17,6 +22,7 @@ public class ConfiguracionesInicialesDialogo extends javax.swing.JDialog {
     public ConfiguracionesInicialesDialogo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -32,7 +38,7 @@ public class ConfiguracionesInicialesDialogo extends javax.swing.JDialog {
         jLabel3 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
-        tabRegistro = new javax.swing.JTabbedPane();
+        tabCredenciales = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         lblImagen = new javax.swing.JLabel();
@@ -138,7 +144,7 @@ public class ConfiguracionesInicialesDialogo extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 10);
         jPanel1.add(btnCancelarIngreso, gridBagConstraints);
 
-        tabRegistro.addTab("Credenciales", jPanel1);
+        tabCredenciales.addTab("Credenciales", jPanel1);
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setLayout(new java.awt.GridBagLayout());
@@ -249,9 +255,9 @@ public class ConfiguracionesInicialesDialogo extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
         jPanel3.add(jLabel12, gridBagConstraints);
 
-        tabRegistro.addTab("Registrar Credenciales", jPanel3);
+        tabCredenciales.addTab("Registrar Credenciales", jPanel3);
 
-        getContentPane().add(tabRegistro, java.awt.BorderLayout.CENTER);
+        getContentPane().add(tabCredenciales, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -319,11 +325,77 @@ public class ConfiguracionesInicialesDialogo extends javax.swing.JDialog {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblImagen;
     private javax.swing.JLabel lblImagen1;
-    private javax.swing.JTabbedPane tabRegistro;
+    private javax.swing.JTabbedPane tabCredenciales;
     private javax.swing.JPasswordField txtClaveIngreso;
     private javax.swing.JPasswordField txtClaveRegistro;
     private javax.swing.JPasswordField txtRepetirClaveRegistro;
     private javax.swing.JTextField txtUsuarioIngreso;
     private javax.swing.JTextField txtUsuarioRegistro;
     // End of variables declaration//GEN-END:variables
+
+        
+    public JTabbedPane getTabCredenciales() {
+        return tabCredenciales;
+    }
+
+    public JPasswordField getTxtClaveRegistro() {
+        return txtClaveRegistro;
+    }
+
+    public void setTxtClaveRegistro(JPasswordField txtClaveRegistro) {
+        this.txtClaveRegistro = txtClaveRegistro;
+    }
+
+    public JPasswordField getTxtRepetirClaveRegistro() {
+        return txtRepetirClaveRegistro;
+    }
+
+    public void setTxtRepetirClaveRegistro(JPasswordField txtRepetirClaveRegistro) {
+        this.txtRepetirClaveRegistro = txtRepetirClaveRegistro;
+    }
+
+    public JTextField getTxtUsuarioRegistro() {
+        return txtUsuarioRegistro;
+    }
+
+    public void setTxtUsuarioRegistro(JTextField txtUsuarioRegistro) {
+        this.txtUsuarioRegistro = txtUsuarioRegistro;
+    }
+
+    public JButton getBtnAceptarIngreso() {
+        return btnAceptarIngreso;
+    }
+
+    public void setBtnAceptarIngreso(JButton btnAceptarIngreso) {
+        this.btnAceptarIngreso = btnAceptarIngreso;
+    }
+
+    public JButton getBtnAceptarRegistro() {
+        return btnAceptarRegistro;
+    }
+
+    public void setBtnAceptarRegistro(JButton btnAceptarRegistro) {
+        this.btnAceptarRegistro = btnAceptarRegistro;
+    }
+
+    public JButton getBtnCancelarIngreso() {
+        return btnCancelarIngreso;
+    }
+
+    public void setBtnCancelarIngreso(JButton btnCancelarIngreso) {
+        this.btnCancelarIngreso = btnCancelarIngreso;
+    }
+
+    public JButton getBtnCancelarRegistro() {
+        return btnCancelarRegistro;
+    }
+
+    public void setBtnCancelarRegistro(JButton btnCancelarRegistro) {
+        this.btnCancelarRegistro = btnCancelarRegistro;
+    }
+    
+    
+
+    
 }
+
