@@ -118,6 +118,8 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
             DialogoCodefac.mensaje("Correcto","Los datos fueron grabados correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         } catch (RemoteException ex) {
             Logger.getLogger(FacturaDisenioModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(FacturaDisenioModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

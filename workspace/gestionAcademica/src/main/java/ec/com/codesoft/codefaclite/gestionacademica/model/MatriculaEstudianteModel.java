@@ -39,7 +39,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sun.security.krb5.internal.PAData;
 
 /**
  *
@@ -119,6 +118,8 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
             ServiceFactory.getFactory().getEstudianteInscritoServiceIf().editar(estudianteInscrito);
             DialogoCodefac.mensaje("Correcto","La matricula fue editada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         } catch (RemoteException ex) {
+            Logger.getLogger(MatriculaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(MatriculaEstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

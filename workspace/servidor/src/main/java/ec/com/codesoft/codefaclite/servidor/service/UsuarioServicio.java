@@ -61,12 +61,23 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
         transaccion.commit();
     }
     
-    public void editar(Usuario entity)
+    
+    
+    public void editar(Usuario entity) throws ServicioCodefacException
     {
+                
         EntityTransaction transaccion=getTransaccion();
         transaccion.begin();
         
         Usuario usuarioOriginal=getFacade().find(entity.getNick());
+        
+        //Verificar que no sea el usuario root el quieren editar
+        if(usuarioOriginal.getNick().equals(Usuario.SUPER_USUARIO))
+        {
+            transaccion.rollback();
+            throw new ServicioCodefacException("El usuario root no se puede editar");
+            
+        }
         
         if(usuarioOriginal.getPerfilesUsuario()!=null)
         {

@@ -80,6 +80,8 @@ public class CatalogoProductoModel extends CatalogoProductoPanel implements Dial
         } catch (RemoteException ex) {
             DialogoCodefac.mensaje("Error","Los datos fueron editados correctamente",DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(CatalogoProductoModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(CatalogoProductoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

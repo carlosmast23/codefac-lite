@@ -351,6 +351,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 }
             } catch (RemoteException ex) {
                 Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         
@@ -2158,10 +2160,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                                 {
                                     if(menuControlador.getModulo().equals(moduloSistema))
                                     {                                    
-                                        if(verificarMenuUsuario(menuControlador) || sessionCodefac.getUsuario().getNick().equals(Usuario.SUPER_USUARIO))
+                                        if(verificarMenuUsuario(menuControlador) || sessionCodefac.getUsuario().isRoot)
                                         {
                                             agregarAlMenu=true;
-
                                         }
 
                                       }
@@ -2178,7 +2179,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                                         if (menuControlador.verificarPermisoModuloAdicional(sessionCodefac.getModulosMap())) 
                                         {
                                             //Verifica si el usuario tienes permisos para esa pantalla o son son super usuarios
-                                            if(verificarMenuUsuario(menuControlador) || sessionCodefac.getUsuario().getNick().equals(Usuario.SUPER_USUARIO))
+                                            if(verificarMenuUsuario(menuControlador) || sessionCodefac.getUsuario().isRoot)
                                             {
                                                 agregarAlMenu = true;
                                             }

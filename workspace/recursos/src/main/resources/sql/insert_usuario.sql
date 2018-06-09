@@ -16,6 +16,12 @@
 INSERT INTO PERFIL(NOMBRE,DESCRIPCION,ESTADO)
     VALUES('Default','Perfil por defecto','A');
 
+/**
+* Creando un usuario sin perfil solo para usuarios root que ingresen a dar mantenimiento
+*/
+INSERT INTO USUARIO(NICK,CLAVE,ESTADO)
+     VALUES ('root', '','I');
+
 
 INSERT INTO PERMISO_VENTANA(PERFIL_ID,NOMBRE_CLASE,PERMISO_GRABAR,PERMISO_ELIMINAR,PERMISO_IMPRIMIR,PERMISO_EDITAR,PERMISO_BUSCAR)
     VALUES(1,'CATG','s','s','s','s','s');

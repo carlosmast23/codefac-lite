@@ -113,6 +113,8 @@ public class PerfilModel extends PerfilPanel{
         } catch (RemoteException ex) {
             DialogoCodefac.mensaje("Error","Ocurrio un error con el servidor", DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(PerfilModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(PerfilModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

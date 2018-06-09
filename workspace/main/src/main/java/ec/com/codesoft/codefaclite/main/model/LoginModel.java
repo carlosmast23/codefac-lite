@@ -10,12 +10,19 @@ import ec.com.codesoft.codefaclite.main.panel.LoginFormDialog;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
+import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import java.awt.Frame;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -80,22 +87,55 @@ public class LoginModel extends LoginFormDialog{
     {
         
         String clave=new String(getTxtClave().getPassword());
-        if(!getTxtUsuario().getText().equals("") && !clave.equals(""))
+        String usuarioTxt=getTxtUsuario().getText();
+        if(!usuarioTxt.equals("") && !clave.equals(""))
         {
-            try {
-                usuario=usuarioServicio.login(getTxtUsuario().getText(),clave);
-                if(usuario!=null)
+            /**
+             * Validacion para verificar si no es un usuario root es decir para soporte
+             */
+            if(usuarioTxt.toLowerCase().indexOf("root")>=0 && ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.PRODUCCION)) //Si contiene la palabra root asumo que es de soporte
+            {
+                if(WebServiceCodefac.getVerificarSoporte(usuarioTxt, clave))
                 {
-                    LOG.log(Level.INFO, "Ingresando con el usuario: "+getTxtUsuario().getText());
-                    dispose();
+                    try {
+                        Map<String,Object> mapParametros=new HashMap<String, Object>();
+                        mapParametros.put("nick",Usuario.SUPER_USUARIO);
+                        
+                        Usuario usuarioRoot=ServiceFactory.getFactory().getUsuarioServicioIf().obtenerPorMap(mapParametros).get(0);//obtiene el usuario root de la base de datos 
+                        usuarioRoot.isRoot=true;
+                        usuario=usuarioRoot;
+                        LOG.log(Level.INFO, "Ingresando con el usuario root: "+usuarioTxt);
+                        dispose();
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
                 else
                 {
-                    LOG.log(Level.WARNING, "Error al ingresar con el usuario: "+getTxtUsuario().getText());
-                    DialogoCodefac.mensaje("Error Login","Datos Incorrectos",DialogoCodefac.MENSAJE_INCORRECTO);
+                    LOG.log(Level.WARNING, "Error al ingresar con el usuario: " + usuarioTxt);
+                    DialogoCodefac.mensaje("Error Login", "Datos Incorrectos para usuario root", DialogoCodefac.MENSAJE_INCORRECTO);
                 }
-            } catch (RemoteException ex) {
-                Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
+                    
+            }
+            else //Validacion para usuarios normales
+            {            
+                try {
+                    usuario=usuarioServicio.login(usuarioTxt,clave);
+                    if(usuario!=null)
+                    {
+                        LOG.log(Level.INFO, "Ingresando con el usuario: "+usuarioTxt);
+                        dispose();
+                    }
+                    else
+                    {
+                        LOG.log(Level.WARNING, "Error al ingresar con el usuario: "+usuarioTxt);
+                        DialogoCodefac.mensaje("Error Login","Datos Incorrectos",DialogoCodefac.MENSAJE_INCORRECTO);
+                    }
+                } catch (RemoteException ex) {
+                    Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
 
         }

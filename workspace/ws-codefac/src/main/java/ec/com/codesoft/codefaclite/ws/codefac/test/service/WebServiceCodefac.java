@@ -20,6 +20,8 @@ import ec.com.codesoft.codefaclite.ws.codefac.webservice.SOAPServer;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.SOAPServerPortType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarmoduloRequestType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarmoduloResponseType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarsoporteRequestType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarsoporteResponseType;
 
 /**
  *
@@ -156,6 +158,20 @@ public abstract class WebServiceCodefac {
 
         ActualizarlicenciaResponseType respuesta = soapServerPort.actualizarlicencia(parametros);
         respuesta.getReturn();
+    }
+    
+    public static Boolean getVerificarSoporte(String usuario, String clave) throws ClientTransportException {
+        try {
+            SOAPServer soapServer = new SOAPServer();
+            SOAPServerPortType soapServerPort = soapServer.getSOAPServerPort();
+            VerificarsoporteRequestType parametrosLicencia = new VerificarsoporteRequestType();
+            parametrosLicencia.setUsuario(usuario);
+            parametrosLicencia.setClave(clave);
+            VerificarsoporteResponseType respuestaLicencia = soapServerPort.verificarsoporte(parametrosLicencia);
+            return respuestaLicencia.getReturn().equals("success");
+        } catch (com.sun.xml.internal.ws.client.ClientTransportException cte) {
+            throw cte;
+        }
     }
 
 }

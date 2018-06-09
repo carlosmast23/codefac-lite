@@ -128,6 +128,8 @@ public class PeriodoModel extends PeriodoPanel {
             DialogoCodefac.mensaje("Datos correctos", "El periodo se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         } catch (RemoteException ex) {
             Logger.getLogger(NivelModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(PeriodoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

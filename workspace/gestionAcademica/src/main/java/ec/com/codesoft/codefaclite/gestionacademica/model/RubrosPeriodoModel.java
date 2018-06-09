@@ -79,6 +79,8 @@ public class RubrosPeriodoModel extends RubrosPeriodoPanel{
             DialogoCodefac.mensaje("Correcto","El rubro se edito correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         } catch (RemoteException ex) {
             Logger.getLogger(RubrosPeriodoModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(RubrosPeriodoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

@@ -41,7 +41,7 @@ public class Test {
         //obtenerTipoLicencia();
         //verificar();
         //devolverEstado();
-        System.out.println(getVerificarSoporte("root_carlos23","123"));
+        System.out.println(getVerificarSoporte("root_soporte","123"));
     }
     
     public static void obtenerTipoLicencia()

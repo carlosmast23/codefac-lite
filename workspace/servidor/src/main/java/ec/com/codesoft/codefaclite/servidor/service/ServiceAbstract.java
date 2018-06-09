@@ -75,7 +75,7 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
         return this.facade.find(primaryKey);
     }
     
-    public void editar(Entity entity) 
+    public void editar(Entity entity) throws ServicioCodefacException,java.rmi.RemoteException
     {
         this.facade.edit(entity);
     }

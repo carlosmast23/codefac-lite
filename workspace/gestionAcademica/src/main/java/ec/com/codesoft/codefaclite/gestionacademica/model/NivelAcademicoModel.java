@@ -78,6 +78,8 @@ public class NivelAcademicoModel extends NivelAcademicoPanel implements Serializ
             DialogoCodefac.mensaje("Datos correctos", "El nivel academico se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         } catch (RemoteException ex) {
             Logger.getLogger(NivelModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(NivelAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }

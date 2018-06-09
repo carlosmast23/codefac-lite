@@ -140,7 +140,9 @@ public class PresupuestoModel extends PresupuestoPanel{
       {
             Logger.getLogger(OrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
             DialogoCodefac.mensaje("Error","Error de comunicacion con el servidor",DialogoCodefac.MENSAJE_INCORRECTO);
-      }
+      } catch (ServicioCodefacException ex) {
+            Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override

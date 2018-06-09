@@ -20,7 +20,7 @@ public interface ServiceAbstractIf<Entity> extends Remote {
     
     public Entity grabar(Entity entity) throws ServicioCodefacException,java.rmi.RemoteException;
     
-    public void editar(Entity entity) throws java.rmi.RemoteException;
+    public void editar(Entity entity) throws ServicioCodefacException,java.rmi.RemoteException;
     
     public void eliminar(Entity entity) throws java.rmi.RemoteException;
     

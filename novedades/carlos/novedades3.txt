@@ -43,6 +43,7 @@ revisar que cuando cambio los clientes no se estan borrando los datos adicionale
 
 Ver como hacer un descuento global
 
+
 Analizar una opcion para hacer un casting entre las unidades de un producto y otras medias de venta (por ejemplo cuando voy a clavos por libras) 
 
 Al momento de cargar las formas de pago  con el cliente , despues de tener ingresado los detalles que cargue con el monto actual del total en modo libre
@@ -54,3 +55,14 @@ hacer acuerdo a Robert de la etiqueta de agregar columna , me parece en el campo
 Hacer un dll en c++ por jni para tener quemado las claves y no me puedan hacer ingenieria inversa
 
 Analizar si agregado un campo de los datos del servidor para grabar la ultima fecha de verificacion de la licencia para tener mas control sobre las estafas
+
+Encriptar las claves del usuario
+Programar los usurios de soporte para acceder por internet
+
+Pensar en como hacer un manejo de logs en una tabla para cosas importantes
+
+Cambiar el tipo de clave primaria de la tabla de usuario para grabar un id y poder reutilizar usuarios
+
+En el usuario da problemas cuando cambian el nick porque busco el dato anterior para comparar, lo que se resuelve creandole un id autogenerado a la tabla usuario
+
+Controlar la excepcion al momento que se pierde la conexion degolpe con el cliente
