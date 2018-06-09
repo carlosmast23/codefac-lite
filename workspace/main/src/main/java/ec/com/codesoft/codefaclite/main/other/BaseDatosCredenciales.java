@@ -23,8 +23,9 @@ public class BaseDatosCredenciales {
     private static BaseDatosCredenciales entity;
     private static final String CAMPO_USUARIO_DB="usuario_db";
     private static final String CAMPO_CLAVE_DB="clave_db";
-    private static final String NOMBRE_ARCHIVO="key.codefac";
     
+    private static final String NOMBRE_ARCHIVO="key.codefac";
+        
     /**
      * Variable para almacenar los datos de las propiedaes
      */
@@ -92,6 +93,7 @@ public class BaseDatosCredenciales {
         }
     }
     
+    
     public void setClave(String claveSinEncriptar)
     {
         try {
@@ -103,5 +105,7 @@ public class BaseDatosCredenciales {
         }
         
     }
+    
+    
     
 }

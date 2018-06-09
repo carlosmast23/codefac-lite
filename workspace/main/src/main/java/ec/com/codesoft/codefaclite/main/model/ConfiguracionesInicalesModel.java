@@ -49,6 +49,25 @@ public class ConfiguracionesInicalesModel extends ConfiguracionesInicialesDialog
     }
 
     private void listenerBotones() {
+        
+        getBtnAceptarIngreso().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String usuario = getTxtUsuarioIngreso().getText();
+                String clave = new String(getTxtClaveIngreso().getPassword());
+
+                //Validaciones de que los campos no esten blanco
+                if (usuario.equals("") || clave.equals("")) {
+                    DialogoCodefac.mensaje("Advertencia", "Porfavor ingrese todos los campos para continuar", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    return;
+                }
+                
+                grabarDatos(usuario,clave);                 
+                dispose();
+            }
+        });
+        
+        
         getBtnAceptarRegistro().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -70,10 +89,7 @@ public class ConfiguracionesInicalesModel extends ConfiguracionesInicialesDialog
                     return;
                 }
                 
-                BaseDatosCredenciales credenciales=new BaseDatosCredenciales();
-                credenciales.setUsuario(usuario);
-                credenciales.setClave(clave);    
-                datosGrabados=true;
+                grabarDatos(usuario,clave);
                 DialogoCodefac.mensaje("Correcto","Las credenciales para la base de datos fueron grabados correctamente \n\n Nota: Se recomienda anotar estos datos en un lugar seguro,\n porque son importanes y requeridos para el funcionamiento del software ",DialogoCodefac.MENSAJE_CORRECTO);
                 dispose();
             }
@@ -92,6 +108,21 @@ public class ConfiguracionesInicalesModel extends ConfiguracionesInicialesDialog
                         
             }
         });
+        
+        getBtnCancelarIngreso().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0); //Si elige cancelar se sale del sistema porque los datos son ncesarios
+            }
+        });
+    }
+    
+    private void grabarDatos(String usuario,String clave)
+    {
+        BaseDatosCredenciales credenciales = new BaseDatosCredenciales();
+        credenciales.setUsuario(usuario);
+        credenciales.setClave(clave);
+        datosGrabados = true;
     }
     
     public enum ModoEnum

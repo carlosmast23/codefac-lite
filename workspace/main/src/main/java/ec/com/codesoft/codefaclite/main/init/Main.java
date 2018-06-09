@@ -175,6 +175,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriFormaPagoServic
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import ec.com.codesoft.codefaclite.utilidades.web.UtilidadesWeb;
 import java.awt.Font;
@@ -564,7 +565,7 @@ public class Main {
                 /**
                  * Componentes iniciales que utilizo tanto para modo servidor y modo cliente-servidor
                  */
-                componentesBaseDatos();
+                componentesBaseDatos(false);
                 cargarRecursosServidor();
                 //Todo: Veriicar este metodo que obtiene la ip del servidor, porque cuando tienen varias interfaces o una virtual puede levantarse el servicio en una IP que no se desea
                 ipServidor = InetAddress.getLocalHost().getHostAddress();
@@ -1006,52 +1007,56 @@ public class Main {
     /**
      * Verifica y carga el Entity manager
      */
-    public static void componentesBaseDatos() {
+    public static void componentesBaseDatos(Boolean repetirCredenciales) {
         /**
          * Verificar si existen las credenciales de la base de datos o las genero
          */
-        BaseDatosCredenciales credenciales=BaseDatosCredenciales.getInstance();
         boolean ingresarCredenciales=false;
-        //verificar si existen los datos creados
-        if(credenciales.cargarDatos())
+        ConfiguracionesInicalesModel.ModoEnum tipoCredencial=ConfiguracionesInicalesModel.ModoEnum.REGISTRAR; //Por defecto hacemos que sea registrar el dialog
+        
+        if(!repetirCredenciales) //Solo ingresar si la variables es false , que quiere decir que haga la verificacion normal
         {
-            String usuarioDb=credenciales.getUsuario();
-            String claveDb=credenciales.getClave();
-            if(usuarioDb==null || claveDb==null)
+            BaseDatosCredenciales credenciales=BaseDatosCredenciales.getInstance();            
+            //verificar si existen los datos creados
+            if(credenciales.cargarDatos())
             {
-                ingresarCredenciales=true;
+                String usuarioDb=credenciales.getUsuario();
+                String claveDb=credenciales.getClave();
+                //Si falta algun datos del usuario y la clave abro la pantalla de crear credenciales
+                if(usuarioDb==null || claveDb==null)
+                {
+                    ingresarCredenciales=true;
+                }
+
             }
             else
             {
-                //Si los datos existen seteo las variables globales e usuario y clave
-                AbstractFacade.usuarioDb = credenciales.getUsuario();
-                AbstractFacade.claveDb = credenciales.getClave();
-                
+                //Si no existe las credenciales verifico si ya existe la base de datos para ver que pantalla abrir para las crdenciales
+                if(UtilidadesArchivos.verificarExiteArchivo("Derby2.DB")) //Todo: Setear en una variable global
+                {
+                    tipoCredencial=ConfiguracionesInicalesModel.ModoEnum.ACCEDER;
+                }                
+                ingresarCredenciales=true;
             }
         }
-        else
+        else //Si pide repetir las credenciales directamente abro el dialogo de las credenciales
         {
             ingresarCredenciales=true;
+            tipoCredencial=ConfiguracionesInicalesModel.ModoEnum.ACCEDER;
+        }
+
+        //Si no existen o faltan credenciales abro la pantalla para crear
+        if (ingresarCredenciales) 
+        {
+            abrirDialogoCredencialesDB(tipoCredencial);
         }
         
-        //Si no existen o faltan credenciales abro la pantalla para crear
-        if(ingresarCredenciales)
-        {
-                ConfiguracionesInicalesModel configuraciones=new ConfiguracionesInicalesModel(ConfiguracionesInicalesModel.ModoEnum.REGISTRAR);
-                configuraciones.setVisible(true);
-                if(!configuraciones.datosGrabados)
-                {
-                    System.exit(0); //Si no se grabo ningun dato se cierra porque el sistema no puede funcionar sin credenciales
-                }
-                       
-        }
         
         //Obtengo los datos para la base de datos
-        credenciales = BaseDatosCredenciales.getInstance();
+        BaseDatosCredenciales credenciales = BaseDatosCredenciales.getInstance();
         credenciales.cargarDatos();
         AbstractFacade.usuarioDb = credenciales.getUsuario();
         AbstractFacade.claveDb = credenciales.getClave();
-
         
         /**
          * Cargar la persistencia del servidor
@@ -1074,9 +1079,9 @@ public class Main {
                 
                 if(ex.getSQLState().equals("08004")) //Este error es cuando las credenciales son incorrectas
                 {
-                    DialogoCodefac.mensaje("Error base de datos","Las credencias de la base de datos son incorrectas",DialogoCodefac.MENSAJE_ADVERTENCIA);                
-                    
-                    System.exit(0); //Si las credenciales son incorrectas se sale del sistema
+                    DialogoCodefac.mensaje("Error base de datos","Las credencias de la base de datos son incorrectas",DialogoCodefac.MENSAJE_ADVERTENCIA);                                    
+                    componentesBaseDatos(true);//solicitar nuevamente las credenciales                    
+                    //System.exit(0); //Si las credenciales son incorrectas se sale del sistema
                 }
                 else
                 {
@@ -1092,6 +1097,15 @@ public class Main {
             System.exit(0);//Salir si existe otra instancia abierta
         }
 
+    }
+    
+    private static void abrirDialogoCredencialesDB(ConfiguracionesInicalesModel.ModoEnum tipoRegistro)
+    {
+        ConfiguracionesInicalesModel configuraciones = new ConfiguracionesInicalesModel(tipoRegistro);
+        configuraciones.setVisible(true);
+        if (!configuraciones.datosGrabados) {
+            System.exit(0); //Si no se grabo ningun dato se cierra porque el sistema no puede funcionar sin credenciales
+        }
     }
 
     private static boolean comprobarLicencia(String pathBase) {

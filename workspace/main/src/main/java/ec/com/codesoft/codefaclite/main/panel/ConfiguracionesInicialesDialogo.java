@@ -107,8 +107,6 @@ public class ConfiguracionesInicialesDialogo extends javax.swing.JDialog {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(jLabel5, gridBagConstraints);
-
-        txtUsuarioIngreso.setText("root");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -182,8 +180,6 @@ public class ConfiguracionesInicialesDialogo extends javax.swing.JDialog {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(jLabel8, gridBagConstraints);
-
-        txtUsuarioRegistro.setText("root");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -392,6 +388,22 @@ public class ConfiguracionesInicialesDialogo extends javax.swing.JDialog {
 
     public void setBtnCancelarRegistro(JButton btnCancelarRegistro) {
         this.btnCancelarRegistro = btnCancelarRegistro;
+    }
+
+    public JPasswordField getTxtClaveIngreso() {
+        return txtClaveIngreso;
+    }
+
+    public void setTxtClaveIngreso(JPasswordField txtClaveIngreso) {
+        this.txtClaveIngreso = txtClaveIngreso;
+    }
+
+    public JTextField getTxtUsuarioIngreso() {
+        return txtUsuarioIngreso;
+    }
+
+    public void setTxtUsuarioIngreso(JTextField txtUsuarioIngreso) {
+        this.txtUsuarioIngreso = txtUsuarioIngreso;
     }
     
     
