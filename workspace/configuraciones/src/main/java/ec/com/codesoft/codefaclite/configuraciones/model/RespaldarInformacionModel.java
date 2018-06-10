@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -239,7 +240,7 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
                     if(!ubicacionRespaldo.equals(""))
                     {
                         crearNombreCarpetaRespaldo();
-                        origenPath = FileSystems.getDefault().getPath("DB");   
+                        origenPath = FileSystems.getDefault().getPath(ParametrosSistemaCodefac.NOMBRE_BASE_DATOS);
                         destinoPath = FileSystems.getDefault().getPath(ubicacionRespaldo+"\\"+nombreCarpetaRelpaldo);
                         File recursosDirectorio = origenPath.toFile();
                         File destinoDirectorio = destinoPath.toFile();

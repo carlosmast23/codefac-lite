@@ -61,7 +61,7 @@ public enum VentanaEnum {
     RUBRO_PLANTILLA("ec.com.codesoft.codefaclite.gestionacademica.model.RubroPlantillaModel", "RUBR", "Rubros Mensuales", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.DEUDAS_ACADEMICOS),
     NOTIFICACION_DEUDAS("ec.com.codesoft.codefaclite.gestionacademica.model.NotificacionesDeudasModel", "NODE", "Notificaciones", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.UTILIDADES),
     MATRICULA_ESTUDIANTE("ec.com.codesoft.codefaclite.gestionacademica.model.MatriculaEstudianteModel", "MAES", "Matricula", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.MATRICULA),
-    RESPALDAR_INFORMACION("ec.com.codesoft.codefaclite.configuraciones.model.RespaldarInformacionModel", "RESP", "Respaldar Informacion", ModuloCodefacEnum.SISTEMA, CategoriaMenuEnum.PROCESOS,TipoLicenciaEnum.GRATIS),
+    RESPALDAR_INFORMACION("ec.com.codesoft.codefaclite.configuraciones.model.RespaldarInformacionModel", "RESP", "Respaldar Informacion", ModuloCodefacEnum.SISTEMA, CategoriaMenuEnum.PROCESOS,true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.GRATIS),
     CONFIGURACION_DEFECTO("ec.com.codesoft.codefaclite.configuraciones.model.ConfiguracionDefectoModel", "CFDF", "Configuraciones por Defecto", ModuloCodefacEnum.SISTEMA, CategoriaMenuEnum.PROCESOS),
     RETENCIONES_PENDIENTES("ec.com.codesoft.codefaclite.compra.model.RetencionesPendienteModel", "RETP", "Retenciones Pendientes", ModuloCodefacEnum.COMPRA, CategoriaMenuEnum.PROCESOS),
     RETENCIONES("ec.com.codesoft.codefaclite.compra.model.RetencionModel", "RETC", "Retención", ModuloCodefacEnum.COMPRA, CategoriaMenuEnum.PROCESOS),

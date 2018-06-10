@@ -21,7 +21,12 @@ public abstract class ParametrosSistemaCodefac {
     /**
      * El modo de configuracion del sistema
      */
-    public static final ModoSistemaEnum MODO=ModoSistemaEnum.DESARROLLO;
+    public static final ModoSistemaEnum MODO=ModoSistemaEnum.PRODUCCION;
+    
+    /**
+     * Nombre de la base de datos
+     */
+    public static final String NOMBRE_BASE_DATOS="Derby2.DB";
     
     /**
      * Icono por defecto para usar en todo el sistema
