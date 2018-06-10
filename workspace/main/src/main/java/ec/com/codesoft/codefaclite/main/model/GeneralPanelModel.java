@@ -760,8 +760,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                                 frameInterface.editar();
                                 procesoTerminado=true;
                             } catch (ExcepcionCodefacLite ex) {
-                                 ex.printStackTrace();
-                                //JOptionPane.showMessageDialog(null,ex.getMessage());
+                                 //ex.printStackTrace();
+                                LOG.log(Level.WARNING,ex.getMessage());
                             }
                             
                         }
@@ -1122,10 +1122,14 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             agregarAyudas(panel);
             
             try
-            {
+            {                
                 panel.limpiar();
+                panel.nuevo();
             }catch(java.lang.UnsupportedOperationException uoe)
             {
+                
+            } catch (ExcepcionCodefacLite ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
             }
             
             /**

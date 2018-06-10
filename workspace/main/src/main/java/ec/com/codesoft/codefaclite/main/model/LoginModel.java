@@ -119,7 +119,7 @@ public class LoginModel extends LoginFormDialog{
                 }
                     
             }
-            else //Validacion para usuarios normales
+            else //Validacion para usuarios normales que no son root
             {            
                 try {
                     usuario=usuarioServicio.login(usuarioTxt,clave);

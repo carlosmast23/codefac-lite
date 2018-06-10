@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.main.license;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
+import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesHash;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import java.io.FileWriter;
@@ -88,7 +89,7 @@ public class Licencia {
             //Validacion cuando el usuario si esta registrado con licencia gratis 
             String licenciaTxt=usuario + ":" + mac + ":" + tipoLicenciaEnum.getLetra()+":"+cantidadClientes+":"+modulosStr;
             LOG.log(Level.INFO,licenciaTxt);
-            return BCrypt.checkpw(licenciaTxt, licencia);
+            return UtilidadesHash.verificarHashBcrypt(licenciaTxt, licencia);
         }
         catch(java.lang.IllegalArgumentException iae)
         {

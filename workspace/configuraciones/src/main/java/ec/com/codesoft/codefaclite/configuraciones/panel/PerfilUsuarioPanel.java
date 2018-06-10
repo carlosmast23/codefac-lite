@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacA
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -53,6 +54,8 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         txtClaveRepetir = new javax.swing.JPasswordField();
         jLabel6 = new javax.swing.JLabel();
         lblBlanco = new javax.swing.JLabel();
+        lblClaveAnterior = new javax.swing.JLabel();
+        txtClaveAnterior = new javax.swing.JPasswordField();
 
         setClosable(true);
         setIconifiable(true);
@@ -67,7 +70,7 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jLabel1, gridBagConstraints);
 
@@ -87,7 +90,7 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jLabel2, gridBagConstraints);
 
@@ -121,7 +124,7 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 9;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jLabel3, gridBagConstraints);
 
@@ -149,8 +152,8 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         jLabel4.setText("Clave:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jLabel4, gridBagConstraints);
 
@@ -159,15 +162,14 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jLabel5, gridBagConstraints);
 
         txtClave.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        txtClave.setText("jPasswordField1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.ipadx = 193;
@@ -176,7 +178,6 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         getContentPane().add(txtClave, gridBagConstraints);
 
         txtClaveRepetir.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        txtClaveRepetir.setText("jPasswordField2");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 4;
@@ -197,6 +198,26 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.2;
         getContentPane().add(lblBlanco, gridBagConstraints);
 
+        lblClaveAnterior.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblClaveAnterior.setText("Clave Anterior:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(lblClaveAnterior, gridBagConstraints);
+
+        txtClaveAnterior.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 193;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(txtClaveAnterior, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -214,7 +235,9 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
     private javax.swing.JList<String> jListPerfiles;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblBlanco;
+    private javax.swing.JLabel lblClaveAnterior;
     private javax.swing.JPasswordField txtClave;
+    private javax.swing.JPasswordField txtClaveAnterior;
     private javax.swing.JPasswordField txtClaveRepetir;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
@@ -246,7 +269,7 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
     
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true ,min=0,nombre = "Clave")
+    @ValidacionCodefacAnotacion(requerido=false ,min=0,nombre = "Clave")
     public JPasswordField getTxtClave() {
         return txtClave;
     }
@@ -274,6 +297,26 @@ public abstract class PerfilUsuarioPanel extends ControladorCodefacInterface {
     public void setTxtUsuario(JTextField txtUsuario) {
         this.txtUsuario = txtUsuario;
     }
+
+    @LimpiarAnotacion
+    public JPasswordField getTxtClaveAnterior() {
+        return txtClaveAnterior;
+    }
+
+    public void setTxtClaveAnterior(JPasswordField txtClaveAnterior) {
+        this.txtClaveAnterior = txtClaveAnterior;
+    }
+
+    public JLabel getLblClaveAnterior() {
+        return lblClaveAnterior;
+    }
+
+    public void setLblClaveAnterior(JLabel lblClaveAnterior) {
+        this.lblClaveAnterior = lblClaveAnterior;
+    }
+    
+    
+    
 
     public JList<String> getjListPerfiles() {
         return jListPerfiles;

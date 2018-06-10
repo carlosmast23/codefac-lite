@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.main.license.excepcion.ValidacionLicenciaExce
 import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
+import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesHash;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -142,7 +143,7 @@ public class ValidacionLicenciaCodefac{
             String modulosStr=licencia.getModulosStr();
             String licenciaStr=licencia.getUsuario()+":"+UtilidadVarios.obtenerMacSinInternet()+":"+licencia.getTipoLicenciaEnum().getLetra()+":"+licencia.getCantidadClientes()+":"+modulosStr;            
             LOG.log(Level.INFO,"creando="+licenciaStr);
-            licenciaStr=BCrypt.hashpw(licenciaStr,BCrypt.gensalt(12));
+            licenciaStr=UtilidadesHash.generarHashBcrypt(licenciaStr);
             Properties prop = new Properties();
             prop.setProperty(Licencia.PROPIEDAD_USUARIO,licencia.getUsuario());
             prop.setProperty(Licencia.PROPIEDAD_LICENCIA,licenciaStr);

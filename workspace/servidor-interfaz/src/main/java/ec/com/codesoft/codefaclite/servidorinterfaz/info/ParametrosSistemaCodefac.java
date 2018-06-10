@@ -21,7 +21,7 @@ public abstract class ParametrosSistemaCodefac {
     /**
      * El modo de configuracion del sistema
      */
-    public static final ModoSistemaEnum MODO=ModoSistemaEnum.PRODUCCION;
+    public static final ModoSistemaEnum MODO=ModoSistemaEnum.DESARROLLO;
     
     /**
      * Icono por defecto para usar en todo el sistema
