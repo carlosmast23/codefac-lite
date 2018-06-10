@@ -68,7 +68,6 @@ public class UtilidadesServidor {
       RecursoCodefac.SQL.getResourceInputStream("insert_default_academico.sql"),
       RecursoCodefac.SQL.getResourceInputStream("insert_default_compras.sql"),
       RecursoCodefac.SQL.getResourceInputStream("insert_servicio.sql"),
-      RecursoCodefac.SQL.getResourceInputStream("insert_default_desarrollo.sql"),
     };
 
     public static InputStream[] querys = {

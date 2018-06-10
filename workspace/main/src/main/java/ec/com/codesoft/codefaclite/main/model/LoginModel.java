@@ -93,29 +93,50 @@ public class LoginModel extends LoginFormDialog{
             /**
              * Validacion para verificar si no es un usuario root es decir para soporte
              */
-            if(usuarioTxt.toLowerCase().indexOf("root")>=0 && ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.PRODUCCION)) //Si contiene la palabra root asumo que es de soporte
+            if(usuarioTxt.toLowerCase().indexOf("root")>=0) //Si contiene la palabra root asumo que es de soporte
             {
-                if(WebServiceCodefac.getVerificarSoporte(usuarioTxt, clave))
+                //Consultar el usuario root
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("nick", Usuario.SUPER_USUARIO);
+                Usuario usuarioRoot = null; //variable para consultar la variable root
+                try {
+                    usuarioRoot = ServiceFactory.getFactory().getUsuarioServicioIf().obtenerPorMap(mapParametros).get(0);//obtiene el usuario root de la base de datos 
+                    usuarioRoot.isRoot = true;
+                } catch (RemoteException ex) {
+                    Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                
+                if(ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.PRODUCCION)) //Cuando esta en modo produccion para el root consulto desde los web services
                 {
-                    try {
-                        Map<String,Object> mapParametros=new HashMap<String, Object>();
-                        mapParametros.put("nick",Usuario.SUPER_USUARIO);
-                        
-                        Usuario usuarioRoot=ServiceFactory.getFactory().getUsuarioServicioIf().obtenerPorMap(mapParametros).get(0);//obtiene el usuario root de la base de datos 
-                        usuarioRoot.isRoot=true;
-                        usuario=usuarioRoot;
-                        LOG.log(Level.INFO, "Ingresando con el usuario root: "+usuarioTxt);
-                        dispose();
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (ServicioCodefacException ex) {
-                        Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
+                    if(WebServiceCodefac.getVerificarSoporte(usuarioTxt, clave))
+                    {                            
+                            usuario=usuarioRoot;
+                            LOG.log(Level.INFO, "Ingresando con el usuario root: "+usuarioTxt);
+                            dispose();
+                    }
+                    else
+                    {
+                        LOG.log(Level.WARNING, "Error al ingresar con el usuario: " + usuarioTxt);
+                        DialogoCodefac.mensaje("Error Login", "Datos Incorrectos para usuario root", DialogoCodefac.MENSAJE_INCORRECTO);
                     }
                 }
                 else
                 {
-                    LOG.log(Level.WARNING, "Error al ingresar con el usuario: " + usuarioTxt);
-                    DialogoCodefac.mensaje("Error Login", "Datos Incorrectos para usuario root", DialogoCodefac.MENSAJE_INCORRECTO);
+                    //Seteo directemente una clave independiente de lo que este grabado en la base, ademas como solo es para modo desarrollo no afecta para el desarrollo
+                    if(clave.equals("1234")) //Todo: ver si se setea esta variable de forma global aunque no hay necesidad
+                    {
+                        usuario=usuarioRoot;
+                        LOG.log(Level.INFO, "Ingresando con el usuario root en produccion: " + usuarioTxt);
+                        dispose();
+                    }
+                    else
+                    {
+                        DialogoCodefac.mensaje("Error Login","Datos Incorrectos para root en modo desarrollo",DialogoCodefac.MENSAJE_INCORRECTO);
+                    }
+
                 }
                     
             }
