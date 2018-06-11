@@ -177,6 +177,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaSer
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
+import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import ec.com.codesoft.codefaclite.utilidades.web.UtilidadesWeb;
 import java.awt.Font;
@@ -810,8 +811,9 @@ public class Main {
              * Verificar si la licencia actual es la misma que tiene el servidor
              */
             ParametroCodefac parametroFechaValidacion = servicio.getParametroByNombre(ParametroCodefac.ULTIMA_FECHA_VALIDACION);
-            if (parametroFechaValidacion != null) {
-                String fechaStr = parametroFechaValidacion.getValor();
+            if (parametroFechaValidacion != null && !parametroFechaValidacion.getValor().equals("")) {
+                //String fechaStr = parametroFechaValidacion.getValor();
+                String fechaStr = UtilidadesEncriptar.desencriptar(parametroFechaValidacion.getValor(),ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
                 if (!fechaStr.equals("")) {
                     try {
                         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
@@ -846,7 +848,7 @@ public class Main {
                             }
                             else
                             {
-                                DialogoCodefac.mensaje("Advertencia", "Le quedan "+(diasLimiteVerificacion-dias)+" días para verificar su licencia por internet. \n\nCausas: \n - No tiene conexion a internet por varios días \n -Esta usando una versión  ilegal \n\n Si el problema persiste comuníquese con un asesor\n Nota: Si no soluciona el problema pasado la fecha limite el programa yo no funcionara" , dias);
+                                DialogoCodefac.mensaje("Advertencia", "Le quedan "+(diasLimiteVerificacion-dias)+" días para verificar su licencia por internet. \n\nCausas: \n - No tiene conexion a internet por varios días \n - Esta usando una versión  ilegal \n\n Si el problema persiste comuníquese con un asesor\n Nota: Si no soluciona el problema pasado la fecha limite el programa yo no funcionara" , dias);
                             }
                         }
 
@@ -890,6 +892,8 @@ public class Main {
             }
         } catch (RemoteException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -912,7 +916,8 @@ public class Main {
             ParametroCodefacServiceIf servicio = ServiceFactory.getFactory().getParametroCodefacServiceIf();
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             Date fechaHoy = UtilidadesFecha.getFechaNTP();
-            parametroFechaValidacion.setValor(format.format(fechaHoy));
+            String dateStr=format.format(fechaHoy);
+            parametroFechaValidacion.setValor(UtilidadesEncriptar.encriptar(dateStr,ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
             if (crear) {
                 servicio.grabar(parametroFechaValidacion);
             } else {

@@ -66,3 +66,10 @@ Cambiar el tipo de clave primaria de la tabla de usuario para grabar un id y pod
 En el usuario da problemas cuando cambian el nick porque busco el dato anterior para comparar, lo que se resuelve creandole un id autogenerado a la tabla usuario
 
 Controlar la excepcion al momento que se pierde la conexion degolpe con el cliente
+
+El metodo de respaldar toca modificar para que funcione en red , solo funciona en local host
+
+Pendiente revisar como especificar si el producto quiero o no que se maneje inventario
+
+Llevar un control de acceso de los documentos disponibles segun el tipo de modulos activos
+
