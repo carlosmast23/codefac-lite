@@ -675,7 +675,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     System.out.println("metodo no implementado"); 
                 } catch (ExcepcionCodefacLite ex) {
                     //Cancela el ciclo de vida normal si manda una excecion
-                    ex.printStackTrace();
+                    System.out.println("ex"); 
+                    //ex.printStackTrace();
                     return;
                 }
                 
