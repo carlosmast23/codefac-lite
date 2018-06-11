@@ -58,7 +58,7 @@ public class UtilidadesServidor {
 
     public static Integer cantidadUsuarios;
 
-    public static Map<ModuloCodefacEnum, Boolean> modulosMap;
+    public static List<ModuloCodefacEnum> modulosMap;
 
     /**
      * Querys que solo se ejecutaran en el modo de desarrollo Ejemplo: Querys de

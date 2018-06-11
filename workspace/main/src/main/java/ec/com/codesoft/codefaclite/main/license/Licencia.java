@@ -197,8 +197,9 @@ public class Licencia {
         return false;
     }
     
-    public Map<ModuloCodefacEnum,Boolean> getModulosSistema()
+    public List<ModuloCodefacEnum> getModulosSistema()
     {
+        /*
         Map<ModuloCodefacEnum,Boolean> modulosMap=new HashMap<ModuloCodefacEnum,Boolean>();
         
         //Si la licencia es gratis no tomo en cuenta ningun modulo
@@ -217,7 +218,8 @@ public class Licencia {
                 modulosMap.put(modulo,false);
             }
         }
-        return modulosMap;    
+        return modulosMap;*/
+        return modulosActivos;
     }
     
     public void llenarPropertiesModulo(Properties propiedades)

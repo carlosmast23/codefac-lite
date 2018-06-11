@@ -203,13 +203,25 @@ public enum VentanaEnum {
         return categorias;
     }
 
-    public Boolean verificarPermisoModuloAdicional(Map<ModuloCodefacEnum, Boolean> modulos) {
+    public Boolean verificarPermisoModuloAdicional(List<ModuloCodefacEnum> modulos) {
         //Si no existe ningun dato en modulo permitidos asumo que no tiene acceso para  los modulos
 
         if (modulosPermitidos == null) {
             return false;
         }
+        
+        for (ModuloCodefacEnum moduloSistema : modulos) {
+            //Verifico si indirectamente otro modulo necesita de esta pantalla
+            for (ModuloCodefacEnum modulosPermitido : modulosPermitidos) 
+            {
+                if (moduloSistema.equals(modulosPermitido)) 
+                {
+                    return true;
+                }
+            }
+        }
 
+        /*
         for (Map.Entry<ModuloCodefacEnum, Boolean> entry : modulos.entrySet()) 
         {
             ModuloCodefacEnum moduloSistema = entry.getKey();
@@ -226,7 +238,7 @@ public enum VentanaEnum {
 
             }
 
-        }
+        }*/
         return false;
     }
 

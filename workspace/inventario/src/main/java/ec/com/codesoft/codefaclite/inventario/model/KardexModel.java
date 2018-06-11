@@ -17,13 +17,13 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import es.mityc.firmaJava.ocsp.config.ServidorOcsp;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -199,7 +199,7 @@ public class KardexModel extends KardexPanel{
                 
                 switch(tipoDocumentoEnum.getModuloEnum())
                 {
-                    case VENTAS:
+                    case FACTURACION:
                         cantidadAcumulada-=kardexDetalle.getCantidad();
                         precioTotalAcumulado=precioTotalAcumulado.subtract(kardexDetalle.getPrecioTotal());
                         
@@ -212,7 +212,7 @@ public class KardexModel extends KardexPanel{
                         completarFila(fila, tipoDocumentoEnum.getModuloEnum(), kardexDetalle, cantidadAcumulada, precioUnitarioPromedio, precioTotalAcumulado,false);
                         break;
                         
-                    case COMPRAS:
+                    case COMPRA:
                         cantidadAcumulada+=kardexDetalle.getCantidad();
                         precioTotalAcumulado=precioTotalAcumulado.add(kardexDetalle.getPrecioTotal());
                         
@@ -270,7 +270,7 @@ public class KardexModel extends KardexPanel{
         
     }
     
-    private void completarFila(Vector<String> fila,ModuloEnum moduloEnum,KardexDetalle kardexDetalle,Integer cantidadAcumulada,BigDecimal precioUnitarioAcumulado,BigDecimal precioTotalAcumulado,boolean agregar)
+    private void completarFila(Vector<String> fila,ModuloCodefacEnum moduloEnum,KardexDetalle kardexDetalle,Integer cantidadAcumulada,BigDecimal precioUnitarioAcumulado,BigDecimal precioTotalAcumulado,boolean agregar)
     {
         if (agregar) {
             fila.add(kardexDetalle.getCantidad() + "");

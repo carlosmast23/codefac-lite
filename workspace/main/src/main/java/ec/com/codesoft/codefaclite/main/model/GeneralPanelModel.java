@@ -2090,16 +2090,12 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     
     private boolean isModuloPermitido(ModuloCodefacEnum moduloVerificar)
     {
-        Map<ModuloCodefacEnum, Boolean> modulosPermitidos =sessionCodefac.getModulosMap();
-        for (Map.Entry<ModuloCodefacEnum, Boolean> entry : modulosPermitidos.entrySet()) {
-            ModuloCodefacEnum key = entry.getKey();
-            Boolean value = entry.getValue();
-            
-            if(moduloVerificar.equals(key))
+        List<ModuloCodefacEnum> modulosPermitidos =sessionCodefac.getModulos();
+        for (ModuloCodefacEnum modulosPermitido : modulosPermitidos) {
+            if(modulosPermitido.equals(moduloVerificar))
             {
-                return value;
+                return true;
             }
-                       
         }
         //Si no encuentra ninguna coincidencia manda false
         return false;
@@ -2181,7 +2177,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
 
                                         //Verifica si la pantalla adicional deberia agregarse porque esta depende de otra que si se cargo el modulo
-                                        if (menuControlador.verificarPermisoModuloAdicional(sessionCodefac.getModulosMap())) 
+                                        if (menuControlador.verificarPermisoModuloAdicional(sessionCodefac.getModulos())) 
                                         {
                                             //Verifica si el usuario tienes permisos para esa pantalla o son son super usuarios
                                             if(verificarMenuUsuario(menuControlador) || sessionCodefac.getUsuario().isRoot)
