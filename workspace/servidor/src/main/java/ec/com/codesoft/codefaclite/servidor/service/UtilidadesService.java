@@ -70,7 +70,7 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
     }
     
     @Override
-    public Map<ModuloCodefacEnum,Boolean> getModulosSistema()  throws RemoteException
+    public List<ModuloCodefacEnum> getModulosSistema()  throws RemoteException
     {
         return UtilidadesServidor.modulosMap;
     }

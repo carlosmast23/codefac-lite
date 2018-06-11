@@ -21,7 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
@@ -281,14 +281,14 @@ public class CompraReporteModel extends CompraReportePanel {
     public void initValoresCombos() {
         //Iniciar valores del combo Documento
         getCmbDocumento().removeAllItems();
-        List<DocumentoEnum> documentos = DocumentoEnum.obtenerDocumentoPorModulo(ModuloEnum.COMPRAS);
+        List<DocumentoEnum> documentos = DocumentoEnum.obtenerDocumentoPorModulo(ModuloCodefacEnum.COMPRA);
         for (DocumentoEnum documento : documentos) {
             getCmbDocumento().addItem(documento);
         }
 
         //Iniciar valores del combo TipoDocumento
         getCmbTipoDocumento().removeAllItems();
-        List<TipoDocumentoEnum> tipoDocumentoEnums = TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloEnum.COMPRAS);
+        List<TipoDocumentoEnum> tipoDocumentoEnums = TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloCodefacEnum.COMPRA);
         for (TipoDocumentoEnum tipoDocumentoEnum : tipoDocumentoEnums) {
             getCmbTipoDocumento().addItem(tipoDocumentoEnum);
         }

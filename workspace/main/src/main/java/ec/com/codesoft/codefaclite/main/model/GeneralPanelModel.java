@@ -36,6 +36,7 @@ import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.main.init.Main;
 import ec.com.codesoft.codefaclite.main.interfaces.BusquedaCodefacInterface;
+import ec.com.codesoft.codefaclite.main.license.Licencia;
 import ec.com.codesoft.codefaclite.main.license.ValidacionLicenciaCodefac;
 import ec.com.codesoft.codefaclite.main.panel.GeneralPanelForm;
 import ec.com.codesoft.codefaclite.main.panel.WidgetVentasDiarias;
@@ -55,6 +56,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
@@ -347,6 +350,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     servicio.editar(parametro);
                 }
             } catch (RemoteException ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
                 Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -670,7 +675,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     System.out.println("metodo no implementado"); 
                 } catch (ExcepcionCodefacLite ex) {
                     //Cancela el ciclo de vida normal si manda una excecion
-                    ex.printStackTrace();
+                    System.out.println("ex"); 
+                    //ex.printStackTrace();
                     return;
                 }
                 
@@ -755,8 +761,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                                 frameInterface.editar();
                                 procesoTerminado=true;
                             } catch (ExcepcionCodefacLite ex) {
-                                 ex.printStackTrace();
-                                //JOptionPane.showMessageDialog(null,ex.getMessage());
+                                 //ex.printStackTrace();
+                                LOG.log(Level.WARNING,ex.getMessage());
                             }
                             
                         }
@@ -1117,10 +1123,14 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             agregarAyudas(panel);
             
             try
-            {
+            {                
                 panel.limpiar();
+                panel.nuevo();
             }catch(java.lang.UnsupportedOperationException uoe)
             {
+                
+            } catch (ExcepcionCodefacLite ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
             }
             
             /**
@@ -2080,20 +2090,14 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     
     private boolean isModuloPermitido(ModuloCodefacEnum moduloVerificar)
     {
-        Map<ModuloCodefacEnum, Boolean> modulosPermitidos =sessionCodefac.getModulosMap();
-        for (Map.Entry<ModuloCodefacEnum, Boolean> entry : modulosPermitidos.entrySet()) {
-            ModuloCodefacEnum key = entry.getKey();
-            Boolean value = entry.getValue();
-            
-            if(value)
+        List<ModuloCodefacEnum> modulosPermitidos =sessionCodefac.getModulos();
+        for (ModuloCodefacEnum modulosPermitido : modulosPermitidos) {
+            if(modulosPermitido.equals(moduloVerificar))
             {
-                if(moduloVerificar.equals(key))
-                {
-                    return true;
-                }
+                return true;
             }
-            
         }
+        //Si no encuentra ninguna coincidencia manda false
         return false;
     
     }
@@ -2109,75 +2113,89 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 menuModulo.setIcon(moduloSistema.getIcono());
                 menuModulo.setFont(new Font("Arial",2,15));
                 boolean existenCategorias=false;
+                
                 for (CategoriaMenuEnum categoriaEnum : CategoriaMenuEnum.values()) {
                     JMenu menuCategoria=new JMenu(categoriaEnum.getNombre());
                     menuCategoria.setIcon(categoriaEnum.getIcono());
                     menuCategoria.setFont(new Font("Arial", 0, 13));
                     
                     boolean existenMenuItem=false;
-                    for (VentanaEnum menuControlador : ventanasMenuList) {
+                    for (VentanaEnum menuControlador : ventanasMenuList)  //Todo: Analizar para que la variables ventanasMenuList pueda setera cada vez que busco las pantalla que pertence al menu y se vayagn quitando de la lista para acelerar el proceso
+                    {
+                        //Si la ventana no pertecene a la categoria no hago mas validaciones
+                        if(!menuControlador.getCategoriaMenu().equals(categoriaEnum))
+                        {
+                            continue; //salta a la siguiente vuelta
+                        }
                         
                         //Verificacion cuando es un modulo habilitado
                         boolean agregarAlMenu=false;
                         
-                        //Validacion de las ventanas cuando el usuario es gratis
-                        if(sessionCodefac.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS))
+                        //Si esta en modo de desarrollo carga todos las opciones de los menus
+                        if(ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.DESARROLLO))
                         {
-                            //Si el tipo de licencia de la pantala es gratis le activo solo las pantallas disponibles para esta modalidad
-                            if (menuControlador.getModulo().equals(moduloSistema)) {
-                                //Si es super usuario cargo todos los datos 
-                                if (sessionCodefac.getUsuario().getNick().equals(Usuario.SUPER_USUARIO)) {
-                                    agregarAlMenu = true;
-                                } else if (menuControlador.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS)) {
-                                    agregarAlMenu = true;
-                                }
+                            if (menuControlador.getModulo().equals(moduloSistema)) 
+                            {
+                                agregarAlMenu=true;
                             }
                         }
-                        else //Validacion para usuarios premiun
+                        else //Si esta en modo de produccion hago las validaciones normales
                         {                        
-                            if(isModuloPermitido(moduloSistema))
+                            //Validacion de las ventanas cuando el usuario es gratis
+                            if(sessionCodefac.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS))
                             {
-                                if(menuControlador.getModulo().equals(moduloSistema))
-                                {
-                                    //Verifica si es super usuario carga todos los modulos
-                                    if(sessionCodefac.getUsuario().getNick().equals(Usuario.SUPER_USUARIO))
+                                //Si el tipo de licencia de la pantala es gratis le activo solo las pantallas disponibles para esta modalidad
+                                if (menuControlador.getModulo().equals(moduloSistema)) 
+                                {                                                                
+                                    //El acceso es el mismo para cualquier usuario gratis y para el administrador
+                                    if(menuControlador.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS)) 
                                     {
-                                        agregarAlMenu=true;
-
+                                        agregarAlMenu = true;
                                     }
-                                    else
-                                    {                                
-                                        if(verificarMenuUsuario(menuControlador))
+
+                                }
+                            }
+                            else //Validacion para usuarios premiun
+                            {                        
+                                if(isModuloPermitido(moduloSistema))
+                                {
+                                    if(menuControlador.getModulo().equals(moduloSistema))
+                                    {                                    
+                                        if(verificarMenuUsuario(menuControlador) || sessionCodefac.getUsuario().isRoot)
                                         {
                                             agregarAlMenu=true;
                                         }
-                                    }
+
+                                      }
                                 }
-                            }
-                            else //Verificacion cuando no es un modulo habilitado
-                            {
-                                //Solo agregar otras ventanas de otros modulos si el menu pertenece al modulo actual
-                                //Nota: sin esta linea pueden aparecer varios enlaces a esta ventana desde otros menus de modulos
-                                if (menuControlador.getModulo().equals(moduloSistema)) {
-                                    //Verifica si es super usuario carga todos los modulos
-                                    if (sessionCodefac.getUsuario().getNick().equals(Usuario.SUPER_USUARIO)) 
-                                    {
-                                        agregarAlMenu = true;
-                                    } 
-                                    else 
-                                        if (menuControlador.verificarPermisoModuloAdicional(sessionCodefac.getModulosMap())) 
+                                else //Verificacion cuando no es un modulo habilitado
+                                {
+                                    //Solo agregar otras ventanas de otros modulos si el menu pertenece al modulo actual
+                                    //Nota: sin esta linea pueden aparecer varios enlaces a esta ventana desde otros menus de modulos
+                                    if (menuControlador.getModulo().equals(moduloSistema)) {
+                                        //Verifica si es super usuario carga todos los modulos
+
+
+                                        //Verifica si la pantalla adicional deberia agregarse porque esta depende de otra que si se cargo el modulo
+                                        if (menuControlador.verificarPermisoModuloAdicional(sessionCodefac.getModulos())) 
                                         {
-                                            if (verificarMenuUsuario(menuControlador)) {
+                                            //Verifica si el usuario tienes permisos para esa pantalla o son son super usuarios
+                                            if(verificarMenuUsuario(menuControlador) || sessionCodefac.getUsuario().isRoot)
+                                            {
                                                 agregarAlMenu = true;
                                             }
+                                        } 
+
+
                                     }
+
+
                                 }
 
-
                             }
-
                         }
                         
+                        //Esta pantalla filtra que solo se agregue si pertenece al modulo y a la submenu corecto
                         if (menuControlador.getCategoriaMenu().equals(categoriaEnum)&& agregarAlMenu ) {
                             existenMenuItem = true;
                             String nombreVentana = "Sin nombre";
@@ -2512,10 +2530,15 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             @Override
             public void actionPerformed(ActionEvent e) {
                 String usuarioLicencia=sessionCodefac.getUsuarioLicencia();
-                String tipoLicencia=WebServiceCodefac.getTipoLicencia(usuarioLicencia);
-                //TODO: Analizar la opcion para comparar tambien el numero de usuario y modulos para generar una nueva licencia
+                //String tipoLicencia=WebServiceCodefac.getTipoLicencia(usuarioLicencia);
+                Licencia licenciaInternet=new Licencia();
+                licenciaInternet.cargarLicenciaOnline(usuarioLicencia);
                 
-                if(sessionCodefac.getTipoLicenciaEnum().getLetra().equals(tipoLicencia))
+                ValidacionLicenciaCodefac validacionLicencia = new ValidacionLicenciaCodefac(sessionCodefac.getParametrosCodefac().get(ParametroCodefac.DIRECTORIO_RECURSOS).getValor());
+                
+                //TODO: Analizar la opcion para comparar tambien el numero de usuario y modulos para generar una nueva licencia
+                                
+                if(validacionLicencia.getLicencia().compararOtraLicencia(licenciaInternet))
                 {
                     DialogoCodefac.mensaje("Advertencia","No necesita actualizar su licencia \n Si desea contratar una nueva licencia visite nuestra página Web", DialogoCodefac.MENSAJE_ADVERTENCIA);
                     return;
@@ -2534,6 +2557,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         ValidarLicenciaModel dialogo=new ValidarLicenciaModel(null,true,true);
                         dialogo.validacionLicenciaCodefac=validacion;
                         dialogo.setVisible(true);
+                        ec.com.codesoft.codefaclite.main.init.Main.iniciarComponentes();
                     } catch (RemoteException ex) {
                         Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     }

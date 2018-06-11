@@ -16,6 +16,16 @@ import java.util.GregorianCalendar;
  * @author Carlos
  */
 public class UtilidadesFecha {
+    
+    public static java.util.Date getFechaNTP() throws Exception
+    {
+        //Generamos un objeto de la clase ObtenerFecha. 
+ 
+        ObtenerFecha objFecha=new ObtenerFecha(); 
+        //Generamos otro objeto de la clase SimpleDateFormat para darle formato a la fecha 
+ 
+        return objFecha.getNTPDate(); 
+    }
    
     public static java.sql.Date getFechaHoy() {
         java.util.Date fechaHoy = new java.util.Date();

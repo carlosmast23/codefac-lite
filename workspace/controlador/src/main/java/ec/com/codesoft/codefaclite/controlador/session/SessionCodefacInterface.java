@@ -64,5 +64,5 @@ public interface SessionCodefacInterface {
      */
     public String getUsuarioLicencia();
 
-    public Map<ModuloCodefacEnum,Boolean> getModulosMap();
+    public List<ModuloCodefacEnum> getModulos();
 }

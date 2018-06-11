@@ -80,6 +80,8 @@ public class AulaModel extends AulaPanel {
             DialogoCodefac.mensaje("Datos correctos", "El aula se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         } catch (RemoteException ex) {
             Logger.getLogger(AulaModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(AulaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

@@ -15,22 +15,29 @@ import javax.swing.ImageIcon;
  * @author Carlos
  */
 public enum ModuloCodefacEnum {
-    SERVICIOS("Servicios","SER","modulo_servicios",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/servicios.png")),
-    CARTERA("Cartera","CAR","modulo_cartera",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/cartera.png")),
-    COMPRA("Compra","COM","modulo_compra",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/compra.png")),
-    INVENTARIO("Inventario","INVS","modulo_inventario",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/inventario.png")),
-    FACTURACION("Facturacion","FAC","modulo_facturacion",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/facturacion.png")),
-    CRM("Crm","CRM","modulo_crm",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/crm.png")),
-    GESTIONA_ACADEMICA("Academico","ACAS","modulo_gestion_academica",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/gestion_academica.png")),
-    SISTEMA("Sistema","SIST","modulo_sistema",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/sistema.png"));
+    SERVICIOS("Servicios","SER","s","modulo_servicios",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/servicios.png")),
+    CARTERA("Cartera","CAR","w","modulo_cartera",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/cartera.png")),
+    COMPRA("Compra","COM","b","modulo_compra",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/compra.png")),
+    INVENTARIO("Inventario","INVS","i","modulo_inventario",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/inventario.png")),
+    FACTURACION("Facturacion","FAC","f","modulo_facturacion",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/facturacion.png")),
+    CRM("Crm","CRM","c","modulo_crm",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/crm.png")),
+    GESTIONA_ACADEMICA("Academico","ACAS","a","modulo_gestion_academica",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/gestion_academica.png")),
+    SISTEMA("Sistema","SIST","t","modulo_sistema",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/sistema.png"));
     private String nombre;
     private String codigo;
     private String nombrePropiedad;
     private ImageIcon icono;
+    
+    /**
+     * Este campo es importante que este sincronizado con la base de datos del administrador
+     * Nota: los valores seteados ya no cambiar porque las licencias van a funcionar con las letras y puede genera problema si se cambian los nombres
+     */
+    private String letra;
 
-    private ModuloCodefacEnum(String nombre, String codigo, String nombrePropiedad,URL path) {
+    private ModuloCodefacEnum(String nombre, String codigo,String letra, String nombrePropiedad,URL path) {
         this.nombre = nombre;
         this.codigo = codigo;
+        this.letra=letra;
         this.nombrePropiedad = nombrePropiedad;
         setImageIcon(path);
     }
@@ -55,6 +62,12 @@ public enum ModuloCodefacEnum {
     public ImageIcon getIcono() {
         return icono;
     }
+
+    public String getLetra() {
+        return letra;
+    }
+    
+    
 
     @Override
     public String toString() {

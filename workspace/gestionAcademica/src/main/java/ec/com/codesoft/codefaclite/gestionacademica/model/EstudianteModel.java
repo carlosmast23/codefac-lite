@@ -252,6 +252,8 @@ public class EstudianteModel extends EstudiantePanel implements DialogInterfaceP
             DialogoCodefac.mensaje("Datos correctos", "El estudiante se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         } catch (RemoteException ex) {
             Logger.getLogger(EstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(EstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

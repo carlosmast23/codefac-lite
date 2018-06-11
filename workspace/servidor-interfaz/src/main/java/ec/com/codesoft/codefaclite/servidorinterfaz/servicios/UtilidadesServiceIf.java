@@ -22,5 +22,5 @@ public interface UtilidadesServiceIf extends Remote
     public Long consultaTamanioGeneralDialogos(String query, Map<Integer, Object> map) throws java.rmi.RemoteException;
     public boolean verificarConexionesServidor() throws java.rmi.RemoteException;
     public TipoLicenciaEnum getTipoLicencia() throws java.rmi.RemoteException;
-    public Map<ModuloCodefacEnum,Boolean> getModulosSistema()  throws RemoteException;
+    public List<ModuloCodefacEnum> getModulosSistema()  throws RemoteException;
 }

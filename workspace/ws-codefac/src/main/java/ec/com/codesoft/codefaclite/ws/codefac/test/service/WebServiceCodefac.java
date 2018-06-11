@@ -6,6 +6,10 @@
 package ec.com.codesoft.codefaclite.ws.codefac.test.service;
 
 import com.sun.xml.internal.ws.client.ClientTransportException;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.ActualizarlicenciaRequestType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.ActualizarlicenciaResponseType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.ComprobarRequestType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.ComprobarResponseType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.DevolverlicenciaRequestType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.DevolverlicenciaResponseType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.NumaquinasRequestType;
@@ -14,14 +18,10 @@ import ec.com.codesoft.codefaclite.ws.codefac.webservice.ObtenerlicenciaRequestT
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.ObtenerlicenciaResponseType;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.SOAPServer;
 import ec.com.codesoft.codefaclite.ws.codefac.webservice.SOAPServerPortType;
-import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarmoduloaRequestType;
-import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarmoduloaResponseType;
-import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarmodulocRequestType;
-import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarmodulocResponseType;
-import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarmodulofRequestType;
-import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarmodulofResponseType;
-import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarmoduloiRequestType;
-import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarmoduloiResponseType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarmoduloRequestType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarmoduloResponseType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarsoporteRequestType;
+import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarsoporteResponseType;
 
 /**
  *
@@ -107,63 +107,68 @@ public abstract class WebServiceCodefac {
     }
     
     
-        /**
-     * Obtiene la licencia del servidor
-     *
-     * @param email
+    /**
+     * 
+     * @param email email a consultar el modulo
+     * @param letra letra asignada al modulo para verificar si esta habilitado
      * @return
+     * @throws ClientTransportException 
      */
-    public static String getModuloInventario(String email) throws ClientTransportException {
-        try
-        {
-            SOAPServer soapServer = new SOAPServer();
-            SOAPServerPortType soapServerPort = soapServer.getSOAPServerPort();
-            VerificarmoduloiRequestType parametrosLicencia = new VerificarmoduloiRequestType();
-            parametrosLicencia.setEmail(email);
-            VerificarmoduloiResponseType respuestaLicencia = soapServerPort.verificarmoduloi(parametrosLicencia);
-            return respuestaLicencia.getReturn();
-        }
-        catch(com.sun.xml.internal.ws.client.ClientTransportException cte)
-        {
-            throw cte;
-        }
-        
-    }
-
-    public static String getModuloGestionAcademica(String email) throws ClientTransportException {
+    public static String getModuloCodefac(String email,String letra) throws ClientTransportException
+    {
         try {
             SOAPServer soapServer = new SOAPServer();
             SOAPServerPortType soapServerPort = soapServer.getSOAPServerPort();
-            VerificarmoduloaRequestType parametrosLicencia = new VerificarmoduloaRequestType();
+            VerificarmoduloRequestType parametrosLicencia = new VerificarmoduloRequestType();
             parametrosLicencia.setEmail(email);
-            VerificarmoduloaResponseType respuestaLicencia = soapServerPort.verificarmoduloa(parametrosLicencia);
+            parametrosLicencia.setTipo(letra);
+            VerificarmoduloResponseType respuestaLicencia = soapServerPort.verificarmodulo(parametrosLicencia);
             return respuestaLicencia.getReturn();
         } catch (com.sun.xml.internal.ws.client.ClientTransportException cte) {
             throw cte;
+        }    
+    }
+    
+    public static boolean verificarCredenciales(String usuario, String clave)
+    {
+        SOAPServer soapServer=new SOAPServer();
+        SOAPServerPortType soapServerPort=soapServer.getSOAPServerPort();
+        ComprobarRequestType parametros=new ComprobarRequestType();
+        parametros.setC(clave);
+        parametros.setU(usuario);
+        ComprobarResponseType respuesta= soapServerPort.comprobar(parametros);
+        if("success".equals(respuesta.getReturn()))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
+    
+    public static void actualizarLicencia(String usuario,String licencia) 
+    {
+        SOAPServer soapServer = new SOAPServer();
+        SOAPServerPortType soapServerPort = soapServer.getSOAPServerPort();
 
-    public static String getModuloFacturacion(String email) throws ClientTransportException {
+        ActualizarlicenciaRequestType parametros = new ActualizarlicenciaRequestType();
+        parametros.setEmail(usuario);
+        parametros.setLicencia(licencia);
+
+        ActualizarlicenciaResponseType respuesta = soapServerPort.actualizarlicencia(parametros);
+        respuesta.getReturn();
+    }
+    
+    public static Boolean getVerificarSoporte(String usuario, String clave) throws ClientTransportException {
         try {
             SOAPServer soapServer = new SOAPServer();
             SOAPServerPortType soapServerPort = soapServer.getSOAPServerPort();
-            VerificarmodulofRequestType parametrosLicencia = new VerificarmodulofRequestType();
-            parametrosLicencia.setEmail(email);
-            VerificarmodulofResponseType respuestaLicencia = soapServerPort.verificarmodulof(parametrosLicencia);
-            return respuestaLicencia.getReturn();
-        } catch (com.sun.xml.internal.ws.client.ClientTransportException cte) {
-            throw cte;
-        }
-    }
-
-    public static String getModuloCrm(String email) throws ClientTransportException {
-        try {
-            SOAPServer soapServer = new SOAPServer();
-            SOAPServerPortType soapServerPort = soapServer.getSOAPServerPort();
-            VerificarmodulocRequestType parametrosLicencia = new VerificarmodulocRequestType();
-            parametrosLicencia.setEmail(email);
-            VerificarmodulocResponseType respuestaLicencia = soapServerPort.verificarmoduloc(parametrosLicencia);
-            return respuestaLicencia.getReturn();
+            VerificarsoporteRequestType parametrosLicencia = new VerificarsoporteRequestType();
+            parametrosLicencia.setUsuario(usuario);
+            parametrosLicencia.setClave(clave);
+            VerificarsoporteResponseType respuestaLicencia = soapServerPort.verificarsoporte(parametrosLicencia);
+            return respuestaLicencia.getReturn().equals("success");
         } catch (com.sun.xml.internal.ws.client.ClientTransportException cte) {
             throw cte;
         }

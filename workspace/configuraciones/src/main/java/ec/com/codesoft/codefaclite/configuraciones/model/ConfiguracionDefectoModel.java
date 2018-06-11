@@ -12,7 +12,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import java.rmi.RemoteException;
@@ -116,14 +116,14 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel{
                 
         //Agregar los tipos de documentos disponibles
         getCmbTipoDocumento().removeAllItems();
-        List<TipoDocumentoEnum> tipoDocumentos= TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloEnum.VENTAS);
+        List<TipoDocumentoEnum> tipoDocumentos= TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloCodefacEnum.FACTURACION);
         for (TipoDocumentoEnum tipoDocumento : tipoDocumentos) {
             getCmbTipoDocumento().addItem(tipoDocumento);
         }
         
         //Agregar los tipos de documentos disponibles para las compras
         getCmbTipoDocumentoCompra().removeAllItems();
-        List<TipoDocumentoEnum> tipoDocumentosCompra= TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloEnum.COMPRAS);
+        List<TipoDocumentoEnum> tipoDocumentosCompra= TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloCodefacEnum.COMPRA);
         for (TipoDocumentoEnum tipoDocumento : tipoDocumentosCompra) {
             getCmbTipoDocumentoCompra().addItem(tipoDocumento);
         }

@@ -102,6 +102,8 @@ public class NivelModel extends NivelPanel {
             DialogoCodefac.mensaje("Datos correctos", "El nivel se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         } catch (RemoteException ex) {
             Logger.getLogger(NivelModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(NivelModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

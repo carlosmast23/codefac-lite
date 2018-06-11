@@ -5,42 +5,18 @@
  */
 package ec.com.codesoft.codefaclite.main.init;
 
-import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
 import com.sun.xml.internal.ws.client.ClientTransportException;
-import ec.com.codesoft.codefaclite.configuraciones.model.CalculadoraModel;
-import ec.com.codesoft.codefaclite.configuraciones.model.ComprobantesConfiguracionModel;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.AyudaCodefacModel;
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecundarioAbstract;
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.ValidadorCodefacModel;
-import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
-import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
-import ec.com.codesoft.codefaclite.crm.model.ClienteReporte;
-import ec.com.codesoft.codefaclite.compra.model.CompraModel;
 import ec.com.codesoft.codefaclite.controlador.logs.LogControlador;
-import ec.com.codesoft.codefaclite.crm.model.EmpresaModel;
-import ec.com.codesoft.codefaclite.crm.model.ProductoModel;
-import ec.com.codesoft.codefaclite.crm.model.ProductoReporte;
-import ec.com.codesoft.codefaclite.facturacion.model.FacturaDisenioModel;
-import ec.com.codesoft.codefaclite.facturacion.model.FacturaReporteModel;
-import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
-import ec.com.codesoft.codefaclite.facturacion.model.NotaCreditoModel;
-import ec.com.codesoft.codefaclite.facturacion.model.UtilidadComprobanteModel;
-import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
-import ec.com.codesoft.codefaclite.gestionacademica.model.AulaModel;
-import ec.com.codesoft.codefaclite.gestionacademica.model.NivelModel;
-import ec.com.codesoft.codefaclite.gestionacademica.model.PeriodoModel;
-import ec.com.codesoft.codefaclite.inventario.model.AsociarProductoProveedorModel;
-import ec.com.codesoft.codefaclite.inventario.model.BodegaModel;
-import ec.com.codesoft.codefaclite.inventario.model.CategoriaProductoModel;
-import ec.com.codesoft.codefaclite.inventario.model.IngresoInventarioModel;
-import ec.com.codesoft.codefaclite.inventario.model.InventarioEnsambleModel;
-import ec.com.codesoft.codefaclite.inventario.model.KardexModel;
 import ec.com.codesoft.codefaclite.main.license.Licencia;
 import ec.com.codesoft.codefaclite.main.license.ValidacionLicenciaCodefac;
 import ec.com.codesoft.codefaclite.main.license.excepcion.NoExisteLicenciaException;
 import ec.com.codesoft.codefaclite.main.license.excepcion.ValidacionLicenciaExcepcion;
+import ec.com.codesoft.codefaclite.main.model.ConfiguracionesInicalesModel;
 import ec.com.codesoft.codefaclite.main.model.DescargaModel;
 import ec.com.codesoft.codefaclite.main.model.GeneralPanelModel;
 import ec.com.codesoft.codefaclite.main.model.HiloPublicidadCodefac;
@@ -49,9 +25,7 @@ import ec.com.codesoft.codefaclite.main.model.ModoAplicativoModel;
 import ec.com.codesoft.codefaclite.main.model.ServidorMonitorModel;
 import ec.com.codesoft.codefaclite.main.model.SplashScreenModel;
 import ec.com.codesoft.codefaclite.main.model.ValidarLicenciaModel;
-import ec.com.codesoft.codefaclite.main.panel.ModoAplicativoDialog;
-import ec.com.codesoft.codefaclite.main.panel.ServidorMonitorPanel;
-import ec.com.codesoft.codefaclite.main.panel.ValidarLicenciaDialog;
+import ec.com.codesoft.codefaclite.main.other.BaseDatosCredenciales;
 import ec.com.codesoft.codefaclite.main.panel.publicidad.Publicidad;
 import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.main.test.TestPruebaRMI;
@@ -59,7 +33,6 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.PersistenciaDuplicadaException;
@@ -142,15 +115,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorS
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceControllerServer;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaEstudiante;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompraDetalle;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CatalogoProductoServiceIf;
@@ -180,7 +145,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraDet
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.gestionacademica.RubroPlantillaEstudianteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.gestionacademica.RubroPlantillaServiceIf;
-import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 import java.io.FileNotFoundException;
@@ -201,11 +165,8 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.PersistenceException;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilUsuarioServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoDetalleServiceIf;
@@ -215,11 +176,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriFormaPagoServic
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionServiceIf;
-import ec.com.codesoft.codefaclite.utilidades.email.PropiedadesCorreoEnum;
+import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
+import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import ec.com.codesoft.codefaclite.utilidades.web.UtilidadesWeb;
 import java.awt.Font;
-import java.io.File;
 import java.sql.SQLException;
 import java.util.Arrays;
 import javax.swing.JFileChooser;
@@ -248,6 +209,7 @@ public class Main {
     private static final String CAMPO_IP_ULTIMO_ACCESO_SERVIDOR="servidorip";
     
     private static final String CAMPO_VERSION="version";
+    
     /**
      * Variable para saber el modo que inicia el aplicativo
      */
@@ -494,7 +456,7 @@ public class Main {
 
     public static void cargarRecursosServidor() {
         try {
-            AbstractFacade.cargarEntityManager();
+            //AbstractFacade.cargarEntityManager();
 
             Map<Class, Class> mapRecursos = new HashMap<Class, Class>();
 
@@ -561,9 +523,9 @@ public class Main {
 
         } catch (PersistenceException ex) {
             Logger.getLogger(TestPruebaRMI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (PersistenciaDuplicadaException ex) {
-            Logger.getLogger(TestPruebaRMI.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } //catch (PersistenciaDuplicadaException ex) {
+        //    Logger.getLogger(TestPruebaRMI.class.getName()).log(Level.SEVERE, null, ex);
+        //}
     }
 
     public static void cargarRecursosCliente(String ipServidor) {
@@ -605,7 +567,7 @@ public class Main {
                 /**
                  * Componentes iniciales que utilizo tanto para modo servidor y modo cliente-servidor
                  */
-                componentesBaseDatos();
+                componentesBaseDatos(false);
                 cargarRecursosServidor();
                 //Todo: Veriicar este metodo que obtiene la ip del servidor, porque cuando tienen varias interfaces o una virtual puede levantarse el servicio en una IP que no se desea
                 ipServidor = InetAddress.getLocalHost().getHostAddress();
@@ -663,9 +625,7 @@ public class Main {
                         LOG.log(Level.INFO, "Modo Cliente Servidor Activado");
                     }
                 }
-
-                
-            
+   
             }            
 
             //Si el aplicativo debe iniciar en modo servidor se cierra la pantalla de carga del slashScreen de codefac porque no necesita cargar mas modulos
@@ -773,6 +733,8 @@ public class Main {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -834,41 +796,69 @@ public class Main {
 
     public static void validacionCodefacOnline(ValidacionLicenciaCodefac validacion) {
 
+        /**
+         * Dias Limite para verificar la licencia en ese periodo de tiempo
+         */
+        int diasLimiteVerificacion=9;
+        /**
+         * Numero de dias antes de empezar a verificar la licencia
+         */
+        int diasToleraciaVerificacion=5;
+        
         try {
             ParametroCodefacServiceIf servicio = ServiceFactory.getFactory().getParametroCodefacServiceIf();
             /**
              * Verificar si la licencia actual es la misma que tiene el servidor
              */
             ParametroCodefac parametroFechaValidacion = servicio.getParametroByNombre(ParametroCodefac.ULTIMA_FECHA_VALIDACION);
-            if (parametroFechaValidacion != null) {
-                String fechaStr = parametroFechaValidacion.getValor();
+            if (parametroFechaValidacion != null && !parametroFechaValidacion.getValor().equals("")) {
+                //String fechaStr = parametroFechaValidacion.getValor();
+                String fechaStr = UtilidadesEncriptar.desencriptar(parametroFechaValidacion.getValor(),ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
                 if (!fechaStr.equals("")) {
                     try {
                         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
                         Date fechaUltimaRevision = formato.parse(fechaStr);
-                        int dias = UtilidadesFecha.obtenerDistanciaDias(fechaUltimaRevision, UtilidadesFecha.hoy());
+                        
+                        Date fechaRevisar=UtilidadesFecha.hoy(); //Por feecto compara con la hora del sistema
+                        try
+                        {
+                            fechaRevisar=UtilidadesFecha.getFechaNTP(); //Si no existe internet hace el calculo con la hora del sistema
+                        }
+                        catch(java.lang.NoSuchMethodError nse)
+                        {
+                            nse.printStackTrace();
+                        } catch (Exception ex) {
+                            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                                
+                        
+                        int dias = UtilidadesFecha.obtenerDistanciaDias(fechaUltimaRevision, fechaRevisar);//Esta fecha 
 
-                        //Validacion para evitar que cambien fechas del sistema o que corrompan la fecha
+                        //Validacion para evitar que cambien fechas del sistema o que corrompan la fecha poniendo una fecha superior
                         if (dias < 0) {
                             DialogoCodefac.mensaje("Error", "No se puede validar su licencia ,inconsistencia con las fechas", DialogoCodefac.MENSAJE_INCORRECTO);
                             System.exit(0);
 
                         }
 
-                        //Revisar la licencia cada despues de 15 dias con un rango maximo de 30 dias 
-                        if (dias > 15 && dias < 30) {
+                        //Revisar la licencia cada 5 dias con un rango maximo de 8 dias 
+                        if (dias > diasToleraciaVerificacion && dias < diasLimiteVerificacion) {
                             if (verificarLicenciaOnline(validacion)) {
                                 grabarFechaRevision(parametroFechaValidacion, false);
                             }
+                            else
+                            {
+                                DialogoCodefac.mensaje("Advertencia", "Le quedan "+(diasLimiteVerificacion-dias)+" días para verificar su licencia por internet. \n\nCausas: \n - No tiene conexion a internet por varios días \n - Esta usando una versión  ilegal \n\n Si el problema persiste comuníquese con un asesor\n Nota: Si no soluciona el problema pasado la fecha limite el programa yo no funcionara" , dias);
+                            }
                         }
 
-                        //Si execde los 30 dias sin validar por internet ya no permite el acceso
-                        if (dias >= 30) {
+                        //Si execede los dias limite sin validar por internet ya no permite el acceso
+                        if (dias >= diasLimiteVerificacion) {
                             if (verificarLicenciaOnline(validacion)) {
                                 grabarFechaRevision(parametroFechaValidacion, false);
                             } else {
                                 //Si no se logro validar la licencia durante 30 dias ya no se abre el software
-                                DialogoCodefac.mensaje("Error", "No se puede validar su licencia , verifique su conexión a internet", DialogoCodefac.MENSAJE_INCORRECTO);
+                                DialogoCodefac.mensaje("Advertencia", "No se puede validar su licencia , verifique su conexión a internet", DialogoCodefac.MENSAJE_ADVERTENCIA);
                                 System.exit(0);
                             }
                         }
@@ -902,6 +892,8 @@ public class Main {
             }
         } catch (RemoteException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -923,14 +915,17 @@ public class Main {
 
             ParametroCodefacServiceIf servicio = ServiceFactory.getFactory().getParametroCodefacServiceIf();
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            Date fechaHoy = UtilidadesFecha.getFechaHoy();
-            parametroFechaValidacion.setValor(format.format(fechaHoy));
+            Date fechaHoy = UtilidadesFecha.getFechaNTP();
+            String dateStr=format.format(fechaHoy);
+            parametroFechaValidacion.setValor(UtilidadesEncriptar.encriptar(dateStr,ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
             if (crear) {
                 servicio.grabar(parametroFechaValidacion);
             } else {
                 servicio.editar(parametroFechaValidacion);
             }
         } catch (RemoteException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -960,105 +955,38 @@ public class Main {
             {
                 return true;
             }
-            else
-            {
-                validacion.crearLicenciaDescargada(licenciaOnline);
+            else //Si existe diferencias con la otra licencia lanza el dialogo para actualizar la licencia
+            {                
+                //validacion.crearLicenciaDescargada(licenciaOnline);a
                 //validacion.crearLicencia(usuario,tipoLicencia,cantidadCliente,modulosActivos);
-                if(validacion.validar())
-                {
-                    return true;
+                //if(validacion.validar())
+                //{
+                //    return true;
+                //}
+                //Pantalla para actualizar la licencia si existe la licencia
+                DialogoCodefac.mensaje("Advertencia","Su licencia esta desactualizada o es incorrecta. \n Porfavor actualice su licencia para continuar", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                ValidarLicenciaModel licenciaDialog = new ValidarLicenciaModel(null, true, true);
+                licenciaDialog.setValidacionLicenciaCodefac(validacion);
+                if (validacion.verificarConexionInternet()) {
+                    licenciaDialog.setVisible(true);
+                    if (licenciaDialog.licenciaCreada) {
+                        return comprobarLicencia(validacion.getPath()); //volver a verificar la licencia
+                    } else {
+                        return false;
+                    }
+                } else {
+                    DialogoCodefac.mensaje("Error", "Para activar su producto conéctese a Internet", DialogoCodefac.MENSAJE_INCORRECTO);
+                    return false;
                 }
-                
+
             }            
 
         }
         catch(com.sun.xml.internal.ws.client.ClientTransportException cte)
         {
             return false;
-        } catch (ValidacionLicenciaExcepcion ex) {
-            return false;
-        } catch (NoExisteLicenciaException ex) {
-            return false;
         }
-        return false;
-    }
 
-    public static Map<String, ParametroCodefac> getParametros() {
-        Map<String, ParametroCodefac> parametros = new HashMap<String, ParametroCodefac>();
-        ParametroCodefac param = new ParametroCodefac();
-
-        param.id = 1;
-        param.nombre = ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA;
-        param.valor = "carlos_alfonso_sanchez_coyago.p12";
-        parametros.put(param.nombre, param);
-
-        param = new ParametroCodefac();
-        param.id = 2;
-        param.nombre = ParametroCodefac.CLAVE_FIRMA_ELECTRONICA;
-        param.valor = "Code17bwbtj";
-        parametros.put(param.nombre, param);
-
-        param = new ParametroCodefac();
-        param.id = 4;
-        param.nombre = ParametroCodefac.MODO_FACTURACION;
-        param.valor = "pruebas";
-        parametros.put(param.nombre, param);
-
-        param = new ParametroCodefac();
-        param.id = 5;
-        param.nombre = ParametroCodefac.SRI_WS_RECEPCION;
-        param.valor = "https://cel.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl";
-        parametros.put(param.nombre, param);
-
-        param = new ParametroCodefac();
-        param.id = 6;
-        param.nombre = ParametroCodefac.SRI_WS_RECEPCION_PRUEBA;
-        param.valor = "https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl";
-        parametros.put(param.nombre, param);
-
-        param = new ParametroCodefac();
-        param.id = 7;
-        param.nombre = ParametroCodefac.SRI_WS_AUTORIZACION;
-        param.valor = "https://cel.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl";
-        parametros.put(param.nombre, param);
-
-        param = new ParametroCodefac();
-        param.id = 8;
-        param.nombre = ParametroCodefac.SRI_WS_AUTORIZACION_PRUEBA;
-        param.valor = "https://celcer.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl";
-        parametros.put(param.nombre, param);
-
-        param = new ParametroCodefac();
-        param.id = 9;
-        param.nombre = ParametroCodefac.SECUENCIAL_FACTURA;
-        param.valor = "1";
-        parametros.put(param.nombre, param);
-
-        param = new ParametroCodefac();
-        param.id = 10;
-        param.nombre = ParametroCodefac.SECUENCIAL_GUIA_REMISION;
-        param.valor = "1";
-        parametros.put(param.nombre, param);
-
-        param = new ParametroCodefac();
-        param.id = 11;
-        param.nombre = ParametroCodefac.SECUENCIAL_NOTA_CREDITO;
-        param.valor = "1";
-        parametros.put(param.nombre, param);
-
-        param = new ParametroCodefac();
-        param.id = 12;
-        param.nombre = ParametroCodefac.SECUENCIAL_NOTA_DEBITO;
-        param.valor = "1";
-        parametros.put(param.nombre, param);
-
-        param = new ParametroCodefac();
-        param.id = 13;
-        param.nombre = ParametroCodefac.SECUENCIAL_RETENCION;
-        param.valor = "1";
-        parametros.put(param.nombre, param);
-
-        return parametros;
     }
 
     public static Map<String,PanelSecundarioAbstract> agregarPanelesSecundarios()
@@ -1087,22 +1015,88 @@ public class Main {
     /**
      * Verifica y carga el Entity manager
      */
-    public static void componentesBaseDatos() {
+    public static void componentesBaseDatos(Boolean repetirCredenciales) {
+        /**
+         * Verificar si existen las credenciales de la base de datos o las genero
+         */
+        boolean ingresarCredenciales=false;
+        ConfiguracionesInicalesModel.ModoEnum tipoCredencial=ConfiguracionesInicalesModel.ModoEnum.REGISTRAR; //Por defecto hacemos que sea registrar el dialog
+        
+        if(!repetirCredenciales) //Solo ingresar si la variables es false , que quiere decir que haga la verificacion normal
+        {
+            BaseDatosCredenciales credenciales=BaseDatosCredenciales.getInstance();            
+            //verificar si existen los datos creados
+            if(credenciales.cargarDatos())
+            {
+                String usuarioDb=credenciales.getUsuario();
+                String claveDb=credenciales.getClave();
+                //Si falta algun datos del usuario y la clave abro la pantalla de crear credenciales
+                if(usuarioDb==null || claveDb==null)
+                {
+                    ingresarCredenciales=true;
+                }
+
+            }
+            else
+            {
+                //Si no existe las credenciales verifico si ya existe la base de datos para ver que pantalla abrir para las crdenciales
+                if(UtilidadesArchivos.verificarExiteArchivo("Derby2.DB")) //Todo: Setear en una variable global
+                {
+                    tipoCredencial=ConfiguracionesInicalesModel.ModoEnum.ACCEDER;
+                }                
+                ingresarCredenciales=true;
+            }
+        }
+        else //Si pide repetir las credenciales directamente abro el dialogo de las credenciales
+        {
+            ingresarCredenciales=true;
+            tipoCredencial=ConfiguracionesInicalesModel.ModoEnum.ACCEDER;
+        }
+
+        //Si no existen o faltan credenciales abro la pantalla para crear
+        if (ingresarCredenciales) 
+        {
+            abrirDialogoCredencialesDB(tipoCredencial);
+        }
+        
+        
+        //Obtengo los datos para la base de datos
+        BaseDatosCredenciales credenciales = BaseDatosCredenciales.getInstance();
+        credenciales.cargarDatos();
+        AbstractFacade.usuarioDb = credenciales.getUsuario();
+        AbstractFacade.claveDb = credenciales.getClave();
+        
+        /**
+         * Cargar la persistencia del servidor
+         */
         try {
+            
             AbstractFacade.cargarEntityManager();
         } catch (PersistenceException e) {
             try {
                 System.out.println(e.getMessage());
                 UtilidadesServidor.crearBaseDatos();
-                //JOptionPane.showMessageDialog(null,"Creada base de datos");
+                
                 AbstractFacade.cargarEntityManager();
             } catch (PersistenceException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             } catch (PersistenciaDuplicadaException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             } catch (SQLException ex) {
+                //System.out.println(ex.getErrorCode());
+                
+                if(ex.getSQLState().equals("08004")) //Este error es cuando las credenciales son incorrectas
+                {
+                    DialogoCodefac.mensaje("Error base de datos","Las credencias de la base de datos son incorrectas",DialogoCodefac.MENSAJE_ADVERTENCIA);                                    
+                    componentesBaseDatos(true);//solicitar nuevamente las credenciales                    
+                    //System.exit(0); //Si las credenciales son incorrectas se sale del sistema
+                }
+                else
+                {
+                    DialogoCodefac.mensaje("Error al crear la base de datos",ex.getMessage()+"\n Se recomienda eliminar y volver a crear la db",DialogoCodefac.MENSAJE_ADVERTENCIA);                
+                }
+                
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                DialogoCodefac.mensaje("Error al crear la base de datos",ex.getMessage()+"\n Se recomienda eliminar y volver a crear la db",DialogoCodefac.MENSAJE_ADVERTENCIA);
                 //TODO: Mejorar esta parte eliminando la base de datos para evitar que ejecuten con problemas en la base
             }
 
@@ -1112,6 +1106,15 @@ public class Main {
         }
 
     }
+    
+    private static void abrirDialogoCredencialesDB(ConfiguracionesInicalesModel.ModoEnum tipoRegistro)
+    {
+        ConfiguracionesInicalesModel configuraciones = new ConfiguracionesInicalesModel(tipoRegistro);
+        configuraciones.setVisible(true);
+        if (!configuraciones.datosGrabados) {
+            System.exit(0); //Si no se grabo ningun dato se cierra porque el sistema no puede funcionar sin credenciales
+        }
+    }
 
     private static boolean comprobarLicencia(String pathBase) {
 
@@ -1119,38 +1122,42 @@ public class Main {
         //String pathBase=servicio.getParametroByNombre(ParametroCodefac.DIRECTORIO_RECURSOS).valor;
         ValidacionLicenciaCodefac validacion = new ValidacionLicenciaCodefac();
         validacion.setPath(pathBase);
+        
+        Boolean existeLicencia=false;
 
         if (validacion.verificarExisteLicencia()) {
             try {
                 if (validacion.validar()) {
                     return true;
                 } else {//Si la licencia es incorrecta abre el dialogo de verificacion
-                    DialogoCodefac.mensaje("Error", "La licencia es incorrecta para esta maquina", DialogoCodefac.MENSAJE_INCORRECTO);
-                    return false;
+                    DialogoCodefac.mensaje("Error", "No se puede validar la licencia, Posibles causas:\n - La licencia esta desactualizada \n - El archivo de la licencia fue modificado", DialogoCodefac.MENSAJE_INCORRECTO);
+                    existeLicencia=true;
                 }
             } catch (ValidacionLicenciaExcepcion ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             } catch (NoExisteLicenciaException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } else //Cuando no existe la licencia
-        {
-            //Crear un dialogo si no existe la licencia
-            ValidarLicenciaModel licenciaDialog = new ValidarLicenciaModel(null, true, false);
-            licenciaDialog.setValidacionLicenciaCodefac(validacion);
-            if (validacion.verificarConexionInternet()) {
-                licenciaDialog.setVisible(true);
-                if (licenciaDialog.licenciaCreada) {
-                    return comprobarLicencia(pathBase); //volver a verificar la licencia
-                } else {
-                    return false;
-                }
+        }  //Cuando no existe la licencia
+
+        
+        
+        //Crear un dialogo si no existe la licencia o esta desactualizada o con alguna incoherencia
+        //ValidarLicenciaModel licenciaDialog = new ValidarLicenciaModel(null, true, false);
+        ValidarLicenciaModel licenciaDialog = new ValidarLicenciaModel(null, true, existeLicencia);
+        licenciaDialog.setValidacionLicenciaCodefac(validacion);
+        if (validacion.verificarConexionInternet()) {
+            licenciaDialog.setVisible(true);
+            if (licenciaDialog.licenciaCreada) {
+                return comprobarLicencia(pathBase); //volver a verificar la licencia
             } else {
-                DialogoCodefac.mensaje("Error", "Para activar su producto conéctese a Internet", DialogoCodefac.MENSAJE_INCORRECTO);
                 return false;
             }
+        } else {
+            DialogoCodefac.mensaje("Error", "Para activar su producto conéctese a Internet", DialogoCodefac.MENSAJE_INCORRECTO);
+            return false;
         }
-        return false;
+
 
     }
 

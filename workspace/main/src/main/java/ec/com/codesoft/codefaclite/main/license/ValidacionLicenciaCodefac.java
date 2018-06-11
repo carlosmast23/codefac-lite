@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.main.license.excepcion.ValidacionLicenciaExce
 import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
+import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesHash;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.jfree.util.Log;
 
 
 /**
@@ -31,6 +33,10 @@ import java.util.logging.Logger;
  * @author Carlos
  */
 public class ValidacionLicenciaCodefac{
+
+    private static final Logger LOG = Logger.getLogger(ValidacionLicenciaCodefac.class.getName());
+    
+    
     
     private static final String NOMBRE_LICENCIA="/licencia/licence.codefac";
     /*public static final String USUARIO="usuario";
@@ -136,7 +142,8 @@ public class ValidacionLicenciaCodefac{
             //String licencia=usuario+":"+UtilidadVarios.obtenerMac()+":"+tipoLicencia+":"+cantidadUsuarios;            
             String modulosStr=licencia.getModulosStr();
             String licenciaStr=licencia.getUsuario()+":"+UtilidadVarios.obtenerMacSinInternet()+":"+licencia.getTipoLicenciaEnum().getLetra()+":"+licencia.getCantidadClientes()+":"+modulosStr;            
-            licenciaStr=BCrypt.hashpw(licenciaStr,BCrypt.gensalt(12));
+            LOG.log(Level.INFO,"creando="+licenciaStr);
+            licenciaStr=UtilidadesHash.generarHashBcrypt(licenciaStr);
             Properties prop = new Properties();
             prop.setProperty(Licencia.PROPIEDAD_USUARIO,licencia.getUsuario());
             prop.setProperty(Licencia.PROPIEDAD_LICENCIA,licenciaStr);
@@ -182,14 +189,10 @@ public class ValidacionLicenciaCodefac{
     {
         FileOutputStream fr=null;
         try {
-            //String licencia=usuario+":"+UtilidadVarios.obtenerMac();            
-            //licencia=BCrypt.hashpw(licencia,BCrypt.gensalt(12));
             Properties prop = new Properties();
             prop.setProperty(Licencia.PROPIEDAD_USUARIO,licencia.getUsuario());
             prop.setProperty(Licencia.PROPIEDAD_LICENCIA,licencia.getLicencia());
             prop.setProperty(Licencia.PROPIEDAD_CANTIDAD_CLIENTES,licencia.getCantidadClientes().toString());            
-            //setearPropiedadesModulos(prop,modulosActivos); //Setea los modulos activos
-            //TipoLicenciaEnum enumTipoLicencia = TipoLicenciaEnum.getEnumByLetra(licencia.getTipoLicenciaEnum());
             prop.setProperty(Licencia.PROPIEDAD_TIPO_LICENCIA,licencia.getTipoLicenciaEnum().getNombre());
             
             licencia.llenarPropertiesModulo(prop);

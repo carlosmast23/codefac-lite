@@ -47,7 +47,8 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
-        
+        getTxtClaveAnterior().setEnabled(false); //desactivar el campo de clave anterior
+        getLblClaveAnterior().setEnabled(false);
     }
 
     @Override
@@ -107,10 +108,13 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
             }
             else
             {
-                throw  new ExcepcionCodefacLite("Cancelar editar");
+                throw  new ExcepcionCodefacLite("Validacion incorrecta");
             }
         } catch (RemoteException ex) {
             DialogoCodefac.mensaje("Error","Ocurrio un error con el servidor", DialogoCodefac.MENSAJE_INCORRECTO);
+            Logger.getLogger(PerfilUsuarioModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            DialogoCodefac.mensaje("Error",ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(PerfilUsuarioModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -119,19 +123,43 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
     {
         String clave = new String(getTxtClave().getPassword());
         String claveRepetida = new String(getTxtClaveRepetir().getPassword());
+        String claveAnterior=new String(getTxtClaveAnterior().getPassword());
+        
         if(clave.equals(""))
         {
-            DialogoCodefac.mensaje("Validación", "No se puede ingresar un clave en blanco", DialogoCodefac.MENSAJE_ADVERTENCIA);
-            return false;
+            return true; //Si la clave esta en blanco entonces no valido nada mas porque asumo que no quiere cambiar la clave
         }
-        
-        if(!usuario.getClave().equals(clave) && !clave.equals(claveRepetida))
+        else //Solo hacer las demas validaciones si existe una clave ingresada
         {
-            DialogoCodefac.mensaje("Validación", "Para modificar la clave ,el campo de repetir clave tienen que ser igual ", DialogoCodefac.MENSAJE_ADVERTENCIA);
-            return false;
+            if (!usuario.getClave().equals(clave) && !clave.equals(claveRepetida)) 
+            {
+                DialogoCodefac.mensaje("Validación", "Para modificar la clave ,el campo de repetir clave tienen que ser igual ", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            }
+            else
+            {
+                if(claveAnterior.equals(""))
+                {
+                    DialogoCodefac.mensaje("Validación", "Ingrese la clave anterior para cambiar a una nueva", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                }
+                else
+                {
+                    try {
+                        if(ServiceFactory.getFactory().getUsuarioServicioIf().login(usuario.getNick(),claveAnterior)==null)
+                        {
+                            DialogoCodefac.mensaje("Error", "La clave anterior es incorrecta no se puede grabar la nueva clave", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                        }
+                        else
+                        {
+                            return true; //Si todos los datos son validados retorno true
+                        }
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(PerfilUsuarioModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
         }
         
-        return true;
+        return false;
     }
 
     @Override
@@ -170,13 +198,11 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
         if (usuarioTemp == null) {
             throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar");
         }
-        else
-        {
-            this.usuario=usuarioTemp;
-        }
         
+        this.usuario=usuarioTemp;
         getTxtUsuario().setText(usuario.getNick());
-        getTxtClave().setText(usuario.getClave());
+        getTxtClaveAnterior().setEnabled(true); //desactivar el campo de clave anterior
+        getLblClaveAnterior().setEnabled(true);
         getCmbEstado().setSelectedItem(usuario.getEstadoEnum());
         cargarListaPerfilesUsuario();
     }
@@ -189,6 +215,7 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
         getTxtUsuario().setText("");
         cargarListaPerfilesUsuario();
         getCmbEstado().setSelectedItem(GeneralEnumEstado.ACTIVO);
+        
     }
 
 //    @Override
@@ -276,9 +303,19 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
 
     private void setearValoresPantalla() {
         usuario.setNick(getTxtUsuario().getText());
-        usuario.setClave(new String(getTxtClave().getPassword()));
+        //usuario.setClave(new String(getTxtClave().getPassword()));
         GeneralEnumEstado estadoEnum=(GeneralEnumEstado) getCmbEstado().getSelectedItem();
         usuario.setEstado(estadoEnum.getEstado());
+        
+        if (estadoFormulario == ESTADO_GRABAR) { //Seteo la clave directo para guardar
+            usuario.setClave(new String(getTxtClave().getPassword()));
+        } else if (estadoFormulario == ESTADO_EDITAR) {
+            String clave=new String(getTxtClave().getPassword());
+            if(!clave.equals("")) //Setear la clave solo cuando es distinta de vacio
+            {
+                usuario.setClave(new String(getTxtClave().getPassword()));
+            }
+        }        
     }
 
     private void valoresIniciales() {

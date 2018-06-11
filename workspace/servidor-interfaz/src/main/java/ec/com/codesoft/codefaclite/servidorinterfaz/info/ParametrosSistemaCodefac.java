@@ -21,14 +21,21 @@ public abstract class ParametrosSistemaCodefac {
     /**
      * El modo de configuracion del sistema
      */
-    public static final ModoSistemaEnum MODO=ModoSistemaEnum.DESARROLLO;
+    public static final ModoSistemaEnum MODO=ModoSistemaEnum.PRODUCCION;
     
     /**
-     * 
+     * Nombre de la base de datos
+     */
+    public static final String NOMBRE_BASE_DATOS="Derby2.DB";
+    
+    /**
+     * Icono por defecto para usar en todo el sistema
      */
     public static final Image iconoSistema=new javax.swing.ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("logoCodefac-ico.png")).getImage();
+
     /**
-     * Icono del sistema 
+     * Cadena que contiene la clave para encriptar o desencriptar los datos en codefac
      */
-    //public static fin  new javax.swing.ImageIcon(RecursoCodefac.IMAGENES_ICONOS.getResourceURL("logoCodefac-ico.png")).getImage()
+    public static final String LLAVE_ENCRIPTAR="codesoft23codefac01"; //Todo: Analizar para obtener esta clave de un ddl en c++ para que no puedan ver con ingeniera inversa, Advertencia: no cambiar porque si hay sistema
+    
 }

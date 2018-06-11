@@ -39,7 +39,7 @@ Source: "icono_codefac.ico"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{commonprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
-Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}";IconFilename: "{app}\logoCodefacTransparente.ico"; Tasks: desktopicon
+Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}";IconFilename: "{app}\icono_codefac.ico"; Tasks: desktopicon
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: shellexec postinstall skipifsilent

@@ -35,7 +35,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenTrabajoEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PrioridadEnumEstado;
@@ -303,7 +303,7 @@ public class OrdenCompraModel extends OrdenCompraPanel{
     private void iniciarVariables() {
         //Agregar los tipos de documentos disponibles
         getCmbTipoDocumento().removeAllItems();
-        List<TipoDocumentoEnum> tipoDocumentos = TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloEnum.COMPRAS);
+        List<TipoDocumentoEnum> tipoDocumentos = TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloCodefacEnum.COMPRA);
         for (TipoDocumentoEnum tipoDocumento : tipoDocumentos) 
         {
             getCmbTipoDocumento().addItem(tipoDocumento);

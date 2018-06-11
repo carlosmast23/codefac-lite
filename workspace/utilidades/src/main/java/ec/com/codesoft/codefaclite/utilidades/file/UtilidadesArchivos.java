@@ -21,4 +21,15 @@ public class UtilidadesArchivos {
             //file.mkdir();
         }
     }
+    
+    public static boolean verificarExiteArchivo(String path)
+    {
+        File fichero = new File(path);
+        
+        if (fichero.exists()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

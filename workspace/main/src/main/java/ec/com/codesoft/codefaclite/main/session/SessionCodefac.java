@@ -33,7 +33,7 @@ public class SessionCodefac implements SessionCodefacInterface{
     private TipoLicenciaEnum tipoLicenciaEnum;
     private String usuarioLicencia; 
     private Licencia licencia;
-    private Map<ModuloCodefacEnum, Boolean> modulos;
+    private List<ModuloCodefacEnum> modulos;
 
     public SessionCodefac() {       
     }
@@ -119,11 +119,11 @@ public class SessionCodefac implements SessionCodefacInterface{
     }
 
     @Override
-    public Map<ModuloCodefacEnum, Boolean> getModulosMap() {
+    public List<ModuloCodefacEnum> getModulos() {
         return modulos;
     }
 
-    public void setModulos(Map<ModuloCodefacEnum, Boolean> modulos) {
+    public void setModulos(List<ModuloCodefacEnum> modulos) {
         this.modulos = modulos;
     }
     

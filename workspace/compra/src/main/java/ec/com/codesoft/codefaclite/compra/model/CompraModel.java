@@ -25,7 +25,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -38,6 +37,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompraDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
@@ -338,14 +338,14 @@ public class CompraModel extends CompraPanel{
     private void iniciarCombos() {
         //Agregar los documentos del sri
         getCmbDocumento().removeAllItems();
-        List<DocumentoEnum> documentos= DocumentoEnum.obtenerDocumentoPorModulo(ModuloEnum.COMPRAS);
+        List<DocumentoEnum> documentos= DocumentoEnum.obtenerDocumentoPorModulo(ModuloCodefacEnum.COMPRA);
         for (DocumentoEnum documento : documentos) {
             getCmbDocumento().addItem(documento);
         }
         
         //Agregar los tipos de documentos disponibles
         getCmbTipoDocumento().removeAllItems();
-        List<TipoDocumentoEnum> tipoDocumentos= TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloEnum.COMPRAS);
+        List<TipoDocumentoEnum> tipoDocumentos= TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloCodefacEnum.COMPRA);
         for (TipoDocumentoEnum tipoDocumento : tipoDocumentos) {
             getCmbTipoDocumento().addItem(tipoDocumento);
         }

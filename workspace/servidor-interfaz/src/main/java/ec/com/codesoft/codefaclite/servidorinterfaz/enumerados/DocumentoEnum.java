@@ -16,25 +16,25 @@ public enum DocumentoEnum {
     /**
      * Documento de la factura que puede ser electronica o fisica
      */
-    FACTURA("Factura","FAC",new ModuloEnum[]{
-        ModuloEnum.VENTAS,
-        ModuloEnum.COMPRAS},true,true),
+    FACTURA("Factura","FAC",new ModuloCodefacEnum[]{
+        ModuloCodefacEnum.FACTURACION,
+        ModuloCodefacEnum.COMPRA},true,true),
     /**
      * Nota de Venta para los contribuyentes que estan en modalidad RIDE
      */
-    NOTA_VENTA("Nota de venta","NVT",new ModuloEnum[]{
-        ModuloEnum.VENTAS,
-        ModuloEnum.COMPRAS},true,false),
+    NOTA_VENTA("Nota de venta","NVT",new ModuloCodefacEnum[]{
+        ModuloCodefacEnum.FACTURACION,
+        ModuloCodefacEnum.COMPRA},true,false),
     
     /**
      * Documentos emitidos por maquinas registradoras
      */
-    TIQUETES_MAQUINAS_REGISTRADORAS("Tiquet maq.reg","TMR",new ModuloEnum[]{
-        ModuloEnum.COMPRAS},true,false);
+    TIQUETES_MAQUINAS_REGISTRADORAS("Tiquet maq.reg","TMR",new ModuloCodefacEnum[]{
+        ModuloCodefacEnum.COMPRA},true,false);
     
     //Tiquetes emitidos por máquinas registradoras;
     
-    private DocumentoEnum(String nombre,String codigo, ModuloEnum[] moduloEnum,Boolean comprobanteFisico,Boolean comprobanteElectronico) {
+    private DocumentoEnum(String nombre,String codigo, ModuloCodefacEnum[] moduloEnum,Boolean comprobanteFisico,Boolean comprobanteElectronico) {
         this.nombre=nombre;
         this.codigo=codigo;
         this.comprobanteElectronico = comprobanteElectronico;
@@ -46,7 +46,7 @@ public enum DocumentoEnum {
     private String codigo;
     private Boolean comprobanteElectronico;
     private Boolean comprobanteFisico;
-    private ModuloEnum[] moduloEnum;
+    private ModuloCodefacEnum[] moduloEnum;
 
     public Boolean getComprobanteElectronico() {
         return comprobanteElectronico;
@@ -56,7 +56,7 @@ public enum DocumentoEnum {
         return comprobanteFisico;
     }
 
-    public ModuloEnum[] getModuloEnum() {
+    public ModuloCodefacEnum[] getModuloEnum() {
         return moduloEnum;
     }
 
@@ -76,12 +76,12 @@ public enum DocumentoEnum {
     /**
      * Metodos personalizado para obtener documento y si es comprobante fisico o electronica
      */
-    public static List<DocumentoEnum> obtenerPorDocumentosFisico(ModuloEnum moduloEnum)
+    public static List<DocumentoEnum> obtenerPorDocumentosFisico(ModuloCodefacEnum moduloEnum)
     {
         List<DocumentoEnum> documentosEnum=new ArrayList<DocumentoEnum>();
         DocumentoEnum[] documentos=DocumentoEnum.values();
         for (DocumentoEnum documento : documentos) {
-            for(ModuloEnum modulo:documento.getModuloEnum())
+            for(ModuloCodefacEnum modulo:documento.getModuloEnum())
             {
                 if(modulo.equals(moduloEnum) && documento.comprobanteFisico)
                 {
@@ -96,12 +96,12 @@ public enum DocumentoEnum {
      /**
      * Metodos personalizado para obtener documento y si es comprobante fisico o electronica
      */
-    public  static List<DocumentoEnum> obtenerPorDocumentosElectronicos(ModuloEnum moduloEnum)
+    public  static List<DocumentoEnum> obtenerPorDocumentosElectronicos(ModuloCodefacEnum moduloEnum)
     {
         List<DocumentoEnum> documentosEnum=new ArrayList<DocumentoEnum>();
         DocumentoEnum[] documentos=DocumentoEnum.values();
         for (DocumentoEnum documento : documentos) {
-            for(ModuloEnum modulo:documento.getModuloEnum())
+            for(ModuloCodefacEnum modulo:documento.getModuloEnum())
             {
                 if(modulo.equals(moduloEnum) && documento.comprobanteElectronico)
                 {
@@ -130,13 +130,13 @@ public enum DocumentoEnum {
      * @param modulo
      * @return 
      */
-    public  static List<DocumentoEnum> obtenerDocumentoPorModulo(ModuloEnum modulo)
+    public  static List<DocumentoEnum> obtenerDocumentoPorModulo(ModuloCodefacEnum modulo)
     {
         List<DocumentoEnum> documentosEnum=new ArrayList<DocumentoEnum>();
         DocumentoEnum[] documentos=DocumentoEnum.values();
         for (DocumentoEnum documento : documentos) {
-            ModuloEnum modulos[]=documento.getModuloEnum();
-            for (ModuloEnum modulo1oEnum : modulos) {
+            ModuloCodefacEnum modulos[]=documento.getModuloEnum();
+            for (ModuloCodefacEnum modulo1oEnum : modulos) {
                 documentosEnum.add(documento);
                 break;
             }

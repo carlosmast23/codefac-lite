@@ -50,7 +50,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteFisicoDisenioServiceIf;
@@ -66,6 +65,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteI
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DatosAdicionalesComprobanteEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoReferenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
@@ -1639,9 +1639,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
-        Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Si desea continuar se perderan los datos sin guardar?", DialogoCodefac.MENSAJE_ADVERTENCIA);
-        if (!respuesta) {
-            throw new ExcepcionCodefacLite("Cancelacion usuario");
+        if(factura.getCliente()!=null || (factura.getDetalles()!=null && factura.getDetalles().size()>0) )
+        {
+            Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Si desea continuar se perderan los datos sin guardar?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            if (!respuesta) {
+                throw new ExcepcionCodefacLite("Cancelacion usuario");
+            }
         }
     }
 
@@ -1992,11 +1995,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //cuando la factura es electronica
         if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).valor.equals(TipoFacturacionEnumEstado.ELECTRONICA.getLetra()))
         {
-            tiposDocumento=DocumentoEnum.obtenerPorDocumentosElectronicos(ModuloEnum.VENTAS);
+            tiposDocumento=DocumentoEnum.obtenerPorDocumentosElectronicos(ModuloCodefacEnum.FACTURACION);
         }
         else //Cuando la factura es fisica
         {
-            tiposDocumento=DocumentoEnum.obtenerPorDocumentosFisico(ModuloEnum.VENTAS);
+            tiposDocumento=DocumentoEnum.obtenerPorDocumentosFisico(ModuloCodefacEnum.FACTURACION);
         }
         
         getCmbDocumento().removeAllItems();
@@ -2008,7 +2011,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //Agregar los tipos de documentos disponibles
 
         getCmbTipoDocumento().removeAllItems();
-        List<TipoDocumentoEnum> tipoDocumentos= TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloEnum.VENTAS);
+        List<TipoDocumentoEnum> tipoDocumentos= TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloCodefacEnum.FACTURACION,session.getModulos());
         for (TipoDocumentoEnum tipoDocumento : tipoDocumentos) {
             getCmbTipoDocumento().addItem(tipoDocumento);
         }

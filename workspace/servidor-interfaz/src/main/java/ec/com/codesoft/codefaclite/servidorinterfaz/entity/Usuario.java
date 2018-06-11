@@ -16,6 +16,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  *
@@ -37,6 +38,12 @@ public class Usuario implements Serializable{
     @Column (name = "ESTADO")
     private String estado;
     
+    /**
+     * Variable que me sirve solo para saber si el usuario ingresado es root
+     */
+    @Transient
+    public boolean isRoot;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario",fetch = FetchType.EAGER)
     private List<PerfilUsuario> perfilesUsuario;
     
@@ -44,9 +51,11 @@ public class Usuario implements Serializable{
     public Usuario(String nick, String clave) {
         this.nick = nick;
         this.clave = clave;
+        this.isRoot=false;
     }
 
     public Usuario() {
+        this.isRoot=false;
     }
     
     

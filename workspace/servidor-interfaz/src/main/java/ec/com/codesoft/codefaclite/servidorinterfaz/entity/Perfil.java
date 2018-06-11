@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -32,7 +33,7 @@ public class Perfil implements Serializable{
     public static final String PERFIl_ADMINISTRADOR="ADMIN";
     public static final String PERFIl_OPERADOR="OPERADOR";
     
-    public static final String PERFIL_GRATIS="GRATIS";
+    public static final String PERFIL_GRATIS="Default";
     
     private static final long serialVersionUID = 1L;
      
@@ -95,6 +96,32 @@ public class Perfil implements Serializable{
     public void setVentanasPermisos(List<PermisoVentana> ventanasPermisos) {
         this.ventanasPermisos = ventanasPermisos;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 71 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Perfil other = (Perfil) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+    
     
 
     public void addPermisoVentana(PermisoVentana permisoVentana)

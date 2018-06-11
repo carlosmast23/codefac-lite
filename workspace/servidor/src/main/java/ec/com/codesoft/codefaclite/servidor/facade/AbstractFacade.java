@@ -35,6 +35,12 @@ public abstract class AbstractFacade<T>
 {
     public static EntityManager entityManager;
     
+    /**
+     * Datos para setear las variables globales de conexion a la base de datos
+     */
+    public static String usuarioDb;
+    public static String claveDb;
+    
     public static final String namePersistence="pu_ejemplo";
     private Class<T> entityClass;
     
@@ -203,8 +209,8 @@ public abstract class AbstractFacade<T>
             //Esta linea se ejecuta si existe la base de datos
             //TODO: Utilizar propertys para cambiar el url cuando es en Linux porque no funciona y tiene otra sintaxis
             Map<String,String> properties=new HashMap<String,String>();
-            properties.put("javax.persistence.jdbc.user", "root");
-            properties.put("javax.persistence.jdbc.password", "Code17bwbtj");
+            properties.put("javax.persistence.jdbc.user", AbstractFacade.usuarioDb);
+            properties.put("javax.persistence.jdbc.password", AbstractFacade.claveDb);
             
             entityManager=Persistence.createEntityManagerFactory(namePersistence,properties).createEntityManager();
         }

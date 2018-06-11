@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
+import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesHash;
 import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.HashMap;
@@ -49,8 +50,18 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
     
     public Usuario login(String nick,String clave)
     {
-        Usuario usuario=usuarioFacade.login(nick, clave);
-        return usuario;
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        mapParametros.put("nick",nick);
+        List<Usuario> usuarios=usuarioFacade.findByMap(mapParametros);
+        if(usuarios.size()>0)
+        {
+            if(UtilidadesHash.verificarHashBcrypt(clave,usuarios.get(0).getClave()))
+            {
+                return usuarios.get(0);
+            }
+        }
+        
+        return null;
     }
     
     public void eliminar(Usuario entity) throws java.rmi.RemoteException {
@@ -61,12 +72,23 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
         transaccion.commit();
     }
     
-    public void editar(Usuario entity)
+    
+    
+    public void editar(Usuario entity) throws ServicioCodefacException
     {
+                
         EntityTransaction transaccion=getTransaccion();
         transaccion.begin();
         
         Usuario usuarioOriginal=getFacade().find(entity.getNick());
+        
+        //Verificar que no sea el usuario root el quieren editar
+        if(usuarioOriginal.getNick().equals(Usuario.SUPER_USUARIO))
+        {
+            transaccion.rollback();
+            throw new ServicioCodefacException("El usuario root no se puede editar");
+            
+        }
         
         if(usuarioOriginal.getPerfilesUsuario()!=null)
         {
@@ -83,6 +105,7 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
         }
         
         //Actualizo las referencia del nuevo objecto a editar
+        entity.setClave(UtilidadesHash.generarHashBcrypt(entity.getClave()));
         entityManager.merge(entity);
         transaccion.commit();
         
@@ -106,6 +129,7 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
             }
             
             transaccion.begin();
+            entity.setClave(UtilidadesHash.generarHashBcrypt(entity.getClave())); //Cifrar la clave para que no puede ser legible 
             entityManager.persist(entity);
             transaccion.commit();
             return entity;
@@ -128,13 +152,14 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
     
     }
     
+    @Deprecated //Todo este metodo ya esta definido en guardar
     public void grabarUsuario(Usuario usuario,String nombrePerfil) throws ServicioCodefacException
     {
         EntityTransaction transaccion=this.getTransaccion();
         try {
             
             transaccion.begin();
-            
+            usuario.setClave(UtilidadesHash.generarHashBcrypt(usuario.getClave()));
             entityManager.persist(usuario);            
             Map<String,Object> parametros=new HashMap<String, Object>();
             parametros.put("nombre",nombrePerfil);

@@ -8,11 +8,14 @@ package ec.com.codesoft.codefaclite.servidor.service;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidor.facade.PerfilFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PermisoVentana;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.rmi.RemoteException;
 import java.util.List;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServiceIf;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityTransaction;
 
 /**
@@ -46,6 +49,27 @@ public class PerfilService extends ServiceAbstract<Perfil,PerfilFacade> implemen
         entity.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
         entityManager.merge(entity);
         transaction.commit();
+    }
+    
+    public void editar(Perfil entity)
+    {
+        try {
+            EntityTransaction transaction=getTransaccion();
+            transaction.begin();
+            
+            Perfil perfilSinModificar = buscarPorId(entity.getId());
+            for (PermisoVentana permisoVentana : perfilSinModificar.getVentanasPermisos()) {
+                //Comprabar si algun objeto fue eliminado
+                if (!entity.getVentanasPermisos().contains(permisoVentana)) {
+                    entityManager.remove(permisoVentana);
+                }
+            }            
+            
+            entityManager.merge(entity);
+            transaction.commit();
+        } catch (RemoteException ex) {
+            Logger.getLogger(PerfilService.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public List<Perfil> obtenerPerfilesPorUsuario(Usuario usuario)
