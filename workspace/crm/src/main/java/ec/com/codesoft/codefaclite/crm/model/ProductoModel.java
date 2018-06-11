@@ -31,6 +31,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
@@ -362,6 +364,16 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
                 getCmbTipoProducto().addItem(tipoProducto);
             }
             
+            //Agregar las opcoiones segun los modulos habilitados
+            getCmbManejaInventario().removeAllItems();
+            
+            if(session.getModulos().contains(ModuloCodefacEnum.INVENTARIO) || ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.DESARROLLO))
+            {
+                getCmbManejaInventario().addItem(EnumSiNo.SI);                
+            }
+            
+            getCmbManejaInventario().addItem(EnumSiNo.NO);
+            
              
             getComboIva().removeAllItems();
             getComboIce().removeAllItems();
@@ -401,7 +413,24 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
 
     private void listenerComboBox() {
 
-        
+        getCmbManejaInventario().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                if (getCmbManejaInventario().getSelectedItem().equals(EnumSiNo.SI)) 
+                {
+                    getTabMenu().setEnabledAt(2, true);
+                    getTabMenu().setEnabledAt(3, true);
+                }
+                else
+                {
+                    getTabMenu().setEnabledAt(2, false);
+                    getTabMenu().setEnabledAt(3, false);
+                }
+
+                
+            }
+        });
         /*
         getComboTipoProducto().addActionListener(new ActionListener() {
             @Override
