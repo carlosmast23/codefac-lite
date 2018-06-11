@@ -31,6 +31,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenTrabajoEnumE
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PrioridadEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.tabla.OpcionMenuListener;
+import ec.com.codesoft.codefaclite.utilidades.tabla.PopupMenuTabla;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -58,6 +60,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.event.PopupMenuEvent;
@@ -467,6 +470,11 @@ public class PresupuestoModel extends PresupuestoPanel{
         
     }
     
+    public void addListenerOpcionesPopupMenu()
+    {
+        
+    }
+    
     public void cambiarOrden()
     {
         Integer[] ordenes = new Integer[mapClientes.size()];
@@ -715,7 +723,7 @@ public class PresupuestoModel extends PresupuestoPanel{
         int c=0;
         Vector<Object> fila;
         DefaultTableModel modeloTablaDetallesPresupuesto = 
-UtilidadesTablas.crearModeloTabla(new String[]{"obj","#","Proveedor","Producto","Valor compra","Valor venta","Cantidad","--"}, new Class[]{PresupuestoDetalle.class,String.class,String.class,String.class,String.class,String.class,String.class,Boolean.class});
+        UtilidadesTablas.crearModeloTabla(new String[]{"obj","#","Proveedor","Producto","Valor compra","Valor venta","Cantidad","--"}, new Class[]{PresupuestoDetalle.class,String.class,String.class,String.class,String.class,String.class,String.class,Boolean.class});
         for(Map.Entry<Persona,List<PresupuestoDetalle>> datoMap : mapClientes.entrySet())
         {
             boolean b = true; 
@@ -743,8 +751,62 @@ UtilidadesTablas.crearModeloTabla(new String[]{"obj","#","Proveedor","Producto",
             }
         }
         getTableDetallesPresupuesto().setModel(modeloTablaDetallesPresupuesto);
+        /**
+         * Agregar PopupMenu en Tabla
+         */
+        String []opcionesMenu = {"Eliminar","Editar"};
+        
+        
+        List<JMenuItem> jMenuItems = new ArrayList<>(); 
+        JMenuItem opcion1 = new JMenuItem("Opcion 1");
+        JMenuItem opcion2 = new JMenuItem("Opcion 2");
+        jMenuItems.add(opcion1);
+        jMenuItems.add(opcion2);
+        
+        opcion1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                opcionMenu1();
+            }
+        });
+        
+        opcion2.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                opcionMenu2();
+            }
+        });
+        
+        PopupMenuTabla menuTabla = new PopupMenuTabla(getTableDetallesPresupuesto(), jMenuItems);
         UtilidadesTablas.ocultarColumna(getTableDetallesPresupuesto(), 0);
+        
     }
+    
+    public void optenerEventosPorOpciondeMenu(List<JMenuItem> items)
+    {
+        ActionListener[] oml = items.get(0).getActionListeners();
+        for (ActionListener actionListener : oml) {
+            System.out.println("-------> " + actionListener);
+        }
+        
+    }
+    public void opcionesMenuPopup(String op)
+    {
+        switch(op)
+        {
+            case "Nuevo":
+                JOptionPane.showConfirmDialog(rootPane, "Nuevo");
+            break;    
+            case "Eliminar":
+                JOptionPane.showConfirmDialog(rootPane, "Eliminar");
+            break;
+            case "Editar":
+                JOptionPane.showConfirmDialog(rootPane, "Editar");
+            break;
+        }
+    }
+    
     
     private boolean verificarCamposValidados() {
         boolean b = true;
@@ -770,5 +832,18 @@ UtilidadesTablas.crearModeloTabla(new String[]{"obj","#","Proveedor","Producto",
     @Override
     public void cargarDatosPantalla(Object entidad) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    /**
+     * Opciones de PopupMenu
+     */
+    public void opcionMenu1()
+    {
+        
+    }
+   
+    public void opcionMenu2()
+    {
+        
     }
 }
