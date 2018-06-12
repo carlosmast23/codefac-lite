@@ -2,20 +2,15 @@
 Pensar en hacer una ventana en configuracion para poder cambiar la plantilla de los correos que llegan con las facturas
 En la pantalla de utilidades verificar que no se envia al correo por el problema del map supongo y verificar cambios de estado en las facturas
 
-Verificar qe puedo hacer en el caso que solo se graba la factura pero no genero el ride 
-
 Revisar que cuando mando a abrir la pantalla desde la matricula no funciona la facturacion parcial
 
 grabar el tipo de documento segun el sri del tipo de documento en cada tabla porque seguramente voy a necesitar para los ats
 
 agregar una opcion para configurar correos con dominios personalizados
 
-Aumentar una opcion para anular facturas electronicas , cuando la eliminacion se la realiza desde el SRI
-
 Al momento de cargar la ip del servidor existen problemas con interfaces virtuales , mejorar esta parte para que solo obtenga un direccion de una red ethernet o wifi
 
 En las compras agregar un campo para saber si son electronicas o manuales
-
 
 revisar porque la forma de pagos cuando se agrega o elimina sale el mensaje de saldo insuficiente
 
@@ -24,8 +19,6 @@ Cuando no exista internet levantar el aplicativo como localhost para cliente-ser
 Analizar el codigo private boolean validacionPersonalizadaPorModulos() en facturacion para validar correctamente con descuentos para los distintos modulos
 
 Revisar el instalador, se instalo en el directorio de la flash no tiene sentido
-Revisar los productos que no haya tantos datos
-Ver un modo para que el administrador pueda cambiar al modo produccion por su propia responsabilidad
 Al momento de crear productos seguidos parese que salio error  (no se actualizo)
 
 Ver si al momento de buscar en la pantalla de cliente , producto como cumple dos funcione filtra los datos al momento de buscar
@@ -35,29 +28,23 @@ Ver si en una variable global del sistema se establece un metodo general de redo
 
 Poner una excepcion para que cuando no haya conexion de os clientes con el servidor se salga y buscar na manera para que al escribir en un campo y presionar enter llame a la venta de buscar
 
-Ver la opcion de hacer una especie de servidor proxy y que el servidor de codefac se encargue de proporcionar el archivo actual
+Ver la opcion de hacer una especie de servidor proxy y que el servidor de codefac se encargue de proporcionar el archivo actual de las actualizaciones
 
-En la pantalla de factura, al momento de escribir la cedula del cliente esta solo buscando todos, crear un metodo en el servicio que obtenga filtrado clientes
+En la pantalla de factura, al momento de escribir la cedula del cliente esta  buscando todos clientes y proveedores, crear un metodo en el servicio que obtenga filtrado clientes
 
-revisar que cuando cambio los clientes no se estan borrando los datos adicionales
-
-Ver como hacer un descuento global
+Ver como hacer un descuento global en la factura
 
 
 Analizar una opcion para hacer un casting entre las unidades de un producto y otras medias de venta (por ejemplo cuando voy a clavos por libras) 
 
 Al momento de cargar las formas de pago  con el cliente , despues de tener ingresado los detalles que cargue con el monto actual del total en modo libre
 
-Analizar si agregar una variable adicional para saber si algunos productos deben manejarse como inventario o directo
 hacer acuerdo a Robert de la etiqueta de agregar columna , me parece en el campo de numero de orden en el sql para que se genere el campo para la nueva version
 
 
 Hacer un dll en c++ por jni para tener quemado las claves y no me puedan hacer ingenieria inversa
 
 Analizar si agregado un campo de los datos del servidor para grabar la ultima fecha de verificacion de la licencia para tener mas control sobre las estafas
-
-Encriptar las claves del usuario
-Programar los usurios de soporte para acceder por internet
 
 Pensar en como hacer un manejo de logs en una tabla para cosas importantes
 
@@ -69,7 +56,9 @@ Controlar la excepcion al momento que se pierde la conexion degolpe con el clien
 
 El metodo de respaldar toca modificar para que funcione en red , solo funciona en local host
 
-Pendiente revisar como especificar si el producto quiero o no que se maneje inventario
 
-Llevar un control de acceso de los documentos disponibles segun el tipo de modulos activos
+Analizar si agregar una variable adicional para saber si algunos productos deben manejarse como inventario o directo
+
+En la pantalla de ventas diarias seleccionar con que modo quieren trabajar con productos libres o con inventario por defecto le dejo habilitado libre
+
 

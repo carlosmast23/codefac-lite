@@ -162,6 +162,9 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
          */
         CatalogoProducto catalogoProducto=crearCatalogoProducto();
         producto.setCatalogoProducto(catalogoProducto);
+        
+        EnumSiNo enumSiNo=(EnumSiNo) getCmbManejaInventario().getSelectedItem();
+        producto.setManejarInventario(enumSiNo.getLetra());
 
     }
     
@@ -264,6 +267,11 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getComboIva().setSelectedItem(producto.getCatalogoProducto().getIva());
         getComboIrbpnr().setSelectedItem(producto.getCatalogoProducto().getIrbpnr());
         getComboIce().setSelectedItem(producto.getCatalogoProducto().getIce()); 
+        
+        //Setear la opcion de inventario y si no esta escogida ninguna opcion de si maneja inventario por defecte seteo en no
+        String letraInventario=(producto.getManejarInventario()!=null)?producto.getManejarInventario():EnumSiNo.NO.getLetra();        
+        EnumSiNo enumInventario=EnumSiNo.getEnumByLetra(letraInventario);        
+        getCmbManejaInventario().setSelectedItem(enumInventario);
 
         actualizarTablaEnsamble();
 
@@ -486,12 +494,15 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         String[] titulo = {"Cantidad", "Nombre", "Precio Venta"};
         DefaultTableModel tableModel = new DefaultTableModel(titulo, 0);
 
-        for (ProductoEnsamble productoEnsamble : producto.getDetallesEnsamble()) {
-            Vector<String> fila = new Vector<String>();
-            fila.add(productoEnsamble.getCantidad() + "");
-            fila.add(productoEnsamble.getComponenteEnsamble().getNombre());
-            fila.add(productoEnsamble.getComponenteEnsamble().getValorUnitario() + "");
-            tableModel.addRow(fila);
+        if(producto.getDetallesEnsamble()!=null)
+        {
+            for (ProductoEnsamble productoEnsamble : producto.getDetallesEnsamble()) {
+                Vector<String> fila = new Vector<String>();
+                fila.add(productoEnsamble.getCantidad() + "");
+                fila.add(productoEnsamble.getComponenteEnsamble().getNombre());
+                fila.add(productoEnsamble.getComponenteEnsamble().getValorUnitario() + "");
+                tableModel.addRow(fila);
+            }
         }
         getTblDatosEnsamble().setModel(tableModel);
     }
