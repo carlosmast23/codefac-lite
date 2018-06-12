@@ -32,6 +32,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenTrabajoEnumE
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PrioridadEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -68,6 +69,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
+        this.ordenTrabajo = new OrdenTrabajo();
         limpiar();
         initDatosTabla();
     }
@@ -84,7 +86,6 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
                 DialogoCodefac.mensaje("Alerta", "No existen detalles para la Orden", DialogoCodefac.MENSAJE_ADVERTENCIA);
                 throw new ExcepcionCodefacLite("Necesita crear detalles ");
             }
-            
             
             Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea realizar la Orden de trabajo?", DialogoCodefac.MENSAJE_ADVERTENCIA);
             if (!respuesta) {
@@ -168,12 +169,13 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
     }
 
     @Override
-    public void buscar() throws ExcepcionCodefacLite {
+    public void buscar() throws ExcepcionCodefacLite{
         OrdenTrabajoBusqueda ordenTrabajoBusqueda = new OrdenTrabajoBusqueda();
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(ordenTrabajoBusqueda);
         buscarDialogoModel.setVisible(true);
-        this.ordenTrabajo = (OrdenTrabajo) buscarDialogoModel.getResultado();
-        if(ordenTrabajo != null){
+        OrdenTrabajo ordenTrabajoTemp = (OrdenTrabajo) buscarDialogoModel.getResultado();
+        if(ordenTrabajoTemp != null){
+            this.ordenTrabajo = ordenTrabajoTemp;
             this.getTxtCodigo().setText(this.ordenTrabajo.getCodigo());
             this.getTxtCliente().setText(""+this.ordenTrabajo.getCliente());
             this.getTxtDescripcion().setText(""+this.ordenTrabajo.getDescripcion());
@@ -182,12 +184,15 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             getCmbEstadoOrdenTrabajo().setSelectedItem(generalEnumEstado);
             mostrarDatosTabla();
         }
+        else
+        {
+                throw new ExcepcionCodefacLite("Cancelando Busqueda");
+        }
         
     }
 
     @Override
     public void limpiar() {
-        this.ordenTrabajo = new OrdenTrabajo();
         limpiarCampos();
         limpiarCamposDetalles();
         cargarCombos(); 
@@ -218,10 +223,13 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
     
     public void cargarValoresIniciales()
     {
+        cargarCombos();
         addListenerBotones();
         addListenerCombos();
         addListenerTablas();
-        cargarCombos();
+        this.getCmbDateFechaIngreso().setDate(UtilidadesFecha.getFechaHoy());
+        this.getCmbDateFechaEntrega().setDate(UtilidadesFecha.getFechaHoy());
+       
     }
     
     public void addListenerBotones()
@@ -370,7 +378,6 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
         }
         catch(RemoteException e)
         {
-            System.out.println("Aqui ocurrio el problema");
             e.printStackTrace();
         }
    
@@ -427,7 +434,8 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             return;
         }    
         
-        if(verificarCamposValidados()){
+        if(verificarCamposValidados())
+        {
             ordenTrabajoDetalle.setDescripcion(""+getTxtAreaDescripcion().getText());
             ordenTrabajoDetalle.setNotas(""+getTxtAreaNotas().getText());
             OrdenTrabajoEnumEstado ordenTrabajoEnumEstado = (OrdenTrabajoEnumEstado) getCmbEstadoDetalle().getSelectedItem();
@@ -439,16 +447,12 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             ordenTrabajoDetalle.setPrioridad(prioridadEnumEstado.getLetra());
             ordenTrabajoDetalle.setEmpleado((Empleado) getCmbAsignadoADetalle().getSelectedItem());
         }
-        if(agregar && ordenTrabajoDetalle.getFechaEntrega() != null)
+        
+        if(agregar)
         {
             ordenTrabajo.addDetalle(ordenTrabajoDetalle);
             mostrarDatosTabla();
         }
-        else{
-            DialogoCodefac.mensaje("Advertencia", "Debe ingresar una fecha", DialogoCodefac.MENSAJE_ADVERTENCIA);
-        }
-            
-        
         
     }
     
@@ -465,22 +469,16 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
         //Detalle Orden trabajo
         getTxtAreaDescripcion().setText("");
         getTxtAreaNotas().setText("");
+        getCmbDateFechaEntrega().setDate(UtilidadesFecha.getFechaHoy());
     }
     
     public void setearDatos() throws ExcepcionCodefacLite
     {
-        try{ 
             this.ordenTrabajo.setFechaIngreso(new Date(getCmbDateFechaIngreso().getDate().getTime()));
             this.ordenTrabajo.setCodigo(""+getTxtCodigo().getText());
             this.ordenTrabajo.setDescripcion(""+getTxtDescripcion().getText());
             GeneralEnumEstado generalEnumEstado = (GeneralEnumEstado) getCmbEstadoOrdenTrabajo().getSelectedItem();
-            this.ordenTrabajo.setEstado(generalEnumEstado.getEstado());
-        }
-        catch(Exception e)
-        {
-            DialogoCodefac.mensaje("Alerta", "Seleccione la fecha de ingreso para Orden Trabajo", DialogoCodefac.MENSAJE_ADVERTENCIA);
-        }
-                
+            this.ordenTrabajo.setEstado(generalEnumEstado.getEstado());          
     }
     
     private boolean verificarCamposValidados() {

@@ -35,6 +35,7 @@ import ec.com.codesoft.codefaclite.utilidades.tabla.OpcionMenuListener;
 import ec.com.codesoft.codefaclite.utilidades.tabla.PopupMenuTabla;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.Color;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -60,11 +61,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
+import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -122,7 +127,7 @@ public class PresupuestoModel extends PresupuestoPanel{
             }
             
             PresupuestoServiceIf servicio = ServiceFactory.getFactory().getPresupuestoServiceIf();
-            servicio.grabar(presupuesto);        
+            servicio.grabar(presupuesto);
             }catch (ServicioCodefacException ex) {
                 Logger.getLogger(Presupuesto.class.getName()).log(Level.SEVERE, null, ex);
             }catch (RemoteException ex) {
@@ -408,7 +413,23 @@ public class PresupuestoModel extends PresupuestoPanel{
                             
                 }
             }    
-        });  
+        });
+        
+        getCmbDetallesOrdenTrabajo().addPopupMenuListener(new PopupMenuListener() {
+            @Override
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+                if(getCmbDetallesOrdenTrabajo().getItemCount() == 0)
+                {
+                    DialogoCodefac.mensaje("Advertencia", "Seleccione una Orden de Trabajo", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                }
+            }
+
+            @Override
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) { }
+
+            @Override
+            public void popupMenuCanceled(PopupMenuEvent e) { }
+        });
         
         getCmbDetallesOrdenTrabajo().addActionListener(new ActionListener() {
             @Override
@@ -716,7 +737,6 @@ public class PresupuestoModel extends PresupuestoPanel{
             for (PresupuestoDetalle presupuestoDetalle : value) {
                 mapOrden.get(c).add(presupuestoDetalle);
             }    
-            //JOptionPane.showConfirmDialog(rootPane, session)
         }
     }
     
