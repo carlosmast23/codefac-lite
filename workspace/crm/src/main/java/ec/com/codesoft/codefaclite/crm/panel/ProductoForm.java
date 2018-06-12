@@ -1020,6 +1020,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     public void setTxtCantidadEnsamble(JTextField txtCantidadEnsamble) {
         this.txtCantidadEnsamble = txtCantidadEnsamble;
     }
+    
 
     public JTable getTblDatosEnsamble() {
         return tblDatosEnsamble;

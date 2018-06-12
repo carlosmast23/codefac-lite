@@ -27,7 +27,9 @@ create table PRODUCTO
     MARCA varchar(50),
     IMAGEN varchar(100),
     CARACTERISTICAS varchar(100),
-    OBSERVACIONES varchar(100),    
+    OBSERVACIONES varchar(100),  
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.3)*/
+    MANEJAR_INVENTARIO  varchar(1),  
 
     primary key (ID_PRODUCTO),
     UNIQUE(CODIGO_PERSONALIZADO,CODIGO_EAN,CODIGO_UPC)
