@@ -17,7 +17,6 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.servicios.busqueda.PresupuestoBusqueda;
 import ec.com.codesoft.codefaclite.servicios.panel.PresupuestoPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
@@ -27,11 +26,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenTrabajoEnumEstado;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PrioridadEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
-import ec.com.codesoft.codefaclite.utilidades.tabla.OpcionMenuListener;
 import ec.com.codesoft.codefaclite.utilidades.tabla.PopupMenuTabla;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.Color;
@@ -39,17 +35,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -58,7 +50,6 @@ import java.util.TreeMap;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -423,7 +414,7 @@ public class PresupuestoModel extends PresupuestoPanel{
     
     public void addListenerTextos()
     {
-         getTxtDiasPresupuesto().addActionListener(new ActionListener() {
+        getTxtDiasPresupuesto().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 calcularFechaProxima();
@@ -530,7 +521,7 @@ public class PresupuestoModel extends PresupuestoPanel{
             if(this.producto == null)
             {
                 DialogoCodefac.mensaje("Advertencia", "Debe seleccionar un producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                throw new ExcepcionCodefacLite("Necesita seleccionar un Cliente");
+                throw new ExcepcionCodefacLite("Necesita seleccionar un producto");
             }
             
             if (!panelPadre.validarPorGrupo("detalles")) {
@@ -567,8 +558,8 @@ public class PresupuestoModel extends PresupuestoPanel{
 
         if(agregar)
         {
-            this.presupuesto.addDetalle(presupuestoDetalle);//-------------------------------------------------------------
-            ordenarDetallesEnFuncionDeCliente();
+            this.presupuesto.addDetalle(presupuestoDetalle);
+            ordenarDetallesEnFuncionDeOrdenCompra();
             mostrarDatosTabla();
         }
         
@@ -705,18 +696,26 @@ public class PresupuestoModel extends PresupuestoPanel{
         }
     }
     
-    public void ordenarDetallesEnFuncionDeCliente1()
+    public void ordenarDetallesEnFuncionDeOrdenCompra()
     {
+        ordenarDetallesEnFuncionDeCliente();
         int c=0;
         mapOrden = new HashMap<Integer,List<PresupuestoDetalle>>();
-        for (Map.Entry<Persona, List<PresupuestoDetalle>> entry : mapClientes.entrySet()) {
+        for (Map.Entry<Persona, List<PresupuestoDetalle>> entry : mapClientes.entrySet()) 
+        {
+            //Número de Orden a emplear por cada proveedor, cada proveedor puede tener varias detalles de ordenes de compra
             c+=1;
             mapOrden.put(c,new ArrayList<PresupuestoDetalle>());
             List<PresupuestoDetalle> value = entry.getValue();
-            for (PresupuestoDetalle presupuestoDetalle : value) {
-                mapOrden.get(c).add(presupuestoDetalle);
+            for (PresupuestoDetalle presupuestoDetalle : value) 
+            {
+                
+                if(presupuestoDetalle.getNumeroOrdenCompra() == null){
+                    presupuestoDetalle.setNumeroOrdenCompra(c);
+                    mapOrden.get(c).add(presupuestoDetalle);
+                }
             }    
-            //JOptionPane.showConfirmDialog(rootPane, session)
+            
         }
     }
     
@@ -747,6 +746,7 @@ public class PresupuestoModel extends PresupuestoPanel{
                     fila.add(detalle.getPrecioCompra().subtract(detalle.getDescuentoCompra())+"");
                     fila.add(detalle.getPrecioVenta().subtract(detalle.getDescuentoVenta())+"");
                     fila.add(detalle.getCantidad().toString());
+                    System.out.println("aaaaaaaaaa" + detalle.getNumeroOrdenCompra());
                     EnumSiNo siNo = EnumSiNo.getEnumByLetra(detalle.getEstado()) ;
                     fila.add(siNo.getBool());
                     modeloTablaDetallesPresupuesto.addRow(fila);
@@ -760,12 +760,12 @@ public class PresupuestoModel extends PresupuestoPanel{
         
         
         List<JMenuItem> jMenuItems = new ArrayList<>(); 
-        JMenuItem opcion1 = new JMenuItem("Opcion 1");
+        JMenuItem nuevo = new JMenuItem("Opcion 1");
         JMenuItem opcion2 = new JMenuItem("Opcion 2");
-        jMenuItems.add(opcion1);
+        jMenuItems.add(nuevo);
         jMenuItems.add(opcion2);
         
-        opcion1.addActionListener(new ActionListener() {
+        nuevo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 opcionMenu1();
@@ -841,6 +841,17 @@ public class PresupuestoModel extends PresupuestoPanel{
      */
     public void opcionMenu1()
     {
+        int n = this.mapOrden.size(); n+=1;
+        int fila = getTableDetallesPresupuesto().getSelectedRow();
+        PresupuestoDetalle presupuestoDetalle = (PresupuestoDetalle) getTableDetallesPresupuesto().getValueAt(fila, 0);
+        if(presupuestoDetalle != null)
+        {
+            presupuestoDetalle.setNumeroOrdenCompra(n+1);
+            mapOrden.put(n,new ArrayList<PresupuestoDetalle>());
+            mapOrden.get(n).add(presupuestoDetalle);            
+        }
+        ordenarDetallesEnFuncionDeOrdenCompra();
+        mostrarDatosTabla();
         
     }
    
