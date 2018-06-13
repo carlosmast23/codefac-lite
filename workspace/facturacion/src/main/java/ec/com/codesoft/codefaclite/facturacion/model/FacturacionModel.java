@@ -65,6 +65,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteI
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DatosAdicionalesComprobanteEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoReferenciaEnum;
@@ -413,8 +414,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     case PRESUPUESTOS:
                         agregarPresupuesto();
                         break;
-                    case INVENTARIO: case LIBRE:
-                        agregarProducto();
+                    case INVENTARIO: 
+                        agregarProducto(EnumSiNo.SI);
+                        break;
+                    case LIBRE:
+                        agregarProducto(EnumSiNo.NO);
                         break;
                 
                 }
@@ -784,8 +788,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         return false;
     }
     
-    private void agregarProducto() {
-        ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo();
+    private void agregarProducto(EnumSiNo manejaInventario) {
+        ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo(manejaInventario);
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
         productoSeleccionado = (Producto) buscarDialogoModel.getResultado();

@@ -26,6 +26,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.utilidades.email.CorreoElectronico;
 import ec.com.codesoft.codefaclite.utilidades.email.SmtpNoExisteException;
 import ec.com.codesoft.codefaclite.utilidades.varios.DialogoCopiarArchivos;
@@ -33,6 +34,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import static java.awt.image.ImageObserver.SOMEBITS;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -82,6 +86,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         jFileChooser.setFileFilter(new FileNameExtensionFilter("Firma Electronica SRI", "p12"));
         dialogoCopiarFondoEscritorio=new DialogoCopiarArchivos("Elegir archivo", "Imagen Escritorio", "jpg","png","bpm");
         this.addListenerButtons();
+        addListenerCombos();
         /**
          * Desactivo el ciclo de vida para controlar manualmente
          */
@@ -152,10 +157,12 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         //super.estadoFormulario = GeneralPanelInterface.ESTADO_EDITAR;
 
         //Validaciones adicionales para validar segun el tipo de usuario Logueado
+        
+        /*
         if (!session.verificarExistePerfil(Perfil.PERFIl_ADMINISTRADOR)) {
             getCmbModoFacturacion().setEnabled(false);
             getCmbIvaDefault().setEnabled(false);
-        }
+        }*/
     }
 
 //    @Override
@@ -520,8 +527,8 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     @Override
     public List<String> getPerfilesPermisos() {
         List<String> permisosPerfil = new ArrayList<String>();
-        permisosPerfil.add(Perfil.PERFIl_OPERADOR);
-        permisosPerfil.add(Perfil.PERFIl_ADMINISTRADOR);
+        //permisosPerfil.add(Perfil.PERFIl_OPERADOR);
+        //permisosPerfil.add(Perfil.PERFIl_ADMINISTRADOR);
         return permisosPerfil;
     }
 
@@ -548,5 +555,23 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     @Override
     public void cargarDatosPantalla(Object entidad) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void addListenerCombos() {
+        
+        getCmbModoFacturacion().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String modoFacturacion = getCmbModoFacturacion().getSelectedItem().toString();
+
+                if (ComprobanteElectronicoService.MODO_PRODUCCION.equals(modoFacturacion)) {
+                    DialogoCodefac.mensaje("Alerta", "Recuerde que en el modo producción todos los documentos son legales y autorizados por el SRI", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                } else if (ComprobanteElectronicoService.MODO_PRUEBAS.equals(modoFacturacion)) {
+                    DialogoCodefac.mensaje("Alerta", "Recuerde que esta opción debe estar activa solo para hacer pruebas", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                }
+            }
+        });
+        
+        
     }
 }

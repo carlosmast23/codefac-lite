@@ -31,6 +31,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
@@ -160,6 +162,9 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
          */
         CatalogoProducto catalogoProducto=crearCatalogoProducto();
         producto.setCatalogoProducto(catalogoProducto);
+        
+        EnumSiNo enumSiNo=(EnumSiNo) getCmbManejaInventario().getSelectedItem();
+        producto.setManejarInventario(enumSiNo.getLetra());
 
     }
     
@@ -262,6 +267,11 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getComboIva().setSelectedItem(producto.getCatalogoProducto().getIva());
         getComboIrbpnr().setSelectedItem(producto.getCatalogoProducto().getIrbpnr());
         getComboIce().setSelectedItem(producto.getCatalogoProducto().getIce()); 
+        
+        //Setear la opcion de inventario y si no esta escogida ninguna opcion de si maneja inventario por defecte seteo en no
+        String letraInventario=(producto.getManejarInventario()!=null)?producto.getManejarInventario():EnumSiNo.NO.getLetra();        
+        EnumSiNo enumInventario=EnumSiNo.getEnumByLetra(letraInventario);        
+        getCmbManejaInventario().setSelectedItem(enumInventario);
 
         actualizarTablaEnsamble();
 
@@ -362,6 +372,16 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
                 getCmbTipoProducto().addItem(tipoProducto);
             }
             
+            //Agregar las opcoiones segun los modulos habilitados
+            getCmbManejaInventario().removeAllItems();
+            
+            if(session.getModulos().contains(ModuloCodefacEnum.INVENTARIO) || ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.DESARROLLO))
+            {
+                getCmbManejaInventario().addItem(EnumSiNo.SI);                
+            }
+            
+            getCmbManejaInventario().addItem(EnumSiNo.NO);
+            
              
             getComboIva().removeAllItems();
             getComboIce().removeAllItems();
@@ -401,7 +421,24 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
 
     private void listenerComboBox() {
 
-        
+        getCmbManejaInventario().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                if (getCmbManejaInventario().getSelectedItem().equals(EnumSiNo.SI)) 
+                {
+                    getTabMenu().setEnabledAt(2, true);
+                    getTabMenu().setEnabledAt(3, true);
+                }
+                else
+                {
+                    getTabMenu().setEnabledAt(2, false);
+                    getTabMenu().setEnabledAt(3, false);
+                }
+
+                
+            }
+        });
         /*
         getComboTipoProducto().addActionListener(new ActionListener() {
             @Override
@@ -457,12 +494,15 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         String[] titulo = {"Cantidad", "Nombre", "Precio Venta"};
         DefaultTableModel tableModel = new DefaultTableModel(titulo, 0);
 
-        for (ProductoEnsamble productoEnsamble : producto.getDetallesEnsamble()) {
-            Vector<String> fila = new Vector<String>();
-            fila.add(productoEnsamble.getCantidad() + "");
-            fila.add(productoEnsamble.getComponenteEnsamble().getNombre());
-            fila.add(productoEnsamble.getComponenteEnsamble().getValorUnitario() + "");
-            tableModel.addRow(fila);
+        if(producto.getDetallesEnsamble()!=null)
+        {
+            for (ProductoEnsamble productoEnsamble : producto.getDetallesEnsamble()) {
+                Vector<String> fila = new Vector<String>();
+                fila.add(productoEnsamble.getCantidad() + "");
+                fila.add(productoEnsamble.getComponenteEnsamble().getNombre());
+                fila.add(productoEnsamble.getComponenteEnsamble().getValorUnitario() + "");
+                tableModel.addRow(fila);
+            }
         }
         getTblDatosEnsamble().setModel(tableModel);
     }

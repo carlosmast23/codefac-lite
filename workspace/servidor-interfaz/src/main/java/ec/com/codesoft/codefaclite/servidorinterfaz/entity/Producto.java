@@ -16,6 +16,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -84,12 +85,15 @@ public class Producto implements Serializable {
     
     @Column(name = "TIPO_PRODUCTO_COD")
     private String tipoProductoCodigo;
+    
+    @Column(name = "MANEJAR_INVENTARIO")
+    private String manejarInventario;
 
     @JoinColumn(name = "CATALOGO_PRODUCTO_ID")
     @ManyToOne    
     private CatalogoProducto catalogoProducto;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productoEnsamble")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productoEnsamble",fetch = FetchType.EAGER)
     private List<ProductoEnsamble> detallesEnsamble;
 
     public Producto() {
@@ -260,6 +264,15 @@ public class Producto implements Serializable {
     public void setTipoProductoCodigo(String tipoProductoCodigo) {
         this.tipoProductoCodigo = tipoProductoCodigo;
     }
+
+    public String getManejarInventario() {
+        return manejarInventario;
+    }
+
+    public void setManejarInventario(String manejarInventario) {
+        this.manejarInventario = manejarInventario;
+    }
+    
     
         
 
@@ -268,6 +281,11 @@ public class Producto implements Serializable {
      */
     public EnumSiNo getGarantiaEnum() {
         return EnumSiNo.getEnumByLetra(garantia);
+    }
+    
+    public EnumSiNo getManejarInventarioEnum()
+    {
+        return EnumSiNo.getEnumByLetra(manejarInventario);
     }
 
     /**

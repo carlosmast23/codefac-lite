@@ -439,7 +439,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         jPanel1.add(jScrollPane4, gridBagConstraints);
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel4.setText("Tipo Oden:");
+        jLabel4.setText("Departamento:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 3;
