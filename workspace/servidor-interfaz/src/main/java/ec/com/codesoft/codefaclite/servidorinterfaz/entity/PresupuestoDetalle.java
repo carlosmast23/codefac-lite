@@ -66,6 +66,10 @@ public class PresupuestoDetalle implements Serializable
     @JoinColumn(name = "PRESUPUESTO_ID")
     @ManyToOne    
     private Presupuesto presupuesto;
+    
+    @JoinColumn(name ="PRODUCTO_PROVEEDOR_ID")
+    @ManyToOne
+    private ProductoProveedor productoProveedor;
 
     public Long getId() {
         return id;
@@ -154,5 +158,15 @@ public class PresupuestoDetalle implements Serializable
     public void setNumeroOrdenCompra(Integer numeroOrdenCompra) {
         this.numeroOrdenCompra = numeroOrdenCompra;
     }
+
+    public ProductoProveedor getProductoProveedor() {
+        return productoProveedor;
+    }
+
+    public void setProductoProveedor(ProductoProveedor productoProveedor) {
+        this.productoProveedor = productoProveedor;
+    }
+    
+    
 
 }

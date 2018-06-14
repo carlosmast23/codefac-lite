@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -32,6 +33,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenCompraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.tabla.PopupMenuTabla;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
@@ -128,10 +130,11 @@ public class PresupuestoModel extends PresupuestoPanel{
             /**
              * El momento que se graba el Presupuesto genero de cada detalle presuesto la orden de compra
              */
+            OrdenCompra ordenCompra;
             for (Map.Entry<Integer, List<PresupuestoDetalle>> entry : this.mapOrden.entrySet()) {
                 Integer key = entry.getKey();
                 List<PresupuestoDetalle> detalles = entry.getValue();
-                OrdenCompra ordenCompra = new OrdenCompra();
+                ordenCompra = new OrdenCompra();
                 ordenCompra.setProveedor(detalles.get(0).getPersona());
                     /**
                      * Todos los presupuestos por el momento van a estar ligados a Servicios   
@@ -335,6 +338,7 @@ public class PresupuestoModel extends PresupuestoPanel{
                 public void updateInterface(Producto entity) {
                         producto = entity;
                         if (producto != null) {
+                            verificarExistenciadeProductoProveedor();
                             getTxtProductoDetalle().setText(producto.getCodigoEAN()+" - "+ producto.getNombre());
                         }
                 }
@@ -351,6 +355,7 @@ public class PresupuestoModel extends PresupuestoPanel{
                 producto = (Producto) buscarDialogoModel.getResultado();
                 if(producto != null)
                 {
+                    verificarExistenciadeProductoProveedor();
                     getTxtProductoDetalle().setText(producto.getCodigoEAN()+" - "+ producto.getNombre());
                 }
             }
@@ -770,7 +775,10 @@ public class PresupuestoModel extends PresupuestoPanel{
         {
             //Número de Orden a emplear por cada proveedor, cada proveedor puede tener varias detalles de ordenes de compra
             c+=1;
-            mapOrden.put(c,new ArrayList<PresupuestoDetalle>());
+            if(mapOrden.get(c) == null)
+            {
+                mapOrden.put(c,new ArrayList<PresupuestoDetalle>());
+            }
             List<PresupuestoDetalle> value = entry.getValue();
             for (PresupuestoDetalle presupuestoDetalle : value) 
             {
@@ -924,5 +932,44 @@ public class PresupuestoModel extends PresupuestoPanel{
     public void opcionMenu2()
     {
         
+    }
+    
+    /**
+     * Verifcar Producto Proveedor
+     */
+    private void verificarExistenciadeProductoProveedor()
+    {
+        ProductoProveedor productoProveedor;
+        //Setear las varibales por defecto
+        getTxtCantidad().setText("1");
+        
+        if (producto != null) {
+            try {
+                //Buscar si existe el producto vinculado con un proveedor
+                ProductoProveedorServiceIf serviceProductoProveedor = ServiceFactory.getFactory().getProductoProveedorServiceIf();
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("producto", this.producto);
+                mapParametros.put("proveedor", this.persona);
+                List<ProductoProveedor> resultados = serviceProductoProveedor.obtenerPorMap(mapParametros);
+                if (resultados != null && resultados.size() > 0) {
+                    productoProveedor = resultados.get(0); //Si existe el proveedor solo seteo la variale
+                    getTxtPrecioCompra().setText(productoProveedor.getCosto() + "");
+                    //EnumSiNo enumSiNo = EnumSiNo.getEnumByLetra(productoProveedor.getConIva());
+                    //getCmbCobraIva().setSelectedItem(enumSiNo);
+                } else {//Cuando no existe crea un nuevo producto proveedor
+                    productoProveedor = new ProductoProveedor(); //Si no existe el item lo creo para posteriormente cuando grabe persistir con la base de datos
+                    productoProveedor.setDescripcion("");
+                    productoProveedor.setEstado("a");
+                    productoProveedor.setProducto(this.producto);
+                    productoProveedor.setProveedor(this.persona);
+                    getTxtPrecioCompra().setText("0.00"); //Seteo con el valor de 0 porque no existe el costo grabado
+                    //getCmbCobraIva().setSelectedItem(EnumSiNo.SI); //Seteo por defecto el valor de SI cuando no existe en la base de datos
+                }
+            } catch (RemoteException ex) {
+                Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 }
