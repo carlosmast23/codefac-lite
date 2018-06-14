@@ -24,11 +24,13 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompra;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenCompraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.tabla.PopupMenuTabla;
@@ -130,18 +132,37 @@ public class PresupuestoModel extends PresupuestoPanel{
                 Integer key = entry.getKey();
                 List<PresupuestoDetalle> detalles = entry.getValue();
                 OrdenCompra ordenCompra = new OrdenCompra();
-                    ordenCompra.setProveedor(detalles.get(0).getPersona());
+                ordenCompra.setProveedor(detalles.get(0).getPersona());
                     /**
                      * Todos los presupuestos por el momento van a estar ligados a Servicios   
                      */     
-                    TipoDocumentoEnum tde = TipoDocumentoEnum.COMPRA_SERVICIOS;
-                    ordenCompra.setCodigoTipoDocumento(tde.getCodigo());
-                    
-                    
-                    
-                        
+                TipoDocumentoEnum tde = TipoDocumentoEnum.COMPRA_SERVICIOS;
+                ordenCompra.setCodigoTipoDocumento(tde.getCodigo());
+                ordenCompra.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+                ordenCompra.setFechaIngreso(this.presupuesto.getFechaPresupuesto());
                 
-            } 
+                for(PresupuestoDetalle pd : detalles){
+                    OrdenCompraDetalle ordenCompraDetalle = new OrdenCompraDetalle();
+                    /**
+                     * Setean valores de Detalle Orden Compra 
+                     */
+                    ordenCompraDetalle.setCantidad(pd.getCantidad().intValue());
+                    ordenCompraDetalle.setDescripcion(pd.getProducto().getNombre());
+                    ordenCompraDetalle.setDescuento(pd.getDescuentoVenta());
+                    ordenCompraDetalle.setPrecioUnitario(pd.getPrecioVenta());
+                    ordenCompraDetalle.setTotal(ordenCompraDetalle.getSubtotal());
+                    ordenCompraDetalle.setValorIce(BigDecimal.ZERO);
+                    ordenCompraDetalle.setIva(BigDecimal.ZERO);
+                    /**
+                     * Agregando detalle a Orden Compra
+                     */
+                    ordenCompra.addDetalle(ordenCompraDetalle);
+                }
+                
+                OrdenCompraServiceIf compraServiceIf = ServiceFactory.getFactory().getOrdenCompraServiceIf();
+                compraServiceIf.grabar(ordenCompra);   
+            }
+            
             }catch (ServicioCodefacException ex) {
                 Logger.getLogger(Presupuesto.class.getName()).log(Level.SEVERE, null, ex);
             }catch (RemoteException ex) {
