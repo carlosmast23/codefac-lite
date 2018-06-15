@@ -80,6 +80,7 @@ public class PresupuestoModel extends PresupuestoPanel{
     
     private Producto producto;
     private Persona persona;
+    private ProductoProveedor productoProveedor;
     private Map<Persona,List<PresupuestoDetalle>> mapClientes;
     private Map<Integer,List<PresupuestoDetalle>> mapOrden;
     
@@ -156,6 +157,7 @@ public class PresupuestoModel extends PresupuestoPanel{
                     ordenCompraDetalle.setTotal(ordenCompraDetalle.getSubtotal());
                     ordenCompraDetalle.setValorIce(BigDecimal.ZERO);
                     ordenCompraDetalle.setIva(BigDecimal.ZERO);
+                    ordenCompraDetalle.setProductoProveedor(pd.getProductoProveedor());
                     /**
                      * Agregando detalle a Orden Compra
                      */
@@ -233,6 +235,7 @@ public class PresupuestoModel extends PresupuestoPanel{
         this.presupuesto = new Presupuesto();
         this.producto = null;
         this.persona = null;
+        this.productoProveedor = null;
         this.mapClientes = null;
         limpiarDetalles();
         limpiarTotales();
@@ -593,13 +596,14 @@ public class PresupuestoModel extends PresupuestoPanel{
                 DialogoCodefac.mensaje("Advertencia", "Debe seleccionar un producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
                 throw new ExcepcionCodefacLite("Necesita seleccionar un producto");
             }
-            
+                
             if (!panelPadre.validarPorGrupo("detalles")) {
                 return;
             }
             
             presupuestoDetalle.setProducto(this.producto);
             presupuestoDetalle.setPersona(this.persona);
+            presupuestoDetalle.setProductoProveedor(this.productoProveedor);
             
             if(verificarCamposValidados())
             {
@@ -640,6 +644,7 @@ public class PresupuestoModel extends PresupuestoPanel{
     {
         this.producto = presupuestoDetalle.getProducto();
         this.persona = presupuestoDetalle.getPersona();
+        this.productoProveedor = presupuestoDetalle.getProductoProveedor();
         getTxtProveedorDetalle().setText(presupuestoDetalle.getPersona().getIdentificacion()+" - "+presupuestoDetalle.getPersona().getRazonSocial() );
         getTxtProductoDetalle().setText(presupuestoDetalle.getProducto().getCodigoEAN()+" - "+presupuestoDetalle.getProducto().getNombre());
         getTxtPrecioCompra().setText(presupuestoDetalle.getPrecioCompra()+"");
@@ -939,7 +944,6 @@ public class PresupuestoModel extends PresupuestoPanel{
      */
     private void verificarExistenciadeProductoProveedor()
     {
-        ProductoProveedor productoProveedor;
         //Setear las varibales por defecto
         getTxtCantidad().setText("1");
         

@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -68,9 +69,8 @@ public class PresupuestoDetalle implements Serializable
     private Presupuesto presupuesto;
     
     @JoinColumn(name ="PRODUCTO_PROVEEDOR_ID")
-    @ManyToOne
     private ProductoProveedor productoProveedor;
-
+    
     public Long getId() {
         return id;
     }
@@ -166,7 +166,30 @@ public class PresupuestoDetalle implements Serializable
     public void setProductoProveedor(ProductoProveedor productoProveedor) {
         this.productoProveedor = productoProveedor;
     }
-    
-    
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final PresupuestoDetalle other = (PresupuestoDetalle) obj;
+        if (!Objects.equals(this.estado, other.estado)) {
+            return false;
+        }
+        
+        return true;
+    }
 }
