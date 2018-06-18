@@ -570,6 +570,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
     
     private void btnListenerCrearProducto() {
+        TipoDocumentoEnum tipoDocumento=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+        
+        EnumSiNo manejoInventario=EnumSiNo.NO;
+        switch (tipoDocumento) {
+            case INVENTARIO:
+                manejoInventario=EnumSiNo.SI;
+                break;
+
+        }
+                
         ObserverUpdateInterface observer = new ObserverUpdateInterface<Producto>() {
             @Override
             public void updateInterface(Producto entity) {
@@ -580,8 +590,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 }
             }
         };
-
-        panelPadre.crearDialogoCodefac(observer, DialogInterfacePanel.PRODUCTO_PANEL, false);
+                
+        panelPadre.crearDialogoCodefac(observer, VentanaEnum.PRODUCTO, false, new Object[]{manejoInventario,getTxtCodigoDetalle().getText()});
+        
     }
 
     private void btnListenerAgregarCliente()

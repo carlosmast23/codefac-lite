@@ -90,7 +90,7 @@ public class ConfiguracionesInicalesModel extends ConfiguracionesInicialesDialog
                 }
                 
                 grabarDatos(usuario,clave);
-                DialogoCodefac.mensaje("Correcto","Las credenciales para la base de datos fueron grabados correctamente \n\n Nota: Se recomienda anotar estos datos en un lugar seguro,\n porque son importanes y requeridos para el funcionamiento del software ",DialogoCodefac.MENSAJE_CORRECTO);
+                DialogoCodefac.mensaje("Correcto","Las credenciales para la base de datos fueron grabados correctamente \n\n Nota: Se recomienda anotar estos datos en un lugar seguro,\n porque son importanes y requeridos para el funcionamiento del software ",DialogoCodefac.MENSAJE_ADVERTENCIA);
                 dispose();
             }
         });        

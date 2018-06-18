@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 import ec.com.codesoft.codefaclite.crm.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.crm.panel.ProductoForm;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
@@ -49,7 +50,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author PC
  */
-public class ProductoModel extends ProductoForm implements DialogInterfacePanel<Producto> {
+public class ProductoModel extends ProductoForm implements DialogInterfacePanel<Producto> , InterfazPostConstructPanel {
 
     private Producto producto;
     private Impuesto impuesto;
@@ -532,6 +533,17 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     @Override
     public void cargarDatosPantalla(Object entidad) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void postConstructorExterno(Object[] parametros) {
+      
+        EnumSiNo enumSiNo=(EnumSiNo) parametros[0];
+        getCmbManejaInventario().setSelectedItem(enumSiNo);
+        
+        //TODO: Mejorar esta parte porque solo va a funcionar para el codigo personalizado y si quieren manejar algunos codigos no funciona
+        String codigoProducto=(String) parametros[1];
+        getTxtCodigoPersonalizado().setText(codigoProducto);
     }
     
     public enum IvaOpcionEnum
