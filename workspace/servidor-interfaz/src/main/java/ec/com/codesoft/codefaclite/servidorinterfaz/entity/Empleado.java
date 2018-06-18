@@ -29,20 +29,39 @@ public class Empleado implements Serializable
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @JoinColumn(name = "PERSONA_ID")
-    @ManyToOne    
-    private Persona cliente;
+    @Column(name = "NOMBRES")
+    private String nombres;
+    @Column(name = "APELLIDOS")
+    private String apellidos;
+    @Column(name = "CEDULA")
+    private String identificacion;
+    @Column(name = "DIRECCION")
+    private String direccion;
+    @Column(name = "TELEFONO_CONVENCIONAL")
+    private String telefonoConvencional;
+    @Column(name = "TELEFONO_CELULAR")
+    private String telefonoCelular;
+    @Column(name = "CORREO_ELECTRONICO")
+    private String correoElectronico;
+    @Column(name = "GENERO")
+    private String sexo;
+    @Column(name = "CARGO")
+    private String cargo;
+    @Column(name = "ESTADO")
+    private String estado;
+    
+//    @JoinColumn(name = "PERSONA_ID")
+//    @ManyToOne    
+//    private Persona cliente;
     
     @JoinColumn(name = "DEPARTAMENTO_ID")
     @ManyToOne    
     private Departamento departamento;
     
-    @Column(name = "CARGO")
-    private String cargo;
-    
-    @Column(name = "ESTADO")
-    private String estado;
-
+    @JoinColumn(name = "NACIONALIDAD_ID")
+    @ManyToOne
+    private Nacionalidad nacionalidad;
+            
     public Empleado() {
         
     }
@@ -71,13 +90,13 @@ public class Empleado implements Serializable
         this.estado = estado;
     }
 
-    public Persona getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Persona cliente) {
-        this.cliente = cliente;
-    }
+//    public Persona getCliente() {
+//        return cliente;
+//    }
+//
+//    public void setCliente(Persona cliente) {
+//        this.cliente = cliente;
+//    }
 
     public Departamento getDepartamento() {
         return departamento;
@@ -87,15 +106,89 @@ public class Empleado implements Serializable
         this.departamento = departamento;
     }
 
+    public String getNombres() {
+        return nombres;
+    }
+
+    public void setNombres(String nombres) {
+        this.nombres = nombres;
+    }
+
+    public String getApellidos() {
+        return apellidos;
+    }
+
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
+    }
+
+    public String getIdentificacion() {
+        return identificacion;
+    }
+
+    public void setIdentificacion(String identificacion) {
+        this.identificacion = identificacion;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public String getTelefonoConvencional() {
+        return telefonoConvencional;
+    }
+
+    public void setTelefonoConvencional(String telefonoConvencional) {
+        this.telefonoConvencional = telefonoConvencional;
+    }
+
+    public String getTelefonoCelular() {
+        return telefonoCelular;
+    }
+
+    public void setTelefonoCelular(String telefonoCelular) {
+        this.telefonoCelular = telefonoCelular;
+    }
+
+    public String getCorreoElectronico() {
+        return correoElectronico;
+    }
+
+    public void setCorreoElectronico(String correoElectronico) {
+        this.correoElectronico = correoElectronico;
+    }
+
+    public String getSexo() {
+        return sexo;
+    }
+
+    public void setSexo(String sexo) {
+        this.sexo = sexo;
+    }
+
+    public Nacionalidad getNacionalidad() {
+        return nacionalidad;
+    }
+
+    public void setNacionalidad(Nacionalidad nacionalidad) {
+        this.nacionalidad = nacionalidad;
+    }
+     
+
     @Override
     public String toString() {
-        try{
-        if(departamento!=null || cliente != null){
-            return ""+departamento.getNombre()+" - "+cliente.getNombresCompletos();
-        }}catch(Exception e){
-            
-        }
-        return "Sin personal asignado";
+//        try{
+//        if(departamento!=null || cliente != null){
+//            return ""+departamento.getNombre()+" - "+cliente.getNombresCompletos();
+//        }}catch(Exception e){
+//            
+//        }
+//        return "Sin personal asignado";
+        return "";
     }
 
     @Override

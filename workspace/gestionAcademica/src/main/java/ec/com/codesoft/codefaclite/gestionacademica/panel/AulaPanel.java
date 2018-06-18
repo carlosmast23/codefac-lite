@@ -48,6 +48,7 @@ public abstract class AulaPanel extends ControladorCodefacInterface {
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         jLabel4.setText("jLabel4");
 
@@ -139,8 +140,6 @@ public abstract class AulaPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 0.1;
         getContentPane().add(jLabel1, gridBagConstraints);
-
-        jLabel3.setText("         ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
@@ -154,6 +153,12 @@ public abstract class AulaPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 0;
         getContentPane().add(jLabel5, gridBagConstraints);
 
+        jLabel2.setText("     ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        getContentPane().add(jLabel2, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -165,6 +170,7 @@ public abstract class AulaPanel extends ControladorCodefacInterface {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<GeneralEnumEstado> cmbEstado;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

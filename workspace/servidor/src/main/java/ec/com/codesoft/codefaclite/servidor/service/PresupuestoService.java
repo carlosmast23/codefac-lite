@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.PresupuestoFacade;
 import ec.com.codesoft.codefaclite.servidor.util.ExcepcionDataBaseEnum;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesExcepciones;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
@@ -33,33 +34,27 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
         this.presupuestoFacade = new PresupuestoFacade();
     }
     
-    public Presupuesto grabar(Presupuesto p) throws ServicioCodefacException
+    public Presupuesto grabar(Presupuesto entity) throws ServicioCodefacException
     {
-        EntityTransaction transaccion = getTransaccion();
-        transaccion.begin();
+        entityManager.getTransaction().begin(); //Inicio de la transaccion
         try {
-            entityManager.persist(p);
-            transaccion.commit();
-        } catch (PersistenceException ex)
-        {
-            if(transaccion.isActive())
-            {
-                transaccion.rollback();
+            //Recorro todos los detalles para verificar si existe todos los productos proveedor o los grabo o los edito con los nuevos valores
+            for (PresupuestoDetalle presupuestoDetalle : entity.getPresupuestoDetalles()) {
+                if (presupuestoDetalle.getProductoProveedor().getId() == null) {
+                    entityManager.persist(presupuestoDetalle.getProductoProveedor());
+                } else {
+                    entityManager.merge(presupuestoDetalle.getProductoProveedor());
+                }
             }
-            
-            ExcepcionDataBaseEnum excepcionEnum=UtilidadesExcepciones.analizarExcepcionDataBase(ex);
-            Logger.getLogger(PersonaService.class.getName()).log(Level.SEVERE, null, ex);
-            if(excepcionEnum.equals(ExcepcionDataBaseEnum.CLAVE_DUPLICADO))
-            {
-                throw new ServicioCodefacException(ExcepcionDataBaseEnum.CLAVE_DUPLICADO.getMensaje());
-            }
-            else
-            {
-                throw new ServicioCodefacException(ExcepcionDataBaseEnum.DESCONOCIDO.getMensaje());
-            }            
-            //throw  new ServicioCodefacException("Error sql desconocido");
+
+            entityManager.persist(entity);
+            entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            entityManager.getTransaction().rollback();
+            throw new ServicioCodefacException("Error al grabar la compra");
         }
-        return p;
+        return entity;
     }
     
     public void editar(Presupuesto p)
