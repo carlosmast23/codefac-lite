@@ -467,6 +467,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     
     private void cargarAyuda()
     {
+        final String PAGINA_DEFECTO="http://www.cf.codesoft-ec.com/ayuda";
+        
         ControladorCodefacInterface panel=(ControladorCodefacInterface) getjDesktopPane1().getSelectedFrame();
         String url="";
         try
@@ -477,55 +479,43 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             }
             else
             {
-                url="http://www.cf.codesoft-ec.com/ayuda";
+                url=PAGINA_DEFECTO;
             }
         }
         catch (UnsupportedOperationException exception) {
             System.out.println("metodo no implementado");
-            return ;
+            url=PAGINA_DEFECTO;
+            //return ; //Si no esta implementado la ayuda no abre nada
         }
         
         
         PanelSecundarioAbstract panelSecundario = panelesSecundariosMap.get(PanelSecundarioAbstract.PANEL_AYUDA);
         JPanel jpanel = (JPanel) panelSecundario;
+        
         int ancho=getjPanelSeleccion().getWidth()-1;
         int alto=getjPanelSeleccion().getHeight()-1;
 
-        if(browser!=null && panel!=null)
+        if(browser!=null && url!=null && browser.getUrl()!=null)
         {
-            //Verifacar si la url cargada es la misma no volver a cargar
-            if(!browser.getUrl().equals(panel.getURLAyuda()))
+            //Verificar si la url cargada no es la misma cargo la nueva url
+            if(!browser.getUrl().equals(url))
             {
                 browser = new SwingBrowser();
-                browser.loadURL(panel.getURLAyuda());
+                browser.loadURL(url);
                 browser.setBounds(1, 1,ancho,alto);
-                jpanel.removeAll();
-                jpanel.add(browser);
-            }
-            else
-            {
-                jpanel.removeAll();
-                jpanel.add(browser);
-            }
+            }            
+            jpanel.removeAll();
+            jpanel.add(browser);
         }
-        else
+        else //Si no existe creado el recurso browser que se muestra en la ayuda la creo desde 0
         {
             browser = new SwingBrowser();
-            if(panel!=null)
-            {
-                browser.loadURL(panel.getURLAyuda());
-                browser.setBounds(1, 1,ancho,alto);
-                jpanel.removeAll();
-                jpanel.add(browser);
-            }
-            else
-            {
-                //Pagina por defecto cuando no existe una ayuda especifica
-                browser.loadURL("http://www.cf.codesoft-ec.com/ayuda");
-                browser.setBounds(1, 1,ancho,alto);
-                jpanel.removeAll();
-                jpanel.add(browser);
-            }
+            
+            browser.loadURL(url);
+            browser.setBounds(1, 1, ancho, alto);
+            jpanel.removeAll();
+            jpanel.add(browser);            
+
         }
         //getjSplitPanelVerticalSecundario().setLeftComponent(getJPanelContenidoAuxiliar());
             

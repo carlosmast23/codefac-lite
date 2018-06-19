@@ -708,7 +708,7 @@ public class Main {
              * Agregando Hilo de Publicidad si es usuario Gratuito
              */
             if (session.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS)) {
-                HiloPublicidadCodefac hiloPublicidad = new HiloPublicidadCodefac();
+                HiloPublicidadCodefac hiloPublicidad = new HiloPublicidadCodefac(panel);
                 hiloPublicidad.setPublicidades(obtenerPublicidades());
                 hiloPublicidad.start();
                 panel.setHiloPublicidadCodefac(hiloPublicidad);
