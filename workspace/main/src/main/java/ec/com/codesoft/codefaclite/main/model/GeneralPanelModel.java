@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.main.model;
 
 
 
+import com.healthmarketscience.rmiio.RemoteInputStream;
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import ec.com.codesoft.codefaclite.configuraciones.model.CalculadoraModel;
 import ec.com.codesoft.codefaclite.configuraciones.model.ComprobantesConfiguracionModel;
@@ -2295,10 +2296,23 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             String nombreImagen=sessionCodefac.getEmpresa().getImagenLogoPath();
             //service.getResourceInputStream(RecursoCodefac.AYUDA, file);
             
-            //inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_GENERAL, "codesoft-logo.png"));
-            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStreamByFile(DirectorioCodefac.IMAGENES, nombreImagen));
-            //inputStream = (InputStream) UtilidadesRmi.deserializar(service.getResourceInputStream(RecursoCodefac.IMAGENES_GENERAL, "codefac-logotipo.png"));
-            //parametros.put("pl_url_img1",UtilidadImagen.castInputStreamToImage(inputStream));
+           if(sessionCodefac.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS))
+            {
+                inputStream=RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
+            }
+            else
+            {
+                RemoteInputStream remoteInputStream = service.getResourceInputStreamByFile(DirectorioCodefac.IMAGENES, nombreImagen);
+                //verifica que existe una imagen
+                if (remoteInputStream != null) {
+                    inputStream = RemoteInputStreamClient.wrap(remoteInputStream);
+                } 
+                else //Si no existe 
+                {
+                    inputStream = RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
+                }            
+            }
+
             parametros.put("pl_url_img1",UtilidadImagen.castInputStreamToImage(inputStream));
             
             inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "facebook.png"));
@@ -2314,22 +2328,6 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             //parametros.put("pl_img_logo_pie",UtilidadImagen.castInputStreamToImage(inputStream));
             parametros.put("pl_img_logo_pie",null);
             
-            /*
-            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_GENERAL, "codefac-logotipo.png"));
-            parametros.put("pl_url_img1_url",UtilidadImagen.castInputStreamToImage(inputStream));
-            
-            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "facebook.png"));
-            parametros.put("pl_img_facebook_url",UtilidadImagen.castInputStreamToImage(inputStream));
-            
-            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "whatsapp.png"));
-            parametros.put("pl_img_whatsapp_url",UtilidadImagen.castInputStreamToImage(inputStream));
-            
-            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_REDES_SOCIALES, "telefono.png"));
-            parametros.put("pl_img_telefono_url",UtilidadImagen.castInputStreamToImage(inputStream));
-            
-            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.IMAGENES_GENERAL, "codesoft-logo.png"));
-            parametros.put("pl_img_logo_pie_url",UtilidadImagen.castInputStreamToImage(inputStream));
-            */
             
             inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER, "encabezado.jrxml"));
             JasperReport reportCabecera = JasperCompileManager.compileReport(inputStream);
@@ -2343,9 +2341,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             //System.out.println(parametros.get("SUBREPORT_DIR"));            
         } catch (RemoteException ex) {
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JRException ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         return parametros;

@@ -61,4 +61,8 @@ Analizar si agregar una variable adicional para saber si algunos productos deben
 
 En la pantalla de ventas diarias seleccionar con que modo quieren trabajar con productos libres o con inventario por defecto le dejo habilitado libre
 
+Analizar el tema de los vendedores
+
+Buscar un programa para abrir base de datos derby embebidas
+
 
