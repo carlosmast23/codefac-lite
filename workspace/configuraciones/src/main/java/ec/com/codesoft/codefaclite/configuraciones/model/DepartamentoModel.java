@@ -13,10 +13,12 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.DepartamentoServiceIf;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,18 +42,18 @@ public class DepartamentoModel extends DepartamentoPanel
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
-
-        
+        departamento = new Departamento();
+        limpiarCampos();
     }
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
         try {
-            departamento = new Departamento();
             setearDatos();
             DepartamentoServiceIf servicio = ServiceFactory.getFactory().getDepartamentoServiceIf();
             servicio.grabar(departamento);
             DialogoCodefac.mensaje("Grabar", "Se guardo el departamento correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+            limpiar();
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(DepartamentoModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {
@@ -65,7 +67,8 @@ public class DepartamentoModel extends DepartamentoPanel
             setearDatos();
             DepartamentoServiceIf servicio = ServiceFactory.getFactory().getDepartamentoServiceIf();
             servicio.grabar(departamento);
-            DialogoCodefac.mensaje("Editar", "Se edito correctamente el departamento ", SOMEBITS);
+            DialogoCodefac.mensaje("Editar", "Se edito correctamente el departamento ", DialogoCodefac.MENSAJE_CORRECTO);
+            limpiar();
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(DepartamentoModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {
@@ -87,6 +90,7 @@ public class DepartamentoModel extends DepartamentoPanel
                         this.departamento.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
                         DepartamentoServiceIf servicio = ServiceFactory.getFactory().getDepartamentoServiceIf();
                         servicio.editar(departamento);
+                        limpiar();
                         DialogoCodefac.mensaje("Eliminar", "El departamento se elimino correctamente", SOMEBITS);
                     } catch (ServicioCodefacException ex) {
                         Logger.getLogger(DepartamentoModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -133,7 +137,7 @@ public class DepartamentoModel extends DepartamentoPanel
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
-        super.buscar(); 
+        //super.buscar(); 
         DepartamentoBusquedaDialogo busquedaDialogo = new DepartamentoBusquedaDialogo();
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialogo);
         buscarDialogoModel.setVisible(true);
@@ -141,23 +145,29 @@ public class DepartamentoModel extends DepartamentoPanel
         if(departamentoTemp != null)        
         {
             this.departamento = departamentoTemp;
-            setearDatos();
+            mostrarDatos();
         }  
     }
 
     @Override
     public BuscarDialogoModel obtenerDialogoBusqueda() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        DepartamentoBusquedaDialogo busquedaDialogo = new DepartamentoBusquedaDialogo();
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialogo);
+        return buscarDialogoModel;  
     }
 
     @Override
     public void cargarDatosPantalla(Object entidad) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.departamento = (Departamento) entidad;
+        mostrarDatos();
     }
     
     @Override
     public List<String> getPerfilesPermisos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<String> permisos = new ArrayList<String>();
+        permisos.add(Perfil.PERFIl_ADMINISTRADOR);
+        permisos.add(Perfil.PERFIl_OPERADOR);
+        return permisos;
     }
     
     public void iniciarCombo()

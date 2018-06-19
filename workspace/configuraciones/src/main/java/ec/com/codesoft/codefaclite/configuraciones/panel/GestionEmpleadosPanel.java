@@ -6,10 +6,13 @@
 package ec.com.codesoft.codefaclite.configuraciones.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Nacionalidad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneroEnum;
+import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
 import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -65,8 +68,14 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         txtAreaDireccion = new javax.swing.JTextArea();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
 
+        setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
+        setTitle("Gestión Empleados");
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setText("Nombres:");
@@ -248,8 +257,10 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.gridheight = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 15;
         gridBagConstraints.ipady = 30;
+        gridBagConstraints.weightx = 0.1;
         getContentPane().add(txtAreaDireccion1, gridBagConstraints);
 
         jLabel13.setText("          ");
@@ -257,6 +268,7 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.1;
         getContentPane().add(jLabel13, gridBagConstraints);
 
@@ -267,6 +279,9 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.7;
         getContentPane().add(jLabel14, gridBagConstraints);
+
+        jLabel15.setText("          ");
+        getContentPane().add(jLabel15, new java.awt.GridBagConstraints());
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -306,7 +321,9 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
     public void setCmbSexo(JComboBox<GeneroEnum> cmbSexo) {
         this.cmbSexo = cmbSexo;
     }
-
+    
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = false, expresionRegular = ExpresionRegular.textoSimple, nombre = "Dirección empleado")
     public JTextArea getTxtAreaDireccion() {
         return txtAreaDireccion;
     }
@@ -314,7 +331,9 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
     public void getTxtAreaDireccion(JTextArea jTextArea1) {
         this.txtAreaDireccion = jTextArea1;
     }
-
+    
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.nombreSocial, nombre = "Apellidos empleado")
     public JTextField getTxtApellidos() {
         return txtApellidos;
     }
@@ -330,7 +349,9 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
     public void setTxtAreaDireccion1(JScrollPane txtAreaDireccion) {
         this.txtAreaDireccion1 = txtAreaDireccion;
     }
-
+    
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.textoSimple, nombre = "Cargo empleado")
     public JTextField getTxtCargo() {
         return txtCargo;
     }
@@ -338,7 +359,9 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
     public void setTxtCargo(JTextField txtCargo) {
         this.txtCargo = txtCargo;
     }
-
+    
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.telefonoCelular, nombre = "Celular empleado")
     public JTextField getTxtCelular() {
         return txtCelular;
     }
@@ -346,7 +369,9 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
     public void setTxtCelular(JTextField txtCelular) {
         this.txtCelular = txtCelular;
     }
-
+    
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = false, expresionRegular = ExpresionRegular.email, nombre = "Correo electrónico empleado")
     public JTextField getTxtCorreoElectronico() {
         return txtCorreoElectronico;
     }
@@ -354,7 +379,9 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
     public void setTxtCorreoElectronico(JTextField txtCorreoElectronico) {
         this.txtCorreoElectronico = txtCorreoElectronico;
     }
-
+    
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.soloNumeros, nombre = "Cédula empleado")
     public JTextField getTxtIdentificacion() {
         return txtIdentificacion;
     }
@@ -362,7 +389,9 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
     public void setTxtIdentificacion(JTextField txtIdentificacion) {
         this.txtIdentificacion = txtIdentificacion;
     }
-
+    
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.nombreSocial, nombre = "Nombres empleado")
     public JTextField getTxtNombres() {
         return txtNombres;
     }
@@ -370,7 +399,9 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
     public void setTxtNombres(JTextField txtNombres) {
         this.txtNombres = txtNombres;
     }
-
+    
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = false, expresionRegular = ExpresionRegular.telefonoConvencional, nombre = "Telefono empleado")
     public JTextField getTxtTelefono() {
         return txtTelefono;
     }
@@ -394,6 +425,7 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

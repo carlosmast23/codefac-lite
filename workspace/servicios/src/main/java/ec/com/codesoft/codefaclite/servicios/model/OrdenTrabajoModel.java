@@ -149,8 +149,10 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
                 dataReporte.setDescripciond(""+otd.getDescripcion());
                 dataReporte.setFechaEntrega(""+otd.getFechaEntrega());
                 dataReporte.setNotas(""+otd.getNotas());
-                if(otd.getEmpleado().getCliente()!=null){
-                    dataReporte.setPersona(""+otd.getEmpleado().getCliente().getNombresCompletos());
+                if(otd.getEmpleado() != null){
+                    String nombresCompletos = otd.getEmpleado().getApellidos()+" "+otd.getEmpleado().getNombres();
+                    dataReporte.setPersona("" + nombresCompletos );
+                    
                 }else{
                     dataReporte.setPersona("");
                 }
@@ -408,8 +410,9 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
                 fila.add("");
             }
             
-            if(detalle.getEmpleado().getCliente()!=null){
-                fila.add(detalle.getEmpleado().getCliente().getNombresCompletos()+"");
+            if(detalle.getEmpleado() !=null ){
+                String nombresCompletos = detalle.getEmpleado().getApellidos()+" "+detalle.getEmpleado().getNombres();
+                fila.add(""+nombresCompletos);
             }
             else
             {

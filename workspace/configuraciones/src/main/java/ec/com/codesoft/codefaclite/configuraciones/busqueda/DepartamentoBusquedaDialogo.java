@@ -30,8 +30,8 @@ public class DepartamentoBusquedaDialogo implements InterfaceModelFind<Departame
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        String queryString = "SELECT d FROM Departamento d WHERE LOWER(d.codigo like ?1) or ";
-        queryString+="(LOWER(u.nombre like ?2) and d.estado=?3)";
+        String queryString = "SELECT d FROM Departamento d WHERE (LOWER(d.codigo) like ?1) or ";
+        queryString+="(LOWER(d.nombre) like ?2) and d.estado=?3";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,filter);
         queryDialog.agregarParametro(2,filter);

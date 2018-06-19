@@ -6,7 +6,12 @@
 package ec.com.codesoft.codefaclite.configuraciones.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.utilidades.calculos.UtilidadesCalculo;
+import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
+import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
@@ -50,6 +55,8 @@ public abstract class DepartamentoPanel extends ControladorCodefacInterface {
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
+        setTitle("Departamento");
+        setName(""); // NOI18N
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setText("Código:");
@@ -147,7 +154,9 @@ public abstract class DepartamentoPanel extends ControladorCodefacInterface {
     public void setCmbEstado(JComboBox<GeneralEnumEstado> cmbEstado) {
         this.cmbEstado = cmbEstado;
     }
-
+    
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.textoSimple ,min=0,nombre = "Código departamento")
     public JTextField getTxtCodigo() {
         return txtCodigo;
     }
@@ -155,7 +164,9 @@ public abstract class DepartamentoPanel extends ControladorCodefacInterface {
     public void setTxtCodigo(JTextField txtCodigo) {
         this.txtCodigo = txtCodigo;
     }
-
+    
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = false, expresionRegular = ExpresionRegular.textoSimple, nombre = "Descripción departamento" )
     public JTextField getTxtDescripcion() {
         return txtDescripcion;
     }
@@ -163,7 +174,9 @@ public abstract class DepartamentoPanel extends ControladorCodefacInterface {
     public void setTxtDescripcion(JTextField txtDescripcion) {
         this.txtDescripcion = txtDescripcion;
     }
-
+    
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.textoSimple, nombre = "Nombre departamento")
     public JTextField getTxtNombre() {
         return txtNombre;
     }
