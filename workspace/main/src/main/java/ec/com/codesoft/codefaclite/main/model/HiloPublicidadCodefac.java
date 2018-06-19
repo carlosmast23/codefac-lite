@@ -7,7 +7,9 @@ package ec.com.codesoft.codefaclite.main.model;
 
 import ec.com.codesoft.codefaclite.main.panel.PublicidadCodefacDialogo;
 import ec.com.codesoft.codefaclite.main.panel.publicidad.Publicidad;
+import java.awt.Container;
 import java.awt.Desktop;
+import java.awt.Frame;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -17,6 +19,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 
 /**
  *
@@ -37,10 +40,16 @@ public class HiloPublicidadCodefac extends Thread{
     private Long contadorTiempo;
             
     public boolean hiloPublicidad;
+    
+    /**
+     * Contenedor principal en el cual se lanza la publicidad para que tenga el mismo foco
+     */
+    private JFrame contenedorPadre;
 
-    public HiloPublicidadCodefac() {
+    public HiloPublicidadCodefac(JFrame contenedorPadre) {
         this.hiloPublicidad=true;
         this.contadorTiempo=0l;
+        this.contenedorPadre=contenedorPadre;
        
     }
        
@@ -73,7 +82,7 @@ public class HiloPublicidadCodefac extends Thread{
     
     private void abrirPublicidad() {
         //super.run(); //To change body of generated methods, choose Tools | Templates.
-        PublicidadCodefacDialogo dialogo = new PublicidadCodefacDialogo(null, true);
+        PublicidadCodefacDialogo dialogo = new PublicidadCodefacDialogo(contenedorPadre, true);
         Publicidad publicidad=obtenerPublicidadConProbabilidad();
         dialogo.setLocationRelativeTo(null);
         

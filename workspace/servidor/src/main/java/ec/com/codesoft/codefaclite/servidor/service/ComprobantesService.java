@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 
 import autorizacion.ws.sri.gob.ec.Autorizacion;
 import autorizacion.ws.sri.gob.ec.Mensaje;
+import com.healthmarketscience.rmiio.RemoteInputStream;
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
@@ -1101,12 +1102,33 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
 
 
         InputStream input=null;
-        try {
-            input = RemoteInputStreamClient.wrap(service.getResourceInputStreamByFile(DirectorioCodefac.IMAGENES, empresa.getImagenLogoPath()));
-        } catch (IOException ex) {
-            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+        
+        //Si la licencia es gratis entonces cargar por defecto una imagen por defecto
+        if(UtilidadesServidor.tipoLicenciaEnum.equals(TipoLicenciaEnum.GRATIS))
+        {
+            input=RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
         }
+        else //Si la licencia es de pago entonces carga la imagen del 
+        {
+            RemoteInputStream remoteInputStream=service.getResourceInputStreamByFile(DirectorioCodefac.IMAGENES, empresa.getImagenLogoPath());
             
+            if(remoteInputStream!=null)
+            {
+                try {
+                    input = RemoteInputStreamClient.wrap(remoteInputStream);
+                } catch (IOException ex) {
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                    input=RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
+                }
+            }
+            else //Si no existe imagen cargar por defecto una imagen en blanco
+            {
+                input=RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
+            }
+
+        }
+        
+        
         parametros.put("pl_url_img1", UtilidadImagen.castInputStreamToImage(input));
         //parametros.put("pl_url_img1", (RecursoCodefac.IMAGENES_GENERAL.getResourceURL("codefac-logotipo.png")));
         
