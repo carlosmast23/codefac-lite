@@ -83,7 +83,7 @@ public abstract class RespaldarInformacionPanel extends ControladorCodefacInterf
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnRespaldar, gridBagConstraints);
 
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel1.setText("Seleccionar ubicación para respaldos:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;

@@ -5,15 +5,18 @@
  */
 package ec.com.codesoft.codefaclite.configuraciones.model;
 
+import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import ec.com.codesoft.codefaclite.configuraciones.panel.RespaldarInformacionPanel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -41,6 +44,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import org.apache.commons.io.FileUtils;
 
 /**
  *
@@ -48,7 +52,7 @@ import javax.swing.JFileChooser;
  */
 public class RespaldarInformacionModel extends RespaldarInformacionPanel
 {
-    private Path origenPath;
+    //private Path origenPath;
     private Path destinoPath;
     private JFileChooser jFileChooser;
     private String ubicacionRespaldo;
@@ -171,30 +175,16 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-     private void copiarDirectorio(File origen, File destino) throws IOException 
+     private void copiarDirectorio(InputStream origen, File destino) throws IOException 
     {
-        if (!destino.exists()) 
-        {
-            destino.mkdir();
-        }
-        for (String f : origen.list())
-        {
-            copiar(new File(origen, f), new File(destino, f));
-        }
+        //if (!destino.exists()) 
+        //{
+        //    destino.mkdir();
+        //}
+        
+        FileUtils.copyInputStreamToFile(origen,destino);        
     }
     
-    public void copiar(File origenLocalizacion, File destinoLocalizacion) throws IOException 
-    {
-        if (origenLocalizacion.isDirectory())
-        {
-            copiarDirectorio(origenLocalizacion, destinoLocalizacion);
-        } 
-        else 
-        {
-            copiarArchivo(origenLocalizacion, destinoLocalizacion);
-        }
-    }
-
     private void copiarArchivo(File source, File target) throws IOException 
     {        
         try 
@@ -240,11 +230,16 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
                     if(!ubicacionRespaldo.equals(""))
                     {
                         crearNombreCarpetaRespaldo();
-                        origenPath = FileSystems.getDefault().getPath(ParametrosSistemaCodefac.NOMBRE_BASE_DATOS);
-                        destinoPath = FileSystems.getDefault().getPath(ubicacionRespaldo+"\\"+nombreCarpetaRelpaldo);
-                        File recursosDirectorio = origenPath.toFile();
+                        
+                        RecursosServiceIf service=ServiceFactory.getFactory().getRecursosServiceIf();                        
+                        InputStream inputDb = RemoteInputStreamClient.wrap(service.getDataBaseResources());                        
+                        
+                        //origenPath = FileSystems.getDefault().getPath(ParametrosSistemaCodefac.NOMBRE_BASE_DATOS);
+                        destinoPath = FileSystems.getDefault().getPath(ubicacionRespaldo+"\\"+nombreCarpetaRelpaldo+".zip");
+                        //File recursosDirectorio = origenPath.toFile();
                         File destinoDirectorio = destinoPath.toFile();
-                        copiarDirectorio(recursosDirectorio, destinoDirectorio);
+                        copiarDirectorio(inputDb, destinoDirectorio);
+                        DialogoCodefac.mensaje("Correcto","El respaldo fue generado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
                     }
                     else
                     {

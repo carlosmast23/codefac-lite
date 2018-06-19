@@ -12,7 +12,9 @@ import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.archivos.UtilidadesZip;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -64,6 +66,22 @@ public class RecursosService extends UnicastRemoteObject implements RecursosServ
             Logger.getLogger(RecursosService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null; //Si falla el servidor devuelve null        
+    }
+    
+    public RemoteInputStream getDataBaseResources() throws RemoteException
+    {
+        try {
+            String nombreBaseDatos=ParametrosSistemaCodefac.NOMBRE_BASE_DATOS;
+            
+            InputStream input= UtilidadesZip.comprimirToInputStream(nombreBaseDatos);
+            RemoteInputStreamServer istream =new SimpleRemoteInputStream(input);
+            RemoteInputStream result = istream.export();
+            return result;
+            //return UtilidadesRmi.serializar(ois);
+        } catch (IOException ex) {
+            Logger.getLogger(RecursosService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null; //Si falla el servidor devuelve null    
     }
     
     /**

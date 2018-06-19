@@ -287,7 +287,7 @@ public class Main {
         //Descargar el archivo de propiedades de la ultima version viginte
         if(UtilidadesWeb.descargarArchivo(nameVersionPropiedades, path+nameVersionPropiedades, carpetaDescarga))
         {
-            LOG.log(Level.INFO,"Descarga archivo de que contiene el numero de la ultima version");
+            LOG.log(Level.INFO,"Descarga archivo de que contiene el número de la última versión");
             propiedadesIniciales = new Properties();
             try {
                 propiedadesIniciales.load(new FileReader(carpetaDescarga+"/"+nameVersionPropiedades));

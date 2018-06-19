@@ -19,5 +19,6 @@ import java.rmi.RemoteException;
 public interface RecursosServiceIf extends Remote {
     public RemoteInputStream getResourceInputStream(RecursoCodefac recurso,String file) throws RemoteException;
     public RemoteInputStream getResourceInputStreamByFile(DirectorioCodefac directorio,String nameFile) throws RemoteException;
+    public RemoteInputStream getDataBaseResources() throws RemoteException;
     public void uploadFileServer(DirectorioCodefac directorio,RemoteInputStream recurso,String nombre) throws RemoteException;
 }
