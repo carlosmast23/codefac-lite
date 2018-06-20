@@ -60,6 +60,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
@@ -83,6 +84,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -136,6 +138,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.ToolTipManager;
@@ -204,6 +207,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     
     public void iniciarComponentesGenerales()
     {
+        iniciarComponentesPantalla();
         iniciarComponentes();        
         agregarListenerBotonesDefecto();
         agregarListenerBotones();
@@ -242,81 +246,55 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
             @Override
             public void windowClosing(WindowEvent e) {
-                /*Boolean respuesta=DialogoCodefac.dialogoPregunta("Alerta","Estas seguro que deseas salir?",DialogoCodefac.MENSAJE_ADVERTENCIA);
-                
-                if(respuesta)
-                {                    
-                    grabarDatosSalir();
-                    
-                    //Solo detener la publicidad cuando exista
-                    if(hiloPublicidadCodefac!=null)
-                        hiloPublicidadCodefac.hiloPublicidad=false;                    
-                    
-                    //AbstractFacade.entityManager.close();
-                    dispose();                    
-                    System.exit(0);
-                    
-                }*/
-                
-                String[] opciones={"Salir","Cambiar usuario","Cancelar"};
-                int opcionSeleccionada=DialogoCodefac.dialogoPreguntaPersonalizada("Alerta","Porfavor seleccione una opción?",DialogoCodefac.MENSAJE_ADVERTENCIA,opciones);
-                switch(opcionSeleccionada)
-                {
-                    case 0: //opcion de salir
-                        grabarDatosSalir();
-
-                        //Solo detener la publicidad cuando exista
-                        if (hiloPublicidadCodefac != null) {
-                            hiloPublicidadCodefac.hiloPublicidad = false;
-                        }
-                        dispose();
-                        System.exit(0);
-                        break;
-                        
-                    case 1:
-                        cerrarTodasPantallas();
-                        setVisible(false);
-                        Usuario usuario=Main.cargarLoginUsuario();
-                        sessionCodefac.setUsuario(usuario);
-                        sessionCodefac.setPerfiles(Main.obtenerPerfilesUsuario(usuario));
-                        setVentanasMenuList(null);
-                        setVisible(true);
-                        break;
-                        
-                    case 2:
-                        break;
-                }
-                
-                
-                
-                
+                eventoCerrarSistema();
             }
 
             @Override
-            public void windowClosed(WindowEvent e) {
-                
-            }
+            public void windowClosed(WindowEvent e){ }
 
             @Override
-            public void windowIconified(WindowEvent e) {
-                
-            }
+            public void windowIconified(WindowEvent e) {}
 
             @Override
-            public void windowDeiconified(WindowEvent e) {
-                
-            }
+            public void windowDeiconified(WindowEvent e) {}
 
             @Override
-            public void windowActivated(WindowEvent e) {
-            }
+            public void windowActivated(WindowEvent e) {}
 
             @Override
-            public void windowDeactivated(WindowEvent e) {
-                
-                
-            }
+            public void windowDeactivated(WindowEvent e) {}
         });
+    }
+    
+    private void eventoCerrarSistema()
+    {
+        String[] opciones = {"Salir", "Cambiar usuario", "Cancelar"};
+        int opcionSeleccionada = DialogoCodefac.dialogoPreguntaPersonalizada("Alerta", "Porfavor seleccione una opción?", DialogoCodefac.MENSAJE_ADVERTENCIA, opciones);
+        switch (opcionSeleccionada) {
+            case 0: //opcion de salir
+                grabarDatosSalir();
+
+                //Solo detener la publicidad cuando exista
+                if (hiloPublicidadCodefac != null) {
+                    hiloPublicidadCodefac.hiloPublicidad = false;
+                }
+                dispose();
+                System.exit(0);
+                break;
+
+            case 1:
+                cerrarTodasPantallas();
+                setVisible(false);
+                Usuario usuario = Main.cargarLoginUsuario();
+                sessionCodefac.setUsuario(usuario);
+                sessionCodefac.setPerfiles(Main.obtenerPerfilesUsuario(usuario));
+                setVentanasMenuList(null);
+                setVisible(true);
+                break;
+
+            case 2:
+                break;
+        }
     }
     
     private void cerrarTodasPantallas()
@@ -1081,9 +1059,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             /**
              * Agregar variables de session a la pantalla
              */
-            //ParametroCodefacServiceIf servicio=ServiceFactory.getFactory().getParametroCodefacServiceIf();
-            //sessionCodefac.setParametrosCodefac(servicio.getParametrosMap());
-            
+           
             panel.estadoFormulario= ControladorCodefacInterface.ESTADO_GRABAR;
             panel.panelPadre=generalPanelModel;
             panel.session=sessionCodefac;
@@ -1099,8 +1075,6 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 System.err.println("Cancelado metodo iniciar");
                 return;
             }
-            
-
             
             panel.addInternalFrameListener(listenerFrame);
             String tituloOriginal=getTituloOriginal(panel.getTitle());
@@ -2199,6 +2173,13 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
                             JMenuItem menuVentana = new JMenuItem(nombreVentana);
                             menuVentana.setFont(new Font("Arial", 0, 13));
+                            
+                            //Agregar atajo de teclado si existe
+                            if(menuControlador.getTeclaAtajo()!=null)
+                            {
+                                menuVentana.setAccelerator(KeyStroke.getKeyStroke(menuControlador.getTeclaAtajo(),InputEvent.SHIFT_MASK));
+                            }
+                            
                             menuCategoria.add(menuVentana);
 
                             menuControlador.setJmenuItem(menuVentana);
@@ -2463,22 +2444,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         getjMenuItemSalir().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //Boolean respuesta=DialogoCodefac.dialogoPregunta("Alerta","Estas seguro que deseas salir?",DialogoCodefac.MENSAJE_ADVERTENCIA);
-                String[] opciones={"Salir","Cambiar usuario","Cancelar"};
-                int opcionSeleccionada=DialogoCodefac.dialogoPreguntaPersonalizada("Alerta","Porfavor seleccione una opción?",DialogoCodefac.MENSAJE_ADVERTENCIA,opciones);
-                switch(opcionSeleccionada)
-                {
-                    case 0: //opcion de salir
-                        hiloPublicidadCodefac.hiloPublicidad = false;
-                        dispose();
-                        break;
-                        
-                    case 1:
-                        break;
-                        
-                    case 2:
-                        break;
-                }
+                eventoCerrarSistema();
 
             }
         });
@@ -2596,6 +2562,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         }
         
                 
+    }
+
+    private void iniciarComponentesPantalla() {
+        String anioActualStr=UtilidadesFecha.obtenerAnioStr(UtilidadesFecha.getFechaHoy());
+        getLblPiePagina().setText("Todos los derechos reservador por @Codesoft "+anioActualStr);
     }
     
     public class ListenerIcono implements IconoInterfaz 
