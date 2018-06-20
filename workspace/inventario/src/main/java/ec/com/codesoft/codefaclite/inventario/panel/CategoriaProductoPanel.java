@@ -44,6 +44,7 @@ public abstract class CategoriaProductoPanel extends ControladorCodefacInterface
         jButton1 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        lblEspacio = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -52,6 +53,7 @@ public abstract class CategoriaProductoPanel extends ControladorCodefacInterface
         setTitle("Categoria del Producto");
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel1.setText("Nombre:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -66,6 +68,7 @@ public abstract class CategoriaProductoPanel extends ControladorCodefacInterface
         gridBagConstraints.weightx = 0.1;
         getContentPane().add(txtNombre, gridBagConstraints);
 
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setText("Descripcion:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -84,10 +87,10 @@ public abstract class CategoriaProductoPanel extends ControladorCodefacInterface
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(8, 0, 8, 0);
         getContentPane().add(jScrollPane1, gridBagConstraints);
 
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel3.setText("Imagen:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -120,6 +123,12 @@ public abstract class CategoriaProductoPanel extends ControladorCodefacInterface
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
         getContentPane().add(jLabel5, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.weighty = 0.1;
+        getContentPane().add(lblEspacio, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -137,6 +146,7 @@ public abstract class CategoriaProductoPanel extends ControladorCodefacInterface
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblEspacio;
     private javax.swing.JTextArea txtDescripcion;
     private javax.swing.JTextField txtFoto;
     private javax.swing.JTextField txtNombre;
