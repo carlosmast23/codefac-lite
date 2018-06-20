@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.main.panel;
 
 import java.awt.Dimension;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -48,7 +49,7 @@ public class LoginFormDialog extends javax.swing.JDialog {
         txtClave = new javax.swing.JPasswordField();
         btnIngresar = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
+        lblPiePagina = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -88,9 +89,10 @@ public class LoginFormDialog extends javax.swing.JDialog {
             }
         });
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("Codefac software de facturacion electronica @ Codesoft 2017");
+        lblPiePagina.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
+        lblPiePagina.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblPiePagina.setText("Codefac software de facturación electrónica @ Codesoft 2017");
+        lblPiePagina.setAlignmentY(0.6F);
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/general/ejecutiva.png"))); // NOI18N
 
@@ -114,7 +116,7 @@ public class LoginFormDialog extends javax.swing.JDialog {
                                 .addComponent(btnIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnSalir, javax.swing.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE))))
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblPiePagina, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(101, Short.MAX_VALUE))
         );
         panelPrincipalLayout.setVerticalGroup(
@@ -133,7 +135,7 @@ public class LoginFormDialog extends javax.swing.JDialog {
                     .addComponent(btnIngresar)
                     .addComponent(btnSalir))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblPiePagina, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelPrincipalLayout.createSequentialGroup()
                 .addContainerGap()
@@ -144,11 +146,11 @@ public class LoginFormDialog extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(panelPrincipal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(panelPrincipal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -209,8 +211,8 @@ public class LoginFormDialog extends javax.swing.JDialog {
     private javax.swing.JButton btnSalir;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel lblPiePagina;
     private javax.swing.JPanel panelPrincipal;
     private javax.swing.JPasswordField txtClave;
     private javax.swing.JTextField txtUsuario;
@@ -254,6 +256,14 @@ public class LoginFormDialog extends javax.swing.JDialog {
 
     public void setPanelPrincipal(JPanel panelPrincipal) {
         this.panelPrincipal = panelPrincipal;
+    }
+
+    public JLabel getLblPiePagina() {
+        return lblPiePagina;
+    }
+
+    public void setLblPiePagina(JLabel lblPiePagina) {
+        this.lblPiePagina = lblPiePagina;
     }
 
     

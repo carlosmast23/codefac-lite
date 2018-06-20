@@ -638,6 +638,14 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         this.lblTextoSecundario = lblTextoSecundario;
     }
 
+    public JLabel getLblPiePagina() {
+        return lblPiePagina;
+    }
+
+    public void setLblPiePagina(JLabel lblPiePagina) {
+        this.lblPiePagina = lblPiePagina;
+    }
+
     
     
     

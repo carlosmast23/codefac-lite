@@ -60,6 +60,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
@@ -204,6 +205,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     
     public void iniciarComponentesGenerales()
     {
+        iniciarComponentesPantalla();
         iniciarComponentes();        
         agregarListenerBotonesDefecto();
         agregarListenerBotones();
@@ -2596,6 +2598,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         }
         
                 
+    }
+
+    private void iniciarComponentesPantalla() {
+        String anioActualStr=UtilidadesFecha.obtenerAnioStr(UtilidadesFecha.getFechaHoy());
+        getLblPiePagina().setText("Todos los derechos reservador por @Codesoft "+anioActualStr);
     }
     
     public class ListenerIcono implements IconoInterfaz 

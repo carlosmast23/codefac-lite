@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import java.awt.Frame;
 import java.awt.Image;
@@ -40,6 +41,7 @@ public class LoginModel extends LoginFormDialog{
 
     public LoginModel() {
         super(null,true);
+        valoresIniciales();
         initListenerBotones();
         this.usuarioServicio=ServiceFactory.getFactory().getUsuarioServicioIf();
         
@@ -164,6 +166,11 @@ public class LoginModel extends LoginFormDialog{
         {
             DialogoCodefac.mensaje("Advertencia Login","Ingrese todos los campos",DialogoCodefac.MENSAJE_ADVERTENCIA);
         }
+    }
+
+    private void valoresIniciales() {
+        String anioActualStr=UtilidadesFecha.obtenerAnioStr(UtilidadesFecha.getFechaHoy());
+        getLblPiePagina().setText("Codefac software de facturación electrónica @ Codesoft "+anioActualStr);
     }
     
 }

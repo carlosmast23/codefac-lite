@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.main.model;
 
 import ec.com.codesoft.codefaclite.main.panel.AcercaDialog;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.web.UtilidadesWeb;
 import java.awt.Frame;
 import java.awt.event.MouseEvent;
@@ -93,6 +94,8 @@ public class AcercaModel extends AcercaDialog{
 
     private void cargarValoresIniciales() {
         getLblVersion().setText("Codefac Lite "+ParametrosSistemaCodefac.VERSION);
+        String anioActualStr=UtilidadesFecha.obtenerAnioStr(UtilidadesFecha.getFechaHoy());
+        getLblPiePagina().setText("Codefac @ 2010 - "+anioActualStr+" Codesoft");
     }
     
 }

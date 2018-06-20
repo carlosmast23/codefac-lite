@@ -42,7 +42,7 @@ public class AcercaDialog extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        lblPiePagina = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         lblVersion = new javax.swing.JLabel();
         lblLicencia = new javax.swing.JLabel();
@@ -87,18 +87,18 @@ public class AcercaDialog extends javax.swing.JDialog {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         jPanel1.add(jLabel3, gridBagConstraints);
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("Codefac @ 2010 - 2017 Codesoft");
-        jLabel4.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        lblPiePagina.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblPiePagina.setForeground(new java.awt.Color(153, 153, 153));
+        lblPiePagina.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblPiePagina.setText("Codefac @ 2010 - 2017 Codesoft");
+        lblPiePagina.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 9;
         gridBagConstraints.gridwidth = 17;
         gridBagConstraints.ipadx = 148;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
-        jPanel1.add(jLabel4, gridBagConstraints);
+        jPanel1.add(lblPiePagina, gridBagConstraints);
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(153, 153, 153));
@@ -270,7 +270,6 @@ public class AcercaDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
@@ -281,6 +280,7 @@ public class AcercaDialog extends javax.swing.JDialog {
     private javax.swing.JLabel lblLicencia;
     private javax.swing.JLabel lblPaginaDesarrolladores;
     private javax.swing.JLabel lblPaginaOficial;
+    private javax.swing.JLabel lblPiePagina;
     private javax.swing.JLabel lblUsuario;
     private javax.swing.JLabel lblVersion;
     // End of variables declaration//GEN-END:variables
@@ -324,8 +324,14 @@ public class AcercaDialog extends javax.swing.JDialog {
     public void setLblVersion(JLabel lblVersion) {
         this.lblVersion = lblVersion;
     }
-    
-    
+
+    public JLabel getLblPiePagina() {
+        return lblPiePagina;
+    }
+
+    public void setLblPiePagina(JLabel lblPiePagina) {
+        this.lblPiePagina = lblPiePagina;
+    }
     
 
     
