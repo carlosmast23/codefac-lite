@@ -3,3 +3,4 @@ Al momento de verificar la licencia ver si por defecto se deja habilitado alguno
 Cuando se ingresan varios modulos en la base de datos no funciona el web service (solo funciona con 1 modulo)
 
 En el metodo de consultar el acceso a los de soporte grabar la fecha del ultimo acceso
+No he venido a saludar a los amigos

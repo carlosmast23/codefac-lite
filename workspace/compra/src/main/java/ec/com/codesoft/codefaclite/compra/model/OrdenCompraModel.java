@@ -48,6 +48,7 @@ import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -208,14 +209,16 @@ public class OrdenCompraModel extends OrdenCompraPanel{
         OrdenCompraBusqueda ordenCompraBusqueda = new OrdenCompraBusqueda();
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(ordenCompraBusqueda);
         buscarDialogoModel.setVisible(true);
-        OrdenCompra ordenCompra = (OrdenCompra)buscarDialogoModel.getResultado();
-        if(ordenCompra != null)
+        OrdenCompra ordenCompraTemp = (OrdenCompra)buscarDialogoModel.getResultado();
+        if(ordenCompraTemp != null)
         {
-            this.ordenCompra = ordenCompra;
+            this.ordenCompra = ordenCompraTemp;
             //actualizarDatosMostrarVentana();
             cargarOrdenCompra();
             mostrarDatosTotales();
             mostrarDatosTabla();
+        }else{
+             throw new ExcepcionCodefacLite("Cancelando Busqueda");
         }
     }
     
@@ -319,6 +322,7 @@ public class OrdenCompraModel extends OrdenCompraPanel{
 
     private void listener() {
         listenerBotones();
+        listenerTabla();
     }
 
     private void listenerBotones() {
@@ -343,7 +347,6 @@ public class OrdenCompraModel extends OrdenCompraPanel{
                     int fila = getTblDetalleProductos().getSelectedRow();
                     OrdenCompraDetalle ordenCompraDetalle = ordenCompra.getDetalles().get(fila);
                     agregarDetallesCompra(ordenCompraDetalle);
-                    
                     calcularDescuento(1, new BigDecimal(getTxtDescuentoImpuestos().getText()));
                     calcularDescuento(2, new BigDecimal(getTxtDescuentoSinImpuestos().getText()));
                 
@@ -434,6 +437,21 @@ public class OrdenCompraModel extends OrdenCompraPanel{
 
                 panelPadre.crearDialogoCodefac(observer, DialogInterfacePanel.PRODUCTO_PANEL, false);
             }
+        });
+    }
+    
+    public void listenerTabla()
+    {
+        getTblDetalleProductos().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int fila = getTblDetalleProductos().getSelectedRow();
+                OrdenCompraDetalle ordenCompraDetalle = ordenCompra.getDetalles().get(fila);
+                /**
+                * Mostrar datos en pantalla para editar 
+                */
+                mostrarDatosEnCampos(ordenCompraDetalle);
+            }     
         });
     }
     
@@ -528,8 +546,8 @@ public class OrdenCompraModel extends OrdenCompraPanel{
     
     private void limpiarCampos() {
         getTxtDescripcionItem().setText("");
-        getTxtPrecionUnitarioItem().setText("");
-        getTxtCantidadItem().setText("");
+        getTxtPrecionUnitarioItem().setText("0.00");
+        getTxtCantidadItem().setText("0");
 
     }
     
@@ -690,7 +708,17 @@ public class OrdenCompraModel extends OrdenCompraPanel{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    
+    public void mostrarDatosEnCampos(OrdenCompraDetalle ordenCompraDetalle)
+    {
+         getTxtCantidadItem().setText("" + ordenCompraDetalle.getCantidad());
+         getTxtPrecionUnitarioItem().setText("" + ordenCompraDetalle.getPrecioUnitario());
+         getTxtDescripcionItem().setText("" + ordenCompraDetalle.getDescripcion());
+         if(ordenCompraDetalle.getIva().compareTo(BigDecimal.ZERO) == 0){
+            getCmbCobraIva().setSelectedItem(EnumSiNo.NO);
+         }else{
+            getCmbCobraIva().setSelectedItem(EnumSiNo.SI);
+         }
+    }
 
     
 }

@@ -83,11 +83,42 @@ public class PresupuestoModel extends PresupuestoPanel{
     private ProductoProveedor productoProveedor;
     private Map<Persona,List<PresupuestoDetalle>> mapClientes;
     private Map<Integer,List<PresupuestoDetalle>> mapOrden;
+    private List<ProveedorReferencia> proveedorReferencias;
+    
+    public class ProveedorReferencia
+    {
+        public Persona persona;
+        public int ordenCompra;
+
+        public ProveedorReferencia(Persona persona, int ordenCompra) {
+            this.persona = persona;
+            this.ordenCompra = ordenCompra;
+        }
+    
+        public Persona getPersona() {
+            return persona;
+        }
+
+        public void setPersona(Persona persona) {
+            this.persona = persona;
+        }
+
+        public int getOrdenCompra() {
+            return ordenCompra;
+        }
+
+        public void setOrdenCompra(int OrdenCompra) {
+            this.ordenCompra = OrdenCompra;
+        }        
+    }
+            
+            
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         presupuesto = new Presupuesto();
-        getTxtCodigo().setText(""+presupuesto.getId());
+        proveedorReferencias = new ArrayList<>();
+        getTxtCodigo().setText("");
         cargarCombos();
         addListenerBotones();
         addListenerCombos();
@@ -213,8 +244,9 @@ public class PresupuestoModel extends PresupuestoPanel{
         PresupuestoBusqueda presupuestoBusqueda = new PresupuestoBusqueda();
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(presupuestoBusqueda);
         buscarDialogoModel.setVisible(true);
-        this.presupuesto = (Presupuesto) buscarDialogoModel.getResultado();
-        if(this.presupuesto != null){
+        Presupuesto tempPresupuesto = (Presupuesto) buscarDialogoModel.getResultado();
+        if(tempPresupuesto != null){
+            this.presupuesto =  tempPresupuesto;
             getTxtCodigo().setText(""+this.presupuesto.getId());
             getTxtCliente().setText(this.presupuesto.getPersona().getIdentificacion()+" - "+this.presupuesto.getPersona().getRazonSocial());                
             cargarDetallesOrdenTrabajo(this.presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo());
@@ -226,6 +258,9 @@ public class PresupuestoModel extends PresupuestoPanel{
             ordenarDetallesEnFuncionDeCliente();
             mostrarDatosTabla();
             calcularTotales();
+        }
+        else{
+             throw new ExcepcionCodefacLite("Cancelando Busqueda");
         }
         
     }
@@ -755,17 +790,31 @@ public class PresupuestoModel extends PresupuestoPanel{
     }
     
     public void ordenarDetallesEnFuncionDeCliente()
-    {
+    {  
         mapClientes = new TreeMap<Persona,List<PresupuestoDetalle>>(new Comparator<Persona>() {
             @Override
             public int compare(Persona o1, Persona o2) {
                 return o1.compareTo(o2);
             }
-        }); 
-        for(PresupuestoDetalle pd : presupuesto.getPresupuestoDetalles()){
+        });
+        boolean b = false;
+        for(PresupuestoDetalle pd : presupuesto.getPresupuestoDetalles())
+        {
+            
             if(mapClientes.get(pd.getPersona()) == null)
             {
                 mapClientes.put(pd.getPersona(),new ArrayList<PresupuestoDetalle>());
+                for(ProveedorReferencia proveedorReferencia: this.proveedorReferencias)
+                {
+                    if(proveedorReferencia.getPersona().equals(pd.getPersona())){
+                       b = true;
+                       break;
+                    }
+                }
+                if(!b){
+                    this.proveedorReferencias.add(new ProveedorReferencia(pd.getPersona(), this.proveedorReferencias.size()+1));
+                }
+                b=false;
             }
             mapClientes.get(pd.getPersona()).add(pd);
         }
@@ -773,27 +822,33 @@ public class PresupuestoModel extends PresupuestoPanel{
     
     public void ordenarDetallesEnFuncionDeOrdenCompra()
     {
+        int c = 0;
         ordenarDetallesEnFuncionDeCliente();
-        int c=0;
         mapOrden = new HashMap<Integer,List<PresupuestoDetalle>>();
         for (Map.Entry<Persona, List<PresupuestoDetalle>> entry : mapClientes.entrySet()) 
         {
             //Número de Orden a emplear por cada proveedor, cada proveedor puede tener varias detalles de ordenes de compra
-            c+=1;
+            List<PresupuestoDetalle> value = entry.getValue();
+            PresupuestoDetalle presupuestoDetalleTemp = value.get(0);
+            for(ProveedorReferencia proveedorReferencia : this.proveedorReferencias)
+            {
+                if(presupuestoDetalleTemp.getProductoProveedor().equals(proveedorReferencia.persona))
+                {
+                    c = proveedorReferencia.getOrdenCompra();
+                }
+            }
             if(mapOrden.get(c) == null)
             {
                 mapOrden.put(c,new ArrayList<PresupuestoDetalle>());
             }
-            List<PresupuestoDetalle> value = entry.getValue();
             for (PresupuestoDetalle presupuestoDetalle : value) 
             {
-                
-                if(presupuestoDetalle.getNumeroOrdenCompra() == null){
-                    presupuestoDetalle.setNumeroOrdenCompra(c);
+                if(presupuestoDetalle.getNumeroOrdenCompra() != null ){
                     mapOrden.get(c).add(presupuestoDetalle);
+                }else{
+                    presupuestoDetalle.setNumeroOrdenCompra(c);
                 }
-            }    
-
+            }
         }
     }
     
@@ -824,7 +879,6 @@ public class PresupuestoModel extends PresupuestoPanel{
                     fila.add(detalle.getPrecioCompra().subtract(detalle.getDescuentoCompra())+"");
                     fila.add(detalle.getPrecioVenta().subtract(detalle.getDescuentoVenta())+"");
                     fila.add(detalle.getCantidad().toString());
-                    System.out.println("aaaaaaaaaa" + detalle.getNumeroOrdenCompra());
                     EnumSiNo siNo = EnumSiNo.getEnumByLetra(detalle.getEstado()) ;
                     fila.add(siNo.getBool());
                     modeloTablaDetallesPresupuesto.addRow(fila);

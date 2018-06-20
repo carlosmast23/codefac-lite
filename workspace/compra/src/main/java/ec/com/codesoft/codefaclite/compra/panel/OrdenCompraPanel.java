@@ -284,7 +284,7 @@ public abstract class OrdenCompraPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(jLabel10, gridBagConstraints);
 
-        txtPrecionUnitarioItem.setText("0");
+        txtPrecionUnitarioItem.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
