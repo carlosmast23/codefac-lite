@@ -214,6 +214,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         agregarListenerSplit();
         agregarListenerFrame();
         agregarListenerGraphics();
+        agregarListenerItemMenu();
         cargarDatosAdicionales();
                
         habilitarBotones(false);  
@@ -2567,6 +2568,58 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private void iniciarComponentesPantalla() {
         String anioActualStr=UtilidadesFecha.obtenerAnioStr(UtilidadesFecha.getFechaHoy());
         getLblPiePagina().setText("Todos los derechos reservador por @Codesoft "+anioActualStr);
+    }
+
+    private void agregarListenerItemMenu() {
+        
+        getItemActualizar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getBtnActualizar().doClick();
+            }
+        });
+        
+        getItemAyuda().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getBtnAyuda().doClick();
+            }
+        });
+        
+        getItemBuscar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getBtnBuscar().doClick();
+            }
+        });
+        
+        getItemEliminar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getBtnEliminar().doClick();
+            }
+        });
+        
+        getItemGuardar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getBtnGuardar().doClick();
+            }
+        });
+        
+        getItemImprimir().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getBtnImprimir().doClick();
+            }
+        });
+
+        getItemNuevo().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getBtnNuevo().doClick();
+            }
+        });
     }
     
     public class ListenerIcono implements IconoInterfaz 
