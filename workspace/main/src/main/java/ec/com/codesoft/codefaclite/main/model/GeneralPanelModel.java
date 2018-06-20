@@ -84,6 +84,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -137,6 +138,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.ToolTipManager;
@@ -1057,9 +1059,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             /**
              * Agregar variables de session a la pantalla
              */
-            //ParametroCodefacServiceIf servicio=ServiceFactory.getFactory().getParametroCodefacServiceIf();
-            //sessionCodefac.setParametrosCodefac(servicio.getParametrosMap());
-            
+           
             panel.estadoFormulario= ControladorCodefacInterface.ESTADO_GRABAR;
             panel.panelPadre=generalPanelModel;
             panel.session=sessionCodefac;
@@ -1075,8 +1075,6 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 System.err.println("Cancelado metodo iniciar");
                 return;
             }
-            
-
             
             panel.addInternalFrameListener(listenerFrame);
             String tituloOriginal=getTituloOriginal(panel.getTitle());
@@ -2175,6 +2173,13 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
                             JMenuItem menuVentana = new JMenuItem(nombreVentana);
                             menuVentana.setFont(new Font("Arial", 0, 13));
+                            
+                            //Agregar atajo de teclado si existe
+                            if(menuControlador.getTeclaAtajo()!=null)
+                            {
+                                menuVentana.setAccelerator(KeyStroke.getKeyStroke(menuControlador.getTeclaAtajo(),InputEvent.SHIFT_MASK));
+                            }
+                            
                             menuCategoria.add(menuVentana);
 
                             menuControlador.setJmenuItem(menuVentana);

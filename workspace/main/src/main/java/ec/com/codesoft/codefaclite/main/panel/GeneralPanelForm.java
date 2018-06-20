@@ -268,6 +268,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         });
         jMenuAyuda.add(jMenuItemContenido);
 
+        jMenuItemAcerca.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.SHIFT_MASK));
         jMenuItemAcerca.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         jMenuItemAcerca.setText("Acerca");
         jMenuAyuda.add(jMenuItemAcerca);
