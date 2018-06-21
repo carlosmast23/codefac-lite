@@ -316,7 +316,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
                 //Solo ejecutar si presiona el evento enter
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {                   
                    int filaSeleccionada=getTblTabla().getSelectedRow();
-                   if(filaSeleccionada>0)   //
+                   if(filaSeleccionada>=0)   //
                    {
                        resultado=listaResultados.get(filaSeleccionada);
                        dispose();

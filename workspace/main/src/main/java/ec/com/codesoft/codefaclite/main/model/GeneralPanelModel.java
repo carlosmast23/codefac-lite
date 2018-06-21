@@ -1632,7 +1632,13 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
                         @Override
                         public void internalFrameIconified(InternalFrameEvent e) {
-                            //mostrarPanelSecundario(false);
+                            //Veifico si ya no existen pantallas para establecer el foco entonces desahabilito los botones
+                            if(verificarTodasPantallasMinimizadas(e.getInternalFrame()))
+                            {
+                                habilitarBotones(false);
+                            }
+                            
+                            System.out.println("minimizado");
                         }
 
                         @Override
@@ -1670,14 +1676,10 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             //s
                            
                         }
-
+                        
+                        //Evento cuando se desactiva las pantallas
                         @Override
-                        public void internalFrameDeactivated(InternalFrameEvent e) {
-                             habilitarBotones(false);
-                             //System.err.println("internalFrameDeactivated");
-                            //habilitarConfiguracioneBotones();
-                            //JOptionPane.showMessageDialog(null,"internalFrameDeactivated");
-                        }
+                        public void internalFrameDeactivated(InternalFrameEvent e) {}
      };
     
         
@@ -2538,6 +2540,28 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         getjDesktopPane1().revalidate();
         getjDesktopPane1().repaint();
         
+    }
+    
+    /**
+     * Verifica si todas las pantallas estan minimizadas
+     * @return 
+     */
+    private Boolean verificarTodasPantallasMinimizadas(JInternalFrame internalFrameActual)
+    {
+       
+        JInternalFrame[] ventanas = getjDesktopPane1().getAllFrames();
+        for (JInternalFrame ventana : ventanas) {
+
+            if(!ventana.equals(internalFrameActual))
+            {
+                
+                if(!ventana.isIcon())
+                {
+                    return  false;
+                }
+            }
+        }
+        return true;
     }
 
     @Override
