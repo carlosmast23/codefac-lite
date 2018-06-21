@@ -73,6 +73,13 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuInicio = new javax.swing.JMenu();
         jMenuItemInicio = new javax.swing.JMenuItem();
+        itemNuevo = new javax.swing.JMenuItem();
+        itemGuardar = new javax.swing.JMenuItem();
+        itemEliminar = new javax.swing.JMenuItem();
+        itemBuscar = new javax.swing.JMenuItem();
+        itemActualizar = new javax.swing.JMenuItem();
+        itemImprimir = new javax.swing.JMenuItem();
+        itemAyuda = new javax.swing.JMenuItem();
         jMenuItemSalir = new javax.swing.JMenuItem();
         jMenuUtilidades = new javax.swing.JMenu();
         jMenuCalculadora = new javax.swing.JMenuItem();
@@ -226,14 +233,85 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuInicio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/modulos/menu.png"))); // NOI18N
         jMenuInicio.setToolTipText("Principal");
 
+        jMenuItemInicio.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItemInicio.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
-        jMenuItemInicio.setText("Iinicio");
+        jMenuItemInicio.setText("Inicio");
         jMenuItemInicio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemInicioActionPerformed(evt);
             }
         });
         jMenuInicio.add(jMenuItemInicio);
+
+        itemNuevo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        itemNuevo.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        itemNuevo.setText("Nuevo");
+        itemNuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemNuevoActionPerformed(evt);
+            }
+        });
+        jMenuInicio.add(itemNuevo);
+
+        itemGuardar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
+        itemGuardar.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        itemGuardar.setText("Guardar");
+        itemGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemGuardarActionPerformed(evt);
+            }
+        });
+        jMenuInicio.add(itemGuardar);
+
+        itemEliminar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
+        itemEliminar.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        itemEliminar.setText("Eliminar");
+        itemEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemEliminarActionPerformed(evt);
+            }
+        });
+        jMenuInicio.add(itemEliminar);
+
+        itemBuscar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.CTRL_MASK));
+        itemBuscar.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        itemBuscar.setText("Buscar");
+        itemBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemBuscarActionPerformed(evt);
+            }
+        });
+        jMenuInicio.add(itemBuscar);
+
+        itemActualizar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
+        itemActualizar.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        itemActualizar.setText("Actualizar");
+        itemActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemActualizarActionPerformed(evt);
+            }
+        });
+        jMenuInicio.add(itemActualizar);
+
+        itemImprimir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
+        itemImprimir.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        itemImprimir.setText("Imprimir");
+        itemImprimir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemImprimirActionPerformed(evt);
+            }
+        });
+        jMenuInicio.add(itemImprimir);
+
+        itemAyuda.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
+        itemAyuda.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        itemAyuda.setText("Ayuda");
+        itemAyuda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemAyudaActionPerformed(evt);
+            }
+        });
+        jMenuInicio.add(itemAyuda);
 
         jMenuItemSalir.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         jMenuItemSalir.setText("Salir");
@@ -268,7 +346,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         });
         jMenuAyuda.add(jMenuItemContenido);
 
-        jMenuItemAcerca.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.SHIFT_MASK));
+        jMenuItemAcerca.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.ALT_MASK));
         jMenuItemAcerca.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         jMenuItemAcerca.setText("Acerca");
         jMenuAyuda.add(jMenuItemAcerca);
@@ -329,6 +407,34 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItemActualizarLicenciaActionPerformed
 
+    private void itemNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemNuevoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_itemNuevoActionPerformed
+
+    private void itemGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemGuardarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_itemGuardarActionPerformed
+
+    private void itemEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemEliminarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_itemEliminarActionPerformed
+
+    private void itemBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemBuscarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_itemBuscarActionPerformed
+
+    private void itemActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemActualizarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_itemActualizarActionPerformed
+
+    private void itemImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemImprimirActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_itemImprimirActionPerformed
+
+    private void itemAyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemAyudaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_itemAyudaActionPerformed
+
 
     /**
      * @param args the command line arguments
@@ -384,6 +490,13 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JButton btnImprimir;
     private javax.swing.JButton btnNuevo;
     private javax.swing.JButton btnSalirPantallaPublicidad;
+    private javax.swing.JMenuItem itemActualizar;
+    private javax.swing.JMenuItem itemAyuda;
+    private javax.swing.JMenuItem itemBuscar;
+    private javax.swing.JMenuItem itemEliminar;
+    private javax.swing.JMenuItem itemGuardar;
+    private javax.swing.JMenuItem itemImprimir;
+    private javax.swing.JMenuItem itemNuevo;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenuAyuda;
@@ -645,6 +758,62 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
     public void setLblPiePagina(JLabel lblPiePagina) {
         this.lblPiePagina = lblPiePagina;
+    }
+
+    public JMenuItem getItemActualizar() {
+        return itemActualizar;
+    }
+
+    public void setItemActualizar(JMenuItem itemActualizar) {
+        this.itemActualizar = itemActualizar;
+    }
+
+    public JMenuItem getItemAyuda() {
+        return itemAyuda;
+    }
+
+    public void setItemAyuda(JMenuItem itemAyuda) {
+        this.itemAyuda = itemAyuda;
+    }
+
+    public JMenuItem getItemBuscar() {
+        return itemBuscar;
+    }
+
+    public void setItemBuscar(JMenuItem itemBuscar) {
+        this.itemBuscar = itemBuscar;
+    }
+
+    public JMenuItem getItemEliminar() {
+        return itemEliminar;
+    }
+
+    public void setItemEliminar(JMenuItem itemEliminar) {
+        this.itemEliminar = itemEliminar;
+    }
+
+    public JMenuItem getItemGuardar() {
+        return itemGuardar;
+    }
+
+    public void setItemGuardar(JMenuItem itemGuardar) {
+        this.itemGuardar = itemGuardar;
+    }
+
+    public JMenuItem getItemImprimir() {
+        return itemImprimir;
+    }
+
+    public void setItemImprimir(JMenuItem itemImprimir) {
+        this.itemImprimir = itemImprimir;
+    }
+
+    public JMenuItem getItemNuevo() {
+        return itemNuevo;
+    }
+
+    public void setItemNuevo(JMenuItem itemNuevo) {
+        this.itemNuevo = itemNuevo;
     }
 
     

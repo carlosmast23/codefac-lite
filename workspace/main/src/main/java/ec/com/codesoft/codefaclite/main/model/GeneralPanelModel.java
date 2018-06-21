@@ -214,6 +214,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         agregarListenerSplit();
         agregarListenerFrame();
         agregarListenerGraphics();
+        agregarListenerItemMenu();
         cargarDatosAdicionales();
                
         habilitarBotones(false);  
@@ -572,7 +573,12 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         else
                         {
                             try {
-                                ventana.setSelected(true);
+                                if (ventana.isIcon()) {
+                                    ventana.setIcon(false);
+                                } else {
+                                    ventana.setSelected(true);
+                                }
+                                
                             } catch (PropertyVetoException ex) {
                                 Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                             }
@@ -1626,12 +1632,24 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
                         @Override
                         public void internalFrameClosed(InternalFrameEvent e) {
-                               //System.err.println("internalFrameClosed");
+                            if (verificarTodasPantallasMinimizadas(e.getInternalFrame())) {
+                                habilitarBotones(false);
+                            }
+                            mostrarPanelSecundario(false);
                         }
 
                         @Override
                         public void internalFrameIconified(InternalFrameEvent e) {
-                            //mostrarPanelSecundario(false);
+                            //Veifico si ya no existen pantallas para establecer el foco entonces desahabilito los botones
+                            ControladorCodefacInterface controlador=(ControladorCodefacInterface) e.getInternalFrame();
+                            controlador.sinAcciones=true; //Este artificio utilizo para que cuando minimice no se ejecuten los validadores
+                            
+                            if (verificarTodasPantallasMinimizadas(e.getInternalFrame())) {
+                                habilitarBotones(false);
+                                
+                            }
+                            mostrarPanelSecundario(false);
+
                         }
 
                         @Override
@@ -1669,14 +1687,10 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             //s
                            
                         }
-
+                        
+                        //Evento cuando se desactiva las pantallas
                         @Override
-                        public void internalFrameDeactivated(InternalFrameEvent e) {
-                             habilitarBotones(false);
-                             //System.err.println("internalFrameDeactivated");
-                            //habilitarConfiguracioneBotones();
-                            //JOptionPane.showMessageDialog(null,"internalFrameDeactivated");
-                        }
+                        public void internalFrameDeactivated(InternalFrameEvent e) {}
      };
     
         
@@ -1704,6 +1718,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
      */
     private void habilitarConfiguracioneBotones()
     {
+        habilitarBotones(false);//Descativo todas las ventanas para luego activar segun los permisos
         JInternalFrame frame = getjDesktopPane1().getSelectedFrame();
         ControladorCodefacInterface frameInterface = (ControladorCodefacInterface) frame;
         
@@ -2177,7 +2192,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             //Agregar atajo de teclado si existe
                             if(menuControlador.getTeclaAtajo()!=null)
                             {
-                                menuVentana.setAccelerator(KeyStroke.getKeyStroke(menuControlador.getTeclaAtajo(),InputEvent.SHIFT_MASK));
+                                menuVentana.setAccelerator(KeyStroke.getKeyStroke(menuControlador.getTeclaAtajo(),InputEvent.ALT_MASK));
                             }
                             
                             menuCategoria.add(menuVentana);
@@ -2538,6 +2553,28 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         getjDesktopPane1().repaint();
         
     }
+    
+    /**
+     * Verifica si todas las pantallas estan minimizadas
+     * @return 
+     */
+    private Boolean verificarTodasPantallasMinimizadas(JInternalFrame internalFrameActual)
+    {
+       
+        JInternalFrame[] ventanas = getjDesktopPane1().getAllFrames();
+        for (JInternalFrame ventana : ventanas) {
+
+            if(!ventana.equals(internalFrameActual))
+            {
+                
+                if(!ventana.isIcon())
+                {
+                    return  false;
+                }
+            }
+        }
+        return true;
+    }
 
     @Override
     public boolean validarPorGrupo(String nombre, String componente) {
@@ -2567,6 +2604,58 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private void iniciarComponentesPantalla() {
         String anioActualStr=UtilidadesFecha.obtenerAnioStr(UtilidadesFecha.getFechaHoy());
         getLblPiePagina().setText("Todos los derechos reservador por @Codesoft "+anioActualStr);
+    }
+
+    private void agregarListenerItemMenu() {
+        
+        getItemActualizar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getBtnActualizar().doClick();
+            }
+        });
+        
+        getItemAyuda().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getBtnAyuda().doClick();
+            }
+        });
+        
+        getItemBuscar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getBtnBuscar().doClick();
+            }
+        });
+        
+        getItemEliminar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getBtnEliminar().doClick();
+            }
+        });
+        
+        getItemGuardar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getBtnGuardar().doClick();
+            }
+        });
+        
+        getItemImprimir().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getBtnImprimir().doClick();
+            }
+        });
+
+        getItemNuevo().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getBtnNuevo().doClick();
+            }
+        });
     }
     
     public class ListenerIcono implements IconoInterfaz 
