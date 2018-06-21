@@ -573,7 +573,12 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         else
                         {
                             try {
-                                ventana.setSelected(true);
+                                if (ventana.isIcon()) {
+                                    ventana.setIcon(false);
+                                } else {
+                                    ventana.setSelected(true);
+                                }
+                                
                             } catch (PropertyVetoException ex) {
                                 Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                             }
