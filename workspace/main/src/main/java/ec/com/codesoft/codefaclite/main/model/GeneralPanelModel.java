@@ -1627,18 +1627,24 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
                         @Override
                         public void internalFrameClosed(InternalFrameEvent e) {
-                               //System.err.println("internalFrameClosed");
+                            if (verificarTodasPantallasMinimizadas(e.getInternalFrame())) {
+                                habilitarBotones(false);
+                            }
+                            mostrarPanelSecundario(false);
                         }
 
                         @Override
                         public void internalFrameIconified(InternalFrameEvent e) {
                             //Veifico si ya no existen pantallas para establecer el foco entonces desahabilito los botones
-                            if(verificarTodasPantallasMinimizadas(e.getInternalFrame()))
-                            {
-                                habilitarBotones(false);
-                            }
+                            ControladorCodefacInterface controlador=(ControladorCodefacInterface) e.getInternalFrame();
+                            controlador.sinAcciones=true; //Este artificio utilizo para que cuando minimice no se ejecuten los validadores
                             
-                            System.out.println("minimizado");
+                            if (verificarTodasPantallasMinimizadas(e.getInternalFrame())) {
+                                habilitarBotones(false);
+                                
+                            }
+                            mostrarPanelSecundario(false);
+
                         }
 
                         @Override
