@@ -2187,7 +2187,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             //Agregar atajo de teclado si existe
                             if(menuControlador.getTeclaAtajo()!=null)
                             {
-                                menuVentana.setAccelerator(KeyStroke.getKeyStroke(menuControlador.getTeclaAtajo(),InputEvent.SHIFT_MASK));
+                                menuVentana.setAccelerator(KeyStroke.getKeyStroke(menuControlador.getTeclaAtajo(),InputEvent.ALT_MASK));
                             }
                             
                             menuCategoria.add(menuVentana);
