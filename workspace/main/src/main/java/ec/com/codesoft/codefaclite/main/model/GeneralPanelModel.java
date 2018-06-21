@@ -1713,6 +1713,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
      */
     private void habilitarConfiguracioneBotones()
     {
+        habilitarBotones(false);//Descativo todas las ventanas para luego activar segun los permisos
         JInternalFrame frame = getjDesktopPane1().getSelectedFrame();
         ControladorCodefacInterface frameInterface = (ControladorCodefacInterface) frame;
         
