@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
@@ -48,6 +49,8 @@ import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -100,7 +103,16 @@ public class OrdenCompraModel extends OrdenCompraPanel{
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {        
-        
+        if(ordenCompra != null && ordenCompra.getDetalles().size() > 0 || ordenCompra.getProveedor() != null)
+        {
+            Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Si desea continuar se perderan los datos sin guardar?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            if (respuesta) {
+                    limpiar();
+
+            }else{
+                throw new ExcepcionCodefacLite("Cancelacion usuario");
+            }
+        }
     }
 
     @Override
@@ -344,11 +356,7 @@ public class OrdenCompraModel extends OrdenCompraPanel{
             public void actionPerformed(ActionEvent e) {
                 //if (bandera) {
                     //bandera = false;
-                    int fila = getTblDetalleProductos().getSelectedRow();
-                    OrdenCompraDetalle ordenCompraDetalle = ordenCompra.getDetalles().get(fila);
-                    agregarDetallesCompra(ordenCompraDetalle);
-                    calcularDescuento(1, new BigDecimal(getTxtDescuentoImpuestos().getText()));
-                    calcularDescuento(2, new BigDecimal(getTxtDescuentoSinImpuestos().getText()));
+                editarDetalleOrdenCompra();
                 
             }
         });
@@ -358,11 +366,7 @@ public class OrdenCompraModel extends OrdenCompraPanel{
             public void actionPerformed(ActionEvent e) {
                 //if (bandera) {
                 //    bandera = false;
-                    int fila = getTblDetalleProductos().getSelectedRow();
-                    System.out.println("Compra: " + ordenCompra.getDetalles().toString());
-                    modeloTablaDetallesCompra.removeRow(fila);
-                    ordenCompra.getDetalles().remove(fila);
-                    actualizarDatosMostrarVentana();
+                eliminarDetalleOrdenCompra();    
                 //}
             }
         });
@@ -440,6 +444,26 @@ public class OrdenCompraModel extends OrdenCompraPanel{
         });
     }
     
+    public void eliminarDetalleOrdenCompra()
+    {
+        int fila = getTblDetalleProductos().getSelectedRow();
+        System.out.println("Compra: " + ordenCompra.getDetalles().toString());
+        modeloTablaDetallesCompra.removeRow(fila);
+        ordenCompra.getDetalles().remove(fila);
+        actualizarDatosMostrarVentana();
+        getBtnAgregarItem().setEnabled(true); 
+    }
+    
+    public void editarDetalleOrdenCompra()
+    {
+        int fila = getTblDetalleProductos().getSelectedRow();
+        OrdenCompraDetalle ordenCompraDetalle = ordenCompra.getDetalles().get(fila);
+        agregarDetallesCompra(ordenCompraDetalle);
+        calcularDescuento(1, new BigDecimal(getTxtDescuentoImpuestos().getText()));
+        calcularDescuento(2, new BigDecimal(getTxtDescuentoSinImpuestos().getText()));
+        getBtnAgregarItem().setEnabled(true);
+    }
+    
     public void listenerTabla()
     {
         getTblDetalleProductos().addMouseListener(new MouseAdapter() {
@@ -451,9 +475,44 @@ public class OrdenCompraModel extends OrdenCompraPanel{
                 * Mostrar datos en pantalla para editar 
                 */
                 mostrarDatosEnCampos(ordenCompraDetalle);
+                getBtnAgregarItem().setEnabled(false);
             }     
         });
+        
+          getTblDetalleProductos().addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                getTblDetalleProductos().addKeyListener(new KeyListener() {
+                    @Override
+                    public void keyTyped(KeyEvent e) {}
+
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                        //Evento cuando se desea eliminar un dato de los detalles
+                        if (e.getKeyCode() == KeyEvent.VK_DELETE) {
+                            eliminarDetalleOrdenCompra();
+                        }      
+                        
+                        //Permite salir del modo edicion y regresa al modo ingreso
+                        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                            editarDetalleOrdenCompra();
+                        }
+
+                    }
+
+                    @Override
+                    public void keyReleased(KeyEvent e) {}
+                });
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
+        });
     }
+    
     
     private void verificarExistenciadeProductoProveedor()
     {

@@ -37,6 +37,8 @@ import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.io.InputStream;
 import java.rmi.RemoteException;
@@ -71,9 +73,17 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
-        this.ordenTrabajo = new OrdenTrabajo();
-        limpiar();
-        initDatosTabla();
+        if(ordenTrabajo != null && ordenTrabajo.getCliente() != null || ordenTrabajo.getDetalles().size()>0){
+            Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Si desea continuar se perderan los datos sin guardar?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            if (respuesta) {
+                   this.ordenTrabajo = new OrdenTrabajo();
+                    limpiar();
+                    initDatosTabla();
+            }else{
+                throw new ExcepcionCodefacLite("Cancelacion usuario");
+            }
+        }
+
     }
 
     @Override
@@ -266,26 +276,18 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
         getBtnActualizarDetalle().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int fila = getTableDetallesOrdenTrabajo().getSelectedRow();
-                OrdenTrabajoDetalle ordenTrabajoDetalle = ordenTrabajo.getDetalles().get(fila);
-                agregarDetallesOrdenTrabajo(ordenTrabajoDetalle);
-                limpiarCamposDetalles();
-                cargarCombos();
-                getBtnAgregarDetalle().setEnabled(true);
+                actualizarDetalleOrdenTrabajo();
             }
         });
  
         getBtnEliminarDetalle().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int fila = getTableDetallesOrdenTrabajo().getSelectedRow();
-                ordenTrabajo.getDetalles().remove(fila);
-                mostrarDatosTabla();
-                getBtnAgregarDetalle().setEnabled(true);
+                eliminarDetalleOrdenTrabajo();
             }
         });
     }
-    
+        
     public void addListenerCombos()
     {
         getCmbTipoOrdenDetalle().addActionListener(new ActionListener() {
@@ -321,6 +323,39 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
                 cargarInformacionDetalleOrdenTrabajo( ordenTrabajoDetalle);
                 
             }
+        });
+        
+         getTableDetallesOrdenTrabajo().addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                getTableDetallesOrdenTrabajo().addKeyListener(new KeyListener() {
+                    @Override
+                    public void keyTyped(KeyEvent e) {}
+
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                        //Evento cuando se desea eliminar un dato de los detalles
+                        if (e.getKeyCode() == KeyEvent.VK_DELETE) {
+                            eliminarDetalleOrdenTrabajo();
+                        }      
+                        
+                        //Permite salir del modo edicion y regresa al modo ingreso
+                        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                            actualizarDetalleOrdenTrabajo();
+                        }
+
+                    }
+
+                    @Override
+                    public void keyReleased(KeyEvent e) {}
+                });
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
         });
     }
     
@@ -403,20 +438,25 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             fila.add(detalle);
             fila.add(detalle.getDescripcion()+"");
             fila.add(detalle.getEstado()+"");
-            if(detalle.getEmpleado().getDepartamento()!= null){
-                fila.add(detalle.getEmpleado().getDepartamento().getNombre()+"");
-            }else
+            try{
+                if(detalle.getEmpleado().getDepartamento()!= null){
+                    fila.add(detalle.getEmpleado().getDepartamento().getNombre()+"");
+                }else
+                {
+                    fila.add("");
+                }
+
+                if(detalle.getEmpleado() !=null ){
+                    String nombresCompletos = detalle.getEmpleado().getApellidos()+" "+detalle.getEmpleado().getNombres();
+                    fila.add(""+nombresCompletos);
+                }
+                else
+                {
+                    fila.add("");
+                }
+            }catch(Exception e)
             {
-                fila.add("");
-            }
-            
-            if(detalle.getEmpleado() !=null ){
-                String nombresCompletos = detalle.getEmpleado().getApellidos()+" "+detalle.getEmpleado().getNombres();
-                fila.add(""+nombresCompletos);
-            }
-            else
-            {
-                fila.add("");
+                e.printStackTrace();
             }
             modeloTablaDetallesCompra.addRow(fila);
         }
@@ -450,7 +490,11 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             }
             PrioridadEnumEstado prioridadEnumEstado = (PrioridadEnumEstado) getCmbPrioridadDetalle().getSelectedItem();
             ordenTrabajoDetalle.setPrioridad(prioridadEnumEstado.getLetra());
-            ordenTrabajoDetalle.setEmpleado((Empleado) getCmbAsignadoADetalle().getSelectedItem());
+            if((Empleado) getCmbAsignadoADetalle().getSelectedItem() != null){
+                ordenTrabajoDetalle.setEmpleado((Empleado) getCmbAsignadoADetalle().getSelectedItem());
+            }else{
+                DialogoCodefac.mensaje("Advertencia", "Se necesita crear Departamento o Empleado...", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            }
         }
         
         if(agregar)
@@ -500,6 +544,24 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             }
         }
         return b;
+    }
+    
+    public void actualizarDetalleOrdenTrabajo()
+    {
+        int fila = getTableDetallesOrdenTrabajo().getSelectedRow();
+        OrdenTrabajoDetalle ordenTrabajoDetalle = ordenTrabajo.getDetalles().get(fila);
+        agregarDetallesOrdenTrabajo(ordenTrabajoDetalle);
+        limpiarCamposDetalles();
+        cargarCombos();
+        getBtnAgregarDetalle().setEnabled(true);
+    }
+    
+    public void eliminarDetalleOrdenTrabajo()
+    {
+        int fila = getTableDetallesOrdenTrabajo().getSelectedRow();
+        ordenTrabajo.getDetalles().remove(fila);
+        mostrarDatosTabla();
+        getBtnAgregarDetalle().setEnabled(true);
     }
 
     @Override

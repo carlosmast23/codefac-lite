@@ -118,9 +118,13 @@ public class CompraModel extends CompraPanel{
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
-        Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Si desea continuar se perderan los datos sin guardar?", DialogoCodefac.MENSAJE_ADVERTENCIA);
-        if (!respuesta) {
-            throw new ExcepcionCodefacLite("Cancelacion usuario");
+        
+        if(compra != null && compra.getDetalles().size()>0 || compra.getProveedor() != null || compra.getOrdenCompra() != null)
+        {
+            Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Si desea continuar se perderan los datos sin guardar?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            if (!respuesta) {
+                throw new ExcepcionCodefacLite("Cancelacion usuario");
+            }
         }
     }
 

@@ -3,3 +3,5 @@ la pantalla abierta de las notificaciones y volvi a generar el reporte se genero
 aparecieron las 2 deudas al mismo tiempo.
 2. En Orden de compra colocar la validacion de boton Editar.
 3. Agregar funcionalidad boton editar en detalles de orden de compra.
+4. Enviar correo al empleado despues que genere la orden de trabajo, ojo que por cada detalle asigno un empleado
+el empleado. 

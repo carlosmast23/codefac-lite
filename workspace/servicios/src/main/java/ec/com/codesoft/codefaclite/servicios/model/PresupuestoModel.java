@@ -43,6 +43,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
@@ -129,7 +131,23 @@ public class PresupuestoModel extends PresupuestoPanel{
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
-        limpiar();
+        
+        if(presupuesto != null && presupuesto.getPresupuestoDetalles().size() > 0 || presupuesto.getPersona() != null || getCmbDetallesOrdenTrabajo().getItemCount() > 0)
+        {
+            Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Si desea continuar se perderan los datos sin guardar?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            if (respuesta) {
+                   this.presupuesto = new Presupuesto();
+                   this.producto = null;
+                   this.persona = null;
+                   this.productoProveedor = null;
+                   this.mapClientes = null;    
+                   limpiar();
+                   initDatosTabla();
+            }else{
+                throw new ExcepcionCodefacLite("Cancelacion usuario");
+            }
+        }
+
     }
 
     @Override
@@ -163,7 +181,8 @@ public class PresupuestoModel extends PresupuestoPanel{
              * El momento que se graba el Presupuesto genero de cada detalle presuesto la orden de compra
              */
             OrdenCompra ordenCompra;
-            for (Map.Entry<Integer, List<PresupuestoDetalle>> entry : this.mapOrden.entrySet()) {
+            for (Map.Entry<Integer, List<PresupuestoDetalle>> entry : this.mapOrden.entrySet()) 
+            {
                 Integer key = entry.getKey();
                 List<PresupuestoDetalle> detalles = entry.getValue();
                 ordenCompra = new OrdenCompra();
@@ -186,15 +205,17 @@ public class PresupuestoModel extends PresupuestoPanel{
                     ordenCompraDetalle.setDescuento(pd.getDescuentoVenta());
                     ordenCompraDetalle.setPrecioUnitario(pd.getPrecioVenta());
                     ordenCompraDetalle.setTotal(ordenCompraDetalle.getSubtotal());
-                    ordenCompraDetalle.setValorIce(BigDecimal.ZERO);
-                    ordenCompraDetalle.setIva(BigDecimal.ZERO);
+                    ordenCompraDetalle.setValorIce(ordenCompraDetalle.getValorIce());
+                    ordenCompraDetalle.setIva(ordenCompraDetalle.getIva());
                     ordenCompraDetalle.setProductoProveedor(pd.getProductoProveedor());
                     /**
                      * Agregando detalle a Orden Compra
                      */
                     ordenCompra.addDetalle(ordenCompraDetalle);
                 }
-                
+                /**
+                 * Grabando la orden de compra por Proveedor
+                 */
                 OrdenCompraServiceIf compraServiceIf = ServiceFactory.getFactory().getOrdenCompraServiceIf();
                 compraServiceIf.grabar(ordenCompra);   
             }
@@ -267,11 +288,6 @@ public class PresupuestoModel extends PresupuestoPanel{
 
     @Override
     public void limpiar() {
-        this.presupuesto = new Presupuesto();
-        this.producto = null;
-        this.persona = null;
-        this.productoProveedor = null;
-        this.mapClientes = null;
         limpiarDetalles();
         limpiarTotales();
     }
@@ -429,41 +445,14 @@ public class PresupuestoModel extends PresupuestoPanel{
         getBtnEditarDetalle().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try{
-                int fila = getTableDetallesPresupuesto().getSelectedRow();
-                PresupuestoDetalle presupuestoDetalle = (PresupuestoDetalle) getTableDetallesPresupuesto().getValueAt(fila, 0);
-                if(presupuestoDetalle != null)
-                {
-                    boolean b = (boolean) getTableDetallesPresupuesto().getValueAt(fila,7);
-                    agregarDetallesPresupuesto(presupuestoDetalle,b);
-                    limpiarDetalles();
-                    calcularTotales();                   
-                    getBtnAgregarDetalle().setEnabled(true);
-                }
-                }catch(Exception exc)
-                {
-                    exc.printStackTrace();
-                }
-                
+               editarDetallePresupuesto();
             }
         });
         
         getBtnEliminarDetalle().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int filaTabla = getTableDetallesPresupuesto().getSelectedRow();
-                PresupuestoDetalle presupuestoDetalle = (PresupuestoDetalle) getTableDetallesPresupuesto().getValueAt(filaTabla,0);
-                if(presupuestoDetalle != null){
-                    for(PresupuestoDetalle pd : presupuesto.getPresupuestoDetalles())
-                    {
-                        if(pd.equals(presupuestoDetalle)){
-                            presupuesto.getPresupuestoDetalles().remove(pd);
-                        }
-                    }
-                }
-                getBtnAgregarDetalle().setEnabled(true);
-                mostrarDatosTabla();
-                calcularTotales();
+                eliminarDetallePresupuesto();
             }
         });
     }
@@ -569,7 +558,41 @@ public class PresupuestoModel extends PresupuestoPanel{
             }
         });
         
+        getTableDetallesPresupuesto().addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                getTableDetallesPresupuesto().addKeyListener(new KeyListener() {
+                    @Override
+                    public void keyTyped(KeyEvent e) {}
+
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                        //Evento cuando se desea eliminar un dato de los detalles
+                        if (e.getKeyCode() == KeyEvent.VK_DELETE) {
+                            eliminarDetallePresupuesto();
+                            
+                        }      
+                        
+                        //Permite salir del modo edicion y regresa al modo ingreso
+                        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                            editarDetallePresupuesto();
+                        }
+
+                    }
+
+                    @Override
+                    public void keyReleased(KeyEvent e) {}
+                });
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
+        });
     }
+        
     
     public void addListenerOpcionesPopupMenu()
     {
@@ -887,9 +910,7 @@ public class PresupuestoModel extends PresupuestoPanel{
         getTableDetallesPresupuesto().setModel(modeloTablaDetallesPresupuesto);
         /**
          * Agregar PopupMenu en Tabla
-         */
-        String []opcionesMenu = {"Eliminar","Editar"};
-        
+         */        
         
         List<JMenuItem> jMenuItems = new ArrayList<>(); 
         JMenuItem nuevo = new JMenuItem("Opcion 1");
@@ -1029,5 +1050,48 @@ public class PresupuestoModel extends PresupuestoPanel{
                 Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+    
+    private void editarDetallePresupuesto()
+    {
+        try{
+            int fila = getTableDetallesPresupuesto().getSelectedRow();
+            PresupuestoDetalle presupuestoDetalle = (PresupuestoDetalle) getTableDetallesPresupuesto().getValueAt(fila, 0);
+            if(presupuestoDetalle != null)
+            {
+                boolean b = (boolean) getTableDetallesPresupuesto().getValueAt(fila,7);
+                agregarDetallesPresupuesto(presupuestoDetalle,b);
+                limpiarDetalles();
+                calcularTotales();                   
+                getBtnAgregarDetalle().setEnabled(true);
+            }
+        }catch(Exception exc)
+        {
+            exc.printStackTrace();
+        }
+                
+    }
+    
+    private void eliminarDetallePresupuesto()
+    {
+        try{
+            int filaTabla = getTableDetallesPresupuesto().getSelectedRow();
+            PresupuestoDetalle presupuestoDetalle = (PresupuestoDetalle) getTableDetallesPresupuesto().getValueAt(filaTabla,0);
+            if(presupuestoDetalle != null){
+                for(PresupuestoDetalle pd : presupuesto.getPresupuestoDetalles())
+                {
+                    if(pd.equals(presupuestoDetalle)){
+                        presupuesto.getPresupuestoDetalles().remove(pd);
+                    }
+                }
+            }
+            getBtnAgregarDetalle().setEnabled(true);
+            mostrarDatosTabla();
+            calcularTotales();
+        }catch(Exception exc)
+        {
+            exc.printStackTrace();
+        }
+                
     }
 }
