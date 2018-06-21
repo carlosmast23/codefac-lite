@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
@@ -303,7 +304,29 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
                     // your valueChanged overridden method 
                 }
             }
-});
+        });
+        
+        getTblTabla().addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                
+                //Solo ejecutar si presiona el evento enter
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {                   
+                   int filaSeleccionada=getTblTabla().getSelectedRow();
+                   if(filaSeleccionada>0)   //
+                   {
+                       resultado=listaResultados.get(filaSeleccionada);
+                       dispose();
+                   }
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
+        });
     }
     
     private void filtrar()
