@@ -355,7 +355,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             @Override
             public void actionPerformed(ActionEvent e) {
                 btnListenerBuscarCliente();
-                getLblNombresClientePresupuesto().setText((factura.getCliente()!=null)?factura.getCliente().getNombresCompletos():"");
             }
         });
 
@@ -487,7 +486,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             @Override
             public void actionPerformed(ActionEvent e) {
                 btnListenerAgregarCliente();
-                getLblNombresClientePresupuesto().setText((factura.getCliente()!=null)?factura.getCliente().getNombresCompletos():"");
             }
         });
 
@@ -1079,7 +1077,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     break;
                     
                 case PRESUPUESTOS:
-                    getLblNombresClientePresupuesto().setText(factura.getCliente().getNombresCompletos());                    
+                    getTxtClientePresupuesto().setText(factura.getCliente().toString());
+                    //getLblNombresClientePresupuesto().setText(factura.getCliente().toString());                    
                     break;
                     
                 case INVENTARIO: case LIBRE:
@@ -1518,10 +1517,27 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
 
     private void setearValoresCliente() {
-        getTxtCliente().setText(factura.getCliente().getIdentificacion());
-        getLblNombreCliente().setText(factura.getCliente().getRazonSocial());
-        getLblDireccionCliente().setText(factura.getCliente().getDireccion());
-        getLblTelefonoCliente().setText(factura.getCliente().getTelefonoConvencional());
+        
+        
+        TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+        
+        //Cargar los tipos de documentos segun el tipo de dcumento
+        switch(tipoDocumentoEnum)
+        {
+            case INVENTARIO:
+            case LIBRE:
+                getTxtCliente().setText(factura.getCliente().getIdentificacion());
+                getLblNombreCliente().setText(factura.getCliente().getRazonSocial());
+                getLblDireccionCliente().setText(factura.getCliente().getDireccion());
+                getLblTelefonoCliente().setText(factura.getCliente().getTelefonoConvencional());
+                break;
+                
+            case PRESUPUESTOS:
+                getTxtClientePresupuesto().setText(factura.getCliente().toString());
+                
+            break;
+        
+        }
 
         /**
          * Cargar el estado de la factura

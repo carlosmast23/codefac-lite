@@ -24,6 +24,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -269,7 +270,8 @@ public class PresupuestoModel extends PresupuestoPanel{
         if(tempPresupuesto != null){
             this.presupuesto =  tempPresupuesto;
             getTxtCodigo().setText(""+this.presupuesto.getId());
-            getTxtCliente().setText(this.presupuesto.getPersona().getIdentificacion()+" - "+this.presupuesto.getPersona().getRazonSocial());                
+            getTxtCliente().setText(this.presupuesto.getPersona().getIdentificacion()+" - "+this.presupuesto.getPersona().getRazonSocial());  
+            getCmbTipoPresupuesto().setSelectedItem(presupuesto.getCatalogoProducto());
             cargarDetallesOrdenTrabajo(this.presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo());
             getCmbDetallesOrdenTrabajo().setSelectedItem(this.presupuesto.getOrdenTrabajoDetalle());
             GeneralEnumEstado generalEnumEstado = GeneralEnumEstado.getEnum(this.presupuesto.getEstado());
@@ -328,6 +330,20 @@ public class PresupuestoModel extends PresupuestoPanel{
         {
             getCmbEstadoPresupuesto().addItem(gem);
         }
+        
+        
+        //Cargando los tipos de catalogos disponibles para los servicios
+        getCmbTipoPresupuesto().removeAllItems();        
+        try {
+            List<CatalogoProducto> listaCatalogos = ServiceFactory.getFactory().getCatalogoProductoServiceIf().obtenerPorModulo(ModuloCodefacEnum.SERVICIOS);
+            for (CatalogoProducto listaCatalogo : listaCatalogos) {
+                getCmbTipoPresupuesto().addItem(listaCatalogo);
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        
     }
     
     public void initDatosTabla()
@@ -775,6 +791,7 @@ public class PresupuestoModel extends PresupuestoPanel{
     private void setearDatos() 
     {         
             this.presupuesto.setDescripcion(getTxtDescripcion().getText());
+            this.presupuesto.setCatalogoProducto((CatalogoProducto) getCmbTipoPresupuesto().getSelectedItem());
             this.presupuesto.setObservaciones(getTxtAreaObservaciones().getText());
             GeneralEnumEstado generalEnumEstado = (GeneralEnumEstado) getCmbEstadoPresupuesto().getSelectedItem();
             this.presupuesto.setEstado(generalEnumEstado.getEstado());

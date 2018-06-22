@@ -70,10 +70,10 @@ public enum VentanaEnum {
     RETENCION_REPORTE("ec.com.codesoft.codefaclite.compra.model.RetencionReporteModel", "CRET", "Reporte Retenciones", ModuloCodefacEnum.COMPRA, CategoriaMenuEnum.REPORTES,null),
     CARTERA("ec.com.codesoft.codefaclite.cartera.model.CarteraModel", "CART", "Cartera", ModuloCodefacEnum.CARTERA, CategoriaMenuEnum.PROCESOS,null),
     ORDEN_TRABAJO("ec.com.codesoft.codefaclite.servicios.model.OrdenTrabajoModel", "ORDT", "Orden de Trabajo", ModuloCodefacEnum.SERVICIOS, CategoriaMenuEnum.PROCESOS,null),
-    PRESUPUESTO("ec.com.codesoft.codefaclite.servicios.model.PresupuestoModel", "PRES", "Presupuesto", ModuloCodefacEnum.SERVICIOS, CategoriaMenuEnum.PROCESOS,null),
+    PRESUPUESTO("ec.com.codesoft.codefaclite.servicios.model.PresupuestoModel", "PRES", "Presupuesto", ModuloCodefacEnum.SERVICIOS, CategoriaMenuEnum.PROCESOS,KeyEvent.VK_P),
     ORDEN_COMPRA("ec.com.codesoft.codefaclite.compra.model.OrdenCompraModel", "ODCP", "Orden de Compra", ModuloCodefacEnum.COMPRA, CategoriaMenuEnum.PROCESOS,null),
-    DEPARTAMENTO("ec.com.codesoft.codefaclite.configuraciones.model.DepartamentoModel", "DEPA", "Departamento", ModuloCodefacEnum.SISTEMA, CategoriaMenuEnum.GESTIONAR,null),
-    EMPLEADO("ec.com.codesoft.codefaclite.configuraciones.model.GestionEmpleadosModel", "GEEM", "Gestión Empleado", ModuloCodefacEnum.SISTEMA, CategoriaMenuEnum.GESTIONAR,null);
+    DEPARTAMENTO("ec.com.codesoft.codefaclite.configuraciones.model.DepartamentoModel", "DEPA", "Departamento", ModuloCodefacEnum.SISTEMA, CategoriaMenuEnum.GESTIONAR,true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null),
+    EMPLEADO("ec.com.codesoft.codefaclite.configuraciones.model.GestionEmpleadosModel", "GEEM", "Gestión Empleado", ModuloCodefacEnum.SISTEMA, CategoriaMenuEnum.GESTIONAR,true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null);
     
     private VentanaEnum(String clase, String codigo, String nombre, ModuloCodefacEnum modulo, CategoriaMenuEnum categoriaMenu,Integer teclaAtajo) {
         this.claseNombre = clase;

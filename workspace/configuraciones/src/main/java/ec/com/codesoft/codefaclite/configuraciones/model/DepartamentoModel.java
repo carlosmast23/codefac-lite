@@ -147,6 +147,10 @@ public class DepartamentoModel extends DepartamentoPanel
             this.departamento = departamentoTemp;
             mostrarDatos();
         }  
+        else
+        {
+            throw new ExcepcionCodefacLite("cancelado metodo buscar");
+        }
     }
 
     @Override

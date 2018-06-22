@@ -65,4 +65,6 @@ Analizar el tema de los vendedores
 
 Buscar un programa para abrir base de datos derby embebidas
 
+Programar los menuItems del menu principal para dar funcinalidades como agregar accesos directos
 
+Ver si guardar encriptada la clave del correo y archivo de la firma principalmente

@@ -135,6 +135,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
@@ -265,6 +266,14 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             @Override
             public void windowDeactivated(WindowEvent e) {}
         });
+        
+        //TODO: Falta implementar la funcionalidad para estos botones
+        JPopupMenu popup = new JPopupMenu();
+        popup.add(new JMenuItem("Nuevo"));
+        popup.add(new JMenuItem("Actualizar"));
+        //popup.add(new JMenuItem("tres"));
+        
+        getjDesktopPane1().setComponentPopupMenu(popup);
     }
     
     private void eventoCerrarSistema()

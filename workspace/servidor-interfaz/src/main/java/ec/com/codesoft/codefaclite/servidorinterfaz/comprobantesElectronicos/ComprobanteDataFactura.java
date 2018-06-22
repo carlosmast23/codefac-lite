@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
@@ -145,19 +146,33 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
                 DetalleFacturaComprobante detalle=new DetalleFacturaComprobante();
                 
                 CatalogoProducto catalogoProducto=null;
-                if(facturaDetalle.getTipoDocumento()!=null && facturaDetalle.getTipoDocumentoEnum().equals(TipoDocumentoEnum.ACADEMICO))
+                
+                if(facturaDetalle.getTipoDocumento()!=null)
                 {
-                    RubroEstudiante rubroEstudiante=ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
-                    catalogoProducto=rubroEstudiante.getRubroNivel().getCatalogoProducto();
-                    detalle.setCodigoPrincipal(rubroEstudiante.getId()+"");
-                }
-                else
-                {
-                    Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
-                    catalogoProducto=producto.getCatalogoProducto();
-                    detalle.setCodigoPrincipal(producto.getCodigoPersonalizado());
+                    switch(facturaDetalle.getTipoDocumentoEnum())
+                    {
+                        case ACADEMICO:
+                            RubroEstudiante rubroEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                            catalogoProducto = rubroEstudiante.getRubroNivel().getCatalogoProducto();
+                            detalle.setCodigoPrincipal(rubroEstudiante.getId() + "");
+                            break;
+                            
+                        case LIBRE:
+                        case INVENTARIO:
+                            Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                            catalogoProducto = producto.getCatalogoProducto();
+                            detalle.setCodigoPrincipal(producto.getCodigoPersonalizado());
+                            break;
+                            
+                        case PRESUPUESTOS:
+                            Presupuesto presupuesto=ServiceFactory.getFactory().getPresupuestoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                            catalogoProducto = presupuesto.getCatalogoProducto();
+                            detalle.setCodigoPrincipal(presupuesto.getId()+"");
+                            break;
+                    }
                 }
                 
+               
                 //detalle.setCodigoPrincipal(producto.getCodigoPersonalizado());
                 detalle.setCantidad(facturaDetalle.getCantidad());
                 detalle.setDescripcion(UtilidadValidador.normalizarTexto(facturaDetalle.getDescripcion()));
