@@ -44,10 +44,10 @@ public class OrdenTrabajoBusquedaDialogo implements InterfaceModelFind<OrdenTrab
 
     @Override
     public void agregarObjeto(OrdenTrabajo t, Vector dato) {
-        dato.add(t.getCodigo());
+        dato.add(""+t.getId());
         dato.add(""+t.getCliente().getNombresCompletos());
-        dato.add(t.getDescripcion());
-        dato.add(t.getFechaIngreso());
+        dato.add(""+t.getDescripcion());
+        dato.add(""+t.getFechaIngreso());
     }
     
 }
