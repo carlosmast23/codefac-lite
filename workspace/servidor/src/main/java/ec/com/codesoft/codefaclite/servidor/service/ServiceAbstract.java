@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceException;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
@@ -90,6 +91,26 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
         return this.facade.findByMap(parametros);
     }
     
+    
+    /**
+     * Metodo Que me permite ejecutar un conjunto de procesos en el jpa como un proceso
+     * @param interfaz
+     * @throws PersistenceException 
+     */
+    protected void ejecutarTransaccion(MetodoInterfaceTransaccion interfaz) throws PersistenceException
+    {
+        EntityTransaction transaccion = entityManager.getTransaction();
+        try {            
+            transaccion.begin();
+            interfaz.transaccion();
+            transaccion.commit();
+        } catch (PersistenceException ex) {
+            if (transaccion.isActive()) {
+                transaccion.rollback();
+            }
+            throw ex;
+        }
+    }
 
     protected Facade getFacade()
     {

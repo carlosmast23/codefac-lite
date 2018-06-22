@@ -38,6 +38,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoService
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoAdicional;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
@@ -442,36 +443,41 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         crearDetalleTabla();
         List<NotaCreditoDetalle> detalles = notaCredito.getDetalles();
         for (NotaCreditoDetalle detalle : detalles) {
+            
+            Vector<String> fila = new Vector<String>();
+            
+            //TODO: Revisar este codigo porque esta de optimizar la carga del precio unitario
             try {
-                if(detalle.getTipoDocumentoEnum().equals(TipoDocumentoEnum.ACADEMICO))
-                {
-                    RubroEstudiante rubroEstudiante=ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(detalle.getReferenciaId());
-                    Vector<String> fila = new Vector<String>();
-                    fila.add(rubroEstudiante.getId().toString());
-                    fila.add(rubroEstudiante.getValor().toString());
-                    fila.add(detalle.getCantidad() + "");
-                    fila.add(detalle.getDescripcion());
-                    fila.add(detalle.getTotal() + "");
-                    this.modeloTablaDetalle.addRow(fila);                    
-                }
-                else
-                {
-                    //TODO:Terminar de implementar las otras filas
-                    if (detalle.getTipoDocumentoEnum().equals(TipoDocumentoEnum.INVENTARIO)) {
+                switch (detalle.getTipoDocumentoEnum()) {
+                    case ACADEMICO:
+                        RubroEstudiante rubroEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(detalle.getReferenciaId());
+                        fila.add(rubroEstudiante.getId().toString());
+                        fila.add(rubroEstudiante.getValor().toString());
+                        break;
+
+                    case PRESUPUESTOS:
+                        //Presupuesto presupuesto = ServiceFactory.getFactory().getPresupuestoServiceIf().buscarPorId(detalle.getReferenciaId());
+                        fila.add(detalle.getReferenciaId()+"");
+                        fila.add(detalle.getPrecioUnitario().toString());
+                        break;
+
+                    case INVENTARIO:
+                    case LIBRE:
                         Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalle.getReferenciaId());
-                        Vector<String> fila = new Vector<String>();
                         fila.add((producto.getCodigoPersonalizado() != null) ? producto.getCodigoPersonalizado() : "");
                         fila.add(producto.getValorUnitario() + "");
-                        fila.add(detalle.getCantidad() + "");
-                        fila.add(detalle.getDescripcion());
-                        fila.add(detalle.getTotal() + "");
-                        this.modeloTablaDetalle.addRow(fila);
-                    }
+                        break;
 
                 }
             } catch (RemoteException ex) {
                 Logger.getLogger(NotaCreditoModel.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
+            //Setear los valores finales
+            fila.add(detalle.getCantidad() + "");
+            fila.add(detalle.getDescripcion());
+            fila.add(detalle.getTotal() + "");
+            this.modeloTablaDetalle.addRow(fila);                
         }
 
     }

@@ -702,17 +702,20 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
     private void procesarComprobanteExtend(ComprobanteElectronicoService comprobanteElectronico,ec.com.codesoft.codefaclite.servidorinterfaz.entity.Comprobante comprobanteOriginal,ClienteInterfaceComprobante callbackClientObject)
     {
         comprobanteOriginal.setEstado(FacturaEnumEstado.SIN_AUTORIZAR.getEstado());
-        entityManager.merge(comprobanteOriginal);
+        
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() {
+                entityManager.merge(comprobanteOriginal);
+            }
+        });        
+
                 //Agregar el listener
         comprobanteElectronico.addActionListerComprobanteElectronico(new ListenerComprobanteElectronico() {
             @Override
             public void termino() {
                 try {
                     //Si la factura termina corectamente grabo el estado y numero de autorizacion
-                    //FacturacionService facturacionService=new FacturacionService();
-                   
-                    //comprobanteOriginal.setClaveAcceso(comprobanteElectronico.getClaveAcceso());                    
-                    //entityManager.merge(comprobanteOriginal);
                     byte[] serializedPrint= getReporteComprobante(comprobanteElectronico.getClaveAcceso());                   
                     callbackClientObject.termino(serializedPrint);
 
@@ -727,7 +730,13 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             public void iniciado(ComprobanteElectronico comprobante) {
                 try {
                     comprobanteOriginal.setClaveAcceso(comprobanteElectronico.getClaveAcceso());
-                    entityManager.merge(comprobanteOriginal);
+
+                    ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                        @Override
+                        public void transaccion() {
+                            entityManager.merge(comprobanteOriginal);
+                        }
+                    });      
                     callbackClientObject.iniciado();
                 } catch (RemoteException ex) {
                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
@@ -743,7 +752,13 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                     if(etapa==ComprobanteElectronicoService.ETAPA_AUTORIZAR)
                     {
                         comprobanteOriginal.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
-                        entityManager.merge(comprobanteOriginal);
+
+                        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                            @Override
+                            public void transaccion() {
+                                entityManager.merge(comprobanteOriginal);
+                            }
+                        });
                     }
                     
                     
@@ -1051,18 +1066,25 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             InputStream inputStream = null;
             try {
 
-                String imagenLogo = empresa.getImagenLogoPath();
-                //String pathImagen = parametroCodefacMap.get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + DirectorioCodefac.IMAGENES.getNombre() + "/" + imagenLogo;
-                String pathImagen = UtilidadesServidor.pathRecursos+"/"+ DirectorioCodefac.IMAGENES.getNombre() + "/" + imagenLogo;
+                String imagenLogo = empresa.getImagenLogoPath();      
                 
-
-                inputStream = new FileInputStream(pathImagen);
-                //Si no existe imagen en la version de pago setea un imagen por defecto
-                if (inputStream == null) {
-                    RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
+                //Si no existe imagen grabada en la base de datos ,muestra la imagen por defecto
+                if(imagenLogo.equals(""))
+                {
+                    inputStream=RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
                 }
-                //BufferedInputStream bufferStream=new BufferedInputStream(inputStream);
-                //servicio.pathLogoImagen = UtilidadImagen.castImputStreamForReport(inputStream);
+                else
+                {
+                    String pathImagen = UtilidadesServidor.pathRecursos + "/" + DirectorioCodefac.IMAGENES.getNombre() + "/" + imagenLogo;
+                    inputStream = new FileInputStream(pathImagen);
+                    //Si no existe imagen en la version de pago setea un imagen por defecto
+                    if (inputStream == null) {
+                        inputStream = RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
+                    }
+                    
+                }
+
+                //Seteo la imagen de logo de la empresa
                 servicio.pathLogoImagen =UtilidadImagen.castInputStreamToImage(inputStream);
                 //servicio.pathLogoImagen = new File(pathImagen.get;
             } catch (FileNotFoundException ex) {
@@ -1110,22 +1132,28 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         }
         else //Si la licencia es de pago entonces carga la imagen del 
         {
-            RemoteInputStream remoteInputStream=service.getResourceInputStreamByFile(DirectorioCodefac.IMAGENES, empresa.getImagenLogoPath());
-            
-            if(remoteInputStream!=null)
+            //Verifica si esta guardado el path de la imagen 
+            if(empresa.getImagenLogoPath()!=null && !empresa.getImagenLogoPath().equals("") )
             {
-                try {
-                    input = RemoteInputStreamClient.wrap(remoteInputStream);
-                } catch (IOException ex) {
-                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
-                    input=RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
+                RemoteInputStream remoteInputStream = service.getResourceInputStreamByFile(DirectorioCodefac.IMAGENES, empresa.getImagenLogoPath());
+
+                if (remoteInputStream != null) {
+                    try {
+                        input = RemoteInputStreamClient.wrap(remoteInputStream);
+                    } catch (IOException ex) {
+                        Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                        input = RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
+                    }
+                } else //Si no existe imagen cargar por defecto una imagen en blanco
+                {
+                    input = RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
                 }
             }
-            else //Si no existe imagen cargar por defecto una imagen en blanco
+            else
             {
-                input=RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
-            }
-
+                input = RecursoCodefac.IMAGENES_GENERAL.getResourceInputStream("sin_imagen.jpg");
+            }           
+            
         }
         
         
