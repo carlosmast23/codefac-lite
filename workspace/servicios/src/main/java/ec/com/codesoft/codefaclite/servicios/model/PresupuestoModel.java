@@ -128,12 +128,13 @@ public class PresupuestoModel extends PresupuestoPanel{
         addListenerTablas();
         addListenerTextos();
         initDatosTabla();
+        this.getCmbFechaPresupuesto().setDate(UtilidadesFecha.getFechaHoy());
     }
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
         
-        if(presupuesto != null && presupuesto.getPresupuestoDetalles().size() > 0 || presupuesto.getPersona() != null || getCmbDetallesOrdenTrabajo().getItemCount() > 0)
+        if(presupuesto != null && presupuesto.getPresupuestoDetalles() != null || presupuesto.getPersona() != null || getCmbDetallesOrdenTrabajo().getItemCount() > 0)
         {
             Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Si desea continuar se perderan los datos sin guardar?", DialogoCodefac.MENSAJE_ADVERTENCIA);
             if (respuesta) {
@@ -292,6 +293,9 @@ public class PresupuestoModel extends PresupuestoPanel{
     public void limpiar() {
         limpiarDetalles();
         limpiarTotales();
+        getTxtOrdenTrabajo().setText("");
+        getTxtCliente().setText("");
+        getCmbDetallesOrdenTrabajo().removeAllItems();
     }
 
     public String getNombre() {
@@ -357,15 +361,26 @@ public class PresupuestoModel extends PresupuestoPanel{
         
         getBtnCliente().addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e){
                 ClienteBusquedaDialogo buscarBusquedaDialogo = new ClienteBusquedaDialogo();
                 BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
                 buscarDialogo.setVisible(true);
                 Persona persona = (Persona) buscarDialogo.getResultado();
                 if(persona != null)
                 {
-                    presupuesto.setPersona(persona);
-                    getTxtCliente().setText(persona.getIdentificacion()+" - "+persona.getRazonSocial());
+                    if(presupuesto.getPersona() != null){
+                        boolean respuesta = DialogoCodefac.dialogoPregunta("Advertencia", "Desea modificar el cliente de la Orden de Trabajo?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                        if(respuesta){
+                            presupuesto.setPersona(persona);
+                            getTxtCliente().setText(persona.getIdentificacion()+" - "+persona.getRazonSocial());
+                        }else{
+                            try {
+                                throw new ExcepcionCodefacLite("Cancelacion usuario");
+                            } catch (ExcepcionCodefacLite ex) {
+                                Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                    }
                 }
             }
         });
@@ -379,6 +394,8 @@ public class PresupuestoModel extends PresupuestoPanel{
                 OrdenTrabajo ordenTrabajo = (OrdenTrabajo) dialogoModel.getResultado();
                 if(ordenTrabajo != null)
                 {
+                    presupuesto.setPersona(ordenTrabajo.getCliente());
+                    getTxtCliente().setText(ordenTrabajo.getCliente().getIdentificacion()+" - "+ordenTrabajo.getCliente().getRazonSocial());
                     cargarDetallesOrdenTrabajo(ordenTrabajo);
                 }
                 
@@ -492,8 +509,7 @@ public class PresupuestoModel extends PresupuestoPanel{
                     DialogoCodefac.mensaje("Advertencia", "Seleccione una Orden de Trabajo", DialogoCodefac.MENSAJE_ADVERTENCIA);
                 }else
                 {
-                    presupuesto.setOrdenTrabajoDetalle((OrdenTrabajoDetalle) getCmbDetallesOrdenTrabajo().getSelectedItem());
-                            
+                   obtenerOrdenTrabajoDetalle();
                 }
             }    
         });
@@ -519,10 +535,16 @@ public class PresupuestoModel extends PresupuestoPanel{
             public void actionPerformed(ActionEvent e) {
                 OrdenTrabajoDetalle otd = (OrdenTrabajoDetalle) getCmbDetallesOrdenTrabajo().getSelectedItem();
                 if(otd != null){
-                    presupuesto.setOrdenTrabajoDetalle((OrdenTrabajoDetalle) getCmbDetallesOrdenTrabajo().getSelectedItem());
+                    obtenerOrdenTrabajoDetalle();
                 }
             }
         });
+    }
+    
+    public void obtenerOrdenTrabajoDetalle()
+    {
+         presupuesto.setOrdenTrabajoDetalle((OrdenTrabajoDetalle) getCmbDetallesOrdenTrabajo().getSelectedItem());
+         getTxtDescripcion().setText(presupuesto.getOrdenTrabajoDetalle().getDescripcion());
     }
     
     public void addListenerTextos()
@@ -632,7 +654,7 @@ public class PresupuestoModel extends PresupuestoPanel{
     
     public void cargarDetallesOrdenTrabajo(OrdenTrabajo ordenTrabajo)
     {
-        getTxtOrdenTrabajo().setText(ordenTrabajo.getCodigo()+" - "+ordenTrabajo.getDescripcion());
+        getTxtOrdenTrabajo().setText(ordenTrabajo.getId() + " - "+ordenTrabajo.getDescripcion());
         getCmbDetallesOrdenTrabajo().removeAllItems();
         for(OrdenTrabajoDetalle pd : ordenTrabajo.getDetalles())
         {
@@ -769,23 +791,23 @@ public class PresupuestoModel extends PresupuestoPanel{
     {
         this.getTxtProveedorDetalle().setText("");
         this.getTxtProductoDetalle().setText("");
-        this.getTxtPrecioCompra().setText("");
-        this.getTxtDescuentoPrecioCompra().setText("");
-        this.getTxtPrecioVenta().setText("");
-        this.getTxtDescuentoPrecioVenta().setText("");
-        this.getTxtCantidad().setText("");
+        this.getTxtPrecioCompra().setText("0.00");
+        this.getTxtDescuentoPrecioCompra().setText("0.00");
+        this.getTxtPrecioVenta().setText("0.00");
+        this.getTxtDescuentoPrecioVenta().setText("0.00");
+        this.getTxtCantidad().setText("1");
         this.persona = null;
         this.producto = null;
     }
     
     public void limpiarTotales()
     {
-        this.getLblDescuentoCompra().setText("");
-        this.getLblSubtotaDescuentoVenta().setText("");
-        this.getLblSubtotalCompra().setText("");
-        this.getLblSubtotalVenta().setText("");
-        this.getLblTotalCompra().setText("");
-        this.getLblTotalVenta().setText("");
+        this.getLblDescuentoCompra().setText("0.00");
+        this.getLblSubtotaDescuentoVenta().setText("0.00");
+        this.getLblSubtotalCompra().setText("0.00");
+        this.getLblSubtotalVenta().setText("0.00");
+        this.getLblTotalCompra().setText("0.00");
+        this.getLblTotalVenta().setText("0.00");
     }
      
     private void setearDatos() 

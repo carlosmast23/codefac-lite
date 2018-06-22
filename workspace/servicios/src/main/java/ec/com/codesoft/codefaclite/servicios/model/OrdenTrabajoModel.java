@@ -424,26 +424,28 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
     
     public void initDatosTabla()
     {
-        DefaultTableModel modeloTablaDetallesCompra = UtilidadesTablas.crearModeloTabla(new String[]{"Descripción","Estado","Tipo Orden","Asignado"}, new Class[]{OrdenTrabajoDetalle.class,String.class,String.class,String.class,String.class});
+        DefaultTableModel modeloTablaDetallesCompra = UtilidadesTablas.crearModeloTabla(new String[]{"Descripción","Estado","Departamento","Empleado"}, new Class[]{OrdenTrabajoDetalle.class,String.class,String.class,String.class,String.class});
         getTableDetallesOrdenTrabajo().setModel(modeloTablaDetallesCompra);
     }
     
     public void mostrarDatosTabla()
     {
-        DefaultTableModel modeloTablaDetallesCompra = UtilidadesTablas.crearModeloTabla(new String[]{"obj","Descripción","Estado","Tipo Orden","Asignado"}, new Class[]{OrdenTrabajoDetalle.class,String.class,String.class,String.class,String.class});
+        DefaultTableModel modeloTablaDetallesCompra = UtilidadesTablas.crearModeloTabla(new String[]{"obj","Descripción","Estado","Departamento","Empleado"}, new Class[]{OrdenTrabajoDetalle.class,String.class,String.class,String.class,String.class});
         List<OrdenTrabajoDetalle> detalles = ordenTrabajo.getDetalles();
         for (OrdenTrabajoDetalle detalle : detalles) 
         {
             Vector<Object> fila=new Vector<>();
             fila.add(detalle);
             fila.add(detalle.getDescripcion()+"");
-            fila.add(detalle.getEstado()+"");
+            OrdenTrabajoEnumEstado ordenTrabajoEnumEstado = OrdenTrabajoEnumEstado.getEnum(detalle.getEstado());
+            fila.add(ordenTrabajoEnumEstado.getNombre());
+            
             try{
                 if(detalle.getEmpleado().getDepartamento()!= null){
                     fila.add(detalle.getEmpleado().getDepartamento().getNombre()+"");
                 }else
                 {
-                    fila.add("");
+                    fila.add("Sin departamento");
                 }
 
                 if(detalle.getEmpleado() !=null ){
@@ -452,7 +454,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
                 }
                 else
                 {
-                    fila.add("");
+                    fila.add("Sin empleado");
                 }
             }catch(Exception e)
             {
@@ -524,7 +526,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
     public void setearDatos() throws ExcepcionCodefacLite
     {
             this.ordenTrabajo.setFechaIngreso(new Date(getCmbDateFechaIngreso().getDate().getTime()));
-            this.ordenTrabajo.setCodigo(""+getTxtCodigo().getText());
+            //this.ordenTrabajo.setCodigo(""+getTxtCodigo().getText());
             this.ordenTrabajo.setDescripcion(""+getTxtDescripcion().getText());
             GeneralEnumEstado generalEnumEstado = (GeneralEnumEstado) getCmbEstadoOrdenTrabajo().getSelectedItem();
             this.ordenTrabajo.setEstado(generalEnumEstado.getEstado());          
