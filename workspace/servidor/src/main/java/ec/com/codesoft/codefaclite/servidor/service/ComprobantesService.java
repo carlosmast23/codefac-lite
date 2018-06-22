@@ -729,15 +729,20 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             @Override
             public void iniciado(ComprobanteElectronico comprobante) {
                 try {
+                    callbackClientObject.iniciado();
+                    /*try {
                     comprobanteOriginal.setClaveAcceso(comprobanteElectronico.getClaveAcceso());
 
                     ejecutarTransaccion(new MetodoInterfaceTransaccion() {
-                        @Override
-                        public void transaccion() {
-                            entityManager.merge(comprobanteOriginal);
-                        }
+                    @Override
+                    public void transaccion() {
+                    entityManager.merge(comprobanteOriginal);
+                    }
                     });      
                     callbackClientObject.iniciado();
+                    } catch (RemoteException ex) {
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                    }*/
                 } catch (RemoteException ex) {
                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -760,6 +765,19 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                             }
                         });
                     }
+                    
+                    //Si se genera la etapa firmar entonces seteo la clave de acceso
+                    if (etapa == ComprobanteElectronicoService.ETAPA_FIRMAR) {
+                        comprobanteOriginal.setClaveAcceso(clave.clave);
+
+                        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                            @Override
+                            public void transaccion() {
+                                entityManager.merge(comprobanteOriginal);
+                            }
+                        });
+                    }
+                    
                     
                     
                 } catch (RemoteException ex) {

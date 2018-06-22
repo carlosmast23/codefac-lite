@@ -1137,10 +1137,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getTxtCliente().setText("");
 
         //Limpiar campos de los detalles de la factura
+        getTxtCodigoDetalle().setText("");
         getTxtValorUnitario().setText("");
         getTxtCantidad().setText("");
         getTxtDescripcion().setText("");
         getTxtDescuento().setText("");
+        getTxtClientePresupuesto().setText("");
         getCheckPorcentaje().setSelected(false);
 
         //Limpiar los datos de la tabla factura
