@@ -29,28 +29,28 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "NOTA_CREDITO")
-public class NotaCredito implements Serializable {
+public class NotaCredito extends Comprobante implements Serializable {
     
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "CLAVE_ACCESO")
-    private String claveAcceso;
-    @Column(name = "EMPRESA_ID")
-    private Long empresaId;
+    //@Column(name = "CLAVE_ACCESO")
+    //private String claveAcceso;
+    //@Column(name = "EMPRESA_ID")
+    //private Long empresaId;
     @Column(name = "TIPO_IDENTIFICACION_ID")
     private Long tipoClienteId;
-    @Column(name = "SECUENCIAL")
-    private Integer secuencial;
-    @Column(name = "PUNTO_ESTABLECIMIENTO")
-    private String puntoEstablecimiento;
-    @Column(name = "PUNTO_EMISION")
-    private String puntoEmision;
+    //@Column(name = "SECUENCIAL")
+    //private Integer secuencial;
+    //@Column(name = "PUNTO_ESTABLECIMIENTO")
+    //private String puntoEstablecimiento;
+    //@Column(name = "PUNTO_EMISION")
+    //private String puntoEmision;
     @Column(name = "FECHA_NOTA_CREDITO")
     private Date fechaNotaCredito;
-    @Column(name = "FECHA_CREACION")
-    private Date fechaCreacion;
+    //@Column(name = "FECHA_CREACION")
+    //private Date fechaCreacion;
     @Column(name = "SUBTOTAL_SIN_IMPUESTOS")
     private BigDecimal subtotalSinImpuesto;
     @Column(name = "SUBTOTAL_DOCE")
@@ -65,20 +65,20 @@ public class NotaCredito implements Serializable {
     private Long ivaSriId;
     @Column(name = "TOTAL")
     private BigDecimal total;
-    @Column(name = "USUARIO_ID")
-    private Long usuarioId;
-    @Column(name = "ESTADO")
-    private String estado;
+    //@Column(name = "USUARIO_ID")
+    //private Long usuarioId;
+    //@Column(name = "ESTADO")
+    //private String estado;
     @Column(name = "RAZON_MODIFICADO")
     private String razonModificado;
-    @Column(name = "RAZON_SOCIAL")
-    private String razonSocial;
-    @Column(name = "IDENTIFICACION")
-    private String identificacion;
-    @Column(name = "DIRECCION")
-    private String direccion;
-    @Column(name = "telefono")
-    private String telefono;
+    //@Column(name = "RAZON_SOCIAL")
+    //private String razonSocial;
+    //@Column(name = "IDENTIFICACION")
+    //private String identificacion;
+    //@Column(name = "DIRECCION")
+    //private String direccion;
+    //@Column(name = "telefono")
+    //private String telefono;
     
     @JoinColumn(name = "FACTURA_ID")
     @ManyToOne    
