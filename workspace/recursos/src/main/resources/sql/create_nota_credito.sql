@@ -20,7 +20,7 @@ create table NOTA_CREDITO
     SECUENCIAL varchar(100),
     PUNTO_ESTABLECIMIENTO decimal,
     PUNTO_EMISION decimal,
-    FECHA_NOTA_CREDITO date,
+    FECHA_EMISION date,
     FECHA_CREACION date,
     SUBTOTAL_SIN_IMPUESTOS decimal(7,2),
     SUBTOTAL_DOCE decimal(7,2),

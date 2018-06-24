@@ -68,3 +68,6 @@ Buscar un programa para abrir base de datos derby embebidas
 Programar los menuItems del menu principal para dar funcinalidades como agregar accesos directos
 
 Ver si guardar encriptada la clave del correo y archivo de la firma principalmente
+
+al momento de mandar en lote en la opcion de abrir la factura no carga el numero de secuencial
+

@@ -223,33 +223,34 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                 try {
 
                     for (Autorizacion autorizacion : autorizaciones) {
+                        if (autorizacion.getEstado().equals("AUTORIZADO")) {
+                            String numeroAutorizacion = autorizacion.getNumeroAutorizacion();
+                            ClaveAcceso claveAcceso = new ClaveAcceso(numeroAutorizacion);
+                            ec.com.codesoft.codefaclite.servidorinterfaz.entity.Comprobante comprobante = null; //comprobante
 
-                        String numeroAutorizacion = autorizacion.getNumeroAutorizacion();
-                        ClaveAcceso claveAcceso = new ClaveAcceso(numeroAutorizacion);
-                        ec.com.codesoft.codefaclite.servidorinterfaz.entity.Comprobante comprobante = null; //comprobante
+                            Map<String, Object> mapParametro = new HashMap<>();
+                            mapParametro.put("claveAcceso", numeroAutorizacion);
 
-                        Map<String, Object> mapParametro = new HashMap<>();
-                        mapParametro.put("claveAcceso", numeroAutorizacion);
+                            switch (claveAcceso.getTipoComprobante()) {
+                                case FACTURA:
+                                    FacturacionService serviceFactura = new FacturacionService();
+                                    comprobante = serviceFactura.obtenerPorMap(mapParametro).get(0);
+                                    break;
 
-                        switch (claveAcceso.getTipoComprobante()) {
-                            case FACTURA:
-                                FacturacionService serviceFactura = new FacturacionService();
-                                comprobante = serviceFactura.obtenerPorMap(mapParametro).get(0);
-                                break;
+                                case NOTA_CREDITO:
+                                    NotaCreditoService serviceNotaCredito = new NotaCreditoService();
+                                    comprobante = serviceNotaCredito.obtenerPorMap(mapParametro).get(0);
+                                    break;
 
-                            case NOTA_CREDITO:
-                                NotaCreditoService serviceNotaCredito = new NotaCreditoService();
-                                comprobante = serviceNotaCredito.obtenerPorMap(mapParametro).get(0);
-                                break;
+                                case COMPROBANTE_RETENCION:
+                                    RetencionService serviceRetencion = new RetencionService();
+                                    comprobante = serviceRetencion.obtenerPorMap(mapParametro).get(0);
+                                    break;
+                            }
 
-                            case COMPROBANTE_RETENCION:
-                                RetencionService serviceRetencion = new RetencionService();
-                                comprobante = serviceRetencion.obtenerPorMap(mapParametro).get(0);
-                                break;
+                            comprobante.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
+                            entityManager.merge(comprobante);
                         }
-
-                        comprobante.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
-                        entityManager.merge(comprobante);
 
                     }
 
