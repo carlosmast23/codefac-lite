@@ -295,7 +295,93 @@ public class Presupuesto implements Serializable
         return true;
     }    
 
-    public Object getDetalles() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    /**
+     * Metodos Personalizados
+     */
+    
+    public EstadoEnum getEstadoEnum()
+    {
+        return EstadoEnum.getByLetra(estado);
     }
+    
+    
+    
+    public enum EstadoEnum
+    {
+        /**
+         * Estado inicial en el cual se guarda cualquier presupuesto y lo que siginifica es que esta todavia en proceso y que aun no se termina
+         * de presupuestar y por tal motivo no se puede facturar, y el usuario debe poder cambiar al estado siguiente cuando lo considere necesario
+         */
+        PRESUPUESTANDO("Presupuestando","p"),
+        /**
+         * Estado intermediaron entre el terminado y seria utilizado principalmente si existe un supervisor que se encarga
+         * de revisar y aprobar los presupuestos , sin este estado previo no se podria cambiar a los posteriores, pero este
+         * estado deberia existir una configuracion para establecer si desea usar este modo, porque puede resultar lento el proceso
+         * para los negocios que requeren ninguna aprobacion
+         */
+        APROBADO("Aprobado","a"),
+        /**
+         * Estado utilizado para indicar que el presupuesto fue finalizado si existe un proceso alterno que acompoña
+         * por ejemplo la mano de obra o alguien esta elaborando el producto , en este estado se deberia informar al 
+         * cliente para que pueda acercarse para cancelar y emitir la factura
+         */
+        TERMINADO("Terminado","t"),
+        
+        /**
+         * Estado estado es utilizado para indicar que un presupuesto no se facturo o no se termino por cualquier razon
+         * En este estado se puede modificar y se puede cambiar a terminando si en el futuro se desea facturar pero es 
+         * para llevar un control de los presupuestos que fueron abandonados
+         */
+        ABANDONADO("Abandonado","b"),
+        
+        /**
+         * Estado utilizado cuando existe una nota de credito que afecta al presupuesto 
+         * En este estado tampoco se debe poder modificar , pero si se debe poder habilitar
+         * el presupuesto cambiado al estado terminado si desean facturar nuevamente
+         */
+        ANULADO("Anulado","n"),
+        /**
+         * Estado seteado cuando al presupuesto esta ligado una factura emitida
+         * En este estado se supone que ya no se pueden modificar valores de venta porque los valores facturados
+         * quedarian descuadrados
+         */
+        FACTURADO("Facturado","f");
+        
+        private String nombre;
+        private String letra;
+
+        private EstadoEnum(String nombre, String letra) {
+            this.nombre = nombre;
+            this.letra = letra;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+
+        public String getLetra() {
+            return letra;
+        }
+
+        @Override
+        public String toString() {
+            return nombre;
+        }
+        
+        public static EstadoEnum getByLetra(String letra)
+        {
+            for (EstadoEnum estadoEnum : EstadoEnum.values()) {
+                if(estadoEnum.getLetra().equals(letra))
+                {
+                    return estadoEnum;
+                }
+            }
+            
+            return null;
+        }
+        
+        
+        
+    }
+    
 }

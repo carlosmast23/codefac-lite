@@ -86,7 +86,7 @@ public class PresupuestoModel extends PresupuestoPanel{
     private ProductoProveedor productoProveedor;
     private Map<Persona,List<PresupuestoDetalle>> mapClientes;
     private Map<Integer,List<PresupuestoDetalle>> mapOrden;
-    private List<ProveedorReferencia> proveedorReferencias;
+    //private List<ProveedorReferencia> proveedorReferencias;
     
     public class ProveedorReferencia
     {
@@ -120,7 +120,7 @@ public class PresupuestoModel extends PresupuestoPanel{
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         presupuesto = new Presupuesto();
-        proveedorReferencias = new ArrayList<>();
+        //proveedorReferencias = new ArrayList<>();
         getTxtCodigo().setText("");
         cargarCombos();
         addListenerBotones();
@@ -178,6 +178,7 @@ public class PresupuestoModel extends PresupuestoPanel{
             
             PresupuestoServiceIf servicio = ServiceFactory.getFactory().getPresupuestoServiceIf();
             servicio.grabar(presupuesto);
+            DialogoCodefac.mensaje("Correcto","El presupuesto fue grabado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
             
             /**
              * El momento que se graba el Presupuesto genero de cada detalle presuesto la orden de compra
@@ -275,7 +276,7 @@ public class PresupuestoModel extends PresupuestoPanel{
             getCmbTipoPresupuesto().setSelectedItem(presupuesto.getCatalogoProducto());
             cargarDetallesOrdenTrabajo(this.presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo());
             getCmbDetallesOrdenTrabajo().setSelectedItem(this.presupuesto.getOrdenTrabajoDetalle());
-            GeneralEnumEstado generalEnumEstado = GeneralEnumEstado.getEnum(this.presupuesto.getEstado());
+            Presupuesto.EstadoEnum generalEnumEstado = Presupuesto.EstadoEnum.getByLetra(this.presupuesto.getEstado());
             getCmbEstadoPresupuesto().setSelectedItem(generalEnumEstado);
             getCmbFechaPresupuesto().setDate(this.presupuesto.getFechaPresupuesto());
             getLblIndicarFechaValidez().setText(""+this.presupuesto.getFechaValidez());
@@ -330,7 +331,7 @@ public class PresupuestoModel extends PresupuestoPanel{
          * Estado general de Presupuesto
          */
         getCmbEstadoPresupuesto().removeAllItems();
-        for(GeneralEnumEstado gem : GeneralEnumEstado.values())
+        for(Presupuesto.EstadoEnum gem : Presupuesto.EstadoEnum.values())
         {
             getCmbEstadoPresupuesto().addItem(gem);
         }
@@ -728,13 +729,44 @@ public class PresupuestoModel extends PresupuestoPanel{
 
         if(agregar)
         {
-            this.presupuesto.addDetalle(presupuestoDetalle);
+            buscarNumeroOrdenPresupuestoDetalle(presupuestoDetalle);
+            this.presupuesto.addDetalle(presupuestoDetalle);            
             ordenarDetallesEnFuncionDeOrdenCompra();
             mostrarDatosTabla();
-        }
-        
+        }        
         
      }
+    
+    /**
+     * Funcion que me permite buscar el numero de una orden de compra o la creaa
+     */
+    private void buscarNumeroOrdenPresupuestoDetalle(PresupuestoDetalle presupuestoDetalle)
+    {
+        int numeroOrdenMaximo=0;
+        
+        //Solo verificar cuando exista detalles agregados
+        if(presupuesto.getPresupuestoDetalles()!=null && presupuesto.getPresupuestoDetalles().size()>0)
+        {
+            for(PresupuestoDetalle detalle:presupuesto.getPresupuestoDetalles())
+            {
+                if(detalle.getPersona().equals(presupuestoDetalle.getPersona()))
+                {
+                    presupuestoDetalle.setNumeroOrdenCompra(detalle.getNumeroOrdenCompra());//Si ya existe un detalle con el mismo proveedor solo seteo el mismo valor por defecto al nuevo detalle
+                }
+                else
+                {
+                    //Busca el numero de orden mas alto
+                    if(detalle.getNumeroOrdenCompra()>numeroOrdenMaximo)
+                    {
+                        numeroOrdenMaximo=detalle.getNumeroOrdenCompra();
+                    }
+                }
+            }
+        }
+        
+        //Si no encuentra ningun proveedor anterior que coincida creo una nueva orden con un numero nuevo
+        presupuestoDetalle.setNumeroOrdenCompra(numeroOrdenMaximo+1); //seteo el maximo numero de orden +1 
+    }
     
     public void cargarInformacionDetallePresupuesto(PresupuestoDetalle presupuestoDetalle)
     {
@@ -815,8 +847,8 @@ public class PresupuestoModel extends PresupuestoPanel{
             this.presupuesto.setDescripcion(getTxtDescripcion().getText());
             this.presupuesto.setCatalogoProducto((CatalogoProducto) getCmbTipoPresupuesto().getSelectedItem());
             this.presupuesto.setObservaciones(getTxtAreaObservaciones().getText());
-            GeneralEnumEstado generalEnumEstado = (GeneralEnumEstado) getCmbEstadoPresupuesto().getSelectedItem();
-            this.presupuesto.setEstado(generalEnumEstado.getEstado());
+            Presupuesto.EstadoEnum generalEnumEstado = (Presupuesto.EstadoEnum) getCmbEstadoPresupuesto().getSelectedItem();
+            this.presupuesto.setEstado(generalEnumEstado.getLetra());
             try{   
                 this.presupuesto.setFechaPresupuesto(new Date(getCmbFechaPresupuesto().getDate().getTime()));
             }
@@ -829,18 +861,19 @@ public class PresupuestoModel extends PresupuestoPanel{
             /**
             *  Agregar referencia por Orden   
             */
-            int c=0;
-            for(Map.Entry<Persona,List<PresupuestoDetalle>> datoMap : mapClientes.entrySet())
-            {
-                c+=1;
-                List<PresupuestoDetalle> presupuestoDetalles = datoMap.getValue();
-                for (PresupuestoDetalle presupuestoDetalle : presupuestoDetalles) {
-                     /**
-                     *  Agregar referencia por proveedor  
-                     */   
-                    presupuestoDetalle.setNumeroOrdenCompra(c);
-                }
-            }    
+            
+//            int c=0;
+//            for(Map.Entry<Persona,List<PresupuestoDetalle>> datoMap : mapClientes.entrySet())
+//            {
+//                c+=1;
+//                List<PresupuestoDetalle> presupuestoDetalles = datoMap.getValue();
+//                for (PresupuestoDetalle presupuestoDetalle : presupuestoDetalles) {
+//                     /**
+//                     *  Agregar referencia por proveedor  
+//                     */   
+//                    presupuestoDetalle.setNumeroOrdenCompra(c);
+//                }
+//            }    
     }
     
     public void setearValoresPresupuesto(BigDecimal descuentoCompra, BigDecimal descuentoVenta, BigDecimal totalCompra, BigDecimal totalVenta)
@@ -853,42 +886,64 @@ public class PresupuestoModel extends PresupuestoPanel{
     
     public void ordenarDetallesEnFuncionDeCliente()
     {  
+        //Metodo que permite ordentar los maps por las proveedores
         mapClientes = new TreeMap<Persona,List<PresupuestoDetalle>>(new Comparator<Persona>() {
             @Override
             public int compare(Persona o1, Persona o2) {
                 return o1.compareTo(o2);
             }
         });
-        boolean b = false;
+
         for(PresupuestoDetalle pd : presupuesto.getPresupuestoDetalles())
         {
             
             if(mapClientes.get(pd.getPersona()) == null)
             {
-                mapClientes.put(pd.getPersona(),new ArrayList<PresupuestoDetalle>());
-                for(ProveedorReferencia proveedorReferencia: this.proveedorReferencias)
-                {
-                    if(proveedorReferencia.getPersona().equals(pd.getPersona())){
-                       b = true;
-                       break;
-                    }
-                }
-                if(!b){
-                    this.proveedorReferencias.add(new ProveedorReferencia(pd.getPersona(), this.proveedorReferencias.size()+1));
-                }
-                b=false;
+                List<PresupuestoDetalle> detalles=new ArrayList<PresupuestoDetalle>();
+                detalles.add(pd); //Agrego el dato a la nueva lista
+                mapClientes.put(pd.getPersona(),detalles); //Agredo el proveedor, con el detalle
             }
-            mapClientes.get(pd.getPersona()).add(pd);
+            else
+            {
+                List<PresupuestoDetalle> detalles=mapClientes.get(pd.getPersona());//Si ya xiste el valor solo consulta la lista para agregar
+                detalles.add(pd);//No necesito actualizar el map porque tiene la referencia de la lista y con modificar la lsita se modifica el map
+                //mapClientes.put(pd.getPersona(), value)
+            }
+            //mapClientes.get(pd.getPersona()).add(pd);
         }
     }
     
     public void ordenarDetallesEnFuncionDeOrdenCompra()
     {
-        int c = 0;
+        //int c = 0;
         ordenarDetallesEnFuncionDeCliente();
         mapOrden = new HashMap<Integer,List<PresupuestoDetalle>>();
+        
+        for (PresupuestoDetalle pd : presupuesto.getPresupuestoDetalles()) 
+        {
+            //Si no existe el numero de orden creo
+            if(mapOrden.get(pd.getNumeroOrdenCompra())==null)
+            {
+                List<PresupuestoDetalle> detalles=new ArrayList<PresupuestoDetalle>();
+                detalles.add(pd);
+                mapOrden.put(pd.getNumeroOrdenCompra(),detalles);
+            }
+            else //Si ya existe solo consulto
+            {
+                List<PresupuestoDetalle> detalles=mapOrden.get(pd.getNumeroOrdenCompra());
+                detalles.add(pd);//Solo agrego porque la referencia de la lista edita al map
+            }
+            
+        }
+        /*
         for (Map.Entry<Persona, List<PresupuestoDetalle>> entry : mapClientes.entrySet()) 
         {
+            Persona proveedor=entry.getKey();
+            List<PresupuestoDetalle> detalles =entry.getValue();
+            
+            
+            
+
             //Número de Orden a emplear por cada proveedor, cada proveedor puede tener varias detalles de ordenes de compra
             List<PresupuestoDetalle> value = entry.getValue();
             PresupuestoDetalle presupuestoDetalleTemp = value.get(0);
@@ -911,7 +966,7 @@ public class PresupuestoModel extends PresupuestoPanel{
                     presupuestoDetalle.setNumeroOrdenCompra(c);
                 }
             }
-        }
+        }*/
     }
     
     public void mostrarDatosTabla()

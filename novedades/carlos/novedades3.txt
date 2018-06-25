@@ -71,3 +71,7 @@ Ver si guardar encriptada la clave del correo y archivo de la firma principalmen
 
 al momento de mandar en lote en la opcion de abrir la factura no carga el numero de secuencial
 
+Revisar el detalle de los presupuestos que tenga una referencia a la orden de compra para poder volver a generar si se edita desde el presupuest
+revisar la nota de credito con los presupuesto no se genera
+ver la posibilidad de cambiar los estados y procesos de cada modulo cuando se factura o se emite una nota de credito solo si esta autorizado el documento o ver que hacer si no se puede validar esa opcion
+agregar opcion de restaurar valores como en la nota de credito cuando se elimina una factura

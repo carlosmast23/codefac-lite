@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInte
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
@@ -803,7 +804,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     private javax.swing.JButton btnProducto;
     private javax.swing.JButton btnProveedor;
     private javax.swing.JComboBox<OrdenTrabajoDetalle> cmbDetallesOrdenTrabajo;
-    private javax.swing.JComboBox<GeneralEnumEstado> cmbEstadoPresupuesto;
+    private javax.swing.JComboBox<Presupuesto.EstadoEnum> cmbEstadoPresupuesto;
     private com.toedter.calendar.JDateChooser cmbFechaPresupuesto;
     private javax.swing.JComboBox<String> cmbOpcionDiaMes;
     private javax.swing.JComboBox<CatalogoProducto> cmbTipoPresupuesto;
@@ -932,13 +933,15 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         this.cmbDetallesOrdenTrabajo = cmbDetallesOrdenTrabajo;
     }
 
-    public JComboBox<GeneralEnumEstado> getCmbEstadoPresupuesto() {
+    public JComboBox<Presupuesto.EstadoEnum> getCmbEstadoPresupuesto() {
         return cmbEstadoPresupuesto;
     }
 
-    public void setCmbEstadoPresupuesto(JComboBox<GeneralEnumEstado> cmbEstadoPresupuesto) {
+    public void setCmbEstadoPresupuesto(JComboBox<Presupuesto.EstadoEnum> cmbEstadoPresupuesto) {
         this.cmbEstadoPresupuesto = cmbEstadoPresupuesto;
     }
+
+    
 
     public JDateChooser getCmbFechaPresupuesto() {
         return cmbFechaPresupuesto;

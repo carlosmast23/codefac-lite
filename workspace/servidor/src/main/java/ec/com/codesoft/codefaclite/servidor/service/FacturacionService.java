@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.Constrain
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
@@ -103,7 +104,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         //NO DEBE AFECTAR A NADA;
                         break;
                     case PRESUPUESTOS:
-                        //Todo: Falta implementar
+                        afectarPresupuesto(detalle);
                         break;
                         
                 }
@@ -126,6 +127,18 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return factura;
+    }
+    
+    private void afectarPresupuesto(FacturaDetalle detalle)
+    {
+        try {
+            PresupuestoService servicio = new PresupuestoService();
+            Presupuesto presupuesto = servicio.buscarPorId(detalle.getReferenciaId());
+            presupuesto.setEstado(Presupuesto.EstadoEnum.FACTURADO.getLetra()); //Cambio el estado a facturado
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
     
     private void afectarAcademico(FacturaDetalle detalle)

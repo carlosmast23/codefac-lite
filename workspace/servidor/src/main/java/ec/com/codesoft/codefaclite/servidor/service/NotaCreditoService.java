@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.NotaCreditoFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
@@ -64,18 +65,26 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
              */
             
             for (NotaCreditoDetalle detalle : notaCredito.getDetalles()) {
-                if(detalle.getTipoDocumentoEnum().equals(TipoDocumentoEnum.ACADEMICO))
+                
+                switch(detalle.getTipoDocumentoEnum())
                 {
-                    RubroEstudiante rubroEstudiante=ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(detalle.getReferenciaId());
-                    rubroEstudiante.setEstadoFactura(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR.getLetra());
-                    rubroEstudiante.setSaldo(rubroEstudiante.getSaldo().add(detalle.getTotal()));
+                    case  ACADEMICO :
+                        RubroEstudiante rubroEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(detalle.getReferenciaId());
+                        rubroEstudiante.setEstadoFactura(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR.getLetra());
+                        rubroEstudiante.setSaldo(rubroEstudiante.getSaldo().add(detalle.getTotal()));
+                        entityManager.merge(rubroEstudiante);                        
+                        break;
+                        
+                    case PRESUPUESTOS:
+                        PresupuestoService presupuestoServicio=new PresupuestoService();
+                        Presupuesto presupuesto=presupuestoServicio.buscarPorId(detalle.getReferenciaId());
+                        presupuesto.setEstado(Presupuesto.EstadoEnum.ANULADO.getLetra());
+                        entityManager.merge(presupuesto);                      
+                        break;
                     
-                    entityManager.merge(rubroEstudiante);
                 }
-                else
-                {
-                    //TODO: Falta implementar la logica para los otros modulos  
-                }
+                
+
             }
             
             /**

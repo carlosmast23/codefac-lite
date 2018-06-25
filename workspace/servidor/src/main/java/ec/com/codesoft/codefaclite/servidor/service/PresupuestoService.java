@@ -36,7 +36,8 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
     
     public Presupuesto grabar(Presupuesto entity) throws ServicioCodefacException
     {
-        entityManager.getTransaction().begin(); //Inicio de la transaccion
+        EntityTransaction transaccion=entityManager.getTransaction();
+        transaccion.begin(); //Inicio de la transaccion
         try {
             //Recorro todos los detalles para verificar si existe todos los productos proveedor o los grabo o los edito con los nuevos valores
             for (PresupuestoDetalle presupuestoDetalle : entity.getPresupuestoDetalles()) {
@@ -48,10 +49,10 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
             }
 
             entityManager.persist(entity);
-            entityManager.getTransaction().commit();
+            transaccion.commit();
         } catch (Exception e) {
             e.printStackTrace();
-            entityManager.getTransaction().rollback();
+            transaccion.rollback();
             throw new ServicioCodefacException("Error al grabar la compra");
         }
         return entity;

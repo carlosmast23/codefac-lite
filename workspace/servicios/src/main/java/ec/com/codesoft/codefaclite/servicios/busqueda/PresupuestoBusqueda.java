@@ -33,11 +33,12 @@ public class PresupuestoBusqueda implements InterfaceModelFind<Presupuesto>
     @Override
     public QueryDialog getConsulta(String filter) {
         //String queryString = "SELECT p FROM Presupuesto p WHERE ";
-        String queryString = "SELECT p FROM Presupuesto p WHERE CAST(p.id CHAR(64) ) like ?1 and p.estado=?2 ";
+        //String queryString = "SELECT p FROM Presupuesto p WHERE CAST(p.id CHAR(64) ) like ?1 and p.estado=?2 ";
+        String queryString = "SELECT p FROM Presupuesto p WHERE CAST(p.id CHAR(64) ) like ?1 ";
         //queryString+=" ( LOWER(p.id) like ?1 ) and p.estado=?2 ";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1, filter);
-        queryDialog.agregarParametro(2, GeneralEnumEstado.ACTIVO.getEstado());
+        //queryDialog.agregarParametro(2, GeneralEnumEstado.ACTIVO.getEstado());
         return queryDialog;
     }
 
