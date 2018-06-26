@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
@@ -143,17 +144,29 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
                 CatalogoProducto catalogoProducto=null;
                 DetalleNotaCreditoComprobante detalle=new DetalleNotaCreditoComprobante();
                 
-                if(detalleNotaCredito.getTipoReferencia().equals(TipoReferenciaEnum.ACADEMICO.getCodigo()))
+                TipoReferenciaEnum tipoReferenciaEnum=TipoReferenciaEnum.getFindByTipoReferencia(detalleNotaCredito.getTipoReferencia());
+                
+                switch(detalleNotaCredito.getTipoDocumentoEnum())
                 {
-                    RubroEstudiante rubroEstudiante=ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(detalleNotaCredito.getReferenciaId());
-                    catalogoProducto=rubroEstudiante.getRubroNivel().getCatalogoProducto();
-                    detalle.setCodigoInterno(rubroEstudiante.getId()+"");
-                }
-                else
-                {
-                    Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalleNotaCredito.getReferenciaId());
-                    catalogoProducto=producto.getCatalogoProducto();
-                    detalle.setCodigoInterno(producto.getCodigoPersonalizado());
+                    case ACADEMICO:
+                        RubroEstudiante rubroEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(detalleNotaCredito.getReferenciaId());
+                        catalogoProducto = rubroEstudiante.getRubroNivel().getCatalogoProducto();
+                        detalle.setCodigoInterno(rubroEstudiante.getId() + "");
+                        break;
+                        
+                    case INVENTARIO:
+                    case LIBRE:
+                        Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(detalleNotaCredito.getReferenciaId());
+                        catalogoProducto = producto.getCatalogoProducto();
+                        detalle.setCodigoInterno(producto.getCodigoPersonalizado());
+                        break;
+                        
+                    case PRESUPUESTOS:
+                        Presupuesto presupuesto=ServiceFactory.getFactory().getPresupuestoServiceIf().buscarPorId(detalleNotaCredito.getReferenciaId());
+                        catalogoProducto = presupuesto.getCatalogoProducto();
+                        detalle.setCodigoInterno(presupuesto.getId()+"");
+                        break;
+                
                 }
                 
                 detalle.setCantidad(detalleNotaCredito.getCantidad());
