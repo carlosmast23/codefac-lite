@@ -47,7 +47,7 @@ public class PresupuestoBusqueda implements InterfaceModelFind<Presupuesto>
     {
         dato.add(p.getCodigo());
         dato.add(p.getDescripcion());
-        dato.add(p.getEstado());
+        dato.add((p.getEstadoEnum()!=null)?p.getEstadoEnum().getNombre():"Sin estado");
         dato.add(p.getFechaPresupuesto());
         dato.add(p.getFechaValidez());
     }
