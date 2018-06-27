@@ -713,7 +713,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                  return;
             }            
             presupuestoSeleccionado=presupuestoTmp;
-            setearValoresProducto(presupuestoSeleccionado.getTotalVenta(), presupuestoSeleccionado.getDescripcion(),presupuestoSeleccionado.getId().toString());
+            
+            String descripcion="P"+presupuestoSeleccionado.getId()+" OT"+presupuestoSeleccionado.getOrdenTrabajoDetalle().getOrdenTrabajo().getId()+"  "+presupuestoSeleccionado.getDescripcion();
+            setearValoresProducto(presupuestoSeleccionado.getTotalVenta(),descripcion,presupuestoSeleccionado.getId().toString());
             banderaAgregar=true;
         }
     }
