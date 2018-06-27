@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -45,9 +46,9 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
      * Setear la pagina actual de la consulta
      */
     private int paginaActual;
-    private long tamanioConsulta;
+    private int tamanioConsulta;
     
-    private long cantidadPaginas;
+    private int cantidadPaginas;
     
     private DefaultTableModel modeloTablaBuscar;
     private InterfaceModelFind model;
@@ -112,29 +113,35 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         if(paginaActual==1)
         {
             getBtnAtras().setEnabled(false);
+            getBtnPrimero().setEnabled(false);
         }
         else
         {
             getBtnAtras().setEnabled(true);
+            getBtnPrimero().setEnabled(true);
         }
         
         if(paginaActual==cantidadPaginas)
         {
             getBtnSiguiente().setEnabled(false);
+            getBtnUltimo().setEnabled(false);
         }
         else
         {
             getBtnSiguiente().setEnabled(true);
+            getBtnUltimo().setEnabled(true);
         }
         
         if(cantidadPaginas==0)
         {
             getBtnAtras().setEnabled(false);
             getBtnSiguiente().setEnabled(false);
+            getBtnPrimero().setEnabled(false);
+            getBtnUltimo().setEnabled(false);
         }
     }
     
-    private Long obtenerTamanioConsulta()
+    private int obtenerTamanioConsulta()
     {
         try {
             String filtro=getTxtBuscar().getText();
@@ -146,11 +153,13 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
             int segundoCorte=query.indexOf("from");
             String queryModificado=queryDialog.query.substring(0,primerCorte)+" count(1) "+queryDialog.query.substring(segundoCorte);
             System.out.println(queryModificado);            
-            return ServiceFactory.getFactory().getUtilidadesServiceIf().consultaTamanioGeneralDialogos(queryModificado, queryDialog.getParametros());
+            Long tamanio=ServiceFactory.getFactory().getUtilidadesServiceIf().consultaTamanioGeneralDialogos(queryModificado, queryDialog.getParametros());
+            
+            return (tamanio!=null)?tamanio.intValue():0;
         } catch (RemoteException ex) {
             Logger.getLogger(BuscarDialogoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return null;
+        return 0;
     }
     
     /**
@@ -162,11 +171,10 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         this.tamanioConsulta=obtenerTamanioConsulta();
         this.paginaActual=1;        
         double paginas=(double)tamanioConsulta/(double)CANTIDAD_FILAS;
-        //new BigDecimal(paginas).setScale(BigDecimal.ROUND_UP).toBigInteger();
         this.cantidadPaginas=(int)(new BigDecimal(paginas).setScale(0,BigDecimal.ROUND_UP).intValue());
-        //if(cantidadPaginas==0)
-        //    cantidadPaginas=1;
-        
+
+        //Enviar un mensaje si no existe datos para no abrir el dialogo sin necesidad
+
         consultaSecundaria();
         
     }
@@ -228,6 +236,22 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
     
     private void initListener()
     {
+        getBtnUltimo().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                paginaActual=cantidadPaginas;
+                consultaSecundaria();
+            }
+        });
+        
+        getBtnPrimero().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                paginaActual=1;
+                consultaSecundaria();                
+            }
+        });
+        
         getBtnSiguiente().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

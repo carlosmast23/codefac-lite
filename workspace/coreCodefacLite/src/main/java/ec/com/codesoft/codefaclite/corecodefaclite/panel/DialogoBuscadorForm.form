@@ -89,11 +89,20 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
           <SubComponents>
+            <Component class="javax.swing.JButton" name="btnPrimero">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/img/iconos/pequenos/flecha_primero.png"/>
+                </Property>
+                <Property name="toolTipText" type="java.lang.String" value="Inicio"/>
+              </Properties>
+            </Component>
             <Component class="javax.swing.JButton" name="btnAtras">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/img/iconos/pequenos/flechaIzq.png"/>
                 </Property>
+                <Property name="toolTipText" type="java.lang.String" value="Atras"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="btnSiguiente">
@@ -101,6 +110,15 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/img/iconos/pequenos/flechaDer.png"/>
                 </Property>
+                <Property name="toolTipText" type="java.lang.String" value="Siguiente"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JButton" name="btnUltimo">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/img/iconos/pequenos/flecha_ultimo.png"/>
+                </Property>
+                <Property name="toolTipText" type="java.lang.String" value="Fin"/>
               </Properties>
             </Component>
           </SubComponents>

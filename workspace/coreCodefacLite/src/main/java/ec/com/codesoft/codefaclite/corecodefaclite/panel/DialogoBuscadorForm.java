@@ -39,8 +39,10 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
         btnCancelar = new javax.swing.JButton();
         lblPiePagina = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
+        btnPrimero = new javax.swing.JButton();
         btnAtras = new javax.swing.JButton();
         btnSiguiente = new javax.swing.JButton();
+        btnUltimo = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         lblTextoBuscar = new javax.swing.JLabel();
         btnFiltrar = new javax.swing.JButton();
@@ -72,11 +74,21 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
         lblPiePagina.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jPanel1.add(lblPiePagina, java.awt.BorderLayout.CENTER);
 
+        btnPrimero.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/flecha_primero.png"))); // NOI18N
+        btnPrimero.setToolTipText("Inicio");
+        jPanel4.add(btnPrimero);
+
         btnAtras.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/flechaIzq.png"))); // NOI18N
+        btnAtras.setToolTipText("Atras");
         jPanel4.add(btnAtras);
 
         btnSiguiente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/flechaDer.png"))); // NOI18N
+        btnSiguiente.setToolTipText("Siguiente");
         jPanel4.add(btnSiguiente);
+
+        btnUltimo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/flecha_ultimo.png"))); // NOI18N
+        btnUltimo.setToolTipText("Fin");
+        jPanel4.add(btnUltimo);
 
         jPanel1.add(jPanel4, java.awt.BorderLayout.LINE_START);
 
@@ -173,7 +185,9 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
     private javax.swing.JButton btnAtras;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnFiltrar;
+    private javax.swing.JButton btnPrimero;
     private javax.swing.JButton btnSiguiente;
+    private javax.swing.JButton btnUltimo;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -263,6 +277,22 @@ public class DialogoBuscadorForm extends javax.swing.JDialog {
 
     public void setBtnSiguiente(JButton btnSiguiente) {
         this.btnSiguiente = btnSiguiente;
+    }
+
+    public JButton getBtnPrimero() {
+        return btnPrimero;
+    }
+
+    public void setBtnPrimero(JButton btnPrimero) {
+        this.btnPrimero = btnPrimero;
+    }
+
+    public JButton getBtnUltimo() {
+        return btnUltimo;
+    }
+
+    public void setBtnUltimo(JButton btnUltimo) {
+        this.btnUltimo = btnUltimo;
     }
     
     
