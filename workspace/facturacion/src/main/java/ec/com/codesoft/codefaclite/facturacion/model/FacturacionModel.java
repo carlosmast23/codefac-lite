@@ -1696,6 +1696,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
 
     private void cargarValoresAdicionales() {
+        getLblEstadoFactura().setText(factura.getEstadoEnum().getNombre());
         getLblSecuencial().setText(factura.getPreimpreso());
         getjDateFechaEmision().setDate(factura.getFechaEmision());
     }
