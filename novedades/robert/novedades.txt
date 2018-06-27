@@ -6,4 +6,9 @@ aparecieron las 2 deudas al mismo tiempo.
 4. Enviar correo al empleado despues que genere la orden de trabajo, ojo que por cada detalle asigno un empleado
 el empleado. 
 
+En las ordenes de trabajo despues de crear un presupuesto , cambiar de estado para que no se acumulen ordenes de trabajo pendientes
+Ojo: Pero se puede cambiar el estado de la orden para volver a reutilizar porque se pueden generar varios presupuestos de la misma orden en casos raros
+
+Establecer un tiempo por defecto de configuracion para los presupuestos, en parametros del sistema que el usuario pueda configurar
+
 Optimizar porque usa 2 map al momento de agregar detalles en los presupuestos

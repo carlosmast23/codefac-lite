@@ -252,8 +252,26 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     
     public void eliminarFactura(Factura factura)
     {
-        factura.setEstado(FacturaEnumEstado.ELIMINADO.getEstado());
-        facturaFacade.edit(factura);
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() {
+                try {
+                    factura.setEstado(FacturaEnumEstado.ELIMINADO.getEstado()); //Cambio el estado de las facturas a eliminad
+                    entityManager.merge(factura); //actualizar los datos de la factura
+                    
+                    NotaCreditoService servicioNotaCredito=new NotaCreditoService();
+                    for (FacturaDetalle detalle : factura.getDetalles()) {
+                        //Anulo los datos segun el tipo de modulo relacionado
+                        servicioNotaCredito.anularProcesoFactura(detalle.getTipoDocumentoEnum(),detalle.getReferenciaId(),detalle.getTotal());
+                    }
+                    
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            }
+        });
+        
     }
     
 

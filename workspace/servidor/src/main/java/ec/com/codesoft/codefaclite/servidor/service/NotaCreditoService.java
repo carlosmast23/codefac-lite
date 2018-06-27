@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.List;
@@ -64,26 +65,8 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
              * Actualizar la logica de cada modulo dependiendo del tipo de documento de cada detalle
              */
             
-            for (NotaCreditoDetalle detalle : notaCredito.getDetalles()) {
-                
-                switch(detalle.getTipoDocumentoEnum())
-                {
-                    case  ACADEMICO :
-                        RubroEstudiante rubroEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(detalle.getReferenciaId());
-                        rubroEstudiante.setEstadoFactura(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR.getLetra());
-                        rubroEstudiante.setSaldo(rubroEstudiante.getSaldo().add(detalle.getTotal()));
-                        entityManager.merge(rubroEstudiante);                        
-                        break;
-                        
-                    case PRESUPUESTOS:
-                        PresupuestoService presupuestoServicio=new PresupuestoService();
-                        Presupuesto presupuesto=presupuestoServicio.buscarPorId(detalle.getReferenciaId());
-                        presupuesto.setEstado(Presupuesto.EstadoEnum.ANULADO.getLetra());
-                        entityManager.merge(presupuesto);                      
-                        break;
-                    
-                }
-                
+            for (NotaCreditoDetalle detalle : notaCredito.getDetalles()) {                
+                anularProcesoFactura(detalle.getTipoDocumentoEnum(),detalle.getReferenciaId() ,detalle.getTotal());
 
             }
             
@@ -111,6 +94,33 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
             Logger.getLogger(NotaCreditoService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return notaCredito;
+    }
+    
+    /**
+     * Metodo que me permite anular el proceso adicional que esta relacionado con las documentos como las facturas o notas de credito
+     * @param tipoDocumento
+     * @param referenciaId
+     * @param total
+     * @throws RemoteException 
+     */
+    public void anularProcesoFactura(TipoDocumentoEnum tipoDocumento,Long referenciaId,BigDecimal total) throws RemoteException
+    {
+        switch (tipoDocumento) {
+            case ACADEMICO:
+                RubroEstudiante rubroEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(referenciaId);
+                rubroEstudiante.setEstadoFactura(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR.getLetra());
+                rubroEstudiante.setSaldo(rubroEstudiante.getSaldo().add(total));
+                entityManager.merge(rubroEstudiante);
+                break;
+
+            case PRESUPUESTOS:
+                PresupuestoService presupuestoServicio = new PresupuestoService();
+                Presupuesto presupuesto = presupuestoServicio.buscarPorId(referenciaId);
+                presupuesto.setEstado(Presupuesto.EstadoEnum.ANULADO.getLetra());
+                entityManager.merge(presupuesto);
+                break;
+
+        }
     }
     
     public String getPreimpresoSiguiente() {

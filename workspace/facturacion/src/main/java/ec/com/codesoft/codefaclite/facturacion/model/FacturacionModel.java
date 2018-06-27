@@ -1001,7 +1001,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     respuesta = DialogoCodefac.dialogoPregunta("Advertencia", "Esta seguro que desea eliminar la factura? ", DialogoCodefac.MENSAJE_ADVERTENCIA);
 
                 } else {
-                    respuesta=DialogoCodefac.dialogoPregunta("Alerta", "La factura se encuentra autorizada en el SRI , \nPorfavor elimine la factura solo si tambien esta anulado en el SRI\nDesea eliminar la factura de todos modos?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    respuesta=DialogoCodefac.dialogoPregunta("Alerta", "La factura se encuentra autorizada en el SRI , \nPorfavor elimine la factura solo si tambien esta anulado en el SRI\nDesea eliminar la factura de todos modos?", DialogoCodefac.MENSAJE_INCORRECTO);
                 }
                 
                 //Eliminar la factura si eligen la respuesta si
