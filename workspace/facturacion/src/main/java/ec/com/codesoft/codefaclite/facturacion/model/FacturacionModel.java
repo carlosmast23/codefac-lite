@@ -69,9 +69,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
+import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import ec.com.codesoft.codefaclite.utilidades.tabla.ButtonColumn;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
@@ -1716,32 +1718,39 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 validado = false;
             }
         }
-        else //Validacion cunando es facturacion electronica
-        {        
+        else         {        
        
-            if (session.getParametrosCodefac().get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor().equals("")) {
-                mensajeValidacion += " - Archivo Firma\n";
-                validado = false;
-            }
-
-            if (session.getParametrosCodefac().get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).getValor().equals("")) {
-                mensajeValidacion += " - Clave Firma\n";
-                validado = false;
-            }
-
-            if (session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals("")) {
-                mensajeValidacion += " - Correo\n";
-                validado = false;
-            }
-
-            if (session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals("")) {
-                mensajeValidacion += " - Clave Correo \n";
-                validado = false;
-            }
-
-            if (session.getEmpresa() == null) {
-                mensajeValidacion += " - Información de Empresa \n";
-                validado = false;
+            try //Validacion cunando es facturacion electronica
+            {
+                if (session.getParametrosCodefac().get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor().equals("")) {
+                    mensajeValidacion += " - Archivo Firma\n";
+                    validado = false;
+                }
+                
+                
+                String claveFirmaElectronica=UtilidadesEncriptar.desencriptar(session.getParametrosCodefac().get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).getValor(),ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
+                
+                if (claveFirmaElectronica.equals("")) {
+                    mensajeValidacion += " - Clave Firma\n";
+                    validado = false;
+                }
+                
+                if (session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals("")) {
+                    mensajeValidacion += " - Correo\n";
+                    validado = false;
+                }
+                
+                if (session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals("")) {
+                    mensajeValidacion += " - Clave Correo \n";
+                    validado = false;
+                }
+                
+                if (session.getEmpresa() == null) {
+                    mensajeValidacion += " - Información de Empresa \n";
+                    validado = false;
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }

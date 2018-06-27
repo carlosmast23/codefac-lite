@@ -49,12 +49,14 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraDetall
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NotaCreditoEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
 import ec.com.codesoft.codefaclite.ws.recepcion.Comprobante;
 import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
+import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import java.awt.event.ActionListener;
 import java.io.ByteArrayOutputStream;
@@ -1020,7 +1022,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             //servicio.setPathBase(parametroCodefacMap.get(ParametroCodefac.DIRECTORIO_RECURSOS).valor);
             servicio.setPathBase(UtilidadesServidor.pathRecursos);
             servicio.setNombreFirma(parametroCodefacMap.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).valor);
-            servicio.setClaveFirma(parametroCodefacMap.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).valor);
+            servicio.setClaveFirma(UtilidadesEncriptar.desencriptar(parametroCodefacMap.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).valor,ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
             String modoFacturacion = parametroCodefacMap.get(ParametroCodefac.MODO_FACTURACION).valor;
             servicio.setModoFacturacion(modoFacturacion);
 
@@ -1085,6 +1087,8 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             servicio.setMapCodeAndNameTipoDocumento(mapTipoDocumento);
             
         } catch (RemoteException ex) {
+            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
             Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
         }
 

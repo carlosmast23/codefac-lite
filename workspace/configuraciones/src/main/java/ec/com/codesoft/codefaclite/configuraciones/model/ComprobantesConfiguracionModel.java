@@ -27,9 +27,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacSe
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.email.CorreoElectronico;
 import ec.com.codesoft.codefaclite.utilidades.email.SmtpNoExisteException;
+import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import ec.com.codesoft.codefaclite.utilidades.varios.DialogoCopiarArchivos;
+import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -202,9 +205,9 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
         String ivaDefacto = ((ImpuestoDetalle) getCmbIvaDefault().getSelectedItem()).getTarifa().toString();
         parametros.get(ParametroCodefac.IVA_DEFECTO).setValor(ivaDefacto);
         parametros.get(ParametroCodefac.CORREO_USUARIO).setValor(getTxtCorreoElectronico().getText());
-        parametros.get(ParametroCodefac.CORREO_CLAVE).setValor(new String(getTxtPasswordCorreo().getPassword()));
+        parametros.get(ParametroCodefac.CORREO_CLAVE).setValor(UtilidadesEncriptar.encriptar(new String(getTxtPasswordCorreo().getPassword()),ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
 
-        parametros.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).setValor(new String(getTxtClaveFirma().getPassword()));
+        parametros.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).setValor(UtilidadesEncriptar.encriptar(new String(getTxtClaveFirma().getPassword()),ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
 
         parametros.get(ParametroCodefac.MODO_FACTURACION).setValor(getCmbModoFacturacion().getSelectedItem().toString());
         
@@ -240,9 +243,10 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             getTxtEstablecimiento().setText(parametros.get(ParametroCodefac.ESTABLECIMIENTO).getValor());
             getTxtPuntoEmision().setText(parametros.get(ParametroCodefac.PUNTO_EMISION).getValor());
             getTxtCorreoElectronico().setText(parametros.get(ParametroCodefac.CORREO_USUARIO).getValor());
-            getTxtPasswordCorreo().setText(parametros.get(ParametroCodefac.CORREO_CLAVE).getValor());
+            getTxtPasswordCorreo().setText(UtilidadesEncriptar.desencriptar(parametros.get(ParametroCodefac.CORREO_CLAVE).getValor(),ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
             getTxtNombreFirma().setText(parametros.get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor());
-            getTxtClaveFirma().setText(parametros.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).getValor());
+            
+            getTxtClaveFirma().setText(UtilidadesEncriptar.desencriptar(parametros.get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).getValor(),ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
             getTxtFondoEscritorio().setText(parametros.get(ParametroCodefac.IMAGEN_FONDO).getValor());
             
             Map<String, Object> map = new HashMap<String, Object>();
@@ -262,6 +266,8 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             getCmbTipoFacturacion().setSelectedItem(TipoFacturacionEnumEstado.getEnumByEstado(letra));
             listenerCmbTipoFacturacion(); //modifica las acciones para esta accion
         } catch (RemoteException ex) {
+            Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
             Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
 

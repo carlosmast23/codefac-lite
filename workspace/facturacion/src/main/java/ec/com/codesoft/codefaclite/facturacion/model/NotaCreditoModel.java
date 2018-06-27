@@ -42,9 +42,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
+import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -509,34 +511,39 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         else
         {
         
-            if(session.getParametrosCodefac().get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor().equals(""))
-            { 
-                mensajeValidacion+=" - Archivo Firma\n";
-                validado= false;
-            }
-
-            if(session.getParametrosCodefac().get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).getValor().equals(""))
-            { 
-                mensajeValidacion+=" - Clave Firma\n";
-                validado= false;
-            }
-
-            if(session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals(""))
-            { 
-                mensajeValidacion+=" - Correo\n";
-                validado= false;
-            }
-
-            if(session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals(""))
-            { 
-                mensajeValidacion+=" - Clave Correo \n";
-                validado= false;
-            }
-
-            if(session.getEmpresa() == null)
-            {
-                mensajeValidacion+=" - Información de Empresa \n";
-                validado= false;
+            try {
+                if(session.getParametrosCodefac().get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor().equals(""))
+                {
+                    mensajeValidacion+=" - Archivo Firma\n";
+                    validado= false;
+                }
+                
+                String claveFirmaElectronica=UtilidadesEncriptar.desencriptar(session.getParametrosCodefac().get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).getValor(),ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
+                if(claveFirmaElectronica.equals(""))
+                {
+                    mensajeValidacion+=" - Clave Firma\n";
+                    validado= false;
+                }
+                
+                if(session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals(""))
+                {
+                    mensajeValidacion+=" - Correo\n";
+                    validado= false;
+                }
+                
+                if(session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals(""))
+                {
+                    mensajeValidacion+=" - Clave Correo \n";
+                    validado= false;
+                }
+                
+                if(session.getEmpresa() == null)
+                {
+                    mensajeValidacion+=" - Información de Empresa \n";
+                    validado= false;
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(NotaCreditoModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         
