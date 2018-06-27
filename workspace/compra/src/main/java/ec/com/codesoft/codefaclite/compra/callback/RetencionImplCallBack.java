@@ -14,8 +14,8 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronico
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -105,7 +105,7 @@ public class RetencionImplCallBack extends UnicastRemoteObject implements Client
         
         if (etapa == ComprobanteElectronicoService.ETAPA_RIDE) {
             monitorData.getBarraProgreso().setValue(65);
-            retencion.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
+            retencion.setEstado(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO.getEstado());
                         
             //En esta etapa ya se habilita la opcion de imprimir el ride porque ya esta generado
             monitorData.getBtnAbrir().setEnabled(true);
@@ -120,7 +120,7 @@ public class RetencionImplCallBack extends UnicastRemoteObject implements Client
         
         if (etapa == ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE) {
             monitorData.getBarraProgreso().setValue(80);
-            retencion.setEstado(FacturaEnumEstado.FACTURADO.getEstado());            
+            retencion.setEstado(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO.getEstado());            
         }
 
         if (etapa == ComprobanteElectronicoService.ETAPA_ENVIAR) {
@@ -129,7 +129,7 @@ public class RetencionImplCallBack extends UnicastRemoteObject implements Client
 
         if (etapa == ComprobanteElectronicoService.ETAPA_AUTORIZAR) {
             monitorData.getBarraProgreso().setValue(100);
-            retencion.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
+            retencion.setEstado(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO.getEstado());
         }
         
     }

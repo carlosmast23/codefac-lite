@@ -101,7 +101,7 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
         //info.setContribuyenteEspecial(claveAcceso);
         
         info.setDirEstablecimiento(UtilidadValidador.normalizarTexto(notaCredito.getCliente().getDireccion()));
-        info.setFechaEmision(ComprobantesElectronicosUtil.dateToString(notaCredito.getFechaNotaCredito()));
+        info.setFechaEmision(ComprobantesElectronicosUtil.dateToString(notaCredito.getFechaEmision()));
         info.setFechaEmisionDocSustento(ComprobantesElectronicosUtil.dateToString(notaCredito.getFactura().getFechaEmision()));
         
         if(notaCredito.getCliente().getSriTipoIdentificacion().getCodigo().equals(SriIdentificacion.CEDULA_IDENTIFICACION))

@@ -12,11 +12,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.Constrain
 import ec.com.codesoft.codefaclite.servidor.facade.NotaCreditoDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.NotaCreditoFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
@@ -52,6 +52,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
             EntityTransaction transaccion=getTransaccion();
             transaccion.begin();
            
+            notaCredito.setEstado(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO.getEstado());
             entityManager.persist(notaCredito);
             //notaCreditoFacade.create(notaCredito);
             /**

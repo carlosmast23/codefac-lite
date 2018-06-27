@@ -32,13 +32,13 @@ public class NotaCreditoFacade extends AbstractFacade<NotaCredito> {
         }
 
         if (fi == null && ff != null) {
-            fecha = " AND u.fechaNotaCredito <= ?3";
+            fecha = " AND u.fechaEmision <= ?3";
         } else if (fi != null && ff == null) {
-            fecha = " AND u.fechaNotaCredito <= ?2";
+            fecha = " AND u.fechaEmision <= ?2";
         } else if (fi == null && ff == null) {
             fecha = "";
         } else {
-            fecha = " AND (u.fechaNotaCredito BETWEEN ?2 AND ?3)";
+            fecha = " AND (u.fechaEmision BETWEEN ?2 AND ?3)";
         }
 
         try {

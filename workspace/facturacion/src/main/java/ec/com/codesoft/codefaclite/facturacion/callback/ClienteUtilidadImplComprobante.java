@@ -17,10 +17,10 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NotaCreditoEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
@@ -77,7 +77,7 @@ public class ClienteUtilidadImplComprobante extends UnicastRemoteObject implemen
                         List<Factura> facturas = servicio.obtenerPorMap(map);
                         for (Factura factura : facturas) {
                             try {
-                                factura.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
+                                factura.setEstado(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO.getEstado());
                                 servicio.editar(factura);
                             } catch (RemoteException ex) {
                                 Logger.getLogger(UtilidadComprobanteModel.class.getName()).log(Level.SEVERE, null, ex);

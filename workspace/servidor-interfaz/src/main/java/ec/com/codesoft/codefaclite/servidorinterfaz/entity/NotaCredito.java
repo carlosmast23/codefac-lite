@@ -29,7 +29,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "NOTA_CREDITO")
-public class NotaCredito extends Comprobante implements Serializable {
+public class NotaCredito extends ComprobanteEntity implements Serializable {
     
     @Id
     @Column(name = "ID")
@@ -47,8 +47,8 @@ public class NotaCredito extends Comprobante implements Serializable {
     //private String puntoEstablecimiento;
     //@Column(name = "PUNTO_EMISION")
     //private String puntoEmision;
-    @Column(name = "FECHA_NOTA_CREDITO")
-    private Date fechaNotaCredito;
+    //@Column(name = "FECHA_NOTA_CREDITO")
+    //private Date fechaNotaCredito;
     //@Column(name = "FECHA_CREACION")
     //private Date fechaCreacion;
     @Column(name = "SUBTOTAL_SIN_IMPUESTOS")
@@ -154,13 +154,13 @@ public class NotaCredito extends Comprobante implements Serializable {
         this.puntoEmision = puntoEmision;
     }
 
-    public Date getFechaNotaCredito() {
+    /*public Date getFechaNotaCredito() {
         return fechaNotaCredito;
     }
 
     public void setFechaNotaCredito(Date fechaNotaCredito) {
         this.fechaNotaCredito = fechaNotaCredito;
-    }
+    }*/
 
     public Date getFechaCreacion() {
         return fechaCreacion;

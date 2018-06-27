@@ -8,8 +8,8 @@ package ec.com.codesoft.codefaclite.facturacion.busqueda;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NotaCreditoEnumEstado;
 import java.util.Vector;
 
@@ -36,7 +36,7 @@ public class NotaCreditoBusqueda implements InterfaceModelFind <NotaCredito>
         String queryString = "SELECT u FROM NotaCredito u WHERE u.estado<>?1 ";
         queryString+="AND ( u.cliente.razonSocial like ?4 )";
         QueryDialog queryDialog=new QueryDialog(queryString);
-        queryDialog.agregarParametro(1,FacturaEnumEstado.ELIMINADO.getEstado());
+        queryDialog.agregarParametro(1,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
         //queryDialog.agregarParametro(2,NotaCreditoEnumEstado.ANULADO.getEstado());
         //queryDialog.agregarParametro(3,NotaCreditoEnumEstado.SIN_AUTORIZAR.getEstado());
         queryDialog.agregarParametro(4,filter);
@@ -48,7 +48,7 @@ public class NotaCreditoBusqueda implements InterfaceModelFind <NotaCredito>
         dato.add(t.getId());
         dato.add(t.getPreimpreso());
         dato.add(t.getCliente().getRazonSocial());
-        dato.add(t.getFechaNotaCredito());
+        dato.add(t.getFechaEmision());
         dato.add(t.getTotal());
     }
 

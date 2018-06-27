@@ -11,7 +11,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.List;
 import javax.persistence.NoResultException;

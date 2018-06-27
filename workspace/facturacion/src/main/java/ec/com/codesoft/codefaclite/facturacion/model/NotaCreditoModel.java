@@ -31,7 +31,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
@@ -85,7 +84,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         //notaCredito.setEstado(Factura.ESTADO_FACTURADO);
         notaCredito.setFechaCreacion(UtilidadesFecha.getFechaHoy());
         notaCredito.setRazonModificado(getTxtMotivoAnulacion().getText());
-        notaCredito.setFechaNotaCredito(new Date(getjDateFechaEmision().getDate().getTime()));
+        notaCredito.setFechaEmision(new Date(getjDateFechaEmision().getDate().getTime()));
         
         notaCredito.setPuntoEmision(session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor);
         notaCredito.setPuntoEstablecimiento(session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor);

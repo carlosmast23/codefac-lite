@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceCom
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataFactura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
@@ -29,7 +30,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DatosAdicionalesComprobanteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
@@ -446,7 +446,7 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel {
         factura.setDescuentoSinImpuestos(BigDecimal.ONE);
         factura.setDireccion(estudianteInscrito.getEstudiante().getRepresentante().getDireccion());
         factura.setEmpresaId(1l);
-        factura.setEstado(FacturaEnumEstado.SIN_AUTORIZAR.getEstado());
+        factura.setEstado(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR.getEstado());
         factura.setFechaCreacion(UtilidadesFecha.getFechaHoy());
         factura.setFechaEmision(UtilidadesFecha.getFechaHoy());
         factura.setIdentificacion(estudianteInscrito.getEstudiante().getRepresentante().getIdentificacion());

@@ -16,7 +16,7 @@ import javax.persistence.MappedSuperclass;
  * @author Carlos
  */
 @MappedSuperclass
-public class Comprobante implements Serializable{
+public class ComprobanteEntity implements Serializable{
     
     @Column(name = "CLAVE_ACCESO")
     protected String claveAcceso;
@@ -58,7 +58,7 @@ public class Comprobante implements Serializable{
     protected String estado;
     
 
-    public Comprobante() {
+    public ComprobanteEntity() {
     }
 
     public String getClaveAcceso() {
@@ -179,5 +179,54 @@ public class Comprobante implements Serializable{
     
     
     
-    
+    public enum ComprobanteEnumEstado {
+        /**
+         * Cuando la factura se grabo y se autorizo en el SRI y no aplica
+         * ninguna nota de credito
+         */
+        FACTURADO("F", "Facturado"),
+        /**
+         * Estado cuando se graba la factura en la base de datos pero no esta
+         * autorizado en el SRI
+         */
+        SIN_AUTORIZAR("S", "Sin Autorizar"),
+        /**
+         * Estado eliminado solo permitido si el comprobante no fue autorizado
+         */
+        ELIMINADO("E", "Eliminado");
+
+        private ComprobanteEnumEstado(String estado, String nombre) {
+            this.estado = estado;
+            this.nombre = nombre;
+        }
+
+        private String estado;
+        private String nombre;
+
+        public static ComprobanteEnumEstado getEnum(String estado) {
+
+            for (ComprobanteEnumEstado enumerador : ComprobanteEnumEstado.values()) {
+                if (enumerador.estado.equals(estado)) {
+                    return enumerador;
+                }
+            }
+            return null;
+        }
+
+        public String getEstado() {
+            return estado;
+        }
+
+        public void setEstado(String estado) {
+            this.estado = estado;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+
+        public void setNombre(String nombre) {
+            this.nombre = nombre;
+        }
+    }
 }

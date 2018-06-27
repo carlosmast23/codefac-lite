@@ -21,7 +21,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceCom
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteData;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import java.awt.Color;
 import java.awt.event.ActionEvent;

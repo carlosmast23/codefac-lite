@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "RETENCION")
 @XmlRootElement
-public class Retencion extends Comprobante implements Serializable {
+public class Retencion extends ComprobanteEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

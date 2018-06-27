@@ -39,6 +39,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
@@ -47,7 +48,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NotaCreditoEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
@@ -202,7 +202,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             public void termino(List<Autorizacion> autorizaciones) {
                 try {
                     //Cambiar el estado de los comprabantes que si fueron autorizados
-                    cambiarEstadoLoteAutorizaciones(autorizaciones,FacturaEnumEstado.FACTURADO);                    
+                    cambiarEstadoLoteAutorizaciones(autorizaciones,ComprobanteEntity.ComprobanteEnumEstado.FACTURADO);                    
                     callbackClientObject.termino(castDatosComprobanteElectronico(autorizaciones,comprobanteElectronico.getServicioSri()));
                 } catch (RemoteException ex) {
                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
@@ -215,7 +215,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         return true;
     }
     
-    private void cambiarEstadoLoteAutorizaciones(List<Autorizacion> autorizaciones,FacturaEnumEstado enumEstado)
+    private void cambiarEstadoLoteAutorizaciones(List<Autorizacion> autorizaciones,ComprobanteEntity.ComprobanteEnumEstado enumEstado)
     {
 
         //Grabar el estado del comprobante consultado
@@ -228,7 +228,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                         if (autorizacion.getEstado().equals("AUTORIZADO")) {
                             String numeroAutorizacion = autorizacion.getNumeroAutorizacion();
                             ClaveAcceso claveAcceso = new ClaveAcceso(numeroAutorizacion);
-                            ec.com.codesoft.codefaclite.servidorinterfaz.entity.Comprobante comprobante = null; //comprobante
+                            ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity comprobante = null; //comprobante
 
                             Map<String, Object> mapParametro = new HashMap<>();
                             mapParametro.put("claveAcceso", numeroAutorizacion);
@@ -250,7 +250,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                                     break;
                             }
 
-                            comprobante.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
+                            comprobante.setEstado(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO.getEstado());
                             entityManager.merge(comprobante);
                         }
 
@@ -458,7 +458,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             public void iniciado() {
                  try {
                      //Seteado las claves de acceso                     
-                    cambiarEstadoLotes(comprobantesData,FacturaEnumEstado.SIN_AUTORIZAR);
+                    cambiarEstadoLotes(comprobantesData,ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR);
                     callbackClientObject.iniciado();
                 } catch (RemoteException ex) {
                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
@@ -487,7 +487,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             public void termino(List<Autorizacion> autorizaciones) {
                 try {
                     //comprobanteElectronico.getServicioSri();
-                    cambiarEstadoLotes(comprobantesData,FacturaEnumEstado.FACTURADO);
+                    cambiarEstadoLotes(comprobantesData,ComprobanteEntity.ComprobanteEnumEstado.FACTURADO);
                     callbackClientObject.termino(castDatosComprobanteElectronico(autorizaciones,comprobanteElectronico.getServicioSri()));
                 } catch (RemoteException ex) {
                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
@@ -558,7 +558,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         return null;
     }
     
-    protected void cambiarEstadoLotes(List<ComprobanteDataInterface> comprobantesData,FacturaEnumEstado estado)
+    protected void cambiarEstadoLotes(List<ComprobanteDataInterface> comprobantesData,ComprobanteEntity.ComprobanteEnumEstado estado)
     {
         for (ComprobanteDataInterface comprobanteDataInterface : comprobantesData) {
             try {
@@ -593,7 +593,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                     if(facturas.size()>0)
                     {
                         Factura facturaEditar=facturas.get(0);
-                        facturaEditar.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
+                        facturaEditar.setEstado(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO.getEstado());
                         servicio.editar(facturaEditar);
                         
                         //Crear cartera de los comprobantes autorizados
@@ -689,7 +689,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                     FacturacionService facturacionService=new FacturacionService();
                    
                     factura.setClaveAcceso(comprobanteElectronico.getClaveAcceso());
-                    factura.setEstado(FacturaEnumEstado.SIN_AUTORIZAR.getEstado());
+                    factura.setEstado(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR.getEstado());
                     
                     ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                         @Override
@@ -753,16 +753,16 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
      * @param comprobante el comprobante a procesar facturas, notas de credito
      * con los datos finales implementados
      */
-    public void procesarComprobante(ComprobanteDataInterface comprobanteData,ec.com.codesoft.codefaclite.servidorinterfaz.entity.Comprobante comprobante,Usuario usuario,ClienteInterfaceComprobante callbackClientObject) throws RemoteException {
+    public void procesarComprobante(ComprobanteDataInterface comprobanteData,ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity comprobante,Usuario usuario,ClienteInterfaceComprobante callbackClientObject) throws RemoteException {
                 
         ComprobanteElectronicoService comprobanteElectronico= cargarConfiguracionesInicialesComprobantes(comprobanteData, usuario);
         procesarComprobanteExtend(comprobanteElectronico, comprobante, callbackClientObject);
 
     }
     
-    private void procesarComprobanteExtend(ComprobanteElectronicoService comprobanteElectronico,ec.com.codesoft.codefaclite.servidorinterfaz.entity.Comprobante comprobanteOriginal,ClienteInterfaceComprobante callbackClientObject)
+    private void procesarComprobanteExtend(ComprobanteElectronicoService comprobanteElectronico,ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity comprobanteOriginal,ClienteInterfaceComprobante callbackClientObject)
     {
-        comprobanteOriginal.setEstado(FacturaEnumEstado.SIN_AUTORIZAR.getEstado());
+        comprobanteOriginal.setEstado(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR.getEstado());
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
@@ -817,7 +817,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                     //Setear el campo de seteado a factura solo si pasa la etapa de autorizar
                     if(etapa==ComprobanteElectronicoService.ETAPA_AUTORIZAR)
                     {
-                        comprobanteOriginal.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
+                        comprobanteOriginal.setEstado(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO.getEstado());
 
                         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                             @Override

@@ -12,7 +12,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
@@ -20,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.Constrain
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
@@ -70,7 +70,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             else
             {
                 //Estableciendo estado de facturacion manual
-                factura.setEstado(FacturaEnumEstado.FACTURADO.getEstado());                
+                factura.setEstado(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO.getEstado());                
                 factura.setTipoFacturacion(TipoFacturacionEnumEstado.NORMAL.getLetra());
                 if(factura.getCodigoDocumento().equals(DocumentoEnum.FACTURA.getCodigo()))
                 {
@@ -256,7 +256,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             @Override
             public void transaccion() {
                 try {
-                    factura.setEstado(FacturaEnumEstado.ELIMINADO.getEstado()); //Cambio el estado de las facturas a eliminad
+                    factura.setEstado(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado()); //Cambio el estado de las facturas a eliminad
                     entityManager.merge(factura); //actualizar los datos de la factura
                     
                     NotaCreditoService servicioNotaCredito=new NotaCreditoService();

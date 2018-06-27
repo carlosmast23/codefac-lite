@@ -5,10 +5,10 @@
  */
 package ec.com.codesoft.codefaclite.servidor.facade;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import java.sql.Date;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -72,9 +72,9 @@ public class FacturaFacade extends AbstractFacade<Factura> {
             
             String queryString = "SELECT u FROM Factura u WHERE u.estado<>?1 AND u.estadoNotaCredito<>?2 AND u.estado<>?3";
             Query query = getEntityManager().createQuery(queryString);
-            query.setParameter(1, FacturaEnumEstado.ELIMINADO.getEstado());
+            query.setParameter(1, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
             query.setParameter(2, Factura.EstadoNotaCreditoEnum.ANULADO_PARCIAL.getEstado());
-            query.setParameter(3, FacturaEnumEstado.SIN_AUTORIZAR.getEstado());
+            query.setParameter(3, ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR.getEstado());
             return (List<Factura>) query.getResultList();
         } catch (NoResultException e) {
             return null;

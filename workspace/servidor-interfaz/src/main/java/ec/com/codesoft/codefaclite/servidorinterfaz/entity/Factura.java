@@ -5,7 +5,6 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -33,7 +32,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "FACTURA")
-public class Factura extends Comprobante implements Serializable {    
+public class Factura extends ComprobanteEntity implements Serializable {    
     public static final String ESTADO_FACTURADO="F";
     public static final String ESTADO_ANULADO="A";
     public static final String ESTADO_PENDIENTE_FACTURA_ELECTRONICA="P";
@@ -248,9 +247,9 @@ public class Factura extends Comprobante implements Serializable {
      * Informacion adicional
      */
     
-    public FacturaEnumEstado getEstadoEnum()
+    public ComprobanteEntity.ComprobanteEnumEstado getEstadoEnum()
     {
-        return FacturaEnumEstado.getEnum(estado);
+        return ComprobanteEntity.ComprobanteEnumEstado.getEnum(estado);
     }
     
     public EstadoNotaCreditoEnum getEstadoNotaCreditoEnum()
