@@ -202,7 +202,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             public void termino(List<Autorizacion> autorizaciones) {
                 try {
                     //Cambiar el estado de los comprabantes que si fueron autorizados
-                    cambiarEstadoLoteAutorizaciones(autorizaciones,ComprobanteEntity.ComprobanteEnumEstado.FACTURADO);                    
+                    cambiarEstadoLoteAutorizaciones(autorizaciones,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);                    
                     callbackClientObject.termino(castDatosComprobanteElectronico(autorizaciones,comprobanteElectronico.getServicioSri()));
                 } catch (RemoteException ex) {
                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
@@ -250,7 +250,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                                     break;
                             }
 
-                            comprobante.setEstado(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO.getEstado());
+                            comprobante.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
                             entityManager.merge(comprobante);
                         }
 
@@ -487,7 +487,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             public void termino(List<Autorizacion> autorizaciones) {
                 try {
                     //comprobanteElectronico.getServicioSri();
-                    cambiarEstadoLotes(comprobantesData,ComprobanteEntity.ComprobanteEnumEstado.FACTURADO);
+                    cambiarEstadoLotes(comprobantesData,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);
                     callbackClientObject.termino(castDatosComprobanteElectronico(autorizaciones,comprobanteElectronico.getServicioSri()));
                 } catch (RemoteException ex) {
                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
@@ -593,7 +593,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                     if(facturas.size()>0)
                     {
                         Factura facturaEditar=facturas.get(0);
-                        facturaEditar.setEstado(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO.getEstado());
+                        facturaEditar.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
                         servicio.editar(facturaEditar);
                         
                         //Crear cartera de los comprobantes autorizados
@@ -817,7 +817,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                     //Setear el campo de seteado a factura solo si pasa la etapa de autorizar
                     if(etapa==ComprobanteElectronicoService.ETAPA_AUTORIZAR)
                     {
-                        comprobanteOriginal.setEstado(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO.getEstado());
+                        comprobanteOriginal.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
 
                         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                             @Override

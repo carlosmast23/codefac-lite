@@ -47,7 +47,7 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
             parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_RETENCION);
         } else {
             //Estableciendo estado de facturacion manual
-            entity.setEstado(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO.getEstado());
+            entity.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
             parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_RETENCION_FISICA);
         }
 

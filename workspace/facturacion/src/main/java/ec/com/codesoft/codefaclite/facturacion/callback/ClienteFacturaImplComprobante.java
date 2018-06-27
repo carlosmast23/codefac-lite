@@ -123,7 +123,7 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
         
         if (etapa == ComprobanteElectronicoService.ETAPA_RIDE) {
             monitorData.getBarraProgreso().setValue(65);
-            facturaProcesando.setEstado(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO.getEstado());
+            facturaProcesando.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
                         
             //En esta etapa ya se habilita la opcion de imprimir el ride porque ya esta generado
             monitorData.getBtnAbrir().setEnabled(true);
@@ -138,7 +138,7 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
         
         if (etapa == ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE) {
             monitorData.getBarraProgreso().setValue(80);
-            facturaProcesando.setEstado(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO.getEstado());            
+            facturaProcesando.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());            
         }
 
         if (etapa == ComprobanteElectronicoService.ETAPA_ENVIAR) {
@@ -147,7 +147,7 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
 
         if (etapa == ComprobanteElectronicoService.ETAPA_AUTORIZAR) {
             monitorData.getBarraProgreso().setValue(100);
-            facturaProcesando.setEstado(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO.getEstado());
+            facturaProcesando.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
         }
 
     }

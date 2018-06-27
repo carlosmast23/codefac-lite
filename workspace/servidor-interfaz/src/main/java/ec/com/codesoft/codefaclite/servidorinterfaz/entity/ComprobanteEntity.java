@@ -184,7 +184,7 @@ public class ComprobanteEntity implements Serializable{
          * Cuando la factura se grabo y se autorizo en el SRI y no aplica
          * ninguna nota de credito
          */
-        FACTURADO("F", "Facturado"),
+        AUTORIZADO("A", "Autorizado"),
         /**
          * Estado cuando se graba la factura en la base de datos pero no esta
          * autorizado en el SRI

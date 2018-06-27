@@ -70,7 +70,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             else
             {
                 //Estableciendo estado de facturacion manual
-                factura.setEstado(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO.getEstado());                
+                factura.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());                
                 factura.setTipoFacturacion(TipoFacturacionEnumEstado.NORMAL.getLetra());
                 if(factura.getCodigoDocumento().equals(DocumentoEnum.FACTURA.getCodigo()))
                 {

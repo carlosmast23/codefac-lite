@@ -77,7 +77,7 @@ public class ClienteUtilidadImplComprobante extends UnicastRemoteObject implemen
                         List<Factura> facturas = servicio.obtenerPorMap(map);
                         for (Factura factura : facturas) {
                             try {
-                                factura.setEstado(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO.getEstado());
+                                factura.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
                                 servicio.editar(factura);
                             } catch (RemoteException ex) {
                                 Logger.getLogger(UtilidadComprobanteModel.class.getName()).log(Level.SEVERE, null, ex);

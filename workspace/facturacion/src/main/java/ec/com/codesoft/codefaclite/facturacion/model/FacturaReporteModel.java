@@ -77,7 +77,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
         getCmbTipo().addItem(TipoBusquedaEnum.ANULADOS);
         getCmbTipo().addItem(TipoBusquedaEnum.FACTURAS);
 
-        getCmbEstado().addItem(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO);
+        getCmbEstado().addItem(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);
         //getCmbEstado().addItem(FacturaEnumEstado.ANULADO_PARCIAL);
         //getCmbEstado().addItem(FacturaEnumEstado.ANULADO_TOTAL);
         getCmbEstado().addItem(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR);

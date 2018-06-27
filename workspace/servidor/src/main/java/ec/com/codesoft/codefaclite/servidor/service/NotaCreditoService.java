@@ -52,7 +52,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
             EntityTransaction transaccion=getTransaccion();
             transaccion.begin();
            
-            notaCredito.setEstado(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO.getEstado());
+            notaCredito.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
             entityManager.persist(notaCredito);
             //notaCreditoFacade.create(notaCredito);
             /**
