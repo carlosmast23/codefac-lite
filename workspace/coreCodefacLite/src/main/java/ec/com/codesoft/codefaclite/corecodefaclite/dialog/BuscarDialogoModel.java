@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.corecodefaclite.dialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.panel.DialogoBuscadorForm;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.FuncionesSistemaCodefac;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -158,6 +159,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
             return (tamanio!=null)?tamanio.intValue():0;
         } catch (RemoteException ex) {
             Logger.getLogger(BuscarDialogoModel.class.getName()).log(Level.SEVERE, null, ex);
+            FuncionesSistemaCodefac.servidorConexionPerdida();
         }
         return 0;
     }

@@ -17,6 +17,7 @@ import java.awt.Image;
 import java.awt.Point;
 import java.io.IOException;
 import java.io.InputStream;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -68,22 +69,22 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
      * Este metodo tiene el objetivo de funcionar despues de construir el objeto para interactuar con las variables inyectadas en el formulario
      * por ejemplo con las variables de session , o con funcionalidades del formulario padre
      */
-    public abstract void iniciar() throws ExcepcionCodefacLite;
+    public abstract void iniciar() throws ExcepcionCodefacLite,RemoteException;
     /**
      * Metodo que se debe implementar si se desea controlar el proceso del boton nuevo
      */
-    public abstract void nuevo() throws ExcepcionCodefacLite;
-    public abstract void grabar() throws ExcepcionCodefacLite;
-    public abstract void editar() throws ExcepcionCodefacLite;
-    public abstract void eliminar() throws ExcepcionCodefacLite;
-    public abstract void imprimir();
-    public abstract void actualizar() throws ExcepcionCodefacLite;
+    public abstract void nuevo() throws ExcepcionCodefacLite,RemoteException;
+    public abstract void grabar() throws ExcepcionCodefacLite,RemoteException;
+    public abstract void editar() throws ExcepcionCodefacLite,RemoteException;
+    public abstract void eliminar() throws ExcepcionCodefacLite,RemoteException;
+    public abstract void imprimir() throws ExcepcionCodefacLite,RemoteException;
+    public abstract void actualizar() throws ExcepcionCodefacLite,RemoteException;
     
     /**
      * Metodo que se ejecuta despues de presionar el boton de buscar     * 
      * Es recomendable usar este metodo solo para buscar datos de la propia clase
      */
-    public void buscar() throws ExcepcionCodefacLite
+    public void buscar() throws ExcepcionCodefacLite,RemoteException
     {
         //Esto lo pongo de esta manera porque Codefac construye automaticamente el metodo buscar desde el controlador
         //y ya no ahy necesidad de implementar, pero si en ultimo caso el usuario tiene la necesidad de escribir su

@@ -51,7 +51,7 @@ public class AulaModel extends AulaPanel {
     }
 
     @Override
-    public void grabar() throws ExcepcionCodefacLite {
+    public void grabar() throws ExcepcionCodefacLite,RemoteException {
         try {
             setearValoresAula(aula);
             aula = aulaService.grabar(aula);
@@ -59,9 +59,6 @@ public class AulaModel extends AulaPanel {
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite("Error al grabar aula modelo");
-        } catch (RemoteException ex) {
-            DialogoCodefac.mensaje("Error", "Error de comunicación con el servidor , aula", DialogoCodefac.MENSAJE_ADVERTENCIA);
-            Logger.getLogger(AulaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -73,13 +70,11 @@ public class AulaModel extends AulaPanel {
     }
 
     @Override
-    public void editar() throws ExcepcionCodefacLite {
+    public void editar() throws ExcepcionCodefacLite,RemoteException {
         try {
             setearValoresAula(aula);
             aulaService.editar(aula);
             DialogoCodefac.mensaje("Datos correctos", "El aula se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-        } catch (RemoteException ex) {
-            Logger.getLogger(AulaModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(AulaModel.class.getName()).log(Level.SEVERE, null, ex);
         }

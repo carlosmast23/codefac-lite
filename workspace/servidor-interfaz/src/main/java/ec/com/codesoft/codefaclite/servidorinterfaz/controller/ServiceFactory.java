@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.controller;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PermisoVentana;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompraDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
@@ -85,10 +86,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionServic
 public abstract class ServiceFactory {
     
     /**
-     * Puerto mediante el cual nos vamos a comunicar con el servidor por RMI
+     * Ip del servidor del cual se va a consumir los servicios
      */
-    public static final int PUERTO_SERVIDOR=1099;
-    public String ipServidor="192.168.1.3";
+    public String ipServidor;
     public static ServiceFactory serviceController;
     
     /**
@@ -189,8 +189,8 @@ public abstract class ServiceFactory {
         if(remote==null)
         {
             try {
-                Registry registro= LocateRegistry.getRegistry(ipServidor,PUERTO_SERVIDOR);    
-                remote= registro.lookup("rmi://"+ipServidor+":"+PUERTO_SERVIDOR+"/"+clase.getSimpleName());
+                Registry registro= LocateRegistry.getRegistry(ipServidor,ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);    
+                remote= registro.lookup("rmi://"+ipServidor+":"+ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED+"/"+clase.getSimpleName());
                 mapRecursosRMI.put(clase,remote);
                 
                 

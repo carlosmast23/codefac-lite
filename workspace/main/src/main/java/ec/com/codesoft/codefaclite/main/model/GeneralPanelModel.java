@@ -57,6 +57,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.FuncionesSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
@@ -662,6 +663,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     System.out.println("ex"); 
                     //ex.printStackTrace();
                     return;
+                } catch (RemoteException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    FuncionesSistemaCodefac.servidorConexionPerdida();
                 }
                 
                 String tituloOriginal=getTituloOriginal(frame.getTitle());
@@ -728,6 +732,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                                 //ex.printStackTrace();
                                 System.err.println(ex.getMessage());
                                 //JOptionPane.showMessageDialog(null,ex.getMessage());
+                            } catch (RemoteException ex) {
+                                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                                FuncionesSistemaCodefac.servidorConexionPerdida();
                             }
                             
                         }
@@ -747,6 +754,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             } catch (ExcepcionCodefacLite ex) {
                                  //ex.printStackTrace();
                                 LOG.log(Level.WARNING,ex.getMessage());
+                            } catch (RemoteException ex) {
+                                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                                FuncionesSistemaCodefac.servidorConexionPerdida();
                             }
                             
                         }
@@ -806,6 +816,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             ejectutarDialogoBusqueda(frameInterface.obtenerDialogoBusqueda(), frameInterface,false);
                         }catch (ExcepcionCodefacLite ex) {
                             throw ex;
+                        } catch (RemoteException ex) {
+                            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                            FuncionesSistemaCodefac.servidorConexionPerdida();
                         }
                     }
                 });
@@ -840,6 +853,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     //getjButton4().setEnabled(false);
                 } catch (ExcepcionCodefacLite ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    FuncionesSistemaCodefac.servidorConexionPerdida();
                 }
                                
             }
@@ -881,6 +897,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 } catch (ExcepcionCodefacLite ex) {
                     //Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     System.err.println(ex.getMessage());
+                } catch (RemoteException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    FuncionesSistemaCodefac.servidorConexionPerdida();
                 }
                                
             }
@@ -910,6 +929,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 catch (UnsupportedOperationException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     //getjButton4().setEnabled(false);
+                } catch (ExcepcionCodefacLite ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    FuncionesSistemaCodefac.servidorConexionPerdida();
                 }
                                
             }
@@ -1008,6 +1032,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         }
     }
     
+    
     private void mostrarPanelSecundario(boolean  opcion)
     {
         if(opcion)
@@ -1089,6 +1114,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             } catch (ExcepcionCodefacLite ex) {
                 System.err.println("Cancelado metodo iniciar");
                 return;
+            } catch (RemoteException ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                FuncionesSistemaCodefac.servidorConexionPerdida();
             }
             
             panel.addInternalFrameListener(listenerFrame);
@@ -1111,6 +1139,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 
             } catch (ExcepcionCodefacLite ex) {
                 Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                FuncionesSistemaCodefac.servidorConexionPerdida();
             }
             
             /**
