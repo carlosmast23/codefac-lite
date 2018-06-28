@@ -23,11 +23,10 @@ public class OrdenTrabajoBusquedaDialogo implements InterfaceModelFind<OrdenTrab
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<>();
-        titulo.add(new ColumnaDialogo("Codigo", 0.2d));
-        titulo.add(new ColumnaDialogo("Nombre", 0.3d));
-        titulo.add(new ColumnaDialogo("Precio Unit", 0.3d));
-        titulo.add(new ColumnaDialogo("IVA", 0.1d));        
-        titulo.add(new ColumnaDialogo("ICE", 0.1d)); 
+        titulo.add(new ColumnaDialogo("Código",0.2d));
+        titulo.add(new ColumnaDialogo("Cliente",0.3d));
+        titulo.add(new ColumnaDialogo("Descripción",0.15d));
+        titulo.add(new ColumnaDialogo("Fecha Ingreso",0.15d));
         return titulo;
     }
 

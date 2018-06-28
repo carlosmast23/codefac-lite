@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -1183,6 +1184,15 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     public void setCmbTipoPresupuesto(JComboBox<CatalogoProducto> cmbTipoPresupuesto) {
         this.cmbTipoPresupuesto = cmbTipoPresupuesto;
     }
+
+    public JPanel getjPanel4() {
+        return jPanel4;
+    }
+
+    public void setjPanel4(JPanel jPanel4) {
+        this.jPanel4 = jPanel4;
+    }
+    
     
     
 
