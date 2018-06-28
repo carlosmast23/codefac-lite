@@ -48,14 +48,13 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteFisicoDisenioServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
@@ -68,11 +67,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DatosAdicionalesC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoReferenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
+import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import ec.com.codesoft.codefaclite.utilidades.tabla.ButtonColumn;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
@@ -713,7 +713,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                  return;
             }            
             presupuestoSeleccionado=presupuestoTmp;
-            setearValoresProducto(presupuestoSeleccionado.getTotalVenta(), presupuestoSeleccionado.getDescripcion(),presupuestoSeleccionado.getId().toString());
+            
+            String descripcion="P"+presupuestoSeleccionado.getId()+" OT"+presupuestoSeleccionado.getOrdenTrabajoDetalle().getOrdenTrabajo().getId()+"  "+presupuestoSeleccionado.getDescripcion();
+            setearValoresProducto(presupuestoSeleccionado.getTotalVenta(),descripcion,presupuestoSeleccionado.getId().toString());
             banderaAgregar=true;
         }
     }
@@ -849,7 +851,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
             
             //Si la factura en manual no continua el proceso de facturacion electronica
-            if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(TipoFacturacionEnumEstado.NORMAL.getLetra()))
+            if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL.getLetra()))
             {
                 DialogoCodefac.mensaje("Correcto", "La factura se grabo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
                 facturaManual();
@@ -995,8 +997,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         if (estadoFormulario.equals(ESTADO_EDITAR)) {
             if (factura != null) {
                 //Eliminar solo si el estado esta en sin autorizar, o esta en el modo de facturacion normal y esta con estado facturado
-                if (factura.getEstado().equals(FacturaEnumEstado.SIN_AUTORIZAR.getEstado()) || 
-                        (factura.getTipoFacturacion().equals(TipoFacturacionEnumEstado.NORMAL.getLetra()) && factura.getEstado().equals(FacturaEnumEstado.FACTURADO.getEstado()) )) {
+                if (factura.getEstado().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR.getEstado()) || 
+                        (factura.getTipoFacturacion().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL.getLetra()) && factura.getEstado().equals(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado()) )) {
                     
                     respuesta = DialogoCodefac.dialogoPregunta("Advertencia", "Esta seguro que desea eliminar la factura? ", DialogoCodefac.MENSAJE_ADVERTENCIA);
 
@@ -1010,7 +1012,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
                         servicio.eliminarFactura(factura);
                         DialogoCodefac.mensaje("Exitoso", "La factura se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-                        getLblEstadoFactura().setText(FacturaEnumEstado.ELIMINADO.getNombre());
+                        getLblEstadoFactura().setText(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getNombre());
                     } catch (RemoteException ex) {
                         Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -1188,7 +1190,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     {
         DocumentoEnum tipoDocumentoEnum= (DocumentoEnum) getCmbDocumento().getSelectedItem();
         String secuencial="";
-        boolean facturacionElectronica=session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).valor.equals(TipoFacturacionEnumEstado.ELECTRONICA.getLetra());
+        boolean facturacionElectronica=session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).valor.equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra());
         
         switch(tipoDocumentoEnum)
         {
@@ -1544,7 +1546,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         /**
          * Cargar el estado de la factura
          */
-        FacturaEnumEstado estadoEnum = FacturaEnumEstado.getEnum(factura.getEstado());
+        ComprobanteEntity.ComprobanteEnumEstado estadoEnum = ComprobanteEntity.ComprobanteEnumEstado.getEnum(factura.getEstado());
         
         if (estadoEnum != null) {
             getLblEstadoFactura().setText(estadoEnum.getNombre());
@@ -1584,7 +1586,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         factura.setPuntoEstablecimiento(session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor);
         
         //Cuando la facturacion es electronica
-        if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(TipoFacturacionEnumEstado.ELECTRONICA.getLetra()))
+        if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra()))
         {
             factura.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_FACTURA).valor));
         }
@@ -1707,7 +1709,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         boolean validado = true;
         
         //Validacion cuando solo sea facturacion manual
-        if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(TipoFacturacionEnumEstado.NORMAL.getLetra()))
+        if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL.getLetra()))
         {
             if (session.getEmpresa() == null) 
             {
@@ -1715,32 +1717,39 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 validado = false;
             }
         }
-        else //Validacion cunando es facturacion electronica
-        {        
+        else         {        
        
-            if (session.getParametrosCodefac().get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor().equals("")) {
-                mensajeValidacion += " - Archivo Firma\n";
-                validado = false;
-            }
-
-            if (session.getParametrosCodefac().get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).getValor().equals("")) {
-                mensajeValidacion += " - Clave Firma\n";
-                validado = false;
-            }
-
-            if (session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals("")) {
-                mensajeValidacion += " - Correo\n";
-                validado = false;
-            }
-
-            if (session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals("")) {
-                mensajeValidacion += " - Clave Correo \n";
-                validado = false;
-            }
-
-            if (session.getEmpresa() == null) {
-                mensajeValidacion += " - Información de Empresa \n";
-                validado = false;
+            try //Validacion cunando es facturacion electronica
+            {
+                if (session.getParametrosCodefac().get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor().equals("")) {
+                    mensajeValidacion += " - Archivo Firma\n";
+                    validado = false;
+                }
+                
+                
+                String claveFirmaElectronica=UtilidadesEncriptar.desencriptar(session.getParametrosCodefac().get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).getValor(),ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
+                
+                if (claveFirmaElectronica.equals("")) {
+                    mensajeValidacion += " - Clave Firma\n";
+                    validado = false;
+                }
+                
+                if (session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals("")) {
+                    mensajeValidacion += " - Correo\n";
+                    validado = false;
+                }
+                
+                if (session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals("")) {
+                    mensajeValidacion += " - Clave Correo \n";
+                    validado = false;
+                }
+                
+                if (session.getEmpresa() == null) {
+                    mensajeValidacion += " - Información de Empresa \n";
+                    validado = false;
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
@@ -2027,7 +2036,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         
         //cuando la factura es electronica
-        if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).valor.equals(TipoFacturacionEnumEstado.ELECTRONICA.getLetra()))
+        if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).valor.equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra()))
         {
             tiposDocumento=DocumentoEnum.obtenerPorDocumentosElectronicos(ModuloCodefacEnum.FACTURACION);
         }

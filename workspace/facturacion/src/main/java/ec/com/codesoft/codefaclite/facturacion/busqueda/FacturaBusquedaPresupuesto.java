@@ -11,7 +11,6 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import java.util.Vector;
 
 /**
@@ -53,7 +52,7 @@ public class FacturaBusquedaPresupuesto implements InterfaceModelFind<Presupuest
         //p.getOrdenTrabajoDetalle().getOrdenTrabajo().getCliente().getRazonSocial();
         String queryString = "SELECT u FROM Presupuesto u WHERE ( u.estado=?1 ) AND ";
         queryString+=(cliente!=null)?" u.ordenTrabajoDetalle.ordenTrabajo.cliente=?3 AND":"";
-        queryString+=" ( LOWER(u.codigo) like ?2 OR  LOWER(u.ordenTrabajoDetalle.ordenTrabajo.cliente.razonSocial) like ?2 )";
+        queryString+=" ( LOWER(u.codigo) like ?2 OR  LOWER(u.ordenTrabajoDetalle.ordenTrabajo.cliente.razonSocial) like ?2 OR CAST(u.id CHAR(64) ) like ?2 )";
         
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,Presupuesto.EstadoEnum.TERMINADO.getLetra()); //Solo buscar los prespuestos que esten con estado terminado
@@ -68,8 +67,8 @@ public class FacturaBusquedaPresupuesto implements InterfaceModelFind<Presupuest
 
     @Override
     public void agregarObjeto(Presupuesto t, Vector dato) {
-        dato.add(t.getCodigo());
-        dato.add(t.getOrdenTrabajoDetalle().getOrdenTrabajo().getCodigo());
+        dato.add(t.getId()+"");
+        dato.add(t.getOrdenTrabajoDetalle().getOrdenTrabajo().getId()+"");
         dato.add(t.getOrdenTrabajoDetalle().getOrdenTrabajo().getCliente().getNombresCompletos());
         dato.add((t.getEstadoEnum()!=null)?t.getEstadoEnum().getNombre():"Sin estado");
         dato.add(t.getFechaPresupuesto());

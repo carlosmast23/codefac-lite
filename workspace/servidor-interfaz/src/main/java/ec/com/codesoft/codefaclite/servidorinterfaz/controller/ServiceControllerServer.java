@@ -5,7 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.controller;
 
-import static ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory.PUERTO_SERVIDOR;
+
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
@@ -25,8 +26,6 @@ public class ServiceControllerServer {
 
     private static final Logger LOG = Logger.getLogger(ServiceControllerServer.class.getName());    
     
-    
-    public static final int PUERTO_SERVIDOR=1099;
        /**
      * Permite cargar todos los recursos que van a usar en el sistema mediante el protocolo RMI
      * @param mapRecursos envia un map con la clase de la clase de la interfaz y la que implementa
@@ -34,7 +33,7 @@ public class ServiceControllerServer {
     public static void cargarRecursos(Map<Class,Class> mapRecursos)
     {
         try {
-            Registry registro=LocateRegistry.createRegistry(PUERTO_SERVIDOR);
+            Registry registro=LocateRegistry.createRegistry(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
             String host=InetAddress.getLocalHost().getHostAddress();
             
             for (Map.Entry<Class, Class> entry : mapRecursos.entrySet()) {
@@ -47,7 +46,7 @@ public class ServiceControllerServer {
                 String nombreRecurso=claseInterfaz.getSimpleName();
                 
                 //Lanza el recurso para que este disponible por la red
-                registro.rebind("rmi://"+host+":"+PUERTO_SERVIDOR+"/"+nombreRecurso,remoteObject);               
+                registro.rebind("rmi://"+host+":"+ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED+"/"+nombreRecurso,remoteObject);               
                 
             }
             

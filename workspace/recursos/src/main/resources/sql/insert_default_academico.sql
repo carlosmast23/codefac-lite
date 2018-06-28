@@ -22,11 +22,11 @@ VALUES ('Ninguno', 'Ninguno', 'A'),
 
 INSERT INTO CLIENTE (NOMBRES, APELLIDOS, TIPO_OPERADOR, RAZON_SOCIAL, NOMBRE_LEGAL, SRI_IDENTIFICACION_ID, IDENTIFICACION, TIPO_CLIENTE, DIRECCION, TELEFONO_CONVENCIONAL, EXTENSION_TELEFONO, TELEFONO_CELULAR, CORREO_ELECTRONICO, ACTIVIDAD_COMERCIAL, ESTADO,SRI_FORMA_PAGO_ID,NACIONALIDAD_ID) 
 VALUES 
-('María José', 'Pillajo', 'C', 'María José Pillajo', NULL, 5, '1718559592', 'CLIENTE', 'ARMENIA 2, LA RIVERA CONJUNTO CHIMBORAZO CASA NO. 6 ', '22093992', '0', '', 'mygoldenworld@gmail.com', NULL, 'A',1,53),
-('Carmen', 'Augusta', 'C', 'Carmen Augusta', NULL, 5, '1715922140', 'CLIENTE', 'SAN PEDRO DE TADOABA', '', '0', '0987446497', 'mygoldenworld@gmail.com', NULL, 'A',1,53),
-('Franklin', 'Lopez Acuña', 'C', 'Franklin Lopez Acuña', NULL, 5, '1715184493', 'CLIENTE', 'CONOCOTO', '', '0', '0998341606', 'mygoldenworld@gmail.com', NULL, 'A',1,53),
-('Pedro ', 'Risueño', 'C', 'Pedro Risueño', NULL, 5, '1719852124', 'CLIENTE', 'CONOCOTO', '23696011', '0', '', 'mygoldenworld@gmail.com', NULL, 'A',1,53),
-('AGENCIA DE REGULACION  Y CONTROL HIDROCARBURIFERO', 'AGENCIA DE REGULACION  Y CONTROL HIDROCARBURIFERO', 'C', 'AGENCIA DE REGULACION  Y CONTROL HIDROCARBURIFERO', NULL, 4, '1768158680001', 'CLIENTE', 'CONOCOTO', '23996500', '0', '', 'mygoldenworld@gmail.com', NULL, 'A',1,53),
+('María José', 'Pillajo', 'C', 'María José Pillajo', NULL, 5, '1718559592', 'CLIENTE', 'ARMENIA 2, LA RIVERA CONJUNTO CHIMBORAZO CASA NO. 6 ', '22093992', '0', '', 'carlosmast2301@hotmail.com', NULL, 'A',1,53),
+('Carmen', 'Augusta', 'C', 'Carmen Augusta', NULL, 5, '1715922140', 'CLIENTE', 'SAN PEDRO DE TADOABA', '', '0', '0987446497', 'carlosmast2301@hotmail.com', NULL, 'A',1,53),
+('Franklin', 'Lopez Acuña', 'C', 'Franklin Lopez Acuña', NULL, 5, '1715184493', 'CLIENTE', 'CONOCOTO', '', '0', '0998341606', 'carlosmast2301@hotmail.com', NULL, 'A',1,53),
+('Pedro ', 'Risueño', 'C', 'Pedro Risueño', NULL, 5, '1719852124', 'CLIENTE', 'CONOCOTO', '23696011', '0', '', 'carlosmast2301@hotmail.com', NULL, 'A',1,53),
+('AGENCIA DE REGULACION  Y CONTROL HIDROCARBURIFERO', 'AGENCIA DE REGULACION  Y CONTROL HIDROCARBURIFERO', 'C', 'AGENCIA DE REGULACION  Y CONTROL HIDROCARBURIFERO', NULL, 4, '1768158680001', 'CLIENTE', 'CONOCOTO', '23996500', '0', '', 'carlosmast2301@hotmail.com', NULL, 'A',1,53),
 ('Carlos', 'Perez', 'C', 'Carlos Perez', NULL, 4, '1719468108001', 'CLIENTE', 'Sangolqui', '022087044', '0', '0983528439', 'jcp_computer@hotmail.com', NULL, 'A',1,53),
 ('Juan', 'Loya', 'C', 'Juan Loya', NULL, 4, '1724218952001', 'CLIENTE', 'Sangolqui', '022087065', '0', '0983528439', 'juancarlos100pl@hotmail.com', NULL, 'A',1,53),
 ('Pedro Alfonso', 'Perez Sanchez', 'C', 'Pedro Alfonso Perez Sanchez', NULL, 4, '1724218953001', 'CLIENTE', 'Sangolqui', '022087065', '0', '0983528439', 'juancarlos100pl@hotmail.com', NULL, 'A',1,53)

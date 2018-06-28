@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "RETENCION")
 @XmlRootElement
-public class Retencion extends Comprobante implements Serializable {
+public class Retencion extends ComprobanteEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -235,8 +235,5 @@ public class Retencion extends Comprobante implements Serializable {
         return UtilidadesFecha.obtenerMesStr(fechaEmision) + "/" + UtilidadesFecha.obtenerAnioStr(fechaEmision);
     }
 
-    public String getPreimpreso() {
-        return UtilidadesTextos.llenarCarateresIzquierda(puntoEmision, 3, "0") + "-" + UtilidadesTextos.llenarCarateresIzquierda(puntoEstablecimiento, 3, "0") + "-" + UtilidadesTextos.llenarCarateresIzquierda(secuencial + "", 8, "0");
-    }
 
 }

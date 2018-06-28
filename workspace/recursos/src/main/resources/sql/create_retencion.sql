@@ -29,6 +29,8 @@ create table RETENCION
     IDENTIFICACION varchar(15),
     DIRECCION varchar(1024),
     TELEFONO varchar(10),
+    TIPO_FACTURACION varchar(1),
+    CODIGO_DOCUMENTO varchar(3),
     primary key (ID)
 
 );

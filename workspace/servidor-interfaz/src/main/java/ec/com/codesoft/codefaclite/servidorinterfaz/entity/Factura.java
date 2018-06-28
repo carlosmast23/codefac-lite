@@ -5,7 +5,6 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -33,7 +32,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "FACTURA")
-public class Factura extends Comprobante implements Serializable {    
+public class Factura extends ComprobanteEntity implements Serializable {    
     public static final String ESTADO_FACTURADO="F";
     public static final String ESTADO_ANULADO="A";
     public static final String ESTADO_PENDIENTE_FACTURA_ELECTRONICA="P";
@@ -77,12 +76,6 @@ public class Factura extends Comprobante implements Serializable {
     @Column(name = "TOTAL")
     private BigDecimal total;
   
-    @Column(name = "TIPO_FACTURACION")
-    private String tipoFacturacion;
-    
-    @Column(name = "CODIGO_DOCUMENTO")
-    private String codigoDocumento;
-    
     @Column(name = "ESTADO_NOTA_CREDITO")
     private String estadoNotaCredito;
     
@@ -211,22 +204,6 @@ public class Factura extends Comprobante implements Serializable {
         this.formaPagos = formaPagos;
     }
 
-    public String getTipoFacturacion() {
-        return tipoFacturacion;
-    }
-
-    public void setTipoFacturacion(String tipoFacturacion) {
-        this.tipoFacturacion = tipoFacturacion;
-    }
-
-    public String getCodigoDocumento() {
-        return codigoDocumento;
-    }
-
-    public void setCodigoDocumento(String codigoDocumento) {
-        this.codigoDocumento = codigoDocumento;
-    }
-
     public List<FacturaAdicional> getDatosAdicionales() {
         return datosAdicionales;
     }
@@ -247,11 +224,6 @@ public class Factura extends Comprobante implements Serializable {
     /**
      * Informacion adicional
      */
-    
-    public FacturaEnumEstado getEstadoEnum()
-    {
-        return FacturaEnumEstado.getEnum(estado);
-    }
     
     public EstadoNotaCreditoEnum getEstadoNotaCreditoEnum()
     {

@@ -23,7 +23,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoReferenciaEnum;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadValidador;
 import java.io.Serializable;
@@ -102,7 +101,7 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
         //info.setContribuyenteEspecial(claveAcceso);
         
         info.setDirEstablecimiento(UtilidadValidador.normalizarTexto(notaCredito.getCliente().getDireccion()));
-        info.setFechaEmision(ComprobantesElectronicosUtil.dateToString(notaCredito.getFechaNotaCredito()));
+        info.setFechaEmision(ComprobantesElectronicosUtil.dateToString(notaCredito.getFechaEmision()));
         info.setFechaEmisionDocSustento(ComprobantesElectronicosUtil.dateToString(notaCredito.getFactura().getFechaEmision()));
         
         if(notaCredito.getCliente().getSriTipoIdentificacion().getCodigo().equals(SriIdentificacion.CEDULA_IDENTIFICACION))
@@ -142,10 +141,8 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
             try {
                 
                 CatalogoProducto catalogoProducto=null;
-                DetalleNotaCreditoComprobante detalle=new DetalleNotaCreditoComprobante();
-                
-                TipoReferenciaEnum tipoReferenciaEnum=TipoReferenciaEnum.getFindByTipoReferencia(detalleNotaCredito.getTipoReferencia());
-                
+                DetalleNotaCreditoComprobante detalle=new DetalleNotaCreditoComprobante();                
+               
                 switch(detalleNotaCredito.getTipoDocumentoEnum())
                 {
                     case ACADEMICO:

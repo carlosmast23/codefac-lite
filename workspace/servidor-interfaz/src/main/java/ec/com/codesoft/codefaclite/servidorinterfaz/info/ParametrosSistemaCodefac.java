@@ -22,7 +22,11 @@ public abstract class ParametrosSistemaCodefac {
      * El modo de configuracion del sistema
      */
     public static final ModoSistemaEnum MODO=ModoSistemaEnum.DESARROLLO;
-    
+
+    /**
+     * Puerto por defecto para configurar las conexiones en red
+     */
+    public static final int PUERTO_COMUNICACION_RED=1099;
     /**
      * Nombre de la base de datos
      */

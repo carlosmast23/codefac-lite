@@ -22,7 +22,7 @@ public class NotaCreditoFacade extends AbstractFacade<NotaCredito> {
         super(NotaCredito.class);
     }
 
-    public List<NotaCredito> lista(Persona persona, Date fi, Date ff) {
+    public List<NotaCredito> lista(Persona persona, Date fi, Date ff,String estado) {
 
         String cliente = "", fecha = "";
         if (persona != null) {
@@ -32,18 +32,20 @@ public class NotaCreditoFacade extends AbstractFacade<NotaCredito> {
         }
 
         if (fi == null && ff != null) {
-            fecha = " AND u.fechaNotaCredito <= ?3";
+            fecha = " AND u.fechaEmision <= ?3";
         } else if (fi != null && ff == null) {
-            fecha = " AND u.fechaNotaCredito <= ?2";
+            fecha = " AND u.fechaEmision <= ?2";
         } else if (fi == null && ff == null) {
             fecha = "";
         } else {
-            fecha = " AND (u.fechaNotaCredito BETWEEN ?2 AND ?3)";
+            fecha = " AND (u.fechaEmision BETWEEN ?2 AND ?3)";
         }
 
+                
         try {
-            String queryString = "SELECT u FROM NotaCredito u WHERE " + cliente + fecha;
+            String queryString = "SELECT u FROM NotaCredito u WHERE u.estado=?4 AND " + cliente + fecha;
             Query query = getEntityManager().createQuery(queryString);
+            
             if (persona != null) {
                 query.setParameter(1, persona);
             }
@@ -53,6 +55,8 @@ public class NotaCreditoFacade extends AbstractFacade<NotaCredito> {
             if (ff != null) {
                 query.setParameter(3, ff);
             }
+            
+            query.setParameter(4,estado);
 
             return query.getResultList();
         } catch (NoResultException e) {

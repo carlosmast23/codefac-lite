@@ -12,14 +12,13 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
@@ -60,27 +59,12 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         transaction.begin();
         
         try {
-            ParametroCodefac parametro =null;
-            //Cuando la factura es electronica
-            if(parametroService.getParametroByNombre(ParametroCodefac.TIPO_FACTURACION).valor.equals(TipoFacturacionEnumEstado.ELECTRONICA.getLetra()))
-            {
-                factura.setTipoFacturacion(TipoFacturacionEnumEstado.ELECTRONICA.getLetra());
-                parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA);
-            }
-            else
-            {
-                //Estableciendo estado de facturacion manual
-                factura.setEstado(FacturaEnumEstado.FACTURADO.getEstado());                
-                factura.setTipoFacturacion(TipoFacturacionEnumEstado.NORMAL.getLetra());
-                if(factura.getCodigoDocumento().equals(DocumentoEnum.FACTURA.getCodigo()))
-                {
-                    parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA_FISICA);
-                }
-                else
-                {
-                    parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_NOTA_VENTA_FISICA);
-                }
-            }
+            
+            factura.setCodigoDocumento(DocumentoEnum.FACTURA.getCodigo());
+            
+            ComprobantesService servicioComprobante = new ComprobantesService();
+            servicioComprobante.setearSecuencialComprobanteSinTransaccion(factura);            
+
             
             factura.setEstadoNotaCredito(Factura.EstadoNotaCreditoEnum.SIN_ANULAR.getEstado());            
             //facturaFacade.create(factura);
@@ -110,14 +94,6 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 }
                 
             }
-            /**
-             * Aumentar el codigo de la numeracion en los parametros
-             */            
-            factura.setSecuencial(Integer.parseInt(parametro.valor));
-            
-            parametro.valor = (Integer.parseInt(parametro.valor) + 1) + "";
-            //parametroService.editar(parametro);
-            entityManager.merge(parametro);
             
         transaction.commit();
         } catch (DatabaseException ex) {
@@ -231,7 +207,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         try {
             Integer secuencialSiguiente=0;
             //Obtener secuencial cuando es modo electronico
-            if(parametroService.getParametroByNombre(ParametroCodefac.TIPO_FACTURACION).valor.equals(TipoFacturacionEnumEstado.ELECTRONICA.getLetra()))
+            if(parametroService.getParametroByNombre(ParametroCodefac.TIPO_FACTURACION).valor.equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra()))
             {
                 secuencialSiguiente = Integer.parseInt(parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA).valor);
             }
@@ -256,7 +232,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             @Override
             public void transaccion() {
                 try {
-                    factura.setEstado(FacturaEnumEstado.ELIMINADO.getEstado()); //Cambio el estado de las facturas a eliminad
+                    factura.setEstado(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado()); //Cambio el estado de las facturas a eliminad
                     entityManager.merge(factura); //actualizar los datos de la factura
                     
                     NotaCreditoService servicioNotaCredito=new NotaCreditoService();

@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,7 +30,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "NOTA_CREDITO")
-public class NotaCredito extends Comprobante implements Serializable {
+public class NotaCredito extends ComprobanteEntity implements Serializable {
     
     @Id
     @Column(name = "ID")
@@ -47,8 +48,8 @@ public class NotaCredito extends Comprobante implements Serializable {
     //private String puntoEstablecimiento;
     //@Column(name = "PUNTO_EMISION")
     //private String puntoEmision;
-    @Column(name = "FECHA_NOTA_CREDITO")
-    private Date fechaNotaCredito;
+    //@Column(name = "FECHA_NOTA_CREDITO")
+    //private Date fechaNotaCredito;
     //@Column(name = "FECHA_CREACION")
     //private Date fechaCreacion;
     @Column(name = "SUBTOTAL_SIN_IMPUESTOS")
@@ -154,13 +155,13 @@ public class NotaCredito extends Comprobante implements Serializable {
         this.puntoEmision = puntoEmision;
     }
 
-    public Date getFechaNotaCredito() {
+    /*public Date getFechaNotaCredito() {
         return fechaNotaCredito;
     }
 
     public void setFechaNotaCredito(Date fechaNotaCredito) {
         this.fechaNotaCredito = fechaNotaCredito;
-    }
+    }*/
 
     public Date getFechaCreacion() {
         return fechaCreacion;
@@ -313,7 +314,42 @@ public class NotaCredito extends Comprobante implements Serializable {
     public void setDatosAdicionales(List<NotaCreditoAdicional> datosAdicionales) {
         this.datosAdicionales = datosAdicionales;
     }
-        
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 97 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final NotaCredito other = (NotaCredito) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
+       
+    /**
+     * Metodos personalizados
+     */
+    
+    public ComprobanteEnumEstado getEstadoEnum()
+    {
+        return ComprobanteEnumEstado.getEnum(estado);
+    }    
     
         /**
      * Informacion personaliazada
@@ -374,10 +410,6 @@ public class NotaCredito extends Comprobante implements Serializable {
     
     }
     
-    public String getPreimpreso()
-    {
-       return UtilidadesTextos.llenarCarateresIzquierda(puntoEmision,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(puntoEstablecimiento,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(secuencial+"",8,"0");
-    }
 
     
 }

@@ -37,7 +37,7 @@ INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('secuencial_retencion_fisica','1');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('tipo_facturacion','e');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('tipo_facturacion','e');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('secuencial_lote','1');
-INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('defecto_tipo_documento_factura','VET');
+INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('defecto_tipo_documento_factura','LIB');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('defecto_tipo_documento_compra','COI');
 INSERT INTO PARAMETRO (NOMBRE) VALUES('directorio_respaldo');
 INSERT INTO PARAMETRO (NOMBRE,VALOR) VALUES('ultima_fecha_validacion',CURRENT_DATE);

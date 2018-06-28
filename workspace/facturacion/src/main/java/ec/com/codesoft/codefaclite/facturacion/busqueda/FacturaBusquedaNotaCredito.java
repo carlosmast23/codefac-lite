@@ -8,9 +8,9 @@ package ec.com.codesoft.codefaclite.facturacion.busqueda;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import java.util.Vector;
 
 /**
@@ -42,9 +42,9 @@ public class FacturaBusquedaNotaCredito implements InterfaceModelFind<Factura> {
         String queryString = "SELECT u FROM Factura u WHERE ( u.estado<>?1 and u.estadoNotaCredito<>?2 and u.estado<>?3 ) AND ";
         queryString+=" ( LOWER(u.cliente.razonSocial) like ?4 OR CONCAT(u.secuencial,'') like ?4 )";
         QueryDialog queryDialog=new QueryDialog(queryString);
-        queryDialog.agregarParametro(1,FacturaEnumEstado.ELIMINADO.getEstado());
+        queryDialog.agregarParametro(1,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
         queryDialog.agregarParametro(2,Factura.EstadoNotaCreditoEnum.ANULADO_TOTAL.getEstado());
-        queryDialog.agregarParametro(3,FacturaEnumEstado.SIN_AUTORIZAR.getEstado());
+        queryDialog.agregarParametro(3,ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR.getEstado());
         queryDialog.agregarParametro(4,filter);
         return queryDialog;
     }
@@ -55,7 +55,7 @@ public class FacturaBusquedaNotaCredito implements InterfaceModelFind<Factura> {
         dato.add(t.getPreimpreso());
         System.out.println(t.getPreimpreso());
         dato.add(t.getCliente().getRazonSocial());
-        FacturaEnumEstado estadoEnum= FacturaEnumEstado.getEnum(t.getEstado());
+        ComprobanteEntity.ComprobanteEnumEstado estadoEnum= ComprobanteEntity.ComprobanteEnumEstado.getEnum(t.getEstado());
         dato.add(estadoEnum.getNombre());
         dato.add(t.getFechaEmision());
         dato.add(t.getTotal());

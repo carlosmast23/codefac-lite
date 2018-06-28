@@ -31,20 +31,21 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
+import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -83,7 +84,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         //notaCredito.setEstado(Factura.ESTADO_FACTURADO);
         notaCredito.setFechaCreacion(UtilidadesFecha.getFechaHoy());
         notaCredito.setRazonModificado(getTxtMotivoAnulacion().getText());
-        notaCredito.setFechaNotaCredito(new Date(getjDateFechaEmision().getDate().getTime()));
+        notaCredito.setFechaEmision(new Date(getjDateFechaEmision().getDate().getTime()));
         
         notaCredito.setPuntoEmision(session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor);
         notaCredito.setPuntoEstablecimiento(session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor);
@@ -115,7 +116,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
             NotaCredito notaCreditoGrabada;
             NotaCreditoServiceIf servicio=ServiceFactory.getFactory().getNotaCreditoServiceIf();
             setearValoresNotaCredito();
-            servicio.grabar(notaCredito);
+            notaCredito=servicio.grabar(notaCredito);
             notaCreditoGrabada=notaCredito;//graba una referencia con ambiento del metodo para los listener
             
             ComprobanteDataNotaCredito comprobanteData=new ComprobanteDataNotaCredito(notaCredito);
@@ -124,7 +125,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
              
             ClienteInterfaceComprobante cic=new ClienteNotaCreditoImplComprobante(this, notaCreditoGrabada);
             ComprobanteServiceIf comprobanteServiceIf=ServiceFactory.getFactory().getComprobanteServiceIf();
-            comprobanteServiceIf.procesarComprobanteNotaCredito(comprobanteData,notaCredito,session.getUsuario(),cic);        
+            comprobanteServiceIf.procesarComprobante(comprobanteData,notaCredito,session.getUsuario(),cic);        
             
 
         } catch (ServicioCodefacException ex) {
@@ -501,7 +502,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         boolean validado=true;
         
                //Validacion cuando solo sea facturacion manual
-        if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(TipoFacturacionEnumEstado.NORMAL.getLetra()))
+        if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL.getLetra()))
         {
             DialogoCodefac.mensaje("Advertencia","Pantalla solo dispinible para facturación electronica",DialogoCodefac.MENSAJE_ADVERTENCIA);
             return false;
@@ -509,34 +510,39 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         else
         {
         
-            if(session.getParametrosCodefac().get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor().equals(""))
-            { 
-                mensajeValidacion+=" - Archivo Firma\n";
-                validado= false;
-            }
-
-            if(session.getParametrosCodefac().get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).getValor().equals(""))
-            { 
-                mensajeValidacion+=" - Clave Firma\n";
-                validado= false;
-            }
-
-            if(session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals(""))
-            { 
-                mensajeValidacion+=" - Correo\n";
-                validado= false;
-            }
-
-            if(session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals(""))
-            { 
-                mensajeValidacion+=" - Clave Correo \n";
-                validado= false;
-            }
-
-            if(session.getEmpresa() == null)
-            {
-                mensajeValidacion+=" - Información de Empresa \n";
-                validado= false;
+            try {
+                if(session.getParametrosCodefac().get(ParametroCodefac.NOMBRE_FIRMA_ELECTRONICA).getValor().equals(""))
+                {
+                    mensajeValidacion+=" - Archivo Firma\n";
+                    validado= false;
+                }
+                
+                String claveFirmaElectronica=UtilidadesEncriptar.desencriptar(session.getParametrosCodefac().get(ParametroCodefac.CLAVE_FIRMA_ELECTRONICA).getValor(),ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
+                if(claveFirmaElectronica.equals(""))
+                {
+                    mensajeValidacion+=" - Clave Firma\n";
+                    validado= false;
+                }
+                
+                if(session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals(""))
+                {
+                    mensajeValidacion+=" - Correo\n";
+                    validado= false;
+                }
+                
+                if(session.getParametrosCodefac().get(ParametroCodefac.CORREO_USUARIO).getValor().equals(""))
+                {
+                    mensajeValidacion+=" - Clave Correo \n";
+                    validado= false;
+                }
+                
+                if(session.getEmpresa() == null)
+                {
+                    mensajeValidacion+=" - Información de Empresa \n";
+                    validado= false;
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(NotaCreditoModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         

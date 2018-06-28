@@ -16,9 +16,9 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectr
 import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceComprobante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataFactura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FacturaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import java.awt.Color;
@@ -103,12 +103,12 @@ public class ClienteNotaCreditoImplComprobante extends UnicastRemoteObject imple
         
         if (etapa == ComprobanteElectronicoService.ETAPA_RIDE) {
             monitorData.getBarraProgreso().setValue(65);
-            notaCreditoProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
+            notaCreditoProcesando.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
         }
 
         if (etapa == ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE) {
             monitorData.getBarraProgreso().setValue(80);
-            notaCreditoProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
+            notaCreditoProcesando.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
         }
 
         if (etapa == ComprobanteElectronicoService.ETAPA_ENVIAR) {
@@ -117,7 +117,7 @@ public class ClienteNotaCreditoImplComprobante extends UnicastRemoteObject imple
 
         if (etapa == ComprobanteElectronicoService.ETAPA_AUTORIZAR) {
             monitorData.getBarraProgreso().setValue(100);
-            notaCreditoProcesando.setEstado(FacturaEnumEstado.FACTURADO.getEstado());
+            notaCreditoProcesando.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
         }
 
     }
