@@ -55,9 +55,9 @@ public class FacturaReporteModel extends FacturaReportePanel {
     private Persona persona;
     Map<String, Object> parameters = new HashMap<String, Object>();
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    private DefaultTableModel modeloTablaFacturas;
-    private List<Factura> datafact;
-    private List<NotaCredito> datafact2;
+
+    //private List<Factura> datafact;
+    //private List<NotaCredito> datafact2;
     Date fechaInicio = null;
     Date fechaFin = null;
     String fechainicio = "";
@@ -121,130 +121,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
         getBtnBuscar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    BigDecimal d = BigDecimal.ZERO;
-                    BigDecimal acum = BigDecimal.ZERO, acumdoce = BigDecimal.ZERO, acumiva = BigDecimal.ZERO, acumdesc = BigDecimal.ZERO;
-                    ComprobanteEntity.ComprobanteEnumEstado estadoFactura = (ComprobanteEntity.ComprobanteEnumEstado) getCmbEstado().getSelectedItem();
-                    String estadoFact = estadoFactura.getEstado();
-                    if (getDateFechaInicio().getDate() != null) {
-                        fechaInicio = new Date(getDateFechaInicio().getDate().getTime());
-                    }   if (getDateFechaFin().getDate() != null) {
-                        fechaFin = new Date(getDateFechaFin().getDate().getTime());
-                    }   System.out.println("ESTADO --------------->" + estadoFact);
-                    Vector<String> titulo = new Vector<>();
-                    titulo.add("Preimpreso");
-                    titulo.add("Fecha");
-                    titulo.add("Identificación");
-                    titulo.add("Razón social");
-                    titulo.add("Nombre legal");
-                    titulo.add("Documento");
-                    titulo.add("Estado");
-                    titulo.add("Tipo");
-                    titulo.add("Subtotal 12%");
-                    titulo.add("Subtotal 0% ");
-                    titulo.add("Descuentos");
-                    titulo.add("IVA 12%");
-                    titulo.add("Total");
-                    modeloTablaFacturas = new DefaultTableModel(titulo, 0);
-                    FacturacionServiceIf fs = ServiceFactory.getFactory().getFacturacionServiceIf();
-                    datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFact);
-                    NotaCreditoServiceIf nc = ServiceFactory.getFactory().getNotaCreditoServiceIf();
-                    datafact2 = nc.obtenerNotasReporte(persona, fechaInicio, fechaFin);
-                    
-                    DocumentosConsultarEnum documentoConsultaEnum=(DocumentosConsultarEnum) getCmbDocumento().getSelectedItem();
-                    
-                    switch(documentoConsultaEnum)
-                    {
-                        case VENTAS:
-                            for (Factura factura : datafact) {
-                                Vector<String> fila = new Vector<String>();
-                                ComprobanteEntity.ComprobanteEnumEstado ef = ComprobanteEntity.ComprobanteEnumEstado.getEnum(factura.getEstado());
-                                DocumentoEnum tipoDocumentoEnum = DocumentoEnum.obtenerDocumentoPorCodigo(factura.getCodigoDocumento());
-                                TipoFacturacionEnumEstado tf = TipoFacturacionEnumEstado.getEnumByEstado(factura.getTipoFacturacion());
-                                fila.add(factura.getPreimpreso());
-                                fila.add(dateFormat.format(factura.getFechaEmision()));
-                                fila.add(factura.getCliente().getIdentificacion());
-                                fila.add(factura.getCliente().getRazonSocial());
-                                fila.add(factura.getCliente().getNombreLegal());
-                                fila.add(tipoDocumentoEnum.getNombre());
-                                fila.add(ef.getNombre());
-                                fila.add(tf.getNombre());
-                                fila.add(factura.getSubtotalImpuestos().toString());
-                                fila.add(factura.getSubtotalSinImpuestos().toString());
-                                fila.add(factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()).toString());
-                                fila.add(factura.getIva().toString());
-
-                                if (getChkAfectaNotaCredito().isSelected()) {
-                                    NotaCredito notaCredito = verificarPorFactura(factura);
-                                    if (notaCredito != null) {
-                                        d = factura.getTotal().subtract(notaCredito.getTotal());
-                                        acum = acum.add(factura.getSubtotalSinImpuestos().subtract(notaCredito.getSubtotalCero()));
-                                        acumdoce = acumdoce.add(factura.getSubtotalImpuestos().subtract(notaCredito.getSubtotalDoce()));
-                                        acumiva = acumiva.add(factura.getIva().subtract(notaCredito.getValorIvaDoce()));
-                                        acumdesc = acumdesc.add(factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()));
-                                    } else {
-                                        d = factura.getTotal();
-                                        acum = acum.add(factura.getSubtotalSinImpuestos());
-                                        acumdoce = acumdoce.add(factura.getSubtotalImpuestos());
-                                        acumiva = acumiva.add(factura.getIva());
-                                        acumdesc = acumdesc.add(factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()));
-                                    }
-                                    fila.add(d.toString());
-                                } else {
-                                    fila.add(factura.getTotal().toString());
-                                    acum = acum.add(factura.getSubtotalSinImpuestos());
-                                    acumdoce = acumdoce.add(factura.getSubtotalImpuestos());
-                                    acumiva = acumiva.add(factura.getIva());
-                                    acumdesc = acumdesc.add(factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()));
-                                }
-                                modeloTablaFacturas.addRow(fila);
-                            }
-
-                            break;
-
-                        case NOTA_CREDITO:
-                            for (NotaCredito nota : datafact2) {
-                                Vector<String> fila = new Vector<String>();
-                                ComprobanteEntity.ComprobanteEnumEstado ef = ComprobanteEntity.ComprobanteEnumEstado.getEnum(nota.getEstado());
-
-                                fila.add(nota.getPreimpreso());
-                                fila.add(dateFormat.format(nota.getFechaEmision()));
-                                fila.add(nota.getCliente().getIdentificacion());
-                                fila.add(nota.getCliente().getRazonSocial());
-                                fila.add(nota.getCliente().getNombreLegal());
-                                fila.add((ef!=null)?ef.getNombre():""); //Todo: Verificar porque el estado de las notas de credito no se esta guardando
-                                fila.add(nota.getSubtotalDoce().toString());
-                                fila.add(nota.getSubtotalCero().toString());
-                                fila.add(nota.getValorIvaDoce().toString());
-                                fila.add(nota.getFactura().getDescuentoImpuestos().add(nota.getFactura().getDescuentoSinImpuestos()).toString());
-                                fila.add(nota.getTotal().toString());
-
-                                acum = acum.add(nota.getSubtotalCero());
-                                acumdoce = acumdoce.add(nota.getSubtotalDoce());
-                                acumiva = acumiva.add(nota.getValorIvaDoce());
-                                acumdesc = acumdesc.add(nota.getFactura().getDescuentoImpuestos().add(nota.getFactura().getDescuentoSinImpuestos()));
-
-                                modeloTablaFacturas.addRow(fila);
-                            }
-
-                            break;
-
-                    }
-                    
-                    getTblDocumentos().setModel(modeloTablaFacturas);
-                     
-                    getTblDocumentos().setModel(modeloTablaFacturas);
-                    getLblSubtotal0().setText(acum.toString());
-                    getLblSubtotal12().setText(acumdoce.toString());
-                    BigDecimal subtotal = acum.add(acumdoce);
-                    getLblSubtotalSinImpuesto().setText(subtotal.toString());
-                    getLblTotalDescuento().setText(acumdesc.toString());
-                    getLblIva12().setText(acumiva.toString());
-                    BigDecimal total = acum.add(acumdoce).add(acumiva);
-                    getTxtValorTotal().setText(total.toString());
-                } catch (RemoteException ex) {
-                    Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                generarReporte(true,false); //codigo que genera el reporte
             }
         });
         getBtnLimpiarFechaInicio().addActionListener(new ActionListener() {
@@ -261,14 +138,229 @@ public class FacturaReporteModel extends FacturaReportePanel {
             }
         });
     }
+    
+    private void generarReporte(Boolean tabla,Boolean reporte)
+    {
+        try {
+            BigDecimal d = BigDecimal.ZERO;
+            BigDecimal acum = BigDecimal.ZERO, acumdoce = BigDecimal.ZERO, acumiva = BigDecimal.ZERO, acumdesc = BigDecimal.ZERO;
+            ComprobanteEntity.ComprobanteEnumEstado estadoFactura = (ComprobanteEntity.ComprobanteEnumEstado) getCmbEstado().getSelectedItem();
+            String estadoFact = estadoFactura.getEstado();
+            if (getDateFechaInicio().getDate() != null) {
+                fechaInicio = new Date(getDateFechaInicio().getDate().getTime());
+            }
+            if (getDateFechaFin().getDate() != null) {
+                fechaFin = new Date(getDateFechaFin().getDate().getTime());
+            }
 
-    private NotaCredito verificarPorFactura(Factura factura) {
-        for (NotaCredito notaCredito : datafact2) {
+
+            FacturacionServiceIf fs = ServiceFactory.getFactory().getFacturacionServiceIf();
+            List<Factura> datafact = fs.obtenerFacturasReporte(persona, fechaInicio, fechaFin, estadoFact);
+            NotaCreditoServiceIf nc = ServiceFactory.getFactory().getNotaCreditoServiceIf();
+            List<NotaCredito> dataNotCre = nc.obtenerNotasReporte(persona, fechaInicio, fechaFin);
+            
+            List<ReporteFacturaData> data = new ArrayList<ReporteFacturaData>();
+
+            DocumentosConsultarEnum documentoConsultaEnum = (DocumentosConsultarEnum) getCmbDocumento().getSelectedItem();
+
+            switch (documentoConsultaEnum) {
+                case VENTAS:
+                    for (Factura factura : datafact) {
+                        Vector<String> fila = new Vector<String>();
+                        ComprobanteEntity.ComprobanteEnumEstado ef = ComprobanteEntity.ComprobanteEnumEstado.getEnum(factura.getEstado());
+                        DocumentoEnum tipoDocumentoEnum = DocumentoEnum.obtenerDocumentoPorCodigo(factura.getCodigoDocumento());
+                        TipoFacturacionEnumEstado tf = TipoFacturacionEnumEstado.getEnumByEstado(factura.getTipoFacturacion());
+                        
+                        data.add(new ReporteFacturaData(
+                                factura.getPreimpreso(),
+                                dateFormat.format(factura.getFechaEmision()),
+                                factura.getCliente().getIdentificacion(),
+                                factura.getCliente().getRazonSocial(),
+                                factura.getCliente().getNombreLegal(),
+                                ef.getNombre(),
+                                factura.getSubtotalImpuestos().toString(),
+                                factura.getSubtotalSinImpuestos().toString(),
+                                factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()).toString(),
+                                factura.getIva().toString(),
+                                d.toString()
+                        ));
+                        
+                        fila.add(factura.getPreimpreso());
+                        fila.add(dateFormat.format(factura.getFechaEmision()));
+                        fila.add(factura.getCliente().getIdentificacion());
+                        fila.add(factura.getCliente().getRazonSocial());
+                        fila.add(factura.getCliente().getNombreLegal());
+                        fila.add(tipoDocumentoEnum.getNombre());
+                        fila.add(ef.getNombre());
+                        fila.add(tf.getNombre());
+                        fila.add(factura.getSubtotalImpuestos().toString());
+                        fila.add(factura.getSubtotalSinImpuestos().toString());
+                        fila.add(factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()).toString());
+                        fila.add(factura.getIva().toString());
+
+                        if (getChkAfectaNotaCredito().isSelected()) {
+                            NotaCredito notaCredito = verificarPorFactura(factura,dataNotCre);
+                            if (notaCredito != null) {
+                                d = factura.getTotal().subtract(notaCredito.getTotal());
+                                acum = acum.add(factura.getSubtotalSinImpuestos().subtract(notaCredito.getSubtotalCero()));
+                                acumdoce = acumdoce.add(factura.getSubtotalImpuestos().subtract(notaCredito.getSubtotalDoce()));
+                                acumiva = acumiva.add(factura.getIva().subtract(notaCredito.getValorIvaDoce()));
+                                acumdesc = acumdesc.add(factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()));
+                            } else {
+                                d = factura.getTotal();
+                                acum = acum.add(factura.getSubtotalSinImpuestos());
+                                acumdoce = acumdoce.add(factura.getSubtotalImpuestos());
+                                acumiva = acumiva.add(factura.getIva());
+                                acumdesc = acumdesc.add(factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()));
+                            }
+                            fila.add(d.toString());
+                        } else {
+                            fila.add(factura.getTotal().toString());
+                            acum = acum.add(factura.getSubtotalSinImpuestos());
+                            acumdoce = acumdoce.add(factura.getSubtotalImpuestos());
+                            acumiva = acumiva.add(factura.getIva());
+                            acumdesc = acumdesc.add(factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos()));
+                        }
+
+                    }
+
+                    break;
+
+                case NOTA_CREDITO:
+                    for (NotaCredito nota : dataNotCre) {
+                        Vector<String> fila = new Vector<String>();
+                        ComprobanteEntity.ComprobanteEnumEstado ef = ComprobanteEntity.ComprobanteEnumEstado.getEnum(nota.getEstado());
+                        
+                        data.add(new ReporteFacturaData(
+                                nota.getPreimpreso(),
+                                dateFormat.format(nota.getFechaEmision()),
+                                nota.getCliente().getIdentificacion(),
+                                nota.getCliente().getRazonSocial(),
+                                nota.getCliente().getNombreLegal(),
+                                "falta estado",
+                                nota.getSubtotalDoce().toString(),
+                                nota.getSubtotalCero().toString(),
+                                nota.getFactura().getDescuentoImpuestos().add(nota.getFactura().getDescuentoSinImpuestos()).toString(),
+                                nota.getValorIvaDoce().toString(),
+                                nota.getTotal().toString()
+                        ));
+
+                        fila.add(nota.getPreimpreso());
+                        fila.add(dateFormat.format(nota.getFechaEmision()));
+                        fila.add(nota.getCliente().getIdentificacion());
+                        fila.add(nota.getCliente().getRazonSocial());
+                        fila.add(nota.getCliente().getNombreLegal());
+                        fila.add((ef != null) ? ef.getNombre() : ""); //Todo: Verificar porque el estado de las notas de credito no se esta guardando
+                        fila.add(nota.getSubtotalDoce().toString());
+                        fila.add(nota.getSubtotalCero().toString());
+                        fila.add(nota.getValorIvaDoce().toString());
+                        fila.add(nota.getFactura().getDescuentoImpuestos().add(nota.getFactura().getDescuentoSinImpuestos()).toString());
+                        fila.add(nota.getTotal().toString());
+
+                        acum = acum.add(nota.getSubtotalCero());
+                        acumdoce = acumdoce.add(nota.getSubtotalDoce());
+                        acumiva = acumiva.add(nota.getValorIvaDoce());
+                        acumdesc = acumdesc.add(nota.getFactura().getDescuentoImpuestos().add(nota.getFactura().getDescuentoSinImpuestos()));
+
+                        
+                    }
+
+                    break;
+
+            }
+            
+            if (tabla) 
+            {
+                //Si genera en la tabla creo los datos de las filas
+                DefaultTableModel modeloTablaFacturas = construirModelTabla();
+                for (ReporteFacturaData reporteFacturaData : data) {
+                        Vector<String> fila = new Vector<String>();
+                        fila.add(reporteFacturaData.getNumeroFactura());
+                        fila.add(reporteFacturaData.getFechaFactura());
+                        fila.add(reporteFacturaData.getIdentificacionCliente());
+                        fila.add(reporteFacturaData.getRazonSocialCliente());
+                        fila.add(reporteFacturaData.getNombreLegalCliente());
+                        fila.add("tipo documento"); //Aqui debe ir el tipo de documento
+                        fila.add(reporteFacturaData.getEstadoFactura());
+                        fila.add("tipo fact"); //Falta implementar
+                        fila.add(reporteFacturaData.getSubtotalDoceFactura());
+                        fila.add(reporteFacturaData.getSubtotalCeroFactura());
+                        fila.add(reporteFacturaData.getDescFactura());
+                        fila.add(reporteFacturaData.getIvaDoceFactura());
+                        modeloTablaFacturas.addRow(fila);
+                }
+                
+                getTblDocumentos().setModel(modeloTablaFacturas);
+                getLblSubtotal0().setText(acum.toString());
+                getLblSubtotal12().setText(acumdoce.toString());
+                BigDecimal subtotal = acum.add(acumdoce);
+                getLblSubtotalSinImpuesto().setText(subtotal.toString());
+                getLblTotalDescuento().setText(acumdesc.toString());
+                getLblIva12().setText(acumiva.toString());
+                BigDecimal total = acum.add(acumdoce).add(acumiva);
+                getTxtValorTotal().setText(total.toString());
+            }
+            
+            //Si crea un reporte paso los datos al jasper
+            if(reporte)
+            {
+                String estadoText = estadoFactura.getNombre();
+                InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_documentos.jrxml");
+                String cliente = "";
+                if (persona == null) {
+                    cliente = "TODOS";
+                } else {
+                    cliente = persona.getRazonSocial();
+                }
+                parameters.put("fechainicio", fechainicio);
+                parameters.put("fechafin", fechafin);
+                parameters.put("tipodocumento", String.valueOf("definir"));
+                parameters.put("cliente", cliente);
+                parameters.put("subtotal", acum.toString());
+                parameters.put("subtotaliva", acumdoce.toString());
+                parameters.put("valoriva", acumiva.toString());
+                BigDecimal total = acum.add(acumdoce).add(acumiva);
+                parameters.put("total", total.toString());
+                BigDecimal subtotal = acum.add(acumdoce);
+                parameters.put("totalsubtotales", subtotal.toString());
+                parameters.put("descuentos", acumdesc.toString());
+                parameters.put("estadofactura", estadoText);
+
+                ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Documentos ");
+            
+            }
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private NotaCredito verificarPorFactura(Factura factura,List<NotaCredito> notasCredito) {
+        for (NotaCredito notaCredito : notasCredito) {
             if (notaCredito.getFactura().equals(factura)) {
                 return notaCredito;
             }
         }
         return null;
+    }
+    
+    private DefaultTableModel construirModelTabla() {
+        Vector<String> titulo = new Vector<>();
+        titulo.add("Preimpreso");
+        titulo.add("Fecha");
+        titulo.add("Identificación");
+        titulo.add("Razón social");
+        titulo.add("Nombre legal");
+        titulo.add("Documento");
+        titulo.add("Estado");
+        titulo.add("Tipo");
+        titulo.add("Subtotal 12%");
+        titulo.add("Subtotal 0% ");
+        titulo.add("Descuentos");
+        titulo.add("IVA 12%");
+        titulo.add("Total");
+        DefaultTableModel modeloTablaFacturas = new DefaultTableModel(titulo, 0);
+        return modeloTablaFacturas;
     }
 
     @Override
@@ -288,6 +380,8 @@ public class FacturaReporteModel extends FacturaReportePanel {
 
     @Override
     public void imprimir() {
+        generarReporte(false,true);
+        /*
         try {
             BigDecimal d = null;
             BigDecimal acum = BigDecimal.ZERO, acumdoce = BigDecimal.ZERO, acumiva = BigDecimal.ZERO, acumdesc = BigDecimal.ZERO;
@@ -372,7 +466,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
                     ));
                 }
             }*/   
-            
+            /*
             String cliente = "";
             if (persona == null) {
                 cliente = "TODOS";
@@ -395,10 +489,11 @@ public class FacturaReporteModel extends FacturaReportePanel {
             /*        data.add(new ReporteFacturaData("001-002-00001231"));
             data.add(new ReporteFacturaData("001-002-000012331"));
             */
+            /*
             ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Documentos ");
         } catch (RemoteException ex) {
             Logger.getLogger(FacturaReporteModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
     }
 
     @Override
