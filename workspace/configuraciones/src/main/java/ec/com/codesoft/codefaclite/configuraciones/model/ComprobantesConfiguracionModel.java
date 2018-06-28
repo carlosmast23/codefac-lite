@@ -20,12 +20,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.email.CorreoElectronico;
@@ -211,7 +211,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
 
         parametros.get(ParametroCodefac.MODO_FACTURACION).setValor(getCmbModoFacturacion().getSelectedItem().toString());
         
-        parametros.get(ParametroCodefac.TIPO_FACTURACION).setValor(((TipoFacturacionEnumEstado)getCmbTipoFacturacion().getSelectedItem()).getLetra());
+        parametros.get(ParametroCodefac.TIPO_FACTURACION).setValor(((ComprobanteEntity.TipoEmisionEnum)getCmbTipoFacturacion().getSelectedItem()).getLetra());
         
         
         
@@ -263,7 +263,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
              * Cargar el tipo de facturacion
              */
             String letra=parametros.get(ParametroCodefac.TIPO_FACTURACION).getValor();
-            getCmbTipoFacturacion().setSelectedItem(TipoFacturacionEnumEstado.getEnumByEstado(letra));
+            getCmbTipoFacturacion().setSelectedItem(ComprobanteEntity.TipoEmisionEnum.getEnumByEstado(letra));
             listenerCmbTipoFacturacion(); //modifica las acciones para esta accion
         } catch (RemoteException ex) {
             Logger.getLogger(ComprobantesConfiguracionModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -288,8 +288,8 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     private void cargarTipoFactura()
     {
         getCmbTipoFacturacion().removeAllItems();
-        TipoFacturacionEnumEstado[] tipos= TipoFacturacionEnumEstado.values();
-        for (TipoFacturacionEnumEstado tipo : tipos) {
+        ComprobanteEntity.TipoEmisionEnum[] tipos= ComprobanteEntity.TipoEmisionEnum.values();
+        for (ComprobanteEntity.TipoEmisionEnum tipo : tipos) {
             getCmbTipoFacturacion().addItem(tipo);
         }
     }
@@ -429,8 +429,8 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
     
     private void listenerCmbTipoFacturacion()
     {
-        TipoFacturacionEnumEstado tipo = (TipoFacturacionEnumEstado) getCmbTipoFacturacion().getSelectedItem();
-        if (tipo.equals(TipoFacturacionEnumEstado.NORMAL)) {
+        ComprobanteEntity.TipoEmisionEnum tipo = (ComprobanteEntity.TipoEmisionEnum) getCmbTipoFacturacion().getSelectedItem();
+        if (tipo.equals(ComprobanteEntity.TipoEmisionEnum.NORMAL)) {
             activarOpcionesFacturarElectronica(false);
         } else {
             activarOpcionesFacturarElectronica(true);

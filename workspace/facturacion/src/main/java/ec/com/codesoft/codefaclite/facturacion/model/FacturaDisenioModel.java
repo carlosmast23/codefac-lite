@@ -25,10 +25,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.BandaComprobante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComponenteComprobanteFisico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteFisicoDisenio;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteFisicoDisenioServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -689,7 +689,7 @@ public class FacturaDisenioModel extends FacturaDisenoPanel implements RepaintIn
     }
 
     private void validarPermisosIniciales() throws ExcepcionCodefacLite{
-        if (!session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).valor.equals(TipoFacturacionEnumEstado.NORMAL.getLetra())) {
+        if (!session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).valor.equals(ComprobanteEntity.TipoEmisionEnum.NORMAL.getLetra())) {
             DialogoCodefac.mensaje("Acceso no pemitido","Esta ventana solo esta disponible en modo Factuación manual",DialogoCodefac.MENSAJE_ADVERTENCIA);
             dispose();
             throw new ExcepcionCodefacLite("No cumple validacion inicial");

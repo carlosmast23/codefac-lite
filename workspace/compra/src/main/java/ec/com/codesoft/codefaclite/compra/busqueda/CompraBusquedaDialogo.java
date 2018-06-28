@@ -10,7 +10,6 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
 import java.util.Vector;
 
 /**

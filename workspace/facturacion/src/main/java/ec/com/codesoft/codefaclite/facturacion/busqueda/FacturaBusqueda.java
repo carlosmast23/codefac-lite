@@ -12,7 +12,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -58,7 +57,7 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura> {
         DocumentoEnum estadoEnum= DocumentoEnum.obtenerDocumentoPorCodigo(t.getCodigoDocumento());
         dato.add(estadoEnum.getNombre());
         
-        TipoFacturacionEnumEstado tipoFactura=TipoFacturacionEnumEstado.getEnumByEstado(t.getTipoFacturacion());
+        ComprobanteEntity.TipoEmisionEnum tipoFactura=ComprobanteEntity.TipoEmisionEnum.getEnumByEstado(t.getTipoFacturacion());
         dato.add(tipoFactura.getNombre());
         
         dato.add(t.getFechaEmision());

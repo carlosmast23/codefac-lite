@@ -242,6 +242,10 @@ public class Factura extends ComprobanteEntity implements Serializable {
         this.estadoNotaCredito = estadoNotaCredito;
     }
         
+    public TipoEmisionEnum getTipoFacturacionEnum() {
+        return TipoEmisionEnum.getEnumByEstado(tipoFacturacion);
+    }
+    
     
     /**
      * Informacion adicional

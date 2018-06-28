@@ -313,7 +313,15 @@ public class NotaCredito extends ComprobanteEntity implements Serializable {
     public void setDatosAdicionales(List<NotaCreditoAdicional> datosAdicionales) {
         this.datosAdicionales = datosAdicionales;
     }
-        
+       
+    /**
+     * Metodos personalizados
+     */
+    
+    public ComprobanteEnumEstado getEstadoEnum()
+    {
+        return ComprobanteEnumEstado.getEnum(estado);
+    }    
     
         /**
      * Informacion personaliazada

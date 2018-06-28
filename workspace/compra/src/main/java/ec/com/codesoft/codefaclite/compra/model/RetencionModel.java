@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.Com
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
@@ -27,7 +28,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
@@ -355,16 +355,17 @@ public class RetencionModel extends RetencionPanel{
          * Cargar el secuencial segun el modo de facturacion seleccionado
          */
         ParametroCodefac paramTipoFacturacion=session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION);
-        TipoFacturacionEnumEstado enumTipoFacturacion=TipoFacturacionEnumEstado.getEnumByEstado(paramTipoFacturacion.getValor());
+
+        ComprobanteEntity.TipoEmisionEnum enumTipoFacturacion=ComprobanteEntity.TipoEmisionEnum.getEnumByEstado(paramTipoFacturacion.getValor());
         
         String secuencial="";
-        if(enumTipoFacturacion.equals(TipoFacturacionEnumEstado.NORMAL))
+        if(enumTipoFacturacion.equals(ComprobanteEntity.TipoEmisionEnum.NORMAL))
         {
             secuencial=session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_RETENCION_FISICA).getValor();
         }
         else
         {
-            if(enumTipoFacturacion.equals(TipoFacturacionEnumEstado.ELECTRONICA))
+            if(enumTipoFacturacion.equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA))
             {
                 secuencial=session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_RETENCION).getValor();
             }
@@ -418,7 +419,7 @@ public class RetencionModel extends RetencionPanel{
         
         
         //Cuando la facturacion es electronica
-        if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(TipoFacturacionEnumEstado.ELECTRONICA.getLetra()))
+        if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra()))
         {
             retencion.setSecuencial(Integer.parseInt(session.getParametrosCodefac().get(ParametroCodefac.SECUENCIAL_RETENCION).valor));
         }

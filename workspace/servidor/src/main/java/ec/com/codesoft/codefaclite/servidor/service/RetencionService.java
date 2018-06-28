@@ -15,7 +15,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RetencionServiceIf;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -42,7 +41,7 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
 
         ParametroCodefacService parametroService = new ParametroCodefacService();
         ParametroCodefac parametro = null;
-        if (parametroService.getParametroByNombre(ParametroCodefac.TIPO_FACTURACION).valor.equals(TipoFacturacionEnumEstado.ELECTRONICA.getLetra())) {
+        if (parametroService.getParametroByNombre(ParametroCodefac.TIPO_FACTURACION).valor.equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra())) {
             //factura.setTipoFacturacion(TipoFacturacionEnumEstado.ELECTRONICA.getLetra());
             parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_RETENCION);
         } else {

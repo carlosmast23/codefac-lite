@@ -229,4 +229,45 @@ public class ComprobanteEntity implements Serializable{
             this.nombre = nombre;
         }
     }
+    
+    /**
+     * Enumerado que me sirve para saber el tipo de emision si fue electronica o manual
+     */
+    public enum TipoEmisionEnum {
+        ELECTRONICA("e", "Electrónica"),
+        NORMAL("m", "Manual");
+
+        private TipoEmisionEnum(String letra, String nombre) {
+            this.letra = letra;
+            this.nombre = nombre;
+        }
+
+        private String letra;
+        private String nombre;
+
+        public String getLetra() {
+            return letra;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+
+        public static TipoEmisionEnum getEnumByEstado(String estado) {
+
+            for (TipoEmisionEnum enumerador : TipoEmisionEnum.values()) {
+                if (enumerador.letra.equals(estado)) {
+                    return enumerador;
+                }
+            }
+            return null;
+        }
+
+        @Override
+        public String toString() {
+            return nombre;
+        }
+
+    }
+    
 }

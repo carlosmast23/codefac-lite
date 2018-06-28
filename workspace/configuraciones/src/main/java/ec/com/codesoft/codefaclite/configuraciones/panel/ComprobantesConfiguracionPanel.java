@@ -7,8 +7,8 @@ package ec.com.codesoft.codefaclite.configuraciones.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
@@ -611,7 +611,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
     private javax.swing.JButton btnFirmaElectronica;
     private javax.swing.JComboBox<ImpuestoDetalle> cmbIvaDefault;
     private javax.swing.JComboBox<String> cmbModoFacturacion;
-    private javax.swing.JComboBox<TipoFacturacionEnumEstado> cmbTipoFacturacion;
+    private javax.swing.JComboBox<ComprobanteEntity.TipoEmisionEnum> cmbTipoFacturacion;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -792,11 +792,11 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         this.txtFondoEscritorio = txtFondoEscritorio;
     }
 
-    public JComboBox<TipoFacturacionEnumEstado> getCmbTipoFacturacion() {
+    public JComboBox<ComprobanteEntity.TipoEmisionEnum> getCmbTipoFacturacion() {
         return cmbTipoFacturacion;
     }
 
-    public void setCmbTipoFacturacion(JComboBox<TipoFacturacionEnumEstado> cmbTipoFacturacion) {
+    public void setCmbTipoFacturacion(JComboBox<ComprobanteEntity.TipoEmisionEnum> cmbTipoFacturacion) {
         this.cmbTipoFacturacion = cmbTipoFacturacion;
     }
 

@@ -31,10 +31,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
@@ -502,7 +502,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
         boolean validado=true;
         
                //Validacion cuando solo sea facturacion manual
-        if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(TipoFacturacionEnumEstado.NORMAL.getLetra()))
+        if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL.getLetra()))
         {
             DialogoCodefac.mensaje("Advertencia","Pantalla solo dispinible para facturación electronica",DialogoCodefac.MENSAJE_ADVERTENCIA);
             return false;

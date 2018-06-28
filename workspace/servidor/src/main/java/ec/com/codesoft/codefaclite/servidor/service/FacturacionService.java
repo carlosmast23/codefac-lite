@@ -14,7 +14,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoFacturacionEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaFacade;
@@ -62,16 +61,16 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         try {
             ParametroCodefac parametro =null;
             //Cuando la factura es electronica
-            if(parametroService.getParametroByNombre(ParametroCodefac.TIPO_FACTURACION).valor.equals(TipoFacturacionEnumEstado.ELECTRONICA.getLetra()))
+            if(parametroService.getParametroByNombre(ParametroCodefac.TIPO_FACTURACION).valor.equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra()))
             {
-                factura.setTipoFacturacion(TipoFacturacionEnumEstado.ELECTRONICA.getLetra());
+                factura.setTipoFacturacion(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra());
                 parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA);
             }
             else
             {
                 //Estableciendo estado de facturacion manual
                 factura.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());                
-                factura.setTipoFacturacion(TipoFacturacionEnumEstado.NORMAL.getLetra());
+                factura.setTipoFacturacion(ComprobanteEntity.TipoEmisionEnum.NORMAL.getLetra());
                 if(factura.getCodigoDocumento().equals(DocumentoEnum.FACTURA.getCodigo()))
                 {
                     parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA_FISICA);
@@ -231,7 +230,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         try {
             Integer secuencialSiguiente=0;
             //Obtener secuencial cuando es modo electronico
-            if(parametroService.getParametroByNombre(ParametroCodefac.TIPO_FACTURACION).valor.equals(TipoFacturacionEnumEstado.ELECTRONICA.getLetra()))
+            if(parametroService.getParametroByNombre(ParametroCodefac.TIPO_FACTURACION).valor.equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra()))
             {
                 secuencialSiguiente = Integer.parseInt(parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA).valor);
             }
