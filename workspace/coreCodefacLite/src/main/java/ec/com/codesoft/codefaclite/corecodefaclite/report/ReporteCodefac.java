@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.corecodefaclite.report;
 
+import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazComunicacionPanel;
 import java.io.InputStream;
 import java.util.Collection;
@@ -89,7 +90,7 @@ public class ReporteCodefac {
     
     public static Map<String,Object> agregarMapPlantilla(Map<String,Object> parametros,String tituloReporte,InterfazComunicacionPanel panelPadre)
     {
-            Map<String,Object> mapCompleto=new HashMap<String,Object>(panelPadre.mapReportePlantilla());            
+            Map<String,Object> mapCompleto=new HashMap<String,Object>(panelPadre.mapReportePlantilla(OrientacionReporteEnum.VERTICAL));            
             //Agregado parametros adicionales
             for (Map.Entry<String, Object> entry : parametros.entrySet()) {
                 String key = entry.getKey();
@@ -104,8 +105,17 @@ public class ReporteCodefac {
     
     public static void generarReporteInternalFramePlantilla(InputStream pathReporte,Map<String,Object> parametros,Collection datos,InterfazComunicacionPanel panelPadre,String tituloReporte)
     {
+        generarReporte(pathReporte,parametros,datos,panelPadre,tituloReporte,OrientacionReporteEnum.VERTICAL);
+    }
+    
+    public static void generarReporteInternalFramePlantilla(InputStream pathReporte, Map<String, Object> parametros, Collection datos, InterfazComunicacionPanel panelPadre, String tituloReporte, OrientacionReporteEnum orientacionEnum) {
+        generarReporte(pathReporte,parametros,datos,panelPadre,tituloReporte,orientacionEnum);
+    }
+        
+    private static void generarReporte(InputStream pathReporte,Map<String,Object> parametros,Collection datos,InterfazComunicacionPanel panelPadre,String tituloReporte,OrientacionReporteEnum orientacionEnum)
+    {
         try {
-            Map<String,Object> mapCompleto=new HashMap<String,Object>(panelPadre.mapReportePlantilla());
+            Map<String,Object> mapCompleto=new HashMap<String,Object>(panelPadre.mapReportePlantilla(orientacionEnum));
             
             //Agregado parametros adicionales
             for (Map.Entry<String, Object> entry : parametros.entrySet()) {
@@ -124,5 +134,5 @@ public class ReporteCodefac {
         } catch (JRException ex) {
             Logger.getLogger(ReporteCodefac.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+    } 
 }

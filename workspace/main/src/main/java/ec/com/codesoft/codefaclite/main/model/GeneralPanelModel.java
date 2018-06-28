@@ -22,6 +22,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.CampoBuscarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
@@ -2303,7 +2304,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     }*/
 
     @Override
-    public Map<String, Object> mapReportePlantilla() {
+    public Map<String, Object> mapReportePlantilla(OrientacionReporteEnum orientacionEnum) {
         InputStream inputStream = null;
 
         SimpleDateFormat formateador = new SimpleDateFormat("d MMM yyyy HH:mm:ss");
@@ -2354,13 +2355,28 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             //parametros.put("pl_img_logo_pie",UtilidadImagen.castInputStreamToImage(inputStream));
             parametros.put("pl_img_logo_pie",null);
             
+            String nombreReporteEncabezado="";
+            String nombreReportePiePagina="";
             
-            inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER, "encabezado.jrxml"));
+            switch(orientacionEnum)
+            {
+                case HORIZONTAL:
+                    nombreReporteEncabezado="encabezado_horizontal.jrxml";
+                    nombreReportePiePagina="pie_pagina_horizontal.jrxml";
+                    break;
+                    
+                case VERTICAL:
+                    nombreReporteEncabezado = "encabezado.jrxml";
+                    nombreReportePiePagina = "pie_pagina.jrxml";
+                    break;
+            }
+            
+            inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER,nombreReporteEncabezado));
             JasperReport reportCabecera = JasperCompileManager.compileReport(inputStream);
             
             parametros.put("pl_url_cabecera",reportCabecera);
             
-            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER, "pie_pagina.jrxml"));
+            inputStream=RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER,nombreReportePiePagina));
             JasperReport reportPiePagina = JasperCompileManager.compileReport(inputStream);
             
             parametros.put("pl_url_piepagina",reportPiePagina);
