@@ -76,12 +76,6 @@ public class Factura extends ComprobanteEntity implements Serializable {
     @Column(name = "TOTAL")
     private BigDecimal total;
   
-    @Column(name = "TIPO_FACTURACION")
-    private String tipoFacturacion;
-    
-    @Column(name = "CODIGO_DOCUMENTO")
-    private String codigoDocumento;
-    
     @Column(name = "ESTADO_NOTA_CREDITO")
     private String estadoNotaCredito;
     
@@ -210,22 +204,6 @@ public class Factura extends ComprobanteEntity implements Serializable {
         this.formaPagos = formaPagos;
     }
 
-    public String getTipoFacturacion() {
-        return tipoFacturacion;
-    }
-
-    public void setTipoFacturacion(String tipoFacturacion) {
-        this.tipoFacturacion = tipoFacturacion;
-    }
-
-    public String getCodigoDocumento() {
-        return codigoDocumento;
-    }
-
-    public void setCodigoDocumento(String codigoDocumento) {
-        this.codigoDocumento = codigoDocumento;
-    }
-
     public List<FacturaAdicional> getDatosAdicionales() {
         return datosAdicionales;
     }
@@ -242,19 +220,10 @@ public class Factura extends ComprobanteEntity implements Serializable {
         this.estadoNotaCredito = estadoNotaCredito;
     }
         
-    public TipoEmisionEnum getTipoFacturacionEnum() {
-        return TipoEmisionEnum.getEnumByEstado(tipoFacturacion);
-    }
-    
     
     /**
      * Informacion adicional
      */
-    
-    public ComprobanteEntity.ComprobanteEnumEstado getEstadoEnum()
-    {
-        return ComprobanteEntity.ComprobanteEnumEstado.getEnum(estado);
-    }
     
     public EstadoNotaCreditoEnum getEstadoNotaCreditoEnum()
     {

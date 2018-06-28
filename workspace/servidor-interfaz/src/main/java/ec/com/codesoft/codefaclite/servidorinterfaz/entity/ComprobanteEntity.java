@@ -57,6 +57,15 @@ public class ComprobanteEntity implements Serializable{
     @Column(name = "ESTADO")
     protected String estado;
     
+    //Para saber el tipo de emision si fue electronica o manual
+    @Column(name = "TIPO_FACTURACION")
+    private String tipoFacturacion;
+    
+    //Para grabar el codigo de los documentos que me va a sservir posiblemente en los ats
+    @Column(name = "CODIGO_DOCUMENTO")
+    private String codigoDocumento;
+    
+    
 
     public ComprobanteEntity() {
     }
@@ -165,6 +174,23 @@ public class ComprobanteEntity implements Serializable{
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
+    public String getTipoFacturacion() {
+        return tipoFacturacion;
+    }
+
+    public void setTipoFacturacion(String tipoFacturacion) {
+        this.tipoFacturacion = tipoFacturacion;
+    }
+
+    public String getCodigoDocumento() {
+        return codigoDocumento;
+    }
+
+    public void setCodigoDocumento(String codigoDocumento) {
+        this.codigoDocumento = codigoDocumento;
+    }
+    
     
     
     
@@ -178,6 +204,13 @@ public class ComprobanteEntity implements Serializable{
     }
     
     
+    public TipoEmisionEnum getTipoFacturacionEnum() {
+        return TipoEmisionEnum.getEnumByEstado(tipoFacturacion);
+    }
+    
+    public ComprobanteEntity.ComprobanteEnumEstado getEstadoEnum() {
+        return ComprobanteEntity.ComprobanteEnumEstado.getEnum(estado);
+    }
     
     public enum ComprobanteEnumEstado {
         /**

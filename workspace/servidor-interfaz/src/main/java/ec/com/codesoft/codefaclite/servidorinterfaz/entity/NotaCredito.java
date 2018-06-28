@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -313,6 +314,33 @@ public class NotaCredito extends ComprobanteEntity implements Serializable {
     public void setDatosAdicionales(List<NotaCreditoAdicional> datosAdicionales) {
         this.datosAdicionales = datosAdicionales;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 97 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final NotaCredito other = (NotaCredito) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
        
     /**
      * Metodos personalizados
@@ -382,10 +410,6 @@ public class NotaCredito extends ComprobanteEntity implements Serializable {
     
     }
     
-    public String getPreimpreso()
-    {
-       return UtilidadesTextos.llenarCarateresIzquierda(puntoEmision,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(puntoEstablecimiento,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(secuencial+"",8,"0");
-    }
 
     
 }

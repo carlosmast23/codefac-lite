@@ -40,8 +40,6 @@ public interface ComprobanteServiceIf extends Remote {
     public byte[] getReporteComprobante(String claveAcceso) throws RemoteException;
 
     public void procesarComprobante(ComprobanteDataInterface comprobanteData,ComprobanteEntity comprobante, Usuario usuario,ClienteInterfaceComprobante callbackClientObject) throws RemoteException;
-    
-    public void procesarComprobanteNotaCredito(ComprobanteDataInterface comprobanteData,NotaCredito notaCredito,Usuario usuario,ClienteInterfaceComprobante callbackClientObject) throws RemoteException;
 
     public void registerForCallback(ClienteInterfaceComprobante callbackClientObject) throws java.rmi.RemoteException;
 

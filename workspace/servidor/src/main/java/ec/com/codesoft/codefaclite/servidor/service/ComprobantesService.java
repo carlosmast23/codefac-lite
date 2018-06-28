@@ -357,78 +357,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         return null;
     }
     
-    
-    /**
-     *
-     * @param comprobante el comprobante a procesar facturas, notas de credito
-     * con los datos finales implementados
-     */
-    public void procesarComprobanteNotaCredito(ComprobanteDataInterface comprobanteData,NotaCredito notaCredito,Usuario usuario,ClienteInterfaceComprobante callbackClientObject) throws RemoteException {
-        /**
-         * Metodo del modulo de facturacion electronica que contiene la interfaz
-         * para facturar electronicamente
-         */
-        ComprobanteElectronicoService comprobanteElectronico= cargarConfiguracionesInicialesComprobantes(comprobanteData, usuario);
-        
-        //Agregar el listener
-        comprobanteElectronico.addActionListerComprobanteElectronico(new ListenerComprobanteElectronico() {
-            @Override
-            public void termino() {
-                try {
-                    //Si la factura termina corectamente grabo el estado y numero de autorizacion
-                    NotaCreditoService notaCreditoService=new NotaCreditoService();
-                   
-                    notaCredito.setClaveAcceso(comprobanteElectronico.getClaveAcceso());
-                    notaCredito.setEstado(NotaCreditoEnumEstado.TERMINADO.getEstado());
-                    entityManager.merge(notaCredito);
-                    //facturacionService.editar(factura);
-                    //cargarDatosRecursos(comprobanteElectronico);
-                    //mapReportePlantilla(usuario);
-                    byte[] serializedPrint= getReporteComprobante(comprobanteElectronico.getClaveAcceso());                   
-                    callbackClientObject.termino(serializedPrint);
-                    
-                    //doCallbacks();
-                } catch (RemoteException ex) {
-                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-            @Override
-            public void iniciado(ComprobanteElectronico comprobante) {
-                try {
-                    callbackClientObject.iniciado();
-                } catch (RemoteException ex) {
-                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-            @Override
-            public void procesando(int etapa, ClaveAcceso clave) {
-                try {
-                    callbackClientObject.procesando(etapa, clave);
-                } catch (RemoteException ex) {
-                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                
-            }
-
-            @Override
-            public void error(ComprobanteElectronicoException cee) {
-                try {
-                    callbackClientObject.error(cee,comprobanteElectronico.getClaveAcceso());
-                } catch (RemoteException ex) {
-                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-        
-        //Proceso el comprobante
-        comprobanteElectronico.procesar(false);
-
-    }
-    
+      
     private Integer obtenerSecuencialLote() throws RemoteException
     {
         //Obtener el numero de secuencial siguiente

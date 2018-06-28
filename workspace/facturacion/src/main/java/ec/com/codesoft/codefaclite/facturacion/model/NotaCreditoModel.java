@@ -116,7 +116,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
             NotaCredito notaCreditoGrabada;
             NotaCreditoServiceIf servicio=ServiceFactory.getFactory().getNotaCreditoServiceIf();
             setearValoresNotaCredito();
-            servicio.grabar(notaCredito);
+            notaCredito=servicio.grabar(notaCredito);
             notaCreditoGrabada=notaCredito;//graba una referencia con ambiento del metodo para los listener
             
             ComprobanteDataNotaCredito comprobanteData=new ComprobanteDataNotaCredito(notaCredito);
@@ -125,7 +125,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
              
             ClienteInterfaceComprobante cic=new ClienteNotaCreditoImplComprobante(this, notaCreditoGrabada);
             ComprobanteServiceIf comprobanteServiceIf=ServiceFactory.getFactory().getComprobanteServiceIf();
-            comprobanteServiceIf.procesarComprobanteNotaCredito(comprobanteData,notaCredito,session.getUsuario(),cic);        
+            comprobanteServiceIf.procesarComprobante(comprobanteData,notaCredito,session.getUsuario(),cic);        
             
 
         } catch (ServicioCodefacException ex) {
