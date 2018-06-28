@@ -53,6 +53,7 @@ import java.math.BigInteger;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -86,41 +87,10 @@ public class PresupuestoModel extends PresupuestoPanel{
     private ProductoProveedor productoProveedor;
     private Map<Persona,List<PresupuestoDetalle>> mapClientes;
     private Map<Integer,List<PresupuestoDetalle>> mapOrden;
-    //private List<ProveedorReferencia> proveedorReferencias;
-    
-    public class ProveedorReferencia
-    {
-        public Persona persona;
-        public int ordenCompra;
-
-        public ProveedorReferencia(Persona persona, int ordenCompra) {
-            this.persona = persona;
-            this.ordenCompra = ordenCompra;
-        }
-    
-        public Persona getPersona() {
-            return persona;
-        }
-
-        public void setPersona(Persona persona) {
-            this.persona = persona;
-        }
-
-        public int getOrdenCompra() {
-            return ordenCompra;
-        }
-
-        public void setOrdenCompra(int OrdenCompra) {
-            this.ordenCompra = OrdenCompra;
-        }        
-    }
-            
-            
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         presupuesto = new Presupuesto();
-        //proveedorReferencias = new ArrayList<>();
         getTxtCodigo().setText("");
         cargarCombos();
         addListenerBotones();
@@ -471,7 +441,6 @@ public class PresupuestoModel extends PresupuestoPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 agregarDetallesPresupuesto(null,false);
-                limpiarDetalles();
                 calcularTotales();
             }
         });
@@ -574,26 +543,26 @@ public class PresupuestoModel extends PresupuestoPanel{
         getTableDetallesPresupuesto().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                int fila = getTableDetallesPresupuesto().getSelectedRow();
-                int columna = getTableDetallesPresupuesto().getSelectedColumn();
-                getBtnAgregarDetalle().setEnabled(false);
-                try{
-                    PresupuestoDetalle presupuestoDetalle =  (PresupuestoDetalle) getTableDetallesPresupuesto().getValueAt(fila, 0);
-                    if(presupuestoDetalle != null){
-                        cargarInformacionDetallePresupuesto( presupuestoDetalle);
-                        if(columna == 7)
-                        {
-                            if(!mapClientes.isEmpty())
-                            {
-                                cambiarOrden();
-                            }
-                        }
-                    }
-                }
-                catch(Exception e)
-                {
-                    e.printStackTrace();
-                }                
+//                int fila = getTableDetallesPresupuesto().getSelectedRow();
+//                int columna = getTableDetallesPresupuesto().getSelectedColumn();
+//                getBtnAgregarDetalle().setEnabled(false);
+//                try{
+//                    PresupuestoDetalle presupuestoDetalle =  (PresupuestoDetalle) getTableDetallesPresupuesto().getValueAt(fila, 0);
+//                    if(presupuestoDetalle != null){
+//                        cargarInformacionDetallePresupuesto( presupuestoDetalle);
+//                        if(columna == 7)
+//                        {
+//                            if(!mapClientes.isEmpty())
+//                            {
+//                                cambiarOrden();
+//                            }
+//                        }
+//                    }
+//                }
+//                catch(Exception e)
+//                {
+//                    e.printStackTrace();
+//                }                
             }
         });
         
@@ -631,28 +600,7 @@ public class PresupuestoModel extends PresupuestoPanel{
             public void keyReleased(KeyEvent e) {}
         });
     }
-        
-    
-    public void addListenerOpcionesPopupMenu()
-    {
-        
-    }
-    
-    public void cambiarOrden()
-    {
-        Integer[] ordenes = new Integer[mapClientes.size()];
-        for(int i=0; i< mapClientes.size(); i++)
-        {
-            ordenes[i]=i+1;
-        }
-        
-        //JComboBox jcb = new JComboBox((ComboBoxModel) ordenes);
-        //jcb.setEditable(true);
-        int opcion = (int) JOptionPane.showInputDialog(null,"Seleccione el número de orden:", "Elegir" ,JOptionPane.QUESTION_MESSAGE,null,ordenes, ordenes[0]);
-        System.out.println("---->Opcion: " + opcion);
-    
-    }
-    
+          
     public void cargarDetallesOrdenTrabajo(OrdenTrabajo ordenTrabajo)
     {
         getTxtOrdenTrabajo().setText(ordenTrabajo.getId() + " - "+ordenTrabajo.getDescripcion());
@@ -676,6 +624,7 @@ public class PresupuestoModel extends PresupuestoPanel{
     public void agregarDetallesPresupuesto(PresupuestoDetalle presupuestoDetalle,boolean estado)
     {
         Boolean agregar = false;
+        Boolean perPro = true;
         if(presupuestoDetalle == null)
         {
             presupuestoDetalle = new PresupuestoDetalle();
@@ -685,55 +634,61 @@ public class PresupuestoModel extends PresupuestoPanel{
         try{
             if(this.persona == null){
                 DialogoCodefac.mensaje("Advertencia", "Debe seleccionar un proveedor", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                throw new ExcepcionCodefacLite("Necesita seleccionar un Cliente");
+                perPro = false;
             }
          
             if(this.producto == null)
             {
                 DialogoCodefac.mensaje("Advertencia", "Debe seleccionar un producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                throw new ExcepcionCodefacLite("Necesita seleccionar un producto");
+                perPro = false;
             }
                 
             if (!panelPadre.validarPorGrupo("detalles")) {
                 return;
             }
             
-            presupuestoDetalle.setProducto(this.producto);
-            presupuestoDetalle.setPersona(this.persona);
-            presupuestoDetalle.setProductoProveedor(this.productoProveedor);
-            
-            if(verificarCamposValidados())
-            {
-                BigDecimal precioCompra = new BigDecimal(getTxtPrecioCompra().getText());
-                presupuestoDetalle.setPrecioCompra(precioCompra.setScale(2,BigDecimal.ROUND_HALF_UP));
-                BigDecimal descuentoCompra = new BigDecimal(getTxtDescuentoPrecioCompra().getText());
-                presupuestoDetalle.setDescuentoCompra(descuentoCompra.setScale(2,BigDecimal.ROUND_HALF_UP));
-                BigDecimal precioVenta = new BigDecimal(getTxtPrecioVenta().getText());
-                presupuestoDetalle.setPrecioVenta(precioVenta.setScale(2,BigDecimal.ROUND_HALF_UP));
-                BigDecimal descuentoVenta = new BigDecimal(getTxtDescuentoPrecioVenta().getText());
-                presupuestoDetalle.setDescuentoVenta(descuentoVenta.setScale(2,BigDecimal.ROUND_HALF_UP));
-                presupuestoDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
-                if(estado){
-                    presupuestoDetalle.setEstado(EnumSiNo.SI.getLetra());
-                }else{
-                    presupuestoDetalle.setEstado(EnumSiNo.NO.getLetra());
+            if(perPro){
+                presupuestoDetalle.setProducto(this.producto);
+                presupuestoDetalle.setPersona(this.persona);
+                presupuestoDetalle.setProductoProveedor(this.productoProveedor);
+
+                if(verificarCamposValidados())
+                {
+                    BigDecimal precioCompra = new BigDecimal(getTxtPrecioCompra().getText());
+                    presupuestoDetalle.setPrecioCompra(precioCompra.setScale(2,BigDecimal.ROUND_HALF_UP));
+                    BigDecimal descuentoCompra = new BigDecimal(getTxtDescuentoPrecioCompra().getText());
+                    presupuestoDetalle.setDescuentoCompra(descuentoCompra.setScale(2,BigDecimal.ROUND_HALF_UP));
+                    BigDecimal precioVenta = new BigDecimal(getTxtPrecioVenta().getText());
+                    presupuestoDetalle.setPrecioVenta(precioVenta.setScale(2,BigDecimal.ROUND_HALF_UP));
+                    BigDecimal descuentoVenta = new BigDecimal(getTxtDescuentoPrecioVenta().getText());
+                    presupuestoDetalle.setDescuentoVenta(descuentoVenta.setScale(2,BigDecimal.ROUND_HALF_UP));
+                    presupuestoDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
+                    if(estado){
+                        presupuestoDetalle.setEstado(EnumSiNo.SI.getLetra());
+                    }else{
+                        presupuestoDetalle.setEstado(EnumSiNo.NO.getLetra());
+                    }
                 }
-            }
-            else{
-                throw new ExcepcionCodefacLite("Campos detalles no validos");
-            }
+                else{
+                    throw new ExcepcionCodefacLite("Campos detalles no validos");
+                }
+            }   
         }catch(ExcepcionCodefacLite e)
         {
              Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, e);
         }
 
-        if(agregar)
+        if(agregar && perPro)
         {
             buscarNumeroOrdenPresupuestoDetalle(presupuestoDetalle);
             this.presupuesto.addDetalle(presupuestoDetalle);            
             ordenarDetallesEnFuncionDeOrdenCompra();
             mostrarDatosTabla();
-        }        
+            limpiarDetalles();
+        }
+        if(perPro){
+            limpiarDetalles();
+        }
         
      }
     
@@ -752,6 +707,7 @@ public class PresupuestoModel extends PresupuestoPanel{
                 if(detalle.getPersona().equals(presupuestoDetalle.getPersona()))
                 {
                     presupuestoDetalle.setNumeroOrdenCompra(detalle.getNumeroOrdenCompra());//Si ya existe un detalle con el mismo proveedor solo seteo el mismo valor por defecto al nuevo detalle
+                    return;
                 }
                 else
                 {
@@ -766,6 +722,60 @@ public class PresupuestoModel extends PresupuestoPanel{
         
         //Si no encuentra ningun proveedor anterior que coincida creo una nueva orden con un numero nuevo
         presupuestoDetalle.setNumeroOrdenCompra(numeroOrdenMaximo+1); //seteo el maximo numero de orden +1 
+    }
+    
+    private int obtenerNumeroOrdenPresupuesto()
+    {
+        int numeroOrden=0;
+        for(PresupuestoDetalle presupuestoDetalle: presupuesto.getPresupuestoDetalles())
+        {
+            if(presupuestoDetalle.getNumeroOrdenCompra()>numeroOrden)
+            {
+                numeroOrden = presupuestoDetalle.getNumeroOrdenCompra();
+            }
+        }
+        
+        return numeroOrden;
+    }
+    
+    /**
+     * Todo: Cambiar esta funcionalidad cuando aprenda lamba, hasta el lunes
+     */
+    private int obtenerNumeroOrdenCompraPorProveedor(PresupuestoDetalle presupuestoDetalleTemp)
+    {
+        int numeroOrdenes = 0;        
+        if(presupuestoDetalleTemp != null)
+        {
+            for(PresupuestoDetalle presupuestoDetalle: presupuesto.getPresupuestoDetalles())
+            {
+                if(presupuestoDetalleTemp.getNumeroOrdenCompra().equals(presupuestoDetalle.getNumeroOrdenCompra()))
+                {
+                    numeroOrdenes +=1; 
+                }
+            }                   
+        }
+            
+        return numeroOrdenes;
+    }
+    
+    
+    private List obtenerNumerosOrdenCompra(PresupuestoDetalle presupuestoDetalle)
+    {
+        List ordenesProveedor = new ArrayList<>();
+        
+        for(PresupuestoDetalle pd : presupuesto.getPresupuestoDetalles())
+        {
+            if(presupuestoDetalle.getPersona().equals(pd.getPersona()))
+            {
+                if(!ordenesProveedor.contains(pd.getNumeroOrdenCompra()))
+                {
+                    ordenesProveedor.add(pd.getNumeroOrdenCompra());
+                }
+            } 
+        }
+        Collections.sort(ordenesProveedor);
+        
+        return ordenesProveedor;
     }
     
     public void cargarInformacionDetallePresupuesto(PresupuestoDetalle presupuestoDetalle)
@@ -857,23 +867,6 @@ public class PresupuestoModel extends PresupuestoPanel{
                 DialogoCodefac.mensaje("Alerta", "Seleccione la fecha de ingreso para Orden Trabajo", DialogoCodefac.MENSAJE_ADVERTENCIA);
             }
             this.presupuesto.setFechaCreacion(UtilidadesFecha.getFechaHoy());
-            
-            /**
-            *  Agregar referencia por Orden   
-            */
-            
-//            int c=0;
-//            for(Map.Entry<Persona,List<PresupuestoDetalle>> datoMap : mapClientes.entrySet())
-//            {
-//                c+=1;
-//                List<PresupuestoDetalle> presupuestoDetalles = datoMap.getValue();
-//                for (PresupuestoDetalle presupuestoDetalle : presupuestoDetalles) {
-//                     /**
-//                     *  Agregar referencia por proveedor  
-//                     */   
-//                    presupuestoDetalle.setNumeroOrdenCompra(c);
-//                }
-//            }    
     }
     
     public void setearValoresPresupuesto(BigDecimal descuentoCompra, BigDecimal descuentoVenta, BigDecimal totalCompra, BigDecimal totalVenta)
@@ -905,11 +898,8 @@ public class PresupuestoModel extends PresupuestoPanel{
             }
             else
             {
-                List<PresupuestoDetalle> detalles=mapClientes.get(pd.getPersona());//Si ya xiste el valor solo consulta la lista para agregar
-                detalles.add(pd);//No necesito actualizar el map porque tiene la referencia de la lista y con modificar la lsita se modifica el map
-                //mapClientes.put(pd.getPersona(), value)
+                mapClientes.get(pd.getPersona()).add(pd);
             }
-            //mapClientes.get(pd.getPersona()).add(pd);
         }
     }
     
@@ -922,7 +912,7 @@ public class PresupuestoModel extends PresupuestoPanel{
         for (PresupuestoDetalle pd : presupuesto.getPresupuestoDetalles()) 
         {
             //Si no existe el numero de orden creo
-            if(mapOrden.get(pd.getNumeroOrdenCompra())==null)
+            if(mapOrden.get(pd.getNumeroOrdenCompra()) == null)
             {
                 List<PresupuestoDetalle> detalles=new ArrayList<PresupuestoDetalle>();
                 detalles.add(pd);
@@ -935,38 +925,6 @@ public class PresupuestoModel extends PresupuestoPanel{
             }
             
         }
-        /*
-        for (Map.Entry<Persona, List<PresupuestoDetalle>> entry : mapClientes.entrySet()) 
-        {
-            Persona proveedor=entry.getKey();
-            List<PresupuestoDetalle> detalles =entry.getValue();
-            
-            
-            
-
-            //Número de Orden a emplear por cada proveedor, cada proveedor puede tener varias detalles de ordenes de compra
-            List<PresupuestoDetalle> value = entry.getValue();
-            PresupuestoDetalle presupuestoDetalleTemp = value.get(0);
-            for(ProveedorReferencia proveedorReferencia : this.proveedorReferencias)
-            {
-                if(presupuestoDetalleTemp.getProductoProveedor().equals(proveedorReferencia.persona))
-                {
-                    c = proveedorReferencia.getOrdenCompra();
-                }
-            }
-            if(mapOrden.get(c) == null)
-            {
-                mapOrden.put(c,new ArrayList<PresupuestoDetalle>());
-            }
-            for (PresupuestoDetalle presupuestoDetalle : value) 
-            {
-                if(presupuestoDetalle.getNumeroOrdenCompra() != null ){
-                    mapOrden.get(c).add(presupuestoDetalle);
-                }else{
-                    presupuestoDetalle.setNumeroOrdenCompra(c);
-                }
-            }
-        }*/
     }
     
     public void mostrarDatosTabla()
@@ -974,13 +932,12 @@ public class PresupuestoModel extends PresupuestoPanel{
         int c=0;
         Vector<Object> fila;
         DefaultTableModel modeloTablaDetallesPresupuesto = 
-        UtilidadesTablas.crearModeloTabla(new String[]{"obj","#","Proveedor","Producto","Valor compra","Valor venta","Cantidad","--"}, new Class[]{PresupuestoDetalle.class,String.class,String.class,String.class,String.class,String.class,String.class,Boolean.class});
-        for(Map.Entry<Persona,List<PresupuestoDetalle>> datoMap : mapClientes.entrySet())
+        UtilidadesTablas.crearModeloTabla(new String[]{"obj","#","Proveedor","Producto","Valor compra","Valor venta","Cantidad"}, new Class[]{PresupuestoDetalle.class,String.class,String.class,String.class,String.class,String.class,String.class});
+        for(Map.Entry<Integer,List<PresupuestoDetalle>> datoMap : mapOrden.entrySet())
         {
             boolean b = true; 
-            c+=1;
-            String titulo = "Orden " + c + " :";
             List<PresupuestoDetalle> detallesPorProveedor = datoMap.getValue();
+            String titulo = "Orden " + detallesPorProveedor.get(0).getNumeroOrdenCompra() + " :";
             for (PresupuestoDetalle detalle : detallesPorProveedor) {
                 if(b){
                     fila=new Vector<>();
@@ -1001,29 +958,29 @@ public class PresupuestoModel extends PresupuestoPanel{
                     modeloTablaDetallesPresupuesto.addRow(fila);
             }
         }
+        
         getTableDetallesPresupuesto().setModel(modeloTablaDetallesPresupuesto);
         /**
          * Agregar PopupMenu en Tabla
          */        
         
         List<JMenuItem> jMenuItems = new ArrayList<>(); 
-        JMenuItem nuevo = new JMenuItem("Opcion 1");
-        JMenuItem opcion2 = new JMenuItem("Opcion 2");
+        JMenuItem nuevo = new JMenuItem("Cambiar orden compra");
+        JMenuItem ordenCompra = new JMenuItem("Desea generar las Ordenes de Compra?");
         jMenuItems.add(nuevo);
-        jMenuItems.add(opcion2);
+        jMenuItems.add(ordenCompra);
         
         nuevo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                opcionMenu1();
+                opcionMenuCambiarOrdenCompra();
             }
         });
         
-        opcion2.addActionListener(new ActionListener() {
-
+        ordenCompra.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                opcionMenu2();
+                opcionMenuGenerarOrdenCompra();
             }
         });
         
@@ -1031,32 +988,6 @@ public class PresupuestoModel extends PresupuestoPanel{
         UtilidadesTablas.ocultarColumna(getTableDetallesPresupuesto(), 0);
         
     }
-    
-    public void optenerEventosPorOpciondeMenu(List<JMenuItem> items)
-    {
-        ActionListener[] oml = items.get(0).getActionListeners();
-        for (ActionListener actionListener : oml) {
-            System.out.println("-------> " + actionListener);
-        }
-        
-    }
-    
-    public void opcionesMenuPopup(String op)
-    {
-        switch(op)
-        {
-            case "Nuevo":
-                JOptionPane.showConfirmDialog(rootPane, "Nuevo");
-            break;    
-            case "Eliminar":
-                JOptionPane.showConfirmDialog(rootPane, "Eliminar");
-            break;
-            case "Editar":
-                JOptionPane.showConfirmDialog(rootPane, "Editar");
-            break;
-        }
-    }
-    
     
     private boolean verificarCamposValidados() {
         boolean b = true;
@@ -1087,25 +1018,60 @@ public class PresupuestoModel extends PresupuestoPanel{
     /**
      * Opciones de PopupMenu
      */
-    public void opcionMenu1()
+    public void opcionMenuCambiarOrdenCompra()
     {
-        int n = this.mapOrden.size(); 
-        int fila = getTableDetallesPresupuesto().getSelectedRow();
-        PresupuestoDetalle presupuestoDetalle = (PresupuestoDetalle) getTableDetallesPresupuesto().getValueAt(fila, 0);
-        if(presupuestoDetalle != null)
-        {
-            presupuestoDetalle.setNumeroOrdenCompra(n);
-            mapOrden.put(n,new ArrayList<PresupuestoDetalle>());
-            mapOrden.get(n).add(presupuestoDetalle);            
+        boolean respuesta =  DialogoCodefac.dialogoPregunta("Advertencia", "Desea colocar el detalle en una nueva orden de compra?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+        /**
+         * Permite saber si elegi la orden de compra
+        */
+        int n = -1;
+        if(respuesta){
+            /**
+             * Permite obtener el numero de orden de compra actual
+             */
+            int numeroOrden = obtenerNumeroOrdenPresupuesto() + 1;
+            int fila = getTableDetallesPresupuesto().getSelectedRow();
+            PresupuestoDetalle presupuestoDetalle = (PresupuestoDetalle) getTableDetallesPresupuesto().getValueAt(fila, 0);
+            if(presupuestoDetalle != null)
+            {
+                if(obtenerNumeroOrdenCompraPorProveedor(presupuestoDetalle)>0){
+                    /**
+                     * Me permite obtener el numero de ordenes de compra existentes por el Proveedor seleccionado
+                     */
+                    List ordenes = obtenerNumerosOrdenCompra(presupuestoDetalle);
+                    
+                    String menu = "Ordenes: \n";
+                    for(Object orden : ordenes)
+                    {
+                        menu += "\t- Orden " + orden.toString()+ "\n";
+                    }
+                    menu += "\t- Nueva Orden: "+numeroOrden;
+                    n = Integer.parseInt(JOptionPane.showInputDialog(rootPane, menu));
+                    
+                        if(n != -1)
+                        {
+                            presupuestoDetalle.setNumeroOrdenCompra(n);
+                        }
+                    
+                }
+            }
+            /**
+             * Orden los detalles del map en funcion del numero de la orden de compra
+             */
+            ordenarDetallesEnFuncionDeOrdenCompra();
+            mostrarDatosTabla();
         }
-        ordenarDetallesEnFuncionDeOrdenCompra();
-        mostrarDatosTabla();
         
     }
    
-    public void opcionMenu2()
+    public void opcionMenuGenerarOrdenCompra()
     {
-        
+        for (Map.Entry<Integer, List<PresupuestoDetalle>> entry : this.mapOrden.entrySet()) {
+            Integer key = entry.getKey();
+            List<PresupuestoDetalle> value = entry.getValue();
+            
+        }
+       
     }
     
     /**
@@ -1156,7 +1122,12 @@ public class PresupuestoModel extends PresupuestoPanel{
                 boolean b = (boolean) getTableDetallesPresupuesto().getValueAt(fila,7);
                 agregarDetallesPresupuesto(presupuestoDetalle,b);
                 limpiarDetalles();
+                mostrarDatosTabla();
                 calcularTotales();                   
+                getBtnAgregarDetalle().setEnabled(true);
+                
+            }else{
+                limpiarDetalles();
                 getBtnAgregarDetalle().setEnabled(true);
             }
         }catch(Exception exc)
