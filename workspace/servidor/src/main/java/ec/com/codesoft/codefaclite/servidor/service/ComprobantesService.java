@@ -48,6 +48,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NotaCreditoEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
@@ -1258,6 +1259,69 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         } else {
             System.out.println("El cliente no estaba registrado");
         }
-    }    
+    }
+
+    public void setearSecuencialComprobanteSinTransaccion(ComprobanteEntity comprobante) throws RemoteException
+    {
+        ParametroCodefacService parametroService=new ParametroCodefacService();
+        ParametroCodefac parametro = null;
+        //Cuando la factura es electronica
+        if (parametroService.getParametroByNombre(ParametroCodefac.TIPO_FACTURACION).valor.equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra())) {
+            comprobante.setTipoFacturacion(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra());
+            parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA);
+            
+            //Obtiene los secuenciales eletronicos
+            switch(comprobante.getCodigoDocumentoEnum())
+            {
+                case FACTURA:
+                    parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA);
+                    break;
+                
+                case RETENCIONES:
+                    parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_RETENCION);
+                    break;
+                    
+                case NOTA_CREDITO:
+                    parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_NOTA_CREDITO);
+                    break;
+            }
+            
+            
+        } else {
+            //Estableciendo estado de facturacion manual
+            comprobante.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+            comprobante.setTipoFacturacion(ComprobanteEntity.TipoEmisionEnum.NORMAL.getLetra());
+            
+            //Busca los secuenciales disponibles para facturacion fisica
+            switch(comprobante.getCodigoDocumentoEnum())
+            {
+                case FACTURA:
+                    parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA_FISICA);
+                    break;
+                    
+                case NOTA_VENTA:
+                    parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_NOTA_VENTA_FISICA);
+                    break;
+                    
+                case RETENCIONES:
+                    parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_RETENCION_FISICA);
+                    break;
+
+                case NOTA_CREDITO:
+                    parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_NOTA_CREDITO_FISICA);
+                    break;
+            }
+
+        }
+        
+        /**
+         * Aumentar el codigo de la numeracion en los parametros
+         */
+        comprobante.setSecuencial(Integer.parseInt(parametro.valor));
+
+        parametro.valor = (Integer.parseInt(parametro.valor) + 1) + "";
+        //parametroService.editar(parametro);
+        entityManager.merge(parametro);
+    }
 
 }

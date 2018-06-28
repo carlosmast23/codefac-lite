@@ -59,27 +59,12 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         transaction.begin();
         
         try {
-            ParametroCodefac parametro =null;
-            //Cuando la factura es electronica
-            if(parametroService.getParametroByNombre(ParametroCodefac.TIPO_FACTURACION).valor.equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra()))
-            {
-                factura.setTipoFacturacion(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra());
-                parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA);
-            }
-            else
-            {
-                //Estableciendo estado de facturacion manual
-                factura.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());                
-                factura.setTipoFacturacion(ComprobanteEntity.TipoEmisionEnum.NORMAL.getLetra());
-                if(factura.getCodigoDocumento().equals(DocumentoEnum.FACTURA.getCodigo()))
-                {
-                    parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA_FISICA);
-                }
-                else
-                {
-                    parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_NOTA_VENTA_FISICA);
-                }
-            }
+            
+            factura.setCodigoDocumento(DocumentoEnum.FACTURA.getCodigo());
+            
+            ComprobantesService servicioComprobante = new ComprobantesService();
+            servicioComprobante.setearSecuencialComprobanteSinTransaccion(factura);            
+
             
             factura.setEstadoNotaCredito(Factura.EstadoNotaCreditoEnum.SIN_ANULAR.getEstado());            
             //facturaFacade.create(factura);
@@ -109,14 +94,6 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 }
                 
             }
-            /**
-             * Aumentar el codigo de la numeracion en los parametros
-             */            
-            factura.setSecuencial(Integer.parseInt(parametro.valor));
-            
-            parametro.valor = (Integer.parseInt(parametro.valor) + 1) + "";
-            //parametroService.editar(parametro);
-            entityManager.merge(parametro);
             
         transaction.commit();
         } catch (DatabaseException ex) {

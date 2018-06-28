@@ -27,10 +27,21 @@ public enum DocumentoEnum {
         ModuloCodefacEnum.COMPRA},true,false),
     
     /**
+     * Nota de credito para anular parcial o total facturas
+     */
+    NOTA_CREDITO("Nota de crédito","NVT",new ModuloCodefacEnum[]{},true,false),
+    
+    /**
+     * Retenciones cuando la entidad es encargada de retener el IVA o la RENTA
+     */
+    RETENCIONES("Retención","RET",new ModuloCodefacEnum[]{},true,false),
+    
+    /**
      * Documentos emitidos por maquinas registradoras
      */
     TIQUETES_MAQUINAS_REGISTRADORAS("Tiquet maq.reg","TMR",new ModuloCodefacEnum[]{
         ModuloCodefacEnum.COMPRA},true,false);
+    
     
     //Tiquetes emitidos por máquinas registradoras;
     

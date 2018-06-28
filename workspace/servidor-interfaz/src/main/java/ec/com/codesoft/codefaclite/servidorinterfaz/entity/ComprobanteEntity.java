@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.sql.Date;
@@ -203,6 +204,10 @@ public class ComprobanteEntity implements Serializable{
        return UtilidadesTextos.llenarCarateresIzquierda(puntoEmision,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(puntoEstablecimiento,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(secuencial+"",9,"0");
     }
     
+    public DocumentoEnum getCodigoDocumentoEnum() {
+        return DocumentoEnum.obtenerDocumentoPorCodigo(codigoDocumento);
+    }
+
     
     public TipoEmisionEnum getTipoFacturacionEnum() {
         return TipoEmisionEnum.getEnumByEstado(tipoFacturacion);

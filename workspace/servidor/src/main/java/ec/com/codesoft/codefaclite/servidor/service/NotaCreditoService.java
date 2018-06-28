@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
@@ -51,17 +52,15 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
         try {
             EntityTransaction transaccion=getTransaccion();
             transaccion.begin();
-           
-            notaCredito.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
-            entityManager.persist(notaCredito);
-            //notaCreditoFacade.create(notaCredito);
-            /**
-             * Aumentar el codigo de la numeracion en los parametros
-             */
-            ParametroCodefac parametro = parametroCodefacService.getParametroByNombre(ParametroCodefac.SECUENCIAL_NOTA_CREDITO);
-            parametro.valor = (Integer.parseInt(parametro.valor) + 1) + "";
-            entityManager.persist(parametro);
             
+            notaCredito.setCodigoDocumento(DocumentoEnum.NOTA_CREDITO.getCodigo());
+            
+            ComprobantesService servicioComprobante = new ComprobantesService();
+            servicioComprobante.setearSecuencialComprobanteSinTransaccion(notaCredito);    
+           
+            //notaCredito.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+            entityManager.persist(notaCredito);
+           
             /**
              * Actualizar la logica de cada modulo dependiendo del tipo de documento de cada detalle
              */
