@@ -145,7 +145,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
         return notaCreditoFacade.findAll();
     }
 
-    public List<NotaCredito> obtenerNotasReporte(Persona persona, Date fi, Date ff) {
-        return notaCreditoFacade.lista(persona, fi, ff);
+    public List<NotaCredito> obtenerNotasReporte(Persona persona, Date fi, Date ff,String estado) {
+        return notaCreditoFacade.lista(persona, fi, ff,estado);
     }
 }
