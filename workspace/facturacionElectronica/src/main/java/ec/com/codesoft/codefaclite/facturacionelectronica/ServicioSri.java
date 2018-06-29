@@ -60,7 +60,7 @@ public class ServicioSri {
     /**
      * Numeros de intento para esperar que el sri me devuelva la consulta de autorizacion de un documentos
      */
-    private static final Long INTENTOS_AUTORIZACION =10L; 
+    private static final Long INTENTOS_AUTORIZACION =50L; 
     
     //private String uri="https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl";
     private String uri_recepcion;

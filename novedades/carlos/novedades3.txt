@@ -81,3 +81,11 @@ Ver el caso que cuando se quiere eliminar directamente una factura , ver que no 
 Revisar que cuando un documento esta la carpeta de enviados no me permite volver a reenviar
 
 Ver si los reportes de consultas tiene que consultar y se queda en memoria y luego genero el reporte
+
+Areglar las formas de pago , esta validando mal cuando se requiere agregar nuevamente
+y ver la posibilidad si se puede editar
+
+Hacer que cuando cambie de tipo de documento se resetean los datos como el cliente
+o pensar como hacer para que la variable de cliente sea general porque siempre necesito
+
+El visualizador despues que se autoriza en lote desde utilidades no funciona para notas de credito

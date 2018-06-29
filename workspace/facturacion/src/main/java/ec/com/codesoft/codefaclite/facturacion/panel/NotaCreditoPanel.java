@@ -145,6 +145,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.03;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panelDatosGenerales.add(jDateFechaEmision, gridBagConstraints);
 

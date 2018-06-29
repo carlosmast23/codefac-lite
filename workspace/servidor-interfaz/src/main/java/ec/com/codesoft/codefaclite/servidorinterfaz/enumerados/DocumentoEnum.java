@@ -29,7 +29,7 @@ public enum DocumentoEnum {
     /**
      * Nota de credito para anular parcial o total facturas
      */
-    NOTA_CREDITO("Nota de crédito","NVT",new ModuloCodefacEnum[]{},true,false),
+    NOTA_CREDITO("Nota de crédito","NCR",new ModuloCodefacEnum[]{},true,false),
     
     /**
      * Retenciones cuando la entidad es encargada de retener el IVA o la RENTA

@@ -1268,10 +1268,11 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         //Cuando la factura es electronica
         if (parametroService.getParametroByNombre(ParametroCodefac.TIPO_FACTURACION).valor.equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra())) {
             comprobante.setTipoFacturacion(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra());
-            parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA);
+            //parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA);
             
             //Obtiene los secuenciales eletronicos
-            switch(comprobante.getCodigoDocumentoEnum())
+            DocumentoEnum documentoEnum=comprobante.getCodigoDocumentoEnum();
+            switch(documentoEnum)
             {
                 case FACTURA:
                     parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA);
@@ -1293,7 +1294,8 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             comprobante.setTipoFacturacion(ComprobanteEntity.TipoEmisionEnum.NORMAL.getLetra());
             
             //Busca los secuenciales disponibles para facturacion fisica
-            switch(comprobante.getCodigoDocumentoEnum())
+            DocumentoEnum documentoEnum=comprobante.getCodigoDocumentoEnum();
+            switch(documentoEnum)
             {
                 case FACTURA:
                     parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA_FISICA);
