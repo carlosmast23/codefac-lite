@@ -20,6 +20,6 @@ public interface ListenerComprobanteElectronicoLote {
     public abstract void clavesGeneradas(List<ClaveAcceso> listaClaves); 
     public abstract void datosAutorizados(List<Autorizacion> autorizaciones);
     public abstract void procesando(int etapa);
-    public abstract void error();
+    public abstract void error(ComprobanteElectronicoException cee);
     public abstract void termino(List<Autorizacion> autorizaciones);
 }

@@ -436,7 +436,7 @@ public class ComprobanteElectronicoService implements Runnable {
 
             if(escuchaLote!=null)escuchaLote.termino(servicioSri.getAutorizacion());
         } catch (ComprobanteElectronicoException cee) {
-            if(escuchaLote!=null)escuchaLote.error();
+            if(escuchaLote!=null)escuchaLote.error(cee);
         }
     
      }

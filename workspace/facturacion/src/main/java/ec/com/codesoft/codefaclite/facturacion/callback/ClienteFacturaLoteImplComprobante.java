@@ -101,19 +101,20 @@ public class ClienteFacturaLoteImplComprobante extends UnicastRemoteObject imple
     }
 
     @Override
-    public void error() {
-        monitorData.getBarraProgreso().setForeground(Color.GREEN);
-        monitorData.getBtnAbrir().setEnabled(true);
+    public void error(ComprobanteElectronicoException cee) {
+        monitorData.getBarraProgreso().setForeground(Color.ORANGE);
+        monitorData.getBarraProgreso().setValue(100);
+        monitorData.getBtnAbrir().setEnabled(false);
         monitorData.getBtnCerrar().setEnabled(true);
+        monitorData.getBtnReporte().setEnabled(true);
         //Ejecutar listener para informar a la pantalla prinicipal que termino el proceso
         if(listener!=null)
             listener.terminoProceso();
         
-        monitorData.getBtnAbrir().addActionListener(new ActionListener() {
+        monitorData.getBtnReporte().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                //facturacionModel.panelPadre.crearReportePantalla(jasperPrint, facturaProcesando.getPreimpreso());
+                JOptionPane.showMessageDialog(null, "Etapa: " + cee.getEtapa() + "\n" + cee.getMessage());
             }
         });
 

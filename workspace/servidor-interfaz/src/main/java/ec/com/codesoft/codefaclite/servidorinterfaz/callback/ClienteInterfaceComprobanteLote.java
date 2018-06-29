@@ -26,6 +26,6 @@ public interface ClienteInterfaceComprobanteLote extends Remote{
     
     public void procesando(int etapa) throws RemoteException;
     
-    public void error() throws RemoteException;
+    public void error(ComprobanteElectronicoException cee) throws RemoteException;
     
 }

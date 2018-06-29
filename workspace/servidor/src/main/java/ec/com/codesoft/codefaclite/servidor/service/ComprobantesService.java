@@ -191,9 +191,9 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             }
 
             @Override
-            public void error() {
+            public void error(ComprobanteElectronicoException cee) {
                 try {
-                    callbackClientObject.error();
+                    callbackClientObject.error(cee);
                 } catch (RemoteException ex) {
                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -405,9 +405,9 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
             }
 
             @Override
-            public void error() {
+            public void error(ComprobanteElectronicoException cee) {
                 try {
-                    callbackClientObject.error();
+                    callbackClientObject.error(cee);
                 } catch (RemoteException ex) {
                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
                 }
