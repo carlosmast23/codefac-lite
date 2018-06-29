@@ -56,7 +56,7 @@ import javax.swing.table.DefaultTableModel;
 public class FacturaReporteModel extends FacturaReportePanel {
 
     private Persona persona;
-    Map<String, Object> parameters = new HashMap<String, Object>();
+    //Map<String, Object> parameters = new HashMap<String, Object>();
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     //private List<Factura> datafact;
@@ -319,6 +319,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
                     cliente = persona.getRazonSocial();
                 }
                 
+                Map<String, Object> parameters = new HashMap<String, Object>();
                 parameters.put("fechainicio", (fechaInicio != null) ? dateFormat.format(fechaInicio) : "");
                 parameters.put("fechafin", (fechaFin != null) ? dateFormat.format(fechaFin) : "");
                 parameters.put("tipodocumento", documentoConsultaEnum.toString());
@@ -353,8 +354,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
                     }
 
                     @Override
-                    public void pdf() {                        
-                        
+                    public void pdf() {                      
                         ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Documentos ", OrientacionReporteEnum.HORIZONTAL);
                     }
                 });
