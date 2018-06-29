@@ -249,8 +249,9 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
                             procesarComprobanteLote(ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE + 1, etapaLimite);
                         break;
 
-                    case ComprobanteElectronicoService.CARPETA_ENVIADOS:
-                        procesarComprobanteLote(ComprobanteElectronicoService.ETAPA_ENVIAR+1,etapaLimite);
+                    case ComprobanteElectronicoService.CARPETA_ENVIADOS: 
+                        //Se procesa desde la etapa de enviar porque aunque ya esta enviado al sri , tienen que volver a generar porque lo hago nuevamente pero por la modalidad en lote
+                        procesarComprobante(ComprobanteElectronicoService.ETAPA_ENVIAR+1, etapaLimite);
                         break;
                         
                     case ComprobanteElectronicoService.CARPETA_AUTORIZADOS:
@@ -276,13 +277,15 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
     {
         
         try {
-            String claveAcceso = tableModel.getValueAt(getTblComprobantes().getSelectedRow(), 0).toString().replace(".xml", "");
+            //Obtiene el nombre de la firma elecronica
+            String claveAcceso = tableModel.getValueAt(getTblComprobantes().getSelectedRow(), 1).toString().replace(".xml", "");
             
             ComprobanteServiceIf comprobanteServiceIf=ServiceFactory.getFactory().getComprobanteServiceIf();
             ClienteUtilidadImplComprobante callBack=new ClienteUtilidadImplComprobante(this);
 
             estadoCargando();            
             comprobanteServiceIf.procesarComprobantesPendiente(etapaInicial, etapaLimite,claveAcceso,obtenerCorreos(),callBack);
+            getCmbCarpetaComprobante().setSelectedIndex(getCmbCarpetaComprobante().getSelectedIndex()); //Volver a cargar los comprobantes para actualizar la tabla
 
         } catch (RemoteException ex) {
             Logger.getLogger(UtilidadComprobanteModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -312,7 +315,7 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
                     @Override
                     public void terminoProceso() {
                         formThis.estadoNormal();
-                        getCmbCarpetaComprobante().setSelectedIndex(getCmbCarpetaComprobante().getSelectedIndex());
+                        getCmbCarpetaComprobante().setSelectedIndex(getCmbCarpetaComprobante().getSelectedIndex()); //Vuelve a cargar los comprobantes
                     }
                 });                
                 ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobantesLotePendiente(etapaInicial, etapaLimite, clavesAcceso, session.getEmpresa().getIdentificacion(),cic);
