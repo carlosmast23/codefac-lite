@@ -1,0 +1,1496 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE DatabaseProfile SYSTEM "dbvis-defs.dtd">
+
+<!--
+   Created by NuoDB, Inc. exclusively for DbVisualizer.
+-->
+
+<DatabaseProfile
+        desc="Profile for NuoDB"
+        minver="9.5"
+        extends="generic">
+
+   <!-- =================================================================== -->
+   <!-- Definition of the commands                                          -->
+   <!-- =================================================================== -->
+
+   <Commands extends="true">
+
+      <Command id="nuodb.getSchemas">
+         <SQL>
+            <![CDATA[
+          SELECT
+            SCHEMA AS TABLE_SCHEM
+          FROM
+            SYSTEM.SCHEMAS
+          ORDER BY
+            SCHEMA
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="nuodb.getSchemaNames">
+         <SQL>
+            <![CDATA[
+          SELECT
+            SCHEMA AS TABLE_SCHEM
+          FROM
+            SYSTEM.SCHEMAS
+          ORDER BY
+            SCHEMA
+            ]]>
+         </SQL>
+         <!--Must have Filter element here since this command is fetched from code-->
+         <Filter index="TABLE_SCHEM" label="Name"/>
+      </Command>
+
+      <Command id="nuodb.getIndexes">
+         <SQL>
+            <![CDATA[
+          SELECT *
+          FROM
+            SYSTEM.INDEXES
+          WHERE
+            INDEXTYPE IN (1, 2) AND SCHEMA = '${schema}' AND TABLENAME ${tableCond}
+          ORDER BY INDEXNAME
+            ]]>
+         </SQL>
+      </Command>
+      
+      <Command id="nuodb.getAllTableIndexes">
+         <SQL>
+            <![CDATA[
+          SELECT *
+          FROM
+            SYSTEM.INDEXES
+          WHERE
+             SCHEMA = '${schema}' AND TABLENAME ${tableNameCond}
+          ORDER BY INDEXNAME
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="nuodb.getFunctions">
+         <SQL>
+            <![CDATA[
+select * from system.functions where SCHEMA = '${schema}' order by SCHEMA, FUNCTIONNAME, PARAMETERCOUNT
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="nuodb.getProcedures">
+         <SQL>
+            <![CDATA[
+select * from system.procedures where SCHEMA = '${schema}' order by SCHEMA, PROCEDURENAME
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="nuodb.getSequences">
+         <SQL>
+            <![CDATA[
+          SELECT *
+          FROM
+            SYSTEM.SEQUENCES
+          WHERE
+            SCHEMA = '${schema}' AND SEQUENCENAME LIKE '${objectname}'
+          ORDER BY
+            SCHEMA, SEQUENCENAME
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="nuodb.getDomains">
+         <SQL>
+            <![CDATA[
+          SELECT
+            d.DOMAINNAME,
+            d.SCHEMA,
+            d.COLLATIONSEQUENCE,
+            d.DATATYPE,
+            t.NAME AS "TYPENAME",
+            d.LENGTH,
+            d.SCALE,
+            d.PRECISION,
+            d.FLAGS,
+            d.DEFAULTVALUE,
+            d.REMARKS
+          FROM
+            SYSTEM.DOMAINS d, SYSTEM.DATATYPES t
+          WHERE
+            d.SCHEMA = '${schema}' AND d.DOMAINNAME LIKE '${objectname}'
+            AND d.DATATYPE = t.ID
+          ORDER BY
+            SCHEMA, DOMAINNAME
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="nuodb.getTriggers">
+         <SQL>
+            <![CDATA[
+SELECT
+    SCHEMA,
+    TABLENAME,
+    TRIGGERNAME,
+    TRIGGER_TYPE,
+    CASE TRIGGER_TYPE
+        WHEN 0 THEN 'Java'
+        ELSE 'SQL'
+    END AS TRIGGER_TYPE ,
+    CASE TYPE_MASK
+        WHEN 1 THEN 'BEFORE INSERT'
+        WHEN 2 THEN 'AFTER INSERT'
+        WHEN 4 THEN 'BEFORE UPDATE'
+        WHEN 8 THEN 'AFTER UPDATE'
+        WHEN 16 THEN 'BEFORE DELETE'
+        WHEN 32 THEN 'AFTER DELETE'
+        WHEN 64 THEN 'BEFORE COMMIT'
+        WHEN 128 THEN 'AFTER COMMIT'
+    END AS TRIGGER_EVENT,
+    POSITION,
+    ACTIVE,
+    CLASSNAME,
+    METHODNAME,
+    TRIGGER_TEXT
+FROM
+    SYSTEM.TRIGGERS
+WHERE
+    SCHEMA = '${schema}' AND TABLENAME LIKE '${tableName}'
+ORDER BY
+    SCHEMA, TABLENAME, TRIGGERNAME
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="nuodb.getUsers">
+         <SQL>
+            <![CDATA[
+          SELECT
+            USERNAME
+          FROM
+            SYSTEM.PASSWORDS
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="nuodb.getRoles">
+         <SQL>
+            <![CDATA[
+          SELECT
+            *
+          FROM
+            SYSTEM.ROLES
+          ORDER BY
+            SCHEMA,
+            ROLENAME
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="nuodb.getSystemProperties">
+         <SQL>
+            <![CDATA[
+          SELECT
+            *
+          FROM
+            SYSTEM.PROPERTIES
+          ORDER BY 1
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="nuodb.getSessions">
+         <SQL>
+            <![CDATA[
+          SELECT
+            C.CONNID, N.GEOREGION, N.ADDRESS, N.PORT, C.USER, C.OPEN, C.EXECID, C.SQLSTRING
+          FROM
+            SYSTEM.CONNECTIONS C, SYSTEM.NODES N
+          WHERE
+            C.NODEID = N.ID;
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="nuodb.getProcesses">
+         <SQL>
+            <![CDATA[
+          SELECT
+            ID, GEOREGION, ADDRESS, PORT, TYPE, STATE, CONNSTATE, MSGQSIZE
+          FROM
+            SYSTEM.NODES
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="nuodb.getQueryStatistics">
+         <SQL>
+            <![CDATA[
+          SELECT
+            S.SCHEMA, S.USER, S.NODEID, S.TIMESTAMP, S.COUNT, S.RUNTIME, S.NROWS, S.NUMPARAM, S.PARAMS, S.SQLSTRING
+          FROM
+            SYSTEM.QUERYSTATS S
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="nuodb.getIndexStatistics">
+         <SQL>
+            <![CDATA[
+          SELECT
+            *
+          FROM
+            SYSTEM.INDEXSTATISTICS
+            ]]>
+         </SQL>
+      </Command>
+
+   </Commands>
+
+   <!-- =================================================================== -->
+   <!-- Definition of the object actions that are used by the tree and views -->
+   <!-- =================================================================== -->
+
+   <ObjectsActionDef extends="false">
+
+      <ActionGroup type="Schemas">
+         <Action id="nuodb-schemas-create" label="Create Schema" reload="true"
+                 resetschemas="true" icon="add">
+            <Input label="Schema Name" name="newSchema" style="text" editable="true"/>
+            <Command>
+               <SQL>
+                  <![CDATA[
+                  create schema ${QB}${newSchema}${QE}
+                  ]]></SQL>
+            </Command>
+            <Confirm>Create schema ${newSchema}?</Confirm>
+            <Result>Schema ${newSchema} created!</Result>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Schema">
+         <Action id="nuodb-schema-drop" label="Drop Schema" reload="true"
+                 resetschemas="true" icon="remove">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Cascade Objects" name="cascade" style="check">
+               <Values>cascade</Values>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[
+                  drop schema "${schema}" ${cascade}
+                  ]]></SQL>
+            </Command>
+            <Confirm>
+               <![CDATA[
+                 Really drop schema ${schema}?<br>
+                 (All data will be lost!)
+               ]]>
+            </Confirm>
+            <Result>Schema ${schema} dropped!</Result>
+         </Action>
+
+         <Action id="nuodb-schema-export" label="Export Schema"
+                 icon="export" reload="false"
+                 class="schemaExport"
+                 doclink="http://www.dbvis.com/doclink/export-schema"/>
+      </ActionGroup>
+
+      <ActionGroup type="Tables">
+         <Action id="nuodb-tables-create-table" label="Create Table"
+                 icon="add" reload="true"
+                 class="tableCreateOrAlter"
+                 classargs="create"
+                 doclink="http://www.dbvis.com/doclink/create-table"/>
+
+         <Action id="nuodb-new-table-import-data" label="Import Table Data" icon="import"
+                 class="tableDataImport"
+                 doclink="http://www.dbvis.com/doclink/import-table"/>
+
+      </ActionGroup>
+
+      <ActionGroup type="Table">
+         <Action id="nuodb-tables-alter-table" label="Alter Table"
+                 icon="edit" reload="true"
+                 class="tableCreateOrAlter"
+                 classargs="alter"
+                 doclink="http://www.dbvis.com/doclink/alter-table"/>
+
+         <Action id="nuodb-table-clear" label="Empty Table" reload="true">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Table" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+
+            <Command>
+               <SQL>
+                  <![CDATA[
+                  delete from "${schema}"."${objectname}"
+                  ]]></SQL>
+            </Command>
+            <Confirm>Really remove all rows in table ${schema}.${objectname}?</Confirm>
+            <Result>All rows in table ${schema}.${objectname} has been removed!</Result>
+         </Action>
+
+         <Action id="nuodb-table-drop" label="Drop Table" reload="true" icon="remove">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Table" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[
+                  drop table "${schema}"."${objectname}"
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>Really drop table ${schema}.${objectname}?</Confirm>
+            <Result>Table ${schema}.${objectname} has been dropped!</Result>
+         </Action>
+
+         <Action id="nuodb-table-import-data" label="Import Table Data" icon="import"
+                 class="tableDataImport"
+                 doclink="../exportImport/exportImport.html#mozTocId708449"/>
+
+         <Action id="nuodb-table-export" label="Export Table" icon="export"
+                 class="tableExport"
+                 doclink="http://www.dbvis.com/doclink/export-table"/>
+
+         <Separator/>
+
+         <Action id="nuodb-create-index" label="Create Index" reload="true">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Table" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Index Name" name="indexname" style="text"/>
+            <Input name="type" label="Type" style="radio">
+               <Labels>Non-unique|Unique</Labels>
+               <Values>|UNIQUE</Values>
+               <Default>UNIQUE</Default>
+            </Input>
+
+            <Input label="Columns" style="separator"/>
+
+            <Input name="columns" style="grid">
+               <Arg name="output" value='"${columnname}"'/>
+               <Arg name="newline" value=", "/>
+
+               <Input name="columnname" label="Column Name" style="list">
+                  <Values column="4">
+                     <Command idref="getColumnNamesFor">
+                        <Input name="table_name" value="${objectname}"/>
+                     </Command>
+                  </Values>
+                  <Default>${0}</Default>
+               </Input>
+            </Input>
+
+            <SetVar name="_type" value='#type.equals("") ? "" : " " + #type'/>
+            <SetVar name="_columns" value='#columns.trim().equals("") ? "" : "(" + #columns + ")"'/>
+
+            <Command>
+               <SQL>
+                  <![CDATA[
+                  create${_type} index ${QB}${indexname}${QE} on "${schema}"."${objectname}" ${_columns}
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>
+               Create index "${schema}"."${indexname}"?
+            </Confirm>
+            <Result>
+               Index "${schema}"."${indexname}" created!
+            </Result>
+         </Action>
+
+         <Action id="nuodb-tabletrigger-create" label="Create Trigger" icon="add" reload="true"
+                 doclink="http://www.dbvis.com/doclink/create-trigger">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Trigger" name="triggerName" style="text"/>
+            <Input label="Trigger Time" name="triggerTime" style="radio">
+               <Values>BEFORE|AFTER</Values>
+               <Default>AFTER</Default>
+            </Input>
+            <Input label="Trigger Event" name="triggerEvent" style="radio">
+               <Values>DELETE|INSERT|UPDATE</Values>
+               <Labels>DELETE</Labels>
+            </Input>
+            <Input label="Table" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Source" style="separator"/>
+            <Input name="source" style="text-editor">
+               <Default><![CDATA[
+--
+--  Insert your own trigger code here
+--
+    THROW 'Not implemented yet';]]>
+               </Default>
+            </Input>
+
+            <Command exectype="asis">
+               <SQL><![CDATA[
+create trigger ${QB}${triggerName}${QE}
+  FOR "${schema}"."${objectname}"
+  ${triggerTime} ${triggerEvent}
+as
+${source}
+end_trigger;]]>
+               </SQL>
+            </Command>
+            <Result>
+               <![CDATA[Trigger <b>${schema}.${triggerName}</b> created.]]>
+            </Result>
+         </Action>
+
+         <Separator/>
+
+         <Action id="nuodb-table-script" label="Script Table" icon="scriptObject"
+                 class="sqlBuilder"
+                 classargs="script-dialog,SELECT,SELECT *,INSERT,UPDATE,DELETE,CREATE,DROP"/>
+
+      </ActionGroup>
+
+      <ActionGroup type="Views">
+         <Action id="nuodb-views-create" label="Create View" reload="true" icon="add">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="View Name" name="viewName" style="text"/>
+            <Input label="Source" style="separator"/>
+            <Input name="source" style="text-editor"/>
+            <Command>
+               <SQL>
+                  <![CDATA[
+                  create view "${schema}".${QB}${viewName}${QE} as ${source}
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>Really create view ${schema}.${viewName}?</Confirm>
+            <Result>View ${schema}.${viewName} created!</Result>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="View">
+         <Action id="nuodb-view-drop" label="Drop View" reload="true" icon="remove">
+           <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="View" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[
+                  drop view "${schema}"."${objectname}"
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>Really drop view ${objectname}?</Confirm>
+            <Result>View ${objectname} has been dropped!</Result>
+         </Action>
+
+         <Action id="nuodb-view-export" label="Export View" icon="export"
+                 class="viewExport"
+                 doclink="../exportImport/exportImport.html#mozTocId584466"/>
+
+         <Separator/>
+
+         <Action id="nuodb-view-script" label="Script View" icon="scriptObject"
+                 class="sqlBuilder"
+                 classargs="script-dialog,SELECT,SELECT *,INSERT,UPDATE,DELETE,CREATE,DROP"/>
+
+      </ActionGroup>
+
+      <ActionGroup type="Index">
+         <Action id="nuodb-index-drop" label="Drop Index" reload="true" icon="remove">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Index" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[
+                  drop index "${schema}"."${objectname}"
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>Really drop index ${schema}.${objectname}?</Confirm>
+            <Result>Index ${schema}.${objectname} dropped!</Result>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Functions">
+         <Action id="nuodb-functions-create" label="Create Function" reload="true" icon="add"
+                 doclink="http://www.dbvis.com/doclink/create-function">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Function Name" name="functionName" style="text"/>
+            <Input label="Return Data Type" name="returns" style="text">
+               <Default>STRING</Default>
+            </Input>
+            <Input label="Security" name="security" style="radio">
+               <Values>INVOKER|DEFINER</Values>
+               <Default>INVOKER</Default>
+            </Input>
+
+            <Input label="Parameters" style="separator"/>
+
+            <Input name="parameters" style="grid">
+               <Arg name="output" value="${QB}${name}${QE} ${type}"/>
+               <Arg name="newline" value=", "/>
+
+               <Input name="name" label="Name" style="text">
+                  <Default>parm</Default>
+               </Input>
+               <Input name="type" label="Type" style="text">
+                  <Default>STRING</Default>
+               </Input>
+            </Input>
+
+            <SetVar name="_security" value='" SECURITY " + #security'/>
+            <SetVar name="_parameters" value='#parameters.trim().equals("") ? "()" : "(" + #parameters + ")"'/>
+
+            <Command exectype="asis">
+               <SQL>
+                  <![CDATA[
+CREATE FUNCTION "${schema}".${QB}${functionName}${QE} ${_parameters}
+RETURNS ${returns}
+${_security}
+AS
+  THROW 'Not implemented yet!';
+END_FUNCTION;
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>
+               Create function ${functionName}?
+            </Confirm>
+            <Result>
+               Function ${functionName} created!
+            </Result>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Function">
+         <Action id="nuodb-function-drop" label="Drop Function" reload="true" icon="remove">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Function" style="text" editable="false">
+               <Default>${objectname}/${paramCount}</Default>
+            </Input>
+            <Command>
+               <SQL><![CDATA[drop function "${schema}"."${objectname}"/${paramCount}]]></SQL>
+            </Command>
+            <Confirm>
+               Really drop procedure ${schema}.${objectname}/${paramCount}?
+            </Confirm>
+            <Result>
+               Procedure ${schema}.${objectname}/${paramCount} dropped!
+            </Result>
+         </Action>
+
+         <Action id="nuodb-function-export" label="Export Function" icon="export"
+                 class="functionExport"
+                 doclink="http://www.dbvis.com/doclink/export-code-object"/>
+      </ActionGroup>
+
+      <ActionGroup type="Procedures">
+         <Action id="nuodb-procedures-create" label="Create Procedure" reload="true" icon="add"
+                 doclink="http://www.dbvis.com/doclink/create-procedure">
+            <Input label="Procedure Owner" name="procedureOwner" style="list">
+               <Values>
+                  <Command idref="nuodb.getSchemas"/>
+               </Values>
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Procedure Name" name="procedureName" style="text"/>
+            <Input label="Security" name="security" style="radio">
+               <Values>INVOKER|DEFINER</Values>
+               <Default>INVOKER</Default>
+            </Input>
+
+            <Input label="Parameters" style="separator"/>
+            <Input name="parameters" style="grid">
+               <Arg name="output" value="${direction} ${QB}${name}${QE} ${type}"/>
+               <Arg name="newline" value=", "/>
+
+               <Input name="name" label="Name" style="text">
+                  <Default>param1</Default>
+               </Input>
+               <Input name="direction" label="Direction" style="list">
+                  <Values>IN|INOUT|OUT</Values>
+                  <Default>IN</Default>
+               </Input>
+               <Input name="type" label="Type" style="text">
+                  <Default>STRING</Default>
+               </Input>
+            </Input>
+            <!--
+                        <Input label="Source" style="separator"/>
+                        <Input name="source" style="text-editor">
+                           <Default>
+                              <![CDATA[
+            BEGIN
+              DBMS_OUTPUT.PUT_LINE('Sample output');
+            END;
+                              ]]>
+                           </Default>
+                        </Input>
+            -->
+            <SetVar name="_security" value='" SECURITY " + #security'/>
+            <SetVar name="_parameters" value='#parameters.trim().equals("") ? "" : "(" + #parameters + ")"'/>
+
+            <Command exectype="asis">
+               <SQL>
+                  <![CDATA[
+CREATE PROCEDURE "${procedureOwner}".${QB}${procedureName}${QE}
+${_parameters}
+${_security}
+AS
+  THROW 'Not implemented yet!';
+END_PROCEDURE;
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>
+               Create procedure ${procedureOwner}.${procedureName}?
+            </Confirm>
+            <Result>
+               Procedure ${procedureOwner}.${procedureName} created!
+            </Result>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Procedure">
+         <Action id="nuodb-procedure-drop" label="Drop Procedure" reload="true" icon="remove">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Procedure" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command>
+               <SQL><![CDATA[drop procedure "${schema}"."${objectname}"]]></SQL>
+            </Command>
+            <Confirm>
+               Really drop procedure ${schema}.${objectname}?
+            </Confirm>
+            <Result>
+               Procedure ${schema}.${objectname} dropped!
+            </Result>
+         </Action>
+
+         <Action id="nuodb-procedure-export" label="Export Procedure" icon="export"
+                 class="procedureExport"
+                 doclink="http://www.dbvis.com/doclink/export-code-object"/>
+      </ActionGroup>
+
+      <ActionGroup type="Trigger">
+         <Action id="nuodb-trigger-drop" label="Drop Trigger" reload="true" icon="remove">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Trigger" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[
+                  drop trigger "${schema}"."${objectname}"
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>Really drop trigger ${schema}.${objectname}?</Confirm>
+            <Result>Trigger ${schema}.${objectname} has been dropped!</Result>
+         </Action>
+
+         <Action id="nuodb-trigger-export" label="Export Trigger" icon="export"
+                 class="triggerExport"
+                 doclink="http://www.dbvis.com/doclink/export-code-object"/>
+      </ActionGroup>
+
+      <ActionGroup type="Sequences">
+         <Action id="nuodb-sequences-create" label="Create Sequence" reload="true" icon="add">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Sequence Name" name="sequenceName" style="text"/>
+            <Input label="Start with" name="startWith" style="number">
+               <Default/>
+            </Input>
+            <SetVar name="_startWith" value='#startWith.trim().equals("") ? "" : " start with " + #startWith'/>
+            <Command>
+               <SQL>
+                  <![CDATA[
+                  create sequence "${schema}".${QB}${sequenceName}${QE}${_startWith}
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>Really create sequence ${schema}.${sequenceName}?</Confirm>
+            <Result>Sequence ${schema}.${sequenceName} created!</Result>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Sequence">
+         <Action id="nuodb-sequence-drop" label="Drop Sequence" reload="true" icon="remove">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Sequence Name" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[
+                  drop sequence "${schema}"."${objectName}"
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>Really drop sequence ${schema}.${objectName}?</Confirm>
+            <Result>Sequence ${schema}.${objectName} dropped!</Result>
+         </Action>
+
+         <Action id="nuodb-sequence-alter" label="Alter Sequence" reload="true">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Sequence Name" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Start with" name="startWith" style="number">
+               <Default/>
+            </Input>
+            <SetVar name="_startWith" value='#startWith.trim().equals("") ? "" : " start with " + #startWith'/>
+            <Command>
+               <SQL>
+                  <![CDATA[
+                  alter sequence "${schema}"."${objectName}"${_startWith}
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>Really alter sequence ${schema}.${objectName}?</Confirm>
+            <Result>Sequence ${schema}.${objectName} altered!</Result>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Domains">
+         <Action id="nuodb-domains-create" label="Create Domain" reload="true" icon="add">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Domain Name" name="domainName" style="text"/>
+            <Input label="Data Type" name="dataType" style="list">
+               <Values column="1">
+                  <Command idref="getDataTypes"/>
+               </Values>
+               <Default>varchar</Default>
+            </Input>
+            <Input label="Data Type Arguments" name="dataTypeArgs" style="text"/>
+            <Input label="Not Null" name="notNull" style="check">
+               <Values>NOT NULL</Values>
+            </Input>
+            <Input label="Default Value" name="defaultValue">
+               <Default>null</Default>
+            </Input>
+            <SetVar name="_notNull" value='#notNull.trim().equals("") ? " NULL" : " " + #notNull'/>
+            <SetVar name="_defaultValue" value='#defaultValue.trim().equals("null") ? "" : " DEFAULT " + #defaultValue'/>
+            <Command>
+               <SQL>
+                  <![CDATA[
+                  create domain "${schema}".${QB}${domainName}${QE} AS ${dataType}${dataTypeArgs}${_notNull}${_defaultValue}
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>Really create domain ${schema}.${domainName}?</Confirm>
+            <Result>Domain ${schema}.${domainName} created!</Result>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Domain">
+         <Action id="nuodb-domain-drop" label="Drop Domain" reload="true" icon="remove">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Domain Name" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[
+                  drop domain "${schema}"."${objectName}"
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>Really drop domain ${schema}.${objectName}?</Confirm>
+            <Result>Domain ${schema}.${objectName} dropped!</Result>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Users">
+         <Action id="nuodb-users-create" label="Create User" reload="true" icon="add">
+            <Input label="User Name" name="userid" style="text"/>
+            <Input label="Password" name="password" style="password"/>
+
+            <Command>
+               <SQL>
+                  <![CDATA[
+                  create user ${userid} password '${password}'
+                  ]]>
+               </SQL>
+            </Command>
+            <Result>User ${userid} created!</Result>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="User">
+         <Action id="nuodb-user-drop" label="Drop User" reload="true" icon="remove">
+            <Input label="User Name" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[
+                  drop user "${objectname}"
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>Really drop user ${objectname}?</Confirm>
+            <Result>User ${objectname} dropped!</Result>
+         </Action>
+
+         <Action id="nuodb-user-changepassword" label="Change Password" reload="false">
+            <Input label="User Name" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Password" name="password" style="password"/>
+            <Command>
+               <SQL>
+                  <![CDATA[
+                  alter user "${objectname}" password '${password}'
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>Change password for user ${objectname}?</Confirm>
+            <Result>Password for ${objectname} changed!</Result>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Roles">
+         <Action id="nuodb-roles-create" label="Create Role" reload="true" icon="add">
+            <Input label="Role Schema" name="schema" style="list">
+               <Values column="1">
+                  <Command idref="nuodb.getSchemas"/>
+               </Values>
+               <Default>${0}</Default>
+            </Input>
+            <Input label="Role Name" name="rolename" style="text"/>
+            <Command>
+               <SQL>
+                  <![CDATA[
+                  create role ${schema}.${rolename}
+                  ]]>
+               </SQL>
+            </Command>
+            <Result>Role ${schema}.${rolename} created!</Result>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Role">
+         <Action id="nuodb-role-drop" label="Drop Role" reload="true" icon="remove">
+            <Input label="Role Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Role Name" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[
+                     drop role "${schema}"."${objectname}"
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>Really drop role ${schema}.${objectname}?</Confirm>
+            <Result>Role ${schema}.${objectname} dropped!</Result>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Session">
+         <Action id="nuodb-session-kill" label="Kill Statement" reload="true" icon="remove">
+            <Input label="Execid" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[kill statement ${objectname}]]>
+               </SQL>
+            </Command>
+            <Confirm>
+               Do you really want to kill statement ${objectname} for user ${nuodb.getSessions.USER}?
+            </Confirm>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="SystemProperties">
+         <Action id="nuodb-systemproperties-modify" label="Modify System Properties" reload="false">
+            <Input name="maxQueryCount" label="Max Query Count" style="number" editable="true">
+               <Default>
+                  <Command>
+                     <SQL>
+                        select value from system.properties where property = 'MAX_QUERY_COUNT'
+                     </SQL>
+                  </Command>
+               </Default>
+            </Input>
+            <Input name="minQueryTime" label="Min Query Time (sec)" style="number" editable="true">
+               <Default>
+                  <Command>
+                     <SQL>
+                        select value from system.properties where property = 'MIN_QUERY_TIME'
+                     </SQL>
+                  </Command>
+               </Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[SET SYSTEM PROPERTY MAX_QUERY_COUNT = ${maxQueryCount};
+SET SYSTEM PROPERTY MIN_QUERY_TIME = ${minQueryTime};
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>Really update system properties?</Confirm>
+            <Result>System properties updated!</Result>
+         </Action>
+      </ActionGroup>
+
+
+   </ObjectsActionDef>
+
+   <!-- =================================================================== -->
+   <!-- Definition of the database objects tree structure -->
+   <!-- =================================================================== -->
+
+   <ObjectsTreeDef extends="false">
+
+      <GroupNode type="Schemas" label="Schemas">
+         <DataNode type="Schema" label="${nuodb.getSchemas.TABLE_SCHEM}" is-empty-output="stop">
+            <SetVar name="schema" value="${nuodb.getSchemas.TABLE_SCHEM}"/>
+            <Command idref="nuodb.getSchemas">
+               <Filter index="TABLE_SCHEM" label="Name"/>
+            </Command>
+
+            <GroupNode type="Tables" label="Tables">
+               <DataNode type="Table" label="${getTables.TABLE_NAME}">
+                  <SetVar name="objectname" value="${getTables.TABLE_NAME}"/>
+                  <SetVar name="rowcount" value="true"/>
+                  <SetVar name="acceptInQB" value="true"/>
+                  <Command idref="getTables">
+                     <Input name="tableType" value="SYSTEM PSEUDO TABLE, SYSTEM TABLE, TABLE"/>
+                  </Command>
+
+                  <!-- Need to keep the objectname for the current table in
+                       a new variable so that the viewers will be able to pick up
+                       the correct input to display -->
+                  <SetVar name="theTableName" value="${objectname}"/>
+
+                  <GroupNode type="Columns" label="Columns">
+                     <DataNode type="Column" label="${getColumnDefinitions.COLUMN_NAME}"
+                               label1="${getColumnDefinitions.TYPE_NAME}"
+                               isLeaf="true"
+                               icon="#dataMap.get('getColumnDefinitions.IS_PRIMARY_KEY') eq true ? 'PrimaryKey' : 'Column'"
+                               tip="#dataMap.get('getColumnDefinitions.IS_PRIMARY_KEY') eq true ? 'This is a primary key column' : ''">
+                        <SetVar name="objectname" value="${getColumnDefinitions.COLUMN_NAME}"/>
+                        <Command idref="getColumnDefinitions">
+                           <Input name="schema" value="${schema}"/>
+                           <Input name="objectname" value="${theTableName}"/>
+                           <Input name="tableType" value="Table"/>
+                           <Filter index="TYPE_NAME" label="Type"/>
+                        </Command>
+                     </DataNode>
+                  </GroupNode>
+
+
+                  <GroupNode type="Indexes" label="Indexes">
+                     <SetVar name="theTableName2" value="= '${objectname}'"/>
+                     <DataNode type="Index" label="${nuodb.getIndexes.INDEXNAME}"
+                               label1="${nuodb.getIndexes.SCHEMA}.${nuodb.getIndexes.TABLENAME} (${nuodb.getIndexes.INDEXTYPE})"
+                               isLeaf="true">
+                        <SetVar name="objectname" value="${nuodb.getIndexes.INDEXNAME}"/>
+                        <Command idref="nuodb.getIndexes">
+                           <Input name="schema" value="${schema}"/>
+                           <Input name="tableCond" value="${theTableName2}"/>
+                           <Filter index="TABLENAME" label="Table Name"/>
+                        </Command>
+                     </DataNode>
+                  </GroupNode>
+
+                  <GroupNode type="Triggers" label="Triggers">
+                     <DataNode type="Trigger"
+                               label="${nuodb.getTriggers.TRIGGERNAME} (${nuodb.getTriggers.SCHEMA}.${nuodb.getTriggers.TABLENAME})"
+                               isLeaf="true">
+                        <SetVar name="getDDLName" value="${nuodb.getTriggers.TABLENAME}/${nuodb.getTriggers.TRIGGERNAME}"/>
+                        <SetVar name="objectname" value="${nuodb.getTriggers.TRIGGERNAME}"/>
+                        <Command idref="nuodb.getTriggers">
+                           <Input name="schema" value="${schema}"/>
+                           <Input name="tableName" value="${theTableName}"/>
+                           <Filter index="TABLENAME" label="Table Name"/>
+                        </Command>
+                     </DataNode>
+                  </GroupNode>
+
+               </DataNode>
+            </GroupNode>
+
+            <GroupNode type="Views" label="Views">
+               <DataNode type="View" label="${getTables.TABLE_NAME}">
+                  <SetVar name="objectname" value="${getTables.TABLE_NAME}"/>
+                  <SetVar name="rowcount" value="true"/>
+                  <SetVar name="acceptInQB" value="true"/>
+                  <Command idref="getTables">
+                     <Input name="tableType" value="SYSTEM VIEW, VIEW"/>
+                  </Command>
+                  
+                  <!-- Need to keep the objectname for the current table in
+                       a new variable so that the viewers will be able to pick up
+                       the correct input to display -->
+                  <SetVar name="theTableName" value="${objectname}"/>
+
+                  <GroupNode type="Columns" label="Columns">
+                     <DataNode type="Column" label="${getColumnDefinitions.COLUMN_NAME}"
+                               label1="${getColumnDefinitions.TYPE_NAME}"
+                               isLeaf="true"
+                               icon="#dataMap.get('getColumnDefinitions.IS_PRIMARY_KEY') eq true ? 'PrimaryKey' : 'Column'"
+                               tip="#dataMap.get('getColumnDefinitions.IS_PRIMARY_KEY') eq true ? 'This is a primary key column' : ''">
+                        <SetVar name="objectname" value="${getColumnDefinitions.COLUMN_NAME}"/>
+                        <Command idref="getColumnDefinitions">
+                           <Input name="schema" value="${schema}"/>
+                           <Input name="objectname" value="${theTableName}"/>
+                           <Input name="tableType" value="View"/>
+                           <Filter index="TYPE_NAME" label="Type"/>
+                        </Command>
+                     </DataNode>
+                  </GroupNode>
+               </DataNode>
+            </GroupNode>
+
+            <GroupNode type="Indexes" label="Indexes">
+               <SetVar name="theTableName2" value="LIKE '%'"/>
+               <DataNode type="Index" label="${nuodb.getIndexes.INDEXNAME}"
+                         label1="${nuodb.getIndexes.TABLENAME}"
+                         isLeaf="true">
+                  <SetVar name="objectname" value="${nuodb.getIndexes.INDEXNAME}"/>
+                  <Command idref="nuodb.getIndexes">
+                     <Input name="schema" value="${schema}"/>
+                     <Input name="tableCond" value="${theTableName2}"/>
+                     <Filter index="TABLENAME" label="Table Name"/>
+                  </Command>
+               </DataNode>
+            </GroupNode>
+
+            <If test="#util.isDatabaseVersionGTE(2,2)">
+               <GroupNode type="Functions" label="Functions">
+                  <DataNode type="Function" label="${nuodb.getFunctions.FUNCTIONNAME} (${nuodb.getFunctions.PARAMETERCOUNT})"
+                            isLeaf="true">
+                     <SetVar name="objectname" value="${nuodb.getFunctions.FUNCTIONNAME}"/>
+                     <SetVar name="paramCount" value="${nuodb.getFunctions.PARAMETERCOUNT}"/>
+                     <SetVar name="getDDLName" value="${nuodb.getFunctions.FUNCTIONNAME} (${nuodb.getFunctions.PARAMETERCOUNT})"/>
+                     <Command idref="nuodb.getFunctions">
+                        <Input name="schema" value="${schema}"/>
+                        <Input name="objectname" value="%"/>
+                     </Command>
+                  </DataNode>
+               </GroupNode>
+            </If>
+
+            <GroupNode type="Procedures" label="Procedures">
+               <DataNode type="Procedure" label="${nuodb.getProcedures.PROCEDURENAME}" isLeaf="true">
+                  <SetVar name="objectname" value="${nuodb.getProcedures.PROCEDURENAME}"/>
+                  <Command idref="nuodb.getProcedures">
+                     <Input name="schema" value="${schema}"/>
+                     <Input name="objectname" value="%"/>
+                  </Command>
+               </DataNode>
+            </GroupNode>
+
+            <GroupNode type="Triggers" label="Triggers">
+               <SetVar name="theTableName" value="%"/>
+               <DataNode type="Trigger" label="${nuodb.getTriggers.TRIGGERNAME} (${nuodb.getTriggers.SCHEMA}.${nuodb.getTriggers.TABLENAME})"
+                         isLeaf="true">
+                  <SetVar name="objectname" value="${nuodb.getTriggers.TRIGGERNAME}"/>
+                  <SetVar name="getDDLName" value="${nuodb.getTriggers.TABLENAME}/${nuodb.getTriggers.TRIGGERNAME}"/>
+                  <Command idref="nuodb.getTriggers">
+                     <Input name="schema" value="${schema}"/>
+                     <Input name="tableName" value="%"/>
+                     <Filter index="TABLENAME" label="Table Name"/>
+                  </Command>
+               </DataNode>
+            </GroupNode>
+
+            <GroupNode type="Sequences" label="Sequences">
+               <DataNode type="Sequence" label="${nuodb.getSequences.SEQUENCENAME}" isLeaf="true">
+                  <SetVar name="objectname" value="${nuodb.getSequences.SEQUENCENAME}"/>
+                  <Command idref="nuodb.getSequences">
+                     <Input name="schema" value="${schema}"/>
+                     <Input name="objectname" value="%"/>
+                  </Command>
+               </DataNode>
+            </GroupNode>
+
+            <GroupNode type="Domains" label="Domains">
+               <DataNode type="Domain" label="${nuodb.getDomains.DOMAINNAME}"
+                         label1="${nuodb.getDomains.TYPENAME}"
+                         isLeaf="true">
+                  <SetVar name="objectname" value="${nuodb.getDomains.DOMAINNAME}"/>
+                  <Command idref="nuodb.getDomains">
+                     <Input name="schema" value="${schema}"/>
+                     <Input name="objectname" value="%"/>
+                     <Filter index="TYPENAME" label="Type"/>
+                  </Command>
+               </DataNode>
+            </GroupNode>
+
+            <GroupNode type="Types" label="Types">
+               <DataNode type="Type" label="${getDataTypes.TYPE_NAME}" isLeaf="true">
+                  <Command idref="getDataTypes"/>
+               </DataNode>
+            </GroupNode>
+
+         </DataNode>
+      </GroupNode>
+
+      <GroupNode type="DBA" label="DBA Views">
+
+         <GroupNode type="Users" label="Users">
+            <DataNode type="User" label="${nuodb.getUsers.USERNAME}" isLeaf="true">
+               <SetVar name="objectname" value="${nuodb.getUsers.USERNAME}"/>
+               <Command idref="nuodb.getUsers"/>
+            </DataNode>
+         </GroupNode>
+
+         <GroupNode type="Roles" label="Roles">
+            <DataNode type="Role" label="${nuodb.getRoles.ROLENAME}" label1="${nuodb.getRoles.SCHEMA}" isLeaf="true">
+               <SetVar name="schema" value="${nuodb.getRoles.SCHEMA}"/>
+               <SetVar name="objectname" value="${nuodb.getRoles.ROLENAME}"/>
+               <Command idref="nuodb.getRoles"/>
+            </DataNode>
+         </GroupNode>
+
+         <GroupNode type="Processes" label="Processes" isLeaf="false">
+            <DataNode type="Process"
+                      label="${nuodb.getProcesses.ID}"
+                      label1="${nuodb.getProcesses.ADDRESS}:${nuodb.getProcesses.PORT} ${nuodb.getProcesses.TYPE},${nuodb.getProcesses.STATE}"
+                      isLeaf="true">
+               <SetVar name="objectname" value="${nuodb.getProcesses.ID}"/>
+               <Command idref="nuodb.getProcesses"/>
+            </DataNode>
+         </GroupNode>
+
+         <GroupNode type="Sessions" label="Sessions" isLeaf="false">
+            <DataNode type="Session" label="${nuodb.getSessions.EXECID}"
+                      label1="${nuodb.getSessions.USER}"
+                      isLeaf="true">
+               <SetVar name="objectname" value="${nuodb.getSessions.EXECID}"/>
+               <Command idref="nuodb.getSessions"/>
+            </DataNode>
+         </GroupNode>
+
+         <GroupNode type="SystemProperties" label="System Properties" isLeaf="true"/>
+
+         <GroupNode type="Statistics" label="Statistics" isLeaf="true"/>
+
+      </GroupNode>
+
+   </ObjectsTreeDef>
+
+   <!-- =================================================================== -->
+   <!-- Definition of the database objects views -->
+   <!-- =================================================================== -->
+
+   <ObjectsViewDef extends="true">
+
+      <ObjectView type="Schemas">
+         <DataView id="generic-schemas-schemas" action="drop"/>
+
+         <DataView id="nuodb-schemas-schemas" icon="Schemas" label="Schemas" viewer="grid">
+            <Command idref="nuodb.getSchemas">
+               <ProcessDataSet action="renamecolumn" index="TABLE_SCHEM" value="Schema"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Schema" action="drop"/>
+
+      <ObjectView type="Tables">
+         <DataView id="generic-tables-tables" action="drop"/>
+
+         <DataView id="nuodb-tables-tables" icon="Tables" label="Tables" viewer="grid">
+            <Input name="menuItem" value="Open in New Tab...">
+               <Input name="action" value="open-object-in-new-tab-command ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+            <Input name="menuItem" value="Open in Floating Tab...">
+               <Input name="action"
+                      value="open-object-in-floating-tab-command ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+            <Input name="menuItem" value="Script: SELECT ALL">
+               <Input name="command" value="select * from ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+            <Input name="menuItem" value="Script: DROP TABLE">
+               <Input name="command" value="drop table ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+
+            <Command idref="getTables">
+               <Input name="tableType" value="SYSTEM PSEUDO TABLE, SYSTEM TABLE, TABLE"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Table">
+         <DataView id="generic-table-grants" action="drop"/>
+         <DataView id="generic-table-indexes" action="drop"/>
+         <DataView id="generic-table-rowid" action="drop"/>
+         <DataView id="generic-table-ddl" order-before="nuodb-table-index">
+            <Message/>
+         </DataView>
+
+         <DataView id="nuodb-table-index" icon="Index" label="Indexes" viewer="grid">
+            <Command idref="nuodb.getAllTableIndexes">
+               <Input name="schema" value="${schema}"/>
+               <Input name="tableNameCond" value="= '${objectname}'"/>
+            </Command>
+         </DataView>
+         <DataView id="nuodb-table-trigger" icon="Trigger" label="Triggers" viewer="form">
+            <Command idref="nuodb.getTriggers">
+               <Input name="database" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="tableName" value="${theTableName}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Triggers">
+         <DataView id="nuodb-triggers-triggers" icon="Triggers" label="Triggers" viewer="grid">
+            <Command idref="nuodb.getTriggers">
+               <Input name="schema" value="${schema}"/>
+               <Input name="tableName" value="${theTableName}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Trigger">
+         <DataView id="nuodb-trigger-sourceeditor" icon="SourceEditor" label="Trigger Editor"
+                   viewer="ProcedureViewer"
+                   classargs="TRIGGER"
+                   doclink="http://www.dbvis.com/doclink/edit-code-object"/>
+         <DataView id="nuodb-trigger-info" icon="Info" label="Info" viewer="node-form"/>
+      </ObjectView>
+
+      <ObjectView type="Views">
+         <DataView id="nuodb-views-views" icon="Views" label="Views" viewer="grid">
+            <Input name="menuItem" value="Open in New Tab...">
+               <Input name="action" value="open-object-in-new-tab-command ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+            <Input name="menuItem" value="Open in Floating Tab...">
+               <Input name="action"
+                      value="open-object-in-floating-tab-command ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+            <Input name="menuItem" value="Script: SELECT ALL">
+               <Input name="command" value="select * from ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+            <Input name="menuItem" value="Script: DROP VIEW">
+               <Input name="command" value="drop view ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+
+            <Command idref="getTables">
+               <Input name="tableType" value="SYSTEM VIEW, VIEW"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="View">
+         <DataView id="nuodb-view-info" icon="Info" label="Info" viewer="node-form"/>
+         <DataView id="nuodb-view-data" icon="Data" label="Data" viewer="table-data"/>
+         <DataView id="nuodb-view-rowcount" icon="RowCount" label="Row Count" viewer="table-rowcount"/>
+         <DataView id="nuodb-view-source" icon="Source" label="DDL" viewer="ddl">
+            <Input name="objectType" value="View"/>
+            <Input name="formatSQL" value="true"/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Functions">
+         <DataView id="nudb-functions-functions" icon="Functions" label="Functions" viewer="grid">
+            <Command idref="nuodb.getFunctions">
+               <Input name="owner" value="${schema}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Function">
+         <DataView id="nuodb-function-info" icon="Info" label="Info" viewer="node-form"/>
+         <DataView id="nuodb-function-sourceeditor" icon="SourceEditor" label="Function Editor"
+                   viewer="ProcedureViewer"
+                   classargs="FUNCTION"
+                   doclink="http://www.dbvis.com/doclink/edit-code-object"/>
+      </ObjectView>
+
+      <ObjectView type="Procedure">
+         <DataView id="nuodb-procedure-sourceeditor" icon="SourceEditor" label="Procedure Editor"
+                   viewer="ProcedureViewer"
+                   classargs="PROCEDURE"
+                   doclink="http://www.dbvis.com/doclink/edit-code-object"/>
+      </ObjectView>
+
+      <ObjectView type="Processes">
+         <DataView id="nuodb-processes-processes" icon="Processes" label="Processes" viewer="grid">
+            <Command idref="nuodb.getProcesses"/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Process">
+         <DataView id="nuodb-process-process" icon="Process" label="Process" viewer="node-form"/>
+      </ObjectView>
+
+      <ObjectView type="Sequences">
+         <DataView id="nuodb-sequences-sequences" icon="Sequences" label="Sequences" viewer="grid">
+            <Command idref="nuodb.getSequences">
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="%"/>
+            </Command>
+            <Input name="menuItem" value="Script: DROP SEQUENCE">
+               <Input name="command" value="drop sequence ${schema||SCHEMA}${object||SEQUENCENAME}"/>
+            </Input>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Sequence">
+         <DataView id="nuodb-sequence-info" icon="Info" label="Info" viewer="node-form">
+            <Command idref="nuodb.getSequences">
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="${objectname}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Domains">
+         <DataView id="nuodb-domains-domains" icon="Domains" label="Domains" viewer="grid">
+            <Command idref="nuodb.getDomains">
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="%"/>
+            </Command>
+            <Input name="menuItem" value="Script: DROP DOMAIN">
+               <Input name="command" value="drop domain ${schema||SCHEMA}${object||DOMAINNAME}"/>
+            </Input>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Domain">
+         <DataView id="nuodb-domain-info" icon="Info" label="Info" viewer="node-form">
+            <Command idref="nuodb.getDomains">
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="${objectname}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Indexes">
+         <DataView id="generic-indexes-indexes" action="drop"/>
+         <DataView id="nuodb-indexes-indexes" icon="Indexes" label="Indexes" viewer="grid">
+            <Command idref="nuodb.getIndexes">
+               <Input name="schema" value="${schema}"/>
+               <Input name="tableCond" value="${theTableName2}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Index">
+         <DataView id="generic-index-index" action="drop"/>
+         <DataView id="nuodb-index-index" icon="Index" label="Index" viewer="node-form"/>
+         <DataView id="nuodb-index-source" icon="Source" label="DDL" viewer="ddl">
+            <Input name="objectType" value="Index"/>
+            <Input name="formatSQL" value="true"/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Users">
+         <DataView id="nuodb-users-users" icon="Users" label="Users" viewer="grid">
+            <Command idref="nuodb.getUsers"/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="User">
+         <DataView id="nuodb-user-info" icon="Info" label="Info" viewer="node-form"/>
+      </ObjectView>
+
+      <ObjectView type="Roles">
+         <DataView id="nuodb-roles-roles" icon="Roles" label="Roles" viewer="grid">
+            <Command idref="nuodb.getRoles"/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Sessions">
+         <DataView id="nuodb-sessions-sessions" icon="Sessions" label="Sessions" viewer="grid">
+            <Command idref="nuodb.getSessions"/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Session">
+         <DataView id="nuodb-session-session" icon="Session" label="Session" viewer="node-form"/>
+      </ObjectView>
+
+      <ObjectView type="SystemProperties">
+         <DataView id="nuodb-systemproperties-systemproperties" icon="SystemProperties" label="System Properties" viewer="grid">
+            <Command idref="nuodb.getSystemProperties"/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Types">
+         <DataView id="nuodb-types-types" icon="Types" label="Types" viewer="grid">
+            <Command idref="getDataTypes"/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Type">
+         <DataView id="nuodb-type-info" icon="Info" label="Info" viewer="node-form"/>
+      </ObjectView>
+
+      <ObjectView type="Statistics">
+         <DataView id="nuodb-statistics-querystatistics" icon="StatisticsQuery" label="Query" viewer="grid">
+            <Command idref="nuodb.getQueryStatistics"/>
+            <Message>
+               <![CDATA[
+<html>
+Statistics of executed queries exceeding thresholds defined in System Properties.
+</html>
+               ]]>
+            </Message>
+         </DataView>
+         <DataView id="nuodb-statistics-indexstatistics" icon="StatisticsIndex" label="Index" viewer="grid">
+            <Command idref="nuodb.getIndexStatistics"/>
+            <Message>
+               <![CDATA[
+<html>
+Statistics of indexes.
+</html>
+               ]]>
+            </Message>
+         </DataView>
+      </ObjectView>
+
+   </ObjectsViewDef>
+</DatabaseProfile>

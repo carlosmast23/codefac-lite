@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DbVisualizer>
+   <Templates>
+      <ImmediateSubstitution>true</ImmediateSubstitution>
+      <Template shortcut=".sf" default="true" format="true">
+         <Description />
+         <Text><![CDATA[select * from myTable where myColumns]]></Text>
+      </Template>
+      <Template shortcut=".sc" default="true" format="true">
+         <Description />
+         <Text><![CDATA[select count(*) from myTable where myColumns]]></Text>
+      </Template>
+      <Template shortcut=".df" default="true" format="true">
+         <Description />
+         <Text><![CDATA[delete from myTable where myColumns]]></Text>
+      </Template>
+      <Template shortcut=".ii" default="true" format="true">
+         <Description />
+         <Text><![CDATA[insert into myTable (myColumns) values (myValues);]]></Text>
+      </Template>
+      <Template shortcut=".date" default="true">
+         <Description>Today's date</Description>
+         <Text><![CDATA[${dbvis-date}$]]></Text>
+      </Template>
+      <Template shortcut=".fdate" default="true">
+         <Description>Today's date, formatted</Description>
+         <Text><![CDATA[${dbvis-date||||||format=[dd-MMM-yyyy]}$]]></Text>
+      </Template>
+      <Template shortcut=".ts" default="true">
+         <Description>Current timestamp</Description>
+         <Text><![CDATA[${dbvis-timestamp}$]]></Text>
+      </Template>
+      <Template shortcut=".time" default="true">
+         <Description>Current time</Description>
+         <Text><![CDATA[${dbvis-time}$]]></Text>
+      </Template>
+      <Template shortcut=".exc" default="true">
+         <Description>@export to CSV template</Description>
+         <Text><![CDATA[@export on;
+@export set Filename="name.csv" Format="CSV";
+select * from myTable;
+@export off;]]></Text>
+      </Template>
+      <Template shortcut=".exs" default="true">
+         <Description>@export to SQL template</Description>
+         <Text><![CDATA[@export on;
+@export set Filename="name.sql" Format="SQL";
+select * from myTable;
+@export off;]]></Text>
+      </Template>
+      <Template shortcut=".exh" default="true">
+         <Description>@export to HTML template</Description>
+         <Text><![CDATA[@export on;
+@export set Filename="name.html" Format="HTML";
+@export set HtmlTitle="Title";
+select * from myTable;
+@export off;]]></Text>
+      </Template>
+      <Template shortcut=".exxls" default="true">
+         <Description>@export to Excel 2007 template</Description>
+         <Text><![CDATA[@export on;
+@export set Filename="name.ooxml" Format="XLS" ExcelFileFormat="ooxml";
+@export set ExcelTitle="Title";
+select * from myTable;
+@export off;]]></Text>
+      </Template>
+      <Template shortcut=".(c)" default="true">
+         <Description>Copyright</Description>
+         <Text><![CDATA[©]]></Text>
+      </Template>
+      <Template shortcut=".(tm)" default="true">
+         <Description>Trademark</Description>
+         <Text><![CDATA[(™)]]></Text>
+      </Template>
+   </Templates>
+</DbVisualizer>

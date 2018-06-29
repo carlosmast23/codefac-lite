@@ -1,0 +1,567 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE DatabaseProfile SYSTEM "dbvis-defs.dtd">
+
+<!--
+   Copyright (c) DbVis Software AB. All Rights Reserved.
+-->
+
+<DatabaseProfile
+        desc="Profile for SQLite"
+        minver="9.5"
+        extends="generic">
+
+   <!-- =================================================================== -->
+   <!-- Definition of the commands                                          -->
+   <!-- =================================================================== -->
+
+   <Commands extends="true">
+
+      <!-- =================================================================== -->
+      <!-- There are no Schema for SQLite. The following adds a dummy schema   -->
+      <!-- which is used only to enable the Export Schema action.              -->
+      <!-- =================================================================== -->
+
+      <Command id="sqllite.getDummySchema">
+         <SQL>
+            <![CDATA[
+select "Schema" AS Schema
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="sqlite.getIndexes">
+         <SQL>
+            <![CDATA[
+SELECT
+    *
+FROM
+    SQLITE_MASTER
+WHERE
+    TBL_NAME LIKE '${tableNamePattern}'
+    AND TYPE = 'index'
+    AND SQL NOT NULL
+ORDER BY NAME
+            ]]>
+         </SQL>
+      </Command>
+
+	<Command id="sqlite.getTriggers">
+		<SQL>
+            <![CDATA[
+SELECT * FROM SQLITE_MASTER WHERE
+    TBL_NAME LIKE '${tableNamePattern}'
+    AND TYPE = 'trigger' AND name LIKE '${triggerNamePattern}'
+ORDER BY NAME
+            ]]>
+		</SQL>
+	</Command>
+
+   </Commands>
+
+   <!-- =================================================================== -->
+   <!-- Definition of the object actions that are used by the tree and views -->
+   <!-- =================================================================== -->
+
+   <ObjectsActionDef extends="false">
+
+      <ActionGroup type="Schema">
+         <Action id="sqlite-schema-export" label="Export Schema"
+                 icon="export" reload="false"
+                 class="schemaExport"
+                 doclink="http://www.dbvis.com/doclink/export-schema"/>
+      </ActionGroup>
+
+      <ActionGroup type="Tables">
+         <Action id="sqlite-tables-create-table" label="Create Table"
+                 icon="add" reload="true"
+                 class="tableCreateOrAlter"
+                 classargs="create"
+                 doclink="http://www.dbvis.com/doclink/create-table"/>
+
+         <Action id="sqlite-new-table-import-data" label="Import Table Data" icon="import"
+                 class="tableDataImport"
+                 doclink="http://www.dbvis.com/doclink/import-table"/>
+
+      </ActionGroup>
+
+      <ActionGroup type="Table">
+         <Action id="sqlite-tables-alter-table" label="Alter Table"
+                 icon="edit" reload="true"
+                 class="tableCreateOrAlter"
+                 classargs="alter"
+                 doclink="http://www.dbvis.com/doclink/alter-table"/>
+
+         <Action id="sqlite-table-rename" label="Rename Table" reload="true" icon="rename">
+            <Input label="Table" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="New Table Name" name="newTable" style="text"/>
+            <Command>
+               <SQL><![CDATA[alter table "${objectname}" rename to  ${QB}${newTable}${QE}]]></SQL>
+            </Command>
+            <Confirm>
+               Confirm rename of ${objectname} to ${newTable}?
+            </Confirm>
+            <Result>
+               Table ${objectname} renamed to ${newTable}!
+            </Result>
+         </Action>
+
+         <Action id="sqlite-table-clear" label="Empty Table" reload="true">
+            <Input label="Table" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+
+            <Command>
+               <SQL><![CDATA[delete from "${objectname}"]]></SQL>
+            </Command>
+            <Confirm>
+               Really remove all rows in table ${objectname}?
+            </Confirm>
+            <Result>
+               All rows in table ${objectname} has been removed!
+            </Result>
+         </Action>
+
+         <Action id="sqlite-table-drop" label="Drop Table" reload="true" icon="remove">
+            <Input label="Table" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command><SQL><![CDATA[drop table "${objectname}"]]></SQL></Command>
+            <Confirm>
+               Really drop table ${objectname}?
+            </Confirm>
+            <Result>
+               Table ${objectname} has been dropped!
+            </Result>
+         </Action>
+
+         <Action id="sqlite-table-import-data" label="Import Table Data" icon="import"
+                 class="tableDataImport"
+                 doclink="http://www.dbvis.com/doclink/import-table"/>
+
+         <Action id="sqlite-table-export" label="Export Table" icon="export"
+                 class="tableExport"
+                 doclink="http://www.dbvis.com/doclink/export-table"/>
+
+         <Separator/>
+
+         <Action id="sqlite-table-create-index" label="Create Index" reload="true">
+            <Input label="Table" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Index Name" name="indexname" style="text"/>
+            <Input name="type" label="Type" style="radio">
+               <Labels>Non-unique|Unique</Labels>
+               <Values>|UNIQUE</Values>
+               <Default>UNIQUE</Default>
+            </Input>
+
+            <Input label="Columns" style="separator"/>
+
+            <Input name="columns" style="grid">
+               <Arg name="output" value='"${columnname}"${_sortorder}'/>
+               <Arg name="newline" value=", "/>
+
+               <Input name="columnname" label="Column Name" style="list">
+                  <Values column="4">
+                     <Command idref="getColumnNamesFor">
+                        <Input name="table_name" value="${objectname}"/>
+                     </Command>
+                  </Values>
+                  <Default>${0}</Default>
+               </Input>
+               <Input name="sortorder" label="Sort Order" style="radio">
+                  <Labels>ASC|DESC|Default</Labels>
+                  <Values>ASC|DESC|</Values>
+                  <Default>ASC</Default>
+               </Input>
+               <SetVar name="_sortorder" value='#sortorder.equals("") ? "" : " " + #sortorder'/>
+            </Input>
+
+            <SetVar name="_type" value='#type.equals("") ? "" : " " + #type'/>
+            <SetVar name="_columns" value='#columns.trim().equals("") ? "" : "(" + #columns + ")"'/>
+            <SetVar name="_indexname" value='#indexname.trim().equals("") ? "" : " " + #QB + #indexname + #QE'/>
+
+            <Command>
+               <SQL>
+                  <![CDATA[create${_type} index${_indexname} on "${objectname}" ${_columns}]]>
+               </SQL>
+            </Command>
+            <Confirm>
+               <![CDATA[Create index "${indexname}"?]]>
+            </Confirm>
+            <Result>
+               <![CDATA[Index "${indexname}" created!]]>
+            </Result>
+         </Action>
+
+         <Action id="sqlite-tabletrigger-create" label="Create Trigger" icon="add" reload="true"
+                 doclink="http://www.dbvis.com/doclink/create-trigger">
+            <Input label="Table" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Trigger" name="triggerName" style="text"/>
+            <Input label="Trigger Time" name="triggerTime" style="radio">
+               <Values>BEFORE|AFTER|INSTEAD OF</Values>
+               <Default>AFTER</Default>
+            </Input>
+            <Input label="Trigger Event" style="separator"/>
+            <Input label="Trigger Event" name="triggerEvent" style="radio" linebreak="false">
+               <Values>DELETE|INSERT|UPDATE</Values>
+               <Default>INSERT</Default>
+            </Input>
+            <Input label="Update Of" name="updateOf" style="text" linebreak="true"/>
+            <SetVar name="_updateOf" value="#updateOf.equals('') ? 'UPDATE' : 'UPDATE OF '+ #updateOf"/>
+            
+            <SetVar name="_trgEvent" value="#triggerEvent.equals('UPDATE') ? #_updateOf : #triggerEvent"/>
+
+            <Input label="When" style="separator"/>
+            <Input  name="when" style="text-editor">
+               <Arg name="height" value="30"/>
+            </Input>
+             
+             <SetVar name="_trgWhen" value="#when.equals('') ? '' : 'WHEN ' + #when"/>
+      
+            <Input label="Source" style="separator"/>
+            <Input name="source" style="text-editor">
+               <Default><![CDATA[
+--
+--  Insert your own trigger code here
+--
+    insert into anotherTable (col1, col2) values(val1, val2);]]>
+               </Default>
+            </Input>
+
+            <Command exectype="asis">
+               <SQL><![CDATA[
+CREATE TRIGGER ${QB}${triggerName}${QE} ${triggerTime} ${_trgEvent} ON `${objectname}`
+FOR EACH ROW  ${_trgWhen} 
+BEGIN 
+${source} END;]]>
+               </SQL>
+            </Command>
+            <Result>
+               <![CDATA[Trigger <b>${catalog}.${triggerName}</b> created.]]>
+            </Result>
+         </Action>
+         <Separator/>
+
+         <Action id="sqlite-table-script" label="Script Table" icon="scriptObject"
+                 class="sqlBuilder"
+                 classargs="script-dialog,SELECT,SELECT *,INSERT,UPDATE,DELETE,CREATE,DROP"/>
+
+      </ActionGroup>
+
+      <ActionGroup type="View">
+         <Action id="sqlite-view-drop" label="Drop View" reload="true" icon="remove">
+            <Input label="View" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command><SQL><![CDATA[drop view "${objectname}"]]></SQL></Command>
+            <Confirm>
+               Really drop view ${objectname}?
+            </Confirm>
+            <Result>
+               View ${objectname} has been dropped!
+            </Result>
+         </Action>
+
+         <Action id="sqlite-view-export" label="Export View" icon="export"
+                 class="viewExport"
+                 doclink="http://www.dbvis.com/doclink/export-view"/>
+
+         <Separator/>
+
+         <Action id="sqlite-view-script" label="Script View" icon="scriptObject"
+                 class="sqlBuilder"
+                 classargs="script-dialog,SELECT,SELECT *,INSERT,UPDATE,DELETE,CREATE,DROP"/>
+
+      </ActionGroup>
+
+      <ActionGroup type="Index">
+         <Action id="sqlite-index-drop" label="Drop Index" reload="true" icon="remove">
+            <Input label="Index" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command><SQL><![CDATA[drop index "${objectname}"]]></SQL></Command>
+            <Confirm>
+               Really drop index ${objectname}?
+            </Confirm>
+            <Result>
+               Index ${objectname} dropped!
+            </Result>
+         </Action>
+      </ActionGroup>
+      
+       <ActionGroup type="Trigger">
+         <Action id="sqlite-trigger-drop" label="Drop Trigger" reload="true" icon="remove">
+            <Input label="Trigger" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command><SQL><![CDATA[drop trigger `${objectname}`]]></SQL></Command>
+            <Confirm>
+               Really drop trigger ${objectname}?
+            </Confirm>
+            <Result>
+               Trigger ${objectname} has been dropped!
+            </Result>
+         </Action>
+
+         <Action id="sqlite-trigger-export" label="Export Trigger" icon="export"
+                 class="triggerExport"
+                 doclink="http://www.dbvis.com/doclink/export-code-object"/>
+
+      </ActionGroup>
+   </ObjectsActionDef>
+
+   <!-- =================================================================== -->
+   <!-- Definition of the database objects tree structure -->
+   <!-- =================================================================== -->
+
+   <ObjectsTreeDef extends="false">
+
+      <DataNode type="Schema" label="Schema">
+         <Command idref="sqllite.getDummySchema">
+            <Filter index="Schema" label="Name"/>
+         </Command>
+
+         <GroupNode type="Tables" label="Tables">
+            <DataNode type="Table" label="${getTables.TABLE_NAME}">
+               <SetVar name="objectname" value="${getTables.TABLE_NAME}"/>
+               <SetVar name="rowcount" value="true"/>
+               <SetVar name="acceptInQB" value="true"/>
+               <Command idref="getTables">
+                  <Input name="tableType" value="SYSTEM TABLE, TABLE"/>
+               </Command>
+
+               <!-- Need to keep the objectname for the current table in
+                    a new variable so that the viewers will be able to pick up
+                    the correct input to display -->
+               <SetVar name="theTableName" value="${objectname}"/>
+
+               <GroupNode type="Columns" label="Columns">
+                  <DataNode type="Column" label="${getColumnDefinitions.COLUMN_NAME}"
+                            label1="${getColumnDefinitions.TYPE_NAME}"
+                            isLeaf="true"
+                            icon="#dataMap.get('getColumnDefinitions.IS_PRIMARY_KEY') eq true ? 'PrimaryKey' : 'Column'"
+                            tip="#dataMap.get('getColumnDefinitions.IS_PRIMARY_KEY') eq true ? 'This is a primary key column' : ''">
+                     <SetVar name="objectname" value="${getColumnDefinitions.COLUMN_NAME}"/>
+                     <Command idref="getColumnDefinitions">
+                        <Input name="schema" value="${schema}"/>
+                        <Input name="objectname" value="${theTableName}"/>
+                        <Input name="tableType" value="Table"/>
+                        <Filter index="TYPE_NAME" label="Type"/>
+                     </Command>
+                  </DataNode>
+               </GroupNode>
+
+               <GroupNode type="Indexes" label="Indexes">
+                  <DataNode type="Index" label="${sqlite.getIndexes.name}"
+                            label1="${sqlite.getIndexes.tbl_name}"
+                            isLeaf="true">
+                     <SetVar name="objectname" value="${sqlite.getIndexes.name}"/>
+                     <Command idref="sqlite.getIndexes">
+                        <Input name="tableNamePattern" value="${theTableName}"/>
+                        <Filter index="tbl_name" label="Table Name"/>
+                     </Command>
+                  </DataNode>
+               </GroupNode>
+               
+               <GroupNode type="Triggers" label="Triggers">
+                 <DataNode type="Trigger" label="${sqlite.getTriggers.NAME}"
+                           label1="${sqlite.getTriggers.TBL_NAME}"
+                           isLeaf="true">
+                    <SetVar name="objectname" value="${sqlite.getTriggers.NAME}"/>
+                    <SetVar name="theTableName" value="${sqlite.getTriggers.TABLE_NAME}"/>
+                    <Command idref="sqlite.getTriggers">
+                       <Input name="schema" value="${schema}"/>
+                       <Input name="triggerNamePattern" value="%"/>
+                       <Input name="tableNamePattern" value="${theTableName}"/>
+                       <Filter index="TBL_NAME" label="Table Name"/>
+                    </Command>
+                 </DataNode>
+              </GroupNode>
+               
+            </DataNode>
+         </GroupNode>
+
+         <GroupNode type="Views" label="Views">
+            <DataNode type="View" label="${getTables.TABLE_NAME}">
+               <SetVar name="objectname" value="${getTables.TABLE_NAME}"/>
+               <SetVar name="rowcount" value="true"/>
+               <SetVar name="acceptInQB" value="true"/>
+               <Command idref="getTables">
+                  <Input name="tableType" value="SYSTEM VIEW, VIEW"/>
+               </Command>
+               
+               <!-- Need to keep the objectname for the current table in
+                    a new variable so that the viewers will be able to pick up
+                    the correct input to display -->
+               <SetVar name="theTableName" value="${objectname}"/>
+
+               <GroupNode type="Columns" label="Columns">
+                  <DataNode type="Column" label="${getColumnDefinitions.COLUMN_NAME}"
+                            label1="${getColumnDefinitions.TYPE_NAME}"
+                            isLeaf="true"
+                            icon="#dataMap.get('getColumnDefinitions.IS_PRIMARY_KEY') eq true ? 'PrimaryKey' : 'Column'"
+                            tip="#dataMap.get('getColumnDefinitions.IS_PRIMARY_KEY') eq true ? 'This is a primary key column' : ''">
+                     <SetVar name="objectname" value="${getColumnDefinitions.COLUMN_NAME}"/>
+                     <Command idref="getColumnDefinitions">
+                        <Input name="schema" value="${schema}"/>
+                        <Input name="objectname" value="${theTableName}"/>
+                        <Input name="tableType" value="View"/>
+                        <Filter index="TYPE_NAME" label="Type"/>
+                     </Command>
+                  </DataNode>
+               </GroupNode>
+            </DataNode>
+         </GroupNode>
+
+         <SetVar name="theTableName" value="%"/>
+
+         <GroupNode type="Indexes" label="Indexes">
+            <DataNode type="Index" label="${sqlite.getIndexes.name}"
+                      label1="${sqlite.getIndexes.tbl_name}"
+                      isLeaf="true">
+               <SetVar name="objectname" value="${sqlite.getIndexes.name}"/>
+               <Command idref="sqlite.getIndexes">
+                  <Input name="tableNamePattern" value="%"/>
+                  <Filter index="tbl_name" label="Table Name"/>
+               </Command>
+            </DataNode>
+         </GroupNode>
+
+         <GroupNode type="Triggers" label="Triggers">
+            <DataNode type="Trigger" label="${sqlite.getTriggers.NAME}"
+                      label1="${sqlite.getTriggers.TBL_NAME}"
+                      isLeaf="true">
+               <SetVar name="objectname" value="${sqlite.getTriggers.NAME}" />
+			
+               <Command idref="sqlite.getTriggers">
+                  <Input name="schema" value="${schema}" />
+                  <Input name="triggerNamePattern" value="%" />
+                  <Input name="tableNamePattern" value="%" />
+                  <Filter index="TBL_NAME" label="Table Name" />
+               </Command>
+            </DataNode>
+         </GroupNode>
+         
+      </DataNode>
+
+   </ObjectsTreeDef>
+
+   <!-- =================================================================== -->
+   <!-- Definition of the database objects views -->
+   <!-- =================================================================== -->
+
+   <ObjectsViewDef extends="true">
+
+      <ObjectView type="Schema" action="drop"/>
+
+      <ObjectView type="Tables">
+         <DataView id="generic-tables-tables" action="drop"/>
+         <DataView id="generic-tables-references" action="drop"/>
+
+         <DataView id="sqlite-tables-tables" icon="Tables" label="Tables" viewer="grid">
+            <Input name="menuItem" value="Open in New Tab...">
+               <Input name="action" value="open-object-in-new-tab-command ${schema||TABLE_SCHEMA}${object||TABLE_NAME}"/>
+            </Input>
+            <Input name="menuItem" value="Open in Floating Tab...">
+               <Input name="action" value="open-object-in-floating-tab-command ${schema||TABLE_SCHEMA}${object||TABLE_NAME}"/>
+            </Input>
+            <Input name="menuItem" value="Script: SELECT ALL">
+               <Input name="command" value="select * from ${schema||TABLE_SCHEMA}${object||TABLE_NAME}"/>
+            </Input>
+            <Input name="menuItem" value="Script: DROP TABLE">
+               <Input name="command" value="drop table ${schema||TABLE_SCHEMA}${object||TABLE_NAME}"/>
+            </Input>
+            <Command idref="getTables">
+               <Input name="tableType" value="SYSTEM TABLE, TABLE"/>
+            </Command>
+         </DataView>
+         <DataView id="sqlite-tables-references" icon="References" label="References" viewer="tables-refs"
+                 doclink="http://www.dbvis.com/doclink/show-references">
+            <Command idref="getTables">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="objectname" value="%"/>
+               <Input name="tableType" value="TABLE"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Table">
+         <DataView id="generic-table-grant" action="drop"/>
+
+         <DataView id="generic-table-ddl">
+            <Message/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Views">
+         <DataView id="sqlite-views-views" icon="Views" label="Views" viewer="grid">
+            <Input name="menuItem" value="Open in New Tab...">
+               <Input name="action" value="open-object-in-new-tab-command ${schema||TABLE_SCHEMA}${object||TABLE_NAME}"/>
+            </Input>
+            <Input name="menuItem" value="Open in Floating Tab...">
+               <Input name="action" value="open-object-in-floating-tab-command ${schema||TABLE_SCHEMA}${object||TABLE_NAME}"/>
+            </Input>
+            <Input name="menuItem" value="Script: SELECT ALL">
+               <Input name="command" value="select * from ${schema||TABLE_SCHEMA}${object||TABLE_NAME}"/>
+            </Input>
+            <Input name="menuItem" value="Script: DROP VIEW">
+               <Input name="command" value="drop view ${schema||TABLE_SCHEMA}${object||TABLE_NAME}"/>
+            </Input>
+            <Command idref="getTables">
+               <Input name="tableType" value="SYSTEM VIEW, VIEW"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="View">
+         <DataView id="sqlite-view-info" icon="Info" label="Info" viewer="node-form"/>
+         <DataView id="sqlite-view-data" icon="Data" label="Data" viewer="table-data"/>
+         <DataView id="sqlite-view-rowcount" icon="RowCount" label="Row Count" viewer="table-rowcount"/>
+         <DataView id="sqlite-view-ddl" icon="Source" label="DDL" viewer="ddl">
+            <Input name="objectType" value="View"/>
+            <Input name="formatSQL" value="true"/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Indexes">
+         <DataView id="generic-indexes-indexes" action="drop"/>
+
+         <DataView id="sqlite-indexes-indexes" icon="Indexes" label="Indexes" viewer="grid">
+            <Command idref="sqlite.getIndexes">
+               <Input name="tableNamePattern" value="${theTableName}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Index">
+         <DataView id="sqlite-index-ddl" icon="Source" label="DDL" viewer="ddl">
+            <Input name="objectType" value="Index"/>
+            <Input name="formatSQL" value="true"/>
+         </DataView>
+      </ObjectView>
+      
+      <ObjectView type="Triggers">
+         <DataView id="sqlite-triggers-triggers" icon="Triggers" label="Triggers" viewer="grid">
+            <Command idref="sqlite.getTriggers">
+               <Input name="triggerNamePattern" value="%"/>
+               <Input name="tableNamePattern" value="${theTableName}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+      
+      <ObjectView type="Trigger">
+         <DataView id="sqlite-trigger-triggereditor" icon="SourceEditor" label="Trigger Editor"
+                   viewer="ProcedureViewer"
+                   classargs="TRIGGER"
+                   doclink="http://www.dbvis.com/doclink/edit-code-object"/>
+         <DataView id="sqlite-trigger-info" icon="Info" label="Info" viewer="node-form"/>
+      </ObjectView>
+
+   </ObjectsViewDef>
+
+</DatabaseProfile>

@@ -1,0 +1,3 @@
+The Xerial SQLite driver is licensed under the Apache License version 2.0.
+
+For details, see http://www.apache.org/licenses/ and http://www.xerial.org/trac/Xerial/wiki/SQLiteJDBC#License

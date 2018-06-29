@@ -1,0 +1,1132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE DatabaseProfile SYSTEM "dbvis-defs.dtd">
+
+<!--
+   Copyright (c) DbVis Software AB. All Rights Reserved.
+-->
+
+<DatabaseProfile
+        desc="Profile for IBM Netezza"
+        minver="9.5"
+        extends="generic">
+    
+   <!-- =================================================================== -->
+   <!-- Definition of initialization commands                               -->
+   <!-- =================================================================== -->
+
+   <InitCommands extends="true">
+      <Command id="netezza.supportsMultipleSchemas"> 
+         <If test="#util.isDatabaseVersionGT(7,0)">
+            <SQL> 
+            <![CDATA[ 
+show enable_schema_dbo_check 
+            ]]> 
+            </SQL> 
+            <ProcessDataSet action="convertsqlwarningtodataset"/>
+            <Output index="1" name="SUPPORTS_MULTIPLE_SCHEMAS"/> 
+         </If>
+         <Else>
+            <SQL>
+            <![CDATA[
+SELECT 'ENABLE_SCHEMA_DBO_CHECK is 0'
+            ]]>
+            </SQL>
+            <Output index="1" name="SUPPORTS_MULTIPLE_SCHEMAS"/>
+         </Else>
+      </Command> 
+      
+      <Command id="netezza.has_V_SCHEMA">
+         <SQL>
+            <![CDATA[
+select 1
+from DEFINITION_SCHEMA._V_VIEW
+where UPPER(OBJTYPE) = 'SYSTEM VIEW'
+and UPPER(VIEWNAME) = '_V_SCHEMA'
+            ]]>
+         </SQL>
+         <Output index="1" name="HAS_V_SCHEMA"/>
+      </Command>
+   </InitCommands>
+
+   <Commands extends="true">
+      
+      <Command id="netezza.getCatalogs">
+         <SQL>
+            <![CDATA[
+select DATABASE
+from DEFINITION_SCHEMA._V_DATABASE
+order by DATABASE
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="netezza.getSchemas">
+         <SQL>
+            <If test="#HAS_V_SCHEMA eq 1">
+            <![CDATA[
+select SCHEMA
+from DEFINITION_SCHEMA._V_SCHEMA
+where DATABASE = CURRENT_CATALOG
+order by SCHEMA
+            ]]>
+            </If>
+            <Else>
+            <![CDATA[
+SELECT
+    TABLE_SCHEM AS SCHEMA
+FROM
+    DEFINITION_SCHEMA._V_JDBC_SCHEMA3
+WHERE TABLE_CATALOG = CURRENT_CATALOG
+UNION
+SELECT 'DEFINITION_SCHEMA' AS SCHEMA
+UNION
+SELECT 'INFORMATION_SCHEMA' AS SCHEMA
+ORDER BY SCHEMA
+            ]]>
+            </Else>
+         </SQL>
+      </Command>
+
+      <Command id="netezza.getSchemaNames">
+         <SQL>
+            <If test="#HAS_V_SCHEMA eq 1">
+            <![CDATA[
+select SCHEMA
+from DEFINITION_SCHEMA._V_SCHEMA
+where DATABASE = CURRENT_CATALOG
+order by SCHEMA
+            ]]>
+            </If>
+            <Else>
+            <![CDATA[
+SELECT
+    TABLE_SCHEM AS SCHEMA
+FROM
+    DEFINITION_SCHEMA._V_JDBC_SCHEMA3
+WHERE TABLE_CATALOG = CURRENT_CATALOG
+UNION
+SELECT 'DEFINITION_SCHEMA' AS SCHEMA
+UNION
+SELECT 'INFORMATION_SCHEMA' AS SCHEMA
+ORDER BY SCHEMA
+            ]]>
+            </Else>
+         </SQL>
+         <!--Must have Filter element here since this command is fetched from code-->
+         <Filter index="SCHEMA" label="Name"/>
+      </Command>
+
+      <Command id="netezza.getViews">
+         <SQL>
+            <![CDATA[
+select *
+from DEFINITION_SCHEMA._V_VIEW
+where (UPPER(OBJTYPE) = 'VIEW' or UPPER(OBJTYPE) = 'SYSTEM VIEW')
+  and DATABASE = '${view_database}'
+  and SCHEMA = '${view_schema}'
+order by VIEWNAME
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="netezza.getMaterializedViews">
+         <SQL>
+            <![CDATA[
+select *
+from DEFINITION_SCHEMA._V_VIEW
+where UPPER(OBJTYPE) = 'MATERIALIZED VIEW'
+  and DATABASE = '${view_database}'
+  and SCHEMA = '${view_schema}'
+order by VIEWNAME
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="netezza.getMaterializedViewSource">
+         <SQL>
+            <![CDATA[
+select DEFINITION
+from DEFINITION_SCHEMA._V_VIEW
+where UPPER(OBJTYPE) = 'MATERIALIZED VIEW'
+  and DATABASE = '${view_database}'
+  and SCHEMA = '${view_schema}'
+  and VIEWNAME = '${name}'
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="netezza.getSequences">
+         <SQL>
+            <![CDATA[
+select * 
+from DEFINITION_SCHEMA._V_SEQUENCE
+where UPPER(OBJTYPE) = 'SEQUENCE'
+  and DATABASE = '${seq_database}'
+  and SCHEMA = '${seq_schema}'
+order by SEQNAME
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="netezza.getSynonyms">
+         <SQL>
+            <![CDATA[
+select * 
+from DEFINITION_SCHEMA._V_SYNONYM
+where UPPER(OBJTYPE) = 'SYNONYM'
+  and DATABASE = '${syn_database}'
+  and SCHEMA = '${syn_schema}'
+order by SYNONYM_NAME
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="netezza.getFunctions">
+         <SQL>
+            <![CDATA[
+select * 
+from DEFINITION_SCHEMA._V_FUNCTION
+where UPPER(OBJTYPE) = 'FUNCTION'
+  and DATABASE = '${func_database}'
+  and SCHEMA = '${func_schema}'
+order by FUNCTION
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="netezza.getProcedures">
+         <SQL>
+            <![CDATA[
+select PROCEDURE,
+  case VARARGS 
+    when TRUE then '(VARARGS)' else ARGUMENTS
+  end ARGUMENTS
+from DEFINITION_SCHEMA._V_PROCEDURE
+where UPPER(OBJTYPE) = 'PROCEDURE'
+  and DATABASE = '${proc_database}'
+  and SCHEMA = '${proc_schema}'
+order by PROCEDURE
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="netezza.getGroups">
+         <SQL>
+            <![CDATA[
+select * 
+from DEFINITION_SCHEMA._V_GROUP
+order by GROUPNAME
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="netezza.getUsers">
+         <SQL>
+            <![CDATA[
+select * 
+from DEFINITION_SCHEMA._V_USER
+order by USERNAME
+            ]]>
+         </SQL>
+      </Command>
+   </Commands>
+   
+   <ObjectsActionDef extends="false">
+      
+      <ActionGroup type="Catalogs">
+         <Action id="netezza-databases-create" label="Create Database" reload="true" icon="add">
+            <Input label="Database" name="newDatabase" style="text"/>
+            <Input label="Collect History" name="collHist" style="radio">
+               <Values>ON|OFF|DEFAULT</Values>
+               <Default>ON</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[
+                  create database ${QB}${newDatabase}${QE} collect history ${collHist}
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>
+               Confirm creation of ${newDatabase}?
+            </Confirm>
+            <Result>
+               Database ${newDatabase} created!
+            </Result>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Schemas">
+         <If test="#SUPPORTS_MULTIPLE_SCHEMAS.matches('^.*ENABLE_SCHEMA_DBO_CHECK is [12]$')"> 
+            <Action id="netezza-schemas-create" label="Create Schema" reload="true" resetschemas="true" icon="add">
+               <Input label="Database" style="text" editable="false">
+                  <Default>${catalog}</Default>
+               </Input>
+               <Input label="New Schema" name="newSchema" style="text"/>
+               <Command>
+                  <SQL>
+                  <![CDATA[
+                  create schema ${QB}${newSchema}${QE}
+                  ]]>
+                  </SQL>
+               </Command>
+               <Confirm>
+                  Confirm creation of ${newSchema}?
+               </Confirm>
+               <Result>
+                  Schema ${newSchema} created!
+               </Result>
+            </Action>
+         </If>
+      </ActionGroup>
+
+      <ActionGroup type="Schema">
+         <Action id="netezza-schema-drop" label="Drop Schema" reload="true" resetschemas="true" icon="remove">
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Drop Schema Objects" name="cascade" style="check"
+                   tip="Automatically drop all objects in the schema">
+               <Values>cascade|restrict</Values>
+               <Default>restrict</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[
+                  drop schema "${catalog}"."${schema}" ${cascade}
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>
+               Confirm drop of ${schema}?
+            </Confirm>
+            <Result>
+               Schema ${schema} dropped!
+            </Result>
+         </Action>
+
+         <Action id="netezza-schema-export" label="Export Schema"
+                 icon="export" reload="false"
+                 class="schemaExport"
+                 doclink="http://www.dbvis.com/doclink/export-schema"/>
+      </ActionGroup>
+      
+      <ActionGroup type="Tables">
+         <Action id="netezza-tables-create-table" label="Create Table"
+                 icon="add" reload="true"
+                 class="tableCreateOrAlter"
+                 classargs="create"
+                 doclink="http://www.dbvis.com/doclink/create-table"/>
+         <Action id="netezza-new-table-import-data"
+                 label="Import Table Data"
+                 icon="import"
+                 class="tableDataImport"
+                 doclink="http://www.dbvis.com/doclink/import-table"/>
+      </ActionGroup>
+
+      <ActionGroup type="Table">
+         <Action id="netezza-tables-alter-table" label="Alter Table"
+                 icon="edit" reload="true"
+                 class="tableCreateOrAlter"
+                 classargs="alter"
+                 doclink="http://www.dbvis.com/doclink/alter-table"/>
+
+         <Action id="netezza-table-clear" label="Empty Table" reload="true">
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Table" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Use Command" name="useCommand" style="radio">
+               <Values>TRUNCATE|DELETE</Values>
+               <Default>TRUNCATE</Default>
+            </Input>
+
+            <SetVar name="_command" value="#useCommand.equals('TRUNCATE') ? 'truncate table' : 'delete from'"/>
+
+            <Command>
+               <SQL>
+                  <![CDATA[
+                  ${_command} "${schema}"."${objectname}"
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>
+               Really remove all rows in table ${schema}.${objectname}?
+            </Confirm>
+            <Result>
+               All rows in table ${schema}.${objectname} has been removed!
+            </Result>
+         </Action>
+
+         <Action id="netezza-table-groom" label="Groom Table" reload="true">
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Table" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Mood" name="mode" style="radio">
+               <Values>RECORDS READY|RECORDS ALL|PAGES ALL|PAGES START|VERSIONS</Values>
+               <Default>RECORDS READY</Default>
+            </Input>
+            <Input label="Reclaim Backupset" name="reclaim" style="radio">
+               <Values>NONE|DEFAULT</Values>
+               <Default>DEFAULT</Default>
+            </Input>
+
+            <Command>
+               <SQL>
+                  <![CDATA[
+                  groom table "${schema}"."${objectname}" ${mode} RECLAIM BACKUPSET ${reclaim}
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>
+               Really groom table ${schema}.${objectname}?
+            </Confirm>
+            <Result>
+               Table ${schema}.${objectname} has been groomed!
+            </Result>
+         </Action>
+
+         <Action id="netezza-table-drop" label="Drop Table" reload="true" icon="remove">
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Table" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[
+                  drop table "${schema}"."${objectname}"
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>
+               Really drop table ${schema}.${objectname}?
+            </Confirm>
+            <Result>
+               Table ${schema}.${objectname} has been dropped!
+            </Result>
+         </Action>
+
+         <Action id="netezza-table-import-data" label="Import Table Data" icon="import"
+                 class="tableDataImport"
+                 doclink="http://www.dbvis.com/doclink/import-table"/>
+
+         <Action id="netezza-table-export" label="Export Table" icon="export"
+                 class="tableExport"
+                 doclink="http://www.dbvis.com/doclink/export-table"/>
+
+         <Separator/>
+         
+         <Action id="netezza-table-stats" label="Generate Statistics">
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Table" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[
+                  generate statistics on "${schema}"."${objectname}"
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>
+               Really drop table ${schema}.${objectname}?
+            </Confirm>
+            <Result>
+               Table ${schema}.${objectname} has been dropped!
+            </Result>
+         </Action>
+
+         <Separator/>
+
+         <Action id="netezza-table-script" label="Script Table" icon="scriptObject"
+                 class="sqlBuilder"
+                 classargs="script-dialog,SELECT,SELECT *,INSERT,UPDATE,DELETE,CREATE,DROP"/>
+
+      </ActionGroup>
+      
+      <ActionGroup type="View">
+         <Action id="netezza-view-drop" label="Drop View" reload="true" icon="remove">
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="View" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[
+                  drop view "${schema}"."${objectname}"
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>
+               Really drop view ${schema}.${objectname}?
+            </Confirm>
+            <Result>
+               View ${schema}.${objectname} has been dropped!
+            </Result>
+         </Action>
+
+         <Action id="netzza-view-export" label="Export View" icon="export"
+                 class="viewExport"
+                 doclink="http://www.dbvis.com/doclink/export-view"/>
+      </ActionGroup>
+
+      <ActionGroup type="MaterializedView">
+         <Action id="netezza-materialized-view-drop" label="Drop Materialized View" reload="true" icon="remove">
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Materialized View" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[
+                  drop view "${schema}"."${objectname}"
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>
+               Really drop materialized view ${schema}.${objectname}?
+            </Confirm>
+            <Result>
+               Materialized view ${schema}.${objectname} has been dropped!
+            </Result>
+         </Action>
+      </ActionGroup>
+      
+      <ActionGroup type="Sequences">
+         <Action id="netezza-sequences-create" label="Create Sequence" reload="true" icon="add">
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Sequence Name" name="sequenceName" style="text"/>
+            <Input label="Start With" name="startWith" style="text">
+               <Default>1</Default>
+            </Input>
+            <Input label="Increment By" name="increment" style="text">
+               <Default>1</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[
+ create sequence "${schema}".${QB}${sequenceName}${QE}
+   start with ${startWith}
+   increment by ${increment}]]>
+               </SQL>
+            </Command>
+            <Result>
+               Sequence ${schema}.${sequenceName} created!
+            </Result>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Sequence">
+         <Action id="netezza-sequence-drop" label="Drop Sequence" reload="true" icon="remove">
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Sequence" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command>
+               <SQL><![CDATA[drop sequence "${schema}"."${objectname}"]]></SQL>
+            </Command>
+            <Confirm>
+               Really drop sequence ${schema}.${objectname}?
+            </Confirm>
+            <Result>
+               Sequence ${schema}.${objectname} dropped!
+            </Result>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Synonym">
+         <Action id="netezza-synonym-drop" label="Drop Synonym" reload="true" icon="remove">
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Synonym" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command>
+               <SQL><![CDATA[drop synonym "${schema}"."${objectname}"]]></SQL>
+            </Command>
+            <Confirm>
+               Really drop synonym ${schema}.${objectname}?
+            </Confirm>
+            <Result>
+               Synonym ${schema}.${objectname} dropped!
+            </Result>
+         </Action>
+      </ActionGroup>
+      
+      <ActionGroup type="Procedures">
+         <Action id="netezza-procedures-create" label="Create Procedure" reload="true" icon="add"
+                 doclink="http://www.dbvis.com/doclink/create-procedure">
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" name="procSchema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Procedure Name" name="procName" style="text"/>
+            <Input label="Return Data Type" name="retType" style="text">
+               <Default>INTEGER</Default>
+            </Input>
+
+            <Input label="Parameters" style="separator"/>
+            <Input name="parameters" style="grid">
+               <Arg name="output" value="${type}"/>
+               <Arg name="newline" value=", "/>
+
+               <Input name="type" label="Type" style="text">
+                  <Default>INTEGER</Default>
+               </Input>
+            </Input>
+
+            <SetVar name="_parameters" value='#parameters.trim().equals("") ? "()" : "(" + #parameters + ")"'/>
+
+            <Command exectype="asis">
+               <SQL>
+                  <![CDATA[
+CREATE PROCEDURE "${procSchema}".${QB}${procName}${QE}${_parameters}
+RETURNS ${retType}
+LANGUAGE NZPLSQL AS
+BEGIN_PROC
+    BEGIN
+        RAISE NOTICE 'Not implemented yet!';
+    END;
+END_PROC;
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>
+               Create procedure "${procSchema}".${procName}?
+            </Confirm>
+            <Result>
+               Procedure "${procSchema}".${procName} created!
+            </Result>
+         </Action>
+      </ActionGroup>
+      
+      <ActionGroup type="Procedure">
+         <Action id="netezza-procedure-drop" label="Drop Procedure" reload="true" icon="remove">
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Procedure" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command><SQL><![CDATA[drop procedure "${schema}"."${objectname}"${args}]]></SQL></Command>
+            <Confirm>
+               Really drop procedure "${schema}"."${objectname}"${args}?
+            </Confirm>
+            <Result>
+               Procedure "${schema}"."${objectname}"${args} dropped!
+            </Result>
+         </Action>
+         
+         <Action id="netezza-procedure-export" label="Export Procedure" icon="export"
+                 class="procedureExport"
+                 doclink="http://www.dbvis.com/doclink/export-code-object"/>
+
+         <Separator/>
+
+         <Action id="netezza-procedure-script" label="Script Procedure" icon="scriptObject"
+                 class="sqlBuilder"
+                 classargs="script-dialog,CALL,CREATE,DROP"/>
+
+      </ActionGroup>
+      
+      <ActionGroup type="Users">
+         <Action id="netezza-users-create-user" label="Create User" reload="true" icon="add">
+            <Input label="User" name="newuser" style="text" editable="true"/>
+            <Input label="Password" name="password" style="text" editable="true"/>
+
+            <Command>
+               <SQL><![CDATA[create user ${QB}${newuser}${QE} with password '${password}']]></SQL>
+            </Command>
+            <Confirm>
+               Create new user ${newuser}?
+            </Confirm>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="User">
+         <Action id="netezza-user-drop-user" label="Drop User" reload="true" icon="remove">
+            <Input label="User" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+
+            <Command>
+               <SQL><![CDATA[drop user "${objectname}"]]></SQL>
+            </Command>
+            <Confirm>
+               Really drop user ${objectname}?
+            </Confirm>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Groups">
+         <Action id="netezza-groups-create-group" label="Create Group" reload="true" icon="add">
+            <Input label="Group" name="newgroup" style="text" editable="true"/>
+
+            <Command>
+               <SQL><![CDATA[create group ${QB}${newgroup}${QE}]]></SQL>
+            </Command>
+            <Confirm>
+               Create new group ${newgroup}?
+            </Confirm>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Group">
+         <Action id="netzza-group-drop-group" label="Drop Group" reload="true" icon="remove">
+            <Input label="Group" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+
+            <Command>
+               <SQL><![CDATA[drop group "${objectname}"]]></SQL>
+            </Command>
+            <Confirm>
+               Really drop group ${objectname}?
+            </Confirm>
+         </Action>
+      </ActionGroup>
+   </ObjectsActionDef>
+   
+   <ObjectsTreeDef extends="false">
+      
+         <GroupNode type="Catalogs" label="Databases">
+         <DataNode type="Catalog" label="${netezza.getCatalogs.DATABASE}">
+            <SetVar name="catalog" value="${netezza.getCatalogs.DATABASE}"/>
+            <Command idref="netezza.getCatalogs">
+               <Filter index="DATABASE" label="Name"/>
+            </Command>
+
+            <GroupNode type="Schemas" label="Schemas">
+               <DataNode type="Schema" label="${netezza.getSchemas.SCHEMA}">
+                  <SetVar name="schema" value="${netezza.getSchemas.SCHEMA}"/>
+                  <Command idref="netezza.getSchemas">
+                     <Filter index="SCHEMA" label="Name"/>
+                  </Command>
+
+                  <GroupNode type="Tables" label="Tables">
+                     <DataNode type="Table" label="${getTables.TABLE_NAME}">
+                        <SetVar name="objectname" value="${getTables.TABLE_NAME}"/>
+                        <SetVar name="rowcount" value="true"/>
+                        <SetVar name="acceptInQB" value="true"/>
+                        <Command idref="getTables">
+                           <Input name="catalog" value="${catalog}"/>
+                           <Input name="schema" value="${schema}"/>
+                           <Input name="objectname" value="%"/>
+                           <Input name="tableType" value="TABLE, SYSTEM TABLE"/>
+                        </Command>
+
+                        <!--
+                        Need to keep the objectname for the current table in
+                        a new variable so that the viewers will be able to pick up
+                        the correct input to display
+                        -->
+
+                        <SetVar name="theTableName" value="${objectname}"/>
+
+                        <GroupNode type="Columns" label="Columns">
+                           <DataNode type="Column" label="${getColumnDefinitions.COLUMN_NAME}"
+                                     label1="${getColumnDefinitions.TYPE_NAME}" isLeaf="true"
+                                     icon="#dataMap.get('getColumnDefinitions.IS_PRIMARY_KEY') eq true ? 'PrimaryKey' : 'Column'"
+                                     tip="#dataMap.get('getColumnDefinitions.IS_PRIMARY_KEY') eq true ? 'This is a primary key column' : ''">
+                              <SetVar name="objectname" value="${getColumnDefinitions.COLUMN_NAME}"/>
+                              <Command idref="getColumnDefinitions">
+                                 <Input name="catalog" value="${catalog}"/>
+                                 <Input name="schema" value="${schema}"/>
+                                 <Input name="objectname" value="${theTableName}"/>
+                                 <Input name="tableType" value="Table"/>
+                                 <Filter index="TYPE_NAME" label="Type"/>
+                              </Command>
+                              <SetVar name="extPropType2" value="N'column'"/>
+                              <SetVar name="extPropVal2" value="N'${objectname}'"/>
+                           </DataNode>
+                        </GroupNode>
+                     </DataNode>
+                  </GroupNode>
+
+                  <GroupNode type="Views" label="Views">
+                     <DataNode type="View" label="${netezza.getViews.VIEWNAME}">
+                        <SetVar name="objectname" value="${netezza.getViews.VIEWNAME}"/>
+                        <SetVar name="rowcount" value="true"/>
+                        <SetVar name="acceptInQB" value="true"/>
+                        <Command idref="netezza.getViews">
+                           <Input name="view_database" value="${catalog}"/>
+                           <Input name="view_schema" value="${schema}"/>
+                        </Command>
+
+                        <!--
+                        Need to keep the objectname for the current table in
+                        a new variable so that the viewers will be able to pick up
+                        the correct input to display
+                        -->
+                        <SetVar name="theTableName" value="${objectname}"/>
+
+                        <GroupNode type="Columns" label="Columns">
+                           <DataNode type="Column" label="${getColumnDefinitions.COLUMN_NAME}"
+                                     label1="${getColumnDefinitions.TYPE_NAME}" isLeaf="true">
+                              <SetVar name="objectname" value="${getColumnDefinitions.COLUMN_NAME}"/>
+                              <Command idref="getColumnDefinitions">
+                                 <Input name="catalog" value="${catalog}"/>
+                                 <Input name="schema" value="${schema}"/>
+                                 <Input name="objectname" value="${theTableName}"/>
+                                 <Input name="tableType" value="View"/>
+                                 <Filter index="TYPE_NAME" label="Type"/>
+                              </Command>
+                           </DataNode>
+                        </GroupNode>
+
+                     </DataNode>
+                  </GroupNode>
+
+                  <GroupNode type="MaterializedViews" label="Materialized Views">
+                     <DataNode type="MaterializedView" label="${netezza.getMaterializedViews.VIEWNAME}">
+                        <SetVar name="objectname" value="${netezza.getMaterializedViews.VIEWNAME}"/>
+                        <SetVar name="rowcount" value="true"/>
+                        <SetVar name="acceptInQB" value="true"/>
+                        <Command idref="netezza.getMaterializedViews">
+                           <Input name="view_database" value="${catalog}"/>
+                           <Input name="view_schema" value="${schema}"/>
+                        </Command>
+
+                        <!--
+                        Need to keep the objectname for the current table in
+                        a new variable so that the viewers will be able to pick up
+                        the correct input to display
+                        -->
+                        <SetVar name="theTableName" value="${objectname}"/>
+
+                        <GroupNode type="Columns" label="Columns">
+                           <DataNode type="Column" label="${getColumnDefinitions.COLUMN_NAME}"
+                                     label1="${getColumnDefinitions.TYPE_NAME}" isLeaf="true">
+                              <SetVar name="objectname" value="${getColumnDefinitions.COLUMN_NAME}"/>
+                              <Command idref="getColumnDefinitions">
+                                 <Input name="catalog" value="${catalog}"/>
+                                 <Input name="schema" value="${schema}"/>
+                                 <Input name="objectname" value="${theTableName}"/>
+                                 <Input name="tableType" value="View"/>
+                                 <Filter index="TYPE_NAME" label="Type"/>
+                              </Command>
+                              <SetVar name="extPropType2" value="N'column'"/>
+                              <SetVar name="extPropVal2" value="N'${objectname}'"/>
+                           </DataNode>
+                        </GroupNode>
+
+                     </DataNode>
+                  </GroupNode>
+
+                  <GroupNode type="Sequences" label="Sequences">
+                     <DataNode type="Sequence" label="${netezza.getSequences.SEQNAME}"
+                                  isLeaf="true">
+                        <SetVar name="objectname" value="${netezza.getSequences.SEQNAME}"/>
+                        <Command idref="netezza.getSequences">
+                           <Input name="seq_database" value="${catalog}"/>
+                           <Input name="seq_schema" value="${schema}"/>
+                        </Command>
+                     </DataNode>
+                  </GroupNode>
+
+                  <GroupNode type="Synonyms" label="Synonyms">
+                     <DataNode type="Synonym" label="${netezza.getSynonyms.SYNONYM_NAME}" isLeaf="true">
+                        <SetVar name="objectname" value="${netezza.getSynonyms.SYNONYM_NAME}"/>
+                        <Command idref="netezza.getSynonyms">
+                           <Input name="syn_database" value="${catalog}"/>
+                           <Input name="syn_schema" value="${schema}"/>
+                        </Command>
+                     </DataNode>
+                  </GroupNode>
+
+                  <GroupNode type="Functions" label="Functions">
+                     <DataNode type="Function" label="${netezza.getFunctions.FUNCTION}${netezza.getFunctions.ARGUMENTS}" isLeaf="true">
+                        <SetVar name="objectname" value="${netezza.getFunctions.FUNCTION}"/>
+                        <Command idref="netezza.getFunctions">
+                           <Input name="func_database" value="${catalog}"/>
+                           <Input name="func_schema" value="DEFINITION_SCHEMA"/>
+                        </Command>
+                     </DataNode>
+                  </GroupNode>
+
+                  <GroupNode type="Procedures" label="Procedures">
+                     <DataNode type="Procedure" label="${netezza.getProcedures.PROCEDURE}${netezza.getProcedures.ARGUMENTS}" isLeaf="true">
+                        <SetVar name="objectname" value="${netezza.getProcedures.PROCEDURE}"/>
+                        <SetVar name="getDDLName" value="${netezza.getProcedures.PROCEDURE}${netezza.getProcedures.ARGUMENTS}"/>
+                        <SetVar name="args" value="${netezza.getProcedures.ARGUMENTS}"/>
+                        <Command idref="netezza.getProcedures">
+                           <Input name="proc_database" value="${catalog}"/>
+                           <Input name="proc_schema" value="${schema}"/>
+                        </Command>
+                     </DataNode>
+                  </GroupNode>
+               </DataNode>
+            </GroupNode>
+         </DataNode>
+      </GroupNode>
+
+      <!-- ================================================================= -->
+      <!-- DBA Nodes -->
+      <!-- ================================================================= -->
+
+      <GroupNode type="DBA" label="DBA Views">
+         <GroupNode type="Users" label="Users">
+            <DataNode type="User" label="${netezza.getUsers.USERNAME}" isLeaf="true">
+               <SetVar name="objectname" value="${netezza.getUsers.USERNAME}"/>
+               <Command idref="netezza.getUsers"/>
+            </DataNode>
+         </GroupNode>
+         <GroupNode type="Groups" label="Groups">
+            <DataNode type="Group" label="${netezza.getGroups.GROUPNAME}" isLeaf="true">
+               <SetVar name="objectname" value="${netezza.getGroups.GROUPNAME}"/>
+               <Command idref="netezza.getGroups"/>
+            </DataNode>
+         </GroupNode>
+      </GroupNode>
+</ObjectsTreeDef>
+   
+   <ObjectsViewDef extends="true">
+      <ObjectView type="Catalog" action="drop"/>
+      <ObjectView type="Schema" action="drop"/>
+      
+      <ObjectView type="Tables">
+         <DataView id="generic-tables-tables" action="drop"/>
+         <DataView id="generic-tables-references" action="drop"/>
+
+         <DataView id="netzza-tables-tables" icon="Tables" label="Tables" viewer="grid">
+            <Input name="menuItem" value="Open in New Tab...">
+               <Input name="action" value="open-object-in-new-tab-command ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+            <Input name="menuItem" value="Open in Floating Tab...">
+               <Input name="action" value="open-object-in-floating-tab-command ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+            <Input name="menuItem" value="Script: SELECT ALL">
+               <Input name="command" value="select * from ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+            <Input name="menuItem" value="Script: DROP TABLE">
+               <Input name="command" value="drop table ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+            <Command idref="getTables">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="%"/>
+               <Input name="tableType" value="TABLE"/>
+            </Command>
+         </DataView>
+         <DataView id="netezza-tables-references" icon="References" label="References" viewer="tables-refs"
+                   doclink="http://www.dbvis.com/doclink/show-references">
+            <Command idref="getTables">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="%"/>
+               <Input name="tableType" value="TABLE"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Table">
+         <DataView id="generic-table-indexes" action="drop"/>
+         <DataView id="generic-table-grants" action="drop"/>
+         <DataView id="generic-table-ddl">
+            <Message/>
+         </DataView>
+      </ObjectView>
+      
+      <ObjectView type="Views">
+         <DataView id="netezza-views-views" icon="Views" label="Views" viewer="grid">
+            <Input name="menuItem" value="Open in New Tab...">
+               <Input name="action" value="open-object-in-new-tab-command ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+            <Input name="menuItem" value="Open in Floating Tab...">
+               <Input name="action" value="open-object-in-floating-tab-command ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+            <Input name="menuItem" value="Script: SELECT ALL">
+               <Input name="command" value="select * from ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+            <Input name="menuItem" value="Script: DROP VIEW">
+               <Input name="command" value="drop view ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+
+            <Command idref="getTables">
+               <Input name="schema" value="${schema}"/>
+               <Input name="tableType" value="SYSTEM VIEW, VIEW"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="View">
+         <DataView id="netezza-view-info" icon="Info" label="Info" viewer="node-form"/>
+         <DataView id="netezza-view-data" icon="Data" label="Data" viewer="table-data"/>
+         <DataView id="netezza-view-rowcount" icon="RowCount" label="Row Count" viewer="table-rowcount"/>
+         <DataView id="netezza-view-ddl" icon="Source" label="DDL" viewer="ddl">
+            <Input name="objectType" value="View"/>
+            <Input name="formatSQL" value="true"/>
+         </DataView>
+      </ObjectView>
+      
+      <ObjectView type="MaterializedViews">
+         <DataView id="netezza-materialized-views-views" icon="Views" label="Views" viewer="grid">
+            <Input name="menuItem" value="Open in New Tab...">
+               <Input name="action" value="open-object-in-new-tab-command ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+            <Input name="menuItem" value="Open in Floating Tab...">
+               <Input name="action" value="open-object-in-floating-tab-command ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+            <Input name="menuItem" value="Script: SELECT ALL">
+               <Input name="command" value="select * from ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+            <Input name="menuItem" value="Script: DROP VIEW">
+               <Input name="command" value="drop view ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+
+            <Command idref="getTables">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="tableType" value="MATERIALIZED VIEW"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="MaterializedView">
+         <DataView id="netezza-materialized-view-info" icon="Info" label="Info" viewer="node-form"/>
+         <DataView id="netezza-materialized-view-data" icon="Data" label="Data" viewer="table-data"/>
+         <DataView id="netezza-materialized-view-rowcount" icon="RowCount" label="Row Count" viewer="table-rowcount"/>
+         <DataView id="netezza-materialized-view-selectsql" icon="Source" label="Select SQL" viewer="text">
+            <Input name="formatSQL" value="true"/>
+            <Input name="dataColumn" value="DEFINITION"/>
+            <Command idref="netezza.getMaterializedViewSource">
+               <Input name="view_database" value="${catalog}"/>
+               <Input name="view_schema" value="${schema}"/>
+               <Input name="name" value="${objectname}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+      
+      <ObjectView type="Sequences">
+         <DataView id="netezza-sequences-sequences" icon="Sequences" label="Sequences" viewer="grid">
+            <Command idref="netezza.getSequences">
+               <Input name="seq_database" value="${catalog}"/>
+               <Input name="seq_schema" value="${schema}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Sequence">
+         <DataView id="netezza-sequence-info" icon="Info" label="Info" viewer="node-form"/>
+      </ObjectView>
+      
+      <ObjectView type="Synonyms">
+         <DataView id="netezza-synonyms-synonyms" icon="Synonyms" label="Synonyms" viewer="grid">
+            <Command idref="netezza.getSynonyms">
+               <Input name="syn_database" value="${catalog}"/>
+               <Input name="syn_schema" value="${schema}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Synonym">
+         <DataView id="netezza-synonym-info" icon="Info" label="Info" viewer="node-form"/>
+      </ObjectView>
+      
+      <ObjectView type="Functions">
+         <DataView id="netezza-functions-functions" icon="Functions" label="Functions" viewer="grid">
+            <Command idref="netezza.getFunctions">
+               <Input name="func_database" value="${catalog}"/>
+               <Input name="func_schema" value="${schema}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Function">
+         <DataView id="netezza-function-info" icon="Info" label="Info" viewer="node-form"/>
+      </ObjectView>
+      
+      <ObjectView type="Procedures">
+         <DataView id="netezza-procedures-procedures" icon="Procedures" label="Procedures" viewer="grid">
+            <Command idref="netezza.getProcedures">
+               <Input name="func_database" value="${catalog}"/>
+               <Input name="func_schema" value="${schema}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Procedure">
+         <DataView id="generic-procedure-columns" action="drop"/>
+         <DataView id="netezza-procedure-editor" icon="SourceEditor" label="Procedure Editor"
+                   viewer="ProcedureViewer"
+                   classargs="PROCEDURE"
+                   doclink="http://www.dbvis.com/doclink/edit-code-object"/>
+         <DataView id="netezza-procedure-info" icon="Info" label="Info" viewer="node-form"/>
+      </ObjectView>
+      
+      <!-- DBA views -->
+
+      <ObjectView type="Users">
+         <DataView id="netezza-users-users" icon="Users" label="Users" viewer="grid">
+            <Command idref="netezza.getUsers"/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="User">
+         <DataView id="netezza-user-info" icon="Info" label="Info" viewer="node-form"/>
+      </ObjectView>
+
+      <ObjectView type="Groups">
+         <DataView id="netezza-groups-groups" icon="Groups" label="Groups" viewer="grid">
+            <Command idref="netezza.getGroups"/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Group">
+         <DataView id="netezza-group-info" icon="Info" label="Info" viewer="node-form"/>
+      </ObjectView>
+   </ObjectsViewDef>
+</DatabaseProfile>

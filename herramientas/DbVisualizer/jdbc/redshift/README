@@ -1,0 +1,7 @@
+Amazon Redshift JDBC Driver 
+---------------------------
+Version:    1.2.1.1001
+Files:      RedshiftJDBC41.jar
+Reference:  http://docs.aws.amazon.com/redshift/latest/mgmt/configure-jdbc-connection.html#download-jdbc-driver
+
+"Amazon Corporate LLC hereby grant DbVis Software a personal, limited, nonexclusive, non-transferable, non-sublicenseable license to install and use the Amazon Redshift ODBC Driver Software and JDBC Driver Software, including any updates and enhancements to it and accompanying documentation delivered by us to you (the “Software”), for the sole purpose of accessing Amazon Redshift (or any successor service designated by us in writing)."

@@ -1,0 +1,9 @@
+Oracle JDBC Driver
+------------------
+Version:    12.2.0.1.0 
+Files:      ojdbc6.jar (original file is ojdbc8.jar), orai18n.jar
+
+Oracle XML Developer's Kit (XDK)
+--------------------------------
+Version:    12.2.0.1.
+Files:      xmlparserv2.jar, xdb.jar (original file is xdb6.jar)

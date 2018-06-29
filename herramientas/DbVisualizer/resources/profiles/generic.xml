@@ -1,0 +1,958 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE DatabaseProfile SYSTEM "dbvis-defs.dtd">
+
+<!--
+   Copyright (c) DbVis Software AB. All Rights Reserved.
+-->
+
+<DatabaseProfile
+        desc="Generic profile for any database"
+        minver="9.5">
+
+   <!-- =================================================================== -->
+   <!-- Definition of the "generic" profile that use                        -->
+   <!-- java.sql.DatabaseMetaData in the JDBC driver to obtain basic        -->
+   <!-- information of the most basic object types such as table, index,    -->
+   <!-- column and so on.                                                   -->
+   <!-- All specialized profiles extends this generic profile.              -->
+   <!-- =================================================================== -->
+
+   <!--
+     These variables are provided by DbVisualizer and the XML may depend on these:
+
+     ${dbvis-defaultCatalogOrSchema}  - Is the default catalog (aka database) for
+                                        databases such as Sybase, MySQL,
+                                        SQL Server, etc. The default
+                                        database is specified in the URL during
+                                        connect. If the actual database do not
+                                        support the catalog concept then this
+                                        variable is simply null.
+
+     ${dbvis-jdbcURL} - The JDBC URL that was used to establish the connection.
+
+     ${dbvis-jdbcUser} - The user name as specified in the connection properties.
+
+     ${DIB} / ${DIE} - Delimited Identifier Begin / End
+   -->
+
+   <!-- =================================================================== -->
+   <!-- Definition of the generic meta data commands that use pure JDBC.    -->
+   <!-- Normally every command shall be uniquely named by the id attribute  -->
+   <!-- usually prefixed with the name of the profile. Ex:                  -->
+   <!-- Ex. "oracle.getTables", "postgresql.getProcesses"                   -->
+   <!-- =================================================================== -->
+
+   <InitCommands extends="false">
+      <!--Place holder for sub profiles-->
+   </InitCommands>
+
+   <Commands extends="false">
+
+      <Command id="getDataTypes" method="jdbc"/>
+      
+      <Command id="getTableNamesFor" method="jdbc">
+         <Input name="catalog" value="${table_catalog}"/>
+         <Input name="schema" value="${table_schema}"/>
+         <Input name="tableType" value="TABLE,SYSTEM TABLE,VIEW"/>
+      </Command>
+
+      <Command id="getColumnNamesFor" method="jdbc">
+         <Input name="catalog" value="${table_catalog}"/>
+         <Input name="schema" value="${table_schema}"/>
+         <Input name="objectname" value="${table_name}"/>
+      </Command>
+
+      <Command id="getColumnDefinitions" method="jdbc">
+         <Input name="catalog" value="${catalog}"/>
+         <Input name="schema" value="${schema}"/>
+         <Input name="objectname" value="${objectname}"/>
+      </Command>
+
+      <Command id="getDistKeyColumnDefinitions" method="jdbc">
+         <Input name="catalog" value="${catalog}"/>
+         <Input name="schema" value="${schema}"/>
+         <Input name="objectname" value="${objectname}"/>
+      </Command>
+
+      <Command id="getSortKeyColumnDefinitions" method="jdbc">
+         <Input name="catalog" value="${catalog}"/>
+         <Input name="schema" value="${schema}"/>
+         <Input name="objectname" value="${objectname}"/>
+      </Command>
+
+      <Command id="getCatalogNames" method="jdbc">
+         <!--Must have Filter element here since this command is fetched from code-->
+         <Filter index="TABLE_CAT" label="Name"/>
+      </Command>
+
+      <Command id="getSchemaNames" method="jdbc">
+         <!--Must have Filter element here since this command is fetched from code-->
+         <Filter index="TABLE_SCHEM" label="Name"/>
+      </Command>
+
+      <Command id="getTableTypes" method="jdbc">
+         <ProcessDataSet action="renamecolumn" index="1" value="TABLE_TYPE"/>
+      </Command>
+
+      <Command id="getCatalogs" method="jdbc">
+         <ProcessDataSet action="renamecolumn" index="1" value="TABLE_CAT"/>
+      </Command>
+
+      <Command id="getSchemas" method="jdbc">
+         <ProcessDataSet action="renamecolumn" index="1" value="TABLE_SCHEM"/>
+         <ProcessDataSet action="distinct" index="1"/>
+         <!--Hbase/Phoenix returns a null schema which is valid for objects created without a qualifying schema.-->
+         <!--Problem is that in other JDBC meta data methods require a blank schema instead of null.-->
+         <ProcessDataSet action="convertnullvalues" index="1" value=""/>
+      </Command>
+
+      <!--Difference with getSchemas is that getSchemas2 takes the-->
+      <!--catalog as argument-->
+      <Command id="getSchemas2" method="jdbc">
+         <Input name="catalog" value="${catalog}"/>
+         <ProcessDataSet action="renamecolumn" index="1" value="TABLE_SCHEM"/>
+      </Command>
+
+      <Command id="getTables" method="jdbc">
+         <Input name="catalog" value="${catalog}"/>
+         <Input name="schema" value="${schema}"/>
+         <Input name="objectname" value="${objectname}"/>
+         <Input name="tableType" value="${tableType}"/>
+         <ProcessDataSet action="renamecolumn" index="1" value="TABLE_CAT"/>
+         <ProcessDataSet action="renamecolumn" index="2" value="TABLE_SCHEM"/>
+         <ProcessDataSet action="renamecolumn" index="3" value="TABLE_NAME"/>
+         <ProcessDataSet action="renamecolumn" index="4" value="TABLE_TYPE"/>
+         <ProcessDataSet action="renamecolumn" index="5" value="REMARKS"/>
+         <ProcessDataSet action="sortcolumn" index="TABLE_CAT,TABLE_SCHEM,TABLE_NAME"/>
+      </Command>
+
+      <Command id="getIndexes" method="jdbc">
+         <Input name="catalog" value="${catalog}"/>
+         <Input name="schema" value="${schema}"/>
+         <Input name="objectname" value="${objectname}"/>
+         <ProcessDataSet action="renamecolumn" index="1" value="TABLE_CAT"/>
+         <ProcessDataSet action="renamecolumn" index="2" value="TABLE_SCHEM"/>
+         <ProcessDataSet action="renamecolumn" index="3" value="TABLE_NAME"/>
+         <ProcessDataSet action="renamecolumn" index="4" value="NON_UNIQUE"/>
+         <ProcessDataSet action="renamecolumn" index="5" value="INDEX_QUALIFIER"/>
+         <ProcessDataSet action="renamecolumn" index="6" value="INDEX_NAME"/>
+         <ProcessDataSet action="renamecolumn" index="7" value="TYPE"/>
+         <ProcessDataSet action="renamecolumn" index="8" value="ORDINAL_POSITION"/>
+         <ProcessDataSet action="renamecolumn" index="9" value="COLUMN_NAME"/>
+         <ProcessDataSet action="renamecolumn" index="10" value="ASC_OR_DESC"/>
+         <ProcessDataSet action="renamecolumn" index="11" value="CARDINALTIY"/>
+         <ProcessDataSet action="renamecolumn" index="12" value="PAGES"/>
+         <ProcessDataSet action="renamecolumn" index="13" value="FILTER_CONDITION"/>
+         <ProcessDataSet action="sortcolumn" index="TABLE_CAT,TABLE_SCHEM,TABLE_NAME,INDEX_NAME,ORDINAL_POSITION"/>
+      </Command>
+
+      <Command id="getPrimaryKeys" method="jdbc">
+         <Input name="catalog" value="${catalog}"/>
+         <Input name="schema" value="${schema}"/>
+         <Input name="objectname" value="${objectname}"/>
+         <ProcessDataSet action="renamecolumn" index="1" value="TABLE_CAT"/>
+         <ProcessDataSet action="renamecolumn" index="2" value="TABLE_SCHEM"/>
+         <ProcessDataSet action="renamecolumn" index="3" value="TABLE_NAME"/>
+         <ProcessDataSet action="renamecolumn" index="4" value="COLUMN_NAME"/>
+         <ProcessDataSet action="renamecolumn" index="5" value="KEY_SEQ"/>
+         <ProcessDataSet action="renamecolumn" index="6" value="PK_NAME"/>
+      </Command>
+
+      <Command id="getColumns" method="jdbc">
+         <Input name="catalog" value="${catalog}"/>
+         <Input name="schema" value="${schema}"/>
+         <Input name="objectname" value="${objectname}"/>
+         <ProcessDataSet action="renamecolumn" index="1" value="TABLE_CAT"/>
+         <ProcessDataSet action="renamecolumn" index="2" value="TABLE_SCHEM"/>
+         <ProcessDataSet action="renamecolumn" index="3" value="TABLE_NAME"/>
+         <ProcessDataSet action="renamecolumn" index="4" value="COLUMN_NAME"/>
+         <ProcessDataSet action="renamecolumn" index="5" value="DATA_TYPE"/>
+         <ProcessDataSet action="renamecolumn" index="6" value="TYPE_NAME"/>
+         <ProcessDataSet action="renamecolumn" index="7" value="COLUMN_SIZE"/>
+         <ProcessDataSet action="renamecolumn" index="8" value="BUFFER_LENGTH"/>
+         <ProcessDataSet action="renamecolumn" index="9" value="DECIMAL_DIGITS"/>
+         <ProcessDataSet action="renamecolumn" index="10" value="NUM_PREC_RADIX"/>
+         <ProcessDataSet action="renamecolumn" index="11" value="NULLABLE"/>
+         <ProcessDataSet action="renamecolumn" index="12" value="REMARKS"/>
+         <ProcessDataSet action="renamecolumn" index="13" value="COLUMN_DEF"/>
+         <ProcessDataSet action="renamecolumn" index="14" value="SQL_DATA_TYPE"/>
+         <ProcessDataSet action="renamecolumn" index="15" value="SQL_DATETIME_SUB"/>
+         <ProcessDataSet action="renamecolumn" index="16" value="CHAR_OCTET_LENGTH"/>
+         <ProcessDataSet action="renamecolumn" index="17" value="ORDINAL_POSITION"/>
+      </Command>
+
+      <Command id="getPrivileges" method="jdbc">
+         <Input name="catalog" value="${catalog}"/>
+         <Input name="schema" value="${schema}"/>
+         <Input name="objectname" value="${objectname}"/>
+         <ProcessDataSet action="renamecolumn" index="1" value="TABLE_CAT"/>
+         <ProcessDataSet action="renamecolumn" index="2" value="TABLE_SCHEM"/>
+         <ProcessDataSet action="renamecolumn" index="3" value="TABLE_NAME"/>
+         <ProcessDataSet action="renamecolumn" index="4" value="GRANTOR"/>
+         <ProcessDataSet action="renamecolumn" index="5" value="GRANTEE"/>
+         <ProcessDataSet action="renamecolumn" index="6" value="PRIVILEGE"/>
+         <ProcessDataSet action="renamecolumn" index="7" value="IS_GRANTABLE"/>
+      </Command>
+
+      <Command id="getBestRowIdentifier" method="jdbc">
+         <Input name="catalog" value="${catalog}"/>
+         <Input name="schema" value="${schema}"/>
+         <Input name="objectname" value="${objectname}"/>
+         <ProcessDataSet action="renamecolumn" index="1" value="SCOPE"/>
+         <ProcessDataSet action="renamecolumn" index="2" value="COLUMN_NAME"/>
+         <ProcessDataSet action="renamecolumn" index="3" value="DATA_TYPE"/>
+         <ProcessDataSet action="renamecolumn" index="4" value="TYPE_NAME"/>
+         <ProcessDataSet action="renamecolumn" index="5" value="COLUMN_SIZE"/>
+         <ProcessDataSet action="renamecolumn" index="6" value="BUFFER_LENGTH"/>
+         <ProcessDataSet action="renamecolumn" index="7" value="DECIMAL_DIGITS"/>
+         <ProcessDataSet action="renamecolumn" index="8" value="PSEUDO_COLUMN"/>
+      </Command>
+
+      <Command id="getVersionColumns" method="jdbc">
+         <Input name="catalog" value="${catalog}"/>
+         <Input name="schema" value="${schema}"/>
+         <Input name="objectname" value="${objectname}"/>
+         <ProcessDataSet action="renamecolumn" index="1" value="SCOPE"/>
+         <ProcessDataSet action="renamecolumn" index="2" value="COLUMN_NAME"/>
+         <ProcessDataSet action="renamecolumn" index="3" value="DATA_TYPE"/>
+         <ProcessDataSet action="renamecolumn" index="4" value="TYPE_NAME"/>
+         <ProcessDataSet action="renamecolumn" index="5" value="COLUMN_SIZE"/>
+         <ProcessDataSet action="renamecolumn" index="6" value="BUFFER_LENGTH"/>
+         <ProcessDataSet action="renamecolumn" index="7" value="DECIMAL_DIGITS"/>
+         <ProcessDataSet action="renamecolumn" index="8" value="PSEUDO_COLUMN"/>
+      </Command>
+
+      <Command id="getProcedures" method="jdbc">
+         <Input name="catalog" value="${catalog}"/>
+         <Input name="schema" value="${schema}"/>
+         <Input name="objectname" value="${objectname}"/>
+         <ProcessDataSet action="renamecolumn" index="1" value="PROCEDURE_CAT"/>
+         <ProcessDataSet action="renamecolumn" index="2" value="PROCEDURE_SCHEM"/>
+         <ProcessDataSet action="renamecolumn" index="3" value="PROCEDURE_NAME"/>
+         <ProcessDataSet action="renamecolumn" index="7" value="REMARKS"/>
+         <ProcessDataSet action="renamecolumn" index="8" value="PROCEDURE_TYPE"/>
+      </Command>
+
+      <Command id="getProcedureColumns" method="jdbc">
+         <Input name="catalog" value="${catalog}"/>
+         <Input name="schema" value="${schema}"/>
+         <Input name="objectname" value="${objectname}"/>
+         <ProcessDataSet action="renamecolumn" index="1" value="PROCEDURE_CAT"/>
+         <ProcessDataSet action="renamecolumn" index="2" value="PROCEDURE_SCHEM"/>
+         <ProcessDataSet action="renamecolumn" index="3" value="PROCEDURE_NAME"/>
+         <ProcessDataSet action="renamecolumn" index="4" value="COLUMN_NAME"/>
+         <ProcessDataSet action="renamecolumn" index="5" value="COLUMN_TYPE"/>
+         <ProcessDataSet action="renamecolumn" index="6" value="DATA_TYPE"/>
+         <ProcessDataSet action="renamecolumn" index="7" value="TYPE_NAME"/>
+         <ProcessDataSet action="renamecolumn" index="8" value="PRECISION"/>
+         <ProcessDataSet action="renamecolumn" index="9" value="LENGTH"/>
+         <ProcessDataSet action="renamecolumn" index="10" value="SCALE"/>
+         <ProcessDataSet action="renamecolumn" index="11" value="RADIX"/>
+         <ProcessDataSet action="renamecolumn" index="12" value="NULLABLE"/>
+         <ProcessDataSet action="renamecolumn" index="13" value="REMARKS"/>
+      </Command>
+
+      <!-- The following two commands for functions requires JDBC 4 drivers -->
+      <Command id="getFunctions" method="jdbc">
+         <Input name="catalog" value="${catalog}"/>
+         <Input name="schema" value="${schema}"/>
+         <Input name="objectname" value="${objectname}"/>
+      </Command>
+
+      <Command id="getFunctionColumns" method="jdbc">
+         <Input name="catalog" value="${catalog}"/>
+         <Input name="schema" value="${schema}"/>
+         <Input name="objectname" value="${objectname}"/>
+      </Command>
+   </Commands>
+
+   <!-- =================================================================== -->
+   <!-- Definition of the object actions                                    -->
+   <!-- =================================================================== -->
+
+   <ObjectsActionDef extends="false">
+      <ActionGroup type="Databases">
+         <If test="#util.isLicensed()">
+            <Action id="generic-databases-create-table" label="Create Table" icon="add" reload="true"
+                    class="tableCreateOrAlter"
+                    classargs="create"
+                    doclink="http://www.dbvis.com/doclink/create-table"/>
+
+         </If>
+         <Else>
+            <Action id="generic-databases-create-table-INFO" label="Create Table" icon="add">
+               <Confirm>
+                  <![CDATA[
+                  This feature is available only in the <b>DbVisualizer Pro</b> edition.
+                  ]]>
+               </Confirm>
+            </Action>
+         </Else>         
+      </ActionGroup>
+
+      <ActionGroup type="Catalog">
+         <If test="#util.isLicensed()">
+            <Action id="generic-catalog-create-table" label="Create Table" icon="add" reload="true"
+                    class="tableCreateOrAlter"
+                    classargs="create"
+                    doclink="http://www.dbvis.com/doclink/create-table"/>
+         </If>
+         <Else>
+            <Action id="generic-catalog-create-table-INFO" label="Create Table" icon="add">
+               <Confirm>
+                  <![CDATA[
+                  This feature is available only in the <b>DbVisualizer Pro</b> edition.
+                  ]]>
+               </Confirm>
+            </Action>
+         </Else>         
+      </ActionGroup>
+
+      <ActionGroup type="Schema">
+         <If test="#util.isLicensed()">
+            <Action id="generic-schema-create-table" label="Create Table" icon="add" reload="true"
+                    class="tableCreateOrAlter"
+                    classargs="create"
+                    doclink="http://www.dbvis.com/doclink/create-table"/>
+
+         </If>
+         <Else>
+            <Action id="generic-schema-create-table-INFO" label="Create Table" icon="add">
+               <Confirm>
+                  <![CDATA[
+                  This feature is available only in the <b>DbVisualizer Pro</b> edition.
+                  ]]>
+               </Confirm>
+            </Action>
+         </Else>         
+      </ActionGroup>
+
+      <ActionGroup type="Tables">
+         <If test="#util.isLicensed()">
+            <Action id="generic-tables-create-table" label="Create Table" icon="add" reload="true"
+                    class="tableCreateOrAlter"
+                    classargs="create"
+                    doclink="http://www.dbvis.com/doclink/create-table"/>
+         </If>
+         <Else>
+            <Action id="generic-tables-create-table-INFO" label="Create Table" icon="add">
+               <Confirm>
+                  <![CDATA[
+                  This feature is available only in the <b>DbVisualizer Pro</b> edition.
+                  ]]>
+               </Confirm>
+            </Action>
+         </Else>         
+         
+         <If test="#util.isLicensed()">
+            <Action id="generic-tables-import-data" label="Import Table Data" icon="import"
+                    class="tableDataImport"
+                    doclink="http://www.dbvis.com/doclink/import-table"/>
+         </If>
+         <Else>
+            <Action id="generic-tables-import-data-INFO" label="Import Table Data" icon="import">
+               <Confirm>
+                  <![CDATA[
+                  This feature is available only in the <b>DbVisualizer Pro</b> edition.
+                  ]]>
+               </Confirm>
+            </Action>
+         </Else>         
+
+      </ActionGroup>
+
+      <ActionGroup type="Table">
+         <If test="#util.isLicensed()">
+            <Action id="generic-table-drop" label="Drop Table" reload="true" icon="remove">
+               <Input label="Catalog" style="text" editable="false">
+                  <Default>${catalog}</Default>
+               </Input>
+               <Input label="Schema" style="text" editable="false">
+                  <Default>${schema}</Default>
+               </Input>
+               <Input label="Table" style="text" editable="false">
+                  <Default>${objectname}</Default>
+               </Input>
+
+               <SetVar name="_catalog" value='#catalog == null or #catalog.trim().length() == 0 ? null : #QBP + #catalog + #QEP'/>
+               <SetVar name="_schema" value='#schema == null or #schema.trim().length() == 0 ? null : #QBP + #schema + #QEP'/>
+               <SetVar name="_objectname" value='#QBP + #objectname + #QEP'/>
+
+
+               <SetVar name="_separator" value='"."'/>
+               <SetVar name="_name" value='#_catalog != null ? #_catalog : null'/>
+               <SetVar name="_name" value='#_schema != null ? (#_name != null ? #_name + #CS + #_schema : #_schema) : #_name'/>
+               <SetVar name="_name" value='#_name != null ? #_name + #_separator + #_objectname : #_objectname'/>
+
+               <Command>
+                  <SQL><![CDATA[drop table ${_name}]]></SQL>
+               </Command>
+               <Confirm>
+                  Really drop table ${_name}?
+               </Confirm>
+               <Result>
+                  Table ${_name} has been dropped!
+               </Result>
+            </Action>
+         </If>
+         <Else>
+            <Action id="generic-table-drop-INFO" label="Drop Table" icon="remove">
+               <Confirm>
+                  <![CDATA[
+                  This feature is available only in the <b>DbVisualizer Pro</b> edition.
+                  ]]>
+               </Confirm>
+            </Action>
+         </Else>
+
+         <Separator/>
+
+         <If test="#util.isLicensed()">
+            <!--
+            This action has been modified to allow for the SQL syntax required by Firebird:
+            DBVIS-885 The generated CREATE INDEX statement does not work with Firebird
+            -->
+            <Action id="generic-table-create-index" label="Create Index" reload="true">
+               <Input label="Database" style="text" editable="false">
+                  <Default>${catalog}</Default>
+               </Input>
+               <Input label="Schema" style="text" editable="false">
+                  <Default>${schema}</Default>
+               </Input>
+               <Input label="Table" style="text" editable="false">
+                  <Default>${objectname}</Default>
+               </Input>
+               <Input label="Index Name" name="indexname" style="text"/>
+               <Input label="Unique" name="unique" style="check">
+                  <Values>unique</Values>
+               </Input>
+
+               <If test="#util.isDatabaseType('firebird')">
+                  <Input name="sortorder" label="Sort Order" style="radio">
+                     <Labels>ASC|DESC|Default</Labels>
+                     <Values>ASC|DESC|</Values>
+                     <Default>ASC</Default>
+                  </Input>
+               </If>
+
+               <Input label="Columns" style="separator"/>
+
+               <Input name="columns" style="grid">
+                  <If test="#util.isDatabaseType('firebird')">
+                     <Arg name="output" value="${QB}${columnname}${QE}"/>
+                  </If>
+                  <Else>
+                     <Arg name="output" value="${QB}${columnname}${QE}${_sortorder}"/>
+                  </Else>
+                  <Arg name="newline" value=", "/>
+
+                  <Input name="columnname" label="Column Name" style="list">
+                     <Values column="4">
+                        <Command idref="getColumnNamesFor">
+                           <Input name="table_catalog" value="${catalog}"/>
+                           <Input name="table_schema" value="${schema}"/>
+                           <Input name="table_name" value="${objectname}"/>
+                        </Command>
+                     </Values>
+                     <Default>${0}</Default>
+                  </Input>
+
+                  <If test="#util.isNotDatabaseType('firebird')">
+                     <Input name="sortorder" label="Sort Order" style="radio">
+                        <Labels>ASC|DESC|Default</Labels>
+                        <Values>ASC|DESC|</Values>
+                        <Default>ASC</Default>
+                     </Input>
+                  </If>
+                  <SetVar name="_sortorder" value='#sortorder.equals("") ? "" : " " + #sortorder'/>
+               </Input>
+
+                <If test="#util.isDatabaseType('firebird')">
+                  <SetVar name="_sortorder" value='#sortorder.equals("") ? "" : " " + #sortorder'/>
+               </If>
+               <SetVar name="_unique" value='#unique.equals("") ? "" : " " + #unique'/>
+               <SetVar name="_columns" value='#columns.trim().equals("") ? "" : "(" + #columns + ")"'/>
+              
+               <Command>
+                   <If test="#util.isDatabaseType('firebird')">
+                     <SQL>
+                        <![CDATA[create${_unique}${_sortorder} index ${QB}${indexname}${QE} on ${QBP}${objectname}${QEP} ${_columns}]]>
+                     </SQL>
+                  </If>
+                  <Else>
+                     <SQL>
+                        <![CDATA[create${_unique} index ${QB}${indexname}${QE} on ${QBP}${objectname}${QEP} ${_columns}]]>
+                     </SQL>
+                  </Else>
+               </Command>
+               <Confirm>
+                  <![CDATA[Create index "${indexname}"?]]>
+               </Confirm>
+               <Result>
+                  <![CDATA[Index "${indexname}" created!]]>
+               </Result>
+            </Action>
+         </If>
+         <Else>
+            <Action id="generic-table-create-index-INFO" label="Create Index">
+               <Confirm>
+                  <![CDATA[
+                  This feature is available only in the <b>DbVisualizer Pro</b> edition.
+                  ]]>
+               </Confirm>
+            </Action>
+         </Else>
+
+         <If test="#util.isLicensed()">
+            <Action id="generic-table-import-data" label="Import Table Data" icon="import"
+                    class="tableDataImport"
+                    doclink="http://www.dbvis.com/doclink/import-table"/>
+         </If>
+         <Else>
+            <Action id="generic-table-import-data-INFO" label="Import Table Data" icon="import">
+               <Confirm>
+                  <![CDATA[
+                  This feature is available only in the <b>DbVisualizer Pro</b> edition.
+                  ]]>
+               </Confirm>
+            </Action>
+         </Else>
+
+         <If test="#util.isLicensed()">
+            <Action id="generic-table-export" label="Export Table" icon="export"
+                    class="tableExport"
+                    doclink="http://www.dbvis.com/doclink/export-table"/>
+         </If>
+         <Else>
+            <Action id="generic-table-export-INFO" label="Export Table" icon="export">
+               <Confirm>
+                  <![CDATA[
+                  This feature is available only in the <b>DbVisualizer Pro</b> edition.
+                  ]]>
+               </Confirm>
+            </Action>
+         </Else>
+
+         <Separator/>
+
+         <Action id="generic-table-script-builder" label="Script Table" icon="scriptObject"
+                 class="sqlBuilder"
+                 classargs="script-dialog,SELECT,SELECT *,INSERT,UPDATE,DELETE,CREATE,DROP"/>
+
+      </ActionGroup>
+
+      <ActionGroup type="Index">
+         <If test="#util.isLicensed()">
+            <Action id="generic-table-drop-index" label="Drop Index" reload="true" icon="remove">
+               <Input label="Database" style="text" editable="false">
+                  <Default>${catalog}</Default>
+               </Input>
+               <Input label="Schema" style="text" editable="false">
+                  <Default>${schema}</Default>
+               </Input>
+               <Input label="Table" style="text" editable="false">
+                  <Default>${theTableName}</Default>
+               </Input>
+               <Input label="Index Name" style="text" editable="false">
+                  <Default>${objectname}</Default>
+               </Input>
+
+               <Command>
+                  <SQL>
+                     <![CDATA[drop index ${QBP}${objectname}${QEP}]]>
+                  </SQL>
+               </Command>
+               <Confirm>
+                  <![CDATA[Really drop index "${objectname}"?]]>
+               </Confirm>
+               <Result>
+                  <![CDATA[Index "${objectname}" has been dropped!]]>
+               </Result>
+            </Action>
+         </If>
+         <Else>
+            <Action id="generic-table-drop-index-INFO" label="Drop Index" icon="remove">
+               <Confirm>
+                  <![CDATA[
+                  This feature is available only in the <b>DbVisualizer Pro</b> edition.
+                  ]]>
+               </Confirm>
+            </Action>
+         </Else>
+      </ActionGroup>
+
+   </ObjectsActionDef>
+
+   <!-- =================================================================== -->
+   <!-- Definition of the database objects tree                             -->
+   <!-- =================================================================== -->
+
+   <ObjectsTreeDef extends="false">
+
+      <DataNode type="Catalog" label="${getCatalogs.TABLE_CAT}" is-empty-output="continue">
+         <SetVar name="catalog" value="${getCatalogs.TABLE_CAT}"/>
+         <If test="#dp.SKIP_CATALOGS eq null">
+            <Command idref="getCatalogs">
+               <Filter index="TABLE_CAT" label="Name"/>
+            </Command>
+         </If>
+         <DataNode type="Schema"
+                   label="${getSchemas.TABLE_SCHEM}"
+                   label1="/*EXPR*/''.equals(#dataMap.get('getSchemas.TABLE_SCHEM')) ? 'Empty schema name' : ''"
+                   is-empty-output="continue">
+
+            <SetVar name="schema" value="${getSchemas.TABLE_SCHEM}"/>
+            <If test="#util.isDatabaseType('snowflake') or #util.isDatabaseType('presto')">
+               <Command idref="getSchemas2">
+                  <Input name="catalog" value="${catalog}"/>
+                  <Filter index="TABLE_SCHEM" label="Name"/>
+                  <!--Must rename this as it otherwise will be getSchemas2.TABLE_SCHEM-->
+                  <Output index="TABLE_SCHEM" name="getSchemas.TABLE_SCHEM"/>
+               </Command>
+            </If>
+            <Else>
+               <Command idref="getSchemas">
+                  <Filter index="TABLE_SCHEM" label="Name"/>
+               </Command>
+            </Else>
+            <DataNode type="Tables" label="${getTableTypes.TABLE_TYPE}" is-empty-output="continue">
+               <SetVar name="tableType" value="${getTableTypes.TABLE_TYPE}"/>
+               <Command idref="getTableTypes"/>
+
+               <DataNode type="Table" label="${getTables.TABLE_NAME}" isLeaf="!#util.isLicensed()">
+                  <SetVar name="objectname" value="${getTables.TABLE_NAME}"/>
+                  <SetVar name="rowcount" value="true"/>
+                  <SetVar name="acceptInQB" value="true"/>
+                  <Command idref="getTables">
+                     <Input name="catalog" value="${catalog}"/>
+                     <Input name="schema" value="${schema}"/>
+                     <Input name="objectname" value="%"/>
+                     <Input name="tableType" value="${tableType}"/>
+                  </Command>
+
+                  <!-- Need to keep the objectname for the current table in
+                       a new variable so that the viewers will be able to pick up
+                       the correct input to display -->
+                  <SetVar name="theTableName" value="${objectname}"/>
+
+                  <GroupNode type="Columns" label="Columns">
+                     <DataNode type="Column" label="${getColumnDefinitions.COLUMN_NAME}"
+                               label1="${getColumnDefinitions.TYPE_NAME}"
+                               isLeaf="true"
+                               icon="#dataMap.get('getColumnDefinitions.IS_PRIMARY_KEY') eq true ? 'PrimaryKey' : 'Column'"
+                               tip="#dataMap.get('getColumnDefinitions.IS_PRIMARY_KEY') eq true ? 'This is a primary key column' : ''">
+                        <SetVar name="objectname" value="${getColumnDefinitions.COLUMN_NAME}"/>
+                        <Command idref="getColumnDefinitions">
+                           <Input name="schema" value="${schema}"/>
+                           <Input name="catalog" value="${catalog}"/>
+                           <Input name="objectname" value="${theTableName}"/>
+                           <Filter index="TYPE_NAME" label="Type"/>
+                        </Command>
+                     </DataNode>
+                  </GroupNode>
+                  <GroupNode type="Indexes" label="Indexes">
+                     <DataNode type="Index" label="${getIndexes.INDEX_NAME}"
+                               label1="${getIndexes.ORDINAL_POSITION}:${getIndexes.COLUMN_NAME}"
+                               isLeaf="true">
+                        <SetVar name="objectname" value="${getIndexes.INDEX_NAME}"/>
+                        <Command idref="getIndexes">
+                           <Input name="schema" value="${schema}"/>
+                           <Input name="catalog" value="${catalog}"/>
+                           <Input name="objectname" value="${theTableName}"/>
+                           <ProcessDataSet action="removeisnullrows" index="INDEX_NAME"/>
+                           <Filter index="COLUMN_NAME" label="Column Name"/>
+                        </Command>
+                     </DataNode>
+                  </GroupNode>
+               </DataNode>
+
+            </DataNode>
+            <GroupNode type="Procedures" label="Procedures">
+               <DataNode type="Procedure" label="${getProcedures.PROCEDURE_NAME}" isLeaf="true">
+                  <SetVar name="objectname" value="${getProcedures.PROCEDURE_NAME}"/>
+                  <Command idref="getProcedures">
+                     <Input name="catalog" value="${catalog}"/>
+                     <Input name="schema" value="${schema}"/>
+                     <Input name="objectname" value="%"/>
+                  </Command>
+               </DataNode>
+            </GroupNode>
+         </DataNode>
+      </DataNode>
+
+   </ObjectsTreeDef>
+
+   <!-- =================================================================== -->
+   <!-- Definition of the database objects views                            -->
+   <!-- =================================================================== -->
+
+   <ObjectsViewDef extends="false">
+
+      <ObjectView type="Catalogs">
+         <DataView id="generic-catalogs-catalogs" icon="Catalogs" label="Catalogs" viewer="grid">
+            <Command idref="getCatalogs"/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Catalog">
+         <DataView id="generic-catalog-tables" icon="Tables" label="Tables" viewer="grid">
+            <If test="#util.isLicensed()">
+               <Input name="menuItem" value="Open in New Tab...">
+                  <Input name="action" value="open-object-in-new-tab-command ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+               </Input>
+               <Input name="menuItem" value="Open in Floating Tab...">
+                  <Input name="action" value="open-object-in-floating-tab-command ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+               </Input>
+            </If>
+            <Input name="menuItem" value="Script: SELECT ALL">
+               <Input name="command" value="select * from ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+            <Input name="menuItem" value="Script: DROP TABLE">
+               <Input name="command" value="drop table ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+            <Command idref="getTables">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="%"/>
+               <Input name="tableType" value="${tableType}"/>
+            </Command>
+         </DataView>
+         <DataView id="generic-catalog-references" icon="References" label="References" viewer="tables-refs"
+                   doclink="http://www.dbvis.com/doclink/show-references">
+            <Command idref="getTables">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="%"/>
+               <Input name="tableType" value="${tableType}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Schemas">
+         <DataView id="generic-schemas-schemas" icon="Schemas" label="Schemas" viewer="grid">
+            <If test="#util.isDatabaseType('snowflake') or #util.isDatabaseType('presto')">
+               <Command idref="getSchemas2">
+                  <Input name="catalog" value="${catalog}"/>
+               </Command>
+            </If>
+            <Else>
+               <Command idref="getSchemas"/>
+            </Else>
+
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Schema">
+         <DataView id="generic-schema-tables" icon="Tables" label="Tables" viewer="grid">
+            <If test="#util.isLicensed()">
+               <Input name="menuItem" value="Open in New Tab...">
+                  <Input name="action" value="open-object-in-new-tab-command ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+               </Input>
+               <Input name="menuItem" value="Open in Floating Tab...">
+                  <Input name="action" value="open-object-in-floating-tab-command ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+               </Input>
+            </If>
+            <Input name="menuItem" value="Script: SELECT ALL">
+               <Input name="command" value="select * from ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+            <Input name="menuItem" value="Script: DROP TABLE">
+               <Input name="command" value="drop table ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+            <Command idref="getTables">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="%"/>
+               <Input name="tableType" value="${tableType}"/>
+            </Command>
+         </DataView>
+         <DataView id="generic-schema-references" icon="References" label="References" viewer="tables-refs"
+                   doclink="http://www.dbvis.com/doclink/show-references">
+            <Command idref="getTables">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="%"/>
+               <Input name="tableType" value="${tableType}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Tables">
+         <DataView id="generic-tables-tables" icon="Tables" label="Tables" viewer="grid">
+            <If test="#util.isLicensed()">
+               <Input name="menuItem" value="Open in New Tab...">
+                  <Input name="action" value="open-object-in-new-tab-command ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+               </Input>
+               <Input name="menuItem" value="Open in Floating Tab...">
+                  <Input name="action" value="open-object-in-floating-tab-command ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+               </Input>
+            </If>
+            <Input name="menuItem" value="Script: SELECT ALL">
+               <Input name="command" value="select * from ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+            <Input name="menuItem" value="Script: DROP">
+               <Input name="command" value="drop ${tableType} ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+            <Command idref="getTables">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="%"/>
+               <Input name="tableType" value="${tableType}"/>
+            </Command>
+         </DataView>
+         <DataView id="generic-tables-references" icon="References" label="References" viewer="tables-refs"
+                   doclink="http://www.dbvis.com/doclink/show-references">
+            <Command idref="getTables">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="%"/>
+               <Input name="tableType" value="${tableType}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Table">
+         <DataView id="generic-table-info" icon="Info" label="Info" viewer="node-form"/>
+
+         <DataView id="generic-table-columns" icon="Columns" label="Columns" viewer="grid">
+            <Command idref="getColumns">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="${objectname}"/>
+            </Command>
+         </DataView>
+         <DataView id="generic-table-data" icon="Data" label="Data" viewer="table-data">
+            <If test="!#util.isLicensed()">
+               <Message>
+                  <![CDATA[
+<html>
+In <b>DbVisualizer Pro</b> this feature includes data editing functionality and management of binary/BLOB data.
+</html>
+         ]]>
+               </Message>
+            </If>
+         </DataView>
+         <DataView id="generic-table-rowcount" icon="RowCount" label="Row Count" viewer="table-rowcount"/>
+         <DataView id="generic-table-primarykey" icon="PrimaryKey" label="Primary Key" viewer="grid">
+            <Command idref="getPrimaryKeys">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="${objectname}"/>
+            </Command>
+         </DataView>
+         <DataView id="generic-table-indexes" icon="Index" label="Indexes" viewer="grid">
+            <Command idref="getIndexes">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="${objectname}"/>
+               <!--DBVIS-2540 Indexes doesn't show in the Indexes tab for a -->
+               <!--table for Progress databases-->
+               <If test="#util.isDatabaseType('informix')">
+                  <!--DBVIS-1067 BOOLEAN and BLOB columns are shown to be -->
+                  <!--included in all indexes in the Indexes tab and subnode for a table node-->
+                  <ProcessDataSet action="removerowsifequalto" index="ORDINAL_POSITION" value="0"/>
+               </If>
+            </Command>
+         </DataView>
+         <DataView id="generic-table-grants" icon="TablePrivileges" label="Grants" viewer="grid">
+            <Command idref="getPrivileges">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="${objectname}"/>
+            </Command>
+         </DataView>
+         <DataView id="generic-table-rowid" icon="RowId" label="Row Id" viewer="grid">
+            <Command idref="getBestRowIdentifier">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="${objectname}"/>
+            </Command>
+         </DataView>
+         <DataView id="generic-table-ddl" icon="Source" label="DDL" viewer="ddl">
+            <Input name="formatSQL" value="true"/>
+            <Message>
+               <![CDATA[
+<html>
+This is a generic presentation of the table DDL based solely on the information
+provided by the JDBC driver. <b>It may not be complete, correct, or run properly.</b
+</html>
+         ]]>
+            </Message>
+         </DataView>
+
+         <DataView id="generic-table-references" icon="References" label="References" viewer="table-refs"
+                   doclink="http://www.dbvis.com/doclink/show-table-references"/>
+         <If test="#util.isLicensed()">
+            <DataView id="generic-table-navigator" icon="Navigator" label="Navigator" viewer="navigator"
+                      doclink="http://www.dbvis.com/doclink/navigate-references"/>
+         </If>
+      </ObjectView>
+
+      <ObjectView type="Columns">
+         <DataView id="generic-columns-columns" icon="Columns" label="Columns" viewer="grid">
+            <Command idref="getColumns">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="${theTableName}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Column">
+         <DataView id="generic-column-column" icon="Column" label="Column" viewer="node-form"/>
+      </ObjectView>
+
+      <ObjectView type="Indexes">
+         <DataView id="generic-indexes-indexes" icon="Indexes" label="Indexes" viewer="grid">
+            <Command idref="getIndexes">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="${theTableName}"/>
+               <ProcessDataSet action="removeisnullrows" index="INDEX_NAME"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Index">
+         <DataView id="generic-index-index" icon="Index" label="Index" viewer="node-form"/>
+      </ObjectView>
+
+      <ObjectView type="Procedures">
+         <DataView id="generic-procedures-procedures" icon="Procedures" label="Procedures" viewer="grid">
+            <Command idref="getProcedures">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="%"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Procedure">
+         <DataView id="generic-procedure-columns" icon="Columns" label="Procedure Columns" viewer="grid">
+            <Command idref="getProcedureColumns">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="${objectname}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <!-- DBA (this is here primarly for sub profiles as it is not used in -->
+      <!-- the generic profile -->
+
+      <ObjectView type="DBA">
+         <DataView id="generic-dba-dba" icon="DBA" label="DBA" viewer="message">
+            <Message>
+               <![CDATA[
+<html>
+  This object groups various <b>DBA views</b> that may require special
+  privileges i.e they may not work properly or give error messages if
+  authorization is not adequate.
+</html>
+         ]]>
+            </Message>
+         </DataView>
+      </ObjectView>
+
+   </ObjectsViewDef>
+
+</DatabaseProfile>

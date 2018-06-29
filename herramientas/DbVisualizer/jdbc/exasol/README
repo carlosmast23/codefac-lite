@@ -1,0 +1,8 @@
+Exasol JDBC Driver
+------------------
+Version:    6.0.8
+Files:      exajdbc.jar
+Reference:  http://www.exasol.com
+
+"Exasol grants DbVis Software AB the right to bundle the
+Exasol SQL JDBC driver with DbVisualizer."

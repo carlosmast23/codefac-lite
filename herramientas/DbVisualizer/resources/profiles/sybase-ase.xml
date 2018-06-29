@@ -1,0 +1,2482 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE DatabaseProfile SYSTEM "dbvis-defs.dtd">
+
+<!--
+   Copyright (c) DbVis Software AB. All Rights Reserved.
+-->
+
+<DatabaseProfile
+        desc="Profile for Sybase ASE"
+        minver="9.5"
+        extends="generic">
+
+   <!-- =================================================================== -->
+   <!-- Definition of the commands -->
+   <!-- =================================================================== -->
+
+   <Commands extends="true">
+
+
+      <Command id="sybasease.getSchemas">
+        <SQL>
+          <![CDATA[
+select name as TABLE_SCHEM
+from   dbo.sysusers where uid != gid
+and    name not in ('usedb_user');
+]]>
+        </SQL>
+      </Command>
+
+      <Command id="sybasease.getSchemaNames">
+        <SQL>
+          <![CDATA[
+select name as TABLE_SCHEM
+from   dbo.sysusers where uid != gid
+and    name not in ('usedb_user');
+]]>
+        </SQL>
+         <!--Must have Filter element here since this command is fetched from code-->
+         <Filter index="TABLE_SCHEM" label="Name"/>
+      </Command>
+
+      <!--
+        The "getTableNamesFor" command is used by Database getTableNamesFor().
+        It must return table names for the catalog and schema named by
+        the ${table_catalog} and ${table_catalog} variables in the first
+        column.
+      -->
+      <Command id="sybasease.getTableNamesFor">
+        <SQL>
+          <![CDATA[
+SELECT o.name
+FROM  dbo.sysobjects o, dbo.sysusers u
+WHERE o.uid = u.uid
+  AND o.type = 'U'
+  AND u.name = '${table_schema}'
+ORDER BY o.name
+            ]]>
+        </SQL>   
+      </Command>
+
+      <!--
+        The "getColumnNamesFor" command is used by Database getColumnNamesFor().
+        It must return column names for the catalog, schema and table named by
+        the ${table_catalog}, ${table_catalog} and ${table_name} variables in
+        the first column.
+      -->
+      <Command id="sybasease.getColumnNamesFor">
+        <SQL>
+          <![CDATA[
+SELECT c.name
+FROM  dbo.sysobjects o, dbo.sysusers u, dbo.syscolumns c
+WHERE o.uid = u.uid AND o.id = c.id
+  AND o.name = '${table_name}' AND u.name = '${table_schema}'
+ORDER BY c.name
+            ]]>
+        </SQL>   
+      </Command>
+
+      <Command id="sybasease.getObjects">
+         <SQL>
+            <![CDATA[
+select user_name(uid) "schema", name, crdate "creation date"
+from [${database}].dbo.sysobjects 
+where type = '${type}'  and user_name(uid) = '${schema}'
+order by 1, name
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="sybasease.getTriggers">
+         <SQL>
+            <![CDATA[
+SELECT DISTINCT *
+    FROM
+    (SELECT
+            tr.name,
+            user_name (tr.uid) 'owner',
+            user_name (o.uid) 'tableowner',
+            o.name AS 'table'
+        FROM
+            dbo.sysobjects o,
+            dbo.sysobjects tr
+        WHERE
+            o.type IN ('U',
+                               'V')
+        AND (o.instrig = tr.id
+            OR o.updtrig = tr.id
+            OR o.deltrig = tr.id)
+        AND tr.type IN ('TR', 'IT')
+        AND ${condition}
+     UNION ALL
+     SELECT
+            tr.name,
+            user_name (tr.uid) 'owner',
+            user_name (o.uid) 'tableowner',
+            o.name AS 'table'
+        FROM
+            dbo.sysobjects o
+        JOIN
+            dbo.sysconstraints c
+        ON  (o.id = c.tableid)
+        JOIN
+            dbo.sysobjects tr
+        ON  (c.constrid = tr.id)
+        WHERE
+            o.type IN ('U', 'V')
+        AND tr.type IN ('TR', 'IT')
+        AND ${condition}
+     ) all_tr
+ORDER BY 1, 2, 3;
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="sybasease.getIndexes">
+         <SQL>
+            <![CDATA[
+use [${database}]
+SELECT
+    i.name                     AS INDEX_NAME,
+    i.indid                    AS INDEX_ID,
+    object_name(i.id)          AS TABLE_NAME,
+    u.name                     AS TABLE_OWNER,
+    CONVERT(VARCHAR, i.id)     AS TABLE_ID,
+    CONVERT(bit, i.status & 2) AS IS_UNIQUE
+FROM
+    sysobjects o,
+    sysindexes i,
+    sysusers u
+WHERE o.id = i.id
+AND o.uid = u.uid
+AND o.type = 'U'
+AND i.indid != 0
+AND u.name = '${schema}'
+AND ${tableNameForIndex}
+ORDER BY
+    i.name
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="sybasease.getIndexColumns">
+         <SQL>
+            <![CDATA[
+use [${database}]
+SELECT
+    name AS INDEX_NAME,
+    object_name(${tableId}) AS TABLE_NAME,
+    index_col(object_name(${tableId}), ${indexId}, 1) AS COLUMN_NAME,
+    1 AS ORDINAL_POSITION,
+    ${orderSQL1} AS ASC_OR_DESC
+FROM dbo.sysindexes WHERE status2 & 2 != 2
+AND index_col(object_name(${tableId}), ${indexId}, 1) IS NOT NULL
+AND id = ${tableId} AND indid = ${indexId}
+UNION ALL
+SELECT
+    name AS INDEX_NAME,
+    object_name(${tableId}) AS TABLE_NAME,
+    index_col(object_name(${tableId}), ${indexId}, 2) AS COLUMN_NAME,
+    2 AS ORDINAL_POSITION,
+    ${orderSQL2} AS ASC_OR_DESC
+FROM dbo.sysindexes WHERE status2 & 2 != 2
+AND index_col(object_name(${tableId}), ${indexId}, 2) IS NOT NULL
+AND id = ${tableId} AND indid = ${indexId}
+UNION ALL
+SELECT
+    name AS INDEX_NAME,
+    object_name(${tableId}) AS TABLE_NAME,
+    index_col(object_name(${tableId}), ${indexId}, 3) AS COLUMN_NAME,
+    3 AS ORDINAL_POSITION,
+    ${orderSQL3} AS ASC_OR_DESC
+FROM dbo.sysindexes WHERE status2 & 2 != 2
+AND index_col(object_name(${tableId}), ${indexId}, 3) IS NOT NULL
+AND id = ${tableId} AND indid = ${indexId}
+UNION ALL
+SELECT
+    name AS INDEX_NAME,
+    object_name(${tableId}) AS TABLE_NAME,
+    index_col(object_name(${tableId}), ${indexId}, 4) AS COLUMN_NAME,
+    4 AS ORDINAL_POSITION,
+    ${orderSQL4} AS ASC_OR_DESC
+FROM dbo.sysindexes WHERE status2 & 2 != 2
+AND index_col(object_name(${tableId}), ${indexId}, 4) IS NOT NULL
+AND id = ${tableId} AND indid = ${indexId}
+UNION ALL
+SELECT
+    name AS INDEX_NAME,
+    object_name(${tableId}) AS TABLE_NAME,
+    index_col(object_name(${tableId}), ${indexId}, 5) AS COLUMN_NAME,
+    5 AS ORDINAL_POSITION,
+    ${orderSQL5} AS ASC_OR_DESC
+FROM dbo.sysindexes WHERE status2 & 2 != 2
+AND index_col(object_name(${tableId}), ${indexId}, 5) IS NOT NULL
+AND id = ${tableId} AND indid = ${indexId}
+UNION ALL
+SELECT
+    name AS INDEX_NAME,
+    object_name(${tableId}) AS TABLE_NAME,
+    index_col(object_name(${tableId}), ${indexId}, 6) AS COLUMN_NAME,
+    6 AS ORDINAL_POSITION,
+    ${orderSQL6} AS ASC_OR_DESC
+FROM dbo.sysindexes WHERE status2 & 2 != 2
+AND index_col(object_name(${tableId}), ${indexId}, 6) IS NOT NULL
+AND id = ${tableId} AND indid = ${indexId}
+UNION ALL
+SELECT
+    name AS INDEX_NAME,
+    object_name(${tableId}) AS TABLE_NAME,
+    index_col(object_name(${tableId}), ${indexId}, 7) AS COLUMN_NAME,
+    7 AS ORDINAL_POSITION,
+    ${orderSQL7} AS ASC_OR_DESC
+FROM dbo.sysindexes WHERE status2 & 2 != 2
+AND index_col(object_name(${tableId}), ${indexId}, 7) IS NOT NULL
+AND id = ${tableId} AND indid = ${indexId}
+UNION ALL
+SELECT
+    name AS INDEX_NAME,
+    object_name(${tableId}) AS TABLE_NAME,
+    index_col(object_name(${tableId}), ${indexId}, 8) AS COLUMN_NAME,
+    8 AS ORDINAL_POSITION,
+    ${orderSQL8} AS ASC_OR_DESC
+FROM dbo.sysindexes WHERE status2 & 2 != 2
+AND index_col(object_name(${tableId}), ${indexId}, 8) IS NOT NULL
+AND id = ${tableId} AND indid = ${indexId}
+UNION ALL
+SELECT
+    name AS INDEX_NAME,
+    object_name(${tableId}) AS TABLE_NAME,
+    index_col(object_name(${tableId}), ${indexId}, 9) AS COLUMN_NAME,
+    9 AS ORDINAL_POSITION,
+    ${orderSQL9} AS ASC_OR_DESC
+FROM dbo.sysindexes WHERE status2 & 2 != 2
+AND index_col(object_name(${tableId}), ${indexId}, 9) IS NOT NULL
+AND id = ${tableId} AND indid = ${indexId}
+UNION ALL
+SELECT
+    name AS INDEX_NAME,
+    object_name(${tableId}) AS TABLE_NAME,
+    index_col(object_name(${tableId}), ${indexId}, 10) AS COLUMN_NAME,
+    10 AS ORDINAL_POSITION,
+    ${orderSQL10} AS ASC_OR_DESC
+FROM dbo.sysindexes WHERE status2 & 2 != 2
+AND index_col(object_name(${tableId}), ${indexId}, 10) IS NOT NULL
+AND id = ${tableId} AND indid = ${indexId}
+UNION ALL
+SELECT
+    name AS INDEX_NAME,
+    object_name(${tableId}) AS TABLE_NAME,
+    index_col(object_name(${tableId}), ${indexId}, 11) AS COLUMN_NAME,
+    11 AS ORDINAL_POSITION,
+    ${orderSQL11} AS ASC_OR_DESC
+FROM dbo.sysindexes WHERE status2 & 2 != 2
+AND index_col(object_name(${tableId}), ${indexId}, 11) IS NOT NULL
+AND id = ${tableId} AND indid = ${indexId}
+UNION ALL
+SELECT
+    name AS INDEX_NAME,
+    object_name(${tableId}) AS TABLE_NAME,
+    index_col(object_name(${tableId}), ${indexId}, 12) AS COLUMN_NAME,
+    12 AS ORDINAL_POSITION,
+    ${orderSQL12} AS ASC_OR_DESC
+FROM dbo.sysindexes WHERE status2 & 2 != 2
+AND index_col(object_name(${tableId}), ${indexId}, 12) IS NOT NULL
+AND id = ${tableId} AND indid = ${indexId}
+UNION ALL
+SELECT
+    name AS INDEX_NAME,
+    object_name(${tableId}) AS TABLE_NAME,
+    index_col(object_name(${tableId}), ${indexId}, 13) AS COLUMN_NAME,
+    13 AS ORDINAL_POSITION,
+    ${orderSQL13} AS ASC_OR_DESC
+FROM dbo.sysindexes WHERE status2 & 2 != 2
+AND index_col(object_name(${tableId}), ${indexId}, 13) IS NOT NULL
+AND id = ${tableId} AND indid = ${indexId}
+UNION ALL
+SELECT
+    name AS INDEX_NAME,
+    object_name(${tableId}) AS TABLE_NAME,
+    index_col(object_name(${tableId}), ${indexId}, 14) AS COLUMN_NAME,
+    14 AS ORDINAL_POSITION,
+    ${orderSQL14} AS ASC_OR_DESC
+FROM dbo.sysindexes WHERE status2 & 2 != 2
+AND index_col(object_name(${tableId}), ${indexId}, 14) IS NOT NULL
+AND id = ${tableId} AND indid = ${indexId}
+UNION ALL
+SELECT
+    name AS INDEX_NAME,
+    object_name(${tableId}) AS TABLE_NAME,
+    index_col(object_name(${tableId}), ${indexId}, 15) AS COLUMN_NAME,
+    15 AS ORDINAL_POSITION,
+    ${orderSQL15} AS ASC_OR_DESC
+FROM dbo.sysindexes WHERE status2 & 2 != 2
+AND index_col(object_name(${tableId}), ${indexId}, 15) IS NOT NULL
+AND id = ${tableId} AND indid = ${indexId}
+UNION ALL
+SELECT
+    name AS INDEX_NAME,
+    object_name(${tableId}) AS TABLE_NAME,
+    index_col(object_name(${tableId}), ${indexId}, 16) AS COLUMN_NAME,
+    16 AS ORDINAL_POSITION,
+    ${orderSQL16} AS ASC_OR_DESC
+FROM dbo.sysindexes WHERE status2 & 2 != 2
+AND index_col(object_name(${tableId}), ${indexId}, 16) IS NOT NULL
+AND id = ${tableId} AND indid = ${indexId}
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="sybasease.getUsers">
+         <SQL>
+            <![CDATA[
+SELECT
+    d.name "User Name",
+    l.name "Login Name",
+    d.uid "UID"
+FROM
+    master.dbo.syslogins l,
+    [${database}].dbo.sysusers d
+WHERE
+    l.suid     = d.suid
+    and d.uid != d.gid
+order by 1
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="sybasease.getGroups">
+         <SQL>
+            <![CDATA[
+SELECT
+    u.name "Group Name",
+    u.gid "GID"
+FROM
+    [${database}].dbo.sysusers u,
+    [${database}].dbo.sysusers g
+WHERE
+    u.gid          = u.uid
+    and u.uid     != 1
+    and u.gid      = g.uid
+    and u.gid      = g.gid
+    and u.gid not in
+    (
+    SELECT
+        lrid
+    FROM
+        [${database}].dbo.sysroles
+    )
+ORDER BY
+    1
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="sybasease.getGroupUsers">
+         <SQL>
+            <![CDATA[
+SELECT
+    grp.name "Group Name",
+    usr.name "User Name",
+    log.name "Login Name"
+FROM
+    [${database}].dbo.sysusers usr,
+    [${database}].dbo.sysusers grp,
+    master.dbo.syslogins log
+WHERE
+    grp.name      = '${group}'
+    and usr.gid   = grp.gid
+    and usr.uid  != usr.gid
+    and log.suid  = usr.suid
+UNION
+SELECT
+    grp.name "Group Name",
+    usr.name "User Name",
+    '' "Login Name"
+FROM
+    [${database}].dbo.sysusers usr,
+    [${database}].dbo.sysusers grp
+WHERE
+    grp.name      = '${group}'
+    and usr.gid   = grp.gid
+    and usr.uid  != usr.gid
+    and usr.name  = 'guest'
+    and usr.suid  = -1
+ORDER BY
+    1
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="sybasease.getUserTypes">
+         <SQL>
+            <![CDATA[
+select t.name 'Data Type', p.name 'System Type', b.name 'Creator',
+t.allownulls 'Allow Nulls', t.length 'Length', t.prec 'Precision', t.scale 'Scale'
+from [${database}].dbo.systypes t, [${database}].dbo.sysusers b, [${database}].dbo.systypes p
+where t.uid = b.uid and t.usertype >= 100 and t.type = p.type and p.usertype =
+(select min(usertype) from [${database}].dbo.systypes where type = t.type) order by 1
+            ]]>
+         </SQL>
+      </Command>
+
+      <!-- ================================================================= -->
+      <!-- DBA related commands requiring certain privileges in the database -->
+      <!-- ================================================================= -->
+
+      <Command id="sybasease.getLogins">
+         <SQL>
+            <![CDATA[
+select name "Name", suid "SUID", dbname "Default Database", fullname "Full Name",
+language "Default Language", totcpu "CPU Time", totio "I/O Time", pwdate "Password Set"
+from master.dbo.syslogins order by 1
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="sybasease.getLoginDatabases">
+         <SQL>
+            <![CDATA[
+select a.name "Name", sum(c.size / 512) "Size (MB)"
+from master.dbo.sysdatabases a, master.dbo.syslogins b, master.dbo.sysusages c
+where (a.suid = b.suid) and (b.suid = ${suid}) and a.dbid = c.dbid group by a.name
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="sybasease.getLoginRoles">
+         <SQL>
+            <![CDATA[
+select role_name(lr.srid) "Name", lr.status "Status"
+from master.dbo.sysloginroles lr, master.dbo.syslogins l
+where lr.suid = l.suid and l.name = '${login}' and lr.status = 1
+order by Name
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="sybasease.getServerRoles">
+         <SQL>
+            <![CDATA[
+select * from master.dbo.syssrvroles order by name
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="sybasease.getRoleLogins">
+         <SQL>
+            <![CDATA[
+select l.name "Name", lr.status "Status"
+from master.dbo.syslogins l, master.dbo.sysloginroles lr
+where lr.srid = role_id('${name}') and l.suid = lr.suid and lr.status = 1
+order by l.name
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="sybasease.getDevices">
+         <SQL>
+            <![CDATA[
+/*
+sysdevice sizes are based on @@pagesize pages
+and @@pagesize is always 2048
+- based on physical io size (always 2048)
+
+sysusages sizes are based on @@maxpagesize pages
+and @@maxpagesize can be 2048, 4096, 8192 or 16384
+- based on logical io size (defined at server level)
+*/
+DECLARE
+    @maxpagesize INT
+ SELECT
+        @maxpagesize = low
+   FROM
+        master..spt_values
+  WHERE
+        number = 1
+    AND type = 'E'DECLARE @mb_factor_d INT, -- to be used with sysdevice numbers
+        @mb_factor_u INT -- to be used with sysusages numbers
+ SELECT
+        @mb_factor_d =(1024*1024) /@@pagesize,
+        @mb_factor_u =(1024*1024) /@maxpagesize
+
+-- devices allocated to a database(s)
+
+ SELECT
+        d.name                                                           AS 'Name',
+        (d.high - d.low + 1) /@mb_factor_d                               AS 'Size (MB)',
+        SUM(u.size) /@mb_factor_u                                        AS 'Used (MB)',
+        ((d.high - d.low + 1) /@mb_factor_d - SUM(u.size) /@mb_factor_u) AS 'Free (MB)',
+        ]]>
+            <If test="#util.isDatabaseVersionGTE(15)">
+        <![CDATA[
+        phyname                                                          AS 'Physical Name',
+        d.vdevno                                                         AS 'Device Number'
+        ]]>
+            </If>
+            <Else>
+        <![CDATA[
+        phyname                                                          AS 'Physical Name'
+        ]]>
+            </Else>
+        <![CDATA[
+   FROM
+        master..sysdevices d,
+        master..sysusages u
+  WHERE
+        ]]>
+            <If test="#util.isDatabaseVersionGTE(15)">
+        <![CDATA[
+        u.vdevno = d.vdevno
+        ]]>
+            </If>
+            <Else>
+        <![CDATA[
+        u.vstart between d.low and d.high
+        ]]>
+            </Else>
+        <![CDATA[
+    AND d.cntrltype = 0
+GROUP BY
+        d.name,
+        (d.high - d.low + 1) /@mb_factor_d,
+        phyname
+  UNION
+
+-- devices not allocated to any databases
+
+ SELECT
+        d.name                             AS 'Name',
+        (d.high - d.low + 1) /@mb_factor_d AS 'Size (MB)',
+        0                                  AS 'Used (MB)',
+        (d.high - d.low + 1) /@mb_factor_d AS 'Free (MB)',
+        ]]>
+            <If test="#util.isDatabaseVersionGTE(15)">
+        <![CDATA[
+        phyname                                                          AS 'Physical Name',
+        d.vdevno                                                         AS 'Device Number'
+        ]]>
+            </If>
+            <Else>
+        <![CDATA[
+        phyname                                                          AS 'Physical Name'
+        ]]>
+            </Else>
+        <![CDATA[
+   FROM
+        master..sysdevices d
+  WHERE
+        NOT EXISTS
+        (
+         SELECT
+                1
+           FROM
+                master..sysusages u
+          WHERE
+        ]]>
+            <If test="#util.isDatabaseVersionGTE(15)">
+        <![CDATA[
+                u.vdevno = d.vdevno)
+        ]]>
+            </If>
+            <Else>
+        <![CDATA[
+                u.vstart between d.low and d.high)
+        ]]>
+            </Else>
+        <![CDATA[
+    AND d.cntrltype = 0
+ORDER BY 1
+]]>
+         </SQL>
+      </Command>
+
+      <Command id="sybasease.getDeviceDatabases">
+         <SQL>
+            <![CDATA[
+select a.name "Name", sum(b.size) / 512 "Size (MB)",
+  (select l.name from master.dbo.syslogins l where l.suid = a.suid) "Creator"
+from master.dbo.sysdatabases a, master.dbo.sysusages b, master.dbo.sysdevices c
+where (a.dbid = b.dbid) and (b.vstart <= c.high) and
+(b.vstart >= c.low) and (c.name = '${name}') group by a.name
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="sybasease.getServerInfo">
+         <SQL>
+            <![CDATA[
+exec sp_server_info
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="sybasease.getRemoteServers">
+         <SQL>
+            <![CDATA[
+select s.srvid, s.srvname, s.srvnetname, s.srvclass, v.name
+from master.dbo.sysservers s, master.dbo.spt_values v
+where s.srvclass = v.number and v.type = 'X' and v.name not in ('access_server', 'sds')
+order by s.srvname
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="sybasease.getCaches">
+         <SQL>
+            <![CDATA[
+select a.name, a.status, a.value, (select b.value from master.dbo.syscurconfigs b
+where b.config = a.config and b.comment = a.name)
+from master.dbo.sysconfigures a where parent = 19 and config = parent order by 2
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="sybasease.getProcesses">
+         <SQL>
+            <![CDATA[
+select p.spid, p.program_name, p.cmd, l.name, p.status, p.suid
+from master.dbo.sysprocesses p, master.dbo.syslogins l
+where p.suid *= l.suid order by 1
+ ]]>
+         </SQL>
+      </Command>
+
+      <Command id="sybasease.getCharSet">
+         <SQL>
+            <![CDATA[
+select name, description from master.dbo.syscharsets
+where id = (select value from master.dbo.syscurconfigs where config = 131) ;
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="sybasease.getTransactions">
+         <SQL>
+            <![CDATA[
+select type = convert(char(11),v3.name), coordinator = convert(char(10), v4.name),
+starttime=convert(char(20), starttime), state = convert(char(17),v1.name),
+connection = convert(char(9), v2.name), dbid=masterdbid, spid, loid, namelen, xactname
+from master.dbo.systransactions ts, master.dbo.spt_values v1,
+master.dbo.spt_values v2, master.dbo.spt_values v3, master.dbo.spt_values v4
+where ts.state = v1.number and v1.type = 'T1' and ts.connection = v2.number and
+v2.type = 'T2' and ts.type = v3.number and v3.type = 'T3'
+and ts.coordinator = v4.number and v4.type = 'T4'
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="sybasease.getLocks">
+         <SQL>
+            <![CDATA[
+select fid, spid, loid, locktype = v1.name, table_id = id, page, row,
+dbname = db_name(dbid), class, context = v2.name
+from master.dbo.syslocks l, master.dbo.spt_values v1, master.dbo.spt_values v2
+where l.type = v1.number and v1.type = 'L' and (l.context + 2049) = v2.number and v2.type = 'L2'
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="sybasease.getDependencies">
+         <SQL>
+            <![CDATA[
+exec sp_depends ${name}
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="sybasease.getFunctionColumns">
+         <SQL>
+            <![CDATA[
+SELECT
+    '${catalog}' AS FUNCTION_CAT,
+    '${schema}' AS FUNCTION_SCHEM,
+    '${function}' AS FUNCTION_NAME,
+    c.name AS COLUMN_NAME,
+    CASE
+        WHEN c.name = 'Return Type' THEN 5
+        ELSE 1
+    END AS COLUMN_TYPE,
+    CASE
+        WHEN t.name = 'bigint' THEN -5
+        WHEN t.name = 'binary' THEN -2
+        WHEN t.name = 'bit' THEN -7
+        WHEN t.name = 'char' THEN 1
+        WHEN t.name = 'date' THEN 91
+        WHEN t.name = 'datetime' THEN 93
+        WHEN t.name = 'decimal' THEN 3
+        WHEN t.name = 'double precision' THEN 8
+        WHEN t.name = 'float' THEN 8
+        WHEN t.name = 'image' THEN -4
+        WHEN t.name = 'int' THEN 4
+        WHEN t.name = 'money' THEN 3
+        WHEN t.name = 'nchar' THEN 1
+        WHEN t.name = 'numeric' THEN 2
+        WHEN t.name = 'nvarchar' THEN 1
+        WHEN t.name = 'real' THEN 7
+        WHEN t.name = 'smalldatetime' THEN 93
+        WHEN t.name = 'smallint' THEN 5
+        WHEN t.name = 'smallmoney' THEN 3
+        WHEN t.name = 'text' THEN -1
+        WHEN t.name = 'time' THEN 92
+        WHEN t.name = 'tinyint' THEN -6
+        WHEN t.name = 'unitext' THEN -1
+        WHEN t.name = 'unsigned bigint' THEN -5
+        WHEN t.name = 'unsigned int' THEN 4
+        WHEN t.name = 'unsigned smallint' THEN 5
+        WHEN t.name = 'varbinary' THEN -3
+        WHEN t.name = 'varchar' THEN 12
+        ELSE 1111
+    END AS DATA_TYPE,
+    t.name AS TYPE_NAME,
+    c.prec AS PRECISION,
+    c.length AS LENGTH,
+    c.scale AS SCALE,
+    convert(bit, c.status & 8) AS NULLABLE
+FROM
+    dbo.sysobjects o,
+    dbo.syscolumns c,
+    dbo.systypes t
+WHERE
+    (
+        o.id = c.id
+    AND c.type = t.type
+    AND c.usertype = t.usertype
+    )
+AND o.type = 'SF'
+AND o.id = object_id('${qname}')
+ORDER BY
+    c.colid ASC
+            ]]>
+         </SQL>
+      </Command>
+
+   </Commands>
+
+   <!-- =================================================================== -->
+   <!-- Definition of the object actions that are used by the tree and views -->
+   <!-- =================================================================== -->
+
+   <ObjectsActionDef extends="false">
+
+       <ActionGroup type="Schema">
+         <Action id="sybasease-schema-export" label="Export Schema"
+                 icon="export" reload="false"
+                 class="schemaExport"
+                 doclink="http://www.dbvis.com/doclink/export-schema"/>
+       </ActionGroup>
+
+       <ActionGroup type="Tables">
+         <Action id="sybasease-tables-create-table" label="Create Table"
+                 icon="add" reload="true"
+                 class="tableCreateOrAlter"
+                 classargs="create"
+                 doclink="http://www.dbvis.com/doclink/create-table"/>
+         <Action id="sybasease-new-table-import-data"
+                 label="Import Table Data"
+                 icon="import"
+                 class="tableDataImport"
+                 doclink="http://www.dbvis.com/doclink/import-table"/>
+      </ActionGroup>
+
+      <ActionGroup type="Table">
+         <Action id="sybasease-tables-alter-table" label="Alter Table"
+                 icon="edit" reload="true"
+                 class="tableCreateOrAlter"
+                 classargs="alter"
+                 doclink="http://www.dbvis.com/doclink/alter-table"/>
+
+         <Action id="sybasease-table-rename" label="Rename Table" reload="true" icon="rename">
+            <Message>
+               <![CDATA[<html>
+                 Warning: Changing an object or column name could break existing stored procedures, cached statements or other compiled objects.
+               ]]>
+            </Message>            
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Table" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="New Table Name" name="newTable" style="text"/>
+            <Command>
+               <SQL><![CDATA[exec sp_rename [${objectname}], ${QB}${newTable}${QE}]]></SQL>
+            </Command>
+            <Confirm>
+               Confirm rename of ${schema}.${objectname} to ${newTable}?
+            </Confirm>
+            <Result>
+               Table ${schema}.${objectname} renamed to ${newTable}!
+            </Result>
+         </Action>
+
+         <Action id="sybasease-table-clear" label="Empty Table" reload="true">
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Table" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Use Command" name="useCommand" style="radio">
+               <Values>TRUNCATE|DELETE</Values>
+               <Default>TRUNCATE</Default>
+            </Input>
+
+            <SetVar name="_command" value="#useCommand.equals('TRUNCATE') ? 'truncate table' : 'delete from'"/>
+
+            <Command>
+               <SQL><![CDATA[${_command} [${schema}].[${objectname}] ]]></SQL>
+            </Command>
+            <Confirm>
+               Really remove all rows in table ${schema}.${objectname}?
+            </Confirm>
+            <Result>
+               All rows in table ${schema}.${objectname} has been removed!
+            </Result>
+         </Action>
+
+         <Action id="sybasease-table-drop" label="Drop Table" reload="true" icon="remove">
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Table" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command><SQL><![CDATA[drop table [${schema}].[${objectname}] ]]></SQL></Command>
+            <Confirm>
+               Really drop table ${schema}.${objectname}?
+            </Confirm>
+            <Result>
+               Table ${schema}.${objectname} has been dropped!
+            </Result>
+         </Action>
+
+         <Action id="sybasease-table-import-data" label="Import Table Data" icon="import"
+                 class="tableDataImport"
+                 doclink="http://www.dbvis.com/doclink/import-table"/>
+
+         <Action id="sybasease-table-export" label="Export Table" icon="export"
+                 class="tableExport"
+                 doclink="http://www.dbvis.com/doclink/export-table"/>
+
+         <Separator/>
+      
+         <Action id="sybasease-table-create-index" label="Create Index" reload="true">
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Table" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Index Name" name="indexname" style="text"/>
+            <Input label="Unique" name="unique" style="check">
+               <Values>unique</Values>
+            </Input>
+
+            <Input label="Columns" style="separator"/>
+
+            <Input name="columns" style="grid">
+               <Arg name="output" value='"${columnname}"${_sortorder}'/>
+               <Arg name="newline" value=", "/>
+
+               <Input name="columnname" label="Column Name" style="list">
+                  <Values column="4">
+                     <Command idref="getColumnNamesFor">
+                        <Input name="table_catalog" value="${catalog}"/>
+                        <Input name="table_schema" value="${schema}"/>
+                        <Input name="table_name" value="${objectname}"/>
+                     </Command>
+                  </Values>
+                  <Default>${0}</Default>
+               </Input>
+               <Input name="sortorder" label="Sort Order" style="radio">
+                  <Labels>ASC|DESC|Default</Labels>
+                  <Values>ASC|DESC|</Values>
+                  <Default>ASC</Default>
+               </Input>
+               <SetVar name="_sortorder" value='#sortorder.equals("") ? "" : " " + #sortorder'/>
+            </Input>
+
+            <SetVar name="_unique" value='#unique.equals("") ? "" : " " + #unique'/>
+            <SetVar name="_columns" value='#columns.trim().equals("") ? "" : "(" + #columns + ")"'/>
+
+            <Command>
+               <SQL>
+                  <![CDATA[create${_unique} index ${indexname} on [${schema}].[${objectname}] ${_columns}]]>
+               </SQL>
+            </Command>
+            <Confirm>
+               <![CDATA[Create index "${indexname}"?]]>
+            </Confirm>
+            <Result>
+               <![CDATA[Index "${indexname}" created!]]>
+            </Result>
+         </Action>
+
+         <Action id="sybasease-tabletrigger-create" label="Create Trigger" icon="add" reload="true"
+                 doclink="http://www.dbvis.com/doclink/create-trigger">
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Trigger" name="triggerName" style="text"/>
+            <Input label="Trigger Event" name="eventDelete" style="check" linebreak="false">
+               <Values>DELETE</Values>
+               <Labels>DELETE</Labels>
+            </Input>
+            <Input label="" name="eventInsert" style="check">
+               <Values>INSERT</Values>
+               <Labels>INSERT</Labels>
+               <Default>INSERT</Default>
+            </Input>
+            <Input label="" name="eventUpdate" style="check" linebreak="true">
+               <Values>UPDATE</Values>
+               <Labels>UPDATE</Labels>
+            </Input>
+            <Input label="Table" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Source" style="separator"/>
+            <Input name="source" style="text-editor">
+               <Default><![CDATA[
+--
+--  Insert your own trigger code here
+--
+    insert into anotherTable (col1, col2) values(val1, val2)]]>
+               </Default>
+            </Input>
+
+            <SetVar name="_triggerEvent" value='#eventDelete'/>
+            <SetVar name="_triggerEvent" value='#_triggerEvent.length() > 0 and #eventInsert.length() > 0 ?
+                                                #_triggerEvent + ", " + #eventInsert :
+                                                #_triggerEvent + #eventInsert'/>
+            <SetVar name="_triggerEvent" value='#_triggerEvent.length() > 0 and #eventUpdate.length() > 0 ?
+                                                #_triggerEvent + ", " + #eventUpdate :
+                                                #_triggerEvent + #eventUpdate'/>
+
+            <Command exectype="asis">
+               <SQL><![CDATA[
+create trigger [${schema}].${triggerName}
+  on [${schema}].[${objectname}]
+  for ${_triggerEvent}
+  as 
+${source}]]>
+               </SQL>
+            </Command>
+            <Result>
+               <![CDATA[Trigger <b>${schema}.${triggerName}</b> created.]]>
+            </Result>
+         </Action>
+
+         <Separator/>
+
+         <Action id="sybasease-table-script" label="Script Table" icon="scriptObject"
+                 class="sqlBuilder"
+                 classargs="script-dialog,SELECT,SELECT *,INSERT,UPDATE,DELETE,CREATE,DROP"/>
+      </ActionGroup>
+
+      <ActionGroup type="Index">
+         <Action id="sybasease-index-drop" label="Drop Index" reload="true" icon="remove">
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Table" style="text" editable="false">
+               <Default>${sybasease.getIndexes.TABLE_NAME}</Default>
+            </Input>
+            <Input label="Index" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command><SQL><![CDATA[drop index [${sybasease.getIndexes.TABLE_NAME}].[${objectname}]]]></SQL></Command>
+            <Confirm>
+               Really drop index ${objectname} for table ${sybasease.getIndexes.TABLE_NAME}?
+            </Confirm>
+            <Result>
+               Index ${sybasease.getIndexes.TABLE_NAME}.${objectname} dropped!
+            </Result>
+         </Action>
+
+         <Action id="sybasease-index-rename" label="Rename Index" reload="true" icon="rename">
+            <Message>
+               <![CDATA[<html>
+                 Warning: Changing an object or column name could break existing stored procedures, cached statements or other compiled objects.
+               ]]>
+            </Message>
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Table" style="text" editable="false">
+               <Default>${sybasease.getIndexes.TABLE_NAME}</Default>
+            </Input>
+            <Input label="Index" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="New Index Name" name="newIndex" style="text"/>
+            <Command>
+               <SQL>
+                  <![CDATA[exec sp_rename [${sybasease.getIndexes.TABLE_NAME}.${objectname}], ${QB}${newIndex}${QE}]]>
+               </SQL>
+            </Command>
+            <Confirm>
+               Confirm rename of index ${objectname} to ${newIndex}?
+            </Confirm>
+            <Result>
+               Index ${objectname} for table ${sybasease.getIndexes.TABLE_NAME} renamed to ${newIndex}!
+            </Result>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Column">
+         <Action id="sybasease-column-rename" label="Rename Column" reload="true" icon="rename">
+            <Message>
+               <![CDATA[<html>
+                 Warning: Changing an object or column name could break existing stored procedures, cached statements or other compiled objects.
+               ]]>
+            </Message>            
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Table" style="text" editable="false">
+               <Default>${theTableName}</Default>
+            </Input>
+            <Input label="Column" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="New Column Name" name="newColumn" style="text"/>
+            <Command>
+               <SQL><![CDATA[exec sp_rename [${theTableName}.${objectname}], ${QB}${newColumn}${QE}]]></SQL>
+            </Command>
+            <Confirm>
+               Confirm rename of column ${objectname} to ${newColumn}?
+            </Confirm>
+            <Result>
+               Column ${objectname} renamed to ${newColumn}!
+            </Result>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="SystemTable">
+         <Action id="sybasease-systemtable-script" label="Script System Table" icon="scriptObject"
+                 class="sqlBuilder"
+                 classargs="script-dialog,SELECT,SELECT *"/>
+      </ActionGroup>
+
+      <ActionGroup type="View">
+         <Action id="sybasease-view-drop" label="Drop View" reload="true" icon="remove">
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="View" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command><SQL><![CDATA[drop view [${schema}].[${objectname}] ]]></SQL></Command>
+            <Confirm>
+               Really drop view ${schema}.${objectname}?
+            </Confirm>
+            <Result>
+               View ${schema}.${objectname} has been dropped!
+            </Result>
+         </Action>
+
+         <Action id="sybasease-view-rename" label="Rename View" reload="true" icon="rename">
+            <Message>
+               <![CDATA[<html>
+                 Warning: Changing an object or column name could break existing stored procedures, cached statements or other compiled objects.
+               ]]>
+            </Message>            
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="View" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="New View Name" name="newView" style="text"/>
+            <Command>
+               <SQL><![CDATA[exec sp_rename [${objectname}], ${QB}${newView}${QE}]]></SQL>
+            </Command>
+            <Confirm>
+               Confirm rename of ${schema}.${objectname} to ${newView}?
+            </Confirm>
+            <Result>
+               View ${schema}.${objectname} renamed to ${newView}!
+            </Result>
+         </Action>
+
+         <Action id="sybasease-view-export" label="Export View" icon="export"
+                 class="viewExport"
+                 doclink="http://www.dbvis.com/doclink/export-view"/>
+
+         <Separator/>
+
+         <Action id="sybasease-viewtrigger-create" label="Create Trigger" icon="add" reload="true"
+                 doclink="http://www.dbvis.com/doclink/create-trigger">
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Trigger" name="triggerName" style="text"/>
+            <Input label="Intead of Event" name="eventDelete" style="check" linebreak="false">
+               <Values>DELETE</Values>
+               <Labels>DELETE</Labels>
+            </Input>
+            <Input label="" name="eventInsert" style="check">
+               <Values>INSERT</Values>
+               <Labels>INSERT</Labels>
+               <Default>INSERT</Default>
+            </Input>
+            <Input label="" name="eventUpdate" style="check" linebreak="true">
+               <Values>UPDATE</Values>
+               <Labels>UPDATE</Labels>
+            </Input>
+            <Input label="Table" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Source" style="separator"/>
+            <Input name="source" style="text-editor">
+               <Default><![CDATA[
+--
+--  Insert your own trigger code here
+--
+    insert into anotherTable (col1, col2) values(val1, val2)]]>
+               </Default>
+            </Input>
+
+            <SetVar name="_triggerEvent" value='#eventDelete'/>
+            <SetVar name="_triggerEvent" value='#_triggerEvent.length() > 0 and #eventInsert.length() > 0 ?
+                                                #_triggerEvent + ", " + #eventInsert :
+                                                #_triggerEvent + #eventInsert'/>
+            <SetVar name="_triggerEvent" value='#_triggerEvent.length() > 0 and #eventUpdate.length() > 0 ?
+                                                #_triggerEvent + ", " + #eventUpdate :
+                                                #_triggerEvent + #eventUpdate'/>
+
+            <Command exectype="asis">
+               <SQL><![CDATA[
+create trigger [${schema}].${QB}${triggerName}${QE}
+  on [${schema}].[${objectname}]
+  instead of ${_triggerEvent}
+  as 
+  begin
+${source}
+  end]]>
+               </SQL>
+            </Command>
+            <Result>
+               <![CDATA[Trigger <b>${schema}.${triggerName}</b> created.]]>
+            </Result>
+         </Action>
+
+         <Separator/>
+
+         <Action id="sybasease-view-script" label="Script View" icon="scriptObject"
+                 class="sqlBuilder"
+                 classargs="script-dialog,SELECT,SELECT *,INSERT,UPDATE,DELETE,CREATE,DROP"/>
+      </ActionGroup>
+
+      <ActionGroup type="Users">
+        <Action id="sybasease-users-add" label="Add User" reload="true" icon="add">
+            <Input label="Login Name" name="loginName" style="list">
+               <Values>
+                  <Command>
+                    <SQL><![CDATA[select name from master.dbo.syslogins order by 1]]></SQL>
+                  </Command>
+               </Values>
+            </Input>
+            <Command>
+               <SQL><![CDATA[exec sp_adduser ${loginName}]]></SQL>
+            </Command>
+            <Result>
+               User ${userid} created!
+            </Result>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="User">
+         <Action id="sybasease-user-drop" label="Drop User" reload="true" icon="remove">
+            <Input label="User Name" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command><SQL><![CDATA[exec sp_dropuser ${objectname}]]></SQL></Command>
+            <Confirm><![CDATA[
+            Really drop user ${objectname}?
+            ]]></Confirm>
+            <Result>
+               User ${objectname} dropped!
+            </Result>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Groups">
+        <Action id="sybasease-groups-add" label="Add Group" reload="true" icon="add">
+            <Input label="Group Name" name="groupName" style="text"/>
+            <Command>
+               <SQL><![CDATA[exec sp_addgroup ${groupName}]]></SQL>
+            </Command>
+            <Result>
+               Group ${userid} added!
+            </Result>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Group">
+         <Action id="sybasease-group-drop" label="Drop Group" reload="true" icon="remove">
+            <Input label="Group Name" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command><SQL><![CDATA[exec sp_dropgroup ${objectname} ]]></SQL></Command>
+            <Confirm><![CDATA[
+            Really drop group ${objectname}?
+            ]]></Confirm>
+            <Result>
+               Group ${objectname} dropped!
+            </Result>
+         </Action>
+      </ActionGroup>
+      
+      <ActionGroup type="Trigger">
+         <Action id="sybasease-trigger-drop" label="Drop Trigger" reload="true" icon="remove">
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Trigger" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command><SQL><![CDATA[drop trigger [${schema}].[${objectname}] ]]></SQL></Command>
+            <Confirm>
+               Really drop trigger ${schema}.${objectname}?
+            </Confirm>
+            <Result>
+               Trigger ${schema}.${objectname} dropped!
+            </Result>
+         </Action>
+
+         <Action id="sybasease-trigger-rename" label="Rename Trigger" reload="true" icon="rename">
+            <Message>
+               <![CDATA[<html>
+                 Warning: Changing an object or column name could break existing stored procedures, cached statements or other compiled objects.
+               ]]>
+            </Message>            
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Trigger" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="New Trigger Name" name="newTrigger" style="text"/>
+            <Command>
+               <SQL>
+                  <![CDATA[exec sp_rename [${objectname}], ${QB}${newTrigger}${QE}]]></SQL>
+            </Command>
+            <Confirm>
+               Confirm rename of trigger ${schema}.${objectname} to
+               ${newTrigger}?
+            </Confirm>
+            <Result>
+               Trigger ${schema}.${objectname} renamed to ${newTrigger}!
+            </Result>
+         </Action>
+
+         <Action id="sybasease-trigger-enable" label="Enable Trigger" icon="enable">
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Trigger" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command>
+               <SQL><![CDATA[
+alter table [${schema}].[${sybasease.getTriggers.table}]
+enable trigger [${objectname}] ]]></SQL>
+            </Command>
+            <Confirm>
+               Enable trigger ${schema}.${objectname} ?
+            </Confirm>
+            <Result>
+               Trigger ${schema}.${objectname} has been enabled!
+            </Result>
+         </Action>
+
+         <Action id="sybasease-trigger-disable" label="Disable Trigger" icon="disable">
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Trigger" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command>
+               <SQL><![CDATA[
+alter table [${schema}].[${sybasease.getTriggers.table}]
+disable trigger [${objectname}] ]]></SQL>
+            </Command>
+            <Confirm>
+               Disable trigger ${schema}.${objectname} ?
+            </Confirm>
+            <Result>
+               Trigger ${schema}.${objectname} has been disabled!
+            </Result>
+         </Action>
+
+         <Action id="sybasease-trigger-export" label="Export Trigger" icon="export"
+                 class="triggerExport"
+                 doclink="http://www.dbvis.com/doclink/export-code-object"/>
+       </ActionGroup>
+
+      <ActionGroup type="ViewTrigger">
+         <Action id="sybasease-view-trigger-drop" label="Drop Trigger" reload="true" icon="remove">
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Trigger" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command><SQL><![CDATA[drop trigger [${schema}].[${objectname}] ]]></SQL></Command>
+            <Confirm>
+               Really drop trigger ${schema}.${objectname}?
+            </Confirm>
+            <Result>
+               Trigger ${schema}.${objectname} dropped!
+            </Result>
+         </Action>
+
+         <Action id="sybasease-view-trigger-rename" label="Rename Trigger" reload="true" icon="rename">
+            <Message>
+               <![CDATA[<html>
+                 Warning: Changing an object or column name could break existing stored procedures, cached statements or other compiled objects.
+               ]]>
+            </Message>            
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Trigger" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="New Trigger Name" name="newTrigger" style="text"/>
+            <Command>
+               <SQL>
+                  <![CDATA[exec sp_rename [${objectname}], ${QB}${newTrigger}${QE}]]></SQL>
+            </Command>
+            <Confirm>
+               Confirm rename of trigger ${schema}.${objectname} to
+               ${newTrigger}?
+            </Confirm>
+            <Result>
+               Trigger ${schema}.${objectname} renamed to ${newTrigger}!
+            </Result>
+         </Action>
+
+         <Action id="sybasease-view-trigger-export" label="Export Trigger" icon="export"
+                 class="triggerExport"
+                 doclink="http://www.dbvis.com/doclink/export-code-object"/>
+       </ActionGroup>
+
+      <ActionGroup type="Procedures">
+         <Action id="sybasease-procedures-create" label="Create Procedure" reload="true" icon="add"
+                 doclink="http://www.dbvis.com/doclink/create-procedure" >
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Procedure Name" name="procedureName" style="text"/>
+            <Input name="mode" label="Transaction Mode" style="radio">
+                  <Values>anymode|chained|unchained</Values>
+                  <Default>anymode</Default>
+               </Input>
+
+            <Input label="Parameters" style="separator"/>
+
+            <Input name="parameters" style="grid">
+               <Arg name="output" value="${name} ${type} ${direction}"/>
+               <Arg name="newline" value=", "/>
+
+               <Input name="name" label="Name" style="text">
+                  <Default>@parm</Default>
+               </Input>
+               <Input name="direction" label="Direction" style="list">
+                  <Values>|OUTPUT</Values>
+                  <Default></Default>
+               </Input>
+               <Input name="type" label="Type" style="text">
+                  <Default>VARCHAR(20)</Default>
+               </Input>
+            </Input>
+
+            <SetVar name="_parameters" value='#parameters.trim().equals("") ? "" : #parameters'/>
+            <Command>
+               <SQL>
+                  <![CDATA[
+                  @stop on error;
+CREATE PROCEDURE ${procedureName}
+${_parameters}
+AS
+  print 'Hello World';
+EXEC sp_procxmode [${procedureName}], ${mode}
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>
+               Create procedure ${procedureName}?
+            </Confirm>
+            <Result>
+               Procedure ${procedureName} created!
+            </Result>
+         </Action>
+      </ActionGroup>
+       
+      <ActionGroup type="Procedure">
+         <Action id="sybasease-procedure-drop" label="Drop Procedure" reload="true" icon="remove">
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Procedure" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command><SQL><![CDATA[drop procedure [${schema}].[${objectname}] ]]></SQL></Command>
+            <Confirm>
+               Really drop procedure ${schema}.${objectname}?
+            </Confirm>
+            <Result>
+               Procedure ${schema}.${objectname} dropped!
+            </Result>
+         </Action>
+
+         <Action id="sybasease-procedure-rename" label="Rename Procedure" reload="true" icon="rename">
+            <Message>
+               <![CDATA[<html>
+                 Warning: Changing an object or column name could break existing stored procedures, cached statements or other compiled objects.
+               ]]>
+            </Message>            
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Procedure" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="New Procedure Name" name="newProcedure" style="text"/>
+            <Command>
+               <SQL>
+                  <![CDATA[exec sp_rename [${objectname}], ${QB}${newProcedure}${QE}]]></SQL>
+            </Command>
+            <Confirm>
+               Confirm rename of procedure ${schema}.${objectname} to
+               ${newProcedure}?
+            </Confirm>
+            <Result>
+               Procedure ${objectname} renamed to ${newProcedure}!
+            </Result>
+         </Action>
+
+         <Action id="sybasease-procedure-export" label="Export Procedure" icon="export"
+                 class="procedureExport"
+                 doclink="http://www.dbvis.com/doclink/export-code-object"/>
+
+         <Separator/>
+
+         <Action id="sybasease-procedure-script" label="Script Procedure" icon="scriptObject"
+                 class="sqlBuilder"
+                 classargs="script-dialog,CALL,CREATE,DROP"/>
+       </ActionGroup>
+
+      <ActionGroup type="Functions">
+         <Action id="sybasease-functions-create" label="Create Function" reload="true" icon="add"
+                 doclink="http://www.dbvis.com/doclink/create-function">
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Function Name" name="functionName" style="text"/>
+            <Input label="Return Data Type" name="returns" style="text">
+               <Default>VARCHAR(20)</Default>
+            </Input>
+
+            <Input label="Parameters" style="separator"/>
+
+            <Input name="parameters" style="grid">
+               <Arg name="output" value="${name} ${type}"/>
+               <Arg name="newline" value=", "/>
+
+               <Input name="name" label="Name" style="text">
+                  <Default>@parm</Default>
+               </Input>
+               <Input name="type" label="Type" style="text">
+                  <Default>VARCHAR(20)</Default>
+               </Input>
+            </Input>
+
+            <SetVar name="_parameters" value='#parameters.trim().equals("") ? "" : "(" + #parameters + ")"'/>
+            <SetVar name="apa" value='#parameters.trim()'/>
+            
+            <Command>
+               <SQL>
+                  <![CDATA[
+CREATE FUNCTION ${functionName}
+${_parameters}
+RETURNS ${returns}
+AS
+  RETURN NULL
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>
+               Create function ${functionName}?
+            </Confirm>
+            <Result>
+               Function ${functionName} created!
+            </Result>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Function">
+         <Action id="sybasease-function-drop" label="Drop Function" reload="true" icon="remove">
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Function" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command><SQL><![CDATA[drop function [${schema}].[${objectname}]]]></SQL></Command>
+            <Confirm>
+               Really drop function ${schema}.${objectname}?
+            </Confirm>
+            <Result>
+               Function ${schema}.${objectname} dropped!
+            </Result>
+         </Action>
+
+         <Action id="sybasease-function-rename" label="Rename Function" reload="true" icon="rename">
+            <Message>
+               <![CDATA[<html>
+                 Warning: Changing an object or column name could break existing stored procedures, cached statements or other compiled objects.
+               ]]>
+            </Message>            
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Function" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="New Function Name" name="newFunction" style="text"/>
+            <Command>
+               <SQL>
+                  <![CDATA[exec sp_rename [${objectname}], ${QB}${newFunction}${QE}]]></SQL>
+            </Command>
+            <Confirm>
+               Confirm rename of function ${schema}.${objectname} to
+               ${newFunction}?
+            </Confirm>
+            <Result>
+               Function ${objectname} renamed to ${newFunction}!
+            </Result>
+         </Action>
+
+         <Action id="sybasease-function-export" label="Export Function" icon="export"
+                 class="functionExport"
+                 doclink="http://www.dbvis.com/doclink/export-code-object"/>
+
+         <Separator/>
+
+         <Action id="sybasease-function-script" label="Script Function" icon="scriptObject"
+                 class="sqlBuilder"
+                 classargs="script-dialog,CALL,CREATE,DROP"/>
+       </ActionGroup>
+
+      <!-- =================================================================== -->
+      <!-- DBA actions -->
+      <!-- =================================================================== -->
+
+
+      <ActionGroup type="Devices">
+         <Action id="sybasease-devices-create" label="Create Device" reload="true" icon="add">
+            <Input label="Device Name" name="device" style="text"/>
+            <Input label="Physical Name" name="path" style="text">
+               <Default>C:\SAP\data\</Default>
+            </Input>
+            <Input label="Device Number" name="deviceNumber" style="number">
+               <Values>
+                  <Command>
+                    <SQL><![CDATA[select name from master.dbo.sysdatabases order by 1]]></SQL>
+                  </Command>
+               </Values>
+               <Default>master</Default>
+            </Input>
+            <Input label="Size" name="size" style="number" linebreak="false">
+               <Default>4096</Default>
+            </Input>
+            <Input name="unit" style="list" linebreak="true">
+               <Labels>KB|MB</Labels>
+               <Values>K|M</Values>
+               <Default>M</Default>
+            </Input>
+            <Input label="Start Address" name="startAddress" style="number"/>
+
+            <Command>
+               <SQL><![CDATA[
+use master;
+disk init name = '${device}', physname = '${path}', vdevno = ${deviceNumber}, size = '${size}${unit}', vstart = ${startAddress}
+               ]]></SQL>
+            </Command>
+            <Result>
+               Database device ${device} created!
+            </Result>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Device">
+         <Action id="sybasease-device-drop" label="Drop Device" reload="true" icon="add">
+            <Input label="Device Name" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+
+            <Command>
+               <SQL><![CDATA[
+use master;
+sp_dropdevice '${objectname}'
+               ]]></SQL>
+            </Command>
+            <Result>
+               Database device ${objectname} dropped!
+            </Result>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Logins">
+         <Action id="sybasease-logins-create" label="Create Login" reload="true" icon="add">
+            <Input label="Login Name" name="userid" style="text"/>
+            <Input label="Password" name="password" style="text"/>
+            <Input label="Default Database" name="defaultDB" style="list">
+               <Values>
+                  <Command>
+                    <SQL><![CDATA[select name from master.dbo.sysdatabases order by 1]]></SQL>                    
+                  </Command>
+               </Values>
+               <Default>master</Default>
+            </Input>
+
+            <Command>
+               <SQL><![CDATA[exec sp_addlogin ${userid}, ${password}, ${defaultDB}]]></SQL>
+            </Command>
+            <Result>
+               User ${userid} created!
+            </Result>
+         </Action>
+      </ActionGroup>
+      
+      <ActionGroup type="Login">
+         <Action id="sybasease-login-drop" label="Drop Login" reload="true" icon="remove">
+            <Input label="User Name" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command><SQL><![CDATA[exec sp_droplogin ${objectname} ]]></SQL></Command>
+            <Confirm><![CDATA[
+              Really drop user ${objectname}?
+              ]]></Confirm>
+            <Result>
+               User ${objectname} dropped!
+            </Result>
+         </Action>
+
+         <Action id="sybasease-login-password" label="Change Password">
+            <Input label="User Name" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Caller Password" name="password" style="text"/>
+            <Input label="New Password" name="newPassword" style="text"/>
+            <Command><SQL><![CDATA[exec sp_password ${password}, ${newPassword}, ${objectname} ]]></SQL></Command>
+            <Confirm><![CDATA[
+              Really changed password for ${objectname}?
+              ]]></Confirm>
+            <Result>
+               User ${objectname} dropped!
+            </Result>
+         </Action>
+
+      </ActionGroup>
+
+   </ObjectsActionDef>
+
+   <!-- =================================================================== -->
+   <!-- Definition of the database objects tree structure -->
+   <!-- =================================================================== -->
+
+   <ObjectsTreeDef extends="false">
+
+      <GroupNode type="Databases" label="Databases">
+         <DataNode type="Catalog" label="${getCatalogs.TABLE_CAT}">
+            <SetVar name="catalog" value="${getCatalogs.TABLE_CAT}"/>
+            <Command idref="getCatalogs">
+               <Filter index="TABLE_CAT" label="Name"/>
+            </Command>
+
+            <GroupNode type="Schemas" label="Schemas">
+               <DataNode type="Schema" label="${sybasease.getSchemas.TABLE_SCHEM}">
+                  <SetVar name="schema" value="${sybasease.getSchemas.TABLE_SCHEM}"/>
+                  <Command idref="sybasease.getSchemas">
+                     <Filter index="TABLE_SCHEM" label="Name"/>
+                  </Command>
+
+                  <GroupNode type="Tables" label="Tables">
+                     <DataNode type="Table" label="${getTables.TABLE_NAME}">
+                        <SetVar name="objectname" value="${getTables.TABLE_NAME}"/>
+                        <SetVar name="rowcount" value="true"/>
+                        <SetVar name="acceptInQB" value="true"/>
+                        <Command idref="getTables">
+                           <Input name="catalog" value="${catalog}"/>
+                           <Input name="schema" value="${schema}"/>
+                           <Input name="objectname" value="%"/>
+                           <Input name="tableType" value="TABLE"/>
+                        </Command>
+
+                        <!-- Need to keep the objectname for the current table in
+                             a new variable so that the viewers will be able to pick up
+                             the correct input to display -->
+                        <SetVar name="theTableName" value="${objectname}"/>
+                        <SetVar name="triggerCondition" value="o.id = object_id ('${schema}.${objectname}')"/>
+
+                        <GroupNode type="Columns" label="Columns">
+                           <DataNode type="Column" label="${getColumnDefinitions.COLUMN_NAME}"
+                                     label1="${getColumnDefinitions.TYPE_NAME}" isLeaf="true"
+                                     icon="#dataMap.get('getColumnDefinitions.IS_PRIMARY_KEY') eq true ? 'PrimaryKey' : 'Column'"
+                                     tip="#dataMap.get('getColumnDefinitions.IS_PRIMARY_KEY') eq true ? 'This is a primary key column' : ''">
+                              <SetVar name="objectname" value="${getColumnDefinitions.COLUMN_NAME}"/>
+                              <Command idref="getColumnDefinitions">
+                                 <Input name="catalog" value="${catalog}"/>
+                                 <Input name="schema" value="${schema}"/>
+                                 <Input name="objectname" value="${theTableName}"/>
+                                 <Input name="tableType" value="Table"/>
+                                 <Filter index="TYPE_NAME" label="Type"/>
+                              </Command>
+                           </DataNode>
+                        </GroupNode>
+
+                        <GroupNode type="Indexes" label="Indexes">
+                           <SetVar name="tableNameForIndex" value="object_name(i.id) = '${theTableName}'"/>
+                           <DataNode type="Index" label="${sybasease.getIndexes.INDEX_NAME}"
+                               label1="${sybasease.getIndexes.TABLE_NAME}"
+                               isLeaf="true">
+                              <SetVar name="objectname" value="${sybasease.getIndexes.INDEX_NAME}"/>
+                              <SetVar name="tableId" value="${sybasease.getIndexes.TABLE_ID}"/>
+                              <SetVar name="indexId" value="${sybasease.getIndexes.INDEX_ID}"/>
+                              <If test="#util.isDatabaseVersionGTE(12)">
+                                 <SetVar name="orderSQL1" value="index_colorder(object_name(${tableId}), ${indexId}, 1)"/>
+                                 <SetVar name="orderSQL2" value="index_colorder(object_name(${tableId}), ${indexId}, 2)"/>
+                                 <SetVar name="orderSQL3" value="index_colorder(object_name(${tableId}), ${indexId}, 3)"/>
+                                 <SetVar name="orderSQL4" value="index_colorder(object_name(${tableId}), ${indexId}, 4)"/>
+                                 <SetVar name="orderSQL5" value="index_colorder(object_name(${tableId}), ${indexId}, 5)"/>
+                                 <SetVar name="orderSQL6" value="index_colorder(object_name(${tableId}), ${indexId}, 6)"/>
+                                 <SetVar name="orderSQL7" value="index_colorder(object_name(${tableId}), ${indexId}, 7)"/>
+                                 <SetVar name="orderSQL8" value="index_colorder(object_name(${tableId}), ${indexId}, 8)"/>
+                                 <SetVar name="orderSQL9" value="index_colorder(object_name(${tableId}), ${indexId}, 9)"/>
+                                 <SetVar name="orderSQL10" value="index_colorder(object_name(${tableId}), ${indexId}, 10)"/>
+                                 <SetVar name="orderSQL11" value="index_colorder(object_name(${tableId}), ${indexId}, 11)"/>
+                                 <SetVar name="orderSQL12" value="index_colorder(object_name(${tableId}), ${indexId}, 12)"/>
+                                 <SetVar name="orderSQL13" value="index_colorder(object_name(${tableId}), ${indexId}, 13)"/>
+                                 <SetVar name="orderSQL14" value="index_colorder(object_name(${tableId}), ${indexId}, 14)"/>
+                                 <SetVar name="orderSQL15" value="index_colorder(object_name(${tableId}), ${indexId}, 15)"/>
+                                 <SetVar name="orderSQL16" value="index_colorder(object_name(${tableId}), ${indexId}, 16)"/>
+                              </If>
+                              <Else>
+                                 <SetVar name="orderSQL1" value="'ASC'"/>
+                                 <SetVar name="orderSQL2" value="'ASC'"/>
+                                 <SetVar name="orderSQL3" value="'ASC'"/>
+                                 <SetVar name="orderSQL4" value="'ASC'"/>
+                                 <SetVar name="orderSQL5" value="'ASC'"/>
+                                 <SetVar name="orderSQL6" value="'ASC'"/>
+                                 <SetVar name="orderSQL7" value="'ASC'"/>
+                                 <SetVar name="orderSQL8" value="'ASC'"/>
+                                 <SetVar name="orderSQL9" value="'ASC'"/>
+                                 <SetVar name="orderSQL10" value="'ASC'"/>
+                                 <SetVar name="orderSQL11" value="'ASC'"/>
+                                 <SetVar name="orderSQL12" value="'ASC'"/>
+                                 <SetVar name="orderSQL13" value="'ASC'"/>
+                                 <SetVar name="orderSQL14" value="'ASC'"/>
+                                 <SetVar name="orderSQL15" value="'ASC'"/>
+                                 <SetVar name="orderSQL16" value="'ASC'"/>
+                              </Else>
+                              <Command idref="sybasease.getIndexes">
+                                 <Input name="database" value="${catalog}"/>
+                                 <Input name="schema" value="${schema}"/>
+                                 <Input name="tableNameForIndex" value="${tableNameForIndex}"/>
+                                 <Filter index="TABLE_NAME" label="Table Name"/>
+                              </Command>
+                           </DataNode>
+                        </GroupNode>
+
+                        <GroupNode type="Triggers" label="Triggers">
+                           <DataNode type="Trigger" label="${sybasease.getTriggers.owner}.${sybasease.getTriggers.name}"
+                                     isLeaf="true">
+                              <SetVar name="schema" value="${sybasease.getTriggers.owner}"/>
+                              <SetVar name="objectname" value="${sybasease.getTriggers.name}"/>
+                              <Command idref="sybasease.getTriggers">
+                                 <Input name="condition" value="${triggerCondition}"/>
+                              </Command>
+                           </DataNode>
+                        </GroupNode>
+                     </DataNode>
+                  </GroupNode>
+
+                  <GroupNode type="SystemTables" label="System Tables">
+                     <DataNode type="SystemTable" label="${getTables.TABLE_NAME}" isLeaf="true">
+                        <SetVar name="objectname" value="${getTables.TABLE_NAME}"/>
+                        <SetVar name="rowcount" value="true"/>
+                        <SetVar name="acceptInQB" value="true"/>
+                        <Command idref="getTables">
+                           <Input name="catalog" value="${catalog}"/>
+                           <Input name="schema" value="${schema}"/>
+                           <Input name="objectname" value="%"/>
+                           <Input name="tableType" value="SYSTEM TABLE"/>
+                        </Command>
+                     </DataNode>
+                  </GroupNode>
+
+                  <GroupNode type="Views" label="Views">
+                     <DataNode type="View" label="${getTables.TABLE_NAME}">
+                        <SetVar name="objectname" value="${getTables.TABLE_NAME}"/>
+                        <SetVar name="rowcount" value="true"/>
+                        <SetVar name="acceptInQB" value="true"/>
+                        <Command idref="getTables">
+                           <Input name="catalog" value="${catalog}"/>
+                           <Input name="schema" value="${schema}"/>
+                           <Input name="objectname" value="%"/>
+                           <Input name="tableType" value="VIEW"/>
+                        </Command>
+
+                        <!-- Need to keep the objectname for the current table in
+                             a new variable so that the viewers will be able to pick up
+                             the correct input to display -->
+                        <SetVar name="theTableName" value="${objectname}"/>
+                        <SetVar name="triggerCondition" value="o.id = object_id ('${schema}.${objectname}')"/>
+
+                        <GroupNode type="Columns" label="Columns">
+                           <DataNode type="Column" label="${getColumnDefinitions.COLUMN_NAME}"
+                                     label1="${getColumnDefinitions.TYPE_NAME}" isLeaf="true"
+                                     icon="#dataMap.get('getColumnDefinitions.IS_PRIMARY_KEY') eq true ? 'PrimaryKey' : 'Column'"
+                                     tip="#dataMap.get('getColumnDefinitions.IS_PRIMARY_KEY') eq true ? 'This is a primary key column' : ''">
+                              <SetVar name="objectname" value="${getColumnDefinitions.COLUMN_NAME}"/>
+                              <Command idref="getColumnDefinitions">
+                                 <Input name="catalog" value="${catalog}"/>
+                                 <Input name="schema" value="${schema}"/>
+                                 <Input name="objectname" value="${theTableName}"/>
+                                 <Input name="tableType" value="View"/>
+                                 <Filter index="TYPE_NAME" label="Type"/>
+                              </Command>
+                           </DataNode>
+                        </GroupNode>
+
+                        <GroupNode type="ViewTriggers" label="Triggers">
+                           <DataNode type="ViewTrigger" label="${sybasease.getTriggers.owner}.${sybasease.getTriggers.name}"
+                                     isLeaf="true">
+                              <SetVar name="schema" value="${sybasease.getTriggers.owner}"/>
+                              <SetVar name="objectname" value="${sybasease.getTriggers.name}"/>
+                              <Command idref="sybasease.getTriggers">
+                                 <Input name="condition" value="${triggerCondition}"/>
+                              </Command>
+                           </DataNode>
+                        </GroupNode>
+                     </DataNode>
+                  </GroupNode>
+
+                  <GroupNode type="Indexes" label="Indexes">
+                     <SetVar name="tableNameForIndex" value="1 = 1"/>
+                     <DataNode type="Index" label="${sybasease.getIndexes.INDEX_NAME}"
+                               label1="${sybasease.getIndexes.TABLE_NAME}"
+                               isLeaf="true">
+                        <SetVar name="objectname" value="${sybasease.getIndexes.INDEX_NAME}"/>
+                        <SetVar name="tableId" value="${sybasease.getIndexes.TABLE_ID}"/>
+                        <SetVar name="indexId" value="${sybasease.getIndexes.INDEX_ID}"/>
+                        <If test="#util.isDatabaseVersionGTE(12)">
+                           <SetVar name="orderSQL1" value="index_colorder(object_name(${tableId}), ${indexId}, 1)"/>
+                           <SetVar name="orderSQL2" value="index_colorder(object_name(${tableId}), ${indexId}, 2)"/>
+                           <SetVar name="orderSQL3" value="index_colorder(object_name(${tableId}), ${indexId}, 3)"/>
+                           <SetVar name="orderSQL4" value="index_colorder(object_name(${tableId}), ${indexId}, 4)"/>
+                           <SetVar name="orderSQL5" value="index_colorder(object_name(${tableId}), ${indexId}, 5)"/>
+                           <SetVar name="orderSQL6" value="index_colorder(object_name(${tableId}), ${indexId}, 6)"/>
+                           <SetVar name="orderSQL7" value="index_colorder(object_name(${tableId}), ${indexId}, 7)"/>
+                           <SetVar name="orderSQL8" value="index_colorder(object_name(${tableId}), ${indexId}, 8)"/>
+                           <SetVar name="orderSQL9" value="index_colorder(object_name(${tableId}), ${indexId}, 9)"/>
+                           <SetVar name="orderSQL10" value="index_colorder(object_name(${tableId}), ${indexId}, 10)"/>
+                           <SetVar name="orderSQL11" value="index_colorder(object_name(${tableId}), ${indexId}, 11)"/>
+                           <SetVar name="orderSQL12" value="index_colorder(object_name(${tableId}), ${indexId}, 12)"/>
+                           <SetVar name="orderSQL13" value="index_colorder(object_name(${tableId}), ${indexId}, 13)"/>
+                           <SetVar name="orderSQL14" value="index_colorder(object_name(${tableId}), ${indexId}, 14)"/>
+                           <SetVar name="orderSQL15" value="index_colorder(object_name(${tableId}), ${indexId}, 15)"/>
+                           <SetVar name="orderSQL16" value="index_colorder(object_name(${tableId}), ${indexId}, 16)"/>
+                        </If>
+                        <Else>
+                           <SetVar name="orderSQL1" value="'ASC'"/>
+                           <SetVar name="orderSQL2" value="'ASC'"/>
+                           <SetVar name="orderSQL3" value="'ASC'"/>
+                           <SetVar name="orderSQL4" value="'ASC'"/>
+                           <SetVar name="orderSQL5" value="'ASC'"/>
+                           <SetVar name="orderSQL6" value="'ASC'"/>
+                           <SetVar name="orderSQL7" value="'ASC'"/>
+                           <SetVar name="orderSQL8" value="'ASC'"/>
+                           <SetVar name="orderSQL9" value="'ASC'"/>
+                           <SetVar name="orderSQL10" value="'ASC'"/>
+                           <SetVar name="orderSQL11" value="'ASC'"/>
+                           <SetVar name="orderSQL12" value="'ASC'"/>
+                           <SetVar name="orderSQL13" value="'ASC'"/>
+                           <SetVar name="orderSQL14" value="'ASC'"/>
+                           <SetVar name="orderSQL15" value="'ASC'"/>
+                           <SetVar name="orderSQL16" value="'ASC'"/>
+                        </Else>
+                        <Command idref="sybasease.getIndexes">
+                           <Input name="database" value="${catalog}"/>
+                           <Input name="schema" value="${schema}"/>
+                           <Input name="tableNameForIndex" value="${tableNameForIndex}"/>
+                           <Filter index="TABLE_NAME" label="Table Name"/>
+                        </Command>
+                     </DataNode>
+                  </GroupNode>
+
+                  <SetVar name="theTableName" value="%"/>
+                  <SetVar name="triggerCondition" value="(o.uid = user_id('${schema}') OR tr.uid = user_id('${schema}'))"/>
+                  <GroupNode type="Triggers" label="Triggers">
+                     <DataNode type="Trigger" label="${sybasease.getTriggers.owner}.${sybasease.getTriggers.name}"
+                               label1="${sybasease.getTriggers.tableowner}.${sybasease.getTriggers.table}"
+                               isLeaf="true">
+                        <SetVar name="schema" value="${sybasease.getTriggers.owner}"/>
+                        <SetVar name="objectname" value="${sybasease.getTriggers.name}"/>
+                        <Command idref="sybasease.getTriggers">
+                           <Input name="condition" value="${triggerCondition}"/>
+                           <Filter index="name" label="Name"/>
+                        </Command>
+                     </DataNode>
+                  </GroupNode>
+
+                  <GroupNode type="Procedures" label="Stored Procedures">
+                     <DataNode type="Procedure" label="${sybasease.getObjects.name}" isLeaf="true">
+                        <SetVar name="objectname" value="${sybasease.getObjects.name}"/>
+                        <Command idref="sybasease.getObjects">
+                           <Input name="database" value="${catalog}"/>
+                           <Input name="schema" value="${schema}"/>
+                           <Input name="type" value="P"/>
+                        </Command>
+                     </DataNode>
+                  </GroupNode>
+
+                  <GroupNode type="Functions" label="Functions">
+                     <DataNode type="Function" label="${sybasease.getObjects.name}" isLeaf="true">
+                        <SetVar name="objectname" value="${sybasease.getObjects.name}"/>
+                        <Command idref="sybasease.getObjects">
+                           <Input name="database" value="${catalog}"/>
+                           <Input name="schema" value="${schema}"/>
+                           <Input name="type" value="SF"/>
+                        </Command>
+                     </DataNode>
+                  </GroupNode>
+
+               </DataNode>
+            </GroupNode>
+
+            <GroupNode type="Users" label="Users" isLeaf="false">
+               <DataNode type="User" label="${sybasease.getUsers.User Name}"
+                         label1="${sybasease.getUsers.Login Name}" isLeaf="true">
+                  <SetVar name="objectname" value="${sybasease.getUsers.User Name}"/>
+                  <Command idref="sybasease.getUsers">
+                     <Input name="database" value="${catalog}"/>
+                  </Command>
+               </DataNode>
+            </GroupNode>
+
+            <GroupNode type="Groups" label="Groups">
+               <DataNode type="Group" label="${sybasease.getGroups.Group Name}" isLeaf="true">
+                  <SetVar name="objectname" value="${sybasease.getGroups.Group Name}"/>
+                  <Command idref="sybasease.getGroups">
+                     <Input name="database" value="${catalog}"/>
+                  </Command>
+               </DataNode>
+            </GroupNode>
+
+            <GroupNode type="Types" label="User Defined Data Types" isLeaf="true"/>
+
+         </DataNode>
+      </GroupNode>
+
+      <!-- ================================================================= -->
+      <!-- DBA Nodes -->
+      <!-- ================================================================= -->
+
+      <GroupNode type="DBA" label="DBA Views">
+         <GroupNode type="ServerInfo" label="Server Info" isLeaf="true"/>
+
+         <GroupNode type="Logins" label="Logins">
+            <DataNode type="Login" label="${sybasease.getLogins.Name}" isLeaf="true">
+               <SetVar name="objectname" value="${sybasease.getLogins.Name}"/>
+               <Command idref="sybasease.getLogins"/>
+            </DataNode>
+         </GroupNode>
+
+         <GroupNode type="Devices" label="Database Devices">
+            <DataNode type="Device" label="${sybasease.getDevices.Name}"
+                      label1="${sybasease.getDevices.Used (MB)}/${sybasease.getDevices.Size (MB)} MB"
+                      isLeaf="true">
+               <SetVar name="objectname" value="${sybasease.getDevices.Name}"/>
+               <Command idref="sybasease.getDevices"/>
+            </DataNode>
+         </GroupNode>
+
+         <GroupNode type="RemoteServers" label="Remote Servers" isLeaf="true"/>
+
+         <GroupNode type="Processes" label="Processes" isLeaf="true"/>
+
+         <GroupNode type="ServerRoles" label="Roles">
+            <DataNode type="ServerRole" label="${sybasease.getServerRoles.NAME}" isLeaf="true">
+               <SetVar name="objectname" value="${sybasease.getServerRoles.NAME}"/>
+               <Command idref="sybasease.getServerRoles"/>
+            </DataNode>
+         </GroupNode>
+
+         <GroupNode type="Transactions" label="Transactions" isLeaf="true"/>
+
+         <GroupNode type="Locks" label="Locks" isLeaf="true"/>
+
+      </GroupNode>
+
+   </ObjectsTreeDef>
+
+   <!-- =================================================================== -->
+   <!-- Definition of the database objects views -->
+   <!-- =================================================================== -->
+
+   <ObjectsViewDef extends="true">
+
+      <ObjectView type="Catalog" action="drop"/>
+      <ObjectView type="Schema" action="drop"/>
+
+      <ObjectView type="Tables">
+         <DataView id="generic-tables-tables" action="drop"/>
+         <DataView id="generic-tables-references" action="drop"/>
+
+         <DataView id="sybasease-tables-tables" icon="Tables" label="Tables" viewer="grid">
+            <Input name="menuItem" value="Open in New Tab...">
+               <Input name="action" value="open-object-in-new-tab-command ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+            <Input name="menuItem" value="Open in Floating Tab...">
+               <Input name="action" value="open-object-in-floating-tab-command ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+            <Input name="menuItem" value="Script: SELECT ALL">
+               <Input name="command" value="select * from ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+            <Input name="menuItem" value="Script: DROP TABLE">
+               <Input name="command" value="drop table ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+
+            <Command idref="getTables">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="%"/>
+               <Input name="tableType" value="TABLE"/>
+            </Command>
+         </DataView>
+         <DataView id="sybasease-tables-references" icon="References" label="References" viewer="tables-refs"
+                   doclink="http://www.dbvis.com/doclink/show-references">
+            <Command idref="getTables">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="%"/>
+               <Input name="tableType" value="TABLE"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Table">
+         <DataView id="generic-table-ddl">
+            <Message/>
+         </DataView>
+
+         <DataView id="sybasease-table-triggers" icon="Trigger" label="Triggers" viewer="form">
+            <Command idref="sybasease.getTriggers">
+               <Input name="condition" value="${triggerCondition}"/>
+            </Command>
+         </DataView>
+         <!--<DataView type="Dependencies" label="Dependencies" viewer="grid">-->
+            <!--<Command idref="sybasease.getDependencies">-->
+               <!--<Input name="name" value="${objectname}"/>-->
+            <!--</Command>-->
+         <!--</DataView>-->
+      </ObjectView>
+
+      <ObjectView type="SystemTables">
+         <DataView id="sybasease-systemtables-systemtables" icon="SystemTables" label="SystemTables" viewer="grid">
+            <Input name="menuItem" value="Open in New Tab...">
+               <Input name="action" value="open-object-in-new-tab-command ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+            <Input name="menuItem" value="Open in Floating Tab...">
+               <Input name="action" value="open-object-in-floating-tab-command ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+            <Input name="menuItem" value="Script: SELECT ALL">
+               <Input name="command" value="select * from ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+
+            <Command idref="getTables">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="%"/>
+               <Input name="tableType" value="SYSTEM TABLE"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="SystemTable">
+         <DataView id="sybasease-systemtable-info" icon="Info" label="Info" viewer="node-form"/>
+         <DataView id="sybasease-systemtable-columns" icon="Columns" label="Columns" viewer="grid">
+            <Command idref="getColumns">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="${objectname}"/>
+            </Command>
+         </DataView>
+         <DataView id="sybasease-systemtable-data" icon="Data" label="Data" viewer="table-data">
+            <Input name="editDisabled" value="true"/>
+         </DataView>
+         <DataView id="sybasease-systemtable-rowcount" icon="RowCount" label="Row Count" viewer="table-rowcount"/>
+      </ObjectView>
+
+      <ObjectView type="Views">
+         <DataView id="sybasease-views-views" icon="Views" label="Views" viewer="grid">
+            <Input name="menuItem" value="Open in New Tab...">
+               <Input name="action" value="open-object-in-new-tab-command ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+            <Input name="menuItem" value="Open in Floating Tab...">
+               <Input name="action" value="open-object-in-floating-tab-command ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+            <Input name="menuItem" value="Script: SELECT ALL">
+               <Input name="command" value="select * from ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+            <Input name="menuItem" value="Script: DROP VIEW">
+               <Input name="command" value="drop view ${schema||TABLE_SCHEM}${object||TABLE_NAME}"/>
+            </Input>
+
+            <Command idref="getTables">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="%"/>
+               <Input name="tableType" value="VIEW"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="View">
+         <DataView id="sybasease-view-info" icon="Info" label="Info" viewer="node-form"/>
+         <DataView id="sybasease-view-columns" icon="Columns" label="Columns" viewer="grid">
+            <Command idref="getColumns">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="${objectname}"/>
+            </Command>
+         </DataView>
+         <DataView id="sybasease-view-data" icon="Data" label="Data" viewer="table-data"/>
+         <DataView id="sybasease-view-rowcount" icon="RowCount" label="Row Count" viewer="table-rowcount"/>
+         <DataView id="sybasease-view-indexes" icon="Index" label="Indexes" viewer="grid">
+            <Command idref="getIndexes">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="${objectname}"/>
+            </Command>
+         </DataView>
+         <DataView id="sybasease-view-grants" icon="TablePrivileges" label="Grants" viewer="grid">
+            <Command idref="getPrivileges">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="${objectname}"/>
+            </Command>
+         </DataView>
+         <DataView id="sybasease-view-triggers" icon="Trigger" label="Triggers" viewer="form">
+            <Command idref="sybasease.getTriggers">
+               <Input name="condition" value="${triggerCondition}"/>
+            </Command>
+         </DataView>
+         <DataView id="sybasease-view-ddl" icon="Source" label="DDL" viewer="ddl">
+            <Input name="objectType" value="View"/>
+            <Input name="formatSQL" value="true"/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Users">
+         <DataView id="sybasease-users-users" icon="Users" label="Users" viewer="grid">
+            <Command idref="sybasease.getUsers">
+               <Input name="database" value="${catalog}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="User">
+         <DataView id="sybasease-user-info" icon="Info" label="Info" viewer="node-form"/>
+      </ObjectView>
+
+      <ObjectView type="Groups">
+         <DataView id="sybasease-groups-groups" icon="Groups" label="Groups" viewer="grid">
+            <Command idref="sybasease.getGroups">
+               <Input name="database" value="${catalog}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Group">
+         <DataView id="sybasease-group-info" icon="Info" label="Info" viewer="node-form"/>
+         <DataView id="sybasease-group-users" icon="Users" label="Users" viewer="grid">
+            <Command idref="sybasease.getGroupUsers">
+               <Input name="database" value="${catalog}"/>
+               <Input name="group" value="${objectname}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Triggers">
+         <DataView id="sybasease-triggers-triggers" icon="Triggers" label="Triggers" viewer="grid">
+            <Command idref="sybasease.getTriggers">
+                <Input name="condition" value="${triggerCondition}"/>
+           </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Trigger">
+         <DataView classargs="TRIGGER" id="sybasease-trigger-triggereditor" icon="SourceEditor" label="Trigger Editor" viewer="ProcedureViewer"
+                   doclink="http://www.dbvis.com/doclink/edit-code-object"/>
+         <DataView id="sybasease-trigger-info" icon="Info" label="Info" viewer="node-form"/>
+      </ObjectView>
+
+      <ObjectView type="ViewTriggers">
+         <DataView id="sybasease-view-triggers-triggers" icon="Triggers" label="Triggers" viewer="grid">
+            <Command idref="sybasease.getTriggers">
+               <Input name="condition" value="${triggerCondition}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="ViewTrigger">
+         <DataView classargs="TRIGGER" id="sybasease-view-trigger-triggereditor" icon="SourceEditor" label="Trigger Editor" viewer="ProcedureViewer"
+                   doclink="http://www.dbvis.com/doclink/edit-code-object"/>
+         <DataView id="sybasease-trigger-info" icon="Info" label="Info" viewer="node-form"/>
+      </ObjectView>
+
+      <ObjectView type="Indexes">
+         <DataView id="generic-indexes-indexes" action="drop"/>
+
+         <DataView id="sybasease-indexes-indexes" icon="Indexes" label="Indexes" viewer="grid">
+            <Command idref="sybasease.getIndexes">
+               <Input name="database" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="tableNameForIndex" value="${tableNameForIndex}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Index">
+         <DataView id="sybasease-index-columns" icon="Columns" label="Columns" viewer="form">
+            <Command idref="sybasease.getIndexColumns">
+               <Input name="database" value="${catalog}"/>
+               <Input name="tableId" value="${tableId}"/>
+               <Input name="indexId" value="${indexId}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Types">
+         <DataView id="sybasease-types-userdefineddatatypes" icon="Types" label="User Defined Data Types" viewer="grid">
+            <Command idref="sybasease.getUserTypes">
+               <Input name="database" value="${catalog}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Procedures">
+         <DataView id="generic-procedures-procedures" action="drop"/>
+
+         <DataView id="sybasease-procedures-procedures" icon="Procedures" label="Procedures" viewer="grid">
+            <Command idref="sybasease.getObjects">
+               <Input name="database" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="type" value="P"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Procedure">
+         <DataView id="generic-procedure-columns" action="drop"/>
+
+         <DataView classargs="PROCEDURE" id="sybasease-procedure-procedureeditor" icon="SourceEditor" label="Procedure Editor" viewer="ProcedureViewer"
+                   doclink="http://www.dbvis.com/doclink/edit-code-object"/>
+         <DataView id="sybasease-procedure-interface" icon="Interface" label="Interface" viewer="form">
+            <Command idref="getProcedureColumns">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="${objectname}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Functions">
+         <DataView id="sybasease-functions-functions" icon="Functions" label="Functions" viewer="grid">
+            <Command idref="sybasease.getObjects">
+               <Input name="database" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="type" value="SF"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Function">
+         <DataView classargs="FUNCTION" id="sybasease-function-functioneditor" icon="SourceEditor" label="Function Editor" viewer="ProcedureViewer"
+                   doclink="http://www.dbvis.com/doclink/edit-code-object"/>
+         <DataView id="sybasease-function-interface" icon="Interface" label="Interface" viewer="form">
+            <Command idref="sybasease.getFunctionColumns">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="function" value="${objectname}"/>
+               <Input name="qname" value="${schema}.${objectname}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <!-- ================================================================= -->
+      <!-- DBA Views -->
+      <!-- ================================================================= -->
+
+      <ObjectView type="ServerInfo">
+         <DataView id="sybasease-serverinfo-serverinfo" icon="Info" label="Server Info" viewer="grid">
+            <Command idref="sybasease.getServerInfo"/>
+         </DataView>
+         <DataView id="sybasease-serverinfo-characterset" icon="Info" label="Character Set" viewer="grid">
+            <Command idref="sybasease.getCharSet"/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Logins">
+         <DataView id="sybasease-logins-logins" icon="Logins" label="Logins" viewer="grid">
+            <Command idref="sybasease.getLogins"/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Login">
+         <DataView id="sybasease-login-info" icon="Info" label="Info" viewer="node-form"/>
+         <DataView id="sybasease-login-databases" icon="Databases" label="Databases" viewer="grid">
+            <Command idref="sybasease.getLoginDatabases">
+               <Input name="suid" value="${sybasease.getLogins.suid}"/>
+            </Command>
+         </DataView>
+         <DataView id="sybasease-login-roles" icon="Roles" label="Roles" viewer="grid">
+            <Command idref="sybasease.getLoginRoles">
+               <Input name="login" value="${sybasease.getLogins.Name}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Devices">
+         <DataView id="sybasease-devices-databasedevices" icon="Devices" label="Database Devices" viewer="grid">
+            <Command idref="sybasease.getDevices"/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Device">
+         <DataView id="sybasease-device-info" icon="Info" label="Info" viewer="node-form"/>
+         <DataView id="sybasease-device-databases" icon="Databases" label="Databases" viewer="grid">
+            <Command idref="sybasease.getDeviceDatabases">
+               <Input name="name" value="${objectname}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="RemoteServers">
+         <DataView id="sybasease-remoteservers-remoteservers" icon="RemoteServers" label="Remote Servers" viewer="grid">
+            <Command idref="sybasease.getRemoteServers"/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="ServerRoles">
+         <DataView id="sybasease-serverroles-roles" icon="ServerRoles" label="Roles" viewer="grid">
+            <Command idref="sybasease.getServerRoles"/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="ServerRole">
+         <DataView id="sybasease-serverrole-info" icon="Info" label="Info" viewer="node-form"/>
+         <DataView id="sybasease-serverrole-logins" icon="Logins" label="Logins" viewer="grid">
+            <Command idref="sybasease.getRoleLogins">
+               <Input name="name" value="${objectname}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Processes">
+         <DataView id="sybasease-processes-processes" icon="Processes" label="Processes" viewer="grid">
+            <Command idref="sybasease.getProcesses"/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Transactions">
+         <DataView id="sybasease-transactions-transactions" icon="Transactions" label="Transactions" viewer="grid">
+            <Command idref="sybasease.getTransactions"/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Locks">
+         <DataView id="sybasease-locks-locks" icon="Locks" label="Locks" viewer="grid">
+            <Command idref="sybasease.getLocks"/>
+         </DataView>
+      </ObjectView>
+
+   </ObjectsViewDef>
+
+</DatabaseProfile>

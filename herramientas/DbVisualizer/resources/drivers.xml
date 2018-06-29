@@ -1,0 +1,970 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+   @(#)$Id$
+
+   Copyright (c) DbVis Software AB. All Rights Reserved.
+-->
+
+<!-- =================================================================== -->
+<!-- This file defines all drivers and related data needed by -->
+<!-- DbVisualizer -->
+<!-- =================================================================== -->
+
+<!--
+  All drivers in this file will appear in the driver manager and in the
+  connection wizard. The <URLFormat> element is presented in the driver
+  manager and in the Connection tab to help the user understanding the format
+  of the URL.
+  The <Identifier> should list the beginning of the URL
+  as much as possible to uniquely identify the driver. This is then
+  used to match with a user specified URL in order to find out which
+  default driver that it is.
+  The <WizardURLFormat> is only used by the connection wizard.
+  It's composed of variables that are parsed and displayed in the
+  wizard. The entered values will replace the complete variable once
+  the connection is established. Here follows a few examples of the
+  variable format:
+
+  Complete sample (type is never used in this scope)
+    ${name|value|type|options}
+
+  ${Server}
+     "Server" is used as label in the wizard with no default value
+
+  ${Server|localhost}
+     "Server" is used as label with "localhost" as its default value
+
+  ${Database File|||file }
+     "Database" is used as label and it will in addition show a "..." button
+     to the right of the input field. Press the button to open a file chooser
+
+  ${Port|1521||prefix=: }
+     "Port" is used as label. If a value is specified then the value will be
+     prefixed with the ":". If no value is specified then no ":" will prefix
+     the value.
+
+  Note: Server and Port variables must be present as variables in order
+        for SSH to be selectable for the connection.
+-->
+
+<DbVisualizer>
+   <Drivers>
+
+      <Driver>
+         <Name>Cache</Name>
+         <Identifier>jdbc:Cache</Identifier>
+         <Type>cache</Type>
+         <URLFormat>
+            jdbc:Cache://&lt;server&gt;:&lt;port1972&gt;/&lt;namespace&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:Cache://${Server|localhost}${Port|1972||prefix=: }/${Namespace}
+         </WizardURLFormat>
+         <DefaultClass>com.intersys.jdbc.CacheDriver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <!--<Driver>-->
+         <!--<Name>Daffodil DB</Name>-->
+         <!--<Identifier>jdbc:daffodilDB</Identifier>-->
+         <!--<Type>daffodil</Type>-->
+         <!--<URLFormat>-->
+            <!--jdbc:daffodilDB://&lt;server&gt;:&lt;port3456&gt;/&lt;database&gt;-->
+         <!--</URLFormat>-->
+         <!--<WizardURLFormat>-->
+            <!--jdbc:daffodilDB://${Server|localhost}${Port|3456||prefix=: }/${Database}-->
+         <!--</WizardURLFormat>-->
+         <!--<DefaultClass>in.co.daffodil.db.rmi.RmiDaffodilDBDriver</DefaultClass>-->
+         <!--<WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>-->
+      <!--</Driver>-->
+
+      <Driver>
+         <Name>DB2</Name>
+         <Identifier>jdbc:db2</Identifier>
+         <Type>db2</Type>
+         <URLFormat>
+            jdbc:db2://&lt;server&gt;:&lt;port50000&gt;/&lt;database&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:db2://${Server|localhost}${Port|50000||prefix=: }${Database|sample||prefix=/ }
+         </WizardURLFormat>
+         <Properties>
+            <Property label="Show Detailed Error Messages" key="retrieveMessagesFromServerOnGetMessage" driverDefault="false" dbvisDefault="true"/>
+            <Property label="" key="clientProgramName" driverDefault="" dbvisDefault="dbvis" showAsOptionIf="false"/>
+         </Properties>
+         <DefaultClass>com.ibm.db2.jcc.DB2Driver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>DB2 (DataDirect)</Name>
+         <Identifier>jdbc:datadirect:db2</Identifier>
+         <Type>db2</Type>
+         <URLFormat>
+            jdbc:datadirect:db2://&lt;server&gt;:&lt;port50000&gt;;DatabaseName=&lt;database&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:datadirect:db2://${Server|localhost}${Port|50000||prefix=: }${Database|sample||prefix=;DatabaseName= }
+         </WizardURLFormat>
+         <DefaultClass>com.ddtek.jdbc.db2.DB2Driver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>DB2 for AS/400 (JTOpen)</Name>
+         <Identifier>jdbc:as400</Identifier>
+         <Type>db2-iseries</Type>
+         <URLFormat>
+            jdbc:as400://&lt;server&gt;naming=sql;errors=full
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:as400://${Server|localhost}
+         </WizardURLFormat>
+         <Properties>
+            <Property label="Error Message Detail Level" key="errors" driverDefault="basic"/>
+            <Property label="Naming Conventions" key="naming" driverDefault="sql"/>
+         </Properties>
+         <DefaultClass>com.ibm.as400.access.AS400JDBCDriver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>DB2 z/OS</Name>
+         <Identifier>jdbc:db2</Identifier>
+         <Type>db2-zos</Type>
+         <URLFormat>
+            jdbc:db2://&lt;server&gt;:&lt;port50000&gt;/&lt;database&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:db2://${Server|localhost}${Port|50000||prefix=: }${Database|sample||prefix=/ }
+         </WizardURLFormat>
+         <Properties>
+            <Property label="Show Detailed Error Messages" key="retrieveMessagesFromServerOnGetMessage" driverDefault="false" dbvisDefault="true"/>
+            <Property label="" key="clientProgramName" driverDefault="" dbvisDefault="dbvis" showAsOptionIf="false"/>
+         </Properties>
+         <DefaultClass>com.ibm.db2.jcc.DB2Driver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>Firebird</Name>
+         <Identifier>jdbc:firebirdsql</Identifier>
+         <Type>firebird</Type>
+         <URLFormat>
+            jdbc:firebirdsql:&lt;server&gt;/&lt;port3050&gt;:&lt;database-file&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:firebirdsql:${Server|localhost}${Port|3050||prefix=/ }${Database File|||file prefix=: }
+         </WizardURLFormat>
+         <DefaultClass>org.firebirdsql.jdbc.FBDriver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>Exasol</Name>
+         <Identifier>jdbc:exa</Identifier>
+         <Type>exasol</Type>
+         <URLFormat>
+            jdbc:exa:&lt;server&gt;:&lt;port8563&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:exa:${Server|localhost}${Port|8563||prefix=: }
+         </WizardURLFormat>
+         <Properties>
+            <Property label="" key="clientname" driverDefault="" dbvisDefault="dbvis" showAsOptionIf="false"/>
+         </Properties>
+         <DefaultClass>com.exasol.jdbc.EXADriver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>FrontBase</Name>
+         <Identifier>jdbc:frontbase</Identifier>
+         <Type>frontbase</Type>
+         <URLFormat>
+            jdbc:frontbase://&lt;server&gt;[:&lt;port20020&gt; | /&lt;database&gt;]
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:frontbase://${Server|localhost}${Port|20020||prefix=: }${Database|||prefix=/ }
+         </WizardURLFormat>
+         <DefaultClass>com.frontbase.jdbc.FBJDriver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>Hive</Name>
+         <Identifier>jdbc:hive2</Identifier>
+         <Type>hive</Type>
+         <URLFormat>
+            jdbc:hive2://&lt;server&gt;:&lt;port10000&gt;/&lt;database&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:hive2://${Server|localhost}${Port|10000||prefix=: }${Database|default||prefix=/ }
+         </WizardURLFormat>
+         <DefaultClass>org.apache.hive.jdbc.HiveDriver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>HP Neoview</Name>
+         <Identifier>jdbc:hpt4jdbc</Identifier>
+         <Type>neoview</Type>
+         <URLFormat>
+            jdbc:hpt4jdbc://&lt;server&gt;:&lt;port&gt;/:
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:hpt4jdbc://${Server}:${Port|18650}/:
+         </WizardURLFormat>
+         <DefaultClass>com.hp.t4jdbc.HPT4Driver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>HSQLDB server</Name>
+         <Identifier>jdbc:hsqldb:hsql</Identifier>
+         <Type>hsql</Type>
+         <URLFormat>
+            jdbc:hsqldb:hsql://&lt;server&gt;:&lt;port9001&gt;/&lt;database&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:hsqldb:hsql://${Server|localhost}${Port|9001||prefix=: }${Database|||prefix=/ }
+         </WizardURLFormat>
+         <DefaultClass>org.hsqldb.jdbcDriver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>HSQLDB embedded</Name>
+         <Identifier>jdbc:hsqldb</Identifier>
+         <Type>hsql</Type>
+         <URLFormat>
+            jdbc:hsqldb:&lt;database&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:hsqldb:${Database file name|||file}
+         </WizardURLFormat>
+         <DefaultClass>org.hsqldb.jdbcDriver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>H2 server</Name>
+         <Identifier>jdbc:h2:tcp</Identifier>
+         <Type>h2</Type>
+         <URLFormat>
+            jdbc:h2:tcp:&lt;server&gt;:&lt;port9092&gt;/&lt;database&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:h2:tcp:${Server|localhost}${Port|9092||prefix=: }${Database file name|~/myh2||file prefix=/ }
+         </WizardURLFormat>
+         <DefaultClass>org.h2.Driver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>H2 embedded</Name>
+         <Identifier>jdbc:h2</Identifier>
+         <Type>h2</Type>
+         <URLFormat>
+            jdbc:h2:&lt;database&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:h2:${Database file name|~/myh2||file}
+         </WizardURLFormat>
+         <DefaultClass>org.h2.Driver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>Informix</Name>
+         <Identifier>jdbc:informix-sqli</Identifier>
+         <Type>informix</Type>
+         <URLFormat>
+            jdbc:informix-sqli://&lt;server&gt;:&lt;port1526&gt;/&lt;database&gt;:informixserver=&lt;dbservername&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:informix-sqli://${Server|localhost}${Port|1526||prefix=: }${Database|||prefix=/ }:informixserver=${Database Server|ol_xxx}
+         </WizardURLFormat>
+         <DefaultClass>com.informix.jdbc.IfxDriver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>Informix (DataDirect)</Name>
+         <Identifier>jdbc:datadirect:informix</Identifier>
+         <Type>informix</Type>
+         <URLFormat>
+            jdbc:datadirect:informix://&lt;server&gt;:&lt;port1526&gt;;InformixServer=&lt;informixserver&gt;;DatabaseName=&lt;database&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:datadirect:informix://${Server|localhost}${Port|1526||prefix=: }${Informix Server|ol_xxx||prefix=;InformixServer= }${Database|||prefix=;DatabaseName= }
+         </WizardURLFormat>
+         <DefaultClass>com.ddtek.jdbc.informix.InformixDriver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>JavaDB/Derby server</Name>
+         <Identifier>jdbc:derby://</Identifier>
+         <Type>derby</Type>
+         <URLFormat>
+            jdbc:derby://&lt;server&gt;:&lt;port1527&gt;/&lt;databaseName&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:derby://${Server|localhost}${Port|1527||prefix=: }${Database|||prefix=/ }
+         </WizardURLFormat>
+         <Properties>
+            <Property label="Create Database" key="create" driverDefault="false"/>
+         </Properties>
+         <DefaultClass>org.apache.derby.jdbc.ClientDriver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>JavaDB/Derby embedded</Name>
+         <Identifier>jdbc:derby</Identifier>
+         <Type>derby</Type>
+         <URLFormat>
+            jdbc:derby:&lt;databaseName&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:derby:${Database|myderby||file}
+         </WizardURLFormat>
+         <Properties>
+            <Property label="Create Database" key="create" driverDefault="false"/>
+         </Properties>
+         <DefaultClass>org.apache.derby.jdbc.EmbeddedDriver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>JDataStore</Name>
+         <Identifier>jdbc:borland:dslocal</Identifier>
+         <Type>jdatastore</Type>
+         <URLFormat>
+            jdbc:borland:dslocal:&lt;file&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:borland:dslocal:${File name|||file}
+         </WizardURLFormat>
+         <DefaultClass>com.borland.datastore.jdbc.DataStoreDriver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>MaxDB</Name>
+         <Identifier>jdbc:sapdb</Identifier>
+         <Type>maxdb</Type>
+         <URLFormat>
+            jdbc:sapdb://&lt;server&gt;:&lt;port7210&gt;/&lt;database&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:sapdb://${Server|localhost}${Port|7210||prefix=: }${Database|||prefix=/ }
+         </WizardURLFormat>
+         <DefaultClass>com.sap.dbtech.jdbc.DriverSapDB</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>MariaDB</Name>
+         <Identifier>jdbc:mariadb</Identifier>
+         <Type>mysql</Type>
+         <URLFormat>
+            jdbc:mariadb://&lt;server&gt;:&lt;port3306&gt;/&lt;database&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:mariadb://${Server|localhost}${Port|3306||prefix=: }/${Database}
+         </WizardURLFormat>
+         <Properties>
+            <PropertyGroup label="Buffer All Rows for a Result" descKey="bufferAllRows">
+               <PropertyGroupMember key="useCursorFetch"
+                                    whenEnabled="false"
+                                    whenDisabled="true"
+                                    driverDefault="false" dbvisDefault="true"/>
+               <PropertyGroupMember key="defaultFetchSize"
+                                    whenEnabled="0"
+                                    whenDisabled="5000"
+                                    disabledIf="#value gt 0"
+                                    driverDefault="0" dbvisDefault="5000"/>
+            </PropertyGroup>
+         </Properties>
+         <DefaultClass>org.mariadb.jdbc.Driver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>McKoi</Name>
+         <Identifier>jdbc:mckoi</Identifier>
+         <Type>generic</Type>
+         <URLFormat>
+            jdbc:mckoi://&lt;server&gt;:&lt;port9157&gt;/&lt;schema&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:mckoi://${Server|localhost}${Port|9157||prefix=: }${Schema|||prefix=/ }
+         </WizardURLFormat>
+         <DefaultClass>com.mckoi.JDBCDriver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>Mimer</Name>
+         <Identifier>jdbc:mimer</Identifier>
+         <Type>mimer</Type>
+         <URLFormat>
+            jdbc:mimer:&lt;protocol&gt;://&lt;server&gt;:&lt;port1360&gt;/&lt;database&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:mimer${Protocol|tcp||choices=[,tcp,local] prefix=: }://${Server|localhost}${Port|1360||prefix=: }${Database|||prefix=/ }${Program|||category=Authentication prefix=?program= }${Program Password|||password category=Authentication prefix=&amp;programpwd= }
+         </WizardURLFormat>
+         <DefaultClass>com.mimer.jdbc.Driver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>MySQL</Name>
+         <Identifier>jdbc:mysql</Identifier>
+         <Type>mysql</Type>
+         <URLFormat>
+            jdbc:mysql://&lt;server&gt;:&lt;port3306&gt;/&lt;database&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:mysql://${Server|localhost}${Port|3306||prefix=: }/${Database}
+         </WizardURLFormat>
+         <Properties>
+            <PropertyGroup label="Buffer All Rows for a Result" descKey="bufferAllRows">
+               <PropertyGroupMember key="useCursorFetch"
+                                    whenEnabled="false"
+                                    whenDisabled="true"
+                                    driverDefault="false" dbvisDefault="true"/>
+               <PropertyGroupMember key="defaultFetchSize"
+                                    whenEnabled="0"
+                                    whenDisabled="5000"
+                                    disabledIf="#value gt 0"
+                                    driverDefault="0" dbvisDefault="5000"/>
+            </PropertyGroup>
+         </Properties>
+         <DefaultClass>com.mysql.jdbc.Driver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>MySQL (DataDirect)</Name>
+         <Identifier>jdbc:datadirect:mysql</Identifier>
+         <Type>mysql</Type>
+         <URLFormat>
+            jdbc:datadirect:mysql://&lt;server&gt;:&lt;port3306&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:datadirect:mysql://${Server|localhost}${Port|3306||prefix=: }${Database|||prefix=;DatabaseName= }
+         </WizardURLFormat>
+         <DefaultClass>com.ddtek.jdbc.mysql.MySQLDriver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>Netezza</Name>
+         <Identifier>jdbc:netezza</Identifier>
+         <Type>netezza</Type>
+         <URLFormat>
+            jdbc:netezza://&lt;server&gt;:&lt;port5480&gt;/&lt;database&gt;
+         </URLFormat>
+         <Properties>
+            <Property label="" key="applicationName" driverDefault="" dbvisDefault="dbvis" showAsOptionIf="false"/>
+         </Properties>
+         <WizardURLFormat>
+            jdbc:netezza://${Server|localhost}${Port|5480||prefix=: }/${Database}
+         </WizardURLFormat>
+         <DefaultClass>org.netezza.Driver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>NuoDB</Name>
+         <Identifier>jdbc:com.nuodb</Identifier>
+         <Type>nuodb</Type>
+         <URLFormat>
+            jdbc:com.nuodb://&lt;server&gt;:&lt;port48004&gt;/&lt;database&gt;&lt;?schema=schema&gt;
+         </URLFormat>
+         <Properties>
+            <Property label="" key="clientInfo" driverDefault="" dbvisDefault="dbvis" showAsOptionIf="false"/>
+         </Properties>
+         <WizardURLFormat>
+            jdbc:com.nuodb://${Server|localhost}${Port|48004||prefix=: }/${Database}${Schema|||prefix=?schema= }
+         </WizardURLFormat>
+         <DefaultClass>com.nuodb.jdbc.Driver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>Oracle Thin</Name>
+         <Identifier>jdbc:oracle:thin</Identifier>
+         <Type>oracle</Type>
+         <URLFormat>
+            jdbc:oracle:thin:@&lt;server&gt;:&lt;port1521&gt;:&lt;sid&gt;
+         </URLFormat>
+         <WizardURLFormats>
+            <WizardURLFormat name="Service">
+               jdbc:oracle:thin:@${Server|localhost}${Port|1521||prefix=: }/${Service|ORCL}
+            </WizardURLFormat>
+            <WizardURLFormat name="SID">
+               jdbc:oracle:thin:@${Server|localhost}${Port|1521||prefix=: }:${SID|ORCL}
+            </WizardURLFormat>
+            <WizardURLFormat name="TNS">
+               jdbc:oracle:thin:@${TNS Alias|||choicesmethod=com.onseven.dbvis.db.oracle.OraTNSUtil.getAliases}
+            </WizardURLFormat>
+         </WizardURLFormats>
+         <MessageWhenChosen>
+            <![CDATA[
+            <html>
+            The bundled JDBC driver for <b>Oracle Thin</b> is not fully backwards compatible with <b>Oracle 9i</b>
+            and earlier versions.<br>
+            To solve this:<br>
+            <b>1.</b>&nbsp;&nbsp;At <b>oracle.com</b> download <b>ojdbc6.jar</b> and the <b>orai18n.jar</b> files for version <b>11.1.0.7.0</b>,
+            <b>2.</b>&nbsp;&nbsp;in DbVisualizer open <b>Tools->Driver Manager</b>,
+            <b>3.</b>&nbsp;&nbsp;in the driver manager select the <b>Oracle Thin</b> driver and select <b>Duplicate Driver</b> in the <b>Driver</b> menu,
+            <b>4.</b>&nbsp;&nbsp;set the name for the new driver to for example "Oracle Thin v11",
+            <b>5.</b>&nbsp;&nbsp;remove the old jar files in the <b>User Specified</b> tab,
+            <b>6.</b>&nbsp;&nbsp;for the new driver load the jar files in the <b>User Specified</b> tab,
+            <b>7.</b>&nbsp;&nbsp;close the driver manager and select the new driver ("Oracle Thin v11") for your database connection,
+            <b>8.</b>&nbsp;&nbsp;connect and verify the driver version in the <b>Connection Message</b> in the connection tab.
+            </html>
+            ]]>
+         </MessageWhenChosen>
+         <Properties>
+            <Property label="SYS Role" key="internal_logon" driverDefault="" choices="|SYSDBA|SYSOPER"/>
+            <Property label="" key="v$session.program" driverDefault="JDBC Thin Client" dbvisDefault="dbvis" showAsOptionIf="false"/>
+         </Properties>
+         <DefaultClass>oracle.jdbc.OracleDriver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>Oracle OCI</Name>
+         <Identifier>jdbc:oracle:oci</Identifier>
+         <Type>oracle</Type>
+         <URLFormat>
+            jdbc:oracle:oci:@&lt;server&gt;:&lt;port1521&gt;:&lt;sid&gt;
+         </URLFormat>
+         <WizardURLFormats>
+            <WizardURLFormat name="Service">
+               jdbc:oracle:oci:@${Server|localhost}${Port|1521||prefix=: }/${Service|ORCL}
+            </WizardURLFormat>
+            <WizardURLFormat name="SID">
+              jdbc:oracle:oci:@${Server|localhost}${Port|1521||prefix=: }:${SID|ORCL}
+            </WizardURLFormat>
+            <WizardURLFormat name="TNS">
+               jdbc:oracle:oci:@${TNS Alias|||choicesmethod=com.onseven.dbvis.db.oracle.OraTNSUtil.getAliases}
+            </WizardURLFormat>
+         </WizardURLFormats>
+         <MessageWhenChosen type="warning">
+            <![CDATA[
+            <html>
+            You've chosen the <b>Oracle OCI</b> driver which is generally <b>not recommended</b>.
+            The reason is because it requires external Oracle libraries and there are only
+            rare situations when the OCI driver may be useful.<br>
+            The <b>recommendation is</b> instead to use the <b>Oracle Thin</b> driver as it is a pure Java
+            driver with no external dependencies. It can be used as-is in DbVisualizer.
+            </html>
+            ]]>
+         </MessageWhenChosen>
+         <Properties>
+            <Property label="SYS Role" key="internal_logon" driverDefault="" choices="|SYSDBA|SYSOPER"/>
+            <Property label="" key="v$session.program" driverDefault="JDBC Thin Client" dbvisDefault="dbvis" showAsOptionIf="false"/>
+         </Properties>
+         <DefaultClass>oracle.jdbc.OracleDriver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>Oracle (DataDirect)</Name>
+         <Identifier>jdbc:datadirect:oracle</Identifier>
+         <Type>oracle</Type>
+         <URLFormat>
+            jdbc:datadirect:oracle://&lt;server&gt;:&lt;port1521&gt;;ServiceName=&lt;servicename&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:datadirect:oracle://${Server|localhost}${Port|1521||prefix=: }${Service Name|ORCL||prefix=;ServiceName= }
+         </WizardURLFormat>
+         <DefaultClass>com.ddtek.jdbc.oracle.OracleDriver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>Pervasive</Name>
+         <Identifier>jdbc:pervasive</Identifier>
+         <Type>pervasive</Type>
+         <URLFormat>
+            jdbc:pervasive://&lt;server&gt;:&lt;port&gt;/&lt;database&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:pervasive://${Server|localhost}${Port|||prefix=: }${Database|||prefix=/ }
+         </WizardURLFormat>
+         <DefaultClass>pervasive.jdbc.PervasiveDriver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <!--<Driver>-->
+         <!--<Name>Pointbase embedded</Name>-->
+         <!--<Identifier>jdbc:pointbase:embedded</Identifier>-->
+         <!--<Type>pointbase</Type>-->
+         <!--<URLFormat>-->
+            <!--jdbc:pointbase:embedded:&lt;:database&gt;-->
+         <!--</URLFormat>-->
+         <!--<WizardURLFormat>-->
+            <!--jdbc:pointbase:embedded:${Database}${database.home|||prefix=,database.home= file }${Create Database|false||choices=[true,false] prefix=,create= }-->
+         <!--</WizardURLFormat>-->
+         <!--<DefaultClass>com.pointbase.jdbc.jdbcUniversalDriver</DefaultClass>-->
+         <!--<WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>-->
+      <!--</Driver>-->
+
+      <!--<Driver>-->
+         <!--<Name>Pointbase server</Name>-->
+         <!--<Identifier>jdbc:pointbase:server</Identifier>-->
+         <!--<Type>pointbase</Type>-->
+         <!--<URLFormat>-->
+            <!--jdbc:pointbase:server://&lt;server&gt;:&lt;port9092&gt;/&lt;database&gt;-->
+         <!--</URLFormat>-->
+         <!--<WizardURLFormat>-->
+            <!--jdbc:pointbase:server://${Server|localhost}${Port|9092||prefix=: }${Database|||prefix=/ }${database.home|||prefix=,database.home= file }${Create Database|false||prefix=,create= }-->
+         <!--</WizardURLFormat>-->
+         <!--<DefaultClass>com.pointbase.jdbc.jdbcUniversalDriver</DefaultClass>-->
+         <!--<WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>-->
+      <!--</Driver>-->
+
+      <Driver>
+         <Name>PostgreSQL</Name>
+         <Identifier>jdbc:postgresql</Identifier>
+         <Type>postgresql</Type>
+         <URLFormat>
+            jdbc:postgresql://&lt;server&gt;:&lt;port5432&gt;/&lt;database&gt;
+         </URLFormat>
+         <Properties>
+            <Property label="" key="ApplicationName" driverDefault="" dbvisDefault="dbvis" showAsOptionIf="false"/>
+            <Property label="" key="loggerLevel" driverDefault="(null)" dbvisDefault="OFF" showAsOptionIf="false"/>
+         </Properties>
+         <WizardURLFormat>
+            jdbc:postgresql:${Server|localhost||prefix=// }${Port|5432||prefix=: }/${Database|postgres}
+         </WizardURLFormat>
+         <DefaultClass>org.postgresql.Driver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>Presto</Name>
+         <Identifier>jdbc:presto</Identifier>
+         <Type>generic</Type>
+         <URLFormat>
+            jdbc:presto://&lt;host&gt;:&lt;port&gt;/&lt;catalog&gt;/&lt;schema&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:presto://${Server|localhost}${Port|||prefix=: }${Catalog|||prefix=/ }${Schema|||prefix=/ }
+         </WizardURLFormat>
+         <DefaultClass>com.facebook.presto.jdbc.PrestoDriver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>Progress (DataDirect)</Name>
+         <Identifier>jdbc:datadirect:openedge</Identifier>
+         <Type>progress</Type>
+         <URLFormat>
+            jdbc:datadirect:openedge://&lt;server&gt;:&lt;port2003&gt;;DatabaseName=&lt;database&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:datadirect:openedge://${Server|localhost}${Port|2003||prefix=: }${Database|||prefix=;DatabaseName= }
+         </WizardURLFormat>
+         <DefaultClass>com.ddtek.jdbc.openedge.OpenEdgeDriver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>Redshift</Name>
+         <Identifier>jdbc:redshift</Identifier>
+         <Type>redshift</Type>
+         <URLFormat>
+            jdbc:redshift://&lt;server&gt;:&lt;port5439&gt;/&lt;database&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:redshift://${Server|localhost}${Port|5439||prefix=: }${Database|||prefix=/ }
+         </WizardURLFormat>
+         <DefaultClass>com.amazon.redshift.jdbc41.Driver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>Snowflake</Name>
+         <Identifier>jdbc:snowflake</Identifier>
+         <Type>snowflake</Type>
+         <URLFormat>
+            jdbc:snowflake://&lt;server&gt;:&lt;port443&gt;/?account=&lt;account&gt;&amp;warehouse=&lt;warehouse&gt;&amp;db=&lt;database&gt;&amp;schema=&lt;schema&gt;&amp;ssl=&lt;on/off&gt;
+         </URLFormat>
+         <WizardURLFormat>jdbc:snowflake://${Server}${Port|443||prefix=: }/?${Account Name|||prefix=account= }${Warehouse Name|||prefix=&amp;warehouse= }${Database Name|||prefix=&amp;db= }${Schema Name|||prefix=&amp;schema= }${Use SSL|on||prefix=&amp;ssl= }</WizardURLFormat>
+         <DefaultClass>com.snowflake.client.jdbc.SnowflakeDriver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>SQLite</Name>
+         <Identifier>jdbc:sqlite</Identifier>
+         <Type>sqlite</Type>
+         <URLFormat>
+            jdbc:sqlite:&lt;database&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:sqlite:${Database file name|mysqlite.db||file}
+         </WizardURLFormat>
+         <DefaultClass>org.sqlite.JDBC</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>SQL Server (DataDirect)</Name>
+         <Identifier>jdbc:datadirect:sqlserver</Identifier>
+         <Type>sqlserver</Type>
+         <URLFormat>
+            jdbc:datadirect:sqlserver://&lt;server&gt;:&lt;port1433&gt;;DatabaseName=&lt;database&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:datadirect:sqlserver://${Server|localhost}${Port|1433||prefix=: }${Database|Northwind||prefix=;DatabaseName= }
+         </WizardURLFormat>
+         <DefaultClass>com.ddtek.jdbc.sqlserver.SQLServerDriver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>SQL Server (jTDS)</Name>
+         <Identifier>jdbc:jtds:sqlserver</Identifier>
+         <Type>sqlserver</Type>
+         <URLFormat>
+            jdbc:jtds:sqlserver://&lt;server&gt;:&lt;port1433&gt;;DatabaseName=&lt;database&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:jtds:sqlserver://${Server|localhost}${Port|1433||prefix=: }${Database|Northwind||prefix=;DatabaseName= }${Instance|||prefix=;Instance=}
+         </WizardURLFormat>
+         <Properties>
+            <Property label="Authentication Domain" key="DOMAIN" driverDefault=""/>
+            <Property label="" key="APPNAME" driverDefault="jTDS" dbvisDefault="dbvis" showAsOptionIf="false"/>
+         </Properties>
+         <DefaultClass>net.sourceforge.jtds.jdbc.Driver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>SQL Server 2000 (Microsoft JDBC Driver)</Name>
+         <Identifier>jdbc:microsoft:sqlserver</Identifier>
+         <Type>sqlserver</Type>
+         <URLFormat>
+            jdbc:microsoft:sqlserver://&lt;server&gt;:&lt;port1433&gt;;DatabaseName=&lt;database&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:microsoft:sqlserver://${Server|localhost}${Port|1433||prefix=: }${Database|Northwind||prefix=;DatabaseName= }
+         </WizardURLFormat>
+         <DefaultClass>
+            com.microsoft.jdbc.sqlserver.SQLServerDriver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>SQL Server 2012 (Microsoft JDBC Driver)</Name>
+         <Identifier>jdbc:sqlserver</Identifier>
+         <Type>sqlserver</Type>
+         <URLFormat>
+            jdbc:sqlserver://&lt;server&gt;:&lt;port1433&gt;;DatabaseName=&lt;database&gt;
+         </URLFormat>
+         <Properties>
+            <Property label="" key="applicationName" driverDefault="Microsoft JDBC Driver for SQL Server" dbvisDefault="dbvis" showAsOptionIf="false"/>
+         </Properties>
+         <WizardURLFormat>
+            jdbc:sqlserver://${Server|localhost}${Port|1433||prefix=: }${Database|Northwind||prefix=;databaseName= }${Instance|||prefix=;instanceName=}
+         </WizardURLFormat>
+         <DefaultClass>
+            com.microsoft.sqlserver.jdbc.SQLServerDriver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>Sybase ASE (jTDS)</Name>
+         <Identifier>jdbc:jtds:sybase</Identifier>
+         <Type>sybase-ase</Type>
+         <URLFormat>
+            jdbc:jtds:sybase://&lt;server&gt;:&lt;port5000&gt;;DatabaseName=&lt;database&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:jtds:sybase://${Server|localhost}${Port|5000||prefix=: }${Database|||prefix=;DatabaseName= }
+         </WizardURLFormat>
+         <Properties>
+            <Property label="" key="PREPARESQL" driverDefault="1" dbvisDefault="2" showAsOptionIf="false"/>
+            <Property label="" key="APPNAME" driverDefault="jTDS" dbvisDefault="dbvis" showAsOptionIf="false"/>
+         </Properties>
+         <DefaultClass>net.sourceforge.jtds.jdbc.Driver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>Sybase ASE (JConnect)</Name>
+         <Identifier>jdbc:sybase:Tds</Identifier>
+         <Type>sybase-ase</Type>
+         <URLFormat>
+            jdbc:sybase:Tds:&lt;server&gt;:&lt;port5000&gt;/&lt;database&gt;
+         </URLFormat>
+         <Properties>
+            <Property label="" key="APPLICATIONNAME" driverDefault="" dbvisDefault="dbvis" showAsOptionIf="false"/>
+         </Properties>
+         <WizardURLFormat>
+            jdbc:sybase:Tds:${Server|localhost}${Port|5000||prefix=: }${Database|||prefix=/ }
+         </WizardURLFormat>
+         <DefaultClass>com.sybase.jdbc4.jdbc.SybDriver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>Sybase ASE (DataDirect)</Name>
+         <Identifier>jdbc:datadirect:sybase</Identifier>
+         <Type>sybase-ase</Type>
+         <URLFormat>
+            jdbc:datadirect:sybase://&lt;server&gt;:&lt;port2048&gt;;DatabaseName=&lt;databasename&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:datadirect:sybase://${Server|localhost}${Port|2048||prefix=: }${Database|||prefix=;DatabaseName= }
+         </WizardURLFormat>
+         <DefaultClass>com.ddtek.jdbc.sybase.SybaseDriver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>Sybase IQ (JConnect)</Name>
+         <Identifier>jdbc:sybase:Tds</Identifier>
+         <Type>sybase-iq</Type>
+         <URLFormat>
+            jdbc:sybase:Tds:&lt;server&gt;:&lt;port2638&gt;?&lt;ServiceName=database&gt;
+         </URLFormat>
+         <Properties>
+            <Property label="" key="APPLICATIONNAME" driverDefault="" dbvisDefault="dbvis" showAsOptionIf="false"/>
+         </Properties>
+         <WizardURLFormat>
+            jdbc:sybase:Tds:${Server|localhost}${Port|2638||prefix=: }${ServiceName|||prefix=? }
+         </WizardURLFormat>
+         <DefaultClass>com.sybase.jdbc4.jdbc.SybDriver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>Sybase SQL Anywhere (JConnect)</Name>
+         <Identifier>jdbc:sybase:Tds</Identifier>
+         <Type>sybase-asa</Type>
+         <URLFormat>
+            jdbc:sybase:Tds:&lt;server&gt;:&lt;port2638&gt;/&lt;database&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:sybase:Tds:${Server|localhost}${Port|2638||prefix=: }${Database|||prefix=/ }
+         </WizardURLFormat>
+         <DefaultClass>com.sybase.jdbc4.jdbc.SybDriver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>Salesforce (Reliersoft)</Name>
+         <Identifier>jdbc:sforce</Identifier>
+         <Type>generic</Type>
+         <URLFormat>
+            jdbc:sforce://login.salesforce.com
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:sforce://${Server|login.salesforce.com}${Port|443||prefix=: }
+         </WizardURLFormat>
+         <Properties>
+            <PropertyGroup label="Optimize for large number of records" descKey="largeFetch">
+               <PropertyGroupMember key="fetchSize"
+                                    whenEnabled="2000"
+                                    whenDisabled="500"
+                                    driverDefault="2000"/>
+            </PropertyGroup>
+            <PropertyGroup label="Deleted records go to Recycle Bin" descKey="recycleBin">
+               <PropertyGroupMember key="performHardDeletes"
+                                    whenEnabled="false"
+                                    whenDisabled="true"
+                                    driverDefault="false"/>
+            </PropertyGroup>
+            <PropertyGroup label="Set fields to NULL (blank) in updates" descKey="setFieldsToNull">
+               <PropertyGroupMember key="setFieldsToNullInUpserts"
+                                    whenEnabled="true"
+                                    whenDisabled="false"
+                                    driverDefault="true"/>
+               <PropertyGroupMember key="setFieldsToNullInUpdates"
+                                    whenEnabled="true"
+                                    whenDisabled="false"
+                                    driverDefault="true"/>
+            </PropertyGroup>
+            <PropertyGroup label="Extended timeout" descKey="extendedTimeout">
+               <PropertyGroupMember key="timeout"
+                                    whenEnabled="300000"
+                                    whenDisabled="30000"
+                                    driverDefault="30000"/>
+            </PropertyGroup>
+         </Properties>
+         <DefaultClass>com.reliersoft.sforce.jdbc.Driver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>Salesforce (DataDirect)</Name>
+         <Identifier>jdbc:datadirect:sforce</Identifier>
+         <Type>generic</Type>
+         <URLFormat>
+            jdbc:datadirect:sforce://&lt;server&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:datadirect:sforce://${Server}
+         </WizardURLFormat>
+         <DefaultClass>com.ddtek.jdbc.sforce.SForceDriver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>Teradata Aster</Name>
+         <Identifier>jdbc:ncluster</Identifier>
+         <Type>generic</Type>
+         <URLFormat>
+            jdbc:ncluster://&lt;server&gt;:&lt;port2406&gt;/&lt;database&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:ncluster://${Server|localhost}${Port|2406||prefix=: }${Database|||prefix=/ }
+         </WizardURLFormat>
+         <DefaultClass>com.asterdata.ncluster.Driver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>Teradata</Name>
+         <Identifier>jdbc:teradata</Identifier>
+         <Type>teradata</Type>
+         <URLFormat>
+            jdbc:teradata://&lt;server&gt;/&lt;database&gt;,&lt;port1025&gt;
+         </URLFormat>
+         <WizardURLFormat>
+            jdbc:teradata://${Server|localhost}${Database|NO_DEF_DATABASE||prefix=/database= }${Port|1025||prefix=,dbs_port= }
+         </WizardURLFormat>
+         <DefaultClass>com.teradata.jdbc.TeraDriver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+      <Driver>
+         <Name>Vertica</Name>
+         <Identifier>jdbc:vertica</Identifier>
+         <Type>vertica</Type>
+         <URLFormat>
+            jdbc:vertica://&lt;server&gt;:&lt;port5433&gt;/&lt;database&gt;
+         </URLFormat>
+         <Properties>
+            <Property label="" key="label" driverDefault="" dbvisDefault="dbvis" showAsOptionIf="false"/>
+         </Properties>
+         <WizardURLFormat>
+            jdbc:vertica:${Server|localhost||prefix=// }${Port|5433||prefix=: }${Database|||prefix=/ }
+         </WizardURLFormat>
+         <DefaultClass>com.vertica.jdbc.Driver</DefaultClass>
+         <WebSite>http://www.dbvis.com/doc/database-drivers/</WebSite>
+      </Driver>
+
+   </Drivers>
+</DbVisualizer>

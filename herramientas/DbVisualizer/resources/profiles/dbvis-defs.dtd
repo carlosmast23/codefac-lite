@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--
+   Copyright (c) DbVis Software AB. All Rights Reserved.
+-->
+
+<!-- =================================================================== -->
+<!-- DTD for database profile XML documents in DbVisualizer -->
+<!-- =================================================================== -->
+
+<!-- DatabaseProfile -->
+
+<!ELEMENT DatabaseProfile (InitCommands | Commands | ObjectsActionDef | ObjectsTreeDef | ObjectsViewDef)*>
+<!ATTLIST DatabaseProfile desc CDATA #IMPLIED
+                          version CDATA #IMPLIED
+                          minver CDATA #IMPLIED
+                          date CDATA #IMPLIED
+                          extends CDATA #IMPLIED>
+
+<!-- If, ElseIf, Else -->
+<!ELEMENT If (#PCDATA | If | ElseIf | Else | Command | Filter | SQL | Input | Output | ProcessDataSet | DataNode | GroupNode | SetVar | ObjectView | DataView | Message | ActionGroup | Action | Separator | Arg | Labels | Values | Default)*>
+<!ATTLIST If test CDATA #REQUIRED
+             context (load | runtime) #IMPLIED
+             action (drop) #IMPLIED>
+
+<!ELEMENT ElseIf (#PCDATA | If | ElseIf | Else | Command | Filter | SQL | Input | Output | ProcessDataSet | DataNode | GroupNode | SetVar | ObjectView | DataView | Message | ActionGroup | Action | Separator | Arg | Labels | Values | Default)*>
+<!ATTLIST ElseIf test CDATA #REQUIRED
+                 context (load | runtime) #IMPLIED
+                 action (drop) #IMPLIED>
+
+<!ELEMENT Else (#PCDATA | If | ElseIf | Else | Command | Filter | SQL | Input | Output | ProcessDataSet | DataNode | GroupNode | SetVar | ObjectView | DataView | Message | ActionGroup | Action | Separator | Arg | Labels | Values | Default)*>
+<!ATTLIST Else action (drop) #IMPLIED>
+
+<!-- Commands -->
+<!ELEMENT InitCommands (OnError | Command | If | ElseIf | Else)*>
+<!ATTLIST InitCommands extends (true | false) #REQUIRED>
+
+<!ELEMENT Commands (OnError | Command | If | ElseIf | Else)*>
+<!ATTLIST Commands extends (true | false) #REQUIRED>
+
+<!ELEMENT Command (Output | Input | ProcessDataSet | SQL | Filter | OnError | If | ElseIf | Else)*>
+<!ATTLIST Command id ID #IMPLIED
+                  idref IDREF #IMPLIED
+                  method (jdbc | dynamic | runBeforeConditionsEval) #IMPLIED
+                  exectype (script | asis | explain) #IMPLIED
+                  processmarkers (true | withdriver) #IMPLIED
+                  autocommit (false) #IMPLIED
+                  whensuccess (commit | rollback | ask) #IMPLIED
+                  whenerror (commit | rollback | ask | ignore) #IMPLIED>
+
+<!-- OnError -->
+<!ELEMENT OnError (Message | If | ElseIf | Else)*>
+
+<!-- Filter -->
+<!ELEMENT Filter (If | ElseIf | Else)*>
+<!ATTLIST Filter index CDATA #REQUIRED
+                 label CDATA #REQUIRED>
+
+<!-- ObjectsActionDef -->
+
+<!ELEMENT ObjectsActionDef (ActionGroup | If | ElseIf | Else)*>
+<!ATTLIST ObjectsActionDef extends (true | false) #REQUIRED>
+
+<!-- ObjectsTreeDef -->
+
+<!ELEMENT ObjectsTreeDef (DataNode | GroupNode | If | ElseIf | Else)*>
+<!ATTLIST ObjectsTreeDef extends (true | false) #REQUIRED>
+
+<!ELEMENT DataNode (SetVar | Command | DataNode | GroupNode | If | ElseIf | Else)*>
+<!ATTLIST DataNode type CDATA #REQUIRED
+                   actiontype CDATA #IMPLIED
+                   label CDATA #REQUIRED
+                   label1 CDATA #IMPLIED
+                   icon CDATA #IMPLIED
+                   tip CDATA #IMPLIED
+                   stop-label-not-equal CDATA #IMPLIED
+                   drop-label-not-equal CDATA #IMPLIED
+                   is-empty-output (continue | stop) #IMPLIED
+                   is-catalog-database CDATA #IMPLIED
+                   isLeaf CDATA #IMPLIED
+                   warnstate CDATA #IMPLIED
+                   errorstate CDATA #IMPLIED
+                   action (drop) #IMPLIED
+                   order-before CDATA #IMPLIED
+                   order-after CDATA #IMPLIED>
+
+<!ELEMENT SetVar (#PCDATA | If | ElseIf | Else)*>
+<!ATTLIST SetVar name CDATA #REQUIRED
+                 value CDATA #IMPLIED
+                 action (show | hide | drop | runwheninit) #IMPLIED>
+
+<!ELEMENT GroupNode (SetVar | DataNode | GroupNode | If | ElseIf | Else)*>
+<!ATTLIST GroupNode type CDATA #REQUIRED
+                    label CDATA #REQUIRED
+                    label1 CDATA #IMPLIED
+                    icon CDATA #IMPLIED
+                    drop-label-not-equal CDATA #IMPLIED
+                    isLeaf CDATA #IMPLIED
+                    action (drop) #IMPLIED
+                    order-before CDATA #IMPLIED
+                    order-after CDATA #IMPLIED>
+
+<!-- ObjectsViewDef -->
+
+<!ELEMENT ObjectsViewDef (ObjectView | If | ElseIf | Else)*>
+<!ATTLIST ObjectsViewDef extends (true | false) #REQUIRED>
+
+<!ELEMENT ObjectView (DataView | If | ElseIf | Else)*>
+<!ATTLIST ObjectView type CDATA #REQUIRED
+                     action (drop) #IMPLIED
+                     order-before CDATA #IMPLIED
+                     order-after CDATA #IMPLIED
+                     layout (tilevertical | tilehorizontal | collapse) #IMPLIED>
+
+<!ELEMENT DataView (DataView | Input | Action | Command | Message | If | ElseIf | Else)*>
+<!ATTLIST DataView id ID #REQUIRED
+                   label CDATA #IMPLIED
+                   icon CDATA #IMPLIED
+                   viewer (grid | text | form | node-form | table-refs | tables-refs | table-data | table-rowcount | message | navigator | ProcedureViewer | ddl | chart) #IMPLIED
+                   drop-label-not-equal CDATA #IMPLIED
+                   class CDATA #IMPLIED
+                   classargs CDATA #IMPLIED
+                   action (drop) #IMPLIED
+                   doclink CDATA #IMPLIED
+                   order-before CDATA #IMPLIED
+                   order-after CDATA #IMPLIED>
+
+<!-- Common elements -->
+
+<!ELEMENT Message (#PCDATA | If | ElseIf | Else)*>
+<!ATTLIST Message type (info | warning | error) #IMPLIED>
+<!ELEMENT Confirm (#PCDATA | If | ElseIf | Else)*>
+<!ELEMENT Result (#PCDATA | If | ElseIf | Else)*>
+<!ELEMENT Values (#PCDATA | Command | If | ElseIf | Else)*>
+<!ATTLIST Values column CDATA #IMPLIED>
+<!ELEMENT Labels (#PCDATA | Command | If | ElseIf | Else)*>
+<!ATTLIST Labels column CDATA #IMPLIED>
+<!ELEMENT Default (#PCDATA | Command | If | ElseIf | Else)*>
+<!ATTLIST Default column CDATA #IMPLIED>
+
+<!ELEMENT ActionGroup (ActionGroup | Action | Separator | If | ElseIf | Else)*>
+<!ATTLIST ActionGroup type CDATA #IMPLIED
+                      label CDATA #IMPLIED
+                      action (drop) #IMPLIED
+                      order-before CDATA #IMPLIED
+                      order-after CDATA #IMPLIED>
+
+
+<!ELEMENT Separator (#PCDATA)*>
+
+<!ELEMENT Action (Command | Confirm | SQL | Result | Input | SetVar | Message | If | ElseIf | Else)*>
+<!ATTLIST Action id ID #REQUIRED
+                 icon CDATA #IMPLIED
+                 label CDATA #IMPLIED
+                 reload (true | false) #IMPLIED
+                 resetcatalogs (true | false) #IMPLIED
+                 resetschemas (true | false) #IMPLIED
+                 supportsmultipleobjects (true | false) #IMPLIED
+                 class CDATA #IMPLIED
+                 classargs CDATA #IMPLIED
+                 mode (script | script-immediate) #IMPLIED
+                 resultaction (mergeasscript | mergeastext) #IMPLIED
+                 resulttarget (editor) #IMPLIED
+                 doclink CDATA #IMPLIED
+                 hideif CDATA #IMPLIED
+                 action (drop) #IMPLIED
+                 order-before CDATA #IMPLIED
+                 order-after CDATA #IMPLIED>
+
+<!ELEMENT Arg (#PCDATA | If | ElseIf | Else)*>
+<!ATTLIST Arg name CDATA #REQUIRED
+              value CDATA #REQUIRED>
+
+<!ELEMENT SQL (#PCDATA | If | ElseIf | Else)*>
+
+<!ELEMENT Input (Values | Labels | Default | Input | Arg | If | ElseIf | Else | SetVar)*>
+<!ATTLIST Input label CDATA #IMPLIED
+                name CDATA #IMPLIED
+                value CDATA #IMPLIED
+                tip CDATA #IMPLIED
+                editable (true | false) #IMPLIED
+                linebreak (true | false) #IMPLIED
+                style (list | radio | text | check | check-list | password | number | text-editor | wrapped-text-editor | grid | separator | label | note) #IMPLIED
+                hideif CDATA #IMPLIED
+                runsetdefaultwhenvaluechanged CDATA #IMPLIED>
+
+<!ELEMENT Output (If | ElseIf | Else)*>
+<!ATTLIST Output index CDATA #REQUIRED
+                 name CDATA #REQUIRED>
+
+<!ELEMENT ProcessDataSet (If | ElseIf | Else)*>
+<!ATTLIST ProcessDataSet
+                 action (renamecolumn | dropcolumn | dropidenticalcolumns | addcolumn | sortcolumn | distinct | removeisnullrows | convertnullvalues | removerowsifequalto | trimcolumn | printdataset | truncatedataset | convertsqlwarningtodataset | mergewithreloadeddataset) #REQUIRED
+                 index CDATA #IMPLIED
+                 value CDATA #IMPLIED>
+

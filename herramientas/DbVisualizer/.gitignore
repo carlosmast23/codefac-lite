@@ -1,0 +1,2 @@
+#Excluir archivo de logs que se genera dependiendo de donde se ejecuta
+derby.log

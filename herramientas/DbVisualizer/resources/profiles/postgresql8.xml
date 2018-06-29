@@ -1,0 +1,4454 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE DatabaseProfile SYSTEM "dbvis-defs.dtd">
+
+<!--
+   Copyright (c) DbVis Software AB. All Rights Reserved.
+-->
+
+<DatabaseProfile
+        desc="Profile for PostgreSQL 8+"
+        minver="9.5"
+        extends="generic">
+
+   <!-- =================================================================== -->
+   <!-- Definition of initialization commands                               -->
+   <!-- =================================================================== -->
+
+   <InitCommands extends="true">
+      <Command id="postgresql8.pgAgentInstalled">
+         <SQL>
+            <![CDATA[
+SELECT
+    1
+FROM
+    pg_catalog.pg_namespace
+WHERE
+    nspname = 'pgagent'
+            ]]>
+         </SQL>
+         <Output index="1" name="PGAGENT_INSTALLED"/>
+      </Command>
+   </InitCommands>
+
+   <!-- =================================================================== -->
+   <!-- Definition of the commands -->
+   <!-- =================================================================== -->
+
+   <Commands extends="true">
+
+      <Command id="postgresql8.getCatalogs">
+         <SQL>
+            <![CDATA[
+select datname, * from pg_catalog.pg_database order by 1
+            ]]>
+         </SQL>
+         <ProcessDataSet action="dropidenticalcolumns" name="datname"/>
+      </Command>
+
+      <Command id="postgresql8.getConnectableDatabases">
+         <SQL>
+            <![CDATA[
+SELECT
+    datname, *
+FROM
+    pg_catalog.pg_database
+WHERE
+    datallowconn IS true
+AND datistemplate IS false
+ORDER BY 1
+             ]]>
+         </SQL>
+         <ProcessDataSet action="dropidenticalcolumns" name="datname"/>
+      </Command>
+      <Command id="postgresql8.getSchemas">
+         <SQL>
+            <![CDATA[
+SELECT n.nspname                                         AS "Name",
+       r.usename                                         AS "Owner",
+       pg_catalog.obj_description(n.oid, 'pg_namespace') AS "Comment"
+FROM pg_catalog.pg_namespace n
+   LEFT JOIN pg_catalog.pg_user r ON n.nspowner= r.usesysid
+ORDER BY 1
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="postgresql8.getSchemaNames">
+         <SQL>
+            <![CDATA[
+SELECT n.nspname                                         AS "Name",
+       r.usename                                         AS "Owner",
+       pg_catalog.obj_description(n.oid, 'pg_namespace') AS "Comment"
+FROM pg_catalog.pg_namespace n
+   LEFT JOIN pg_catalog.pg_user r ON n.nspowner= r.usesysid
+ORDER BY 1
+            ]]>
+         </SQL>
+         <!--Must have Filter element here since this command is fetched from code-->
+         <Filter index="Name" label="Name"/>
+      </Command>
+
+      <Command id="postgresql8.getTables">
+         <SQL>
+            <![CDATA[
+SELECT c.relname                                     AS "Name",
+       n.nspname                                     AS "Schema",
+       pg_get_userbyid(c.relowner)                   AS "Owner",
+       t.spcname                                     AS "Tablespace",
+       c.relhasindex                                 AS "Has Indexes",
+       c.relhasrules                                 AS "Has Rules",
+       ]]>
+            <If test="#util.isDatabaseVersionGTE(8,4)">
+               <![CDATA[
+       c.relhastriggers                               AS "Has Triggers",
+       ]]>
+            </If>
+            <Else>
+               <![CDATA[
+       (c.reltriggers > 0)                            AS "Has Triggers",
+       ]]>
+            </Else>
+            <![CDATA[
+       c.relisshared                                 AS "Is Shared",
+       c.relnatts                                    AS "N Cols",
+       pg_catalog.obj_description(c.oid, 'pg_class') AS "Comment"
+FROM   pg_class c
+   LEFT JOIN pg_namespace n   ON n.oid = c.relnamespace
+   LEFT JOIN pg_tablespace t  ON t.oid = c.reltablespace
+WHERE n.nspname LIKE '${schema}'
+AND   c.relname LIKE '${table}'
+]]>
+            <If test="#util.isDatabaseVersionGTE(10,0)">
+AND c.relkind in ('r'::"char", 'p'::"char")
+AND c.relispartition = 'false'
+            </If>
+            <Else>
+AND c.relkind in ('r'::"char")
+            </Else>
+            <![CDATA[
+ORDER BY n.nspname, c.relname
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="postgresql8.getTablePartitions">
+         <SQL>
+            <![CDATA[
+select p.relname                                     AS "Name",
+       pg_get_expr(p.relpartbound, p.oid)            AS "Partition Bounds",
+       pn.nspname                                    AS "Schema",
+       pg_get_userbyid(p.relowner)                   AS "Owner",
+       pt.spcname                                    AS "Tablespace",
+       p.relhasindex                                 AS "Has Indexes",
+       p.relhasrules                                 AS "Has Rules",
+       p.relhastriggers                              AS "Has Triggers",
+       p.relisshared                                 AS "Is Shared",
+       p.relnatts                                    AS "N Cols",
+       pg_catalog.obj_description(p.oid, 'pg_class') AS "Comment",
+       p.oid,
+       c.relname                                     AS "Parent Table",
+       n.nspname                                     AS "Parent Table Schema",
+       pg_get_userbyid(c.relowner)                   AS "Parent Table Owner"
+FROM pg_class c
+LEFT JOIN pg_namespace n   ON n.oid = c.relnamespace
+LEFT JOIN pg_tablespace t  ON t.oid = c.reltablespace
+LEFT JOIN pg_depend d ON d.refobjid = c.oid
+LEFT JOIN pg_class p ON p.oid = d.objid
+LEFT JOIN pg_namespace pn   ON pn.oid = p.relnamespace
+LEFT JOIN pg_tablespace pt  ON pt.oid = p.reltablespace
+WHERE n.nspname LIKE '${schema}'
+AND c.relname LIKE '${table}'
+AND c.relkind in ('r'::"char", 'p'::"char")
+AND p.relispartition = 'true'
+ORDER BY pn.nspname, p.relname
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="postgresql8.getForeignTables">
+         <SQL>
+            <![CDATA[
+SELECT c.relname                                     AS "Name",
+       n.nspname                                     AS "Schema",
+       fs.srvname                                    AS "Foreign Server",
+       ft.ftoptions                                  AS "Options",
+       pg_get_userbyid(c.relowner)                   AS "Owner",
+       t.spcname                                     AS "Tablespace",
+       c.relhasindex                                 AS "Has Indexes",
+       c.relhasrules                                 AS "Has Rules",
+       ]]>
+            <If test="#util.isDatabaseVersionGTE(8,4)">
+               <![CDATA[
+       c.relhastriggers                               AS "Has Triggers",
+       ]]>
+            </If>
+            <Else>
+               <![CDATA[
+       (c.reltriggers > 0)                            AS "Has Triggers",
+       ]]>
+            </Else>
+            <![CDATA[
+       c.relisshared                                 AS "Is Shared",
+       c.relnatts                                    AS "N Cols",
+       pg_catalog.obj_description(c.oid, 'pg_class') AS "Comment"
+FROM   pg_class c
+   LEFT JOIN pg_namespace n   ON n.oid = c.relnamespace
+   LEFT JOIN pg_tablespace t  ON t.oid = c.reltablespace
+   LEFT JOIN pg_foreign_table ft  ON ft.ftrelid = c.oid
+   LEFT JOIN pg_foreign_server fs  ON ft.ftserver = fs.oid
+WHERE c.relkind = 'f'::"char"
+AND   n.nspname = '${schema}'
+AND   c.relname LIKE '%'
+ORDER BY n.nspname, c.relname
+            ]]>
+         </SQL>
+      </Command>
+      <!--
+            <Command id="postgresql8.getTable">
+               <SQL>
+                  <![CDATA[
+      select * from pg_tables where tablename = '${table}'
+                  ]]>
+               </SQL>
+            </Command>
+      -->
+
+      <Command id="postgresql8.getViews">
+         <SQL>
+            <![CDATA[
+SELECT c.relname                                      AS "Name",
+       n.nspname                                      AS "Schema",
+       pg_get_userbyid(c.relowner)                    AS "Owner",
+       t.spcname                                      AS "Tablespace",
+       c.relhasindex                                  AS "Has Indexes",
+       c.relhasrules                                  AS "Has Rules",
+       ]]>
+            <If test="#util.isDatabaseVersionGTE(8,4)">
+               <![CDATA[
+       c.relhastriggers                               AS "Has Triggers",
+       ]]>
+            </If>
+            <Else>
+               <![CDATA[
+       (c.reltriggers > 0)                            AS "Has Triggers",
+       ]]>
+            </Else>
+            <![CDATA[
+       c.relisshared                                  AS "Is Shared",
+       c.relnatts                                     AS "N Cols",
+       pg_catalog.obj_description(c.oid, 'pg_class')  AS "Comment"
+FROM   pg_class c
+   LEFT JOIN pg_namespace n   ON n.oid = c.relnamespace
+   LEFT JOIN pg_tablespace t  ON t.oid = c.reltablespace
+WHERE c.relkind = 'v'::"char"
+AND   n.nspname LIKE '${schema}'
+AND   c.relname LIKE '${table}'
+ORDER BY n.nspname, c.relname
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="postgresql8.getIndexes">
+         <SQL>
+            <![CDATA[
+SELECT i.relname                                             AS "Index Name",
+       n.nspname                                             AS "Schema Name",
+       c.relname                                             AS "Table Name",
+       t.spcname                                             AS "Tablespace",
+       x.indisunique                                         AS "Unique",
+       x.indisprimary                                        AS "Primary",
+       x.indisclustered                                      AS "Clustered",
+       x.indnatts                                            AS "N Cols",
+       pg_catalog.obj_description(x.indexrelid, 'pg_class')  AS "Comment"
+FROM   pg_index x
+   JOIN   pg_class c ON c.oid = x.indrelid
+   JOIN   pg_class i ON i.oid = x.indexrelid
+   LEFT JOIN pg_namespace n ON n.oid = c.relnamespace
+   LEFT JOIN pg_tablespace t ON t.oid = i.reltablespace
+WHERE (c.relkind = 'r'::"char" OR c.relkind = 'm')
+AND   i.relkind = 'i'::"char"
+AND i.relname NOT IN
+(
+    SELECT
+        cr.constraint_name
+    FROM
+        information_schema.table_constraints cr
+    WHERE
+        n.nspname = cr.table_schema
+    AND c.relname = cr.table_name
+)
+AND   n.nspname LIKE '${schema}'
+AND   c.relname LIKE '${table}'
+ORDER BY n.nspname, i.relname
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="postgresql8.getIndexSource">
+         <SQL>
+            <![CDATA[
+SELECT pg_get_indexdef(i.oid) AS indexdef
+FROM   pg_index x JOIN pg_class c ON c.oid = x.indrelid
+   JOIN   pg_class i ON i.oid = x.indexrelid
+   LEFT JOIN pg_namespace n ON n.oid = c.relnamespace
+   LEFT JOIN pg_tablespace t ON t.oid = i.reltablespace
+WHERE c.relkind = 'r'::"char" AND i.relkind = 'i'::"char"
+AND   i.relname = '${indexname}' AND n.nspname LIKE '${schema}'
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="postgresql8.getTriggers">
+         <SQL>
+            <![CDATA[
+SELECT DISTINCT
+       trigger_name         AS "Trigger Name",
+       trigger_catalog      AS "Trigger Catalog",
+       trigger_schema       AS "Trigger Schema",
+       action_orientation   AS "Action Orientation",
+            ]]>
+            <If test="#util.isDatabaseVersionGTE(9,1)">
+               <![CDATA[
+       action_timing        AS "Condition Timing",
+            ]]>
+            </If>
+            <Else>
+               <![CDATA[
+       condition_timing     AS "Condition Timing",
+            ]]>
+            </Else>
+            <![CDATA[
+       event_object_catalog AS "Event Object Catalog",
+       event_object_schema  AS "Event Object Schema",
+       event_object_table   AS "Event Object Table"
+FROM information_schema.triggers 
+WHERE trigger_schema LIKE '${schema}'
+AND event_object_table LIKE '${tableNamePattern}'
+ORDER BY 1
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="postgresql8.getTriggerSource">
+         <SQL>
+            <![CDATA[
+SELECT p.prosrc
+FROM pg_trigger trg, pg_class tbl, pg_proc p
+WHERE trg.tgrelid = tbl.oid
+AND trg.tgfoid = p.oid
+AND trg.tgname = '${trigname}'
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="postgresql8.getFunctions">
+         <SQL>
+            <![CDATA[
+SELECT p.proname AS "Function Name",
+       n.nspname AS "Schema Name",
+      CASE WHEN p.proretset THEN 'setof ' ELSE '' END ||
+      pg_catalog.format_type(p.prorettype, NULL) AS "Result data type",
+      pg_catalog.oidvectortypes(p.proargtypes) AS "Argument data types",
+      r.usename AS "Owner",
+      l.lanname AS "Language",
+      pg_catalog.obj_description(p.oid, 'pg_proc') AS "Comment"
+FROM pg_catalog.pg_proc p
+   LEFT JOIN pg_catalog.pg_namespace n ON n.oid = p.pronamespace
+   LEFT JOIN pg_catalog.pg_language l ON l.oid = p.prolang
+   LEFT JOIN pg_catalog.pg_user r ON r.usesysid = p.proowner
+WHERE p.prorettype <> 'pg_catalog.cstring'::pg_catalog.regtype
+   AND (p.proargtypes[0] IS NULL
+      OR   p.proargtypes[0] <> 'pg_catalog.cstring'::pg_catalog.regtype)
+   AND NOT p.proisagg
+   AND n.nspname LIKE '${schema}'
+ORDER BY 2, 1, 3, 4
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="postgresql8.getFunctionSource">
+         <SQL>
+            <![CDATA[
+SELECT p.prosrc as "Source code"
+FROM pg_catalog.pg_proc p
+   LEFT JOIN pg_catalog.pg_namespace n ON n.oid = p.pronamespace
+WHERE n.nspname = '${schema}'
+AND p.proname = '${funcname}';
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="postgresql8.getSequences">
+         <SQL>
+            <![CDATA[
+SELECT c.relname                                                           AS "Sequence Name",
+       n.nspname                                                           AS "Schema Name",
+       c.oid                                                               AS "Rel Id",
+       (pg_stat_get_blocks_fetched(c.oid) - pg_stat_get_blocks_hit(c.oid)) AS "Blocks Read",
+       pg_stat_get_blocks_hit(c.oid)                                       AS "Blocks Hit",
+       pg_catalog.obj_description(c.oid, 'pg_class')                       AS "Comment"
+FROM   pg_class c
+   LEFT JOIN pg_namespace n ON n.oid = c.relnamespace
+WHERE c.relkind = 'S'::"char"
+AND n.nspname LIKE '${schema}'
+ORDER BY n.nspname, c.relname
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="postgresql8.getSequence">
+         <SQL>
+             <If test="#util.isDatabaseVersionGTE(10,0)">
+              <![CDATA[
+    SELECT 
+        n.nspname                                                          AS "Schema Name",
+        c.relname                                                          AS "Sequence Name",
+        pg_catalog.obj_description(c.oid, 'pg_class')                      AS "Comment",
+       pgs.seqincrement                                                    AS "Increment By", 
+       pgs.seqmax                                                          AS "Max Value", 
+       pgs.seqmin                                                          AS "Min Value", 
+       pgs.seqcache                                                        AS "Cache Value",
+       seq.log_cnt                                                         AS "Log Cnt",
+       pgs.seqcycle                                                        AS "Cycle",
+       seq.is_called                                                       AS "Is Called",
+       c.oid                                                               AS "Rel Id",
+       (pg_stat_get_blocks_fetched(c.oid) - pg_stat_get_blocks_hit(c.oid)) AS "Blocks Read",
+       pg_stat_get_blocks_hit(c.oid)                                       AS "Blocks Hit"
+FROM pg_class c
+   LEFT JOIN pg_namespace n ON n.oid = c.relnamespace
+   LEFT JOIN pg_sequence pgs ON pgs.seqrelid = c.oid,
+    "${schema}"."${seqname}" seq
+WHERE c.relkind = 'S'::"char" 
+  AND n.nspname LIKE '${schema}'
+  AND c.relname = '${seqname}'
+  ORDER BY n.nspname, c.relname;
+]]>
+              </If>
+               <Else>
+            <![CDATA[
+SELECT sequence_name AS "Sequence Name",
+       last_value    AS "Last Value",
+       increment_by  AS "Increment By",
+       max_value     AS "Max Value",
+       min_value     AS "Min Value",
+       cache_value   AS "Cache Value",
+       log_cnt       AS "Log Cnt",
+       is_cycled     AS "Is Cycled",
+       is_called     AS "Is Called"
+FROM "${schema}"."${seqname}"
+            ]]>
+           </Else>
+         </SQL>
+      </Command>
+
+      <Command id="postgresql8.getDomains">
+         <SQL>
+            <![CDATA[
+SELECT t.typname                                          AS "Domain Name",
+       n.nspname                                          AS "Schema Name",
+       pg_catalog.format_type(t.typbasetype, t.typtypmod) AS "Type",
+       CASE WHEN  t.typdefault IS NOT NULL
+          THEN ''||t.typdefault
+          ELSE ''
+       END                                                AS "Default",
+       CASE WHEN t.typnotnull
+          THEN 'Yes'
+          ELSE 'No'
+       END                                                AS "Not null",
+       pg_catalog.pg_get_constraintdef(r.oid, true)       AS "Check",
+       pg_catalog.obj_description(t.oid, 'pg_type')       AS "Comment"
+FROM pg_catalog.pg_type t
+   LEFT JOIN pg_catalog.pg_namespace n ON n.oid = t.typnamespace
+   LEFT JOIN pg_catalog.pg_constraint r ON t.oid = r.contypid
+WHERE t.typtype = 'd' 
+AND n.nspname LIKE '${schema}'
+ORDER BY 1, 2
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="postgresql8.getAggregates">
+         <SQL>
+            <![CDATA[
+SELECT p.proname AS "Aggregate Name", 
+   n.nspname as "Schema Name",
+   CASE p.proargtypes[0] 
+      WHEN 'pg_catalog."any"'::pg_catalog.regtype
+      THEN CAST('(all types)' AS pg_catalog.text)
+      ELSE pg_catalog.format_type(p.proargtypes[0], NULL)
+   END AS "Data Type",
+   pg_catalog.obj_description(p.oid, 'pg_proc') AS "Comment"
+FROM pg_catalog.pg_proc p
+   LEFT JOIN pg_catalog.pg_namespace n ON n.oid = p.pronamespace
+WHERE p.proisagg 
+   AND n.nspname LIKE '${schema}'
+ORDER BY 1, 2, 3
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="postgresql8.getOperators">
+         <SQL>
+            <![CDATA[
+SELECT o.oprname AS "Operator Name",
+   n.nspname as "Schema Name",
+   CASE WHEN o.oprkind='l' THEN NULL ELSE pg_catalog.format_type(o.oprleft, NULL) END AS "Left arg type",
+   CASE WHEN o.oprkind='r' THEN NULL ELSE pg_catalog.format_type(o.oprright, NULL) END AS "Right arg type",
+   pg_catalog.format_type(o.oprresult, NULL) AS "Result type",
+   coalesce(pg_catalog.obj_description(o.oid, 'pg_operator'),
+            pg_catalog.obj_description(o.oprcode, 'pg_proc')) AS "Comment"
+FROM pg_catalog.pg_operator o
+   LEFT JOIN pg_catalog.pg_namespace n ON n.oid = o.oprnamespace
+WHERE n.nspname LIKE '${schema}'
+ORDER BY n.nspname, o.oprname, o.oprleft, o.oprright
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="postgresql8.getTypes">
+         <SQL>
+            <![CDATA[
+SELECT  pg_catalog.format_type(t.oid, NULL) AS "Type Name",
+   n.nspname as "Schema Name",
+   pg_catalog.obj_description(t.oid, 'pg_type') as "Comment"
+FROM pg_catalog.pg_type t
+   LEFT JOIN pg_catalog.pg_namespace n ON n.oid = t.typnamespace
+WHERE (t.typrelid = 0 OR (SELECT c.relkind = 'c' FROM pg_catalog.pg_class c WHERE c.oid = t.typrelid)) AND t.typname !~ '^_'
+   AND t.typtype != 'd'
+   AND n.nspname LIKE '${schema}'
+ORDER BY 2, 1
+            ]]>
+         </SQL>
+      </Command>
+
+
+      <!-- ================================================================= -->
+      <!-- DBA related commands requiring certain privileges in the database -->
+      <!-- ================================================================= -->
+
+      <Command id="postgresql8.getUsers">
+         <SQL>
+            <![CDATA[
+select * from pg_user
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="postgresql8.getGroups">
+         <SQL>
+            <![CDATA[
+select * from pg_group
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="postgresql8.getSettings">
+         <SQL>
+            <![CDATA[
+select * from pg_settings
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="postgresql8.getSessions">
+         <SQL>
+            <![CDATA[
+select * from pg_stat_activity
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="postgresql8.getLocks">
+         <SQL>
+            <![CDATA[
+select * from pg_locks
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="postgresql8.getMaterializedViews">
+         <SQL>
+            <![CDATA[
+select *
+from pg_matviews
+where schemaname = '${owner}' order by matviewname
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="postgresql8.getMaterializedViewSource">
+         <SQL>
+            <![CDATA[
+select definition
+from pg_matviews
+where schemaname = '${owner}' and matviewname = '${name}'
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="postgresql8.getPrivileges">
+         <SQL>
+            <![CDATA[
+SELECT
+    table_catalog as "TABLE_CAT",
+    table_schema AS "TABLE_SCHEM",
+    table_name AS "TABLE_NAME",
+    grantor AS "GRANTOR",
+    grantee AS "GRANTEE",
+    privilege_type AS "PRIVILEGE",
+    with_hierarchy AS "IS_GRANTABLE"
+FROM
+    information_schema.table_privileges
+WHERE
+    table_catalog = '${catalog}'
+AND table_schema = '${schema}'
+AND table_name = '${objectname}'
+ORDER BY privilege_type
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="postgresql8.getTablespaces">
+         <SQL>
+            <If test="#util.isDatabaseVersionGTE(9,0)">
+            <![CDATA[
+SELECT
+    ts.spcname,
+    sh.usename,
+    ts.spcacl,
+    ts.spcoptions
+FROM
+    pg_catalog.pg_tablespace ts,
+    pg_catalog.pg_shadow sh
+WHERE
+    ts.spcowner = sh.usesysid
+    ORDER BY 1
+            ]]>
+            </If>
+            <Else>
+            <![CDATA[
+SELECT
+    *
+FROM
+    pg_catalog.pg_tablespace ts
+    ORDER BY 1
+            ]]>
+            </Else>
+         </SQL>
+      </Command>
+
+      <Command id="postgresql8.getForeignServers">
+         <SQL>
+            <![CDATA[
+SELECT
+    fs.srvname,
+    sh.usename,
+    fs.srvtype,
+    fs.srvversion,
+    fs.srvacl,
+    fs.srvoptions
+FROM
+    pg_catalog.pg_foreign_server fs,
+    pg_catalog.pg_shadow sh
+WHERE
+    fs.srvowner = sh.usesysid
+    ORDER BY 1
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="postgresql8.getUserMappings">
+         <SQL>
+            <![CDATA[
+SELECT
+    au.rolname AS "Local User",
+    um.srvname AS "Foreign Server",
+    um.usename AS "Foreign User",
+    um.umoptions AS "Options"
+FROM
+    pg_catalog.pg_user_mappings um,
+    pg_catalog.pg_authid au
+WHERE
+    um.umuser = au.oid
+    AND um.srvname LIKE '${server}'
+    ORDER BY 1
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="postgresql8.getJobs">
+         <SQL>
+            <![CDATA[
+SELECT
+    j.jobid        AS "ID",
+    j.jobname      AS "Name",
+    j.jobenabled   AS "Enabled",
+    j.jobhostagent AS "Host agent",
+    c.jclname      AS "Job class",
+    j.jobcreated   AS "Created",
+    j.jobchanged   AS "Changed",
+    j.jobnextrun   AS "Next run",
+    j.joblastrun   AS "Last run",
+    j.jobdesc      AS "Description",
+    CASE WHEN j.jobenabled=true THEN ''
+        ELSE 'Disabled'
+      END          AS "IsDisabledText",
+    CASE WHEN log.jlgstatus is NULL THEN ''
+            WHEN log.jlgstatus = 'r'
+        THEN 'Running'
+        WHEN log.jlgstatus = 's'
+        THEN 'Successful'
+        WHEN log.jlgstatus = 'f'
+        THEN 'Failed'
+        WHEN log.jlgstatus = 'i'
+        THEN 'No steps'
+        WHEN log.jlgstatus = 'd'
+        THEN 'Aborted'
+        ELSE log.jlgstatus
+      END AS latestLogStatus
+      
+FROM
+    pgagent.pga_job j
+JOIN
+    pgagent.pga_jobclass c
+ON
+    j.jobjclid = c.jclid
+LEFT JOIN pgagent.pga_joblog log
+  ON
+    j.jobid = log.jlgjobid 
+    AND log.jlgstart = 
+        (
+           SELECT MAX(log.jlgstart) 
+           FROM pgagent.pga_joblog log 
+           WHERE j.jobid = log.jlgjobid
+        )
+    ORDER BY 1
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="postgresql8.getJobLog">
+         <SQL>
+            <![CDATA[
+SELECT
+    l.jlgid AS "Run",
+    CASE
+        WHEN l.jlgstatus = 'r'
+        THEN 'Running'
+        WHEN l.jlgstatus = 's'
+        THEN 'Successful'
+        WHEN l.jlgstatus = 'f'
+        THEN 'Failed'
+        WHEN l.jlgstatus = 'i'
+        THEN 'No steps'
+        WHEN l.jlgstatus = 'd'
+        THEN 'Aborted'
+    END                        AS "Status",
+    l.jlgstart                 AS "Start time",
+    l.jlgstart + l.jlgduration AS "End time",
+    l.jlgduration              AS "Duration"
+FROM
+    pgagent.pga_joblog l
+JOIN
+    pgagent.pga_job j
+ON
+    l.jlgjobid = j.jobid
+WHERE
+    j.jobid = ${jobId}
+ORDER BY 1 DESC
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="postgresql8.getJobSchedules">
+         <SQL>
+            <![CDATA[
+SELECT
+    s.jscid      AS "ID",
+    s.jscname    AS "Name",
+    s.jscenabled AS "Enabled",
+    s.jscstart   AS "Start date",
+    s.jscend     AS "End date",
+    s.jscdesc    AS "Description",
+    CASE WHEN s.jscenabled=true THEN ''
+        ELSE 'Disabled'
+    END        AS "IsDisabledText"
+FROM
+    pgagent.pga_schedule s
+WHERE
+    s.jscjobid = ${jobId}
+ORDER BY
+    1            
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="postgresql8.getJobSchedule">
+         <SQL>
+            <![CDATA[
+SELECT
+    s.jscid      AS "ID",
+    s.jscname    AS "Name",
+    s.jscenabled AS "Enabled",
+    s.jscstart   AS "Start date",
+    s.jscend     AS "End date",
+    CASE
+        WHEN false = ALL (s.jscweekdays)
+        THEN 'Any weekday'
+        WHEN true = ALL (s.jscweekdays)
+        THEN 'All weekdays'
+        ELSE array_to_string (ARRAY
+            (
+                SELECT
+                    CASE
+                        WHEN s.jscweekdays[x.i] = true
+                        THEN (string_to_array
+                            ('Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday', ',')) [
+                            x.i]
+                    END
+                FROM
+                    generate_series (1, 7) AS x (i)) , ', ')
+    END AS "Weekdays",
+    CASE
+        WHEN false = ALL (s.jscmonthdays)
+        THEN 'Any month day'
+        WHEN true = ALL (s.jscmonthdays)
+        THEN 'All month days'
+        ELSE array_to_string (ARRAY
+            (
+                SELECT
+                    CASE
+                        WHEN x.i = 32
+                        AND s.jscmonthdays[x.i] = true
+                        THEN 'Last day '
+                        WHEN s.jscmonthdays[x.i] = true
+                        THEN concat (x.i)
+                    END
+                FROM
+                    generate_series (1, 32) AS x (i)) , ', ')
+    END AS "Month days",
+    CASE
+        WHEN false = ALL (s.jscmonths)
+        THEN 'Any month'
+        WHEN true = ALL (s.jscmonths)
+        THEN 'All months'
+        ELSE array_to_string (ARRAY
+            (
+                SELECT
+                    CASE
+                        WHEN s.jscmonths[x.i] = true
+                        THEN (string_to_array
+                            (
+                            'January,February,March,April,May,June,July,August,September,October,November,December'
+                            , ',')) [x.i]
+                    END
+                FROM
+                    generate_series (1, 12) AS x (i)) , ', ')
+    END AS "Months",
+    CASE
+        WHEN false = ALL (s.jschours)
+        THEN 'Any hour'
+        WHEN true = ALL (s.jschours)
+        THEN 'All hours'
+        ELSE array_to_string (ARRAY
+            (
+                SELECT
+                    CASE
+                        WHEN s.jschours[x.i] = true
+                        THEN concat (x.i - 1, ' ')
+                    END
+                FROM
+                    generate_series (1, 24) AS x (i)) , ', ')
+    END AS "Hours",
+    CASE
+        WHEN false = ALL (s.jscminutes)
+        THEN 'Any minute'
+        WHEN true = ALL (s.jscminutes)
+        THEN 'All minutes'
+        ELSE array_to_string (ARRAY
+            (
+                SELECT
+                    CASE
+                        WHEN s.jscminutes[x.i] = true
+                        THEN concat (x.i - 1, ' ')
+                    END
+                FROM
+                    generate_series (1, 60) AS x (i)) , ', ')
+    END AS "Minutes",
+    (
+        SELECT
+            array_to_string (ARRAY
+            (
+                SELECT
+                    concat ('[', jexdate, ' ', jextime, ']')
+                FROM
+                    pgagent.pga_exception
+                WHERE
+                    jexscid = ${jscId}) , ',')) AS "Exceptions",
+    s.jscdesc                                                 AS "Description"
+FROM
+    pgagent.pga_schedule s
+WHERE
+    s.jscjobid = ${jobId}
+AND s.jscid = ${jscId}
+ORDER BY
+    1            
+            ]]>
+         </SQL>
+      </Command>
+
+      <!--  The job steps are ordered by their name as this is the execution order  -->
+      <Command id="postgresql8.getJobSteps">
+         <SQL>
+            <![CDATA[
+SELECT
+    jstname     AS "Name",
+    jstid       AS "ID",
+    jstenabled  AS "Enabled",
+    CASE
+        WHEN jstkind = 's'
+        THEN 'SQL'
+        WHEN jstkind = 'b'
+        THEN 'Batch'
+    END        AS "Kind",
+    jstdbname  AS "Database",
+    jstconnstr AS "Connection String",
+    jstcode    AS "Code",
+    CASE WHEN jstenabled=true THEN ''
+        ELSE 'Disabled'
+      END      AS "IsDisabledText",
+    CASE
+        WHEN jstonerror = 'f'
+        THEN 'Fail and stop'
+        WHEN jstonerror = 's'
+        THEN 'Mark succeeded and continue'
+        WHEN jstonerror = 'i'
+        THEN 'Mark ignored and continue'
+    END       AS "On error",
+    jstdesc   AS "Comment",
+     CASE WHEN log.jslstatus is NULL THEN ''
+            WHEN log.jslstatus = 'r'
+        THEN 'Running'
+        WHEN log.jslstatus = 's'
+        THEN 'Successful'
+        WHEN log.jslstatus = 'f'
+        THEN 'Failed'
+        WHEN log.jslstatus = 'i'
+        THEN 'No steps'
+        WHEN log.jslstatus = 'd'
+        THEN 'Aborted'
+        ELSE log.jslstatus
+      END AS latestStatus
+FROM
+    pgagent.pga_jobstep step
+    LEFT JOIN pgagent.pga_jobsteplog log
+  ON
+    step.jstid = log.jsljstid 
+  AND log.jslstart = 
+        (
+           SELECT MAX(log.jslstart) 
+           FROM pgagent.pga_jobsteplog log 
+           WHERE step.jstid = log.jsljstid
+        )
+WHERE
+    jstjobid = ${jobId} ORDER BY jstname;
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="postgresql8.getJobStepLog">
+         <SQL>
+            <![CDATA[
+SELECT
+    jslid AS "Run",
+    CASE
+        WHEN jslstatus = 'r'
+        THEN 'Running'
+        WHEN jslstatus = 's'
+        THEN 'Successful'
+        WHEN jslstatus = 'f'
+        THEN 'Failed'
+        WHEN jslstatus = 'i'
+        THEN 'Ignored failure'
+        WHEN jslstatus = 'd'
+        THEN 'Aborted'
+    END                    AS "Status",
+    jslresult              AS "Result",
+    jslstart               AS "Start time",
+    jslstart + jslduration AS "End time",
+    jslduration            AS "Duration",
+    jsloutput              AS "Output"
+FROM
+    pgagent.pga_jobsteplog
+WHERE
+    jsljstid = ${jstId}
+ORDER BY
+    1 DESC
+            ]]>
+         </SQL>
+      </Command>
+
+      <Command id="postgresql8.getEventTriggers">
+         <SQL>
+            <![CDATA[
+SELECT
+    et.evtname  AS "Event Trigger",
+    et.evtevent AS "Event",
+    p.proname   AS "Called Procedure" ,
+    CASE
+        WHEN et.evtenabled = 'O'
+        THEN 'Origin and Local Modes'
+        WHEN et.evtenabled = 'R'
+        THEN 'Replica Mode'
+        WHEN et.evtenabled = 'A'
+        THEN 'Always'
+        WHEN et.evtenabled = 'D'
+        THEN 'Disabled'
+    END        AS "Enabled",
+    et.evttags AS "Tags"
+FROM
+    pg_catalog.pg_event_trigger et,
+    pg_catalog.pg_proc p
+WHERE
+    et.evtfoid = p.oid
+ORDER BY 1
+            ]]>
+         </SQL>
+      </Command>
+   </Commands>
+
+   <!-- =================================================================== -->
+   <!-- Definition of the object actions that are used by the tree and views -->
+   <!-- =================================================================== -->
+
+   <ObjectsActionDef extends="false">
+
+      <ActionGroup type="Databases">
+         <Action id="postgresql-database-create" label="Create Database" reload="true"
+                 resetcatalogs="true" icon="add">
+            <Input label="New Database Name" name="newDatabase" style="text"/>
+            <Input label="Owner" name="owner" style="list">
+               <Values>
+                  <Command>
+                     <SQL>
+                        <![CDATA[select '' union select usename from pg_catalog.pg_user]]>
+                     </SQL>
+                  </Command>
+               </Values>
+            </Input>
+            <Input label="Template" name="template" style="list">
+               <Values>
+                  <Command>
+                     <SQL>
+                        <![CDATA[SELECT '' UNION SELECT datname FROM pg_catalog.pg_database WHERE datistemplate IS true ORDER BY 1]]>
+                     </SQL>
+                  </Command>
+               </Values>
+            </Input>
+            <Input label="Encoding" name="encoding" style="list">
+               <Values>
+                  |BIG5|EUC_CN|EUC_JP|EUC_JIS_2004|EUC_KR|EUC_TW|GB18030|GBK|ISO_8859_5|ISO_8859_6|ISO_8859_7|ISO_8859_8|
+                  JOHAB|KOI8R|KOI8U|LATIN1|LATIN2|LATIN3|LATIN4|LATIN5|LATIN6|LATIN7|LATIN8|LATIN9|LATIN10|MULE_INTERNAL|SJIS|SHIFT_JIS_2004|
+                  SQL_ASCII|UHC|UTF8|WIN866|WIN874|WIN1250|WIN1251|WIN1252|WIN1253|WIN1254|WIN1255|WIN1256|WIN1257|WIN1258
+               </Values>
+            </Input>
+            <!--Collations supported from 9.1-->
+            <If test="#util.isDatabaseVersionGTE(9,1)">
+               <Input label="Collation" name="lc_collate" style="list">
+                  <Values>
+                     <Command>
+                        <SQL>
+                           <![CDATA[SELECT collcollate FROM pg_catalog.pg_collation ORDER BY 1]]>
+                        </SQL>
+                     </Command>
+                  </Values>
+               </Input>
+               <Input label="Character Classification" name="lc_ctype" style="list">
+                  <Values>
+                     <Command>
+                        <SQL>
+                           <![CDATA[SELECT collctype FROM pg_catalog.pg_collation ORDER BY 1]]>
+                        </SQL>
+                     </Command>
+                  </Values>
+               </Input>
+            </If>
+            <Input label="Tablespace" name="tablespace" style="list">
+               <Values>
+                  <Command>
+                     <SQL>
+                        <![CDATA[SELECT '' UNION SELECT spcname FROM pg_catalog.pg_tablespace ORDER BY 1]]>
+                     </SQL>
+                  </Command>
+               </Values>
+            </Input>
+            <Input label="Max Connections" name="connlimit" style="number">
+               <Default>-1</Default>
+            </Input>
+
+            <SetVar name="_owner" value='#owner.equals("") ? "" : "owner = \&quot;" + #owner + "\&quot;"'/>
+            <SetVar name="_template" value='#template.equals("") ? "" : "template = \&quot;" + #template + "\&quot;"'/>
+            <SetVar name="_encoding" value='#encoding.equals("") ? "" : "encoding = &apos;" + #encoding + "&apos;"'/>
+            <If test="#util.isDatabaseVersionGTE(9,1)">
+               <SetVar name="_lc_collate" value='#lc_collate.equals("") ? "" : "lc_collate = &apos;" + #lc_collate + "&apos;"'/>
+               <SetVar name="_lc_ctype" value='#lc_ctype.equals("") ? "" : "lc_ctype = &apos;" + #lc_ctype + "&apos;"'/>
+            </If>
+            <SetVar name="_tablespace" value='#tablespace.equals("") ? "" : "tablespace =  \&quot;" + #tablespace + "\&quot;"'/>
+            <SetVar name="_connlimit" value='#connlimit.equals("-1") ? "" : "connection limit = " + #connlimit'/>
+            <Command>
+               <SQL>
+                  <![CDATA[create database ${QB}${newDatabase}${QE} ${_owner} ${_template} ${_encoding} ${_lc_collate} ${_lc_ctype} ${_tablespace} ${_connlimit}]]></SQL>
+            </Command>
+            <Confirm>
+               Confirm create of database ${newDatabase}?
+            </Confirm>
+            <Result>
+               Database ${newDatabase} created!
+            </Result>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Catalog">
+         <Action id="postgresql-database-drop" label="Drop Database" reload="true"
+                 resetcatalogs="true" icon="remove">
+            <Message>
+               <![CDATA[<html>
+A database can only be dropped if there are no physical connections to it.
+Make sure that the database node has never been expanded since connect and
+that no <b>Object View</b>, <b>SQL Commander</b> or <b>Monitor</b> is
+using the database before dropping it.
+</html>
+               ]]>
+            </Message>
+            <Input label="Database" style="text" editable="false">
+               <Default>${catalog}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[                  
+drop database "${catalog}";
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>
+               Really drop database ${catalog}?
+            </Confirm>
+            <Result>
+               database ${catalog} has been dropped!
+            </Result>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Schemas">
+         <Action id="postgresql-schemas-create-schema" label="Create Schema" reload="true" resetschemas="true" icon="add">
+            <Input label="Schema" name="newschema" style="text" editable="true"/>
+            <Input label="Authorization" name="authorization" style="list">
+               <Values>
+                  <Command>
+                     <SQL>
+                        <![CDATA[select '' union select usename from pg_user]]></SQL>
+                  </Command>
+               </Values>
+            </Input>
+
+            <SetVar name="_authorization" value='#authorization.equals("") ? "" : " authorization " + #authorization'/>
+
+            <Command>
+               <SQL>
+                  <![CDATA[create schema ${QB}${newschema}${QE}${_authorization}]]></SQL>
+            </Command>
+            <Confirm>
+               Create new schema ${schema}?
+            </Confirm>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Schema">
+         <Action id="postgresql-schema-drop" label="Drop Schema" reload="true" resetschemas="true" icon="remove">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Cascade" name="cascade" style="check">
+               <Values>cascade</Values>
+            </Input>
+            <Command>
+               <SQL><![CDATA[drop schema "${schema}" ${cascade}]]></SQL>
+            </Command>
+            <Confirm>
+               Really drop schema ${schema}?
+            </Confirm>
+         </Action>
+         <Action id="postgresql-schema-comment" label="Comment Schema" reload="true">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Comment" name="comment" style="wrapped-text-editor">
+               <Default>${postgresql8.getSchemas.Comment}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[comment on schema "${schema}" is '${comment}']]></SQL>
+            </Command>
+            <Confirm>
+               Apply new comment on ${schema}?
+            </Confirm>
+         </Action>
+         <Action id="postgresql-schema-export" label="Export Schema"
+                 icon="export" reload="false"
+                 class="schemaExport"
+                 doclink="http://www.dbvis.com/doclink/export-schema"/>
+      </ActionGroup>
+
+      <ActionGroup type="Tables">
+         <Action id="postgresql-tables-create-table" label="Create Table"
+                 icon="add" reload="true"
+                 class="tableCreateOrAlter"
+                 classargs="create"
+                 doclink="http://www.dbvis.com/doclink/create-table"/>
+         <Action id="postgresql-new-table-import-data"
+                 label="Import Table Data"
+                 icon="import"
+                 class="tableDataImport"
+                 doclink="http://www.dbvis.com/doclink/import-table"/>
+      </ActionGroup>
+
+      <ActionGroup type="Table">
+         <Action id="postgresql-tables-alter-table" label="Alter Table"
+                 icon="edit" reload="true"
+                 class="tableCreateOrAlter"
+                 classargs="alter"
+                 doclink="http://www.dbvis.com/doclink/alter-table"/>
+
+         <Action id="postgresql-table-rename" label="Rename Table" reload="true" icon="rename">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Table" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="New Table Name" name="newTable" style="text"/>
+            <Command>
+               <SQL>
+                  <![CDATA[alter table "${schema}"."${objectname}" rename to ${QB}${newTable}${QE}]]></SQL>
+            </Command>
+            <Confirm>
+               Confirm rename of ${schema}.${objectname} to ${newTable}?
+            </Confirm>
+            <Result>
+               Table ${schema}.${objectname} renamed to ${newTable}!
+            </Result>
+         </Action>
+
+         <Action id="postgresql-table-clear" label="Empty Table" reload="true">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Table" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Use Command" name="useCommand" style="radio">
+               <Values>TRUNCATE|DELETE</Values>
+               <Default>TRUNCATE</Default>
+            </Input>
+
+            <SetVar name="_command" value="#useCommand.equals('TRUNCATE') ? 'truncate table' : 'delete from'"/>
+
+            <Command>
+               <SQL><![CDATA[${_command} "${schema}"."${objectname}"]]></SQL>
+            </Command>
+            <Confirm>
+               Really remove all rows in table ${schema}.${objectname}?
+            </Confirm>
+            <Result>
+               All rows in table ${schema}.${objectname} has been removed!
+            </Result>
+         </Action>
+
+         <Action id="postgresql-table-drop" label="Drop Table" reload="true" icon="remove">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Table" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Drop Dependent Object(s)" name="cascade" style="check"
+                   tip="Automatically drop objects that depend on the table (such as views)">
+               <Values>cascade</Values>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[drop table "${schema}"."${objectname}" ${cascade}]]></SQL>
+            </Command>
+            <Confirm>
+               Really drop table ${schema}.${objectname}?
+            </Confirm>
+            <Result>
+               Table ${schema}.${objectname} has been dropped!
+            </Result>
+         </Action>
+
+         <Action id="postgresql-table-comment" label="Comment Table" reload="true">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Table" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Comment" name="comment" style="wrapped-text-editor">
+               <Default>${postgresql8.getTables.Comment}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[comment on table "${schema}"."${objectname}" is '${comment}']]></SQL>
+            </Command>
+            <Confirm>
+               Apply new comment on ${schema}.${objectname}?
+            </Confirm>
+         </Action>
+
+         <Action id="postgresql-table-import-data" label="Import Table Data" icon="import"
+                 class="tableDataImport"
+                 doclink="http://www.dbvis.com/doclink/import-table"/>
+
+         <Action id="postgresql-table-export" label="Export Table" icon="export"
+                 class="tableExport"
+                 doclink="http://www.dbvis.com/doclink/export-table"/>
+
+         <Separator/>
+
+         <Action id="postgresql-table-create-index" label="Create Index" reload="true">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Table" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Index Name" name="indexname" style="text"/>
+            <Input label="Unique" name="unique" style="check">
+               <Values>unique</Values>
+            </Input>
+
+            <Input label="Columns" style="separator"/>
+
+            <Input name="columns" style="grid">
+               <Arg name="output" value='"${columnname}"${_sortorder}'/>
+               <Arg name="newline" value=", "/>
+
+               <Input name="columnname" label="Column Name" style="list">
+                  <Values column="4">
+                     <Command idref="getColumnNamesFor">
+                        <Input name="table_catalog" value="${catalog}"/>
+                        <Input name="table_schema" value="${schema}"/>
+                        <Input name="table_name" value="${objectname}"/>
+                     </Command>
+                  </Values>
+                  <Default>${0}</Default>
+               </Input>
+               <Input name="sortorder" label="Sort Order" style="radio">
+                  <Labels>ASC|DESC|Default</Labels>
+                  <Values>ASC|DESC|</Values>
+                  <Default>ASC</Default>
+               </Input>
+               <SetVar name="_sortorder" value='#sortorder.equals("") ? "" : " " + #sortorder'/>
+            </Input>
+
+            <SetVar name="_unique" value='#unique.equals("") ? "" : " " + #unique'/>
+            <SetVar name="_columns" value='#columns.trim().equals("") ? "" : "(" + #columns + ")"'/>
+            <SetVar name="_indexname" value='#indexname.trim().equals("") ? "" : " " + #QB + #indexname + #QE'/>             
+
+            <Command>
+               <SQL>
+                  <![CDATA[create${_unique} index${_indexname} on "${schema}"."${objectname}" ${_columns}]]>
+               </SQL>
+            </Command>
+            <Confirm>
+               <![CDATA[Create index "${indexname}"?]]>
+            </Confirm>
+            <Result>
+               <![CDATA[Index "${indexname}" created!]]>
+            </Result>
+         </Action>
+
+         <Action id="postgresql-tabletrigger-create" label="Create Trigger" icon="add" reload="true"
+                 doclink="http://www.dbvis.com/doclink/create-trigger">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Trigger" name="triggerName" style="text"/>
+            <Input label="Trigger Time" name="triggerTime" style="radio">
+               <Values>BEFORE|AFTER</Values>
+               <Default>AFTER</Default>
+            </Input>
+            <Input label="Trigger Event" name="eventDelete" style="check" linebreak="false">
+               <Values>DELETE</Values>
+               <Labels>DELETE</Labels>
+            </Input>
+            <Input label="" name="eventInsert" style="check">
+               <Values>INSERT</Values>
+               <Labels>INSERT</Labels>
+               <Default>INSERT</Default>
+            </Input>
+            <Input label="" name="eventUpdate" style="check" linebreak="true">
+               <Values>UPDATE</Values>
+               <Labels>UPDATE</Labels>
+            </Input>
+            <Input label="Trigger Type" name="triggerType" style="radio">
+               <Values>STATEMENT|ROW</Values>
+               <Default>STATEMENT</Default>
+            </Input>
+            <Input label="Table" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Source" style="separator"/>
+            <Input name="source" style="text-editor">
+               <Default><![CDATA[
+--
+--  Insert your own trigger code here
+--
+    EXECUTE PROCEDURE "RI_FKey_cascade_del"()]]>
+               </Default>
+            </Input>
+
+            <SetVar name="_triggerEvent" value='#eventDelete'/>
+            <SetVar name="_triggerEvent" value='#_triggerEvent.length() > 0 and #eventInsert.length() > 0 ?
+                                                #_triggerEvent + " OR " + #eventInsert :
+                                                #_triggerEvent + #eventInsert'/>
+            <SetVar name="_triggerEvent" value='#_triggerEvent.length() > 0 and #eventUpdate.length() > 0 ?
+                                                #_triggerEvent + " OR " + #eventUpdate :
+                                                #_triggerEvent + #eventUpdate'/>
+
+            <Command exectype="asis">
+               <SQL><![CDATA[
+create trigger ${QB}${triggerName}${QE}
+  ${triggerTime} ${_triggerEvent}
+  on "${schema}"."${objectname}"
+  for each ${triggerType}
+${source}]]>
+               </SQL>
+            </Command>
+            <Result>
+               <![CDATA[Trigger <b>${schema}.${triggerName}</b> created.]]>
+            </Result>
+         </Action>
+
+         <Separator/>
+
+         <Action id="postgresql-table-script" label="Script Table" icon="scriptObject"
+                 class="sqlBuilder"
+                 classargs="script-dialog,SELECT,SELECT *,INSERT,UPDATE,DELETE,CREATE,DROP"/>
+      </ActionGroup>
+
+      <ActionGroup type="Column">
+         <Action id="postgresql-column-comment" label="Comment Column" reload="true">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Table" style="text" editable="false">
+               <Default>${theTableName}</Default>
+            </Input>
+            <Input label="Column" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Comment" name="comment" style="wrapped-text-editor">
+               <Default>${getColumnDefinitions.COMMENT}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[comment on column "${schema}"."${theTableName}"."${objectname}" is '${comment}']]></SQL>
+            </Command>
+            <Confirm>
+               Apply new comment on ${schema}.${theTableName}.${objectname}?
+            </Confirm>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="ForeignTable">
+         <Action id="postgresql-foreign-table-drop" label="Drop Table" reload="true" icon="remove">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Table" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Drop Dependent Object(s)" name="cascade" style="check"
+                   tip="Automatically drop objects that depend on the foreign table (such as views)">
+               <Values>cascade</Values>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[drop foreign table "${schema}"."${objectname}" ${cascade}]]></SQL>
+            </Command>
+            <Confirm>
+               Really drop foreign table ${schema}.${objectname}?
+            </Confirm>
+            <Result>
+               Table ${schema}.${objectname} has been dropped!
+            </Result>
+         </Action>
+
+         <Action id="postgresql-foreign-table-comment" label="Comment Table" reload="true">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Table" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Comment" name="comment" style="wrapped-text-editor">
+               <Default>${postgresql8.getForeignTables.Comment}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[comment on foreign table "${schema}"."${objectname}" is '${comment}']]></SQL>
+            </Command>
+            <Confirm>
+               Apply new comment on ${schema}.${objectname}?
+            </Confirm>
+         </Action>
+
+         <Separator/>
+
+         <Action id="postgresql-table-script2" label="Script Table" icon="scriptObject"
+                 class="sqlBuilder"
+                 classargs="script-dialog,SELECT,SELECT *,INSERT,UPDATE,DELETE"/>
+
+      </ActionGroup>
+
+      <ActionGroup type="View">
+         <Action id="postgresql-view-drop" label="Drop View" reload="true" icon="remove">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="View" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Cascade" name="cascade" style="check">
+               <Values>cascade</Values>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[drop view "${schema}"."${objectname}" ${cascade}]]></SQL>
+            </Command>
+            <Confirm>
+               Really drop view ${schema}.${objectname}?
+            </Confirm>
+            <Result>
+               View ${schema}.${objectname} has been dropped!
+            </Result>
+         </Action>
+
+         <Action id="postgresql-view-rename" label="Rename View" reload="true" icon="rename">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="View" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="New View Name" name="newTable" style="text"/>
+            <Command>
+               <SQL>
+                  <![CDATA[alter table "${schema}"."${objectname}" rename to ${QB}${newTable}${QE}]]></SQL>
+            </Command>
+            <Confirm>
+               Confirm rename of ${schema}.${objectname} to ${newTable}?
+            </Confirm>
+            <Result>
+               View ${schema}.${objectname} renamed to ${newTable}!
+            </Result>
+         </Action>
+
+         <Action id="postgresql-view-comment" label="Comment View" reload="true">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="View" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Comment" name="comment" style="wrapped-text-editor">
+               <Default>${postgresql8.getViews.Comment}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[comment on view "${schema}"."${objectname}" is '${comment}']]></SQL>
+            </Command>
+            <Confirm>
+               Apply new comment on ${schema}.${objectname}?
+            </Confirm>
+         </Action>
+
+         <Action id="postgresql-view-export" label="Export View" icon="export"
+                 class="viewExport"
+                 doclink="http://www.dbvis.com/doclink/export-view"/>
+
+         <Separator/>
+
+         <Action id="postgresql-view-script" label="Script View" icon="scriptObject"
+                 class="sqlBuilder"
+                 classargs="script-dialog,SELECT,SELECT *,INSERT,UPDATE,DELETE,CREATE,DROP"/>
+      </ActionGroup>
+
+      <ActionGroup type="MaterializedView">
+         <Action id="postgresql8-materializedview-drop" label="Drop Materialized View" reload="true" icon="remove">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Materialized View" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[drop materialized view "${schema}"."${objectname}"]]></SQL>
+            </Command>
+            <Confirm>
+               Really drop materialized view ${schema}.${objectname}?
+            </Confirm>
+            <Result>
+               Materialized view ${schema}.${objectname} dropped!
+            </Result>
+         </Action>
+
+         <Action id="postgresql8-materializedview-refresh" label="Refresh Materialized View" reload="false">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Materialized View" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Option" name="option" style="radio">
+               <Labels>WITH DATA|WITH NO DATA
+               </Labels>
+               <Values>WITH DATA|WITH NO DATA</Values>
+            </Input>
+
+            <Command exectype="asis">
+               <SQL>
+                  <![CDATA[REFRESH MATERIALIZED VIEW "${schema}"."${objectname}" ${option}]]></SQL>
+            </Command>
+            <Confirm>
+               Really refresh materialized view ${schema}.${objectname}?
+            </Confirm>
+            <Result>
+               Materialized view ${schema}.${objectname} has been refreshed!
+            </Result>
+         </Action>
+
+         <Action id="postgresql8-materializedview-comment" label="Comment Materialized View">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Materialized View" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Comment" name="comment" style="wrapped-text-editor">
+               <Default>
+                  <Command>
+                     <SQL>
+                        <![CDATA[
+SELECT
+   d.description
+FROM
+   pg_catalog.pg_description d,
+   pg_catalog.pg_class c,
+   pg_catalog.pg_namespace n
+WHERE
+   d.objoid = c.oid
+AND c.relnamespace = n.oid
+AND d.objsubid = 0
+AND c.relname = '${objectname}'
+AND n.nspname = '${schema}'
+                        ]]>
+                     </SQL>
+                  </Command>
+               </Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[comment on materialized view "${schema}"."${objectname}" is '${comment}']]></SQL>
+            </Command>
+            <Confirm>
+               Apply new comment on ${schema}.${objectname}?
+            </Confirm>
+         </Action>
+         
+         <Separator/>
+
+         <Action id="postgresql-materializedview-script" label="Script Materialized View" icon="scriptObject"
+                 class="sqlBuilder"
+                 classargs="script-dialog,SELECT,SELECT *"/>
+      </ActionGroup>
+
+      <ActionGroup type="Index">
+         <Action id="postgresql-index-drop" label="Drop Index" reload="true" icon="remove">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Index" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Cascade" name="cascade" style="check">
+               <Values>cascade</Values>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[drop index "${schema}"."${objectname}" ${cascade}]]></SQL>
+            </Command>
+            <Confirm>
+               Really drop index ${schema}.${objectname}?
+            </Confirm>
+            <Result>
+               Index ${schema}.${objectname} dropped!
+            </Result>
+         </Action>
+
+         <Action id="postgresql-index-rename" label="Rename Index" reload="true" icon="rename">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Index" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="New Index Name" name="newTable" style="text"/>
+            <Command>
+               <SQL>
+                  <![CDATA[alter index "${schema}"."${objectname}" rename to ${QB}${newTable}${QE}]]></SQL>
+            </Command>
+            <Confirm>
+               Confirm rename of index ${schema}.${objectname} to ${newTable}?
+            </Confirm>
+            <Result>
+               Index ${objectname} renamed to ${newTable}!
+            </Result>
+         </Action>
+
+         <Action id="postgresql-index-rebuild" label="Rebuild Index">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Index" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command>
+               <SQL><![CDATA[reindex index "${schema}"."${objectname}"]]></SQL>
+            </Command>
+            <Confirm>
+               Confirm rebuild of index ${schema}.${objectname}?
+            </Confirm>
+            <Result>
+               Index ${schema}.${objectname} rebuilt!
+            </Result>
+         </Action>
+
+         <Action id="postgresql-index-comment" label="Comment Index" reload="true">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Index" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Comment" name="comment" style="wrapped-text-editor">
+               <Default>${postgresql8.getIndexes.Comment}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[comment on index "${schema}"."${objectname}" is '${comment}']]></SQL>
+            </Command>
+            <Confirm>
+               Apply new comment on ${schema}.${objectname}?
+            </Confirm>
+         </Action>
+
+         <Separator/>
+
+         <Action id="postgresql-index-script" label="Script Index" icon="scriptObject"
+                 class="sqlBuilder"
+                 classargs="script-dialog,CREATE,DROP"/>
+      </ActionGroup>
+
+      <ActionGroup type="Trigger">
+         <Action id="postgresql-trigger-drop" label="Drop Trigger" reload="true" icon="remove">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Trigger" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[drop trigger "${objectname}" on "${eventschema}"."${eventtable}"]]></SQL>
+            </Command>
+            <Confirm>
+               Really drop trigger ${objectname}?
+            </Confirm>
+            <Result>
+               Trigger ${objectname} dropped!
+            </Result>
+         </Action>
+
+         <Action id="postgresql-trigger-rename" label="Rename Trigger" reload="true" icon="rename">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Trigger" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="New Trigger Name" name="newTrigger" style="text"/>
+            <Command>
+               <SQL>
+                  <![CDATA[alter trigger "${objectname}" on "${eventschema}"."${eventtable}" rename to ${QB}${newTrigger}${QE}]]></SQL>
+            </Command>
+            <Confirm>
+               Confirm rename of trigger ${objectname} to ${newTrigger}?
+            </Confirm>
+            <Result>
+               Trigger ${objectname} renamed to ${newTrigger}!
+            </Result>
+         </Action>
+
+         <Action id="postgresql-trigger-enable" label="Enable Trigger" icon="enable">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Trigger" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[alter table "${eventschema}"."${eventtable}" enable trigger "${objectname}"]]></SQL>
+            </Command>
+            <Confirm>
+               Enable trigger ${objectname} ?
+            </Confirm>
+            <Result>
+               Trigger ${objectname} has been enabled!
+            </Result>
+         </Action>
+
+         <Action id="postgresql-trigger-disable" label="Disable Trigger" icon="disable">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Trigger" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[alter table "${eventschema}"."${eventtable}" disable trigger "${objectname}"]]></SQL>
+            </Command>
+            <Confirm>
+               Disable trigger ${objectname} ?
+            </Confirm>
+            <Result>
+               Trigger ${objectname} has been disabled!
+            </Result>
+         </Action>
+
+         <Action id="postgresql-trigger-comment" label="Comment Trigger" reload="true">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${eventschema}</Default>
+            </Input>
+            <Input label="Table" style="text" editable="false">
+               <Default>${eventtable}</Default>
+            </Input>
+            <Input label="Trigger" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Comment" name="comment" style="wrapped-text-editor">
+               <Default>
+                  <Command>
+                     <SQL><![CDATA[SELECT pg_catalog.obj_description(t.oid, 'pg_trigger')
+FROM pg_catalog.pg_class c, pg_catalog.pg_namespace n, pg_catalog.pg_trigger t
+WHERE c.relnamespace = n.oid
+AND t.tgrelid = c.oid
+AND c.relname = '${eventtable}'
+AND n.nspname = '${eventschema}'
+AND t.tgname = '${objectname}'
+]]></SQL>
+                  </Command>
+               </Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[comment on trigger "${objectname}" on "${eventschema}"."${eventtable}" is '${comment}']]></SQL>
+            </Command>
+            <Confirm>
+               Apply new comment on ${eventschema}.${eventtable}.${objectname}?
+            </Confirm>
+         </Action>
+
+         <Action id="postgresql-trigger-export" label="Export Trigger" icon="export"
+                 class="triggerExport"
+                 doclink="http://www.dbvis.com/doclink/export-code-object"/>
+      </ActionGroup>
+
+      <ActionGroup type="Partition">
+         <Action id="postgresql-partition-rename" label="Rename Partition" reload="true" icon="rename">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Partition" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="New Partition Name" name="newTable" style="text"/>
+            <Command>
+               <SQL>
+                  <![CDATA[alter table "${schema}"."${objectname}" rename to ${QB}${newTable}${QE}]]></SQL>
+            </Command>
+            <Confirm>
+               Confirm rename of ${schema}.${objectname} to ${newTable}?
+            </Confirm>
+            <Result>
+               Partition ${schema}.${objectname} renamed to ${newTable}!
+            </Result>
+         </Action>
+
+         <Action id="postgresql-partition-clear" label="Empty Partition" reload="true">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Partition" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Use Command" name="useCommand" style="radio">
+               <Values>TRUNCATE|DELETE</Values>
+               <Default>TRUNCATE</Default>
+            </Input>
+
+            <SetVar name="_command" value="#useCommand.equals('TRUNCATE') ? 'truncate table' : 'delete from'"/>
+
+            <Command>
+               <SQL><![CDATA[${_command} "${schema}"."${objectname}"]]></SQL>
+            </Command>
+            <Confirm>
+               Really remove all rows in partition ${schema}.${objectname}?
+            </Confirm>
+            <Result>
+               All rows in partition ${schema}.${objectname} has been removed!
+            </Result>
+         </Action>
+
+         <Action id="postgresql-partition-drop" label="Drop Partition" reload="true" icon="remove">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Partition" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Drop Dependent Object(s)" name="cascade" style="check"
+                   tip="Automatically drop objects that depend on the table (such as views)">
+               <Values>cascade</Values>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[drop table "${schema}"."${objectname}" ${cascade}]]></SQL>
+            </Command>
+            <Confirm>
+               Really drop partition ${schema}.${objectname}?
+            </Confirm>
+            <Result>
+               Partition ${schema}.${objectname} has been dropped!
+            </Result>
+         </Action>
+         
+         <Action id="postgresql-partition-comment" label="Comment Partition" reload="true">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Partition" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Comment" name="comment" style="wrapped-text-editor">
+               <Default>${postgresql8.getTablePartitions.Comment}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[comment on table "${schema}"."${objectname}" is '${comment}']]></SQL>
+            </Command>
+            <Confirm>
+               Apply new comment on ${schema}.${objectname}?
+            </Confirm>
+         </Action>
+
+         <Separator/>
+
+         <Action id="postgresql-partition-detach" label="Detach Partition" reload="true">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Partition" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[alter table "${parentSchema}"."${parentName}" detach partition "${schema}"."${objectname}"]]></SQL>
+            </Command>
+            <Confirm>
+               Really detach partition ${schema}.${objectname}?
+            </Confirm>
+            <Result>
+               Partition ${schema}.${objectname} has been detached!
+            </Result>
+         </Action>
+         
+         <Separator/>
+         
+         <Action id="postgresql-partition-create-index" label="Create Index" reload="true">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Partition" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Index Name" name="indexname" style="text"/>
+            <Input label="Unique" name="unique" style="check">
+               <Values>unique</Values>
+            </Input>
+
+            <Input label="Columns" style="separator"/>
+
+            <Input name="columns" style="grid">
+               <Arg name="output" value='"${columnname}"${_sortorder}'/>
+               <Arg name="newline" value=", "/>
+
+               <Input name="columnname" label="Column Name" style="list">
+                  <Values column="4">
+                     <Command idref="getColumnNamesFor">
+                        <Input name="table_catalog" value="${catalog}"/>
+                        <Input name="table_schema" value="${schema}"/>
+                        <Input name="table_name" value="${objectname}"/>
+                     </Command>
+                  </Values>
+                  <Default>${0}</Default>
+               </Input>
+               <Input name="sortorder" label="Sort Order" style="radio">
+                  <Labels>ASC|DESC|Default</Labels>
+                  <Values>ASC|DESC|</Values>
+                  <Default>ASC</Default>
+               </Input>
+               <SetVar name="_sortorder" value='#sortorder.equals("") ? "" : " " + #sortorder'/>
+            </Input>
+
+            <SetVar name="_unique" value='#unique.equals("") ? "" : " " + #unique'/>
+            <SetVar name="_columns" value='#columns.trim().equals("") ? "" : "(" + #columns + ")"'/>
+            <SetVar name="_indexname" value='#indexname.trim().equals("") ? "" : " " + #QB + #indexname + #QE'/>             
+
+            <Command>
+               <SQL>
+                  <![CDATA[create${_unique} index${_indexname} on "${schema}"."${objectname}" ${_columns}]]>
+               </SQL>
+            </Command>
+            <Confirm>
+               <![CDATA[Create index "${indexname}"?]]>
+            </Confirm>
+            <Result>
+               <![CDATA[Index "${indexname}" created!]]>
+            </Result>
+         </Action>
+      </ActionGroup>
+      
+      <ActionGroup type="Functions">
+         <Action id="postgresql-functions-create" label="Create Function" reload="true" icon="add"
+                 doclink="http://www.dbvis.com/doclink/create-function">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Function" name="functionName" style="text"/>
+
+            <Input label="Options" style="separator"/>
+            <Input label="Return Data Type" name="returns" style="text">
+               <Default>INTEGER</Default>
+            </Input>
+            <!--
+                        <Input label="Language" name="language" style="radio">
+                           <Values>SQL|C|INTERNAL</Values>
+                           <Default>SQL</Default>
+                        </Input>
+                        <Input label="Volatility" name="volatility" style="radio">
+                           <Values>VOLATILE|STABLE|IMMUTABLE</Values>
+                           <Default>VOLATILE</Default>
+                        </Input>
+                        <Input label="Returns Set" name="returnsSet" style="check">
+                           <Values>SETOF </Values>
+                        </Input>
+                        <Input label="Strict" name="strict" style="check">
+                           <Values>STRICT</Values>
+                        </Input>
+                        <Input label="Security of Definer" name="security" style="check">
+                           <Values>SECURITY DEFINER</Values>
+                        </Input>
+            -->
+            <Input label="Parameters" style="separator"/>
+
+            <Input name="parameters" style="grid">
+               <Arg name="output" value="${direction} ${QB}${name}${QE} ${type}"/>
+               <Arg name="newline" value=", "/>
+
+               <Input name="direction" label="Direction" style="list">
+                  <Values>IN|INOUT|OUT</Values>
+                  <Default>IN</Default>
+               </Input>
+               <Input name="name" label="Name" style="text">
+                  <Default>parm</Default>
+               </Input>
+               <Input name="type" label="Type" style="text">
+                  <Default>INTEGER</Default>
+               </Input>
+            </Input>
+
+            <SetVar name="_parameters" value='#parameters.trim().equals("") ? "()" : "(" + #parameters + ")"'/>
+            <Input label="Source" style="separator"/>
+            <Input name="body" style="text-editor">
+               <Default>select 100</Default>
+            </Input>
+            <Command exectype="asis">
+               <SQL>
+                  <![CDATA[
+CREATE FUNCTION "${schema}".${QB}${functionName}${QE}
+${_parameters}
+RETURNS ${returns} 
+AS $body$
+  ${body}
+$body$
+LANGUAGE sql]]>
+               </SQL>
+            </Command>
+            <Result>
+               <![CDATA[Function "${schema}"."${functionName}" created!]]>
+            </Result>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Function">
+         <Action id="postgresql-function-drop" label="Drop Function" reload="true" icon="remove">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Function" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Cascade" name="cascade" style="check">
+               <Values>cascade</Values>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[drop function "${schema}"."${objectname}" ( ${postgresql8.getFunctions.Argument data types} ) ${cascade}]]></SQL>
+            </Command>
+            <Confirm>
+               Really drop function ${schema}.${objectname}?
+            </Confirm>
+            <Result>
+               Function ${schema}.${objectname} dropped!
+            </Result>
+         </Action>
+
+         <Action id="postgresql-function-rename" label="Rename Function" reload="true" icon="rename">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Function" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="New Function Name" name="newFunction" style="text"/>
+            <Command>
+               <SQL>
+                  <![CDATA[alter function "${schema}"."${objectname}" ( ${postgresql8.getFunctions.Argument data types} ) rename to ${QB}${newFunction}${QE}]]></SQL>
+            </Command>
+            <Confirm>
+               Confirm rename of function ${objectname} to ${newFunction}?
+            </Confirm>
+            <Result>
+               Function ${objectname} renamed to ${newFunction}!
+            </Result>
+         </Action>
+
+         <Action id="postgresql-function-comment" label="Comment Function" reload="true">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Function" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Comment" name="comment" style="wrapped-text-editor">
+               <Default>${postgresql8.getFunctions.Comment}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[comment on function "${schema}"."${objectname}" (${postgresql8.getFunctions.Argument data types}) is '${comment}']]></SQL>
+            </Command>
+            <Confirm>
+               Apply new comment on ${schema}.${getDDLName}?
+            </Confirm>
+         </Action>
+
+         <Action id="postgresql-function-export" label="Export Function" icon="export"
+                 class="functionExport"
+                 doclink="http://www.dbvis.com/doclink/export-code-object"/>
+
+         <Separator/>
+
+         <Action id="postgresql-function-script" label="Script Function" icon="scriptObject"
+                 class="sqlBuilder"
+                 classargs="script-dialog,CALL,CREATE,DROP"/>
+      </ActionGroup>
+
+      <ActionGroup type="Sequences">
+         <Action id="postgresql-sequences-create" label="Create Sequence" reload="true" icon="add">
+            <Input label="Sequence Owner" name="owner" style="list">
+               <Values>
+                  <Command>
+                     <SQL>
+                        <![CDATA[
+SELECT trim(n.nspname) FROM pg_catalog.pg_namespace n LEFT JOIN pg_catalog.pg_user r ON n.nspowner=r.usesysid
+WHERE n.nspname NOT IN ('pg_catalog', 'information_schema', 'pg_toast') ORDER BY 1;
+                        ]]>
+                     </SQL>
+                  </Command>
+               </Values>
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Sequence Name" name="sequenceName" style="text"/>
+            <Input label="Start With" name="startWith" style="text">
+               <Default>1</Default>
+            </Input>
+            <Input label="Increment By" name="increment" style="text">
+               <Default>1</Default>
+            </Input>
+            <Input label="Cached Values" name="cache" style="text">
+               <Default>20</Default>
+            </Input>
+            <Input label="Cycle" name="cycle" style="radio">
+               <Labels>Cycle|No Cycle</Labels>
+               <Values>cycle|no cycle</Values>
+               <Default>no cycle</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[create sequence "${owner}".${QB}${sequenceName}${QE} start with ${startWith} increment by ${increment} no maxvalue no minvalue cache ${cache} ${cycle}]]></SQL>
+            </Command>
+            <Result>
+               Sequence ${owner}.${sequenceName} created!
+            </Result>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Sequence">
+         <Action id="postgresql-sequence-drop" label="Drop Sequence" reload="true" icon="remove">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Sequence" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Cascade" name="cascade" style="check">
+               <Values>cascade</Values>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[drop sequence "${schema}"."${objectname}" ${cascade}]]></SQL>
+            </Command>
+            <Confirm>
+               Really drop sequence ${schema}.${objectname}?
+            </Confirm>
+            <Result>
+               Sequence ${schema}.${objectname} dropped!
+            </Result>
+         </Action>
+
+         <Action id="postgresql-sequence-comment" label="Comment Sequence" reload="true">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Sequence" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Comment" name="comment" style="wrapped-text-editor">
+               <Default>${postgresql8.getSequences.Comment}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[comment on sequence "${schema}"."${objectname}" is '${comment}']]></SQL>
+            </Command>
+            <Confirm>
+               Apply new comment on ${schema}.${objectname}?
+            </Confirm>
+         </Action>
+         
+         <Separator/>
+
+         <Action id="postgresql-sequence-script" label="Script Sequence" icon="scriptObject"
+                 class="sqlBuilder"
+                 classargs="script-dialog,CREATE,DROP"/>
+      </ActionGroup>
+
+      <ActionGroup type="Domain">
+         <Action id="postgresql-domain-drop" label="Drop Domain" reload="true" icon="remove">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Domain" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Cascade" name="cascade" style="check">
+               <Values>cascade</Values>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[drop domain "${schema}"."${objectname}" ${cascade}]]></SQL>
+            </Command>
+            <Confirm>
+               Really drop domain ${schema}.${objectname}?
+            </Confirm>
+            <Result>
+               Domain ${schema}.${objectname} dropped!
+            </Result>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Aggregate">
+         <Action id="postgresql-aggregate-drop" label="Drop Aggregate" reload="true" icon="remove">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Aggregate" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Cascade" name="cascade" style="check">
+               <Values>cascade</Values>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[drop aggregate "${schema}"."${objectname}" ( ${postgresql8.getAggregates.Data Type} )  ${cascade}]]></SQL>
+            </Command>
+            <Confirm>
+               Really drop aggregate ${schema}.${objectname}?
+            </Confirm>
+            <Result>
+               Aggregate ${schema}.${objectname} has been dropped!
+            </Result>
+         </Action>
+
+         <Action id="postgresql-aggregate-rename" label="Rename Aggregate" reload="true" icon="rename">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Aggregate" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="New Aggregate Name" name="newAggregate" style="text"/>
+            <Command>
+               <SQL>
+                  <![CDATA[alter aggregate "${schema}"."${objectname}" ( ${postgresql8.getAggregates.Data Type} ) rename to ${QB}${newAggregate}${QE}]]></SQL>
+            </Command>
+            <Confirm>
+               Confirm rename of ${schema}.${objectname} to ${newAggregate}?
+            </Confirm>
+            <Result>
+               Aggregate ${schema}.${objectname} renamed to ${newAggregate}!
+            </Result>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Type">
+         <Action id="postgresql-type-drop" label="Drop Type" reload="true" icon="remove">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Type" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Cascade" name="cascade" style="check">
+               <Values>cascade</Values>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[drop type ${objectname} ${cascade}]]></SQL>
+            </Command>
+            <Confirm>
+               Really drop type ${schema}.${objectname}?
+            </Confirm>
+            <Result>
+               Type ${schema}.${objectname} dropped!
+            </Result>
+         </Action>
+
+         <Action id="postgresql-type-comment" label="Comment Type" reload="true">
+            <Input label="Schema" style="text" editable="false">
+               <Default>${schema}</Default>
+            </Input>
+            <Input label="Type" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Comment" name="comment" style="wrapped-text-editor">
+               <Default>${postgresql8.getTypes.Comment}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[comment on type ${objectname} is '${comment}']]></SQL>
+            </Command>
+            <Confirm>
+               Apply new comment on ${schema}.${objectname}?
+            </Confirm>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Tablespaces">
+         <Action id="postgresql-tablespace-create" label="Create Tablespace" reload="true" icon="add">
+            <Input label="Tablespace Name" name="tablespace" style="text"/>
+            <Input label="Owner" name="owner" style="list">
+               <Values>
+                  <Command>
+                     <SQL>
+                        <![CDATA[select '' union select usename from pg_catalog.pg_user]]>
+                     </SQL>
+                  </Command>
+               </Values>
+            </Input>
+            <Input label="Location" name="location" style="text"/>
+            <SetVar name="_owner" value='#owner.equals("") ? "" : "owner \&quot;" + #owner + "\&quot;"'/>
+            <Command>
+               <SQL>
+                  <![CDATA[create tablespace ${QB}${tablespace}${QE} ${_owner} location '${location}']]></SQL>
+            </Command>
+            <Confirm>
+               Confirm create of tablespace ${tablespace}?
+            </Confirm>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Tablespace">
+         <Action id="postgresql-tablespace-drop" label="Drop Tablespace" reload="true" icon="remove">
+            <Input label="Tablespace Name" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command>
+               <SQL><![CDATA[drop tablespace "${objectname}"]]></SQL>
+            </Command>
+            <Confirm>
+               Really drop tablespace ${objectname}?
+            </Confirm>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="ForeignServer">
+         <Action id="postgresql-foreign-server-drop" label="Drop Foreign Server" reload="true" icon="remove">
+            <Input label="Server Name" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Drop Dependent Objects" name="cascade" style="check"
+                   tip="Enable this to drop all dependent objects, e.g User Mappings">
+               <Values>cascade</Values>
+            </Input>
+            <Command>
+               <SQL><![CDATA[drop server "${objectname}" ${cascade}]]></SQL>
+            </Command>
+            <Confirm>
+               Really drop foreign server ${objectname}?
+            </Confirm>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="UserMapping">
+         <Action id="postgresql-user-mapping-drop" label="Drop User Mapping" reload="true" icon="remove">
+            <Input label="Server Name" style="text" editable="false">
+               <Default>${server}</Default>
+            </Input>
+            <Input label="User Name" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[drop user mapping for "${objectname}" server "${server}"]]></SQL>
+            </Command>
+            <Confirm>
+               Really drop user mapping for ${objectname}?
+            </Confirm>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Jobs">
+         <Action id="postgresql-jobs-create" label="Create Job" reload="true" icon="add">
+            <Input label="Name" name="jobName" style="text"/>
+            <Input label="Enabled" name="jobEnabled" style="check">
+               <Values>true|false</Values>
+               <Default>true</Default>
+            </Input>
+            <Input label="Job Class" name="jobClass" style="list">
+               <Values>
+                  <Command>
+                     <SQL>
+                        <![CDATA[select jclname from pgagent.pga_jobclass]]>
+                     </SQL>
+                  </Command>
+               </Values>
+            </Input>
+            <Input label="Host Agent" name="hostAgent" style="text"/>
+            <Input label="Description" style="separator"/>
+            <Input name="jobDescr" style="text-editor"/>
+            <Command>
+               <SQL>
+                  <![CDATA[
+INSERT INTO pgagent.pga_job (jobname, jobjclid, jobhostagent, jobdesc, jobenabled)
+    VALUES ('${jobName}',
+            (SELECT jclid FROM pgagent.pga_jobclass WHERE
+                jclname = '${jobClass}') ,
+            '${hostAgent}',
+            '${jobDescr}',
+            ${jobEnabled})
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>
+               Really create job ${jobName}?
+            </Confirm>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Job">
+         <Action id="postgresql-job-alter" label="Alter Job" reload="true" icon="edit">
+            <Input label="Name" name="jobName" style="text">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Enabled" name="jobEnabled" style="check">
+               <Values>true|false</Values>
+               <Default>
+                  <Command>
+                     <SQL>
+                        <![CDATA[select jobenabled from pgagent.pga_job where jobid = ${jobId}]]>
+                     </SQL>
+                  </Command>
+               </Default>
+            </Input>
+            <Input label="Job Class" name="jobClass" style="list">
+               <Values>
+                  <Command>
+                     <SQL>
+                        <![CDATA[select jclname from pgagent.pga_jobclass]]>
+                     </SQL>
+                  </Command>
+               </Values>
+               <Default>
+                  <Command>
+                     <SQL>
+                        <![CDATA[select jclname from pgagent.pga_jobclass where jclid = (select jobjclid from pgagent.pga_job where jobid = ${jobId})]]>
+                     </SQL>
+                  </Command>
+               </Default>
+            </Input>
+            <Input label="Host Agent" name="hostAgent" style="text">
+               <Default>
+                  <Command>
+                     <SQL>
+                        <![CDATA[select jobhostagent from pgagent.pga_job where jobid = ${jobId}]]>
+                     </SQL>
+                  </Command>
+               </Default>
+            </Input>
+            <Input label="Description" style="separator"/>
+            <Input name="jobDescr" style="text-editor">
+               <Default>
+                  <Command>
+                     <SQL>
+                        <![CDATA[select jobdesc from pgagent.pga_job where jobid = ${jobId}]]>
+                     </SQL>
+                  </Command>
+               </Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[
+UPDATE pgagent.pga_job 
+  SET jobname = '${jobName}', 
+      jobjclid = (SELECT jclid FROM pgagent.pga_jobclass WHERE
+                  jclname = '${jobClass}'), 
+      jobhostagent = '${hostAgent}',
+      jobdesc = '${jobDescr}',
+      jobenabled = ${jobEnabled}
+  WHERE jobid = ${jobId}
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>
+               Really alter job ${objectname}?
+            </Confirm>
+         </Action>
+
+        <Action id="postgresql-job-enable-disable" label="Enable/Disable Job" reload="true" icon="edit">
+            <Input label="Name" name="jobName" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            
+            <Input label="Enabled" name="jobEnabled" style="check">
+               <Values>true|false</Values>
+               <Default>
+                  <Command>
+                     <SQL>
+                        <![CDATA[select jobenabled from pgagent.pga_job where jobid = ${jobId}]]>
+                     </SQL>
+                  </Command>
+               </Default>
+            </Input>
+ 
+            <Command>
+               <SQL>
+                  <![CDATA[
+UPDATE pgagent.pga_job
+    SET jobenabled = ${jobEnabled}
+    WHERE jobid = ${jobId};
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>
+               Really change enable state of ${objectname}?
+            </Confirm>
+         </Action>
+
+         <Action id="postgresql-job-drop" label="Drop Job" reload="true" icon="remove">
+            <Input label="Name" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[delete from pgagent.pga_job where jobid = ${jobId}]]></SQL>
+            </Command>
+            <Confirm>
+               Really drop job ${objectname}?
+            </Confirm>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="JobSchedules">
+         <Action id="postgresql-schedules-create" label="Create Schedule" reload="true" icon="add">
+            <Input label="Schedule" name="scheduleName" style="text"/>
+            <Input label="Enabled" name="schEnabled" style="check">
+               <Values>true|false</Values>
+               <Default>true</Default>
+            </Input>
+            <Input label="Start" name="start" style="text" linebreak="false">
+               <Default>
+                  <Command>
+                     <SQL><![CDATA[select current_timestamp]]></SQL>
+                  </Command>
+               </Default>
+            </Input>
+            <SetVar name="_start" value='#start.trim().equals("") ? "NULL" : "&apos;" + #start + "&apos;"'/>
+
+            <Input label="End" name="end" style="text" linebreak="true"/>
+            <SetVar name="_end" value='#end.trim().equals("") ? "NULL" : "&apos;" + #end + "&apos;"'/>
+
+            <Input label="Weekdays" name="weekdays" style="check-list">
+               <Arg name="output" value="jscweekdays[${value}] = true"/>
+               <Arg name="newline" value=", "/>
+               <Labels>
+                  Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday
+               </Labels>
+               <Values>1|2|3|4|5|6|7</Values>
+            </Input>
+
+            <Input label="Month days" name="monthdays" style="check-list">
+               <Arg name="output" value="jscmonthdays[${value}] = true"/>
+               <Arg name="newline" value=", "/>
+               <Labels>
+                  1st|2nd|3rd|4th|5th|6th|7th|8th|9th|10th|11th|12th|13th|14th|15th|16th|17th|18th|19th|20th|21th|22th|23th|24th|25th|26th|27th|28th|29th|30th|31th|Last
+                  day
+               </Labels>
+               <Values>
+                  1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31|32
+               </Values>
+            </Input>
+
+            <Input label="Months" name="months" style="check-list">
+               <Arg name="output" value="jscmonths[${value}] = true"/>
+               <Arg name="newline" value=", "/>
+               <Labels>
+                  January|February|March|April|May|June|July|August|September|October|November|December
+               </Labels>
+               <Values>1|2|3|4|5|6|7|8|9|10|11|12</Values>
+            </Input>
+
+            <Input label="Hours" name="hours" style="check-list">
+               <Arg name="output" value="jschours[${value}] = true"/>
+               <Arg name="newline" value=", "/>
+               <Labels>
+                  00|01|02|03|04|05|06|07|08|09|10|11|12|13|14|15|16|17|18|19|20|21|22|23
+               </Labels>
+               <Values>
+                  1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24
+               </Values>
+            </Input>
+
+            <Input label="Minutes" name="minutes" style="check-list">
+               <Arg name="output" value="jscminutes[${value}] = true"/>
+               <Arg name="newline" value=", "/>
+               <Labels>
+                  00|01|02|03|04|05|06|07|08|09|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31|32|33|34|35|36|37|38|39|40|41|42|43|44|45|46|47|48|49|50|51|52|53|54|55|56|57|58|59
+               </Labels>
+               <Values>
+                  1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31|32|33|34|35|36|37|38|39|40|41|42|43|44|45|46|47|48|49|50|51|52|53|54|55|56|57|58|59|60
+               </Values>
+            </Input>
+
+            <Input label="Exceptions" style="separator"/>
+            <Input name="exceptions" style="grid">
+               <SetVar name="_date" value='#util.isNullOrWhitespace(#date) ? "NULL" : "&apos;" + #date + "&apos;"'/>
+               <SetVar name="_time" value='#util.isNullOrWhitespace(#time) ? "NULL" : "&apos;" + #time + "&apos;"'/>
+               <Arg name="output" value="${_date}, ${_time}"/>
+               <Arg name="newline" value="\n"/>
+               <Arg name="rowprefix" value="INSERT INTO pgagent.pga_exception (jexscid, jexdate, jextime) VALUES (currval ('pgagent.pga_schedule_jscid_seq'), "/>
+               <Arg name="rowsuffix" value=");"/>
+
+               <Input name="date" label="Date" style="text"/>
+               <Input name="time" label="Time" style="text"/>
+            </Input>
+
+            <SetVar name="_allDaysAndTimes" value='#weekdays + #monthdays + #months + #hours + #minutes'/>
+            <SetVar name="_allDaysAndTimesColumns"
+                    value='#util.isNullOrWhitespace(#weekdays)  ? "" : #weekdays'/>
+            <SetVar name="_allDaysAndTimesColumns"
+                    value='#util.isNullOrWhitespace(#monthdays) ? #_allDaysAndTimesColumns : #util.isNullOrWhitespace(#_allDaysAndTimesColumns) ? #monthdays : #_allDaysAndTimesColumns + ", " + #monthdays'/>
+            <SetVar name="_allDaysAndTimesColumns"
+                    value='#util.isNullOrWhitespace(#months)    ? #_allDaysAndTimesColumns : #util.isNullOrWhitespace(#_allDaysAndTimesColumns) ? #months : #_allDaysAndTimesColumns + ", " + #months'/>
+            <SetVar name="_allDaysAndTimesColumns"
+                    value='#util.isNullOrWhitespace(#hours)     ? #_allDaysAndTimesColumns : #util.isNullOrWhitespace(#_allDaysAndTimesColumns) ? #hours : #_allDaysAndTimesColumns + ", " + #hours'/>
+            <SetVar name="_allDaysAndTimesColumns"
+                    value='#util.isNullOrWhitespace(#minutes)   ? #_allDaysAndTimesColumns : #util.isNullOrWhitespace(#_allDaysAndTimesColumns) ? #minutes : #_allDaysAndTimesColumns + ", " + #minutes'/>
+            <SetVar name="_updateDaysAndTimes" value='#_allDaysAndTimes.trim().isEmpty() ? 
+               "" : "UPDATE pgagent.pga_schedule SET " + #_allDaysAndTimesColumns +
+               " WHERE jscid = currval (&apos;pgagent.pga_schedule_jscid_seq&apos;);"'/>
+
+            <Command>
+               <SQL>
+                  <![CDATA[
+INSERT INTO pgagent.pga_schedule (jscjobid, jscname, jscstart, jscend, jscenabled)
+    VALUES (${jobId}, '${scheduleName}', ${_start}, ${_end}, ${schEnabled});
+${_updateDaysAndTimes}
+${exceptions}
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>
+               Really create schedule ${scheduleName}?
+            </Confirm>
+            <Result>
+               <![CDATA[Schedule "${scheduleName}" created!]]>
+            </Result>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="JobSchedule">
+         <Action id="postgresql-job-schedule-alter" label="Alter Schedule" reload="true" icon="edit">
+            <Input label="Schedule" name="scheduleName" style="text">
+               <Default>
+                  <Command>
+                     <SQL>
+                        <![CDATA[select jscname from pgagent.pga_schedule where jscid = ${jscId}]]>
+                     </SQL>
+                  </Command>
+               </Default>
+            </Input>
+            <Input label="Enabled" name="schEnabled" style="check">
+               <Values>true|false</Values>
+               <Default>
+                  <Command>
+                     <SQL>
+                        <![CDATA[select jscenabled from pgagent.pga_schedule where jscid = ${jscId}]]>
+                     </SQL>
+                  </Command>
+               </Default>
+            </Input>
+            <Input label="Start" name="start" style="text" linebreak="false">
+               <Default>
+                  <Command>
+                     <SQL>
+                        <![CDATA[select jscstart from pgagent.pga_schedule where jscid = ${jscId}]]>
+                     </SQL>
+                  </Command>
+               </Default>
+            </Input>
+            <SetVar name="_start" value='#start.trim().equals("") ? "NULL" : "&apos;" + #start + "&apos;"'/>
+
+            <Input label="End" name="end" style="text" linebreak="true">
+               <Default>
+                  <Command>
+                     <SQL>
+                        <![CDATA[select jscend from pgagent.pga_schedule where jscid = ${jscId}]]>
+                     </SQL>
+                  </Command>
+               </Default>
+            </Input>
+            <SetVar name="_end" value='#end.trim().equals("") ? "NULL" : "&apos;" + #end + "&apos;"'/>
+
+            <Input label="Weekdays" name="weekdays" style="check-list">
+               <Arg name="output" value="jscweekdays[${value}] = true"/>
+               <Arg name="newline" value=", "/>
+               <Labels>
+                  Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday
+               </Labels>
+               <Values>1|2|3|4|5|6|7</Values>
+               <Default>
+                  <Command>
+                     <SQL>
+                        <![CDATA[
+SELECT
+    array_to_string (ARRAY
+    (
+        SELECT
+            CASE
+                WHEN jscweekdays[x.i] = true
+                THEN x.i
+            END
+        FROM
+            generate_series (1, 7) AS x (i)) , '|')
+FROM
+    pgagent.pga_schedule
+WHERE jscid = ${jscId}
+                     ]]>
+                     </SQL>
+                  </Command>
+               </Default>
+            </Input>
+
+            <Input label="Month days" name="monthdays" style="check-list">
+               <Arg name="output" value="jscmonthdays[${value}] = true"/>
+               <Arg name="newline" value=", "/>
+               <Labels>
+                  1st|2nd|3rd|4th|5th|6th|7th|8th|9th|10th|11th|12th|13th|14th|15th|16th|17th|18th|19th|20th|21th|22th|23th|24th|25th|26th|27th|28th|29th|30th|31th|Last
+                  day
+               </Labels>
+               <Values>
+                  1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31|32
+               </Values>
+               <Default>
+                  <Command>
+                     <SQL>
+                        <![CDATA[
+SELECT
+    array_to_string (ARRAY
+    (
+        SELECT
+            CASE
+                WHEN jscmonthdays[x.i] = true
+                THEN x.i
+            END
+        FROM
+            generate_series (1, 32) AS x (i)) , '|')
+FROM
+    pgagent.pga_schedule
+WHERE jscid = ${jscId}
+                     ]]>
+                     </SQL>
+                  </Command>
+               </Default>
+            </Input>
+
+            <Input label="Months" name="months" style="check-list">
+               <Arg name="output" value="jscmonths[${value}] = true"/>
+               <Arg name="newline" value=", "/>
+               <Labels>
+                  January|February|March|April|May|June|July|August|September|October|November|December
+               </Labels>
+               <Values>1|2|3|4|5|6|7|8|9|10|11|12</Values>
+               <Default>
+                  <Command>
+                     <SQL>
+                        <![CDATA[
+SELECT
+    array_to_string (ARRAY
+    (
+        SELECT
+            CASE
+                WHEN jscmonths[x.i] = true
+                THEN x.i
+            END
+        FROM
+            generate_series (1, 12) AS x (i)) , '|')
+FROM
+    pgagent.pga_schedule
+WHERE jscid = ${jscId}
+                     ]]>
+                     </SQL>
+                  </Command>
+               </Default>
+            </Input>
+
+            <Input label="Hours" name="hours" style="check-list">
+               <Arg name="output" value="jschours[${value}] = true"/>
+               <Arg name="newline" value=", "/>
+               <Labels>
+                  00|01|02|03|04|05|06|07|08|09|10|11|12|13|14|15|16|17|18|19|20|21|22|23
+               </Labels>
+               <Values>
+                  1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24
+               </Values>
+               <Default>
+                  <Command>
+                     <SQL>
+                        <![CDATA[
+SELECT
+    array_to_string (ARRAY
+    (
+        SELECT
+            CASE
+                WHEN jschours[x.i] = true
+                THEN x.i
+            END
+        FROM
+            generate_series (1, 24) AS x (i)) , '|')
+FROM
+    pgagent.pga_schedule
+WHERE jscid = ${jscId}
+                     ]]>
+                     </SQL>
+                  </Command>
+               </Default>
+            </Input>
+
+            <Input label="Minutes"  name="minutes" style="check-list">
+               <Arg name="output" value="jscminutes[${value}] = true"/>
+               <Arg name="newline" value=", "/>
+               <Labels>
+                  00|01|02|03|04|05|06|07|08|09|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31|32|33|34|35|36|37|38|39|40|41|42|43|44|45|46|47|48|49|50|51|52|53|54|55|56|57|58|59
+               </Labels>
+               <Values>
+                  1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31|32|33|34|35|36|37|38|39|40|41|42|43|44|45|46|47|48|49|50|51|52|53|54|55|56|57|58|59|60
+               </Values>
+               <Default>
+                  <Command>
+                     <SQL>
+                        <![CDATA[
+SELECT
+    array_to_string (ARRAY
+    (
+        SELECT
+            CASE
+                WHEN jscminutes[x.i] = true
+                THEN x.i
+            END
+        FROM
+            generate_series (1, 60) AS x (i)) , '|')
+FROM
+    pgagent.pga_schedule
+WHERE jscid = ${jscId}
+                     ]]>
+                     </SQL>
+                  </Command>
+               </Default>
+            </Input>
+
+            <Input label="Exceptions" style="separator"/>
+            <Input name="exceptions" style="grid">
+               <SetVar name="_date" value='#util.isNullOrWhitespace(#date) ? "NULL" : "&apos;" + #date + "&apos;"'/>
+               <SetVar name="_time" value='#util.isNullOrWhitespace(#time) ? "NULL" : "&apos;" + #time + "&apos;"'/>
+               <Arg name="output" value="${_date}, ${_time}"/>
+               <Arg name="newline" value="\n"/>
+               <Arg name="rowprefix" value="INSERT INTO pgagent.pga_exception (jexscid, jexdate, jextime) VALUES (${jscId}, "/>
+               <Arg name="rowsuffix" value=");"/>
+
+               <Input name="date" label="Date" style="text">
+                  <!--Must be an empty Default element here as otherwise the first-->
+                  <!--default row entry for that column will be used when inserting -->
+                  <!--new rows manually.-->
+                  <Default/>
+               </Input>
+
+               <Input name="time" label="Time" style="text">
+                  <!--Must be an empty Default element here as otherwise the first-->
+                  <!--default row entry for that column will be used when inserting -->
+                  <!--new rows manually.-->
+                  <Default/>
+               </Input>
+
+               <!--This SELECT fetches the default values for the grid. The number of-->
+               <!--columns in the result set should match with the number of input-->
+               <!--elements in the grid-->
+               <Default>
+                  <Command>
+                     <SQL>SELECT jexdate, jextime FROM pgagent.pga_exception WHERE jexscid = ${jscId}</SQL>
+                  </Command>
+               </Default>
+            </Input>
+
+            <SetVar name="_allDaysAndTimes" value='#weekdays + #monthdays + #months + #hours + #minutes'/>
+            <SetVar name="_allDaysAndTimesColumns"
+                    value='#util.isNullOrWhitespace(#weekdays)  ? "" : #weekdays'/>
+            <SetVar name="_allDaysAndTimesColumns"
+                    value='#util.isNullOrWhitespace(#monthdays) ? #_allDaysAndTimesColumns : #util.isNullOrWhitespace(#_allDaysAndTimesColumns) ? #monthdays : #_allDaysAndTimesColumns + ", " + #monthdays'/>
+            <SetVar name="_allDaysAndTimesColumns"
+                    value='#util.isNullOrWhitespace(#months)    ? #_allDaysAndTimesColumns : #util.isNullOrWhitespace(#_allDaysAndTimesColumns) ? #months : #_allDaysAndTimesColumns + ", " + #months'/>
+            <SetVar name="_allDaysAndTimesColumns"
+                    value='#util.isNullOrWhitespace(#hours)     ? #_allDaysAndTimesColumns : #util.isNullOrWhitespace(#_allDaysAndTimesColumns) ? #hours : #_allDaysAndTimesColumns + ", " + #hours'/>
+            <SetVar name="_allDaysAndTimesColumns"
+                    value='#util.isNullOrWhitespace(#minutes)   ? #_allDaysAndTimesColumns : #util.isNullOrWhitespace(#_allDaysAndTimesColumns) ? #minutes : #_allDaysAndTimesColumns + ", " + #minutes'/>
+            <SetVar name="_updateDaysAndTimes" value='#_allDaysAndTimes.trim().isEmpty() ? 
+               "" : "UPDATE pgagent.pga_schedule SET " + #_allDaysAndTimesColumns +
+               " WHERE jscid = " + #jscId + ";"'/>
+
+            <Command>
+               <SQL>
+                  <![CDATA[
+UPDATE pgagent.pga_schedule 
+    SET jscname     = '${scheduleName}', 
+        jscstart    = ${_start}, 
+        jscend      = ${_end}, 
+        jscenabled  = ${schEnabled},
+        jscweekdays = default,
+        jscmonthdays = default,
+        jscmonths   = default,
+        jschours    = default,
+        jscminutes  = default
+    WHERE jscid = ${jscId};
+${_updateDaysAndTimes}
+DELETE FROM pgagent.pga_exception WHERE jexscid = ${jscId};
+${exceptions}
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>
+               Really alter schedule ${scheduleName}?
+            </Confirm>
+            <Result>
+               <![CDATA[Schedule "${scheduleName}" altered!]]>
+            </Result>
+         </Action>
+
+        <Action id="postgresql-job-schedule-enable-disable" label="Enable/Disable Job Schedule" reload="true" icon="edit">
+            <Input label="Schedule" name="schName" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            
+            <Input label="Enabled" name="schEnabled" style="check">
+               <Values>true|false</Values>
+               <Default>
+                  <Command>
+                     <SQL>
+                        <![CDATA[select jscenabled from pgagent.pga_schedule where jscid = ${jscId}]]>
+                     </SQL>
+                  </Command>
+               </Default>
+            </Input>
+ 
+            <Command>
+               <SQL>
+                  <![CDATA[
+UPDATE pgagent.pga_schedule
+    SET jscenabled = ${schEnabled}
+    WHERE jscid = ${jscId};
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>
+               Really change enable state of ${objectname}?
+            </Confirm>
+         </Action>
+
+         <Action id="postgresql-job-schedule-drop" label="Drop Job Schedule" reload="true" icon="remove">
+            <Input label="Name" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[delete from pgagent.pga_schedule where jscid = ${jscId}]]></SQL>
+            </Command>
+            <Confirm>
+               Really drop job schedule ${objectname}?
+            </Confirm>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="JobSteps">
+         <Action id="postgresql-job-steps-create" label="Create Job Step" reload="true" icon="add">
+            <Input label="Name" name="stepName" style="text"/>
+            <Input label="Enabled" name="stepEnabled" style="check">
+               <Values>true|false</Values>
+               <Default>true</Default>
+            </Input>
+            <Input label="Database" name="stepDatabase" style="list">
+               <Values>
+                  <Command>
+                     <SQL>
+                        <![CDATA[
+SELECT ''
+UNION
+SELECT
+    datname
+FROM
+    pg_catalog.pg_database
+WHERE
+    datallowconn IS true
+AND datistemplate IS false
+ORDER BY 1
+             ]]>
+                     </SQL>
+                  </Command>
+               </Values>
+            </Input>
+            <Input label="Connect String" name="connectString" style="text"/>
+            <Input label="Kind" name="kind" style="radio">
+               <Labels>SQL|Batch</Labels>
+               <Values>s|b</Values>
+            </Input>
+            <Input label="On Error" name="onError" style="radio">
+               <Labels>Fail and stop|Mark succeeded and continue|Mark ignored and continue</Labels>
+               <Values>f|s|i</Values>
+            </Input>
+            <Input label="Code" style="separator"/>
+            <Input name="code" style="text-editor"/>
+            <Input label="Description" style="separator"/>
+            <Input name="stepDescr" style="text-editor"/>
+
+            <Command>
+               <SQL>
+                  <![CDATA[
+INSERT INTO pgagent.pga_jobstep (jstjobid, jstname, jstdesc, jstenabled, jstkind, jstonerror, jstcode, jstdbname, jstconnstr)
+    VALUES(${jobId}, 
+             '${stepName}', 
+             '${stepDescr}', 
+             ${stepEnabled}, 
+             '${kind}', 
+             '${onError}', 
+             '${code}', 
+             '${stepDatabase}', 
+             '${connectString}');
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>
+               Really create job step ${stepName}?
+            </Confirm>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="JobStep">
+         <Action id="postgresql-job-steps-alter" label="Alter Job Step" reload="true" icon="edit">
+            <Input label="Name" name="stepName" style="text">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Enabled" name="stepEnabled" style="check">
+               <Values>true|false</Values>
+               <Default>
+                  <Command>
+                     <SQL>
+                        <![CDATA[select jstenabled from pgagent.pga_jobstep where jstid = ${jstId}]]>
+                     </SQL>
+                  </Command>
+               </Default>
+            </Input>
+            <Input label="Database" name="stepDatabase" style="list">
+               <Values>
+                  <Command>
+                     <SQL>
+                        <![CDATA[
+SELECT ''
+UNION
+SELECT
+    datname
+FROM
+    pg_catalog.pg_database
+WHERE
+    datallowconn IS true
+AND datistemplate IS false
+ORDER BY 1
+             ]]>
+                     </SQL>
+                  </Command>
+               </Values>
+               <Default>
+                  <Command>
+                     <SQL>
+                        <![CDATA[select jstdbname from pgagent.pga_jobstep where jstid = ${jstId}]]>
+                     </SQL>
+                  </Command>
+               </Default>
+            </Input>
+            <Input label="Connect String" name="connectString" style="text">
+               <Default>
+                  <Command>
+                     <SQL>
+                        <![CDATA[select jstconnstr from pgagent.pga_jobstep where jstid = ${jstId}]]>
+                     </SQL>
+                  </Command>
+               </Default>
+            </Input>
+            <Input label="Kind" name="kind" style="radio">
+               <Labels>SQL|Batch</Labels>
+               <Values>s|b</Values>
+               <Default>
+                  <Command>
+                     <SQL>
+                        <![CDATA[select jstkind from pgagent.pga_jobstep where jstid = ${jstId}]]>
+                     </SQL>
+                  </Command>
+               </Default>
+            </Input>
+            <Input label="On Error" name="onError" style="radio">
+               <Labels>Fail and stop|Mark succeeded and continue|Mark ignored and continue</Labels>
+               <Values>f|s|i</Values>
+               <Default>
+                  <Command>
+                     <SQL>
+                        <![CDATA[select jstonerror from pgagent.pga_jobstep where jstid = ${jstId}]]>
+                     </SQL>
+                  </Command>
+               </Default>
+            </Input>
+            <Input label="Code" style="separator"/>
+            <Input name="code" style="text-editor">
+               <Default>
+                  <Command>
+                     <SQL>
+                        <![CDATA[select jstcode from pgagent.pga_jobstep where jstid = ${jstId}]]>
+                     </SQL>
+                  </Command>
+               </Default>
+            </Input>
+            <Input label="Description" style="separator"/>
+            <Input name="stepDescr" style="text-editor">
+               <Default>
+                  <Command>
+                     <SQL>
+                        <![CDATA[select jstdesc from pgagent.pga_jobstep where jstid = ${jstId}]]>
+                     </SQL>
+                  </Command>
+               </Default>
+            </Input>
+            <SetVar name="_code" value="#util.replaceAll(#code,'\'','\'\'')"/>
+            <Command>
+               <SQL>
+                  <![CDATA[
+UPDATE pgagent.pga_jobstep 
+    SET jstname    = '${stepName}', 
+        jstdesc    = '${stepDescr}', 
+        jstenabled = ${stepEnabled}, 
+        jstkind    = '${kind}', 
+        jstonerror = '${onError}', 
+        jstcode    = '${_code}', 
+        jstdbname  = '${stepDatabase}', 
+        jstconnstr = '${connectString}'
+    WHERE jstid = ${jstId};
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>
+               Really alter job step ${objectname}?
+            </Confirm>
+         </Action>
+
+
+        <Action id="postgresql-job-steps-enable-disable" label="Enable/Disable Job Step" reload="true" icon="edit">
+            <Input label="Step Name" name="stepName" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            
+            <Input label="Enabled" name="stepEnabled" style="check">
+               <Values>true|false</Values>
+               <Default>
+                  <Command>
+                     <SQL>
+                        <![CDATA[select jstenabled from pgagent.pga_jobstep where jstid = ${jstId}]]>
+                     </SQL>
+                  </Command>
+               </Default>
+            </Input>
+ 
+            <Command>
+               <SQL>
+                  <![CDATA[
+UPDATE pgagent.pga_jobstep 
+    SET jstenabled = ${stepEnabled}
+    WHERE jstid = ${jstId};
+                  ]]>
+               </SQL>
+            </Command>
+            <Confirm>
+               Really change enable state of ${objectname}?
+            </Confirm>
+         </Action>
+
+
+         <Action id="postgresql-job-step-drop" label="Drop Job Step" reload="true" icon="remove">
+            <Input label="Name" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[delete from pgagent.pga_jobstep where jstid = ${jstId}]]></SQL>
+            </Command>
+            <Confirm>
+               Really drop job step ${objectname}?
+            </Confirm>
+         </Action>
+
+      </ActionGroup>
+
+      <ActionGroup type="EventTrigger">
+         <Action id="postgresql-event-trigger-drop" label="Drop Event Trigger" reload="true" icon="remove">
+            <Input label="Event Trigger" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+            <Input label="Cascade" name="cascade" style="check">
+               <Values>cascade</Values>
+            </Input>
+            <Command>
+               <SQL>
+                  <![CDATA[drop event trigger "${objectname}" ${cascade}]]></SQL>
+            </Command>
+            <Confirm>
+               Really drop event trigger ${objectname}?
+            </Confirm>
+            <Result>
+               Event trigger ${objectname} dropped!
+            </Result>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Settings">
+         <If test="#util.isDatabaseVersionGTE(9,4)">
+            <Action id="postgresql-settings-alter" label="Alter Setting" reload="true" icon="edit">
+               <Input name="setting" label="Setting" runsetdefaultwhenvaluechanged="value,desc" style="list" linebreak="false">
+                  <Values>
+                     <Command>
+                        <SQL><![CDATA[select name from pg_settings]]></SQL>
+                     </Command>
+                  </Values>
+               </Input>
+               <Input name="value" label="Value" style="text" linebreak="true">
+                  <Default>
+                     <Command>
+                        <SQL>
+                           <![CDATA[select setting from pg_settings where name = '${setting}']]></SQL>
+                     </Command>
+                  </Default>
+               </Input>
+               <Input label="Description" name="desc" style="text-editor" editable="false">
+                  <Default>
+                     <Command>
+                        <SQL>
+                           <![CDATA[select short_desc from pg_settings where name = '${setting}']]></SQL>
+                     </Command>
+                  </Default>
+               </Input>
+               <Input label="Apply Immediately" name="apply" style="check">
+                  <Values>select pg_reload_conf();</Values>
+                  <Default>true</Default>
+               </Input>
+               <Command>
+                  <SQL>
+                     <![CDATA[
+alter system set ${setting} = '${value}';
+${apply}
+                     ]]>
+                  </SQL>
+               </Command>
+               <Confirm>
+                  Really alter setting ${setting}?
+               </Confirm>
+            </Action>
+
+            <Action id="postgresql-settings-reset-all" label="Reset All" reload="true" icon="edit">
+               <Input label="Apply Immediately" name="apply" style="check">
+                  <Values>select pg_reload_conf();</Values>
+                  <Default>true</Default>
+               </Input>
+               <Command>
+                  <SQL>
+                     <![CDATA[
+alter system reset all;
+${apply}
+                    ]]>
+                  </SQL>
+               </Command>
+               <Confirm>
+                  Really reset all settings modified with Alter Setting or ALTER
+                  SYSTEM?
+               </Confirm>
+            </Action>
+         </If>
+
+         <Action id="postgresql-reload-config" label="Reload Configuration">
+            <Command>
+               <SQL>
+                  <![CDATA[
+select pg_reload_conf();
+                    ]]>
+               </SQL>
+            </Command>
+            <Confirm>
+               Really reload the configuration settings?
+            </Confirm>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Users">
+         <Action id="postgresql-users-create-user" label="Create User" reload="true" icon="add">
+            <Input label="User" name="newuser" style="text" editable="true"/>
+            <Input label="Password" name="password" style="text" editable="true"/>
+            <Input label="In Group" name="group" style="list">
+               <Values>
+                  <Command>
+                     <SQL>
+                        <![CDATA[select '' union select groname from pg_group]]></SQL>
+                  </Command>
+               </Values>
+            </Input>
+            <!--  <SetVar name="_group" value='#group.equals("") ? "" : "in group " + #group'/>-->
+             <SetVar name="_group" value='#group.equals("") ? "" : "in group " + "\""+ #group + "\""'/>
+            
+            <Input label="Create DB" name="createdb" style="check">
+               <Values>CREATEDB</Values>
+            </Input>
+            <Input label="Super User" name="superuser" style="check">
+               <Values>SUPERUSER</Values>
+            </Input>
+
+            <Command>
+               <SQL>
+                  <![CDATA[create user ${QB}${newuser}${QE} with password '${password}' ${_group} ${createdb} ${superuser}]]></SQL>
+            </Command>
+            <Confirm>
+               Create new user ${newuser}?
+            </Confirm>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="User">
+         <Action id="postgresql-user-drop-user" label="Drop User" reload="true" icon="remove">
+            <Input label="User" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+
+            <Command>
+               <SQL><![CDATA[drop user "${objectname}"]]></SQL>
+            </Command>
+            <Confirm>
+               Really drop user ${objectname}?
+            </Confirm>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Groups">
+         <Action id="postgresql-groups-create-group" label="Create Group" reload="true" icon="add">
+            <Input label="Group" name="newgroup" style="text" editable="true"/>
+
+            <Command>
+               <SQL><![CDATA[create group ${QB}${newgroup}${QE}]]></SQL>
+            </Command>
+            <Confirm>
+               Create new group ${newgroup}?
+            </Confirm>
+         </Action>
+      </ActionGroup>
+
+      <ActionGroup type="Group">
+         <Action id="postgresql-group-drop-group" label="Drop Group" reload="true" icon="remove">
+            <Input label="Group" style="text" editable="false">
+               <Default>${objectname}</Default>
+            </Input>
+
+            <Command>
+               <SQL><![CDATA[drop group "${objectname}"]]></SQL>
+            </Command>
+            <Confirm>
+               Really drop group ${objectname}?
+            </Confirm>
+         </Action>
+      </ActionGroup>
+   </ObjectsActionDef>
+
+   <!-- =================================================================== -->
+   <!-- Definition of the database objects tree structure -->
+   <!-- PostgreSQL only allows browsing default database specified in the -->
+   <!-- URL. This definition simply makes non default databases  -->
+   <!-- e.g catalogs as leaf nodes. -->
+   <!-- All nodes below the default database is listed as owner.object -->
+   <!-- =================================================================== -->
+
+   <ObjectsTreeDef extends="false">
+
+      <GroupNode type="Databases" label="Databases">
+         <DataNode type="Catalog" label="${postgresql8.getConnectableDatabases.datname}" is-catalog-database="true">
+            <SetVar name="catalog" value="${postgresql8.getConnectableDatabases.datname}"/>
+            <Command idref="postgresql8.getConnectableDatabases">
+               <Filter index="datname" label="Name"/>
+            </Command>
+
+            <GroupNode type="Schemas" label="Schemas">
+               <DataNode type="Schema" label="${postgresql8.getSchemas.Name}">
+                  <SetVar name="schema" value="${postgresql8.getSchemas.Name}"/>
+                  <Command idref="postgresql8.getSchemas">
+                     <Filter index="Name" label="Name"/>
+                  </Command>
+
+                  <GroupNode type="Tables" label="Tables">
+                     <DataNode type="Table" label="${postgresql8.getTables.Name}">
+                        <SetVar name="objectname" value="${postgresql8.getTables.Name}"/>
+                        <SetVar name="rowcount" value="true"/>
+                        <SetVar name="acceptInQB" value="true"/>
+                        <Command idref="postgresql8.getTables">
+                           <Input name="schema" value="${schema}"/>
+                           <Input name="table" value="%"/>
+                        </Command>
+
+                        <!-- Need to keep the objectname for the current table in
+                       a new variable so that the viewers will be able to pick up
+                       the correct input to display -->
+                        <SetVar name="theTableName" value="${objectname}"/>
+
+                        <GroupNode type="Columns" label="Columns">
+                           <DataNode type="Column" label="${getColumnDefinitions.COLUMN_NAME}"
+                                     label1="${getColumnDefinitions.TYPE_NAME}"
+                                     isLeaf="true"
+                                     icon="#dataMap.get('getColumnDefinitions.IS_PRIMARY_KEY') eq true ? 'PrimaryKey' : 'Column'"
+                                     tip="#dataMap.get('getColumnDefinitions.IS_PRIMARY_KEY') eq true ? 'This is a primary key column' : ''">
+                              <SetVar name="objectname" value="${getColumnDefinitions.COLUMN_NAME}"/>
+                              <Command idref="getColumnDefinitions">
+                                 <Input name="schema" value="${schema}"/>
+                                 <Input name="objectname" value="${theTableName}"/>
+                                 <Input name="tableType" value="Table"/>
+                                 <Filter index="TYPE_NAME" label="Type"/>
+                              </Command>
+                           </DataNode>
+                        </GroupNode>
+
+                        <GroupNode type="Indexes" label="Indexes">
+                           <DataNode type="Index" label="${postgresql8.getIndexes.Index Name}" isLeaf="true">
+                              <SetVar name="objectname" value="${postgresql8.getIndexes.Index Name}"/>
+                              <Command idref="postgresql8.getIndexes">
+                                 <Input name="schema" value="${schema}"/>
+                                 <Input name="table" value="${theTableName}"/>
+                              </Command>
+                           </DataNode>
+                        </GroupNode>
+
+                        <GroupNode type="Triggers" label="Triggers">
+                           <DataNode type="Trigger" label="${postgresql8.getTriggers.Trigger Name} (${postgresql8.getTriggers.Event Object Schema}.${postgresql8.getTriggers.Event Object Table})"
+                                     isLeaf="true">
+                              <SetVar name="objectname" value="${postgresql8.getTriggers.Trigger Name}"/>
+                              <SetVar name="eventschema" value="${postgresql8.getTriggers.Event Object Schema}"/>
+                              <SetVar name="eventtable" value="${postgresql8.getTriggers.Event Object Table}"/>
+                              <SetVar name="getDDLName" value="${postgresql8.getTriggers.Event Object Table}/${postgresql8.getTriggers.Trigger Name}"/>
+                              <Command idref="postgresql8.getTriggers">
+                                 <Input name="schema" value="${schema}"/>
+                                 <Input name="tableNamePattern" value="${theTableName}"/>
+                                 <Filter index="Event Object Table" label="Table Name"/>
+                              </Command>
+                           </DataNode>
+                        </GroupNode>
+                        
+                        <If test="#util.isDatabaseVersionGTE(10,0)">
+                           <GroupNode type="Partitions" label="Partitions">
+                              <DataNode type="Partition" label="${postgresql8.getTablePartitions.Name}" isLeaf="false">
+                                 <SetVar name="objectname" value="${postgresql8.getTablePartitions.Name}"/>
+                                 <SetVar name="parentName" value="${postgresql8.getTablePartitions.Parent Table}"/>
+                                 <SetVar name="parentSchema" value="${postgresql8.getTablePartitions.Parent Table Schema}"/>
+                                 <Command idref="postgresql8.getTablePartitions">
+                                    <Input name="schema" value="${schema}"/>
+                                    <Input name="table" value="${theTableName}"/>
+                                 </Command>
+                                 <GroupNode type="PartitionIndexes" label="Indexes">
+                                    <DataNode type="Index" label="${postgresql8.getIndexes.Index Name}" isLeaf="true">
+                                       <SetVar name="objectname" value="${postgresql8.getIndexes.Index Name}"/>
+                                       <Command idref="postgresql8.getIndexes">
+                                          <Input name="schema" value="${schema}"/>
+                                          <Input name="table" value="${objectname}"/>
+                                       </Command>
+                                    </DataNode>
+                                 </GroupNode>
+                                 <GroupNode type="SubPartitions" label="Partitions">
+                                    <DataNode type="Partition" label="${postgresql8.getTablePartitions.Name}" isLeaf="false">
+                                       <SetVar name="objectname" value="${postgresql8.getTablePartitions.Name}"/>
+                                       <SetVar name="parentName" value="${postgresql8.getTablePartitions.Parent Table}"/>
+                                       <SetVar name="parentSchema" value="${postgresql8.getTablePartitions.Parent Table Schema}"/>
+                                       <Command idref="postgresql8.getTablePartitions">
+                                          <Input name="schema" value="${schema}"/>
+                                          <Input name="table" value="${objectname}"/>
+                                       </Command>
+                                       <GroupNode type="PartitionIndexes" label="Indexes">
+                                          <DataNode type="Index" label="${postgresql8.getIndexes.Index Name}" isLeaf="true">
+                                             <SetVar name="objectname" value="${postgresql8.getIndexes.Index Name}"/>
+                                             <Command idref="postgresql8.getIndexes">
+                                                <Input name="schema" value="${schema}"/>
+                                                <Input name="table" value="${objectname}"/>
+                                             </Command>
+                                          </DataNode>
+                                       </GroupNode>
+                                    </DataNode>
+                                 </GroupNode>
+                              </DataNode>
+                           </GroupNode>
+                        </If>
+                     </DataNode>
+                  </GroupNode>
+
+                  <If test="#util.isDatabaseVersionGTE(9,1)">
+                     <GroupNode type="ForeignTables" label="Foreign Tables">
+                        <DataNode type="ForeignTable" label="${postgresql8.getForeignTables.Name}">
+                           <SetVar name="objectname" value="${postgresql8.getForeignTables.Name}"/>
+                           <SetVar name="rowcount" value="true"/>
+                           <SetVar name="acceptInQB" value="true"/>
+                           <Command idref="postgresql8.getForeignTables">
+                              <Input name="schema" value="${schema}"/>
+                              <Input name="table" value="%"/>
+                           </Command>
+                           <!-- Need to keep the objectname for the current table in
+                           a new variable so that the viewers will be able to pick up
+                           the correct input to display -->
+                           <SetVar name="theTableName" value="${objectname}"/>
+
+                           <GroupNode type="Columns" label="Columns">
+                              <DataNode type="Column" label="${getColumnDefinitions.COLUMN_NAME}"
+                                        label1="${getColumnDefinitions.TYPE_NAME}"
+                                        isLeaf="true">
+                                 <SetVar name="objectname" value="${getColumnDefinitions.COLUMN_NAME}"/>
+                                 <Command idref="getColumnDefinitions">
+                                    <Input name="schema" value="${schema}"/>
+                                    <Input name="objectname" value="${theTableName}"/>
+                                    <Input name="tableType" value="Table"/>
+                                    <Filter index="TYPE_NAME" label="Type"/>
+                                 </Command>
+                              </DataNode>
+                           </GroupNode>
+
+                        </DataNode>
+                     </GroupNode>
+                  </If>
+
+                  <GroupNode type="Views" label="Views">
+                     <DataNode type="View" label="${postgresql8.getViews.Name}">
+                        <SetVar name="objectname" value="${postgresql8.getViews.Name}"/>
+                        <SetVar name="rowcount" value="true"/>
+                        <SetVar name="acceptInQB" value="true"/>
+                        <Command idref="postgresql8.getViews">
+                           <Input name="schema" value="${schema}"/>
+                           <Input name="table" value="%"/>
+                        </Command>
+                        
+                        <!-- Need to keep the objectname for the current view in
+                       a new variable so that the viewers will be able to pick up
+                       the correct input to display -->
+                        <SetVar name="theTableName" value="${objectname}"/>
+
+                        <GroupNode type="Columns" label="Columns">
+                           <DataNode type="Column" label="${getColumnDefinitions.COLUMN_NAME}"
+                                     label1="${getColumnDefinitions.TYPE_NAME}" isLeaf="true">
+                              <SetVar name="objectname" value="${getColumnDefinitions.COLUMN_NAME}"/>
+                              <Command idref="getColumnDefinitions">
+                                 <Input name="catalog" value="${catalog}"/>
+                                 <Input name="schema" value="${schema}"/>
+                                 <Input name="objectname" value="${theTableName}"/>
+                                 <Input name="tableType" value="View"/>
+                                 <Filter index="TYPE_NAME" label="Type"/>
+                              </Command>
+                           </DataNode>
+                        </GroupNode>
+                     </DataNode>
+                  </GroupNode>
+
+                  <If test="#util.isDatabaseVersionGTE(9,3)">
+                     <GroupNode type="MaterializedViews" label="Materialized Views">
+                        <DataNode type="MaterializedView" label="${postgresql8.getMaterializedViews.matviewname}" isLeaf="false">
+                           <SetVar name="objectname" value="${postgresql8.getMaterializedViews.matviewname}"/>
+                           <SetVar name="rowcount" value="true"/>
+                           <SetVar name="acceptInQB" value="true"/>
+                           <Command idref="postgresql8.getMaterializedViews">
+                              <Input name="owner" value="${schema}"/>
+                           </Command>
+
+                           <!-- Need to keep the objectname for the current view in
+                           a new variable so that the viewers will be able to pick up
+                           the correct input to display -->
+                           <SetVar name="theTableName" value="${objectname}"/>
+
+                           <GroupNode type="Columns" label="Columns">
+                              <DataNode type="Column" label="${getColumns.COLUMN_NAME}"
+                                        label1="${getColumns.TYPE_NAME}" isLeaf="true">
+                                 <SetVar name="objectname" value="${getColumns.COLUMN_NAME}"/>
+                                 <!-- Materialized View columns are not included in the views
+                                      used for getColumnDefinitions so we use getColumns here.
+                                 -->
+                                 <Command idref="getColumns">
+                                    <Input name="owner" value="${schema}"/>
+                                    <Input name="table" value="${objectname}"/>
+                                 </Command>
+                              </DataNode>
+                           </GroupNode>
+
+                           <!-- postgresql8.getIndexes is used both to list all indexes in
+                           the schema and indexes related to a specific table.
+                           This variable is needed in order to either get all indexes
+                           (even those not related to a table) or indexes that
+                           really are associated with a table -->
+                           <SetVar name="indexOwnerSQL" value="table_owner = '${schema}'"/>
+
+                           <GroupNode type="Indexes" label="Indexes">
+                              <DataNode type="Index" label="${postgresql8.getIndexes.Index Name}" isLeaf="true">
+                                 <SetVar name="objectname" value="${postgresql8.getIndexes.Index Name}"/>
+                                 <Command idref="postgresql8.getIndexes">
+                                    <Input name="schema" value="${schema}"/>
+                                    <Input name="table" value="${theTableName}"/>
+                                 </Command>
+                              </DataNode>
+                           </GroupNode>
+                        </DataNode>
+                     </GroupNode>
+                  </If>
+
+                  <SetVar name="theTableName" value="%"/>
+
+                  <GroupNode type="Indexes" label="Indexes">
+                     <DataNode type="Index" label="${postgresql8.getIndexes.Index Name}"
+                               label1="${postgresql8.getIndexes.Schema Name}.${postgresql8.getIndexes.Table Name}"
+                               isLeaf="true">
+                        <SetVar name="objectname" value="${postgresql8.getIndexes.Index Name}"/>
+                        <Command idref="postgresql8.getIndexes">
+                           <Input name="schema" value="${schema}"/>
+                           <Input name="table" value="%"/>
+                           <Filter index="Table Name" label="Table Name"/>
+                        </Command>
+                     </DataNode>
+                  </GroupNode>
+
+                  <GroupNode type="Triggers" label="Triggers">
+                     <DataNode type="Trigger" label="${postgresql8.getTriggers.Trigger Name} (${postgresql8.getTriggers.Event Object Schema}.${postgresql8.getTriggers.Event Object Table})"
+                               isLeaf="true">
+                        <SetVar name="objectname" value="${postgresql8.getTriggers.Trigger Name}"/>
+                        <SetVar name="eventschema" value="${postgresql8.getTriggers.Event Object Schema}"/>
+                        <SetVar name="eventtable" value="${postgresql8.getTriggers.Event Object Table}"/>
+                        <SetVar name="getDDLName" value="${postgresql8.getTriggers.Event Object Table}/${postgresql8.getTriggers.Trigger Name}"/>
+                        <Command idref="postgresql8.getTriggers">
+                           <Input name="schema" value="${schema}"/>
+                           <Input name="tableNamePattern" value="${theTableName}"/>
+                           <Filter index="Event Object Table" label="Table Name"/>
+                        </Command>
+                     </DataNode>
+                  </GroupNode>
+
+                  <GroupNode type="Functions" label="Functions">
+                     <DataNode type="Function" label="${postgresql8.getFunctions.Function Name} (${postgresql8.getFunctions.Argument data types})"
+                               isLeaf="true">
+                        <SetVar name="objectname" value="${postgresql8.getFunctions.Function Name}"/>
+                        <SetVar name="getDDLName" value="${postgresql8.getFunctions.Function Name} (${postgresql8.getFunctions.Argument data types})"/>
+                        <Command idref="postgresql8.getFunctions">
+                           <Input name="schema" value="${schema}"/>
+                        </Command>
+                     </DataNode>
+                  </GroupNode>
+
+                  <!--
+            <GroupNode type="Procedures" label="Functions">
+               <DataNode type="Procedure" label="${getProcedures.PROCEDURE_SCHEM}.${getProcedures.PROCEDURE_NAME}" isLeaf="true">
+                  <SetVar name="objectname" value="${getProcedures.PROCEDURE_NAME}"/>
+                  <Command idref="getProcedures">
+                     <Input name="catalog" value="${catalog}"/>
+                     <Input name="schema" value="${schema}"/>
+                     <Input name="procedure" value="${procedure}"/>
+                  </Command>
+               </DataNode>
+            </GroupNode>
+-->
+
+                  <GroupNode type="Sequences" label="Sequences">
+                     <DataNode type="Sequence" label="${postgresql8.getSequences.Sequence Name}" isLeaf="true">
+                        <SetVar name="schema" value="${postgresql8.getSequences.Schema Name}"/>
+                        <SetVar name="objectname" value="${postgresql8.getSequences.Sequence Name}"/>
+                        <Command idref="postgresql8.getSequences"/>
+                     </DataNode>
+                  </GroupNode>
+
+                  <GroupNode type="Domains" label="Domains">
+                     <DataNode type="Domain" label="${postgresql8.getDomains.Domain Name}" isLeaf="true">
+                        <SetVar name="objectname" value="${postgresql8.getDomains.Domain Name}"/>
+                        <Command idref="postgresql8.getDomains">
+                           <Input name="schema" value="${schema}"/>
+                        </Command>
+                     </DataNode>
+                  </GroupNode>
+
+                  <GroupNode type="Aggregates" label="Aggregates">
+                     <DataNode type="Aggregate" label="${postgresql8.getAggregates.Aggregate Name}"
+                               label1="${postgresql8.getAggregates.Data Type}"
+                               isLeaf="true">
+                        <SetVar name="objectname" value="${postgresql8.getAggregates.Aggregate Name}"/>
+                        <Command idref="postgresql8.getAggregates">
+                           <Input name="schema" value="${schema}"/>
+                        </Command>
+                     </DataNode>
+                  </GroupNode>
+
+                  <GroupNode type="Operators" label="Operators" icon="mathOperator">
+                     <DataNode type="Operator" label="${postgresql8.getOperators.Operator Name}"
+                              icon="mathOperator"
+                               label1="${postgresql8.getOperators.Left arg type},${postgresql8.getOperators.Right arg type}"
+                               isLeaf="true">
+                        <SetVar name="objectname" value="${postgresql8.getOperators.Operator Name}"/>
+                        <Command idref="postgresql8.getOperators">
+                           <Input name="schema" value="${schema}"/>
+                        </Command>
+                     </DataNode>
+                  </GroupNode>
+
+                  <GroupNode type="Types" label="Types">
+                     <DataNode type="Type" label="${postgresql8.getTypes.Type Name}" isLeaf="true">
+                        <SetVar name="objectname" value="${postgresql8.getTypes.Type Name}"/>
+                        <Command idref="postgresql8.getTypes">
+                           <Input name="schema" value="${schema}"/>
+                        </Command>
+                     </DataNode>
+                  </GroupNode>
+
+                  <!-- todo? <GroupNode type="Rules" label="Rules"/> -->
+
+               </DataNode>
+            </GroupNode>
+
+         </DataNode>
+      </GroupNode>
+
+      <!-- ================================================================= -->
+      <!-- DBA Nodes -->
+      <!-- ================================================================= -->
+
+      <GroupNode type="DBA" label="DBA Views">
+         <GroupNode type="Users" label="Users">
+            <DataNode type="User" label="${postgresql8.getUsers.usename}" isLeaf="true">
+               <SetVar name="objectname" value="${postgresql8.getUsers.usename}"/>
+               <Command idref="postgresql8.getUsers"/>
+            </DataNode>
+         </GroupNode>
+         <GroupNode type="Groups" label="Groups">
+            <DataNode type="Group" label="${postgresql8.getGroups.groname}" isLeaf="true">
+               <SetVar name="objectname" value="${postgresql8.getGroups.groname}"/>
+               <Command idref="postgresql8.getGroups"/>
+            </DataNode>
+         </GroupNode>
+         <GroupNode type="Settings" label="Settings" isLeaf="true"/>
+         <GroupNode type="Locks" label="Locks" isLeaf="true"/>
+         <GroupNode type="Sessions" label="Sessions" isLeaf="true"/>
+         <GroupNode type="Tablespaces" label="Tablespaces" isLeaf="false">
+            <DataNode type="Tablespace" label="${postgresql8.getTablespaces.spcname}" isLeaf="true">
+               <SetVar name="objectname" value="${postgresql8.getTablespaces.spcname}"/>
+               <Command idref="postgresql8.getTablespaces"/>
+            </DataNode>
+         </GroupNode>
+         <If test="#util.isDatabaseVersionGTE(8,4)">
+            <GroupNode type="ForeignServers" label="Foreign Servers" isLeaf="false">
+               <DataNode type="ForeignServer" label="${postgresql8.getForeignServers.srvname}" isLeaf="false">
+                  <SetVar name="objectname" value="${postgresql8.getForeignServers.srvname}"/>
+                  <SetVar name="server" value="${postgresql8.getForeignServers.srvname}"/>
+                  <Command idref="postgresql8.getForeignServers"/>
+
+                  <GroupNode type="UserMappings" label="User Mappings" isLeaf="false">
+                     <DataNode type="UserMapping" label="${postgresql8.getUserMappings.Local User}" isLeaf="true">
+                        <SetVar name="objectname" value="${postgresql8.getUserMappings.Local User}"/>
+                        <Command idref="postgresql8.getUserMappings">
+                           <Input name="server" value="${server}"/>
+                        </Command>
+                     </DataNode>
+                  </GroupNode>
+               </DataNode>
+            </GroupNode>
+         </If>
+         <If test="#util.isDatabaseVersionGTE(9,3)">
+            <GroupNode type="EventTriggers" label="Event Triggers">
+               <DataNode type="EventTrigger" label="${postgresql8.getEventTriggers.Event Trigger}" isLeaf="true">
+                  <SetVar name="objectname" value="${postgresql8.getEventTriggers.Event Trigger}"/>
+                  <Command idref="postgresql8.getEventTriggers"/>
+               </DataNode>
+            </GroupNode>
+         </If>
+         <If test="#PGAGENT_INSTALLED eq 1">
+            <GroupNode type="Jobs" label="Jobs" isLeaf="false">
+               <DataNode type="Job" label="${postgresql8.getJobs.Name}" isLeaf="false"
+                  label1="${postgresql8.getJobs.isDisabledText}"
+                  errorstate="#dataMap.get('postgresql8.getJobs.latestLogStatus').equals('Failed')"
+                  tip="#dataMap.get('postgresql8.getJobs.latestLogStatus').equals('Failed') ? 'Job is in an failed state' : ''">
+                  <SetVar name="objectname" value="${postgresql8.getJobs.Name}"/>
+                  <SetVar name="jobId" value="${postgresql8.getJobs.ID}"/>
+                  <Command idref="postgresql8.getJobs"/>
+
+                  <GroupNode type="JobSchedules" label="Job Schedules" isLeaf="false">
+                     <DataNode type="JobSchedule" label="${postgresql8.getJobSchedules.Name}" isLeaf="true"
+                               label1="${postgresql8.getJobSchedules.isDisabledText}">
+                        <SetVar name="objectname" value="${postgresql8.getJobSchedules.Name}"/>
+                        <SetVar name="jscId" value="${postgresql8.getJobSchedules.ID}"/>
+                        <Command idref="postgresql8.getJobSchedules">
+                           <Input name="jobId" value="${jobId}"/>
+                        </Command>
+                     </DataNode>
+                  </GroupNode>
+
+                  <GroupNode type="JobSteps" label="Job Steps" isLeaf="false">
+                     <DataNode type="JobStep" label="${postgresql8.getJobSteps.Name}" isLeaf="true"
+                               label1="${postgresql8.getJobSteps.isDisabledText}"
+                               errorstate="#dataMap.get('postgresql8.getJobSteps.latestStatus').equals('Failed')"
+                               tip="#dataMap.get('postgresql8.getJobSteps.latestStatus').equals('Failed') ? 'Job step is in a failed state' : ''">
+                        <SetVar name="objectname" value="${postgresql8.getJobSteps.Name}"/>
+                        <SetVar name="jstId" value="${postgresql8.getJobSteps.ID}"/>
+                        <Command idref="postgresql8.getJobSteps">
+                           <Input name="jobId" value="${jobId}"/>
+                        </Command>
+                     </DataNode>
+                  </GroupNode>
+               </DataNode>
+            </GroupNode>
+         </If>
+      </GroupNode>
+
+   </ObjectsTreeDef>
+
+   <!-- =================================================================== -->
+   <!-- Definition of the database objects views -->
+   <!-- =================================================================== -->
+
+   <ObjectsViewDef extends="true">
+
+      <ObjectView type="Databases">
+         <DataView id="postgresql8-databases-databases" icon="Catalog" label="Databases" viewer="grid">
+            <Command idref="postgresql8.getCatalogs"/>
+            <Message>
+               <![CDATA[
+<html>
+List of all available databases in the database server. 
+</html>
+               ]]>
+            </Message>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Catalog" action="drop"/>
+
+      <ObjectView type="Schemas">
+         <DataView id="generic-schemas-schemas" action="drop"/>
+
+         <DataView id="postgresql8-schemas-schemas" icon="Schemas" label="Schemas" viewer="grid">
+            <Command idref="postgresql8.getSchemas"/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Schema">
+         <DataView id="generic-schema-tables" action="drop"/>
+         <DataView id="generic-schema-references" action="drop"/>
+
+         <DataView id="postgresql8-schema-info" icon="Info" label="Info" viewer="node-form"/>
+      </ObjectView>
+
+      <ObjectView type="Tables">
+         <DataView id="generic-tables-tables" action="drop"/>
+         <DataView id="generic-tables-references" action="drop"/>
+
+         <DataView id="postgresql8-tables-tables" icon="Tables" label="Tables" viewer="grid">
+            <Input name="menuItem" value="Open in New Tab...">
+               <Input name="action" value="open-object-in-new-tab-command ${schema||Schema}${object||Name}"/>
+            </Input>
+            <Input name="menuItem" value="Open in Floating Tab...">
+               <Input name="action" value="open-object-in-floating-tab-command ${schema||Schema}${object||Name}"/>
+            </Input>
+            <Input name="menuItem" value="Script: SELECT ALL">
+               <Input name="command" value="select * from ${schema||Schema}${object||Name}"/>
+            </Input>
+            <Input name="menuItem" value="Script: DROP TABLE">
+               <Input name="command" value="drop table ${schema||Schema}${object||Name}"/>
+            </Input>
+
+            <Command idref="postgresql8.getTables">
+               <Input name="schema" value="${schema}"/>
+               <Input name="table" value="%"/>
+            </Command>
+         </DataView>
+         <DataView id="postgresql8-tables-references" icon="References" label="References" viewer="tables-refs"
+                   doclink="http://www.dbvis.com/doclink/show-references">
+            <Command idref="getTables">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="%"/>
+               <Input name="tableType" value="SYSTEM TABLE,TABLE"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Table">
+         <DataView id="generic-table-info" action="drop"/>
+
+         <DataView id="postgresql8-table-info" icon="Info" label="Info" viewer="form" order-before="0">
+            <Command idref="postgresql8.getTables">
+               <Input name="schema" value="${schema}"/>
+               <Input name="table" value="${objectname}"/>
+            </Command>
+         </DataView>
+         <DataView id="generic-table-ddl">
+            <Message/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="ForeignTables">
+         <DataView id="postgresql8-foreign-tables-tables" icon="ForeignTables" label="Foreign Tables" viewer="grid">
+            <Input name="menuItem" value="Script: SELECT ALL">
+               <Input name="command" value="select * from ${schema||Schema}${object||Name}"/>
+            </Input>
+            <Input name="menuItem" value="Script: DROP TABLE">
+               <Input name="command" value="drop foreign table ${schema||Schema}${object||Name}"/>
+            </Input>
+
+            <Command idref="postgresql8.getForeignTables">
+               <Input name="schema" value="${schema}"/>
+               <Input name="table" value="%"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="ForeignTable">
+         <DataView id="postgres8-foreign-table-info" icon="Info" label="Info" viewer="node-form"/>
+         <DataView id="postgres8-foreign-table-columns" icon="Columns" label="Columns" viewer="grid">
+            <Command idref="getColumns">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="${objectname}"/>
+            </Command>
+         </DataView>
+         <DataView id="postgres8-foreign-table-data" icon="Data" label="Data" viewer="table-data"/>
+         <DataView id="postgres8-foreign-table-rowcount" icon="RowCount" label="Row Count" viewer="table-rowcount"/>
+         <DataView id="postgres8-foreign-table-grants" icon="TablePrivileges" label="Grants" viewer="grid">
+            <Command idref="getPrivileges">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="${objectname}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Views">
+         <DataView id="postgresql8-views-views" icon="Views" label="Views" viewer="grid">
+            <Input name="menuItem" value="Open in New Tab...">
+               <Input name="action" value="open-object-in-new-tab-command ${schema||Schema}${object||Name}"/>
+            </Input>
+            <Input name="menuItem" value="Open in Floating Tab...">
+               <Input name="action" value="open-object-in-floating-tab-command ${schema||Schema}${object||Name}"/>
+            </Input>
+            <Input name="menuItem" value="Script: SELECT ALL">
+               <Input name="command" value="select * from ${schema||Schema}${object||Name}"/>
+            </Input>
+            <Input name="menuItem" value="Script: DROP VIEW">
+               <Input name="command" value="drop view ${schema||Schema}${object||Name}"/>
+            </Input>
+
+            <Command idref="postgresql8.getViews">
+               <Input name="schema" value="${schema}"/>
+               <Input name="table" value="%"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="View">
+         <DataView id="postgresql8-view-info" icon="Info" label="Info" viewer="form">
+            <Command idref="postgresql8.getViews">
+               <Input name="schema" value="${schema}"/>
+               <Input name="table" value="${objectname}"/>
+            </Command>
+         </DataView>
+         <DataView id="postgresql8-view-columns" icon="Columns" label="Columns" viewer="grid">
+            <Command idref="getColumns">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="${objectname}"/>
+            </Command>
+         </DataView>
+         <DataView id="postgresql8-view-data" icon="Data" label="Data" viewer="table-data"/>
+         <DataView id="postgresql8-view-rowcount" icon="RowCount" label="Row Count" viewer="table-rowcount"/>
+         <DataView id="postgresql8-view-indexes" icon="Index" label="Indexes" viewer="grid">
+            <Command idref="getIndexes">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="${objectname}"/>
+            </Command>
+         </DataView>
+         <DataView id="postgresql8-view-grants" icon="TablePrivileges" label="Grants" viewer="grid">
+            <Command idref="postgresql8.getPrivileges">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="${objectname}"/>
+            </Command>
+         </DataView>
+         <DataView id="postgresql8-view-ddl" icon="Source" label="DDL" viewer="ddl">
+            <Input name="objectType" value="View"/>
+            <Input name="formatSQL" value="true"/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="MaterializedViews">
+         <DataView id="postgresql8-materializedviews-materializedviews" icon="MaterializedViews" label="Materialized Views" viewer="grid">
+            <Input name="menuItem" value="Open in New Tab...">
+               <Input name="action" value="open-object-in-new-tab-command ${schema||schemaname}${object||matviewname}"/>
+            </Input>
+            <Input name="menuItem" value="Open in Floating Tab...">
+               <Input name="action" value="open-object-in-floating-tab-command ${schema||schemaname}${object||matviewname}"/>
+            </Input>
+            <Input name="menuItem" value="Script: SELECT ALL">
+               <Input name="command" value="select * from ${schema||schemaname}${object||matviewname}"/>
+            </Input>
+            <Input name="menuItem" value="Script: DROP MATERIALIZED VIEW">
+               <Input name="command" value="drop materialized view ${schema||schemaname}${object||matviewname}"/>
+            </Input>
+
+            <Command idref="postgresql8.getMaterializedViews">
+               <Input name="owner" value="${schema}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="MaterializedView">
+         <DataView id="postgresql8-materializedview-info" icon="Info" label="Info" viewer="node-form"/>
+         <DataView id="postgresql8-materializedview-columns" icon="Columns" label="Columns" viewer="grid">
+            <Command idref="getColumns">
+               <Input name="owner" value="${schema}"/>
+               <Input name="table" value="${objectname}"/>
+            </Command>
+         </DataView>
+         <DataView id="postgresql8-materializedview-data" icon="Data" label="Data" viewer="table-data"/>
+         <DataView id="postgresql8-materializedview-rowcount" icon="RowCount" label="Row Count" viewer="table-rowcount"/>
+         <DataView id="postgresql8-materializedview-indexes" icon="Index" label="Indexes" viewer="grid">
+            <Command idref="postgresql8.getIndexes">
+               <Input name="owner" value="${schema}"/>
+               <Input name="table" value="${objectname}"/>
+            </Command>
+         </DataView>
+         <DataView id="postgresql8-materializedview-selectsql" icon="Source" label="Select SQL" viewer="text">
+            <Input name="formatSQL" value="true"/>
+            <Input name="dataColumn" value="definition"/>
+            <Command idref="postgresql8.getMaterializedViewSource">
+               <Input name="owner" value="${schema}"/>
+               <Input name="name" value="${objectname}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Indexes">
+         <DataView id="generic-indexes-indexes" action="drop"/>
+
+         <DataView id="postgresql8-indexes-indexes" icon="Indexes" label="Indexes" viewer="grid">
+            <Command idref="postgresql8.getIndexes">
+               <Input name="schema" value="${schema}"/>
+               <Input name="table" value="${theTableName}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="PartitionIndexes">
+         <DataView id="postgresql8-partition-indexes-indexes" icon="Indexes" label="Indexes" viewer="grid">
+            <Command idref="postgresql8.getIndexes">
+               <Input name="schema" value="${schema}"/>
+               <Input name="table" value="${objectname}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Index">
+         <!--todo?
+                  <DataView type="Columns" label="Columns" viewer="grid">
+                     <Command idref="postgresql8.getIndexColumns">
+                        <Input name="indexname" value="${objectname}"/>
+                     </Command>
+                  </DataView>
+         -->
+         <DataView id="postgresql8-index-ddl" icon="Source" label="DDL" viewer="ddl">
+            <Input name="objectType" value="Index"/>
+            <Input name="formatSQL" value="true"/>
+         </DataView>
+         <!--
+                  <DataView type="Source" label="Native DDL" viewer="text">
+                     <Input name="formatSQL" value="true"/>
+                     <Command idref="postgresql8.getIndexSource">
+                        <Input name="schema" value="${schema}"/>
+                        <Input name="indexname" value="${objectname}"/>
+                     </Command>
+                     <Message>
+                        <![CDATA[
+         <html>
+         This view shows the complete DDL used to create the object.
+         </html>
+                       ]]>
+                     </Message>
+                  </DataView>
+         -->
+      </ObjectView>
+
+      <ObjectView type="Triggers">
+         <DataView id="postgresql8-triggers-triggers" icon="Triggers" label="Triggers" viewer="grid">
+            <Command idref="postgresql8.getTriggers">
+               <Input name="schema" value="${schema}"/>
+               <Input name="tableNamePattern" value="${theTableName}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Trigger">
+         <DataView classargs="TRIGGER" id="postgresql8-trigger-triggereditor" icon="SourceEditor" label="Trigger Editor" viewer="ProcedureViewer"
+                   doclink="http://www.dbvis.com/doclink/edit-code-object">
+         </DataView>
+         <DataView id="postgresql8-trigger-info" icon="Info" label="Info" viewer="node-form"/>
+         <!--
+                  <DataView type="Source" label="Source" viewer="text">
+                     <Input name="formatSQL" value="true"/>
+                     <Command idref="postgresql8.getTriggerSource">
+                        <Input name="trigname" value="${objectname}"/>
+                     </Command>
+                  </DataView>
+         -->
+      </ObjectView>
+
+      <ObjectView type="Partitions">
+         <DataView id="postgresql8-partitions-partitions" icon="Partitions" label="Partitions" viewer="grid">
+            <Command idref="postgresql8.getTablePartitions">
+               <Input name="schema" value="${schema}"/>
+               <Input name="table" value="${theTableName}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Partition">
+         <DataView id="postgresql8-partition-info" icon="Info" label="Info" viewer="node-form"/>
+         <DataView id="postgresql8-partition-indexes" icon="Index" label="Indexes" viewer="grid">
+            <Command idref="getIndexes">
+               <Input name="catalog" value="${catalog}"/>
+               <Input name="schema" value="${schema}"/>
+               <Input name="objectname" value="${objectname}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+
+      <ObjectView type="SubPartitions">
+         <DataView id="postgresql8-subpartitions-partitions" icon="Partitions" label="Partitions" viewer="grid">
+            <Command idref="postgresql8.getTablePartitions">
+               <Input name="schema" value="${schema}"/>
+               <Input name="table" value="${objectname}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Sequences">
+         <DataView id="postgresql8-sequences-sequences" icon="Sequences" label="Sequences" viewer="grid">
+            <Command idref="postgresql8.getSequences"/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Sequence">
+         <DataView id="postgresql8-sequence-info" icon="Info" label="Info" viewer="form">
+            <Command idref="postgresql8.getSequence">
+               <Input name="schema" value="${schema}"/>
+               <Input name="seqname" value="${objectname}"/>
+            </Command>
+         </DataView>
+         <DataView id="postgresql8-sequence-ddl" icon="Source" label="DDL" viewer="ddl">
+            <Input name="objectType" value="Sequence"/>
+            <Input name="formatSQL" value="true"/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Functions">
+         <DataView id="postgresql8-functions-functions" icon="Functions" label="Functions" viewer="grid">
+            <Command idref="postgresql8.getFunctions">
+               <Input name="schema" value="${schema}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Function">
+         <DataView classargs="FUNCTION" id="postgresql8-function-functioneditor" icon="SourceEditor" label="Function Editor" viewer="ProcedureViewer"
+                   doclink="http://www.dbvis.com/doclink/edit-code-object">
+         </DataView>
+         <DataView id="postgresql8-function-info" icon="Info" label="Info" viewer="node-form"/>
+         <!--
+                  <DataView type="Source" label="Source" viewer="text">
+                     <Command idref="postgresql8.getFunctionSource">
+                        <Input name="schema" value="${schema}"/>
+                        <Input name="funcname" value="${objectname}"/>
+                     </Command>
+                  </DataView>
+         -->
+      </ObjectView>
+
+      <ObjectView type="Domains">
+         <DataView id="postgresql8-domains-domains" icon="Domains" label="Domains" viewer="grid">
+            <Command idref="postgresql8.getDomains">
+               <Input name="schema" value="${schema}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Domain">
+         <DataView id="postgresql8-domain-info" icon="Info" label="Info" viewer="node-form"/>
+      </ObjectView>
+
+      <ObjectView type="Aggregates">
+         <DataView id="postgresql8-aggregates-aggregates" icon="Aggregates" label="Aggregates" viewer="grid">
+            <Command idref="postgresql8.getAggregates">
+               <Input name="schema" value="${schema}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Aggregate">
+         <DataView id="postgresql8-aggregate-info" icon="Info" label="Info" viewer="node-form"/>
+      </ObjectView>
+
+      <ObjectView type="Operators">
+         <DataView id="postgresql8-operators-operators" icon="Operators" label="Operators" viewer="grid">
+            <Command idref="postgresql8.getOperators">
+               <Input name="schema" value="${schema}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Operator">
+         <DataView id="postgresql8-operator-info" icon="Info" label="Info" viewer="node-form"/>
+      </ObjectView>
+
+      <ObjectView type="Types">
+         <DataView id="postgresql8-types-types" icon="Types" label="Types" viewer="grid">
+            <Command idref="postgresql8.getTypes">
+               <Input name="schema" value="${schema}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Type">
+         <DataView id="postgresql8-type-info" icon="Info" label="Info" viewer="node-form"/>
+      </ObjectView>
+
+      <!-- DBA views -->
+
+      <ObjectView type="Users">
+         <DataView id="postgresql8-users-users" icon="Users" label="Users" viewer="grid">
+            <Command idref="postgresql8.getUsers"/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="User">
+         <DataView id="postgresql8-user-info" icon="Info" label="Info" viewer="node-form"/>
+      </ObjectView>
+
+      <ObjectView type="Groups">
+         <DataView id="postgresql8-groups-groups" icon="Groups" label="Groups" viewer="grid">
+            <Command idref="postgresql8.getGroups"/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Group">
+         <DataView id="postgresql8-group-info" icon="Info" label="Info" viewer="node-form"/>
+      </ObjectView>
+
+      <ObjectView type="Settings">
+         <DataView id="postgresql8-settings-settings" icon="Settings" label="Settings" viewer="grid">
+            <Command idref="postgresql8.getSettings"/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Sessions">
+         <DataView id="postgresql8-sessions-sessions" icon="Sessions" label="Sessions" viewer="grid">
+            <Command idref="postgresql8.getSessions"/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Locks">
+         <DataView id="postgresql8-locks-locks" icon="Locks" label="Locks" viewer="grid">
+            <Command idref="postgresql8.getLocks"/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Tablespaces">
+         <DataView id="postgresql8-tablespaces-tablespaces" icon="Tablespaces" label="Tablespaces" viewer="grid">
+            <Command idref="postgresql8.getTablespaces"/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Tablespace">
+         <DataView id="postgresql8-tablespace-info" icon="Info" label="Info" viewer="node-form"/>
+      </ObjectView>
+
+      <ObjectView type="ForeignServers">
+         <DataView id="postgresql8-foreign-servers" icon="ForeignServers" label="Foreign Servers" viewer="grid">
+            <Command idref="postgresql8.getForeignServers"/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="ForeignServer">
+         <DataView id="postgresql8-foreign-server-info" icon="Info" label="Info" viewer="node-form"/>
+      </ObjectView>
+
+      <ObjectView type="UserMappings">
+         <DataView id="postgresql8-user-mappings" icon="UserMappings" label="User Mappings" viewer="grid">
+            <Command idref="postgresql8.getUserMappings">
+               <Input name="server" value="%"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="UserMapping">
+         <DataView id="postgresql8-user-mapping-info" icon="Info" label="Info" viewer="node-form"/>
+      </ObjectView>
+
+      <ObjectView type="Jobs">
+         <DataView id="postgresql8-jobs" icon="Jobs" label="Jobs" viewer="grid">
+            <Command idref="postgresql8.getJobs">
+              <!--
+                The following can be added if we don't want the DiableText in the grid
+                I find it quite useful  
+                <ProcessDataSet action="dropcolumn" index="isdisabledtext"></ProcessDataSet>
+              -->
+            </Command>
+            
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="Job">
+         <DataView id="postgresql8-job-info" icon="Info" label="Info" viewer="node-form"/>
+         <DataView id="postgresql8-job-log" icon="JobHistory" label="Run Log" viewer="grid">
+            <Command idref="postgresql8.getJobLog">
+               <Input name="jobId" value="${jobId}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="JobSchedules">
+         <DataView id="postgresql8-job-schedules" icon="JobSchedules" label="Job Schedules" viewer="grid">
+            <Command idref="postgresql8.getJobSchedules">
+               <Input name="jobId" value="${jobId}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="JobSchedule">
+         <DataView id="postgresql8-job-schedule-info" icon="Info" label="Info" viewer="form">
+            <Command idref="postgresql8.getJobSchedule">
+               <Input name="jobId" value="${jobId}"/>
+               <Input name="jscId" value="${jscId}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="JobSteps">
+         <DataView id="postgresql8-job-steps" icon="JobSteps" label="Job Steps" viewer="grid">
+            <Command idref="postgresql8.getJobSteps">
+               <Input name="jobId" value="${jobId}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="JobStep">
+         <DataView id="postgresql8-job-step-info" icon="Info" label="Info" viewer="node-form"/>
+         <DataView id="postgresql8-job-step-log" icon="JobHistory" label="Run Log" viewer="grid">
+            <Command idref="postgresql8.getJobStepLog">
+               <Input name="jstId" value="${jstId}"/>
+            </Command>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="EventTriggers">
+         <DataView id="postgresql8-jevent-triggers" icon="EventTriggers" label="Event Triggers" viewer="grid">
+            <Command idref="postgresql8.getEventTriggers"/>
+         </DataView>
+      </ObjectView>
+
+      <ObjectView type="EventTrigger">
+         <DataView id="postgresql8-event-trigger-info" icon="Info" label="Info" viewer="node-form"/>
+      </ObjectView>
+
+   </ObjectsViewDef>
+
+</DatabaseProfile>
