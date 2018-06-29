@@ -5,6 +5,9 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.model;
 
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.excel.Excel;
+import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
@@ -58,10 +61,10 @@ public class FacturaReporteModel extends FacturaReportePanel {
 
     //private List<Factura> datafact;
     //private List<NotaCredito> datafact2;
-    Date fechaInicio = null;
-    Date fechaFin = null;
-    String fechainicio = "";
-    String fechafin = "";
+    //Date fechaInicio = null;
+    //Date fechaFin = null;
+    //String fechainicio = "";
+    //String fechafin = "";
 
     public FacturaReporteModel() {
         valoresIniciales();
@@ -143,6 +146,9 @@ public class FacturaReporteModel extends FacturaReportePanel {
     {
         try {
             
+            Date fechaInicio=null;
+            Date fechaFin =null;
+            
             BigDecimal acum = BigDecimal.ZERO, acumdoce = BigDecimal.ZERO, acumiva = BigDecimal.ZERO, acumdesc = BigDecimal.ZERO;
             ComprobanteEntity.ComprobanteEnumEstado estadoFactura = (ComprobanteEntity.ComprobanteEnumEstado) getCmbEstado().getSelectedItem();
             String estadoStr = estadoFactura.getEstado();
@@ -210,7 +216,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
                                 dateFormat.format(factura.getFechaEmision()),
                                 factura.getCliente().getIdentificacion(),
                                 factura.getCliente().getRazonSocial(),
-                                factura.getCliente().getNombreLegal(),
+                                ((factura.getCliente().getNombreLegal())!=null)?factura.getCliente().getNombreLegal():"",
                                 (factura.getEstadoEnum()!=null)?factura.getEstadoEnum().getNombre():"Sin estado",
                                 (factura.getTipoFacturacionEnum()!=null)?factura.getTipoFacturacionEnum().getNombre():"Sin definir",
                                 (factura.getCodigoDocumentoEnum()!=null)?factura.getCodigoDocumentoEnum().getNombre():"",
@@ -240,7 +246,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
                                 dateFormat.format(nota.getFechaEmision()),
                                 nota.getCliente().getIdentificacion(),
                                 nota.getCliente().getRazonSocial(),
-                                nota.getCliente().getNombreLegal(),
+                                (nota.getCliente().getNombreLegal()!=null)?nota.getCliente().getNombreLegal():"",
                                 (nota.getEstadoEnum()!=null)?nota.getEstadoEnum().getNombre():"Sin estado",
                                 (nota.getTipoFacturacionEnum()!=null)?nota.getTipoFacturacionEnum().getNombre():"",
                                 (nota.getCodigoDocumentoEnum()!=null)?nota.getCodigoDocumentoEnum().getNombre():"",
@@ -285,7 +291,6 @@ public class FacturaReporteModel extends FacturaReportePanel {
                         fila.add(reporteFacturaData.getSubtotalCeroFactura());
                         fila.add(reporteFacturaData.getDescFactura());
                         fila.add(reporteFacturaData.getIvaDoceFactura());
-                        fila.add(reporteFacturaData.getTotalFactura());
                         fila.add(reporteFacturaData.getValorAfecta());
                         fila.add(reporteFacturaData.getTotalFinal());                        
                         modeloTablaFacturas.addRow(fila);
@@ -306,16 +311,17 @@ public class FacturaReporteModel extends FacturaReportePanel {
             if(reporte)
             {
                 String estadoText = estadoFactura.getNombre();
-                InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_documentos.jrxml");
+                final InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("reporte_documentos.jrxml");
                 String cliente = "";
                 if (persona == null) {
                     cliente = "TODOS";
                 } else {
                     cliente = persona.getRazonSocial();
                 }
-                parameters.put("fechainicio", fechainicio);
-                parameters.put("fechafin", fechafin);
-                parameters.put("tipodocumento", String.valueOf("definir"));
+                
+                parameters.put("fechainicio", (fechaInicio != null) ? dateFormat.format(fechaInicio) : "");
+                parameters.put("fechafin", (fechaFin != null) ? dateFormat.format(fechaFin) : "");
+                parameters.put("tipodocumento", documentoConsultaEnum.toString());
                 parameters.put("cliente", cliente);
                 parameters.put("subtotal", acum.toString());
                 parameters.put("subtotaliva", acumdoce.toString());
@@ -326,8 +332,32 @@ public class FacturaReporteModel extends FacturaReportePanel {
                 parameters.put("totalsubtotales", subtotal.toString());
                 parameters.put("descuentos", acumdesc.toString());
                 parameters.put("estadofactura", estadoText);
+                
+                
+                DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
+                    
+                    
+                    
+                    @Override
+                    public void excel() {
+                        try {
+                            Excel excel = new Excel();
+                            Vector<String> titulosVector=crearCabezeraTabla();
+                            String nombreCabeceras[] = titulosVector.toArray(new String[titulosVector.size()]); //Convertir en array
+                            excel.gestionarIngresoInformacionExcel(nombreCabeceras, data);
+                            excel.abrirDocumento();
+                        } catch (Exception exc) {
+                            exc.printStackTrace();
+                            DialogoCodefac.mensaje("Error", "El archivo Excel se encuentra abierto", DialogoCodefac.MENSAJE_INCORRECTO);
+                        }
+                    }
 
-                ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Documentos ",OrientacionReporteEnum.HORIZONTAL);
+                    @Override
+                    public void pdf() {                        
+                        
+                        ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Documentos ", OrientacionReporteEnum.HORIZONTAL);
+                    }
+                });
             
             }
             
@@ -345,7 +375,8 @@ public class FacturaReporteModel extends FacturaReportePanel {
         return null;
     }
     
-    private DefaultTableModel construirModelTabla() {
+    private Vector<String>  crearCabezeraTabla()
+    {
         Vector<String> titulo = new Vector<>();
         titulo.add("Preimpreso");
         titulo.add("Referencia");
@@ -360,10 +391,13 @@ public class FacturaReporteModel extends FacturaReportePanel {
         titulo.add("Subtotal 0% ");
         titulo.add("Descuentos");
         titulo.add("IVA 12%");
-        titulo.add("Total 1");
         titulo.add("Valor Afecta");
-        titulo.add("Total 2");
-        
+        titulo.add("Total");
+        return titulo;
+    }
+    
+    private DefaultTableModel construirModelTabla() {
+        Vector<String> titulo = crearCabezeraTabla();        
         DefaultTableModel modeloTablaFacturas = new DefaultTableModel(titulo, 0);
         return modeloTablaFacturas;
     }

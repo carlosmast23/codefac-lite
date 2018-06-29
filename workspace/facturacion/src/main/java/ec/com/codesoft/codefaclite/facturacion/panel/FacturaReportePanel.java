@@ -54,10 +54,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         chkTodos = new javax.swing.JCheckBox();
         btnLimpiarFechaInicio = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
         btnLimpiarFechaFin = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
@@ -134,7 +131,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         getContentPane().add(dateFechaInicio, gridBagConstraints);
 
         lblFechaInicio.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        lblFechaInicio.setText("Fecha incial:");
+        lblFechaInicio.setText("Fecha inicial:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -230,29 +227,11 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 1;
         getContentPane().add(jLabel1, gridBagConstraints);
 
-        jLabel4.setText("           ");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 15;
-        getContentPane().add(jLabel4, gridBagConstraints);
-
         jLabel12.setText("           ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 5;
         getContentPane().add(jLabel12, gridBagConstraints);
-
-        jLabel14.setText("           ");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 14;
-        getContentPane().add(jLabel14, gridBagConstraints);
-
-        jLabel15.setText("           ");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 9;
-        getContentPane().add(jLabel15, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 15;
         gridBagConstraints.gridy = 8;
@@ -471,12 +450,9 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;

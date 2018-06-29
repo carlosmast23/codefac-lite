@@ -77,3 +77,7 @@ ver la posibilidad de cambiar los estados y procesos de cada modulo cuando se fa
 agregar opcion de restaurar valores como en la nota de credito cuando se elimina una factura
 
 Ver el caso que cuando se quiere eliminar directamente una factura , ver que no este anulada por una nota de credito
+
+Revisar que cuando un documento esta la carpeta de enviados no me permite volver a reenviar
+
+Ver si los reportes de consultas tiene que consultar y se queda en memoria y luego genero el reporte

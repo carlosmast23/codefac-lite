@@ -35,7 +35,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         if (fi == null && ff != null) {
             fecha = " AND u.fechaEmision <= ?3";
         } else if (fi != null && ff == null) {
-            fecha = " AND u.fechaEmision <= ?2";
+            fecha = " AND u.fechaEmision >= ?2";
         } else if (fi == null && ff == null) {
             fecha = "";
         } else {
