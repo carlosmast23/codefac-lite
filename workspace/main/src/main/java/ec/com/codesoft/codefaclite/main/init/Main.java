@@ -714,13 +714,9 @@ public class Main {
                 panel.setHiloPublicidadCodefac(hiloPublicidad);
             }
             
-            panel.getLblNombreEmpresa().setText(" Empresa: "+ ((session.getEmpresa()!= null)? session.getEmpresa().getNombreLegal():"Sin asignar") + " | Usuario: "+session.getUsuario().getNick());
-            //Obtener el tipo de licencia para imprimir en la pantalla inicio
-            UtilidadesServiceIf utilidadesService=ServiceFactory.getFactory().getUtilidadesServiceIf();
-            TipoLicenciaEnum tipoLicenciaEnum=utilidadesService.getTipoLicencia();
-            
-            panel.getLblTextoSecundario().setText("Servidor IP: "+ipServidor+" | Licencia: "+tipoLicenciaEnum.getNombre()+" | Versión: "+ParametrosSistemaCodefac.VERSION);
-            
+           
+            panel.ipServidor=ipServidor;
+            panel.setearEtiquetasPantallaPrincipal();
             
             panel.iniciarComponentesGenerales();
             //frameAplicacion.dispose(); //Libero el recurso de la pantalla que tiene el icono en la barra de tareas

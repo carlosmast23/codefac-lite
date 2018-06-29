@@ -62,6 +62,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.info.FuncionesSistemaCodefac
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
@@ -201,6 +202,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
      */
     private WidgetVirtualMallModelo widgetVirtualMall;
     private WidgetVentasDiarias widgetVentasDiarias;
+    
+    /**
+     * Varible que almacena la ip del servidor para setear en la pantalla
+     */
+    public String ipServidor;
 
     public GeneralPanelModel() 
     {
@@ -294,13 +300,14 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 System.exit(0);
                 break;
 
-            case 1:
+            case 1: //opcion cambiar de usuario
                 cerrarTodasPantallas();
                 setVisible(false);
                 Usuario usuario = Main.cargarLoginUsuario();
                 sessionCodefac.setUsuario(usuario);
                 sessionCodefac.setPerfiles(Main.obtenerPerfilesUsuario(usuario));
                 setVentanasMenuList(null);
+                setearEtiquetasPantallaPrincipal();
                 setVisible(true);
                 break;
 
@@ -2712,6 +2719,20 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 getBtnNuevo().doClick();
             }
         });
+    }
+    
+    public void setearEtiquetasPantallaPrincipal()
+    {
+        try {
+            getLblNombreEmpresa().setText(" Empresa: " + ((sessionCodefac.getEmpresa() != null) ? sessionCodefac.getEmpresa().getNombreLegal() : "Sin asignar") + " | Usuario: " + sessionCodefac.getUsuario().getNick());
+            
+            //Obtener el tipo de licencia para imprimir en la pantalla inicio
+            UtilidadesServiceIf utilidadesService = ServiceFactory.getFactory().getUtilidadesServiceIf();
+            TipoLicenciaEnum tipoLicenciaEnum = utilidadesService.getTipoLicencia();
+            getLblTextoSecundario().setText("Servidor IP: " + ipServidor + " | Licencia: " + tipoLicenciaEnum.getNombre() + " | Versión: " + ParametrosSistemaCodefac.VERSION);
+        } catch (RemoteException ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public class ListenerIcono implements IconoInterfaz 
