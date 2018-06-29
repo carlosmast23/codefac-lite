@@ -115,6 +115,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JasperPrint;
 import org.apache.commons.collections4.map.HashedMap;
+import org.jdesktop.swingx.prompt.PromptSupport;
 
 /**
  *
@@ -161,6 +162,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         initModelTablaFormaPago();
         initModelTablaDetalleFactura();
         initModelTablaDatoAdicional();
+        setearValoresVista();
         //setearVariablesIniciales();
 
     }
@@ -351,13 +353,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
         });
         
-        getBtnBuscarClientePresupuesto().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                btnListenerBuscarCliente();
-            }
-        });
-
         getBtnBuscarCliente().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -482,12 +477,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
         });
         
-        getBtnAgregarClientePresupuesto().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                btnListenerAgregarCliente();
-            }
-        });
 
         getBtnAgregarCliente().addActionListener(new ActionListener() {
             @Override
@@ -1079,7 +1068,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     break;
                     
                 case PRESUPUESTOS:
-                    getTxtClientePresupuesto().setText(factura.getCliente().toString());
+                    //getTxtClientePresupuesto().setText(factura.getCliente().toString());
                     //getLblNombresClientePresupuesto().setText(factura.getCliente().toString());                    
                     break;
                     
@@ -1144,7 +1133,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getTxtCantidad().setText("");
         getTxtDescripcion().setText("");
         getTxtDescuento().setText("");
-        getTxtClientePresupuesto().setText("");
+        //getTxtClientePresupuesto().setText("");
         getCheckPorcentaje().setSelected(false);
 
         //Limpiar los datos de la tabla factura
@@ -1537,7 +1526,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 break;
                 
             case PRESUPUESTOS:
-                getTxtClientePresupuesto().setText(factura.getCliente().toString());
+                //getTxtClientePresupuesto().setText(factura.getCliente().toString());
                 
             break;
         
@@ -2379,6 +2368,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             @Override
             public void keyReleased(KeyEvent e) {}
         });
+    }
+
+    private void setearValoresVista() {
+        PromptSupport.setPrompt("Identificación",getTxtCliente());
     }
     
     
