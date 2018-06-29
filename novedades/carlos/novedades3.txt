@@ -4,17 +4,11 @@ En la pantalla de utilidades verificar que no se envia al correo por el problema
 
 Revisar que cuando mando a abrir la pantalla desde la matricula no funciona la facturacion parcial
 
-grabar el tipo de documento segun el sri del tipo de documento en cada tabla porque seguramente voy a necesitar para los ats
-
 agregar una opcion para configurar correos con dominios personalizados
 
 Al momento de cargar la ip del servidor existen problemas con interfaces virtuales , mejorar esta parte para que solo obtenga un direccion de una red ethernet o wifi
 
 En las compras agregar un campo para saber si son electronicas o manuales
-
-revisar porque la forma de pagos cuando se agrega o elimina sale el mensaje de saldo insuficiente
-
-Cuando no exista internet levantar el aplicativo como localhost para cliente-servidor
 
 Analizar el codigo private boolean validacionPersonalizadaPorModulos() en facturacion para validar correctamente con descuentos para los distintos modulos
 
@@ -25,8 +19,6 @@ Ver si al momento de buscar en la pantalla de cliente , producto como cumple dos
 
 Al momento de grabar los datos de la empresa en red no se mostrababa en la vista del otro usuario
 Ver si en una variable global del sistema se establece un metodo general de redondeo
-
-Poner una excepcion para que cuando no haya conexion de os clientes con el servidor se salga y buscar na manera para que al escribir en un campo y presionar enter llame a la venta de buscar
 
 Ver la opcion de hacer una especie de servidor proxy y que el servidor de codefac se encargue de proporcionar el archivo actual de las actualizaciones
 
@@ -52,33 +44,21 @@ Cambiar el tipo de clave primaria de la tabla de usuario para grabar un id y pod
 
 En el usuario da problemas cuando cambian el nick porque busco el dato anterior para comparar, lo que se resuelve creandole un id autogenerado a la tabla usuario
 
-Controlar la excepcion al momento que se pierde la conexion degolpe con el cliente
-
-El metodo de respaldar toca modificar para que funcione en red , solo funciona en local host
-
-
-Analizar si agregar una variable adicional para saber si algunos productos deben manejarse como inventario o directo
 
 En la pantalla de ventas diarias seleccionar con que modo quieren trabajar con productos libres o con inventario por defecto le dejo habilitado libre
 
 Analizar el tema de los vendedores
 
-Buscar un programa para abrir base de datos derby embebidas
-
 Programar los menuItems del menu principal para dar funcinalidades como agregar accesos directos
 
-Ver si guardar encriptada la clave del correo y archivo de la firma principalmente
 
 al momento de mandar en lote en la opcion de abrir la factura no carga el numero de secuencial
 
 Revisar el detalle de los presupuestos que tenga una referencia a la orden de compra para poder volver a generar si se edita desde el presupuest
 
 ver la posibilidad de cambiar los estados y procesos de cada modulo cuando se factura o se emite una nota de credito solo si esta autorizado el documento o ver que hacer si no se puede validar esa opcion
-agregar opcion de restaurar valores como en la nota de credito cuando se elimina una factura
 
 Ver el caso que cuando se quiere eliminar directamente una factura , ver que no este anulada por una nota de credito
-
-Revisar que cuando un documento esta la carpeta de enviados no me permite volver a reenviar
 
 Ver si los reportes de consultas tiene que consultar y se queda en memoria y luego genero el reporte
 
@@ -89,3 +69,5 @@ Hacer que cuando cambie de tipo de documento se resetean los datos como el clien
 o pensar como hacer para que la variable de cliente sea general porque siempre necesito
 
 El visualizador despues que se autoriza en lote desde utilidades no funciona para notas de credito
+
+Ver si se hace una super validacion para que las demas pantalla solo pueda usar cuando grabo los datos de la empresa

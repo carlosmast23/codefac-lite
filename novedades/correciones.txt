@@ -1,25 +1,9 @@
-Pantalla: Nota Credito y Factura
-Evento: Estructura
-Problema Esta de grabar la referencia del codigo del documento proporciando por el SRI , porque al momento de generar los comprobantes
-electronicos siempre necesito ese dato, por el momento solo estan seteado los valores.
-
---------------------------------------------
 Consultar que tipo de monedas acepta el SRI porque solo queda seteado el valor
 
 Consultar para que sirve el rise porque queda comentado en la nota de credito
 
---------------------------------------------
-En los comprobantes electronicos los descuentos no se estan considerando toca implementar esta parte
-
----------------------------------------------
 
 Implementar el metodo de prevalidacion en la facturacion electronica
 
-
------------------------------------------------
-
 Preguntar si una nota de credito puede anular una nota de credito o que se hace cuando quiero eliminar una nota de credito
 
------------------------------------------------
-
-Verificar el campo requerido de las validaciones

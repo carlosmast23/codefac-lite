@@ -1,37 +1,17 @@
-﻿El modulo de facturacion por lote revisar si sigue funcionando
-En la facturacion por lote agregar la posibilidad de dejar escoger facturas seleccionadas para enviar
-Terminar el modulo de cartera
-Terminar de hacer que muestre el error de cada factura por lote, ahorita solo muestra autorizado o no
-Revisar despues de facturar en lote no carga correctamente la factura
+﻿Terminar el modulo de cartera
 Revisar porque no se guarda la cartera detalle en la facturacion en lote
 
 Verificar la modalidad de obligado a llevar contabilidad en las comprobantes electronicos
-Para manejar el pago de un rubro varias veces se puede manejar un campo de saldo en el rubro
-En la pantalla de estudiante agregar un representante secundario o 3
 Adicional ver una pantalla estandar cuando tenga que seleccionar varios resultados como para varios representantes
-Para crear varios rubros mensuales mejor separar una tabla de plantilla para evitar organizacion
-
-
-Agregar un campo en el representante para la forma de pago
 
 En los rubros nivel agregar un lapso de tiempo para ver que rubros ya fueron vencidos
 
 Agregar un reporte o agregar una pantalla para informar sobre los rubros que sobrepasan el tiempo normal de pago
 
-Agregar estados de eliminado y analisar si se pueden dar de baja
-
 
 Agregar un reporte de pagos vs deudas por curso y estudiantes
 
+
 Analisar si cambiar el nombre de nivel a academico a curso.
 
-
-El codigo sistema debe solo visual
-
-Agregar otro campo adicional para facturar
-
-Las etnias poner un combo --> [Mestizos, Montubios, Afroecuatorianos, Indígenas, Blancos, Otros]
-
-Crear un ficha del estudiante cuando cargo el estudiante
-
-Toca analizar para grabar la forma de pago en el represntante por defecto y que se carga en la factura
+Crear un ficha del estudiante cuando grabo el estudiante (imprimir datos del estudiante)

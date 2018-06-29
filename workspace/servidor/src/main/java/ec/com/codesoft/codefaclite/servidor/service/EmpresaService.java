@@ -31,19 +31,27 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
     
     public Empresa grabar(Empresa p)
     {
-        try {
-            empresaFacade.create(p);
-        } catch (DatabaseException ex) {
-            Logger.getLogger(EmpresaService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ConstrainViolationExceptionSQL ex) {
-            Logger.getLogger(EmpresaService.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() {
+                try {
+                    entityManager.persist(p);
+                } catch (DatabaseException ex) {
+                    Logger.getLogger(EmpresaService.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
         return p;
     }
     
     public void editar(Empresa p)
     {
-        empresaFacade.edit(p);
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() {
+                entityManager.merge(p);
+            }
+        });
     }
     
     public void eliminar(Empresa p)
