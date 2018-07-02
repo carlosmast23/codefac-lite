@@ -903,11 +903,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
 
     @Override
-    public void eliminar() {
+    public void eliminar() throws ExcepcionCodefacLite,RemoteException {
         //Varible 
         boolean respuesta =false;
         
-        //Eliminar solo si ha cargado un dato para editar
+        //Eliminar solo si esta en modo editar
         if (estadoFormulario.equals(ESTADO_EDITAR)) {
             if (factura != null) {
                 //Eliminar solo si el estado esta en sin autorizar, o esta en el modo de facturacion normal y esta con estado facturado
@@ -932,6 +932,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     }
                 }
             }
+        }
+        else
+        {
+            throw new ExcepcionCodefacLite("Cancelar evento eliminar porque no esta en modo editar");
         }
     }
 
@@ -1006,7 +1010,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
                         
             cargarDatosDetalles();
-            setearDetalleFactura();
+            limpiarDetalleFactura();
             cargarTotales();
             cargarValoresAdicionales();
             cargarFormasPagoTabla();
@@ -1317,12 +1321,38 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     }
 
-    private void setearDetalleFactura() {
+    /**
+     * Limpiar las variables y los campos de de la vista de la parte de detalle
+     */
+    private void limpiarDetalleFactura() {
+        
+        TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+        
+        //Limpio las variables
+        switch(tipoDocumentoEnum)
+        {
+            case LIBRE:
+            case INVENTARIO:
+                productoSeleccionado=null;
+                break;
+                
+            case PRESUPUESTOS:
+                presupuestoSeleccionado=null;
+                break;
+                
+            case ACADEMICO:
+                rubroSeleccionado=null;
+                break;
+        
+        }
+            
+        
+        //Limpio los datos en la pantalla
         getTxtCantidad().setText("");
-        getTxtCliente().setText("");
         getTxtDescripcion().setText("");
         getTxtValorUnitario().setText("");
         getTxtDescuento().setText("0");
+        getTxtCodigoDetalle().setText("");
         getTxtCodigoDetalle().requestFocus();
         getTxtCodigoDetalle().selectAll();
     }
@@ -1773,7 +1803,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 }
 
                 
-                
                 facturaDetalle.setValorIce(BigDecimal.ZERO);
                 
                 BigDecimal descuento;
@@ -1818,11 +1847,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     }
                     
                     cargarDatosDetalles();
-                    setearDetalleFactura();
+                    limpiarDetalleFactura();
                     cargarTotales();
                 } else {
                     DialogoCodefac.mensaje("Alerta", "El valor de Descuento excede, el valor de PrecioTotal del Producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                    setearDetalleFactura();
+                    limpiarDetalleFactura();
                 }
             } catch (RemoteException ex) {
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -1906,11 +1935,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     factura.addDetalle(facturaDetalle);
 
                     cargarDatosDetalles();
-                    setearDetalleFactura();
+                    limpiarDetalleFactura();
                     cargarTotales();
                 } else {
                     DialogoCodefac.mensaje("Alerta", "El valor de Descuento excede, el valor de PrecioTotal del Producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                    setearDetalleFactura();
+                    limpiarDetalleFactura();
                 }
             } catch (RemoteException ex) {
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -1928,7 +1957,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             ///Cargar los datos de la factura
             setearValoresCliente();
             cargarDatosDetalles();
-            setearDetalleFactura();
+            limpiarDetalleFactura();
             cargarTotales();
             cargarValoresAdicionales();
             //cargarFormasPagoTabla();
@@ -1980,7 +2009,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             @Override
             public void actionPerformed(ActionEvent e) {
                 TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();                    
-                seleccionarPanelTipoDocumento(tipoDocumentoEnum);                
+                seleccionarPanelTipoDocumento(tipoDocumentoEnum);
+                limpiarDetalleFactura();
             }
         });
         
