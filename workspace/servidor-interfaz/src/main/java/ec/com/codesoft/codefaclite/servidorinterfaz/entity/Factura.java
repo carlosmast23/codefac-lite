@@ -256,6 +256,20 @@ public class Factura extends ComprobanteEntity implements Serializable {
         
     }
     
+    public BigDecimal getTotalFormasPago()
+    {
+        BigDecimal totalFormasPago = BigDecimal.ZERO;
+        int res;
+        if (formaPagos!= null) {
+            for (FormaPago fp : formaPagos) {
+                totalFormasPago = totalFormasPago.add(fp.getTotal());
+            }
+        }
+        return totalFormasPago;
+        //totalFormasPago = totalFormasPago.add(valorTotalFormaDePago);
+    
+    }
+    
     public void addDatoAdicional(String campo, String valor)
     {
         FacturaAdicional dato=new FacturaAdicional();

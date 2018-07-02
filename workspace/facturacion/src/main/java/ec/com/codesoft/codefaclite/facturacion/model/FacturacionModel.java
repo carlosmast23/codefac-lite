@@ -127,17 +127,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     //private Persona persona;
     private Factura factura;
     private Estudiante estudiante;
-    private DefaultTableModel modeloTablaFormasPago;
+    //private DefaultTableModel modeloTablaFormasPago;
     private DefaultTableModel modeloTablaDetallesProductos;
     private DefaultTableModel modeloTablaDatosAdicionales;
     private Producto productoSeleccionado;
     private RubroEstudiante rubroSeleccionado;
     private Presupuesto presupuestoSeleccionado;
     //private int fila;
-    private int filaFP;
-    private boolean bandera;
-    private boolean banderaFP;
-    private boolean banderaAgregar;
     private java.util.Date fechaMax;
     private java.util.Date fechaMin;
     
@@ -194,8 +190,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //this.subTotalDescuentoSinImpuesto = new BigDecimal(0);
         this.factura.setDescuentoImpuestos(new BigDecimal(0));
         //this.subtotalSinImpuestosDescuento=BigDecimal.ZERO;
-        this.bandera = false;
-        this.banderaAgregar = true;
         this.factura.setDescuentoImpuestos(new BigDecimal(0));
         //calcularIva12();
         //datosAdicionales = new HashMap<String, String>();
@@ -321,8 +315,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     FormaPago formaPago = dialog.getFormaPago();
                     try {
 
-                        verificarSumaFormaPago();
                         factura.addFormaPago(formaPago);
+                        verificarSumaFormaPago();
 
                         cargarFormasPagoTabla();
                     } catch (Exception ex) {
@@ -336,12 +330,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getBtnQuitarDetalleFormaPago().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (banderaFP) {
-                    modeloTablaFormasPago.removeRow(filaFP);
-                    factura.getFormaPagos().remove(filaFP);
-                    verificarSumaFormaPago();
+                int filaFormaPago=getTblFormasPago().getSelectedRow();
+                if(filaFormaPago>=0)
+                {
+                    factura.getFormaPagos().remove(filaFormaPago);
+                    //verificarSumaFormaPago();
                     cargarFormasPagoTabla();
-                    banderaFP = false;
                 }
             }
         });
@@ -384,7 +378,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     getTxtDescripcion().setText(facturaDetalle.getDescripcion());
                     getTxtDescuento().setText(facturaDetalle.getDescuento() + "");
                     getCheckPorcentaje().setSelected(false);
-                    bandera = true;
                     getBtnEditarDetalle().setEnabled(true);
                     getBtnQuitarDetalle().setEnabled(true);
                     getBtnAgregarDetalleFactura().setEnabled(false);
@@ -413,18 +406,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getBtnQuitarDetalle().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (bandera) {
-                    btnListenerEliminar();
-                }
+                btnListenerEliminar();
             }
         });
 
         getBtnEditarDetalle().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (bandera) {
-                    btnListenerEditar();
-                }
+                btnListenerEditar();
             }
         });
         
@@ -452,13 +441,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
         });
 
-        getTblFormasPago().addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                filaFP = getTblFormasPago().getSelectedRow();
-                banderaFP = true;
-            }
-        });
         
         getCmbDocumento().addActionListener(new ActionListener() {
             @Override
@@ -495,7 +477,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         int fila = getTblDetalleFactura().getSelectedRow();
         if(fila>=0)
         {
-            bandera = false;
             modeloTablaDetallesProductos.removeRow(fila);
             factura.getDetalles().remove(fila);
             cargarTotales();
@@ -524,7 +505,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 if (entity != null) {
                     productoSeleccionado = entity;
                     setearValoresProducto(productoSeleccionado.getValorUnitario(), productoSeleccionado.getNombre(),productoSeleccionado.getCodigoPersonalizado());
-                    banderaAgregar = true;
                 }
             }
         };
@@ -541,10 +521,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             public void updateInterface(Persona entity) {
                 factura.setCliente(entity);
                 if (factura.getCliente() != null) {
-                    cargarFormaPago();
-                    setearValoresCliente();
-                    cargarDatosAdicionales();
-                    cargarTablaDatosAdicionales();;
+                    cargarCliente(entity);
                 }
             }
         },VentanaEnum.CLIENTE, false,parametros);
@@ -656,7 +633,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             String descripcion="P"+presupuestoSeleccionado.getId()+" OT"+presupuestoSeleccionado.getOrdenTrabajoDetalle().getOrdenTrabajo().getId()+"  "+presupuestoSeleccionado.getDescripcion();
             setearValoresProducto(presupuestoSeleccionado.getTotalVenta(),descripcion,presupuestoSeleccionado.getId().toString());
-            banderaAgregar=true;
         }
     }
     
@@ -677,7 +653,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             rubroSeleccionado=rubroEstudianteTmp;
             setearValoresProducto(rubroEstudianteTmp.getSaldo(),rubroEstudianteTmp.getRubroNivel().getNombre(),rubroEstudianteTmp.getId().toString());
-            banderaAgregar = true;
         }
         
     }
@@ -754,7 +729,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         this.productoSeleccionado=productoSeleccionado;
         setearValoresProducto(productoSeleccionado.getValorUnitario(), productoSeleccionado.getNombre(),productoSeleccionado.getCodigoPersonalizado());
-        banderaAgregar = true;
     }
 
     @Override
@@ -1179,9 +1153,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     private void cargarFormasPagoTabla() {
 
-        //this.modeloTablaFormasPago=new DefaultTableModel(fila,0);
-        //this.modeloTablaFormasPago.initModelTablaFormaPago();
-        initModelTablaFormaPago();
+        //Crea el modelo con el titulo de las formas de pago
+        DefaultTableModel modeloTablaFormasPago=initModelTablaFormaPago();
 
         List<FormaPago> formasPago = factura.getFormaPagos();
         for (FormaPago formaPago : formasPago) {
@@ -1190,20 +1163,21 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             fila.add(formaPago.getTotal().toString());
             fila.add(formaPago.getUnidadTiempo());
             fila.add(formaPago.getPlazo() + "");
-            this.modeloTablaFormasPago.addRow(fila);
+            modeloTablaFormasPago.addRow(fila);
         }
-
+        getTblFormasPago().setModel(modeloTablaFormasPago);
     }
 
-    private void initModelTablaFormaPago() {
+    private DefaultTableModel initModelTablaFormaPago() {
         Vector<String> titulo = new Vector<>();
         titulo.add("forma pago");
         titulo.add("Valor");
         titulo.add("Tipo");
         titulo.add("Tiempo");
 
-        this.modeloTablaFormasPago = new DefaultTableModel(titulo, 0);
+        DefaultTableModel modeloTablaFormasPago = new DefaultTableModel(titulo, 0);
         getTblFormasPago().setModel(modeloTablaFormasPago);
+        return modeloTablaFormasPago;
     }
 
     private void initModelTablaDetalleFactura() {
@@ -1720,21 +1694,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
 
     public boolean verificarSumaFormaPago() {
-        BigDecimal totalFormasPago = BigDecimal.ZERO;
-        int res;
-        try {
-            if(factura.getFormaPagos()!=null)
-            {
-                for (FormaPago fp : factura.getFormaPagos()) {
-                    totalFormasPago = totalFormasPago.add(fp.getTotal());
-                }
-            }
-            //totalFormasPago = totalFormasPago.add(valorTotalFormaDePago);
-        } catch (Exception e) {
-            System.out.println("Es la primera vez que se utiliza una forma de pago");
-        }
-
-        res = factura.getTotal().compareTo(totalFormasPago);
+        
+        //Obtiene el total de las formas de pago
+        BigDecimal totalFormasPago = factura.getTotalFormasPago();
+        int res = factura.getTotal().compareTo(totalFormasPago);
         if (res == -1) 
         {
             DialogoCodefac.mensaje("Advertencia", "La forma de pago sobrepasa el valor a Facturar", DialogoCodefac.MENSAJE_ADVERTENCIA);
@@ -1857,11 +1820,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     cargarDatosDetalles();
                     setearDetalleFactura();
                     cargarTotales();
-                    banderaAgregar = false;
                 } else {
                     DialogoCodefac.mensaje("Alerta", "El valor de Descuento excede, el valor de PrecioTotal del Producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
                     setearDetalleFactura();
-                    banderaAgregar = false;
                 }
             } catch (RemoteException ex) {
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -1947,11 +1908,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     cargarDatosDetalles();
                     setearDetalleFactura();
                     cargarTotales();
-                    banderaAgregar = false;
                 } else {
                     DialogoCodefac.mensaje("Alerta", "El valor de Descuento excede, el valor de PrecioTotal del Producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
                     setearDetalleFactura();
-                    banderaAgregar = false;
                 }
             } catch (RemoteException ex) {
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
