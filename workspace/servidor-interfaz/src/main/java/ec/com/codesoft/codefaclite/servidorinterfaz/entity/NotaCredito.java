@@ -378,7 +378,7 @@ public class NotaCredito extends ComprobanteEntity implements Serializable {
     public void addDatosAdicionalCorreo(String correo)
     {
         NotaCreditoAdicional datoAdicional=new NotaCreditoAdicional();
-        datoAdicional.setCampo(FacturaAdicional.NOMBRE_CORREO);
+        datoAdicional.setCampo(NotaCreditoAdicional.CampoDefectoEnum.CORREO.getNombre());
         datoAdicional.setNotaCredito(this);
         datoAdicional.setTipo(FacturaAdicional.Tipo.TIPO_CORREO.getLetra());
         datoAdicional.setValor(correo);
@@ -403,7 +403,7 @@ public class NotaCredito extends ComprobanteEntity implements Serializable {
         //Modificar el nombre si el correo es mas de 2
         if(datoAdicional.getNumero()>1)
         {
-            datoAdicional.setCampo(FacturaAdicional.NOMBRE_CORREO+" "+datoAdicional.getNumero());
+            datoAdicional.setCampo(NotaCreditoAdicional.CampoDefectoEnum.CORREO.getNombre()+" "+datoAdicional.getNumero());
         }
 
         this.datosAdicionales.add(datoAdicional);

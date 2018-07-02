@@ -54,6 +54,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteFisicoD
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
@@ -218,31 +219,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         return b;
     }
 
-    private void addListenerButtons() {
-        
-        getBtnAgregarRepresentante().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<Persona>() {
-                    @Override
-                    public void updateInterface(Persona entity) {
-                        factura.setCliente(entity);
-                        if (factura.getCliente() != null) {
-                            if (entity != null) {
-                                //Agregar solo si no existe el dato en el combo box
-                                if (!verificaDatoComboRepresentante(entity)) {
-                                    getCmbRepresentante().addItem(entity);
-                                    getCmbRepresentante().setSelectedItem(entity);
-                                } else {
-                                    getCmbRepresentante().setSelectedItem(entity);
-                                }
-
-                            }
-                        }
-                    }
-                }, DialogInterfacePanel.CLIENTE_PANEL, false);
-            }
-        });
+    private void addListenerButtons() {        
         
         getBtnAgregarDatosAdicionales().addActionListener(new ActionListener() {
             @Override
@@ -278,33 +255,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
         });
         
-        getBtnBuscarRepresentante().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda();
-                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
-                buscarDialogoModel.setVisible(true);
                 
-                Persona represetanteTmp=(Persona) buscarDialogoModel.getResultado();
-                
-                if(represetanteTmp!=null)
-                {
-                    //Agregar solo si no existe el dato en el combo box
-                    if(!verificaDatoComboRepresentante(represetanteTmp))
-                    {
-                        getCmbRepresentante().addItem(represetanteTmp);
-                        getCmbRepresentante().setSelectedItem(represetanteTmp);
-                    }
-                    else
-                    {
-                        getCmbRepresentante().setSelectedItem(represetanteTmp);
-                    }
-                   
-                }
-
-            }
-        });
-        
         getBtnBuscarEstudiante().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -657,7 +608,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         if (cliente != null) {
             factura.setCliente(cliente);
             //Elimino datos adicionales del anterior cliente si estaba seleccionado
-            factura.eliminarTodosDatosAdicionales();
+            //factura.eliminarTodosDatosAdicionales();
             
             cargarFormaPago();
             setearValoresCliente();
@@ -1504,7 +1455,18 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     {
         //Cargar el correo solo cuando exista 
         if (factura.getCliente().getCorreoElectronico() != null) {
-            factura.addDatosAdicionalCorreo(factura.getCliente().getCorreoElectronico());
+            //Obtiene el campo del correo por defecto sis existe
+            FacturaAdicional campoAdicional=factura.obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum.CORREO);
+            //Si no existe el campo del correo del cliente lo creo
+            if(campoAdicional==null)
+            {
+                factura.addDatosAdicionalCorreo(factura.getCliente().getCorreoElectronico());
+            }
+            else //Si existe el campo del correo del cliente lo edito
+            {
+                campoAdicional.setValor(factura.getCliente().getCorreoElectronico());
+            }                
+            
             //datosAdicionales.put("email", factura.getCliente().getCorreoElectronico());
         }
     }
@@ -1517,6 +1479,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //Cargar los tipos de documentos segun el tipo de dcumento
         switch(tipoDocumentoEnum)
         {
+            case PRESUPUESTOS:            
+            case ACADEMICO:
             case INVENTARIO:
             case LIBRE:
                 getTxtCliente().setText(factura.getCliente().getIdentificacion());
@@ -1525,10 +1489,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 getLblTelefonoCliente().setText(factura.getCliente().getTelefonoConvencional());
                 break;
                 
-            case PRESUPUESTOS:
                 //getTxtClientePresupuesto().setText(factura.getCliente().toString());
-                
-            break;
+
         
         }
 
@@ -2075,9 +2037,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     if(persona!=null)
                     {
                         factura.setCliente(persona);
+                        cargarCliente(persona); //carga los datos del representante en los campos del cliente
                         
                         //Modificar el correo principal de los datos adicionales por el del nuevo cliente
-                        FacturaAdicional facturaAdicional=factura.obtenerDatoAdicionalPorCampo(FacturaAdicional.NOMBRE_CORREO);
+                        FacturaAdicional facturaAdicional=factura.obtenerDatoAdicionalPorCampo(FacturaAdicional.CampoDefectoEnum.CORREO);
                         //Si el campo ya existe solo lo modifico
                         if(facturaAdicional!=null)
                         {   

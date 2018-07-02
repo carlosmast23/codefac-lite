@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional.CampoDefectoEnum;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -266,6 +267,7 @@ public class Factura extends ComprobanteEntity implements Serializable {
         addDatoAdicional(dato);
     }
     
+    
     public void addDatoAdicional(FacturaAdicional datoAdicional)
     {
         if(this.datosAdicionales==null)
@@ -279,7 +281,7 @@ public class Factura extends ComprobanteEntity implements Serializable {
     public void addDatosAdicionalCorreo(String correo)
     {
         FacturaAdicional facturaAdicional=new FacturaAdicional();
-        facturaAdicional.setCampo(FacturaAdicional.NOMBRE_CORREO);
+        facturaAdicional.setCampo(FacturaAdicional.CampoDefectoEnum.CORREO.getNombre());
         facturaAdicional.setFactura(this);
         facturaAdicional.setTipo(FacturaAdicional.Tipo.TIPO_CORREO.getLetra());
         facturaAdicional.setValor(correo);
@@ -304,19 +306,19 @@ public class Factura extends ComprobanteEntity implements Serializable {
         //Modificar el nombre si el correo es mas de 2
         if(facturaAdicional.getNumero()>1)
         {
-            facturaAdicional.setCampo(FacturaAdicional.NOMBRE_CORREO+" "+facturaAdicional.getNumero());
+            facturaAdicional.setCampo(FacturaAdicional.CampoDefectoEnum.CORREO.getNombre()+" "+facturaAdicional.getNumero());
         }
 
         this.datosAdicionales.add(facturaAdicional);
     
     }
     
-    public FacturaAdicional obtenerDatoAdicionalPorCampo(String nombre)
+    public FacturaAdicional obtenerDatoAdicionalPorCampo(CampoDefectoEnum campo)
     {
         if(this.datosAdicionales!=null)
         {
             for (FacturaAdicional facturaAdicional : datosAdicionales) {
-                if(facturaAdicional.getCampo().equals(nombre))
+                if(facturaAdicional.getCampo().equals(campo.getNombre()))
                 {
                     return facturaAdicional;
                 }
@@ -325,7 +327,9 @@ public class Factura extends ComprobanteEntity implements Serializable {
         return null;
     }
     
-    
+    /**
+     * Elimina datos adicionales de la factura como correos o codigos de enlace de los documentos
+     */
     public void eliminarTodosDatosAdicionales()
     {
         if(this.datosAdicionales!=null)

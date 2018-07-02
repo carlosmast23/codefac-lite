@@ -151,7 +151,7 @@ public class Retencion extends ComprobanteEntity implements Serializable {
 
     public void addDatosAdicionalCorreo(String correo) {
         RetencionAdicional retencionAdicional = new RetencionAdicional();
-        retencionAdicional.setCampo(FacturaAdicional.NOMBRE_CORREO);
+        retencionAdicional.setCampo(RetencionAdicional.CampoDefectoEnum.CORREO.getNombre());
         retencionAdicional.setRetencion(this);
         retencionAdicional.setTipo(FacturaAdicional.Tipo.TIPO_CORREO.getLetra());
         retencionAdicional.setValor(correo);
@@ -173,7 +173,7 @@ public class Retencion extends ComprobanteEntity implements Serializable {
         retencionAdicional.setNumero(numeroMaximo + 1);
         //Modificar el nombre si el correo es mas de 2
         if (retencionAdicional.getNumero() > 1) {
-            retencionAdicional.setCampo(FacturaAdicional.NOMBRE_CORREO + " " + retencionAdicional.getNumero());
+            retencionAdicional.setCampo(RetencionAdicional.CampoDefectoEnum.CORREO.getNombre() + " " + retencionAdicional.getNumero());
         }
 
         this.datosAdicionales.add(retencionAdicional);

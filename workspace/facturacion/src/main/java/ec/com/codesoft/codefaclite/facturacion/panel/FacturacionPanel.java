@@ -176,8 +176,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         btnBuscarEstudiante = new javax.swing.JButton();
         jLabel32 = new javax.swing.JLabel();
         jLabel33 = new javax.swing.JLabel();
-        btnBuscarRepresentante = new javax.swing.JButton();
-        btnAgregarRepresentante = new javax.swing.JButton();
         cmbRepresentante = new javax.swing.JComboBox<>();
         panelDatosPresupuestos = new javax.swing.JPanel();
         chkFiltroPresupuestoCliente = new javax.swing.JCheckBox();
@@ -955,21 +953,20 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         panelDatosEmpresa1.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         panelDatosEmpresa1.setLayout(new java.awt.GridBagLayout());
 
-        jLabel30.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel30.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel30.setText("Representante:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 10);
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
         panelDatosEmpresa1.add(jLabel30, gridBagConstraints);
 
         txtEstudiante.setEditable(false);
         txtEstudiante.setText("                                       ...");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 19;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
@@ -977,16 +974,18 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
         btnBuscarEstudiante.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 23;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
         panelDatosEmpresa1.add(btnBuscarEstudiante, gridBagConstraints);
 
-        jLabel32.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel32.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         jLabel32.setText("Estudiante:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.insets = new java.awt.Insets(15, 2, 10, 10);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
         panelDatosEmpresa1.add(jLabel32, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -995,24 +994,11 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.weighty = 0.1;
         panelDatosEmpresa1.add(jLabel33, gridBagConstraints);
 
-        btnBuscarRepresentante.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 23;
-        gridBagConstraints.gridy = 7;
-        panelDatosEmpresa1.add(btnBuscarRepresentante, gridBagConstraints);
-
-        btnAgregarRepresentante.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add_user.png"))); // NOI18N
-        btnAgregarRepresentante.setToolTipText("Nuevo Representante");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 24;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        panelDatosEmpresa1.add(btnAgregarRepresentante, gridBagConstraints);
-
         cmbRepresentante.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 20;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
         panelDatosEmpresa1.add(cmbRepresentante, gridBagConstraints);
@@ -1183,10 +1169,8 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnAgregarDetalleFactura;
     private javax.swing.JButton btnAgregarFormaPago;
     private javax.swing.JButton btnAgregarProducto;
-    private javax.swing.JButton btnAgregarRepresentante;
     private javax.swing.JButton btnBuscarCliente;
     private javax.swing.JButton btnBuscarEstudiante;
-    private javax.swing.JButton btnBuscarRepresentante;
     private javax.swing.JButton btnCrearProducto;
     private javax.swing.JButton btnEditarDetalle;
     private javax.swing.JButton btnQuitarDatosAdicionales;
@@ -1592,13 +1576,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         this.btnBuscarEstudiante = btnBuscarEstudiante;
     }
 
-    public JButton getBtnBuscarRepresentante() {
-        return btnBuscarRepresentante;
-    }
-
-    public void setBtnBuscarRepresentante(JButton btnBuscarRepresentante) {
-        this.btnBuscarRepresentante = btnBuscarRepresentante;
-    }
 
     public JTextField getTxtEstudiante() {
         return txtEstudiante;
@@ -1616,13 +1593,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         this.btnAgregarDatosAdicionales = btnAgregarDatosAdicionales;
     }
 
-    public JButton getBtnAgregarRepresentante() {
-        return btnAgregarRepresentante;
-    }
-
-    public void setBtnAgregarRepresentante(JButton btnAgregarRepresentante) {
-        this.btnAgregarRepresentante = btnAgregarRepresentante;
-    }
 
     public JComboBox<Persona> getCmbRepresentante() {
         return cmbRepresentante;

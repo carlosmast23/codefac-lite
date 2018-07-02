@@ -35,6 +35,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NotaCreditoEnumEs
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
@@ -428,7 +429,7 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
                 listaModel = new DefaultListModel();
                 List<InformacionAdicional> infoAdicional = comprobante.getInformacionAdicional();
                 for (InformacionAdicional informacionAdicional : infoAdicional) {
-                    if (informacionAdicional.getNombre().indexOf(FacturaAdicional.NOMBRE_CORREO) >= 0) {
+                    if (informacionAdicional.getNombre().indexOf(ComprobanteAdicional.CampoDefectoEnum.CORREO.getNombre()) >= 0) {
                         listaModel.addElement(informacionAdicional.getValor());
                     }
                 }

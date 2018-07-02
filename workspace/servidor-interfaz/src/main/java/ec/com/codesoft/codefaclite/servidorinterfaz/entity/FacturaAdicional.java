@@ -21,78 +21,15 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "FACTURA_ADICIONAL")
-public class FacturaAdicional implements Serializable {
+public class FacturaAdicional extends ComprobanteAdicional implements Serializable {
     
     /**
      * Nombre de los campos para grabar correos
      */
-    public static final String NOMBRE_CORREO="correo";
-    
-    
-    @Id
-    @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;    
-    
-    @Column(name = "CAMPO")
-    private String campo;
-    
-    @Column(name = "VALOR")
-    private String valor;
-    
-    @Column(name = "TIPO")
-    private String tipo;
-    
-    /**
-     * Tipo de dato que se utiliza para numerar tipo de datos de un mismo tipo por ejemplo
-     * los correo, correo 1 , correo 2 , correo 3
-     */
-    @Column(name = "NUMERO")
-    private Integer numero;
-    
-    @JoinColumn(name = "FACTURA_ID")
+    //public static final String NOMBRE_CORREO="correo";
+        @JoinColumn(name = "FACTURA_ID")
     @ManyToOne
     private Factura factura;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getCampo() {
-        return campo;
-    }
-
-    public void setCampo(String campo) {
-        this.campo = campo;
-    }
-
-    public String getValor() {
-        return valor;
-    }
-
-    public void setValor(String valor) {
-        this.valor = valor;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
-    public Integer getNumero() {
-        return numero;
-    }
-
-    public void setNumero(Integer numero) {
-        this.numero = numero;
-    }
 
     public Factura getFactura() {
         return factura;
@@ -101,29 +38,6 @@ public class FacturaAdicional implements Serializable {
     public void setFactura(Factura factura) {
         this.factura = factura;
     }
-    
-    public enum Tipo
-    {
-        TIPO_CORREO("c","correo"),
-        TIPO_OTRO("o","otro");
 
-        private Tipo(String letra, String nombre) {
-            this.letra = letra;
-            this.nombre = nombre;
-        }
-        
-        private String letra;
-        private String nombre;
-
-        public String getLetra() {
-            return letra;
-        }
-
-        public String getNombre() {
-            return nombre;
-        }
-        
-        
-    }
     
 }
