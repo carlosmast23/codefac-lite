@@ -1768,15 +1768,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             
             try {
-                //FacturaDetalle facturaDetalle = new FacturaDetalle();
-                facturaDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
-                facturaDetalle.setDescripcion(getTxtDescripcion().getText());
                 
-                
-                BigDecimal valorTotalUnitario = new BigDecimal(getTxtValorUnitario().getText());
-                facturaDetalle.setPrecioUnitario(valorTotalUnitario);
-                
-                //Variable del producto para verificar otros datos como el iva
+                                //Variable del producto para verificar otros datos como el iva
                 CatalogoProducto catalogoProducto=null;
                 //Seleccionar la referencia dependiendo del tipo de documento
                 TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
@@ -1799,9 +1792,22 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
                         catalogoProducto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
                         break;
-
                 }
-
+                //Advertecia catalogo producto
+                if(catalogoProducto==null)
+                {
+                    DialogoCodefac.mensaje("Advertencia","No esta definido el Catalogo Producto ,donde se especifica los impuestos para facturar ",DialogoCodefac.MENSAJE_INCORRECTO);
+                    return;
+                }
+                
+                //FacturaDetalle facturaDetalle = new FacturaDetalle();
+                facturaDetalle.setCantidad(new BigDecimal(getTxtCantidad().getText()));
+                facturaDetalle.setDescripcion(getTxtDescripcion().getText());
+                
+                
+                BigDecimal valorTotalUnitario = new BigDecimal(getTxtValorUnitario().getText());
+                facturaDetalle.setPrecioUnitario(valorTotalUnitario);
+                
                 
                 facturaDetalle.setValorIce(BigDecimal.ZERO);
                 
