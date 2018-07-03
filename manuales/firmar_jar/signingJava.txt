@@ -1,0 +1,4 @@
+http://www.myjavazone.com/2010/07/firma-digital-de-un-archivo-jar.html
+
+Create Sign: keytool -genkey -alias nombre -validity ndias -v
+Signing: jarsigner.exe nombrearchivo.jar nombrecertificado -verbose
