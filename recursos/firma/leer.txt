@@ -1,0 +1,4 @@
+El archivo .Keystore es el archivo para firmar las aplicaciones
+
+Instalacion
+Copiar en la carpeta del usuario con el que se esta trabajando
