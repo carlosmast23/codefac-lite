@@ -5,11 +5,13 @@
  */
 package ec.com.codesoft.codefaclite.utilidades.tabla;
 
+import java.util.Enumeration;
 import java.util.List;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 /**
  *
@@ -68,6 +70,14 @@ public abstract class UtilidadesTablas {
             }
         };    
          return defaultTableModel;
+    }
+    
+     public static void cambiarColorFila(JTable table) {
+        Enumeration<TableColumn> en = table.getColumnModel().getColumns();
+        while (en.hasMoreElements()) {
+            TableColumn tc = en.nextElement();
+            tc.setCellRenderer(new CellRenderer());
+        }
     }
    
 }

@@ -986,7 +986,7 @@ public class PresupuestoModel extends PresupuestoPanel{
         
         PopupMenuTabla menuTabla = new PopupMenuTabla(getTableDetallesPresupuesto(), jMenuItems);
         UtilidadesTablas.ocultarColumna(getTableDetallesPresupuesto(), 0);
-        
+        UtilidadesTablas.cambiarColorFila(getTableDetallesPresupuesto());
     }
     
     private boolean verificarCamposValidados() {
