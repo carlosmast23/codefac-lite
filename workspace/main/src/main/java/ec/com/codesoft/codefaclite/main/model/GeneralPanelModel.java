@@ -206,12 +206,12 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     /**
      * Varible que almacena la ip del servidor para setear en la pantalla
      */
-    public String ipServidor;
+    public String ipServidor; //Todo: agrupar estos datos de mejor maneras
+    
 
     public GeneralPanelModel() 
     {
-    
-        
+        getjPanelSeleccion().setVisible(false);//Asumo que cuando se abre por primera vez la pantalla esta oculta
     }
     
     public void iniciarComponentesGenerales()
@@ -464,7 +464,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     
     private void cargarAyuda()
     {
-        final String PAGINA_DEFECTO="http://www.cf.codesoft-ec.com/ayuda";
+        final String PAGINA_DEFECTO=ParametrosSistemaCodefac.PAGINA_DEFECTO_AYUDA;
         
         ControladorCodefacInterface panel=(ControladorCodefacInterface) getjDesktopPane1().getSelectedFrame();
         String url="";
@@ -950,8 +950,18 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         getBtnAyuda().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    cargarAyuda();
-                    mostrarPanelSecundario(true,PanelSecundarioAbstract.PANEL_AYUDA);
+                    
+                    if(!getjPanelSeleccion().isVisible())//Si no esta visible el panel lo muestra
+                    {
+                        cargarAyuda();
+                        mostrarPanelSecundario(true, PanelSecundarioAbstract.PANEL_AYUDA);
+                    }
+                    else //Si esta vosible el panel lo oculta
+                    {
+                        cargarAyuda();
+                        mostrarPanelSecundario(false, PanelSecundarioAbstract.PANEL_AYUDA);
+                    }
+
                     
                 }
             });
@@ -1069,11 +1079,13 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             //Valores para mostrar en la pantalla secundaria
             PROPORCION_HORIZONTAL = PROPORCION_HORIZONTAL_DEFAULT;
             PROPORCION_VERTICAL = PROPORCION_VERTICAL_DEFAULT;
+            getjPanelSeleccion().setVisible(opcion); //Vuelve visible el componente secundario
         }
         else
         {
-            PROPORCION_HORIZONTAL = PROPORCION_HORIZONTAL_INICIAL;
-            PROPORCION_VERTICAL = 0.9999999999999999d;
+            PROPORCION_HORIZONTAL = PROPORCION_HORIZONTAL_INICIAL; //proporcion que oculta en  la pantalla
+            PROPORCION_VERTICAL = 0.9999999999999999d; //Proporcion que oculta en la pantall
+            getjPanelSeleccion().setVisible(opcion); //Vuelve invisible el componente secundario
 
         }
         

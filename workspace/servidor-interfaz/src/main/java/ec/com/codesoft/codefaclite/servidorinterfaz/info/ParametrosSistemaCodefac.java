@@ -21,7 +21,7 @@ public abstract class ParametrosSistemaCodefac {
     /**
      * El modo de configuracion del sistema
      */
-    public static final ModoSistemaEnum MODO=ModoSistemaEnum.DESARROLLO;
+    public static final ModoSistemaEnum MODO=ModoSistemaEnum.PRODUCCION;
 
     /**
      * Puerto por defecto para configurar las conexiones en red
@@ -40,6 +40,10 @@ public abstract class ParametrosSistemaCodefac {
     /**
      * Cadena que contiene la clave para encriptar o desencriptar los datos en codefac
      */
-    public static final String LLAVE_ENCRIPTAR="codesoft23codefac01"; //Todo: Analizar para obtener esta clave de un ddl en c++ para que no puedan ver con ingeniera inversa, Advertencia: no cambiar porque si hay sistema
+    public static final String LLAVE_ENCRIPTAR="codesoft23codefac01"; //Todo: Analizar para obtener esta clave de un ddl en c++ para que no puedan ver con ingeniera inversa, Advertencia: no cambiar la clave porque datos encriptados con este clave ya no se podrian desencriptar
     
+    /**
+     * Pagina que se carga por defecto cuando carga las ayudas
+     */
+    public static final String PAGINA_DEFECTO_AYUDA="http://www.cf.codesoft-ec.com/ayuda";
 }
