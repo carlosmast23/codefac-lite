@@ -709,11 +709,15 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 {
                     if(validarFormulario(frameInterface,ValidacionCodefacAnotacion.GRUPO_FORMULARIO))
                     {
-                        DialogInterfacePanel interfaz = (DialogInterfacePanel) frame;
-                        Object resultado = interfaz.getResult();
-                        frameInterface.formOwner.updateInterface(resultado);
-                        frame.dispose();
-                        mostrarPanelSecundario(false);
+                        try {
+                            DialogInterfacePanel interfaz = (DialogInterfacePanel) frame;
+                            Object resultado = interfaz.getResult();
+                            frameInterface.formOwner.updateInterface(resultado);
+                            frame.dispose();
+                            mostrarPanelSecundario(false);
+                        } catch (ExcepcionCodefacLite ex) {
+                            System.out.println("Error al grabar en modo dialogo");
+                        }
                     }
                     else
                     {

@@ -88,7 +88,7 @@ public class CategoriaProductoModel extends CategoriaProductoPanel implements Di
     }
 
     @Override
-    public CategoriaProducto getResult() {
+    public CategoriaProducto getResult() throws ExcepcionCodefacLite {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

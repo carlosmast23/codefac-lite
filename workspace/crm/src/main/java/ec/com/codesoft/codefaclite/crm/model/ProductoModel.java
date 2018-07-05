@@ -319,14 +319,14 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     }
 
     @Override
-    public Producto getResult() {
+    public Producto getResult() throws ExcepcionCodefacLite {
         try {
             grabar();
             return producto;
         } catch (ExcepcionCodefacLite ex) {
             Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
         }
-        return null;
     }
 
     @Override
