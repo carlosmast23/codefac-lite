@@ -7,8 +7,10 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,14 +37,17 @@ public class Nivel implements Serializable{
     private String nombre;
     @Column(name = "ORDEN")
     private Integer orden;
+    
     @JoinColumn(name = "NIVELPOSTERIOR_ID")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    
     private Nivel nivelPosterior;
     @Column(name = "DESCRIPCION")
     private String descripcion;
     @Column(name = "ESTADO")
     private String estado;
-
+    
+    
     public String getNombre() {
         return nombre;
     }

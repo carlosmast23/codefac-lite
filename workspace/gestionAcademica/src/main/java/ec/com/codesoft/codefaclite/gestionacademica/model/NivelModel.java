@@ -38,7 +38,7 @@ public class NivelModel extends NivelPanel {
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        iniciarCombos();
     }
 
     public void iniciarCombos() {
@@ -55,7 +55,12 @@ public class NivelModel extends NivelPanel {
             List<Nivel> nivelList = nivelService.obtenerTodos();
             getCmbNivelPosterior().addItem(n1);
             for (Nivel niv : nivelList) {
-                getCmbNivelPosterior().addItem(niv);
+                if(niv.getEstado() != null){
+                    GeneralEnumEstado enumEstado = GeneralEnumEstado.getEnum(niv.getEstado());
+                    if(enumEstado.equals(GeneralEnumEstado.ACTIVO)){
+                        getCmbNivelPosterior().addItem(niv);
+                    }
+                }
             }
         } catch (RemoteException ex) {
             Logger.getLogger(NivelModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -64,7 +69,7 @@ public class NivelModel extends NivelPanel {
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        iniciarCombos();
     }
 
     @Override
@@ -73,6 +78,7 @@ public class NivelModel extends NivelPanel {
             setearValoresNivel(nivel);
             nivel = nivelService.grabar(nivel);
             DialogoCodefac.mensaje("Datos correctos", "El nivel se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+            iniciarCombos();
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite("Error al grabar nivel modelo");
@@ -89,8 +95,8 @@ public class NivelModel extends NivelPanel {
         nivel.setEstado(((GeneralEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
 
         if (getCmbNivelPosterior().getSelectedItem() != null) {
-            nivel = (Nivel) getCmbNivelPosterior().getSelectedItem();
-            nivel.setNivelPosterior(nivel);
+            Nivel nivelTemp = (Nivel) getCmbNivelPosterior().getSelectedItem();
+            nivel.setNivelPosterior(nivelTemp);
         }
     }
 
@@ -149,7 +155,7 @@ public class NivelModel extends NivelPanel {
         getTxtOrden().setText(nivel.getOrden().toString());
         getTxtDescripcion().setText(nivel.getDescripcion());
         getCmbNivelPosterior().setSelectedItem(nivel.getNivelPosterior());
-
+        
     }
 
     @Override
@@ -157,7 +163,6 @@ public class NivelModel extends NivelPanel {
         nivel = new Nivel();
         //iniciarCombos();
         iniciarCombos();
-        getCmbNivelPosterior().setSelectedIndex(0);
     }
 
 //    @Override

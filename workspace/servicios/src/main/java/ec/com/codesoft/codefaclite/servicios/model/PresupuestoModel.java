@@ -13,9 +13,14 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.UtilidadesComprobantes;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servicios.busqueda.PresupuestoBusqueda;
 import ec.com.codesoft.codefaclite.servicios.panel.PresupuestoPanel;
+import ec.com.codesoft.codefaclite.servicios.reportdata.OrdenCompraDataReporte;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.CorreoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
@@ -25,6 +30,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -48,6 +54,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.rmi.RemoteException;
@@ -78,8 +85,10 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author CodesoftDesarrollo 1
  */
-public class PresupuestoModel extends PresupuestoPanel{
-
+public class PresupuestoModel extends PresupuestoPanel implements Runnable{
+    
+    private static final String PATH_REPORTE_TMP = "tmp/reporteOrdenCompra.pdf";
+    
     private Presupuesto presupuesto;
     
     private Producto producto;
@@ -87,6 +96,8 @@ public class PresupuestoModel extends PresupuestoPanel{
     private ProductoProveedor productoProveedor;
     private Map<Persona,List<PresupuestoDetalle>> mapClientes;
     private Map<Integer,List<PresupuestoDetalle>> mapOrden;
+    private List<OrdenCompra> ordenesCompra;
+    private String correoEmpleado;
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
@@ -151,6 +162,15 @@ public class PresupuestoModel extends PresupuestoPanel{
             DialogoCodefac.mensaje("Correcto","El presupuesto fue grabado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
             
             /**
+             * Me permite grabar todas las ordenes de compra generadas para despues enviar por correo a los Empleados
+             */
+                this.ordenesCompra = new ArrayList<>();
+                if(this.presupuesto.getOrdenTrabajoDetalle().getEmpleado().getCorreoElectronico() != null){
+                    this.correoEmpleado = this.presupuesto.getOrdenTrabajoDetalle().getEmpleado().getCorreoElectronico();
+                }else{
+                    this.correoEmpleado = "Sin Asignar Correo";
+                }    
+            /**
              * El momento que se graba el Presupuesto genero de cada detalle presuesto la orden de compra
              */
             OrdenCompra ordenCompra;
@@ -163,34 +183,41 @@ public class PresupuestoModel extends PresupuestoPanel{
                     /**
                      * Todos los presupuestos por el momento van a estar ligados a Servicios   
                      */     
-                TipoDocumentoEnum tde = TipoDocumentoEnum.COMPRA_SERVICIOS;
-                ordenCompra.setCodigoTipoDocumento(tde.getCodigo());
-                ordenCompra.setFechaCreacion(UtilidadesFecha.getFechaHoy());
-                ordenCompra.setFechaIngreso(this.presupuesto.getFechaPresupuesto());
-                
-                for(PresupuestoDetalle pd : detalles){
-                    OrdenCompraDetalle ordenCompraDetalle = new OrdenCompraDetalle();
-                    /**
-                     * Setean valores de Detalle Orden Compra 
-                     */
-                    ordenCompraDetalle.setCantidad(pd.getCantidad().intValue());
-                    ordenCompraDetalle.setDescripcion(pd.getProducto().getNombre());
-                    ordenCompraDetalle.setDescuento(pd.getDescuentoVenta());
-                    ordenCompraDetalle.setPrecioUnitario(pd.getPrecioVenta());
-                    ordenCompraDetalle.setTotal(ordenCompraDetalle.getSubtotal());
-                    ordenCompraDetalle.setValorIce(ordenCompraDetalle.getValorIce());
-                    ordenCompraDetalle.setIva(ordenCompraDetalle.getIva());
-                    ordenCompraDetalle.setProductoProveedor(pd.getProductoProveedor());
-                    /**
-                     * Agregando detalle a Orden Compra
-                     */
-                    ordenCompra.addDetalle(ordenCompraDetalle);
-                }
+                    TipoDocumentoEnum tde = TipoDocumentoEnum.COMPRA_SERVICIOS;
+                    ordenCompra.setCodigoTipoDocumento(tde.getCodigo());
+                    ordenCompra.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+                    ordenCompra.setFechaIngreso(this.presupuesto.getFechaPresupuesto());
+                    ordenCompra.setDescuentoImpuestos(BigDecimal.ZERO);
+                    ordenCompra.setDescuentoSinImpuestos(BigDecimal.ZERO);
+                    ordenCompra.setObservacion(this.presupuesto.getDescripcion());
+                    ordenCompra.setIva(BigDecimal.ZERO);
+                    
+                    for(PresupuestoDetalle pd : detalles){
+                        OrdenCompraDetalle ordenCompraDetalle = new OrdenCompraDetalle();
+                        /**
+                         * Setean valores de Detalle Orden Compra 
+                         */
+                        ordenCompraDetalle.setCantidad(pd.getCantidad().intValue());
+                        ordenCompraDetalle.setDescripcion(pd.getProducto().getNombre());
+                        ordenCompraDetalle.setDescuento(pd.getDescuentoVenta());
+                        ordenCompraDetalle.setPrecioUnitario(pd.getPrecioVenta());
+                        ordenCompraDetalle.setTotal(ordenCompraDetalle.getSubtotal());
+                        ordenCompraDetalle.setValorIce(ordenCompraDetalle.getValorIce());
+                        ordenCompraDetalle.setIva(ordenCompraDetalle.getIva());
+                        ordenCompraDetalle.setProductoProveedor(pd.getProductoProveedor());
+                        /**
+                         * Agregando detalle a Orden Compra
+                         */
+                        ordenCompra.addDetalle(ordenCompraDetalle);
+                    }
                 /**
                  * Grabando la orden de compra por Proveedor
                  */
                 OrdenCompraServiceIf compraServiceIf = ServiceFactory.getFactory().getOrdenCompraServiceIf();
-                compraServiceIf.grabar(ordenCompra);   
+                compraServiceIf.grabar(ordenCompra);
+                this.ordenesCompra.add(ordenCompra);
+                //this.corresEmpleados.
+
             }
             
             }catch (ServicioCodefacException ex) {
@@ -907,14 +934,14 @@ public class PresupuestoModel extends PresupuestoPanel{
     {
         //int c = 0;
         ordenarDetallesEnFuncionDeCliente();
-        mapOrden = new HashMap<Integer,List<PresupuestoDetalle>>();
+        mapOrden = new HashMap<>();
         
         for (PresupuestoDetalle pd : presupuesto.getPresupuestoDetalles()) 
         {
             //Si no existe el numero de orden creo
             if(mapOrden.get(pd.getNumeroOrdenCompra()) == null)
             {
-                List<PresupuestoDetalle> detalles=new ArrayList<PresupuestoDetalle>();
+                List<PresupuestoDetalle> detalles=new ArrayList<>();
                 detalles.add(pd);
                 mapOrden.put(pd.getNumeroOrdenCompra(),detalles);
             }
@@ -1156,7 +1183,103 @@ public class PresupuestoModel extends PresupuestoPanel{
         }catch(Exception exc)
         {
             exc.printStackTrace();
-        }
+        }              
+    }
+    
+    private void generarReportePdf(OrdenCompra ordenCompra)
+    {
+        Map parametros =  new HashMap();
+        List<OrdenCompraDataReporte> dataReportes = new ArrayList<>();
+        if(ordenCompra.getDetalles() != null)
+        {
+            parametros.put("codigo", ordenCompra.getId().toString());
+            parametros.put("proveedor", ordenCompra.getProveedor().getNombresCompletos());
+            parametros.put("descripcion", ordenCompra.getObservacion());
+            parametros.put("estado", "no definido");
+            parametros.put("fecha", "" + ordenCompra.getFechaIngreso());
+            parametros.put("subtotal12", "" + ordenCompra.getSubtotalImpuestos().subtract(ordenCompra.getDescuentoImpuestos()));
+            parametros.put("subtotal0", "" + ordenCompra.getSubtotalSinImpuestos().subtract(ordenCompra.getDescuentoSinImpuestos()));
+            parametros.put("descuento12", "" + ordenCompra.getDescuentoImpuestos());
+            parametros.put("descuento0", "" + ordenCompra.getDescuentoSinImpuestos());
+            parametros.put("subtotalImpuestos", "" + ordenCompra.getSubtotalImpuestos());
+            parametros.put("subtotalSinImpuestos", "" + ordenCompra.getSubtotalSinImpuestos());
+            parametros.put("iva", "" + ordenCompra.getIva());
+            parametros.put("total", "" + ordenCompra.getTotal());
+            
+            for(OrdenCompraDetalle otd : ordenCompra.getDetalles())
+            {
+                OrdenCompraDataReporte dataReporte = new OrdenCompraDataReporte();
+                dataReporte.setCantidad("" + otd.getCantidad().toString());
+                dataReporte.setDescripcion("" + otd.getDescripcion());
+                dataReporte.setValorUnitario("" + otd.getPrecioUnitario().toString());
+                dataReporte.setValorTotal("" + otd.getTotal().toString());
                 
+                dataReportes.add(dataReporte);
+                
+            }
+            InputStream path = RecursoCodefac.JASPER_COMPRA.getResourceInputStream("orden_compra.jrxml");
+            //ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, dataReportes, panelPadre, "Orden de Compra");
+            UtilidadesComprobantes.generarReporteJasper(path, parametros, dataReportes, PATH_REPORTE_TMP);
+        }
+    }
+    
+    private void enviarCorreo(EstudianteInscrito estudianteInscrito, String mensaje)
+    {
+        CorreoCodefac correoCodefac = new CorreoCodefac() {
+            @Override
+            public String getMensaje() {
+                return mensaje;
+            }
+
+            @Override
+            public String getTitulo() {
+                return "Orden Compra";
+            }
+
+            @Override
+            public Map<String, String> getPathFiles() {
+                HashMap<String, String> mapArchivos = new HashMap<String, String>();
+                mapArchivos.put("Comunicado.pdf", PATH_REPORTE_TMP);
+                return mapArchivos;
+            }
+
+            @Override
+            public List<String> getDestinatorios() {
+                List<String> destinatarios = new ArrayList<String>();
+                destinatarios.add(estudianteInscrito.getEstudiante().getRepresentante().getCorreoElectronico());
+                return destinatarios;
+            }
+        };
+
+        correoCodefac.enviarCorreo();
+    }
+    
+    public void enviarComunicados()
+    {
+        if(!this.ordenesCompra.isEmpty())
+        {
+            for(OrdenCompra ordenCompra : this.ordenesCompra)
+            {
+                /**
+                 * Generar Reporte
+                 */
+                generarReportePdf(ordenCompra);
+                /**
+                 * Crear mensaje para Empleado si existe
+                 */
+                String mensaje;
+            }
+        }
+    }
+            
+    @Override
+    public void run() 
+    {
+        
+    }
+    
+    public String crearMensajeCorreo(OrdenCompra ordenCompra )
+    {
+        return "corre";
     }
 }

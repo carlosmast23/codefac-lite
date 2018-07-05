@@ -1,0 +1,6 @@
+Novedades:
+- Verificar que cuando existe una cedula repetida en un dialogo este ventana se cierra, cuando estaba creando un representante y escribi
+una cedula ya existente me dio el mensaje de cedula repetida y me cerro el dialogo y perdi la informacion ingresada.
+
+Observación:
+- Verificar si el campo Orden de la venta Nivel, esta siendo utilizada; ya que el nivel anterior lo puedo obtener en el combo
