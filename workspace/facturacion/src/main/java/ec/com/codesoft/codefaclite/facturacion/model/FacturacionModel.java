@@ -482,8 +482,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         break;
                         
                 }
-                agregarDetallesFactura(facturaDetalle);
-                habilitarModoIngresoDatos();
+                if(agregarDetallesFactura(facturaDetalle))
+                {
+                    habilitarModoIngresoDatos();
+                }
             } catch (RemoteException ex) {
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1774,7 +1776,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
     }
 
-    public void agregarDetallesFactura(FacturaDetalle facturaDetalle) {
+    public boolean agregarDetallesFactura(FacturaDetalle facturaDetalle) {
         boolean agregar = true;
 
         //Verifica si manda un detalle existe solo se modifica
@@ -1785,8 +1787,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
 
         if (!panelPadre.validarPorGrupo("detalles")) {
+            int filaSeleccionada=getTblDetalleFactura().getSelectedRow();
             cargarDatosDetalles(); //Si no se pudo editar vuelvo a cargar los detalles si se modifico desde la tabla para que quede la forma original
-            return;
+            getTblDetalleFactura().setRowSelectionInterval(filaSeleccionada,filaSeleccionada);
+            return false;
         }
         
 
@@ -1794,7 +1798,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             //Validacion dependiendo de la logica de cada tipo de documento
             if (!validacionPersonalizadaPorModulos()) {
-                return;
+                return false;
             }
             
             
@@ -1828,7 +1832,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 if(catalogoProducto==null)
                 {
                     DialogoCodefac.mensaje("Advertencia","No esta definido el Catalogo Producto ,donde se especifica los impuestos para facturar ",DialogoCodefac.MENSAJE_INCORRECTO);
-                    return;
+                    return false;
                 }
                 
                 //FacturaDetalle facturaDetalle = new FacturaDetalle();
@@ -1889,12 +1893,20 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 } else {
                     DialogoCodefac.mensaje("Alerta", "El valor de Descuento excede, el valor de PrecioTotal del Producto", DialogoCodefac.MENSAJE_ADVERTENCIA);
                     limpiarDetalleFactura();
+                    return false;
                 }
             } catch (RemoteException ex) {
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
+            return true; //si pasa todas las validaciones asumo que se edito correctamente
 
         }
+        else
+        {
+            return false;
+        }
+        
     }
     
     //TODO: Para optimizar y mejorar el codigo analizar para utilizar una sola funcion con la anterior
