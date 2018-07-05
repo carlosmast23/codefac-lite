@@ -400,7 +400,15 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getTxtCantidad().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                agregarDetallesFactura(null);
+                if(getBtnAgregarDetalleFactura().isEnabled())
+                {   //Si esta habilitado el boton de agregar funciona para agregar
+                    agregarDetallesFactura(null);
+                }
+                else //Si no esta habilitado el boton de editar funciona como para editar
+                {
+                    btnListenerEditar();
+                }
+                
             }
         });
 
