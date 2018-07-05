@@ -30,7 +30,7 @@ public interface InterfazComunicacionPanel
      * @param namePanel nombre del panel que se quiere abrir para obtener el dato
      * @param maximizado opcion para saber si quieres que se abra maximizado o mimimizado
      */
-    public void crearDialogoCodefac(ObserverUpdateInterface panel,String namePanel,boolean maximizado);
+    public void crearDialogoCodefac(ObserverUpdateInterface panel,String namePanel,boolean maximizado,GeneralPanelInterface panelPadre);
     
     /**
      * Me permite crear una un dialogo pasando como referencia un enum con la ventana del formulario
@@ -38,7 +38,7 @@ public interface InterfazComunicacionPanel
      * @param namePanel
      * @param maximizado 
      */
-    public void crearDialogoCodefac(ObserverUpdateInterface panel,VentanaEnum ventanEnum,boolean maximizado);
+    public void crearDialogoCodefac(ObserverUpdateInterface panel,VentanaEnum ventanEnum,boolean maximizado,GeneralPanelInterface panelPadre);
     
     /**
      * Metodo que permite crear un dialogo pero con datos para el postCostructorExterno
@@ -46,7 +46,7 @@ public interface InterfazComunicacionPanel
      * @param ventanEnum
      * @param maximizado 
      */
-    public void crearDialogoCodefac(ObserverUpdateInterface panel,VentanaEnum ventanEnum,boolean maximizado,Object[] parametrosPostConstructor);
+    public void crearDialogoCodefac(ObserverUpdateInterface panel,VentanaEnum ventanEnum,boolean maximizado,Object[] parametrosPostConstructor,GeneralPanelInterface panelPadre);
     
     public Map<String,Object> mapReportePlantilla(OrientacionReporteEnum orientacionEnum);
     /**

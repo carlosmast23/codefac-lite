@@ -509,7 +509,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
         };
                 
-        panelPadre.crearDialogoCodefac(observer, VentanaEnum.PRODUCTO, false, new Object[]{manejoInventario,getTxtCodigoDetalle().getText()});
+        panelPadre.crearDialogoCodefac(observer, VentanaEnum.PRODUCTO, false, new Object[]{manejoInventario,getTxtCodigoDetalle().getText()},this);
         
     }
 
@@ -524,7 +524,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     cargarCliente(entity);
                 }
             }
-        },VentanaEnum.CLIENTE, false,parametros);
+        },VentanaEnum.CLIENTE, false,parametros,this);
     }
     
     private void btnListenerBuscarCliente() {

@@ -370,7 +370,7 @@ public class MatriculaEstudianteModel extends MatriculaEstudiantePanel{
                             getTxtEstudiante().setText(entity.getNombreCompleto());
                        }
                     }
-                }, VentanaEnum.ESTUDIANTES,false);
+                }, VentanaEnum.ESTUDIANTES,false,formularioActual);
             }
         });
     }

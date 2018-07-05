@@ -26,6 +26,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneroEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDiscapacidadEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.hoy;
@@ -435,7 +436,7 @@ public class EstudianteModel extends EstudiantePanel implements DialogInterfaceP
                                 
                             }
                         }
-                    }, DialogInterfacePanel.CLIENTE_PANEL, false);
+                    }, VentanaEnum.CLIENTE, false,formularioActual);
     }
     
     public void obtenerRepresentante(int opc)

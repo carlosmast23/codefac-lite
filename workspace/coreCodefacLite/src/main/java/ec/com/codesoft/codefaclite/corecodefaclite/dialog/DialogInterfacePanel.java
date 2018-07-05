@@ -15,8 +15,6 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
  * formulario principal
  */
 public interface DialogInterfacePanel<T> {
-    public static final String CLIENTE_PANEL="ec.com.codesoft.codefaclite.crm.model.ClienteModel";
-    public static final String PRODUCTO_PANEL="ec.com.codesoft.codefaclite.crm.model.ProductoModel";
     
     public T getResult() throws ExcepcionCodefacLite;
 }

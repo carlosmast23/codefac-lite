@@ -56,15 +56,33 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
     public boolean sinAcciones=true;
     public boolean formularioCerrando=false;
     public boolean modoDialogo=false;
+    
     /**
-     * Fomulario propietari
+     * Evento propietario que contiene el metodo para poder utilizar dialogos
      */
     public ObserverUpdateInterface formOwner;
+    
+    /**
+     * Variable que setea cual fue el formulario padre para devolver el focus
+     * //TODO: Ver alguna forma de optimizar esta parte
+     */
+    public GeneralPanelInterface formOwnerFocus;
     
     public static final String ESTADO_GRABAR="G";
     public static final String ESTADO_EDITAR="E";
     
     public String estadoFormulario;
+    
+    /**
+     * Variable de utilidad solo para facilitar el trabajo para obtener la referencia al objecto actual desde una clase interna o anonima
+     */
+    public GeneralPanelInterface formularioActual;
+
+    public GeneralPanelInterface() {
+        this.formularioActual=this;
+    }
+    
+    
     /**
      * Este metodo tiene el objetivo de funcionar despues de construir el objeto para interactuar con las variables inyectadas en el formulario
      * por ejemplo con las variables de session , o con funcionalidades del formulario padre

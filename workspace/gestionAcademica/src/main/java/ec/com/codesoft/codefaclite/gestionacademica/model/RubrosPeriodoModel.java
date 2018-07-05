@@ -232,7 +232,7 @@ public class RubrosPeriodoModel extends RubrosPeriodoPanel{
                        }
                        
                    }
-               }, VentanaEnum.CATALOGO_PRODUCTO,false,new Object[]{ModuloCodefacEnum.GESTIONA_ACADEMICA});
+               }, VentanaEnum.CATALOGO_PRODUCTO,false,new Object[]{ModuloCodefacEnum.GESTIONA_ACADEMICA},formularioActual);
             }
         });
     }

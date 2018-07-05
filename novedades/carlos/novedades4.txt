@@ -1,0 +1,1 @@
+Ver si se puede tener o no se necesita un campo para especificar cuando un cliente es tambien un representante

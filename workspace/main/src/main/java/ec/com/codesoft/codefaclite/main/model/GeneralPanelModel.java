@@ -715,8 +715,15 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             frameInterface.formOwner.updateInterface(resultado);
                             frame.dispose();
                             mostrarPanelSecundario(false);
+                            
+                            //Setear el focus al formulario que abrio el dialogo
+                            frameInterface.formOwnerFocus.moveToFront();
+                            frameInterface.formOwnerFocus.setSelected(true);
+                            
                         } catch (ExcepcionCodefacLite ex) {
                             System.out.println("Error al grabar en modo dialogo");
+                        } catch (PropertyVetoException ex) {
+                            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                     else
@@ -2423,22 +2430,22 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     }
     
      @Override
-    public void crearDialogoCodefac(ObserverUpdateInterface panel,VentanaEnum ventanEnum,boolean maximizado)
+    public void crearDialogoCodefac(ObserverUpdateInterface panel,VentanaEnum ventanEnum,boolean maximizado,GeneralPanelInterface panelPadre)
     {
-        crearDialogoVentana(ventanEnum.getClase(), panel, maximizado,null);    
+        crearDialogoVentana(ventanEnum.getClase(), panel, maximizado,null,panelPadre);    
     }
     
     @Override
-    public void crearDialogoCodefac(ObserverUpdateInterface panel,VentanaEnum ventanEnum,boolean maximizado,Object[] parametrosPostConstructor)
+    public void crearDialogoCodefac(ObserverUpdateInterface panel,VentanaEnum ventanEnum,boolean maximizado,Object[] parametrosPostConstructor,GeneralPanelInterface panelPadre)
     {
-        crearDialogoVentana(ventanEnum.getClase(), panel, maximizado,parametrosPostConstructor);    
+        crearDialogoVentana(ventanEnum.getClase(), panel, maximizado,parametrosPostConstructor,panelPadre);    
     }
 
     @Override
-    public void crearDialogoCodefac(ObserverUpdateInterface panel,String namePanel, boolean maximizado) {
+    public void crearDialogoCodefac(ObserverUpdateInterface panel,String namePanel, boolean maximizado,GeneralPanelInterface panelPadre) {
         
         Class clase=buscarPanelDialog(namePanel);
-        crearDialogoVentana(clase, panel, maximizado,null);
+        crearDialogoVentana(clase, panel, maximizado,null,panelPadre);
                 
     }
     
@@ -2453,7 +2460,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         }
     }   
     
-    private void crearDialogoVentana(Class clase,ObserverUpdateInterface panel,boolean maximizado,Object[] parametrosPostConstructor)
+    private void crearDialogoVentana(Class clase,ObserverUpdateInterface panel,boolean maximizado,Object[] parametrosPostConstructor,GeneralPanelInterface panelPadre)
     {
         if(clase!=null)
         {
@@ -2465,6 +2472,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 if(ventana instanceof  DialogInterfacePanel)
                 {
                     ventana.modoDialogo=true;
+                    ventana.formOwnerFocus=panelPadre;
                     ventana.formOwner=panel;
                     agregarListenerMenu(ventana,maximizado);
                     habilitarBotones(false);

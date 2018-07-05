@@ -459,7 +459,7 @@ public class CompraModel extends CompraPanel{
                     }
                 };
 
-                panelPadre.crearDialogoCodefac(observer, DialogInterfacePanel.PRODUCTO_PANEL, false);
+                panelPadre.crearDialogoCodefac(observer, VentanaEnum.PRODUCTO, false,formularioActual);
             }
         });
         
@@ -481,7 +481,7 @@ public class CompraModel extends CompraPanel{
                             desbloquearIngresoDetalleProducto();
                         }
                     }
-                }, VentanaEnum.CLIENTE, false,paramPostConstruct);
+                }, VentanaEnum.CLIENTE, false,paramPostConstruct,formularioActual);
          
                 //panelPadre.crearVentanaCodefac(VentanaEnum.CLIENTE,true,paramPostConstruct);
                 

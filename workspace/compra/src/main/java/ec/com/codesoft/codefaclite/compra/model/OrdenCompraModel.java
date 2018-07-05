@@ -407,7 +407,7 @@ public class OrdenCompraModel extends OrdenCompraPanel{
                             //desbloquearIngresoDetalleProducto();
                         }
                     }
-                }, VentanaEnum.CLIENTE, false,paramPostConstruct);
+                }, VentanaEnum.CLIENTE, false,paramPostConstruct,formularioActual);
          
                 //panelPadre.crearVentanaCodefac(VentanaEnum.CLIENTE,true,paramPostConstruct);
                 
@@ -439,7 +439,7 @@ public class OrdenCompraModel extends OrdenCompraPanel{
                     }
                 };
 
-                panelPadre.crearDialogoCodefac(observer, DialogInterfacePanel.PRODUCTO_PANEL, false);
+                panelPadre.crearDialogoCodefac(observer, VentanaEnum.PRODUCTO, false,formularioActual);
             }
         });
     }

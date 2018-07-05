@@ -38,6 +38,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenCompraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
@@ -411,7 +412,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                             getTxtProveedorDetalle().setText(persona.getIdentificacion()+" - "+persona.getRazonSocial());
                         }
                 }
-                }, DialogInterfacePanel.CLIENTE_PANEL, false);
+                }, VentanaEnum.CLIENTE, false,formularioActual);
             }
         });
         
@@ -427,7 +428,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                             getTxtProductoDetalle().setText(producto.getCodigoEAN()+" - "+ producto.getNombre());
                         }
                 }
-                }, DialogInterfacePanel.PRODUCTO_PANEL, false);
+                }, VentanaEnum.PRODUCTO, false,formularioActual);
             }
         });
         

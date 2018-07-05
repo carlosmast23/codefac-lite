@@ -277,7 +277,7 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
                         getCmbRubro().setSelectedItem(catalogo);
 
                     }
-                }, VentanaEnum.CATALOGO_PRODUCTO, false);
+                }, VentanaEnum.CATALOGO_PRODUCTO, false,formularioActual);
             }
         });
         
