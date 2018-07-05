@@ -712,13 +712,15 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         try {
                             DialogInterfacePanel interfaz = (DialogInterfacePanel) frame;
                             Object resultado = interfaz.getResult();
-                            frameInterface.formOwner.updateInterface(resultado);
                             frame.dispose();
                             mostrarPanelSecundario(false);
-                            
                             //Setear el focus al formulario que abrio el dialogo
                             frameInterface.formOwnerFocus.moveToFront();
                             frameInterface.formOwnerFocus.setSelected(true);
+                            
+                            frameInterface.formOwner.updateInterface(resultado);
+                            
+
                             
                         } catch (ExcepcionCodefacLite ex) {
                             System.out.println("Error al grabar en modo dialogo");

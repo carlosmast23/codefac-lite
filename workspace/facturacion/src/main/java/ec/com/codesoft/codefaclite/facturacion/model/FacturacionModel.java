@@ -505,6 +505,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 if (entity != null) {
                     productoSeleccionado = entity;
                     setearValoresProducto(productoSeleccionado.getValorUnitario(), productoSeleccionado.getNombre(),productoSeleccionado.getCodigoPersonalizado());
+                    //Establecer puntero en la cantidad para agregar
+                    getTxtCantidad().requestFocus();
+                    getTxtCantidad().selectAll();
                 }
             }
         };
@@ -2242,8 +2245,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             public void keyPressed(KeyEvent e) {
                 
                 //Solo validar si existe datos ingresados en el combo
-                if(getTxtCodigoDetalle().equals(""))
+                if(getTxtCodigoDetalle().getText().trim().equals(""))
+                {
                     return;
+                }
                 
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 
