@@ -114,6 +114,7 @@ import javax.swing.JTextField;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import net.sf.jasperreports.engine.JasperPrint;
 import org.apache.commons.collections4.map.HashedMap;
 import org.jdesktop.swingx.prompt.PromptSupport;
@@ -459,9 +460,33 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         int fila = getTblDetalleFactura().getSelectedRow();
         if(fila>=0)
         {
-            FacturaDetalle facturaDetalle = factura.getDetalles().get(fila);
-            agregarDetallesFactura(facturaDetalle);
-            habilitarModoIngresoDatos();
+            try {
+                FacturaDetalle facturaDetalle = factura.getDetalles().get(fila);
+                //Buscar la referencia de las variables depedendiendo del modulo seleccionado
+                TipoDocumentoEnum tipoDocumentoEnum = (TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+                switch (tipoDocumentoEnum) {
+                    case LIBRE:
+                    case INVENTARIO:
+                        Producto producto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                        productoSeleccionado = producto;
+                        break;
+                        
+                    case PRESUPUESTOS:
+                        Presupuesto presupuesto=ServiceFactory.getFactory().getPresupuestoServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                        presupuestoSeleccionado = presupuesto;
+                        break;
+                        
+                    case ACADEMICO:
+                        RubroEstudiante rubroEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(facturaDetalle.getReferenciaId());
+                        rubroSeleccionado = rubroEstudiante;
+                        break;
+                        
+                }
+                agregarDetallesFactura(facturaDetalle);
+                habilitarModoIngresoDatos();
+            } catch (RemoteException ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
@@ -1304,6 +1329,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     return;
                 
                 Object dato=modeloTablaDetallesProductos.getValueAt(filaModificada, columnaModificada);
+                //TableModel modelo = ((TableModel) (e.getSource()));
+                //String datoOriginal=modelo.getValueAt(filaModificada,columnaModificada)
                 
                 switch(columnaModificada)
                 {
@@ -1758,6 +1785,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
 
         if (!panelPadre.validarPorGrupo("detalles")) {
+            cargarDatosDetalles(); //Si no se pudo editar vuelvo a cargar los detalles si se modifico desde la tabla para que quede la forma original
             return;
         }
         
