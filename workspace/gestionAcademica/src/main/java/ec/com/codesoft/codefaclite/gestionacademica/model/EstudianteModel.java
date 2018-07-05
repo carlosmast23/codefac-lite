@@ -463,14 +463,14 @@ public class EstudianteModel extends EstudiantePanel implements DialogInterfaceP
     }
 
     @Override
-    public Estudiante getResult() {
+    public Estudiante getResult() throws ExcepcionCodefacLite {
         try {
             grabar();
             return estudiante;
         } catch (ExcepcionCodefacLite ex) {
             Logger.getLogger(EstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
+            throw  ex;
         }
-        return null;
     }
 
     @Override

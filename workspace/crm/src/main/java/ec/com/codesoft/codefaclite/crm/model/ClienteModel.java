@@ -415,15 +415,15 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     }
 
     @Override
-    public Persona getResult() {
+    public Persona getResult() throws ExcepcionCodefacLite {
 
         try {
             grabar();
             return persona;
         } catch (ExcepcionCodefacLite ex) {
             Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
         }
-        return null;
     }
 
     private void cargarDatosIniciales() {

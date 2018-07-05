@@ -276,14 +276,15 @@ public class CatalogoProductoModel extends CatalogoProductoPanel implements Dial
     }
 
     @Override
-    public CatalogoProducto getResult() {
+    public CatalogoProducto getResult() throws ExcepcionCodefacLite {
         try {
             grabar();
             return catalogoProducto;
         } catch (ExcepcionCodefacLite ex) {
             Logger.getLogger(CatalogoProductoModel.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
         }
-        return null;
+
     }
     
     @Override

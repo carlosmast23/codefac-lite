@@ -150,14 +150,14 @@ public class BodegaModel extends BodegaPanel implements DialogInterfacePanel<Bod
     }
 
     @Override
-    public Bodega getResult() {
+    public Bodega getResult() throws ExcepcionCodefacLite {
         try {
             grabar();
             return bodega;
         } catch (ExcepcionCodefacLite ex) {
             Logger.getLogger(BodegaModel.class.getName()).log(Level.SEVERE, null, ex);
+            throw  ex;
         }
-        return null;
     }
 
     @Override
