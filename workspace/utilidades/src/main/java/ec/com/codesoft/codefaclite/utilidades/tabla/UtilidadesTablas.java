@@ -72,12 +72,23 @@ public abstract class UtilidadesTablas {
          return defaultTableModel;
     }
     
-     public static void cambiarColorFila(JTable table) {
+    public static void cambiarColorFila(JTable table) {
         Enumeration<TableColumn> en = table.getColumnModel().getColumns();
         while (en.hasMoreElements()) {
             TableColumn tc = en.nextElement();
             tc.setCellRenderer(new CellRenderer());
         }
     }
+    
+    public static void bloquearColumnasTabla(JTable table, Boolean[] puedeEditar)
+    {
+        table = new JTable(){
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return puedeEditar[columnIndex];
+            }
+        };
+    }
+     
    
 }
