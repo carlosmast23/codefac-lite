@@ -1,3 +1,4 @@
 Ver si se puede tener o no se necesita un campo para especificar cuando un cliente es tambien un representante
 Analizar si unicamente el estudiante puede grabar cedulas o puede grabar otro tipo de documentos , ejemplo para instituciones educativas superiores
 Verificar que las despues de hacer alguna validacion el puntero por defecto aparesca en el campo para editar de forma generica
+Clsificar en rubros si se debe cobrar a todos como (matricula) o no , para tener mejor validacion

@@ -985,6 +985,10 @@ public class Main {
 
     }
 
+    /**
+     * Agrega todas las pantallas secundarias que puedo utilizar en la pantalla secuendaria del menu principal
+     * @return 
+     */
     public static Map<String,PanelSecundarioAbstract> agregarPanelesSecundarios()
     {
         Map<String,PanelSecundarioAbstract> paneles=new HashMap<String,PanelSecundarioAbstract>();

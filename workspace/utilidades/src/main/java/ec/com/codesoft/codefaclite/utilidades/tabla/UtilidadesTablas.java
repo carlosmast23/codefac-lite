@@ -89,6 +89,11 @@ public abstract class UtilidadesTablas {
             }
         };
     }
+    
+    public static void bloquerTodasColumnasTabla(JTable table)
+    {
+        
+    }
      
    
 }

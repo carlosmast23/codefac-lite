@@ -12,12 +12,11 @@ import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import ec.com.codesoft.codefaclite.configuraciones.model.CalculadoraModel;
 import ec.com.codesoft.codefaclite.configuraciones.model.ComprobantesConfiguracionModel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
-import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteListener;
-import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.directorio.DirectorioCodefac;
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecundarioAbstract;
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecundarioListener;
+import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.ValidadorCodefacModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.AyudaCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
@@ -35,7 +34,6 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPa
 import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
 import ec.com.codesoft.codefaclite.crm.model.ProductoModel;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
-import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.main.init.Main;
 import ec.com.codesoft.codefaclite.main.interfaces.BusquedaCodefacInterface;
 import ec.com.codesoft.codefaclite.main.license.Licencia;
@@ -52,7 +50,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
-import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceControllerServer;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PermisoVentana;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
@@ -64,23 +61,15 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefa
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UtilidadesServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
-import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
 import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
-import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
-import es.mityc.firmaJava.ocsp.config.ServidorOcsp;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
-import java.awt.Panel;
 import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
@@ -93,75 +82,58 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.beans.PropertyVetoException;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.rmi.RemoteException;
+import java.sql.JDBCType;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
-import javax.swing.Action;
 import javax.swing.BorderFactory;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JEditorPane;
-import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
-import javax.swing.ListCellRenderer;
-import javax.swing.ListSelectionModel;
 import javax.swing.ToolTipManager;
 import javax.swing.WindowConstants;
-import javax.swing.border.Border;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.plaf.SplitPaneUI;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
 import javax.swing.text.JTextComponent;
-import javax.swing.text.StyledEditorKit;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.swing.JRViewer;
-import org.jfree.util.Log;
+
 /**
  *
  * @author Carlos
@@ -207,8 +179,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
      * Varible que almacena la ip del servidor para setear en la pantalla
      */
     public String ipServidor; //Todo: agrupar estos datos de mejor maneras
-    
-
+   
     public GeneralPanelModel() 
     {
         getjPanelSeleccion().setVisible(false);//Asumo que cuando se abre por primera vez la pantalla esta oculta
@@ -1104,7 +1075,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         
         getjSplitPanel().setDividerLocation(PROPORCION_HORIZONTAL);
         getjSplitPanelVerticalSecundario().setDividerLocation(PROPORCION_VERTICAL);
-        getjPanelSeleccion().setSelectedComponent(panelesSecundariosMap.get(panelSecundario));
+        getjPanelSeleccion().setSelectedComponent(panelesSecundariosMap.get(panelSecundario)); //Seleccionar el tab del panel secundario seleccionado
 
     }
     private boolean verificarPermisosVentana(List<String> permisosVentana,List<Perfil> rolesUsuario)
@@ -1497,38 +1468,31 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     
     private void mostrarConsola(ConsolaGeneral consola,Boolean actualizarVista)
     {
-        /*
-       getjTablaConsola().addMouseListener(new MouseListener() {
+       PanelSecundarioAbstract panel=panelesSecundariosMap.get(PanelSecundarioAbstract.PANEL_VALIDACION);
+       //Esta funcion se encarga de enviar el modelo a la tabla para mostrar los datos
+       panel.actualizar(consola.getModeloTabla());
+       
+       JTable tablaValidacion=(JTable) panel.getPropertyByNombre(ValidadorCodefacModel.PROPIEDAD_TABLA);       
+       tablaValidacion.addMouseListener(new MouseListener() {           
            @Override
            public void mouseClicked(MouseEvent e) {
-               //int fila=getjTablaConsola().getSelectedRow();
-               //consola.seleccionarFila(fila);
-               
+               int filaSeleccionado=tablaValidacion.getSelectedRow();
+               if(filaSeleccionado>=0)
+               {
+                   ControladorCodefacInterface frameInterface=(ControladorCodefacInterface) getPanelActivo();
+                   frameInterface.consola.seleccionarFila(filaSeleccionado);
+               }
            }
+
            @Override
-           public void mousePressed(MouseEvent e) {
-               
-           }
+           public void mousePressed(MouseEvent e) {}
            @Override
-           public void mouseReleased(MouseEvent e) {
-               
-           }
+           public void mouseReleased(MouseEvent e) {}
            @Override
-           public void mouseEntered(MouseEvent e) {
-               
-           }
+           public void mouseEntered(MouseEvent e) {}
            @Override
-           public void mouseExited(MouseEvent e) {
-               
-           }
+           public void mouseExited(MouseEvent e) {}
        });
-       */
-       PanelSecundarioAbstract panel=panelesSecundariosMap.get(PanelSecundarioAbstract.PANEL_VALIDACION);
-       panel.actualizar(consola.getModeloTabla());
-       //getJPanelContenidoAuxiliar().removeAll();
-       //getJPanelContenidoAuxiliar().add(getJPanelConsola());
-       //if(!actualizarVista)
-        //   return;
                
        if(consola.getModeloTabla().getRowCount()>0)
        {
@@ -1744,13 +1708,6 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                                 System.out.println("Panel Activo: "+panel.getTitle());
                                 if (panel.consola != null) {
                                     mostrarConsola(getPanelActivo().consola, false);
-                                    System.out.println(getPanelActivo().consola.getModeloTabla().getRowCount());
-                                    //revalidate();
-                                    //repaint();
-                                    //revalidate();
-                                    //repaint();
-                                    System.out.println("consola seteado a otra pantalla");
-
                                 }
                                 else
                                     System.out.println("consola null");

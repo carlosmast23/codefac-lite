@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.controlador.panelessecundariomodel;
 
 import ec.com.codesoft.codefaclite.controlador.panel.AyudaCodefacPanel;
+import java.awt.event.MouseListener;
 
 /**
  *
@@ -17,5 +18,11 @@ public class AyudaCodefacModel extends AyudaCodefacPanel{
     public void actualizar(Object obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public Object getPropertyByNombre(String nombre) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     
 }
