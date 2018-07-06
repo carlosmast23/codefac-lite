@@ -251,35 +251,30 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
      * Metodo que me permite saber si existe datos ingresados y no existe nongun dato y puedo salir sin grabar
      * @return 
      */
-    public boolean salirSinGrabar(Class clase)
-    {
-        Class[] clases = clase.getClasses();
-        //for (Class clase1 : clases) {
-        //    System.out.println("clase:" + clase1.getName());
-            
-            //if (clase1.equals(JInternalFrame.class)) 
-            //{
-                Field[] campos = clase.getSuperclass().getDeclaredFields();
-                for (Field campo : campos) {
-                    System.out.println(campo.getName() + "->" + campo.getType().getName());
-                    if (campo.getType().equals(JTextField.class) || campo.getType().equals(JTextArea.class)) {
-                        try {
-                            campo.setAccessible(true);
-                            JTextComponent campoTexto = (JTextComponent) campo.get(this);
-                            if (!campoTexto.getText().equals("")) {
-                                return false;
-                            }
-                        } catch (IllegalArgumentException ex) {
-                            Logger.getLogger(GeneralPanelInterface.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (IllegalAccessException ex) {
-                            Logger.getLogger(GeneralPanelInterface.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+    public boolean salirSinGrabar() {
+        //Esta validacion solo debe funcionar en el estado de grabar
+        if(estadoFormulario!=ESTADO_GRABAR)
+        {
+            return true;
+        }
+        
+        //TODO: Ver si se puede validar para otros componentes como combox
+        Field[] campos = getClass().getSuperclass().getDeclaredFields();
+        for (Field campo : campos) {
+            if (campo.getType().equals(JTextField.class) || campo.getType().equals(JTextArea.class)) {
+                try {
+                    campo.setAccessible(true);
+                    JTextComponent campoTexto = (JTextComponent) campo.get(this);
+                    if (!campoTexto.getText().equals("")) {
+                        return false;
                     }
+                } catch (IllegalArgumentException ex) {
+                    Logger.getLogger(GeneralPanelInterface.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(GeneralPanelInterface.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
-            //}
-
-        //}
+            }
+        }
         return true;
 
     }    

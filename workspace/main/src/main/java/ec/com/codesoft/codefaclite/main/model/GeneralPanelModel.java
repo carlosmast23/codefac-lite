@@ -1715,19 +1715,19 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         public void internalFrameClosing(InternalFrameEvent e) {
                             Boolean respuesta=true;
                             GeneralPanelInterface panelCerrando=(GeneralPanelInterface) e.getInternalFrame();                            
-                            if(!panelCerrando.salirSinGrabar(panelCerrando.getClass()))
+                            if(!panelCerrando.salirSinGrabar())
                             {
                                 respuesta=DialogoCodefac.dialogoPregunta("Advertencia","Existen datos ingresados , esta seguro que desea cerrar la ventana?",DialogoCodefac.MENSAJE_ADVERTENCIA);
                             }
                             
                             //Solo cerrar si la respuesta es si
                             if(respuesta)
-                            {
-                                e.getInternalFrame().dispose();
+                            {                                
                                 ControladorCodefacInterface panel = (ControladorCodefacInterface) getjDesktopPane1().getSelectedFrame();
                                 panel.formularioCerrando = true;
                                 cargarAyuda();
                                 mostrarPanelSecundario(false);
+                                e.getInternalFrame().dispose();
                             }                                                        
                         }
 

@@ -408,5 +408,13 @@ public class EmpresaModel extends EmpresaForm
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public boolean salirSinGrabar() {
+        return true ;  //Esta pantalla necesito que siempre salga sin preguntar
+    }
+
+    
+
+    
     
 }
