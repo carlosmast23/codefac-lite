@@ -1034,7 +1034,10 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         }
     }
     
-    
+    /**
+     * TODO: optimizar este codigo porque existe 2 repetidos con diferentes parametros
+     * @param opcion 
+     */
     private void mostrarPanelSecundario(boolean  opcion)
     {
         if(opcion)
@@ -1042,11 +1045,13 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             //Valores para mostrar en la pantalla secundaria
             PROPORCION_HORIZONTAL = PROPORCION_HORIZONTAL_DEFAULT;
             PROPORCION_VERTICAL = PROPORCION_VERTICAL_DEFAULT;
+            getjPanelSeleccion().setVisible(opcion); //Vuelve visible el componente secundario
         }
         else
         {
             PROPORCION_HORIZONTAL = PROPORCION_HORIZONTAL_INICIAL;
             PROPORCION_VERTICAL = 0.9999999999999999d;
+            getjPanelSeleccion().setVisible(opcion); //Vuelve invisible el componente secundario
 
         }
         
