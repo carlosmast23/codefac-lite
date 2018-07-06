@@ -24,6 +24,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterfac
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.CampoBuscarAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.CursorPorDefectoAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ConsolaGeneral;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
@@ -90,6 +91,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -114,6 +116,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
@@ -639,8 +642,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     System.out.println("metodo no implementado"); 
                 } catch (ExcepcionCodefacLite ex) {
                     //Cancela el ciclo de vida normal si manda una excecion
-                    System.out.println("ex"); 
-                    //ex.printStackTrace();
+                    System.out.println(ex.getMessage()); 
                     return;
                 } catch (RemoteException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -664,7 +666,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     
                 limpiarCamposValidacion(frameInterface);
                 frameInterface.consola=new ConsolaGeneral();
-                mostrarConsola(frameInterface.consola,true);
+                mostrarConsola(frameInterface.consola,true);                
             }
         });
         
@@ -1104,7 +1106,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private void agregarListenerMenu(ControladorCodefacInterface panel,boolean maximisado)
     {
         try {
-           
+            //Anular el metodo de cierre automatico para contralar manualmente
+            panel.setDefaultCloseOperation(JInternalFrame.DO_NOTHING_ON_CLOSE);
             /**
              * Agregar variables de session a la pantalla
              */
@@ -1136,7 +1139,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             panel.setMaximum(maximisado);
             panel.show();
             getBtnNuevo().requestFocus();
-            agregarValidadores(panel);
+            agregarValidadores(panel); //Agregar validadores para los campos
             agregarAyudas(panel);
             
             try
@@ -1237,7 +1240,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
     }
     
-        private void limpiarAnotaciones(ControladorCodefacInterface panel)
+    private void limpiarAnotaciones(ControladorCodefacInterface panel)
     {
        boolean validado=true;
        
@@ -1264,7 +1267,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         }
 
     }
-    
+    //TODO: optimizar para que exista un solo meotodo para correr las validaciones para que no exista tantos recorridos de gana
     private void limpiarCamposValidacion(ControladorCodefacInterface panel)
     {
        ConsolaGeneral consola=new ConsolaGeneral();
@@ -1272,6 +1275,13 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
        Class classVentana=panel.getClass();
         Method[] metodos=classVentana.getMethods();
         for (Method metodo : metodos) {
+            
+            //Si no es metodo de tipo get ya no valida
+            if(metodo.getName().indexOf("get")!=0)
+            {
+                continue;
+            }
+            
             LimpiarAnotacion validacion=metodo.getAnnotation(LimpiarAnotacion.class);
             //System.out.println(metodo.getName());
             if(validacion!=null)
@@ -1288,6 +1298,23 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+            
+            CursorPorDefectoAnotacion anotacionCursor=metodo.getAnnotation(CursorPorDefectoAnotacion.class);
+            if(anotacionCursor!=null)
+            {
+                try {
+                    JTextComponent componente=(JTextComponent) metodo.invoke(panel);
+                    componente.requestFocus(); //Seteo el focus del campo por defecto
+                    
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalArgumentException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InvocationTargetException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
         }
 
     }
@@ -1515,6 +1542,12 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
        Class classVentana=panel.getClass();
         Method[] metodos=classVentana.getMethods();
         for (Method metodo : metodos) {
+            //solo hacer validaciones para metodos que empicen con la palabra get
+            if(metodo.getName().indexOf("get")!=0)
+            {
+                continue;
+            }
+            
             ValidacionCodefacAnotacion validacion=metodo.getAnnotation(ValidacionCodefacAnotacion.class);
             if(validacion!=null)
             {
@@ -1590,7 +1623,23 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 }
             }
             
-            //Buscar Anotaciones para la etiqueta de busque por campo
+            CursorPorDefectoAnotacion anotacionCursorDefecto=metodo.getAnnotation(CursorPorDefectoAnotacion.class);
+            if(anotacionCursorDefecto!=null)
+            {
+                try {
+                    JTextComponent componente=(JTextComponent) metodo.invoke(panel);
+                    componente.requestFocus(); //Setear con el puntero ese campo
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalArgumentException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InvocationTargetException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
+            
+            //Buscar Anotaciones para la etiqueta de busqueda por campo
             CampoBuscarAnotacion buscarAnotacion=metodo.getAnnotation(CampoBuscarAnotacion.class);
             if(buscarAnotacion!=null)
             {
@@ -1664,16 +1713,27 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
                         @Override
                         public void internalFrameClosing(InternalFrameEvent e) {
-                            // System.out.println("internalFrameClosing");
-                            ControladorCodefacInterface panel=(ControladorCodefacInterface) getjDesktopPane1().getSelectedFrame();
-                            panel.formularioCerrando=true;
-                            cargarAyuda();                            
-                            mostrarPanelSecundario(false);
+                            Boolean respuesta=true;
+                            GeneralPanelInterface panelCerrando=(GeneralPanelInterface) e.getInternalFrame();                            
+                            if(!panelCerrando.salirSinGrabar(panelCerrando.getClass()))
+                            {
+                                respuesta=DialogoCodefac.dialogoPregunta("Advertencia","Existen datos ingresados , esta seguro que desea cerrar la ventana?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                            }
                             
+                            //Solo cerrar si la respuesta es si
+                            if(respuesta)
+                            {
+                                e.getInternalFrame().dispose();
+                                ControladorCodefacInterface panel = (ControladorCodefacInterface) getjDesktopPane1().getSelectedFrame();
+                                panel.formularioCerrando = true;
+                                cargarAyuda();
+                                mostrarPanelSecundario(false);
+                            }                                                        
                         }
 
                         @Override
                         public void internalFrameClosed(InternalFrameEvent e) {
+                            
                             if (verificarTodasPantallasMinimizadas(e.getInternalFrame())) {
                                 habilitarBotones(false);
                             }
@@ -1728,7 +1788,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         public void internalFrameDeactivated(InternalFrameEvent e) {}
      };
     
-        
+           
     
     private void habilitarBotones(Boolean opcion)
     {

@@ -17,6 +17,8 @@ import java.awt.Image;
 import java.awt.Point;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,9 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.text.JTextComponent;
 import org.bouncycastle.crypto.tls.SessionParameters;
 
 /**
@@ -242,7 +247,42 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
         //this.setVisible(true);
     }
 
-    
+     /**
+     * Metodo que me permite saber si existe datos ingresados y no existe nongun dato y puedo salir sin grabar
+     * @return 
+     */
+    public boolean salirSinGrabar(Class clase)
+    {
+        Class[] clases = clase.getClasses();
+        //for (Class clase1 : clases) {
+        //    System.out.println("clase:" + clase1.getName());
+            
+            //if (clase1.equals(JInternalFrame.class)) 
+            //{
+                Field[] campos = clase.getSuperclass().getDeclaredFields();
+                for (Field campo : campos) {
+                    System.out.println(campo.getName() + "->" + campo.getType().getName());
+                    if (campo.getType().equals(JTextField.class) || campo.getType().equals(JTextArea.class)) {
+                        try {
+                            campo.setAccessible(true);
+                            JTextComponent campoTexto = (JTextComponent) campo.get(this);
+                            if (!campoTexto.getText().equals("")) {
+                                return false;
+                            }
+                        } catch (IllegalArgumentException ex) {
+                            Logger.getLogger(GeneralPanelInterface.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (IllegalAccessException ex) {
+                            Logger.getLogger(GeneralPanelInterface.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+
+            //}
+
+        //}
+        return true;
+
+    }    
     
     
 }

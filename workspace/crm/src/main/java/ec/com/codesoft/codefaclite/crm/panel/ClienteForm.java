@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.crm.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.CampoBuscarAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.CursorPorDefectoAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
@@ -516,6 +517,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         this.jTextExtension = jTextExtension;
     }
 
+    @CursorPorDefectoAnotacion   
     @CampoBuscarAnotacion
     @LimpiarAnotacion
     @ValidacionCodefacAnotacion(requerido=true, personalizado ={"validarIdentificacionSegunOpcionEstablecida"} , min=0 ,max = 13,expresionRegular = "",nombre = NOMBRE_VALIDADOR_IDENTIFICACION)

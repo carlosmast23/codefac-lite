@@ -2,3 +2,7 @@ Ver si se puede tener o no se necesita un campo para especificar cuando un clien
 Analizar si unicamente el estudiante puede grabar cedulas o puede grabar otro tipo de documentos , ejemplo para instituciones educativas superiores
 Verificar que las despues de hacer alguna validacion el puntero por defecto aparesca en el campo para editar de forma generica
 Clsificar en rubros si se debe cobrar a todos como (matricula) o no , para tener mejor validacion
+
+Agregar el nombre legal en los clientes y que automaticamente me aparesca para llenar estos datos cuando se ingrese un ruc
+
+Ver una forma para saber que si tiene datos llenos no le permita salir de la pantalla
