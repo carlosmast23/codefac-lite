@@ -55,6 +55,7 @@ public class AsociarProductoProveedorModel extends AsociarProductoProveedorPanel
         agregarListenerCombo();
         initModelTablaProductoProveedor();
         this.servicioProductoProveedor=ServiceFactory.getFactory().getProductoProveedorServiceIf();
+        this.mapDatosIngresadosDefault.put(getTxtCosto(),"0");
     }
 
     @Override

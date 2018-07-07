@@ -69,6 +69,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
     public FacturaReporteModel() {
         valoresIniciales();
         initListener();
+        super.validacionDatosIngresados=false;
     }
 
     private void initListener() {

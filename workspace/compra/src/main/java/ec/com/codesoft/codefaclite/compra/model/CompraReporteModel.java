@@ -87,6 +87,12 @@ public class CompraReporteModel extends CompraReportePanel {
     //Mapa que almacena
     private Map parametros;
 
+    public CompraReporteModel() {
+        super.validacionDatosIngresados=false;
+    }
+    
+    
+
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         iniciarValoresVentana();

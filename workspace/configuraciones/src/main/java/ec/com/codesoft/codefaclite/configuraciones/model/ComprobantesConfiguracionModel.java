@@ -94,6 +94,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
          * Desactivo el ciclo de vida para controlar manualmente
          */
         super.cicloVida = false;
+        super.validacionDatosIngresados=false;
 
     }
 

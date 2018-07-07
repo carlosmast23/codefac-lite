@@ -638,7 +638,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     boolean respuesta=true;
                     if(!frameInterface.salirSinGrabar())
                     {
-                        respuesta=DialogoCodefac.dialogoPregunta("Advertencia","Existen datos ingresados , ésta seguro que desea limpiar la ventana?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                        respuesta=DialogoCodefac.dialogoPregunta("Advertencia","Existen datos ingresados , está seguro que desea limpiar la ventana?",DialogoCodefac.MENSAJE_ADVERTENCIA);
                     }
                     
                     //Solo si la respuesta es grabar ejecuta el metodo
@@ -997,7 +997,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     }
 
                     if (!frameInterface.salirSinGrabar()) {
-                        boolean respuesta = DialogoCodefac.dialogoPregunta("Advertencia", "Existen datos ingresados , ésta seguro que desea buscar de todos modos?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                        boolean respuesta = DialogoCodefac.dialogoPregunta("Advertencia", "Existen datos ingresados , está seguro que desea buscar de todos modos?", DialogoCodefac.MENSAJE_ADVERTENCIA);
                         if (!respuesta) {
                             return; //Si el usuario no desea cargar porque existen datos ingresados cancelo el proceso
                         }
@@ -1739,7 +1739,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             GeneralPanelInterface panelCerrando=(GeneralPanelInterface) e.getInternalFrame();                            
                             if(!panelCerrando.salirSinGrabar())
                             {
-                                respuesta=DialogoCodefac.dialogoPregunta("Advertencia","Existen datos ingresados , ésta seguro que desea cerrar la ventana?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                                respuesta=DialogoCodefac.dialogoPregunta("Advertencia","Existen datos ingresados , está seguro que desea cerrar la ventana?",DialogoCodefac.MENSAJE_ADVERTENCIA);
                             }
                             
                             //Solo cerrar si la respuesta es si

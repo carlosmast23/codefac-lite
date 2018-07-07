@@ -21,12 +21,14 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -76,15 +78,38 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
     public static final String ESTADO_GRABAR="G";
     public static final String ESTADO_EDITAR="E";
     
+    /**
+     * Variable que contiene el estado actual del formulario para que el desarrollado pueda consultar
+     */
     public String estadoFormulario;
+    
+    /**
+     * Lista que me permite grabar componentes que se desean excluir para no tomar en cuenta para la validacion de no salir si existen datos ingresados 
+     */
+    public List<JComponent> listaExclusionComponentes;
+    
+    /**
+     * Variable para controlar si desea activar o desactivar esta validacion de cuando existen datos ingresados
+     * Esto deberia desactivarse por ejemplo para reportes
+     */
+    public Boolean validacionDatosIngresados;
     
     /**
      * Variable de utilidad solo para facilitar el trabajo para obtener la referencia al objecto actual desde una clase interna o anonima
      */
     public GeneralPanelInterface formularioActual;
+    
+    /**
+     * Map que me permite tener almacenados si algunos campos tienen valores por defecto para la validacion de datos ingresados
+     */
+    public Map<JComponent,Object> mapDatosIngresadosDefault;
 
     public GeneralPanelInterface() {
         this.formularioActual=this;
+        this.listaExclusionComponentes=new ArrayList<JComponent>();
+        this.mapDatosIngresadosDefault=new HashMap<JComponent,Object>();
+        this.validacionDatosIngresados=true;
+        
     }
     
     
@@ -252,8 +277,8 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
      * @return 
      */
     public boolean salirSinGrabar() {
-        //Esta validacion solo debe funcionar en el estado de grabar
-        if(estadoFormulario!=ESTADO_GRABAR)
+        //Esta validacion solo debe funcionar en el estado de grabar y si esta activa la opcion de validar
+        if(estadoFormulario!=ESTADO_GRABAR || !validacionDatosIngresados)
         {
             return true;
         }
@@ -261,13 +286,40 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
         //TODO: Ver si se puede validar para otros componentes como combox
         Field[] campos = getClass().getSuperclass().getDeclaredFields();
         for (Field campo : campos) {
+            
             if (campo.getType().equals(JTextField.class) || campo.getType().equals(JTextArea.class)) {
                 try {
                     campo.setAccessible(true);
-                    JTextComponent campoTexto = (JTextComponent) campo.get(this);
-                    if (!campoTexto.getText().equals("")) {
-                        return false;
+                    Object campoSeleccionado= campo.get(this);
+                    
+                    //Verificar si el campo no se encuentra dentro de la lista de exclusiones
+                    if(listaExclusionComponentes.contains(campoSeleccionado))
+                    {
+                        continue;
                     }
+                    
+                    JTextComponent campoTexto = (JTextComponent) campoSeleccionado;
+                    Object valorDefecto=mapDatosIngresadosDefault.get(campoTexto);
+                    String valorCampo=campoTexto.getText();
+                    
+                    //Verifico si tiene ingresado cualquier valor que no sea por defecto significa que cambio el valor
+                    if(valorDefecto!=null)
+                    {
+                        if (!valorDefecto.toString().equals(valorCampo) ) {
+                            if(!valorCampo.equals(""))
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (!valorCampo.equals("")) {
+                            return false;
+                        }
+                    }
+
+
                 } catch (IllegalArgumentException ex) {
                     Logger.getLogger(GeneralPanelInterface.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IllegalAccessException ex) {

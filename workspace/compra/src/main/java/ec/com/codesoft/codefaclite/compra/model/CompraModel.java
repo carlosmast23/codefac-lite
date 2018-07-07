@@ -89,6 +89,12 @@ public class CompraModel extends CompraPanel{
     private int filaDP;
     private Boolean banderaIngresoDetallesCompra;
     private Compra.RetencionEnumCompras estadoRetencion;
+
+    public CompraModel() {
+        super.validacionDatosIngresados=false;
+    }
+    
+    
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite {

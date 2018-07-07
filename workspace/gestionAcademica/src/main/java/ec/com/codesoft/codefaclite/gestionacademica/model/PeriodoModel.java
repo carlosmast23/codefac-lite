@@ -47,6 +47,7 @@ public class PeriodoModel extends PeriodoPanel {
 
     public PeriodoModel() {
         periodoService = ServiceFactory.getFactory().getPeriodoServiceIf();
+        listaExclusionComponentes.add(getTxtNombre()); //Agrego a la lista de exluciones para evitar que valide cuando existan datos ingresados
     }
 
     @Override

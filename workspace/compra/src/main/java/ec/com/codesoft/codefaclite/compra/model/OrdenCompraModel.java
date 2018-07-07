@@ -94,6 +94,13 @@ public class OrdenCompraModel extends OrdenCompraPanel{
     
     private BigDecimal subtotal0;
 
+    public OrdenCompraModel() {
+        listaExclusionComponentes.add(getTxtDescuentoImpuestos());
+        listaExclusionComponentes.add(getTxtDescuentoSinImpuestos());
+    }
+    
+    
+
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         listener();

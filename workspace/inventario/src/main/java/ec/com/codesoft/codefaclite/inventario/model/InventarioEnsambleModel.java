@@ -45,6 +45,12 @@ public class InventarioEnsambleModel extends InventarioEnsamblePanel{
 
     private Producto productoEnsamble;
     private Kardex kardexEnsamble;
+
+    public InventarioEnsambleModel() {
+        super.mapDatosIngresadosDefault.put(getTxtCantidad(),"0");
+    }
+    
+    
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite {

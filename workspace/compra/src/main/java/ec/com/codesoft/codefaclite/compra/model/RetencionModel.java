@@ -64,6 +64,11 @@ public class RetencionModel extends RetencionPanel{
      */
     //private Compra compra;
     private Retencion retencion;
+
+    public RetencionModel() {
+        this.validacionDatosIngresados=false;
+    }
+    
     
     
     @Override

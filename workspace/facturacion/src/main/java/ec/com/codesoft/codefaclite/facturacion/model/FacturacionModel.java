@@ -1669,14 +1669,27 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
+        /*
         if(factura.getCliente()!=null || (factura.getDetalles()!=null && factura.getDetalles().size()>0) )
         {
             Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Si desea continuar se perderan los datos sin guardar?", DialogoCodefac.MENSAJE_ADVERTENCIA);
             if (!respuesta) {
                 throw new ExcepcionCodefacLite("Cancelacion usuario");
             }
-        }
+        }*/
     }
+
+    @Override
+    public boolean salirSinGrabar() {
+        if(factura.getCliente()!=null || (factura.getDetalles()!=null && factura.getDetalles().size()>0) )
+        {
+            //Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Si desea continuar se perderan los datos sin guardar?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            return false;            
+        }
+        return true;
+    }
+    
+    
 
     public void definirFechaMinFacturacion() {
 

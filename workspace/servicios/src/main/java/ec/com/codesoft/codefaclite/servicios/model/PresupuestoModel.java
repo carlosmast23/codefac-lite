@@ -99,6 +99,17 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     private Map<Integer,List<PresupuestoDetalle>> mapOrden;
     private List<OrdenCompra> ordenesCompra;
     private String correoEmpleado;
+
+    public PresupuestoModel() {
+        super.listaExclusionComponentes.add(getTxtPrecioVenta());
+        super.listaExclusionComponentes.add(getTxtPrecioCompra());
+        super.listaExclusionComponentes.add(getTxtCantidad());
+        super.listaExclusionComponentes.add(getTxtDescuentoPrecioCompra());
+        super.listaExclusionComponentes.add(getTxtDescuentoPrecioVenta());
+    }
+    
+    
+    
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite {

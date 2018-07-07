@@ -95,6 +95,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         cargarDatosIniciales();
         addListenerTexts();
         addListenerCombos();
+        super.mapDatosIngresadosDefault.put(getjTextExtension(),"0");
     }
 
     @Override

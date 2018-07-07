@@ -70,6 +70,16 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     public ProductoModel() {
         listenerComboBox();
         listenerBotones();
+        
+        mapDatosIngresadosDefault.put(getTextValorUnitario(),"0");
+        mapDatosIngresadosDefault.put(getTxtCantidadEnsamble(),"0");
+        mapDatosIngresadosDefault.put(getTxtCantidadEnsamble(),"0");
+        
+        mapDatosIngresadosDefault.put(getTxtCantidadMinima(),"0");
+        mapDatosIngresadosDefault.put(getTxtPrecioDistribuidor(),"0");
+        mapDatosIngresadosDefault.put(getTxtPrecioTarjeta(),"0");
+        mapDatosIngresadosDefault.put(getTxtStockInicial(),"0");
+        
     }
 
     @Override

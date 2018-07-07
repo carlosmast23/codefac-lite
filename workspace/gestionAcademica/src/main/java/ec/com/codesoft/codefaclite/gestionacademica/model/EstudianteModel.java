@@ -60,6 +60,7 @@ public class EstudianteModel extends EstudiantePanel implements DialogInterfaceP
     Boolean banderaNacionalidad;
     public EstudianteModel() {
         estudianteService = ServiceFactory.getFactory().getEstudianteServiceIf();
+        listaExclusionComponentes.add(getTxtPorcentajeDiscapacidad()); //Agrego a la lista de exluciones para evitar que valide cuando existan datos ingresados
     }
 
     @Override

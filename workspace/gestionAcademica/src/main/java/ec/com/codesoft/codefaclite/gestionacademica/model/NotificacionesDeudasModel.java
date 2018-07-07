@@ -83,6 +83,12 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
     
     private DefaultListModel<RubroPlantillaMes> modeloLista;
 
+    public NotificacionesDeudasModel() {
+        listaExclusionComponentes.add(getTxtFormatoMensaje()); //Agrego a la lista de exluciones para evitar que valide cuando existan datos ingresados
+    }
+    
+    
+
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         iniciarVariables();

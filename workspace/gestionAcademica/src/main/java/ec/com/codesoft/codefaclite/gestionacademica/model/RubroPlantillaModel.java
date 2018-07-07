@@ -74,6 +74,13 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
      */
     private RubroPlantilla rubroPlantilla;
 
+    public RubroPlantillaModel() {
+        listaExclusionComponentes.add(getTxtValor()); //Agrego a la lista de exluciones para evitar que valide cuando existan datos ingresados
+        listaExclusionComponentes.add(getTxtDiasCredito()); //Agrego a la lista de exluciones para evitar que valide cuando existan datos ingresados
+    }
+    
+    
+
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         cargarValoresIniciales();

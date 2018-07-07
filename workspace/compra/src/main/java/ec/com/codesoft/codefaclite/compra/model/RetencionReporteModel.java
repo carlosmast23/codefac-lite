@@ -72,6 +72,13 @@ public class RetencionReporteModel extends RetencionReportePanel {
 
     private static final Logger LOG = Logger.getLogger(RetencionReporteModel.class.getName());
 
+    public RetencionReporteModel() {
+        super.validacionDatosIngresados=false;
+    }
+    
+    
+    
+
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         getCmbTipo().addItem("IVA");

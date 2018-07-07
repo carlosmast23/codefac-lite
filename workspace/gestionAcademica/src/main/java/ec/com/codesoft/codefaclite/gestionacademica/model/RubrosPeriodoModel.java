@@ -46,6 +46,12 @@ public class RubrosPeriodoModel extends RubrosPeriodoPanel{
     private Nivel nivelDefecto;
     
     private RubrosNivel rubrosNivel;
+
+    public RubrosPeriodoModel() {
+        listaExclusionComponentes.add(getTxtValor()); //Agrego a la lista de exluciones para evitar que valide cuando existan datos ingresados
+    }
+    
+    
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite {

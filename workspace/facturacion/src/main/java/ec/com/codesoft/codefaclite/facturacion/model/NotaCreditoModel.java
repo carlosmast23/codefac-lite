@@ -76,6 +76,7 @@ public class NotaCreditoModel extends NotaCreditoPanel {
 
     public NotaCreditoModel() {
         addListenerButtons();
+        super.validacionDatosIngresados=false;
     }
     
     private void setearValoresNotaCredito()

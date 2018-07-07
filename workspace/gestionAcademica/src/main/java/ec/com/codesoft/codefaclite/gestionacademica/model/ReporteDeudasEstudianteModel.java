@@ -55,6 +55,12 @@ public class ReporteDeudasEstudianteModel extends ReporteDeudasEstudiantePanel {
     private boolean banderaRubros = false;
     Estudiante estudiante = null;
 
+    public ReporteDeudasEstudianteModel() {
+        validacionDatosIngresados=false;
+    }
+    
+    
+
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         
