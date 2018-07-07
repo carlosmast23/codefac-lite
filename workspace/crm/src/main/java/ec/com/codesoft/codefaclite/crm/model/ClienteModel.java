@@ -34,6 +34,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesJuridicas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
@@ -238,10 +239,10 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         boolean verificador = false;
         switch (this.opcionIdentificacion) {
             case 4:
-                verificador = validarRUC(getjTextIdentificacion().getText());
+                verificador = UtilidadesJuridicas.validarTodosRuc(getjTextIdentificacion().getText());
                 break;
             case 5:
-                verificador = validarCedula(getjTextIdentificacion().getText());
+                verificador = UtilidadesJuridicas.validarCedula(getjTextIdentificacion().getText());
                 break;
             case 6:
                 verificador = true;
@@ -251,49 +252,6 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
                 break;
         }
         return verificador;
-    }
-
-    public boolean validarCedula(String cedula) {
-        try {
-            int suma = 0;
-            if (cedula.length() == 9) {
-                return false;
-            } else {
-                int a[] = new int[cedula.length() / 2];
-                int b[] = new int[(cedula.length() / 2)];
-                int c = 0;
-                int d = 1;
-                for (int i = 0; i < cedula.length() / 2; i++) {
-                    a[i] = Integer.parseInt(String.valueOf(cedula.charAt(c)));
-                    c = c + 2;
-                    if (i < (cedula.length() / 2) - 1) {
-                        b[i] = Integer.parseInt(String.valueOf(cedula.charAt(d)));
-                        d = d + 2;
-                    }
-                }
-
-                for (int i = 0; i < a.length; i++) {
-                    a[i] = a[i] * 2;
-                    if (a[i] > 9) {
-                        a[i] = a[i] - 9;
-                    }
-                    suma = suma + a[i] + b[i];
-                }
-                int aux = suma / 10;
-                int dec = (aux + 1) * 10;
-                if ((dec - suma) == Integer.parseInt(String.valueOf(cedula.charAt(cedula.length() - 1)))) {
-                    return true;
-                } else if (suma % 10 == 0 && cedula.charAt(cedula.length() - 1) == '0') {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        } catch (NumberFormatException nfe) {
-            return false;
-        } catch (Exception err) {
-            return false;
-        }
     }
     
     private void cargarDatos() {
@@ -523,24 +481,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         });
 
     }
-
-    private boolean validarRUC(String RUC) {
-        System.out.println("Longitud de RUC" + RUC.length());
-        if (RUC.length() == 13) {
-            String cedula = RUC.substring(0, 10);
-            System.out.println("CEDULA: " + cedula);
-            String ruc = RUC.substring(10, 13);
-            System.out.println("RUC: " + ruc);
-            System.out.println("VALor cedula " + validarCedula(cedula));
-            System.out.println("VALor ruc " + isNumeric(ruc));
-            if (validarCedula(cedula) && isNumeric(ruc)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
+    
     public boolean isNumeric(String cadena) {
         boolean resultado;
         try {
