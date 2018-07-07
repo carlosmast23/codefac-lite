@@ -635,7 +635,22 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 
                 try
                 {
-                    frameInterface.nuevo();
+                    boolean respuesta=true;
+                    if(!frameInterface.salirSinGrabar())
+                    {
+                        respuesta=DialogoCodefac.dialogoPregunta("Advertencia","Existen datos ingresados , ésta seguro que desea limpiar la ventana?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    }
+                    
+                    //Solo si la respuesta es grabar ejecuta el metodo
+                    if(respuesta)
+                    {
+                        frameInterface.nuevo();
+                    }
+                    else
+                    {
+                        return ; //cancelar la operacion si el usuario escoge no
+                    }
+                    
                 }
                 catch(UnsupportedOperationException exception)
                 {
@@ -980,9 +995,16 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                        busquedaInterface.buscar();
                         return;
                     }
-                    
-                   
+
+                    if (!frameInterface.salirSinGrabar()) {
+                        boolean respuesta = DialogoCodefac.dialogoPregunta("Advertencia", "Existen datos ingresados , ésta seguro que desea buscar de todos modos?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                        if (!respuesta) {
+                            return; //Si el usuario no desea cargar porque existen datos ingresados cancelo el proceso
+                        }
+                    }                    
+                                       
                     busquedaInterface.buscar();
+                    
                     frameInterface.estadoFormulario= ControladorCodefacInterface.ESTADO_EDITAR;
                     limpiarCamposValidacion(frameInterface);
                     mostrarPanelSecundario(false);
@@ -1717,7 +1739,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             GeneralPanelInterface panelCerrando=(GeneralPanelInterface) e.getInternalFrame();                            
                             if(!panelCerrando.salirSinGrabar())
                             {
-                                respuesta=DialogoCodefac.dialogoPregunta("Advertencia","Existen datos ingresados , esta seguro que desea cerrar la ventana?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                                respuesta=DialogoCodefac.dialogoPregunta("Advertencia","Existen datos ingresados , ésta seguro que desea cerrar la ventana?",DialogoCodefac.MENSAJE_ADVERTENCIA);
                             }
                             
                             //Solo cerrar si la respuesta es si

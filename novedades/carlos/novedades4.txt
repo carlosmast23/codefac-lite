@@ -6,3 +6,11 @@ Clsificar en rubros si se debe cobrar a todos como (matricula) o no , para tener
 Agregar el nombre legal en los clientes y que automaticamente me aparesca para llenar estos datos cuando se ingrese un ruc
 
 Ver una forma para saber que si tiene datos llenos no le permita salir de la pantalla
+
+Ver una forma que en los campos de texto si existe alguno lleno que me pregunte si deseo salir
+
+Ver si puedo sobrrescribir el metodo para validar al salir y si puedo hacer validaciones personalizadas
+
+Agregar de alguna forma campos para excluir de las validaciones al salir
+
+Agregar esta opcion de validar tambien cuando se presiona el boton de nuevo
