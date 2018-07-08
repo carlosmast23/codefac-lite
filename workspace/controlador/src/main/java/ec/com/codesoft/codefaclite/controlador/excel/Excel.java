@@ -120,7 +120,7 @@ public class Excel<T>
             for (TipoDato valorDato: valores) 
             {
                 celda = fila.createCell(c++);
-                Object valor = valorDato.valor;
+                Object valor = (valorDato.valor!=null)?valorDato.valor:"";
                 TipoDataEnum tipo = valorDato.tipoData;
                 switch(tipo)
                 {

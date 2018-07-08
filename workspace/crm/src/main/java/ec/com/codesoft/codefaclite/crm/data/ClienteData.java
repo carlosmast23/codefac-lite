@@ -19,6 +19,7 @@ public class ClienteData implements ExcelDatosInterface
 {
     private String identificacion;
     private String nombresCompletos;
+    private String nombreLegal;
     private String telefono;
     private String direccion;
     private String email;
@@ -66,12 +67,23 @@ public class ClienteData implements ExcelDatosInterface
         this.email = email;
     }
 
+    public String getNombreLegal() {
+        return nombreLegal;
+    }
+
+    public void setNombreLegal(String nombreLegal) {
+        this.nombreLegal = nombreLegal;
+    }
+    
+    
+
     @Override
     public List<TipoDato> getDatos() {
         List<TipoDato> tiposDatos = new ArrayList<TipoDato>();
         
         tiposDatos.add(new TipoDato(this.identificacion,Excel.TipoDataEnum.TEXTO));        
         tiposDatos.add(new TipoDato(this.nombresCompletos, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.nombreLegal,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.telefono, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.direccion, Excel.TipoDataEnum.TEXTO));        
         tiposDatos.add(new TipoDato(this.email,Excel.TipoDataEnum.TEXTO));

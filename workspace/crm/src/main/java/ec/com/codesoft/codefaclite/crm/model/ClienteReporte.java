@@ -48,7 +48,7 @@ public class ClienteReporte extends ControladorCodefacInterface{
             Map parameters = new HashMap();
             List<ClienteData> data = new ArrayList<ClienteData>();
             PersonaServiceIf service=ServiceFactory.getFactory().getPersonaServiceIf();
-            List<Persona> clientes=service.obtenerTodos();
+            List<Persona> clientes=service.obtenerTodos(); //Todo: Obtener filtrar solo por clientes
             
             for (Persona cliente : clientes) {
                 ClienteData clienteData=new ClienteData();
@@ -56,6 +56,7 @@ public class ClienteReporte extends ControladorCodefacInterface{
                 clienteData.setEmail(cliente.getCorreoElectronico());
                 clienteData.setIdentificacion(cliente.getIdentificacion());
                 clienteData.setNombresCompletos(cliente.getRazonSocial());
+                clienteData.setNombreLegal(cliente.getNombreLegal());
                 clienteData.setTelefono(cliente.getTelefonoCelular());
                 data.add(clienteData);
             }
@@ -72,12 +73,13 @@ public class ClienteReporte extends ControladorCodefacInterface{
                 public void excel() {
                     try{
                         Excel excel = new Excel();
-                        String nombreCabeceras[] = {"Identificación", "Nombres completos", "Telefono", "Dirección","Email"};
+                        String nombreCabeceras[] = {"Identificación", "Nombres completos","Nombre Legal", "Telefono", "Dirección","Email"};
                         excel.gestionarIngresoInformacionExcel(nombreCabeceras, data);
                         excel.abrirDocumento();
                     }
                     catch(Exception exc)
                     {
+                        exc.printStackTrace();
                         DialogoCodefac.mensaje("Error","El archivo Excel se encuentra abierto",DialogoCodefac.MENSAJE_INCORRECTO);
                     }  
                 }
