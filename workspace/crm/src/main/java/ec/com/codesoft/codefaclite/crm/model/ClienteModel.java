@@ -81,8 +81,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     private PersonaServiceIf personaService;
     private Persona persona;
     private String razonSocial;
-    private String comboIdentificacion[] = {"CEDULA", "RUC", "PASAPORTE", "IDENTIFICACION DEL EXTERIOR", "PLACA"};
-    private String comboTipoCliente[] = {"CLIENTE", "SUJETO RETENIDO", "DESTINATARIO"};
+    //private String comboTipoCliente[] = {"CLIENTE", "SUJETO RETENIDO", "DESTINATARIO"};
 
     private int opcionIdentificacion = 4;
     
@@ -92,7 +91,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         this.personaService = ServiceFactory.getFactory().getPersonaServiceIf();
         getjTextExtension().setText("0");
         this.razonSocial = "";
-        cargarClientes();
+        cargarTipoClientes();
         cargarDatosIniciales();
         addListenerTexts();
         addListenerCombos();
@@ -137,6 +136,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         persona.setNombres(getjTextNombres().getText());
         persona.setApellidos(getjTextApellidos().getText());
         persona.setRazonSocial(getjTextNombreSocial().getText());
+        persona.setNombreLegal(getTxtNombreLegal().getText());
         persona.setSriTipoIdentificacion((SriIdentificacion) getjComboIdentificacion().getSelectedItem());
         persona.setIdentificacion(getjTextIdentificacion().getText());
         persona.setTipCliente((String) getjComboTipoCliente().getSelectedItem());
@@ -213,7 +213,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
 
     @Override
     public void actualizar() {
-        cargarClientes();
+        cargarTipoClientes();
     }
 /*
     @Override
@@ -259,7 +259,8 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         getjTextApellidos().setText(persona.getApellidos());
         getjTextNombreSocial().setText(persona.getRazonSocial());
         getjTextIdentificacion().setText("" + persona.getIdentificacion());
-        persona.setNombreLegal(getjTextNombreSocial().getText());
+        getTxtNombreLegal().setText(persona.getNombreLegal());
+        //persona.setNombreLegal(getjTextNombreSocial().getText());
         
         
         //getjComboIdentificacion().setSelectedIndex(comboIdentificacion(persona.getIdentificacion()));
@@ -297,23 +298,6 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         return true;
     }
 
-    public int comboIdentificacion(String op) {
-        for (int i = 0; i < comboIdentificacion.length; i++) {
-            if (op.equals(comboIdentificacion[i])) {
-                return i;
-            }
-        }
-        return 0;
-    }
-
-    public int comboTipoCliente(String op) {
-        for (int i = 0; i < comboTipoCliente.length; i++) {
-            if (op.equals(comboTipoCliente[i])) {
-                return i;
-            }
-        }
-        return 0;
-    }
 
     @Override
     public void limpiar() {
@@ -354,7 +338,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     /**
      * Cargar los tipos de clientes de la base de datos
      */
-    private void cargarClientes() {
+    private void cargarTipoClientes() {
         try {
             /**
              * Cargar los valores por defecto de las identificaciones
@@ -451,10 +435,26 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             @Override
             public void actionPerformed(ActionEvent e) {
                 opcionIdentificacion = Integer.parseInt(((SriIdentificacion) getjComboIdentificacion().getSelectedItem()).getCodigo());
-                System.out.println("Info combo: " + ((SriIdentificacion) getjComboIdentificacion().getSelectedItem()).getCodigo());
+                
                 //Validario comonente cuando sea diferente de vacio dependiendo la opcion de identificacion
                 if (!getjTextIdentificacion().getText().equals("")) {
                     panelPadre.validarPorGrupo(ValidacionCodefacAnotacion.GRUPO_FORMULARIO, NOMBRE_VALIDADOR_IDENTIFICACION);
+                }
+                
+                //Habilitar o deshabilitar razon social y nombre legal dependiendo si elige cedula o ruc
+                SriIdentificacion sriIdentificacion=(SriIdentificacion) getjComboIdentificacion().getSelectedItem();
+                
+                // Verifico que si el codigo es igual a la cedula desahabilito esos 2 datos
+                if(sriIdentificacion.getCodigo().equals(SriIdentificacion.CEDULA_IDENTIFICACION))
+                {
+                    getTxtNombreLegal().setText("");
+                    getTxtNombreLegal().setEnabled(false);
+                    getjTextNombreSocial().setEnabled(false);
+                }
+                else //Verifico si es cualquier otro dato solicito los 2 campos de nombre legal y razon social
+                {
+                    getTxtNombreLegal().setEnabled(true);
+                    getjTextNombreSocial().setEnabled(true);
                 }
             }
         });

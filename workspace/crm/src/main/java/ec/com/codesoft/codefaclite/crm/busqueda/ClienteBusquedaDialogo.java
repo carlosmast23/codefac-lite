@@ -13,7 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import java.util.Vector;
 
 /**
- *
+ * TODO: Ver como unificar el dialogo con la factura y otras que usan similares
  * @author PC
  */
 public class ClienteBusquedaDialogo implements InterfaceModelFind<Persona>
@@ -23,12 +23,11 @@ public class ClienteBusquedaDialogo implements InterfaceModelFind<Persona>
     public Vector<ColumnaDialogo> getColumnas() 
     {
         Vector<ColumnaDialogo> titulo=new Vector<ColumnaDialogo>();
-        titulo.add(new ColumnaDialogo("Identificacion",0.2d));
+        titulo.add(new ColumnaDialogo("Identificacion",0.15d));
         titulo.add(new ColumnaDialogo("Razón Social ",0.3d));
-        titulo.add(new ColumnaDialogo("Telefono",0.15d));
-        titulo.add(new ColumnaDialogo("Extension",0.10d));
-        titulo.add(new ColumnaDialogo("Celular",0.10d));
-        titulo.add(new ColumnaDialogo("Correo",0.15d));
+        titulo.add(new ColumnaDialogo("Nombre Legal",0.2d));
+        titulo.add(new ColumnaDialogo("Telefono",0.1d));
+        titulo.add(new ColumnaDialogo("Celular",0.1d));
         
         return titulo;
       
@@ -39,34 +38,20 @@ public class ClienteBusquedaDialogo implements InterfaceModelFind<Persona>
     {
         dato.add(t.getIdentificacion());
         dato.add(t.getRazonSocial());
-        dato.add(t.getTelefonoConvencional());
-        dato.add(t.getExtensionTelefono());
+        dato.add((t.getNombreLegal()!=null)?t.getNombreLegal():"");
+        dato.add(t.getTelefonoConvencional());       
         dato.add(t.getTelefonoCelular());
-        dato.add(t.getCorreoElectronico());
    
     }
-    /*
-    @Override
-    public Boolean buscarObjeto(Persona t, Object valor) 
-    {
-        if(t.getIdentificacion().equals(valor.toString()))
-        {
-            return true;
-        }   
-        else
-        {
-            return false;
-        }       
-    }*/
 
     @Override
     public QueryDialog getConsulta(String filter) {
         //Persona p;
-        //p.getIdentificacion();
+        //p.getNombreLegal();
         String queryString = "SELECT u FROM Persona u WHERE ";
-        queryString+=" ( LOWER(u.razonSocial) like ?1 or u.identificacion like ?1 )";
+        queryString+=" ( LOWER(u.razonSocial) like ?1 or u.identificacion like ?1 or LOWER(u.nombreLegal) like ?1 )";
         QueryDialog queryDialog=new QueryDialog(queryString);
-        queryDialog.agregarParametro(1,filter);
+        queryDialog.agregarParametro(1,filter.toLowerCase());
         return queryDialog;
     }
     

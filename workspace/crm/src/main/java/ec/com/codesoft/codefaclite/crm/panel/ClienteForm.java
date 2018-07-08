@@ -80,6 +80,8 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         lblEspacio5 = new javax.swing.JLabel();
         lblEspacio8 = new javax.swing.JLabel();
         lblEspacio6 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        txtNombreLegal = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jComboTipoCliente = new javax.swing.JComboBox<>();
@@ -122,21 +124,21 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel3.setText("Tipo Identificación:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanelCaracteristicasGenerales.add(jLabel3, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanelCaracteristicasGenerales.add(jComboIdentificacion, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.4;
         jPanelCaracteristicasGenerales.add(jTextIdentificacion, gridBagConstraints);
@@ -145,7 +147,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jLabel6.setText("Dirección:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanelCaracteristicasGenerales.add(jLabel6, gridBagConstraints);
@@ -156,7 +158,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
@@ -166,28 +168,28 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jLabel7.setText("Teléfono Convencional:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanelCaracteristicasGenerales.add(jLabel7, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weightx = 0.2;
         jPanelCaracteristicasGenerales.add(jTextTelefono, gridBagConstraints);
 
         jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel8.setText("Extensión:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanelCaracteristicasGenerales.add(jLabel8, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.2;
@@ -197,13 +199,13 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jLabel9.setText("Teléfono Celular:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanelCaracteristicasGenerales.add(jLabel9, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanelCaracteristicasGenerales.add(jTextCelular, gridBagConstraints);
@@ -212,13 +214,14 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jLabel10.setText("Correo Electrónico:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanelCaracteristicasGenerales.add(jLabel10, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanelCaracteristicasGenerales.add(jTextCorreo, gridBagConstraints);
@@ -226,7 +229,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel4.setText("Identificación:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
@@ -236,7 +239,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jLabel11.setText("Estado:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanelCaracteristicasGenerales.add(jLabel11, gridBagConstraints);
@@ -248,7 +251,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.2;
@@ -264,10 +267,10 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jPanelCaracteristicasGenerales.add(jLabel13, gridBagConstraints);
 
         jLabel14.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel14.setText("Razón Social:");
+        jLabel14.setText("Nombre Legal:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanelCaracteristicasGenerales.add(jLabel14, gridBagConstraints);
@@ -312,16 +315,31 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jPanelCaracteristicasGenerales.add(lblEspacio5, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 0.1;
         jPanelCaracteristicasGenerales.add(lblEspacio8, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.8;
         jPanelCaracteristicasGenerales.add(lblEspacio6, gridBagConstraints);
+
+        jLabel17.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel17.setText("Razón Social:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanelCaracteristicasGenerales.add(jLabel17, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        jPanelCaracteristicasGenerales.add(txtNombreLegal, gridBagConstraints);
 
         jTabbedPane1.addTab("Datos Principales", jPanelCaracteristicasGenerales);
 
@@ -428,6 +446,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -458,6 +477,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JLabel lblEspacio7;
     private javax.swing.JLabel lblEspacio8;
     private javax.swing.JLabel lblOligadoLlevarContabilidad;
+    private javax.swing.JTextField txtNombreLegal;
     // End of variables declaration//GEN-END:variables
 
     public JComboBox<String> getjComboTipoCliente() {
@@ -621,6 +641,15 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     public void setLblOligadoLlevarContabilidad(JLabel lblOligadoLlevarContabilidad) {
         this.lblOligadoLlevarContabilidad = lblOligadoLlevarContabilidad;
     }
+
+    public JTextField getTxtNombreLegal() {
+        return txtNombreLegal;
+    }
+
+    public void setTxtNombreLegal(JTextField txtNombreLegal) {
+        this.txtNombreLegal = txtNombreLegal;
+    }
+    
     
     
     
