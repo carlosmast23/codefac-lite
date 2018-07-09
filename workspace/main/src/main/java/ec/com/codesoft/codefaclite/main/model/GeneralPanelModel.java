@@ -813,7 +813,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 JInternalFrame frame= getjDesktopPane1().getSelectedFrame();
                 ControladorCodefacInterface frameInterface=(ControladorCodefacInterface) frame;
 
-                listenerBuscar(frame, new BusquedaCodefacInterface() {
+                listenerBuscar(frame,true, new BusquedaCodefacInterface() {
                     @Override
                     public void buscar() throws ExcepcionCodefacLite {
                         
@@ -980,7 +980,13 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         
     }
     
-    private void listenerBuscar(JInternalFrame frame,BusquedaCodefacInterface busquedaInterface)
+    /**
+     * Listener que ejecuta el dialogo para buscar datos
+     * @param frame
+     * @param busquedaInterface
+     * @param validacionDatosIngresados variable para saber si quiere validar si existen datos 
+     */
+    private void listenerBuscar(JInternalFrame frame,boolean  validacionDatosIngresados,BusquedaCodefacInterface busquedaInterface)
     {
         try
                 {
@@ -996,7 +1002,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         return;
                     }
 
-                    if (!frameInterface.salirSinGrabar()) {
+                    //Solo ejecutar si requiere validacion de campos ingresados
+                    if (validacionDatosIngresados && !frameInterface.salirSinGrabar()) {
                         boolean respuesta = DialogoCodefac.dialogoPregunta("Advertencia", "Existen datos ingresados , está seguro que desea buscar de todos modos?", DialogoCodefac.MENSAJE_ADVERTENCIA);
                         if (!respuesta) {
                             return; //Si el usuario no desea cargar porque existen datos ingresados cancelo el proceso
@@ -1678,14 +1685,14 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             if(e.getKeyCode() == KeyEvent.VK_ENTER){
                                 JInternalFrame frame = getjDesktopPane1().getSelectedFrame();
                                 
-                                listenerBuscar(frame, new BusquedaCodefacInterface() {
+                                listenerBuscar(frame,false,new BusquedaCodefacInterface() {
                                     @Override
                                     public void buscar() throws ExcepcionCodefacLite {
 
                                         try
                                         {
                                             BuscarDialogoModel dialogBuscar=panel.obtenerDialogoBusqueda();
-                                            //Ejecutar la pantalla de dialogo solo si algo de texto
+                                            //Ejecutar la pantalla de dialogo solo si hay algo de texto
                                             if (!componente.getText().equals("")) {
                                                 try {
                                                     dialogBuscar.getTxtBuscar().setText(componente.getText());
