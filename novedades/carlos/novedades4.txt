@@ -7,6 +7,7 @@ En el reporte de clientes , falta filtrar solo por tipo de dato cliente o ambos 
 Agregar en el reporte de clientes el nombre legal
 
 Agregar un campo adicional en el reporte de ordenes de trabajo para agregar una politica , reglamento o observacion que se desea imprimir en los reportes
+Agregar validacion para agregar alerta para cuando se busca desde un campo con esta opcion y al momento de cargar el registro se pierdon los datos ingresados anteriormente
 
 
 

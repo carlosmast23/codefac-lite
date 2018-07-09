@@ -60,7 +60,7 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
     /**
      * Variables para corregir bugs de los internal frames
      */
-    public boolean sinAcciones=true;
+    public boolean sinAcciones=false;
     public boolean formularioCerrando=false;
     public boolean modoDialogo=false;
     
@@ -300,7 +300,7 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
                     
                     JTextComponent campoTexto = (JTextComponent) campoSeleccionado;
                     Object valorDefecto=mapDatosIngresadosDefault.get(campoTexto);
-                    String valorCampo=campoTexto.getText();
+                    String valorCampo=campoTexto.getText().trim();
                     
                     //Verifico si tiene ingresado cualquier valor que no sea por defecto significa que cambio el valor
                     if(valorDefecto!=null)

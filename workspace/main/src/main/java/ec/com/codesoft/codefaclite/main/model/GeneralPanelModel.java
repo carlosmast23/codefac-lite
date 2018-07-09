@@ -813,7 +813,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 JInternalFrame frame= getjDesktopPane1().getSelectedFrame();
                 ControladorCodefacInterface frameInterface=(ControladorCodefacInterface) frame;
 
-                listenerBuscar(frame,true, new BusquedaCodefacInterface() {
+                listenerBuscar(frame,new BusquedaCodefacInterface() {
                     @Override
                     public void buscar() throws ExcepcionCodefacLite {
                         
@@ -822,7 +822,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             frameInterface.buscar();
                         } catch (UnsupportedOperationException ex) {
                             //Este metodo se ejecuta si no existe implementacion del metodo buscar
-                            ejectutarDialogoBusqueda(frameInterface.obtenerDialogoBusqueda(), frameInterface,false);
+                            ejectutarDialogoBusqueda(frameInterface.obtenerDialogoBusqueda(),true,frameInterface,false);
                         }catch (ExcepcionCodefacLite ex) {
                             throw ex;
                         } catch (RemoteException ex) {
@@ -986,7 +986,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
      * @param busquedaInterface
      * @param validacionDatosIngresados variable para saber si quiere validar si existen datos 
      */
-    private void listenerBuscar(JInternalFrame frame,boolean  validacionDatosIngresados,BusquedaCodefacInterface busquedaInterface)
+    private void listenerBuscar(JInternalFrame frame,BusquedaCodefacInterface busquedaInterface)
     {
         try
                 {
@@ -1002,13 +1002,6 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         return;
                     }
 
-                    //Solo ejecutar si requiere validacion de campos ingresados
-                    if (validacionDatosIngresados && !frameInterface.salirSinGrabar()) {
-                        boolean respuesta = DialogoCodefac.dialogoPregunta("Advertencia", "Existen datos ingresados , está seguro que desea buscar de todos modos?", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                        if (!respuesta) {
-                            return; //Si el usuario no desea cargar porque existen datos ingresados cancelo el proceso
-                        }
-                    }                    
                                        
                     busquedaInterface.buscar();
                     
@@ -1033,7 +1026,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
      * @param cargarDirecto //si esta en tru y existe un solo dato carga directamente sin confirmacion del usuario
      * @throws ExcepcionCodefacLite 
      */
-    private void ejectutarDialogoBusqueda(BuscarDialogoModel dialogModel,ControladorCodefacInterface frameInterface,boolean cargarDirecto) throws ExcepcionCodefacLite
+    private void ejectutarDialogoBusqueda(BuscarDialogoModel dialogModel,boolean  validacionDatosIngresados,GeneralPanelInterface frameInterface,boolean cargarDirecto) throws ExcepcionCodefacLite
     {   
         //Si no existe datos no muestro nada
         if (dialogModel.getTamanioConsulta() == 0) {
@@ -1041,14 +1034,21 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             throw new ExcepcionCodefacLite("No existen datos en la consulta para abrir el dialogo de busqueda");
         } 
         
+       
         //Si desea cargar directo , lo hace cuando existe un solo resultado
         if(cargarDirecto)
         {
             if(dialogModel.getTamanioConsulta() == 1)
             {
                 Object resultado=dialogModel.obtenerResultadoLista(0); //obtiene el primer resultado para cargar en la pantalla
-                frameInterface.cargarDatosPantalla(resultado);
-                return ;
+                
+                //Preguntar si desea cargar los datos perdiendo los datos ingresados
+                if(preguntarCargarDatosBuscar(validacionDatosIngresados,frameInterface))
+                {
+                    frameInterface.cargarDatosPantalla(resultado);
+                    
+                }
+                return;
             }
         }
 
@@ -1057,12 +1057,33 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         Object resultado=dialogModel.getResultado();                
         if(resultado!=null)
         {
-            frameInterface.cargarDatosPantalla(resultado);
+            //Preguntar si desea cargar los datos perdiendo los datos ingresados
+            if(preguntarCargarDatosBuscar(validacionDatosIngresados,frameInterface))
+            {
+                frameInterface.cargarDatosPantalla(resultado);
+            }
+            else
+            {
+                throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar, no desea cargar los datos");
+            }
         }
         else
         {
             throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar, no selecciono ningun dato");
         }
+    }
+    
+    private boolean preguntarCargarDatosBuscar(boolean  validacionDatosIngresados,GeneralPanelInterface frameInterface)
+    {
+        //Solo ejecutar si requiere validacion de campos ingresados
+        if(validacionDatosIngresados)
+        {
+            if (!frameInterface.salirSinGrabar()) {
+                boolean respuesta = DialogoCodefac.dialogoPregunta("Advertencia", "Existen datos ingresados , está seguro que desea cargar de todos modos?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                return respuesta;
+            }
+        }
+        return true;
     }
     
     /**
@@ -1451,7 +1472,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     
 
     
-    private Vector<String> validarComponente(ValidacionCodefacAnotacion validacion,JTextComponent componente,ControladorCodefacInterface panel)
+    private Vector<String> validarComponente(ValidacionCodefacAnotacion validacion,JTextComponent componente,GeneralPanelInterface panel)
     {
         Vector<String> validar=new Vector<String>();
         if(validacion.requerido())
@@ -1566,7 +1587,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
       
     }
     
-    private void agregarValidadores(ControladorCodefacInterface panel)
+    private void agregarValidadores(GeneralPanelInterface panel)
     {
        Class classVentana=panel.getClass();
         Method[] metodos=classVentana.getMethods();
@@ -1599,16 +1620,24 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
 
                             @Override
                             public void focusLost(FocusEvent e) {
-                                System.out.println("focusLost");
+
+                                //Verifica que no existen datos ingresados porque no debe validar nada
+                                //Optimizar este codigo porque este metodo es para otra funcionalidad mas complicada
+                                String letra=componente.getText();
+                                if(panel.salirSinGrabar() && componente.getText().equals(""))
+                                {
+                                    return;
+                                }
 
                                 //Este codigo se pone porque despues de cambiar de pantalla se ejecuta el evento de focus de la anterior
                                 //y eso me genera problemas cuando quiero manejar los eventos de las jinternalFrame
+                                //TODO: Revisar este codigo
                                 if(!panel.equals(getPanelActivo()))
                                 {
                                     //System.out.println("no validar porque cambio de pantalla");
                                     return;
                                 }
-
+                                //TODO: Revisar esta solucion porque es muy rebuscada
                                 if (panel.sinAcciones) {
                                     panel.sinAcciones = false;
                                     return;
@@ -1685,7 +1714,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             if(e.getKeyCode() == KeyEvent.VK_ENTER){
                                 JInternalFrame frame = getjDesktopPane1().getSelectedFrame();
                                 
-                                listenerBuscar(frame,false,new BusquedaCodefacInterface() {
+                                listenerBuscar(frame,new BusquedaCodefacInterface() {
                                     @Override
                                     public void buscar() throws ExcepcionCodefacLite {
 
@@ -1698,7 +1727,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                                                     dialogBuscar.getTxtBuscar().setText(componente.getText());
                                                     dialogBuscar.ejecutarConsulta();
                                                     //Verifico que exista coincidencias con el dato ingreso o cancelo la busquda
-                                                     ejectutarDialogoBusqueda(dialogBuscar, panel,true);                                                   
+                                                     ejectutarDialogoBusqueda(dialogBuscar,false,panel,true);                                                   
                                                     
                                                 } catch (ExcepcionCodefacLite ex) {
                                                     throw ex;
