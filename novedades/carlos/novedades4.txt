@@ -3,14 +3,10 @@ Analizar si unicamente el estudiante puede grabar cedulas o puede grabar otro ti
 Verificar que las despues de hacer alguna validacion el puntero por defecto aparesca en el campo para editar de forma generica
 Clsificar en rubros si se debe cobrar a todos como (matricula) o no , para tener mejor validacion
 
-Agregar el nombre legal en los clientes y que automaticamente me aparesca para llenar estos datos cuando se ingrese un ruc
+En el reporte de clientes , falta filtrar solo por tipo de dato cliente o ambos , y ademas crear un reporte igual para proveedores
+Agregar en el reporte de clientes el nombre legal
 
-Ver una forma para saber que si tiene datos llenos no le permita salir de la pantalla
+Agregar un campo adicional en el reporte de ordenes de trabajo para agregar una politica , reglamento o observacion que se desea imprimir en los reportes
 
-Ver una forma que en los campos de texto si existe alguno lleno que me pregunte si deseo salir
 
-Ver si puedo sobrrescribir el metodo para validar al salir y si puedo hacer validaciones personalizadas
 
-Agregar de alguna forma campos para excluir de las validaciones al salir
-
-Agregar esta opcion de validar tambien cuando se presiona el boton de nuevo
