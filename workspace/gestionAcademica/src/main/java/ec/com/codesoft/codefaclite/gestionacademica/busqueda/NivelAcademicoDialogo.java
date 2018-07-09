@@ -57,7 +57,7 @@ public class NivelAcademicoDialogo implements InterfaceModelFind<NivelAcademico>
     public void agregarObjeto(NivelAcademico t, Vector dato) {
         dato.add(t.getNombre());
         dato.add(t.getPeriodo().getNombre());
-        dato.add(t.getNivel().getNombre());
+        dato.add((t.getNivel()!=null)?t.getNivel().getNombre():"");
         dato.add(t.getEstadoEnum().getNombre());
     }
 

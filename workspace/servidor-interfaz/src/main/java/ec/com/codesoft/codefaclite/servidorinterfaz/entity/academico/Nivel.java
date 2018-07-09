@@ -16,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -37,10 +38,8 @@ public class Nivel implements Serializable{
     private String nombre;
     @Column(name = "ORDEN")
     private Integer orden;
-    
-    @JoinColumn(name = "NIVELPOSTERIOR_ID")
-    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    
+    @JoinColumn(name = "NIVELPOSTERIOR_ID")  
+    @OneToOne
     private Nivel nivelPosterior;
     @Column(name = "DESCRIPCION")
     private String descripcion;
