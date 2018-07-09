@@ -461,8 +461,11 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             }
             modeloTablaDetallesCompra.addRow(fila);
         }
+        
         getTableDetallesOrdenTrabajo().setModel(modeloTablaDetallesCompra);
         UtilidadesTablas.ocultarColumna(getTableDetallesOrdenTrabajo(), 0);
+        UtilidadesTablas.bloquearColumnasTabla(getTableDetallesOrdenTrabajo(), new Boolean[]{true,false,true,false,true});
+        
 
     }
     

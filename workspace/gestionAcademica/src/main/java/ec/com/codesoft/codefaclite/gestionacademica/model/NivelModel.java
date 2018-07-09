@@ -94,7 +94,7 @@ public class NivelModel extends NivelPanel {
         nivel.setDescripcion(getTxtDescripcion().getText());
         nivel.setEstado(((GeneralEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
 
-        if (getCmbNivelPosterior().getSelectedItem() != null) {
+        if (!getCmbNivelPosterior().getSelectedItem().toString().equals("Ninguno")) {
             Nivel nivelTemp = (Nivel) getCmbNivelPosterior().getSelectedItem();
             nivel.setNivelPosterior(nivelTemp);
         }
