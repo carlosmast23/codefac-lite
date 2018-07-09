@@ -57,8 +57,6 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         jComboIdentificacion = new javax.swing.JComboBox<>();
         jTextIdentificacion = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextAreaDireccion = new javax.swing.JTextArea();
         jLabel7 = new javax.swing.JLabel();
         jTextTelefono = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
@@ -82,6 +80,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         lblEspacio6 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         txtNombreLegal = new javax.swing.JTextField();
+        jTextAreaDireccion = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jComboTipoCliente = new javax.swing.JComboBox<>();
@@ -151,18 +150,6 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanelCaracteristicasGenerales.add(jLabel6, gridBagConstraints);
-
-        jTextAreaDireccion.setColumns(20);
-        jTextAreaDireccion.setRows(3);
-        jScrollPane1.setViewportView(jTextAreaDireccion);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        jPanelCaracteristicasGenerales.add(jScrollPane1, gridBagConstraints);
 
         jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel7.setText("Teléfono Convencional:");
@@ -340,6 +327,12 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         jPanelCaracteristicasGenerales.add(txtNombreLegal, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        jPanelCaracteristicasGenerales.add(jTextAreaDireccion, gridBagConstraints);
 
         jTabbedPane1.addTab("Datos Principales", jPanelCaracteristicasGenerales);
 
@@ -459,10 +452,9 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanelCaracteristicasGenerales;
     private javax.swing.JPopupMenu jPopupMenu1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField jTextApellidos;
-    private javax.swing.JTextArea jTextAreaDireccion;
+    private javax.swing.JTextField jTextAreaDireccion;
     private javax.swing.JTextField jTextCelular;
     private javax.swing.JTextField jTextCorreo;
     private javax.swing.JTextField jTextExtension;
@@ -499,11 +491,11 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
   
     @LimpiarAnotacion
     @ValidacionCodefacAnotacion(requerido=false ,min=0, expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\,\\ ]*$",nombre = "Direccion", expresionRegularMensaje = "No se permite la letra ñ, ni tildes")
-    public JTextArea getjTextAreaDireccion() {
+    public JTextField getjTextAreaDireccion() {
         return jTextAreaDireccion;
     }
 
-    public void setjTextAreaDireccion(JTextArea jTextAreaDireccion) {
+    public void setjTextAreaDireccion(JTextField jTextAreaDireccion) {
         this.jTextAreaDireccion = jTextAreaDireccion;
     }
 
@@ -518,7 +510,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$", nombre = "Correo Electronico", expresionRegularMensaje = "Ingrese una dirección de correo valida" )
+    @ValidacionCodefacAnotacion(requerido = false, expresionRegular = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$", nombre = "Correo Electronico", expresionRegularMensaje = "Ingrese una dirección de correo valida" )
     public JTextField getjTextCorreo() {
         return jTextCorreo;
     }

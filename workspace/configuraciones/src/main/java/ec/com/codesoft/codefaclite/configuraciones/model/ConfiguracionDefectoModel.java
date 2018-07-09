@@ -38,6 +38,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel{
          * Desactivo el ciclo de vida para controlar manualmente
          */
         super.cicloVida = false;
+        super.validacionDatosIngresados=false;
     }
 
     @Override
@@ -143,6 +144,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel{
             TipoDocumentoEnum tipoDocumentoCompraEnum=TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(parametroTipoDocumentoCompra.getValor());            
             getCmbTipoDocumentoCompra().setSelectedItem(tipoDocumentoCompraEnum);
             
+            //Cargar el documento de la compra
+            ParametroCodefac parametroOrdenCompraObservacion= parametros.get(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES);
+            getTxtOrdenTrabajoReporte().setText((parametroOrdenCompraObservacion!=null)?parametroOrdenCompraObservacion.getValor():"");
+            
         } catch (RemoteException ex) {
             Logger.getLogger(ConfiguracionDefectoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -154,6 +159,21 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel{
         
         TipoDocumentoEnum tipoDocumentoCompra=(TipoDocumentoEnum) getCmbTipoDocumentoCompra().getSelectedItem();
         parametros.get(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_COMPRA).setValor(tipoDocumentoCompra.getCodigo());
+        
+        ParametroCodefac parametroCodefac=parametros.get(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES);
+        if(parametroCodefac==null)
+        {
+            parametroCodefac=new ParametroCodefac();
+            parametroCodefac.setNombre(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES);
+            parametroCodefac.setValor(getTxtOrdenTrabajoReporte().getText());
+            parametros.put(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES, parametroCodefac);
+
+        }
+        else
+        {
+            parametroCodefac.setValor(getTxtOrdenTrabajoReporte().getText());
+        }
+        
         
 
         

@@ -37,6 +37,7 @@ public interface SessionCodefacInterface {
     
     public void setUsuario(Usuario usuario);
     public void setEmpresa(Empresa empresa);
+    public void setParametrosCodefac(Map<String,ParametroCodefac> parametros);
     
     public List<Perfil> getPerfiles();
     /**

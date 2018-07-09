@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.configuraciones.model;
 
+import ec.com.codesoft.codefaclite.configuraciones.busqueda.GestionEmpleadosBusquedaDialogo;
 import ec.com.codesoft.codefaclite.configuraciones.busqueda.PerfilBusquedaDialogo;
 import ec.com.codesoft.codefaclite.configuraciones.busqueda.PerfilUsuarioBusquedaDialogo;
 import ec.com.codesoft.codefaclite.configuraciones.panel.PerfilUsuarioPanel;
@@ -13,6 +14,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PerfilUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
@@ -59,6 +61,7 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
                 UsuarioServicioIf usuarioServicioIf = ServiceFactory.getFactory().getUsuarioServicioIf();
                 setearValoresPantalla();
                 usuarioServicioIf.grabar(usuario);
+                session.setUsuario(usuario);
                 DialogoCodefac.mensaje("Correcto", "El usuario se grabo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
             }
             else
@@ -203,6 +206,7 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
         getTxtUsuario().setText(usuario.getNick());
         getTxtClaveAnterior().setEnabled(true); //desactivar el campo de clave anterior
         getLblClaveAnterior().setEnabled(true);
+        getTxtEmpleado().setText((usuario.getEmpleado()!=null)?usuario.getEmpleado().toString():"");
         getCmbEstado().setSelectedItem(usuario.getEstadoEnum());
         cargarListaPerfilesUsuario();
     }
@@ -213,6 +217,7 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
         getTxtClave().setText("");
         getTxtClaveRepetir().setText("");
         getTxtUsuario().setText("");
+        getTxtEmpleado().setText("");
         cargarListaPerfilesUsuario();
         getCmbEstado().setSelectedItem(GeneralEnumEstado.ACTIVO);
         
@@ -246,6 +251,22 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
     }
 
     private void agregarListener() {
+        
+        getBtnBuscarEmpleado().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GestionEmpleadosBusquedaDialogo empleadosBusquedaDialogo = new GestionEmpleadosBusquedaDialogo();
+                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(empleadosBusquedaDialogo);
+                buscarDialogoModel.setVisible(true);
+                Empleado empleadoTemp = (Empleado) buscarDialogoModel.getResultado();
+                if (empleadoTemp != null) {
+                    usuario.setEmpleado(empleadoTemp);
+                    getTxtEmpleado().setText(empleadoTemp.toString());
+                }
+            }
+        });
+        
+        
         getBtnAgregarPerfil().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -306,6 +327,7 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
         //usuario.setClave(new String(getTxtClave().getPassword()));
         GeneralEnumEstado estadoEnum=(GeneralEnumEstado) getCmbEstado().getSelectedItem();
         usuario.setEstado(estadoEnum.getEstado());
+
         
         if (estadoFormulario == ESTADO_GRABAR) { //Seteo la clave directo para guardar
             usuario.setClave(new String(getTxtClave().getPassword()));

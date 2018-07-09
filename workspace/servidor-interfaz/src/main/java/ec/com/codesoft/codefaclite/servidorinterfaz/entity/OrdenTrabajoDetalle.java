@@ -53,7 +53,14 @@ public class OrdenTrabajoDetalle implements Serializable
     
     @JoinColumn(name = "EMPLEADO_ID")
     @ManyToOne(optional = false)
-    private Empleado empleado;        
+    private Empleado empleado;       
+    
+    /**
+     * Este valor se lo crea porque el departamente es propio de a donde se asigna el trabajo sin importar el empleado
+     */
+    @JoinColumn(name = "DEPARTAMENTO_ID")
+    @ManyToOne    
+    private Departamento departamento;
 
     public Long getId() {
         return id;
@@ -126,6 +133,16 @@ public class OrdenTrabajoDetalle implements Serializable
     public void setEmpleado(Empleado empleado) {
         this.empleado = empleado;
     }
+
+    public Departamento getDepartamento() {
+        return departamento;
+    }
+
+    public void setDepartamento(Departamento departamento) {
+        this.departamento = departamento;
+    }
+    
+    
 
     @Override
     public String toString() {

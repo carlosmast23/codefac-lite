@@ -22,6 +22,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
@@ -73,16 +74,6 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
-        if(ordenTrabajo != null && ordenTrabajo.getCliente() != null || ordenTrabajo.getDetalles().size()>0){
-            Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Si desea continuar se perderan los datos sin guardar?", DialogoCodefac.MENSAJE_ADVERTENCIA);
-            if (respuesta) {
-                   this.ordenTrabajo = new OrdenTrabajo();
-                    limpiar();
-                    initDatosTabla();
-            }else{
-                throw new ExcepcionCodefacLite("Cancelacion usuario");
-            }
-        }
 
     }
 
@@ -105,8 +96,9 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             }
             setearDatos();
             OrdenTrabajoServiceIf servicio = ServiceFactory.getFactory().getOrdenTrabajoServiceIf();
-            servicio.grabar(ordenTrabajo);
-            limpiar();
+            ordenTrabajo=servicio.grabar(ordenTrabajo);
+            imprimir();
+            //limpiar();
             }catch (ServicioCodefacException ex) {
                 Logger.getLogger(OrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
             }catch (RemoteException ex) {
@@ -142,17 +134,23 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
         List<OrdenTrabajoDataReporte> dataReportes = new ArrayList<>();
         if(this.ordenTrabajo.getDetalles() != null)
         {
-            parametros.put("codigo",this.ordenTrabajo.getCodigo());
+            parametros.put("codigo",this.ordenTrabajo.getId().toString());
             parametros.put("cliente", this.ordenTrabajo.getCliente().getNombresCompletos());
             parametros.put("descripcion", this.ordenTrabajo.getDescripcion());
             GeneralEnumEstado generalEnumEstado = GeneralEnumEstado.getEnum(this.ordenTrabajo.getEstado());
             parametros.put("estado", generalEnumEstado.getNombre());
             parametros.put("fechaIngreso", ""+ this.ordenTrabajo.getFechaIngreso());
+            
+            ParametroCodefac parametroCodefac=session.getParametrosCodefac().get(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES);
+            parametros.put("observaciones",(parametroCodefac!=null)?parametroCodefac.getValor():"");
+            
+            parametros.put("empleado",(session.getUsuario().getEmpleado()!=null)?session.getUsuario().getEmpleado().getNombresCompletos():"");
+            
             for(OrdenTrabajoDetalle otd : this.ordenTrabajo.getDetalles())
             {
                 OrdenTrabajoDataReporte dataReporte = new OrdenTrabajoDataReporte();
-                if(otd.getEmpleado().getDepartamento()!=null){
-                    dataReporte.setDepartamento(""+otd.getEmpleado().getDepartamento().getNombre());;
+                if(otd.getDepartamento()!=null){
+                    dataReporte.setDepartamento(""+otd.getDepartamento().getNombre());;
                 }else{
                     dataReporte.setDepartamento("");
                 }
@@ -207,6 +205,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
 
     @Override
     public void limpiar() {
+        limpiarVariables();
         limpiarCampos();
         limpiarCamposDetalles();
         cargarCombos(); 
@@ -371,7 +370,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
         getCmbDateFechaEntrega().setDate(ordenTrabajoDetalle.getFechaEntrega());
         PrioridadEnumEstado prioridadEnumEstado = PrioridadEnumEstado.getEnum(ordenTrabajoDetalle.getPrioridad());
         getCmbPrioridadDetalle().setSelectedItem(prioridadEnumEstado);
-        Departamento departamento = ordenTrabajoDetalle.getEmpleado().getDepartamento();
+        Departamento departamento = ordenTrabajoDetalle.getDepartamento();
         getCmbTipoOrdenDetalle().setSelectedItem(departamento);
         getCmbAsignadoADetalle().setSelectedItem(ordenTrabajoDetalle.getEmpleado());
     }
@@ -441,8 +440,8 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             fila.add(ordenTrabajoEnumEstado.getNombre());
             
             try{
-                if(detalle.getEmpleado().getDepartamento()!= null){
-                    fila.add(detalle.getEmpleado().getDepartamento().getNombre()+"");
+                if(detalle.getDepartamento()!= null){
+                    fila.add(detalle.getDepartamento().getNombre()+"");
                 }else
                 {
                     fila.add("Sin departamento");
@@ -484,6 +483,8 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
         if(verificarCamposValidados())
         {
             ordenTrabajoDetalle.setDescripcion(""+getTxtAreaDescripcion().getText());
+            Departamento departamento=(Departamento) getCmbTipoOrdenDetalle().getSelectedItem();
+            ordenTrabajoDetalle.setDepartamento(departamento);
             ordenTrabajoDetalle.setNotas(""+getTxtAreaNotas().getText());
             OrdenTrabajoEnumEstado ordenTrabajoEnumEstado = (OrdenTrabajoEnumEstado) getCmbEstadoDetalle().getSelectedItem();
             ordenTrabajoDetalle.setEstado(ordenTrabajoEnumEstado.getLetra());
@@ -575,4 +576,20 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
     public void cargarDatosPantalla(Object entidad) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public boolean salirSinGrabar() {
+           //TODO: Arreglar esta validacion
+           //if(ordenTrabajo != null && ordenTrabajo.getCliente() != null || ordenTrabajo.getDetalles().size()>0)
+           //{
+           // return false;
+           //}
+           return true;
+    }
+
+    private void limpiarVariables() {
+       this.ordenTrabajo=new OrdenTrabajo();
+    }
+    
+    
 }

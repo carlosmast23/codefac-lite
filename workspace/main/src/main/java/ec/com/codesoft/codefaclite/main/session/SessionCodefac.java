@@ -74,6 +74,7 @@ public class SessionCodefac implements SessionCodefacInterface{
         return null;
     }
 
+    @Override
     public void setParametrosCodefac(Map<String,ParametroCodefac> parametrosCodefac) {
         this.parametrosCodefac = parametrosCodefac;
     }

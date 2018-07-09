@@ -177,6 +177,11 @@ public class Empleado implements Serializable
     public void setNacionalidad(Nacionalidad nacionalidad) {
         this.nacionalidad = nacionalidad;
     }
+    
+    public String getNombresCompletos()
+    {
+        return nombres+" "+apellidos;
+    }
      
 
     @Override

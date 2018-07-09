@@ -9,6 +9,8 @@
  */
 create table 
     USUARIO( 
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.5.1)*/
+    EMPLEADO_ID BIGINT ,
     NICK varchar(120) ,
     CLAVE varchar(120), 
     ESTADO varchar(1), 

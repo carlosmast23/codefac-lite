@@ -32,7 +32,7 @@ public class OrdenTrabajoBusqueda implements InterfaceModelFind<OrdenTrabajo>
     @Override
     public QueryDialog getConsulta(String filter) {
         String queryString = "SELECT o FROM OrdenTrabajo o WHERE ";
-        queryString+=" ( LOWER(o.codigo) like ?1 ) and o.estado=?2 ";
+        queryString+=" o.estado=?2 OR CAST(o.id CHAR(64)) like ?1 ";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1, filter);
         queryDialog.agregarParametro(2, GeneralEnumEstado.ACTIVO.getEstado());
@@ -42,7 +42,7 @@ public class OrdenTrabajoBusqueda implements InterfaceModelFind<OrdenTrabajo>
     @Override
     public void agregarObjeto(OrdenTrabajo o, Vector dato) 
     {
-        dato.add(o.getCodigo());
+        dato.add(o.getId());
         dato.add(o.getDescripcion());
         dato.add(o.getEstado());
         dato.add(o.getFechaIngreso());

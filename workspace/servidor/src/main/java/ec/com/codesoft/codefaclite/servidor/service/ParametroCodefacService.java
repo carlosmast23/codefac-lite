@@ -58,11 +58,31 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
      */
     public void editarParametros(Map<String ,ParametroCodefac> parametro) throws java.rmi.RemoteException
     {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() {
+                for (Map.Entry<String, ParametroCodefac> entry : parametro.entrySet()) {
+                    //String key = entry.getKey();
+                    ParametroCodefac value = entry.getValue();
+                    
+                    if(value.getId()==null) //Si no existe el dato lo grabo
+                    {
+                        entityManager.persist(value);
+                    }
+                    else //Si existe el dato solo lo edito
+                    {
+                        entityManager.merge(value);
+                    }
+                    
+                }
+            }
+        });
+        /*
            for (Map.Entry<String, ParametroCodefac> entry : parametro.entrySet()) {
             String key = entry.getKey();
             ParametroCodefac value = entry.getValue();
             parametroCodefacFacade.edit(value);
-        }
+        }*/
     }
     
     public ParametroCodefac grabar(ParametroCodefac parametro) throws java.rmi.RemoteException

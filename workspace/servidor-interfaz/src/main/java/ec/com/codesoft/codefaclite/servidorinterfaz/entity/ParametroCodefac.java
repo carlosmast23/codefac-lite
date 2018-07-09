@@ -62,10 +62,12 @@ public class ParametroCodefac implements Serializable {
     
     public static final String SECUENCIAL_LOTE= "secuencial_lote";
     
+    public static final String ORDEN_TRABAJO_OBSERVACIONES = "orden_trabajo_observaciones";
+    
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long id;
+    public Long id;
     
     @Column(name = "NOMBRE")
     public String nombre;
@@ -76,11 +78,11 @@ public class ParametroCodefac implements Serializable {
     public ParametroCodefac() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

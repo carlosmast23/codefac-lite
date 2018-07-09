@@ -9,5 +9,10 @@ Agregar en el reporte de clientes el nombre legal
 Agregar un campo adicional en el reporte de ordenes de trabajo para agregar una politica , reglamento o observacion que se desea imprimir en los reportes
 Agregar validacion para agregar alerta para cuando se busca desde un campo con esta opcion y al momento de cargar el registro se pierdon los datos ingresados anteriormente
 
+Revisar el tema de las sessiones , porque si algun cliente modifica se supone que se debe actualizar a todas las sesiones de los demas usuarios
+Revisar que para algunos clientes se debe validar que el usuario tiene que estar registrado como empleado y ver donde vincular
+Validar que en la pantalla de ordenes de trabajo solo pueda crear un empleado
+Analizar que la opcion de actualizar la licencia tambien deberia ser un permiso
+Revisar que cuando se actualiza la licencia para mas modulos y luego se agrega ventanas a un perfil toca reiniciar para ver las modificaciones
 
 

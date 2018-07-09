@@ -14,6 +14,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -37,6 +39,10 @@ public class Usuario implements Serializable{
     
     @Column (name = "ESTADO")
     private String estado;
+    
+    @JoinColumn(name = "EMPLEADO_ID")
+    @ManyToOne 
+    private Empleado empleado;
     
     /**
      * Variable que me sirve solo para saber si el usuario ingresado es root
@@ -83,6 +89,14 @@ public class Usuario implements Serializable{
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
+    public Empleado getEmpleado() {
+        return empleado;
+    }
+
+    public void setEmpleado(Empleado empleado) {
+        this.empleado = empleado;
+    }
     
     
 
@@ -93,6 +107,7 @@ public class Usuario implements Serializable{
     public void setPerfilesUsuario(List<PerfilUsuario> perfilesUsuario) {
         this.perfilesUsuario = perfilesUsuario;
     }
+    
 
     @Override
     public String toString() {
