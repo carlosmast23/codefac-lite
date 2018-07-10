@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.inventario.panel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
+import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -153,7 +154,7 @@ public abstract class CategoriaProductoPanel extends ControladorCodefacInterface
     // End of variables declaration//GEN-END:variables
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Descripcion", expresionRegularMensaje = "No se permiten caracteres especiales")
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.textoSimple, nombre = "Descripcion", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextArea getTxtDescripcion() {
         return txtDescripcion;
     }
@@ -171,7 +172,7 @@ public abstract class CategoriaProductoPanel extends ControladorCodefacInterface
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Nombre", expresionRegularMensaje = "No se permiten caracteres especiales")
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.textoSimple, nombre = "Nombre", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextField getTxtNombre() {
         return txtNombre;
     }

@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ClienteEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
+import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -543,7 +544,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
 
     @CampoBuscarAnotacion
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true , min=0 ,max = 100,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Nombre Social", expresionRegularMensaje = "No se permite la letra ñ, ni tildes")
+    @ValidacionCodefacAnotacion(requerido=true , min=0 ,max = 100, expresionRegular = ExpresionRegular.textoSimple, nombre = "Nombre Social", expresionRegularMensaje = "No se permite la letra ñ, ni tildes")
     public JTextField getjTextNombreSocial() {
         return jTextNombreSocial;
     }
@@ -575,7 +576,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true, min = 3, max = 200, expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$", nombre = "Apellidos", expresionRegularMensaje = "No se permite la letra ñ, ni tildes")
+    @ValidacionCodefacAnotacion(requerido = true, min = 3, max = 200, expresionRegular = ExpresionRegular.textoSimple, nombre = "Apellidos", expresionRegularMensaje = "No se permite la letra ñ, ni tildes")
     public JTextField getjTextApellidos() {
         return jTextApellidos;
     }
@@ -585,7 +586,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true, min = 3, max = 200, expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$", nombre = "Nombres", expresionRegularMensaje = "No se permite la letra ñ, ni tildes")
+    @ValidacionCodefacAnotacion(requerido = true, min = 3, max = 200, expresionRegular = ExpresionRegular.textoSimple, nombre = "Nombres", expresionRegularMensaje = "No se permite la letra ñ, ni tildes")
     public JTextField getjTextNombres() {
         return jTextNombres;
     }

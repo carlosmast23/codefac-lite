@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInte
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
+import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
@@ -708,7 +709,7 @@ public abstract class ComprobantesConfiguracionPanel extends ControladorCodefacI
         this.txtClaveFirma = txtClaveFirma;
     }
 
-    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$", nombre = "Correo Electronico")
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.email, nombre = "Correo Electronico")
     public JTextField getTxtCorreoElectronico() {
         return txtCorreoElectronico;
     }

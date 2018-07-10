@@ -582,26 +582,18 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         getTableDetallesPresupuesto().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-//                int fila = getTableDetallesPresupuesto().getSelectedRow();
-//                int columna = getTableDetallesPresupuesto().getSelectedColumn();
-//                getBtnAgregarDetalle().setEnabled(false);
-//                try{
-//                    PresupuestoDetalle presupuestoDetalle =  (PresupuestoDetalle) getTableDetallesPresupuesto().getValueAt(fila, 0);
-//                    if(presupuestoDetalle != null){
-//                        cargarInformacionDetallePresupuesto( presupuestoDetalle);
-//                        if(columna == 7)
-//                        {
-//                            if(!mapClientes.isEmpty())
-//                            {
-//                                cambiarOrden();
-//                            }
-//                        }
-//                    }
-//                }
-//                catch(Exception e)
-//                {
-//                    e.printStackTrace();
-//                }                
+                int fila = getTableDetallesPresupuesto().getSelectedRow();
+                getBtnAgregarDetalle().setEnabled(false);
+                try{
+                    PresupuestoDetalle presupuestoDetalle =  (PresupuestoDetalle) getTableDetallesPresupuesto().getValueAt(fila, 0);
+                    if(presupuestoDetalle != null){
+                        cargarInformacionDetallePresupuesto( presupuestoDetalle);
+                    }
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                }                
             }
         });
         
@@ -980,7 +972,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             for (PresupuestoDetalle detalle : detallesPorProveedor) {
                 if(b){
                     fila=new Vector<>();
-                    fila.add(null);fila.add(titulo+"");fila.add("");;fila.add("");;fila.add("");;fila.add("");;fila.add("");;fila.add(true);
+                    fila.add(null);fila.add(titulo+"");fila.add("");fila.add("");fila.add("");fila.add("");fila.add("");
                     b = false;
                     modeloTablaDetallesPresupuesto.addRow(fila);
                 }
@@ -992,8 +984,6 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                     fila.add(detalle.getPrecioCompra().subtract(detalle.getDescuentoCompra())+"");
                     fila.add(detalle.getPrecioVenta().subtract(detalle.getDescuentoVenta())+"");
                     fila.add(detalle.getCantidad().toString());
-                    EnumSiNo siNo = EnumSiNo.getEnumByLetra(detalle.getEstado()) ;
-                    fila.add(siNo.getBool());
                     modeloTablaDetallesPresupuesto.addRow(fila);
             }
         }
@@ -1158,8 +1148,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             PresupuestoDetalle presupuestoDetalle = (PresupuestoDetalle) getTableDetallesPresupuesto().getValueAt(fila, 0);
             if(presupuestoDetalle != null)
             {
-                boolean b = (boolean) getTableDetallesPresupuesto().getValueAt(fila,7);
-                agregarDetallesPresupuesto(presupuestoDetalle,b);
+                agregarDetallesPresupuesto(presupuestoDetalle,false);
                 limpiarDetalles();
                 mostrarDatosTabla();
                 calcularTotales();                   

@@ -15,13 +15,13 @@ public final class ExpresionRegular
      * Texto simple 
      * Ejm: Texto simple que tiene caracteres como - guion, . punto, _línea baja y , coma
     */
-    public static final String textoSimple = "^[A-Za-z0-9\\s.\\_\\-\\,\\ ]*$";
+    public static final String textoSimple = "^[A-Za-zÀ-ÿ0-9\\u00f1\\u00d1\\s.\\_\\-\\,\\ ]*$";
     
     /**
      * Texto simple 
      * Ejm: Texto simple que permite todo lo que tiene su primera opcion menos coma
     */
-    public static final String textoSimple2 ="^[A-Za-z0-9\\s.\\_\\-\\ ]*$";
+    public static final String textoSimple2 ="^[A-Za-zÀ-ÿ0-9\\u00f1\\u00d1\\s.\\_\\-\\ ]*$";
     
     /**
      * Número celular de 10 digitos
@@ -51,7 +51,7 @@ public final class ExpresionRegular
      * Texto Simple que permite la validacion de un nombre de razón social sin caracteres especiales
      * Ejm: Codesoft Desarrollo 1
     */
-    public static final String nombreSocial = "^[A-Za-z0-9\\s]*$";
+    public static final String nombreSocial = "^[A-Za-z0-9À-ÿ\\u00f1\\u00d1\\s]*$";
     
     /**
      * Número que permite validar el ingreso de numeros enteros para precios

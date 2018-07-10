@@ -64,10 +64,12 @@ import javax.swing.table.DefaultTableModel;
 public class OrdenTrabajoModel extends OrdenTrabajoPanel{
 
     private OrdenTrabajo ordenTrabajo;
+    private List<String> categoriasDetallesOrdenTrabajo;
     
     @Override
     public void iniciar() {
         this.ordenTrabajo = new OrdenTrabajo();
+        this.categoriasDetallesOrdenTrabajo = new ArrayList<>();
         cargarValoresIniciales();
         initDatosTabla();
     }
@@ -267,6 +269,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             public void actionPerformed(ActionEvent e) 
             {
                 agregarDetallesOrdenTrabajo(null);
+                agregarCategoriaOrdenTrabajo();
                 limpiarCamposDetalles();
                 cargarCombos();
             }
@@ -316,10 +319,19 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
         getTableDetallesOrdenTrabajo().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                int fila = getTableDetallesOrdenTrabajo().getSelectedRow();
-                getBtnAgregarDetalle().setEnabled(false);
-                OrdenTrabajoDetalle ordenTrabajoDetalle = ordenTrabajo.getDetalles().get(fila);
-                cargarInformacionDetalleOrdenTrabajo( ordenTrabajoDetalle);
+                try
+                {
+                    int fila = getTableDetallesOrdenTrabajo().getSelectedRow();
+                    getBtnAgregarDetalle().setEnabled(false);
+                    OrdenTrabajoDetalle ordenTrabajoDetalle = (OrdenTrabajoDetalle) getTableDetallesOrdenTrabajo().getValueAt(fila,0);
+                    if(ordenTrabajoDetalle != null){
+                        cargarInformacionDetalleOrdenTrabajo( ordenTrabajoDetalle);
+                    }
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                }  
                 
             }
         });
@@ -429,12 +441,27 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
     
     public void mostrarDatosTabla()
     {
-        DefaultTableModel modeloTablaDetallesCompra = UtilidadesTablas.crearModeloTabla(new String[]{"obj","Descripción","Estado","Departamento","Empleado"}, new Class[]{OrdenTrabajoDetalle.class,String.class,String.class,String.class,String.class});
+        DefaultTableModel modeloTablaDetallesCompra = UtilidadesTablas.crearModeloTabla(new String[]{"obj","Categoria","Descripción","Estado","Departamento","Empleado"}, new Class[]{OrdenTrabajoDetalle.class,String.class,String.class,String.class,String.class,String.class});
         List<OrdenTrabajoDetalle> detalles = ordenTrabajo.getDetalles();
+        boolean b = true;
+        Vector<Object> fila;
         for (OrdenTrabajoDetalle detalle : detalles) 
         {
-            Vector<Object> fila=new Vector<>();
+            if(b)
+            {
+                fila=new Vector<>();
+                fila.add(null);
+                fila.add(""+getTxtCategoria().getText());
+                fila.add("");
+                fila.add("");
+                fila.add("");
+                fila.add("");
+                b = false;
+                modeloTablaDetallesCompra.addRow(fila);
+            }
+            fila=new Vector<>();
             fila.add(detalle);
+            fila.add("");
             fila.add(detalle.getDescripcion()+"");
             OrdenTrabajoEnumEstado ordenTrabajoEnumEstado = OrdenTrabajoEnumEstado.getEnum(detalle.getEstado());
             fila.add(ordenTrabajoEnumEstado.getNombre());
@@ -592,6 +619,11 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
 
     private void limpiarVariables() {
        this.ordenTrabajo=new OrdenTrabajo();
+    }
+    
+    public void agregarCategoriaOrdenTrabajo()
+    {
+        this.categoriasDetallesOrdenTrabajo.add(getTxtCategoria().getText());
     }
     
     

@@ -185,6 +185,24 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
     public void setCmbDateFechaEntrega(JDateChooser cmbDateFechaEntrega) {
         this.cmbDateFechaEntrega = cmbDateFechaEntrega;
     }
+
+    public JComboBox<String> getCmbCategoria() {
+        return cmbCategoria;
+    }
+
+    public void setCmbCategoria(JComboBox<String> cmbCategoria) {
+        this.cmbCategoria = cmbCategoria;
+    }
+
+    public JTextField getTxtCategoria() {
+        return txtCategoria;
+    }
+
+    public void setTxtCategoria(JTextField txtCategoria) {
+        this.txtCategoria = txtCategoria;
+    }
+    
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -230,6 +248,9 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         btnActualizarDetalle = new javax.swing.JButton();
         btnEliminarDetalle = new javax.swing.JButton();
         cmbDateFechaEntrega = new com.toedter.calendar.JDateChooser();
+        jLabel14 = new javax.swing.JLabel();
+        txtCategoria = new javax.swing.JTextField();
+        cmbCategoria = new javax.swing.JComboBox<>();
         lblEspacio1 = new javax.swing.JLabel();
         lblEspacio2 = new javax.swing.JLabel();
         lblTotalDetalles = new javax.swing.JLabel();
@@ -369,7 +390,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         jLabel9.setText("Asignado A:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel9, gridBagConstraints);
@@ -378,7 +399,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         jLabel10.setText("Fecha Entrega:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -386,7 +407,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -396,7 +417,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         jLabel11.setText("Descripción:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel11, gridBagConstraints);
@@ -407,7 +428,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -420,7 +441,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         jLabel12.setText("Notas:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel12, gridBagConstraints);
@@ -431,7 +452,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -444,14 +465,14 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         jLabel4.setText("Departamento:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel4, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.1;
@@ -462,14 +483,14 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         jLabel13.setText("Estado:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel13, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.1;
@@ -480,14 +501,14 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         jLabel8.setText("Prioridad:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel8, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -516,15 +537,38 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         jPanel1.add(jToolBar1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(cmbDateFechaEntrega, gridBagConstraints);
+
+        jLabel14.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel14.setText("Categoria:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        jPanel1.add(jLabel14, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.weightx = 0.1;
+        jPanel1.add(txtCategoria, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 20, 10, 0);
+        jPanel1.add(cmbCategoria, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -570,6 +614,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
     private javax.swing.JButton btnCliente;
     private javax.swing.JButton btnEliminarDetalle;
     private javax.swing.JComboBox<Empleado> cmbAsignadoADetalle;
+    private javax.swing.JComboBox<String> cmbCategoria;
     private com.toedter.calendar.JDateChooser cmbDateFechaEntrega;
     private com.toedter.calendar.JDateChooser cmbDateFechaIngreso;
     private javax.swing.JComboBox<OrdenTrabajoEnumEstado> cmbEstadoDetalle;
@@ -581,6 +626,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -600,6 +646,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
     private javax.swing.JTable tableDetallesOrdenTrabajo;
     private javax.swing.JTextArea txtAreaDescripcion;
     private javax.swing.JTextArea txtAreaNotas;
+    private javax.swing.JTextField txtCategoria;
     private javax.swing.JTextField txtCliente;
     private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextField txtDescripcion;

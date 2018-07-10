@@ -1027,8 +1027,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     }
     
     @LimpiarAnotacion
-    //@ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.soloNumeros2, nombre = "Cantidad", grupo = "detalles")
-    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[0-9]+$", nombre = "Cantidad", grupo = "detalles")
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.soloNumeros2, nombre = "Cantidad", grupo = "detalles")
     public JTextField getTxtCantidad() {
         return txtCantidad;
     }

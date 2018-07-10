@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
@@ -692,7 +693,7 @@ public abstract class OrdenCompraPanel extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Descripción",grupo = "detalles")
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = ExpresionRegular.textoSimple ,nombre = "Descripción",grupo = "detalles")
     public JTextField getTxtDescripcionItem() {
         return txtDescripcionItem;
     }
@@ -732,7 +733,7 @@ public abstract class OrdenCompraPanel extends ControladorCodefacInterface {
     }
     
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = "^[A-Za-z0-9\\s.\\_\\-\\ ]*$",nombre = "Observación")
+    @ValidacionCodefacAnotacion(requerido=true ,expresionRegular = ExpresionRegular.textoSimple ,nombre = "Observación")
     public JTextField getTxtObservacion() {
         return txtObservacion;
     }
