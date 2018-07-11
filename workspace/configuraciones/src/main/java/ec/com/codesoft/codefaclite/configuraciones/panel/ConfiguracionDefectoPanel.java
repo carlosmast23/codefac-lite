@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.configuraciones.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import javax.swing.JComboBox;
 import javax.swing.JTextArea;
@@ -48,6 +49,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         txtOrdenTrabajoReporte = new javax.swing.JTextArea();
         lblEspacioBlanco2 = new javax.swing.JLabel();
         lblEspacioBlanco = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        cmbFormatoHojas = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -114,6 +117,9 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setText("Detalles Reporte Ordenes de Trabajo:");
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel2.add(jLabel2, gridBagConstraints);
 
@@ -123,7 +129,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
@@ -132,16 +138,31 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel2.add(jScrollPane1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 0.1;
         jPanel2.add(lblEspacioBlanco2, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanel2.add(lblEspacioBlanco, gridBagConstraints);
+
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel3.setText("Formato Reportes:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel2.add(jLabel3, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel2.add(cmbFormatoHojas, gridBagConstraints);
 
         jTabbedPane1.addTab("Ordenes Trabajo", jPanel2);
 
@@ -152,11 +173,13 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<FormatoHojaEnum> cmbFormatoHojas;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumentoCompra;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
@@ -191,6 +214,14 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
     public void setTxtOrdenTrabajoReporte(JTextArea txtOrdenTrabajoReporte) {
         this.txtOrdenTrabajoReporte = txtOrdenTrabajoReporte;
+    }
+
+    public JComboBox<FormatoHojaEnum> getCmbFormatoHojas() {
+        return cmbFormatoHojas;
+    }
+
+    public void setCmbFormatoHojas(JComboBox<FormatoHojaEnum> cmbFormatoHojas) {
+        this.cmbFormatoHojas = cmbFormatoHojas;
     }
     
     
