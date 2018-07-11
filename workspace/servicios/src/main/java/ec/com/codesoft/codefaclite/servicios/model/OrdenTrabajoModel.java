@@ -56,6 +56,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import org.jdesktop.swingx.prompt.PromptSupport;
 
 /**
  *
@@ -72,6 +73,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
         this.categoriasDetallesOrdenTrabajo = new ArrayList<>();
         cargarValoresIniciales();
         initDatosTabla();
+        PromptSupport.setPrompt("Ingrese descripción corta", getTxtCategoria());
     }
 
     @Override
@@ -159,6 +161,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
                 dataReporte.setDescripciond(""+otd.getDescripcion());
                 dataReporte.setFechaEntrega(""+otd.getFechaEntrega());
                 dataReporte.setNotas(""+otd.getNotas());
+                dataReporte.setTitulo(""+otd.getTitulo());
                 if(otd.getEmpleado() != null){
                     String nombresCompletos = otd.getEmpleado().getApellidos()+" "+otd.getEmpleado().getNombres();
                     dataReporte.setPersona("" + nombresCompletos );
@@ -269,9 +272,6 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             public void actionPerformed(ActionEvent e) 
             {
                 agregarDetallesOrdenTrabajo(null);
-                agregarCategoriaOrdenTrabajo();
-                limpiarCamposDetalles();
-                cargarCombos();
             }
         });
         
@@ -372,8 +372,12 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
     
     public void cargarInformacionDetalleOrdenTrabajo(OrdenTrabajoDetalle ordenTrabajoDetalle)
     {
+        /**
+         * Cargar informacion a los text
+         */
         getTxtAreaDescripcion().setText(ordenTrabajoDetalle.getDescripcion());
         getTxtAreaNotas().setText(ordenTrabajoDetalle.getNotas());
+        getTxtCategoria().setText(ordenTrabajoDetalle.getTitulo());
         /**
          * Cargar información a los combos
          */
@@ -441,30 +445,17 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
     
     public void mostrarDatosTabla()
     {
-        DefaultTableModel modeloTablaDetallesCompra = UtilidadesTablas.crearModeloTabla(new String[]{"obj","Categoria","Descripción","Estado","Departamento","Empleado"}, new Class[]{OrdenTrabajoDetalle.class,String.class,String.class,String.class,String.class,String.class});
+        DefaultTableModel modeloTablaDetallesCompra = UtilidadesTablas.crearModeloTabla(new String[]{"obj","Titulo","Descripción","Estado","Departamento","Empleado"}, new Class[]{OrdenTrabajoDetalle.class,String.class,String.class,String.class,String.class,String.class});
         List<OrdenTrabajoDetalle> detalles = ordenTrabajo.getDetalles();
-        boolean b = true;
         Vector<Object> fila;
         for (OrdenTrabajoDetalle detalle : detalles) 
         {
-            if(b)
-            {
-                fila=new Vector<>();
-                fila.add(null);
-                fila.add(""+getTxtCategoria().getText());
-                fila.add("");
-                fila.add("");
-                fila.add("");
-                fila.add("");
-                b = false;
-                modeloTablaDetallesCompra.addRow(fila);
-            }
             fila=new Vector<>();
             fila.add(detalle);
-            fila.add("");
-            fila.add(detalle.getDescripcion()+"");
+            fila.add(""+detalle.getTitulo());
+            fila.add(""+detalle.getDescripcion()+"");
             OrdenTrabajoEnumEstado ordenTrabajoEnumEstado = OrdenTrabajoEnumEstado.getEnum(detalle.getEstado());
-            fila.add(ordenTrabajoEnumEstado.getNombre());
+            fila.add(""+ordenTrabajoEnumEstado.getNombre());
             
             try{
                 if(detalle.getDepartamento()!= null){
@@ -528,13 +519,18 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             }else{
                 DialogoCodefac.mensaje("Advertencia", "Se necesita crear Departamento o Empleado...", DialogoCodefac.MENSAJE_ADVERTENCIA);
             }
+            ordenTrabajoDetalle.setTitulo(""+getTxtCategoria().getText());
         }
         
         if(agregar)
         {
             ordenTrabajo.addDetalle(ordenTrabajoDetalle);
-            mostrarDatosTabla();
+            procesoMostrarDetalles();
+        }else
+        {
+            procesoMostrarDetalles();
         }
+                   
         
     }
     
@@ -552,6 +548,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
         getTxtAreaDescripcion().setText("");
         getTxtAreaNotas().setText("");
         getCmbDateFechaEntrega().setDate(UtilidadesFecha.getFechaHoy());
+        getTxtCategoria().setText("");
     }
     
     public void setearDatos() throws ExcepcionCodefacLite
@@ -565,18 +562,28 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
     
     private boolean verificarCamposValidados() {
         //bandera para comprobar que todos los campos esten validados
-        boolean b = true;
-        List<JTextArea> camposValidar = new ArrayList<JTextArea>();
+        boolean b1 = true, b2 = true;
+        List<JTextArea> camposValidar = new ArrayList<>();
         //Ingresar los campos para validar 
         camposValidar.add(getTxtAreaDescripcion());
         camposValidar.add(getTxtAreaNotas());
+        
         //Obtener el estado de validacion de los campos
         for (JTextArea campo : camposValidar) {
             if (!campo.getBackground().equals(Color.white)) {
-                b = false;
+                b1 = false;
             }
         }
-        return b;
+        
+        List<JTextField> camposFields = new ArrayList<>();
+        camposFields.add(getTxtCategoria());
+        for (JTextField camposField : camposFields) {
+            if(!camposField.getBackground().equals(Color.WHITE)){
+                b2 = false;
+            }
+        }
+      
+        return b1&&b2;
     }
     
     public void actualizarDetalleOrdenTrabajo()
@@ -584,8 +591,6 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
         int fila = getTableDetallesOrdenTrabajo().getSelectedRow();
         OrdenTrabajoDetalle ordenTrabajoDetalle = ordenTrabajo.getDetalles().get(fila);
         agregarDetallesOrdenTrabajo(ordenTrabajoDetalle);
-        limpiarCamposDetalles();
-        cargarCombos();
         getBtnAgregarDetalle().setEnabled(true);
     }
     
@@ -593,7 +598,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
     {
         int fila = getTableDetallesOrdenTrabajo().getSelectedRow();
         ordenTrabajo.getDetalles().remove(fila);
-        mostrarDatosTabla();
+        procesoMostrarDetalles();
         getBtnAgregarDetalle().setEnabled(true);
     }
 
@@ -621,10 +626,11 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
        this.ordenTrabajo=new OrdenTrabajo();
     }
     
-    public void agregarCategoriaOrdenTrabajo()
+    public void procesoMostrarDetalles()
     {
-        this.categoriasDetallesOrdenTrabajo.add(getTxtCategoria().getText());
+        mostrarDatosTabla();
+        limpiarCamposDetalles();
+        cargarCombos();
     }
-    
     
 }

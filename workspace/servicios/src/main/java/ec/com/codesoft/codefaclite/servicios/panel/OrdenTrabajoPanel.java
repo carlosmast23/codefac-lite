@@ -135,7 +135,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
     }
     
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido=false,expresionRegular = ExpresionRegular.textoSimple ,nombre = "Nota detalle Orden Trabajo", grupo = "detalles")
+    @ValidacionCodefacAnotacion(requerido=false ,nombre = "Nota detalle Orden Trabajo", grupo = "detalles")
     public JTextArea getTxtAreaNotas() {
         return txtAreaNotas;
     }
@@ -161,7 +161,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
     }
     
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.textoSimple, nombre = "Descripción Orden Trabajo")
+    @ValidacionCodefacAnotacion(requerido = false, nombre = "Descripción Orden Trabajo")
     public JTextField getTxtDescripcion() {
         return txtDescripcion;
     }
@@ -185,15 +185,9 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
     public void setCmbDateFechaEntrega(JDateChooser cmbDateFechaEntrega) {
         this.cmbDateFechaEntrega = cmbDateFechaEntrega;
     }
-
-    public JComboBox<String> getCmbCategoria() {
-        return cmbCategoria;
-    }
-
-    public void setCmbCategoria(JComboBox<String> cmbCategoria) {
-        this.cmbCategoria = cmbCategoria;
-    }
-
+    
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true, nombre = "Título detalle Orden Trabajo", grupo = "detalles")
     public JTextField getTxtCategoria() {
         return txtCategoria;
     }
@@ -248,9 +242,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         btnActualizarDetalle = new javax.swing.JButton();
         btnEliminarDetalle = new javax.swing.JButton();
         cmbDateFechaEntrega = new com.toedter.calendar.JDateChooser();
-        jLabel14 = new javax.swing.JLabel();
         txtCategoria = new javax.swing.JTextField();
-        cmbCategoria = new javax.swing.JComboBox<>();
         lblEspacio1 = new javax.swing.JLabel();
         lblEspacio2 = new javax.swing.JLabel();
         lblTotalDetalles = new javax.swing.JLabel();
@@ -546,29 +538,14 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(cmbDateFechaEntrega, gridBagConstraints);
-
-        jLabel14.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel14.setText("Categoria:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        jPanel1.add(jLabel14, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(txtCategoria, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(10, 20, 10, 0);
-        jPanel1.add(cmbCategoria, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -614,7 +591,6 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
     private javax.swing.JButton btnCliente;
     private javax.swing.JButton btnEliminarDetalle;
     private javax.swing.JComboBox<Empleado> cmbAsignadoADetalle;
-    private javax.swing.JComboBox<String> cmbCategoria;
     private com.toedter.calendar.JDateChooser cmbDateFechaEntrega;
     private com.toedter.calendar.JDateChooser cmbDateFechaIngreso;
     private javax.swing.JComboBox<OrdenTrabajoEnumEstado> cmbEstadoDetalle;
@@ -626,7 +602,6 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

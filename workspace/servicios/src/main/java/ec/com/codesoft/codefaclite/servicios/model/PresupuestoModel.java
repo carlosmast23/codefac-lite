@@ -22,6 +22,7 @@ import ec.com.codesoft.codefaclite.servicios.panel.PresupuestoPanel;
 import ec.com.codesoft.codefaclite.servicios.reportdata.OrdenCompraDataReporte;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.CorreoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
@@ -90,6 +91,9 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     
     private static final String PATH_REPORTE_TMP = "tmp/reporteOrdenCompra.pdf";
     
+    public static final String ETIQUETA_NOMBRE_CLIENTE = "[nombre_cliente]";
+    public static final String ETIQUETA_NOMBRE_EMPLEADO = "[nombre_empleado]";
+    
     private Presupuesto presupuesto;
     
     private Producto producto;
@@ -99,6 +103,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     private Map<Integer,List<PresupuestoDetalle>> mapOrden;
     private List<OrdenCompra> ordenesCompra;
     private String correoEmpleado;
+    private Empleado empleado;
 
     public PresupuestoModel() {
         super.listaExclusionComponentes.add(getTxtPrecioVenta());
@@ -227,8 +232,13 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                  */
                 OrdenCompraServiceIf compraServiceIf = ServiceFactory.getFactory().getOrdenCompraServiceIf();
                 compraServiceIf.grabar(ordenCompra);
-                this.ordenesCompra.add(ordenCompra);
-                //this.corresEmpleados.
+//                this.ordenesCompra.add(ordenCompra);
+//                
+//                if(this.presupuesto.getOrdenTrabajoDetalle().getEmpleado() != null){
+//                    Empleado empleadoTemp = this.presupuesto.getOrdenTrabajoDetalle().getEmpleado(); 
+//                }
+//                
+//                Persona personaTemp = this.presupuesto.getPersona();
 
             }
             
@@ -1259,28 +1269,30 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     {
         if(!this.ordenesCompra.isEmpty())
         {
-            for(OrdenCompra ordenCompra : this.ordenesCompra)
-            {
-                /**
-                 * Generar Reporte
-                 */
-                generarReportePdf(ordenCompra);
+                //generarReportePdf(ordenCompra);
                 /**
                  * Crear mensaje para Empleado si existe
                  */
-                String mensaje;
-            }
+                String mensaje =  construirMensaje(empleado, persona);
+                
+            
         }
     }
-            
+    
+    public String construirMensaje(Empleado empleado, Persona persona)
+    {
+        String mensaje = "Estimad@ [nombre_empleado] realize la orden de compra del Cliente [nombre_cliente]";
+        
+        mensaje = mensaje.replace(ETIQUETA_NOMBRE_EMPLEADO, empleado.getNombresCompletos());
+        mensaje = mensaje.replace(ETIQUETA_NOMBRE_CLIENTE, persona.getNombresCompletos());
+
+        return mensaje;
+    }
+                
     @Override
     public void run() 
     {
         
     }
     
-    public String crearMensajeCorreo(OrdenCompra ordenCompra )
-    {
-        return "corre";
-    }
 }

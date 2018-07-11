@@ -24,6 +24,7 @@ public class OrdenTrabajoDataReporte implements ExcelDatosInterface
     private String prioridad;
     private String departamento;
     private String persona;
+    private String titulo;
 
     public OrdenTrabajoDataReporte() {
     }
@@ -98,6 +99,14 @@ public class OrdenTrabajoDataReporte implements ExcelDatosInterface
 
     public void setEstadod(String estadod) {
         this.estadod = estadod;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
      
     @Override

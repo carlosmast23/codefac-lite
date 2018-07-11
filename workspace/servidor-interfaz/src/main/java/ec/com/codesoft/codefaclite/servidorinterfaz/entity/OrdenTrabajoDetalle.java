@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import java.io.Serializable;
 import java.sql.Date;
 import javax.persistence.Column;
@@ -15,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  *
@@ -47,6 +49,9 @@ public class OrdenTrabajoDetalle implements Serializable
     @Column(name = "PRIORIDAD")
     private String prioridad;
     
+    @Column(name = "TITULO")
+    private String titulo;
+    
     @JoinColumn(name = "ORDEN_TRABAJO_ID")
     @ManyToOne(optional = false)
     private OrdenTrabajo ordenTrabajo;
@@ -61,7 +66,8 @@ public class OrdenTrabajoDetalle implements Serializable
     @JoinColumn(name = "DEPARTAMENTO_ID")
     @ManyToOne    
     private Departamento departamento;
-
+    
+            
     public Long getId() {
         return id;
     }
@@ -141,8 +147,14 @@ public class OrdenTrabajoDetalle implements Serializable
     public void setDepartamento(Departamento departamento) {
         this.departamento = departamento;
     }
-    
-    
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
 
     @Override
     public String toString() {

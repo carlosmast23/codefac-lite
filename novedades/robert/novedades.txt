@@ -1,8 +1,7 @@
 1. En la pantalla de notificaciones academicas , cuando matricule un dato y deje
 la pantalla abierta de las notificaciones y volvi a generar el reporte se genero mal
 aparecieron las 2 deudas al mismo tiempo.
-2. En Orden de compra colocar la validacion de boton Editar.
-3. Agregar funcionalidad boton editar en detalles de orden de compra.
+
 4. Enviar correo al empleado despues que genere la orden de trabajo, ojo que por cada detalle asigno un empleado
 el empleado. 
 
@@ -12,3 +11,5 @@ Ojo: Pero se puede cambiar el estado de la orden para volver a reutilizar porque
 Establecer un tiempo por defecto de configuracion para los presupuestos, en parametros del sistema que el usuario pueda configurar
 
 Optimizar porque usa 2 map al momento de agregar detalles en los presupuestos
+Reporte Orden de trabajo colocar tres valores
+colocar campo en orden trabajo detalle titulo
