@@ -15,4 +15,10 @@ Validar que en la pantalla de ordenes de trabajo solo pueda crear un empleado
 Analizar que la opcion de actualizar la licencia tambien deberia ser un permiso
 Revisar que cuando se actualiza la licencia para mas modulos y luego se agrega ventanas a un perfil toca reiniciar para ver las modificaciones
 
+Revisar porque no se creo el campo de empleado_id en usuario y departamento:id en orden de trabajo
+
+Problema: Se cambio la clave del usuario al asignar un empleado al usuario , o posiblemente paso cuando se actualizo la licencia
+
+Revisar los detalles de la orden de trabajo cuando se intenta agregar se borran los campos de descripcion y notas
+
 

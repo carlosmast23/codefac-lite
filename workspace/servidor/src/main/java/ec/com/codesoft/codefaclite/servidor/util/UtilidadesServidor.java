@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -287,6 +288,8 @@ public class UtilidadesServidor {
                                     pstm.execute();
                                     pstm.close();
                                 } catch (SQLException ex) {
+                                    LOG.log(Level.SEVERE, "Query Error:" + query.getQuery());
+                                    JOptionPane.showMessageDialog(null,"Error al actualizar la base de datos en el Query: \n"+query.getQuery()+"\n\n CAUSA:\n"+ex.getCause().toString(),"ERROR",JOptionPane.WARNING_MESSAGE);
                                     Logger.getLogger(UtilidadesServidor.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                             }
@@ -330,20 +333,24 @@ public class UtilidadesServidor {
         //5.- quitar porciacaso los espacios en blanco
         String queryEditar = "ALTER TABLE " + nombreTabla + " ADD";
 
-        int posInicialParentesisPropiedades = str.indexOf(")");
-        String queryBuscar = str.substring(posInicialParentesisPropiedades + 1);
+        int posInicialParentesisPropiedades = str.indexOf(")"); //Buscar la primer parentesis de la etiqueta version del sistema (VERSION_SISTEMA) porque ya no necesito para encontrar el campo a editar
+        String queryBuscar = str.substring(posInicialParentesisPropiedades + 1); //Elimino los datos con paratesis
+        queryBuscar=queryBuscar.replace("*/",""); //Elimino este caracter al final de la etiqueta ( VERSION_SISTEMA) que corresponde a final el comentario
 
         int posFinalComaDelCampo = queryBuscar.indexOf(",");
-        int posSegundoParentecisPropiedades = queryBuscar.indexOf(")");
+        int posParentecisCerradoPropiedades = queryBuscar.indexOf(")"); //Esta parentesis es para verificar si existe algun tipo de dato que ocupa parentesis ejemplo VARCHAR(12)
+        int posParentecisAbiertoPropiedades = queryBuscar.indexOf("(");
 
-        //Si cumple esta condicion significa que la coma marca el final del script a modificar
-        if (posFinalComaDelCampo > posSegundoParentecisPropiedades) {
-            String queryTmp = queryBuscar.substring(0, posFinalComaDelCampo);
-            queryEditar = queryEditar + queryTmp;
-        } else {
-            //Si entra en esta condicion significa que existe una segunda coma que es la que marca el final , esto puede suceder por ejemplo en el tipo de dato decimal que ocupa coma para definir
-            int posSegunaComa = str.substring(posFinalComaDelCampo + 1).indexOf(",");
+        //Si la coma esta entre un parentesis asumo que es para los tipo de datos decimal y debo buscar la siguiente ,
+        if (posFinalComaDelCampo>posParentecisAbiertoPropiedades && posFinalComaDelCampo < posParentecisCerradoPropiedades) 
+        {
+            //Si entra en esta condicion significa que existe una segunda coma que es la que marca el final , esto puede suceder por ejemplo en el tipo de dato decimal que ocupa coma para definir            
+            int posSegunaComa = queryBuscar.indexOf(",",posFinalComaDelCampo+1); //Busca el segundo coma que debe se el que divide el tipo de dato
             String queryTmp = queryBuscar.substring(0, posSegunaComa);
+            queryEditar = queryEditar + queryTmp;
+
+        } else {
+            String queryTmp = queryBuscar.substring(0, posFinalComaDelCampo);
             queryEditar = queryEditar + queryTmp;
         }
         return queryEditar;
