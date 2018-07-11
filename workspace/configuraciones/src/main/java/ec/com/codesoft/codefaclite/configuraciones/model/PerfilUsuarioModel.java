@@ -101,18 +101,30 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
     
     @Override
     public void editar() throws ExcepcionCodefacLite {
-        try {
-            if(validarEditar())
-            {
-                UsuarioServicioIf usuarioServicioIf = ServiceFactory.getFactory().getUsuarioServicioIf();
-                setearValoresPantalla();
-                usuarioServicioIf.editar(usuario);
-                DialogoCodefac.mensaje("Correcto", "El usuario se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+        try {     
+            UsuarioServicioIf usuarioServicioIf = ServiceFactory.getFactory().getUsuarioServicioIf();
+            
+            //Verificar si el usuario desea cambiar de clave
+            String clave = new String(getTxtClave().getPassword());
+            String claveRepetida = new String(getTxtClaveRepetir().getPassword());
+            String claveAnterior = new String(getTxtClaveAnterior().getPassword());
+
+            //Si alguna de estos datos fue modificado asumo que quiere editar la clave
+            if (!clave.equals("") || !claveAnterior.equals("") || !claveRepetida.equals("")) {
+                if (validarEditarClave(clave, claveRepetida, claveAnterior)) {
+                    usuario=usuarioServicioIf.cambiarClave(usuario,claveAnterior,clave); //Todo : Mejorar esta parte para solo ejecutar cuando desean cambiar la clave
+                } else {
+                    throw new ExcepcionCodefacLite("Validacion incorrecta");
+                }
             }
-            else
-            {
-                throw  new ExcepcionCodefacLite("Validacion incorrecta");
-            }
+            
+            
+            //Editar el usuario
+            setearValoresPantalla();
+            usuarioServicioIf.editar(usuario);            
+            DialogoCodefac.mensaje("Correcto", "El usuario se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+            
+            
         } catch (RemoteException ex) {
             DialogoCodefac.mensaje("Error","Ocurrio un error con el servidor", DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(PerfilUsuarioModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -120,17 +132,16 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
             DialogoCodefac.mensaje("Error",ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(PerfilUsuarioModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
     
-    private boolean validarEditar()
+    }
+        
+    private boolean validarEditarClave(String clave,String claveRepetida,String claveAnterior)
     {
-        String clave = new String(getTxtClave().getPassword());
-        String claveRepetida = new String(getTxtClaveRepetir().getPassword());
-        String claveAnterior=new String(getTxtClaveAnterior().getPassword());
         
         if(clave.equals(""))
         {
-            return true; //Si la clave esta en blanco entonces no valido nada mas porque asumo que no quiere cambiar la clave
+            DialogoCodefac.mensaje("Validación", "El campo de la clave esta en blanco, no se puede cambiar de clave ", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            //return false; //Si la clave esta en blanco entonces no valido nada mas porque asumo que no quiere cambiar la clave
         }
         else //Solo hacer las demas validaciones si existe una clave ingresada
         {

@@ -428,6 +428,24 @@ public class Main {
                 if(UtilidadesSistema.compareVersion(versionGrabada,ParametrosSistemaCodefac.VERSION)==-1)
                 {
                     try {
+                        
+                        //Obtiene una instancia de un objeto donde puedo interactuar con la base de datos
+                        BaseDatosCredenciales credenciales = BaseDatosCredenciales.getInstance();
+                        //verificar si existen los datos creados
+                        if (credenciales.cargarDatos()) {
+                            String usuarioDb = credenciales.getUsuario();
+                            String claveDb = credenciales.getClave();
+                            //Si falta algun datos del usuario y la clave abro la pantalla de crear credenciales
+                            if (usuarioDb != null || claveDb != null) { //TODO: hacer una validacion tambien cuando falte alguno de los datos por algun motivo anormal
+                                AbstractFacade.usuarioDb=usuarioDb;
+                                AbstractFacade.claveDb=claveDb;
+                            }
+                        }
+                        else
+                        {
+                            DialogoCodefac.mensaje("Alerta","No se puede actualizar la base de datos , error en las credenciales",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                        }
+                        
                         //TODO: Metodo que ejecuta los scripts para actualizar el sistema
                         UtilidadesServidor.actualizarBaseDatos(versionGrabada);
                         
@@ -435,6 +453,8 @@ public class Main {
                         propiedadesIniciales.put(CAMPO_VERSION,ParametrosSistemaCodefac.VERSION);
                         propiedadesIniciales.store(new FileWriter(NOMBRE_ARCHIVO_CONFIGURACION), "");
                     } catch (IOException ex) {
+                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (Exception ex) {
                         Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     

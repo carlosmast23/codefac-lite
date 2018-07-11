@@ -72,6 +72,20 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
         transaccion.commit();
     }
     
+    public Usuario cambiarClave(Usuario usuario,String claveAnterior,String claveNueva) throws java.rmi.RemoteException, ServicioCodefacException
+    {
+        //TODO: Complentar la validacion completa validando con el usuario guardado y el nuevo usuario para ver si los datos coinciden
+        //Actualizo las referencia del nuevo objecto a editar
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() {
+                usuario.setClave(UtilidadesHash.generarHashBcrypt(claveNueva));
+                entityManager.merge(usuario);
+            }
+        });
+        return usuario;
+
+    }
     
     
     public void editar(Usuario entity) throws ServicioCodefacException
@@ -105,8 +119,8 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
         }
         
         //Actualizo las referencia del nuevo objecto a editar
-        entity.setClave(UtilidadesHash.generarHashBcrypt(entity.getClave()));
-        entityManager.merge(entity);
+        //entity.setClave(UtilidadesHash.generarHashBcrypt(entity.getClave()));
+        //entityManager.merge(entity);
         transaccion.commit();
         
     }
