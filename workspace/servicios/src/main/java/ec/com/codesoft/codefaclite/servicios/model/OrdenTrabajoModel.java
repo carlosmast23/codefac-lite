@@ -58,6 +58,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import org.apache.commons.collections4.map.HashedMap;
 import org.jdesktop.swingx.prompt.PromptSupport;
 
 /**
@@ -73,6 +74,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
     public void iniciar() {
         this.ordenTrabajo = new OrdenTrabajo();
         this.categoriasDetallesOrdenTrabajo = new ArrayList<>();
+        agregarListener();
         cargarValoresIniciales();
         initDatosTabla();
         PromptSupport.setPrompt("Ingrese descripción corta", getTxtCategoria());
@@ -148,7 +150,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             parametros.put("fechaIngreso", ""+ this.ordenTrabajo.getFechaIngreso());
             
             ParametroCodefac parametroCodefac=session.getParametrosCodefac().get(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES);
-            parametros.put("observaciones",(parametroCodefac!=null)?parametroCodefac.getValor():"");
+            parametros.put("observacionOrdenTrabajo",(parametroCodefac!=null)?parametroCodefac.getValor():"");
             
             parametros.put("empleado",(session.getUsuario().getEmpleado()!=null)?session.getUsuario().getEmpleado().getNombresCompletos():"");
             
@@ -198,7 +200,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
                     break;
             }
             
-            parametros.put("observaciones",(parametroFormatoOrden!=null)?parametroFormatoOrden.getValor():"");
+            //parametros.put("observaciones",(parametroFormatoOrden!=null)?parametroFormatoOrden.getValor():"");
             
             InputStream path = RecursoCodefac.JASPER_SERVICIO.getResourceInputStream(nombreReporte);
             ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, dataReportes, panelPadre, "Orden de Trabajo",OrientacionReporteEnum.VERTICAL,formatoHojaEnum);
@@ -218,8 +220,8 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
         OrdenTrabajo ordenTrabajoTemp = (OrdenTrabajo) buscarDialogoModel.getResultado();
         if(ordenTrabajoTemp != null){
             this.ordenTrabajo = ordenTrabajoTemp;
-            this.getTxtCodigo().setText(this.ordenTrabajo.getCodigo());
-            this.getTxtCliente().setText(""+this.ordenTrabajo.getCliente());
+            this.getLblCodigo().setText(this.ordenTrabajo.getId()+"");
+            cargarDatosCliente(ordenTrabajo.getCliente());
             this.getTxtDescripcion().setText(""+this.ordenTrabajo.getDescripcion());
             this.getCmbDateFechaIngreso().setDate(this.ordenTrabajo.getFechaIngreso());
             GeneralEnumEstado generalEnumEstado = GeneralEnumEstado.getEnum(this.ordenTrabajo.getEstado());
@@ -287,7 +289,8 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
                 if(persona != null)
                 {
                     ordenTrabajo.setCliente(persona);
-                    getTxtCliente().setText(persona.getRazonSocial()+" - "+persona.getIdentificacion());
+                    cargarDatosCliente(persona);
+                    //getTxtCliente().setText(persona.getRazonSocial()+" - "+persona.getIdentificacion());
                 }
             }
         });
@@ -562,9 +565,11 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
     public void limpiarCampos()
     {
         //Orden trabajo
-        getTxtCodigo().setText("");
+        getLblCodigo().setText("");
         getTxtCliente().setText("");
         getTxtDescripcion().setText("");
+        getLblNombreLegal().setText("");
+        getLblRazonSocial().setText("");
     }
     
     public void limpiarCamposDetalles()
@@ -656,6 +661,76 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
         mostrarDatosTabla();
         limpiarCamposDetalles();
         cargarCombos();
+    }
+    
+    private void cargarDatosCliente(Persona cliente)
+    {
+        if(cliente==null)
+        {
+            getLblRazonSocial().setText("");
+            getLblNombreLegal().setText("");            
+        }
+        else
+        {
+            getLblRazonSocial().setText(cliente.getRazonSocial());
+            getLblNombreLegal().setText(cliente.getNombreLegal());
+            getTxtCliente().setText(cliente.getIdentificacion());
+        }
+    }
+
+    private void agregarListener() {
+        getTxtCliente().addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                String identificacion=getTxtCliente().getText();
+                if(!identificacion.equals(""))
+                {
+                    //mapParametros.put("tipo",OperadorNegocioEnum.CLIENTE); //TODO: Falta optimizar cuando sean clientes y proveedores o ambos 
+
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                        try {
+                            Map<String, Object> mapParametros = new HashedMap<String, Object>();
+                            mapParametros.put("identificacion", identificacion);
+                            List<Persona> resultados=ServiceFactory.getFactory().getPersonaServiceIf().obtenerPorMap(mapParametros); //Todo crear mejor un metodo que ya obtener filtrado los datos
+                            if(resultados.size()==0)
+                            {
+                                if(DialogoCodefac.dialogoPregunta("Crear Cliente","No existe el Cliente, lo desea crear?",DialogoCodefac.MENSAJE_ADVERTENCIA))
+                                {
+                                    Object[] parametros = {OperadorNegocioEnum.CLIENTE, getTxtCliente().getText()};
+                                    panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<Persona>() {
+                                        @Override
+                                        public void updateInterface(Persona entity) {
+                                            ordenTrabajo.setCliente(entity);
+                                            if (ordenTrabajo.getCliente() != null) 
+                                            {
+                                                cargarDatosCliente(entity);
+                                            }
+                                        }
+                                    }, VentanaEnum.CLIENTE, false, parametros, formularioActual);
+                                }
+                            }
+                            else
+                            {
+                                ordenTrabajo.setCliente(resultados.get(0));
+                                cargarDatosCliente(resultados.get(0));
+                               //Opcion cuando encuentra los datos del cliente 
+                            }
+                        } catch (RemoteException ex) {
+                            Logger.getLogger(OrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ServicioCodefacException ex) {
+                            Logger.getLogger(OrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        
+                    }
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
+        });
     }
     
 }

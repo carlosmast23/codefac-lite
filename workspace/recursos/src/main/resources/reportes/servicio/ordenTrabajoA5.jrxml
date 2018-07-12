@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="421" pageHeight="595" columnWidth="381" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
-	<property name="ireport.zoom" value="1.32867075000004"/>
+	<property name="ireport.zoom" value="1.098075000000035"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="style1">
@@ -33,7 +33,7 @@
 	<parameter name="pl_facebook" class="java.lang.String"/>
 	<parameter name="pl_adicional" class="java.lang.String"/>
 	<parameter name="pl_celular" class="java.lang.String"/>
-	<parameter name="observaciones" class="java.lang.String"/>
+	<parameter name="observacionOrdenTrabajo" class="java.lang.String"/>
 	<parameter name="empleado" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
@@ -248,43 +248,43 @@
 		</band>
 	</pageFooter>
 	<lastPageFooter>
-		<band height="123">
+		<band height="143">
 			<staticText>
-				<reportElement x="7" y="5" width="37" height="10" uuid="cb949dc1-be6f-4bf0-b546-27213f679f07"/>
+				<reportElement x="7" y="4" width="37" height="11" uuid="cb949dc1-be6f-4bf0-b546-27213f679f07"/>
 				<textElement>
-					<font size="7" isBold="true"/>
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[MONTO:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="206" y="70" width="117" height="12" uuid="e8a7d38a-b5e6-44d7-b95e-630ff0021856"/>
+				<reportElement x="206" y="91" width="130" height="12" uuid="e8a7d38a-b5e6-44d7-b95e-630ff0021856"/>
 				<box>
 					<topPen lineWidth="0.5" lineStyle="Dotted"/>
 				</box>
 				<textElement textAlignment="Center">
-					<font size="8"/>
+					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{cliente}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="80" y="70" width="111" height="12" uuid="8237f9c6-3854-49db-93d2-6b3e420f741b"/>
+				<reportElement x="44" y="91" width="130" height="12" uuid="8237f9c6-3854-49db-93d2-6b3e420f741b"/>
 				<box>
 					<topPen lineWidth="0.5" lineStyle="Dotted"/>
 				</box>
 				<textElement textAlignment="Center">
-					<font size="8"/>
+					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{empleado}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="299" y="7" width="35" height="10" uuid="a60f1027-befe-4fee-bf71-5d44050d319e"/>
+				<reportElement x="299" y="4" width="35" height="13" uuid="a60f1027-befe-4fee-bf71-5d44050d319e"/>
 				<textElement>
-					<font size="7" isBold="true"/>
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[SALDO:]]></text>
 			</staticText>
 			<subreport>
-				<reportElement x="0" y="82" width="381" height="40" uuid="308e3f4c-60b9-4fdc-9fe8-42c13167ef87"/>
+				<reportElement x="0" y="103" width="381" height="40" uuid="308e3f4c-60b9-4fdc-9fe8-42c13167ef87"/>
 				<subreportParameter name="pl_telefonos">
 					<subreportParameterExpression><![CDATA[$P{pl_telefonos}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -313,10 +313,10 @@
 				<subreportExpression><![CDATA[$P{pl_url_piepagina}]]></subreportExpression>
 			</subreport>
 			<rectangle>
-				<reportElement x="191" y="4" width="33" height="10" uuid="7e678262-207d-4ebd-9c87-a162e1ddf656"/>
+				<reportElement x="191" y="2" width="46" height="14" uuid="7e678262-207d-4ebd-9c87-a162e1ddf656"/>
 			</rectangle>
 			<textField isBlankWhenNull="true">
-				<reportElement x="0" y="16" width="381" height="28" uuid="9ed91449-f963-4b34-9bd1-23b556d8076a"/>
+				<reportElement x="0" y="20" width="381" height="38" uuid="9ed91449-f963-4b34-9bd1-23b556d8076a"/>
 				<box>
 					<topPen lineWidth="0.25" lineStyle="Dashed"/>
 					<leftPen lineWidth="0.25" lineStyle="Dashed"/>
@@ -327,20 +327,20 @@
 					<font size="6"/>
 					<paragraph leftIndent="5" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{observaciones}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{observacionOrdenTrabajo}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="151" y="5" width="40" height="10" uuid="3ab372e1-e031-4570-893d-83b3f79fba82"/>
+				<reportElement x="151" y="4" width="40" height="11" uuid="3ab372e1-e031-4570-893d-83b3f79fba82"/>
 				<textElement>
-					<font size="7" isBold="true"/>
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ABONO:]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="44" y="4" width="37" height="10" uuid="80646d90-ffc7-49d5-9ce5-067cc25742d2"/>
+				<reportElement x="43" y="2" width="51" height="14" uuid="80646d90-ffc7-49d5-9ce5-067cc25742d2"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="334" y="6" width="37" height="10" uuid="a74fec5a-0e63-42d1-8741-446b5c49b8a4"/>
+				<reportElement x="334" y="2" width="47" height="14" uuid="a74fec5a-0e63-42d1-8741-446b5c49b8a4"/>
 			</rectangle>
 		</band>
 	</lastPageFooter>

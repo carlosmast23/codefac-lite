@@ -13,10 +13,10 @@
 	<title>
 		<band height="49" splitType="Stretch">
 			<textField>
-				<reportElement x="135" y="37" width="286" height="11" uuid="762323ac-9ad0-48e2-a3ff-8bc176c1b6ea"/>
+				<reportElement x="135" y="37" width="266" height="11" uuid="762323ac-9ad0-48e2-a3ff-8bc176c1b6ea"/>
 				<textElement textAlignment="Right">
 					<font size="7" isItalic="true"/>
-					<paragraph rightIndent="10"/>
+					<paragraph rightIndent="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pl_direccion}+" "+$P{pl_telefonos}]]></textFieldExpression>
 			</textField>
@@ -46,7 +46,7 @@
 				<textFieldExpression><![CDATA[$P{pl_titulo}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="0" y="48" width="298" height="1" forecolor="#003366" uuid="feed92f2-8eed-4098-b895-dfd5b101cec8"/>
+				<reportElement x="0" y="48" width="401" height="1" forecolor="#003366" uuid="feed92f2-8eed-4098-b895-dfd5b101cec8"/>
 			</line>
 		</band>
 	</title>

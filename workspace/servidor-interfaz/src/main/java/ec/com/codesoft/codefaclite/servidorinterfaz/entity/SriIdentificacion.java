@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.sql.Date;
 import javax.persistence.Column;
@@ -98,7 +99,7 @@ public class SriIdentificacion implements Serializable{
 
     @Override
     public String toString() {
-        return tipoIdentificacion;
+        return UtilidadesTextos.acortarTexto(tipoIdentificacion,25);
     }
 
     @Override
