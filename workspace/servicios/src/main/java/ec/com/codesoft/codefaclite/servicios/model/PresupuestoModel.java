@@ -181,12 +181,12 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             /**
              * Me permite grabar todas las ordenes de compra generadas para despues enviar por correo a los Empleados
              */
-                this.ordenesCompra = new ArrayList<>();
-                if(this.presupuesto.getOrdenTrabajoDetalle().getEmpleado().getCorreoElectronico() != null){
-                    this.correoEmpleado = this.presupuesto.getOrdenTrabajoDetalle().getEmpleado().getCorreoElectronico();
-                }else{
-                    this.correoEmpleado = "Sin Asignar Correo";
-                }    
+//            this.ordenesCompra = new ArrayList<>();
+//            if(this.presupuesto.getOrdenTrabajoDetalle().getEmpleado().getCorreoElectronico() != null){
+//                this.correoEmpleado = this.presupuesto.getOrdenTrabajoDetalle().getEmpleado().getCorreoElectronico();
+//            }else{
+//                this.correoEmpleado = "Sin Asignar Correo";
+//            }    
             /**
              * El momento que se graba el Presupuesto genero de cada detalle presuesto la orden de compra
              */
@@ -196,6 +196,9 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 Integer key = entry.getKey();
                 List<PresupuestoDetalle> detalles = entry.getValue();
                 ordenCompra = new OrdenCompra();
+                /**
+                 * Obtener para que proveedor se realiza la orden de compra
+                 */
                 ordenCompra.setProveedor(detalles.get(0).getPersona());
                     /**
                      * Todos los presupuestos por el momento van a estar ligados a Servicios   
@@ -217,28 +220,44 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                         ordenCompraDetalle.setCantidad(pd.getCantidad().intValue());
                         ordenCompraDetalle.setDescripcion(pd.getProducto().getNombre());
                         ordenCompraDetalle.setDescuento(pd.getDescuentoVenta());
-                        ordenCompraDetalle.setPrecioUnitario(pd.getPrecioVenta());
+
                         ordenCompraDetalle.setTotal(ordenCompraDetalle.getSubtotal());
                         ordenCompraDetalle.setValorIce(ordenCompraDetalle.getValorIce());
                         ordenCompraDetalle.setIva(ordenCompraDetalle.getIva());
                         ordenCompraDetalle.setProductoProveedor(pd.getProductoProveedor());
-                        /**
-                         * Agregando detalle a Orden Compra
-                         */
-                        ordenCompra.addDetalle(ordenCompraDetalle);
+                        
+                        if (productoProveedor.getConIva().equals("s")) {
+                            ordenCompraDetalle.setIva(ordenCompraDetalle.calcularValorIva());
+                        } else {
+                            ordenCompraDetalle.setIva(BigDecimal.ZERO);
+                        }
+
+                        ordenCompraDetalle.setProductoProveedor(productoProveedor);
+                        ordenCompraDetalle.setTotal(ordenCompraDetalle.getSubtotal());
+
+
+
+                        //compraDetalle.setTotal(compraDetalle.getTotal().subtract(valorTotalRetencion));
+                        ordenCompraDetalle.setValorIce(BigDecimal.ZERO);
+                                    ////////////////////////////////
+                                    /**
+                                     * Agregando detalle a Orden Compra
+                                     */
+                                    ordenCompra.addDetalle(ordenCompraDetalle);
                     }
                 /**
                  * Grabando la orden de compra por Proveedor
                  */
                 OrdenCompraServiceIf compraServiceIf = ServiceFactory.getFactory().getOrdenCompraServiceIf();
                 compraServiceIf.grabar(ordenCompra);
-//                this.ordenesCompra.add(ordenCompra);
-//                
-//                if(this.presupuesto.getOrdenTrabajoDetalle().getEmpleado() != null){
-//                    Empleado empleadoTemp = this.presupuesto.getOrdenTrabajoDetalle().getEmpleado(); 
-//                }
-//                
-//                Persona personaTemp = this.presupuesto.getPersona();
+                DialogoCodefac.mensaje("Orden compra", "Orden de Compra N° " + key +" generada", DialogoCodefac.MENSAJE_CORRECTO);
+                //this.ordenesCompra.add(ordenCompra);
+////                
+////                if(this.presupuesto.getOrdenTrabajoDetalle().getEmpleado() != null){
+////                    Empleado empleadoTemp = this.presupuesto.getOrdenTrabajoDetalle().getEmpleado(); 
+////                }
+////                
+////                Persona personaTemp = this.presupuesto.getPersona();
 
             }
             
@@ -256,7 +275,6 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             PresupuestoServiceIf servicio = ServiceFactory.getFactory().getPresupuestoServiceIf();
             servicio.editar(this.presupuesto);
             DialogoCodefac.mensaje("Correcto","El presupuesto fue editado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
-            
       } 
       catch (RemoteException ex) 
       {
@@ -293,13 +311,16 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             getTxtCodigo().setText(""+this.presupuesto.getId());
             getTxtCliente().setText(this.presupuesto.getPersona().getIdentificacion()+" - "+this.presupuesto.getPersona().getRazonSocial());  
             getCmbTipoPresupuesto().setSelectedItem(presupuesto.getCatalogoProducto());
+            /**
+             * Cargar detalles que existian de la Orden de trabajo
+             */
             cargarDetallesOrdenTrabajo(this.presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo());
-            getCmbDetallesOrdenTrabajo().setSelectedItem(this.presupuesto.getOrdenTrabajoDetalle());
             Presupuesto.EstadoEnum generalEnumEstado = Presupuesto.EstadoEnum.getByLetra(this.presupuesto.getEstado());
             getCmbEstadoPresupuesto().setSelectedItem(generalEnumEstado);
             getCmbFechaPresupuesto().setDate(this.presupuesto.getFechaPresupuesto());
+            getTxtDiasPresupuesto().setText("" + UtilidadesFecha.obtenerDistanciaDias(this.presupuesto.getFechaPresupuesto(), this.presupuesto.getFechaValidez()));
             getLblIndicarFechaValidez().setText(""+this.presupuesto.getFechaValidez());
-            ordenarDetallesEnFuncionDeCliente();
+            ordenarDetallesEnFuncionDeOrdenCompra();
             mostrarDatosTabla();
             calcularTotales();
         }
@@ -313,9 +334,12 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     public void limpiar() {
         limpiarDetalles();
         limpiarTotales();
-        getTxtOrdenTrabajo().setText("");
-        getTxtCliente().setText("");
-        getCmbDetallesOrdenTrabajo().removeAllItems();
+        this.getTxtOrdenTrabajo().setText("");
+        this.getTxtCliente().setText("");
+        this.getCmbDetallesOrdenTrabajo().removeAllItems();
+        this.getTxtCodigo().setText("");
+        this.getTxtDescripcion().setText("");
+        initDatosTabla();
     }
 
     public String getNombre() {
@@ -372,7 +396,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     
     public void initDatosTabla()
     {
-        DefaultTableModel modeloTablaDetallesPresupuesto = UtilidadesTablas.crearModeloTabla(new String[]{"Proveedor","Producto","Valor compra","Valor venta","Cantidad"}, new Class[]{String.class,String.class,String.class,String.class,String.class});
+        DefaultTableModel modeloTablaDetallesPresupuesto = UtilidadesTablas.crearModeloTabla(new String[]{"#","Proveedor","Producto","Valor compra","Valor venta","Cantidad"}, new Class[]{String.class,String.class,String.class,String.class,String.class,String.class});
         getTableDetallesPresupuesto().setModel(modeloTablaDetallesPresupuesto);
     }
     
@@ -540,6 +564,12 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 {
                     DialogoCodefac.mensaje("Advertencia", "Seleccione una Orden de Trabajo", DialogoCodefac.MENSAJE_ADVERTENCIA);
                 }
+                else
+                {
+                    obtenerOrdenTrabajoDetalle();
+                }    
+                 
+                
             }
 
             @Override
@@ -552,10 +582,11 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         getCmbDetallesOrdenTrabajo().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                OrdenTrabajoDetalle otd = (OrdenTrabajoDetalle) getCmbDetallesOrdenTrabajo().getSelectedItem();
-                if(otd != null){
+                if(!(getCmbDetallesOrdenTrabajo().getItemCount() == 0))
+                {
                     obtenerOrdenTrabajoDetalle();
                 }
+                    
             }
         });
     }
@@ -564,6 +595,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     {
          presupuesto.setOrdenTrabajoDetalle((OrdenTrabajoDetalle) getCmbDetallesOrdenTrabajo().getSelectedItem());
          getTxtDescripcion().setText(presupuesto.getOrdenTrabajoDetalle().getDescripcion());
+         System.out.println("-->" + getCmbDetallesOrdenTrabajo().getSelectedItem());
     }
     
     public void addListenerTextos()
@@ -642,7 +674,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         });
     }
           
-    public void cargarDetallesOrdenTrabajo(OrdenTrabajo ordenTrabajo)
+     public void cargarDetallesOrdenTrabajo(OrdenTrabajo ordenTrabajo)
     {
         getTxtOrdenTrabajo().setText(ordenTrabajo.getId() + " - "+ordenTrabajo.getDescripcion());
         getCmbDetallesOrdenTrabajo().removeAllItems();
@@ -650,6 +682,10 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         {
             getCmbDetallesOrdenTrabajo().addItem(pd);
         }
+        /**
+          * Definir el detalle escogido
+          */
+        getCmbDetallesOrdenTrabajo().setSelectedItem((OrdenTrabajoDetalle)this.presupuesto.getOrdenTrabajoDetalle());
     }
     
     public void calcularFechaProxima()
@@ -691,8 +727,6 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             if(perPro){
                 presupuestoDetalle.setProducto(this.producto);
                 presupuestoDetalle.setPersona(this.persona);
-                presupuestoDetalle.setProductoProveedor(this.productoProveedor);
-
                 if(verificarCamposValidados())
                 {
                     BigDecimal precioCompra = new BigDecimal(getTxtPrecioCompra().getText());
@@ -709,6 +743,9 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                     }else{
                         presupuestoDetalle.setEstado(EnumSiNo.NO.getLetra());
                     }
+                    BigDecimal costo = new BigDecimal(getTxtPrecioVenta().getText());
+                    this.productoProveedor.setCosto(costo.setScale(2,BigDecimal.ROUND_HALF_UP));
+                    presupuestoDetalle.setProductoProveedor(this.productoProveedor);
                 }
                 else{
                     throw new ExcepcionCodefacLite("Campos detalles no validos");
@@ -895,9 +932,9 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
      
     private void setearDatos() 
     {         
-            this.presupuesto.setDescripcion(getTxtDescripcion().getText());
-            this.presupuesto.setCatalogoProducto((CatalogoProducto) getCmbTipoPresupuesto().getSelectedItem());
-            this.presupuesto.setObservaciones(getTxtAreaObservaciones().getText());
+            this.presupuesto.setDescripcion(""+getTxtDescripcion().getText());
+            //this.presupuesto.setCatalogoProducto((CatalogoProducto) getCmbTipoPresupuesto().getSelectedItem());
+            this.presupuesto.setObservaciones(""+getTxtAreaObservaciones().getText());
             Presupuesto.EstadoEnum generalEnumEstado = (Presupuesto.EstadoEnum) getCmbEstadoPresupuesto().getSelectedItem();
             this.presupuesto.setEstado(generalEnumEstado.getLetra());
             try{   
