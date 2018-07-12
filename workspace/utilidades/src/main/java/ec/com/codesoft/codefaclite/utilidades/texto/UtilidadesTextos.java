@@ -31,6 +31,31 @@ import org.w3c.dom.Document;
  * @author Carlos
  */
 public abstract class UtilidadesTextos {
+    
+    /**
+     * Cuando un texto es muy grande lo puede acortar
+     * @param texto
+     * @return 
+     */
+    public static String acortarTexto(String texto,Integer tamanioMaximo)
+    {
+        if(texto!=null)
+        {
+            if(texto.length()>tamanioMaximo)
+            {
+                texto=texto.substring(0,tamanioMaximo);
+                texto=texto+"...";
+                return texto;
+            }
+            else
+            {
+                return texto;
+            }
+        }
+        
+        return "";
+    }
+    
     public static String getStringURLFile(InputStream input)
     {   
         String text = "";
