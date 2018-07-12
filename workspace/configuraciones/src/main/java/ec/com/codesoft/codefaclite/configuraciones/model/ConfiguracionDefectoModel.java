@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
@@ -128,6 +129,13 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel{
         for (TipoDocumentoEnum tipoDocumento : tipoDocumentosCompra) {
             getCmbTipoDocumentoCompra().addItem(tipoDocumento);
         }
+        
+        //Agregar los datos del combo de tipo formato de hoja de las ordenes de trabajo
+        FormatoHojaEnum[] formatos = FormatoHojaEnum.values();
+        for (FormatoHojaEnum formato : formatos) {
+            getCmbFormatoHojas().addItem(formato);
+        }
+        
     }
 
     private void cargarDatos() {
@@ -148,6 +156,12 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel{
             ParametroCodefac parametroOrdenCompraObservacion= parametros.get(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES);
             getTxtOrdenTrabajoReporte().setText((parametroOrdenCompraObservacion!=null)?parametroOrdenCompraObservacion.getValor():"");
             
+            //Cargar datos del tipo de reporte de las ordenes de trabajo
+            ParametroCodefac parametroFormtaOrdenTrabajo= parametros.get(ParametroCodefac.FORMATO_ORDEN_TRABAJO);
+            getCmbFormatoHojas().setSelectedItem((parametroFormtaOrdenTrabajo!=null)?parametroFormtaOrdenTrabajo.getValor():null);
+            //getTxtOrdenTrabajoReporte().setText((parametroFormtaOrdenTrabajo!=null)?parametroFormtaOrdenTrabajo.getValor():"");
+            
+            
         } catch (RemoteException ex) {
             Logger.getLogger(ConfiguracionDefectoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -160,7 +174,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel{
         TipoDocumentoEnum tipoDocumentoCompra=(TipoDocumentoEnum) getCmbTipoDocumentoCompra().getSelectedItem();
         parametros.get(ParametroCodefac.DEFECTO_TIPO_DOCUMENTO_COMPRA).setValor(tipoDocumentoCompra.getCodigo());
         
-        ParametroCodefac parametroCodefac=parametros.get(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES);
+        //Agregar detalle para la orden de trabajo
+        agregarParametro(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES,getTxtOrdenTrabajoReporte().getText());
+        /*ParametroCodefac parametroCodefac=parametros.get(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES);
         if(parametroCodefac==null)
         {
             parametroCodefac=new ParametroCodefac();
@@ -172,11 +188,27 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel{
         else
         {
             parametroCodefac.setValor(getTxtOrdenTrabajoReporte().getText());
-        }
+        }*/
         
         
+        //Agregar tipo de hoja para el reporte de la orden de trabajo
+        FormatoHojaEnum formatoHojaEnum=(FormatoHojaEnum) getCmbFormatoHojas().getSelectedItem();
+        agregarParametro(ParametroCodefac.FORMATO_ORDEN_TRABAJO,formatoHojaEnum.getLetra());
+        
+    }
+    
+    private void agregarParametro(String nombreParametro,String valor)
+    {
+        ParametroCodefac parametroCodefac = parametros.get(nombreParametro);
+        if (parametroCodefac == null) {
+            parametroCodefac = new ParametroCodefac();
+            parametroCodefac.setNombre(nombreParametro);
+            parametroCodefac.setValor(valor);
+            parametros.put(nombreParametro, parametroCodefac);
 
-        
+        } else {
+            parametroCodefac.setValor(valor);
+        }
     }
 
     @Override

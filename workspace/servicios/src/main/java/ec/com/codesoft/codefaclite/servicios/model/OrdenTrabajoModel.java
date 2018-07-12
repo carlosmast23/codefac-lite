@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
@@ -27,6 +28,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenTrabajoEnumEstado;
@@ -175,8 +177,31 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
                 dataReporte.setEstadod(""+otee.getNombre());
                 dataReportes.add(dataReporte);
             }
-            InputStream path = RecursoCodefac.JASPER_SERVICIO.getResourceInputStream("ordenTrabajo.jrxml");
-            ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, dataReportes, panelPadre, "Orden de Trabajo");
+            
+            //Seleccionar el tipo de formato del reporte segun la configuracion general
+            ParametroCodefac parametroFormatoOrden=session.getParametrosCodefac().get(ParametroCodefac.FORMATO_ORDEN_TRABAJO);
+            FormatoHojaEnum formatoHojaEnum=FormatoHojaEnum.A4; //Si no configura nada por defecto configura en A4
+            if(parametroFormatoOrden!=null)
+            {
+                formatoHojaEnum=FormatoHojaEnum.buscarPorLetra(parametroFormatoOrden.getValor());
+            }
+            
+            String nombreReporte="ordenTrabajo.jrxml"; //Por defecto selecciona un reporte en vertical
+            
+            switch (formatoHojaEnum) {
+                case A4:
+                    nombreReporte = "ordenTrabajo.jrxml";
+                    break;
+
+                case A5:
+                    nombreReporte = "ordenTrabajoA5.jrxml";
+                    break;
+            }
+            
+            parametros.put("observaciones",(parametroFormatoOrden!=null)?parametroFormatoOrden.getValor():"");
+            
+            InputStream path = RecursoCodefac.JASPER_SERVICIO.getResourceInputStream(nombreReporte);
+            ReporteCodefac.generarReporteInternalFramePlantilla(path, parametros, dataReportes, panelPadre, "Orden de Trabajo",OrientacionReporteEnum.VERTICAL,formatoHojaEnum);
         }
     }
 

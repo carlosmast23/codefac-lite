@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.corecodefaclite.views;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import java.util.Map;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -48,7 +49,7 @@ public interface InterfazComunicacionPanel
      */
     public void crearDialogoCodefac(ObserverUpdateInterface panel,VentanaEnum ventanEnum,boolean maximizado,Object[] parametrosPostConstructor,GeneralPanelInterface panelPadre);
     
-    public Map<String,Object> mapReportePlantilla(OrientacionReporteEnum orientacionEnum);
+    public Map<String,Object> mapReportePlantilla(OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte);
     /**
      * Metodo que permite validar todos los componentes del formulario
      * @param nombre

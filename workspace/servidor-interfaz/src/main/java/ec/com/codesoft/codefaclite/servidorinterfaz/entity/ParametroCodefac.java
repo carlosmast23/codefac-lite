@@ -63,6 +63,7 @@ public class ParametroCodefac implements Serializable {
     public static final String SECUENCIAL_LOTE= "secuencial_lote";
     
     public static final String ORDEN_TRABAJO_OBSERVACIONES = "orden_trabajo_observaciones";
+    public static final String FORMATO_ORDEN_TRABAJO="formato_orden_trabajo";
     
     @Id
     @Column(name = "ID")

@@ -54,6 +54,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PermisoVentana;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.FuncionesSistemaCodefac;
@@ -2416,7 +2417,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     }*/
 
     @Override
-    public Map<String, Object> mapReportePlantilla(OrientacionReporteEnum orientacionEnum) {
+    public Map<String, Object> mapReportePlantilla(OrientacionReporteEnum orientacionEnum,FormatoHojaEnum formatoReporte) {
         InputStream inputStream = null;
 
         SimpleDateFormat formateador = new SimpleDateFormat("d MMM yyyy HH:mm:ss");
@@ -2470,17 +2471,34 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             String nombreReporteEncabezado="";
             String nombreReportePiePagina="";
             
-            switch(orientacionEnum)
+            switch(formatoReporte)
             {
-                case HORIZONTAL:
-                    nombreReporteEncabezado="encabezado_horizontal.jrxml";
-                    nombreReportePiePagina="pie_pagina_horizontal.jrxml";
+                case A5:
+                    switch (orientacionEnum) {
+                        case HORIZONTAL:
+                            break;
+
+                        case VERTICAL:
+                            nombreReporteEncabezado = "encabezadoA5.jrxml";
+                            nombreReportePiePagina = "pie_paginaA5.jrxml";
+                            break;
+                    }
                     break;
                     
-                case VERTICAL:
-                    nombreReporteEncabezado = "encabezado.jrxml";
-                    nombreReportePiePagina = "pie_pagina.jrxml";
+                case A4:
+                    switch (orientacionEnum) {
+                        case HORIZONTAL:
+                            nombreReporteEncabezado = "encabezado_horizontal.jrxml";
+                            nombreReportePiePagina = "pie_pagina_horizontal.jrxml";
+                            break;
+
+                        case VERTICAL:
+                            nombreReporteEncabezado = "encabezado.jrxml";
+                            nombreReportePiePagina = "pie_pagina.jrxml";
+                            break;
+                    }
                     break;
+                
             }
             
             inputStream = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER,nombreReporteEncabezado));

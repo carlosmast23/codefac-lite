@@ -11,14 +11,24 @@ Agregar validacion para agregar alerta para cuando se busca desde un campo con e
 
 Revisar el tema de las sessiones , porque si algun cliente modifica se supone que se debe actualizar a todas las sesiones de los demas usuarios
 Revisar que para algunos clientes se debe validar que el usuario tiene que estar registrado como empleado y ver donde vincular
+
 Validar que en la pantalla de ordenes de trabajo solo pueda crear un empleado
+
 Analizar que la opcion de actualizar la licencia tambien deberia ser un permiso
+
 Revisar que cuando se actualiza la licencia para mas modulos y luego se agrega ventanas a un perfil toca reiniciar para ver las modificaciones
 
 Revisar porque no se creo el campo de empleado_id en usuario y departamento:id en orden de trabajo
 
-Problema: Se cambio la clave del usuario al asignar un empleado al usuario , o posiblemente paso cuando se actualizo la licencia
-
 Revisar los detalles de la orden de trabajo cuando se intenta agregar se borran los campos de descripcion y notas
 
+Hacer un excepcion para avizar al usuario cuando no tiene datos del cliente y estan fallando los reportes
+
+Hacer el reporte de las ordenes de trabajo
+
+Agregar el numero de telefono en los reportes
+
+En la orden de trabajo me parece que cuando puse el signo + no podia validar, seria bueno que paresca un dialogo con el error para saber el tipo de validacion y analizar cual seria el tamanio del limite de los campos
+Terminar que los datos carguen correctamente
+Revisar un problema que despues de actualizar codefac se abre pero me parece que intenta actualizar la base de datos auque solo este e modo cliente
 
