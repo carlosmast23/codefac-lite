@@ -225,14 +225,34 @@ public class Persona implements Serializable, Comparable<Persona>{
         this.obligadoLlevarContabilidad = obligadoLlevarContabilidad;
     }
     
-    
-    
 
     ///Metodos personalizados
     public String getNombresCompletos() {
         String nombresTmp = (nombres != null) ? nombres : "";
         String apellidosTmp = (apellidos != null) ? apellidos : "";
         return nombresTmp + " " + apellidosTmp;
+    }
+    
+    public String getTelefonosTodos()
+    {
+        String telefonos="";
+       
+        if (telefonoConvencional!=null && !telefonoConvencional.equals("")) {
+            telefonos=telefonoConvencional;
+        }
+        
+        if (telefonoCelular!=null && !telefonoCelular.equals("")) {
+            //Si ya existe un telefono anterior agregado aumento el separador
+            if(!telefonos.equals(""))
+            {
+                telefonos=telefonos+"/";
+            }
+            
+            telefonos=telefonos+telefonoCelular;
+        }
+        
+        return telefonos;
+        
     }
     
     public EnumSiNo getObligadoLlevarContabilidadEnum() {

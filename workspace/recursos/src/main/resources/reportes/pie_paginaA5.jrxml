@@ -14,7 +14,7 @@
 	<pageFooter>
 		<band height="40" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="421" height="20" uuid="2493a00c-db4f-407e-8462-4afde06650b2"/>
+				<reportElement x="0" y="0" width="411" height="20" uuid="2493a00c-db4f-407e-8462-4afde06650b2"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9" isBold="true" isItalic="true" isUnderline="false"/>
 				</textElement>
