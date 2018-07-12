@@ -418,6 +418,15 @@ public class Main {
     //Funcion que verifica si se instalo una nueva version y ejecuta los scripts para actualizar la base de datos
     private static void verificarActualizacionBaseDatosVersion()
     {
+        //Si el usuario inicia el programa en modo cliente no debe hacer esta validacion de actualizar datos
+        String modoAplicativo=propiedadesIniciales.getProperty(CAMPO_MODO_APLICATIVO);
+        
+        if (modoAplicativo!=null && modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE.toString()))
+        {
+            return;
+        }
+        
+        
         String versionGrabada=propiedadesIniciales.getProperty(CAMPO_VERSION);
         
         if(versionGrabada!=null)
