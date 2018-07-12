@@ -31,7 +31,7 @@ create table DETALLE_ORDEN_TRABAJO
     ESTADO varchar(10),
     TIPO_ORDEN_TRABAJO varchar(10),
     PRIORIDAD varchar(15),
-    /*@AGREGAR_COLUMNA(VERSIO_SISTEMA=1.2.5.2)*/
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.5.2)*/
     TITULO varchar(60),
     primary key(ID)
 );
