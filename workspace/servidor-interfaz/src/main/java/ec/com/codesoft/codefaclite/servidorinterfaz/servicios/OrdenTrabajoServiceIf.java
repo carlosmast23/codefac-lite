@@ -7,6 +7,8 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import java.rmi.RemoteException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,4 +22,6 @@ public interface OrdenTrabajoServiceIf extends ServiceAbstractIf<OrdenTrabajo>
     public void editar(OrdenTrabajo ordenTrabajo) throws java.rmi.RemoteException;
     public List<OrdenTrabajo> obtenerTodos()throws java.rmi.RemoteException;
     public void eliminar(OrdenTrabajo ordenTrabajo) throws java.rmi.RemoteException;
+    public List<OrdenTrabajo> consultarReporte(Date fechaInicial, Date fechaFinal) throws RemoteException;
+    
 }

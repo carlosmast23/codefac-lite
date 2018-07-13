@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.Constrain
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoServiceIf;
 import java.rmi.RemoteException;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -66,5 +67,12 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
         ordenTrabajo.setEstado("");
         ordenTrabajoFacade.edit(ordenTrabajo);
     }
+    
+    @Override
+    public List<OrdenTrabajo> consultarReporte(Date fechaInicial, Date fechaFinal) throws RemoteException
+    {
+        return getFacade().consultaReporteFacade(fechaInicial,fechaFinal);        
+    }
+    
 }
 

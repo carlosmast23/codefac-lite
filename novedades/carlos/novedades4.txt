@@ -32,3 +32,5 @@ En la orden de trabajo me parece que cuando puse el signo + no podia validar, se
 Terminar que los datos carguen correctamente
 Revisar un problema que despues de actualizar codefac se abre pero me parece que intenta actualizar la base de datos auque solo este e modo cliente
 
+ANALIZAR si se debe crear un catalago para definir si cobra o no iva al momento de crear los productos
+

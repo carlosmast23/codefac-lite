@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -119,5 +120,29 @@ public class OrdenTrabajo implements Serializable
         this.detalles.add(detalle);
         
     }
+     
+    /**
+     * Metodos Personalizados
+     */
+     
+     public String getDetalleString()
+     {
+        //Si no hay datos retorna vacio
+        if(this.detalles==null)return"";
+        
+        String detallesTotales="";
+        for (OrdenTrabajoDetalle detalle : detalles) {
+             String detalleStr=UtilidadesTextos.acortarTexto(detalle.getTitulo(),50);
+             detallesTotales=detallesTotales+detalleStr+" |";
+        }
+        
+        //Recortar el caracter final |
+        if(detallesTotales.length()>0)
+        {
+            detallesTotales=detallesTotales.substring(0,detallesTotales.length()-1);
+        }
+        
+        return detallesTotales;
+     }
    
 }
