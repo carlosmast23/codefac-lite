@@ -417,16 +417,7 @@ public class Main {
     
     //Funcion que verifica si se instalo una nueva version y ejecuta los scripts para actualizar la base de datos
     private static void verificarActualizacionBaseDatosVersion()
-    {
-        //Si el usuario inicia el programa en modo cliente no debe hacer esta validacion de actualizar datos
-        String modoAplicativo=propiedadesIniciales.getProperty(CAMPO_MODO_APLICATIVO);
-        
-        if (modoAplicativo!=null && modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE.toString()))
-        {
-            return;
-        }
-        
-        
+    {        
         String versionGrabada=propiedadesIniciales.getProperty(CAMPO_VERSION);
         
         if(versionGrabada!=null)
@@ -436,28 +427,35 @@ public class Main {
                 //Solo si existe el dato en el archivo , verifico que el dato almacenado sea diferente y superior a la version ejecutada para actualizar
                 if(UtilidadesSistema.compareVersion(versionGrabada,ParametrosSistemaCodefac.VERSION)==-1)
                 {
+                   
                     try {
                         
-                        //Obtiene una instancia de un objeto donde puedo interactuar con la base de datos
-                        BaseDatosCredenciales credenciales = BaseDatosCredenciales.getInstance();
-                        //verificar si existen los datos creados
-                        if (credenciales.cargarDatos()) {
-                            String usuarioDb = credenciales.getUsuario();
-                            String claveDb = credenciales.getClave();
-                            //Si falta algun datos del usuario y la clave abro la pantalla de crear credenciales
-                            if (usuarioDb != null || claveDb != null) { //TODO: hacer una validacion tambien cuando falte alguno de los datos por algun motivo anormal
-                                AbstractFacade.usuarioDb=usuarioDb;
-                                AbstractFacade.claveDb=claveDb;
-                            }
-                        }
-                        else
+                        //Si el usuario inicia el programa en modo cliente no debe hacer esta validacion de actualizar datos
+                        String modoAplicativo = propiedadesIniciales.getProperty(CAMPO_MODO_APLICATIVO);
+                        
+                        //Solo actualizar si es un modo servidor , o cliente servidor
+                        if (modoAplicativo!=null && !modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE.toString())) 
                         {
-                            DialogoCodefac.mensaje("Alerta","No se puede actualizar la base de datos , error en las credenciales",DialogoCodefac.MENSAJE_ADVERTENCIA);
-                        }
-                        
-                        //TODO: Metodo que ejecuta los scripts para actualizar el sistema
-                        UtilidadesServidor.actualizarBaseDatos(versionGrabada);
-                        
+                            //Obtiene una instancia de un objeto donde puedo interactuar con la base de datos
+                            BaseDatosCredenciales credenciales = BaseDatosCredenciales.getInstance();
+                            //verificar si existen los datos creados
+                            if (credenciales.cargarDatos()) {
+                                String usuarioDb = credenciales.getUsuario();
+                                String claveDb = credenciales.getClave();
+                                //Si falta algun datos del usuario y la clave abro la pantalla de crear credenciales
+                                if (usuarioDb != null || claveDb != null) { //TODO: hacer una validacion tambien cuando falte alguno de los datos por algun motivo anormal
+                                    AbstractFacade.usuarioDb=usuarioDb;
+                                    AbstractFacade.claveDb=claveDb;
+                                }
+                            }
+                            else
+                            {
+                                DialogoCodefac.mensaje("Alerta","No se puede actualizar la base de datos , error en las credenciales",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                            }
+
+                            //TODO: Metodo que ejecuta los scripts para actualizar el sistema
+                            UtilidadesServidor.actualizarBaseDatos(versionGrabada);
+                        }                        
                         //Actualizo el archivo de propiedades del sistema con la ultima version
                         propiedadesIniciales.put(CAMPO_VERSION,ParametrosSistemaCodefac.VERSION);
                         propiedadesIniciales.store(new FileWriter(NOMBRE_ARCHIVO_CONFIGURACION), "");

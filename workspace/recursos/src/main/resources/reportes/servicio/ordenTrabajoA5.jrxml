@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="421" pageHeight="595" columnWidth="381" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
-	<property name="ireport.zoom" value="1.098075000000035"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="2.1398375295825907"/>
+	<property name="ireport.x" value="222"/>
 	<property name="ireport.y" value="0"/>
 	<style name="style1">
 		<conditionalStyle>
@@ -35,6 +35,10 @@
 	<parameter name="pl_celular" class="java.lang.String"/>
 	<parameter name="observacionOrdenTrabajo" class="java.lang.String"/>
 	<parameter name="empleado" class="java.lang.String"/>
+	<parameter name="direccion" class="java.lang.String"/>
+	<parameter name="telefonos" class="java.lang.String"/>
+	<parameter name="cedula" class="java.lang.String"/>
+	<parameter name="correo" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -79,28 +83,62 @@
 		</band>
 	</title>
 	<pageHeader>
-		<band height="37" splitType="Stretch">
+		<band height="57" splitType="Stretch">
 			<textField>
-				<reportElement x="44" y="24" width="205" height="12" uuid="395e42bd-bd0e-47b4-8040-30122e4da97f"/>
+				<reportElement x="310" y="39" width="50" height="12" uuid="395e42bd-bd0e-47b4-8040-30122e4da97f"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{fechaIngreso}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="0" width="44" height="12" uuid="06344eec-e1f6-474b-834a-64d2f8b2d173"/>
-				<textElement textAlignment="Right">
+				<reportElement x="275" y="39" width="35" height="12" uuid="e35047d6-5098-4294-b4ab-4f0d0366aada"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="15" width="69" height="12" uuid="06344eec-e1f6-474b-834a-64d2f8b2d173"/>
+				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Cliente:]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="0" y="12" width="44" height="12" uuid="df34970a-e390-442e-8bc6-985128740cef"/>
-				<textElement textAlignment="Right">
-					<font size="9" isBold="true"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="70" y="27" width="205" height="12" uuid="12e07238-470a-46ff-add1-fb128f3e9d49"/>
+				<textElement>
+					<font size="9"/>
 				</textElement>
-				<text><![CDATA[Estado:]]></text>
+				<textFieldExpression><![CDATA[$P{direccion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="276" y="0" width="105" height="15" uuid="86856508-a120-4b5e-a3ea-bcf478f218f4"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código:]]></text>
 			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="70" y="40" width="90" height="12" uuid="deed9b40-fb1e-4271-8427-d09f34d11985"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{telefonos}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="70" y="15" width="205" height="12" uuid="5f603c69-4924-4a2f-a92c-b1d5610591c8"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{cliente}]]></textFieldExpression>
+			</textField>
 			<textField>
 				<reportElement x="276" y="15" width="105" height="21" uuid="8371e6ed-6cbb-4b05-93d4-adbd60f2d739"/>
 				<box>
@@ -115,38 +153,32 @@
 				<textFieldExpression><![CDATA[$P{codigo}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="-1" y="24" width="45" height="12" uuid="e35047d6-5098-4294-b4ab-4f0d0366aada"/>
-				<textElement textAlignment="Right">
+				<reportElement x="1" y="27" width="69" height="12" uuid="e2fd7476-1955-4a56-bc82-3540587282e5"/>
+				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Fecha:]]></text>
+				<text><![CDATA[Dirección:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="40" width="69" height="12" uuid="de4117e3-c405-4d16-b6ac-379355d0a214"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Telefonos:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="44" y="12" width="206" height="12" uuid="8389666e-8458-4c62-8e61-9e5ca9cb73e9"/>
+				<reportElement x="70" y="3" width="104" height="12" uuid="abf4810f-0587-410a-86df-cb921db24dc4"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{estado}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="44" y="0" width="206" height="12" uuid="5f603c69-4924-4a2f-a92c-b1d5610591c8"/>
-				<textElement>
-					<font size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{cliente}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{cedula}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="276" y="0" width="105" height="15" uuid="86856508-a120-4b5e-a3ea-bcf478f218f4"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center">
-					<font size="10" isBold="true"/>
+				<reportElement x="1" y="3" width="69" height="12" uuid="d4b3b6c2-7029-4e95-8a19-75dbeeafd384"/>
+				<textElement>
+					<font size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Código:]]></text>
+				<text><![CDATA[Identificación:]]></text>
 			</staticText>
 		</band>
 	</pageHeader>
@@ -162,7 +194,7 @@
 					<rightPen lineWidth="0.5" lineStyle="Dashed"/>
 				</box>
 				<textElement>
-					<font size="8" isBold="true"/>
+					<font size="9" isBold="true"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<text><![CDATA[Notas:]]></text>
@@ -207,7 +239,7 @@
 					<bottomPen lineWidth="0.5" lineStyle="Dashed"/>
 				</box>
 				<textElement>
-					<font size="8" isBold="true"/>
+					<font size="9" isBold="true"/>
 					<paragraph leftIndent="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{titulo}]]></textFieldExpression>

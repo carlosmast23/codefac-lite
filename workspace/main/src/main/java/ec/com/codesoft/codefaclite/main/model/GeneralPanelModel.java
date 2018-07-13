@@ -1793,9 +1793,20 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         @Override
                         public void internalFrameClosed(InternalFrameEvent e) {
                             
-                            if (verificarTodasPantallasMinimizadas(e.getInternalFrame())) {
+                            //if (verificarTodasPantallasMinimizadas(e.getInternalFrame())) {
                                 habilitarBotones(false);
+                            //}
+                            //Seleccionar la siguiente ventana por defecto
+                            JInternalFrame[] ventanas=getjDesktopPane1().getAllFrames();
+                            for (JInternalFrame ventana : ventanas) {
+                                    try {
+                                        if(!ventana.isIcon())
+                                            ventana.setSelected(true);
+                                    } catch (PropertyVetoException ex) {
+                                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
                             }
+                            
                             mostrarPanelSecundario(false);
                         }
 

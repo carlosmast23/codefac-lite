@@ -21,7 +21,7 @@
 				<textFieldExpression><![CDATA[$P{pl_direccion}+" "+$P{pl_telefonos}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="75" y="22" width="294" height="15" uuid="957c3dc5-2b07-45d2-bd7b-2b90920bf27c"/>
+				<reportElement x="75" y="22" width="271" height="15" uuid="957c3dc5-2b07-45d2-bd7b-2b90920bf27c"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="11" isBold="false" isItalic="true"/>
 				</textElement>
@@ -39,7 +39,7 @@
 				<imageExpression><![CDATA[$P{pl_url_img1}]]></imageExpression>
 			</image>
 			<textField>
-				<reportElement x="75" y="0" width="294" height="22" uuid="6d32c61e-7403-4e29-ae20-cc34c0e33104"/>
+				<reportElement x="75" y="0" width="271" height="22" uuid="6d32c61e-7403-4e29-ae20-cc34c0e33104"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="15" isBold="true"/>
 				</textElement>
