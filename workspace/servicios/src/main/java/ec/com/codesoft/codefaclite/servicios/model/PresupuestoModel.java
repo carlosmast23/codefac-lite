@@ -59,6 +59,7 @@ import java.awt.event.MouseEvent;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -82,6 +83,7 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.table.DefaultTableModel;
+import org.bouncycastle.pqc.math.linearalgebra.BigIntUtils;
 
 /**
  *
@@ -211,6 +213,10 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                     ordenCompra.setDescuentoSinImpuestos(BigDecimal.ZERO);
                     ordenCompra.setObservacion(this.presupuesto.getDescripcion());
                     ordenCompra.setIva(BigDecimal.ZERO);
+                    ordenCompra.setEstado("a");
+                    
+                    
+                    BigDecimal total = new BigDecimal(BigInteger.ZERO);
                     
                     for(PresupuestoDetalle pd : detalles){
                         OrdenCompraDetalle ordenCompraDetalle = new OrdenCompraDetalle();
@@ -220,10 +226,8 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                         ordenCompraDetalle.setCantidad(pd.getCantidad().intValue());
                         ordenCompraDetalle.setDescripcion(pd.getProducto().getNombre());
                         ordenCompraDetalle.setDescuento(pd.getDescuentoVenta());
-
-                        ordenCompraDetalle.setTotal(ordenCompraDetalle.getSubtotal());
-                        ordenCompraDetalle.setValorIce(ordenCompraDetalle.getValorIce());
-                        ordenCompraDetalle.setIva(ordenCompraDetalle.getIva());
+                        ordenCompraDetalle.setPrecioUnitario(pd.getPrecioVenta());
+                        ordenCompraDetalle.setValorIce(BigDecimal.ZERO);
                         ordenCompraDetalle.setProductoProveedor(pd.getProductoProveedor());
                         
                         if (productoProveedor.getConIva().equals("s")) {
@@ -234,17 +238,21 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
 
                         ordenCompraDetalle.setProductoProveedor(productoProveedor);
                         ordenCompraDetalle.setTotal(ordenCompraDetalle.getSubtotal());
+                        
+                        /**
+                         * Sumatoria de totales de cada detalle
+                         */
+                        total.add(ordenCompraDetalle.getTotal());
 
-
-
-                        //compraDetalle.setTotal(compraDetalle.getTotal().subtract(valorTotalRetencion));
-                        ordenCompraDetalle.setValorIce(BigDecimal.ZERO);
-                                    ////////////////////////////////
-                                    /**
-                                     * Agregando detalle a Orden Compra
-                                     */
-                                    ordenCompra.addDetalle(ordenCompraDetalle);
+                        /**
+                         * Agregando detalle a Orden Compra
+                         */
+                        ordenCompra.addDetalle(ordenCompraDetalle);
                     }
+                    
+                    ordenCompra.setTotal(total.setScale(2, RoundingMode.HALF_UP));
+                    
+  
                 /**
                  * Grabando la orden de compra por Proveedor
                  */
@@ -883,9 +891,9 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         
         for (PresupuestoDetalle detalle : detalles) {
             subtotalCompra = subtotalCompra.add(detalle.getPrecioCompra()).multiply(detalle.getCantidad());
-            descuentoCompra = descuentoCompra.add(detalle.getDescuentoCompra()).multiply(detalle.getCantidad());
+            descuentoCompra = descuentoCompra.add(detalle.getDescuentoCompra());
             subtotalVenta = subtotalVenta.add(detalle.getPrecioVenta()).multiply(detalle.getCantidad());
-            descuentoVenta = descuentoVenta.add(detalle.getDescuentoVenta()).multiply(detalle.getCantidad());
+            descuentoVenta = descuentoVenta.add(detalle.getDescuentoVenta());
             totalCompra = subtotalCompra.subtract(descuentoCompra);
             totalVenta = subtotalVenta.subtract(descuentoVenta);
         }
@@ -906,6 +914,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         
        
     }
+    
     
     public void limpiarDetalles()
     {
