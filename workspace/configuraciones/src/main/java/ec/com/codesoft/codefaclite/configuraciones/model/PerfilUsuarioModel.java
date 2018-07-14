@@ -5,10 +5,10 @@
  */
 package ec.com.codesoft.codefaclite.configuraciones.model;
 
-import ec.com.codesoft.codefaclite.configuraciones.busqueda.GestionEmpleadosBusquedaDialogo;
 import ec.com.codesoft.codefaclite.configuraciones.busqueda.PerfilBusquedaDialogo;
 import ec.com.codesoft.codefaclite.configuraciones.busqueda.PerfilUsuarioBusquedaDialogo;
 import ec.com.codesoft.codefaclite.configuraciones.panel.PerfilUsuarioPanel;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
@@ -266,7 +266,7 @@ public class PerfilUsuarioModel extends PerfilUsuarioPanel{
         getBtnBuscarEmpleado().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GestionEmpleadosBusquedaDialogo empleadosBusquedaDialogo = new GestionEmpleadosBusquedaDialogo();
+                EmpleadoBusquedaDialogo empleadosBusquedaDialogo = new EmpleadoBusquedaDialogo();
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(empleadosBusquedaDialogo);
                 buscarDialogoModel.setVisible(true);
                 Empleado empleadoTemp = (Empleado) buscarDialogoModel.getResultado();

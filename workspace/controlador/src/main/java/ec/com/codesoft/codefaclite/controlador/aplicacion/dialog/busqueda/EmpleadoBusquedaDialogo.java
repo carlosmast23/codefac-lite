@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.configuraciones.busqueda;
+package ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
@@ -14,9 +14,9 @@ import java.util.Vector;
 
 /**
  *
- * @author Robert
+ * @author Carlos
  */
-public class GestionEmpleadosBusquedaDialogo implements InterfaceModelFind<Empleado>
+public class EmpleadoBusquedaDialogo implements InterfaceModelFind<Empleado>
 {
     @Override
     public Vector<ColumnaDialogo> getColumnas() {

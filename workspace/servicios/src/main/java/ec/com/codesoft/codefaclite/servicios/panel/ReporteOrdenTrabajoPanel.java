@@ -8,9 +8,12 @@ package ec.com.codesoft.codefaclite.servicios.panel;
 import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 
 /**
  *
@@ -43,19 +46,19 @@ public abstract class ReporteOrdenTrabajoPanel extends ControladorCodefacInterfa
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         cmbDepartamentos = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
-        txtEmpleados = new javax.swing.JTextField();
+        btnBuscarEmpleado = new javax.swing.JButton();
+        txtEmpleado = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         cmbEstado = new javax.swing.JComboBox<>();
         btnConsultar = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jCheckBox3 = new javax.swing.JCheckBox();
-        jCheckBox4 = new javax.swing.JCheckBox();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        chkEstadoTodos = new javax.swing.JCheckBox();
+        chkDepartamentoTodos = new javax.swing.JCheckBox();
+        chkEmpleadoTodos = new javax.swing.JCheckBox();
+        btnLimpiarFechaInicial = new javax.swing.JButton();
+        btnLimpiarFechaFinal = new javax.swing.JButton();
         lblEspacioBlanco = new javax.swing.JLabel();
+        btnHoy = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -122,19 +125,21 @@ public abstract class ReporteOrdenTrabajoPanel extends ControladorCodefacInterfa
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(cmbDepartamentos, gridBagConstraints);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add_user.png"))); // NOI18N
+        btnBuscarEmpleado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add_user.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jButton1, gridBagConstraints);
+        getContentPane().add(btnBuscarEmpleado, gridBagConstraints);
+
+        txtEmpleado.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(txtEmpleados, gridBagConstraints);
+        getContentPane().add(txtEmpleado, gridBagConstraints);
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel5.setText("Estado:");
@@ -167,44 +172,38 @@ public abstract class ReporteOrdenTrabajoPanel extends ControladorCodefacInterfa
         gridBagConstraints.weightx = 0.1;
         getContentPane().add(jLabel6, gridBagConstraints);
 
-        jCheckBox1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jCheckBox1.setText("Todos");
+        chkEstadoTodos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        chkEstadoTodos.setText("Todos");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 4;
-        getContentPane().add(jCheckBox1, gridBagConstraints);
+        getContentPane().add(chkEstadoTodos, gridBagConstraints);
 
-        jCheckBox2.setText("jCheckBox2");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 0;
-        getContentPane().add(jCheckBox2, gridBagConstraints);
-
-        jCheckBox3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jCheckBox3.setText("Todos");
+        chkDepartamentoTodos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        chkDepartamentoTodos.setText("Todos");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
-        getContentPane().add(jCheckBox3, gridBagConstraints);
+        getContentPane().add(chkDepartamentoTodos, gridBagConstraints);
 
-        jCheckBox4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jCheckBox4.setText("Todos");
+        chkEmpleadoTodos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        chkEmpleadoTodos.setText("Todos");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
-        getContentPane().add(jCheckBox4, gridBagConstraints);
+        getContentPane().add(chkEmpleadoTodos, gridBagConstraints);
 
-        jButton3.setText("L");
+        btnLimpiarFechaInicial.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/clear.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 0;
-        getContentPane().add(jButton3, gridBagConstraints);
+        getContentPane().add(btnLimpiarFechaInicial, gridBagConstraints);
 
-        jButton4.setText("L");
+        btnLimpiarFechaFinal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/clear.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 1;
-        getContentPane().add(jButton4, gridBagConstraints);
+        getContentPane().add(btnLimpiarFechaFinal, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 5;
@@ -213,23 +212,26 @@ public abstract class ReporteOrdenTrabajoPanel extends ControladorCodefacInterfa
         gridBagConstraints.weighty = 0.1;
         getContentPane().add(lblEspacioBlanco, gridBagConstraints);
 
+        btnHoy.setText("Hoy");
+        getContentPane().add(btnHoy, new java.awt.GridBagConstraints());
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscarEmpleado;
     private javax.swing.JButton btnConsultar;
+    private javax.swing.JButton btnHoy;
+    private javax.swing.JButton btnLimpiarFechaFinal;
+    private javax.swing.JButton btnLimpiarFechaInicial;
+    private javax.swing.JCheckBox chkDepartamentoTodos;
+    private javax.swing.JCheckBox chkEmpleadoTodos;
+    private javax.swing.JCheckBox chkEstadoTodos;
     private javax.swing.JComboBox<Departamento> cmbDepartamentos;
-    private javax.swing.JComboBox<String> cmbEstado;
+    private javax.swing.JComboBox<OrdenTrabajoDetalle.EstadoEnum> cmbEstado;
     private com.toedter.calendar.JDateChooser cmbFechaFinal;
     private com.toedter.calendar.JDateChooser cmbFechaInicial;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JCheckBox jCheckBox4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -237,7 +239,7 @@ public abstract class ReporteOrdenTrabajoPanel extends ControladorCodefacInterfa
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel lblEspacioBlanco;
-    private javax.swing.JTextField txtEmpleados;
+    private javax.swing.JTextField txtEmpleado;
     // End of variables declaration//GEN-END:variables
 
     public JDateChooser getCmbFechaFinal() {
@@ -271,6 +273,81 @@ public abstract class ReporteOrdenTrabajoPanel extends ControladorCodefacInterfa
     public void setCmbDepartamentos(JComboBox<Departamento> cmbDepartamentos) {
         this.cmbDepartamentos = cmbDepartamentos;
     }
+
+    public JButton getBtnBuscarEmpleado() {
+        return btnBuscarEmpleado;
+    }
+
+    public void setBtnBuscarEmpleado(JButton btnBuscarEmpleado) {
+        this.btnBuscarEmpleado = btnBuscarEmpleado;
+    }
+
+    public JTextField getTxtEmpleado() {
+        return txtEmpleado;
+    }
+
+    public void setTxtEmpleado(JTextField txtEmpleado) {
+        this.txtEmpleado = txtEmpleado;
+    }
+
+    public JCheckBox getChkDepartamentoTodos() {
+        return chkDepartamentoTodos;
+    }
+
+    public void setChkDepartamentoTodos(JCheckBox chkDepartamentoTodos) {
+        this.chkDepartamentoTodos = chkDepartamentoTodos;
+    }
+
+    public JCheckBox getChkEmpleadoTodos() {
+        return chkEmpleadoTodos;
+    }
+
+    public void setChkEmpleadoTodos(JCheckBox chkEmpleadoTodos) {
+        this.chkEmpleadoTodos = chkEmpleadoTodos;
+    }
+
+    public JButton getBtnLimpiarFechaFinal() {
+        return btnLimpiarFechaFinal;
+    }
+
+    public void setBtnLimpiarFechaFinal(JButton btnLimpiarFechaFinal) {
+        this.btnLimpiarFechaFinal = btnLimpiarFechaFinal;
+    }
+
+    public JButton getBtnLimpiarFechaInicial() {
+        return btnLimpiarFechaInicial;
+    }
+
+    public void setBtnLimpiarFechaInicial(JButton btnLimpiarFechaInicial) {
+        this.btnLimpiarFechaInicial = btnLimpiarFechaInicial;
+    }
+
+    public JButton getBtnHoy() {
+        return btnHoy;
+    }
+
+    public void setBtnHoy(JButton btnHoy) {
+        this.btnHoy = btnHoy;
+    }
+
+    public JComboBox<OrdenTrabajoDetalle.EstadoEnum> getCmbEstado() {
+        return cmbEstado;
+    }
+
+    public void setCmbEstado(JComboBox<OrdenTrabajoDetalle.EstadoEnum> cmbEstado) {
+        this.cmbEstado = cmbEstado;
+    }
+
+    public JCheckBox getChkEstadoTodos() {
+        return chkEstadoTodos;
+    }
+
+    public void setChkEstadoTodos(JCheckBox chkEstadoTodos) {
+        this.chkEstadoTodos = chkEstadoTodos;
+    }
+    
+    
+    
 
     
 }

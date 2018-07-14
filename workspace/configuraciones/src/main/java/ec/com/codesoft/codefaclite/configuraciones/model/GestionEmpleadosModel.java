@@ -5,8 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.configuraciones.model;
 
-import ec.com.codesoft.codefaclite.configuraciones.busqueda.GestionEmpleadosBusquedaDialogo;
 import ec.com.codesoft.codefaclite.configuraciones.panel.GestionEmpleadosPanel;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
@@ -78,7 +78,7 @@ public class GestionEmpleadosModel extends GestionEmpleadosPanel
     @Override
     public void buscar() throws ExcepcionCodefacLite {
         //super.buscar(); //To change body of generated methods, choose Tools | Templates.
-        GestionEmpleadosBusquedaDialogo empleadosBusquedaDialogo = new GestionEmpleadosBusquedaDialogo();
+        EmpleadoBusquedaDialogo empleadosBusquedaDialogo = new EmpleadoBusquedaDialogo();
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(empleadosBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
         Empleado empleadoTemp = (Empleado) buscarDialogoModel.getResultado();

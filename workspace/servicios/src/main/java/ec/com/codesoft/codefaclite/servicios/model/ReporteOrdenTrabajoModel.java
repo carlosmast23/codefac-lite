@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servicios.model;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
@@ -17,8 +18,11 @@ import ec.com.codesoft.codefaclite.servicios.data.OrdenTrabajoData;
 import ec.com.codesoft.codefaclite.servicios.panel.ReporteOrdenTrabajoPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.awt.Dialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.table.DefaultTableModel;
 
@@ -43,12 +48,18 @@ public class ReporteOrdenTrabajoModel extends ReporteOrdenTrabajoPanel{
     /**
      * Variable para guardar la lista de resultados de la consulta cuando existe consultas
      */
-    private List<OrdenTrabajo> listaResultado;
+    private List<OrdenTrabajoDetalle> listaResultado;
+    /**
+     * Referencia para buscar el empleado por el cual buscar
+     */
+    private Empleado empleado;
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
+        listenerCheck();
         listenerBotones();
         valoresIniciales();
+        validacionDatosIngresados=false;
     }
 
     @Override
@@ -82,15 +93,15 @@ public class ReporteOrdenTrabajoModel extends ReporteOrdenTrabajoPanel{
         
         List<OrdenTrabajoData> listData=new ArrayList<OrdenTrabajoData>() ;
         
-        for (OrdenTrabajo ordenTrabajo : listaResultado) 
+        for (OrdenTrabajoDetalle ordenTrabajoDetalle : listaResultado) 
         {
             OrdenTrabajoData ordenTrabajoData=new OrdenTrabajoData();
-            ordenTrabajoData.setCliente(ordenTrabajo.getCliente().getNombresCompletos());
-            ordenTrabajoData.setCodigo(ordenTrabajo.getId().toString());
-            ordenTrabajoData.setDetalleStr(ordenTrabajo.getDetalleString());
-            ordenTrabajoData.setEstado(ordenTrabajo.getEstado());
-            ordenTrabajoData.setFechaIngreso(ordenTrabajo.getFechaIngreso().toString());
-            ordenTrabajoData.setIdentificacion(ordenTrabajo.getCliente().getIdentificacion());     
+            ordenTrabajoData.setCliente(ordenTrabajoDetalle.getOrdenTrabajo().getCliente().getNombresCompletos());
+            ordenTrabajoData.setCodigo(ordenTrabajoDetalle.getOrdenTrabajo().getId().toString());
+            ordenTrabajoData.setDetalleStr(ordenTrabajoDetalle.getTitulo());
+            ordenTrabajoData.setEstado(ordenTrabajoDetalle.getEstado());
+            ordenTrabajoData.setFechaIngreso(ordenTrabajoDetalle.getOrdenTrabajo().getFechaIngreso().toString());
+            ordenTrabajoData.setIdentificacion(ordenTrabajoDetalle.getOrdenTrabajo().getCliente().getIdentificacion());     
             listData.add(ordenTrabajoData);
         }
         
@@ -153,6 +164,21 @@ public class ReporteOrdenTrabajoModel extends ReporteOrdenTrabajoPanel{
     
 
     private void listenerBotones() {
+        
+        getBtnBuscarEmpleado().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                EmpleadoBusquedaDialogo empleadosBusquedaDialogo = new EmpleadoBusquedaDialogo();
+                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(empleadosBusquedaDialogo);
+                buscarDialogoModel.setVisible(true);
+                Empleado empleadoTemp = (Empleado) buscarDialogoModel.getResultado();
+                if (empleadoTemp != null) {
+                    empleado = empleadoTemp;
+                    getTxtEmpleado().setText(empleado.toString());
+                }
+            }
+        });
+        
         getBtnConsultar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -160,7 +186,9 @@ public class ReporteOrdenTrabajoModel extends ReporteOrdenTrabajoPanel{
                     OrdenTrabajoServiceIf serviceOrdenTrabajo=ServiceFactory.getFactory().getOrdenTrabajoServiceIf();
                     Date fechaInicial=getCmbFechaInicial().getDate();
                     Date fechaDateFinal=getCmbFechaFinal().getDate();
-                    listaResultado=serviceOrdenTrabajo.consultarReporte(fechaInicial, fechaDateFinal);
+                    Departamento departamento=(Departamento) getCmbDepartamentos().getSelectedItem();
+                    OrdenTrabajoDetalle.EstadoEnum estado=(OrdenTrabajoDetalle.EstadoEnum) getCmbEstado().getSelectedItem();
+                    listaResultado=serviceOrdenTrabajo.consultarReporte(fechaInicial, fechaDateFinal,departamento,empleado,estado);
                     imprimir();
                 } catch (RemoteException ex) {
                     Logger.getLogger(ReporteOrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -170,7 +198,30 @@ public class ReporteOrdenTrabajoModel extends ReporteOrdenTrabajoPanel{
                 }
             }
         });
+        
+        getBtnLimpiarFechaInicial().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getCmbFechaInicial().setDate(null);
+            }
+        });
+        
+        getBtnLimpiarFechaFinal().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getCmbFechaFinal().setDate(null);
+            }
+        });
+        
+        getBtnHoy().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getCmbFechaInicial().setDate(UtilidadesFecha.getFechaHoy());
+            }
+        });
     }
+    
+    
     
     /*
     private void generarTabla()
@@ -202,11 +253,77 @@ public class ReporteOrdenTrabajoModel extends ReporteOrdenTrabajoPanel{
             List<Departamento> departamentos= ServiceFactory.getFactory().getDepartamentoServiceIf().obtenerTodos(); //TODO: Filtrar solo departamentos activos
             getCmbDepartamentos().removeAllItems();
             for (Departamento departamento : departamentos)
-                
+            {                
                 getCmbDepartamentos().addItem(departamento);
+            }
+            
+            OrdenTrabajoDetalle.EstadoEnum[] estados=OrdenTrabajoDetalle.EstadoEnum.values();
+            getCmbEstado().removeAllItems();
+            for (OrdenTrabajoDetalle.EstadoEnum estado : estados) {
+                getCmbEstado().addItem(estado);
+            }
+            
+            
         } catch (RemoteException ex) {
             Logger.getLogger(ReporteOrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        
+        
+        //Valores iniciales
+        //getChkDepartamentoTodos().setSelected(true);
+        //getChkEmpleadoTodos().setSelected(true);
+        getChkEstadoTodos().doClick();
+        getChkDepartamentoTodos().doClick();
+        getChkEmpleadoTodos().doClick();
+    }
+
+    private void listenerCheck() {
+        getChkEmpleadoTodos().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(getChkEmpleadoTodos().isSelected())
+                {
+                    empleado=null;
+                    getTxtEmpleado().setText("");
+                    getBtnBuscarEmpleado().setEnabled(false);
+                }
+                else
+                {
+                    getBtnBuscarEmpleado().setEnabled(true);
+                }
+            }
+        });
+        
+        getChkDepartamentoTodos().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(getChkDepartamentoTodos().isSelected())
+                {
+                    getCmbDepartamentos().setSelectedItem(null);
+                    getCmbDepartamentos().setEnabled(false);
+                }
+                else
+                {
+                    getCmbDepartamentos().setEnabled(true);
+                }
+            }
+        });
+        
+        getChkEstadoTodos().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(getChkEstadoTodos().isSelected())
+                {
+                    getCmbEstado().setSelectedItem(null);
+                    getCmbEstado().setEnabled(false);
+                }
+                else
+                {
+                    getCmbEstado().setEnabled(true);
+                }
+            }
+        });
         
     }
     

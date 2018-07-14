@@ -11,9 +11,9 @@ import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenTrabajoEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PrioridadEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
 import javax.swing.JButton;
@@ -87,11 +87,11 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         this.cmbDateFechaIngreso = cmbDateFechaIngreso;
     }
 
-    public JComboBox<OrdenTrabajoEnumEstado> getCmbEstadoDetalle() {
+    public JComboBox<OrdenTrabajoDetalle.EstadoEnum> getCmbEstadoDetalle() {
         return cmbEstadoDetalle;
     }
 
-    public void setCmbEstadoDetalle(JComboBox<OrdenTrabajoEnumEstado> cmbEstadoDetalle) {
+    public void setCmbEstadoDetalle(JComboBox<OrdenTrabajoDetalle.EstadoEnum> cmbEstadoDetalle) {
         this.cmbEstadoDetalle = cmbEstadoDetalle;
     }
 
@@ -661,7 +661,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
     private javax.swing.JComboBox<Empleado> cmbAsignadoADetalle;
     private com.toedter.calendar.JDateChooser cmbDateFechaEntrega;
     private com.toedter.calendar.JDateChooser cmbDateFechaIngreso;
-    private javax.swing.JComboBox<OrdenTrabajoEnumEstado> cmbEstadoDetalle;
+    private javax.swing.JComboBox<OrdenTrabajoDetalle.EstadoEnum> cmbEstadoDetalle;
     private javax.swing.JComboBox<GeneralEnumEstado> cmbEstadoOrdenTrabajo;
     private javax.swing.JComboBox<PrioridadEnumEstado> cmbPrioridadDetalle;
     private javax.swing.JComboBox<Departamento> cmbTipoOrdenDetalle;

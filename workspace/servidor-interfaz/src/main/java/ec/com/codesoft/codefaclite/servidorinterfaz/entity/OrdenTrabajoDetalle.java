@@ -187,6 +187,55 @@ public class OrdenTrabajoDetalle implements Serializable
         return true;
     }
     
+    public enum EstadoEnum {
+        /**
+         * Identificador para saber qe ordenes estan en estado recibido
+         */
+        RECIBIDO("R", "Recibido"),
+        /**
+         * Identificador para saber que la orden ay esta presupuestada
+         */
+        PRESUPUESTADO("P", "Presupuestado"),
+        /**
+         * Identificador para saber que anularon el detalle de una orden
+         */
+        ANULADO("A", "Anulado");
+
+        private EstadoEnum(String letra, String nombre) {
+            this.letra = letra;
+            this.nombre = nombre;
+        }
+
+        private String letra;
+        private String nombre;
+
+        public String getLetra() {
+            return letra;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+
+        public static EstadoEnum getEnum(String letra) {
+
+            for (EstadoEnum enumerador : EstadoEnum.values()) {
+                if (enumerador.letra.equals(letra)) {
+                    return enumerador;
+                }
+            }
+            return null;
+        }
+
+        @Override
+        public String toString() {
+            return nombre;
+        }
+        
+        
+
+    }
+
     
     
 }

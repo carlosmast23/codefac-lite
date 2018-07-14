@@ -5,7 +5,10 @@
  */
 package ec.com.codesoft.codefaclite.servidor.facade;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Query;
@@ -22,21 +25,40 @@ public class OrdenTrabajoFacade extends AbstractFacade<OrdenTrabajo>
         super(OrdenTrabajo.class);
     }
     
-    public List<OrdenTrabajo> consultaReporteFacade(Date fechaInicial, Date fechaFinal)
+    public List<OrdenTrabajoDetalle> consultaReporteFacade(Date fechaInicial, Date fechaFinal,Departamento  departamento,Empleado empleado,OrdenTrabajoDetalle.EstadoEnum estado)
     {
-        OrdenTrabajo ot;
+        OrdenTrabajoDetalle otd;
+        //otd.getEmpleado();
+        //otd.getDepartamento();
+        //otd.getOrdenTrabajo();
+        //ot.get
        // ot.getFechaIngreso();        
-        String queryStr="SELECT u FROM OrdenTrabajo u WHERE 1=1 ";
+        String queryStr="SELECT u FROM OrdenTrabajoDetalle u WHERE 1=1 ";
         
         if (fechaInicial != null) 
         {
-            queryStr = queryStr + " AND u.fechaIngreso>=?1 ";
+            queryStr = queryStr + " AND u.ordenTrabajo.fechaIngreso>=?1 ";
         }
 
         if (fechaFinal != null) 
         {
-            queryStr = queryStr + " AND u.fechaIngreso<=?2 ";
-        }        
+            queryStr = queryStr + " AND u.ordenTrabajo.fechaIngreso<=?2 ";
+        }   
+        
+        if(departamento!=null)
+        {
+            queryStr = queryStr + " AND u.departamento=?3 ";
+        }
+        
+        if(empleado!=null)
+        {
+            queryStr = queryStr + " AND u.empleado=?4 ";
+        }
+        
+        if(estado!=null)
+        {
+            queryStr=queryStr+"AND u.estado=?5 ";
+        }
         
         
         Query query = getEntityManager().createQuery(queryStr);
@@ -47,6 +69,17 @@ public class OrdenTrabajoFacade extends AbstractFacade<OrdenTrabajo>
         
         if(fechaFinal!=null)
             query.setParameter(2,fechaFinal);
+        
+        if (departamento != null)
+            query.setParameter(3, departamento);
+        
+        if (empleado != null) {
+            query.setParameter(4, empleado);
+        }
+        
+        if (estado != null) {
+            query.setParameter(5, estado.getLetra());
+        }
         
         return query.getResultList();
     }
