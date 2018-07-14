@@ -1212,10 +1212,12 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
              */
             if(!maximisado)
             {
-                Dimension desktopSize = getSize();
-                Dimension jInternalFrameSize = panel.getSize();
-                panel.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
-                        (desktopSize.height - jInternalFrameSize.height) / 2);
+                Dimension desktopSize =getjDesktopPane1().getSize(); //tamanio del escritorio
+                Dimension jInternalFrameSize = panel.getPreferredSize(); //tamanio de la ventana
+                double ancho=(double)(desktopSize.width - jInternalFrameSize.width) /(double) 2;
+                double alto=(double)(desktopSize.height - jInternalFrameSize.height) /(double) 2;
+                //double alto=(double)(desktopSize.height) /(double) 2;
+                panel.setLocation((int)ancho,(int)alto);
             }
             
             

@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servicios.data.OrdenTrabajoData;
 import ec.com.codesoft.codefaclite.servicios.panel.ReporteOrdenTrabajoPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoServiceIf;
 import java.awt.Dialog;
@@ -47,6 +48,7 @@ public class ReporteOrdenTrabajoModel extends ReporteOrdenTrabajoPanel{
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         listenerBotones();
+        valoresIniciales();
     }
 
     @Override
@@ -159,15 +161,18 @@ public class ReporteOrdenTrabajoModel extends ReporteOrdenTrabajoPanel{
                     Date fechaInicial=getCmbFechaInicial().getDate();
                     Date fechaDateFinal=getCmbFechaFinal().getDate();
                     listaResultado=serviceOrdenTrabajo.consultarReporte(fechaInicial, fechaDateFinal);
-                    generarTabla();
+                    imprimir();
                 } catch (RemoteException ex) {
                     Logger.getLogger(ReporteOrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
                     DialogoCodefac.mensaje("Error","No existe comunicación con el servidor",DialogoCodefac.MENSAJE_INCORRECTO);
+                } catch (ExcepcionCodefacLite ex) {
+                    Logger.getLogger(ReporteOrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
     }
     
+    /*
     private void generarTabla()
     {
         //Si no existen datos en la tabla no se genera nada
@@ -188,6 +193,20 @@ public class ReporteOrdenTrabajoModel extends ReporteOrdenTrabajoPanel{
         }
         
         getTblDatos().setModel(modeloTabla);
+        
+    }*/
+
+    private void valoresIniciales() {
+        
+        try {
+            List<Departamento> departamentos= ServiceFactory.getFactory().getDepartamentoServiceIf().obtenerTodos(); //TODO: Filtrar solo departamentos activos
+            getCmbDepartamentos().removeAllItems();
+            for (Departamento departamento : departamentos)
+                
+                getCmbDepartamentos().addItem(departamento);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ReporteOrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
     

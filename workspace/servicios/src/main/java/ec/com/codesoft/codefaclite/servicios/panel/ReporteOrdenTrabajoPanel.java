@@ -7,7 +7,9 @@ package ec.com.codesoft.codefaclite.servicios.panel;
 
 import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JTable;
 
 /**
@@ -21,6 +23,7 @@ public abstract class ReporteOrdenTrabajoPanel extends ControladorCodefacInterfa
      */
     public ReporteOrdenTrabajoPanel() {
         initComponents();
+        //Departamento as;
     }
 
     /**
@@ -46,24 +49,24 @@ public abstract class ReporteOrdenTrabajoPanel extends ControladorCodefacInterfa
         cmbEstado = new javax.swing.JComboBox<>();
         btnConsultar = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblDatos = new javax.swing.JTable();
         jCheckBox1 = new javax.swing.JCheckBox();
         jCheckBox2 = new javax.swing.JCheckBox();
         jCheckBox3 = new javax.swing.JCheckBox();
         jCheckBox4 = new javax.swing.JCheckBox();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        lblEspacioBlanco = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
         setTitle("Reporte Ordenes Trabajo");
+        setPreferredSize(new java.awt.Dimension(694, 200));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel1.setText("Fecha Inicial");
+        jLabel1.setText("Fecha Inicial:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 0;
@@ -72,7 +75,7 @@ public abstract class ReporteOrdenTrabajoPanel extends ControladorCodefacInterfa
         getContentPane().add(jLabel1, gridBagConstraints);
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel2.setText("Fecha Final");
+        jLabel2.setText("Fecha Final:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 1;
@@ -94,7 +97,7 @@ public abstract class ReporteOrdenTrabajoPanel extends ControladorCodefacInterfa
         getContentPane().add(cmbFechaFinal, gridBagConstraints);
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel3.setText("Departamento");
+        jLabel3.setText("Departamento:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -103,7 +106,7 @@ public abstract class ReporteOrdenTrabajoPanel extends ControladorCodefacInterfa
         getContentPane().add(jLabel3, gridBagConstraints);
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel4.setText("Empleado");
+        jLabel4.setText("Empleado:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -134,7 +137,7 @@ public abstract class ReporteOrdenTrabajoPanel extends ControladorCodefacInterfa
         getContentPane().add(txtEmpleados, gridBagConstraints);
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel5.setText("Estado");
+        jLabel5.setText("Estado:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -161,30 +164,8 @@ public abstract class ReporteOrdenTrabajoPanel extends ControladorCodefacInterfa
         gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.3;
+        gridBagConstraints.weightx = 0.1;
         getContentPane().add(jLabel6, gridBagConstraints);
-
-        tblDatos.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(tblDatos);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 13;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jScrollPane1, gridBagConstraints);
 
         jCheckBox1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jCheckBox1.setText("Todos");
@@ -224,6 +205,13 @@ public abstract class ReporteOrdenTrabajoPanel extends ControladorCodefacInterfa
         gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 1;
         getContentPane().add(jButton4, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        getContentPane().add(lblEspacioBlanco, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -231,7 +219,7 @@ public abstract class ReporteOrdenTrabajoPanel extends ControladorCodefacInterfa
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConsultar;
-    private javax.swing.JComboBox<String> cmbDepartamentos;
+    private javax.swing.JComboBox<Departamento> cmbDepartamentos;
     private javax.swing.JComboBox<String> cmbEstado;
     private com.toedter.calendar.JDateChooser cmbFechaFinal;
     private com.toedter.calendar.JDateChooser cmbFechaInicial;
@@ -248,8 +236,7 @@ public abstract class ReporteOrdenTrabajoPanel extends ControladorCodefacInterfa
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblDatos;
+    private javax.swing.JLabel lblEspacioBlanco;
     private javax.swing.JTextField txtEmpleados;
     // End of variables declaration//GEN-END:variables
 
@@ -277,15 +264,13 @@ public abstract class ReporteOrdenTrabajoPanel extends ControladorCodefacInterfa
         this.btnConsultar = btnConsultar;
     }
 
-    public JTable getTblDatos() {
-        return tblDatos;
+    public JComboBox<Departamento> getCmbDepartamentos() {
+        return cmbDepartamentos;
     }
 
-    public void setTblDatos(JTable tblDatos) {
-        this.tblDatos = tblDatos;
+    public void setCmbDepartamentos(JComboBox<Departamento> cmbDepartamentos) {
+        this.cmbDepartamentos = cmbDepartamentos;
     }
-    
-    
-    
 
+    
 }

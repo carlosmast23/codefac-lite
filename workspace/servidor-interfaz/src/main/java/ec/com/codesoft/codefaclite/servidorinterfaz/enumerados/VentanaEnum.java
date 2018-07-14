@@ -73,7 +73,7 @@ public enum VentanaEnum {
     PRESUPUESTO("ec.com.codesoft.codefaclite.servicios.model.PresupuestoModel", "PRES", "Presupuesto", ModuloCodefacEnum.SERVICIOS, CategoriaMenuEnum.PROCESOS,KeyEvent.VK_P),
     ORDEN_COMPRA("ec.com.codesoft.codefaclite.compra.model.OrdenCompraModel", "ODCP", "Orden de Compra", ModuloCodefacEnum.COMPRA, CategoriaMenuEnum.PROCESOS,null),
     DEPARTAMENTO("ec.com.codesoft.codefaclite.configuraciones.model.DepartamentoModel", "DEPA", "Departamento", ModuloCodefacEnum.SISTEMA, CategoriaMenuEnum.GESTIONAR,true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null),
-    ORDEN_TRABAJO_REPORTE("ec.com.codesoft.codefaclite.servicios.model.ReporteOrdenTrabajoModel", "ORTR", "Orden Trabajo Reporte", ModuloCodefacEnum.SERVICIOS, CategoriaMenuEnum.REPORTES,true, new ModuloCodefacEnum[]{ModuloCodefacEnum.SERVICIOS},TipoLicenciaEnum.PRO,null),
+    ORDEN_TRABAJO_REPORTE("ec.com.codesoft.codefaclite.servicios.model.ReporteOrdenTrabajoModel", "ORTR", "Orden Trabajo Reporte", ModuloCodefacEnum.SERVICIOS, CategoriaMenuEnum.REPORTES,false, new ModuloCodefacEnum[]{ModuloCodefacEnum.SERVICIOS},TipoLicenciaEnum.PRO,null),
     EMPLEADO("ec.com.codesoft.codefaclite.configuraciones.model.GestionEmpleadosModel", "GEEM", "Gestión Empleado", ModuloCodefacEnum.SISTEMA, CategoriaMenuEnum.GESTIONAR,true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null);
     
     private VentanaEnum(String clase, String codigo, String nombre, ModuloCodefacEnum modulo, CategoriaMenuEnum categoriaMenu,Integer teclaAtajo) {
@@ -111,6 +111,7 @@ public enum VentanaEnum {
         this.modulosPermitidos = modulosPermitidos;
         this.tipoLicenciaEnum=tipoLicenciaEnum;
         this.teclaAtajo=teclaAtajo;
+        this.maximizado=maximizado;
     }
 
     private String claseNombre;
