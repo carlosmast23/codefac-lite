@@ -6,11 +6,13 @@
 package ec.com.codesoft.codefaclite.main.panel;
 
 
+import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -56,6 +58,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jPanelSeleccion = new javax.swing.JTabbedPane();
         JPanelMenu = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
+        cmbPantallasAbiertas = new javax.swing.JComboBox<>();
         btnHome = new javax.swing.JButton();
         btnNuevo = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
@@ -136,6 +139,11 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
         jToolBar1.setBorder(null);
         jToolBar1.setRollover(true);
+
+        cmbPantallasAbiertas.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        cmbPantallasAbiertas.setToolTipText("Ventanas abiertas");
+        cmbPantallasAbiertas.setPreferredSize(new java.awt.Dimension(120, 20));
+        jToolBar1.add(cmbPantallasAbiertas);
 
         btnHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/home.png"))); // NOI18N
         btnHome.setToolTipText("Ir al menu principal");
@@ -496,6 +504,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JButton btnImprimir;
     private javax.swing.JButton btnNuevo;
     private javax.swing.JButton btnSalirPantallaPublicidad;
+    private javax.swing.JComboBox<GeneralPanelInterface> cmbPantallasAbiertas;
     private javax.swing.JMenuItem itemActualizar;
     private javax.swing.JMenuItem itemAyuda;
     private javax.swing.JMenuItem itemBuscar;
@@ -823,6 +832,15 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         this.itemNuevo = itemNuevo;
     }
 
+    public JComboBox<GeneralPanelInterface> getCmbPantallasAbiertas() {
+        return cmbPantallasAbiertas;
+    }
+
+    public void setCmbPantallasAbiertas(JComboBox<GeneralPanelInterface> cmbPantallasAbiertas) {
+        this.cmbPantallasAbiertas = cmbPantallasAbiertas;
+    }
+
+    
     
     
     

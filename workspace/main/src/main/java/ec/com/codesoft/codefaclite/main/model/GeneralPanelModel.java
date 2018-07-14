@@ -194,6 +194,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         iniciarComponentesPantalla();
         iniciarComponentes();        
         agregarListenerBotonesDefecto();
+        agregarListenerCombos();
         agregarListenerBotones();
         agregarListenerSplit();
         agregarListenerFrame();
@@ -1224,6 +1225,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             panel.consola=new ConsolaGeneral();
             mostrarConsola(panel.consola,true);
             
+            //Agregar ventana al combo de ventanas abiertas
+            getCmbPantallasAbiertas().addItem(panel);
+            
 
                         
         } catch (PropertyVetoException ex) {
@@ -1789,6 +1793,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                                 cargarAyuda();
                                 mostrarPanelSecundario(false);
                                 e.getInternalFrame().dispose();
+                                getCmbPantallasAbiertas().removeItem(e.getInternalFrame());
                             }                                                        
                         }
 
@@ -2870,6 +2875,28 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         } catch (RemoteException ex) {
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void agregarListenerCombos() {
+        getCmbPantallasAbiertas().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GeneralPanelInterface panel=(GeneralPanelInterface) getCmbPantallasAbiertas().getSelectedItem();
+                if(panel!=null)
+                {
+                    try {
+                        if(panel.isIcon())
+                        {
+                            panel.setIcon(false);
+                        }
+                        
+                        panel.setSelected(true);
+                    } catch (PropertyVetoException ex) {
+                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
     }
     
     public class ListenerIcono implements IconoInterfaz 

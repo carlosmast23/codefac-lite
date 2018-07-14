@@ -311,5 +311,21 @@ public enum VentanaEnum {
         }
         return lista;
     }
+    
+    /**
+     * Metodo que retorna el objeto enum dependiendo la clase que se pase del objeto
+     * @param clase
+     * @return 
+     */
+    public static VentanaEnum getByClass(Class clase)
+    {
+        for (VentanaEnum object : VentanaEnum.values()) {
+            if(clase.equals(object.getClase()))
+            {
+                return object;
+            }
+        }
+        return null;
+    }
 
 }

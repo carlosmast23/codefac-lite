@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterfac
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ConsolaGeneral;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
@@ -330,6 +331,14 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
         return true;
 
     }    
+
+    @Override
+    public String toString() {
+        VentanaEnum ventanaEnum=VentanaEnum.getByClass(this.getClass());
+        return ventanaEnum.getNombre();
+    }
+    
+    
     
     
 }
