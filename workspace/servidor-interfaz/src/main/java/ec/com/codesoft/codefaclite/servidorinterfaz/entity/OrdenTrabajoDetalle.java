@@ -159,7 +159,7 @@ public class OrdenTrabajoDetalle implements Serializable
 
     @Override
     public String toString() {
-        return ""+ id + " - " + descripcion;
+        return "N° "+ id + " - " + descripcion;
     }
 
     @Override

@@ -8,6 +8,9 @@ package ec.com.codesoft.codefaclite.servicios.model;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.OrdenTrabajoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProveedorBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
+import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
@@ -73,6 +76,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -91,6 +95,8 @@ import org.bouncycastle.pqc.math.linearalgebra.BigIntUtils;
  */
 public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     
+    private PresupuestoModel instanceThis = this;
+    
     private static final String PATH_REPORTE_TMP = "tmp/reporteOrdenCompra.pdf";
     
     public static final String ETIQUETA_NOMBRE_CLIENTE = "[nombre_cliente]";
@@ -104,8 +110,12 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     private Map<Persona,List<PresupuestoDetalle>> mapClientes;
     private Map<Integer,List<PresupuestoDetalle>> mapOrden;
     private List<OrdenCompra> ordenesCompra;
-    private String correoEmpleado;
     private Empleado empleado;
+    
+    /**
+     * Hilo para procesar el envio de las notificaciones
+     */
+    private Thread hiloNotificaciones;
 
     public PresupuestoModel() {
         super.listaExclusionComponentes.add(getTxtPrecioVenta());
@@ -188,7 +198,12 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
 //                this.correoEmpleado = this.presupuesto.getOrdenTrabajoDetalle().getEmpleado().getCorreoElectronico();
 //            }else{
 //                this.correoEmpleado = "Sin Asignar Correo";
-//            }    
+//            }
+
+            /**
+             * Me permite grabar cada orden de compra para generar los reportes y enviar por correo al empleado 
+             */
+            this.ordenesCompra = new ArrayList<>();
             /**
              * El momento que se graba el Presupuesto genero de cada detalle presuesto la orden de compra
              */
@@ -259,14 +274,20 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 OrdenCompraServiceIf compraServiceIf = ServiceFactory.getFactory().getOrdenCompraServiceIf();
                 compraServiceIf.grabar(ordenCompra);
                 DialogoCodefac.mensaje("Orden compra", "Orden de Compra N° " + key +" generada", DialogoCodefac.MENSAJE_CORRECTO);
-                //this.ordenesCompra.add(ordenCompra);
-////                
-////                if(this.presupuesto.getOrdenTrabajoDetalle().getEmpleado() != null){
-////                    Empleado empleadoTemp = this.presupuesto.getOrdenTrabajoDetalle().getEmpleado(); 
-////                }
-////                
-////                Persona personaTemp = this.presupuesto.getPersona();
-
+                /**
+                 * Agregar ordenes para enviar a correo
+                 */
+                this.ordenesCompra.add(ordenCompra);
+            }
+            
+            Presupuesto.EstadoEnum estadoEnum = (Presupuesto.EstadoEnum) getCmbEstadoPresupuesto().getSelectedItem();
+            if(estadoEnum.equals(Presupuesto.EstadoEnum.TERMINADO))
+            {
+                hiloNotificaciones = new Thread(instanceThis);
+                hiloNotificaciones.start();
+                DialogoCodefac.mensaje("Correcto", "Las notificaciones se estan enviado , puede revisar en el monitor", DialogoCodefac.MENSAJE_CORRECTO);
+                
+                
             }
             
             }catch (ServicioCodefacException ex) {
@@ -404,7 +425,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     
     public void initDatosTabla()
     {
-        DefaultTableModel modeloTablaDetallesPresupuesto = UtilidadesTablas.crearModeloTabla(new String[]{"#","Proveedor","Producto","Valor compra","Valor venta","Cantidad"}, new Class[]{String.class,String.class,String.class,String.class,String.class,String.class});
+        DefaultTableModel modeloTablaDetallesPresupuesto = UtilidadesTablas.crearModeloTabla(new String[]{"#","Proveedor","Producto","Valor compra","Descuento compra","Valor venta","Descuento venta","Cantidad"}, new Class[]{String.class,String.class,String.class,String.class,String.class,String.class,String.class,String.class});
         getTableDetallesPresupuesto().setModel(modeloTablaDetallesPresupuesto);
     }
     
@@ -503,7 +524,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         getBtnProveedor().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ClienteBusquedaDialogo buscarBusquedaDialogo = new ClienteBusquedaDialogo();
+                ProveedorBusquedaDialogo buscarBusquedaDialogo = new ProveedorBusquedaDialogo();
                 BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
                 buscarDialogo.setVisible(true);
                 persona = (Persona) buscarDialogo.getResultado();
@@ -597,13 +618,15 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                     
             }
         });
+        
+        
     }
     
     public void obtenerOrdenTrabajoDetalle()
     {
          presupuesto.setOrdenTrabajoDetalle((OrdenTrabajoDetalle) getCmbDetallesOrdenTrabajo().getSelectedItem());
          getTxtDescripcion().setText(presupuesto.getOrdenTrabajoDetalle().getDescripcion());
-         System.out.println("-->" + getCmbDetallesOrdenTrabajo().getSelectedItem());
+
     }
     
     public void addListenerTextos()
@@ -638,6 +661,9 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                     PresupuestoDetalle presupuestoDetalle =  (PresupuestoDetalle) getTableDetallesPresupuesto().getValueAt(fila, 0);
                     if(presupuestoDetalle != null){
                         cargarInformacionDetallePresupuesto( presupuestoDetalle);
+                    }else
+                    {
+                        limpiarDetalles();
                     }
                 }
                 catch(Exception e)
@@ -683,8 +709,15 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     }
           
      public void cargarDetallesOrdenTrabajo(OrdenTrabajo ordenTrabajo)
-    {
-        getTxtOrdenTrabajo().setText(ordenTrabajo.getId() + " - "+ordenTrabajo.getDescripcion());
+    {   
+        if(ordenTrabajo.getDescripcion() !=  null && !(ordenTrabajo.getDescripcion().equals("")))
+        {
+            getTxtOrdenTrabajo().setText("N° " + ordenTrabajo.getId() + " - " + ordenTrabajo.getDescripcion());    
+        }
+        else{
+            getTxtOrdenTrabajo().setText("N° " + ordenTrabajo.getId() + " - " + "Orden trabajo");    
+        }
+
         getCmbDetallesOrdenTrabajo().removeAllItems();
         for(OrdenTrabajoDetalle pd : ordenTrabajo.getDetalles())
         {
@@ -1019,7 +1052,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         int c=0;
         Vector<Object> fila;
         DefaultTableModel modeloTablaDetallesPresupuesto = 
-        UtilidadesTablas.crearModeloTabla(new String[]{"obj","#","Proveedor","Producto","Valor compra","Valor venta","Cantidad"}, new Class[]{PresupuestoDetalle.class,String.class,String.class,String.class,String.class,String.class,String.class});
+        UtilidadesTablas.crearModeloTabla(new String[]{"obj","#","Proveedor","Producto","Valor compra","Descuento compra","Valor venta","Descuento venta","Cantidad"}, new Class[]{PresupuestoDetalle.class,String.class,String.class,String.class,String.class,String.class,String.class,String.class,String.class});
         for(Map.Entry<Integer,List<PresupuestoDetalle>> datoMap : mapOrden.entrySet())
         {
             boolean b = true; 
@@ -1028,7 +1061,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             for (PresupuestoDetalle detalle : detallesPorProveedor) {
                 if(b){
                     fila=new Vector<>();
-                    fila.add(null);fila.add(titulo+"");fila.add("");fila.add("");fila.add("");fila.add("");fila.add("");
+                    fila.add(null);fila.add(titulo+"");fila.add("");fila.add("");fila.add("");fila.add("");fila.add("");fila.add("");fila.add("");
                     b = false;
                     modeloTablaDetallesPresupuesto.addRow(fila);
                 }
@@ -1037,8 +1070,12 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                     fila.add("");
                     fila.add(detalle.getPersona().getNombresCompletos()+"");
                     fila.add(detalle.getProducto().getNombre()+"");
-                    fila.add(detalle.getPrecioCompra().subtract(detalle.getDescuentoCompra())+"");
-                    fila.add(detalle.getPrecioVenta().subtract(detalle.getDescuentoVenta())+"");
+                    fila.add(""+detalle.getPrecioCompra().multiply(detalle.getCantidad()));
+                    //fila.add(detalle.getPrecioCompra().subtract(detalle.getDescuentoCompra())+"");
+                    fila.add(""+detalle.getDescuentoCompra());
+                    fila.add(detalle.getPrecioVenta().multiply(detalle.getCantidad()));
+                    //fila.add(detalle.getPrecioVenta().subtract(detalle.getDescuentoVenta())+"");
+                    fila.add(""+detalle.getDescuentoVenta());
                     fila.add(detalle.getCantidad().toString());
                     modeloTablaDetallesPresupuesto.addRow(fila);
             }
@@ -1224,22 +1261,24 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     private void eliminarDetallePresupuesto()
     {
         try{
-            int filaTabla = getTableDetallesPresupuesto().getSelectedRow();
-            PresupuestoDetalle presupuestoDetalle = (PresupuestoDetalle) getTableDetallesPresupuesto().getValueAt(filaTabla,0);
+            int fila = getTableDetallesPresupuesto().getSelectedRow();
+            PresupuestoDetalle presupuestoDetalle = (PresupuestoDetalle) getTableDetallesPresupuesto().getValueAt(fila,0);
             if(presupuestoDetalle != null){
-                for(PresupuestoDetalle pd : presupuesto.getPresupuestoDetalles())
-                {
-                    if(pd.equals(presupuestoDetalle)){
-                        presupuesto.getPresupuestoDetalles().remove(pd);
-                    }
-                }
+                
+                    presupuesto.getPresupuestoDetalles().remove(presupuestoDetalle);
+                    getBtnAgregarDetalle().setEnabled(true);
+                    limpiarDetalles();
+                    ordenarDetallesEnFuncionDeOrdenCompra();
+                    mostrarDatosTabla();
+                    calcularTotales();
             }
-            getBtnAgregarDetalle().setEnabled(true);
-            mostrarDatosTabla();
-            calcularTotales();
-        }catch(Exception exc)
+            else{
+                getBtnAgregarDetalle().setEnabled(true);
+                limpiarDetalles();
+            }
+        }catch(Exception e)
         {
-            exc.printStackTrace();
+            e.printStackTrace();
         }              
     }
     
@@ -1280,7 +1319,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         }
     }
     
-    private void enviarCorreo(EstudianteInscrito estudianteInscrito, String mensaje)
+    private void enviarCorreo(Empleado empleado, String mensaje)
     {
         CorreoCodefac correoCodefac = new CorreoCodefac() {
             @Override
@@ -1303,7 +1342,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             @Override
             public List<String> getDestinatorios() {
                 List<String> destinatarios = new ArrayList<String>();
-                destinatarios.add(estudianteInscrito.getEstudiante().getRepresentante().getCorreoElectronico());
+                destinatarios.add(empleado.getCorreoElectronico());
                 return destinatarios;
             }
         };
@@ -1313,16 +1352,45 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     
     public void enviarComunicados()
     {
-        if(!this.ordenesCompra.isEmpty())
-        {
-                //generarReportePdf(ordenCompra);
-                /**
-                 * Crear mensaje para Empleado si existe
-                 */
-                String mensaje =  construirMensaje(empleado, persona);
-                
+       
+        try{
+            Empleado empleadoTemp = this.presupuesto.getOrdenTrabajoDetalle().getEmpleado();
             
-        }
+            if(!this.ordenesCompra.isEmpty()){
+                
+                MonitorComprobanteData monitorData = getMonitorComprobanteData();
+                MonitorComprobanteModel.getInstance().mostrar();
+                
+                int contador = 0;
+                for (OrdenCompra ordenCompra : this.ordenesCompra) {
+                    contador++;
+                    /**
+                     * Generar Reporte
+                     */
+                    generarReportePdf(ordenCompra);
+                    /**
+                     * Enviar al correo
+                     */
+                    String mensaje = construirMensaje(empleadoTemp, ordenCompra.getProveedor());
+                    enviarCorreo(empleadoTemp, mensaje);
+                    
+                    double relacion = (double) contador / (double) this.ordenesCompra.size();
+                    int porcentaje = (int) (relacion * 100);
+                    monitorData.getBarraProgreso().setValue(porcentaje);
+                    
+                }
+           }
+           else{
+               DialogoCodefac.mensaje("Advertencia", "Empleado sin asignar ", SOMEBITS);
+           }     
+           
+            
+           
+       }catch(Exception e)
+       {
+           e.printStackTrace();
+       }
+               
     }
     
     public String construirMensaje(Empleado empleado, Persona persona)
@@ -1334,11 +1402,32 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
 
         return mensaje;
     }
-                
+    
+    /**
+     * Obtiene una version del monitor del comprobante para mostrar el avance de
+     * las notificaciones enviadas
+     *
+     * @return
+     */
+    private MonitorComprobanteData getMonitorComprobanteData() {
+        //Obtener una instancia del monitor para mostrar el avance de los datos
+        MonitorComprobanteData monitorData = MonitorComprobanteModel.getInstance().agregarComprobante();
+
+        monitorData.getLblPreimpreso().setText("enviado notificaciones");
+        monitorData.getBtnAbrir().setEnabled(false);
+        monitorData.getBtnReporte().setEnabled(false);
+        monitorData.getBtnCerrar().setEnabled(false);
+        monitorData.getBarraProgreso().setString("enviando notificaciones");
+        monitorData.getBarraProgreso().setStringPainted(true);
+
+        return monitorData;
+
+    } 
+    
     @Override
     public void run() 
     {
-        
+        enviarComunicados();
     }
     
 }

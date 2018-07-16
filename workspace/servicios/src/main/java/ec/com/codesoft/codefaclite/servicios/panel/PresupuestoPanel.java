@@ -485,7 +485,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         getContentPane().add(cmbDetallesOrdenTrabajo, gridBagConstraints);
 
         jLabel14.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel14.setText("Tipo Presupuesto:");
+        jLabel14.setText("Tipo Facturación:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 2;

@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import java.util.Vector;
 
 /**
@@ -64,9 +65,11 @@ public class ClienteBusquedaDialogo implements InterfaceModelFind<Persona>
         //Persona p;
         //p.getRazonSocial();
         String queryString = "SELECT u FROM Persona u WHERE ";
-        queryString+=" ( LOWER(u.razonSocial) like ?1 )";
+        queryString+=" ( LOWER(u.razonSocial) like ?1 and( u.tipo like ?2 or u.tipo like ?3))";
         QueryDialog queryDialog=new QueryDialog(queryString);
-        queryDialog.agregarParametro(1,filter);
+        queryDialog.agregarParametro(1, filter);
+        queryDialog.agregarParametro(2, OperadorNegocioEnum.CLIENTE.getLetra());
+        queryDialog.agregarParametro(3, OperadorNegocioEnum.AMBOS.getLetra());
         return queryDialog;
     }
     
