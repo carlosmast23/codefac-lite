@@ -5,14 +5,17 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.enumerados;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Carlos
  */
 public enum CarteraDocumentoEnum {
 
-    ABONO(CarteraEnum.COMPROBANTE_INGRESO,"ABONO","ABO"),
-    RETENCION(CarteraEnum.COMPROBANTE_INGRESO,"ABONO","RET");
+    ABONO(CarteraEnum.COMPROBANTE_INGRESO,"Abono","ABO"),
+    RETENCION(CarteraEnum.COMPROBANTE_INGRESO,"Retención","RET");
 
     private CarteraDocumentoEnum(CarteraEnum carteraEnum, String nombre, String codigo) {
         this.carteraEnum = carteraEnum;
@@ -24,7 +27,26 @@ public enum CarteraDocumentoEnum {
     private String nombre;
     private String codigo;
 
+    @Override
+    public String toString() {
+        return nombre;
+    }
+    
+    
 
+
+    public static List<CarteraDocumentoEnum>  buscarPorTipoCartera(CarteraEnum cartera)
+    {
+        List<CarteraDocumentoEnum> resultados=new ArrayList<CarteraDocumentoEnum>();
+        for (CarteraDocumentoEnum carteraDocumentoEnum : CarteraDocumentoEnum.values()) 
+        {
+            if(carteraDocumentoEnum.carteraEnum.equals(cartera))
+            {
+                resultados.add(carteraDocumentoEnum);
+            }
+        }
+        return resultados;
+    }
 
     
 }
