@@ -58,7 +58,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jPanelSeleccion = new javax.swing.JTabbedPane();
         JPanelMenu = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
-        cmbPantallasAbiertas = new javax.swing.JComboBox<>();
         btnHome = new javax.swing.JButton();
         btnNuevo = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
@@ -87,6 +86,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuItemSalir = new javax.swing.JMenuItem();
         jMenuUtilidades = new javax.swing.JMenu();
         jMenuCalculadora = new javax.swing.JMenuItem();
+        jMenuVentanasActivas = new javax.swing.JMenu();
         jMenuAyuda = new javax.swing.JMenu();
         jMenuItemContenido = new javax.swing.JMenuItem();
         jMenuItemAcerca = new javax.swing.JMenuItem();
@@ -136,14 +136,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         setSize(new java.awt.Dimension(800, 600));
 
         JPanelMenu.setBackground(new java.awt.Color(255, 255, 255));
+        JPanelMenu.setLayout(new java.awt.GridBagLayout());
 
         jToolBar1.setBorder(null);
         jToolBar1.setRollover(true);
-
-        cmbPantallasAbiertas.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        cmbPantallasAbiertas.setToolTipText("Ventanas abiertas");
-        cmbPantallasAbiertas.setPreferredSize(new java.awt.Dimension(120, 20));
-        jToolBar1.add(cmbPantallasAbiertas);
 
         btnHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/home.png"))); // NOI18N
         btnHome.setToolTipText("Ir al menu principal");
@@ -205,7 +201,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         btnAyuda.setMargin(new java.awt.Insets(0, 14, 0, 14));
         jToolBar1.add(btnAyuda);
 
-        JPanelMenu.add(jToolBar1);
+        JPanelMenu.add(jToolBar1, new java.awt.GridBagConstraints());
 
         getContentPane().add(JPanelMenu, java.awt.BorderLayout.PAGE_START);
 
@@ -346,6 +342,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuUtilidades.add(jMenuCalculadora);
 
         jMenuBar1.add(jMenuUtilidades);
+
+        jMenuVentanasActivas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/modulos/ventanas.png"))); // NOI18N
+        jMenuVentanasActivas.setToolTipText("Ventanas Abiertas");
+        jMenuBar1.add(jMenuVentanasActivas);
 
         jMenuAyuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/modulos/ayuda.png"))); // NOI18N
         jMenuAyuda.setText("Ayuda");
@@ -504,7 +504,6 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JButton btnImprimir;
     private javax.swing.JButton btnNuevo;
     private javax.swing.JButton btnSalirPantallaPublicidad;
-    private javax.swing.JComboBox<GeneralPanelInterface> cmbPantallasAbiertas;
     private javax.swing.JMenuItem itemActualizar;
     private javax.swing.JMenuItem itemAyuda;
     private javax.swing.JMenuItem itemBuscar;
@@ -524,6 +523,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JMenuItem jMenuItemInicio;
     private javax.swing.JMenuItem jMenuItemSalir;
     private javax.swing.JMenu jMenuUtilidades;
+    private javax.swing.JMenu jMenuVentanasActivas;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanelPublicidadBorde;
     private javax.swing.JPanel jPanelPublicidadContenido;
@@ -832,12 +832,12 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         this.itemNuevo = itemNuevo;
     }
 
-    public JComboBox<GeneralPanelInterface> getCmbPantallasAbiertas() {
-        return cmbPantallasAbiertas;
+    public JMenu getjMenuVentanasActivas() {
+        return jMenuVentanasActivas;
     }
 
-    public void setCmbPantallasAbiertas(JComboBox<GeneralPanelInterface> cmbPantallasAbiertas) {
-        this.cmbPantallasAbiertas = cmbPantallasAbiertas;
+    public void setjMenuVentanasActivas(JMenu jMenuVentanasActivas) {
+        this.jMenuVentanasActivas = jMenuVentanasActivas;
     }
 
     

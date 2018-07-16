@@ -112,6 +112,8 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -183,10 +185,16 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
      * Varible que almacena la ip del servidor para setear en la pantalla
      */
     public String ipServidor; //Todo: agrupar estos datos de mejor maneras
+    
+    /**
+     * Map que me permite tener grabadas las pantallas abiertas
+     */
+    private Map<GeneralPanelInterface,JMenuItem> mapPantallaAbiertas;
    
     public GeneralPanelModel() 
     {
         getjPanelSeleccion().setVisible(false);//Asumo que cuando se abre por primera vez la pantalla esta oculta
+        mapPantallaAbiertas=new HashMap<GeneralPanelInterface, JMenuItem>();
     }
     
     public void iniciarComponentesGenerales()
@@ -194,7 +202,6 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         iniciarComponentesPantalla();
         iniciarComponentes();        
         agregarListenerBotonesDefecto();
-        agregarListenerCombos();
         agregarListenerBotones();
         agregarListenerSplit();
         agregarListenerFrame();
@@ -1226,12 +1233,88 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             mostrarConsola(panel.consola,true);
             
             //Agregar ventana al combo de ventanas abiertas
-            getCmbPantallasAbiertas().addItem(panel);
+            agregarVentanaAbierta(panel);
             
 
                         
         } catch (PropertyVetoException ex) {
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    /**
+     * Metodo para agregar en un metodo todas las ventanas abiertas
+     * @param panel 
+     */
+    private void agregarVentanaAbierta(GeneralPanelInterface panel)
+    {
+        JMenuItem jmenuItem=mapPantallaAbiertas.get(panel);
+        if(jmenuItem==null)
+        {
+            jmenuItem=new JMenuItem(panel.toString());
+            //jmenuItem.setFont(new Font("Arial", Font.BOLD, 13));
+            seleccionarVentanaActivaMenu();
+            jmenuItem.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (panel != null) {
+                        try {
+                            if (panel.isIcon()) {
+                                panel.setIcon(false);
+                            }
+
+                            panel.setSelected(true);
+                            seleccionarVentanaActivaMenu();
+                        } catch (PropertyVetoException ex) {
+                            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            });
+            
+            mapPantallaAbiertas.put(panel, jmenuItem);
+        }
+        
+        getjMenuVentanasActivas().add(jmenuItem);
+        
+    }
+    
+    /**
+     * 
+     * Metodo que permite poner check en la ventana que este seleccionada
+     */
+    private void seleccionarVentanaActivaMenu()
+    {
+        GeneralPanelInterface panel= getPanelActivo();
+        
+        for (Map.Entry<GeneralPanelInterface, JMenuItem> entry : mapPantallaAbiertas.entrySet()) {
+            GeneralPanelInterface key = entry.getKey();
+            JMenuItem value = entry.getValue();            
+            
+            if(panel.equals(key))
+            {
+                value.setFont(new Font("Arial", Font.BOLD, 13));      
+            }
+            else
+            {
+                value.setFont(new Font("Arial", Font.PLAIN, 13));
+            }
+            
+        }
+    }
+    
+    /**
+     * Metodo para quitar del menu alguna ventana abierta
+     */
+    private void quitarVentanaAbierta(GeneralPanelInterface panel)
+    {
+        JMenuItem jmenuItem=mapPantallaAbiertas.get(panel);
+        if(jmenuItem!=null)
+        {
+            //Eliminar la referencia del map
+            mapPantallaAbiertas.remove(panel);
+            //Eliminar la referencia del menu
+            getjMenuVentanasActivas().remove(jmenuItem);
         }
     }
     
@@ -1793,7 +1876,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                                 cargarAyuda();
                                 mostrarPanelSecundario(false);
                                 e.getInternalFrame().dispose();
-                                getCmbPantallasAbiertas().removeItem(e.getInternalFrame());
+                                quitarVentanaAbierta(panelCerrando); //
                             }                                                        
                         }
 
@@ -2236,6 +2319,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             this.getJMenuBar().add(menu);
         }
         this.getJMenuBar().add(getjMenuAyuda());
+        this.getJMenuBar().add(getjMenuVentanasActivas());
         //actualizarMenuCodefac();
         agregarListenerMenu();
     }
@@ -2877,28 +2961,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         }
     }
 
-    private void agregarListenerCombos() {
-        getCmbPantallasAbiertas().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                GeneralPanelInterface panel=(GeneralPanelInterface) getCmbPantallasAbiertas().getSelectedItem();
-                if(panel!=null)
-                {
-                    try {
-                        if(panel.isIcon())
-                        {
-                            panel.setIcon(false);
-                        }
-                        
-                        panel.setSelected(true);
-                    } catch (PropertyVetoException ex) {
-                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
-        });
-    }
-    
+       
     public class ListenerIcono implements IconoInterfaz 
     {
         private Class ventanaClase;
