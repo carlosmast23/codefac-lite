@@ -5,13 +5,15 @@
  */
 package ec.com.codesoft.codefaclite.cartera.panel;
 
+import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CarteraDocumentoEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CarteraEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CarteraTipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera.TipoCarteraEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwingX;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -51,14 +53,16 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         lblTelefonos = new javax.swing.JLabel();
         jToolBar1 = new javax.swing.JToolBar();
         txtIdentificacion = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
+        btnBuscarPersona = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jDateChooser2 = new com.toedter.calendar.JDateChooser();
+        cmbFechaEmision = new com.toedter.calendar.JDateChooser();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         cmbTipoCartera = new javax.swing.JComboBox<>();
         lblEspacio1 = new javax.swing.JLabel();
+        cmbDocumentoCategoriaCartera = new javax.swing.JComboBox<>();
+        jLabel10 = new javax.swing.JLabel();
         cmbDocumentoCartera = new javax.swing.JComboBox<>();
         jPanel3 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
@@ -84,7 +88,7 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         jButton3 = new javax.swing.JButton();
         jLabel18 = new javax.swing.JLabel();
         jTextField7 = new javax.swing.JTextField();
-        jButton6 = new javax.swing.JButton();
+        btnBuscarDocumento = new javax.swing.JButton();
         lblEspacio2 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
 
@@ -159,11 +163,11 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         txtIdentificacion.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jToolBar1.add(txtIdentificacion);
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
-        jButton2.setFocusable(false);
-        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton2);
+        btnBuscarPersona.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
+        btnBuscarPersona.setFocusable(false);
+        btnBuscarPersona.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnBuscarPersona.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnBuscarPersona);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -196,7 +200,7 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.ipadx = 60;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel2.add(jDateChooser2, gridBagConstraints);
+        jPanel2.add(cmbFechaEmision, gridBagConstraints);
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel3.setText("Tipo:");
@@ -209,7 +213,7 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel4.setText("Documento:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(jLabel4, gridBagConstraints);
@@ -229,9 +233,24 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         jPanel2.add(lblEspacio1, gridBagConstraints);
 
-        cmbDocumentoCartera.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        cmbDocumentoCategoriaCartera.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(cmbDocumentoCategoriaCartera, gridBagConstraints);
+
+        jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel10.setText("Categoria:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jLabel10, gridBagConstraints);
+
+        cmbDocumentoCartera.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 9;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(cmbDocumentoCartera, gridBagConstraints);
@@ -364,7 +383,7 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         jPanel4.add(cmbTipoDocumentoCartera, gridBagConstraints);
 
         jLabel16.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel16.setText("Documento:");
+        jLabel16.setText("Cruce Documento:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
@@ -424,8 +443,8 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(jTextField7, gridBagConstraints);
 
-        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
-        jPanel4.add(jButton6, new java.awt.GridBagConstraints());
+        btnBuscarDocumento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
+        jPanel4.add(btnBuscarDocumento, new java.awt.GridBagConstraints());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;
@@ -455,18 +474,20 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<CarteraDocumentoEnum > cmbDocumentoCartera;
-    private javax.swing.JComboBox<CarteraEnum > cmbTipoCartera;
-    private javax.swing.JComboBox<CarteraTipoDocumentoEnum > cmbTipoDocumentoCartera;
+    private javax.swing.JButton btnBuscarDocumento;
+    private javax.swing.JButton btnBuscarPersona;
+    private javax.swing.JComboBox<DocumentoEnum > cmbDocumentoCartera;
+    private javax.swing.JComboBox<Cartera.CarteraCategoriaEnum > cmbDocumentoCategoriaCartera;
+    private com.toedter.calendar.JDateChooser cmbFechaEmision;
+    private javax.swing.JComboBox<TipoCarteraEnum > cmbTipoCartera;
+    private javax.swing.JComboBox<String > cmbTipoDocumentoCartera;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private com.toedter.calendar.JDateChooser jDateChooser1;
-    private com.toedter.calendar.JDateChooser jDateChooser2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel15;
@@ -504,29 +525,6 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtIdentificacion;
     // End of variables declaration//GEN-END:variables
 
-    public JComboBox<CarteraEnum> getCmbTipoCartera() {
-        return cmbTipoCartera;
-    }
-
-    public void setCmbTipoCartera(JComboBox<CarteraEnum> cmbTipoCartera) {
-        this.cmbTipoCartera = cmbTipoCartera;
-    }
-
-    public JComboBox<CarteraDocumentoEnum> getCmbDocumentoCartera() {
-        return cmbDocumentoCartera;
-    }
-
-    public void setCmbDocumentoCartera(JComboBox<CarteraDocumentoEnum> cmbDocumentoCartera) {
-        this.cmbDocumentoCartera = cmbDocumentoCartera;
-    }
-
-    public JComboBox<CarteraTipoDocumentoEnum> getCmbTipoDocumentoCartera() {
-        return cmbTipoDocumentoCartera;
-    }
-
-    public void setCmbTipoDocumentoCartera(JComboBox<CarteraTipoDocumentoEnum> cmbTipoDocumentoCartera) {
-        this.cmbTipoDocumentoCartera = cmbTipoDocumentoCartera;
-    }
 
     public JTextField getTxtIdentificacion() {
         return txtIdentificacion;
@@ -559,6 +557,57 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
     public void setLblTelefonos(JLabel lblTelefonos) {
         this.lblTelefonos = lblTelefonos;
     }
+
+    public JButton getBtnBuscarPersona() {
+        return btnBuscarPersona;
+    }
+
+    public void setBtnBuscarPersona(JButton btnBuscarPersona) {
+        this.btnBuscarPersona = btnBuscarPersona;
+    }
+
+    public JDateChooser getCmbFechaEmision() {
+        return cmbFechaEmision;
+    }
+
+    public void setCmbFechaEmision(JDateChooser cmbFechaEmision) {
+        this.cmbFechaEmision = cmbFechaEmision;
+    }
+
+    public JButton getBtnBuscarDocumento() {
+        return btnBuscarDocumento;
+    }
+
+    public void setBtnBuscarDocumento(JButton btnBuscarDocumento) {
+        this.btnBuscarDocumento = btnBuscarDocumento;
+    }
+
+    public JComboBox<TipoCarteraEnum> getCmbTipoCartera() {
+        return cmbTipoCartera;
+    }
+
+    public void setCmbTipoCartera(JComboBox<TipoCarteraEnum> cmbTipoCartera) {
+        this.cmbTipoCartera = cmbTipoCartera;
+    }
+
+    public JComboBox<Cartera.CarteraCategoriaEnum> getCmbDocumentoCategoriaCartera() {
+        return cmbDocumentoCategoriaCartera;
+    }
+
+    public void setCmbDocumentoCategoriaCartera(JComboBox<Cartera.CarteraCategoriaEnum> cmbDocumentoCategoriaCartera) {
+        this.cmbDocumentoCategoriaCartera = cmbDocumentoCategoriaCartera;
+    }
+
+    public JComboBox<DocumentoEnum> getCmbDocumentoCartera() {
+        return cmbDocumentoCartera;
+    }
+
+    public void setCmbDocumentoCartera(JComboBox<DocumentoEnum> cmbDocumentoCartera) {
+        this.cmbDocumentoCartera = cmbDocumentoCartera;
+    }
+
+    
+    
     
     
 }

@@ -16,44 +16,73 @@ public enum DocumentoEnum {
     /**
      * Documento de la factura que puede ser electronica o fisica
      */
-    FACTURA("Factura","FAC",new ModuloCodefacEnum[]{
-        ModuloCodefacEnum.FACTURACION,
-        ModuloCodefacEnum.COMPRA},true,true),
+    FACTURA("Factura",
+            "FAC",
+            DocumentoCategoriaEnum.COMPROBANTES_VENTA,
+            new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION,ModuloCodefacEnum.COMPRA},
+            true,
+            true),
     /**
      * Nota de Venta para los contribuyentes que estan en modalidad RIDE
      */
-    NOTA_VENTA("Nota de venta","NVT",new ModuloCodefacEnum[]{
-        ModuloCodefacEnum.FACTURACION,
-        ModuloCodefacEnum.COMPRA},true,false),
+    NOTA_VENTA("Nota de venta",
+            "NVT",
+            DocumentoCategoriaEnum.DOCUMENTOS_COMPLEMENTARIOS,
+            new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION,ModuloCodefacEnum.COMPRA},
+            true,
+            false),
     
     /**
      * Nota de credito para anular parcial o total facturas
      */
-    NOTA_CREDITO("Nota de crédito","NCR",new ModuloCodefacEnum[]{},true,false),
+    NOTA_CREDITO("Nota de crédito",
+            "NCR",
+            DocumentoCategoriaEnum.DOCUMENTOS_COMPLEMENTARIOS,
+            new ModuloCodefacEnum[]{},
+            true,
+            false),
     
     /**
      * Retenciones cuando la entidad es encargada de retener el IVA o la RENTA
      */
-    RETENCIONES("Retención","RET",new ModuloCodefacEnum[]{},true,false),
+    RETENCIONES("Retención",
+            "RET",
+            DocumentoCategoriaEnum.COMPROBANTES_RETENCION,
+            new ModuloCodefacEnum[]{},
+            true,
+            false),
     
     /**
      * Documentos emitidos por maquinas registradoras
      */
-    TIQUETES_MAQUINAS_REGISTRADORAS("Tiquet maq.reg","TMR",new ModuloCodefacEnum[]{
-        ModuloCodefacEnum.COMPRA},true,false);
+    TIQUETES_MAQUINAS_REGISTRADORAS("Tiquet maq.reg",
+            "TMR",
+            DocumentoCategoriaEnum.COMPROBANTES_VENTA,
+            new ModuloCodefacEnum[]{ModuloCodefacEnum.COMPRA},
+            true,
+            false),
+    
+    ABONOS("Abono",
+            "ABO",
+            DocumentoCategoriaEnum.COMPROBANTE_INGRESOS_EGRESOS,
+            new ModuloCodefacEnum[]{},
+            true,
+            false);
     
     
     //Tiquetes emitidos por máquinas registradoras;
     
-    private DocumentoEnum(String nombre,String codigo, ModuloCodefacEnum[] moduloEnum,Boolean comprobanteFisico,Boolean comprobanteElectronico) {
+    private DocumentoEnum(String nombre,String codigo,DocumentoCategoriaEnum categoria, ModuloCodefacEnum[] moduloEnum,Boolean comprobanteFisico,Boolean comprobanteElectronico) {
         this.nombre=nombre;
         this.codigo=codigo;
+        this.categoria=categoria;
         this.comprobanteElectronico = comprobanteElectronico;
         this.comprobanteFisico = comprobanteFisico;
         this.moduloEnum = moduloEnum;
     }
     
     private String nombre;
+    private DocumentoCategoriaEnum categoria;
     private String codigo;
     private Boolean comprobanteElectronico;
     private Boolean comprobanteFisico;
@@ -78,6 +107,16 @@ public enum DocumentoEnum {
     public String getNombre() {
         return nombre;
     }
+
+    public DocumentoCategoriaEnum getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(DocumentoCategoriaEnum categoria) {
+        this.categoria = categoria;
+    }
+    
+    
     
     @Override
     public String toString() {
@@ -155,4 +194,15 @@ public enum DocumentoEnum {
         return documentosEnum;
     }
     
+    public static List<DocumentoEnum> obtenerPorCategoria(DocumentoCategoriaEnum categoriaEnum)
+    {
+        List<DocumentoEnum> resultados=new ArrayList<DocumentoEnum>();
+        for (DocumentoEnum object : DocumentoEnum.values()) {
+            if(object.getCategoria().equals(categoriaEnum))
+            {
+                resultados.add(object);
+            }
+        }
+        return resultados;
+    }
 }

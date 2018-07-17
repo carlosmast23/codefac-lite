@@ -5,20 +5,22 @@
  */
 package ec.com.codesoft.codefaclite.cartera.model;
 
+import ec.com.codesoft.codefaclite.cartera.busqueda.CarteraBusqueda;
 import ec.com.codesoft.codefaclite.cartera.panel.CarteraPanel;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CarteraDocumentoEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CarteraEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CarteraTipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -51,6 +53,7 @@ public class CarteraModel extends CarteraPanel{
         valoresIniciales();
         listenerCombos();
         listenerTextos();
+        listenerBotones();
     }
 
     @Override
@@ -92,6 +95,7 @@ public class CarteraModel extends CarteraPanel{
     public void limpiar() {
         cartera=new Cartera();
         getCmbTipoCartera().setSelectedIndex(0);
+        getCmbFechaEmision().setDate(UtilidadesFecha.getFechaHoy());
     }
 
     //@Override
@@ -126,7 +130,7 @@ public class CarteraModel extends CarteraPanel{
 
     private void valoresIniciales() {
         getCmbTipoCartera().removeAllItems();
-        for (CarteraEnum carteraEnum : CarteraEnum.values()) {
+        for (Cartera.TipoCarteraEnum carteraEnum : Cartera.TipoCarteraEnum.values()) {
             getCmbTipoCartera().addItem(carteraEnum);
         }
     }
@@ -135,31 +139,31 @@ public class CarteraModel extends CarteraPanel{
         getCmbTipoCartera().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CarteraEnum carteraEnum=(CarteraEnum) getCmbTipoCartera().getSelectedItem();
-                if(carteraEnum!=null)
+                Cartera.TipoCarteraEnum tipoCarteraEnum=(Cartera.TipoCarteraEnum) getCmbTipoCartera().getSelectedItem();
+                if(tipoCarteraEnum!=null)
                 {
-                    List<CarteraDocumentoEnum> lista=CarteraDocumentoEnum.buscarPorTipoCartera(carteraEnum);
-                    getCmbDocumentoCartera().removeAllItems();
-                    for (CarteraDocumentoEnum carteraDocumentoEnum : lista) {
-                        getCmbDocumentoCartera().addItem(carteraDocumentoEnum);
+                    List<Cartera.CarteraCategoriaEnum> lista=Cartera.CarteraCategoriaEnum.buscarPorTipoCartera(tipoCarteraEnum);
+                    getCmbDocumentoCategoriaCartera().removeAllItems();
+                    for (Cartera.CarteraCategoriaEnum carteraDocumentoEnum : lista) {
+                        getCmbDocumentoCategoriaCartera().addItem(carteraDocumentoEnum);
                     }                    
                 }
             }
         });
         
         
-        getCmbDocumentoCartera().addActionListener(new ActionListener() {
+        getCmbDocumentoCategoriaCartera().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CarteraDocumentoEnum carteraDocumentoEnum=(CarteraDocumentoEnum) getCmbDocumentoCartera().getSelectedItem();
+                Cartera.CarteraCategoriaEnum carteraDocumentoEnum=(Cartera.CarteraCategoriaEnum) getCmbDocumentoCategoriaCartera().getSelectedItem();
                 if(carteraDocumentoEnum!=null)
                 {
-                    List<CarteraTipoDocumentoEnum> resultados=CarteraTipoDocumentoEnum.buscarPorDocumentoCartera(carteraDocumentoEnum);
+                    List<DocumentoEnum> resultados=DocumentoEnum.obtenerPorCategoria(carteraDocumentoEnum.getDocumentoCategoriaEnum());
                     
-                    getCmbTipoDocumentoCartera().removeAllItems();
-                    for (CarteraTipoDocumentoEnum resultado : resultados) 
+                    getCmbDocumentoCartera().removeAllItems();
+                    for (DocumentoEnum resultado : resultados) 
                     {
-                        getCmbTipoDocumentoCartera().addItem(resultado);
+                        getCmbDocumentoCartera().addItem(resultado);
                     }
                 }
             }
@@ -219,12 +223,56 @@ public class CarteraModel extends CarteraPanel{
             @Override
             public void keyReleased(KeyEvent e) {}
 
-            private void cargarDatosCliente(Persona persona) {
-                getLblNombresClientes().setText(persona.getRazonSocial());
-                getLblDireccion().setText(persona.getDireccion());
-                getLblTelefonos().setText(persona.getTelefonosTodos());
+        });
+    }
+    
+    private void cargarDatosCliente(Persona persona) {
+        getLblNombresClientes().setText(persona.getRazonSocial());
+        getLblDireccion().setText(persona.getDireccion());
+        getLblTelefonos().setText(persona.getTelefonosTodos());
+        getTxtIdentificacion().setText(persona.getIdentificacion());
+    }
+    
+    private void btnListenerBuscarCliente() {
+        ClienteBusquedaDialogo clienteBusquedaDialogo = new ClienteBusquedaDialogo();
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
+        buscarDialogoModel.setVisible(true);
+        //factura.setCliente((Persona) buscarDialogoModel.getResultado());
+        Persona personaTemp=(Persona) buscarDialogoModel.getResultado();
+        if(personaTemp!=null)
+        {
+            cartera.setPersona(personaTemp);
+            cargarDatosCliente((Persona) buscarDialogoModel.getResultado());
+        }
+       
+    }
+
+    private void listenerBotones() {
+        getBtnBuscarPersona().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                btnListenerBuscarCliente();
+            }
+        });
+        
+        getBtnBuscarDocumento().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Cartera.TipoCarteraEnum tipoCarteraEnum=(Cartera.TipoCarteraEnum) getCmbTipoCartera().getSelectedItem();                
+                if(tipoCarteraEnum!=null)
+                {
+                    CarteraBusqueda carteraBusqueda=new CarteraBusqueda();
+                    BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(carteraBusqueda);
+                    buscarDialogoModel.setVisible(true);
+                    Cartera carteraTmp=(Cartera) buscarDialogoModel.getResultado();
+                    if(carteraTmp!=null)
+                    {
+                        
+                    }
+                }
             }
         });
     }
+    
     
 }

@@ -12,7 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * Estos documentos son internos del sistema y me permite clasificar a que proceso
+ * pertenece o con cual modulo se debe relacionar
  * @author Carlos
  */
 public enum TipoDocumentoEnum {
@@ -20,48 +21,80 @@ public enum TipoDocumentoEnum {
     /**
      * Tipo de documento que vincula a un producto pero sin afectar el stock
      */
-    LIBRE(ModuloCodefacEnum.FACTURACION, "LIB", "Libre", TipoDocumentoEnum.NO_AFECTA_INVETARIO,new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION}),
+    LIBRE(ModuloCodefacEnum.FACTURACION, 
+            "LIB", 
+            "Libre", 
+            TipoDocumentoEnum.NO_AFECTA_INVETARIO,
+            new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION}),
     
     /**
      * Tipo de documento que afecta al stock de los productos
      */
-    INVENTARIO(ModuloCodefacEnum.FACTURACION,"VET","Inventario",TipoDocumentoEnum.AFECTA_INVENTARIO_NEGATIVO,new ModuloCodefacEnum[]{ModuloCodefacEnum.INVENTARIO}),
+    INVENTARIO(ModuloCodefacEnum.FACTURACION,
+            "VET",
+            "Inventario",
+            TipoDocumentoEnum.AFECTA_INVENTARIO_NEGATIVO,
+            new ModuloCodefacEnum[]{ModuloCodefacEnum.INVENTARIO}),
     /**
      * Tipo de compra que va a ingresar productos al inventario
      */
-    COMPRA_INVENTARIO(ModuloCodefacEnum.COMPRA,"COI","Compra Inventario",TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO),
+    COMPRA_INVENTARIO(ModuloCodefacEnum.COMPRA, 
+            "COI", 
+            "Compra Inventario", 
+            TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO),
         /**
      * Tipo de compra que va a ingresar productos al inventario
      */
-    COMPRA_SERVICIOS(ModuloCodefacEnum.COMPRA,"COS","Compra Servicios",TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO),
+    COMPRA_SERVICIOS(ModuloCodefacEnum.COMPRA,
+            "COS",
+            "Compra Servicios",
+            TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO),
     /**
      * Tipo de compra que se registra como gastos de la empresa
      */
-    COMPRA_GASTOS(ModuloCodefacEnum.COMPRA,"COG","Compra Gastos",TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO),    
+    COMPRA_GASTOS(ModuloCodefacEnum.COMPRA,
+            "COG",
+            "Compra Gastos",
+            TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO),    
     /**
      * Retenciones del iva o del inventario
      */
-    RETENCIONES(ModuloCodefacEnum.COMPRA,"RET","Retenciones",TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO),
+    RETENCIONES(ModuloCodefacEnum.COMPRA,
+            "RET","Retenciones",
+            TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO),
     
     /**
      *  Tipo de documento cuando se hace un ingreso de los ensambles
      */
-    ENSAMBLE_INGRESO(ModuloCodefacEnum.INVENTARIO,"INV","Ingreso Inventario Ensamble",TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO),
+    ENSAMBLE_INGRESO(ModuloCodefacEnum.INVENTARIO,
+            "INV",
+            "Ingreso Inventario Ensamble",
+            TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO),
     
      /**
      *  Tipo de documento cuando se hace un egreso de los ensambles
      */
-    ENSAMBLE_EGRESO(ModuloCodefacEnum.INVENTARIO,"INE","Egreso Inventario Ensamble",TipoDocumentoEnum.AFECTA_INVENTARIO_NEGATIVO),
+    ENSAMBLE_EGRESO(ModuloCodefacEnum.INVENTARIO,
+            "INE",
+            "Egreso Inventario Ensamble",
+            TipoDocumentoEnum.AFECTA_INVENTARIO_NEGATIVO),
     
     /**
      * Tipo de documento utilizado para facturar desde el modulo acaemico
      */
-    ACADEMICO(ModuloCodefacEnum.FACTURACION,"ACA","Académico",TipoDocumentoEnum.NO_AFECTA_INVETARIO,new ModuloCodefacEnum[]{ModuloCodefacEnum.GESTIONA_ACADEMICA}),
+    ACADEMICO(ModuloCodefacEnum.FACTURACION,
+            "ACA","Académico",
+            TipoDocumentoEnum.NO_AFECTA_INVETARIO,
+            new ModuloCodefacEnum[]{ModuloCodefacEnum.GESTIONA_ACADEMICA}),
     
     /**
      * Tipo de documento utilizado para facturar desde los presupuestos
      */
-    PRESUPUESTOS(ModuloCodefacEnum.FACTURACION,"PRE","Presupuestos",TipoDocumentoEnum.NO_AFECTA_INVETARIO,new ModuloCodefacEnum[]{ModuloCodefacEnum.SERVICIOS});
+    PRESUPUESTOS(ModuloCodefacEnum.FACTURACION,
+            "PRE",
+            "Presupuestos",
+            TipoDocumentoEnum.NO_AFECTA_INVETARIO,
+            new ModuloCodefacEnum[]{ModuloCodefacEnum.SERVICIOS});
 
     
     public static final String AFECTA_INVENTARIO_POSITIVO="+";

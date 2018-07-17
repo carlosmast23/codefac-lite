@@ -6,6 +6,9 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -44,6 +47,9 @@ public class Cartera implements Serializable{
     @Column(name = "FECHA_CREACION")
     private Date fechaCreacion;
     
+    @Column(name = "FECHA_EMISION")
+    protected Date fechaEmision;
+    
     @Column(name = "TOTAL")
     private BigDecimal total;
     
@@ -56,6 +62,15 @@ public class Cartera implements Serializable{
      */
     @Column(name = "REFERENCIA_ID")
     private Long referenciaID;
+    
+    @Column(name = "SECUENCIAL")
+    protected Integer secuencial;
+    
+    @Column(name = "PUNTO_ESTABLECIMIENTO")
+    protected String puntoEstablecimiento;
+    
+    @Column(name = "PUNTO_EMISION")
+    protected String puntoEmision;
     
     /**
      * Codigo del documento para poder enlazar posteriormente con la referencia si necesito algun dato adicional
@@ -122,12 +137,43 @@ public class Cartera implements Serializable{
         this.codigoDocumento = codigoDocumento;
     }
 
+    public Integer getSecuencial() {
+        return secuencial;
+    }
+
+    public void setSecuencial(Integer secuencial) {
+        this.secuencial = secuencial;
+    }
+
+    public String getPuntoEstablecimiento() {
+        return puntoEstablecimiento;
+    }
+
+    public void setPuntoEstablecimiento(String puntoEstablecimiento) {
+        this.puntoEstablecimiento = puntoEstablecimiento;
+    }
+
+    public String getPuntoEmision() {
+        return puntoEmision;
+    }
+
+    public void setPuntoEmision(String puntoEmision) {
+        this.puntoEmision = puntoEmision;
+    }
+    
+    
+
     public void setDetalles(List<CarteraDetalle> detalles) {
         this.detalles = detalles;
     }
 
     public List<CarteraDetalle> getDetalles() {
         return detalles;
+    }
+    
+    public DocumentoEnum getCarteraDocumentoEnum()
+    {
+        return DocumentoEnum.obtenerDocumentoPorCodigo(codigoDocumento);
     }
     
     //Metodos personalizados
@@ -143,7 +189,109 @@ public class Cartera implements Serializable{
         detalles.add(carteraDetalle);
     }
     
+    public String getPreimpreso() {
+        return UtilidadesTextos.llenarCarateresIzquierda(puntoEmision, 3, "0") + "-" + UtilidadesTextos.llenarCarateresIzquierda(puntoEstablecimiento, 3, "0") + "-" + UtilidadesTextos.llenarCarateresIzquierda(secuencial + "", 9, "0");
+    }
     
+    /**
+     * Metodos Personalizados
+     */
     
+    /**
+     * Enum que identifica que tipo de cartera es de cliente o de proveedores
+     */
+    public enum TipoCarteraEnum
+    {
+        CLIENTE("Cliente","C"), PROVEEDORES("Proveedor","P");
+
+        private TipoCarteraEnum(String nombre, String letra) {
+            this.nombre = nombre;
+            this.letra = letra;
+        }
+        
+        private String nombre;
+        private String letra;
+
+        public String getNombre() {
+            return nombre;
+        }
+
+        public void setNombre(String nombre) {
+            this.nombre = nombre;
+        }
+
+        public String getLetra() {
+            return letra;
+        }
+
+        public void setLetra(String letra) {
+            this.letra = letra;
+        }
+
+        @Override
+        public String toString() {
+            return nombre;
+        }
+        
+        public static TipoCarteraEnum buscarPorLetra(String letra)
+        {
+            for (TipoCarteraEnum object : TipoCarteraEnum.values()) {
+                if(object.getLetra().equals(letra))
+                {
+                    return object;
+                }
+            }
+            return null;
+        }        
+        
+    }
     
+    public enum CarteraCategoriaEnum
+    {        
+        COMPRAS("Compras",TipoCarteraEnum.PROVEEDORES,DocumentoCategoriaEnum.COMPROBANTES_VENTA),
+        VENTAS("Ventas",TipoCarteraEnum.CLIENTE,DocumentoCategoriaEnum.COMPROBANTES_VENTA),
+        RETENCIONES_CLIENTES("Retención Clientes",TipoCarteraEnum.CLIENTE,DocumentoCategoriaEnum.COMPROBANTES_RETENCION),
+        RETENCIONES_PROVEEDOR("Retención Proveedor",TipoCarteraEnum.PROVEEDORES,DocumentoCategoriaEnum.COMPROBANTES_RETENCION),
+        DOCUMENTOS_COMPLEMENTARIOS_CLIENTE("Doc Complemetarios",TipoCarteraEnum.CLIENTE,DocumentoCategoriaEnum.DOCUMENTOS_COMPLEMENTARIOS),
+        DOCUMENTOS_COMPLEMENTARIOS_PROVEEDOR("Doc Complemetarios",TipoCarteraEnum.PROVEEDORES,DocumentoCategoriaEnum.DOCUMENTOS_COMPLEMENTARIOS),
+        COMPROBANTE_INGRESO("Comprobante de Ingreso",TipoCarteraEnum.CLIENTE,DocumentoCategoriaEnum.COMPROBANTE_INGRESOS_EGRESOS),
+        COMPROBANTE_EGRESO("Comprobante de Egreso",TipoCarteraEnum.PROVEEDORES,DocumentoCategoriaEnum.COMPROBANTE_INGRESOS_EGRESOS);
+
+        private CarteraCategoriaEnum(String nombre,TipoCarteraEnum tipoCartera,DocumentoCategoriaEnum documentoCategoriaEnum) {
+            this.tipoCartera = tipoCartera;
+            this.nombre = nombre;
+            this.documentoCategoriaEnum = documentoCategoriaEnum;
+        }
+        
+        private TipoCarteraEnum tipoCartera;
+        private String nombre;
+        private DocumentoCategoriaEnum documentoCategoriaEnum;
+
+        public TipoCarteraEnum getTipoCartera() {
+            return tipoCartera;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+
+        public DocumentoCategoriaEnum getDocumentoCategoriaEnum() {
+            return documentoCategoriaEnum;
+        }
+
+        
+        public static List<CarteraCategoriaEnum> buscarPorTipoCartera(TipoCarteraEnum tipo)
+        {
+            List<CarteraCategoriaEnum> resultados=new ArrayList<CarteraCategoriaEnum>();
+            for (CarteraCategoriaEnum object : CarteraCategoriaEnum.values()) 
+            {
+                if(object.tipoCartera.equals(tipo))
+                {
+                    resultados.add(object);
+                }
+            }
+            return resultados;
+        }
+        
+    }
 }
