@@ -102,6 +102,8 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
                 throw new ExcepcionCodefacLite("Cancelacion usuario");
             }
             setearDatos();
+            OrdenTrabajo.GeneralEstadoEnum estadoEnum = (OrdenTrabajo.GeneralEstadoEnum) getCmbEstadoDetallesOrdenTrabajo().getSelectedItem();
+            this.ordenTrabajo.setEstadoDetalles(estadoEnum.getEstado());
             OrdenTrabajoServiceIf servicio = ServiceFactory.getFactory().getOrdenTrabajoServiceIf();
             ordenTrabajo=servicio.grabar(ordenTrabajo);
             imprimir();
@@ -228,8 +230,10 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             this.getTxtDescripcion().setText(""+this.ordenTrabajo.getDescripcion());
             this.getCmbDateFechaIngreso().setDate(this.ordenTrabajo.getFechaIngreso());
             GeneralEnumEstado generalEnumEstado = GeneralEnumEstado.getEnum(this.ordenTrabajo.getEstado());
-            getCmbEstadoOrdenTrabajo().setSelectedItem(generalEnumEstado);
-            mostrarDatosTabla();
+            this.getCmbEstadoOrdenTrabajo().setSelectedItem(generalEnumEstado);
+            OrdenTrabajo.GeneralEstadoEnum generalEstadoEnum = OrdenTrabajo.GeneralEstadoEnum.getEnum(this.ordenTrabajo.getEstado());
+            this.getCmbEstadoDetallesOrdenTrabajo().setSelectedItem(generalEstadoEnum);
+            mostrarDatosTabla();           
         }
         else
         {
@@ -428,7 +432,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
          * Estado general de orden trabajo
          */
         getCmbEstadoOrdenTrabajo().removeAllItems();
-        for(OrdenTrabajo.GeneralEstadoEnum generalEnumEstado : OrdenTrabajo.GeneralEstadoEnum.values())
+        for(GeneralEnumEstado generalEnumEstado : GeneralEnumEstado.values())
         {
             getCmbEstadoOrdenTrabajo().addItem(generalEnumEstado);
         }
@@ -443,6 +447,16 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
         }
         
         getCmbAsignadoADetalle().removeAllItems();
+        
+        /**
+         * Estado general para los detalles de orden trabajo
+         */
+        getCmbEstadoDetallesOrdenTrabajo().removeAllItems();
+        for(OrdenTrabajoDetalle.EstadoEnum estadoEnum: OrdenTrabajoDetalle.EstadoEnum.values())
+        {
+            getCmbEstadoDetallesOrdenTrabajo().addItem(estadoEnum);
+        }
+        getCmbEstadoDetallesOrdenTrabajo().setEnabled(false);
         
         /**
          * Prioridad por detalle de orden trabajo
@@ -590,7 +604,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             //this.ordenTrabajo.setCodigo(""+getTxtCodigo().getText());
             this.ordenTrabajo.setDescripcion(""+getTxtDescripcion().getText());
             GeneralEnumEstado generalEnumEstado = (GeneralEnumEstado) getCmbEstadoOrdenTrabajo().getSelectedItem();
-            this.ordenTrabajo.setEstado(generalEnumEstado.getEstado());          
+            this.ordenTrabajo.setEstado(generalEnumEstado.getEstado());
     }
     
     private boolean verificarCamposValidados() {

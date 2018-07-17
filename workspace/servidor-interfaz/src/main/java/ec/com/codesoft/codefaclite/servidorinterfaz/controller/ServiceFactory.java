@@ -34,6 +34,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServ
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenCompraServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilUsuarioServiceIf;
@@ -154,6 +155,7 @@ public abstract class ServiceFactory {
     public SriRetencionServiceIf getSriRetencionServiceIf(){return (SriRetencionServiceIf) getRecursosRMI(SriRetencionServiceIf.class);};
     public OrdenCompraServiceIf getOrdenCompraServiceIf(){return (OrdenCompraServiceIf) getRecursosRMI(OrdenCompraServiceIf.class);};
     public OrdenTrabajoServiceIf getOrdenTrabajoServiceIf(){return (OrdenTrabajoServiceIf) getRecursosRMI(OrdenTrabajoServiceIf.class);};
+    public OrdenTrabajoDetalleServiceIf getOrdenDetalleTrabajoServiceIf(){return (OrdenTrabajoDetalleServiceIf) getRecursosRMI(OrdenTrabajoDetalleServiceIf.class);};
     public EmpleadoServiceIf getEmpleadoServiceIf(){return (EmpleadoServiceIf) getRecursosRMI(EmpleadoServiceIf.class);};
     public DepartamentoServiceIf getDepartamentoServiceIf(){return (DepartamentoServiceIf) getRecursosRMI(DepartamentoServiceIf.class);};
     public PresupuestoServiceIf getPresupuestoServiceIf(){return (PresupuestoServiceIf) getRecursosRMI(PresupuestoServiceIf.class);};

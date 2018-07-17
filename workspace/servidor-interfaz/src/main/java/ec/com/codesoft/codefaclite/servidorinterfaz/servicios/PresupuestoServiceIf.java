@@ -12,5 +12,5 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
  * @author CodesoftDesarrollo 1
  */
 public interface PresupuestoServiceIf  extends ServiceAbstractIf<Presupuesto> {
-    
+        
 }

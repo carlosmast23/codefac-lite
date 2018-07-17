@@ -44,8 +44,8 @@ public class OrdenTrabajo implements Serializable
     @Column(name = "ESTADO")
     private String estado;
     
-    @Column(name = "ESTADO_ORDENES")
-    private String estadoOrdenes;
+    @Column(name = "ESTADO_DETALLES")
+    private String estadoDetalles;
     
     @Column(name = "FECHA_INGRESO")
     private Date fechaIngreso;
@@ -113,14 +113,14 @@ public class OrdenTrabajo implements Serializable
         this.cliente = cliente;
     }
 
-    public String getEstadoOrdenes() {
-        return estadoOrdenes;
+    public String getEstadoDetalles() {
+        return estadoDetalles;
     }
 
-    public void setEstadoOrdenes(String estadoOrdenes) {
-        this.estadoOrdenes = estadoOrdenes;
+    public void setEstadoDetalles(String estadoDetalles) {
+        this.estadoDetalles = estadoDetalles;
     }
-        
+       
      public void addDetalle(OrdenTrabajoDetalle detalle)
     {
         if(this.detalles==null)

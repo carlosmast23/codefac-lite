@@ -15,6 +15,8 @@ create table ORDEN_TRABAJO
     DESCRIPCION varchar(150),
     ESTADO varchar(10),
     FECHA_INGRESO date,
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.5.6)*/
+    ESTADO_DETALLES varchar(10),
     primary key(ID)
 );
 

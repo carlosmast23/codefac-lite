@@ -35,6 +35,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -44,6 +45,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenCompraServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoDetalleServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
@@ -193,7 +196,12 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             servicio.grabar(presupuesto);
             DialogoCodefac.mensaje("Correcto","El presupuesto fue grabado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
             
-             this.ordenesCompra = new ArrayList<>();
+            /**
+             * Modifar el estado del detalle de la orden de trabajo ya que se le ligo al presupuesto 
+             */
+            modificarEstadoOrdenTrabajoPorDetalle();
+            
+            this.ordenesCompra = new ArrayList<>();
             /**
              * El momento que se graba el Presupuesto genero de cada detalle presuesto la orden de compra
              */
@@ -1457,7 +1465,34 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
 
         return monitorData;
 
-    } 
+    }
+    
+    public void modificarEstadoOrdenTrabajoPorDetalle()
+    {
+        try {
+            OrdenTrabajoServiceIf servicio = ServiceFactory.getFactory().getOrdenTrabajoServiceIf();
+            /**
+             * Modificar el campo ya que se esta ligando un detalle de la Orden de Trabajo a un Presupuesto
+             */
+            OrdenTrabajo ordenTrabajo = this.presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo();
+            ordenTrabajo.setEstadoDetalles(OrdenTrabajo.GeneralEstadoEnum.LIGADO.getEstado());
+            //servicio.editar(ordenTrabajo);
+            
+            Map<String,Object> parametrosMap= new HashMap<>();
+            parametrosMap.put("ordenTrabajo", ordenTrabajo);
+            List<OrdenTrabajoDetalle> detalles = ServiceFactory.getFactory().getOrdenDetalleTrabajoServiceIf().obtenerTodos();
+            
+            
+            boolean b = false;
+            for (OrdenTrabajoDetalle detalle : detalles) {
+                //OrdenTrabajo.GeneralEstadoEnum.getEnum(detalle.)
+                        
+            }
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     @Override
     public void run() 

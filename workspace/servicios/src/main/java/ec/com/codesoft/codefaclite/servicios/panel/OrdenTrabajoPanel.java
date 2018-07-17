@@ -96,14 +96,22 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         this.cmbEstadoDetalle = cmbEstadoDetalle;
     }
 
-    public JComboBox<OrdenTrabajo.GeneralEstadoEnum> getCmbEstadoOrdenTrabajo() {
+    public JComboBox<GeneralEnumEstado> getCmbEstadoOrdenTrabajo() {
         return cmbEstadoOrdenTrabajo;
     }
 
-    public void setCmbEstadoOrdenTrabajo(JComboBox<OrdenTrabajo.GeneralEstadoEnum> cmbEstadoOrdenTrabajo) {
+    public void setCmbEstadoOrdenTrabajo(JComboBox<GeneralEnumEstado> cmbEstadoOrdenTrabajo) {
         this.cmbEstadoOrdenTrabajo = cmbEstadoOrdenTrabajo;
     }
 
+    public JComboBox<OrdenTrabajoDetalle.EstadoEnum> getCmbEstadoDetallesOrdenTrabajo() {
+        return cmbEstadoDetallesOrdenTrabajo;
+    }
+
+    public void setCmbEstadoDetallesOrdenTrabajo(JComboBox<OrdenTrabajoDetalle.EstadoEnum> cmbEstadoDetallesOrdenTrabajo) {
+        this.cmbEstadoDetallesOrdenTrabajo = cmbEstadoDetallesOrdenTrabajo;
+    }
+    
     public JComboBox<PrioridadEnumEstado> getCmbPrioridadDetalle() {
         return cmbPrioridadDetalle;
     }
@@ -275,6 +283,8 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         lblRazonSocial = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         lblNombreLegal = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        cmbEstadoDetallesOrdenTrabajo = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -650,6 +660,24 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jPanel2, gridBagConstraints);
 
+        jLabel15.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel15.setText("Detalles");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jLabel15, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(cmbEstadoDetallesOrdenTrabajo, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -663,7 +691,8 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
     private com.toedter.calendar.JDateChooser cmbDateFechaEntrega;
     private com.toedter.calendar.JDateChooser cmbDateFechaIngreso;
     private javax.swing.JComboBox<OrdenTrabajoDetalle.EstadoEnum> cmbEstadoDetalle;
-    private javax.swing.JComboBox<OrdenTrabajo.GeneralEstadoEnum> cmbEstadoOrdenTrabajo;
+    private javax.swing.JComboBox<OrdenTrabajoDetalle.EstadoEnum> cmbEstadoDetallesOrdenTrabajo;
+    private javax.swing.JComboBox<GeneralEnumEstado> cmbEstadoOrdenTrabajo;
     private javax.swing.JComboBox<PrioridadEnumEstado> cmbPrioridadDetalle;
     private javax.swing.JComboBox<Departamento> cmbTipoOrdenDetalle;
     private javax.swing.JLabel jLabel1;
@@ -672,6 +701,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
