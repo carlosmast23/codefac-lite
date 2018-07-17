@@ -34,3 +34,5 @@ Revisar un problema que despues de actualizar codefac se abre pero me parece que
 
 ANALIZAR si se debe crear un catalago para definir si cobra o no iva al momento de crear los productos
 
+Agregar el tipo de cartera
+

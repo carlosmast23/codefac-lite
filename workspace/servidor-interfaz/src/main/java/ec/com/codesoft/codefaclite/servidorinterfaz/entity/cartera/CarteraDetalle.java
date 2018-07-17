@@ -41,6 +41,12 @@ public class CarteraDetalle implements Serializable {
     
     @Column(name = "TOTAL")
     private BigDecimal total;
+    
+    @Column(name = "SALDO")
+    private BigDecimal saldo;
+    
+    @Column(name = "DESCRIPCION")
+    private String descripcion;    
         
     @JoinColumn(name="CARTERA_ID")
     @ManyToOne(optional = false)
@@ -85,6 +91,23 @@ public class CarteraDetalle implements Serializable {
     public void setCartera(Cartera cartera) {
         this.cartera = cartera;
     }
+
+    public BigDecimal getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(BigDecimal saldo) {
+        this.saldo = saldo;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+    
     
     
     

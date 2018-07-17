@@ -32,7 +32,11 @@ create table CARTERA_DETALLE(
     CARTERA_ID BIGINT,
     TIPO_REFERENCIA varchar(5),  
     REFERENCIA_ID BIGINT,  
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.5.6)*/
+    DESCRIPCION varchar(150),
     TOTAL decimal(7,2),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.5.6)*/
+    SALDO decimal(7,2),  
     primary key (ID)
 );
 
