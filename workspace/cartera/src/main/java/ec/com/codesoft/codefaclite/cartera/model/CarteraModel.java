@@ -16,21 +16,28 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComponent;
+import javax.swing.table.DefaultTableModel;
 import org.apache.commons.collections4.map.HashedMap;
 
 /**
@@ -43,6 +50,11 @@ public class CarteraModel extends CarteraPanel{
      * Referencia para guardar con la cartera que se va a trabajar
      */
     private Cartera cartera;
+    
+    /**
+     * Referencia para saber que detalle editar
+     */
+    private CarteraDetalle detalleEditar;
 
     public CarteraModel() {
     }
@@ -54,6 +66,7 @@ public class CarteraModel extends CarteraPanel{
         listenerCombos();
         listenerTextos();
         listenerBotones();
+        listenerTablas();
     }
 
     @Override
@@ -271,6 +284,106 @@ public class CarteraModel extends CarteraPanel{
                     }
                 }
             }
+        });
+        
+        getBtnAgregarDetalle().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CarteraDetalle carteraDetalle=new CarteraDetalle();
+                setearDatosDetalle(carteraDetalle);
+                cartera.addDetalle(carteraDetalle);
+                
+                //Actualizar la vista
+                actualizaVistaTablaDetalles();
+                limpiarDetalleVista();
+                
+            }
+        });
+        
+        getBtnEditarDetalle().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(detalleEditar!=null)
+                {
+                    setearDatosDetalle(detalleEditar);
+                    actualizaVistaTablaDetalles();
+                }
+            }
+        });
+        
+        getBtnEliminarDetalle().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int filaSeleccionada=getTblDetalles().getSelectedRow();
+                if(filaSeleccionada>=0)
+                {
+                    CarteraDetalle carteraDetalle=(CarteraDetalle) getTblDetalles().getModel().getValueAt(filaSeleccionada,0);
+                    if(carteraDetalle!=null)
+                    {
+                        cartera.getDetalles().remove(carteraDetalle);
+                        actualizaVistaTablaDetalles();
+                    }
+                }
+            }
+        });
+    }
+    
+    private void setearDatosDetalle(CarteraDetalle carteraDetalle)
+    {
+        BigDecimal total = new BigDecimal(getTxtValorDetalle().getText());
+        String descripcion = getTxtDescripcionDetalle().getText();
+
+        carteraDetalle.setTotal(total);
+        carteraDetalle.setDescripcion(descripcion);
+    }
+    
+    private void limpiarDetalleVista()
+    {
+        getTxtValorDetalle().setText("");
+        getTxtDescripcionDetalle().setText("");
+    }
+    
+    public void actualizaVistaTablaDetalles()
+    {
+        if(cartera.getDetalles()==null)return; //validar que existan datos
+        String[] tituloTabla={"","Descripción","Valor"};
+                
+        DefaultTableModel modeloTabla=new DefaultTableModel(tituloTabla,0);
+        
+        for (CarteraDetalle carteraDetalle : cartera.getDetalles()) {
+            Object[] fila={carteraDetalle,carteraDetalle.getDescripcion(),carteraDetalle.getTotal()};
+            modeloTabla.addRow(fila);
+        }        
+        
+        getTblDetalles().setModel(modeloTabla);
+        UtilidadesTablas.ocultarColumna(getTblDetalles(),0);
+        
+    }
+
+    private void listenerTablas() {
+        getTblDetalles().addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int filaSeleccionada=getTblDetalles().getSelectedRow();
+                if(filaSeleccionada>=0)
+                {
+                    detalleEditar=(CarteraDetalle) getTblDetalles().getModel().getValueAt(filaSeleccionada,0);
+                    getTxtDescripcionDetalle().setText(detalleEditar.getDescripcion());
+                    getTxtValorDetalle().setText(detalleEditar.getTotal().toString());
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
         });
     }
     

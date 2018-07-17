@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwingX;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 
 /**
@@ -73,24 +74,26 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         jTextField4 = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
         jTextField5 = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtValorDetalle = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         cmbTipoDocumentoCartera = new javax.swing.JComboBox<>();
         jLabel16 = new javax.swing.JLabel();
         jTextField6 = new javax.swing.JTextField();
         jToolBar2 = new javax.swing.JToolBar();
-        jButton5 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnAgregarDetalle = new javax.swing.JButton();
+        btnEditarDetalle = new javax.swing.JButton();
+        btnEliminarDetalle = new javax.swing.JButton();
         jLabel18 = new javax.swing.JLabel();
-        jTextField7 = new javax.swing.JTextField();
+        txtDescripcionDetalle = new javax.swing.JTextField();
         btnBuscarDocumento = new javax.swing.JButton();
         lblEspacio2 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblDetalles = new javax.swing.JTable();
+        jPanel5 = new javax.swing.JPanel();
 
         jButton1.setText("jButton1");
 
@@ -329,28 +332,6 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         getContentPane().add(jPanel3, gridBagConstraints);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.weighty = 0.1;
-        getContentPane().add(jScrollPane1, gridBagConstraints);
-
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Detalles Adicionales", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 11))); // NOI18N
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
@@ -368,7 +349,7 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel4.add(jTextField1, gridBagConstraints);
+        jPanel4.add(txtValorDetalle, gridBagConstraints);
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel5.setText("Tipo Documento:");
@@ -403,23 +384,23 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         jToolBar2.setBorder(null);
         jToolBar2.setRollover(true);
 
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/nuevo-icono.png"))); // NOI18N
-        jButton5.setFocusable(false);
-        jButton5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar2.add(jButton5);
+        btnAgregarDetalle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/nuevo-icono.png"))); // NOI18N
+        btnAgregarDetalle.setFocusable(false);
+        btnAgregarDetalle.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAgregarDetalle.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar2.add(btnAgregarDetalle);
 
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/edit-icon.png"))); // NOI18N
-        jButton4.setFocusable(false);
-        jButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar2.add(jButton4);
+        btnEditarDetalle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/edit-icon.png"))); // NOI18N
+        btnEditarDetalle.setFocusable(false);
+        btnEditarDetalle.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnEditarDetalle.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar2.add(btnEditarDetalle);
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/delete-icon.png"))); // NOI18N
-        jButton3.setFocusable(false);
-        jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar2.add(jButton3);
+        btnEliminarDetalle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/delete-icon.png"))); // NOI18N
+        btnEliminarDetalle.setFocusable(false);
+        btnEliminarDetalle.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnEliminarDetalle.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar2.add(btnEliminarDetalle);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
@@ -441,7 +422,7 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.3;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel4.add(jTextField7, gridBagConstraints);
+        jPanel4.add(txtDescripcionDetalle, gridBagConstraints);
 
         btnBuscarDocumento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
         jPanel4.add(btnBuscarDocumento, new java.awt.GridBagConstraints());
@@ -469,22 +450,49 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel17, gridBagConstraints);
 
+        jTabbedPane1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+
+        tblDetalles.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tblDetalles);
+
+        jTabbedPane1.addTab("Detalles", jScrollPane1);
+        jTabbedPane1.addTab("Cruce Documentos", jPanel5);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        getContentPane().add(jTabbedPane1, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregarDetalle;
     private javax.swing.JButton btnBuscarDocumento;
     private javax.swing.JButton btnBuscarPersona;
+    private javax.swing.JButton btnEditarDetalle;
+    private javax.swing.JButton btnEliminarDetalle;
     private javax.swing.JComboBox<DocumentoEnum > cmbDocumentoCartera;
     private javax.swing.JComboBox<Cartera.CarteraCategoriaEnum > cmbDocumentoCategoriaCartera;
     private com.toedter.calendar.JDateChooser cmbFechaEmision;
     private javax.swing.JComboBox<TipoCarteraEnum > cmbTipoCartera;
     private javax.swing.JComboBox<String > cmbTipoDocumentoCartera;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -506,15 +514,14 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JLabel lblDireccion;
@@ -522,7 +529,10 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblEspacio2;
     private javax.swing.JLabel lblNombresClientes;
     private javax.swing.JLabel lblTelefonos;
+    private javax.swing.JTable tblDetalles;
+    private javax.swing.JTextField txtDescripcionDetalle;
     private javax.swing.JTextField txtIdentificacion;
+    private javax.swing.JTextField txtValorDetalle;
     // End of variables declaration//GEN-END:variables
 
 
@@ -606,6 +616,55 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         this.cmbDocumentoCartera = cmbDocumentoCartera;
     }
 
+    public JButton getBtnAgregarDetalle() {
+        return btnAgregarDetalle;
+    }
+
+    public void setBtnAgregarDetalle(JButton btnAgregarDetalle) {
+        this.btnAgregarDetalle = btnAgregarDetalle;
+    }
+
+    public JTextField getTxtValorDetalle() {
+        return txtValorDetalle;
+    }
+
+    public void setTxtValorDetalle(JTextField txtValorDetalle) {
+        this.txtValorDetalle = txtValorDetalle;
+    }
+
+    public JTextField getTxtDescripcionDetalle() {
+        return txtDescripcionDetalle;
+    }
+
+    public void setTxtDescripcionDetalle(JTextField txtDescripcionDetalle) {
+        this.txtDescripcionDetalle = txtDescripcionDetalle;
+    }
+
+    public JTable getTblDetalles() {
+        return tblDetalles;
+    }
+
+    public void setTblDetalles(JTable tblDetalles) {
+        this.tblDetalles = tblDetalles;
+    }
+
+    public JButton getBtnEditarDetalle() {
+        return btnEditarDetalle;
+    }
+
+    public void setBtnEditarDetalle(JButton btnEditarDetalle) {
+        this.btnEditarDetalle = btnEditarDetalle;
+    }
+
+    public JButton getBtnEliminarDetalle() {
+        return btnEliminarDetalle;
+    }
+
+    public void setBtnEliminarDetalle(JButton btnEliminarDetalle) {
+        this.btnEliminarDetalle = btnEliminarDetalle;
+    }
+
+    
     
     
     
