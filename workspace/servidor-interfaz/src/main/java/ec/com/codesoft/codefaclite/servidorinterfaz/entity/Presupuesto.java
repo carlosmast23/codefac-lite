@@ -313,6 +313,7 @@ public class Presupuesto implements Serializable
          * de presupuestar y por tal motivo no se puede facturar, y el usuario debe poder cambiar al estado siguiente cuando lo considere necesario
          */
         PRESUPUESTANDO("Presupuestando","p"),
+        
         /**
          * Estado intermediaron entre el terminado y seria utilizado principalmente si existe un supervisor que se encarga
          * de revisar y aprobar los presupuestos , sin este estado previo no se podria cambiar a los posteriores, pero este
@@ -320,6 +321,7 @@ public class Presupuesto implements Serializable
          * para los negocios que requeren ninguna aprobacion
          */
         APROBADO("Aprobado","a"),
+        
         /**
          * Estado utilizado para indicar que el presupuesto fue finalizado si existe un proceso alterno que acompoña
          * por ejemplo la mano de obra o alguien esta elaborando el producto , en este estado se deberia informar al 
@@ -340,6 +342,7 @@ public class Presupuesto implements Serializable
          * el presupuesto cambiado al estado terminado si desean facturar nuevamente
          */
         ANULADO("Anulado","n"),
+        
         /**
          * Estado seteado cuando al presupuesto esta ligado una factura emitida
          * En este estado se supone que ya no se pueden modificar valores de venta porque los valores facturados

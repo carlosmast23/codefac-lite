@@ -111,6 +111,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     private Map<Integer,List<PresupuestoDetalle>> mapOrden;
     private List<OrdenCompra> ordenesCompra;
     private Empleado empleado;
+    private Presupuesto.EstadoEnum generalEnumEstado;
     
     /**
      * Hilo para procesar el envio de las notificaciones
@@ -139,6 +140,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         addListenerTextos();
         initDatosTabla();
         this.getCmbFechaPresupuesto().setDate(UtilidadesFecha.getFechaHoy());
+        this.setEnabled(false);
     }
 
     @Override
@@ -152,7 +154,8 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                    this.producto = null;
                    this.persona = null;
                    this.productoProveedor = null;
-                   this.mapClientes = null;    
+                   this.mapClientes = null;
+                   this.ordenesCompra = null;
                    limpiar();
                    initDatosTabla();
             }else{
@@ -190,20 +193,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             servicio.grabar(presupuesto);
             DialogoCodefac.mensaje("Correcto","El presupuesto fue grabado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
             
-            /**
-             * Me permite grabar todas las ordenes de compra generadas para despues enviar por correo a los Empleados
-             */
-//            this.ordenesCompra = new ArrayList<>();
-//            if(this.presupuesto.getOrdenTrabajoDetalle().getEmpleado().getCorreoElectronico() != null){
-//                this.correoEmpleado = this.presupuesto.getOrdenTrabajoDetalle().getEmpleado().getCorreoElectronico();
-//            }else{
-//                this.correoEmpleado = "Sin Asignar Correo";
-//            }
-
-            /**
-             * Me permite grabar cada orden de compra para generar los reportes y enviar por correo al empleado 
-             */
-            this.ordenesCompra = new ArrayList<>();
+             this.ordenesCompra = new ArrayList<>();
             /**
              * El momento que se graba el Presupuesto genero de cada detalle presuesto la orden de compra
              */
@@ -300,10 +290,35 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     @Override
     public void editar() throws ExcepcionCodefacLite {
          try {
-            setearDatos();
-            PresupuestoServiceIf servicio = ServiceFactory.getFactory().getPresupuestoServiceIf();
-            servicio.editar(this.presupuesto);
-            DialogoCodefac.mensaje("Correcto","El presupuesto fue editado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+            boolean b = false;
+            switch(generalEnumEstado)
+            {
+                case ABANDONADO:
+                    
+                    break;
+                case ANULADO:
+                    
+                    break;
+                case APROBADO:
+                    break;
+                case FACTURADO:
+                    DialogoCodefac.mensaje("Advertencia", "El presupuesto esta factura no se permiten modificaciones", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    break;
+                case PRESUPUESTANDO:
+                    break;
+                case TERMINADO:
+                    break;
+                   
+            }
+            if(b){ 
+                setearDatos();
+                PresupuestoServiceIf servicio = ServiceFactory.getFactory().getPresupuestoServiceIf();
+                servicio.editar(this.presupuesto);
+                DialogoCodefac.mensaje("Correcto","El presupuesto fue editado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+            }else
+            {
+                
+            }
       } 
       catch (RemoteException ex) 
       {
@@ -337,6 +352,28 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         Presupuesto tempPresupuesto = (Presupuesto) buscarDialogoModel.getResultado();
         if(tempPresupuesto != null){
             this.presupuesto =  tempPresupuesto;
+            Presupuesto.EstadoEnum generalEnumEstadoTemp = Presupuesto.EstadoEnum.getByLetra(this.presupuesto.getEstado());
+            this.generalEnumEstado = generalEnumEstadoTemp;
+            switch(generalEnumEstado)
+            {
+                case ABANDONADO:
+                    
+                    break;
+                case ANULADO:
+                    break;
+                case APROBADO:
+                    break;
+                case FACTURADO:
+                    DialogoCodefac.mensaje("Advertencia", "El presupuesto esta factura no se permiten modificaciones", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    break;
+                case PRESUPUESTANDO:
+                    break;
+                case TERMINADO:
+                    break;
+                   
+            }
+            
+            getCmbEstadoPresupuesto().setSelectedItem(generalEnumEstadoTemp);
             getTxtCodigo().setText(""+this.presupuesto.getId());
             getTxtCliente().setText(this.presupuesto.getPersona().getIdentificacion()+" - "+this.presupuesto.getPersona().getRazonSocial());  
             getCmbTipoPresupuesto().setSelectedItem(presupuesto.getCatalogoProducto());
@@ -344,8 +381,6 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
              * Cargar detalles que existian de la Orden de trabajo
              */
             cargarDetallesOrdenTrabajo(this.presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo());
-            Presupuesto.EstadoEnum generalEnumEstado = Presupuesto.EstadoEnum.getByLetra(this.presupuesto.getEstado());
-            getCmbEstadoPresupuesto().setSelectedItem(generalEnumEstado);
             getCmbFechaPresupuesto().setDate(this.presupuesto.getFechaPresupuesto());
             getTxtDiasPresupuesto().setText("" + UtilidadesFecha.obtenerDistanciaDias(this.presupuesto.getFechaPresupuesto(), this.presupuesto.getFechaValidez()));
             getLblIndicarFechaValidez().setText(""+this.presupuesto.getFechaValidez());
@@ -409,7 +444,9 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         }
         
         
-        //Cargando los tipos de catalogos disponibles para los servicios
+        /**
+         * Cargando los tipos de catalogos disponibles para los servicios
+         */
         getCmbTipoPresupuesto().removeAllItems();        
         try {
             List<CatalogoProducto> listaCatalogos = ServiceFactory.getFactory().getCatalogoProductoServiceIf().obtenerPorModulo(ModuloCodefacEnum.SERVICIOS);
@@ -596,9 +633,7 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 else
                 {
                     obtenerOrdenTrabajoDetalle();
-                }    
-                 
-                
+                }       
             }
 
             @Override

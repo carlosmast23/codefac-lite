@@ -131,6 +131,7 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         setIconifiable(true);
         setMaximizable(true);
         setTitle("Presupuesto");
+        setName(""); // NOI18N
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N

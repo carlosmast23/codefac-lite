@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -95,11 +96,11 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         this.cmbEstadoDetalle = cmbEstadoDetalle;
     }
 
-    public JComboBox<GeneralEnumEstado> getCmbEstadoOrdenTrabajo() {
+    public JComboBox<OrdenTrabajo.GeneralEstadoEnum> getCmbEstadoOrdenTrabajo() {
         return cmbEstadoOrdenTrabajo;
     }
 
-    public void setCmbEstadoOrdenTrabajo(JComboBox<GeneralEnumEstado> cmbEstadoOrdenTrabajo) {
+    public void setCmbEstadoOrdenTrabajo(JComboBox<OrdenTrabajo.GeneralEstadoEnum> cmbEstadoOrdenTrabajo) {
         this.cmbEstadoOrdenTrabajo = cmbEstadoOrdenTrabajo;
     }
 
@@ -662,7 +663,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
     private com.toedter.calendar.JDateChooser cmbDateFechaEntrega;
     private com.toedter.calendar.JDateChooser cmbDateFechaIngreso;
     private javax.swing.JComboBox<OrdenTrabajoDetalle.EstadoEnum> cmbEstadoDetalle;
-    private javax.swing.JComboBox<GeneralEnumEstado> cmbEstadoOrdenTrabajo;
+    private javax.swing.JComboBox<OrdenTrabajo.GeneralEstadoEnum> cmbEstadoOrdenTrabajo;
     private javax.swing.JComboBox<PrioridadEnumEstado> cmbPrioridadDetalle;
     private javax.swing.JComboBox<Departamento> cmbTipoOrdenDetalle;
     private javax.swing.JLabel jLabel1;

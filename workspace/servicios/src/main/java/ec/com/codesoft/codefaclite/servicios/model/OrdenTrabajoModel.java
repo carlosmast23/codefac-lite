@@ -428,7 +428,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
          * Estado general de orden trabajo
          */
         getCmbEstadoOrdenTrabajo().removeAllItems();
-        for(GeneralEnumEstado generalEnumEstado : GeneralEnumEstado.values())
+        for(OrdenTrabajo.GeneralEstadoEnum generalEnumEstado : OrdenTrabajo.GeneralEstadoEnum.values())
         {
             getCmbEstadoOrdenTrabajo().addItem(generalEnumEstado);
         }

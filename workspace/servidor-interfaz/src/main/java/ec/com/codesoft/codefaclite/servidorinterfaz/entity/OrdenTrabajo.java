@@ -44,6 +44,9 @@ public class OrdenTrabajo implements Serializable
     @Column(name = "ESTADO")
     private String estado;
     
+    @Column(name = "ESTADO_ORDENES")
+    private String estadoOrdenes;
+    
     @Column(name = "FECHA_INGRESO")
     private Date fechaIngreso;
     
@@ -109,7 +112,15 @@ public class OrdenTrabajo implements Serializable
     public void setCliente(Persona cliente) {
         this.cliente = cliente;
     }
-    
+
+    public String getEstadoOrdenes() {
+        return estadoOrdenes;
+    }
+
+    public void setEstadoOrdenes(String estadoOrdenes) {
+        this.estadoOrdenes = estadoOrdenes;
+    }
+        
      public void addDetalle(OrdenTrabajoDetalle detalle)
     {
         if(this.detalles==null)
@@ -144,5 +155,59 @@ public class OrdenTrabajo implements Serializable
         
         return detallesTotales;
      }
-   
+     
+     public enum GeneralEstadoEnum{
+         
+         /**
+         * Estado inicial en el cual se guarda cualquier Orden de trabajo y lo que siginifica es que esta todavia en proceso y que aun no se ha ligado
+         * algo detalle con un presupuesto.
+         */    
+        GENERADO("G","Generado"),
+        
+         /**
+         * Estado utilizado para indicar que la orden de trabajo mas especificamente uno de sus detalles esta ligado a un presupuesto
+         */
+        LIGADO("L","Ligado"),
+        
+        /**
+         * Estado utilizado para indicar que todos los detalles de la orden de trabajo han sido finculadas a un presupuesto
+         */
+        FINALIZADO("F","Finalizado"),;
+        
+        private String estado;
+        private String nombre;
+        
+        private GeneralEstadoEnum(String estado, String nombre)
+        {
+            this.estado = estado;
+            this.nombre = nombre;
+        }
+
+        public String getEstado() {
+            return estado;
+        }
+
+        public void setEstado(String estado) {
+            this.estado = estado;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+
+        public void setNombre(String nombre) {
+            this.nombre = nombre;
+        }
+        
+        public static GeneralEstadoEnum getEnum(String estado) 
+        {
+            for (GeneralEstadoEnum enumerador : GeneralEstadoEnum.values()) {
+                if (enumerador.estado.equals(estado)) {
+                    return enumerador;
+                }
+            }
+            return null;
+        }
+        
+     }
 }
