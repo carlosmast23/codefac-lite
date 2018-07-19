@@ -8,6 +8,8 @@ package ec.com.codesoft.codefaclite.servidor.service;
 import ec.com.codesoft.codefaclite.servidor.facade.PresupuestoFacade;
 import ec.com.codesoft.codefaclite.servidor.util.ExcepcionDataBaseEnum;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesExcepciones;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -72,6 +74,11 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
     public List<Presupuesto> buscar()
     {
         return presupuestoFacade.findAll();
+    }
+    
+    public List<OrdenTrabajoDetalle> listarOrdenesTrabajo()
+    {
+        return presupuestoFacade.listarOrdenTrabajo();
     }
     
     
