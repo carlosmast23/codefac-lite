@@ -1170,7 +1170,6 @@ public class Main {
         
         
         //Crear un dialogo si no existe la licencia o esta desactualizada o con alguna incoherencia
-        //ValidarLicenciaModel licenciaDialog = new ValidarLicenciaModel(null, true, false);
         ValidarLicenciaModel licenciaDialog = new ValidarLicenciaModel(null, true, existeLicencia);
         licenciaDialog.setValidacionLicenciaCodefac(validacion);
         if (validacion.verificarConexionInternet()) {

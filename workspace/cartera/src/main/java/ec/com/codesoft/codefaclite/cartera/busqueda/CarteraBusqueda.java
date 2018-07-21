@@ -8,7 +8,10 @@ package ec.com.codesoft.codefaclite.cartera.busqueda;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -17,6 +20,24 @@ import java.util.Vector;
  */
 public class CarteraBusqueda implements InterfaceModelFind<Cartera> 
 {
+    private Boolean buscarTipoCliente;
+    private Boolean buscarTipoProveedor;
+    private Persona persona;
+    private List<DocumentoEnum> documentosEnum;
+
+    public CarteraBusqueda() {
+        this.buscarTipoCliente = false;
+        this.buscarTipoProveedor = false;
+        this.documentosEnum = null;    
+    }
+
+    
+    public CarteraBusqueda(Boolean buscarTipoCliente, Boolean buscarTipoProveedor, List<DocumentoEnum> documentosEnum, Persona persona) {
+        this.buscarTipoCliente = buscarTipoCliente;
+        this.buscarTipoProveedor = buscarTipoProveedor;
+        this.documentosEnum = documentosEnum;
+        this.persona=persona;
+    }
 
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
@@ -33,16 +54,92 @@ public class CarteraBusqueda implements InterfaceModelFind<Cartera>
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        //Cartera cartera;
+        Cartera cartera;
+        //cartera.getCodigoDocumento()
         //cartera.getSecuencial();
         //cartera.getPersona().getRazonSocial();
         //cartera.getPreimpreso();
-        String queryString = "SELECT u FROM Cartera u WHERE ";
-        queryString += " ( LOWER(u.persona.razonSocial) like ?1 or u.persona.identificacion like ?1 or u.secuencial like ?1 )";
+        
+        
+        String queryString = "SELECT u FROM Cartera u WHERE 1=1 ";
+        
+        if(documentosEnum!=null)
+        {
+            if(documentosEnum.size()>0)
+            {
+                queryString=queryString+"AND ( ";
+            }
+            
+            for (int i = 0; i < documentosEnum.size(); i++) {
+                
+                //Si es el ultimo parametro entonces ya no pongo el parametro OR
+                if(i==documentosEnum.size()-1)
+                {
+                    queryString=queryString+"u.codigoDocumento=?"+(i+1000)+") ";
+                }
+                else
+                {
+                    queryString=queryString+"u.codigoDocumento=?"+(i+1000)+" OR ";
+                }
+                
+            }
+
+        }
+        
+        
+        if(buscarTipoCliente && buscarTipoProveedor)
+        {
+            queryString=queryString+" AND  u.tipoCartera=?3 or u.tipoCartera=?4 ";
+        }
+        else
+        {
+            if(buscarTipoCliente)
+            {
+                queryString=queryString+" AND  u.tipoCartera=?3 ";
+            }
+            
+            if(buscarTipoProveedor)
+            {
+                queryString=queryString+" AND  u.tipoCartera=?4 ";
+            }
+        }
+        
+        if(persona!=null)
+        {
+            queryString=queryString+" AND  u.persona=?5 ";
+        }
+        
+        queryString += " AND ( LOWER(u.persona.razonSocial) like ?1 or u.persona.identificacion like ?1 or CAST(u.secuencial CHAR(64)) like ?1 )";
         QueryDialog queryDialog = new QueryDialog(queryString);
         queryDialog.agregarParametro(1, filter.toLowerCase());
+        
+        if(documentosEnum!=null)
+        {
+            for (int i = 0; i < documentosEnum.size();i++)
+            {                
+                queryDialog.agregarParametro(1000+i,documentosEnum.get(i).getCodigo());
+            }
+            
+        }
+        
+        if(persona!=null)
+        {
+            queryDialog.agregarParametro(5,persona);
+        }
+        
+        if (buscarTipoCliente) 
+        {
+            queryDialog.agregarParametro(3,Cartera.TipoCarteraEnum.CLIENTE.getLetra());
+        }
+
+        if (buscarTipoProveedor) 
+        {
+            queryDialog.agregarParametro(4,Cartera.TipoCarteraEnum.PROVEEDORES.getLetra());
+        }
+        
         return queryDialog;
     }
+        
 
     @Override
     public void agregarObjeto(Cartera t, Vector dato) {

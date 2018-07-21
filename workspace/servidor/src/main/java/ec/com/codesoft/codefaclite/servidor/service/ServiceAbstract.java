@@ -97,18 +97,24 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
      * @param interfaz
      * @throws PersistenceException 
      */
-    protected void ejecutarTransaccion(MetodoInterfaceTransaccion interfaz) throws PersistenceException
-    {
+    protected void ejecutarTransaccion(MetodoInterfaceTransaccion interfaz) throws PersistenceException ,Exception 
+   {
         EntityTransaction transaccion = entityManager.getTransaction();
         try {            
             transaccion.begin();
             interfaz.transaccion();
             transaccion.commit();
-        } catch (PersistenceException ex) {
+        } catch (PersistenceException ex) { //Hacer un RoolBack cuando es un error relacionado con la persistencia
             if (transaccion.isActive()) {
                 transaccion.rollback();
             }
             throw ex;
+        } catch(Exception e) //Hacer un RollBack si se produce cualquier error
+        {
+             if (transaccion.isActive()) {
+                transaccion.rollback();
+            }
+             throw e;
         }
     }
 

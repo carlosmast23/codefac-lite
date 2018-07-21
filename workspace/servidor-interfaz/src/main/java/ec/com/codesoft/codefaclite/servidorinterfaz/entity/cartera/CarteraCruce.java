@@ -32,6 +32,9 @@ public class CarteraCruce implements Serializable {
     @Column(name = "FECHA_CRUCE")
     private Date fechaCruce;
     
+    @Column(name = "FECHA_CREACION")
+    private Date fechaCreacion;
+    
     @Column(name = "VALOR")
     private BigDecimal valor;
     
@@ -82,6 +85,16 @@ public class CarteraCruce implements Serializable {
     public void setCarteraDetalle(CarteraDetalle carteraDetalle) {
         this.carteraDetalle = carteraDetalle;
     }
+
+    public Date getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(Date fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+    
+    
     
     
 }

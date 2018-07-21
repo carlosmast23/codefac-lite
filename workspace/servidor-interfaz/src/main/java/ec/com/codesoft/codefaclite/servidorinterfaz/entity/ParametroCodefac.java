@@ -64,6 +64,7 @@ public class ParametroCodefac implements Serializable {
     
     public static final String ORDEN_TRABAJO_OBSERVACIONES = "orden_trabajo_observaciones";
     public static final String FORMATO_ORDEN_TRABAJO="formato_orden_trabajo";
+    public static final String ACTIVAR_CARTERA="cartera_activa";
     
     @Id
     @Column(name = "ID")

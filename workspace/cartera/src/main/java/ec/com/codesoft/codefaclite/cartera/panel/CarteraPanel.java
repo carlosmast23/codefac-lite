@@ -13,11 +13,15 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwingX;
+import java.awt.Color;
+import java.awt.Component;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.TableCellRenderer;
 
 /**
  *
@@ -30,7 +34,7 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
      */
     public CarteraPanel() {
         initComponents();
-        UtilidadesSwingX.placeHolder("Identificación",txtIdentificacion);
+        UtilidadesSwingX.placeHolder("Identificación",txtIdentificacion);            
     }
 
     /**
@@ -69,7 +73,7 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         jLabel6 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        txtPreimpreso = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         jTextField4 = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
@@ -79,21 +83,57 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         txtValorDetalle = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         cmbTipoDocumentoCartera = new javax.swing.JComboBox<>();
-        jLabel16 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
         jToolBar2 = new javax.swing.JToolBar();
         btnAgregarDetalle = new javax.swing.JButton();
         btnEditarDetalle = new javax.swing.JButton();
         btnEliminarDetalle = new javax.swing.JButton();
         jLabel18 = new javax.swing.JLabel();
         txtDescripcionDetalle = new javax.swing.JTextField();
-        btnBuscarDocumento = new javax.swing.JButton();
         lblEspacio2 = new javax.swing.JLabel();
-        jLabel17 = new javax.swing.JLabel();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        lblTotalCartera = new javax.swing.JLabel();
+        tabDetalles = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDetalles = new javax.swing.JTable();
         jPanel5 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblDetallesCruzar = new javax.swing.JTable(){
+            public Component prepareRenderer(TableCellRenderer rendererr, int roww, int columnn)
+
+            {
+
+                Component componentt = super.prepareRenderer(rendererr,roww,columnn);
+                if(columnn == 5)//color of third column is red(index 2)
+                {
+                    componentt.setBackground(new Color(3,139,141));
+                    componentt.setForeground(Color.white);
+                }
+                else
+                {
+                    componentt.setBackground(Color.WHITE);
+                    componentt.setForeground(Color.black);
+                }
+
+                return componentt;
+
+            }
+
+        };
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tblDocumentosCruzar = new javax.swing.JTable();
+        jLabel12 = new javax.swing.JLabel();
+        btnCruzar = new javax.swing.JButton();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        jToolBar3 = new javax.swing.JToolBar();
+        btnAgregarDocumentoCruzar = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        cmbFechaCruzar = new com.toedter.calendar.JDateChooser();
+        jLabel19 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tblCruceDetalles = new javax.swing.JTable();
+        jToolBar4 = new javax.swing.JToolBar();
+        btnEliminarCruce = new javax.swing.JButton();
 
         jButton1.setText("jButton1");
 
@@ -297,7 +337,7 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel3.add(jTextField3, gridBagConstraints);
+        jPanel3.add(txtPreimpreso, gridBagConstraints);
 
         jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel8.setText("Código Doc:");
@@ -338,14 +378,14 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel1.setText("Valor:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(jLabel1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -354,32 +394,18 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel5.setText("Tipo Documento:");
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(jLabel5, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(cmbTipoDocumentoCartera, gridBagConstraints);
-
-        jLabel16.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel16.setText("Cruce Documento:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel4.add(jLabel16, gridBagConstraints);
-
-        jTextField6.setEditable(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.3;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel4.add(jTextField6, gridBagConstraints);
 
         jToolBar2.setBorder(null);
         jToolBar2.setRollover(true);
@@ -403,31 +429,28 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         jToolBar2.add(btnEliminarDetalle);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 0;
         jPanel4.add(jToolBar2, gridBagConstraints);
 
         jLabel18.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel18.setText("Descripción:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(jLabel18, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.3;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(txtDescripcionDetalle, gridBagConstraints);
-
-        btnBuscarDocumento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
-        jPanel4.add(btnBuscarDocumento, new java.awt.GridBagConstraints());
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.weightx = 0.4;
         jPanel4.add(lblEspacio2, gridBagConstraints);
@@ -439,34 +462,154 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         getContentPane().add(jPanel4, gridBagConstraints);
 
-        jLabel17.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel17.setText("00.00");
-        jLabel17.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Total", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 11))); // NOI18N
+        lblTotalCartera.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        lblTotalCartera.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblTotalCartera.setText("00.00");
+        lblTotalCartera.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Total", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 11))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 50;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jLabel17, gridBagConstraints);
+        getContentPane().add(lblTotalCartera, gridBagConstraints);
 
-        jTabbedPane1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        tabDetalles.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
 
-        tblDetalles.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
         jScrollPane1.setViewportView(tblDetalles);
 
-        jTabbedPane1.addTab("Detalles", jScrollPane1);
-        jTabbedPane1.addTab("Cruce Documentos", jPanel5);
+        tabDetalles.addTab("Detalles", jScrollPane1);
+
+        jPanel5.setLayout(new java.awt.GridBagLayout());
+
+        jScrollPane2.setViewportView(tblDetallesCruzar);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        jPanel5.add(jScrollPane2, gridBagConstraints);
+
+        jScrollPane3.setViewportView(tblDocumentosCruzar);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        jPanel5.add(jScrollPane3, gridBagConstraints);
+
+        jLabel12.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel12.setText("Fecha Cruzar");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel5.add(jLabel12, gridBagConstraints);
+
+        btnCruzar.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
+        btnCruzar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/flechaDer.png"))); // NOI18N
+        btnCruzar.setText("Cruzar");
+        btnCruzar.setFocusable(false);
+        btnCruzar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnCruzar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.weightx = 0.01;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel5.add(btnCruzar, gridBagConstraints);
+
+        jLabel14.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel14.setText("Detalles sin cruzar");
+        jLabel14.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
+        jPanel5.add(jLabel14, gridBagConstraints);
+
+        jLabel17.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel17.setText("Documentos para cruzar");
+        jLabel17.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
+        jPanel5.add(jLabel17, gridBagConstraints);
+
+        jToolBar3.setBorder(null);
+        jToolBar3.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        jToolBar3.setRollover(true);
+
+        btnAgregarDocumentoCruzar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/nuevo-icono2.png"))); // NOI18N
+        btnAgregarDocumentoCruzar.setFocusable(false);
+        btnAgregarDocumentoCruzar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAgregarDocumentoCruzar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar3.add(btnAgregarDocumentoCruzar);
+
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/delete-icon2.png"))); // NOI18N
+        jButton4.setFocusable(false);
+        jButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar3.add(jButton4);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel5.add(jToolBar3, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel5.add(cmbFechaCruzar, gridBagConstraints);
+
+        jLabel19.setText("jLabel19");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        jPanel5.add(jLabel19, gridBagConstraints);
+
+        tabDetalles.addTab("Cruce Documentos", jPanel5);
+
+        jPanel6.setLayout(new java.awt.GridBagLayout());
+
+        jScrollPane4.setViewportView(tblCruceDetalles);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        jPanel6.add(jScrollPane4, gridBagConstraints);
+
+        jToolBar4.setRollover(true);
+
+        btnEliminarCruce.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/delete-icon2.png"))); // NOI18N
+        btnEliminarCruce.setFocusable(false);
+        btnEliminarCruce.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnEliminarCruce.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar4.add(btnEliminarCruce);
+
+        jPanel6.add(jToolBar4, new java.awt.GridBagConstraints());
+
+        tabDetalles.addTab("Cruce Detalles", jPanel6);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -475,7 +618,7 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
-        getContentPane().add(jTabbedPane1, gridBagConstraints);
+        getContentPane().add(tabDetalles, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -483,25 +626,31 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarDetalle;
-    private javax.swing.JButton btnBuscarDocumento;
+    private javax.swing.JButton btnAgregarDocumentoCruzar;
     private javax.swing.JButton btnBuscarPersona;
+    private javax.swing.JButton btnCruzar;
     private javax.swing.JButton btnEditarDetalle;
+    private javax.swing.JButton btnEliminarCruce;
     private javax.swing.JButton btnEliminarDetalle;
     private javax.swing.JComboBox<DocumentoEnum > cmbDocumentoCartera;
     private javax.swing.JComboBox<Cartera.CarteraCategoriaEnum > cmbDocumentoCategoriaCartera;
+    private com.toedter.calendar.JDateChooser cmbFechaCruzar;
     private com.toedter.calendar.JDateChooser cmbFechaEmision;
     private javax.swing.JComboBox<TipoCarteraEnum > cmbTipoCartera;
     private javax.swing.JComboBox<String > cmbTipoDocumentoCartera;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton4;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -515,23 +664,32 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
+    private javax.swing.JToolBar jToolBar3;
+    private javax.swing.JToolBar jToolBar4;
     private javax.swing.JLabel lblDireccion;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio2;
     private javax.swing.JLabel lblNombresClientes;
     private javax.swing.JLabel lblTelefonos;
+    private javax.swing.JLabel lblTotalCartera;
+    private javax.swing.JTabbedPane tabDetalles;
+    private javax.swing.JTable tblCruceDetalles;
     private javax.swing.JTable tblDetalles;
+    private javax.swing.JTable tblDetallesCruzar;
+    private javax.swing.JTable tblDocumentosCruzar;
     private javax.swing.JTextField txtDescripcionDetalle;
     private javax.swing.JTextField txtIdentificacion;
+    private javax.swing.JTextField txtPreimpreso;
     private javax.swing.JTextField txtValorDetalle;
     // End of variables declaration//GEN-END:variables
 
@@ -582,14 +740,6 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
 
     public void setCmbFechaEmision(JDateChooser cmbFechaEmision) {
         this.cmbFechaEmision = cmbFechaEmision;
-    }
-
-    public JButton getBtnBuscarDocumento() {
-        return btnBuscarDocumento;
-    }
-
-    public void setBtnBuscarDocumento(JButton btnBuscarDocumento) {
-        this.btnBuscarDocumento = btnBuscarDocumento;
     }
 
     public JComboBox<TipoCarteraEnum> getCmbTipoCartera() {
@@ -663,7 +813,91 @@ public abstract class CarteraPanel extends ControladorCodefacInterface {
     public void setBtnEliminarDetalle(JButton btnEliminarDetalle) {
         this.btnEliminarDetalle = btnEliminarDetalle;
     }
+    
+    public JLabel getLblTotalCartera() {
+        return lblTotalCartera;
+    }
 
+    public void setLblTotalCartera(JLabel lblTotalCartera) {
+        this.lblTotalCartera = lblTotalCartera;
+    }
+
+    public JTable getTblDetallesCruzar() {
+        return tblDetallesCruzar;
+    }
+
+    public void setTblDetallesCruzar(JTable tblDetallesCruzar) {
+        this.tblDetallesCruzar = tblDetallesCruzar;
+    }
+
+    public JTabbedPane getTabDetalles() {
+        return tabDetalles;
+    }
+
+    public void setTabDetalles(JTabbedPane tabDetalles) {
+        this.tabDetalles = tabDetalles;
+    }
+
+
+    public JButton getBtnAgregarDocumentoCruzar() {
+        return btnAgregarDocumentoCruzar;
+    }
+
+    public void setBtnAgregarDocumentoCruzar(JButton btnAgregarDocumentoCruzar) {
+        this.btnAgregarDocumentoCruzar = btnAgregarDocumentoCruzar;
+    }
+
+    public JTable getTblDocumentosCruzar() {
+        return tblDocumentosCruzar;
+    }
+
+    public void setTblDocumentosCruzar(JTable tblDocumentosCruzar) {
+        this.tblDocumentosCruzar = tblDocumentosCruzar;
+    }
+
+    public JButton getBtnCruzar() {
+        return btnCruzar;
+    }
+
+    public void setBtnCruzar(JButton btnCruzar) {
+        this.btnCruzar = btnCruzar;
+    }
+
+    public JDateChooser getCmbFechaCruzar() {
+        return cmbFechaCruzar;
+    }
+
+    public void setCmbFechaCruzar(JDateChooser cmbFechaCruzar) {
+        this.cmbFechaCruzar = cmbFechaCruzar;
+    }
+
+    public JTable getTblCruceDetalles() {
+        return tblCruceDetalles;
+    }
+
+    public void setTblCruceDetalles(JTable tblCruceDetalles) {
+        this.tblCruceDetalles = tblCruceDetalles;
+    }
+
+    public JButton getBtnEliminarCruce() {
+        return btnEliminarCruce;
+    }
+
+    public void setBtnEliminarCruce(JButton btnEliminarCruce) {
+        this.btnEliminarCruce = btnEliminarCruce;
+    }
+
+    public JTextField getTxtPreimpreso() {
+        return txtPreimpreso;
+    }
+
+    public void setTxtPreimpreso(JTextField txtPreimpreso) {
+        this.txtPreimpreso = txtPreimpreso;
+    }
+
+    
+    
+    
     
     
     

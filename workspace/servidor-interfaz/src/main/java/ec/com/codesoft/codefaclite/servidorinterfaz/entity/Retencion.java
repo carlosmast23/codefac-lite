@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -189,6 +190,17 @@ public class Retencion extends ComprobanteEntity implements Serializable {
             }
         }
         return null;
+    }
+    
+    public BigDecimal obtenerTotalNotaCredito()
+    {
+        if(detalles==null)return BigDecimal.ZERO;
+        
+        BigDecimal total=BigDecimal.ZERO;
+        for (RetencionDetalle detalle : detalles) {
+            total=total.add(detalle.getValorRetenido());
+        }
+        return total;
     }
 
     @Override

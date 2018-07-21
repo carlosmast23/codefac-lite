@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.configuraciones.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import javax.swing.JComboBox;
@@ -51,6 +52,11 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         lblEspacioBlanco = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         cmbFormatoHojas = new javax.swing.JComboBox<>();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        cmbActivarModuloCartera = new javax.swing.JComboBox<>();
+        lblEspacio6 = new javax.swing.JLabel();
+        lblEspacio4 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -166,6 +172,31 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
         jTabbedPane1.addTab("Ordenes Trabajo", jPanel2);
 
+        jPanel3.setLayout(new java.awt.GridBagLayout());
+
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel4.setText("Activar Módulo:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel3.add(jLabel4, gridBagConstraints);
+
+        cmbActivarModuloCartera.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel3.add(cmbActivarModuloCartera, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.weighty = 0.1;
+        jPanel3.add(lblEspacio6, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        jPanel3.add(lblEspacio4, gridBagConstraints);
+
+        jTabbedPane1.addTab("Cartera", jPanel3);
+
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -173,6 +204,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<EnumSiNo> cmbActivarModuloCartera;
     private javax.swing.JComboBox<FormatoHojaEnum> cmbFormatoHojas;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumentoCompra;
@@ -180,13 +212,17 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio2;
     private javax.swing.JLabel lblEspacio3;
+    private javax.swing.JLabel lblEspacio4;
+    private javax.swing.JLabel lblEspacio6;
     private javax.swing.JLabel lblEspacioBlanco;
     private javax.swing.JLabel lblEspacioBlanco2;
     private javax.swing.JTextArea txtOrdenTrabajoReporte;
@@ -222,6 +258,14 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
     public void setCmbFormatoHojas(JComboBox<FormatoHojaEnum> cmbFormatoHojas) {
         this.cmbFormatoHojas = cmbFormatoHojas;
+    }
+
+    public JComboBox<EnumSiNo> getCmbActivarModuloCartera() {
+        return cmbActivarModuloCartera;
+    }
+
+    public void setCmbActivarModuloCartera(JComboBox<EnumSiNo> cmbActivarModuloCartera) {
+        this.cmbActivarModuloCartera = cmbActivarModuloCartera;
     }
     
     

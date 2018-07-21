@@ -8,12 +8,14 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoCategoriaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -77,6 +79,12 @@ public class Cartera implements Serializable{
      */
     @Column(name = "CODIGO_DOCUMENTO")
     private String codigoDocumento;
+    
+    @Column(name = "TIPO_CARTERA")
+    private String tipoCartera;
+    
+    @Column(name = "ESTADO")
+    private String estado;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cartera", fetch = FetchType.EAGER)
     private List<CarteraDetalle> detalles;
@@ -160,7 +168,63 @@ public class Cartera implements Serializable{
     public void setPuntoEmision(String puntoEmision) {
         this.puntoEmision = puntoEmision;
     }
+
+    public Date getFechaEmision() {
+        return fechaEmision;
+    }
+
+    public void setFechaEmision(Date fechaEmision) {
+        this.fechaEmision = fechaEmision;
+    }
+
+    public String getTipoCartera() {
+        return tipoCartera;
+    }
+
+    public void setTipoCartera(String tipoCartera) {
+        this.tipoCartera = tipoCartera;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 89 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Cartera other = (Cartera) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
     
+    
+    
+    
+    public GeneralEnumEstado getEstadoEnum()
+    {
+        return GeneralEnumEstado.getEnum(estado);
+    }
     
 
     public void setDetalles(List<CarteraDetalle> detalles) {
@@ -176,6 +240,11 @@ public class Cartera implements Serializable{
         return DocumentoEnum.obtenerDocumentoPorCodigo(codigoDocumento);
     }
     
+    
+    public TipoCarteraEnum getTipoCarteraEnum()
+    {
+        return TipoCarteraEnum.buscarPorLetra(tipoCartera);
+    }
     //Metodos personalizados
     
     public void addDetalle(CarteraDetalle carteraDetalle)
@@ -187,6 +256,18 @@ public class Cartera implements Serializable{
         
         carteraDetalle.setCartera(this);
         detalles.add(carteraDetalle);
+    }
+    
+    public  BigDecimal totalDetalles()
+    {
+        BigDecimal totalCartera=BigDecimal.ZERO;
+        if(detalles!=null)
+        {
+            for (CarteraDetalle detalle : detalles) {
+                totalCartera=totalCartera.add(detalle.getTotal());
+            }
+        }
+        return totalCartera;
     }
     
     public String getPreimpreso() {

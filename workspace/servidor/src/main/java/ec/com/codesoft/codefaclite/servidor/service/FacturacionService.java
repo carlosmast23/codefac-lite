@@ -17,10 +17,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaFacade;
+import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.math.BigDecimal;
@@ -94,6 +96,10 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 }
                 
             }
+            
+            //Grabar en la cartera si todo el proceso anterior fue correcto
+            CarteraService carteraService=new CarteraService();
+            carteraService.grabarDocumentoCartera(factura, Cartera.TipoCarteraEnum.CLIENTE);
             
         transaction.commit();
         } catch (DatabaseException ex) {

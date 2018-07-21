@@ -30,6 +30,16 @@ public abstract class UtilidadesTablas {
         }        
 
     }
+    
+    public static <T> T obtenerDatoSeleccionado(JTable tabla,int columna)
+    {
+        int fila=tabla.getSelectedRow();
+        if(fila>=0)
+        {
+            return (T)tabla.getValueAt(fila, columna);
+        }
+        return null;
+    }
       
     
     public static void ocultarColumna(JTable jtable,int columna)

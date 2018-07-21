@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
@@ -136,6 +137,11 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel{
             getCmbFormatoHojas().addItem(formato);
         }
         
+        //Agregar las opcion para esocger si o no en activar modulo cartera
+        getCmbActivarModuloCartera().removeAllItems();
+        getCmbActivarModuloCartera().addItem(EnumSiNo.NO);
+        getCmbActivarModuloCartera().addItem(EnumSiNo.SI);
+        
     }
 
     private void cargarDatos() {
@@ -159,6 +165,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel{
             //Cargar datos del tipo de reporte de las ordenes de trabajo
             ParametroCodefac parametroFormtaOrdenTrabajo= parametros.get(ParametroCodefac.FORMATO_ORDEN_TRABAJO);
             getCmbFormatoHojas().setSelectedItem((parametroFormtaOrdenTrabajo!=null)?parametroFormtaOrdenTrabajo.getValor():null);
+            
+            ParametroCodefac parametroActivarCarteras = parametros.get(ParametroCodefac.ACTIVAR_CARTERA);
+            EnumSiNo enumSiNo=EnumSiNo.getEnumByLetra((parametroActivarCarteras!=null)?parametroActivarCarteras.getValor():null);
+            getCmbActivarModuloCartera().setSelectedItem(enumSiNo);
             //getTxtOrdenTrabajoReporte().setText((parametroFormtaOrdenTrabajo!=null)?parametroFormtaOrdenTrabajo.getValor():"");
             
             
@@ -176,6 +186,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel{
         
         //Agregar detalle para la orden de trabajo
         agregarParametro(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES,getTxtOrdenTrabajoReporte().getText());
+        
+        EnumSiNo enumSiNo=(EnumSiNo) getCmbActivarModuloCartera().getSelectedItem();
+        agregarParametro(ParametroCodefac.ACTIVAR_CARTERA,enumSiNo.getLetra());
         /*ParametroCodefac parametroCodefac=parametros.get(ParametroCodefac.ORDEN_TRABAJO_OBSERVACIONES);
         if(parametroCodefac==null)
         {
