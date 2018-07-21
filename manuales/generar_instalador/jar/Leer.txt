@@ -1,0 +1,2 @@
+Aqui colocar el jar de codefac con el nombre codefac.jar
+Nota: Su usan otro nombre no se general el instalador
