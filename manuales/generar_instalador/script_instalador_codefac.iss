@@ -5,7 +5,7 @@
 #define MyAppVersion "1.2"
 #define MyAppPublisher "Codesoft"
 #define MyAppURL "http://www.cf.codesoft-ec.com/"
-#define MyAppExeName "codefac.jar"
+#define MyAppExeName "codefac.bat"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -33,8 +33,9 @@ Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "codefac.jar"; DestDir: "{app}"; Flags: ignoreversion
-Source: "icono_codefac.ico"; DestDir: "{app}"; Flags: ignoreversion
+Source: "recursos/codefac.bat"; DestDir: "{app}"; Flags: ignoreversion
+Source: "recursos/icono_codefac.ico"; DestDir: "{app}"; Flags: ignoreversion
+Source: "jar/codefac.jar"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
