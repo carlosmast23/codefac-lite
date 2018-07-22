@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.main.init;
 
-import com.sun.xml.internal.ws.client.ClientTransportException;
+//import com.sun.xml.internal.ws.client.ClientTransportException;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.AyudaCodefacModel;
@@ -957,13 +957,14 @@ public class Main {
      * Verifica que la licencia que esta en el computador sea la misma que la
      * del servidor
      *
+     * @param validacion
      * @return
      */
 
-    public static boolean verificarLicenciaOnline(ValidacionLicenciaCodefac validacion) throws ClientTransportException
+    public static boolean verificarLicenciaOnline(ValidacionLicenciaCodefac validacion)
     {
-        try
-        {
+        //try
+        //{
             
             String usuario=validacion.obtenerLicencia().getProperty(Licencia.PROPIEDAD_USUARIO);
             Licencia licenciaOnline=new Licencia();
@@ -1004,11 +1005,11 @@ public class Main {
 
             }            
 
-        }
-        catch(com.sun.xml.internal.ws.client.ClientTransportException cte)
-        {
-            return false;
-        }
+        //}
+        //catch(com.sun.xml.internal.ws.client.ClientTransportException cte)
+        //{
+        //    return false;
+        //}
 
     }
 

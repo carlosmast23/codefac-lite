@@ -25,6 +25,10 @@ import org.eclipse.persistence.exceptions.DatabaseException;
  */
 public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
 {
+
+    private static final Logger LOG = Logger.getLogger(ServiceAbstract.class.getName());
+    
+    
     protected AbstractFacade<Entity> facade;
     protected EntityManager entityManager;
 
@@ -97,7 +101,7 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
      * @param interfaz
      * @throws PersistenceException 
      */
-    protected void ejecutarTransaccion(MetodoInterfaceTransaccion interfaz) throws PersistenceException ,Exception 
+    protected void ejecutarTransaccion(MetodoInterfaceTransaccion interfaz) throws PersistenceException
    {
         EntityTransaction transaccion = entityManager.getTransaction();
         try {            
@@ -114,7 +118,8 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
              if (transaccion.isActive()) {
                 transaccion.rollback();
             }
-             throw e;
+            LOG.log(Level.SEVERE,e.getMessage()); //Todo: Mejorar esta parte porque deberia imprimir toda la pila de error y ademas deberia poder comunicar el error a la capa superior
+            //throw e;
         }
     }
 

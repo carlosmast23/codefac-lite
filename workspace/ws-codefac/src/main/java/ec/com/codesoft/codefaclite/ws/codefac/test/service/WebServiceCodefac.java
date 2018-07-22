@@ -34,23 +34,23 @@ public abstract class WebServiceCodefac {
      * @param email
      * @return 
      */
-    public static String getTipoLicencia(String email) throws ClientTransportException {
+    public static String getTipoLicencia(String email) {
         /**
          * Obtener el tipo de licencia del usuario
          */
-        try
-        {
+        //try
+        //{
             SOAPServer soapServer = new SOAPServer();
             SOAPServerPortType soapServerPort = soapServer.getSOAPServerPort();
             DevolverlicenciaRequestType parametrosLicencia = new DevolverlicenciaRequestType();
             parametrosLicencia.setEmail(email);
             DevolverlicenciaResponseType respuestaLicencia = soapServerPort.devolverlicencia(parametrosLicencia);
             return respuestaLicencia.getReturn();
-        }
-        catch(com.sun.xml.internal.ws.client.ClientTransportException cte)
-        {
-            throw cte;
-        }
+        //}
+        //catch(com.sun.xml.internal.ws.client.ClientTransportException cte)
+        //{
+        //    throw cte;
+        //}
 
     
     }
@@ -60,23 +60,23 @@ public abstract class WebServiceCodefac {
      * @param email
      * @return 
      */
-    public static String getLicencia(String email)throws ClientTransportException{
+    public static String getLicencia(String email){
         /**
          * Obtener el tipo de licencia del usuario
          */
-        try
-        {
+        //try
+        //{
             SOAPServer soapServer = new SOAPServer();
             SOAPServerPortType soapServerPort = soapServer.getSOAPServerPort();
             ObtenerlicenciaRequestType parametrosLicencia = new ObtenerlicenciaRequestType();
             parametrosLicencia.setEmail(email);        
             ObtenerlicenciaResponseType respuestaLicencia = soapServerPort.obtenerlicencia(parametrosLicencia);
             return respuestaLicencia.getReturn();
-        }
-        catch(com.sun.xml.internal.ws.client.ClientTransportException cte)
-        {
-            throw cte;
-        }
+        //}
+        //catch(com.sun.xml.internal.ws.client.ClientTransportException cte)
+        //{
+        //    throw cte;
+        //}
 
     
     }
@@ -88,11 +88,11 @@ public abstract class WebServiceCodefac {
      * @param email
      * @return
      */
-    public static Integer getCantidadClientes(String email) throws ClientTransportException {
+    public static Integer getCantidadClientes(String email) {
         /**
          * Obtener el tipo de licencia del usuario
          */
-        try {
+        //try {
             SOAPServer soapServer = new SOAPServer();
             SOAPServerPortType soapServerPort = soapServer.getSOAPServerPort();
             NumaquinasRequestType parametrosLicencia = new NumaquinasRequestType();
@@ -100,9 +100,9 @@ public abstract class WebServiceCodefac {
             NumaquinasResponseType respuestaLicencia = soapServerPort.numaquinas(parametrosLicencia);
             //return respuestaLicencia.getReturn();
             return Integer.parseInt(respuestaLicencia.getReturn());
-        } catch (com.sun.xml.internal.ws.client.ClientTransportException cte) {
-            throw cte;
-        }
+        //} catch (com.sun.xml.internal.ws.client.ClientTransportException cte) {
+        //    throw cte;
+        //}
 
     }
     
@@ -114,9 +114,9 @@ public abstract class WebServiceCodefac {
      * @return
      * @throws ClientTransportException 
      */
-    public static String getModuloCodefac(String email,String letra) throws ClientTransportException
+    public static String getModuloCodefac(String email,String letra) //throws ClientTransportException
     {
-        try {
+        //try {
             SOAPServer soapServer = new SOAPServer();
             SOAPServerPortType soapServerPort = soapServer.getSOAPServerPort();
             VerificarmoduloRequestType parametrosLicencia = new VerificarmoduloRequestType();
@@ -124,9 +124,9 @@ public abstract class WebServiceCodefac {
             parametrosLicencia.setTipo(letra);
             VerificarmoduloResponseType respuestaLicencia = soapServerPort.verificarmodulo(parametrosLicencia);
             return respuestaLicencia.getReturn();
-        } catch (com.sun.xml.internal.ws.client.ClientTransportException cte) {
-            throw cte;
-        }    
+        //} catch (com.sun.xml.internal.ws.client.ClientTransportException cte) {
+        //    throw cte;
+        //}    
     }
     
     public static boolean verificarCredenciales(String usuario, String clave)
@@ -160,8 +160,8 @@ public abstract class WebServiceCodefac {
         respuesta.getReturn();
     }
     
-    public static Boolean getVerificarSoporte(String usuario, String clave) throws ClientTransportException {
-        try {
+    public static Boolean getVerificarSoporte(String usuario, String clave){
+        //try {
             SOAPServer soapServer = new SOAPServer();
             SOAPServerPortType soapServerPort = soapServer.getSOAPServerPort();
             VerificarsoporteRequestType parametrosLicencia = new VerificarsoporteRequestType();
@@ -169,9 +169,9 @@ public abstract class WebServiceCodefac {
             parametrosLicencia.setClave(clave);
             VerificarsoporteResponseType respuestaLicencia = soapServerPort.verificarsoporte(parametrosLicencia);
             return respuestaLicencia.getReturn().equals("success");
-        } catch (com.sun.xml.internal.ws.client.ClientTransportException cte) {
-            throw cte;
-        }
+        //} catch (com.sun.xml.internal.ws.client.ClientTransportException cte) {
+        //    throw cte;
+        //}
     }
 
 }

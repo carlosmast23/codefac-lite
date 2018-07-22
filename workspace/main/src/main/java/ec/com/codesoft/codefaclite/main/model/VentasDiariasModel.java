@@ -5,7 +5,6 @@
  */
 package ec.com.codesoft.codefaclite.main.model;
 
-import com.sun.xml.internal.bind.v2.model.core.Adapter;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
