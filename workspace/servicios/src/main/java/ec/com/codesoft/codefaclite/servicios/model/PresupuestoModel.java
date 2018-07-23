@@ -114,7 +114,6 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     private Map<Integer,List<PresupuestoDetalle>> mapOrden;
     private List<OrdenCompra> ordenesCompra;
     private Empleado empleado;
-    private Presupuesto.EstadoEnum generalEnumEstado;
     
     /**
      * Hilo para procesar el envio de las notificaciones
@@ -278,15 +277,10 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 this.ordenesCompra.add(ordenCompra);
             }
             
-            Presupuesto.EstadoEnum estadoEnum = (Presupuesto.EstadoEnum) getCmbEstadoPresupuesto().getSelectedItem();
-            if(estadoEnum.equals(Presupuesto.EstadoEnum.TERMINADO))
-            {
-                hiloNotificaciones = new Thread(instanceThis);
-                hiloNotificaciones.start();
-                DialogoCodefac.mensaje("Correcto", "Las notificaciones se estan enviado , puede revisar en el monitor", DialogoCodefac.MENSAJE_CORRECTO);
-                
-                
-            }
+            /**
+             * Se inicia el proceso de enviar comumnicados a los empleados
+             */
+            empezarEnviarComunicados();
             
             }catch (ServicioCodefacException ex) {
                 Logger.getLogger(Presupuesto.class.getName()).log(Level.SEVERE, null, ex);
@@ -298,34 +292,15 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     @Override
     public void editar() throws ExcepcionCodefacLite {
          try {
-            boolean b = false;
-            switch(generalEnumEstado)
-            {
-                case ABANDONADO:
-                    
-                    break;
-                case ANULADO:
-                    
-                    break;
-                case APROBADO:
-                    break;
-                case FACTURADO:
-                    DialogoCodefac.mensaje("Advertencia", "El presupuesto esta factura no se permiten modificaciones", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                    break;
-                case PRESUPUESTANDO:
-                    break;
-                case TERMINADO:
-                    break;
-                   
-            }
-            if(b){ 
+            if(editarFuncionEstadoPresupuesto())
+            { 
                 setearDatos();
                 PresupuestoServiceIf servicio = ServiceFactory.getFactory().getPresupuestoServiceIf();
                 servicio.editar(this.presupuesto);
                 DialogoCodefac.mensaje("Correcto","El presupuesto fue editado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
             }else
             {
-                
+                DialogoCodefac.mensaje("Advertencia", "El estado del presupuesto es incorrecto", DialogoCodefac.MENSAJE_ADVERTENCIA);
             }
       } 
       catch (RemoteException ex) 
@@ -336,7 +311,49 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public boolean editarFuncionEstadoPresupuesto()
+    {   
+        Presupuesto.EstadoEnum generalEnumEstado = Presupuesto.EstadoEnum.getByLetra(this.presupuesto.getEstado());
+        Presupuesto.EstadoEnum estadoPresupuestoEnum  = (Presupuesto.EstadoEnum) getCmbEstadoPresupuesto().getSelectedItem();    
+        boolean b = false;
+        switch(generalEnumEstado)
+        {
+            case ABANDONADO:
+                if(!(estadoPresupuestoEnum.equals(Presupuesto.EstadoEnum.FACTURADO) || estadoPresupuestoEnum.equals(Presupuesto.EstadoEnum.ANULADO)))
+                {
+                    return true;
+                }
+            break;
+            case ANULADO:
+                if(estadoPresupuestoEnum.equals(Presupuesto.EstadoEnum.TERMINADO))
+                {
+                    return true;
+                }
+            break;
+            case APROBADO:
 
+            break;
+            case FACTURADO:
+                    DialogoCodefac.mensaje("Advertencia", "El presupuesto esta facturado no se permiten modificaciones", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            break;
+            case PRESUPUESTANDO:              
+                if(!(estadoPresupuestoEnum.equals(Presupuesto.EstadoEnum.FACTURADO) || estadoPresupuestoEnum.equals(Presupuesto.EstadoEnum.ANULADO)))
+                {
+                    return true;
+                }          
+                break;
+            case TERMINADO:
+                if(estadoPresupuestoEnum.equals(Presupuesto.EstadoEnum.PRESUPUESTANDO) || estadoPresupuestoEnum.equals(Presupuesto.EstadoEnum.ABANDONADO) || estadoPresupuestoEnum.equals(Presupuesto.EstadoEnum.TERMINADO))
+                {
+                    return true;
+                }
+            break;
+
+        }
+        return false;
+    }
+    
     @Override
     public void eliminar() throws ExcepcionCodefacLite {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -361,23 +378,16 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
         if(tempPresupuesto != null){
             this.presupuesto =  tempPresupuesto;
             Presupuesto.EstadoEnum generalEnumEstadoTemp = Presupuesto.EstadoEnum.getByLetra(this.presupuesto.getEstado());
-            this.generalEnumEstado = generalEnumEstadoTemp;
-            switch(generalEnumEstado)
+            switch(generalEnumEstadoTemp)
             {
-                case ABANDONADO:
-                    
-                    break;
-                case ANULADO:
-                    break;
-                case APROBADO:
-                    break;
                 case FACTURADO:
                     DialogoCodefac.mensaje("Advertencia", "El presupuesto esta factura no se permiten modificaciones", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                    break;
+                break;
                 case PRESUPUESTANDO:
-                    break;
+                break;
                 case TERMINADO:
-                    break;
+                    DialogoCodefac.mensaje("Advertencia", "El presupuesto esta terminado no se permiten modificaciones", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                break;
                    
             }
             
@@ -808,6 +818,21 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
                 return;
             }
             
+            Presupuesto.EstadoEnum generalEnumEstado = Presupuesto.EstadoEnum.getByLetra(this.presupuesto.getEstado());
+            if(generalEnumEstado != null)
+            {
+                switch(generalEnumEstado)
+                {
+                    case PRESUPUESTANDO:
+                    case ABANDONADO:
+                        perPro = perPro && true;  
+                    break;
+                    default:
+                        perPro = perPro && false;  
+                    break;
+                }
+            }
+            
             if(perPro){
                 presupuestoDetalle.setProducto(this.producto);
                 presupuestoDetalle.setPersona(this.persona);
@@ -1016,12 +1041,12 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     }
      
     private void setearDatos() 
-    {         
-            this.presupuesto.setDescripcion(""+getTxtDescripcion().getText());
-            //this.presupuesto.setCatalogoProducto((CatalogoProducto) getCmbTipoPresupuesto().getSelectedItem());
-            this.presupuesto.setObservaciones(""+getTxtAreaObservaciones().getText());
+    {               
             Presupuesto.EstadoEnum generalEnumEstado = (Presupuesto.EstadoEnum) getCmbEstadoPresupuesto().getSelectedItem();
             this.presupuesto.setEstado(generalEnumEstado.getLetra());
+            this.presupuesto.setDescripcion(""+getTxtDescripcion().getText());
+            this.presupuesto.setCatalogoProducto((CatalogoProducto) getCmbTipoPresupuesto().getSelectedItem());
+            this.presupuesto.setObservaciones(""+getTxtAreaObservaciones().getText());
             try{   
                 this.presupuesto.setFechaPresupuesto(new Date(getCmbFechaPresupuesto().getDate().getTime()));
             }
@@ -1498,6 +1523,17 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
     public void run() 
     {
         enviarComunicados();
+    }
+    
+    public void empezarEnviarComunicados()
+    {
+        Presupuesto.EstadoEnum estadoEnum = (Presupuesto.EstadoEnum) getCmbEstadoPresupuesto().getSelectedItem();
+        if(estadoEnum.equals(Presupuesto.EstadoEnum.TERMINADO))
+        {
+            hiloNotificaciones = new Thread(instanceThis);
+            hiloNotificaciones.start();
+            DialogoCodefac.mensaje("Correcto", "Las notificaciones se estan enviado , puede revisar en el monitor", DialogoCodefac.MENSAJE_CORRECTO);
+        }
     }
     
 }

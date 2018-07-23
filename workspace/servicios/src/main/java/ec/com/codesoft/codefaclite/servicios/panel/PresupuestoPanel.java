@@ -117,12 +117,6 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
         txtDescuentoPrecioVenta = new javax.swing.JTextField();
         txtDescuentoPrecioCompra = new javax.swing.JTextField();
         jLabel20 = new javax.swing.JLabel();
-        jPanel4 = new javax.swing.JPanel();
-        jLabel21 = new javax.swing.JLabel();
-        jLabel23 = new javax.swing.JLabel();
-        jLabel26 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
         jLabel27 = new javax.swing.JLabel();
         cmbTipoPresupuesto = new javax.swing.JComboBox<>();
         llblEspacio50 = new javax.swing.JLabel();
@@ -724,41 +718,6 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
 
         jTabbedPane1.addTab("Detalles", jPanel1);
 
-        jPanel4.setLayout(new java.awt.GridBagLayout());
-
-        jLabel21.setText("Proveedor: ");
-        jPanel4.add(jLabel21, new java.awt.GridBagConstraints());
-
-        jLabel23.setText("Orden Compra: ");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        jPanel4.add(jLabel23, gridBagConstraints);
-
-        jLabel26.setText("jLabel26");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        jPanel4.add(jLabel26, gridBagConstraints);
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        jPanel4.add(jComboBox1, gridBagConstraints);
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        jPanel4.add(jComboBox2, gridBagConstraints);
-
-        jTabbedPane1.addTab("Orden Trabajo", jPanel4);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
@@ -810,8 +769,6 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     private com.toedter.calendar.JDateChooser cmbFechaPresupuesto;
     private javax.swing.JComboBox<String> cmbOpcionDiaMes;
     private javax.swing.JComboBox<CatalogoProducto> cmbTipoPresupuesto;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -826,12 +783,9 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
-    private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -843,7 +797,6 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -1184,16 +1137,5 @@ public abstract class PresupuestoPanel extends ControladorCodefacInterface{
     public void setCmbTipoPresupuesto(JComboBox<CatalogoProducto> cmbTipoPresupuesto) {
         this.cmbTipoPresupuesto = cmbTipoPresupuesto;
     }
-
-    public JPanel getjPanel4() {
-        return jPanel4;
-    }
-
-    public void setjPanel4(JPanel jPanel4) {
-        this.jPanel4 = jPanel4;
-    }
     
-    
-    
-
 }

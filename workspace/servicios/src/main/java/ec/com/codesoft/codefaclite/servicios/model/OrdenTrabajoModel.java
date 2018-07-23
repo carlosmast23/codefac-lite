@@ -102,12 +102,11 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
                 throw new ExcepcionCodefacLite("Cancelacion usuario");
             }
             setearDatos();
-            OrdenTrabajo.GeneralEstadoEnum estadoEnum = (OrdenTrabajo.GeneralEstadoEnum) getCmbEstadoDetallesOrdenTrabajo().getSelectedItem();
-            this.ordenTrabajo.setEstadoDetalles(estadoEnum.getEstado());
+           
             OrdenTrabajoServiceIf servicio = ServiceFactory.getFactory().getOrdenTrabajoServiceIf();
             ordenTrabajo=servicio.grabar(ordenTrabajo);
             imprimir();
-            //limpiar();
+   
             }catch (ServicioCodefacException ex) {
                 Logger.getLogger(OrdenTrabajoModel.class.getName()).log(Level.SEVERE, null, ex);
             }catch (RemoteException ex) {
@@ -118,6 +117,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
     @Override
     public void editar() throws ExcepcionCodefacLite {
       try {
+          
             setearDatos();
             OrdenTrabajoServiceIf servicio = ServiceFactory.getFactory().getOrdenTrabajoServiceIf(); 
             servicio.editar(this.ordenTrabajo);
@@ -601,10 +601,9 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
     public void setearDatos() throws ExcepcionCodefacLite
     {
             this.ordenTrabajo.setFechaIngreso(new Date(getCmbDateFechaIngreso().getDate().getTime()));
-            //this.ordenTrabajo.setCodigo(""+getTxtCodigo().getText());
             this.ordenTrabajo.setDescripcion(""+getTxtDescripcion().getText());
-            GeneralEnumEstado generalEnumEstado = (GeneralEnumEstado) getCmbEstadoOrdenTrabajo().getSelectedItem();
-            this.ordenTrabajo.setEstado(generalEnumEstado.getEstado());
+            OrdenTrabajo.GeneralEstadoEnum estadoEnum = (OrdenTrabajo.GeneralEstadoEnum) getCmbEstadoDetallesOrdenTrabajo().getSelectedItem();
+            this.ordenTrabajo.setEstadoDetalles(estadoEnum.getEstado());
     }
     
     private boolean verificarCamposValidados() {
