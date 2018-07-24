@@ -74,8 +74,8 @@ public class Persona implements Serializable, Comparable<Persona>{
     @JoinColumn(name = "SRI_FORMA_PAGO_ID")
     private SriFormaPago sriFormaPago;
     
-    @JoinColumn(name = "SRI_IDENTIFICACION_ID")
-    private SriIdentificacion sriTipoIdentificacion;
+    //@JoinColumn(name = "SRI_IDENTIFICACION_ID")
+    //private SriIdentificacion sriTipoIdentificacion;
     
     /**
      * Variable para identificar el tipo de la persona, si es proveedor ,
@@ -212,13 +212,13 @@ public class Persona implements Serializable, Comparable<Persona>{
         this.sriFormaPago = sriFormaPago;
     }
 
-    public SriIdentificacion getSriTipoIdentificacion() {
-        return sriTipoIdentificacion;
-    }
+    //public SriIdentificacion getSriTipoIdentificacion() {
+    //    return sriTipoIdentificacion;
+    //}
 
-    public void setSriTipoIdentificacion(SriIdentificacion sriTipoIdentificacion) {
-        this.sriTipoIdentificacion = sriTipoIdentificacion;
-    }
+    //public void setSriTipoIdentificacion(SriIdentificacion sriTipoIdentificacion) {
+    //    this.sriTipoIdentificacion = sriTipoIdentificacion;
+    //}
 
     public String getObligadoLlevarContabilidad() {
         return obligadoLlevarContabilidad;

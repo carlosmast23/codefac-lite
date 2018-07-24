@@ -28,6 +28,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoPro
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadValidador;
 import java.io.Serializable;
@@ -87,7 +88,15 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
         
         informacionFactura.setFechaEmision(ComprobantesElectronicosUtil.dateToString(factura.getFechaEmision()));
         
-        if(factura.getCliente().getSriTipoIdentificacion().getCodigo().equals(SriIdentificacion.CEDULA_IDENTIFICACION))
+        SriIdentificacionServiceIf servicioSri = ServiceFactory.getFactory().getSriIdentificacionServiceIf();
+        SriIdentificacion sriIdentificacion = null;
+        try {
+            sriIdentificacion = servicioSri.obtenerPorTransaccionEIdentificacion(factura.getCliente().getTipoIdentificacionEnum(), SriIdentificacion.tipoTransaccionEnum.VENTA);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ComprobanteDataNotaCredito.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if(sriIdentificacion!=null && sriIdentificacion.getCodigo().equals(SriIdentificacion.CEDULA_IDENTIFICACION))
             informacionFactura.setIdentificacionComprador(factura.getCliente().getIdentificacion());
         else
             informacionFactura.setIdentificacionComprador(UtilidadesTextos.llenarCarateresDerecha(factura.getCliente().getIdentificacion(), 13, "0"));
@@ -96,7 +105,7 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
         //Falta manejar este campo al momento de guardar
         informacionFactura.setRazonSocialComprador(UtilidadValidador.normalizarTexto(factura.getCliente().getRazonSocial()));
         //informacionFactura.setRazonSocialComprador(factura.getCliente().getRazonSocial());
-        informacionFactura.setTipoIdentificacionComprador(factura.getCliente().getSriTipoIdentificacion().getCodigo());
+        informacionFactura.setTipoIdentificacionComprador(sriIdentificacion.getCodigo());
         
         BigDecimal descuentoTotal=factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos());
         informacionFactura.setTotalDescuento(descuentoTotal);

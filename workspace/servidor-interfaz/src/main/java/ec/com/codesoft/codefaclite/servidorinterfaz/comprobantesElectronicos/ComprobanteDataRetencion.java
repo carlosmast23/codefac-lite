@@ -12,18 +12,23 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.retencion.Detalle
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.retencion.InformacionRetencion;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.retencion.RetencionComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadValidador;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.io.Serializable;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -91,7 +96,15 @@ public class ComprobanteDataRetencion implements ComprobanteDataInterface,Serial
         info.setDirEstablecimiento(UtilidadValidador.normalizarTexto(retencion.getProveedor().getDireccion()));
         info.setFechaEmision(ComprobantesElectronicosUtil.dateToString(retencion.getFechaEmision()));
         
-        if(retencion.getProveedor().getSriTipoIdentificacion().getCodigo().equals(SriIdentificacion.CEDULA_IDENTIFICACION))
+        SriIdentificacionServiceIf servicioSri=ServiceFactory.getFactory().getSriIdentificacionServiceIf();
+        SriIdentificacion sriIdentificacion=null;
+        try {
+            sriIdentificacion=servicioSri.obtenerPorTransaccionEIdentificacion(retencion.getProveedor().getTipoIdentificacionEnum(), SriIdentificacion.tipoTransaccionEnum.VENTA);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ComprobanteDataNotaCredito.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        if(sriIdentificacion!=null && sriIdentificacion.getCodigo().equals(SriIdentificacion.CEDULA_IDENTIFICACION))
             info.setIdentificacionSujetoRetenido(retencion.getProveedor().getIdentificacion());
         else
             info.setIdentificacionSujetoRetenido(UtilidadesTextos.llenarCarateresDerecha(retencion.getProveedor().getIdentificacion(), 13, "0"));
@@ -103,7 +116,7 @@ public class ComprobanteDataRetencion implements ComprobanteDataInterface,Serial
         info.setRazonSocialSujetoRetenido(retencion.getProveedor().getRazonSocial());
         
         //Todo: Revisar este caso porque en los clientes coincide pero para las proveedores ya no coincide el codigo de tipo de identifiacion
-        info.setTipoIdentificacionSujetoRetenido(retencion.getProveedor().getSriTipoIdentificacion().getCodigo());
+        info.setTipoIdentificacionSujetoRetenido(sriIdentificacion.getCodigo());
 
         /**
          * Llenar los detalles de las retenciones

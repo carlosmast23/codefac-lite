@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadValidador;
 import java.io.Serializable;
@@ -104,10 +105,22 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
         info.setFechaEmision(ComprobantesElectronicosUtil.dateToString(notaCredito.getFechaEmision()));
         info.setFechaEmisionDocSustento(ComprobantesElectronicosUtil.dateToString(notaCredito.getFactura().getFechaEmision()));
         
-        if(notaCredito.getCliente().getSriTipoIdentificacion().getCodigo().equals(SriIdentificacion.CEDULA_IDENTIFICACION))
+        SriIdentificacionServiceIf servicioSri=ServiceFactory.getFactory().getSriIdentificacionServiceIf();
+        SriIdentificacion sriIdentificacion=null;
+        try {
+            sriIdentificacion=servicioSri.obtenerPorTransaccionEIdentificacion(notaCredito.getCliente().getTipoIdentificacionEnum(), SriIdentificacion.tipoTransaccionEnum.VENTA);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ComprobanteDataNotaCredito.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if(sriIdentificacion!=null && sriIdentificacion.getCodigo().equals(SriIdentificacion.CEDULA_IDENTIFICACION))
+        {
             info.setIdentificacionComprador(notaCredito.getCliente().getIdentificacion());
+        }
         else
+        {
             info.setIdentificacionComprador(UtilidadesTextos.llenarCarateresDerecha(notaCredito.getCliente().getIdentificacion(), 13, "0"));
+        }
         /**
          * Verificar que valor no mas acepta
          */
@@ -123,7 +136,7 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
          */
         //info.setRise(claveAcceso);
         
-        info.setTipoIdentificacionComprador(UtilidadValidador.normalizarTexto(notaCredito.getCliente().getSriTipoIdentificacion().getCodigo()));
+        info.setTipoIdentificacionComprador(UtilidadValidador.normalizarTexto(sriIdentificacion.getCodigo()));
         //info.setTotalImpuestos(totalImpuestos);
         info.setTotalSinImpuestos(notaCredito.getSubtotalDoce().add(notaCredito.getSubtotalCero()));
         info.setValorModificacion(notaCredito.getTotal());
