@@ -193,7 +193,7 @@ public class OrdenTrabajoDetalle implements Serializable
          */
         RECIBIDO("R", "Recibido"),
         /**
-         * Identificador para saber que la orden ay esta presupuestada
+         * Identificador para saber que la orden ya esta presupuestada
          */
         PRESUPUESTADO("P", "Presupuestado"),
         /**
