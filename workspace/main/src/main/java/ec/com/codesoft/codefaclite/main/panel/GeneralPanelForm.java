@@ -221,7 +221,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
 
         lblPiePagina.setForeground(new java.awt.Color(255, 255, 255));
         lblPiePagina.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblPiePagina.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img.general/letraCodefac.png"))); // NOI18N
+        lblPiePagina.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/general/letraCodefac.png"))); // NOI18N
         lblPiePagina.setText("Todos los derechos reservador por @Codesoft 2017       ");
         JPanelPiePagina.add(lblPiePagina, java.awt.BorderLayout.CENTER);
 

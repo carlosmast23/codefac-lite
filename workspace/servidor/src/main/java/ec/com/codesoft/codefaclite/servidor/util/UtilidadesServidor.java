@@ -42,6 +42,7 @@ public class UtilidadesServidor {
 
     private static final Logger LOG = Logger.getLogger(UtilidadesServidor.class.getName());
 
+    public static final String ETIQUETA_AGREGAR_SCRIPT = "@AGREGAR_SCRIPT ";
     public static final String ETIQUETA_AGREGAR_COLUMNA = "@AGREGAR_COLUMNA";
     public static final String ETIQUETA_AGREGAR_TABLA = "@AGREGAR_TABLA";
     public static final String ETIQUETA_VERSION = "VERSION_SISTEMA";
@@ -253,6 +254,21 @@ public class UtilidadesServidor {
                                 }
 
                             }
+                            
+                            //Agregar scripts pendientes para actualizar la base de datos
+                            String[] etiquetas = queryTabla.split(ETIQUETA_AGREGAR_SCRIPT);
+                            if(etiquetas.length>1)
+                            {
+                                for (int i = 0; i < etiquetas.length; i++) {
+                                    String etiqueta = etiquetas[i];
+                                    String version = obtenerPropiedad(etiqueta, ETIQUETA_VERSION);
+                                    //String nombreTabla = obtenerNombreTabla(queryTabla);
+                                    String queryNuevo = obtenerQuery(etiqueta);
+                                    queryNuevo=queryNuevo;
+                                    
+                                }
+                            }
+                            
 
                         }
                     } catch (NullPointerException cpe) {
@@ -321,6 +337,14 @@ public class UtilidadesServidor {
 
         return nombreTabla;
 
+    }
+    
+    public static String obtenerQuery(String str)
+    {
+        str=str.replace(" ","");//Copiar espacios en blanco
+        int indiceTerminaEtiqueta=str.indexOf(")*/");
+        str=str.substring(indiceTerminaEtiqueta+3);
+        return str;
     }
 
     public static String obtenerQueryEdit(String str, String nombreTabla) {

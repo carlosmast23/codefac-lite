@@ -25,6 +25,7 @@ import ec.com.codesoft.codefaclite.main.model.ModoAplicativoModel;
 import ec.com.codesoft.codefaclite.main.model.ServidorMonitorModel;
 import ec.com.codesoft.codefaclite.main.model.SplashScreenModel;
 import ec.com.codesoft.codefaclite.main.model.ValidarLicenciaModel;
+import ec.com.codesoft.codefaclite.main.other.ArchivoDescarga;
 import ec.com.codesoft.codefaclite.main.other.BaseDatosCredenciales;
 import ec.com.codesoft.codefaclite.main.panel.publicidad.Publicidad;
 import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
@@ -177,12 +178,16 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaSer
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
+import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSistema;
 import ec.com.codesoft.codefaclite.utilidades.web.UtilidadesWeb;
 import java.awt.Font;
+import java.io.File;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
@@ -277,7 +282,8 @@ public class Main {
     
     private static void verificarUltimaVersionCodefac()
     {
-        String path="http://www.cf.codesoft-ec.com/uploads/versiones/"; //directorio principal desde donde se van a bajar los archivos para actualizar
+        //String path="http://www.cf.codesoft-ec.com/uploads/versiones/"; //directorio principal desde donde se van a bajar los archivos para actualizar
+        String path="http://localhost/java/recursos/";
         String carpetaDescarga="tmp"; //nombre de la carpeta para almacenar en el directoro TODO: Crear una variable global paa hacer referenca al directorio temporal
         
         String nameUltimaVersion="codefac.jar"; //Nombre del archivo de la nueva version de Codefac para descargar        
@@ -293,7 +299,7 @@ public class Main {
                 propiedadesIniciales.load(new FileReader(carpetaDescarga+"/"+nameVersionPropiedades));
                 String ultimaVersion=propiedadesIniciales.getProperty("version");
                 //Solo actualizar si la version instalada es menor a la disponible en internet
-                if(UtilidadesSistema.compareVersion(ParametrosSistemaCodefac.VERSION,ultimaVersion)==-1)
+                //if(UtilidadesSistema.compareVersion(ParametrosSistemaCodefac.VERSION,ultimaVersion)==-1)
                 {
                     if(!DialogoCodefac.dialogoPregunta("Actualizar Codefac","Existe una nueva versión disponible , desea actualizar ahora?", DialogoCodefac.MENSAJE_CORRECTO))
                     {
@@ -307,7 +313,11 @@ public class Main {
                     LOG.log(Level.INFO, "Descargado updater para instalar las actualizaciones");
                     
                     //Descargar la ultima version disponible en el repositorio web
-                    DescargaModel descargaModel=new DescargaModel(nameUltimaVersion, carpetaDescarga,path+nameUltimaVersion);
+                    List<ArchivoDescarga> archivosDescargar=new ArrayList<ArchivoDescarga>();
+                   
+                    archivosDescargar.add(new ArchivoDescarga(nameUltimaVersion,path+nameUltimaVersion,carpetaDescarga));
+                    archivosDescargar.addAll(buscarLibreriasActualizar(path,carpetaDescarga)); //Obtiene una lista de librerias de descargar para actualizar
+                    DescargaModel descargaModel=new DescargaModel(archivosDescargar);
                     descargaModel.empezarDescarga();
                     descargaModel.setVisible(true);
                     
@@ -338,6 +348,56 @@ public class Main {
         }
         
         
+    }
+    
+    private static List<ArchivoDescarga> buscarLibreriasActualizar(String path,String carpetaDescarga)
+    {
+        final String ARCHIVO_LISTA_LIBRERIAS = "librerias.txt";
+        UtilidadesWeb.descargarArchivo(ARCHIVO_LISTA_LIBRERIAS, path + ARCHIVO_LISTA_LIBRERIAS, carpetaDescarga);
+        List<String> libreriasOnline=UtilidadesArchivos.leerArchivoPlano(carpetaDescarga + "/" + ARCHIVO_LISTA_LIBRERIAS); //Ontiene un array con todos los nombres de las librias disponibles en linea
+        File archivoLibrerias=new File("lib"); //Busca la carpeta de librerias del computador
+        
+        //Verifica si el directorio existe obtengo una lista de las librerias actuales para comparar
+        List<String> listaLibreriasDescargadas=new ArrayList<String>();
+        if(archivoLibrerias.exists())
+        {
+            String[] libreriasActuales=archivoLibrerias.list();
+            listaLibreriasDescargadas = new ArrayList<String>(Arrays.asList(libreriasActuales));
+        }
+        
+        //Verifico cuales son las librerias que faltan por descargar
+        HashSet<String> conjuntoOnline=new HashSet<String>(libreriasOnline);
+        HashSet<String> conjuntoDescargado=new HashSet<String>(listaLibreriasDescargadas);
+        conjuntoOnline.removeAll(conjuntoDescargado); //elimino los conjuntos que ya estan descargados y estos son los que faltan descargar
+        
+        ////Librerias por defecto que siempre se deben actualizar porque son parte de la funcionalidad del sistema
+        ////TODO: Estar siempre alerta porque si se aumenta un modulo toca agregar en esta parte
+        conjuntoOnline.add("cartera-1.0-SNAPSHOT.jar");
+        conjuntoOnline.add("compra-1.0-SNAPSHOT.jar");
+        conjuntoOnline.add("configuraciones-1.0-SNAPSHOT.jar");
+        conjuntoOnline.add("controlador-1.0-SNAPSHOT.jar");
+        conjuntoOnline.add("coreCodefacLite-1.0-SNAPSHOT.jar");
+        conjuntoOnline.add("crm-1.0-SNAPSHOT.jar");
+        conjuntoOnline.add("facturacion-1.0-SNAPSHOT.jar");
+        conjuntoOnline.add("facturacionElectronica-1.0-SNAPSHOT.jar");
+        conjuntoOnline.add("gestionAcademica-1.0-SNAPSHOT.jar");
+        conjuntoOnline.add("inventario-1.0-SNAPSHOT.jar");
+        conjuntoOnline.add("recursos-1.0-SNAPSHOT.jar");
+        conjuntoOnline.add("servicios-1.0-SNAPSHOT.jar");
+        conjuntoOnline.add("servidor-1.0-SNAPSHOT.jar");
+        conjuntoOnline.add("servidor-interfaz-1.0-SNAPSHOT.jar");
+        conjuntoOnline.add("utilidades-1.0-SNAPSHOT.jar");
+        conjuntoOnline.add("ws-client-iess-1.0-SNAPSHOT.jar");
+        conjuntoOnline.add("ws-codefac-1.0-SNAPSHOT.jar");
+        conjuntoOnline.add("ws-virtualmall-1.0-SNAPSHOT.jar");
+       
+        //Crear el map con los datos para descargar
+        List<ArchivoDescarga> listLibreriasDescargar=new ArrayList<ArchivoDescarga>();
+        for (Iterator<String> iterator = conjuntoOnline.iterator(); iterator.hasNext();) {
+            String nombreLibreria = iterator.next();
+            listLibreriasDescargar.add(new ArchivoDescarga(nombreLibreria+".new", path+nombreLibreria,"lib"));
+        }
+        return listLibreriasDescargar;
     }
 
     /**

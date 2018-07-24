@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
@@ -34,11 +35,14 @@ public class Main {
 
             //Muevo el archivo nuevo para actualizar
             Files.move(aplicacionActualizada.toPath(), aplicacionNueva.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            
+            //Actualizar las nuevas librerias descargadas
+            instalarLibreriasNuevas();
 
             try {
                 // Comando para abrir nuevamente el aplicativo java (java -jar codefac.jar)
                 List<String> comando = Arrays.asList(
-                        "java",
+                        "javaw",
                         "-jar",
                         "codefac.jar");
                 //Ejecuta el comando como si estuviera directamente ejecutando en el cmd del sistema
@@ -57,4 +61,41 @@ public class Main {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    /**
+     * Metodo que se encarga de remplazar las librerias descargadas
+     */
+    public static void instalarLibreriasNuevas()
+    {
+        File archivoLibrerias=new File("lib"); //Busca la carpeta de librerias del computador
+        
+        //Verifica si el directorio existe obtengo una lista de las librerias actuales para comparar
+        if(archivoLibrerias.exists())
+        {
+            //String[] libreriasActuales=archivoLibrerias.list();
+            File[] libreriasActuales=archivoLibrerias.listFiles();
+            for (File libreria : libreriasActuales) {
+                if(libreria.getName().indexOf(".new")>=0) //Si la libreria tiene este formato toca actualizar
+                {
+                    try {
+                        File newFile = new File(libreria.getParent(),libreria.getName().replace(".new",""));
+                        Files.move(libreria.toPath(), newFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    } catch (IOException ex) {
+                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }
+    }
+    /*
+    public static boolean renombrarArchivo(File file, String nuevoNombre) {
+        try {
+            File newFile = new File(file.getParent(), nuevoNombre);
+            Files.move(file.toPath(), newFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            return true;
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }*/
 }

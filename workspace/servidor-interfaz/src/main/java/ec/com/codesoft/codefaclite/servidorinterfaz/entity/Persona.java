@@ -61,6 +61,9 @@ public class Persona implements Serializable, Comparable<Persona>{
     @Column(name = "ESTADO")
     private String estado;
     
+    @Column(name = "TIPO_IDENTIFICACION")
+    private String tipoIdentificacion;
+
     @Column(name = "OBLIGADO_LLEVAR_CONTABILIDAD")
     private String obligadoLlevarContabilidad;    
     
@@ -73,7 +76,7 @@ public class Persona implements Serializable, Comparable<Persona>{
     
     @JoinColumn(name = "SRI_IDENTIFICACION_ID")
     private SriIdentificacion sriTipoIdentificacion;
-
+    
     /**
      * Variable para identificar el tipo de la persona, si es proveedor ,
      * cliente, o ambos
@@ -224,6 +227,15 @@ public class Persona implements Serializable, Comparable<Persona>{
     public void setObligadoLlevarContabilidad(String obligadoLlevarContabilidad) {
         this.obligadoLlevarContabilidad = obligadoLlevarContabilidad;
     }
+
+    public String getTipoIdentificacion() {
+        return tipoIdentificacion;
+    }
+
+    public void setTipoIdentificacion(String tipoIdentificacion) {
+        this.tipoIdentificacion = tipoIdentificacion;
+    }
+    
     
 
     ///Metodos personalizados
@@ -254,6 +266,12 @@ public class Persona implements Serializable, Comparable<Persona>{
         return telefonos;
         
     }
+    
+    public TipoIdentificacionEnum getTipoIdentificacionEnum()
+    {
+        return TipoIdentificacionEnum.obtenerPorLetra(tipoIdentificacion);
+    }
+    
     
     public EnumSiNo getObligadoLlevarContabilidadEnum() {
         return EnumSiNo.getEnumByLetra(obligadoLlevarContabilidad);
@@ -297,6 +315,48 @@ public class Persona implements Serializable, Comparable<Persona>{
     @Override
     public int compareTo(Persona o) {
       return this.getIdCliente().compareTo(o.getIdCliente());
+    }
+    
+    public enum TipoIdentificacionEnum
+    {
+        RUC("R","Ruc"),
+        CEDULA("C","Cédula"),
+        PASAPORTE("P","Pasaporte"),
+        CLIENTE_FINAL("F","Consumidor Final");
+        
+        private String letra;
+        private String nombre;
+
+        private TipoIdentificacionEnum(String letra, String nombre) {
+            this.letra = letra;
+            this.nombre = nombre;
+        }
+
+        public String getLetra() {
+            return letra;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+        
+        public static TipoIdentificacionEnum obtenerPorLetra(String letra)
+        {
+            for (Persona.TipoIdentificacionEnum tipoIdentificacion : TipoIdentificacionEnum.values()) {
+                if(tipoIdentificacion.getLetra().equals(letra))
+                {
+                    return tipoIdentificacion;
+                }
+            }
+            return null;
+        }
+
+        @Override
+        public String toString() {
+            return nombre;
+        }
+        
+        
     }
 
 }
