@@ -190,10 +190,11 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             if (!respuesta) {
                 throw new ExcepcionCodefacLite("Cancelacion usuario de Presupuesto");
             }
-            
+
             PresupuestoServiceIf servicio = ServiceFactory.getFactory().getPresupuestoServiceIf();
             servicio.grabar(presupuesto);
             DialogoCodefac.mensaje("Correcto","El presupuesto fue grabado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+            
             
             /**
              * Modifar el estado del detalle de la orden de trabajo ya que se le ligo al presupuesto 
@@ -1492,27 +1493,27 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
 
     }
     
-    public void modificarEstadoOrdenTrabajoPorDetalle()
+    public void modificarEstadoOrdenTrabajoPorDetalle() throws ServicioCodefacException
     {
         try {
-            OrdenTrabajoServiceIf servicio = ServiceFactory.getFactory().getOrdenTrabajoServiceIf();
+            PresupuestoServiceIf servicioPresupuesto = ServiceFactory.getFactory().getPresupuestoServiceIf();
+            OrdenTrabajoServiceIf servicioOrden = ServiceFactory.getFactory().getOrdenTrabajoServiceIf();
             /**
-             * Modificar el campo ya que se esta ligando un detalle de la Orden de Trabajo a un Presupuesto
-             */
+            * Obtengo las Detalles de las ordenes de trabajo ligadas a los presupuestos   
+            */
+            List<OrdenTrabajoDetalle> ordenesTrabajoDetalles = servicioPresupuesto.listarOrdenesTrabajo(this.presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo());
             OrdenTrabajo ordenTrabajo = this.presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo();
-            ordenTrabajo.setEstadoDetalles(OrdenTrabajo.GeneralEstadoEnum.LIGADO.getEstado());
-            //servicio.editar(ordenTrabajo);
-            
-            Map<String,Object> parametrosMap= new HashMap<>();
-            parametrosMap.put("ordenTrabajo", ordenTrabajo);
-            List<OrdenTrabajoDetalle> detalles = ServiceFactory.getFactory().getOrdenDetalleTrabajoServiceIf().obtenerTodos();
-            
-            
-            boolean b = false;
-            for (OrdenTrabajoDetalle detalle : detalles) {
-                //OrdenTrabajo.GeneralEstadoEnum.getEnum(detalle.)
-                        
+            if(ordenesTrabajoDetalles.size() == this.presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo().getDetalles().size())
+            {
+                /**
+                * Modificar el campo ya que se esta ligando un detalle de la Orden de Trabajo a un Presupuesto
+                */
+                ordenTrabajo.setEstadoDetalles(OrdenTrabajo.GeneralEstadoEnum.FINALIZADO.getEstado());
+            }else{
+                ordenTrabajo.setEstadoDetalles(OrdenTrabajo.GeneralEstadoEnum.LIGADO.getEstado());
             }
+            servicioOrden.editar(ordenTrabajo);
+            
             
         } catch (RemoteException ex) {
             Logger.getLogger(PresupuestoModel.class.getName()).log(Level.SEVERE, null, ex);

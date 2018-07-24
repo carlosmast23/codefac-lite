@@ -104,11 +104,11 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
         this.cmbEstadoOrdenTrabajo = cmbEstadoOrdenTrabajo;
     }
 
-    public JComboBox<OrdenTrabajoDetalle.EstadoEnum> getCmbEstadoDetallesOrdenTrabajo() {
+    public JComboBox<OrdenTrabajo.GeneralEstadoEnum> getCmbEstadoDetallesOrdenTrabajo() {
         return cmbEstadoDetallesOrdenTrabajo;
     }
 
-    public void setCmbEstadoDetallesOrdenTrabajo(JComboBox<OrdenTrabajoDetalle.EstadoEnum> cmbEstadoDetallesOrdenTrabajo) {
+    public void setCmbEstadoDetallesOrdenTrabajo(JComboBox<OrdenTrabajo.GeneralEstadoEnum> cmbEstadoDetallesOrdenTrabajo) {
         this.cmbEstadoDetallesOrdenTrabajo = cmbEstadoDetallesOrdenTrabajo;
     }
     
@@ -691,7 +691,7 @@ public abstract class OrdenTrabajoPanel extends ControladorCodefacInterface{
     private com.toedter.calendar.JDateChooser cmbDateFechaEntrega;
     private com.toedter.calendar.JDateChooser cmbDateFechaIngreso;
     private javax.swing.JComboBox<OrdenTrabajoDetalle.EstadoEnum> cmbEstadoDetalle;
-    private javax.swing.JComboBox<OrdenTrabajoDetalle.EstadoEnum> cmbEstadoDetallesOrdenTrabajo;
+    private javax.swing.JComboBox<OrdenTrabajo.GeneralEstadoEnum> cmbEstadoDetallesOrdenTrabajo;
     private javax.swing.JComboBox<GeneralEnumEstado> cmbEstadoOrdenTrabajo;
     private javax.swing.JComboBox<PrioridadEnumEstado> cmbPrioridadDetalle;
     private javax.swing.JComboBox<Departamento> cmbTipoOrdenDetalle;

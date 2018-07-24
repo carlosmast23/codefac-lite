@@ -50,10 +50,12 @@ public class TestBaseDatos {
 //            for (Persona persona : personas) {
 //                System.out.println(" - " + persona);
 //            }
-            
+            OrdenTrabajoService service = new OrdenTrabajoService();
+            OrdenTrabajo ordenTrabajo = (OrdenTrabajo) service.obtenerTodos().get(0);
+            System.out.println("Número de ordenes de trabajo: " + ordenTrabajo.getDetalles().size()); 
             PresupuestoService servicio1 = new PresupuestoService();
-            List <OrdenTrabajoDetalle> ordenesTrabajo = servicio1.listarOrdenesTrabajo();
-            for (OrdenTrabajoDetalle ordenTrabajo : ordenesTrabajo) {
+            List <OrdenTrabajoDetalle> ordenesTrabajoDetalles = servicio1.listarOrdenesTrabajo(ordenTrabajo);
+            for (OrdenTrabajoDetalle ordenTrabajoDetalle : ordenesTrabajoDetalles) {
                 System.out.println("-> " + ordenTrabajo.toString());
             }
                     

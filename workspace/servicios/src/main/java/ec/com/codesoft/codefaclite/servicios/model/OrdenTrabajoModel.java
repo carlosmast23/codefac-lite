@@ -34,6 +34,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEn
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PrioridadEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.Color;
@@ -224,15 +225,15 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
         buscarDialogoModel.setVisible(true);
         OrdenTrabajo ordenTrabajoTemp = (OrdenTrabajo) buscarDialogoModel.getResultado();
         if(ordenTrabajoTemp != null){
-            this.ordenTrabajo = ordenTrabajoTemp;
-            this.getLblCodigo().setText(this.ordenTrabajo.getId()+"");
+            ordenTrabajo = ordenTrabajoTemp;
+            getLblCodigo().setText(this.ordenTrabajo.getId()+"");
             cargarDatosCliente(ordenTrabajo.getCliente());
-            this.getTxtDescripcion().setText(""+this.ordenTrabajo.getDescripcion());
-            this.getCmbDateFechaIngreso().setDate(this.ordenTrabajo.getFechaIngreso());
+            getTxtDescripcion().setText(""+this.ordenTrabajo.getDescripcion());
+            getCmbDateFechaIngreso().setDate(this.ordenTrabajo.getFechaIngreso());
             GeneralEnumEstado generalEnumEstado = GeneralEnumEstado.getEnum(this.ordenTrabajo.getEstado());
-            this.getCmbEstadoOrdenTrabajo().setSelectedItem(generalEnumEstado);
-            OrdenTrabajo.GeneralEstadoEnum generalEstadoEnum = OrdenTrabajo.GeneralEstadoEnum.getEnum(this.ordenTrabajo.getEstado());
-            this.getCmbEstadoDetallesOrdenTrabajo().setSelectedItem(generalEstadoEnum);
+            getCmbEstadoOrdenTrabajo().setSelectedItem(generalEnumEstado);
+            OrdenTrabajo.GeneralEstadoEnum generalEstadoEnum = OrdenTrabajo.GeneralEstadoEnum.getEnum(this.ordenTrabajo.getEstadoDetalles());
+            getCmbEstadoDetallesOrdenTrabajo().setSelectedItem(generalEstadoEnum);
             mostrarDatosTabla();           
         }
         else
@@ -452,7 +453,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
          * Estado general para los detalles de orden trabajo
          */
         getCmbEstadoDetallesOrdenTrabajo().removeAllItems();
-        for(OrdenTrabajoDetalle.EstadoEnum estadoEnum: OrdenTrabajoDetalle.EstadoEnum.values())
+        for(OrdenTrabajo.GeneralEstadoEnum estadoEnum: OrdenTrabajo.GeneralEstadoEnum.values())
         {
             getCmbEstadoDetallesOrdenTrabajo().addItem(estadoEnum);
         }
@@ -553,7 +554,15 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             ordenTrabajoDetalle.setDepartamento(departamento);
             ordenTrabajoDetalle.setNotas(""+getTxtAreaNotas().getText());
             OrdenTrabajoDetalle.EstadoEnum ordenTrabajoEnumEstado = (OrdenTrabajoDetalle.EstadoEnum) getCmbEstadoDetalle().getSelectedItem();
-            ordenTrabajoDetalle.setEstado(ordenTrabajoEnumEstado.getLetra());
+            if(!agregar){
+                /**
+                 * Cuando se guarda por primera, por defecto se guarda por recibido
+                 */
+                ordenTrabajoEnumEstado = OrdenTrabajoDetalle.EstadoEnum.RECIBIDO;
+                ordenTrabajoDetalle.setEstado(ordenTrabajoEnumEstado.getLetra());
+            }else{
+                ordenTrabajoDetalle.setEstado(ordenTrabajoEnumEstado.getLetra());    
+            }
             if(getCmbDateFechaEntrega()!=null){
                 ordenTrabajoDetalle.setFechaEntrega(new Date(getCmbDateFechaEntrega().getDate().getTime()));
             }
@@ -600,11 +609,13 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
     
     public void setearDatos() throws ExcepcionCodefacLite
     {
+            GeneralEnumEstado generalEnumEstado = (GeneralEnumEstado) getCmbEstadoOrdenTrabajo().getSelectedItem();
             this.ordenTrabajo.setFechaIngreso(new Date(getCmbDateFechaIngreso().getDate().getTime()));
             this.ordenTrabajo.setDescripcion(""+getTxtDescripcion().getText());
-            OrdenTrabajo.GeneralEstadoEnum estadoEnum = (OrdenTrabajo.GeneralEstadoEnum) getCmbEstadoDetallesOrdenTrabajo().getSelectedItem();
-            this.ordenTrabajo.setEstadoDetalles(estadoEnum.getEstado());
+            this.ordenTrabajo.setEstado(generalEnumEstado.getEstado());
     }
+    
+  
     
     private boolean verificarCamposValidados() {
         //bandera para comprobar que todos los campos esten validados
