@@ -102,8 +102,12 @@ public class UtilidadesServidor {
         RecursoCodefac.SQL.getResourceInputStream("insert_default.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_empresa.sql"),
         RecursoCodefac.SQL.getResourceInputStream("insert_usuario.sql"),
-        RecursoCodefac.SQL.getResourceInputStream("create_servicios.sql"),
+        RecursoCodefac.SQL.getResourceInputStream("create_servicios.sql"),        
     };
+    
+     public static InputStream[] querys_update = {
+         RecursoCodefac.SQL.getResourceInputStream("update/update.sql"),
+     };
 
     public static void crearBaseDatos() throws SQLException {
         try {
@@ -254,27 +258,49 @@ public class UtilidadesServidor {
                                 }
 
                             }
-                            
-                            //Agregar scripts pendientes para actualizar la base de datos
-                            String[] etiquetas = queryTabla.split(ETIQUETA_AGREGAR_SCRIPT);
-                            if(etiquetas.length>1)
-                            {
-                                for (int i = 0; i < etiquetas.length; i++) {
-                                    String etiqueta = etiquetas[i];
-                                    String version = obtenerPropiedad(etiqueta, ETIQUETA_VERSION);
-                                    //String nombreTabla = obtenerNombreTabla(queryTabla);
-                                    String queryNuevo = obtenerQuery(etiqueta);
-                                    queryNuevo=queryNuevo;
-                                    
-                                }
-                            }
-                            
 
                         }
                     } catch (NullPointerException cpe) {
                         System.out.println("Alerta al crear el sql, porfavor revise que los sql no tengan espacios en blanco al final, apesar de esta advertencia el proceso puede continuar sin ningun problema");
                     } catch (UnsupportedEncodingException ex) {
                         Logger.getLogger(UtilidadesServidor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                
+                for (InputStream queryStream : querys_update) {
+                    String sql = UtilidadesTextos.getStringURLFile(queryStream);
+                    String[] sentencias = sql.split(";");
+                    for (String sentencia : sentencias) 
+                    {
+                        byte ptext[] = sentencia.getBytes();
+                        String queryTabla = new String(ptext, "UTF-8");
+                        //Agregar scripts pendientes para actualizar la base de datos
+                        String[] etiquetas = queryTabla.split(ETIQUETA_AGREGAR_SCRIPT);
+                        if (etiquetas.length > 1) {
+                            for (int i = 0; i < etiquetas.length; i++) {
+                                //Si la parte separada no tiene esta etiqueta no me sirve porque aveces se separa en etiquetas basura
+                                //TODO: Revisar si esta solucion debe aplicar a los metodos anteriores
+                                if(etiquetas[i].indexOf(ETIQUETA_VERSION)<0)continue;
+                                
+                                String etiqueta = etiquetas[i];
+                                String version = obtenerPropiedad(etiqueta, ETIQUETA_VERSION);
+                                //String nombreTabla = obtenerNombreTabla(queryTabla);
+                                String queryNuevo = obtenerQuery(etiqueta);
+
+                                //Agregar al Map los querys si no existe ninguno con ese numero de version
+                                if (mapQuerysVersion.get(version) == null) {
+                                    List<ScriptCodefac> listaQuerys = new ArrayList<ScriptCodefac>();
+                                    listaQuerys.add(new ScriptCodefac(queryNuevo, ScriptCodefac.PrioridadQueryEnum.OTHER_SCRIPT));
+                                    mapQuerysVersion.put(version, listaQuerys);
+                                } else //Obtiene la lista de los querys anteriormente agregados para ingresar el nuevo query
+                                {
+                                    List<ScriptCodefac> listaQuerys = mapQuerysVersion.get(version);
+                                    listaQuerys.add(new ScriptCodefac(queryNuevo, ScriptCodefac.PrioridadQueryEnum.OTHER_SCRIPT));
+                                    mapQuerysVersion.put(version, listaQuerys);
+                                }
+                            }
+
+                        }
                     }
                 }
 
@@ -320,6 +346,8 @@ public class UtilidadesServidor {
             Logger.getLogger(UtilidadesServidor.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(UtilidadesServidor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(UtilidadesServidor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -341,9 +369,9 @@ public class UtilidadesServidor {
     
     public static String obtenerQuery(String str)
     {
-        str=str.replace(" ","");//Copiar espacios en blanco
-        int indiceTerminaEtiqueta=str.indexOf(")*/");
-        str=str.substring(indiceTerminaEtiqueta+3);
+        //str=str.replace(" ","");//Copiar espacios en blanco
+        int indiceTerminaEtiqueta=str.indexOf("*/");
+        str=str.substring(indiceTerminaEtiqueta+2);
         return str;
     }
 
