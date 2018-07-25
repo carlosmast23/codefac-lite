@@ -40,6 +40,10 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
     {
         EntityTransaction transaccion=entityManager.getTransaction();
         transaccion.begin(); //Inicio de la transaccion
+        /**
+         * Cambiar el estado del detalle de la Orden de trabajo
+         */
+        //OrdenTrabajoDetalleService service = new OrdenTrabajoDetalleService();
         try {
             //Recorro todos los detalles para verificar si existe todos los productos proveedor o los grabo o los edito con los nuevos valores
             for (PresupuestoDetalle presupuestoDetalle : entity.getPresupuestoDetalles()) {
@@ -76,10 +80,11 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
         return presupuestoFacade.findAll();
     }
     
-    public List<OrdenTrabajoDetalle> listarOrdenesTrabajo()
+    public List<OrdenTrabajoDetalle> listarOrdenesTrabajo(OrdenTrabajo ordenTrabajo)
     {
-        return presupuestoFacade.listarOrdenTrabajo();
+        return presupuestoFacade.listarOrdenTrabajo(ordenTrabajo);
     }
+    
     
     
 }

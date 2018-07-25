@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.EntityTransaction;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
@@ -77,5 +78,26 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
         return getFacade().consultaReporteFacade(fechaInicial,fechaFinal,departamento,empleado,estado);        
     }
     
+    @Override
+    public OrdenTrabajo grabar(OrdenTrabajo ordenTrabajo)
+    {
+        
+        EntityTransaction transaction = entityManager.getTransaction();
+        
+        try{
+            transaction.begin();
+            OrdenTrabajo.GeneralEstadoEnum estadoEnum = OrdenTrabajo.GeneralEstadoEnum.GENERADO;
+            ordenTrabajo.setEstadoDetalles(estadoEnum.getEstado());
+            entityManager.persist(ordenTrabajo);
+            entityManager.flush();
+            transaction.commit();
+        }
+        catch (DatabaseException ex) {
+            transaction.rollback();
+            Logger.getLogger(OrdenTrabajoService.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        
+        return ordenTrabajo;
+    }
 }
 
