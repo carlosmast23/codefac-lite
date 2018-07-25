@@ -36,6 +36,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Source: "recursos/codefac.bat"; DestDir: "{app}"; Flags: ignoreversion
 Source: "recursos/icono_codefac.ico"; DestDir: "{app}"; Flags: ignoreversion
 Source: "jar/codefac.jar"; DestDir: "{app}"; Flags: ignoreversion
+Source: "lib/*"; DestDir: "{app}/lib"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

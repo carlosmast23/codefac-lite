@@ -53,4 +53,5 @@ workspace/main/codefac.ini
 #Excluir archivos del manual para generar el instalador
 /manuales/generar_instalador/Output/
 /manuales/generar_instalador/jar/*.jar
+/manuales/generar_instalador/lib
 
