@@ -390,6 +390,7 @@ public class Main {
         conjuntoOnline.add("ws-client-iess-1.0-SNAPSHOT.jar");
         conjuntoOnline.add("ws-codefac-1.0-SNAPSHOT.jar");
         conjuntoOnline.add("ws-virtualmall-1.0-SNAPSHOT.jar");
+        conjuntoOnline.add("transporte-1.0-SNAPSHOT.jar");
        
         //Crear el map con los datos para descargar
         List<ArchivoDescarga> listLibreriasDescargar=new ArrayList<ArchivoDescarga>();
