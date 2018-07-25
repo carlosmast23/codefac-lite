@@ -282,8 +282,8 @@ public class Main {
     
     private static void verificarUltimaVersionCodefac()
     {
-        //String path="http://www.cf.codesoft-ec.com/uploads/versiones/"; //directorio principal desde donde se van a bajar los archivos para actualizar
-        String path="http://localhost/java/recursos/";
+        String path="http://www.cf.codesoft-ec.com/uploads/versiones/"; //directorio principal desde donde se van a bajar los archivos para actualizar
+        //String path="http://localhost/java/recursos/";
         String carpetaDescarga="tmp"; //nombre de la carpeta para almacenar en el directoro TODO: Crear una variable global paa hacer referenca al directorio temporal
         
         String nameUltimaVersion="codefac.jar"; //Nombre del archivo de la nueva version de Codefac para descargar        
@@ -299,7 +299,7 @@ public class Main {
                 propiedadesIniciales.load(new FileReader(carpetaDescarga+"/"+nameVersionPropiedades));
                 String ultimaVersion=propiedadesIniciales.getProperty("version");
                 //Solo actualizar si la version instalada es menor a la disponible en internet
-                //if(UtilidadesSistema.compareVersion(ParametrosSistemaCodefac.VERSION,ultimaVersion)==-1)
+                if(UtilidadesSistema.compareVersion(ParametrosSistemaCodefac.VERSION,ultimaVersion)==-1)
                 {
                     if(!DialogoCodefac.dialogoPregunta("Actualizar Codefac","Existe una nueva versión disponible , desea actualizar ahora?", DialogoCodefac.MENSAJE_CORRECTO))
                     {
