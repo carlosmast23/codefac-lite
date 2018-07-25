@@ -199,90 +199,90 @@ public class PresupuestoModel extends PresupuestoPanel implements Runnable{
             /**
              * Modifar el estado del detalle de la orden de trabajo ya que se le ligo al presupuesto 
              */
-            modificarEstadoOrdenTrabajoPorDetalle();
+            //modificarEstadoOrdenTrabajoPorDetalle();
             
-            this.ordenesCompra = new ArrayList<>();
-            /**
-             * El momento que se graba el Presupuesto genero de cada detalle presuesto la orden de compra
-             */
-            OrdenCompra ordenCompra;
-            for (Map.Entry<Integer, List<PresupuestoDetalle>> entry : this.mapOrden.entrySet()) 
-            {
-                Integer key = entry.getKey();
-                List<PresupuestoDetalle> detalles = entry.getValue();
-                ordenCompra = new OrdenCompra();
-                /**
-                 * Obtener para que proveedor se realiza la orden de compra
-                 */
-                ordenCompra.setProveedor(detalles.get(0).getPersona());
-                    /**
-                     * Todos los presupuestos por el momento van a estar ligados a Servicios   
-                     */     
-                    TipoDocumentoEnum tde = TipoDocumentoEnum.COMPRA_SERVICIOS;
-                    ordenCompra.setCodigoTipoDocumento(tde.getCodigo());
-                    ordenCompra.setFechaCreacion(UtilidadesFecha.getFechaHoy());
-                    ordenCompra.setFechaIngreso(this.presupuesto.getFechaPresupuesto());
-                    ordenCompra.setDescuentoImpuestos(BigDecimal.ZERO);
-                    ordenCompra.setDescuentoSinImpuestos(BigDecimal.ZERO);
-                    ordenCompra.setObservacion(this.presupuesto.getDescripcion());
-                    ordenCompra.setIva(BigDecimal.ZERO);
-                    ordenCompra.setEstado("a");
-                    
-                    
-                    BigDecimal total = new BigDecimal(BigInteger.ZERO);
-                    
-                    for(PresupuestoDetalle pd : detalles){
-                        OrdenCompraDetalle ordenCompraDetalle = new OrdenCompraDetalle();
-                        /**
-                         * Setean valores de Detalle Orden Compra 
-                         */
-                        ordenCompraDetalle.setCantidad(pd.getCantidad().intValue());
-                        ordenCompraDetalle.setDescripcion(pd.getProducto().getNombre());
-                        ordenCompraDetalle.setDescuento(pd.getDescuentoVenta());
-                        ordenCompraDetalle.setPrecioUnitario(pd.getPrecioVenta());
-                        ordenCompraDetalle.setValorIce(BigDecimal.ZERO);
-                        ordenCompraDetalle.setProductoProveedor(pd.getProductoProveedor());
-                        
-                        if (productoProveedor.getConIva().equals("s")) {
-                            ordenCompraDetalle.setIva(ordenCompraDetalle.calcularValorIva());
-                        } else {
-                            ordenCompraDetalle.setIva(BigDecimal.ZERO);
-                        }
-
-                        ordenCompraDetalle.setProductoProveedor(productoProveedor);
-                        ordenCompraDetalle.setTotal(ordenCompraDetalle.getSubtotal());
-                        
-                        /**
-                         * Sumatoria de totales de cada detalle
-                         */
-                        total.add(ordenCompraDetalle.getTotal());
-
-                        /**
-                         * Agregando detalle a Orden Compra
-                         */
-                        ordenCompra.addDetalle(ordenCompraDetalle);
-                    }
-                    
-                    ordenCompra.setTotal(total.setScale(2, RoundingMode.HALF_UP));
-                    
-  
-                /**
-                 * Grabando la orden de compra por Proveedor
-                 */
-                OrdenCompraServiceIf compraServiceIf = ServiceFactory.getFactory().getOrdenCompraServiceIf();
-                compraServiceIf.grabar(ordenCompra);
-                DialogoCodefac.mensaje("Orden compra", "Orden de Compra N° " + key +" generada", DialogoCodefac.MENSAJE_CORRECTO);
-                /**
-                 * Agregar ordenes para enviar a correo
-                 */
-                this.ordenesCompra.add(ordenCompra);
-            }
-            
-            /**
-             * Se inicia el proceso de enviar comumnicados a los empleados
-             */
-            empezarEnviarComunicados();
-            
+//            this.ordenesCompra = new ArrayList<>();
+//            /**
+//             * El momento que se graba el Presupuesto genero de cada detalle presuesto la orden de compra
+//             */
+//            OrdenCompra ordenCompra;
+//            for (Map.Entry<Integer, List<PresupuestoDetalle>> entry : this.mapOrden.entrySet()) 
+//            {
+//                Integer key = entry.getKey();
+//                List<PresupuestoDetalle> detalles = entry.getValue();
+//                ordenCompra = new OrdenCompra();
+//                /**
+//                 * Obtener para que proveedor se realiza la orden de compra
+//                 */
+//                ordenCompra.setProveedor(detalles.get(0).getPersona());
+//                    /**
+//                     * Todos los presupuestos por el momento van a estar ligados a Servicios   
+//                     */     
+//                    TipoDocumentoEnum tde = TipoDocumentoEnum.COMPRA_SERVICIOS;
+//                    ordenCompra.setCodigoTipoDocumento(tde.getCodigo());
+//                    ordenCompra.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+//                    ordenCompra.setFechaIngreso(this.presupuesto.getFechaPresupuesto());
+//                    ordenCompra.setDescuentoImpuestos(BigDecimal.ZERO);
+//                    ordenCompra.setDescuentoSinImpuestos(BigDecimal.ZERO);
+//                    ordenCompra.setObservacion(this.presupuesto.getDescripcion());
+//                    ordenCompra.setIva(BigDecimal.ZERO);
+//                    ordenCompra.setEstado("a");
+//                    
+//                    
+//                    BigDecimal total = new BigDecimal(BigInteger.ZERO);
+//                    
+//                    for(PresupuestoDetalle pd : detalles){
+//                        OrdenCompraDetalle ordenCompraDetalle = new OrdenCompraDetalle();
+//                        /**
+//                         * Setean valores de Detalle Orden Compra 
+//                         */
+//                        ordenCompraDetalle.setCantidad(pd.getCantidad().intValue());
+//                        ordenCompraDetalle.setDescripcion(pd.getProducto().getNombre());
+//                        ordenCompraDetalle.setDescuento(pd.getDescuentoVenta());
+//                        ordenCompraDetalle.setPrecioUnitario(pd.getPrecioVenta());
+//                        ordenCompraDetalle.setValorIce(BigDecimal.ZERO);
+//                        ordenCompraDetalle.setProductoProveedor(pd.getProductoProveedor());
+//                        
+//                        if (productoProveedor.getConIva().equals("s")) {
+//                            ordenCompraDetalle.setIva(ordenCompraDetalle.calcularValorIva());
+//                        } else {
+//                            ordenCompraDetalle.setIva(BigDecimal.ZERO);
+//                        }
+//
+//                        ordenCompraDetalle.setProductoProveedor(productoProveedor);
+//                        ordenCompraDetalle.setTotal(ordenCompraDetalle.getSubtotal());
+//                        
+//                        /**
+//                         * Sumatoria de totales de cada detalle
+//                         */
+//                        total.add(ordenCompraDetalle.getTotal());
+//
+//                        /**
+//                         * Agregando detalle a Orden Compra
+//                         */
+//                        ordenCompra.addDetalle(ordenCompraDetalle);
+//                    }
+//                    
+//                    ordenCompra.setTotal(total.setScale(2, RoundingMode.HALF_UP));
+//                    
+//  
+//                /**
+//                 * Grabando la orden de compra por Proveedor
+//                 */
+//                OrdenCompraServiceIf compraServiceIf = ServiceFactory.getFactory().getOrdenCompraServiceIf();
+//                compraServiceIf.grabar(ordenCompra);
+//                DialogoCodefac.mensaje("Orden compra", "Orden de Compra N° " + key +" generada", DialogoCodefac.MENSAJE_CORRECTO);
+//                /**
+//                 * Agregar ordenes para enviar a correo
+//                 */
+//                this.ordenesCompra.add(ordenCompra);
+//            }
+//            
+//            /**
+//             * Se inicia el proceso de enviar comumnicados a los empleados
+//             */
+//            empezarEnviarComunicados();
+//            
             }catch (ServicioCodefacException ex) {
                 Logger.getLogger(Presupuesto.class.getName()).log(Level.SEVERE, null, ex);
             }catch (RemoteException ex) {

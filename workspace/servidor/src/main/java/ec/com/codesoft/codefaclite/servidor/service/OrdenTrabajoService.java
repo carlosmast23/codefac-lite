@@ -87,7 +87,19 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
         try{
             transaction.begin();
             OrdenTrabajo.GeneralEstadoEnum estadoEnum = OrdenTrabajo.GeneralEstadoEnum.GENERADO;
+            OrdenTrabajoDetalle.EstadoEnum estadoEnumDetalle = OrdenTrabajoDetalle.EstadoEnum.RECIBIDO;
+            /**
+             * Agregar estado por defecto a orden trabajo (GENERADO)
+             */
             ordenTrabajo.setEstadoDetalles(estadoEnum.getEstado());
+            for(OrdenTrabajoDetalle otd : ordenTrabajo.getDetalles())
+            {
+                /**
+                 * Agregar estado por defecto a detalle orden trabajo
+                 */
+                otd.setEstado(estadoEnumDetalle.getLetra());
+       
+            }
             entityManager.persist(ordenTrabajo);
             entityManager.flush();
             transaction.commit();

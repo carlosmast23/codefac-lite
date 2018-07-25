@@ -105,7 +105,7 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
             setearDatos();
            
             OrdenTrabajoServiceIf servicio = ServiceFactory.getFactory().getOrdenTrabajoServiceIf();
-            ordenTrabajo=servicio.grabar(ordenTrabajo);
+            ordenTrabajo = servicio.grabar(ordenTrabajo);
             imprimir();
    
             }catch (ServicioCodefacException ex) {
@@ -298,7 +298,8 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
                 {
                     ordenTrabajo.setCliente(persona);
                     cargarDatosCliente(persona);
-                    //getTxtCliente().setText(persona.getRazonSocial()+" - "+persona.getIdentificacion());
+                    getTxtCategoria().requestFocus();
+                    
                 }
             }
         });
@@ -584,8 +585,8 @@ public class OrdenTrabajoModel extends OrdenTrabajoPanel{
         {
             procesoMostrarDetalles();
         }
-                   
         
+        getTxtCategoria().requestFocus();
     }
     
     public void limpiarCampos()

@@ -197,9 +197,14 @@ public class OrdenTrabajoDetalle implements Serializable
          */
         PRESUPUESTADO("P", "Presupuestado"),
         /**
+         * Identificar para saber si se termino de realizar el presupueto
+         */
+        TERMINADO("T", "Terminado"),
+        /**
          * Identificador para saber que anularon el detalle de una orden
          */
-        ANULADO("A", "Anulado");
+        ANULADO("A", "Anulado")
+        ;
 
         private EstadoEnum(String letra, String nombre) {
             this.letra = letra;

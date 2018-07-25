@@ -38,14 +38,18 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
     
     public Presupuesto grabar(Presupuesto entity) throws ServicioCodefacException
     {
+        
         EntityTransaction transaccion=entityManager.getTransaction();
-        transaccion.begin(); //Inicio de la transaccion
-        /**
-         * Cambiar el estado del detalle de la Orden de trabajo
-         */
-        //OrdenTrabajoDetalleService service = new OrdenTrabajoDetalleService();
         try {
-            //Recorro todos los detalles para verificar si existe todos los productos proveedor o los grabo o los edito con los nuevos valores
+            transaccion.begin();
+            /**
+             * Cambiar el estado del detalle de la Orden de trabajo
+             */
+            entity.getOrdenTrabajoDetalle().setEstado(OrdenTrabajoDetalle.EstadoEnum.PRESUPUESTADO.getLetra());
+            
+            /**
+             * Recorro todos los detalles para verificar si existe todos los productos proveedor o los grabo o los edito con los nuevos valores
+             */ 
             for (PresupuestoDetalle presupuestoDetalle : entity.getPresupuestoDetalles()) {
                 if (presupuestoDetalle.getProductoProveedor().getId() == null) {
                     entityManager.persist(presupuestoDetalle.getProductoProveedor());
