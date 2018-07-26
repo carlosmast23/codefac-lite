@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.main.panel;
 
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JProgressBar;
 
 /**
@@ -41,6 +42,8 @@ public  class DescargaDialog extends javax.swing.JDialog {
         lblTamanio = new javax.swing.JLabel();
         barraProgreso = new javax.swing.JProgressBar();
         jLabel3 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        lstArchivosPendientes = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -89,7 +92,7 @@ public  class DescargaDialog extends javax.swing.JDialog {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel5, gridBagConstraints);
 
@@ -105,20 +108,36 @@ public  class DescargaDialog extends javax.swing.JDialog {
         barraProgreso.setStringPainted(true);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 318;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(barraProgreso, gridBagConstraints);
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/general/codefac-nombre.PNG"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel3, gridBagConstraints);
+
+        lstArchivosPendientes.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Archivos Pendientes Descargar", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 12))); // NOI18N
+        lstArchivosPendientes.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jScrollPane1.setViewportView(lstArchivosPendientes);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jScrollPane1, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -175,9 +194,11 @@ public  class DescargaDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblNombreArchivo;
     private javax.swing.JLabel lblSitio;
     private javax.swing.JLabel lblTamanio;
+    private javax.swing.JList<String> lstArchivosPendientes;
     // End of variables declaration//GEN-END:variables
 
     public JLabel getLblNombreArchivo() {
@@ -212,6 +233,15 @@ public  class DescargaDialog extends javax.swing.JDialog {
         this.barraProgreso = barraProgreso;
     }
 
+    public JList<String> getLstArchivosPendientes() {
+        return lstArchivosPendientes;
+    }
+
+    public void setLstArchivosPendientes(JList<String> lstArchivosPendientes) {
+        this.lstArchivosPendientes = lstArchivosPendientes;
+    }
+
+    
     
     
 }

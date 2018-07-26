@@ -2096,7 +2096,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             getjSplitPanelVerticalSecundario().setDividerLocation(PROPORCION_VERTICAL);
             
             //Cargar el fondo de la pantalla
-            Image fondoImg=new javax.swing.ImageIcon(getClass().getResource("/img.general/fondoGeneral.png")).getImage();
+            Image fondoImg=new javax.swing.ImageIcon(getClass().getResource("/img/general/fondoGeneral.png")).getImage();
             getjDesktopPane1().setBorder(new Fondo(fondoImg));
             
             //Setear el segundo componente de la ventana auxliar

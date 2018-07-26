@@ -53,6 +53,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
@@ -76,14 +77,14 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
      * Modelo para manejar las identificaciones del sri
      */
     private DefaultComboBoxModel<SriIdentificacion> modelComboIdentificacion;
-    List<SriIdentificacion> identificaciones;
+    //List<SriIdentificacion> identificaciones;
 
     private PersonaServiceIf personaService;
     private Persona persona;
     private String razonSocial;
     //private String comboTipoCliente[] = {"CLIENTE", "SUJETO RETENIDO", "DESTINATARIO"};
 
-    private int opcionIdentificacion = 4;
+    //private int opcionIdentificacion = 4;
     
     protected OperadorNegocioEnum operadorNegocioDefault;
 
@@ -137,7 +138,9 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         persona.setApellidos(getjTextApellidos().getText());
         persona.setRazonSocial(getjTextNombreSocial().getText());
         persona.setNombreLegal(getTxtNombreLegal().getText());
-        persona.setSriTipoIdentificacion((SriIdentificacion) getjComboIdentificacion().getSelectedItem());
+        
+        Persona.TipoIdentificacionEnum tipoIdentificacionEnum=(Persona.TipoIdentificacionEnum) getjComboIdentificacion().getSelectedItem();
+        persona.setTipoIdentificacion(tipoIdentificacionEnum.getLetra());
         persona.setIdentificacion(getjTextIdentificacion().getText());
         persona.setTipCliente((String) getjComboTipoCliente().getSelectedItem());
         persona.setDireccion(getjTextAreaDireccion().getText());
@@ -237,17 +240,25 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     @validacionPersonalizadaAnotacion(errorTitulo = "Formato de identificacion")
     public boolean validarIdentificacionSegunOpcionEstablecida() {
         boolean verificador = false;
-        switch (this.opcionIdentificacion) {
-            case 4:
+        Persona.TipoIdentificacionEnum tipoIdentificacion=(Persona.TipoIdentificacionEnum) getjComboIdentificacion().getSelectedItem();
+        
+        if(tipoIdentificacion==null)
+            return false;
+        
+        switch (tipoIdentificacion) {
+            case RUC:
                 verificador = UtilidadesJuridicas.validarTodosRuc(getjTextIdentificacion().getText());
                 break;
-            case 5:
+            case CEDULA:
                 verificador = UtilidadesJuridicas.validarCedula(getjTextIdentificacion().getText());
                 break;
-            case 6:
+            case PASAPORTE:
                 verificador = true;
                 break;
-            default:
+            case CLIENTE_FINAL:
+                verificador=(getjTextIdentificacion().getText().equals("9999999999999"))?true:false;
+                break;
+            default :
                 verificador = false;
                 break;
         }
@@ -264,7 +275,8 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         
         
         //getjComboIdentificacion().setSelectedIndex(comboIdentificacion(persona.getIdentificacion()));
-        getjComboIdentificacion().setSelectedItem(persona.getSriTipoIdentificacion());
+        getjComboIdentificacion().setSelectedItem(persona.getTipoIdentificacionEnum());
+        //getjComboIdentificacion().setSelectedItem(persona.getSriTipoIdentificacion());
         getjTextIdentificacion().setText(persona.getIdentificacion());
         getjComboTipoCliente().setSelectedItem(persona.getTipCliente());
         getjTextAreaDireccion().setText(persona.getDireccion());
@@ -339,22 +351,15 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
      * Cargar los tipos de clientes de la base de datos
      */
     private void cargarTipoClientes() {
-        try {
-            /**
-             * Cargar los valores por defecto de las identificaciones
-             */
-            SriServiceIf servicioSri = ServiceFactory.getFactory().getSriServiceIf();
-            identificaciones = servicioSri.obtenerIdentificaciones(SriIdentificacion.CLIENTE);
-            getjComboIdentificacion().removeAllItems();
-            for (SriIdentificacion identificacion : identificaciones) {
-                if (!(identificacion.getCodigo().equals("07") || identificacion.getCodigo().equals("19"))) {
-                    getjComboIdentificacion().addItem(identificacion);
-                }
-            }
-        } catch (RemoteException ex) {
-            Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
+        /**
+         * Cargar los valores por defecto de las identificaciones
+         */
+        //SriServiceIf servicioSri = ServiceFactory.getFactory().getSriServiceIf();
+        //identificaciones = servicioSri.obtenerIdentificaciones(SriIdentificacion.CLIENTE);
+        getjComboIdentificacion().removeAllItems();
+        for (Persona.TipoIdentificacionEnum tipoIdentificacion : Persona.TipoIdentificacionEnum.values()) {
+            getjComboIdentificacion().addItem(tipoIdentificacion);
         }
-
     }
 
     @Override
@@ -434,7 +439,8 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         getjComboIdentificacion().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                opcionIdentificacion = Integer.parseInt(((SriIdentificacion) getjComboIdentificacion().getSelectedItem()).getCodigo());
+                Persona.TipoIdentificacionEnum tipoIdentificacionEnum=(Persona.TipoIdentificacionEnum) getjComboIdentificacion().getSelectedItem();
+                //opcionIdentificacion = Integer.parseInt(((SriIdentificacion) getjComboIdentificacion().getSelectedItem()).getCodigo());
                 
                 //Validario comonente cuando sea diferente de vacio dependiendo la opcion de identificacion
                 if (!getjTextIdentificacion().getText().equals("")) {
@@ -442,10 +448,10 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
                 }
                 
                 //Habilitar o deshabilitar razon social y nombre legal dependiendo si elige cedula o ruc
-                SriIdentificacion sriIdentificacion=(SriIdentificacion) getjComboIdentificacion().getSelectedItem();
+                //SriIdentificacion sriIdentificacion=(SriIdentificacion) getjComboIdentificacion().getSelectedItem();
                 
                 // Verifico que si el codigo es igual a la cedula desahabilito esos 2 datos
-                if(sriIdentificacion.getCodigo().equals(SriIdentificacion.CEDULA_IDENTIFICACION))
+                if(tipoIdentificacionEnum!=null && tipoIdentificacionEnum.equals(tipoIdentificacionEnum.CEDULA))
                 {
                     getTxtNombreLegal().setText("");
                     getTxtNombreLegal().setEnabled(false);

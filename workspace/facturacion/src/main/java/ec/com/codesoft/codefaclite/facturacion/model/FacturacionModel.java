@@ -895,9 +895,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     private Map<String,String> getMapAdicional(Factura factura)
     {
         Map<String,String> parametroMap=new HashMap<String ,String>();
-        for (FacturaAdicional datoAdicional : factura.getDatosAdicionales()) 
+        if(factura.getDatosAdicionales()!=null)
         {
-            parametroMap.put(datoAdicional.getCampo(),datoAdicional.getValor());
+            for (FacturaAdicional datoAdicional : factura.getDatosAdicionales()) 
+            {
+                parametroMap.put(datoAdicional.getCampo(),datoAdicional.getValor());
+            }
         }
         return parametroMap;
     }
@@ -1504,7 +1507,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             //Si no existe el campo del correo del cliente lo creo
             if(campoAdicional==null)
             {
-                factura.addDatosAdicionalCorreo(factura.getCliente().getCorreoElectronico());
+                if(factura.getCliente().getCorreoElectronico()!=null && !factura.getCliente().getCorreoElectronico().toString().isEmpty())
+                    factura.addDatosAdicionalCorreo(factura.getCliente().getCorreoElectronico());
             }
             else //Si existe el campo del correo del cliente lo edito
             {

@@ -56,7 +56,7 @@ public class FacturaBusquedaNotaCredito implements InterfaceModelFind<Factura> {
         System.out.println(t.getPreimpreso());
         dato.add(t.getCliente().getRazonSocial());
         ComprobanteEntity.ComprobanteEnumEstado estadoEnum= ComprobanteEntity.ComprobanteEnumEstado.getEnum(t.getEstado());
-        dato.add(estadoEnum.getNombre());
+        dato.add((estadoEnum!=null)?estadoEnum.getNombre():"Sin Estado");
         dato.add(t.getFechaEmision());
         dato.add(t.getTotal());
     }

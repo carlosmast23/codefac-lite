@@ -18,7 +18,13 @@ create table EJEMPLO(
 );
 
 Nota: El campo VERSION_SISTEMA es el numero de version en la cual se esta ejecutando el cambio
+--------------------------------------------------------------
+@AGREGAR_SCRIPT -> Sirve cuando quiero ejecutar un script
 
+Ejemplo:
+
+/*@AGREGAR_SCRIPT (VERSION_SISTEMA=1.0)*/
+    ADD EDIT TABLE;
 
 
 

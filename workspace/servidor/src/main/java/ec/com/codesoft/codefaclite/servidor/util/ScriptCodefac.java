@@ -40,7 +40,8 @@ public class ScriptCodefac {
     public enum PrioridadQueryEnum
     {
         CREATE_TABLE(1),
-        INSERT_COLUMN(2);
+        INSERT_COLUMN(2),
+        OTHER_SCRIPT(3);
         
         private int numero;
 

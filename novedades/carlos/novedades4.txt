@@ -36,3 +36,10 @@ ANALIZAR si se debe crear un catalago para definir si cobra o no iva al momento 
 
 Agregar el tipo de cartera
 Analizar si la cartera puede activar cuentas por cobrar y cuentas por pagar de forma independiente
+
+
+Validar que el codigo del SRI no puede ser mas 30 caracteres
+
+Cuando se genera un error en la factura y se elimina ver como eliminar fisicamente para que no salga en la pantalla de utilidad de comprobantes
+
+Revisar porque no aparecen 2 productos en la base de datos de Codesoft

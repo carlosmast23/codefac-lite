@@ -38,6 +38,9 @@ public class SriIdentificacion implements Serializable{
     private String tipoTransaccion;
 
     @Column(name = "TIPO_IDENTIFICACION")
+    private String tipoIdentificacionNombre;
+    
+    @Column(name = "TIPO_IDENTIFICACION_LETRA")
     private String tipoIdentificacion;
 
     @Column(name = "FECHA_INICIO")
@@ -73,12 +76,12 @@ public class SriIdentificacion implements Serializable{
         this.tipoTransaccion = tipoTransaccion;
     }
 
-    public String getTipoIdentificacion() {
-        return tipoIdentificacion;
+    public String getTipoIdentificacionNombre() {
+        return tipoIdentificacionNombre;
     }
 
-    public void setTipoIdentificacion(String tipoIdentificacion) {
-        this.tipoIdentificacion = tipoIdentificacion;
+    public void setTipoIdentificacionNombre(String tipoIdentificacionNombre) {
+        this.tipoIdentificacionNombre = tipoIdentificacionNombre;
     }
 
     public Date getFechaInicio() {
@@ -96,11 +99,17 @@ public class SriIdentificacion implements Serializable{
     public void setFechaFin(Date fechaFin) {
         this.fechaFin = fechaFin;
     }
+    
+    public void getTipoIdentificacionEnum()
+    {
+        Persona.TipoIdentificacionEnum.obtenerPorLetra(tipoIdentificacion);
+    }
 
     @Override
     public String toString() {
-        return UtilidadesTextos.acortarTexto(tipoIdentificacion,25);
+        return UtilidadesTextos.acortarTexto(tipoIdentificacionNombre,25);
     }
+    
 
     @Override
     public int hashCode() {
@@ -127,6 +136,30 @@ public class SriIdentificacion implements Serializable{
         return true;
     }
     
+    public enum  tipoTransaccionEnum
+    {
+        COMPRA("COMPRA"),VENTA("VENTA");
+
+        private tipoTransaccionEnum(String nombre) {
+            this.nombre = nombre;
+        }
+        
+        
+        
+        private String nombre;
+
+        public String getNombre() {
+            return nombre;
+        }
+
+        @Override
+        public String toString() {
+            return "tipoTransaccionEnum{" + "nombre=" + nombre + '}';
+        }
+        
+        
+        
+    }
     
     
 }

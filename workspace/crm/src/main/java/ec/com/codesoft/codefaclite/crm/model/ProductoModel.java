@@ -249,6 +249,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getTxtCodigoUPC().setText(producto.getCodigoUPC());
         getTextNombre().setText(producto.getNombre());
         getTextValorUnitario().setText(producto.getValorUnitario().toString());
+        getCmbIvaOpcionPrecioVentaPublico().setSelectedItem(IvaOpcionEnum.SIN_IVA); //Seleccciona esta opcion porque por defecto los precios en la base de datos estan grabados sin Iva
 
         //getComboIva().setSelectedItem(producto.getCatalogoProducto().getIva());
 
@@ -302,6 +303,8 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
 
         getComboIrbpnr().setEditable(true);
         getComboIrbpnr().setSelectedItem("Seleccione: ");
+        
+        getCmbIvaOpcionPrecioVentaPublico().setSelectedItem(IvaOpcionEnum.SIN_IVA);
 
 
     }

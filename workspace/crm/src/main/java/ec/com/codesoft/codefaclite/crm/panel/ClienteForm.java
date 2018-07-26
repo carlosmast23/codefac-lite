@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Nacionalidad;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ClienteEnumEstado;
@@ -35,7 +36,6 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
      */
     public ClienteForm() {
         initComponents();
-        SriFormaPago sriFormaPago;
     }
 
     /**
@@ -433,7 +433,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JComboBox<SriFormaPago> cmbFormaPagoDefecto;
     private javax.swing.JComboBox<Nacionalidad> cmbNacionalidad;
     private javax.swing.JComboBox<OperadorNegocioEnum> cmbTipoOperador;
-    private javax.swing.JComboBox<SriIdentificacion> jComboIdentificacion;
+    private javax.swing.JComboBox<Persona.TipoIdentificacionEnum> jComboIdentificacion;
     private javax.swing.JComboBox<String> jComboTipoCliente;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -565,11 +565,11 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         this.jTextTelefono = jTextTelefono;
     }
 
-    public JComboBox<SriIdentificacion> getjComboIdentificacion() {
+    public JComboBox<Persona.TipoIdentificacionEnum> getjComboIdentificacion() {
         return jComboIdentificacion;
     }
 
-    public void setjComboIdentificacion(JComboBox<SriIdentificacion> jComboIdentificacion) {
+    public void setjComboIdentificacion(JComboBox<Persona.TipoIdentificacionEnum> jComboIdentificacion) {
         this.jComboIdentificacion = jComboIdentificacion;
     }
 
