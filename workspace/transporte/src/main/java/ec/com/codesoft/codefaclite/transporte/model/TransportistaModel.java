@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.validacionPersonalizadaAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -21,6 +22,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TransportistaEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.TransportistaServiceIf;
 import ec.com.codesoft.codefaclite.transporte.busqueda.TransportistaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.transporte.panel.TransportistaPanel;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesJuridicas;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -158,6 +160,8 @@ public class TransportistaModel extends TransportistaPanel implements DialogInte
         transportista.setRazonSocial(getTxtRazonSocial().getText());
         transportista.setTelefonoCelular(getTxtCelular().getText());
         transportista.setTelefonoConvencional(getTxtTelefono().getText());
+        Persona.TipoIdentificacionEnum identificacionEnum = (Persona.TipoIdentificacionEnum) getCmbIdentificacion().getSelectedItem();
+        transportista.setTipoIdentificacion(identificacionEnum.getLetra());
     }
     
     private boolean prevalidar() {
@@ -205,5 +209,45 @@ public class TransportistaModel extends TransportistaPanel implements DialogInte
         {
             getCmbEstado().addItem(tee);
         }
+        
+        cargarTipoClientes();
+    }
+    
+    /**
+     * Cargar los tipos de clientes de la base de datos
+     */
+    private void cargarTipoClientes() {
+        getCmbIdentificacion().removeAllItems();
+        for (Persona.TipoIdentificacionEnum tipoIdentificacion : Persona.TipoIdentificacionEnum.values()) {
+            getCmbIdentificacion().addItem(tipoIdentificacion);
+        }
+    }
+    
+    @validacionPersonalizadaAnotacion(errorTitulo = "Formato de identificacion")
+    public boolean validarIdentificacionSegunOpcionEstablecida() {
+        boolean verificador = false;
+        Persona.TipoIdentificacionEnum tipoIdentificacion=(Persona.TipoIdentificacionEnum) getCmbIdentificacion().getSelectedItem();
+        
+        if(tipoIdentificacion==null)
+            return false;
+        
+        switch (tipoIdentificacion) {
+            case RUC:
+                verificador = UtilidadesJuridicas.validarTodosRuc(getTxtIdentificacion().getText());
+                break;
+            case CEDULA:
+                verificador = UtilidadesJuridicas.validarCedula(getTxtIdentificacion().getText());
+                break;
+            case PASAPORTE:
+                verificador = true;
+                break;
+            case CLIENTE_FINAL:
+                verificador=(getTxtIdentificacion().getText().equals("9999999999999"))?true:false;
+                break;
+            default :
+                verificador = false;
+                break;
+        }
+        return verificador;
     }
 }

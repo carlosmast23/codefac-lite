@@ -11,7 +11,7 @@
 create table TRANSPORTISTA
 (
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1),
-    IDENTIFICACIN varchar(1),
+    IDENTIFICACION varchar(15),
     NOMBRES varchar(30),
     APELLIDOS varchar(30),
     RAZON_SOCIAL varchar(100),
@@ -22,5 +22,6 @@ create table TRANSPORTISTA
     TELEFONO_CELULAR varchar(15),
     TELEFONO_CONVENCIONAL varchar(15),
     ESTADO varchar(1),
+    TIPO_IDENTIFICACION varchar(1), 
     primary key (ID)
 );
