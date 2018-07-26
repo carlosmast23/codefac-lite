@@ -664,9 +664,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 catch(UnsupportedOperationException exception)
                 {
                     System.out.println("metodo no implementado"); 
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, exception);
                 } catch (ExcepcionCodefacLite ex) {
                     //Cancela el ciclo de vida normal si manda una excecion
                     System.out.println(ex.getMessage()); 
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     return;
                 } catch (RemoteException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -721,6 +723,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             
                         } catch (ExcepcionCodefacLite ex) {
                             System.out.println("Error al grabar en modo dialogo");
+                            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                         } catch (PropertyVetoException ex) {
                             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -750,6 +753,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                                 //ex.printStackTrace();
                                 System.err.println(ex.getMessage());
                                 //JOptionPane.showMessageDialog(null,ex.getMessage());
+                                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                             } catch (RemoteException ex) {
                                 Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                                 FuncionesSistemaCodefac.servidorConexionPerdida();
@@ -772,6 +776,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             } catch (ExcepcionCodefacLite ex) {
                                  //ex.printStackTrace();
                                 LOG.log(Level.WARNING,ex.getMessage());
+                                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                             } catch (RemoteException ex) {
                                 Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                                 FuncionesSistemaCodefac.servidorConexionPerdida();
@@ -806,6 +811,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     }
                 }
                 catch (UnsupportedOperationException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     System.err.println("Metodo no implementado boton editar");
                     //Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     //getjButton4().setEnabled(false);
@@ -833,6 +839,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             //Este metodo se ejecuta si no existe implementacion del metodo buscar
                             ejectutarDialogoBusqueda(frameInterface.obtenerDialogoBusqueda(),true,frameInterface,false);
                         }catch (ExcepcionCodefacLite ex) {
+                            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                             throw ex;
                         } catch (RemoteException ex) {
                             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -914,6 +921,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     //getjButton4().setEnabled(false);
                 } catch (ExcepcionCodefacLite ex) {
                     //Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     System.err.println(ex.getMessage());
                 } catch (RemoteException ex) {
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -1024,6 +1032,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 catch (ExcepcionCodefacLite ex) 
                 {
                     LOG.log(Level.WARNING,ex.getMessage());
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     //Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
     }
@@ -1181,8 +1190,10 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             }
             catch(java.lang.UnsupportedOperationException uoe)
             {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, uoe);
                 System.err.println("Metodo no implementado");
             } catch (ExcepcionCodefacLite ex) {
+                Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                 System.err.println("Cancelado metodo iniciar");
                 return;
             } catch (RemoteException ex) {
@@ -1820,6 +1831,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                                                      ejectutarDialogoBusqueda(dialogBuscar,false,panel,true);                                                   
                                                     
                                                 } catch (ExcepcionCodefacLite ex) {
+                                                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                                                     throw ex;
                                                 }
                                             } else {
