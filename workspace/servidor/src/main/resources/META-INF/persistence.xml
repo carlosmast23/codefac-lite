@@ -69,6 +69,7 @@
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.Departamento</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalle</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.Transportista</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
   </persistence-unit>
 </persistence>

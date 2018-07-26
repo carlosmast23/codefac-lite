@@ -37,11 +37,11 @@ public class Test {
         //obtenerLicencia();
         //setearLicencia();
         //obtenerNumeroMaquinasLicencia();
-        //setearTipoLicencia();
+        setearTipoLicencia();
         //obtenerTipoLicencia();
         //verificar();
         //devolverEstado();
-        System.out.println(getVerificarSoporte("root_soporte","123"));
+        //System.out.println(getVerificarSoporte("root_soporte","123"));
     }
     
     public static void obtenerTipoLicencia()
@@ -82,7 +82,7 @@ public class Test {
         ActualizarlicenciaRequestType parametros=new ActualizarlicenciaRequestType();
         //parametros.setEmail("carlosmast2301@hotmail.es");
         //parametros.setEmail("treborvtc@outlook.com");
-        parametros.setEmail("trebortc@outlook.com");
+        parametros.setEmail("trebortc@hotmail.com");
         parametros.setLicencia("");
 
         ActualizarlicenciaResponseType respuesta=soapServerPort.actualizarlicencia(parametros);

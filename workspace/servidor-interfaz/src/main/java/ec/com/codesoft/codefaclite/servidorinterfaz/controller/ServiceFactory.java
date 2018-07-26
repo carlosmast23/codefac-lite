@@ -79,6 +79,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriFormaPagoServic
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.TransportistaServiceIf;
 
 /**
  *
@@ -160,6 +161,7 @@ public abstract class ServiceFactory {
     public DepartamentoServiceIf getDepartamentoServiceIf(){return (DepartamentoServiceIf) getRecursosRMI(DepartamentoServiceIf.class);};
     public PresupuestoServiceIf getPresupuestoServiceIf(){return (PresupuestoServiceIf) getRecursosRMI(PresupuestoServiceIf.class);};
     public PresupuestoDetalleServiceIf getPresupuestoDetalleServiceIf(){return (PresupuestoDetalleServiceIf) getRecursosRMI(PresupuestoDetalleServiceIf.class);};
+    public TransportistaServiceIf getTransportistaServiceIf(){return (TransportistaServiceIf) getRecursosRMI(TransportistaServiceIf.class);};
     /**
      * Crea una nueva instancia el controlados para manejar por el cliente
      * @param ipServidor 

@@ -109,7 +109,6 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             setearDatos();
             persona = personaService.grabar(persona);
             DialogoCodefac.mensaje("Datos correctos", "El cliente se guardo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
-            System.err.println("Se grabo correctamente");
         } catch (ServicioCodefacException ex) {
             DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite("Error al prevalidar");

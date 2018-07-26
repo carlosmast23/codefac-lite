@@ -6,7 +6,12 @@
 package ec.com.codesoft.codefaclite.transporte.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.CampoBuscarAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.CursorPorDefectoAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TransportistaEnumEstado;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
@@ -59,6 +64,8 @@ public abstract class TransportistaPanel extends ControladorCodefacInterface {
         lblEspacio1 = new javax.swing.JLabel();
         lblEspacio2 = new javax.swing.JLabel();
         lblEspacio3 = new javax.swing.JLabel();
+        cmbEstado = new javax.swing.JComboBox<>();
+        jLabel12 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -106,7 +113,6 @@ public abstract class TransportistaPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel3, gridBagConstraints);
 
-        cmbIdentificacion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 0;
@@ -264,17 +270,35 @@ public abstract class TransportistaPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         getContentPane().add(lblEspacio3, gridBagConstraints);
 
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(cmbEstado, gridBagConstraints);
+
+        jLabel12.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel12.setText("Estado:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 4;
+        getContentPane().add(jLabel12, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
-    public JComboBox<String> getCmbIdentificacion() {
+    public JComboBox<TransportistaEnumEstado> getCmbIdentificacion() {
         return cmbIdentificacion;
     }
 
-    public void setCmbIdentificacion(JComboBox<String> cmbIdentificacion) {
+    public void setCmbIdentificacion(JComboBox<TransportistaEnumEstado> cmbIdentificacion) {
         this.cmbIdentificacion = cmbIdentificacion;
     }
-
+    
+    @CursorPorDefectoAnotacion   
+    @CampoBuscarAnotacion
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true)
     public JTextField getTxtApellidos() {
         return txtApellidos;
     }
@@ -282,7 +306,8 @@ public abstract class TransportistaPanel extends ControladorCodefacInterface {
     public void setTxtApellidos(JTextField txtApellidos) {
         this.txtApellidos = txtApellidos;
     }
-
+    
+    @LimpiarAnotacion
     public JTextField getTxtCelular() {
         return txtCelular;
     }
@@ -290,15 +315,17 @@ public abstract class TransportistaPanel extends ControladorCodefacInterface {
     public void setTxtCelular(JTextField txtCelular) {
         this.txtCelular = txtCelular;
     }
-
+    
+    @LimpiarAnotacion
     public JTextField getTxtCorreo() {
         return txtCorreo;
     }
-
+    
     public void setTxtCorreo(JTextField txtCorreo) {
         this.txtCorreo = txtCorreo;
     }
 
+    @LimpiarAnotacion
     public JTextField getTxtDireccion() {
         return txtDireccion;
     }
@@ -306,7 +333,10 @@ public abstract class TransportistaPanel extends ControladorCodefacInterface {
     public void setTxtDireccion(JTextField txtDireccion) {
         this.txtDireccion = txtDireccion;
     }
-
+    
+    @CursorPorDefectoAnotacion   
+    @CampoBuscarAnotacion
+    @LimpiarAnotacion
     public JTextField getTxtIdentificacion() {
         return txtIdentificacion;
     }
@@ -314,7 +344,8 @@ public abstract class TransportistaPanel extends ControladorCodefacInterface {
     public void setTxtIdentificacion(JTextField txtIdentificacion) {
         this.txtIdentificacion = txtIdentificacion;
     }
-
+    
+    @LimpiarAnotacion
     public JTextField getTxtNombreComercial() {
         return txtNombreComercial;
     }
@@ -322,7 +353,11 @@ public abstract class TransportistaPanel extends ControladorCodefacInterface {
     public void setTxtNombreComercial(JTextField txtNombreComercial) {
         this.txtNombreComercial = txtNombreComercial;
     }
-
+    
+    @LimpiarAnotacion
+    @CursorPorDefectoAnotacion   
+    @CampoBuscarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true)
     public JTextField getTxtNombres() {
         return txtNombres;
     }
@@ -330,7 +365,9 @@ public abstract class TransportistaPanel extends ControladorCodefacInterface {
     public void setTxtNombres(JTextField txtNombres) {
         this.txtNombres = txtNombres;
     }
-
+    
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true)
     public JTextField getTxtPlaca() {
         return txtPlaca;
     }
@@ -338,7 +375,9 @@ public abstract class TransportistaPanel extends ControladorCodefacInterface {
     public void setTxtPlaca(JTextField txtPlaca) {
         this.txtPlaca = txtPlaca;
     }
-
+    
+    @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = true)
     public JTextField getTxtRazonSocial() {
         return txtRazonSocial;
     }
@@ -346,7 +385,8 @@ public abstract class TransportistaPanel extends ControladorCodefacInterface {
     public void setTxtRazonSocial(JTextField txtRazonSocial) {
         this.txtRazonSocial = txtRazonSocial;
     }
-
+    
+    @LimpiarAnotacion
     public JTextField getTxtTelefono() {
         return txtTelefono;
     }
@@ -354,13 +394,22 @@ public abstract class TransportistaPanel extends ControladorCodefacInterface {
     public void setTxtTelefono(JTextField txtTelefono) {
         this.txtTelefono = txtTelefono;
     }
-    
 
+    public JComboBox<TransportistaEnumEstado> getCmbEstado() {
+        return cmbEstado;
+    }
+
+    public void setCmbEstado(JComboBox<TransportistaEnumEstado> cmbEstado) {
+        this.cmbEstado = cmbEstado;
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> cmbIdentificacion;
+    private javax.swing.JComboBox<TransportistaEnumEstado> cmbEstado;
+    private javax.swing.JComboBox<TransportistaEnumEstado> cmbIdentificacion;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
