@@ -75,7 +75,8 @@ public enum VentanaEnum {
     DEPARTAMENTO("ec.com.codesoft.codefaclite.configuraciones.model.DepartamentoModel", "DEPA", "Departamento", ModuloCodefacEnum.SISTEMA, CategoriaMenuEnum.GESTIONAR,true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null),
     ORDEN_TRABAJO_REPORTE("ec.com.codesoft.codefaclite.servicios.model.ReporteOrdenTrabajoModel", "ORTR", "Orden Trabajo Reporte", ModuloCodefacEnum.SERVICIOS, CategoriaMenuEnum.REPORTES,false, new ModuloCodefacEnum[]{ModuloCodefacEnum.SERVICIOS},TipoLicenciaEnum.PRO,null),
     EMPLEADO("ec.com.codesoft.codefaclite.configuraciones.model.GestionEmpleadosModel", "GEEM", "Gestión Empleado", ModuloCodefacEnum.SISTEMA, CategoriaMenuEnum.GESTIONAR,true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null),
-    TRANSPORTISTA("ec.com.codesoft.codefaclite.transporte.model.TransportistaModel", "TRTA", "Transportista", ModuloCodefacEnum.TRANSPORTE, CategoriaMenuEnum.GESTIONAR,true, new ModuloCodefacEnum[]{},TipoLicenciaEnum.PRO,null);
+    TRANSPORTISTA("ec.com.codesoft.codefaclite.transporte.model.TransportistaModel", "TRTA", "Transportista", ModuloCodefacEnum.TRANSPORTE, CategoriaMenuEnum.GESTIONAR,true, new ModuloCodefacEnum[]{},TipoLicenciaEnum.PRO,null),
+    GUIA_REMISION("ec.com.codesoft.codefaclite.transporte.model.GuiaRemisionModel", "GURE", "Guía de Remisión", ModuloCodefacEnum.TRANSPORTE, CategoriaMenuEnum.PROCESOS,true, new ModuloCodefacEnum[]{},TipoLicenciaEnum.PRO,null);
     
     private VentanaEnum(String clase, String codigo, String nombre, ModuloCodefacEnum modulo, CategoriaMenuEnum categoriaMenu,Integer teclaAtajo) {
         this.claseNombre = clase;
