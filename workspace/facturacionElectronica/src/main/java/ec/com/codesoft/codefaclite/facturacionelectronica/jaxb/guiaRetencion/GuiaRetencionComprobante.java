@@ -7,6 +7,10 @@ package ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.guiaRetencion;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import java.util.List;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -17,12 +21,14 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name = ComprobanteElectronico.GUIA_REMISION)
 @XmlType(propOrder = {
     "informacionTributaria",
-    "infoNotaCredito",
-    "detalles",
+    "infoGuiaRemision",
+    "destinatarios",
     "informacionAdicional"})
 public class GuiaRetencionComprobante extends ComprobanteElectronico{
     
-    private 
+    private InformacionGuiaRemision infoGuiaRemision;
+    
+    private List<DestinatariosGuiaRemisionComprobante> destinatarios;
 
     @Override
     public String getTipoDocumento() {
@@ -31,12 +37,41 @@ public class GuiaRetencionComprobante extends ComprobanteElectronico{
 
     @Override
     public String getFechaEmision() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return infoGuiaRemision.getFechaIniTransporte();
     }
 
     @Override
     public String getRazonSocialComprador() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return infoGuiaRemision.getRazonSocialTransportista();
     }
+    
+    @XmlAttribute(name = "version")
+    public String getVersionAttribute() {
+        return "1.1.0";
+    }
+
+    
+    @XmlElement(name = "infoGuiaRemision")
+    public InformacionGuiaRemision getInfoGuiaRemision() {
+        return infoGuiaRemision;
+    }
+
+    public void setInfoGuiaRemision(InformacionGuiaRemision infoGuiaRemision) {
+        this.infoGuiaRemision = infoGuiaRemision;
+    }
+
+    @XmlElementWrapper(name = "destinatarios")
+    @XmlElement(name = "destinatario")
+    public List<DestinatariosGuiaRemisionComprobante> getDestinatarios() {
+        return destinatarios;
+    }
+
+    public void setDestinatarios(List<DestinatariosGuiaRemisionComprobante> destinatarios) {
+        this.destinatarios = destinatarios;
+    }
+    
+    
+    
+    
     
 }

@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteE
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.guiaRetencion.GuiaRetencionComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.lote.LoteComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.lote.LoteComprobanteCData;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.notacredito.NotaCreditoComprobante;
@@ -231,7 +232,7 @@ public class ComprobanteElectronicoService implements Runnable {
             }
 
             if (etapaActual.equals(ETAPA_PRE_VALIDAR)) {
-                preValidacion();
+                preValidacion();a
                 if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
                 System.out.println("preValidacion()");
                 if (etapaLimiteProcesar<=ETAPA_PRE_VALIDAR) {
@@ -715,8 +716,16 @@ public class ComprobanteElectronicoService implements Runnable {
                 }
                 else
                 {
-                    System.out.println("no esta comparando clases");
-                    return null;
+                    if(comprobante.getClass().equals(GuiaRetencionComprobante.class))
+                    {
+                        
+                    }return 
+                    else
+                    {                    
+                        System.out.println("no esta comparando clases");
+                        return null;
+                    }
+                    
                 }
             }
     }
