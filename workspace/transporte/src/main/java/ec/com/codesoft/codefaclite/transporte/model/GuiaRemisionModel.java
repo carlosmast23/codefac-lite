@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.transporte.model;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.transporte.panel.GuiaRemisionPanel;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwingX;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        iniciarComponentesPantalla();
     }
 
     @Override
@@ -81,6 +82,25 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
     @Override
     public void cargarDatosPantalla(Object entidad) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void iniciarComponentesPantalla() {
+        agregarPlaceHolder();
+    }
+
+    private void agregarPlaceHolder() {
+        UtilidadesSwingX.placeHolder("Identificación",getTxtIdentificacionDestinatario());
+        UtilidadesSwingX.placeHolder("Identificación",getTxtIdentificacionTransportista());
+        UtilidadesSwingX.placeHolder("Autorización", getTxtAutorizacion());
+        UtilidadesSwingX.placeHolder("Preimpreso", getTxtPreimpreso());
+        UtilidadesSwingX.placeHolder("Doc.Aduanero", getTxtDocAduanero());
+        
+        UtilidadesSwingX.placeHolder("Dirección Destino", getTxtDireccionDestino());
+        UtilidadesSwingX.placeHolder("Motivo Traslado", getTxtMotivoTraslado());
+        UtilidadesSwingX.placeHolder("Ruta", getTxtRuta());
+        
+        
+        
     }
    
     
