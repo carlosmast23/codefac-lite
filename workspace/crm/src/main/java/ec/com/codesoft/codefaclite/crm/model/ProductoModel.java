@@ -238,10 +238,14 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo();
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
-        producto = (Producto) buscarDialogoModel.getResultado();
+        Producto productoTmp = (Producto) buscarDialogoModel.getResultado();
 
         if (producto == null) {
             throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar producto vacio");
+        }
+        else
+        {
+            this.producto=productoTmp;
         }
 
         getTxtCodigoPersonalizado().setText(producto.getCodigoPersonalizado());
