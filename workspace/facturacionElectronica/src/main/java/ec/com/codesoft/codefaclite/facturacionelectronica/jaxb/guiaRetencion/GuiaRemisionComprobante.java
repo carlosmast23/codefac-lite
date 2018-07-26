@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlType;
     "infoGuiaRemision",
     "destinatarios",
     "informacionAdicional"})
-public class GuiaRetencionComprobante extends ComprobanteElectronico{
+public class GuiaRemisionComprobante extends ComprobanteElectronico{
     
     private InformacionGuiaRemision infoGuiaRemision;
     

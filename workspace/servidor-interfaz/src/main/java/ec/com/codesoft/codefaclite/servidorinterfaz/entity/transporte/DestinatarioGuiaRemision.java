@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -34,7 +35,100 @@ public class DestinatarioGuiaRemision implements Serializable{
     private String autorizacionNumero;
     private Date fechaEmision;
     
-    private DetalleProductoGuiaRemision detallesProductos;
+    private List<DetalleProductoGuiaRemision> detallesProductos;
+
+    public DestinatarioGuiaRemision() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Persona getDestinatorio() {
+        return destinatorio;
+    }
+
+    public void setDestinatorio(Persona destinatorio) {
+        this.destinatorio = destinatorio;
+    }
+
+    public String getRazonSocial() {
+        return razonSocial;
+    }
+
+    public void setRazonSocial(String razonSocial) {
+        this.razonSocial = razonSocial;
+    }
+
+    public String getDireccionDestino() {
+        return direccionDestino;
+    }
+
+    public void setDireccionDestino(String direccionDestino) {
+        this.direccionDestino = direccionDestino;
+    }
+
+    public String getMotivoTranslado() {
+        return motivoTranslado;
+    }
+
+    public void setMotivoTranslado(String motivoTranslado) {
+        this.motivoTranslado = motivoTranslado;
+    }
+
+    public String getRuta() {
+        return ruta;
+    }
+
+    public void setRuta(String ruta) {
+        this.ruta = ruta;
+    }
+
+    public String getCodDucumentoSustento() {
+        return codDucumentoSustento;
+    }
+
+    public void setCodDucumentoSustento(String codDucumentoSustento) {
+        this.codDucumentoSustento = codDucumentoSustento;
+    }
+
+    public String getPreimpreso() {
+        return preimpreso;
+    }
+
+    public void setPreimpreso(String preimpreso) {
+        this.preimpreso = preimpreso;
+    }
+
+    public String getAutorizacionNumero() {
+        return autorizacionNumero;
+    }
+
+    public void setAutorizacionNumero(String autorizacionNumero) {
+        this.autorizacionNumero = autorizacionNumero;
+    }
+
+    public Date getFechaEmision() {
+        return fechaEmision;
+    }
+
+    public void setFechaEmision(Date fechaEmision) {
+        this.fechaEmision = fechaEmision;
+    }
+
+    public List<DetalleProductoGuiaRemision> getDetallesProductos() {
+        return detallesProductos;
+    }
+
+    public void setDetallesProductos(List<DetalleProductoGuiaRemision> detallesProductos) {
+        this.detallesProductos = detallesProductos;
+    }
+
+    
     
     
 }

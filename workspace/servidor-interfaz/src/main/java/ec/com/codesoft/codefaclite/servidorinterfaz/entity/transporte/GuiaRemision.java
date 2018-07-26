@@ -40,6 +40,16 @@ public class GuiaRemision extends ComprobanteEntity implements  Serializable{
     private String placa;
     
     List<DestinatarioGuiaRemision> destinatarios;
+
+    public List<DestinatarioGuiaRemision> getDestinatarios() {
+        return destinatarios;
+    }
+
+    public void setDestinatarios(List<DestinatarioGuiaRemision> destinatarios) {
+        this.destinatarios = destinatarios;
+    }
+    
+    
     
     
 }

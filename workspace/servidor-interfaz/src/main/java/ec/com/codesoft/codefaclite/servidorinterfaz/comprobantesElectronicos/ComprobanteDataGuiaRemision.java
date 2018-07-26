@@ -1,0 +1,173 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos;
+
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
+import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.guiaRetencion.DestinatariosGuiaRemisionComprobante;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.guiaRetencion.DetalleGuiaRemisionComprobante;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.guiaRetencion.GuiaRemisionComprobante;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.guiaRetencion.InformacionGuiaRemision;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.retencion.InformacionRetencion;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DestinatarioGuiaRemision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DetalleProductoGuiaRemision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadValidador;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+/**
+ *
+ * @author Carlos
+ */
+public class ComprobanteDataGuiaRemision implements ComprobanteDataInterface,Serializable {
+    
+    private GuiaRemision guiaRemision;
+    private Map<String,String> mapInfoAdicional;
+    private List<String> correosAdicionales;
+    private ListenerComprobanteElectronico listener;
+
+    public ComprobanteDataGuiaRemision(GuiaRemision guiaRemision) {
+        this.guiaRemision = guiaRemision;
+    }
+    
+    
+    @Override
+    public String getCodigoComprobante() {
+        return ComprobanteEnum.GUIA_REMISION.getCodigo();
+    }
+
+    @Override
+    public String getSecuencial() {
+        String secuencial = guiaRemision.getSecuencial().toString();
+        return UtilidadesTextos.llenarCarateresIzquierda(secuencial, 9, "0");
+    }
+
+    @Override
+    public Map<String, String> getMapAdicional() {
+        for (Map.Entry<String, String> entry : mapInfoAdicional.entrySet()) {
+            String key = entry.getKey();
+            String value = UtilidadValidador.normalizarTextoCorreo(entry.getValue());
+            mapInfoAdicional.put(key, value);
+        }
+        return mapInfoAdicional;
+    }
+
+    @Override
+    public List<String> getCorreos() {
+        List<String> correos=new ArrayList<String>();
+        /*
+        if(guiaRemision!=null && guiaRemision.getProveedor()!=null)
+            correos.add(guiaRemision.getProveedor().getCorreoElectronico());
+        
+        //Agregar correos adicionales , solo si estan seteados los valores de los correos       
+        if(this.correosAdicionales!=null)
+        {
+            for (String correo : this.correosAdicionales) {
+                if(!correos.contains(correo))
+                {
+                    correos.add(correo);
+                }
+            }
+        }*/
+        return correos;
+    }
+
+    @Override
+    public ComprobanteElectronico getComprobante() {
+        GuiaRemisionComprobante guiaRemicion=new GuiaRemisionComprobante();
+        InformacionGuiaRemision info=new InformacionGuiaRemision();
+        
+        //Revisar que codigo debe ir aqui , aunque en el SRI dice que es opcional
+        info.setContribuyenteEspecial("123");
+        info.setDirEstablecimiento(UtilidadValidador.normalizarTexto(guiaRemision.getDireccion()));
+        //info.setFechaEmision(ComprobantesElectronicosUtil.dateToString(guiaRemision.getFechaEmision()));
+        
+        
+        SriIdentificacionServiceIf servicioSri=ServiceFactory.getFactory().getSriIdentificacionServiceIf();
+        SriIdentificacion sriIdentificacion=null;
+        /*try {
+            sriIdentificacion=servicioSri.obtenerPorTransaccionEIdentificacion(guiaRemision.getProveedor().getTipoIdentificacionEnum(), SriIdentificacion.tipoTransaccionEnum.VENTA);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ComprobanteDataNotaCredito.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        if(sriIdentificacion!=null && sriIdentificacion.getCodigo().equals(SriIdentificacion.CEDULA_IDENTIFICACION))
+            info.setIdentificacionSujetoRetenido(guiaRemision.getProveedor().getIdentificacion());
+        else
+            info.setIdentificacionSujetoRetenido(UtilidadesTextos.llenarCarateresDerecha(guiaRemision.getProveedor().getIdentificacion(), 13, "0"));
+        
+        */
+        /**
+         * Verificar que valor no mas acepta
+         */
+        info.setObligadoContabilidad("NO"); //Esta parte deberia agregar en la informacion del transportista
+        
+        //Todo: Revisar este caso porque en los clientes coincide pero para las proveedores ya no coincide el codigo de tipo de identifiacion
+
+        /**
+         * Llenar los detalles de las retenciones
+         */
+        List<DestinatariosGuiaRemisionComprobante> detalleDestinatarios=new ArrayList<DestinatariosGuiaRemisionComprobante>();
+        
+        for (DestinatarioGuiaRemision destinatario : guiaRemision.getDestinatarios()) {
+            DestinatariosGuiaRemisionComprobante destinatarioData=new DestinatariosGuiaRemisionComprobante();
+            destinatarioData.setCodDocSustento(destinatario.getCodDucumentoSustento());
+            destinatarioData.setCodEstabDestino("001");//Todo: Verificar porque este campo deberia trabajar con sucursales
+            destinatarioData.setDirDestinatario(destinatario.getDireccionDestino());
+            destinatarioData.setDocAduaneroUnico("");//Todo: Ver este campo debe estar grabando pero no esta
+            destinatarioData.setFechaEmisionDocSustento(destinatario.getFechaEmision().toString());
+            destinatarioData.setIdentificacionDestinatario(destinatario.getDestinatorio().getIdentificacion()); //Todo: este dato deberia mejor estar grabado porque se supone que no se puden modificar por ningun motivo
+            destinatarioData.setMotivoTraslado(destinatario.getMotivoTranslado());
+            destinatarioData.setNumAutDocSustento(destinatario.getAutorizacionNumero());
+            destinatarioData.setRazonSocialDestinatario(destinatario.getRazonSocial());
+            destinatarioData.setRuta(destinatario.getRuta());
+            detalleDestinatarios.add(destinatarioData);
+            
+            ///////// Obtener los detalles de los productos de cada destinatario ///////////////////////////
+            List<DetalleGuiaRemisionComprobante> detalleProductos=new ArrayList<DetalleGuiaRemisionComprobante>();
+            for (DetalleProductoGuiaRemision producto : destinatario.getDetallesProductos()) {
+                DetalleGuiaRemisionComprobante productoData=new DetalleGuiaRemisionComprobante();
+                productoData.setCantidad(producto.getCantidad());
+                productoData.setCodigoAdicional(producto.getCodigoAdicional());
+                productoData.setCodigoInterno(producto.getCodigoInterno());
+                productoData.setDescripcion(producto.getDescripcion());
+                detalleProductos.add(productoData);
+            }
+            destinatarioData.setDetalles(detalleProductos);
+        }
+
+        guiaRemicion.setInfoGuiaRemision(info);
+        guiaRemicion.setDestinatarios(detalleDestinatarios);
+        
+        return guiaRemicion;
+    }
+
+    @Override
+    public ListenerComprobanteElectronico getListenerComprobanteElectronico() {
+        return listener;
+    }
+
+    @Override
+    public Long getComprobanteId() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void setMapInfoAdicional(Map<String, String> mapInfoAdicional) {
+        this.mapInfoAdicional = mapInfoAdicional;
+    }
+    
+    
+    
+}

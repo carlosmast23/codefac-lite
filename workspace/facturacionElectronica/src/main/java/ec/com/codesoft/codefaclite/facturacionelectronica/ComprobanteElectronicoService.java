@@ -13,7 +13,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteE
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
-import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.guiaRetencion.GuiaRetencionComprobante;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.guiaRetencion.GuiaRemisionComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.lote.LoteComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.lote.LoteComprobanteCData;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.notacredito.NotaCreditoComprobante;
@@ -24,6 +24,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.UtilidadesCo
 import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.ComprobanteElectronicoReporte;
 import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.DetalleReporteData;
 import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.FacturaElectronicaReporte;
+import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.GuiaRemisionReporte;
 import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.NotaCreditoReporte;
 import ec.com.codesoft.codefaclite.facturacionelectronica.reporte.RetencionElectronicaReporte;
 import ec.com.codesoft.codefaclite.ws.recepcion.Comprobante;
@@ -232,7 +233,7 @@ public class ComprobanteElectronicoService implements Runnable {
             }
 
             if (etapaActual.equals(ETAPA_PRE_VALIDAR)) {
-                preValidacion();a
+                preValidacion();
                 if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
                 System.out.println("preValidacion()");
                 if (etapaLimiteProcesar<=ETAPA_PRE_VALIDAR) {
@@ -716,10 +717,11 @@ public class ComprobanteElectronicoService implements Runnable {
                 }
                 else
                 {
-                    if(comprobante.getClass().equals(GuiaRetencionComprobante.class))
+                    if(comprobante.getClass().equals(GuiaRemisionComprobante.class))
                     {
-                        
-                    }return 
+                        GuiaRemisionReporte guiaRemisionReporte=new GuiaRemisionReporte(comprobante);
+                        return guiaRemisionReporte;
+                    }
                     else
                     {                    
                         System.out.println("no esta comparando clases");
@@ -1220,6 +1222,7 @@ public class ComprobanteElectronicoService implements Runnable {
         }
     }
     
+    //TODO: Revisar si usa este metodo y unificar con el de enum
     private String getTipoComprobante(ComprobanteElectronico comprobante) {
         switch (comprobante.getTipoDocumento()) {
             case ComprobanteElectronico.FACTURA:
@@ -1230,6 +1233,10 @@ public class ComprobanteElectronicoService implements Runnable {
                 
             case ComprobanteElectronico.RETENCION:
                 return "07";
+                
+            case ComprobanteElectronico.GUIA_REMISION:
+                return "06";
+                
 
             default:
                 return "00";
