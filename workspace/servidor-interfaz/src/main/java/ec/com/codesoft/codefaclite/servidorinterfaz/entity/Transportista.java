@@ -48,6 +48,9 @@ public class Transportista implements Serializable
     private String telefonoConvencional;
     @Column(name = "ESTADO")
     private String estado;
+    @Column(name = "TIPO_IDENTIFICACION")
+    private String tipoIdentificacion;
+
 
     public Long getId() {
         return id;
@@ -145,6 +148,14 @@ public class Transportista implements Serializable
         this.estado = estado;
     }
 
+    public String getTipoIdentificacion() {
+        return tipoIdentificacion;
+    }
+
+    public void setTipoIdentificacion(String tipoIdentificacion) {
+        this.tipoIdentificacion = tipoIdentificacion;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 7;

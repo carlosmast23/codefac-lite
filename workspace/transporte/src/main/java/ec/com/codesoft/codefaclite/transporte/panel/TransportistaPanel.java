@@ -11,7 +11,9 @@ import ec.com.codesoft.codefaclite.corecodefaclite.util.CursorPorDefectoAnotacio
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TransportistaEnumEstado;
+import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
@@ -20,6 +22,8 @@ import javax.swing.JTextField;
  * @author Carlos
  */
 public abstract class TransportistaPanel extends ControladorCodefacInterface {
+    
+    public static final String NOMBRE_VALIDADOR_IDENTIFICACION="Identificacion";
 
     /**
      * Creates new form TransportistaPanel
@@ -287,18 +291,16 @@ public abstract class TransportistaPanel extends ControladorCodefacInterface {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
-    public JComboBox<TransportistaEnumEstado> getCmbIdentificacion() {
+    public JComboBox<Persona.TipoIdentificacionEnum> getCmbIdentificacion() {
         return cmbIdentificacion;
     }
 
-    public void setCmbIdentificacion(JComboBox<TransportistaEnumEstado> cmbIdentificacion) {
+    public void setCmbIdentificacion(JComboBox<Persona.TipoIdentificacionEnum> cmbIdentificacion) {
         this.cmbIdentificacion = cmbIdentificacion;
     }
     
-    @CursorPorDefectoAnotacion   
-    @CampoBuscarAnotacion
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true)
+    @ValidacionCodefacAnotacion(requerido = true, min = 3, max = 200, expresionRegular = ExpresionRegular.textoSimple, nombre = "Apellidos", expresionRegularMensaje = "No se permite la letra caracteres especiales")
     public JTextField getTxtApellidos() {
         return txtApellidos;
     }
@@ -317,6 +319,7 @@ public abstract class TransportistaPanel extends ControladorCodefacInterface {
     }
     
     @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido = false, expresionRegular = ExpresionRegular.email, nombre = "Correo Electronico", expresionRegularMensaje = "Ingrese una dirección de correo valida" )
     public JTextField getTxtCorreo() {
         return txtCorreo;
     }
@@ -337,6 +340,7 @@ public abstract class TransportistaPanel extends ControladorCodefacInterface {
     @CursorPorDefectoAnotacion   
     @CampoBuscarAnotacion
     @LimpiarAnotacion
+    @ValidacionCodefacAnotacion(requerido=true, personalizado ={"validarIdentificacionSegunOpcionEstablecida"} , min=0 ,max = 13,expresionRegular = "",nombre = NOMBRE_VALIDADOR_IDENTIFICACION)
     public JTextField getTxtIdentificacion() {
         return txtIdentificacion;
     }
@@ -355,9 +359,7 @@ public abstract class TransportistaPanel extends ControladorCodefacInterface {
     }
     
     @LimpiarAnotacion
-    @CursorPorDefectoAnotacion   
-    @CampoBuscarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true)
+    @ValidacionCodefacAnotacion(requerido = true, min = 3, max = 200, expresionRegular = ExpresionRegular.textoSimple, nombre = "Nombres", expresionRegularMensaje = "No se permite la letra caracteres especiales")    
     public JTextField getTxtNombres() {
         return txtNombres;
     }
@@ -376,8 +378,10 @@ public abstract class TransportistaPanel extends ControladorCodefacInterface {
         this.txtPlaca = txtPlaca;
     }
     
+    @CursorPorDefectoAnotacion   
+    @CampoBuscarAnotacion
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true)
+    @ValidacionCodefacAnotacion(requerido=true , min=0 ,max = 100, expresionRegular = ExpresionRegular.textoSimple, nombre = "Razón Social", expresionRegularMensaje = "No se permite la letra caracteres especiales")
     public JTextField getTxtRazonSocial() {
         return txtRazonSocial;
     }
@@ -405,7 +409,7 @@ public abstract class TransportistaPanel extends ControladorCodefacInterface {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<TransportistaEnumEstado> cmbEstado;
-    private javax.swing.JComboBox<TransportistaEnumEstado> cmbIdentificacion;
+    private javax.swing.JComboBox<Persona.TipoIdentificacionEnum> cmbIdentificacion;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
