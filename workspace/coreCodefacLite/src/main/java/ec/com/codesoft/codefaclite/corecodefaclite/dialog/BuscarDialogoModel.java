@@ -23,6 +23,7 @@ import java.math.BigInteger;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -81,7 +82,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
     private void consultaSecundaria()
     {
         try {
-            String filtro=getTxtBuscar().getText();
+            String filtro=getTxtBuscar().getText().toLowerCase();
             QueryDialog queryDialog=this.model.getConsulta("%"+filtro+"%");
             //queryDialog.agregarParametro(1000,"%"+filtro+"%");
             
@@ -91,6 +92,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
             if(listaResultados!=null)
                 listaResultados.clear();
             
+            convertirMinusculasParametros(queryDialog);
             listaResultados=ServiceFactory.getFactory().getUtilidadesServiceIf().consultaGeneralDialogos(queryDialog.query,queryDialog.getParametros(),limiteInferior,CANTIDAD_FILAS);
             cargarDatos(listaResultados);
             
@@ -145,7 +147,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
     private int obtenerTamanioConsulta()
     {
         try {
-            String filtro=getTxtBuscar().getText();
+            String filtro=getTxtBuscar().getText().toLowerCase();
             QueryDialog queryDialog=this.model.getConsulta("%"+filtro+"%");
             //queryDialog.agregarParametro(1000,"%"+filtro+"%");
             String query=queryDialog.query;
@@ -154,6 +156,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
             int segundoCorte=query.indexOf("from");
             String queryModificado=queryDialog.query.substring(0,primerCorte)+" count(1) "+queryDialog.query.substring(segundoCorte);
             System.out.println(queryModificado);            
+            convertirMinusculasParametros(queryDialog);
             Long tamanio=ServiceFactory.getFactory().getUtilidadesServiceIf().consultaTamanioGeneralDialogos(queryModificado, queryDialog.getParametros());
             
             return (tamanio!=null)?tamanio.intValue():0;
@@ -292,15 +295,6 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
             @Override
             public void actionPerformed(ActionEvent e) {
                 ejecutarConsulta();
-                /*
-                if(getTxtBuscar().getText().equals(""))
-                {
-                    cargarDatos(listaResultados);
-                }
-                else
-                {
-                    ejecutarConsulta();
-                }*/
                 
             }
         });
@@ -355,20 +349,6 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         });
     }
     
-    private void filtrar()
-    {
-        /**
-        listaResultados=new ArrayList<Object>();
-        listaResultados.clear();
-        for (Object obj : listaResultados) {
-            if(this.model.buscarObjeto(obj,getTxtBuscar().getText()))
-            {
-                listaResultadosFiltrados.add(obj);
-            }
-        }
-        cargarDatos(listaResultadosFiltrados);
-        */
-    }
 
     private void establecerPropiedadesIniciales() {
         //Centrar el dialogo
@@ -380,7 +360,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
     
     public void setearTextoBusqueda(String texto)
     {
-        getTxtBuscar().setText(texto);
+        getTxtBuscar().setText(texto.toLowerCase());
     }
 
     public long getTamanioConsulta() {
@@ -390,6 +370,22 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
     public Object obtenerResultadoLista(int indice)
     {
         return this.listaResultados.get(indice);
+    }
+    
+    private void convertirMinusculasParametros(QueryDialog queryDialog)
+    {
+        for (Map.Entry<Integer, Object> en : queryDialog.getParametros().entrySet()) {
+            Integer numero = en.getKey();
+            Object valor = en.getValue();
+            
+            //Solo aplicar esta opcion cuando el tipo de dato enviado es String
+            if(valor.getClass().equals(String.class))
+            {
+                queryDialog.getParametros().put(numero, valor); //Remplazo el antiguo valor por el nuevo con minusculas
+            }
+            
+        }
+
     }
     
 }

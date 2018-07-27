@@ -69,7 +69,7 @@ create table DESTINATARIO_GUIA_REMISION
     COD_DOCUMENTO_SUSTENTO varchar(32),
     PREIMPRESO varchar(32),
     AUTORIZACION_NUMERO varchar(128),
-    FECHA_EMISION date;
+    primary key (ID)
 
 );
 
