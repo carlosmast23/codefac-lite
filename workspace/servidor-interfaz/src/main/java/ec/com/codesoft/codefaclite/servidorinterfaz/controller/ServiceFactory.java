@@ -5,8 +5,6 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.controller;
 
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PermisoVentana;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
@@ -56,17 +54,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraDet
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.gestionacademica.RubroPlantillaEstudianteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.gestionacademica.RubroPlantillaServiceIf;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.rmi.AccessException;
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -79,6 +72,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriFormaPagoServic
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.DestinatarioGuiaRemisionServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.DetalleProductoGuiaRemisionServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.GuiaRemisionAdicionalServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.GuiaRemisionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.TransportistaServiceIf;
 
 /**
@@ -161,7 +158,12 @@ public abstract class ServiceFactory {
     public DepartamentoServiceIf getDepartamentoServiceIf(){return (DepartamentoServiceIf) getRecursosRMI(DepartamentoServiceIf.class);};
     public PresupuestoServiceIf getPresupuestoServiceIf(){return (PresupuestoServiceIf) getRecursosRMI(PresupuestoServiceIf.class);};
     public PresupuestoDetalleServiceIf getPresupuestoDetalleServiceIf(){return (PresupuestoDetalleServiceIf) getRecursosRMI(PresupuestoDetalleServiceIf.class);};
-    public TransportistaServiceIf getTransportistaServiceIf(){return (TransportistaServiceIf) getRecursosRMI(TransportistaServiceIf.class);};
+    public TransportistaServiceIf getTransportistaServiceIf(){return (TransportistaServiceIf) getRecursosRMI(TransportistaServiceIf.class);};    
+    public DestinatarioGuiaRemisionServiceIf getDestinatarioGuiaRemisionServiceIf(){return (DestinatarioGuiaRemisionServiceIf) getRecursosRMI(DestinatarioGuiaRemisionServiceIf.class);};
+    public DetalleProductoGuiaRemisionServiceIf getDetalleProductoGuiaRemisionServiceIf(){return (DetalleProductoGuiaRemisionServiceIf) getRecursosRMI(DetalleProductoGuiaRemisionServiceIf.class);};
+    public GuiaRemisionServiceIf getGuiaRemisionServiceIf(){return (GuiaRemisionServiceIf) getRecursosRMI(GuiaRemisionServiceIf.class);};
+    public GuiaRemisionAdicionalServiceIf getGuiaRemisionAdicionalServiceIf(){return (GuiaRemisionAdicionalServiceIf) getRecursosRMI(GuiaRemisionAdicionalServiceIf.class);};
+    
     /**
      * Crea una nueva instancia el controlados para manejar por el cliente
      * @param ipServidor 

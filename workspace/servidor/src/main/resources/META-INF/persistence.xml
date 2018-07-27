@@ -70,6 +70,11 @@
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalle</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.Transportista</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DestinatarioGuiaRemision</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DetalleProductoGuiaRemision</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemisionService</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemisionAdicional</class>
+    
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
   </persistence-unit>
 </persistence>
