@@ -240,7 +240,26 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
        
     
     private void initListener()
-    {
+    {        
+        getTxtBuscar().addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                    if(getTblTabla().getRowCount()>0)
+                    {
+                        getTblTabla().setRowSelectionInterval(0,0);//Seleccionar la primera fila de la tabla
+                        getTblTabla().requestFocus();
+                    }
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
+        });
+        
         getBtnUltimo().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -341,6 +360,15 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
                        resultado=listaResultados.get(filaSeleccionada);
                        dispose();
                    }
+                }
+                
+                if(e.getKeyCode()==KeyEvent.VK_UP)
+                {
+                    int filaSeleccionada=getTblTabla().getSelectedRow();
+                    if(filaSeleccionada==0)
+                    {
+                        getTxtBuscar().requestFocus();
+                    }
                 }
             }
 
