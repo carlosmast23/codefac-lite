@@ -5,15 +5,18 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import java.io.Serializable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  *
  * @author Carlos
  */
-public class GuiaRemisionAdicional implements Serializable{
+@Table(name = "GUIA_REMISION_ADICIONAL")
+public class GuiaRemisionAdicional extends ComprobanteAdicional implements Serializable{
     
     @JoinColumn(name = "GUIA_REMISION_ID")
     @ManyToOne

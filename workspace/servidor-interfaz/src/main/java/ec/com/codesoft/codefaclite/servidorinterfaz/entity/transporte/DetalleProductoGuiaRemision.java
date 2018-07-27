@@ -9,23 +9,30 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  *
  * @author Carlos
  */
+@Table(name = "DETALLE_PRODUCTO_GUIA_REMISION")
 public class DetalleProductoGuiaRemision {
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    @Column(name = "CODIGO_INTERNO")
     private String codigoInterno;
+    @Column(name = "CODIGO_ADICIONAL")
     private String codigoAdicional;
+    @Column(name = "DESCRIPCION")
     private String descripcion;
+    @Column(name = "CANTIDAD")
     private Integer cantidad;
     
-    private Long referencia; //Almacena la referencia al producto 
+    @Column(name = "REFERENCIA_ID")
+    private Long referenciaId; //Almacena la referencia al producto 
 
     public Long getId() {
         return id;
@@ -67,14 +74,14 @@ public class DetalleProductoGuiaRemision {
         this.cantidad = cantidad;
     }
 
-    public Long getReferencia() {
-        return referencia;
+    public Long getReferenciaId() {
+        return referenciaId;
     }
 
-    public void setReferencia(Long referencia) {
-        this.referencia = referencia;
+    public void setReferenciaId(Long referenciaId) {
+        this.referenciaId = referenciaId;
     }
-    
+
     
     
 }

@@ -240,7 +240,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         buscarDialogoModel.setVisible(true);
         Producto productoTmp = (Producto) buscarDialogoModel.getResultado();
 
-        if (producto == null) {
+        if (productoTmp == null) {
             throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar producto vacio");
         }
         else
