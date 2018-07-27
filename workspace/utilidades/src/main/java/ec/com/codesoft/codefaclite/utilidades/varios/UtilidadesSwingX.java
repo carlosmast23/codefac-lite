@@ -5,6 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.utilidades.varios;
 
+import java.awt.Color;
+import java.awt.Font;
 import javax.swing.text.JTextComponent;
 import org.jdesktop.swingx.prompt.PromptSupport;
 
@@ -17,5 +19,7 @@ public class UtilidadesSwingX {
     public static void placeHolder(String texto,JTextComponent componente)
     {
         PromptSupport.setPrompt(texto, componente);
+        PromptSupport.setForeground(Color.lightGray, componente);
+        PromptSupport.setFontStyle(Font.BOLD, componente);
     }
 }

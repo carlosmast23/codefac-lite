@@ -33,6 +33,8 @@ public class DetalleProductoGuiaRemision {
     
     @Column(name = "REFERENCIA_ID")
     private Long referenciaId; //Almacena la referencia al producto 
+    
+    private DestinatarioGuiaRemision destinatario;
 
     public Long getId() {
         return id;
@@ -81,6 +83,16 @@ public class DetalleProductoGuiaRemision {
     public void setReferenciaId(Long referenciaId) {
         this.referenciaId = referenciaId;
     }
+
+    public DestinatarioGuiaRemision getDestinatario() {
+        return destinatario;
+    }
+
+    public void setDestinatario(DestinatarioGuiaRemision destinatario) {
+        this.destinatario = destinatario;
+    }
+    
+    
 
     
     

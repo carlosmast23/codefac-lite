@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -40,6 +41,8 @@ public class DestinatarioGuiaRemision implements Serializable{
     private Date fechaEmision;
     
     private List<DetalleProductoGuiaRemision> detallesProductos;
+    
+    private GuiaRemision guiaRemision;
 
     public DestinatarioGuiaRemision() {
     }
@@ -131,6 +134,23 @@ public class DestinatarioGuiaRemision implements Serializable{
     public void setDetallesProductos(List<DetalleProductoGuiaRemision> detallesProductos) {
         this.detallesProductos = detallesProductos;
     }
+
+    public GuiaRemision getGuiaRemision() {
+        return guiaRemision;
+    }
+
+    public void setGuiaRemision(GuiaRemision guiaRemision) {
+        this.guiaRemision = guiaRemision;
+    }
+
+    public void addProducto(DetalleProductoGuiaRemision detalle) {
+        if (this.detallesProductos == null) {
+            this.detallesProductos = new ArrayList<DetalleProductoGuiaRemision>();
+        }
+        detalle.setDestinatario(this);
+        this.detallesProductos.add(detalle);
+    }
+
 
     
     

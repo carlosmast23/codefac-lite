@@ -17,7 +17,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPanel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteFacturacionBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.EstudianteBusquedaDialogo;
-import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusqueda;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusquedaPresupuesto;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.RubroEstudianteBusqueda;
@@ -78,6 +78,7 @@ import ec.com.codesoft.codefaclite.utilidades.tabla.ButtonColumn;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwingX;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -2399,7 +2400,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
 
     private void setearValoresVista() {
-        PromptSupport.setPrompt("Identificación",getTxtCliente());
+        UtilidadesSwingX.placeHolder("Identificación", getTxtCliente());
     }
     
     

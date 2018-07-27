@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.facturacion.busqueda;
+package ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda;
 
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ColumnaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import java.util.ArrayList;
@@ -22,8 +23,20 @@ import javax.persistence.Query;
  *
  * @author Carlos
  */
-public class FacturaBusqueda implements InterfaceModelFind<Factura> {
+public class FacturaBusqueda implements InterfaceModelFind<Factura> {   
+    private Persona cliente;
 
+    public FacturaBusqueda(Persona cliente) {
+        this.cliente = cliente;
+    
+    }
+
+    public FacturaBusqueda() {
+    }
+    
+    
+    
+    
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<>();
@@ -40,10 +53,20 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura> {
     @Override
     public QueryDialog getConsulta(String filter) {
         String queryString = "SELECT u FROM Factura u WHERE u.estado<>?1 ";
+        if(cliente!=null)
+        {
+            queryString+=" AND u.cliente=?10 ";
+        }
+        
         queryString+="AND ( LOWER(u.cliente.razonSocial) like ?2 OR CONCAT(u.secuencial, '') like ?2 )";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
         queryDialog.agregarParametro(2,filter);
+        
+        if (cliente != null) {
+            queryDialog.agregarParametro(10,cliente);
+        }
+        
         //queryDialog.agregarParametro(3,FacturaEnumEstado.SIN_AUTORIZAR.getEstado());
         return queryDialog;
     }
@@ -63,21 +86,5 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura> {
         dato.add(t.getFechaEmision());
         dato.add(t.getTotal());
     }
-/*
-    @Override
-    public Boolean buscarObjeto(Factura t, Object valor) {
-        //if(t.getCliente().getIdentificacion().indexOf(valor.toString())>=0 || t.getPreimpreso().indexOf(valor.toString())>=0)
-        String preimpreso=t.getPreimpreso().toLowerCase();
-        String valorBuscar=valor.toString().toLowerCase();
-        if(preimpreso.indexOf(valorBuscar)>=0)
-        {
-            return true;
-        }   
-        else
-        {
-            return false;
-        }  
-        //return true;
-    }*/
     
 }

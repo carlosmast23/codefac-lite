@@ -5,7 +5,10 @@
  */
 package ec.com.codesoft.codefaclite.transporte.panel;
 
+import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 /**
@@ -36,7 +39,6 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         jLabel35 = new javax.swing.JLabel();
         lblSecuencial = new javax.swing.JLabel();
         jLabel38 = new javax.swing.JLabel();
-        jLabel39 = new javax.swing.JLabel();
         lblEspacio1 = new javax.swing.JLabel();
         lblEspacio2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -50,8 +52,8 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         jPanel1 = new javax.swing.JPanel();
         jToolBar2 = new javax.swing.JToolBar();
         txtIdentificacionDestinatario = new javax.swing.JTextField();
-        btnAgregarCliente1 = new javax.swing.JButton();
-        btnBuscarCliente1 = new javax.swing.JButton();
+        btnAgregarDestinatario = new javax.swing.JButton();
+        btnBuscarDestinatario = new javax.swing.JButton();
         txtMotivoTraslado = new javax.swing.JTextField();
         jPanel6 = new javax.swing.JPanel();
         txtPreimpreso = new javax.swing.JTextField();
@@ -59,13 +61,13 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         txtDocAduanero = new javax.swing.JTextField();
         jToolBar4 = new javax.swing.JToolBar();
         jButton1 = new javax.swing.JButton();
-        jDateChooser3 = new com.toedter.calendar.JDateChooser();
+        cmbFechaFactura = new com.toedter.calendar.JDateChooser();
         jLabel15 = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
+        lblNombresCompletosDestinatarios = new javax.swing.JLabel();
         txtRuta = new javax.swing.JTextField();
         txtDireccionDestino = new javax.swing.JTextField();
         jToolBar5 = new javax.swing.JToolBar();
-        jButton2 = new javax.swing.JButton();
+        btnAgregarDestinarioGuiaRemision = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
@@ -148,14 +150,6 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         panelDatosGenerales.add(jLabel38, gridBagConstraints);
-
-        jLabel39.setText("             ");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panelDatosGenerales.add(jLabel39, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
@@ -262,18 +256,19 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         txtIdentificacionDestinatario.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jToolBar2.add(txtIdentificacionDestinatario);
 
-        btnAgregarCliente1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/mas-ico.png"))); // NOI18N
-        btnAgregarCliente1.setText("Agregar");
-        jToolBar2.add(btnAgregarCliente1);
+        btnAgregarDestinatario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/mas-ico.png"))); // NOI18N
+        btnAgregarDestinatario.setText("Agregar");
+        jToolBar2.add(btnAgregarDestinatario);
 
-        btnBuscarCliente1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
-        btnBuscarCliente1.setToolTipText("Buscar Cliente");
-        jToolBar2.add(btnBuscarCliente1);
+        btnBuscarDestinatario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
+        btnBuscarDestinatario.setToolTipText("Buscar Cliente");
+        jToolBar2.add(btnBuscarDestinatario);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(3, 5, 15, 20);
         jPanel1.add(jToolBar2, gridBagConstraints);
@@ -330,7 +325,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel6.add(jDateChooser3, gridBagConstraints);
+        jPanel6.add(cmbFechaFactura, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
@@ -350,15 +345,15 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel15, gridBagConstraints);
 
-        jLabel16.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel16.setText("Nombres Completos");
+        lblNombresCompletosDestinatarios.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblNombresCompletosDestinatarios.setText("Nombres Completos");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jLabel16, gridBagConstraints);
+        jPanel1.add(lblNombresCompletosDestinatarios, gridBagConstraints);
 
         txtRuta.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -384,11 +379,11 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         jToolBar5.setBorder(null);
         jToolBar5.setRollover(true);
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add2.png"))); // NOI18N
-        jButton2.setFocusable(false);
-        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar5.add(jButton2);
+        btnAgregarDestinarioGuiaRemision.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add2.png"))); // NOI18N
+        btnAgregarDestinarioGuiaRemision.setFocusable(false);
+        btnAgregarDestinarioGuiaRemision.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAgregarDestinarioGuiaRemision.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar5.add(btnAgregarDestinarioGuiaRemision);
 
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/edit_icon.png"))); // NOI18N
         jButton3.setFocusable(false);
@@ -701,19 +696,19 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizarDetalle;
     private javax.swing.JButton btnAgregarCliente;
-    private javax.swing.JButton btnAgregarCliente1;
+    private javax.swing.JButton btnAgregarDestinarioGuiaRemision;
+    private javax.swing.JButton btnAgregarDestinatario;
     private javax.swing.JButton btnAgregarDetalle;
     private javax.swing.JButton btnBuscarCliente;
-    private javax.swing.JButton btnBuscarCliente1;
+    private javax.swing.JButton btnBuscarDestinatario;
     private javax.swing.JButton btnEliminarDetalle;
+    private com.toedter.calendar.JDateChooser cmbFechaFactura;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JComboBox<String> jComboBox1;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private com.toedter.calendar.JDateChooser jDateChooser2;
-    private com.toedter.calendar.JDateChooser jDateChooser3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -721,7 +716,6 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
@@ -729,7 +723,6 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel38;
-    private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -760,6 +753,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblEspacio3;
     private javax.swing.JLabel lblEspacio4;
     private javax.swing.JLabel lblNombreComercial;
+    private javax.swing.JLabel lblNombresCompletosDestinatarios;
     private javax.swing.JLabel lblRuc;
     private javax.swing.JLabel lblSecuencial;
     private javax.swing.JLabel lblTelefonos;
@@ -807,7 +801,55 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     public JTextField getTxtRuta() {
         return txtRuta;
     }
-    
+
+    public JLabel getLblNombresCompletosDestinatarios() {
+        return lblNombresCompletosDestinatarios;
+    }
+
+    public void setLblNombresCompletosDestinatarios(JLabel lblNombresCompletosDestinatarios) {
+        this.lblNombresCompletosDestinatarios = lblNombresCompletosDestinatarios;
+    }
+
+    public JButton getBtnAgregarDestinatario() {
+        return btnAgregarDestinatario;
+    }
+
+    public JButton getBtnBuscarDestinatario() {
+        return btnBuscarDestinatario;
+    }
+
+    public JButton getBtnBuscarFactura() {
+        return jButton1;
+    }
+
+    public JDateChooser getCmbFechaFactura() {
+        return cmbFechaFactura;
+    }
+
+    public JLabel getLblNombreComercial() {
+        return lblNombreComercial;
+    }
+
+    public JLabel getLblRuc() {
+        return lblRuc;
+    }
+
+    public JLabel getLblSecuencial() {
+        return lblSecuencial;
+    }
+
+    public JLabel getLblTelefonos() {
+        return lblTelefonos;
+    }
+
+    public JLabel getLblDireccion() {
+        return lblDireccion;
+    }
+
+    public JButton getBtnAgregarDestinarioGuiaRemision() {
+        return btnAgregarDestinarioGuiaRemision;
+    }
+
     
     
 

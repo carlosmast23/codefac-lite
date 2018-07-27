@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Transportista;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -129,6 +130,19 @@ public class GuiaRemision extends ComprobanteEntity implements  Serializable{
     public void setPlaca(String placa) {
         this.placa = placa;
     }
+    
+    /**
+     * Agregar Destinatarios a la guia de remision
+     * @param detalle 
+     */
+    public void addDestinario(DestinatarioGuiaRemision detalle) {
+        if (this.destinatarios == null) {
+            this.destinatarios = new ArrayList<DestinatarioGuiaRemision>();
+        }
+        detalle.setGuiaRemision(this);
+        this.destinatarios.add(detalle);
+    }
+    
 
     @Override
     public int hashCode() {
