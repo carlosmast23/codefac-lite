@@ -143,9 +143,34 @@ public class TransportistaModel extends TransportistaPanel implements DialogInte
     }
 
     @Override
+    public void buscar() throws ExcepcionCodefacLite, RemoteException {
+        obtenerDialogoBusqueda().setVisible(true);
+        Transportista transportistaTemp = (Transportista) obtenerDialogoBusqueda().getResultado();
+        if(transportistaTemp == null)
+        {
+            throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar transportista vacio");
+        }else
+        {
+            this.transportista = transportistaTemp;
+            cargarDatosTransportista();
+        }
+                
+    }
+    
+    
+    @Override
     public void cargarDatosPantalla(Object entidad) {
-        transportista = (Transportista) entidad;
-        cargarDatosTransportista();
+        try {
+             if(entidad != null){
+                transportista = (Transportista) entidad;
+                cargarDatosTransportista();
+            }else
+            {
+                throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar producto vacio");
+            }
+        }catch (ExcepcionCodefacLite ex) {
+                Logger.getLogger(TransportistaModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void setearDatos()
@@ -162,6 +187,8 @@ public class TransportistaModel extends TransportistaPanel implements DialogInte
         transportista.setTelefonoConvencional(getTxtTelefono().getText());
         Persona.TipoIdentificacionEnum identificacionEnum = (Persona.TipoIdentificacionEnum) getCmbIdentificacion().getSelectedItem();
         transportista.setTipoIdentificacion(identificacionEnum.getLetra());
+        TransportistaEnumEstado transportistaEnumEstado = (TransportistaEnumEstado) getCmbEstado().getSelectedItem();
+        transportista.setEstado(transportistaEnumEstado.getEstado());
     }
     
     private boolean prevalidar() {
@@ -199,6 +226,10 @@ public class TransportistaModel extends TransportistaPanel implements DialogInte
         getTxtPlaca().setText(transportista.getPlacaVehiculo());
         getTxtRazonSocial().setText(transportista.getRazonSocial());
         getTxtTelefono().setText(transportista.getTelefonoConvencional());
+        Persona.TipoIdentificacionEnum tipoIdentificacionEnum = Persona.TipoIdentificacionEnum.obtenerPorLetra(transportista.getTipoIdentificacion());
+        getCmbIdentificacion().setSelectedItem(tipoIdentificacionEnum);
+        TransportistaEnumEstado transportistaEnumEstado = TransportistaEnumEstado.getEnum(transportista.getEstado());
+        getCmbEstado().setSelectedItem(transportistaEnumEstado);
   
     }
     
