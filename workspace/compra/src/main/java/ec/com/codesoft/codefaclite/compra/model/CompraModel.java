@@ -101,11 +101,15 @@ public class CompraModel extends CompraPanel{
         iniciarCombos();
         agregarListenerBotones();
         crearVariables();
-        if(session.getEmpresa().getObligadoLlevarContabilidad().equalsIgnoreCase(Empresa.SI_LLEVA_CONTABILIDAD))
-        {
-            initModelTablaDetalleCompra();
+        if(session.getEmpresa() != null){
+            if(session.getEmpresa().getObligadoLlevarContabilidad().equalsIgnoreCase(Empresa.SI_LLEVA_CONTABILIDAD))
+            {
+                initModelTablaDetalleCompra();
+            }else{
+                initModelTablaDetalleCompraSinRetencion();
+            }
         }else{
-            initModelTablaDetalleCompraSinRetencion();
+            DialogoCodefac.mensaje("Advertencia", "No existe información de empresa", DialogoCodefac.MENSAJE_ADVERTENCIA);
         }
         getCmbFechaCompra().setDate(new java.util.Date());
         desbloquearIngresoDetalleProducto();
@@ -217,7 +221,10 @@ public class CompraModel extends CompraPanel{
         {
             this.compra=compra;
             cargarDatosCompra();
+        }else{
+            throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar compra vacio");
         }
+        
         
     }
     
