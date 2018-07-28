@@ -142,6 +142,22 @@ public class GuiaRemision extends ComprobanteEntity implements  Serializable{
         detalle.setGuiaRemision(this);
         this.destinatarios.add(detalle);
     }
+
+    public Integer obtenerTotalProductos()
+    {
+        Integer cantidad=0;
+        if(destinatarios!=null)
+        {
+            for (DestinatarioGuiaRemision destinatario : destinatarios) 
+            {
+                for (DetalleProductoGuiaRemision detalle : destinatario.getDetallesProductos()) {
+                    cantidad+=detalle.getCantidad();
+                }
+            }
+        }
+        return cantidad;
+    }
+    
     
 
     @Override
