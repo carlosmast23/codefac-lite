@@ -60,7 +60,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         txtAutorizacion = new javax.swing.JTextField();
         txtDocAduanero = new javax.swing.JTextField();
         jToolBar4 = new javax.swing.JToolBar();
-        jButton1 = new javax.swing.JButton();
+        BtnBuscarFactura = new javax.swing.JButton();
         cmbFechaFactura = new com.toedter.calendar.JDateChooser();
         jLabel15 = new javax.swing.JLabel();
         lblNombresCompletosDestinatarios = new javax.swing.JLabel();
@@ -257,7 +257,6 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         jToolBar2.add(txtIdentificacionDestinatario);
 
         btnAgregarDestinatario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/mas-ico.png"))); // NOI18N
-        btnAgregarDestinatario.setText("Agregar");
         jToolBar2.add(btnAgregarDestinatario);
 
         btnBuscarDestinatario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
@@ -312,11 +311,11 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         jToolBar4.setBorder(null);
         jToolBar4.setRollover(true);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
-        jButton1.setFocusable(false);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar4.add(jButton1);
+        BtnBuscarFactura.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
+        BtnBuscarFactura.setFocusable(false);
+        BtnBuscarFactura.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        BtnBuscarFactura.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar4.add(BtnBuscarFactura);
 
         jPanel6.add(jToolBar4, new java.awt.GridBagConstraints());
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -451,7 +450,6 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         jToolBar1.add(txtIdentificacionTransportista);
 
         btnAgregarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/mas-ico.png"))); // NOI18N
-        btnAgregarCliente.setText("Agregar");
         jToolBar1.add(btnAgregarCliente);
 
         btnBuscarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
@@ -694,6 +692,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BtnBuscarFactura;
     private javax.swing.JButton btnActualizarDetalle;
     private javax.swing.JButton btnAgregarCliente;
     private javax.swing.JButton btnAgregarDestinarioGuiaRemision;
@@ -703,7 +702,6 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnBuscarDestinatario;
     private javax.swing.JButton btnEliminarDetalle;
     private com.toedter.calendar.JDateChooser cmbFechaFactura;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JComboBox<String> jComboBox1;
@@ -819,7 +817,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     }
 
     public JButton getBtnBuscarFactura() {
-        return jButton1;
+        return BtnBuscarFactura;
     }
 
     public JDateChooser getCmbFechaFactura() {

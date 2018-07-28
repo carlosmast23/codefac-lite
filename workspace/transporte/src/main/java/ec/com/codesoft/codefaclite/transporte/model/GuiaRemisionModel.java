@@ -44,7 +44,8 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
     
     private GuiaRemision guiaRemision;
     private Transportista transportista;
-    private Persona destinatario;
+    private DestinatarioGuiaRemision destinatario;
+    private Factura facturaSeleccionada;
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
@@ -93,6 +94,8 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
         
         ///Limpiar Variables
         guiaRemision=new GuiaRemision();
+        transportista=new Transportista();
+        destinatario=new DestinatarioGuiaRemision();
     }
     
      public void cargarSecuencial()
@@ -259,6 +262,8 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
         destinatario.setRuta(destinatario.getRuta());
         return destinatario;
     }
+    
+    private void crearDetallesDestinatario
 
     private void listenerBotones() {
         
@@ -267,6 +272,8 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
             public void actionPerformed(ActionEvent e) {
                 DestinatarioGuiaRemision destinatarioGuiaRemision=crearDestinatario();
                 guiaRemision.addDestinario(destinatarioGuiaRemision);
+                
+                
             }
         });
         
@@ -291,11 +298,16 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(facturaBusqueda);
                 buscarDialogoModel.setVisible(true);
                 Factura facturaTmp = (Factura) buscarDialogoModel.getResultado();
-                cargarDatoFactura(facturaTmp);
-                //if (facturaTmp != null) 
-                //{
-                    
-                //}
+                if(facturaTmp!=null)
+                {
+                    facturaSeleccionada=facturaTmp;
+                    cargarDatoFactura(facturaTmp);
+                }
+                else
+                {
+                    facturaSeleccionada=null;
+                }
+                
             }
         });
     }

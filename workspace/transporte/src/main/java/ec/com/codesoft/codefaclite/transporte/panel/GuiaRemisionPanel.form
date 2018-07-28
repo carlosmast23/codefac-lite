@@ -282,7 +282,6 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/img/iconos/mas-ico.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Agregar"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="btnBuscarDestinatario">
@@ -361,7 +360,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JButton" name="jButton1">
+                <Component class="javax.swing.JButton" name="BtnBuscarFactura">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/img/iconos/find2-ico.png"/>
@@ -570,7 +569,6 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/img/iconos/mas-ico.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Agregar"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="btnBuscarCliente">
