@@ -7,8 +7,11 @@ package ec.com.codesoft.codefaclite.transporte.panel;
 
 import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DestinatarioGuiaRemision;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 
 /**
@@ -60,7 +63,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         txtAutorizacion = new javax.swing.JTextField();
         txtDocAduanero = new javax.swing.JTextField();
         jToolBar4 = new javax.swing.JToolBar();
-        jButton1 = new javax.swing.JButton();
+        BtnBuscarFactura = new javax.swing.JButton();
         cmbFechaFactura = new com.toedter.calendar.JDateChooser();
         jLabel15 = new javax.swing.JLabel();
         lblNombresCompletosDestinatarios = new javax.swing.JLabel();
@@ -88,17 +91,17 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         jLabel13 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jPanel3 = new javax.swing.JPanel();
-        jLabel20 = new javax.swing.JLabel();
+        lblCantidadProductos = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblGuiaRemision = new javax.swing.JTable();
         jPanel4 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jToolBar3 = new javax.swing.JToolBar();
         btnAgregarDetalle = new javax.swing.JButton();
         btnActualizarDetalle = new javax.swing.JButton();
         btnEliminarDetalle = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cmbDestinatarios = new javax.swing.JComboBox<>();
         lblEspacio4 = new javax.swing.JLabel();
         jTextField10 = new javax.swing.JTextField();
         jTextField11 = new javax.swing.JTextField();
@@ -257,7 +260,6 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         jToolBar2.add(txtIdentificacionDestinatario);
 
         btnAgregarDestinatario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/mas-ico.png"))); // NOI18N
-        btnAgregarDestinatario.setText("Agregar");
         jToolBar2.add(btnAgregarDestinatario);
 
         btnBuscarDestinatario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
@@ -312,11 +314,11 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         jToolBar4.setBorder(null);
         jToolBar4.setRollover(true);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
-        jButton1.setFocusable(false);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar4.add(jButton1);
+        BtnBuscarFactura.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
+        BtnBuscarFactura.setFocusable(false);
+        BtnBuscarFactura.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        BtnBuscarFactura.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar4.add(BtnBuscarFactura);
 
         jPanel6.add(jToolBar4, new java.awt.GridBagConstraints());
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -451,7 +453,6 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         jToolBar1.add(txtIdentificacionTransportista);
 
         btnAgregarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/mas-ico.png"))); // NOI18N
-        btnAgregarCliente.setText("Agregar");
         jToolBar1.add(btnAgregarCliente);
 
         btnBuscarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
@@ -547,14 +548,14 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
-        jLabel20.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel20.setText("00000000000111");
+        lblCantidadProductos.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblCantidadProductos.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel3.add(jLabel20, gridBagConstraints);
+        jPanel3.add(lblCantidadProductos, gridBagConstraints);
 
         jLabel22.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel22.setText("Cantidad:  ");
@@ -574,7 +575,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jPanel3, gridBagConstraints);
 
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblGuiaRemision);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -624,12 +625,12 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         jPanel4.add(jToolBar3, gridBagConstraints);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbDestinatarios.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
-        jPanel4.add(jComboBox1, gridBagConstraints);
+        jPanel4.add(cmbDestinatarios, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 0;
@@ -694,6 +695,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BtnBuscarFactura;
     private javax.swing.JButton btnActualizarDetalle;
     private javax.swing.JButton btnAgregarCliente;
     private javax.swing.JButton btnAgregarDestinarioGuiaRemision;
@@ -702,11 +704,10 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnBuscarCliente;
     private javax.swing.JButton btnBuscarDestinatario;
     private javax.swing.JButton btnEliminarDetalle;
+    private javax.swing.JComboBox<DestinatarioGuiaRemision> cmbDestinatarios;
     private com.toedter.calendar.JDateChooser cmbFechaFactura;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JComboBox<String> jComboBox1;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private com.toedter.calendar.JDateChooser jDateChooser2;
     private javax.swing.JLabel jLabel1;
@@ -718,7 +719,6 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel35;
@@ -737,7 +737,6 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField10;
     private javax.swing.JTextField jTextField11;
@@ -747,6 +746,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     private javax.swing.JToolBar jToolBar3;
     private javax.swing.JToolBar jToolBar4;
     private javax.swing.JToolBar jToolBar5;
+    private javax.swing.JLabel lblCantidadProductos;
     private javax.swing.JLabel lblDireccion;
     private javax.swing.JLabel lblEspacio1;
     private javax.swing.JLabel lblEspacio2;
@@ -758,6 +758,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblSecuencial;
     private javax.swing.JLabel lblTelefonos;
     private javax.swing.JPanel panelDatosGenerales;
+    private javax.swing.JTable tblGuiaRemision;
     private javax.swing.JTextField txtAutorizacion;
     private javax.swing.JTextField txtDireccionDestino;
     private javax.swing.JTextField txtDocAduanero;
@@ -819,7 +820,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     }
 
     public JButton getBtnBuscarFactura() {
-        return jButton1;
+        return BtnBuscarFactura;
     }
 
     public JDateChooser getCmbFechaFactura() {
@@ -849,6 +850,20 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     public JButton getBtnAgregarDestinarioGuiaRemision() {
         return btnAgregarDestinarioGuiaRemision;
     }
+
+    public JTable getTblGuiaRemision() {
+        return tblGuiaRemision;
+    }
+
+    public JComboBox<DestinatarioGuiaRemision> getCmbDestinatarios() {
+        return cmbDestinatarios;
+    }
+
+    public JLabel getLblCantidadProductos() {
+        return lblCantidadProductos;
+    }
+
+    
 
     
     

@@ -145,14 +145,16 @@ public class UtilidadComprobanteModel extends UtilidadComprobantePanel {
         String[] titulo = new String[]{"Seleccion","Clave Acceso","Preimpreso","Fecha"};
 
         this.tableModel=UtilidadesTablas.crearModeloTabla(titulo,new Class[]{Boolean.class,String.class,String.class,String.class});
-        
-        for (ComprobanteElectronico comprobante : comprobantes) {
-            Vector<Object> fila = new Vector<>();
-            fila.add(false);
-            fila.add(comprobante.getInformacionTributaria().getClaveAcceso());
-            fila.add(comprobante.getInformacionTributaria().getPreimpreso());
-            fila.add(comprobante.getFechaEmision());
-            this.tableModel.addRow(fila);
+        if(comprobantes!=null)
+        {
+            for (ComprobanteElectronico comprobante : comprobantes) {
+                Vector<Object> fila = new Vector<>();
+                fila.add(false);
+                fila.add(comprobante.getInformacionTributaria().getClaveAcceso());
+                fila.add(comprobante.getInformacionTributaria().getPreimpreso());
+                fila.add(comprobante.getFechaEmision());
+                this.tableModel.addRow(fila);
+            }
         }
         this.getTblComprobantes().setModel(tableModel);
     }

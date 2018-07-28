@@ -11,18 +11,22 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.guiaRetencion.DetalleGuiaRemisionComprobante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Transportista;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DestinatarioGuiaRemision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DetalleProductoGuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.transporte.panel.GuiaRemisionPanel;
+import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwingX;
 import java.awt.event.ActionEvent;
@@ -34,6 +38,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JComponent;
+import javax.swing.table.DefaultTableModel;
 import org.apache.commons.collections4.map.HashedMap;
 
 /**
@@ -44,7 +50,9 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
     
     private GuiaRemision guiaRemision;
     private Transportista transportista;
+    private DestinatarioGuiaRemision destinatarioGuiaRemision;
     private Persona destinatario;
+    private Factura facturaSeleccionada;
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
@@ -89,10 +97,14 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
          getLblTelefonos().setText(session.getEmpresa().getTelefonos());
         getLblNombreComercial().setText(session.getEmpresa().getNombreLegal());
         getLblDireccion().setText(session.getEmpresa().getDireccion());
+        getLblCantidadProductos().setText("0");
         cargarSecuencial();
         
         ///Limpiar Variables
         guiaRemision=new GuiaRemision();
+        transportista=new Transportista();
+        destinatarioGuiaRemision=new DestinatarioGuiaRemision();
+        destinatario=new Persona();
     }
     
      public void cargarSecuencial()
@@ -207,10 +219,10 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
         panelPadre.crearDialogoCodefac(new ObserverUpdateInterface<Persona>() {
             @Override
             public void updateInterface(Persona entity) {
-                //factura.setCliente(entity);
-                //if (factura.getCliente() != null) {
-                //    cargarCliente(entity);
-                //}
+                if(entity!=null)
+                {
+                    destinatario=entity;
+                }
             }
         },VentanaEnum.CLIENTE, false,parametros,this);
     }
@@ -233,8 +245,13 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
         ClienteFacturacionBusqueda clienteBusquedaDialogo = new ClienteFacturacionBusqueda();
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(clienteBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
-        //factura.setCliente((Persona) buscarDialogoModel.getResultado());        
-        cargarCliente((Persona) buscarDialogoModel.getResultado());        
+        //factura.setCliente((Persona) buscarDialogoModel.getResultado());      
+        if(buscarDialogoModel.getResultado()!=null)
+        {
+            destinatario=(Persona) buscarDialogoModel.getResultado();
+            cargarCliente(destinatario);        
+        }
+        
     }
     
     private void cargarDatoFactura(Factura factura)
@@ -257,16 +274,32 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
         destinatario.setPreimpreso(getTxtPreimpreso().getText());
         destinatario.setRazonSocial(destinatario.getRazonSocial());
         destinatario.setRuta(destinatario.getRuta());
+        destinatario.setReferenciaDocumentoId(facturaSeleccionada.getId());
+        
+        ///Agregado detalle  de los productos de la factura enlazada
+        for (FacturaDetalle facturaDetalle : facturaSeleccionada.getDetalles()) {
+            DetalleProductoGuiaRemision detalle=new DetalleProductoGuiaRemision();
+            detalle.setCantidad(facturaDetalle.getCantidad().intValue());
+            detalle.setCodigoAdicional("");
+            detalle.setCodigoInterno(facturaDetalle.getReferenciaId()+"");
+            detalle.setDescripcion(facturaDetalle.getDescripcion());
+            detalle.setReferenciaId(facturaDetalle.getReferenciaId());
+            destinatario.addProducto(detalle);
+        }        
+        
         return destinatario;
     }
-
+    
+    
     private void listenerBotones() {
         
         getBtnAgregarDestinarioGuiaRemision().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 DestinatarioGuiaRemision destinatarioGuiaRemision=crearDestinatario();
-                guiaRemision.addDestinario(destinatarioGuiaRemision);
+                guiaRemision.addDestinario(destinatarioGuiaRemision); 
+                cargarDestinatariosAgregados();
+                imprimirTabla();
             }
         });
         
@@ -291,13 +324,64 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(facturaBusqueda);
                 buscarDialogoModel.setVisible(true);
                 Factura facturaTmp = (Factura) buscarDialogoModel.getResultado();
-                cargarDatoFactura(facturaTmp);
-                //if (facturaTmp != null) 
-                //{
-                    
-                //}
+                if(facturaTmp!=null)
+                {
+                    facturaSeleccionada=facturaTmp;
+                    cargarDatoFactura(facturaTmp);
+                }
+                else
+                {
+                    facturaSeleccionada=null;
+                }
+                
             }
         });
     }
+    
+    private void imprimirTabla()
+    {
+        String[] titulos={"","Factura","FechaFact","Destinatario","Código Producto","Descripción","Cantidad"};
+        
+        DefaultTableModel modeloTabla=UtilidadesTablas.crearModeloTabla(titulos,
+        new Class[]{DetalleProductoGuiaRemision.class,
+        String.class,
+        String.class,
+        String.class,
+        String.class,
+        String.class,
+        String.class});
+        
+        for (DestinatarioGuiaRemision destinatarios : guiaRemision.getDestinatarios()) {
+            for (DetalleProductoGuiaRemision detalle : destinatarios.getDetallesProductos()) {
+                modeloTabla.addRow(new Object[]{
+                    detalle,
+                    detalle.getDestinatario().getPreimpreso(),
+                    detalle.getDestinatario().getFechaEmision().toString(),
+                    detalle.getDestinatario().getDestinatorio().getNombresCompletos(),
+                    detalle.getCodigoInterno(),
+                    detalle.getDescripcion(),
+                    detalle.getCantidad(),
+                });
+              
+            }            
+        }
+        
+        //Imprimir el total de la cantidad de productos a transportar
+        getLblCantidadProductos().setText(guiaRemision.obtenerTotalProductos().toString());
+        
+        getTblGuiaRemision().setModel(modeloTabla);
+        UtilidadesTablas.ocultarColumna(getTblGuiaRemision(),0);
+        
+    }
+    
+    private void cargarDestinatariosAgregados()
+    {
+        getCmbDestinatarios().removeAllItems();
+        for (DestinatarioGuiaRemision destinatario : guiaRemision.getDestinatarios()) {
+            getCmbDestinatarios().addItem(destinatario);
+        }
+        
+    }
+    
     
 }

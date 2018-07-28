@@ -43,3 +43,4 @@ Validar que el codigo del SRI no puede ser mas 30 caracteres
 Cuando se genera un error en la factura y se elimina ver como eliminar fisicamente para que no salga en la pantalla de utilidad de comprobantes
 
 Revisar porque no aparecen 2 productos en la base de datos de Codesoft
+Añadir un campo de autorizacion en las facturas el numero de autorizacion en especial para las facturas fisicas porque necesito para los ats

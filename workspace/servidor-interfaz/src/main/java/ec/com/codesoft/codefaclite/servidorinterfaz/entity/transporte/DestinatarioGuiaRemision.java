@@ -40,6 +40,8 @@ public class DestinatarioGuiaRemision implements Serializable{
     private String autorizacionNumero;
     private Date fechaEmision;
     
+    private Long referenciaDocumentoId;
+    
     private List<DetalleProductoGuiaRemision> detallesProductos;
     
     private GuiaRemision guiaRemision;
@@ -143,6 +145,16 @@ public class DestinatarioGuiaRemision implements Serializable{
         this.guiaRemision = guiaRemision;
     }
 
+    public Long getReferenciaDocumentoId() {
+        return referenciaDocumentoId;
+    }
+
+    public void setReferenciaDocumentoId(Long referenciaDocumentoId) {
+        this.referenciaDocumentoId = referenciaDocumentoId;
+    }
+    
+    
+
     public void addProducto(DetalleProductoGuiaRemision detalle) {
         if (this.detallesProductos == null) {
             this.detallesProductos = new ArrayList<DetalleProductoGuiaRemision>();
@@ -151,8 +163,9 @@ public class DestinatarioGuiaRemision implements Serializable{
         this.detallesProductos.add(detalle);
     }
 
-
-    
-    
+    @Override
+    public String toString() {
+        return destinatorio.getRazonSocial()+" ("+preimpreso+")";
+    }
     
 }
