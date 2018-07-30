@@ -468,7 +468,9 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
                     + "<br><br> <b>NOTA.- Este mensaje fue enviado automáticamente por el sistema, por favor no responda a este correo.</b>";
             CorreoElectronico correoElectronico = new CorreoElectronico(getTxtCorreoElectronico().getText(), new String(getTxtPasswordCorreo().getPassword()), desc, correos, "Notificación Codefac");
             correoElectronico.sendMail();
-            configurarCorreoDeConsumidorFinal();
+            //TODO: Verificar si se va a dar uso de esta funcionalidad
+            //TODO: Agregar una variable para la informacion del consumidor final
+            //configurarCorreoDeConsumidorFinal();
             //DialogoCodefac.mensaje("Exito","El correo y la clave son correctos",DialogoCodefac.MENSAJE_CORRECTO);
         } catch (AuthenticationFailedException ex) {
             System.out.println("Fallo al autentificar el usuario");

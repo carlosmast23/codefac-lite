@@ -507,7 +507,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
 
             @Override
             public void focusLost(FocusEvent evt) {
-                getjTextNombreSocial().setText(getjTextNombres().getText() + " " + getjTextApellidos().getText());
+                getjTextNombreSocial().setText(getjTextApellidos().getText() + " " + getjTextNombres().getText());
             }
         });
 

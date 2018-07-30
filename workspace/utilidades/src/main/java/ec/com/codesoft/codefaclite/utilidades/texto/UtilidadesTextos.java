@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JTextField;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -219,5 +220,10 @@ public abstract class UtilidadesTextos {
         return letra+"";
     }
     
+    public static void convertirAMayusculasLetras(JTextField ingresoInfo, int pos){
+        String cadena = (ingresoInfo.getText()).toUpperCase();
+        ingresoInfo.setText(cadena);
+        ingresoInfo.setCaretPosition(pos);
+    }
     
 }
