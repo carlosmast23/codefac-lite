@@ -76,18 +76,18 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         jPanel2 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        lblPlacaTransportista = new javax.swing.JLabel();
         jToolBar1 = new javax.swing.JToolBar();
         txtIdentificacionTransportista = new javax.swing.JTextField();
         btnAgregarCliente = new javax.swing.JButton();
-        btnBuscarCliente = new javax.swing.JButton();
+        btnBuscarTransportista = new javax.swing.JButton();
         lblEspacio3 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jDateChooser2 = new com.toedter.calendar.JDateChooser();
         jLabel9 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
+        lblNombresTransportista = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jPanel3 = new javax.swing.JPanel();
@@ -434,14 +434,14 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(jLabel7, gridBagConstraints);
 
-        jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel8.setText("Numero Placa");
+        lblPlacaTransportista.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblPlacaTransportista.setText("Numero Placa");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel2.add(jLabel8, gridBagConstraints);
+        jPanel2.add(lblPlacaTransportista, gridBagConstraints);
 
         jToolBar1.setBorder(null);
         jToolBar1.setFloatable(false);
@@ -455,9 +455,9 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         btnAgregarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/mas-ico.png"))); // NOI18N
         jToolBar1.add(btnAgregarCliente);
 
-        btnBuscarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
-        btnBuscarCliente.setToolTipText("Buscar Cliente");
-        jToolBar1.add(btnBuscarCliente);
+        btnBuscarTransportista.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
+        btnBuscarTransportista.setToolTipText("Buscar Cliente");
+        jToolBar1.add(btnBuscarTransportista);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -516,14 +516,14 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 40, 5, 5);
         jPanel2.add(jLabel11, gridBagConstraints);
 
-        jLabel12.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel12.setText("Nombres Completos");
+        lblNombresTransportista.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblNombresTransportista.setText("Nombres Completos");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel2.add(jLabel12, gridBagConstraints);
+        jPanel2.add(lblNombresTransportista, gridBagConstraints);
 
         jLabel13.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel13.setText("Nombres Completos:");
@@ -701,8 +701,8 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnAgregarDestinarioGuiaRemision;
     private javax.swing.JButton btnAgregarDestinatario;
     private javax.swing.JButton btnAgregarDetalle;
-    private javax.swing.JButton btnBuscarCliente;
     private javax.swing.JButton btnBuscarDestinatario;
+    private javax.swing.JButton btnBuscarTransportista;
     private javax.swing.JButton btnEliminarDetalle;
     private javax.swing.JComboBox<DestinatarioGuiaRemision> cmbDestinatarios;
     private com.toedter.calendar.JDateChooser cmbFechaFactura;
@@ -713,7 +713,6 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
@@ -727,7 +726,6 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -754,6 +752,8 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblEspacio4;
     private javax.swing.JLabel lblNombreComercial;
     private javax.swing.JLabel lblNombresCompletosDestinatarios;
+    private javax.swing.JLabel lblNombresTransportista;
+    private javax.swing.JLabel lblPlacaTransportista;
     private javax.swing.JLabel lblRuc;
     private javax.swing.JLabel lblSecuencial;
     private javax.swing.JLabel lblTelefonos;
@@ -863,8 +863,20 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         return lblCantidadProductos;
     }
 
-    
+    public JButton getBtnBuscarTransportista() {
+        return btnBuscarTransportista;
+    }
 
+    public JLabel getLblNombresTransportista() {
+        return lblNombresTransportista;
+    }
+
+    public JLabel getLblPlacaTransportista() {
+        return lblPlacaTransportista;
+    }
+
+    
+    
     
     
 

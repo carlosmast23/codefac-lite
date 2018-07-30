@@ -155,6 +155,7 @@ public class Transportista implements Serializable
     public void setTipoIdentificacion(String tipoIdentificacion) {
         this.tipoIdentificacion = tipoIdentificacion;
     }
+ 
     
     @Override
     public int hashCode() {

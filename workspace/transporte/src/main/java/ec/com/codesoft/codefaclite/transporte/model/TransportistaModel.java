@@ -20,7 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ClienteEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TransportistaEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.TransportistaServiceIf;
-import ec.com.codesoft.codefaclite.transporte.busqueda.TransportistaBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.TransportistaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.transporte.panel.TransportistaPanel;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesJuridicas;
 import java.rmi.RemoteException;

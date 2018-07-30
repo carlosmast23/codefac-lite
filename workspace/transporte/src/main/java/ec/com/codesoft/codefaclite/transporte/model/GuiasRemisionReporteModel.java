@@ -6,13 +6,13 @@
 package ec.com.codesoft.codefaclite.transporte.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteFacturacionBusqueda;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.TransportistaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Transportista;
-import ec.com.codesoft.codefaclite.transporte.busqueda.TransportistaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.transporte.panel.GuiasRemisionReportePanel;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.awt.event.ActionEvent;

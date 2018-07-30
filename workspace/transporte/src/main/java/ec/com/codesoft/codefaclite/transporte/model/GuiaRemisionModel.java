@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.transporte.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteFacturacionBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.TransportistaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
@@ -290,8 +291,30 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
         return destinatario;
     }
     
+    private void cargarDatosTransportista() {
+        if(guiaRemision.getTransportista()!=null)
+        {
+            getLblNombresTransportista().setText(guiaRemision.getTransportista().getRazonSocial());
+            getLblPlacaTransportista().setText(guiaRemision.getTransportista().getPlacaVehiculo());
+        }
+    }
+    
     
     private void listenerBotones() {
+        
+        getBtnBuscarTransportista().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                TransportistaBusquedaDialogo transportistaBusquedaDialogo = new TransportistaBusquedaDialogo();
+                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(transportistaBusquedaDialogo);
+                Transportista transportistaTemp = (Transportista) buscarDialogoModel.getResultado();
+                if (transportistaTemp != null) {                    
+                    guiaRemision.setTransportista(transportistaTemp);
+                    cargarDatosTransportista();
+                }
+            }
+
+        });
         
         getBtnAgregarDestinarioGuiaRemision().addActionListener(new ActionListener() {
             @Override
