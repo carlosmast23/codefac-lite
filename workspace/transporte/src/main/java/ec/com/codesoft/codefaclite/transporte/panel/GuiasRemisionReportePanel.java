@@ -105,6 +105,7 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.weightx = 0.1;
@@ -113,7 +114,7 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
 
         btnBuscarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/icon1.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -141,7 +142,7 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
         lblFechaFin.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblFechaFin.setText("Fecha final:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -149,7 +150,7 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
 
         dateFechaFin.setDateFormatString("yyyy-MM-dd");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
@@ -179,7 +180,7 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 10;
+        gridBagConstraints.gridwidth = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
@@ -189,9 +190,8 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/icon1.png"))); // NOI18N
         btnBuscar.setText("Consultar");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnBuscar, gridBagConstraints);
@@ -199,7 +199,7 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
         chkTodosCliente.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         chkTodosCliente.setText("Todos");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -215,7 +215,7 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
 
         jLabel1.setText("           ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 1;
         getContentPane().add(jLabel1, gridBagConstraints);
 
@@ -231,7 +231,7 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
 
         btnLimpiarFechaFin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/clear.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridx = 9;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -356,20 +356,21 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
         gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(PanelValores, gridBagConstraints);
 
         jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel8.setText("Estado:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel8, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
@@ -390,6 +391,7 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.weightx = 0.1;
@@ -398,7 +400,7 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
 
         btnBuscarTransportista.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/icon1.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -407,7 +409,7 @@ public abstract class GuiasRemisionReportePanel extends ControladorCodefacInterf
         chkTodosTransportista.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         chkTodosTransportista.setText("Todos");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 2;
         getContentPane().add(chkTodosTransportista, gridBagConstraints);
 
