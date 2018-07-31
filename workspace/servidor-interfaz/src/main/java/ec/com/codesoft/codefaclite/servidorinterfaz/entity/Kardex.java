@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -68,7 +69,7 @@ public class Kardex implements Serializable {
     @ManyToOne     
     private Producto producto;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "kardex")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "kardex" ,fetch = FetchType.EAGER )
     private List<KardexDetalle> detallesKardex;
 
     public Kardex() {

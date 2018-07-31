@@ -57,10 +57,14 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto>
 
     @Override
     public QueryDialog getConsulta(String filter) {
+        //Producto p;
+        //p.getTipoProductoEnum();
+        //p.getTipoProductoCodigo();
+        
         String queryExtra="";
         if(tipoProductoEnum!=null)
         {
-            queryExtra=" u.tipoProducto=?99 and ";
+            queryExtra=" u.tipoProductoCodigo=?99 and ";
         }        
         
         String queryString = "SELECT u FROM Producto u WHERE (u.estado=?1) and "+queryExtra;
