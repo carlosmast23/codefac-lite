@@ -27,7 +27,7 @@ public class DetalleGuiaRemisionComprobante implements Serializable{
     public DetalleGuiaRemisionComprobante() {
     }
 
-    @XmlElement(name = "dirEstablecimiento")
+    @XmlElement(name = "codigoInterno")
     public String getCodigoInterno() {
         return codigoInterno;
     }
@@ -36,7 +36,7 @@ public class DetalleGuiaRemisionComprobante implements Serializable{
         this.codigoInterno = codigoInterno;
     }
 
-    @XmlElement(name = "dirEstablecimiento")
+    @XmlElement(name = "codigoAdicional")
     public String getCodigoAdicional() {
         return codigoAdicional;
     }
@@ -45,7 +45,7 @@ public class DetalleGuiaRemisionComprobante implements Serializable{
         this.codigoAdicional = codigoAdicional;
     }
 
-    @XmlElement(name = "dirEstablecimiento")
+    @XmlElement(name = "descripcion")
     public String getDescripcion() {
         return descripcion;
     }
@@ -54,7 +54,7 @@ public class DetalleGuiaRemisionComprobante implements Serializable{
         this.descripcion = descripcion;
     }
 
-    @XmlElement(name = "dirEstablecimiento")
+    @XmlElement(name = "cantidad")
     public Integer getCantidad() {
         return cantidad;
     }

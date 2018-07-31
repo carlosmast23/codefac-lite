@@ -111,6 +111,8 @@ public class ComprobanteAdicional implements Serializable{
         }
     }
     
+    
+    
     public enum Tipo
     {
         TIPO_CORREO("c","correo"),

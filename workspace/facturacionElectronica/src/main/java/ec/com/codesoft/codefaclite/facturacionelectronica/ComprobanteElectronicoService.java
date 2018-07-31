@@ -159,6 +159,10 @@ public class ComprobanteElectronicoService implements Runnable {
     private URL pathNotaCreditoJasper;
     
     private URL pathRetencionJasper;
+    
+    private URL pathGuiaRemisionJasper;
+    
+    private JasperReport jasperSubReporteGuiaRemision;
         
     private String pathParentJasper;
     public Image pathLogoImagen;
@@ -641,7 +645,7 @@ public class ComprobanteElectronicoService implements Runnable {
             datosMap.put("SUBREPORT_FORMA_PAGO", reporteFormaPago);
             datosMap.put("fecha_hora_autorizacion","");
             datosMap.put("estado","");
-
+            
             /**
              * Agregar datos adicionales como por ejemplo los datos del pide de
              * pagina
@@ -719,7 +723,7 @@ public class ComprobanteElectronicoService implements Runnable {
                 {
                     if(comprobante.getClass().equals(GuiaRemisionComprobante.class))
                     {
-                        GuiaRemisionReporte guiaRemisionReporte=new GuiaRemisionReporte(comprobante);
+                        GuiaRemisionReporte guiaRemisionReporte=new GuiaRemisionReporte(comprobante,jasperSubReporteGuiaRemision);
                         return guiaRemisionReporte;
                     }
                     else
@@ -1513,6 +1517,10 @@ public class ComprobanteElectronicoService implements Runnable {
             {
                 path=pathRetencionJasper.openStream();
             }
+            else if (ComprobanteEnum.GUIA_REMISION.getCodigo().equals(clave.tipoComprobante))
+            {
+                path=pathGuiaRemisionJasper.openStream();
+            }
             //comprobante.getTipoDocumento();
             //return path + "-" + comprobante.getInformacionTributaria().getPreimpreso() +"_"+claveAcceso+ ".pdf";
         } catch (IOException ex) {
@@ -1559,6 +1567,14 @@ public class ComprobanteElectronicoService implements Runnable {
 
     public void setMapCodeAndNameTipoDocumento(Map<String, String> mapCodeAndNameTipoDocumento) {
         this.mapCodeAndNameTipoDocumento = mapCodeAndNameTipoDocumento;
+    }
+
+    public void setPathGuiaRemisionJasper(URL pathGuiaRemisionJasper) {
+        this.pathGuiaRemisionJasper = pathGuiaRemisionJasper;
+    }
+
+    public void setJasperSubReporteGuiaRemision(JasperReport jasperSubReporteGuiaRemision) {
+        this.jasperSubReporteGuiaRemision = jasperSubReporteGuiaRemision;
     }
     
     

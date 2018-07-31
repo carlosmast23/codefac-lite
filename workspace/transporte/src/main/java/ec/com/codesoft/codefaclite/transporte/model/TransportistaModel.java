@@ -144,8 +144,9 @@ public class TransportistaModel extends TransportistaPanel implements DialogInte
 
     @Override
     public void buscar() throws ExcepcionCodefacLite, RemoteException {
-        obtenerDialogoBusqueda().setVisible(true);
-        Transportista transportistaTemp = (Transportista) obtenerDialogoBusqueda().getResultado();
+        BuscarDialogoModel dialogoBusqueda=obtenerDialogoBusqueda();
+        dialogoBusqueda.setVisible(true);
+        Transportista transportistaTemp = (Transportista) dialogoBusqueda.getResultado();
         if(transportistaTemp == null)
         {
             throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar transportista vacio");

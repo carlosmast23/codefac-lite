@@ -12,6 +12,11 @@ package ec.com.codesoft.codefaclite.utilidades.validadores;
 public abstract class UtilidadValidador {
     
     public static String normalizarTexto(String s) {
+        
+        //Si la variable es nula devolver en blanco
+        if(s==null)
+            return "";
+        
         // Cadena de caracteres original a sustituir.
         String original = "áàäéèëíìïóòöúùuñÁÀÄÉÈËÍÌÏÓÒÖÚÙÜÑçÇ[]{}^\\-¿";
         // Cadena de caracteres ASCII que reemplazarán los originales.

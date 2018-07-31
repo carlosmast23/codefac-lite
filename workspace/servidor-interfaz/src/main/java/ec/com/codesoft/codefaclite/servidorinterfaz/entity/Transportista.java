@@ -155,6 +155,10 @@ public class Transportista implements Serializable
     public void setTipoIdentificacion(String tipoIdentificacion) {
         this.tipoIdentificacion = tipoIdentificacion;
     }
+    
+    public Persona.TipoIdentificacionEnum getTipoIdentificacionEnum() {
+        return Persona.TipoIdentificacionEnum.obtenerPorLetra(tipoIdentificacion);
+    }
  
     
     @Override

@@ -1037,6 +1037,20 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
         servicio.setPathFacturaJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceURL("facturaReporte.jrxml"));
         servicio.setPathNotaCreditoJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceURL("notaCreditoReporte.jrxml"));
         servicio.setPathRetencionJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceURL("retencion.jrxml"));
+        servicio.setPathGuiaRemisionJasper(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS.getResourceURL("guiaRemision.jrxml"));
+        
+        //TODO:Optimizar esta parte para que sola cargue cuando necesite cargar las guias de remision
+        InputStream inputStreamGuiaRemision;
+        try {
+            inputStreamGuiaRemision = RemoteInputStreamClient.wrap(service.getResourceInputStream(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS, "guiaRemisionDetalle.jrxml"));
+            JasperReport reporteDetalleGuiaRemision = JasperCompileManager.compileReport(inputStreamGuiaRemision);
+            servicio.setJasperSubReporteGuiaRemision(reporteDetalleGuiaRemision);
+        } catch (IOException ex) {
+            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JRException ex) {
+            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         //String imagenLogo=session.getParametrosCodefac().get(ParametroCodefac.LOGO_EMPRESA).getValor();
         //TODO Este parametro debe ser configurable cuando se la version de pago para que permita seleccionar la imagen del cliente
         //servicio.setLogoImagen(DirectorioCodefac.IMAGENES.getArchivoStream(session,imagenLogo));
@@ -1265,8 +1279,10 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
     {
         ParametroCodefacService parametroService=new ParametroCodefacService();
         ParametroCodefac parametro = null;
+        
         //Cuando la factura es electronica
-        if (parametroService.getParametroByNombre(ParametroCodefac.TIPO_FACTURACION).valor.equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra())) {
+        ParametroCodefac parametroTipoFacturacion=parametroService.getParametroByNombre(ParametroCodefac.TIPO_FACTURACION);
+        if (parametroTipoFacturacion.valor.equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra())) {
             comprobante.setTipoFacturacion(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra());
             //parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_FACTURA);
             
@@ -1284,6 +1300,10 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                     
                 case NOTA_CREDITO:
                     parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_NOTA_CREDITO);
+                    break;
+                    
+                case GUIA_REMISION: 
+                    parametro= parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_GUIA_REMISION);
                     break;
             }
             
@@ -1311,6 +1331,10 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
 
                 case NOTA_CREDITO:
                     parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_NOTA_CREDITO_FISICA);
+                    break;
+                    
+                case GUIA_REMISION:
+                    parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_GUIA_REMISION_FISICA);
                     break;
             }
 

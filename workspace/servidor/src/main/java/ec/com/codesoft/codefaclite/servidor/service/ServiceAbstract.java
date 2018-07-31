@@ -118,6 +118,7 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
              if (transaccion.isActive()) {
                 transaccion.rollback();
             }
+            e.printStackTrace();
             LOG.log(Level.SEVERE,e.getMessage()); //Todo: Mejorar esta parte porque deberia imprimir toda la pila de error y ademas deberia poder comunicar el error a la capa superior
             //throw e;
         }

@@ -12,11 +12,16 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -33,9 +38,7 @@ public class GuiaRemision extends ComprobanteEntity implements  Serializable{
     private Long id;
     
     @Column(name = "DIRECCION_PARTIDA")
-    private String direccionPartida;
-    @Column(name = "TRANSPORTISTA_ID")
-    private Transportista transportista;
+    private String direccionPartida;    
     @Column(name = "RISE")
     private String rise;
     @Column(name = "OBLIGADO_LLEVAS_CONTABILIDAD")
@@ -44,13 +47,22 @@ public class GuiaRemision extends ComprobanteEntity implements  Serializable{
     private String contribuyenteEspecial;
     @Column(name = "FECHA_INICIO_TRANSPORTE")
     private Date fechaIniciaTransporte;
-    @Column(name = "FECHA_INICIO_TRANSPORTE")
+    @Column(name = "FECHA_FIN_TRANSPORTE")
     private Date fechaFinTransporte;
     @Column(name = "PLACA")
     private String placa;
     
-    List<DestinatarioGuiaRemision> destinatarios;
+    @JoinColumn(name = "TRANSPORTISTA_ID")
+    @ManyToOne
+    private Transportista transportista;   
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "guiaRemision",fetch = FetchType.EAGER)
+    private List<DestinatarioGuiaRemision> destinatarios;
 
+    public GuiaRemision() {
+    }
+      
+    
     public List<DestinatarioGuiaRemision> getDestinatarios() {
         return destinatarios;
     }

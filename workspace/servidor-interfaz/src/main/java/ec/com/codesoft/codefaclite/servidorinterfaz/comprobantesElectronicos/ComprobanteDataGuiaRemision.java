@@ -23,9 +23,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionS
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadValidador;
 import java.io.Serializable;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -92,11 +95,27 @@ public class ComprobanteDataGuiaRemision implements ComprobanteDataInterface,Ser
         //Revisar que codigo debe ir aqui , aunque en el SRI dice que es opcional
         info.setContribuyenteEspecial("123");
         info.setDirEstablecimiento(UtilidadValidador.normalizarTexto(guiaRemision.getDireccion()));
+        info.setFechaIniTransporte(ComprobantesElectronicosUtil.dateToString(guiaRemision.getFechaIniciaTransporte()));
+        info.setFechaFinTransporte(ComprobantesElectronicosUtil.dateToString(guiaRemision.getFechaFinTransporte()));
+        info.setDirPartida(guiaRemision.getDireccionPartida());
+        info.setRazonSocialTransportista(guiaRemision.getRazonSocial());
+        //info.setTipoIdentificacionTransportista(""); //Buscar tipo de identificacion
+        info.setRucTransportista(guiaRemision.getTransportista().getIdentificacion());
+        //info.setRise(""); TODO:Analizar en que caso debe salir
+        info.setPlaca(guiaRemision.getPlaca());
+        
+        
         //info.setFechaEmision(ComprobantesElectronicosUtil.dateToString(guiaRemision.getFechaEmision()));
         
         
-        SriIdentificacionServiceIf servicioSri=ServiceFactory.getFactory().getSriIdentificacionServiceIf();
-        SriIdentificacion sriIdentificacion=null;
+        SriIdentificacionServiceIf servicioSri = ServiceFactory.getFactory().getSriIdentificacionServiceIf();
+        SriIdentificacion sriIdentificacion = null;
+        try {
+            sriIdentificacion = servicioSri.obtenerPorTransaccionEIdentificacion(guiaRemision.getTransportista().getTipoIdentificacionEnum(), SriIdentificacion.tipoTransaccionEnum.VENTA);
+            info.setTipoIdentificacionTransportista(sriIdentificacion.getCodigo());
+        } catch (RemoteException ex) {
+            Logger.getLogger(ComprobanteDataNotaCredito.class.getName()).log(Level.SEVERE, null, ex);
+        }
         /*try {
             sriIdentificacion=servicioSri.obtenerPorTransaccionEIdentificacion(guiaRemision.getProveedor().getTipoIdentificacionEnum(), SriIdentificacion.tipoTransaccionEnum.VENTA);
         } catch (RemoteException ex) {
@@ -123,16 +142,17 @@ public class ComprobanteDataGuiaRemision implements ComprobanteDataInterface,Ser
         
         for (DestinatarioGuiaRemision destinatario : guiaRemision.getDestinatarios()) {
             DestinatariosGuiaRemisionComprobante destinatarioData=new DestinatariosGuiaRemisionComprobante();
-            destinatarioData.setCodDocSustento(destinatario.getCodDucumentoSustento());
+            destinatarioData.setCodDocSustento("01");
             destinatarioData.setCodEstabDestino("001");//Todo: Verificar porque este campo deberia trabajar con sucursales
             destinatarioData.setDirDestinatario(destinatario.getDireccionDestino());
-            destinatarioData.setDocAduaneroUnico("");//Todo: Ver este campo debe estar grabando pero no esta
-            destinatarioData.setFechaEmisionDocSustento(destinatario.getFechaEmision().toString());
+            destinatarioData.setDocAduaneroUnico(" ");//Todo: Ver este campo debe estar grabando pero no esta
+            destinatarioData.setFechaEmisionDocSustento(ComprobantesElectronicosUtil.dateToString(destinatario.getFechaEmision()));
             destinatarioData.setIdentificacionDestinatario(destinatario.getDestinatorio().getIdentificacion()); //Todo: este dato deberia mejor estar grabado porque se supone que no se puden modificar por ningun motivo
             destinatarioData.setMotivoTraslado(destinatario.getMotivoTranslado());
             destinatarioData.setNumAutDocSustento(destinatario.getAutorizacionNumero());
-            destinatarioData.setRazonSocialDestinatario(destinatario.getRazonSocial());
+            destinatarioData.setRazonSocialDestinatario(UtilidadValidador.normalizarTexto(destinatario.getRazonSocial()));
             destinatarioData.setRuta(destinatario.getRuta());
+            destinatarioData.setNumDocSustento(destinatario.getPreimpreso());
             detalleDestinatarios.add(destinatarioData);
             
             ///////// Obtener los detalles de los productos de cada destinatario ///////////////////////////
@@ -140,7 +160,7 @@ public class ComprobanteDataGuiaRemision implements ComprobanteDataInterface,Ser
             for (DetalleProductoGuiaRemision producto : destinatario.getDetallesProductos()) {
                 DetalleGuiaRemisionComprobante productoData=new DetalleGuiaRemisionComprobante();
                 productoData.setCantidad(producto.getCantidad());
-                productoData.setCodigoAdicional(producto.getCodigoAdicional());
+                //productoData.setCodigoAdicional(producto.getCodigoAdicional());
                 productoData.setCodigoInterno(producto.getCodigoInterno());
                 productoData.setDescripcion(producto.getDescripcion());
                 detalleProductos.add(productoData);

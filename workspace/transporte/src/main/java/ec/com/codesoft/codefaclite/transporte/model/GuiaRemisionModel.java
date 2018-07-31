@@ -12,7 +12,10 @@ import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.guiaRetencion.DetalleGuiaRemisionComprobante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataGuiaRemision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataNotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
@@ -26,15 +29,21 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DetallePro
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
+import ec.com.codesoft.codefaclite.transporte.callback.GuiaRemisionImplComprobante;
 import ec.com.codesoft.codefaclite.transporte.panel.GuiaRemisionPanel;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwingX;
+import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.rmi.RemoteException;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -50,7 +59,7 @@ import org.apache.commons.collections4.map.HashedMap;
 public class GuiaRemisionModel extends GuiaRemisionPanel{
     
     private GuiaRemision guiaRemision;
-    private Transportista transportista;
+    //private Transportista transportista;
     private DestinatarioGuiaRemision destinatarioGuiaRemision;
     private Persona destinatario;
     private Factura facturaSeleccionada;
@@ -69,7 +78,25 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
 
     @Override
     public void grabar() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            setearValores();
+            guiaRemision=ServiceFactory.getFactory().getGuiaRemisionServiceIf().grabar(guiaRemision);            
+            
+            ComprobanteDataGuiaRemision comprobanteData = new ComprobanteDataGuiaRemision(this.guiaRemision);
+            comprobanteData.setMapInfoAdicional(new HashMap<String, String>());
+            
+            GuiaRemisionImplComprobante gic=new GuiaRemisionImplComprobante(this, guiaRemision);            
+            ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
+            comprobanteServiceIf.procesarComprobante(comprobanteData, guiaRemision, session.getUsuario(), gic);
+            
+            DialogoCodefac.mensaje("Correcto","Los datos de la guia de remisión fueron grabados correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+        } catch (ServicioCodefacException ex) {
+            DialogoCodefac.mensaje("Error","Error al grabar los datos",DialogoCodefac.MENSAJE_INCORRECTO);
+            Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ExcepcionCodefacLite(ex.getMessage());
+        }
+        
+        
     }
 
     @Override
@@ -95,7 +122,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
     @Override
     public void limpiar() {
         getLblRuc().setText(session.getEmpresa().getIdentificacion());
-         getLblTelefonos().setText(session.getEmpresa().getTelefonos());
+        getLblTelefonos().setText(session.getEmpresa().getTelefonos());
         getLblNombreComercial().setText(session.getEmpresa().getNombreLegal());
         getLblDireccion().setText(session.getEmpresa().getDireccion());
         getLblCantidadProductos().setText("0");
@@ -103,9 +130,34 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
         
         ///Limpiar Variables
         guiaRemision=new GuiaRemision();
-        transportista=new Transportista();
+        //transportista=new Transportista();
         destinatarioGuiaRemision=new DestinatarioGuiaRemision();
         destinatario=new Persona();
+        
+        //Limpiar etiquetas de la pantalla
+        getLblNombresTransportista().setText("");
+        getLblPlacaTransportista().setText("");
+        getTxtDireccionPartida().setText("");
+        getCmbFechaInicio().setDate(UtilidadesFecha.getFechaHoy());
+        getCmbFechaFin().setDate(UtilidadesFecha.getFechaHoy());
+        getTxtIdentificacionTransportista().setText("");
+        getTxtIdentificacionDestinatario().setText("");
+        getTxtDireccionDestino().setText("");
+        getTxtMotivoTraslado().setText("");
+        getTxtRuta().setText("");
+        
+        getTxtPreimpreso().setText("");
+        getTxtAutorizacion().setText("");
+        getTxtDocAduanero().setText("");
+        getCmbFechaFactura().setDate(UtilidadesFecha.hoy());
+        getTxtCantidad().setText("");
+        getTxtDescripcionDetalle().setText("");
+        getTxtCodigoDetalle().setText("");
+        getCmbDestinatarios().removeAllItems();
+        
+        imprimirTabla();
+        
+        
     }
     
      public void cargarSecuencial()
@@ -135,7 +187,14 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
+        permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
+        return permisos;
     }
 
     @Override
@@ -273,7 +332,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
         destinatario.setGuiaRemision(guiaRemision);
         destinatario.setMotivoTranslado(getTxtMotivoTraslado().getText());
         destinatario.setPreimpreso(getTxtPreimpreso().getText());
-        destinatario.setRazonSocial(destinatario.getRazonSocial());
+        destinatario.setRazonSocial(this.destinatario.getRazonSocial());
         destinatario.setRuta(destinatario.getRuta());
         destinatario.setReferenciaDocumentoId(facturaSeleccionada.getId());
         
@@ -294,6 +353,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
     private void cargarDatosTransportista() {
         if(guiaRemision.getTransportista()!=null)
         {
+            getTxtIdentificacionTransportista().setText(guiaRemision.getTransportista().getIdentificacion());
             getLblNombresTransportista().setText(guiaRemision.getTransportista().getRazonSocial());
             getLblPlacaTransportista().setText(guiaRemision.getTransportista().getPlacaVehiculo());
         }
@@ -307,6 +367,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
             public void actionPerformed(ActionEvent e) {
                 TransportistaBusquedaDialogo transportistaBusquedaDialogo = new TransportistaBusquedaDialogo();
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(transportistaBusquedaDialogo);
+                buscarDialogoModel.setVisible(true);
                 Transportista transportistaTemp = (Transportista) buscarDialogoModel.getResultado();
                 if (transportistaTemp != null) {                    
                     guiaRemision.setTransportista(transportistaTemp);
@@ -343,7 +404,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
         getBtnBuscarFactura().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                FacturaBusqueda facturaBusqueda = new FacturaBusqueda();
+                FacturaBusqueda facturaBusqueda = new FacturaBusqueda(destinatario);
                 BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(facturaBusqueda);
                 buscarDialogoModel.setVisible(true);
                 Factura facturaTmp = (Factura) buscarDialogoModel.getResultado();
@@ -363,6 +424,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
     
     private void imprimirTabla()
     {
+        
         String[] titulos={"","Factura","FechaFact","Destinatario","Código Producto","Descripción","Cantidad"};
         
         DefaultTableModel modeloTabla=UtilidadesTablas.crearModeloTabla(titulos,
@@ -373,20 +435,24 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
         String.class,
         String.class,
         String.class});
-        
-        for (DestinatarioGuiaRemision destinatarios : guiaRemision.getDestinatarios()) {
-            for (DetalleProductoGuiaRemision detalle : destinatarios.getDetallesProductos()) {
-                modeloTabla.addRow(new Object[]{
-                    detalle,
-                    detalle.getDestinatario().getPreimpreso(),
-                    detalle.getDestinatario().getFechaEmision().toString(),
-                    detalle.getDestinatario().getDestinatorio().getNombresCompletos(),
-                    detalle.getCodigoInterno(),
-                    detalle.getDescripcion(),
-                    detalle.getCantidad(),
-                });
-              
-            }            
+
+
+        if(guiaRemision.getDestinatarios()!=null)
+        {
+            for (DestinatarioGuiaRemision destinatarios : guiaRemision.getDestinatarios()) {
+                for (DetalleProductoGuiaRemision detalle : destinatarios.getDetallesProductos()) {
+                    modeloTabla.addRow(new Object[]{
+                        detalle,
+                        detalle.getDestinatario().getPreimpreso(),
+                        detalle.getDestinatario().getFechaEmision().toString(),
+                        detalle.getDestinatario().getDestinatorio().getNombresCompletos(),
+                        detalle.getCodigoInterno(),
+                        detalle.getDescripcion(),
+                        detalle.getCantidad(),
+                    });
+
+                }            
+            }
         }
         
         //Imprimir el total de la cantidad de productos a transportar
@@ -403,6 +469,24 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
         for (DestinatarioGuiaRemision destinatario : guiaRemision.getDestinatarios()) {
             getCmbDestinatarios().addItem(destinatario);
         }
+        
+    }
+
+    private void setearValores() {
+        Transportista transportista=guiaRemision.getTransportista();
+        guiaRemision.setTransportista(transportista);
+        guiaRemision.setDireccion(transportista.getDireccion());
+        guiaRemision.setDireccionPartida(getTxtDireccionPartida().getText());
+        guiaRemision.setRazonSocial(transportista.getRazonSocial());
+        guiaRemision.setRise("");
+        guiaRemision.setObligadoLlevarContabilidad("NO"); //Por el momneto dejo seteado que no necesiton el campo
+        guiaRemision.setFechaIniciaTransporte(new java.sql.Date(getCmbFechaInicio().getDate().getTime()));
+        guiaRemision.setFechaEmision(new java.sql.Date(getCmbFechaInicio().getDate().getTime())); //Esto esta variable porque necesito para volver a generar la clave de acceso
+        guiaRemision.setFechaFinTransporte(new java.sql.Date(getCmbFechaFin().getDate().getTime()));
+        guiaRemision.setPlaca(transportista.getPlacaVehiculo());
+        guiaRemision.setPuntoEstablecimiento(session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor);
+        guiaRemision.setPuntoEmision(session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor);
+  ;
         
     }
     

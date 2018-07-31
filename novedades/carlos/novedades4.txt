@@ -44,3 +44,13 @@ Cuando se genera un error en la factura y se elimina ver como eliminar fisicamen
 
 Revisar porque no aparecen 2 productos en la base de datos de Codesoft
 Añadir un campo de autorizacion en las facturas el numero de autorizacion en especial para las facturas fisicas porque necesito para los ats
+
+
+Verificar en las clases data de los comprobantes en el atributo que dice obligado a llevar contabilidad estan seteados
+
+Investigar para que sirve el campo codDocSustento que por el momento solo esta seteado
+
+Revisar que los documentos electronicos sigan funcionando cuando salen mas de 2 pagina
+
+Ver si puedo compilar al iniciar la aplicacion todos los reportes para no volver a ejecutar ese proceso y que se vuelva lento cuando necsito reportes
+es decir crear un proxi de reportes

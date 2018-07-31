@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d9c21352-f760-4e3a-b774-88dde93e1e8b">
-	<property name="ireport.zoom" value="1.21000000000003"/>
+	<property name="ireport.zoom" value="1.0000000000000258"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="36"/>
+	<property name="ireport.y" value="289"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -69,25 +69,19 @@
 	<parameter name="punto_partida" class="java.lang.String"/>
 	<parameter name="fechaInicio" class="java.lang.String"/>
 	<parameter name="fechaFin" class="java.lang.String"/>
-	<parameter name="ruta" class="java.lang.String"/>
-	<parameter name="establecimientoDestino" class="java.lang.String"/>
-	<parameter name="documentoAduanero" class="java.lang.String"/>
-	<parameter name="razon_social_persona" class="java.lang.String"/>
-	<parameter name="indentificacion_persona" class="java.lang.String"/>
-	<parameter name="destino" class="java.lang.String"/>
-	<parameter name="numero_autorizacion" class="java.lang.String"/>
-	<parameter name="motivo_traslado" class="java.lang.String"/>
-	<parameter name="fecha_emision_1" class="java.lang.String"/>
-	<parameter name="preimpreso" class="java.lang.String"/>
-	<field name="comprobante" class="java.lang.String"/>
-	<field name="numero" class="java.lang.String"/>
+	<parameter name="pl_url_detalle" class="java.lang.Object"/>
 	<field name="fechaEmision" class="java.lang.String"/>
-	<field name="ejercicioFiscal" class="java.lang.String"/>
-	<field name="baseImponible" class="java.lang.String"/>
-	<field name="impuesto" class="java.lang.String"/>
-	<field name="codigo" class="java.lang.String"/>
-	<field name="porcentajeRetencion" class="java.lang.String"/>
-	<field name="valorRetenido" class="java.lang.String"/>
+	<field name="productos" class="java.lang.Object"/>
+	<field name="preimpreso" class="java.lang.String"/>
+	<field name="fecha_emision" class="java.lang.String"/>
+	<field name="numero_autorizacion" class="java.lang.String"/>
+	<field name="motivo_traslado" class="java.lang.String"/>
+	<field name="destino" class="java.lang.String"/>
+	<field name="identificacion_persona" class="java.lang.String"/>
+	<field name="razon_social_persona" class="java.lang.String"/>
+	<field name="documentoAduanero" class="java.lang.String"/>
+	<field name="establecimientoDestino" class="java.lang.String"/>
+	<field name="ruta" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -245,7 +239,7 @@
 				<textFieldExpression><![CDATA[$P{obligado_contabilidad}]]></textFieldExpression>
 			</textField>
 			<rectangle radius="10">
-				<reportElement x="0" y="329" width="555" height="93" uuid="d6e55cd7-2cf7-4ef4-9873-efe1510dd550"/>
+				<reportElement x="0" y="333" width="555" height="84" uuid="d6e55cd7-2cf7-4ef4-9873-efe1510dd550"/>
 			</rectangle>
 			<staticText>
 				<reportElement x="5" y="357" width="182" height="20" uuid="b0655437-1765-43fa-8aa8-396a8dd3634b"/>
@@ -327,39 +321,179 @@
 		</band>
 	</title>
 	<detail>
-		<band height="99" splitType="Stretch">
+		<band height="161" splitType="Stretch">
+			<staticText>
+				<reportElement x="10" y="10" width="125" height="15" uuid="899dd4ee-740b-42b9-bb85-6786b5fd49c9"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Preimpreso]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="40" width="125" height="15" uuid="c6653939-5c3c-47b0-9e43-592a7e2b54e9"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Documento Aduanero:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="55" width="125" height="15" uuid="09122673-8713-4ec7-8913-30c5cfdd3a68"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Número Autorización:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="365" y="10" width="100" height="15" uuid="9a7b2517-812a-469f-ac15-148aeba6a0c7"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha emisión:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="465" y="40" width="90" height="15" uuid="a58aa1e7-6b93-480d-b4d6-e1748640ccbc"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{establecimientoDestino}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="135" y="70" width="384" height="15" uuid="1194b5f3-93c3-42cd-9697-8a370ad5b398"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{motivo_traslado}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="10" y="85" width="125" height="15" uuid="c78cf322-9fb5-4251-80ce-6612d600cd85"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Destino:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="365" y="25" width="100" height="15" uuid="73fd3199-7c04-4c16-9c24-0f661022e67a"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Identificación:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="25" width="125" height="15" uuid="3c61bc0d-7e10-499a-ad26-5aaff4284e02"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Razón Social:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="135" y="85" width="384" height="15" uuid="cff199a7-7200-4add-83f2-8ddf15be8b87"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{destino}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="135" y="40" width="230" height="15" uuid="08a15cbd-24b4-4033-8e9b-c827c98030b6"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{documentoAduanero}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="465" y="10" width="90" height="15" uuid="67b5feb2-8bc8-4301-9941-3e6c25101a2c"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fecha_emision}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="365" y="40" width="100" height="15" uuid="d870b50e-338e-4b84-b989-0e727e29066e"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Establecimiento:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="70" width="125" height="15" uuid="4b39f322-6b64-48f0-905a-f3dea0f1d11c"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Motivo Traslado:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="135" y="55" width="384" height="15" uuid="6bb32884-f7dd-4cbc-9663-028914c6517d"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numero_autorizacion}]]></textFieldExpression>
+			</textField>
 			<subreport isUsingCache="true">
-				<reportElement stretchType="RelativeToTallestObject" x="0" y="4" width="555" height="91" uuid="a33b277a-1e10-4aab-b6bd-febf84cc5a7a"/>
+				<reportElement stretchType="RelativeToTallestObject" x="10" y="115" width="545" height="45" uuid="a33b277a-1e10-4aab-b6bd-febf84cc5a7a"/>
 				<subreportParameter name="$P{fecha_emision}">
-					<subreportParameterExpression><![CDATA[$P{fecha_emision}]]></subreportParameterExpression>
+					<subreportParameterExpression><![CDATA[$F{fecha_emision}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="$P{ruta}">
-					<subreportParameterExpression><![CDATA[$P{ruta}]]></subreportParameterExpression>
+					<subreportParameterExpression><![CDATA[$F{ruta}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="$P{documentoAduanero}">
-					<subreportParameterExpression><![CDATA[$P{documentoAduanero}]]></subreportParameterExpression>
+					<subreportParameterExpression><![CDATA[$F{documentoAduanero}]]></subreportParameterExpression>
 				</subreportParameter>
-				<subreportParameter name="$P{indentificacion_persona}">
-					<subreportParameterExpression><![CDATA[$P{indentificacion_persona}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="P{razon_social_persona}">
-					<subreportParameterExpression><![CDATA[P{razon_social_persona}]]></subreportParameterExpression>
+				<subreportParameter name="$P{razon_social_persona}">
+					<subreportParameterExpression><![CDATA[$F{razon_social_persona}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="$P{destino}">
-					<subreportParameterExpression><![CDATA[$P{destino}]]></subreportParameterExpression>
+					<subreportParameterExpression><![CDATA[$F{destino}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="$P{motivo_traslado}">
-					<subreportParameterExpression><![CDATA[$P{motivo_traslado}]]></subreportParameterExpression>
+					<subreportParameterExpression><![CDATA[$F{motivo_traslado}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="$P{establecimientoDestino}">
-					<subreportParameterExpression><![CDATA[$P{establecimientoDestino}]]></subreportParameterExpression>
+					<subreportParameterExpression><![CDATA[$F{establecimientoDestino}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="$P{identificacion_persona}">
+					<subreportParameterExpression><![CDATA[$F{identificacion_persona}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="$P{numero_autorizacion}">
-					<subreportParameterExpression><![CDATA[$P{numero_autorizacion}]]></subreportParameterExpression>
+					<subreportParameterExpression><![CDATA[$F{numero_autorizacion}]]></subreportParameterExpression>
 				</subreportParameter>
-				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<dataSourceExpression><![CDATA[$F{productos}]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{pl_url_detalle}]]></subreportExpression>
 			</subreport>
+			<textField>
+				<reportElement x="135" y="10" width="100" height="15" uuid="9cd9b796-caf4-45d5-aaf6-8c10d5cdf237"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{preimpreso}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="465" y="25" width="90" height="15" uuid="e81ff60e-90b8-4af8-aaef-7bb8fc430850"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{identificacion_persona}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="135" y="25" width="230" height="15" uuid="026676bb-37b1-449e-9bae-3ea20c326237"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{razon_social_persona}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="135" y="100" width="420" height="15" uuid="2a0b0502-c8e8-49b4-8ded-4b0a56f67e57"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ruta}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="10" y="100" width="125" height="15" uuid="cb7beafc-5c14-41ae-8ae7-dcc69aa90487"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ruta:]]></text>
+			</staticText>
 		</band>
 	</detail>
 	<pageFooter>

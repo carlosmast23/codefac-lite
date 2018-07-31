@@ -186,7 +186,8 @@ public class FirmaElectronica {
         try {
             Document documentoParaFirmar = obtenerDocumento(recursoParaFirmar);
             datosParaFirmar.setDocument(documentoParaFirmar);
-        } catch (Exception e) {            
+        } catch (Exception e) {        
+            e.printStackTrace();
             throw new Exception(e.toString());
         }
         return datosParaFirmar;
@@ -200,13 +201,16 @@ public class FirmaElectronica {
 		try {
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			documento = db.parse(archivo);
-		} catch (ParserConfigurationException ex) {
-			throw new Exception("Error al interpretar el documento");
-		} catch (IOException ex) {
-			throw new Exception("Error al interpretar el documento");
-		} catch (IllegalArgumentException ex) {
-			throw new Exception("Error al interpretar el documento");
-		}
+        } catch (ParserConfigurationException ex) {
+            ex.printStackTrace();
+            throw new Exception("Error al interpretar el documento");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            throw new Exception("Error al interpretar el documento");
+        } catch (IllegalArgumentException ex) {
+            ex.printStackTrace();
+            throw new Exception("Error al interpretar el documento");
+        }
 		return documento;
 	}
     

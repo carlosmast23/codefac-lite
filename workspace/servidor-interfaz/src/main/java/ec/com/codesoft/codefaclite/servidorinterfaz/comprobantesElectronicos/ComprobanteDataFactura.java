@@ -116,7 +116,7 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
         /**
          * Aqui hay que setear los valores de la base de datos
          */
-        informacionFactura.setObligadoContabilidad("NO");
+        informacionFactura.setObligadoContabilidad("NO"); //TODO: Revisar esta parte porque debe cambiar dependiendo el cliente
         //informacionFactura.setTotalImpuestos(totalImpuestos);
         
         /**

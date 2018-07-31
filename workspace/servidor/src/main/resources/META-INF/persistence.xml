@@ -72,7 +72,7 @@
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.Transportista</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DestinatarioGuiaRemision</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DetalleProductoGuiaRemision</class>
-    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemisionService</class>
+    <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision</class>
     <class>ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemisionAdicional</class>
     
     <exclude-unlisted-classes>false</exclude-unlisted-classes>

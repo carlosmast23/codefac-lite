@@ -67,7 +67,14 @@ public enum DocumentoEnum {
             DocumentoCategoriaEnum.COMPROBANTE_INGRESOS_EGRESOS,
             new ModuloCodefacEnum[]{},
             true,
-            false);
+            false),
+    
+    GUIA_REMISION("Guía Remisión",
+            "GIR",
+            DocumentoCategoriaEnum.DOCUMENTOS_COMPLEMENTARIOS,
+            new ModuloCodefacEnum[]{},
+            true,
+            false),;
     
     
     //Tiquetes emitidos por máquinas registradoras;

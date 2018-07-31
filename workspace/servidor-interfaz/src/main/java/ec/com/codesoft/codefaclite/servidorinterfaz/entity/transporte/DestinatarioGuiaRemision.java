@@ -10,11 +10,17 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -30,21 +36,37 @@ public class DestinatarioGuiaRemision implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    private Persona destinatorio;
+    @Column(name = "RAZON_SOCIAL")
     private String razonSocial;
+    @Column(name = "DIRECCION_DESTINO")
     private String direccionDestino;
+    @Column(name = "MOTIVO_TRANSLADO")
     private String motivoTranslado;
+    @Column(name = "RUTA")
     private String ruta;
+    @Column(name = "COD_DOCUMENTO_SUSTENTO")
     private String codDucumentoSustento;
+    @Column(name = "PREIMPRESO")
     private String preimpreso;
+    @Column(name = "AUTORIZACION_NUMERO")
     private String autorizacionNumero;
+    @Column(name = "FECHA_EMISION")
     private Date fechaEmision;
     
+    @Column(name = "REFERENCIA_DOCUMENTO_ID")
     private Long referenciaDocumentoId;
     
+    @JoinColumn(name = "GUIA_REMISION_ID")
+    @ManyToOne(optional = false)
+    private GuiaRemision guiaRemision;
+    
+    @JoinColumn(name = "PERSONA_ID")
+    @ManyToOne(optional = false)
+    private Persona destinatorio;
+   
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "destinatario",fetch = FetchType.EAGER)
     private List<DetalleProductoGuiaRemision> detallesProductos;
     
-    private GuiaRemision guiaRemision;
 
     public DestinatarioGuiaRemision() {
     }
@@ -151,6 +173,33 @@ public class DestinatarioGuiaRemision implements Serializable{
 
     public void setReferenciaDocumentoId(Long referenciaDocumentoId) {
         this.referenciaDocumentoId = referenciaDocumentoId;
+    }
+    
+    
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 19 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final DestinatarioGuiaRemision other = (DestinatarioGuiaRemision) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
     }
     
     

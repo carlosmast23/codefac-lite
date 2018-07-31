@@ -82,9 +82,9 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         btnAgregarCliente = new javax.swing.JButton();
         btnBuscarTransportista = new javax.swing.JButton();
         lblEspacio3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
-        jDateChooser2 = new com.toedter.calendar.JDateChooser();
+        txtDireccionPartida = new javax.swing.JTextField();
+        cmbFechaInicio = new com.toedter.calendar.JDateChooser();
+        cmbFechaFin = new com.toedter.calendar.JDateChooser();
         jLabel9 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         lblNombresTransportista = new javax.swing.JLabel();
@@ -103,9 +103,9 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         btnEliminarDetalle = new javax.swing.JButton();
         cmbDestinatarios = new javax.swing.JComboBox<>();
         lblEspacio4 = new javax.swing.JLabel();
-        jTextField10 = new javax.swing.JTextField();
-        jTextField11 = new javax.swing.JTextField();
-        jTextField12 = new javax.swing.JTextField();
+        txtCodigoDetalle = new javax.swing.JTextField();
+        txtCantidad = new javax.swing.JTextField();
+        txtDescripcionDetalle = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
@@ -474,7 +474,7 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.01;
         jPanel2.add(lblEspacio3, gridBagConstraints);
 
-        jTextField1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtDireccionPartida.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 3;
@@ -482,21 +482,21 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel2.add(jTextField1, gridBagConstraints);
+        jPanel2.add(txtDireccionPartida, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.ipadx = 30;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel2.add(jDateChooser1, gridBagConstraints);
+        jPanel2.add(cmbFechaInicio, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.ipadx = 30;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel2.add(jDateChooser2, gridBagConstraints);
+        jPanel2.add(cmbFechaFin, gridBagConstraints);
 
         jLabel9.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel9.setText("Fecha fin:");
@@ -643,21 +643,21 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
-        jPanel4.add(jTextField10, gridBagConstraints);
+        jPanel4.add(txtCodigoDetalle, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.05;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
-        jPanel4.add(jTextField11, gridBagConstraints);
+        jPanel4.add(txtCantidad, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.3;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
-        jPanel4.add(jTextField12, gridBagConstraints);
+        jPanel4.add(txtDescripcionDetalle, gridBagConstraints);
 
         jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel10.setText("Cantidad:");
@@ -706,10 +706,10 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnEliminarDetalle;
     private javax.swing.JComboBox<DestinatarioGuiaRemision> cmbDestinatarios;
     private com.toedter.calendar.JDateChooser cmbFechaFactura;
+    private com.toedter.calendar.JDateChooser cmbFechaFin;
+    private com.toedter.calendar.JDateChooser cmbFechaInicio;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
-    private com.toedter.calendar.JDateChooser jDateChooser2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -735,10 +735,6 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField11;
-    private javax.swing.JTextField jTextField12;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JToolBar jToolBar3;
@@ -760,7 +756,11 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
     private javax.swing.JPanel panelDatosGenerales;
     private javax.swing.JTable tblGuiaRemision;
     private javax.swing.JTextField txtAutorizacion;
+    private javax.swing.JTextField txtCantidad;
+    private javax.swing.JTextField txtCodigoDetalle;
+    private javax.swing.JTextField txtDescripcionDetalle;
     private javax.swing.JTextField txtDireccionDestino;
+    private javax.swing.JTextField txtDireccionPartida;
     private javax.swing.JTextField txtDocAduanero;
     private javax.swing.JTextField txtIdentificacionDestinatario;
     private javax.swing.JTextField txtIdentificacionTransportista;
@@ -875,7 +875,31 @@ public abstract class GuiaRemisionPanel extends ControladorCodefacInterface {
         return lblPlacaTransportista;
     }
 
-    
+    public JTextField getTxtDireccionPartida() {
+        return txtDireccionPartida;
+    }
+
+    public JDateChooser getCmbFechaFin() {
+        return cmbFechaFin;
+    }
+
+    public JDateChooser getCmbFechaInicio() {
+        return cmbFechaInicio;
+    }
+
+    public JTextField getTxtCodigoDetalle() {
+        return txtCodigoDetalle;
+    }
+
+    public JTextField getTxtCantidad() {
+        return txtCantidad;
+    }
+
+    public JTextField getTxtDescripcionDetalle() {
+        return txtDescripcionDetalle;
+    }
+
+     
     
     
     

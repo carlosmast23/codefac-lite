@@ -24,7 +24,6 @@ import javax.xml.bind.annotation.XmlType;
     "contribuyenteEspecial",
     "fechaIniTransporte",
     "fechaFinTransporte",
-    "fechaEmisionDocSustento",
     "placa",})
 public class InformacionGuiaRemision implements Serializable{
     

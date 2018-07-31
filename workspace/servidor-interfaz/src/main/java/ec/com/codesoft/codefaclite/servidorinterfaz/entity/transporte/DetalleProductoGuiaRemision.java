@@ -5,18 +5,24 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte;
 
+import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
  *
  * @author Carlos
  */
+@Entity
 @Table(name = "DETALLE_PRODUCTO_GUIA_REMISION")
-public class DetalleProductoGuiaRemision {
+public class DetalleProductoGuiaRemision implements Serializable{
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +40,9 @@ public class DetalleProductoGuiaRemision {
     @Column(name = "REFERENCIA_ID")
     private Long referenciaId; //Almacena la referencia al producto 
     
+
+    @JoinColumn(name="DESTINATARIO_ID")
+    @ManyToOne(optional = false)    
     private DestinatarioGuiaRemision destinatario;
 
     public Long getId() {
@@ -94,6 +103,33 @@ public class DetalleProductoGuiaRemision {
     
     
 
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 89 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final DetalleProductoGuiaRemision other = (DetalleProductoGuiaRemision) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
+    
     
     
 }

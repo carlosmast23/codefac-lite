@@ -26,7 +26,8 @@ import javax.xml.bind.annotation.XmlType;
             "codDocSustento",
             "numDocSustento",
             "numAutDocSustento",
-            "fechaEmisionDocSustento"})
+            "fechaEmisionDocSustento",
+            "detalles"})
 public class DestinatariosGuiaRemisionComprobante implements Serializable{
     private String identificacionDestinatario;
     private String razonSocialDestinatario;
