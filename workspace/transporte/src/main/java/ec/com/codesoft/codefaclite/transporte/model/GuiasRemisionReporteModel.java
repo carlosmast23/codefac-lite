@@ -19,7 +19,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +61,9 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
             getBtnBuscarTransportista().setEnabled(false);
         }
         
+        listenerBotones();
+        listenerCheck();
+        listenerFechas();
         
     }
 
@@ -166,14 +171,14 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
         getBtnLimpiarFechaInicio().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                getDateFechaInicio().setDate(null);
             }
         });
         
         getBtnLimpiarFechaFin().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                getDateFechaFin().setDate(null);
             }
         });
     }
@@ -183,14 +188,27 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
         getChkTodosCliente().addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    persona = null;
+                    getTxtCliente().setText("...");
+                    getBtnBuscarCliente().setEnabled(false);
+                } else {
+                    getBtnBuscarCliente().setEnabled(true);
+                }
             }
         });
         
         getChkTodosTransportista().addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                if(e.getStateChange() == ItemEvent.SELECTED)
+                {
+                    transportista = null;
+                    getTxtTransportista().setText("...");
+                    getBtnBuscarTransportista().setEnabled(false);
+                } else {
+                    getBtnBuscarTransportista().setEnabled(true);
+                }   
             }
         });
     }
@@ -235,6 +253,25 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
         Vector<String> titulo = crearCabezeraTabla();        
         DefaultTableModel modeloTablaFacturas = new DefaultTableModel(titulo, 0);
         return modeloTablaFacturas;
+    }
+    
+    public void generarReporte()
+    {
+        Date fechaInicio = null;
+        Date fechaFin = null;
+        
+        if(getDateFechaInicio().getDate() != null){
+            fechaInicio = new Date(getDateFechaInicio().getDate().getTime());
+        }
+        if(getDateFechaInicio().getDate() != null){
+            fechaFin = new Date(getDateFechaFin().getDate().getTime());
+        }
+        
+        ComprobanteEntity.ComprobanteEnumEstado estadoFactura = (ComprobanteEntity.ComprobanteEnumEstado) getCmbEstado().getSelectedItem();
+        String estadoStr = estadoFactura.getEstado();
+        
+        BigDecimal acum = BigDecimal.ZERO, acumdoce = BigDecimal.ZERO, acumiva = BigDecimal.ZERO, acumdesc = BigDecimal.ZERO;
+            
     }
     
 }

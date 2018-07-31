@@ -48,7 +48,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="99" splitType="Stretch">
+		<band height="191" splitType="Stretch">
 			<subreport>
 				<reportElement x="0" y="0" width="802" height="50" uuid="31eb3805-56c5-4f98-981f-b7c717ff02c4"/>
 				<subreportParameter name="pl_direccion">
@@ -76,22 +76,22 @@
 				<subreportExpression><![CDATA[$P{pl_url_cabecera}]]></subreportExpression>
 			</subreport>
 			<textField>
-				<reportElement x="53" y="71" width="100" height="20" uuid="a679bb78-753d-40b8-824f-856c4a5ff89f"/>
+				<reportElement x="53" y="121" width="100" height="20" uuid="a679bb78-753d-40b8-824f-856c4a5ff89f"/>
 				<textFieldExpression><![CDATA[$P{fechainicio}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="341" y="71" width="100" height="20" uuid="ac6d3bbf-f255-4408-b8fe-7bdf7c66e664"/>
+				<reportElement x="341" y="121" width="100" height="20" uuid="ac6d3bbf-f255-4408-b8fe-7bdf7c66e664"/>
 				<textFieldExpression><![CDATA[$P{fechafin}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="4" y="73" width="49" height="20" uuid="7819bba4-eb89-4534-bd86-b8d6b99f6b4a"/>
+				<reportElement x="4" y="123" width="49" height="20" uuid="7819bba4-eb89-4534-bd86-b8d6b99f6b4a"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Desde:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="291" y="73" width="50" height="20" uuid="48d66939-8103-4be0-9ae7-572e71f82c3c"/>
+				<reportElement x="291" y="123" width="50" height="20" uuid="48d66939-8103-4be0-9ae7-572e71f82c3c"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
@@ -109,14 +109,14 @@
 				<textFieldExpression><![CDATA[$P{tipodocumento}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="291" y="51" width="50" height="20" uuid="04ea4e6c-b02b-491b-b21f-ff331861479f"/>
+				<reportElement x="4" y="73" width="50" height="20" uuid="04ea4e6c-b02b-491b-b21f-ff331861479f"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Cliente:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="341" y="51" width="100" height="20" uuid="5b00f0d0-065f-4bda-a421-0918f5a52a27"/>
+				<reportElement x="53" y="73" width="388" height="20" uuid="5b00f0d0-065f-4bda-a421-0918f5a52a27"/>
 				<textFieldExpression><![CDATA[$P{cliente}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -714,6 +714,6 @@
 		</band>
 	</lastPageFooter>
 	<summary>
-		<band height="42" splitType="Stretch"/>
+		<band height="72" splitType="Stretch"/>
 	</summary>
 </jasperReport>

@@ -22,7 +22,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TransportistaEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.TransportistaServiceIf;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.TransportistaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.transporte.panel.TransportistaPanel;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesJuridicas;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,6 +48,7 @@ public class TransportistaModel extends TransportistaPanel implements DialogInte
         transportista = new Transportista();
         transportistaService = ServiceFactory.getFactory().getTransportistaServiceIf();
         cargarCombos();
+        listenerTextos();
     }
 
     @Override
@@ -281,5 +285,16 @@ public class TransportistaModel extends TransportistaPanel implements DialogInte
                 break;
         }
         return verificador;
+    }
+    
+    public void listenerTextos()
+    {
+        getTxtPlaca().addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                int pos = getTxtPlaca().getCaretPosition();
+                UtilidadesTextos.convertirAMayusculasLetras(getTxtPlaca(), pos);
+            }
+        });
     }
 }
