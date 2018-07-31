@@ -54,3 +54,5 @@ Revisar que los documentos electronicos sigan funcionando cuando salen mas de 2 
 
 Ver si puedo compilar al iniciar la aplicacion todos los reportes para no volver a ejecutar ese proceso y que se vuelva lento cuando necsito reportes
 es decir crear un proxi de reportes
+
+Agregar un campo para grabar novedades al momento de ingresar la mercaderia
