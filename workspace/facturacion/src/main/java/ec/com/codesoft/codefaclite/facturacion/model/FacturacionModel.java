@@ -1372,6 +1372,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
         
+        //TODO: REVISAR PORQUE ME TOCA HACER ESTA VALIDACION
+        if(tipoDocumentoEnum==null)
+        {
+            tipoDocumentoEnum=tipoDocumentoEnum.LIBRE;
+        }
+        
         //Limpio las variables
         switch(tipoDocumentoEnum)
         {

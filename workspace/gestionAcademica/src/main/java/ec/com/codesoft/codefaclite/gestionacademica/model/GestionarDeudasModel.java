@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
@@ -234,7 +235,7 @@ public class GestionarDeudasModel extends GestionarDeudasPanel{
     }
     
     private void cargarTabla() {
-        DefaultTableModel modeloTabla = crearModeloTabla(new String[]{"Opcion", "Alumno"}, new Class[]{Boolean.class, RubroEstudianteData.class});
+        DefaultTableModel modeloTabla = crearModeloTabla(new String[]{"Opción", "Alumno"}, new Class[]{Boolean.class, RubroEstudianteData.class});
         listaEstudiantes=new ArrayList<RubroEstudianteData>();
         try {            
             NivelAcademico nivelAcademico = (NivelAcademico) getCmbNivelAcademico().getSelectedItem();
@@ -287,6 +288,7 @@ public class GestionarDeudasModel extends GestionarDeudasPanel{
             Logger.getLogger(GestionarDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         getTblEstudiantes().setModel(modeloTabla);
+        UtilidadesTablas.definirTamanioColumnas(getTblEstudiantes(),new Integer[]{100});
         
         getTblEstudiantes().getModel().addTableModelListener(new TableModelListener() {
             @Override

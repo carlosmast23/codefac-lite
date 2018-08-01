@@ -12,6 +12,7 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -25,7 +26,7 @@ public abstract class UtilidadesTablas {
     
     public static void definirTamanioColumnas(JTable jtable,Integer[] tamanios)
     {
-        for (int i = 0; i < jtable.getColumnCount(); i++) {
+        for (int i = 0; i < tamanios.length; i++) {
             jtable.getColumnModel().getColumn(i).setMaxWidth(tamanios[i]);
         }        
 
@@ -104,6 +105,33 @@ public abstract class UtilidadesTablas {
     {
         
     }
-     
+    
+    public static void cambiarTamanioColumnas(JTable table , Integer[] valoresColumnas)
+    {
+        int total=0;
+        for (int i = 0; i < valoresColumnas.length; i++) 
+        {
+           total+=valoresColumnas[i];
+        }
+        
+        double porcentajes[]=new double[valoresColumnas.length];        
+        for (int i = 0; i < porcentajes.length; i++) {
+            porcentajes[i]=(double)((double)valoresColumnas[i]/(double)total);
+        }
+        
+        TableColumnModel columnModel = table.getColumnModel();        
+        for (int i=0;i<columnModel.getColumnCount();i++) 
+        {
+            TableColumn columna=columnModel.getColumn(i);
+            int tamanioTabla=table.getSize().width;
+            double tamanioColumna=porcentajes[i]*tamanioTabla;
+            columna.setPreferredWidth((int) tamanioColumna);
+            columna.setMaxWidth((int) tamanioColumna);
+            //columna.se
+        }
+        
+        
+        
+    }
    
 }
