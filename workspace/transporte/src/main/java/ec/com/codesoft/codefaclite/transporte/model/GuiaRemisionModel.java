@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.transporte.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteFacturacionBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.GuiaRemisionBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.TransportistaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
@@ -204,12 +205,23 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
 
     @Override
     public BuscarDialogoModel obtenerDialogoBusqueda() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        GuiaRemisionBusqueda busqueda=new GuiaRemisionBusqueda();
+        BuscarDialogoModel buscarModel=new BuscarDialogoModel(busqueda);
+        return buscarModel;
     }
 
     @Override
     public void cargarDatosPantalla(Object entidad) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        guiaRemision=(GuiaRemision) entidad;
+        cargarDatosTransportista();
+        cargarCliente(guiaRemision.getDestinatarios().get(0).getDestinatorio());
+        getTxtDireccionPartida().setText(guiaRemision.getDireccionPartida());
+        getCmbFechaInicio().setDate(guiaRemision.getFechaIniciaTransporte());
+        getCmbFechaFin().setDate(guiaRemision.getFechaFinTransporte());
+        cargarDestinatariosAgregados();
+        imprimirTabla();
+        //cargarDatoFactura(guiaRemision.getre)
+        
     }
 
     private void iniciarComponentesPantalla() {
@@ -475,6 +487,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
     private void setearValores() {
         Transportista transportista=guiaRemision.getTransportista();
         guiaRemision.setTransportista(transportista);
+        guiaRemision.setIdentificacion(guiaRemision.getTransportista().getIdentificacion());
         guiaRemision.setDireccion(transportista.getDireccion());
         guiaRemision.setDireccionPartida(getTxtDireccionPartida().getText());
         guiaRemision.setRazonSocial(transportista.getRazonSocial());
