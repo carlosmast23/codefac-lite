@@ -156,7 +156,8 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
             int segundoCorte=query.indexOf("from");
             String queryModificado=queryDialog.query.substring(0,primerCorte)+" count(1) "+queryDialog.query.substring(segundoCorte);
             //Eliminar las columnas de ordenar porque no se pueden ejecutar en conjunto con el comando count(1)
-            queryModificado=queryModificado.substring(0,queryModificado.toLowerCase().indexOf("order by")); //TODO: Analizar como verificar para otros casos que tengan mas espacios entre order y by
+            if(queryModificado.toLowerCase().indexOf("order by")>=0)
+                queryModificado=queryModificado.substring(0,queryModificado.toLowerCase().indexOf("order by")); //TODO: Analizar como verificar para otros casos que tengan mas espacios entre order y by
             
             System.out.println(queryModificado);            
             convertirMinusculasParametros(queryDialog);
