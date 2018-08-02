@@ -32,7 +32,7 @@ public enum DirectorioCodefac {
     IMAGENES("imagenes"),
     LICENCIA("licencia"),
     COMPROBANTES_PRUEBAS("comprobantes/pruebas"),
-    COMPROBANTES_PRODUCCION("comprobantes/produccion"),
+    COMPROBANTES_PRODUCCION("comprobantes/producción"),
     FIRMA("firma"),
     TEMP("temporal");
     
