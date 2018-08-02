@@ -28,6 +28,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NotaCreditoService
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.*;
+import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -298,6 +299,10 @@ public class FacturaReporteModel extends FacturaReportePanel {
                 }
                 
                 getTblDocumentos().setModel(modeloTablaFacturas);
+                Map<Integer,Integer> mapTamanios=new HashMap<Integer,Integer>();
+                mapTamanios.put(0,130);
+                UtilidadesTablas.definirTamanioColumnasPorMap(getTblDocumentos(),mapTamanios);
+                
                 getLblSubtotal0().setText(acum.toString());
                 getLblSubtotal12().setText(acumdoce.toString());
                 BigDecimal subtotal = acum.add(acumdoce);

@@ -26,6 +26,8 @@ public class FacturaFacade extends AbstractFacade<Factura> {
     }
 
     public List<Factura> lista(Persona persona, Date fi, Date ff, String estado) {
+        //Factura factura;
+        //factura.getSecuencial();
         String cliente = "", fecha = "", estadoFactura = "";
         if (persona != null) {
             cliente = "u.cliente=?1";
@@ -46,7 +48,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         }
 
         try {
-            String queryString = "SELECT u FROM Factura u WHERE " + cliente + fecha + estadoFactura;
+            String queryString = "SELECT u FROM Factura u WHERE " + cliente + fecha + estadoFactura +" ORDER BY u.secuencial asc";
             Query query = getEntityManager().createQuery(queryString);
             //System.err.println("QUERY--->"+query.toString());
             if (persona != null) {
