@@ -88,7 +88,7 @@ public class ComprobanteElectronicoService implements Runnable {
     public static final String CARPETA_CONFIGURACION = "configuracion";
 
 
-    public static final String MODO_PRODUCCION = "producción";
+    public static final String MODO_PRODUCCION = "produccion";
     public static final String MODO_PRUEBAS = "pruebas";
 
     public static final Integer ETAPA_GENERAR = 1;
