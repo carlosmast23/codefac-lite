@@ -60,3 +60,5 @@ Verificar cual es el proceso si eleminan por ejemplo una alumno y luego quieren 
 
 En la pantalla de ingreso de mercaderia esta cargando incorrectamente el preimpreso de las facturas de compra
 Hacer un nuevo instalador porque no va a funcionar por la carpeta de autorizacion
+Pensar en una forma de utilizar unidades de medidad y convertidores
+REVISAR QUE LOS REPORTES EN EXCEL FUNCIONE EN FORMATO ESTANDAR COMO POR EJEMPLO CVS

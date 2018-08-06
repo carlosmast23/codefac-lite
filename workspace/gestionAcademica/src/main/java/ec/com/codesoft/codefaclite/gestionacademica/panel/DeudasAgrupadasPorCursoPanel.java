@@ -17,12 +17,12 @@ import javax.swing.JTable;
  *
  * @author CodesoftDesarrollo
  */
-public abstract class ReporteDeudasCursoPanel extends ControladorCodefacInterface {
+public abstract class DeudasAgrupadasPorCursoPanel extends ControladorCodefacInterface {
 
     /**
      * Creates new form ReporteDeudasCursoPanel
      */
-    public ReporteDeudasCursoPanel() {
+    public DeudasAgrupadasPorCursoPanel() {
         initComponents();
     }
 
@@ -53,7 +53,7 @@ public abstract class ReporteDeudasCursoPanel extends ControladorCodefacInterfac
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
-        setTitle("Deudas General por Curso");
+        setTitle("Deudas Agrupadas por Curso");
         setToolTipText("");
         getContentPane().setLayout(new java.awt.GridBagLayout());
 

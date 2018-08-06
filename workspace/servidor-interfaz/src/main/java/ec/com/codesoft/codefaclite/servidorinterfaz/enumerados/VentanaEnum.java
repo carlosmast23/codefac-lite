@@ -57,7 +57,7 @@ public enum VentanaEnum {
     REPORTE_MATRICULA("ec.com.codesoft.codefaclite.gestionacademica.model.ReporteAcademicoModel", "RMAT", "Reporte Matricula", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.REPORTES,null),
     REPORTE_DEUDAS("ec.com.codesoft.codefaclite.gestionacademica.model.ReporteDeudasModel", "RDES", "Reporte Deudas", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.REPORTES,null),
     REPORTE_DEUDASESTUDIANTE("ec.com.codesoft.codefaclite.gestionacademica.model.ReporteDeudasEstudianteModel", "RDEI", "Reporte Deudas Estudiante", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.REPORTES,null),
-    REPORTE_DEUDASCURSO("ec.com.codesoft.codefaclite.gestionacademica.model.ReporteDeudasCursoModel", "RDEC", "Reporte Deudas Curso", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.REPORTES,null),
+    REPORTE_DEUDASCURSO("ec.com.codesoft.codefaclite.gestionacademica.model.DeudasAgrupadasPorCursoModel", "RDEC", "Deudas Agrupadas por Curso", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.REPORTES,null),
     DEUDA_ESTUDIANTE("ec.com.codesoft.codefaclite.gestionacademica.model.DeudaEstudianteModel", "DEML", "Deuda Estudiante", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.DEUDAS_ACADEMICOS,null),
     CATALOGO_PRODUCTO("ec.com.codesoft.codefaclite.inventario.model.CatalogoProductoModel", "CAPR", "Catalogo Producto", ModuloCodefacEnum.INVENTARIO, CategoriaMenuEnum.GESTIONAR,TipoLicenciaEnum.GRATIS,null),
     RUBRO_PLANTILLA("ec.com.codesoft.codefaclite.gestionacademica.model.RubroPlantillaModel", "RUBR", "Rubros Mensuales", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.DEUDAS_ACADEMICOS,null),

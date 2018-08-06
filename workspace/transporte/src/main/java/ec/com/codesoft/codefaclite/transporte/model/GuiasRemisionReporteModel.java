@@ -7,25 +7,40 @@ package ec.com.codesoft.codefaclite.transporte.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteFacturacionBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.TransportistaBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.excel.Excel;
+import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Transportista;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.GuiaRemisionServiceIf;
+import ec.com.codesoft.codefaclite.transporte.data.GuiaTransporteData;
 import ec.com.codesoft.codefaclite.transporte.panel.GuiasRemisionReportePanel;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -36,6 +51,10 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
 {
     private Persona persona;
     private Transportista transportista;
+    private List<GuiaRemision> listaConsulta;
+    
+    private Date fechaInicial;
+    private Date fechaFinal;
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
@@ -89,7 +108,7 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
 
     @Override
     public void imprimir() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        imprimirReporte();
     }
 
     @Override
@@ -135,7 +154,7 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
         getBtnBuscar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                ejecutarConsulta();
             }
         });
         
@@ -181,6 +200,109 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
                 getDateFechaFin().setDate(null);
             }
         });
+    }
+    
+    public void ejecutarConsulta()
+    {
+        try {
+            GuiaRemisionServiceIf guiaRemisionServiceIf=ServiceFactory.getFactory().getGuiaRemisionServiceIf();
+            fechaInicial=(getDateFechaInicio().getDate()!=null)?new java.sql.Date(getDateFechaInicio().getDate().getTime()):null;
+            fechaFinal=(getDateFechaFin().getDate()!=null)?new java.sql.Date(getDateFechaFin().getDate().getTime()):null;
+            
+            listaConsulta=guiaRemisionServiceIf.obtenerConsulta(fechaInicial,fechaFinal);
+            mostrarReporteTabla();
+            imprimirReporte();
+            
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(GuiasRemisionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(GuiasRemisionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void imprimirReporte()
+    {
+        List<GuiaTransporteData> listReporte=new ArrayList<GuiaTransporteData>();
+        for (GuiaRemision guiaRemision : listaConsulta) {
+            GuiaTransporteData data=new GuiaTransporteData();
+            data.setDireccionPartida(guiaRemision.getDireccionPartida());
+            data.setEstado(guiaRemision.getEstado());
+            data.setFechaFin(guiaRemision.getFechaFinTransporte().toString());
+            data.setFechaInicio(guiaRemision.getFechaIniciaTransporte().toString());
+            data.setIdentififacion((guiaRemision.getIdentificacion()!=null)?guiaRemision.getIdentificacion().toString():"");
+            data.setPlaca(guiaRemision.getPlaca());
+            data.setPreimpreso(guiaRemision.getPreimpreso());
+            data.setTransportista(guiaRemision.getRazonSocial());
+            listReporte.add(data);
+        }
+        
+        if(listaConsulta!=null)
+        {
+            DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
+                @Override
+                public void excel() {
+                    try {
+                        Excel excel = new Excel();
+                        String nombreCabeceras[] = getCabeceraReporte();
+                        excel.gestionarIngresoInformacionExcel(nombreCabeceras, listReporte);
+                        excel.abrirDocumento();
+                    } catch (IOException ex) {
+                        Logger.getLogger(GuiasRemisionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IllegalArgumentException ex) {
+                        Logger.getLogger(GuiasRemisionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IllegalAccessException ex) {
+                        Logger.getLogger(GuiasRemisionReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+
+                @Override
+                public void pdf() {
+                    InputStream path = RecursoCodefac.JASPER_TRANSPORTE.getResourceInputStream("reporte_guiaRemision.jrxml");
+                    Map parameters = new HashMap();
+                    ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, listReporte, panelPadre, "Reporte Guía Remisión ");
+                    //dispose();
+                    //setVisible(false);
+                }
+            });
+        
+        }
+    }
+    
+    private String[] getCabeceraReporte()
+    {
+        return new String[]{"Preimpreso","Transportista","Identificación","Estado","FechaInicio","FechaFin","Dir Partida","Placa"};
+    }
+    
+    private void mostrarReporteTabla()
+    {
+        String[] titulos=getCabeceraReporte();
+        
+        if(listaConsulta!=null)
+        {
+            DefaultTableModel modeloTabla=new DefaultTableModel(titulos,0);
+            
+            for (GuiaRemision guiaRemision : listaConsulta) 
+            {
+                String[] fila={
+                    guiaRemision.getPreimpreso(),
+                    guiaRemision.getRazonSocial(),
+                    guiaRemision.getIdentificacion(),
+                    guiaRemision.getEstadoEnum().getNombre(),
+                    guiaRemision.getFechaIniciaTransporte().toString(),
+                    guiaRemision.getFechaFinTransporte().toString(),
+                    guiaRemision.getDireccionPartida(),
+                    guiaRemision.getPlaca()
+                    
+                };
+                
+                modeloTabla.addRow(fila);
+            }
+            
+            getTblDocumentos().setModel(modeloTabla);
+        
+        }
+        
+    
     }
    
     public void listenerCheck()
@@ -228,50 +350,6 @@ public class GuiasRemisionReporteModel extends GuiasRemisionReportePanel
         getTxtTransportista().setText(" " + transportista.getIdentificacion()+ " - " + transportista.getApellidos() +" "+ transportista.getNombres());
     }
     
-    private Vector<String>  crearCabezeraTabla()
-    {
-        Vector<String> titulo = new Vector<>();
-        titulo.add("Preimpreso");
-        titulo.add("Referencia");
-        titulo.add("Fecha");
-        titulo.add("Identificación");
-        titulo.add("Razón social");
-        titulo.add("Nombre legal");
-        titulo.add("Documento");
-        titulo.add("Estado");
-        titulo.add("Tipo");
-        titulo.add("Subtotal 12%");
-        titulo.add("Subtotal 0% ");
-        titulo.add("Descuentos");
-        titulo.add("IVA 12%");
-        titulo.add("Valor Afecta");
-        titulo.add("Total");
-        return titulo;
-    }
-    
-    private DefaultTableModel construirModelTabla() {
-        Vector<String> titulo = crearCabezeraTabla();        
-        DefaultTableModel modeloTablaFacturas = new DefaultTableModel(titulo, 0);
-        return modeloTablaFacturas;
-    }
-    
-    public void generarReporte()
-    {
-        Date fechaInicio = null;
-        Date fechaFin = null;
-        
-        if(getDateFechaInicio().getDate() != null){
-            fechaInicio = new Date(getDateFechaInicio().getDate().getTime());
-        }
-        if(getDateFechaInicio().getDate() != null){
-            fechaFin = new Date(getDateFechaFin().getDate().getTime());
-        }
-        
-        ComprobanteEntity.ComprobanteEnumEstado estadoFactura = (ComprobanteEntity.ComprobanteEnumEstado) getCmbEstado().getSelectedItem();
-        String estadoStr = estadoFactura.getEstado();
-        
-        BigDecimal acum = BigDecimal.ZERO, acumdoce = BigDecimal.ZERO, acumiva = BigDecimal.ZERO, acumdesc = BigDecimal.ZERO;
-            
-    }
+  
     
 }

@@ -16,6 +16,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemisi
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.GuiaRemisionServiceIf;
 import java.rmi.RemoteException;
+import java.sql.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -63,6 +65,10 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
         return entity;
     }
     
+    public List<GuiaRemision> obtenerConsulta(Date fechaInicial,Date fechaFinal) throws ServicioCodefacException, RemoteException
+    {
+        return getFacade().obtenerConsultaFacade(fechaInicial, fechaFinal);
+    }
     
     
 }

@@ -14,7 +14,7 @@ import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
  */
 public class TestEncriptar {
     public static void main(String[] args) {
-        String datosEncriptado=UtilidadesEncriptar.encriptar("2018-06-01",ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
+        String datosEncriptado=UtilidadesEncriptar.encriptar("1702mgwk",ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
         System.out.println(datosEncriptado); 
    }
 }

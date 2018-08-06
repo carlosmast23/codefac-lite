@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.utilidades.tabla;
 
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -28,7 +29,20 @@ public abstract class UtilidadesTablas {
     {
         for (int i = 0; i < tamanios.length; i++) {
             jtable.getColumnModel().getColumn(i).setMaxWidth(tamanios[i]);
+            jtable.getColumnModel().getColumn(i).setPreferredWidth(tamanios[i]);
         }        
+
+    }
+    
+    public static void definirTamanioColumnasPorMap(JTable jtable,Map<Integer,Integer> tamaniosMap)
+    {
+        for (Map.Entry<Integer, Integer> entry : tamaniosMap.entrySet()) {
+            Integer columna = entry.getKey();
+            Integer tamanio = entry.getValue();
+            
+            jtable.getColumnModel().getColumn(columna).setPreferredWidth(tamanio);
+            
+        }
 
     }
     

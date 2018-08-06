@@ -44,7 +44,8 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura> {
         titulo.add(new ColumnaDialogo("preimpreso", 0.2d));
         titulo.add(new ColumnaDialogo("cliente", 0.3d));
         titulo.add(new ColumnaDialogo("documento", 0.15d));
-        titulo.add(new ColumnaDialogo("tipo", 0.15d));
+        //titulo.add(new ColumnaDialogo("tipo", 0.15d));
+        titulo.add(new ColumnaDialogo("estado", 0.15d));
         titulo.add(new ColumnaDialogo("fecha", 0.15d));
         titulo.add(new ColumnaDialogo("total", 0.1d));        
         return titulo;
@@ -52,6 +53,8 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura> {
 
     @Override
     public QueryDialog getConsulta(String filter) {
+        //Factura f;
+        //f.getSecuencial();
         String queryString = "SELECT u FROM Factura u WHERE u.estado<>?1 ";
         if(cliente!=null)
         {
@@ -59,6 +62,7 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura> {
         }
         
         queryString+="AND ( LOWER(u.cliente.razonSocial) like ?2 OR CONCAT(u.secuencial, '') like ?2 )";
+        queryString+=" ORDER BY u.secuencial DESC ";
         QueryDialog queryDialog=new QueryDialog(queryString);
         queryDialog.agregarParametro(1,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
         queryDialog.agregarParametro(2,filter);
@@ -77,11 +81,13 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura> {
         dato.add(t.getPreimpreso());
         System.out.println(t.getPreimpreso());
         dato.add(t.getCliente().getRazonSocial());
-        DocumentoEnum estadoEnum= DocumentoEnum.obtenerDocumentoPorCodigo(t.getCodigoDocumento());
-        dato.add(estadoEnum.getNombre());
+        DocumentoEnum documentoEnum= DocumentoEnum.obtenerDocumentoPorCodigo(t.getCodigoDocumento());        
+        dato.add(documentoEnum.getNombre()); //TODO: Veri si para cosnultar por documento sea una propiedad intrinsica de la factura
         
-        ComprobanteEntity.TipoEmisionEnum tipoFactura=ComprobanteEntity.TipoEmisionEnum.getEnumByEstado(t.getTipoFacturacion());
-        dato.add(tipoFactura.getNombre());
+        //ComprobanteEntity.TipoEmisionEnum tipoFactura=ComprobanteEntity.TipoEmisionEnum.getEnumByEstado(t.getTipoFacturacion());
+        //dato.add(tipoFactura.getNombre());
+        
+        dato.add((t.getEstadoEnum()!=null)?t.getEstadoEnum().getNombre():"Sin estado");
         
         dato.add(t.getFechaEmision());
         dato.add(t.getTotal());

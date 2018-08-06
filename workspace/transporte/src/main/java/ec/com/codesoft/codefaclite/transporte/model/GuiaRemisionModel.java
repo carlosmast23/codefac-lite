@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.transporte.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteFacturacionBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.GuiaRemisionBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.TransportistaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
@@ -33,6 +34,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteService
 import ec.com.codesoft.codefaclite.transporte.callback.GuiaRemisionImplComprobante;
 import ec.com.codesoft.codefaclite.transporte.panel.GuiaRemisionPanel;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwingX;
@@ -41,6 +43,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.HashMap;
@@ -50,6 +53,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JasperPrint;
 import org.apache.commons.collections4.map.HashedMap;
 
 /**
@@ -111,7 +115,20 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
 
     @Override
     public void imprimir() throws ExcepcionCodefacLite, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (this.guiaRemision != null && estadoFormulario.equals(ESTADO_EDITAR)) {
+            try {
+                String claveAcceso = this.guiaRemision.getClaveAcceso();
+                byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso);
+                JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
+                panelPadre.crearReportePantalla(jasperPrint, guiaRemision.getPreimpreso());
+            } catch (RemoteException ex) {
+                Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(GuiaRemisionModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     @Override
@@ -204,12 +221,23 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
 
     @Override
     public BuscarDialogoModel obtenerDialogoBusqueda() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        GuiaRemisionBusqueda busqueda=new GuiaRemisionBusqueda();
+        BuscarDialogoModel buscarModel=new BuscarDialogoModel(busqueda);
+        return buscarModel;
     }
 
     @Override
     public void cargarDatosPantalla(Object entidad) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        guiaRemision=(GuiaRemision) entidad;
+        cargarDatosTransportista();
+        cargarCliente(guiaRemision.getDestinatarios().get(0).getDestinatorio());
+        getTxtDireccionPartida().setText(guiaRemision.getDireccionPartida());
+        getCmbFechaInicio().setDate(guiaRemision.getFechaIniciaTransporte());
+        getCmbFechaFin().setDate(guiaRemision.getFechaFinTransporte());
+        cargarDestinatariosAgregados();
+        imprimirTabla();
+        //cargarDatoFactura(guiaRemision.getre)
+        
     }
 
     private void iniciarComponentesPantalla() {
@@ -475,6 +503,7 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
     private void setearValores() {
         Transportista transportista=guiaRemision.getTransportista();
         guiaRemision.setTransportista(transportista);
+        guiaRemision.setIdentificacion(guiaRemision.getTransportista().getIdentificacion());
         guiaRemision.setDireccion(transportista.getDireccion());
         guiaRemision.setDireccionPartida(getTxtDireccionPartida().getText());
         guiaRemision.setRazonSocial(transportista.getRazonSocial());
