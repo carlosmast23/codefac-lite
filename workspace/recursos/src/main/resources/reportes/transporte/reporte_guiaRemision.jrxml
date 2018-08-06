@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_documentos" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="BlankPage" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9cda46cf-cd6e-4c09-b67c-62113b7f5ab2">
-	<property name="ireport.zoom" value="1.366026910730178"/>
-	<property name="ireport.x" value="263"/>
-	<property name="ireport.y" value="84"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="pl_fecha_hora" class="java.lang.String"/>
 	<parameter name="pl_direccion" class="java.lang.String"/>
 	<parameter name="pl_nombre_empresa" class="java.lang.String"/>
@@ -30,6 +30,7 @@
 	<parameter name="pl_celular" class="java.lang.String"/>
 	<parameter name="pl_adicional" class="java.lang.String"/>
 	<parameter name="pl_facebook" class="java.lang.String"/>
+	<parameter name="transportista" class="java.lang.String"/>
 	<field name="numeroFactura" class="java.lang.String"/>
 	<field name="fechaFactura" class="java.lang.String"/>
 	<field name="identificacionCliente" class="java.lang.String"/>
@@ -76,47 +77,47 @@
 				<subreportExpression><![CDATA[$P{pl_url_cabecera}]]></subreportExpression>
 			</subreport>
 			<textField>
-				<reportElement x="53" y="121" width="100" height="20" uuid="a679bb78-753d-40b8-824f-856c4a5ff89f"/>
+				<reportElement x="75" y="113" width="100" height="20" uuid="a679bb78-753d-40b8-824f-856c4a5ff89f"/>
 				<textFieldExpression><![CDATA[$P{fechainicio}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="341" y="121" width="100" height="20" uuid="ac6d3bbf-f255-4408-b8fe-7bdf7c66e664"/>
+				<reportElement x="281" y="113" width="100" height="20" uuid="ac6d3bbf-f255-4408-b8fe-7bdf7c66e664"/>
 				<textFieldExpression><![CDATA[$P{fechafin}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="4" y="123" width="49" height="20" uuid="7819bba4-eb89-4534-bd86-b8d6b99f6b4a"/>
+				<reportElement x="7" y="113" width="68" height="20" uuid="7819bba4-eb89-4534-bd86-b8d6b99f6b4a"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Desde:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="291" y="123" width="50" height="20" uuid="48d66939-8103-4be0-9ae7-572e71f82c3c"/>
+				<reportElement x="231" y="113" width="50" height="20" uuid="48d66939-8103-4be0-9ae7-572e71f82c3c"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Hasta:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="4" y="53" width="49" height="20" uuid="f16db097-36b2-49ca-a514-710cf754642d"/>
+				<reportElement x="4" y="53" width="74" height="20" uuid="f16db097-36b2-49ca-a514-710cf754642d"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Tipo: ]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="53" y="53" width="100" height="20" uuid="fc87f1b5-92b0-4cfa-8d99-ecd9e831181c"/>
+				<reportElement x="78" y="53" width="100" height="20" uuid="fc87f1b5-92b0-4cfa-8d99-ecd9e831181c"/>
 				<textFieldExpression><![CDATA[$P{tipodocumento}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="4" y="73" width="50" height="20" uuid="04ea4e6c-b02b-491b-b21f-ff331861479f"/>
+				<reportElement x="4" y="73" width="74" height="20" uuid="04ea4e6c-b02b-491b-b21f-ff331861479f"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Cliente:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="53" y="73" width="388" height="20" uuid="5b00f0d0-065f-4bda-a421-0918f5a52a27"/>
+				<reportElement x="78" y="73" width="303" height="20" uuid="5b00f0d0-065f-4bda-a421-0918f5a52a27"/>
 				<textFieldExpression><![CDATA[$P{cliente}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -130,6 +131,14 @@
 				</textElement>
 				<text><![CDATA[Estado:]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="5" y="93" width="73" height="20" uuid="4052a83e-0e31-4603-9597-76ba37a2948f"/>
+				<text><![CDATA[Transportista:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="78" y="93" width="303" height="20" uuid="46627382-d888-4112-8bb0-7a98ab032c5b"/>
+				<textFieldExpression><![CDATA[$P{transportista}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<columnHeader>
