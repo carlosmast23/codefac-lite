@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesJuridicas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -295,85 +296,7 @@ public class EmpresaModel extends EmpresaForm
     @validacionPersonalizadaAnotacion(errorTitulo = "Formato de ruc")
     public boolean validarRuc()
     {
-        return validarRUC(getjTextRuc().getText());
-    }        
-            
-    private boolean validarRUC(String RUC) 
-    {
-        System.out.println("Longitud de RUC" + RUC.length());
-        if(RUC.length() == 13)
-        {
-            String cedula = RUC.substring(0,10);
-            System.out.println("CEDULA: " + cedula);
-            String ruc = RUC.substring(10,13);
-            System.out.println("RUC: " + ruc);
-            System.out.println("VALor cedula " +  validarCedula(cedula));
-            System.out.println("VALor ruc " +  isNumeric(ruc));
-            if(validarCedula(cedula) && isNumeric(ruc))
-            {
-                return true;
-            }
-        }
-        
-        return false;
-    }
-    
-    public boolean validarCedula(String cedula)
-    {          
-        boolean cedulaCorrecta = false;
-        try {
-            if (cedula.length() == 10) // ConstantesApp.LongitudCedula
-            {
-                int tercerDigito = Integer.parseInt(cedula.substring(2, 3));
-                if (tercerDigito < 6) {
-                    // Coeficientes de validación cédula
-                    // El decimo digito se lo considera dígito verificador
-                    int[] coefValCedula = {2, 1, 2, 1, 2, 1, 2, 1, 2};
-                    int verificador = Integer.parseInt(cedula.substring(9, 10));
-                    int suma = 0;
-                    int digito = 0;
-                    for (int i = 0; i < (cedula.length() - 1); i++) {
-                        digito = Integer.parseInt(cedula.substring(i, i + 1)) * coefValCedula[i];
-                        suma += ((digito % 10) + (digito / 10));
-                    }
-
-                    if ((suma % 10 == 0) && (suma % 10 == verificador)) {
-                        cedulaCorrecta = true;
-                    } else if ((10 - (suma % 10)) == verificador) {
-                        cedulaCorrecta = true;
-                    } else {
-                        cedulaCorrecta = false;
-                    }
-                } else {
-                    cedulaCorrecta = false;
-                }
-            } else {
-                cedulaCorrecta = false;
-            }
-        } catch (NumberFormatException nfe) {
-            cedulaCorrecta = false;
-        } catch (Exception err) {
-            cedulaCorrecta = false;
-        }
-
-        if (!cedulaCorrecta) {
-            System.out.println("La Cédula ingresada es Incorrecta");
-        }
-        return cedulaCorrecta;
-
-    }
-    
-    public boolean isNumeric(String cadena) 
-    {
-        boolean resultado;
-        try
-        {
-            Integer.parseInt(cadena);
-            resultado = true;
-        } catch (NumberFormatException excepcion) {
-            resultado = false;
-        }
-        return resultado;
+        return UtilidadesJuridicas.validarTodosRuc(getjTextRuc().getText());
     }
     
     public void moverArchivo() {
