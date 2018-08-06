@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.ImpuestoC
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.TotalImpuesto;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
@@ -116,7 +117,7 @@ public class ComprobanteDataFactura implements ComprobanteDataInterface,Serializ
         /**
          * Aqui hay que setear los valores de la base de datos
          */
-        informacionFactura.setObligadoContabilidad("NO"); //TODO: Revisar esta parte porque debe cambiar dependiendo el cliente
+        informacionFactura.setObligadoContabilidad(factura.getObligadoLlevarContabilidad()); //TODO: Revisar esta parte porque debe cambiar dependiendo el cliente
         //informacionFactura.setTotalImpuestos(totalImpuestos);
         
         /**

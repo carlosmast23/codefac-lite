@@ -58,6 +58,9 @@ public class ComprobanteEntity implements Serializable{
     @Column(name = "ESTADO")
     protected String estado;
     
+    @Column(name = "OBLIGADO_LLEVAR_CONTABILIDAD")
+    protected String obligadoLlevarContabilidad;
+    
     //Para saber el tipo de emision si fue electronica o manual
     @Column(name = "TIPO_FACTURACION")
     private String tipoFacturacion;
@@ -191,6 +194,15 @@ public class ComprobanteEntity implements Serializable{
     public void setCodigoDocumento(String codigoDocumento) {
         this.codigoDocumento = codigoDocumento;
     }
+
+    public String getObligadoLlevarContabilidad() {
+        return obligadoLlevarContabilidad;
+    }
+
+    public void setObligadoLlevarContabilidad(String obligadoLlevarContabilidad) {
+        this.obligadoLlevarContabilidad = obligadoLlevarContabilidad;
+    }
+    
     
     
     

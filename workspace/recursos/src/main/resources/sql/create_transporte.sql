@@ -23,6 +23,8 @@ create table TRANSPORTISTA
     TELEFONO_CONVENCIONAL varchar(15),
     ESTADO varchar(1),
     TIPO_IDENTIFICACION varchar(1), 
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.6.1)*/
+    OBLIGADO_LLEVAR_CONTABILIDAD varchar(2),
     primary key (ID)
 );
 

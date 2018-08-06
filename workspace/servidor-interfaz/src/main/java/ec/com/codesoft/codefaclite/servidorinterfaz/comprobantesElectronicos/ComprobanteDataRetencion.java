@@ -91,7 +91,7 @@ public class ComprobanteDataRetencion implements ComprobanteDataInterface,Serial
         RetencionComprobante retencionComprobante=new RetencionComprobante();
         InformacionRetencion info=new InformacionRetencion();
         
-        //Revisar que codigo debe ir aqui , aunque en el SRI dice que es opcional
+        //TODO:Revisar que codigo debe ir aqui , aunque en el SRI dice que es opcional
         info.setContribuyenteEspecial("123");
         info.setDirEstablecimiento(UtilidadValidador.normalizarTexto(retencion.getProveedor().getDireccion()));
         info.setFechaEmision(ComprobantesElectronicosUtil.dateToString(retencion.getFechaEmision()));
@@ -111,7 +111,7 @@ public class ComprobanteDataRetencion implements ComprobanteDataInterface,Serial
         /**
          * Verificar que valor no mas acepta
          */
-        info.setObligadoContabilidad(retencion.getProveedor().getObligadoLlevarContabilidadEnum().getNombre().toUpperCase());
+        info.setObligadoContabilidad(retencion.getObligadoLlevarContabilidad());
         info.setPeriodoFiscal(retencion.getPeriodoFiscal());
         info.setRazonSocialSujetoRetenido(retencion.getProveedor().getRazonSocial());
         

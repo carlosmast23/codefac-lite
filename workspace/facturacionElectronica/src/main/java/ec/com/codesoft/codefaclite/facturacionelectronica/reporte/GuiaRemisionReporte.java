@@ -89,6 +89,7 @@ public class GuiaRemisionReporte extends ComprobanteElectronicoReporte {
         map.put("placa", comprobante.getInfoGuiaRemision().getPlaca());
         map.put("fechaFin", comprobante.getInfoGuiaRemision().getFechaFinTransporte());
         map.put("pl_url_detalle",detalleReporte);
+        map.put("obligado_contabilidad",comprobante.getInfoGuiaRemision().getObligadoContabilidad());
         return map;
     }
     

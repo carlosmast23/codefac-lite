@@ -508,13 +508,13 @@ public class GuiaRemisionModel extends GuiaRemisionPanel{
         guiaRemision.setDireccionPartida(getTxtDireccionPartida().getText());
         guiaRemision.setRazonSocial(transportista.getRazonSocial());
         guiaRemision.setRise("");
-        guiaRemision.setObligadoLlevarContabilidad("NO"); //Por el momneto dejo seteado que no necesiton el campo
         guiaRemision.setFechaIniciaTransporte(new java.sql.Date(getCmbFechaInicio().getDate().getTime()));
         guiaRemision.setFechaEmision(new java.sql.Date(getCmbFechaInicio().getDate().getTime())); //Esto esta variable porque necesito para volver a generar la clave de acceso
         guiaRemision.setFechaFinTransporte(new java.sql.Date(getCmbFechaFin().getDate().getTime()));
         guiaRemision.setPlaca(transportista.getPlacaVehiculo());
         guiaRemision.setPuntoEstablecimiento(session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor);
         guiaRemision.setPuntoEmision(session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor);
+        guiaRemision.setObligadoLlevarContabilidad(session.getEmpresa().getObligadoLlevarContabilidad());
   ;
         
     }

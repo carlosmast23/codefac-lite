@@ -62,3 +62,5 @@ En la pantalla de ingreso de mercaderia esta cargando incorrectamente el preimpr
 Hacer un nuevo instalador porque no va a funcionar por la carpeta de autorizacion
 Pensar en una forma de utilizar unidades de medidad y convertidores
 REVISAR QUE LOS REPORTES EN EXCEL FUNCIONE EN FORMATO ESTANDAR COMO POR EJEMPLO CVS
+
+En la pantalla de empresa y todas las demas donde toca validar la cedula verificar que se cumpla las 3 validaciones

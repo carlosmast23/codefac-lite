@@ -128,7 +128,7 @@ public class ComprobanteDataNotaCredito implements ComprobanteDataInterface,Seri
         
         info.setMotivo(notaCredito.getRazonModificado());
         info.setNumDocModificado(notaCredito.getFactura().getPreimpreso());
-        info.setObligadoContabilidad("NO");
+        info.setObligadoContabilidad(notaCredito.getObligadoLlevarContabilidad());
         info.setRazonSocialComprador(UtilidadValidador.normalizarTexto(notaCredito.getCliente().getRazonSocial()));
         
         /**
