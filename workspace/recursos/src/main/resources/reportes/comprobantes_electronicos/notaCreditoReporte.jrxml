@@ -84,7 +84,7 @@
 	</background>
 	<title>
 		<band height="431" splitType="Stretch">
-			<image>
+			<image hAlign="Center">
 				<reportElement x="0" y="20" width="313" height="152" uuid="0b0aecb9-e33e-4335-9a20-b132c3621bbf"/>
 				<imageExpression><![CDATA[$P{imagen_logo}]]></imageExpression>
 			</image>
