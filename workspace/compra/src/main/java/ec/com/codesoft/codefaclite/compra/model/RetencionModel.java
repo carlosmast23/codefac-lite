@@ -421,6 +421,7 @@ public class RetencionModel extends RetencionPanel{
         
         retencion.setPuntoEmision(session.getParametrosCodefac().get(ParametroCodefac.PUNTO_EMISION).valor);
         retencion.setPuntoEstablecimiento(session.getParametrosCodefac().get(ParametroCodefac.ESTABLECIMIENTO).valor);
+        retencion.setObligadoLlevarContabilidad(session.getEmpresa().getObligadoLlevarContabilidad());
         
         
         //Cuando la facturacion es electronica

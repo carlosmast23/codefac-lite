@@ -131,7 +131,7 @@ public class ComprobanteDataGuiaRemision implements ComprobanteDataInterface,Ser
         /**
          * Verificar que valor no mas acepta
          */
-        info.setObligadoContabilidad("NO"); //Esta parte deberia agregar en la informacion del transportista
+        info.setObligadoContabilidad(guiaRemision.getObligadoLlevarContabilidad()); //Esta parte deberia agregar en la informacion del transportista
         
         //Todo: Revisar este caso porque en los clientes coincide pero para las proveedores ya no coincide el codigo de tipo de identifiacion
 

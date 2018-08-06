@@ -31,6 +31,8 @@ create table RETENCION
     TELEFONO varchar(10),
     TIPO_FACTURACION varchar(1),
     CODIGO_DOCUMENTO varchar(3),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.6.1)*/
+    OBLIGADO_LLEVAR_CONTABILIDAD varchar(2),
     primary key (ID)
 
 );

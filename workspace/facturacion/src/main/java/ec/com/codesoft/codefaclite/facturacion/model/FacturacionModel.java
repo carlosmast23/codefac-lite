@@ -1615,6 +1615,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();
         factura.setCodigoDocumento(documentoEnum.getCodigo());
         
+        factura.setObligadoLlevarContabilidad(session.getEmpresa().getObligadoLlevarContabilidad());
+        
         /**
          * Redondeo los valores de los precios unitario de los detalles de la factura
          * Nota: este proceso lo hago al final porque para los totales necesitaba tener los valores exactos de los precios unitarios, pero como ya va a generar la factura puedo redondeal los valores unitario
