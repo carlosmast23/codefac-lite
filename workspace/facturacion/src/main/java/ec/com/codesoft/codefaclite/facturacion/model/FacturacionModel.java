@@ -983,7 +983,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     @Override
     public void imprimir() {
-        if (this.factura != null) {
+        if (this.factura != null && estadoFormulario.equals(ESTADO_EDITAR)) {
             try {
                 String claveAceeso = this.factura.getClaveAcceso();
                 byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAceeso);

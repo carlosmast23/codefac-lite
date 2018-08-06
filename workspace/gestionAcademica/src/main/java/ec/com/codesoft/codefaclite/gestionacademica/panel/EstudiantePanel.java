@@ -127,7 +127,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         lblCodSistema.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        lblCodSistema.setText("Codigo Sistema:");
+        lblCodSistema.setText("Código Sistema:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -136,7 +136,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         jPanel1.add(lblCodSistema, gridBagConstraints);
 
         lblCodAuxiliar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        lblCodAuxiliar.setText("Codigo Auxiliar:");
+        lblCodAuxiliar.setText("Código Auxiliar:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;

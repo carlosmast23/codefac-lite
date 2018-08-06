@@ -12,7 +12,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
-import ec.com.codesoft.codefaclite.gestionacademica.panel.ReporteDeudasCursoPanel;
+import ec.com.codesoft.codefaclite.gestionacademica.panel.DeudasAgrupadasPorCursoPanel;
 import ec.com.codesoft.codefaclite.gestionacademica.reportdata.ReporteDeudasCursoData;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -44,7 +44,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author CodesoftDesarrollo
  */
-public class ReporteDeudasCursoModel extends ReporteDeudasCursoPanel {
+public class DeudasAgrupadasPorCursoModel extends DeudasAgrupadasPorCursoPanel {
 
     Map parameters = new HashMap();
     private boolean banderaNiveles = false;
@@ -135,7 +135,7 @@ public class ReporteDeudasCursoModel extends ReporteDeudasCursoPanel {
             });
 
         } catch (RemoteException ex) {
-            Logger.getLogger(ReporteDeudasCursoModel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DeudasAgrupadasPorCursoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -246,7 +246,7 @@ public class ReporteDeudasCursoModel extends ReporteDeudasCursoPanel {
 
                     getTblDeudas().setModel(modeloTablaDeudas);
                 } catch (RemoteException ex) {
-                    Logger.getLogger(ReporteDeudasCursoModel.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(DeudasAgrupadasPorCursoModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
             }
