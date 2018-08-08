@@ -8,9 +8,12 @@ package ec.com.codesoft.codefaclite.corecodefaclite.views;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ComponenteSecundarioAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ConsolaGeneral;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
@@ -19,6 +22,7 @@ import java.awt.Point;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -28,13 +32,19 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.TitledBorder;
 import javax.swing.text.JTextComponent;
 import org.bouncycastle.crypto.tls.SessionParameters;
+import org.jdesktop.swingx.VerticalLayout;
 
 /**
  *
@@ -104,13 +114,19 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
      * Map que me permite tener almacenados si algunos campos tienen valores por defecto para la validacion de datos ingresados
      */
     public Map<JComponent,Object> mapDatosIngresadosDefault;
+    
+    /**
+     * Lista de botones auxiliares para la barra lateral izquierda de la pantalla
+     */
+    private Map<String,List<Component>> mapComponentesLaterales;
 
     public GeneralPanelInterface() {
         this.formularioActual=this;
         this.listaExclusionComponentes=new ArrayList<JComponent>();
         this.mapDatosIngresadosDefault=new HashMap<JComponent,Object>();
-        this.validacionDatosIngresados=true;
+        this.mapComponentesLaterales=new HashMap<String,List<Component>>();
         
+        this.validacionDatosIngresados=true;       
     }
     
     
@@ -330,7 +346,127 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
         }
         return true;
 
-    }    
+    }
+
+    /**
+     * Agrega componentes laterales para que se muestren en la parte derecha de la pantalla
+     * @param nombreCategoria
+     * @param componente 
+     */
+    public void agregarComponenteLateral(String nombreCategoria,Component componente)
+    {
+        List<Component> componentes=mapComponentesLaterales.get(nombreCategoria);
+        if(componentes==null)
+        {
+            componentes=new ArrayList<Component>();
+            componentes.add(componente);
+            mapComponentesLaterales.put(nombreCategoria, componentes);
+        }
+        else
+        {
+            componentes.add(componente);
+        }
+    }
+    
+    /**
+     * Metodo que recostruye las interfaces con botones adicionales si existen para construir un menu lateral
+     */
+    public void reconstruirPantalla()
+    {
+        buscarComponentesSecundarios();
+        
+        //Validacion que cuando no existe componentes laterales no reconstruye nada
+        if(this.mapComponentesLaterales.size()==0)
+        {
+            return ;
+        }
+        
+        Component[] componentesPantalla=getContentPane().getComponents();
+        getContentPane().removeAll();
+        
+        getContentPane().setLayout(new BorderLayout());
+        
+        JPanel panelVertical = new JPanel();
+        panelVertical.setLayout(new VerticalLayout());
+        TitledBorder titledBorder=BorderFactory.createTitledBorder("");
+        titledBorder.setTitleColor(Color.white);
+        panelVertical.setBorder(BorderFactory.createTitledBorder(""));
+        panelVertical.setBackground(new Color(99, 130, 191));
+        
+        //panelVertical.add(new JLabel("asdkañsdkñlasdkñl"));
+        for (Map.Entry<String, List<Component>> entry : mapComponentesLaterales.entrySet()) {
+            String key = entry.getKey();
+            List<Component> componentes = entry.getValue();
+            
+            JPanel panelVerticalAgrupador = new JPanel();
+            panelVerticalAgrupador.setLayout(new VerticalLayout());
+            
+            TitledBorder title;
+            title = BorderFactory.createTitledBorder(key);
+            title.setTitleColor(Color.white);
+            panelVerticalAgrupador.setBorder(title);
+            panelVerticalAgrupador.setBackground(new Color(99, 130, 191));
+            
+            //LLenar con todos los componentes enviados
+            for (Component componente : componentes) {
+                
+                //Alinear el contenido
+                if(componente instanceof JButton)
+                {
+                    ((JButton)componente).setHorizontalAlignment(SwingConstants.LEFT);
+                }
+                
+                panelVerticalAgrupador.add(componente);
+            }
+            
+            panelVertical.add(panelVerticalAgrupador);            
+            
+        }
+
+        //Posiciono el panel vertical en la parte derecha de los formularios        
+        getContentPane().add(panelVertical,BorderLayout.LINE_START);
+        
+        //Ubico todos los demas componentes en la parte central
+        for (Component componente : componentesPantalla) {
+            getContentPane().add(componente,BorderLayout.CENTER);
+        }
+        
+        
+    }
+    
+    
+    private void buscarComponentesSecundarios()
+    {
+        this.mapComponentesLaterales=new HashMap<String,List<Component>>();
+        
+        Class classVentana=this.getClass();
+        Method[] metodos=classVentana.getMethods();
+        
+        for (Method metodo : metodos) {
+            ComponenteSecundarioAnotacion anotacion=metodo.getAnnotation(ComponenteSecundarioAnotacion.class);
+            //System.out.println(metodo.getName());
+            if(anotacion!=null)
+            {
+                try {
+                    String nombreCategoria=anotacion.nombreCategoria();
+                    if(metodo.getName().indexOf("get")!=0)
+                    {
+                        continue;
+                    }
+                    
+                    Component componente=(Component) metodo.invoke(this);
+                    agregarComponenteLateral(nombreCategoria,componente);
+                    
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(GeneralPanelInterface.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalArgumentException ex) {
+                    Logger.getLogger(GeneralPanelInterface.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InvocationTargetException ex) {
+                    Logger.getLogger(GeneralPanelInterface.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }
 
     @Override
     public String toString() {

@@ -1183,6 +1183,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             panel.estadoFormulario= ControladorCodefacInterface.ESTADO_GRABAR;
             panel.panelPadre=generalPanelModel;
             panel.session=sessionCodefac;
+            panel.reconstruirPantalla(); //Metodo adicional que construye las pantallas laterales
             
             try
             {

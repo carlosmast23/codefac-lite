@@ -341,6 +341,13 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
 
     private void listenerBotones() {
         
+        getBtnImprimir().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                imprimir();
+            }
+        });
+        
         getBtnAgregarMes().addActionListener(new ActionListener() 
         {
             @Override
