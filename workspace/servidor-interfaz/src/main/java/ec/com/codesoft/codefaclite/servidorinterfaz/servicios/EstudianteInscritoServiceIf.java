@@ -38,5 +38,7 @@ public interface EstudianteInscritoServiceIf extends ServiceAbstractIf<Estudiant
     public List<EstudianteInscrito> obtenerEstudiantesInscritosPorPeriodo(Periodo periodo) throws RemoteException;
     
     public void eliminarEstudiantesInscrito(List<EstudianteInscrito> estudiantesEliminar) throws RemoteException;
+    
+    public Long obtenerTamanioEstudiatesInscritosPorCurso(NivelAcademico nivelAcademico) throws RemoteException;
 
 }

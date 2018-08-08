@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import java.rmi.RemoteException;
 import java.util.List;
 
@@ -16,4 +17,5 @@ import java.util.List;
  */
 public interface NivelAcademicoServiceIf extends ServiceAbstractIf<NivelAcademico>{
     public List<NivelAcademico> obtenerTodosActivosPorPeriodo(Periodo periodo) throws RemoteException;
+    public void eliminarNivelAcademico(NivelAcademico n) throws RemoteException,ServicioCodefacException;
 }

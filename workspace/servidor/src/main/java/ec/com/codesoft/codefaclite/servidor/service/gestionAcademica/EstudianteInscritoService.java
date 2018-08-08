@@ -35,6 +35,11 @@ public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrit
 
     }
     
+    public Long obtenerTamanioEstudiatesInscritosPorCurso(NivelAcademico nivelAcademico) throws RemoteException
+    {
+        return getFacade().obtenerTamanioEstudiatesInscritosPorCurso(nivelAcademico);
+    }
+    
     public EstudianteInscrito matricularEstudiante(EstudianteInscrito estudianteInscrito,RubroEstudiante rubroMatricula) throws RemoteException
     {
         EntityTransaction transaccion = getTransaccion();

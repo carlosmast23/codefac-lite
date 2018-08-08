@@ -6,15 +6,19 @@
 package ec.com.codesoft.codefaclite.servidor.service.gestionAcademica;
 
 import ec.com.codesoft.codefaclite.servidor.facade.gestionAcademica.NivelAcademicoFacade;
+import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServiceIf;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -36,9 +40,32 @@ public class NivelAcademicoService extends ServiceAbstract<NivelAcademico, Nivel
         super(NivelAcademicoFacade.class);
     }
 
-    public void eliminar(NivelAcademico n) {
-        n.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
-        nivelAcademicoFacade.edit(n);
+    public void eliminarNivelAcademico(NivelAcademico n) throws RemoteException,ServicioCodefacException {
+        
+        try {
+            EstudianteInscritoService servicio=new EstudianteInscritoService();
+            Long cantidadEstudiantesInscritos=servicio.obtenerTamanioEstudiatesInscritosPorCurso(n);
+            
+            //Si no existe ningun estudiante registrado entonces puede borrar los dato
+            if(cantidadEstudiantesInscritos==0)
+            {
+                ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                    @Override
+                    public void transaccion() {
+                        n.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
+                        entityManager.merge(n);
+                    }
+                });                
+            }
+            else
+            {
+                throw new ServicioCodefacException("No se puede eliminar el curso porque existen datos registrados ");
+            }
+           
+        } catch (RemoteException ex) {
+            Logger.getLogger(NivelAcademicoService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
     }
 
 }

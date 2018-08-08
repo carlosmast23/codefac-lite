@@ -89,13 +89,18 @@ public class NivelAcademicoModel extends NivelAcademicoPanel implements Serializ
         if (estadoFormulario.equals(GeneralPanelInterface.ESTADO_EDITAR)) {
             try {
                 Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea eliminar el nivel academico(curso)?", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                if (!respuesta) {
+                if (!respuesta) 
+                {
                     throw new ExcepcionCodefacLite("Cancelacion nivel acemico");
                 }
-                nivelAcademicoService.eliminar(nivelAcademico);
+                
+                nivelAcademicoService.eliminarNivelAcademico(nivelAcademico);
                 DialogoCodefac.mensaje("Datos correctos", "El nivel academico se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
             } catch (RemoteException ex) {
                 Logger.getLogger(AulaModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                DialogoCodefac.mensaje("Alerta",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+                Logger.getLogger(NivelAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
