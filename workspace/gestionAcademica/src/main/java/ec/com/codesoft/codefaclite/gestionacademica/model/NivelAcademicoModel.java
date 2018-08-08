@@ -196,8 +196,11 @@ public class NivelAcademicoModel extends NivelAcademicoPanel implements Serializ
             for (Periodo periodo : periodos) {
                 getCmbPeriodo().addItem(periodo);
             }
-
-            List<Nivel> niveles = ServiceFactory.getFactory().getNivelServiceIf().obtenerTodos();
+            
+            /**
+             * cargar niveles disponibles
+             */
+            List<Nivel> niveles = ServiceFactory.getFactory().getNivelServiceIf().obtenerNivelesActivos();
             getCmbNivel().removeAllItems();
             for (Nivel nivel : niveles) {
                 getCmbNivel().addItem(nivel);

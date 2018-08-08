@@ -170,7 +170,7 @@ public class RubrosPeriodoModel extends RubrosPeriodoPanel{
             }
             
             //Cargar los combos de los niveles
-            List<Nivel> niveles=ServiceFactory.getFactory().getNivelServiceIf().obtenerTodos();
+            List<Nivel> niveles=ServiceFactory.getFactory().getNivelServiceIf().obtenerNivelesActivos();
             //Ingresa un valor por defecto  para todos los rubros para referirse que va a estar disponibles para todos lo nivelss
             getCmbNivel().addItem(nivelDefecto);
             

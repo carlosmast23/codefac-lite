@@ -13,6 +13,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelServiceIf;
 import java.rmi.RemoteException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.persistence.exceptions.DatabaseException;
@@ -51,5 +54,14 @@ public class NivelService extends ServiceAbstract<Nivel, NivelFacade> implements
         n.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
         nivelFacade.edit(n);
     }
+    
+    public List<Nivel> obtenerNivelesActivos() throws RemoteException
+    {
+        Map<String,Object> mapParametros=new HashMap<String,Object>();
+        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        return getFacade().findByMap(mapParametros);
+        
+    }
+            
 
 }
