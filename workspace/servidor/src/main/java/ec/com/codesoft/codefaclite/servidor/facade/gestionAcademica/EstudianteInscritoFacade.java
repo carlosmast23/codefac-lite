@@ -26,6 +26,20 @@ public class EstudianteInscritoFacade extends AbstractFacade<EstudianteInscrito>
         super(EstudianteInscrito.class);
     }
     
+    public Long obtenerTamanioEstudiatesInscritosPorEstudiante(Estudiante estudiante) 
+    {
+
+        EstudianteInscrito estudianteInscrito = new EstudianteInscrito();
+        estudianteInscrito.getNivelAcademico();
+        String queryString = "SELECT count(1) FROM EstudianteInscrito u WHERE u.estado=?1 and u.estudiante=?2 ";
+
+        Query query = getEntityManager().createQuery(queryString);
+        query.setParameter(1, GeneralEnumEstado.ACTIVO.getEstado());
+        query.setParameter(2, estudiante);
+        return (Long) query.getSingleResult();
+
+    }
+    
     public Long obtenerTamanioEstudiatesInscritosPorCurso(NivelAcademico nivelAcademico)
     {
         EstudianteInscrito estudianteInscrito=new EstudianteInscrito();

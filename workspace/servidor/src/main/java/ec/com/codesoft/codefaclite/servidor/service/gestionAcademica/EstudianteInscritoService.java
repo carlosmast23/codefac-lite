@@ -35,6 +35,11 @@ public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrit
 
     }
     
+    public Long obtenerTamanioPorEstudiante(Estudiante estudiante)
+    {
+        return getFacade().obtenerTamanioEstudiatesInscritosPorEstudiante(estudiante);
+    }
+    
     public Long obtenerTamanioEstudiatesInscritosPorCurso(NivelAcademico nivelAcademico) throws RemoteException
     {
         return getFacade().obtenerTamanioEstudiatesInscritosPorCurso(nivelAcademico);

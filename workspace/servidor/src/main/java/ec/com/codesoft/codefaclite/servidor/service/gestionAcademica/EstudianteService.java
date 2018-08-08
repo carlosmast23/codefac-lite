@@ -6,14 +6,18 @@
 package ec.com.codesoft.codefaclite.servidor.service.gestionAcademica;
 
 import ec.com.codesoft.codefaclite.servidor.facade.gestionAcademica.EstudianteFacade;
+import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteServiceIf;
 import java.rmi.RemoteException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -36,9 +40,29 @@ public class EstudianteService extends ServiceAbstract<Estudiante, EstudianteFac
         return estudianteFacade.getEstudiantesNuevos();
     }
 
-    public void eliminar(Estudiante e) {
-        e.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
-        estudianteFacade.edit(e);
+    public void eliminarEstudiante(Estudiante e)  throws RemoteException ,ServicioCodefacException {
+        try {
+            EstudianteInscritoService service=new EstudianteInscritoService();
+            Long cantidadEstudiantesInscritos=service.obtenerTamanioPorEstudiante(e);
+            if(cantidadEstudiantesInscritos>0)
+            {
+                throw new ServicioCodefacException("No se puede eliminar porque el estudiante esta inscrito");
+            }
+            else
+            {
+                ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                    @Override
+                    public void transaccion() {
+                        e.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
+                        entityManager.merge(e);
+                    }
+                });
+            }
+            
+           
+        } catch (RemoteException ex) {
+            Logger.getLogger(EstudianteService.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

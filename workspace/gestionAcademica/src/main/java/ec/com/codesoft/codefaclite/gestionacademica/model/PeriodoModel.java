@@ -165,10 +165,15 @@ public class PeriodoModel extends PeriodoPanel {
         PeriodoBusquedaDialogo periodoBusquedaDialogo = new PeriodoBusquedaDialogo();
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(periodoBusquedaDialogo);
         buscarDialogoModel.setVisible(true);
-        periodo = (Periodo) buscarDialogoModel.getResultado();
-        if (periodo == null) {
+        Periodo periodoTmp = (Periodo) buscarDialogoModel.getResultado();
+        if (periodoTmp == null) {
             throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar periodo vacio");
         }
+        else
+        {
+            periodo=periodoTmp;
+        }
+        
         cargarDatos();
     }
     

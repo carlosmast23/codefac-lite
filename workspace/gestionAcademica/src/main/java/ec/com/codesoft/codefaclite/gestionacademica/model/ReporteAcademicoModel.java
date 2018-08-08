@@ -291,7 +291,7 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
 
     private void cargarDefecto() {
         try {
-            List<Periodo> periodos = ServiceFactory.getFactory().getPeriodoServiceIf().obtenerTodos();
+            List<Periodo> periodos = ServiceFactory.getFactory().getPeriodoServiceIf().obtenerPeriodosSinEliminar();
             getCmbPeriodo().removeAllItems();
 
             for (Periodo periodo : periodos) {

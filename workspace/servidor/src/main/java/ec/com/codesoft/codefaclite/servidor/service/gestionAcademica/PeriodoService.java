@@ -53,6 +53,23 @@ public class PeriodoService extends ServiceAbstract<Periodo, PeriodoFacade> impl
         List<Periodo> periodos= obtenerPorMap(mapParametros);
         return periodos;
     }
+    
+    public List<Periodo> obtenerPeriodoSinEliminar() throws RemoteException
+    {
+        Map<String,Object> mapParametros=new HashMap<String, Object>();
+        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+         mapParametros.put("estado",GeneralEnumEstado.INACTIVO.getEstado());
+          mapParametros.put("estado",GeneralEnumEstado.ANULADO.getEstado());
+           mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+            mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        List<Periodo> periodos= obtenerPorMap(mapParametros);
+        return periodos;
+    }
+    
+    public List<Periodo> obtenerPeriodosSinEliminar() throws RemoteException
+    {
+        return getFacade().getPeriodosSinEliminar();
+    }
 
     public void editar(Periodo p) {
         periodoFacade.edit(p);

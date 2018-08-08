@@ -66,7 +66,7 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
         try {
             Periodo p1 = new Periodo();
             p1.setNombre("Seleccione:");
-            List<Periodo> periodos = ServiceFactory.getFactory().getPeriodoServiceIf().obtenerTodos();
+            List<Periodo> periodos = ServiceFactory.getFactory().getPeriodoServiceIf().obtenerPeriodosSinEliminar();
             getCmbPeriodo().removeAllItems();
             getCmbPeriodo().addItem(p1);
             for (Periodo periodo : periodos) {

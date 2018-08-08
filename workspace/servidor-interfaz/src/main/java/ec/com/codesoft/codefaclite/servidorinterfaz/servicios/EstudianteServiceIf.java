@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import java.rmi.RemoteException;
 import java.util.List;
 
@@ -17,4 +18,5 @@ import java.util.List;
 public interface EstudianteServiceIf extends ServiceAbstractIf<Estudiante>{
     public List<Estudiante> estudianteSinMatriculaPorPeriodo(Periodo periodo)throws RemoteException;
     public List<Estudiante> estudianteNuevosSinMatricula() throws RemoteException;
+    public void eliminarEstudiante(Estudiante e)  throws RemoteException ,ServicioCodefacException;
 }

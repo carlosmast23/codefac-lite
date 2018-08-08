@@ -267,10 +267,13 @@ public class EstudianteModel extends EstudiantePanel implements DialogInterfaceP
                 if (!respuesta) {
                     throw new ExcepcionCodefacLite("Cancelacion aula");
                 }
-                estudianteService.eliminar(estudiante);
+                estudianteService.eliminarEstudiante(estudiante);
                 DialogoCodefac.mensaje("Datos correctos", "El estudiante se elimino correctamente", DialogoCodefac.MENSAJE_CORRECTO);
             } catch (RemoteException ex) {
                 Logger.getLogger(AulaModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+                Logger.getLogger(EstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

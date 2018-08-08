@@ -42,6 +42,7 @@ public abstract class ReporteAcademicoPanel extends ControladorCodefacInterface{
         tblEstudiantes = new javax.swing.JTable();
         lblperiodo = new javax.swing.JLabel();
         cmbPeriodo = new javax.swing.JComboBox<>();
+        lblEspacio2 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -55,8 +56,7 @@ public abstract class ReporteAcademicoPanel extends ControladorCodefacInterface{
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
-        gridBagConstraints.insets = new java.awt.Insets(30, 20, 20, 20);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(lblBuscar, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -64,7 +64,7 @@ public abstract class ReporteAcademicoPanel extends ControladorCodefacInterface{
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(cmbNivelAcademico, gridBagConstraints);
 
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
@@ -72,7 +72,7 @@ public abstract class ReporteAcademicoPanel extends ControladorCodefacInterface{
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 5, 0, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnBuscar, gridBagConstraints);
 
         tblEstudiantes.setModel(new javax.swing.table.DefaultTableModel(
@@ -91,20 +91,19 @@ public abstract class ReporteAcademicoPanel extends ControladorCodefacInterface{
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.gridwidth = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 50, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jScrollPane1, gridBagConstraints);
 
         lblperiodo.setText("Periodo Matricula:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(30, 20, 20, 20);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(lblperiodo, gridBagConstraints);
 
         cmbPeriodo.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -113,8 +112,14 @@ public abstract class ReporteAcademicoPanel extends ControladorCodefacInterface{
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(cmbPeriodo, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.2;
+        getContentPane().add(lblEspacio2, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -126,6 +131,7 @@ public abstract class ReporteAcademicoPanel extends ControladorCodefacInterface{
     private javax.swing.JComboBox<Periodo> cmbPeriodo;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblBuscar;
+    private javax.swing.JLabel lblEspacio2;
     private javax.swing.JLabel lblperiodo;
     private javax.swing.JTable tblEstudiantes;
     // End of variables declaration//GEN-END:variables
