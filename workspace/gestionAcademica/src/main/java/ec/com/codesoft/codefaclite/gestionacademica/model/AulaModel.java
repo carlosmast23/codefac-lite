@@ -106,19 +106,20 @@ public class AulaModel extends AulaPanel {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public void buscar() throws ExcepcionCodefacLite {
-        AulaBusquedaDialogo aulaBusquedaDialogo = new AulaBusquedaDialogo();
-        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(aulaBusquedaDialogo);
-        buscarDialogoModel.setVisible(true);
-        aula = (Aula) buscarDialogoModel.getResultado();
-        if (aula == null) {
-            throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar aula vacio");
-        }
-        getTxtNombre().setText(aula.getNombre());
-        getTxtUbicacion().setText(aula.getUbicacion());
-        getTxtCapacidad().setText((aula.getCapacidad()!=null)?aula.getCapacidad().toString():"");
-    }
+//    @Override
+//    public void buscar() throws ExcepcionCodefacLite {
+//        AulaBusquedaDialogo aulaBusquedaDialogo = new AulaBusquedaDialogo();
+//        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(aulaBusquedaDialogo);
+//        buscarDialogoModel.setVisible(true);
+//        Aula aulaTemp = (Aula) buscarDialogoModel.getResultado();
+//        if (aulaTemp != null) {
+//            aula = aulaTemp;
+//            throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar aula vacio");
+//        }
+//        getTxtNombre().setText(aula.getNombre());
+//        getTxtUbicacion().setText(aula.getUbicacion());
+//        getTxtCapacidad().setText((aula.getCapacidad()!=null)?aula.getCapacidad().toString():"");
+//    }
 
     @Override
     public void limpiar() {
@@ -127,7 +128,7 @@ public class AulaModel extends AulaPanel {
 
     }
 
-//    @Override
+
     public String getNombre() {
         return "Aula";
     }
@@ -156,12 +157,24 @@ public class AulaModel extends AulaPanel {
 
     @Override
     public BuscarDialogoModel obtenerDialogoBusqueda() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        AulaBusquedaDialogo aulaBusquedaDialogo = new AulaBusquedaDialogo();
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(aulaBusquedaDialogo);
+        return buscarDialogoModel;
     }
 
     @Override
     public void cargarDatosPantalla(Object entidad) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        aula = (Aula) entidad;
+        cargarDatos();
+    }
+    
+    public void cargarDatos()
+    {
+        getTxtCapacidad().setText((aula.getCapacidad()!=null)?aula.getCapacidad().toString():"");
+        getTxtNombre().setText("" + aula.getNombre());
+        getTxtUbicacion().setText("" + aula.getUbicacion());
+        GeneralEnumEstado generalEnumEstado = GeneralEnumEstado.getEnum(aula.getEstado());
+        getCmbEstado().setSelectedItem(generalEnumEstado);
     }
 
 }
