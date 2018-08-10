@@ -42,8 +42,7 @@ public class PeriodoModel extends PeriodoPanel {
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     Date fechaInicio = null;
     Date fechaFin = null;
-    //String fechainicio = "";
-    //String fechafin = "";
+
 
     public PeriodoModel() {
         periodoService = ServiceFactory.getFactory().getPeriodoServiceIf();
@@ -110,12 +109,10 @@ public class PeriodoModel extends PeriodoPanel {
         periodo.setEstado(((GeneralEnumEstado) getCmbEstado().getSelectedItem()).getEstado());
         if (getDateFechaInicio().getDate() != null) {
             fechaInicio = new Date(getDateFechaInicio().getDate().getTime());
-            //fechainicio = dateFormat.format(getDateFechaInicio().getDate());
             periodo.setFechaInicio(fechaInicio);
         }
         if (getDateFechaFin().getDate() != null) {
             fechaFin = new Date(getDateFechaFin().getDate().getTime());
-            //fechafin = dateFormat.format(getDateFechaFin().getDate());
             periodo.setFechaFin(fechaFin);
         }
 
@@ -160,23 +157,7 @@ public class PeriodoModel extends PeriodoPanel {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public void buscar() throws ExcepcionCodefacLite {
-        PeriodoBusquedaDialogo periodoBusquedaDialogo = new PeriodoBusquedaDialogo();
-        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(periodoBusquedaDialogo);
-        buscarDialogoModel.setVisible(true);
-        Periodo periodoTmp = (Periodo) buscarDialogoModel.getResultado();
-        if (periodoTmp == null) {
-            throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar periodo vacio");
-        }
-        else
-        {
-            periodo=periodoTmp;
-        }
-        
-        cargarDatos();
-    }
-    
+   
     private void cargarDatos()
     {
         getTxtNombre().setText(periodo.getNombre());
@@ -184,7 +165,7 @@ public class PeriodoModel extends PeriodoPanel {
 
         getDateFechaInicio().setDate(periodo.getFechaInicio());
         getDateFechaFin().setDate(periodo.getFechaFin());
-        
+
         getCmbEstado().setSelectedItem(periodo.getEStadoEnum());
     }
 
@@ -228,12 +209,15 @@ public class PeriodoModel extends PeriodoPanel {
 
     @Override
     public BuscarDialogoModel obtenerDialogoBusqueda() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        PeriodoBusquedaDialogo periodoBusquedaDialogo = new PeriodoBusquedaDialogo();
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(periodoBusquedaDialogo);
+        return buscarDialogoModel;
     }
 
     @Override
     public void cargarDatosPantalla(Object entidad) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        periodo = (Periodo) entidad;
+        cargarDatos();
     }
 
 }

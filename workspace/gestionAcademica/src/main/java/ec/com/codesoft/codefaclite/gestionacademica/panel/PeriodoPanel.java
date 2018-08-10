@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInte
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
 import javax.swing.JComboBox;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -220,7 +221,7 @@ public abstract class PeriodoPanel extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Nombre", expresionRegularMensaje = "No se permiten caracteres especiales")
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.textoSimple, nombre = "Nombre", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextField getTxtNombre() {
         return txtNombre;
     }
@@ -230,7 +231,7 @@ public abstract class PeriodoPanel extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = false, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Observaciones", expresionRegularMensaje = "No se permiten caracteres especiales")
+    @ValidacionCodefacAnotacion(requerido = false, expresionRegular = ExpresionRegular.textoSimple, nombre = "Observaciones", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextArea getTxtObservacion() {
         return txtObservacion;
     }
