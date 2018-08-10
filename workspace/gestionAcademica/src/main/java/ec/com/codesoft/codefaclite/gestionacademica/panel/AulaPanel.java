@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.gestionacademica.model.AulaModel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
@@ -182,7 +183,7 @@ public abstract class AulaPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtUbicacion;
     // End of variables declaration//GEN-END:variables
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[0-9]+$", nombre = "Orden")
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.soloNumeros2 , nombre = "Orden")
     public JTextField getTxtCapacidad() {
         return txtCapacidad;
     }
@@ -192,7 +193,7 @@ public abstract class AulaPanel extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Nombre", expresionRegularMensaje = "No se permiten caracteres especiales")
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.textoSimple, nombre = "Nombre", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextField getTxtNombre() {
         return txtNombre;
     }
@@ -202,7 +203,7 @@ public abstract class AulaPanel extends ControladorCodefacInterface {
     }
 
     @LimpiarAnotacion
-    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = "^[a-zA-Z\\s0-9.\\_\\-]*$", nombre = "Ubicacion", expresionRegularMensaje = "No se permiten caracteres especiales")
+    @ValidacionCodefacAnotacion(requerido = true, expresionRegular = ExpresionRegular.textoSimple, nombre = "Ubicación", expresionRegularMensaje = "No se permiten caracteres especiales")
     public JTextField getTxtUbicacion() {
         return txtUbicacion;
     }

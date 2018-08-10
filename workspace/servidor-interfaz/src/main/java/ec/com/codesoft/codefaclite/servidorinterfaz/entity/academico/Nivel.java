@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -124,6 +125,10 @@ public class Nivel implements Serializable{
         }
         return true;
     }
-
+    
+    public GeneralEnumEstado getEstadoEnum()
+    {
+        return GeneralEnumEstado.getEnum(estado);
+    }
     
 }

@@ -47,7 +47,6 @@ public class NivelModel extends NivelPanel {
             getCmbEstado().addItem(enumerador);
         }
 
-        //combo para niveles
         try {
             Nivel n1 = new Nivel();
             n1.setNombre("Ninguno");
@@ -140,25 +139,6 @@ public class NivelModel extends NivelPanel {
     }
 
     @Override
-    public void buscar() throws ExcepcionCodefacLite {
-        NivelBusquedaDialogo nivelBusquedaDialogo = new NivelBusquedaDialogo();
-        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(nivelBusquedaDialogo);
-        buscarDialogoModel.setVisible(true);
-        Nivel nivelTemp = (Nivel) buscarDialogoModel.getResultado();
-        if (nivelTemp == null) {
-            throw new ExcepcionCodefacLite("Excepcion lanzada desde buscar aula vacio");
-        } else {
-            nivel = nivelTemp;
-        }
-
-        getTxtNombre().setText(nivel.getNombre());
-        getTxtOrden().setText(nivel.getOrden().toString());
-        getTxtDescripcion().setText(nivel.getDescripcion());
-        getCmbNivelPosterior().setSelectedItem(nivel.getNivelPosterior());
-        
-    }
-
-    @Override
     public void limpiar() {
         nivel = new Nivel();
         //iniciarCombos();
@@ -194,12 +174,25 @@ public class NivelModel extends NivelPanel {
 
     @Override
     public BuscarDialogoModel obtenerDialogoBusqueda() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        NivelBusquedaDialogo nivelBusquedaDialogo = new NivelBusquedaDialogo();
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(nivelBusquedaDialogo);
+        return buscarDialogoModel;
     }
 
     @Override
     public void cargarDatosPantalla(Object entidad) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        nivel = (Nivel) entidad;
+        cargarDatos();
+        
+    }
+    
+    public void cargarDatos()
+    {
+        getTxtNombre().setText(nivel.getNombre());
+        getTxtOrden().setText(nivel.getOrden().toString());
+        getCmbNivelPosterior().setSelectedItem(nivel.getNivelPosterior());
+        getTxtDescripcion().setText(nivel.getDescripcion());
+        getCmbEstado().setSelectedItem(nivel.getEstadoEnum());
     }
 
 }
