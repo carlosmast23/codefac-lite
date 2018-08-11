@@ -46,4 +46,11 @@ public abstract class ParametrosSistemaCodefac {
      * Pagina que se carga por defecto cuando carga las ayudas
      */
     public static final String PAGINA_DEFECTO_AYUDA="http://www.cf.codesoft-ec.com/ayuda";
+    
+    /**
+     * Puerto por el que van a aceptar conexiones para el app movil de Codefac
+     */
+    public static final Integer PUERTO_APP_MOVIL_SMS=9999;
+    
+    public static final String CODIGO_TELEFONO_ECUADOR="+593";
 }

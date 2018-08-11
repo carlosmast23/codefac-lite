@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.AyudaCodef
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecundarioAbstract;
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.ValidadorCodefacModel;
 import ec.com.codesoft.codefaclite.controlador.logs.LogControlador;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ServidorSMS;
 import ec.com.codesoft.codefaclite.main.license.Licencia;
 import ec.com.codesoft.codefaclite.main.license.ValidacionLicenciaCodefac;
 import ec.com.codesoft.codefaclite.main.license.excepcion.NoExisteLicenciaException;
@@ -709,6 +710,8 @@ public class Main {
                 }
                 
                 verificarLicencia(parametroDirectorioRecursos.getValor());
+                //Cargar el servidor de mensajeria
+                ServidorSMS.getInstance().iniciarServidor();
                 
                 //Seteo el path de los directorio como una referencia global de todo el sistema
                 UtilidadesServidor.pathRecursos = parametroDirectorioRecursos.getValor();    

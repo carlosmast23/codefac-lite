@@ -51,6 +51,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.NotaCreditoEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ServidorSMS;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
@@ -708,8 +709,8 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                 try {
                     //Si la factura termina corectamente grabo el estado y numero de autorizacion
                     byte[] serializedPrint= getReporteComprobante(comprobanteElectronico.getClaveAcceso());                   
-                    callbackClientObject.termino(serializedPrint);
-
+                    callbackClientObject.termino(serializedPrint);                    
+                    
                 } catch (RemoteException ex) {
                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {
@@ -755,6 +756,9 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                                 entityManager.merge(comprobanteOriginal);
                             }
                         });
+                        
+                        //Enviar mensaje
+                        ServidorSMS.getInstance().enviarMensaje("994905332","La factura"+clave.secuencial+" fue enviada a su correo");
                     }
                     
                     //Si se genera la etapa firmar entonces seteo la clave de acceso
