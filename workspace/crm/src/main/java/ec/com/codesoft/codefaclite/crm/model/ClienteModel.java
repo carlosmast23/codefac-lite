@@ -32,6 +32,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Nacionalidad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ServidorSMS;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesJuridicas;
@@ -40,6 +41,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
@@ -94,6 +97,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         this.razonSocial = "";
         cargarTipoClientes();
         cargarDatosIniciales();
+        addListenerBotones();
         addListenerTexts();
         addListenerCombos();
         super.mapDatosIngresadosDefault.put(getjTextExtension(),"0");
@@ -499,6 +503,24 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     }
 
     public void addListenerTexts() {
+        /*
+        getTxtMensajeTexto().addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                //getLblCantidadTextoMensajes().setText(getTxtMensajeTexto().getText().length()+"/"+ServidorSMS.LIMITE_CARACTERES);
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                
+            }
+        });*/
+        
         getjTextNombres().addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent evt) {
@@ -556,5 +578,39 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     public void cargarDatosPantalla(Object entidad) {
         persona=(Persona) entidad;
         cargarDatos();
+    }
+
+    private void addListenerBotones() {
+        getBtnEnviarSms().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                if(!estadoFormulario.equals(ESTADO_EDITAR))
+                {
+                    DialogoCodefac.mensaje("Incorrecto","Seleccione una persona para enviar el sms",DialogoCodefac.MENSAJE_INCORRECTO);
+                }
+                
+                String mensajeEnviar=getTxtMensajeTexto().getText().replace("\n","");
+                if(mensajeEnviar.length()<=ServidorSMS.LIMITE_CARACTERES)
+                {
+                    ServidorSMS servidorSms=ServidorSMS.getInstance();
+                    if(servidorSms.servicioDisponible())
+                    {
+                        servidorSms.enviarMensaje(persona.getTelefonoCelular(),mensajeEnviar);
+                        DialogoCodefac.mensaje("Correcto","El mensaje fue enviado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+                    }
+                    else
+                    {
+                        DialogoCodefac.mensaje("Incorrecto","El servicio de Sms no esta diponible",DialogoCodefac.MENSAJE_INCORRECTO);
+                    }
+                    
+                }
+                else
+                {
+                    DialogoCodefac.mensaje("Incorrecto","El tamaño maximo del mensaje es de "+ServidorSMS.LIMITE_CARACTERES+" , y tu mensaje tiene "+mensajeEnviar.length(),DialogoCodefac.MENSAJE_INCORRECTO);
+                }
+                
+            }
+        });
     }
 }

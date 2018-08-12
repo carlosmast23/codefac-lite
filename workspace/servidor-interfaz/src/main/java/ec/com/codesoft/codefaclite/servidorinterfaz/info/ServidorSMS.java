@@ -8,18 +8,27 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.info;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.jfree.util.Log;
 
 /**
  *
  * @author Carlos
  */
 public class ServidorSMS implements Runnable{
+
+    private static final Logger LOG = Logger.getLogger(ServidorSMS.class.getName());
+    /*
+    Variable que me indica la cantidad maxima de caracteres que puede enviar en un mensaje de texto
+    */
+    public static final int LIMITE_CARACTERES=160;
+    
     
     private int puerto;
     private ServerSocket servidorSocket;
@@ -47,9 +56,11 @@ public class ServidorSMS implements Runnable{
     public void iniciarServidor()
     {
         try {
-            servidorSocket = new ServerSocket(puerto);
+            InetAddress addr = InetAddress.getByName("192.168.1.3");
+            servidorSocket = new ServerSocket(puerto,50,addr);
             hilo=new Thread(this); //Iniciar el escucha de peticiones para conectarse al servidor
             hilo.start();
+            LOG.log(Level.INFO,"Iniciado servicio SMS CODEFAC , PUERTO:"+servidorSocket.getLocalPort()+"IP: "+servidorSocket.getInetAddress().getHostAddress());
         } catch (IOException ex) {
             Logger.getLogger(ServidorSMS.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -62,6 +73,8 @@ public class ServidorSMS implements Runnable{
             Socket socket=servidorSocket.accept();
             clientesConectados.add(socket);
             
+            LOG.log(Level.INFO,"Nuevo celular conectado: "+socket.getLocalAddress().getLocalHost());
+            
         } catch (IOException ex) {
             Logger.getLogger(ServidorSMS.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -72,8 +85,11 @@ public class ServidorSMS implements Runnable{
         if(!clientesConectados.isEmpty())
         {
             Socket socketCliente=clientesConectados.get(0);
-            escribirSocket(ParametrosSistemaCodefac.CODIGO_TELEFONO_ECUADOR+numero, socketCliente);
-            escribirSocket(mensaje, socketCliente);            
+            String numeroCompleto=ParametrosSistemaCodefac.CODIGO_TELEFONO_ECUADOR+numero.substring(1);
+            escribirSocket(numeroCompleto, socketCliente);
+            escribirSocket(mensaje, socketCliente);
+
+            LOG.log(Level.INFO,"Mensaje SMS enviado Número: "+numeroCompleto+", Mensaje:"+mensaje);            
         }
     }
     
@@ -97,6 +113,18 @@ public class ServidorSMS implements Runnable{
         {
             esperarConexion();
         }
+    }
+    
+    /**
+     * Metodo que permite verificar si el servicio esta dicponible para proceder a enviar el mensaje
+     * @return 
+     */
+    public Boolean servicioDisponible()
+    {
+        if(clientesConectados.size()>0)
+            return true;
+        
+        return false;
     }
     
 }

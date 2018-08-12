@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInte
 import ec.com.codesoft.codefaclite.corecodefaclite.util.CampoBuscarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.CursorPorDefectoAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ComponenteSecundarioAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Nacionalidad;
@@ -18,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ClienteEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -48,7 +50,11 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jPanel2 = new javax.swing.JPanel();
+        pnlSms = new javax.swing.JPanel();
+        btnEnviarSms = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtMensajeTexto = new javax.swing.JTextArea();
+        lblCantidadTextoMensajes = new javax.swing.JLabel();
         jPopupMenu1 = new javax.swing.JPopupMenu();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanelCaracteristicasGenerales = new javax.swing.JPanel();
@@ -93,6 +99,41 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
         chkObligadoLlevarContabilidad = new javax.swing.JCheckBox();
         lblEspacio7 = new javax.swing.JLabel();
         lblEspacio4 = new javax.swing.JLabel();
+
+        pnlSms.setLayout(new java.awt.GridBagLayout());
+
+        btnEnviarSms.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnEnviarSms.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/sms.png"))); // NOI18N
+        btnEnviarSms.setText("Enviar Mensaje Texto");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        pnlSms.add(btnEnviarSms, gridBagConstraints);
+
+        txtMensajeTexto.setColumns(20);
+        txtMensajeTexto.setRows(5);
+        jScrollPane1.setViewportView(txtMensajeTexto);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        pnlSms.add(jScrollPane1, gridBagConstraints);
+
+        lblCantidadTextoMensajes.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblCantidadTextoMensajes.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblCantidadTextoMensajes.setText("0/0");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnlSms.add(lblCantidadTextoMensajes, gridBagConstraints);
 
         setClosable(true);
         setIconifiable(true);
@@ -428,6 +469,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEnviarSms;
     private javax.swing.JCheckBox chkObligadoLlevarContabilidad;
     private javax.swing.JComboBox<ClienteEnumEstado> cmbEstado;
     private javax.swing.JComboBox<SriFormaPago> cmbFormaPagoDefecto;
@@ -452,9 +494,9 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanelCaracteristicasGenerales;
     private javax.swing.JPopupMenu jPopupMenu1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField jTextApellidos;
     private javax.swing.JTextField jTextAreaDireccion;
@@ -465,6 +507,7 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JTextField jTextNombreSocial;
     private javax.swing.JTextField jTextNombres;
     private javax.swing.JTextField jTextTelefono;
+    private javax.swing.JLabel lblCantidadTextoMensajes;
     private javax.swing.JLabel lblEspacio;
     private javax.swing.JLabel lblEspacio4;
     private javax.swing.JLabel lblEspacio5;
@@ -472,6 +515,8 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     private javax.swing.JLabel lblEspacio7;
     private javax.swing.JLabel lblEspacio8;
     private javax.swing.JLabel lblOligadoLlevarContabilidad;
+    private javax.swing.JPanel pnlSms;
+    private javax.swing.JTextArea txtMensajeTexto;
     private javax.swing.JTextField txtNombreLegal;
     // End of variables declaration//GEN-END:variables
 
@@ -644,8 +689,23 @@ public abstract class ClienteForm extends ControladorCodefacInterface {
     public void setTxtNombreLegal(JTextField txtNombreLegal) {
         this.txtNombreLegal = txtNombreLegal;
     }
-    
-    
+
+    @ComponenteSecundarioAnotacion(nombreCategoria = "Mensajeria")
+    public JPanel getPnlSms() {
+        return pnlSms;
+    }
+
+    public JButton getBtnEnviarSms() {
+        return btnEnviarSms;
+    }
+
+    public JTextArea getTxtMensajeTexto() {
+        return txtMensajeTexto;
+    }
+
+    public JLabel getLblCantidadTextoMensajes() {
+        return lblCantidadTextoMensajes;
+    }
     
     
 
