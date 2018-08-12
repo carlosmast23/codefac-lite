@@ -12,7 +12,7 @@ import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.AyudaCodef
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecundarioAbstract;
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.ValidadorCodefacModel;
 import ec.com.codesoft.codefaclite.controlador.logs.LogControlador;
-import ec.com.codesoft.codefaclite.servidorinterfaz.info.ServidorSMS;
+import ec.com.codesoft.codefaclite.servicios.ServidorSMS;
 import ec.com.codesoft.codefaclite.main.license.Licencia;
 import ec.com.codesoft.codefaclite.main.license.ValidacionLicenciaCodefac;
 import ec.com.codesoft.codefaclite.main.license.excepcion.NoExisteLicenciaException;
@@ -71,6 +71,7 @@ import ec.com.codesoft.codefaclite.servidor.service.ProductoProveedorService;
 import ec.com.codesoft.codefaclite.servidor.service.ProductoService;
 import ec.com.codesoft.codefaclite.servidor.service.RecursosService;
 import ec.com.codesoft.codefaclite.servidor.service.RetencionService;
+import ec.com.codesoft.codefaclite.servidor.service.SmsService;
 import ec.com.codesoft.codefaclite.servidor.service.SriFormaPagoService;
 import ec.com.codesoft.codefaclite.servidor.service.SriIdentificacionService;
 import ec.com.codesoft.codefaclite.servidor.service.SriRetencionIvaService;
@@ -179,6 +180,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilUsuarioServi
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RetencionServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SmsServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriFormaPagoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
@@ -621,6 +623,7 @@ public class Main {
             mapRecursos.put(DetalleProductoGuiaRemisionService.class, DetalleProductoGuiaRemisionServiceIf.class);
             mapRecursos.put(GuiaRemisionService.class, GuiaRemisionServiceIf.class);
             mapRecursos.put(GuiaRemisionAdicionalService.class, GuiaRemisionAdicionalServiceIf.class);
+            mapRecursos.put(SmsService.class, SmsServiceIf.class);
             
             ServiceControllerServer.cargarRecursos(mapRecursos);
             LOG.log(Level.INFO,"Servidor Iniciado");

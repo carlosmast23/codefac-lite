@@ -53,4 +53,6 @@ public abstract class ParametrosSistemaCodefac {
     public static final Integer PUERTO_APP_MOVIL_SMS=9999;
     
     public static final String CODIGO_TELEFONO_ECUADOR="+593";
+    
+    public static final Integer LIMITE_CARACTERES_SMS=160;
 }

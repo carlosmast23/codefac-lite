@@ -14,9 +14,13 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -56,8 +60,15 @@ public class ServicioSMS extends IntentService
             //Se queda en bucle infinito hasta enviar los mensajes
 
             InputStream inputStream = socket.getInputStream();
+            OutputStream outputStream=socket.getOutputStream();
+
             BufferedReader entrada = new BufferedReader(
                     new InputStreamReader( inputStream ) );
+
+            PrintWriter salida = new PrintWriter(
+                    new OutputStreamWriter( outputStream ) );
+
+
             while(true) {
                 String numeroStr="";
                 numeroStr=entrada.readLine(); //Lectura de la primera linea que contiene el numero de telefono
@@ -68,6 +79,10 @@ public class ServicioSMS extends IntentService
                 mensajeBroadcast("enviando mensaje a "+numeroStr+ ": "+mensajeTxt);
                 MainActivity.actividadPrincipal.enviarMensaje(numeroStr,mensajeTxt); //TODO: Optimizar el codigo para ver si puedo usar el metodo de enviar mensaje desde esta misma clase
                 mensajeBroadcast("mensaje enviado ...");
+
+                //Mandar un mensaje devuelta para saber que el proceso fue correcto o enviar un codigo de error
+                salida.println("OK"); //TODO: Cambiar este metodo por otro mas especifico de lectura de errores
+                salida.flush();
 
             }
             //cierra conexion

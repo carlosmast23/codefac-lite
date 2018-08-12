@@ -68,6 +68,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RetencionServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SmsServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriFormaPagoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
@@ -163,6 +164,7 @@ public abstract class ServiceFactory {
     public DetalleProductoGuiaRemisionServiceIf getDetalleProductoGuiaRemisionServiceIf(){return (DetalleProductoGuiaRemisionServiceIf) getRecursosRMI(DetalleProductoGuiaRemisionServiceIf.class);};
     public GuiaRemisionServiceIf getGuiaRemisionServiceIf(){return (GuiaRemisionServiceIf) getRecursosRMI(GuiaRemisionServiceIf.class);};
     public GuiaRemisionAdicionalServiceIf getGuiaRemisionAdicionalServiceIf(){return (GuiaRemisionAdicionalServiceIf) getRecursosRMI(GuiaRemisionAdicionalServiceIf.class);};
+    public SmsServiceIf getSmsServiceIf(){return (SmsServiceIf) getRecursosRMI(SmsServiceIf.class);};
     
     /**
      * Crea una nueva instancia el controlados para manejar por el cliente

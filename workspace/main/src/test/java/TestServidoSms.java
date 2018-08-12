@@ -1,5 +1,5 @@
 
-import ec.com.codesoft.codefaclite.servidorinterfaz.info.ServidorSMS;
+import ec.com.codesoft.codefaclite.servicios.ServidorSMS;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

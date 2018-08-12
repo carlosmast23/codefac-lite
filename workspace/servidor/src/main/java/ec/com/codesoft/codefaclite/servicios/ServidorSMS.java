@@ -3,14 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.servidorinterfaz.info;
+package ec.com.codesoft.codefaclite.servicios;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -27,7 +31,7 @@ public class ServidorSMS implements Runnable{
     /*
     Variable que me indica la cantidad maxima de caracteres que puede enviar en un mensaje de texto
     */
-    public static final int LIMITE_CARACTERES=160;
+    //public static final int LIMITE_CARACTERES=160;
     
     
     private int puerto;
@@ -56,8 +60,8 @@ public class ServidorSMS implements Runnable{
     public void iniciarServidor()
     {
         try {
-            InetAddress addr = InetAddress.getByName("192.168.1.3");
-            servidorSocket = new ServerSocket(puerto,50,addr);
+            //InetAddress addr = InetAddress.getByName("192.168.1.3");
+            servidorSocket = new ServerSocket(puerto);
             hilo=new Thread(this); //Iniciar el escucha de peticiones para conectarse al servidor
             hilo.start();
             LOG.log(Level.INFO,"Iniciado servicio SMS CODEFAC , PUERTO:"+servidorSocket.getLocalPort()+"IP: "+servidorSocket.getInetAddress().getHostAddress());
@@ -80,17 +84,44 @@ public class ServidorSMS implements Runnable{
         }
     }
     
-    public void enviarMensaje(String numero,String mensaje)
+    public boolean enviarMensaje(String numero,String mensaje)
     {
         if(!clientesConectados.isEmpty())
         {
-            Socket socketCliente=clientesConectados.get(0);
-            String numeroCompleto=ParametrosSistemaCodefac.CODIGO_TELEFONO_ECUADOR+numero.substring(1);
-            escribirSocket(numeroCompleto, socketCliente);
-            escribirSocket(mensaje, socketCliente);
-
-            LOG.log(Level.INFO,"Mensaje SMS enviado Número: "+numeroCompleto+", Mensaje:"+mensaje);            
+            Socket socketCliente=null;
+            try {
+                socketCliente=clientesConectados.get(0);
+                socketCliente.setSoTimeout(1000*10); //Establece el tiempo de espera maximo para recibir una confirmacion del celular como 10 segundos 
+                String numeroCompleto=ParametrosSistemaCodefac.CODIGO_TELEFONO_ECUADOR+numero.substring(1);
+                escribirSocket(numeroCompleto, socketCliente);
+                escribirSocket(mensaje, socketCliente);
+                //Leer respuesta del servidor para saber si el proceso fue enviado correctamente
+                leerSocket(socketCliente); //TODO:Falta implementar la lectura de codigos de error pero por ahora me conforma cuando lanza las excepciones
+                LOG.log(Level.INFO,"Mensaje SMS enviado Número: "+numeroCompleto+", Mensaje:"+mensaje);
+                return true;
+                
+            } catch (SocketException ex) {
+                clientesConectados.remove(socketCliente); //Si sucede algun error de conexion 
+                Logger.getLogger(ServidorSMS.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                clientesConectados.remove(socketCliente); //Si sucede algun error de conexion elimino la conexion actual
+                Logger.getLogger(ServidorSMS.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
+        return false;
+    }
+    
+    private String leerSocket(Socket socketCliente) throws IOException
+    {
+        String resultado="";
+        try {
+            BufferedReader input=new BufferedReader(new InputStreamReader(socketCliente.getInputStream()));
+            resultado=input.readLine();
+        } catch (IOException ex) {
+            Logger.getLogger(ServidorSMS.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex; //Lanzar la excepcion para que controle el flujo superior
+        }
+        return resultado;
     }
     
     private void escribirSocket(String mensaje,Socket socketCliente)
@@ -99,6 +130,7 @@ public class ServidorSMS implements Runnable{
         try {
             output = new PrintStream(socketCliente.getOutputStream());
             output.println(mensaje);
+
         } catch (IOException ex) {
             Logger.getLogger(ServidorSMS.class.getName()).log(Level.SEVERE, null, ex);
         } finally {

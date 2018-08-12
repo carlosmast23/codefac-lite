@@ -32,7 +32,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Nacionalidad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
-import ec.com.codesoft.codefaclite.servidorinterfaz.info.ServidorSMS;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SmsServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesJuridicas;
@@ -590,24 +591,34 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
                     DialogoCodefac.mensaje("Incorrecto","Seleccione una persona para enviar el sms",DialogoCodefac.MENSAJE_INCORRECTO);
                 }
                 
-                String mensajeEnviar=getTxtMensajeTexto().getText().replace("\n","");
-                if(mensajeEnviar.length()<=ServidorSMS.LIMITE_CARACTERES)
+                String mensajeEnviar=getTxtMensajeTexto().getText().replace("\n"," ");
+                
+                SmsServiceIf smsServiceIf=ServiceFactory.getFactory().getSmsServiceIf();
+                                        
+                if(mensajeEnviar.length()<=ParametrosSistemaCodefac.LIMITE_CARACTERES_SMS)
                 {
-                    ServidorSMS servidorSms=ServidorSMS.getInstance();
-                    if(servidorSms.servicioDisponible())
-                    {
-                        servidorSms.enviarMensaje(persona.getTelefonoCelular(),mensajeEnviar);
-                        DialogoCodefac.mensaje("Correcto","El mensaje fue enviado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
-                    }
-                    else
-                    {
-                        DialogoCodefac.mensaje("Incorrecto","El servicio de Sms no esta diponible",DialogoCodefac.MENSAJE_INCORRECTO);
+                    try {
+                        SmsServiceIf servidorSms=ServiceFactory.getFactory().getSmsServiceIf();
+                        if(servidorSms.isServicioDisponible())
+                        {
+                            servidorSms.enviarMensaje(persona.getTelefonoCelular(),mensajeEnviar);
+                            DialogoCodefac.mensaje("Correcto","El mensaje fue enviado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+                        }
+                        else
+                        {
+                            DialogoCodefac.mensaje("Incorrecto","El servicio de Sms no esta diponible",DialogoCodefac.MENSAJE_INCORRECTO);
+                        }
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ServicioCodefacException ex) {
+                        DialogoCodefac.mensaje("Error", ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+                        Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     
                 }
                 else
                 {
-                    DialogoCodefac.mensaje("Incorrecto","El tamaño maximo del mensaje es de "+ServidorSMS.LIMITE_CARACTERES+" , y tu mensaje tiene "+mensajeEnviar.length(),DialogoCodefac.MENSAJE_INCORRECTO);
+                    DialogoCodefac.mensaje("Incorrecto","El tamaño maximo del mensaje es de "+ParametrosSistemaCodefac.LIMITE_CARACTERES_SMS+" , y tu mensaje tiene "+mensajeEnviar.length(),DialogoCodefac.MENSAJE_INCORRECTO);
                 }
                 
             }
