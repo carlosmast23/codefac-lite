@@ -37,10 +37,10 @@ public abstract class CompraReporteProductoPanel extends ControladorCodefacInter
         java.awt.GridBagConstraints gridBagConstraints;
 
         jLabel1 = new javax.swing.JLabel();
-        txtProducto = new javax.swing.JTextField();
+        txtGenericoProductoProveedor = new javax.swing.JTextField();
         btnObtenerDatos = new javax.swing.JButton();
         chckTodos = new javax.swing.JCheckBox();
-        btnBuscarProducto = new javax.swing.JButton();
+        btnBuscarGenerico = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblInformacionReporte = new javax.swing.JTable();
         cmbTipoReporte = new javax.swing.JComboBox<>();
@@ -65,7 +65,7 @@ public abstract class CompraReporteProductoPanel extends ControladorCodefacInter
         gridBagConstraints.ipadx = 55;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.1;
-        getContentPane().add(txtProducto, gridBagConstraints);
+        getContentPane().add(txtGenericoProductoProveedor, gridBagConstraints);
 
         btnObtenerDatos.setText("Buscar");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -80,11 +80,11 @@ public abstract class CompraReporteProductoPanel extends ControladorCodefacInter
         gridBagConstraints.gridy = 1;
         getContentPane().add(chckTodos, gridBagConstraints);
 
-        btnBuscarProducto.setText("Buscar");
+        btnBuscarGenerico.setText("Buscar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
-        getContentPane().add(btnBuscarProducto, gridBagConstraints);
+        getContentPane().add(btnBuscarGenerico, gridBagConstraints);
 
         tblInformacionReporte.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -126,7 +126,7 @@ public abstract class CompraReporteProductoPanel extends ControladorCodefacInter
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBuscarProducto;
+    private javax.swing.JButton btnBuscarGenerico;
     private javax.swing.JButton btnObtenerDatos;
     private javax.swing.JCheckBox chckTodos;
     private javax.swing.JComboBox<String> cmbTipoReporte;
@@ -134,15 +134,15 @@ public abstract class CompraReporteProductoPanel extends ControladorCodefacInter
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tblInformacionReporte;
-    private javax.swing.JTextField txtProducto;
+    private javax.swing.JTextField txtGenericoProductoProveedor;
     // End of variables declaration//GEN-END:variables
 
-    public JButton getBtnBuscarProducto() {
-        return btnBuscarProducto;
+    public JButton getBtnBuscarGenerico() {
+        return btnBuscarGenerico;
     }
 
-    public void setBtnBuscarProducto(JButton btnBuscarProducto) {
-        this.btnBuscarProducto = btnBuscarProducto;
+    public void setBtnBuscarGenerico(JButton btnBuscarProducto) {
+        this.btnBuscarGenerico = btnBuscarProducto;
     }
 
     public JButton getBtnObtenerDatos() {
@@ -161,12 +161,12 @@ public abstract class CompraReporteProductoPanel extends ControladorCodefacInter
         this.chckTodos = chckTodos;
     }
 
-    public JTextField getTxtProducto() {
-        return txtProducto;
+    public JTextField getTxtGenericoProductoProveedor() {
+        return txtGenericoProductoProveedor;
     }
 
-    public void setTxtProducto(JTextField txtProducto) {
-        this.txtProducto = txtProducto;
+    public void setTxtGenericoProductoProveedor(JTextField txtProducto) {
+        this.txtGenericoProductoProveedor = txtProducto;
     }
 
     public JComboBox<String> getCmbTipoReporte() {

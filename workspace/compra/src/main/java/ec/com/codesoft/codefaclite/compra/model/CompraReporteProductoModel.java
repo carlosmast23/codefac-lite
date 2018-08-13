@@ -10,7 +10,9 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.crm.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.compra.panel.CompraReporteProductoPanel;
+import ec.com.codesoft.codefaclite.crm.busqueda.ProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -21,6 +23,10 @@ import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.text.StyledEditorKit;
 
 /**
@@ -30,12 +36,15 @@ import javax.swing.text.StyledEditorKit;
 public class CompraReporteProductoModel  extends CompraReporteProductoPanel
 {
     private Producto producto;
+    private Persona proveedor;
     private Boolean todos;
     private String opcionReporte;
+    private DefaultTableModel modeloTablaDetallesCompra;
+    private List<ProductoProveedor>  productoProveedores;
             
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
-        agregarListener();
+        agregarBotonListener();
     }
 
     @Override
@@ -75,12 +84,11 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
 
     @Override
     public void limpiar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        getTxtGenericoProductoProveedor().setText("");
     }
 
-//    @Override
     public String getNombre() {
-        return "Compra Reporte Producto";
+        return "Compra Reporte Proveedor Producto";
     }
 
     @Override
@@ -98,28 +106,49 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    public void agregarListener()
+    public void agregarBotonListener()
     {
-        getBtnBuscarProducto().addActionListener(new ActionListener() {
+        getBtnBuscarGenerico().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) 
             {
-                ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo();
-                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
-                buscarDialogoModel.setVisible(true);
-                producto = (Producto) buscarDialogoModel.getResultado();
-                if(producto != null)
+                
+                if(getCmbTipoReporte().getSelectedItem().equals("Producto")){
+                    ProductoBusquedaDialogo productoBusquedaDialogo = new ProductoBusquedaDialogo();
+                    BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(productoBusquedaDialogo);
+                    buscarDialogoModel.setVisible(true);
+                    Producto productoTemp = (Producto) buscarDialogoModel.getResultado();
+                    if(productoTemp != null)
+                    {
+                        producto = productoTemp;
+                        proveedor = null;
+                        limpiar();
+                        getTxtGenericoProductoProveedor().setText("" + producto.getNombre() + " - " + producto.getCodigoPersonalizado());
+                    }
+                }else if(getCmbTipoReporte().getSelectedItem().equals("Proveedor"))
                 {
-                    String nombre = producto.getNombre();
-                    String codigo;
-                    if(producto.getCodigoPersonalizado() != null){
-                        codigo = producto.getCodigoPersonalizado();    
-                    }else{
-                        codigo = "";
+                    ProveedorBusquedaDialogo proveedorBusquedaDialogo = new ProveedorBusquedaDialogo();
+                    BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(proveedorBusquedaDialogo);
+                    buscarDialogoModel.setVisible(true);
+                    Persona proveedorTemp = (Persona) buscarDialogoModel.getResultado();
+                    if(proveedorTemp != null)
+                    {
+                        proveedor = proveedorTemp;
+                        producto = null;
+                        limpiar();
+//                        if(!proveedor.getNombreLegal().equals("")){
+//                            getTxtGenericoProductoProveedor().setText(" " + proveedor.getIdentificacion()+ " - " + proveedor.getNombreLegal());
+//                        }else
+//                        {
+                            getTxtGenericoProductoProveedor().setText(" " + proveedor.getIdentificacion() + " - " + proveedor.getRazonSocial());
+//                        }
                     }
                     
-                    getTxtProducto().setText(nombre + " - " + codigo);
+                }else
+                {
+                    DialogoCodefac.mensaje("Advertencia", "Seleccione una opción valida", DialogoCodefac.MENSAJE_ADVERTENCIA);
                 }
+                       
             }
         });
         
@@ -127,24 +156,36 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
             @Override
             public void actionPerformed(ActionEvent e) 
             {
-                if(producto != null) 
-                {
-                    try
+                
+                try {
+                    opcionReporte = (String) getCmbTipoReporte().getSelectedItem();
+                    switch(opcionReporte)
                     {
-                        if(todos){
-                            buscarPorProducto();
-                        }else
-                        {
-                            buscarTodosLosProductos();
-                        }
-                                    
+                        case "Producto":
+                            if(!todos){
+                                buscarPorProductoProveedor(1);
+                            }else{
+                                buscarTodosProductoProveedor();
+                            }
+                            break;
+                        case "Proveedor":
+                            if(!todos){
+                                buscarPorProductoProveedor(2);
+                            }else{
+                                buscarTodosProductoProveedor();
+                            }
+                            
+                            break;
+                        default:
+                            DialogoCodefac.mensaje("Advertencia", "Seleccione una opción valida", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                            break;                
                     }
-                    catch(ServicioCodefacException | RemoteException exc)
-                    {
-                        System.out.println("Se produjo un error en obtener los productosProveedores");
-                    }
-                    
+                } catch (RemoteException ex) {
+                    Logger.getLogger(CompraReporteProductoModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(CompraReporteProductoModel.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                
             }
         });
         
@@ -154,58 +195,117 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
                 if(getChckTodos().isSelected())
                 {
                     todos = true;
+                    getBtnBuscarGenerico().setEnabled(false);
+                    getTxtGenericoProductoProveedor().setEnabled(false);
                 }
                 else
                 {
                     todos = false;
+                    getBtnBuscarGenerico().setEnabled(true);
+                    getTxtGenericoProductoProveedor().setEnabled(true);
                 }
             }
         });
         
-        getCmbTipoReporte().addActionListener( new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                opcionReporte = (String) getCmbTipoReporte().getSelectedItem();
-               
-                switch(opcionReporte)
-                {
-                    case "Proveedor":
-                        break;
-                    case "Producto":
-                        break;
-                    default:
-                        DialogoCodefac.mensaje("Error", "Debe seleccionar un tipo de busqueda para el reporte", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                        break;
-                }                      
-            }
-        });
     }
     
-    public void buscarPorProducto() throws RemoteException, ServicioCodefacException
+    public void buscarPorProductoProveedor(int opc) throws RemoteException, ServicioCodefacException
     {
         ProductoProveedorServiceIf productoProveedorServiceIf = ServiceFactory.getFactory().getProductoProveedorServiceIf();
         Map<String, Object> mapParametros = new HashMap<String, Object>();
-        mapParametros.put("producto", producto);
-        List<ProductoProveedor> productoProveedores = productoProveedorServiceIf.obtenerPorMap(mapParametros);
-        if(productoProveedores != null && productoProveedores.size() > 0)
+        switch(opc)
         {
-            for(ProductoProveedor productoProveedor : productoProveedores)
-            {
-                System.out.println("Producto -->" + productoProveedor.getProducto().getNombre());
-                System.out.println("Proveedor -->" + productoProveedor.getProveedor());
-            }
+            case 1:
+                mapParametros.put("producto", producto);
+            break;
+            case 2:
+                mapParametros.put("proveedor", proveedor);
+            break;
+        }   
+        productoProveedores = productoProveedorServiceIf.obtenerPorMap(mapParametros);
+        if(productoProveedores != null && productoProveedores.size() > 0){
+            mostrarDatosTabla();
+        }else{
+            DialogoCodefac.mensaje("ProductoProveedor", "Error en busqueda", DialogoCodefac.MENSAJE_ADVERTENCIA);
         }
-        else
+        
+        
+    }
+    
+    public void buscarTodosProductoProveedor() throws RemoteException
+    {
+        ProductoProveedorServiceIf productoProveedorServiceIf = ServiceFactory.getFactory().getProductoProveedorServiceIf();
+        productoProveedores = productoProveedorServiceIf.obtenerTodos();
+        if(productoProveedores != null && productoProveedores.size() > 0 )
         {
+            mostrarDatosTabla();
+        }else{
             DialogoCodefac.mensaje("ProductoProveedor", "Error en busqueda", DialogoCodefac.MENSAJE_ADVERTENCIA);
         }
     }
     
-    public void buscarTodosLosProductos()
+    private void mostrarDatosTabla()
     {
+        String[] titulo={"Nombre","Descripción"};
+        Persona tempPer = null;
+        Producto tempPro = null;
+        boolean prod = true;
+        this.modeloTablaDetallesCompra = new DefaultTableModel(titulo,0);
+        int opc = 0;
+        opc = (getCmbTipoReporte().getSelectedItem().equals("Producto") ? 1 : 2);
         
+        for (ProductoProveedor detalle : productoProveedores) {
+            Vector<String> fila=new Vector<String>();
+            prod = true;
+            switch(opc)
+            {
+                case 1:
+                    if(tempPro != null && detalle.getProducto().equals(tempPro))
+                    {
+                        prod = false;
+                    }
+                    if(prod){
+                        fila = new Vector<String>();
+                        fila.add(""+detalle.getProducto());
+                        fila.add("");
+                        this.modeloTablaDetallesCompra.addRow(fila);
+                    }
+                        fila = new Vector<String>();
+                        fila.add("");
+                        fila.add(" " + detalle.getProveedor());
+                        tempPro = detalle.getProducto();
+                    break;
+                case 2:
+                    if(tempPer != null && detalle.getProveedor().equals(tempPer))
+                    {
+                        prod = false;
+                    }
+                    if(prod){
+                        fila = new Vector<String>();
+                        fila.add(""+detalle.getProveedor());
+                        fila.add("");
+                        this.modeloTablaDetallesCompra.addRow(fila);
+                    }
+                        fila = new Vector<String>();
+                        fila.add("");
+                        fila.add(" " + detalle.getProducto());
+                        tempPer = detalle.getProveedor();
+                    break;
+            }
+            
+            this.modeloTablaDetallesCompra.addRow(fila);
+        }
+        getTblInformacionReporte().setModel(this.modeloTablaDetallesCompra);     
     }
-
+    
+    private void initModelTablaDetalleCompra() {
+        Vector<String> titulo = new Vector<>();
+        titulo.add("Nombre");
+        titulo.add("Descripción");
+        this.modeloTablaDetallesCompra = new DefaultTableModel(titulo, 0);
+        getTblInformacionReporte().setModel(modeloTablaDetallesCompra);
+    }
+    
     @Override
     public BuscarDialogoModel obtenerDialogoBusqueda() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -215,4 +315,5 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
     public void cargarDatosPantalla(Object entidad) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+   
 }

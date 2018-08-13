@@ -13,3 +13,8 @@ Establecer un tiempo por defecto de configuracion para los presupuestos, en para
 Optimizar porque usa 2 map al momento de agregar detalles en los presupuestos
 Reporte Orden de trabajo colocar tres valores
 colocar campo en orden trabajo detalle titulo
+
+Pendientes 13/08/2018
+	- Reporte KARDEX
+	- Reporte Proveedores - Producto
+	- 
