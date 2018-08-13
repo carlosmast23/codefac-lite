@@ -277,6 +277,15 @@ public class Estudiante implements Serializable {
         hash = 73 * hash + Objects.hashCode(this.idEstudiante);
         return hash;
     }
+    
+    /**
+     * Devuelve el primer apellido y nombre
+     * @return 
+     */
+    public String getNombreSimple()
+    {
+        return apellidos.split(" ")[0]+" "+nombres.split(" ")[0];
+    }
 
     @Override
     public boolean equals(Object obj) {

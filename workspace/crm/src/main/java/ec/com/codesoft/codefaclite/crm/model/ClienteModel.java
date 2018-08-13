@@ -5,12 +5,14 @@
  */
 package ec.com.codesoft.codefaclite.crm.model;
 
+import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteEnvioSmsInterface;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
+import ec.com.codesoft.codefaclite.corecodefaclite.sms.ControladorPlantillaSms;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.validacionPersonalizadaAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
@@ -32,11 +34,14 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Nacionalidad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PlantillaSmsEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SmsServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesJuridicas;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
@@ -57,6 +62,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JREmptyDataSource;
@@ -72,7 +78,7 @@ import net.sf.jasperreports.view.JasperViewer;
  *
  * @author PC
  */
-public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Persona>, InterfazPostConstructPanel {
+public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Persona>, InterfazPostConstructPanel ,ComponenteEnvioSmsInterface{
 
     private static final Logger LOG = Logger.getLogger(ClienteModel.class.getName());
 
@@ -96,6 +102,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         this.personaService = ServiceFactory.getFactory().getPersonaServiceIf();
         getjTextExtension().setText("0");
         this.razonSocial = "";
+        excluirValidaciones();
         cargarTipoClientes();
         cargarDatosIniciales();
         addListenerBotones();
@@ -379,6 +386,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     }
 
     private void cargarDatosIniciales() {
+        getPnlSms().setControlador(this);
         operadorNegocioDefault=OperadorNegocioEnum.CLIENTE;
         /**
          * Cargando los estados por defecto
@@ -387,6 +395,8 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         for (ClienteEnumEstado enumerador : ClienteEnumEstado.values()) {
             getCmbEstado().addItem(enumerador);
         }
+        
+        
     }
 
     private boolean prevalidar() {
@@ -440,6 +450,8 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     }
 
     public void addListenerCombos() {
+        
+         
         getjComboIdentificacion().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -504,24 +516,8 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     }
 
     public void addListenerTexts() {
-        /*
-        getTxtMensajeTexto().addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-                //getLblCantidadTextoMensajes().setText(getTxtMensajeTexto().getText().length()+"/"+ServidorSMS.LIMITE_CARACTERES);
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                
-            }
-        });*/
         
+                
         getjTextNombres().addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent evt) {
@@ -582,46 +578,37 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     }
 
     private void addListenerBotones() {
-        getBtnEnviarSms().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                
-                if(!estadoFormulario.equals(ESTADO_EDITAR))
-                {
-                    DialogoCodefac.mensaje("Incorrecto","Seleccione una persona para enviar el sms",DialogoCodefac.MENSAJE_INCORRECTO);
-                }
-                
-                String mensajeEnviar=getTxtMensajeTexto().getText().replace("\n"," ");
-                
-                SmsServiceIf smsServiceIf=ServiceFactory.getFactory().getSmsServiceIf();
-                                        
-                if(mensajeEnviar.length()<=ParametrosSistemaCodefac.LIMITE_CARACTERES_SMS)
-                {
-                    try {
-                        SmsServiceIf servidorSms=ServiceFactory.getFactory().getSmsServiceIf();
-                        if(servidorSms.isServicioDisponible())
-                        {
-                            servidorSms.enviarMensaje(persona.getTelefonoCelular(),mensajeEnviar);
-                            DialogoCodefac.mensaje("Correcto","El mensaje fue enviado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
-                        }
-                        else
-                        {
-                            DialogoCodefac.mensaje("Incorrecto","El servicio de Sms no esta diponible",DialogoCodefac.MENSAJE_INCORRECTO);
-                        }
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (ServicioCodefacException ex) {
-                        DialogoCodefac.mensaje("Error", ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
-                        Logger.getLogger(ClienteModel.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    
-                }
-                else
-                {
-                    DialogoCodefac.mensaje("Incorrecto","El tamaño maximo del mensaje es de "+ParametrosSistemaCodefac.LIMITE_CARACTERES_SMS+" , y tu mensaje tiene "+mensajeEnviar.length(),DialogoCodefac.MENSAJE_INCORRECTO);
-                }
-                
-            }
-        });
+        
+    }
+
+    //Lista de componentes que se deben excluir de las validaciona automaticas
+    private void excluirValidaciones() {
+       listaExclusionComponentes.add(getPnlSms().getTxtMensajeTexto());
+    }
+
+    @Override
+    public boolean getValidacionEnvioSms() {
+        if (!estadoFormulario.equals(ESTADO_EDITAR)) {
+            DialogoCodefac.mensaje("Error", "Porfavor seleccione un cliente para enviar el mensaje", DialogoCodefac.MENSAJE_INCORRECTO);
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String getNumeroTelefono() {
+        return persona.getTelefonoCelular();
+    }
+
+    @Override
+    public Map<PlantillaSmsEnum.EtiquetaEnum, String> getPlantillaTags() {
+        Map<PlantillaSmsEnum.EtiquetaEnum, String> mapParametros = new HashMap<PlantillaSmsEnum.EtiquetaEnum, String>();
+        mapParametros.put(PlantillaSmsEnum.EtiquetaEnum.EMPRESA, session.getEmpresa().getNombreLegal());
+        return mapParametros;
+    }
+
+    @Override
+    public VentanaEnum getVentanaEnum() {
+        return VentanaEnum.CLIENTE;
     }
 }

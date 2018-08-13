@@ -7,8 +7,10 @@ package ec.com.codesoft.codefaclite.gestionacademica.panel;
 
 import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteEnvioSmsPanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.CampoBuscarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.validation.ComponenteSecundarioAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Nacionalidad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
@@ -29,6 +31,7 @@ import javax.swing.JTextField;
 public abstract class EstudiantePanel extends ControladorCodefacInterface {
 
     public static final String NOMBRE_VALIDADOR_IDENTIFICACION = "Identificacion";
+    private ComponenteEnvioSmsPanel pnlEnvioSmsPanel=new ComponenteEnvioSmsPanel();
 
     /**
      * Creates new form Estudiante
@@ -1014,6 +1017,12 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
     public void setBtnEliminarRepre2(JButton btnEliminarRepre2) {
         this.btnEliminarRepre2 = btnEliminarRepre2;
     }
+
+    @ComponenteSecundarioAnotacion(nombreCategoria = "Mensaje Sms")
+    public ComponenteEnvioSmsPanel getPnlEnvioSmsPanel() {
+        return pnlEnvioSmsPanel;
+    }
+    
     
     
     
