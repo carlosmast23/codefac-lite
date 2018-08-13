@@ -68,3 +68,6 @@ Aumentar el campo de contribuyente especial en los clientes porque necesito ese 
 Revisar la forma de pago en la factura aveces no me deja agregar ni modificar
 Cuando estan en las pantallas de reporte no funciona el boton de ayuda para mostrar el panel secundario
 Revisar que no se agrego el campo de obligado allevar contabilidad en la tabla transporte , al parecer porque esa tabla es creada con una etiqueta
+
+Agregar un campo cargando antes de abrir cada ventana cuando se demora para que el usuario sepa que esta procesando
+Revisar que cuando solo se cierra la aplicacion sigue enviado mensajes uspuestamente , pero se supone que el celular me responde un mensaje para que me confirme que se envio el mensaje, pero aunque ya esta cerrado la palicacion en el ecelular me aparece como que me esta enviado una respuesta , ver que devuelve, y ver si hay como controlar tambien cuando escribo en el socket hacia el cliente

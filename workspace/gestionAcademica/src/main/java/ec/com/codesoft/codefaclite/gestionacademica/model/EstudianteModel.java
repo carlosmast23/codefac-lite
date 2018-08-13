@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.gestionacademica.model;
 
+import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteEnvioSmsInterface;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
@@ -25,6 +26,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneroEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PlantillaSmsEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDiscapacidadEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteServiceIf;
@@ -48,7 +50,7 @@ import java.util.logging.Logger;
  *
  * @author Carlos
  */
-public class EstudianteModel extends EstudiantePanel implements DialogInterfacePanel<Estudiante>{
+public class EstudianteModel extends EstudiantePanel implements ComponenteEnvioSmsInterface,DialogInterfacePanel<Estudiante>{
 
     private Persona representante;
     private Persona representanteParaFacturar;
@@ -58,6 +60,7 @@ public class EstudianteModel extends EstudiantePanel implements DialogInterfaceP
     Date fechaNacimiento = null;
     String fechanacimiento = "";
     Boolean banderaNacionalidad;
+    
     public EstudianteModel() {
         estudianteService = ServiceFactory.getFactory().getEstudianteServiceIf();
         listaExclusionComponentes.add(getTxtPorcentajeDiscapacidad()); //Agrego a la lista de exluciones para evitar que valide cuando existan datos ingresados
@@ -65,126 +68,11 @@ public class EstudianteModel extends EstudiantePanel implements DialogInterfaceP
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
-        try {
-            getDateFechaNacimiento().setDate(hoy());
-            this.banderaNacionalidad = false;
-            List<Nacionalidad> nacion = ServiceFactory.getFactory().getNacionalidadServiceIf().obtenerTodos();
-            getCmbNacionalidad().removeAllItems();
-            for (Nacionalidad n : nacion) {
-                getCmbNacionalidad().addItem(n);
-            }
-
-            getCmbTipoDiscapacidad().removeAllItems();
-            for (TipoDiscapacidadEnum tipo : TipoDiscapacidadEnum.values()) {
-                getCmbTipoDiscapacidad().addItem(tipo);
-            }
-
-            getCmbDiscapacidad().removeAllItems();
-            for (EnumSiNo sino : EnumSiNo.values()) {
-                getCmbDiscapacidad().addItem(sino);
-            }
-
-            getCmbEstado().removeAllItems();
-            for (GeneralEnumEstado enumerador : GeneralEnumEstado.values()) {
-                getCmbEstado().addItem(enumerador);
-            }
-
-            getCmbGenero().removeAllItems();
-            for (GeneroEnum generoEnum : GeneroEnum.values()) {
-                getCmbGenero().addItem(generoEnum);
-            }
-
-            getBtnBuscarRepresentante().addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    obtenerRepresentante(1);
-                }
-            });
-
-            getBtnAgregarRepresentante().addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    crearRepresentante(1);
-                }
-            });
-            
-            getBtnBuscarPersonaFacturar().addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    obtenerRepresentante(2);
-                }
-            });
-            
-            getBtnAgregarPersonaFacturar().addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    crearRepresentante(2);
-                }
-            });
-            
-            getBtnEliminarRepre1().addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    Boolean siNo = DialogoCodefac.dialogoPregunta("Advertencia", "Deseea eliminar el representante 1", DialogoCodefac.MENSAJE_ADVERTENCIA);                    
-                    if(siNo)
-                    {
-                        representante = null;
-                        getTxtRepresentante().setText("");
-                    }
-                }
-            });
-            
-            getBtnEliminarRepre2().addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                   
-                    Boolean siNo = DialogoCodefac.dialogoPregunta("Advertencia", "Deseea eliminar el representante 2", DialogoCodefac.MENSAJE_ADVERTENCIA);                    
-                    if(siNo)
-                    {
-                        representanteParaFacturar = null;
-                        getTxtFacturarANombre().setText("");
-                    }
-                }
-            });
-
-            getCmbDiscapacidad().addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if(getCmbDiscapacidad().getSelectedItem()!=null)
-                    {
-                        String disc = ((EnumSiNo) getCmbDiscapacidad().getSelectedItem()).getLetra();
-                        if (disc == "n") {
-                            getTxtConadis().setText("");
-                            getTxtObsDiscapacidad().setText("");
-                            getCmbTipoDiscapacidad().setSelectedIndex(0);
-                            getTxtPorcentajeDiscapacidad().setText("0");
-                        }
-                    }
-                }
-            });
-            
-            getCmbNacionalidad().addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if(getCmbNacionalidad().getSelectedItem()!=null)
-                    {
-                        String nacionalidad = (String) getCmbNacionalidad().getSelectedItem().toString();
-                        if (nacionalidad.equals("ECUATORIANA")) {
-                            banderaNacionalidad = true;
-                            getCmbEtnia().setEnabled(true);
-                        } else {
-                            banderaNacionalidad = false;
-                            getCmbEtnia().setEnabled(false);
-                        }
-                    }
-                               
-                }
-            });
-            
-            
-        } catch (RemoteException ex) {
-            Logger.getLogger(EstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        agregarListenerBotones();
+        agregarListenerCombos();
+        iniciarVariables();
+        getDateFechaNacimiento().setDate(hoy());
+        this.banderaNacionalidad = false;
     }
 
     @Override
@@ -491,4 +379,162 @@ public class EstudianteModel extends EstudiantePanel implements DialogInterfaceP
         cargarDatos();
     }
 
+    private void agregarListenerBotones() {
+        
+        getBtnBuscarRepresentante().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    obtenerRepresentante(1);
+                }
+            });
+
+            getBtnAgregarRepresentante().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    crearRepresentante(1);
+                }
+            });
+            
+            getBtnBuscarPersonaFacturar().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    obtenerRepresentante(2);
+                }
+            });
+            
+            getBtnAgregarPersonaFacturar().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    crearRepresentante(2);
+                }
+            });
+            
+            getBtnEliminarRepre1().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Boolean siNo = DialogoCodefac.dialogoPregunta("Advertencia", "Deseea eliminar el representante 1", DialogoCodefac.MENSAJE_ADVERTENCIA);                    
+                    if(siNo)
+                    {
+                        representante = null;
+                        getTxtRepresentante().setText("");
+                    }
+                }
+            });
+            
+            getBtnEliminarRepre2().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                   
+                    Boolean siNo = DialogoCodefac.dialogoPregunta("Advertencia", "Deseea eliminar el representante 2", DialogoCodefac.MENSAJE_ADVERTENCIA);                    
+                    if(siNo)
+                    {
+                        representanteParaFacturar = null;
+                        getTxtFacturarANombre().setText("");
+                    }
+                }
+            });
+
+    }
+
+    private void agregarListenerCombos() {
+        
+        try {
+            List<Nacionalidad> nacion = ServiceFactory.getFactory().getNacionalidadServiceIf().obtenerTodos();
+            getCmbNacionalidad().removeAllItems();
+            for (Nacionalidad n : nacion) {
+                getCmbNacionalidad().addItem(n);
+            }
+            
+            getCmbTipoDiscapacidad().removeAllItems();
+            for (TipoDiscapacidadEnum tipo : TipoDiscapacidadEnum.values()) {
+                getCmbTipoDiscapacidad().addItem(tipo);
+            }
+
+            getCmbDiscapacidad().removeAllItems();
+            for (EnumSiNo sino : EnumSiNo.values()) {
+                getCmbDiscapacidad().addItem(sino);
+            }
+
+            getCmbEstado().removeAllItems();
+            for (GeneralEnumEstado enumerador : GeneralEnumEstado.values()) {
+                getCmbEstado().addItem(enumerador);
+            }
+
+            getCmbGenero().removeAllItems();
+            for (GeneroEnum generoEnum : GeneroEnum.values()) {
+                getCmbGenero().addItem(generoEnum);
+            }
+
+            getCmbDiscapacidad().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if(getCmbDiscapacidad().getSelectedItem()!=null)
+                    {
+                        String disc = ((EnumSiNo) getCmbDiscapacidad().getSelectedItem()).getLetra();
+                        if (disc == "n") {
+                            getTxtConadis().setText("");
+                            getTxtObsDiscapacidad().setText("");
+                            getCmbTipoDiscapacidad().setSelectedIndex(0);
+                            getTxtPorcentajeDiscapacidad().setText("0");
+                        }
+                    }
+                }
+            });
+            
+            getCmbNacionalidad().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if(getCmbNacionalidad().getSelectedItem()!=null)
+                    {
+                        String nacionalidad = (String) getCmbNacionalidad().getSelectedItem().toString();
+                        if (nacionalidad.equals("ECUATORIANA")) {
+                            banderaNacionalidad = true;
+                            getCmbEtnia().setEnabled(true);
+                        } else {
+                            banderaNacionalidad = false;
+                            getCmbEtnia().setEnabled(false);
+                        }
+                    }
+                               
+                }
+            });
+        } catch (RemoteException ex) {
+            Logger.getLogger(EstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public String getNumeroTelefono() {
+        return estudiante.getCelular();
+    }
+
+    @Override
+    public Map<PlantillaSmsEnum.EtiquetaEnum, String> getPlantillaTags() {
+        Map<PlantillaSmsEnum.EtiquetaEnum, String> mapParametros=new HashMap<PlantillaSmsEnum.EtiquetaEnum,String>();
+        mapParametros.put(PlantillaSmsEnum.EtiquetaEnum.EMPRESA,session.getEmpresa().getNombreLegal());
+        mapParametros.put(PlantillaSmsEnum.EtiquetaEnum.ESTUDIANTE_NOMBRE,estudiante.getNombreSimple());        
+        return mapParametros;
+    }
+
+    @Override
+    public boolean getValidacionEnvioSms() {
+        
+        if(!estadoFormulario.equals(ESTADO_EDITAR))
+        {
+            DialogoCodefac.mensaje("Error","Porfavor seleccione un cliente para enviar el mensaje",DialogoCodefac.MENSAJE_INCORRECTO);
+            return false;
+        }
+                
+        return true;
+    }
+
+    private void iniciarVariables() {
+        getPnlEnvioSmsPanel().setControlador(this); //Agragando inmplementacion de los metodos necesarios para la funcionalidad de enviar sms
+    }
+
+    @Override
+    public VentanaEnum getVentanaEnum() {
+        return VentanaEnum.ESTUDIANTES;
+    }
+    
 }
