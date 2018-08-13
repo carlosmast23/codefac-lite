@@ -87,6 +87,7 @@ public class ComprobanteAdicional implements Serializable{
      */
     public enum CampoDefectoEnum
     {               
+        CELULAR("celular"),
         CORREO("correo");
         
         private String nombre;
@@ -116,6 +117,7 @@ public class ComprobanteAdicional implements Serializable{
     public enum Tipo
     {
         TIPO_CORREO("c","correo"),
+        TIPO_CELULAR("t","celular"),
         TIPO_OTRO("o","otro");
 
         private Tipo(String letra, String nombre) {

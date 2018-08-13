@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.callback.ClienteInterfaceCom
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataFactura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.ComprobanteDataInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
@@ -414,7 +415,7 @@ public class FacturaAcademicoLoteModel extends FacturaAcademicoLotePanel {
                 Factura factura = generarFactura(estudianteInscrito, rubrosEstudiantes);
 
                 //Datos adicionales en la factura
-                factura.addDatosAdicionalCorreo(estudianteInscrito.getEstudiante().getRepresentante().getCorreoElectronico());
+                factura.addDatosAdicionalCorreo(estudianteInscrito.getEstudiante().getRepresentante().getCorreoElectronico(),ComprobanteAdicional.Tipo.TIPO_CORREO,ComprobanteAdicional.CampoDefectoEnum.CORREO);
                 factura.addDatoAdicional(DatosAdicionalesComprobanteEnum.NOMBRE_ESTUDIANTE.getNombre(), estudianteInscrito.getEstudiante().getNombreCompleto());
                 factura.addDatoAdicional(DatosAdicionalesComprobanteEnum.CODIGO_ESTUDIANTE.getNombre(), estudianteInscrito.getEstudiante().getIdEstudiante().toString());
 

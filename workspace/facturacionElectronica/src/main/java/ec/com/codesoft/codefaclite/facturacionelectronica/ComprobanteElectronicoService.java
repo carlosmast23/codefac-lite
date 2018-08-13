@@ -172,6 +172,7 @@ public class ComprobanteElectronicoService implements Runnable {
     private ListenerComprobanteElectronicoLote escuchaLote;
     
     private MetodosEnvioInterface metodoEnvioInterface;
+    private MetodoEnvioSmsInterface metodoEnvioSmsInterface;
     private List<String> correosElectronicos;
 
     private String footerMensajeCorreo;
@@ -289,7 +290,7 @@ public class ComprobanteElectronicoService implements Runnable {
                 }
                 etapaActual++;
                 //generarRide();
-                System.out.println("enviarCorreo()");
+                System.out.println("enviarCorreo() y SMS()");
             }
 
             if (etapaActual.equals(ETAPA_ENVIAR)) {
@@ -469,6 +470,7 @@ public class ComprobanteElectronicoService implements Runnable {
                 String mensajeGenerado =getMensajeCorreo(claveAcceso.getTipoComprobante(),comprobante);
                 
                 List<String> correosElectronicosTemp=new ArrayList<String>();
+                List<String> numerosSmsTemp=new ArrayList<String>();
                 
                 if(correosElectronicos!=null)
                 {
@@ -479,13 +481,30 @@ public class ComprobanteElectronicoService implements Runnable {
                 if(comprobante.getInformacionAdicional()!=null)
                 {
                     for (InformacionAdicional infoAdicional : comprobante.getInformacionAdicional()) {
-                        if (infoAdicional.getNombre().indexOf("correo") >= 0) {
+                        if (infoAdicional.getNombre().indexOf("correo") >= 0) { //TODO: Setear a una variable global para poder modificar
                             correosElectronicosTemp.add(infoAdicional.getValor());
+                        }
+                        
+                        //Buscar numeros de celular para enviar el correo
+                        if (infoAdicional.getNombre().indexOf("celular") >= 0) { //TODO: Setear a una variable global para poder modificar
+                            numerosSmsTemp.add(infoAdicional.getValor());
                         }
                     }
                 }
                 
                 metodoEnvioInterface.enviarCorreo(mensajeGenerado, claveAcceso.getTipoComprobante().getNombre()+":" + comprobante.getInformacionTributaria().getPreimpreso(), correosElectronicosTemp, archivosPath);
+                
+                /**
+                 * ENVIAR SMS SI EL NUMERO ESTA EN LOS CAMPOS ADICIONALES
+                 */
+                if(numerosSmsTemp.size()>0)
+                {   
+                    String mensajeGeneradoSms =getMensajeSms(claveAcceso.getTipoComprobante(),comprobante);
+                    metodoEnvioSmsInterface.enviarMensaje(numerosSmsTemp, mensajeGeneradoSms);
+                    System.out.println("Enviado SMS a los numeros ingresados");
+                }
+                
+                
             } catch (Exception ex) {
                 Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE, null, ex);
                 ex.printStackTrace();
@@ -568,6 +587,34 @@ public class ComprobanteElectronicoService implements Runnable {
             throw new ComprobanteElectronicoException(ex.getMessage(), "Enviar comprobante", ComprobanteElectronicoException.ERROR_ENVIO_CLIENTE);
         }
 
+    }
+    
+    private String getMensajeSms(ComprobanteEnum clase,ComprobanteElectronico comprobante)
+    {
+        String mensajeGenerado = "Estimado/a , ";
+        mensajeGenerado+=comprobante.getInformacionTributaria().getNombreComercial()+" "; //Nombre legal
+        mensajeGenerado+="le informa que su ";
+        if(clase.equals(ComprobanteEnum.FACTURA))
+        {
+            mensajeGenerado+=" Factura ";
+        }
+        else
+        {
+            if(clase.equals(ComprobanteEnum.NOTA_CREDITO))
+            {
+                mensajeGenerado+=" Nota Credito ";
+            }
+            else
+            {
+                mensajeGenerado+=" Comprobante ";
+            }
+        }
+        
+        mensajeGenerado+=" electronico ";
+        mensajeGenerado+=comprobante.getInformacionTributaria().getSecuencial();
+        mensajeGenerado+=" fue emitida correctamente";
+        return mensajeGenerado;
+        
     }
     
     private String getMensajeCorreo(ComprobanteEnum clase,ComprobanteElectronico comprobante)
@@ -1575,6 +1622,10 @@ public class ComprobanteElectronicoService implements Runnable {
 
     public void setJasperSubReporteGuiaRemision(JasperReport jasperSubReporteGuiaRemision) {
         this.jasperSubReporteGuiaRemision = jasperSubReporteGuiaRemision;
+    }
+
+    public void setMetodoEnvioSmsInterface(MetodoEnvioSmsInterface metodoEnvioSmsInterface) {
+        this.metodoEnvioSmsInterface = metodoEnvioSmsInterface;
     }
     
     

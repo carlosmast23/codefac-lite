@@ -232,7 +232,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 {
                     if(tipoEnum.equals(FacturaAdicional.Tipo.TIPO_CORREO))
                     {
-                        factura.addDatosAdicionalCorreo(valor);
+                        factura.addDatosAdicionalCorreo(valor,FacturaAdicional.Tipo.TIPO_CORREO,ComprobanteAdicional.CampoDefectoEnum.CORREO);
                     }
                     else
                     {
@@ -1515,7 +1515,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             if(campoAdicional==null)
             {
                 if(factura.getCliente().getCorreoElectronico()!=null && !factura.getCliente().getCorreoElectronico().toString().isEmpty())
-                    factura.addDatosAdicionalCorreo(factura.getCliente().getCorreoElectronico());
+                    factura.addDatosAdicionalCorreo(factura.getCliente().getCorreoElectronico(),FacturaAdicional.Tipo.TIPO_CORREO,ComprobanteAdicional.CampoDefectoEnum.CORREO);
             }
             else //Si existe el campo del correo del cliente lo edito
             {
@@ -1524,6 +1524,25 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             //datosAdicionales.put("email", factura.getCliente().getCorreoElectronico());
         }
+        
+        //Cargar el numero e celular del cliente
+        if (factura.getCliente().getTelefonoCelular() != null) {
+            //Obtiene el campo del correo por defecto sis existe
+            FacturaAdicional campoAdicional=factura.obtenerDatoAdicionalPorCampo(ComprobanteAdicional.CampoDefectoEnum.CELULAR);
+            //Si no existe el campo del correo del cliente lo creo
+            if(campoAdicional==null)
+            {
+                if(factura.getCliente().getTelefonoCelular()!=null && !factura.getCliente().getTelefonoCelular().toString().isEmpty())
+                    factura.addDatosAdicionalCorreo(factura.getCliente().getTelefonoCelular(),FacturaAdicional.Tipo.TIPO_CELULAR,ComprobanteAdicional.CampoDefectoEnum.CELULAR);
+            }
+            else //Si existe el campo del correo del cliente lo edito
+            {
+                campoAdicional.setValor(factura.getCliente().getTelefonoCelular());
+            }                
+            
+            //datosAdicionales.put("email", factura.getCliente().getCorreoElectronico());
+        }
+        
     }
 
     private void setearValoresCliente() {
@@ -2125,7 +2144,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         {
                             //Solo agregar si el cliente tiene un correo por defecto
                             if(persona.getCorreoElectronico()!=null)
-                                factura.addDatosAdicionalCorreo(persona.getCorreoElectronico());
+                            {
+                                factura.addDatosAdicionalCorreo(persona.getCorreoElectronico(),FacturaAdicional.Tipo.TIPO_CORREO,ComprobanteAdicional.CampoDefectoEnum.CORREO);
+
+                            }
                         }
                         
                         cargarTablaDatosAdicionales();

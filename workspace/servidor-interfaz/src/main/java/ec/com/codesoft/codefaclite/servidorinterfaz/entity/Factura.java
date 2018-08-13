@@ -292,12 +292,12 @@ public class Factura extends ComprobanteEntity implements Serializable {
         this.datosAdicionales.add(datoAdicional);
     }
     
-    public void addDatosAdicionalCorreo(String correo)
+    public void addDatosAdicionalCorreo(String correo,FacturaAdicional.Tipo tipoCorreo,FacturaAdicional.CampoDefectoEnum campoDefecto)
     {
         FacturaAdicional facturaAdicional=new FacturaAdicional();
-        facturaAdicional.setCampo(FacturaAdicional.CampoDefectoEnum.CORREO.getNombre());
+        facturaAdicional.setCampo(campoDefecto.getNombre());
         facturaAdicional.setFactura(this);
-        facturaAdicional.setTipo(FacturaAdicional.Tipo.TIPO_CORREO.getLetra());
+        facturaAdicional.setTipo(tipoCorreo.getLetra());
         facturaAdicional.setValor(correo);
         
         if (this.datosAdicionales == null) {
@@ -307,7 +307,7 @@ public class Factura extends ComprobanteEntity implements Serializable {
         //Buscar si existe un correo anterior para nombrar de forma secuencial
         Integer numeroMaximo=0;
         for (FacturaAdicional datoAdicional : datosAdicionales) {            
-            if(datoAdicional.getTipo().equals(FacturaAdicional.Tipo.TIPO_CORREO.getLetra()))
+            if(datoAdicional.getTipo().equals(tipoCorreo.getLetra()))
             {
                 if(datoAdicional.getNumero()>numeroMaximo)
                 {
@@ -320,7 +320,7 @@ public class Factura extends ComprobanteEntity implements Serializable {
         //Modificar el nombre si el correo es mas de 2
         if(facturaAdicional.getNumero()>1)
         {
-            facturaAdicional.setCampo(FacturaAdicional.CampoDefectoEnum.CORREO.getNombre()+" "+facturaAdicional.getNumero());
+            facturaAdicional.setCampo(campoDefecto.getNombre()+" "+facturaAdicional.getNumero());
         }
 
         this.datosAdicionales.add(facturaAdicional);
