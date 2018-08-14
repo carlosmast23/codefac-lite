@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -31,7 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "PRODUCTO")
 @XmlRootElement
-public class Producto implements Serializable {
+public class Producto implements Serializable, Comparable<Producto> {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -311,7 +312,34 @@ public class Producto implements Serializable {
     public String toString() {
         return nombre;
     }
-    
-    
 
+    @Override
+    public int compareTo(Producto p) {
+      return this.getIdProducto().compareTo(p.getIdProducto());
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 79 * hash + Objects.hashCode(this.idProducto);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Producto other = (Producto) obj;
+        if (!Objects.equals(this.idProducto, other.idProducto)) {
+            return false;
+        }
+        return true;
+    }
 }

@@ -6,6 +6,8 @@
 package ec.com.codesoft.codefaclite.compra.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.CampoBuscarAnotacion;
+import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -51,8 +53,10 @@ public abstract class CompraReporteProductoPanel extends ControladorCodefacInter
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
+        setTitle("Reporte Producto/Proveedor");
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel1.setText("Nombre: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -63,10 +67,12 @@ public abstract class CompraReporteProductoPanel extends ControladorCodefacInter
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 55;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtGenericoProductoProveedor, gridBagConstraints);
 
+        btnObtenerDatos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/icon1.png"))); // NOI18N
         btnObtenerDatos.setText("Buscar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -80,10 +86,12 @@ public abstract class CompraReporteProductoPanel extends ControladorCodefacInter
         gridBagConstraints.gridy = 1;
         getContentPane().add(chckTodos, gridBagConstraints);
 
-        btnBuscarGenerico.setText("Buscar");
+        btnBuscarGenerico.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/Zoom.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnBuscarGenerico, gridBagConstraints);
 
         tblInformacionReporte.setModel(new javax.swing.table.DefaultTableModel(
@@ -114,8 +122,10 @@ public abstract class CompraReporteProductoPanel extends ControladorCodefacInter
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(cmbTipoReporte, gridBagConstraints);
 
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setText("Reporte:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -160,7 +170,9 @@ public abstract class CompraReporteProductoPanel extends ControladorCodefacInter
     public void setChckTodos(JCheckBox chckTodos) {
         this.chckTodos = chckTodos;
     }
-
+    
+    @CampoBuscarAnotacion
+    @LimpiarAnotacion
     public JTextField getTxtGenericoProductoProveedor() {
         return txtGenericoProductoProveedor;
     }
