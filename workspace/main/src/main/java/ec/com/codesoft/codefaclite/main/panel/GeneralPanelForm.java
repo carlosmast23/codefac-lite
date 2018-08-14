@@ -86,6 +86,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuItemSalir = new javax.swing.JMenuItem();
         jMenuUtilidades = new javax.swing.JMenu();
         jMenuCalculadora = new javax.swing.JMenuItem();
+        jmenuTemas = new javax.swing.JMenu();
         jMenuVentanasActivas = new javax.swing.JMenu();
         jMenuAyuda = new javax.swing.JMenu();
         jMenuItemContenido = new javax.swing.JMenuItem();
@@ -341,6 +342,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         });
         jMenuUtilidades.add(jMenuCalculadora);
 
+        jmenuTemas.setText("Tema");
+        jmenuTemas.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        jMenuUtilidades.add(jmenuTemas);
+
         jMenuBar1.add(jMenuUtilidades);
 
         jMenuVentanasActivas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/modulos/ventanas.png"))); // NOI18N
@@ -531,6 +536,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JSplitPane jSplitPanel;
     private javax.swing.JSplitPane jSplitPanelVerticalSecundario;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JMenu jmenuTemas;
     private javax.swing.JLabel lblNombreEmpresa;
     private javax.swing.JLabel lblPiePagina;
     private javax.swing.JLabel lblTextoSecundario;
@@ -840,8 +846,9 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         this.jMenuVentanasActivas = jMenuVentanasActivas;
     }
 
-    
-    
-    
+    public JMenu getJmenuTemas() {
+        return jmenuTemas;
+    }
+
     
 }
