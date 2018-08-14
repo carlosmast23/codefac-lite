@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.AyudaCodef
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.PanelSecundarioAbstract;
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.ValidadorCodefacModel;
 import ec.com.codesoft.codefaclite.controlador.logs.LogControlador;
+import ec.com.codesoft.codefaclite.main.archivos.ArchivoConfiguracionesCodefac;
 import ec.com.codesoft.codefaclite.servicios.ServidorSMS;
 import ec.com.codesoft.codefaclite.main.license.Licencia;
 import ec.com.codesoft.codefaclite.main.license.ValidacionLicenciaCodefac;
@@ -124,6 +125,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceControllerServer;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EstiloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CatalogoProductoServiceIf;
@@ -202,6 +204,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.LookAndFeel;
+import javax.swing.SwingUtilities;
+import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
@@ -214,18 +219,6 @@ public class Main {
 
     private static final Logger LOG = Logger.getLogger(Main.class.getName());
     
-
-    private static Properties propiedadesIniciales;
-    /**
-     * Nombre del archivo de configuraciones iniciales
-     */
-    private static final String NOMBRE_ARCHIVO_CONFIGURACION = "codefac.ini";
-
-    private static final String CAMPO_MODO_APLICATIVO = "modo";
-    
-    private static final String CAMPO_IP_ULTIMO_ACCESO_SERVIDOR="servidorip";
-    
-    private static final String CAMPO_VERSION="version";
     
     /**
      * Variable para saber el modo que inicia el aplicativo
@@ -237,7 +230,7 @@ public class Main {
         frameAplicacion.setUndecorated(true);
         frameAplicacion.setIconImage(ParametrosSistemaCodefac.iconoSistema);
         frameAplicacion.setVisible(true);
-        
+            
         //Configurar diferente tipo de letra para los dialogos
         UIManager.put("OptionPane.messageFont", new Font("Arial", Font.PLAIN, 14));
         
@@ -250,6 +243,11 @@ public class Main {
          * Configura el archivo para guardar la configuracion inicial en propertys de como va a iniciar el aplicativo
          */
         cargarConfiguracionesIniciales();
+        
+        /**
+         * Carga el tema seleccionado por defecto en aarchivo codefac.ini
+         */
+        cargarTemaCodefac();
         
         /**
          * Verificar si estan actualizaciones pendientes de una nueva version
@@ -279,17 +277,7 @@ public class Main {
     //Lee el archivo de configuraciones de cada computador como por ejemplo
     //para saber la modalidad por defecto que se debe ejcutar el aplicativo
     private static void cargarConfiguracionesIniciales() {
-        try {
-            propiedadesIniciales = new Properties();
-            propiedadesIniciales.load(new FileReader(NOMBRE_ARCHIVO_CONFIGURACION));
-
-        } catch (FileNotFoundException ex) {
-            //Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            LOG.log(Level.INFO,"Archivo de configuracion inicial no existe");
-
-        } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        ArchivoConfiguracionesCodefac.getInstance().cargarConfiguracionesIniciales();
     }
     
     private static void verificarUltimaVersionCodefac()
@@ -302,11 +290,11 @@ public class Main {
         String nameVersionPropiedades="ultimaVersion.codefac"; //Nombe del archivo de las propiedades para comparar si tenemos al ultima versions
         String nameUpdater="updater.jar"; //Nombre del archivo updater que se encarga de hacer la actualizacion
         
-        //Descargar el archivo de propiedades de la ultima version viginte
+        //Descargar el archivo de propiedades de la ultima version vigente
         if(UtilidadesWeb.descargarArchivo(nameVersionPropiedades, path+nameVersionPropiedades, carpetaDescarga))
         {
             LOG.log(Level.INFO,"Descarga archivo de que contiene el número de la última versión");
-            propiedadesIniciales = new Properties();
+            Properties propiedadesIniciales = new Properties();
             try {
                 propiedadesIniciales.load(new FileReader(carpetaDescarga+"/"+nameVersionPropiedades));
                 String ultimaVersion=propiedadesIniciales.getProperty("version");
@@ -456,8 +444,9 @@ public class Main {
      */
     public static void iniciarModoAplicativo(Boolean configuracionesDefecto) {
         //Si existen configuraciones iniciales solo las carga
+        Properties propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
         if (propiedadesIniciales != null && configuracionesDefecto) {
-            String modoAplicativoStr = propiedadesIniciales.getProperty(CAMPO_MODO_APLICATIVO);
+            String modoAplicativoStr = propiedadesIniciales.getProperty(ArchivoConfiguracionesCodefac.CAMPO_MODO_APLICATIVO);
             if (modoAplicativoStr != null) {
                 modoAplicativo = Integer.parseInt(modoAplicativoStr);
                 return; //sio existe no continua buscando el modo de aplicativo
@@ -478,8 +467,8 @@ public class Main {
         } else {
             try {
                 modoAplicativo = dialogAplicativo.getModo();
-                propiedadesIniciales.put(CAMPO_MODO_APLICATIVO, modoAplicativo + "");
-                propiedadesIniciales.store(new FileWriter(NOMBRE_ARCHIVO_CONFIGURACION), "");
+                propiedadesIniciales.put(ArchivoConfiguracionesCodefac.CAMPO_MODO_APLICATIVO, modoAplicativo + "");
+                ArchivoConfiguracionesCodefac.getInstance().guardar();
             } catch (IOException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -491,7 +480,8 @@ public class Main {
     //Funcion que verifica si se instalo una nueva version y ejecuta los scripts para actualizar la base de datos
     private static void verificarActualizacionBaseDatosVersion()
     {        
-        String versionGrabada=propiedadesIniciales.getProperty(CAMPO_VERSION);
+        Properties propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
+        String versionGrabada=propiedadesIniciales.getProperty(ArchivoConfiguracionesCodefac.CAMPO_VERSION);
         
         if(versionGrabada!=null)
         {
@@ -504,7 +494,7 @@ public class Main {
                     try {
                         
                         //Si el usuario inicia el programa en modo cliente no debe hacer esta validacion de actualizar datos
-                        String modoAplicativo = propiedadesIniciales.getProperty(CAMPO_MODO_APLICATIVO);
+                        String modoAplicativo = propiedadesIniciales.getProperty(ArchivoConfiguracionesCodefac.CAMPO_MODO_APLICATIVO);
                         
                         //Solo actualizar si es un modo servidor , o cliente servidor
                         if (modoAplicativo!=null && !modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE.toString())) 
@@ -530,8 +520,8 @@ public class Main {
                             UtilidadesServidor.actualizarBaseDatos(versionGrabada);
                         }                        
                         //Actualizo el archivo de propiedades del sistema con la ultima version
-                        propiedadesIniciales.put(CAMPO_VERSION,ParametrosSistemaCodefac.VERSION);
-                        propiedadesIniciales.store(new FileWriter(NOMBRE_ARCHIVO_CONFIGURACION), "");
+                        propiedadesIniciales.put(ArchivoConfiguracionesCodefac.CAMPO_VERSION,ParametrosSistemaCodefac.VERSION);
+                        ArchivoConfiguracionesCodefac.getInstance().guardar();
                     } catch (IOException ex) {
                         Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (Exception ex) {
@@ -545,8 +535,8 @@ public class Main {
         {
             try {
                 //Si no hay dato no se actualiza porque asumo que es la primera vez que se usa el sistema
-                propiedadesIniciales.put(CAMPO_VERSION, ParametrosSistemaCodefac.VERSION);
-                propiedadesIniciales.store(new FileWriter(NOMBRE_ARCHIVO_CONFIGURACION), "");
+                propiedadesIniciales.put(ArchivoConfiguracionesCodefac.CAMPO_VERSION, ParametrosSistemaCodefac.VERSION);
+                ArchivoConfiguracionesCodefac.getInstance().guardar();
             } catch (IOException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -656,7 +646,8 @@ public class Main {
             
             if (modoAplicativo.equals(ModoAplicativoModel.MODO_CLIENTE)) {
                   //Consultar si existe grabado la ip del servidor para cargar por defecto la ultima
-                    String ipServidorDefecto=propiedadesIniciales.getProperty(CAMPO_IP_ULTIMO_ACCESO_SERVIDOR);
+                    Properties propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
+                    String ipServidorDefecto=propiedadesIniciales.getProperty(ArchivoConfiguracionesCodefac.CAMPO_IP_ULTIMO_ACCESO_SERVIDOR);
                     
                     //Cargar los recursos para funcionar en modo cliente
                     ipServidor = JOptionPane.showInputDialog("Ingresa la Ip del servidor: ",(ipServidorDefecto==null)?"":ipServidorDefecto);
@@ -664,8 +655,8 @@ public class Main {
                     verificarConexionesPermitidas();
                     
                     //Grabar la ip del ultimo servidor accedido para no ingresar nuevamente el dato
-                    propiedadesIniciales.put(CAMPO_IP_ULTIMO_ACCESO_SERVIDOR, ipServidor + "");
-                    propiedadesIniciales.store(new FileWriter(NOMBRE_ARCHIVO_CONFIGURACION), "");
+                    propiedadesIniciales.put(ArchivoConfiguracionesCodefac.CAMPO_IP_ULTIMO_ACCESO_SERVIDOR, ipServidor + "");
+                    ArchivoConfiguracionesCodefac.getInstance().guardar();
                     
                     LOG.log(Level.INFO, "Modo Cliente Activado");
             }
@@ -1278,6 +1269,37 @@ public class Main {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    private static void cargarTemaCodefac() {
+        ArchivoConfiguracionesCodefac archivo=ArchivoConfiguracionesCodefac.getInstance();
+        String tema=archivo.obtenerValor(ArchivoConfiguracionesCodefac.CAMPO_TEMA);
+        if(tema==null)
+        {
+            EstiloCodefacEnum estiloDefecto=EstiloCodefacEnum.GLASS;
+            ArchivoConfiguracionesCodefac.getInstance().agregarCampo(ArchivoConfiguracionesCodefac.CAMPO_TEMA,estiloDefecto.getNombre());
+            setearEstiloSistema(estiloDefecto);
+        }
+        else
+        {
+            setearEstiloSistema(EstiloCodefacEnum.findByNombre(tema));
+        }
+    }
+    
+    public static void setearEstiloSistema(EstiloCodefacEnum estiloCodefacEnum)
+    {
+        try {
+            UIManager.setLookAndFeel(estiloCodefacEnum.getClassName());
+            //repaint();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 }

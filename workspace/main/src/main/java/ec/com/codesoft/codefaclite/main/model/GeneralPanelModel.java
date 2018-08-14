@@ -35,6 +35,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPa
 import ec.com.codesoft.codefaclite.crm.model.ClienteModel;
 import ec.com.codesoft.codefaclite.crm.model.ProductoModel;
 import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
+import ec.com.codesoft.codefaclite.main.archivos.ArchivoConfiguracionesCodefac;
 import ec.com.codesoft.codefaclite.main.init.Main;
 import ec.com.codesoft.codefaclite.main.interfaces.BusquedaCodefacInterface;
 import ec.com.codesoft.codefaclite.main.license.Licencia;
@@ -54,6 +55,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PermisoVentana;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CategoriaMenuEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EstiloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
@@ -125,7 +127,10 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
@@ -2900,7 +2905,52 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        //Cargar los temas en el menu
+        for(EstiloCodefacEnum estiloEnum : EstiloCodefacEnum.values())
+        {
+            JMenuItem menuItemTema=new JMenuItem(estiloEnum.getNombre());
+            menuItemTema.setFont(new Font("Arial", Font.PLAIN, 13));   
+            menuItemTema.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    seleccionarTema(estiloEnum.getNombre());
+                    //DialogoCodefac.mensaje("Correcto","Tema modificado correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+                    //Guardar en el arcivo de configuraciones
+                    try {
+                        ArchivoConfiguracionesCodefac.getInstance().agregarCampo(ArchivoConfiguracionesCodefac.CAMPO_TEMA, estiloEnum.getNombre());
+                        ArchivoConfiguracionesCodefac.getInstance().guardar();
+                        
+                    } catch (IOException ex) {
+                        Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
+            
+            getJmenuTemas().add(menuItemTema);            
+        }
                 
+    }
+    
+    /**
+     * Metodo que permite establecer el nuevo tema para cambiar la apariencia
+     */
+    private void seleccionarTema(String nombreTema)
+    {
+        EstiloCodefacEnum estiloCodefacEnum=EstiloCodefacEnum.findByNombre(nombreTema);
+        try {
+            UIManager.setLookAndFeel(estiloCodefacEnum.getClassName());
+            SwingUtilities.updateComponentTreeUI( this );
+            repaint();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 
     private void iniciarComponentesPantalla() {

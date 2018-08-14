@@ -6,6 +6,8 @@
 package ec.com.codesoft.codefaclite.gestionacademica.model;
 
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
+import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteEnvioSmsData;
+import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteEnvioSmsInterface;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
@@ -31,6 +33,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PlantillaSmsEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
@@ -57,7 +61,7 @@ import net.sf.jasperreports.engine.JasperReport;
  *
  * @author Carlos
  */
-public class NotificacionesDeudasModel extends NotificacionesDeudasPanel implements Runnable {
+public class NotificacionesDeudasModel extends NotificacionesDeudasPanel implements Runnable,ComponenteEnvioSmsInterface {
 
     private static final String PATH_REPORTE_TMP = "tmp/reporteDeuda.pdf";
 
@@ -653,6 +657,22 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
 
     @Override
     public void cargarDatosPantalla(Object entidad) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean getValidacionEnvioSms() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+
+    @Override
+    public VentanaEnum getVentanaEnum() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<ComponenteEnvioSmsData> getDataSms() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

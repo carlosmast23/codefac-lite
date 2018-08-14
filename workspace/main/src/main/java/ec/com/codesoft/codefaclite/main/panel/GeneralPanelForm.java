@@ -57,7 +57,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         JPanelAuxiliarInterno = new javax.swing.JPanel();
         jPanelSeleccion = new javax.swing.JTabbedPane();
         JPanelMenu = new javax.swing.JPanel();
-        jToolBar1 = new javax.swing.JToolBar();
+        jToolBar2 = new javax.swing.JToolBar();
         btnHome = new javax.swing.JButton();
         btnNuevo = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
@@ -86,6 +86,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jMenuItemSalir = new javax.swing.JMenuItem();
         jMenuUtilidades = new javax.swing.JMenu();
         jMenuCalculadora = new javax.swing.JMenuItem();
+        jmenuTemas = new javax.swing.JMenu();
         jMenuVentanasActivas = new javax.swing.JMenu();
         jMenuAyuda = new javax.swing.JMenu();
         jMenuItemContenido = new javax.swing.JMenuItem();
@@ -138,70 +139,95 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         JPanelMenu.setBackground(new java.awt.Color(255, 255, 255));
         JPanelMenu.setLayout(new java.awt.GridBagLayout());
 
-        jToolBar1.setBorder(null);
-        jToolBar1.setRollover(true);
+        jToolBar2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 0));
+        jToolBar2.setFloatable(false);
+        jToolBar2.setRollover(true);
 
         btnHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/home.png"))); // NOI18N
         btnHome.setToolTipText("Ir al menu principal");
+        btnHome.setFocusable(false);
+        btnHome.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnHome.setMargin(new java.awt.Insets(0, 14, 0, 14));
-        jToolBar1.add(btnHome);
+        btnHome.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar2.add(btnHome);
 
         btnNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/nuevo-icono2.png"))); // NOI18N
         btnNuevo.setToolTipText("Nuevo");
+        btnNuevo.setFocusable(false);
+        btnNuevo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnNuevo.setMargin(new java.awt.Insets(0, 14, 0, 14));
-        jToolBar1.add(btnNuevo);
+        btnNuevo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar2.add(btnNuevo);
 
         btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/save-icon.png"))); // NOI18N
         btnGuardar.setToolTipText("Grabar");
+        btnGuardar.setFocusable(false);
+        btnGuardar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnGuardar.setMargin(new java.awt.Insets(0, 14, 0, 14));
+        btnGuardar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jToolBar1.add(btnGuardar);
+        jToolBar2.add(btnGuardar);
 
         btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/delete-icon.png"))); // NOI18N
         btnEliminar.setToolTipText("Eliminar");
+        btnEliminar.setFocusable(false);
+        btnEliminar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnEliminar.setMargin(new java.awt.Insets(0, 14, 0, 14));
-        jToolBar1.add(btnEliminar);
+        btnEliminar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar2.add(btnEliminar);
 
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find-icon.png"))); // NOI18N
         btnBuscar.setToolTipText("Buscar");
+        btnBuscar.setFocusable(false);
+        btnBuscar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnBuscar.setMargin(new java.awt.Insets(0, 14, 0, 14));
+        btnBuscar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscarActionPerformed(evt);
             }
         });
-        jToolBar1.add(btnBuscar);
+        jToolBar2.add(btnBuscar);
 
         btnActualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/refresh-icon.png"))); // NOI18N
         btnActualizar.setToolTipText("Refrescar");
+        btnActualizar.setFocusable(false);
+        btnActualizar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnActualizar.setMargin(new java.awt.Insets(0, 14, 0, 14));
+        btnActualizar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnActualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnActualizarActionPerformed(evt);
             }
         });
-        jToolBar1.add(btnActualizar);
+        jToolBar2.add(btnActualizar);
 
         btnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/print-icon.png"))); // NOI18N
         btnImprimir.setToolTipText("Imprimir");
+        btnImprimir.setFocusable(false);
+        btnImprimir.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnImprimir.setMargin(new java.awt.Insets(0, 14, 0, 14));
+        btnImprimir.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnImprimir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnImprimirActionPerformed(evt);
             }
         });
-        jToolBar1.add(btnImprimir);
+        jToolBar2.add(btnImprimir);
 
         btnAyuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/help_icon.png"))); // NOI18N
         btnAyuda.setToolTipText("Ayuda");
+        btnAyuda.setFocusable(false);
+        btnAyuda.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnAyuda.setMargin(new java.awt.Insets(0, 14, 0, 14));
-        jToolBar1.add(btnAyuda);
+        btnAyuda.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar2.add(btnAyuda);
 
-        JPanelMenu.add(jToolBar1, new java.awt.GridBagConstraints());
+        JPanelMenu.add(jToolBar2, new java.awt.GridBagConstraints());
 
         getContentPane().add(JPanelMenu, java.awt.BorderLayout.PAGE_START);
 
@@ -340,6 +366,10 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
             }
         });
         jMenuUtilidades.add(jMenuCalculadora);
+
+        jmenuTemas.setText("Tema");
+        jmenuTemas.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        jMenuUtilidades.add(jmenuTemas);
 
         jMenuBar1.add(jMenuUtilidades);
 
@@ -530,7 +560,8 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
     private javax.swing.JTabbedPane jPanelSeleccion;
     private javax.swing.JSplitPane jSplitPanel;
     private javax.swing.JSplitPane jSplitPanelVerticalSecundario;
-    private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JToolBar jToolBar2;
+    private javax.swing.JMenu jmenuTemas;
     private javax.swing.JLabel lblNombreEmpresa;
     private javax.swing.JLabel lblPiePagina;
     private javax.swing.JLabel lblTextoSecundario;
@@ -840,8 +871,9 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         this.jMenuVentanasActivas = jMenuVentanasActivas;
     }
 
-    
-    
-    
+    public JMenu getJmenuTemas() {
+        return jmenuTemas;
+    }
+
     
 }

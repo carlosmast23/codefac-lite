@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.FirmaElectronica;
+import ec.com.codesoft.codefaclite.facturacionelectronica.MetodoEnvioSmsInterface;
 import ec.com.codesoft.codefaclite.facturacionelectronica.MetodosEnvioInterface;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ServicioSri;
 import ec.com.codesoft.codefaclite.facturacionelectronica.evento.ListenerComprobanteElectronico;
@@ -758,7 +759,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                         });
                         
                         //Enviar mensaje
-                        ServidorSMS.getInstance().enviarMensaje("994905332","La factura"+clave.secuencial+" fue enviada a su correo");
+                        //ServidorSMS.getInstance().enviarMensaje("994905332","La factura"+clave.secuencial+" fue enviada a su correo");
                     }
                     
                     //Si se genera la etapa firmar entonces seteo la clave de acceso
@@ -984,6 +985,7 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
              * Cargar variables para el envio del correo
              */
             cargarConfiguracionesCorreo(servicio);
+            cargarConfiguracionesSms(servicio);
             String footer = UtilidadVarios.getStringHtmltoUrl(RecursoCodefac.HTML.getResourceInputStream("footer_codefac.html"));
             servicio.setFooterMensajeCorreo(footer);
 
@@ -1215,6 +1217,19 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
 
         //System.out.println(parametros.get("SUBREPORT_DIR"));
         return parametros;
+    }
+    
+    private void cargarConfiguracionesSms(ComprobanteElectronicoService servicio)
+    {
+        servicio.setMetodoEnvioSmsInterface(new MetodoEnvioSmsInterface() {
+            @Override
+            public void enviarMensaje(List<String> numeros, String mensaje) throws Exception {
+                ServidorSMS servidorSms=ServidorSMS.getInstance();
+                for (String numero : numeros) {
+                    servidorSms.enviarMensaje(numero, mensaje);
+                }
+            }
+        });
     }
     
     private void cargarConfiguracionesCorreo(ComprobanteElectronicoService servicio)

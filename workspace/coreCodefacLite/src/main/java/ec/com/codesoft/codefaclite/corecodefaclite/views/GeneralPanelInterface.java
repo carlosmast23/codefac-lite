@@ -10,17 +10,12 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterfac
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ComponenteSecundarioAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ConsolaGeneral;
-import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
-import java.awt.Image;
-import java.awt.Point;
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -31,19 +26,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.JTextComponent;
-import org.bouncycastle.crypto.tls.SessionParameters;
+import org.jdesktop.swingx.JXTaskPane;
+import org.jdesktop.swingx.JXTaskPaneContainer;
 import org.jdesktop.swingx.VerticalLayout;
 
 /**
@@ -386,26 +379,34 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
         
         getContentPane().setLayout(new BorderLayout());
         
-        JPanel panelVertical = new JPanel();
-        panelVertical.setLayout(new VerticalLayout());
-        TitledBorder titledBorder=BorderFactory.createTitledBorder("");
-        titledBorder.setTitleColor(Color.white);
-        panelVertical.setBorder(BorderFactory.createTitledBorder(""));
-        panelVertical.setBackground(new Color(99, 130, 191));
+         JXTaskPaneContainer panelVertical = new JXTaskPaneContainer();
+         panelVertical.setBackground(new Color(99, 130, 191));
+        //JPanel panelVertical = new JPanel();
+        //panelVertical.setLayout(new VerticalLayout());
+        //TitledBorder titledBorder=BorderFactory.createTitledBorder("");
+        //titledBorder.setTitleColor(Color.white);
+        //panelVertical.setBorder(BorderFactory.createTitledBorder(""));
+        //panelVertical.setBackground(new Color(99, 130, 191));
         
         //panelVertical.add(new JLabel("asdkañsdkñlasdkñl"));
         for (Map.Entry<String, List<Component>> entry : mapComponentesLaterales.entrySet()) {
             String key = entry.getKey();
             List<Component> componentes = entry.getValue();
             
-            JPanel panelVerticalAgrupador = new JPanel();
-            panelVerticalAgrupador.setLayout(new VerticalLayout());
             
-            TitledBorder title;
-            title = BorderFactory.createTitledBorder(key);
-            title.setTitleColor(Color.white);
-            panelVerticalAgrupador.setBorder(title);
-            panelVerticalAgrupador.setBackground(new Color(99, 130, 191));
+            //JPanel panelVerticalAgrupador = new JPanel();
+            //panelVerticalAgrupador.setLayout(new VerticalLayout());
+            
+            //TitledBorder title;
+            //title = BorderFactory.createTitledBorder(key);
+            //title.setTitleColor(Color.white);
+            //panelVerticalAgrupador.setBorder(title);
+            //panelVerticalAgrupador.setBackground(new Color(99, 130, 191));
+            
+            
+            JXTaskPane taskpane = new JXTaskPane();
+            taskpane.setTitle(key);
+           
             
             //LLenar con todos los componentes enviados
             for (Component componente : componentes) {
@@ -416,15 +417,17 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame
                     ((JButton)componente).setHorizontalAlignment(SwingConstants.LEFT);
                 }
                 
-                panelVerticalAgrupador.add(componente);
+                taskpane.add(componente);
+                //panelVerticalAgrupador.add(componente);
             }
             
-            panelVertical.add(panelVerticalAgrupador);            
+            panelVertical.add(taskpane);            
             
         }
 
         //Posiciono el panel vertical en la parte derecha de los formularios        
         getContentPane().add(panelVertical,BorderLayout.LINE_START);
+        
         
         //Ubico todos los demas componentes en la parte central
         for (Component componente : componentesPantalla) {
