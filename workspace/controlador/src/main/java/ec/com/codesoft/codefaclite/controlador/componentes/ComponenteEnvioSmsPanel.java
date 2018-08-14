@@ -159,41 +159,48 @@ public class ComponenteEnvioSmsPanel extends javax.swing.JPanel {
                     return;
                 }
                 
-                if(controlador.getNumeroTelefono().isEmpty())
-                {
-                    DialogoCodefac.mensaje("Error","No se puede enviar un mensaje si no esta ingresado el telefono ",DialogoCodefac.MENSAJE_INCORRECTO);
-                    return;
-                }
-
+                   
+                String mensajeEnviar=txtMensajeTexto.getText();                
                 
-                String mensajeEnviar=txtMensajeTexto.getText();
-                
-                                        
-                if(mensajeEnviar.length()<=ParametrosSistemaCodefac.LIMITE_CARACTERES_SMS)
-                {
-                    try {
-                        //Map<PlantillaSmsEnum.EtiquetaEnum,String> mapParametros=new HashMap<PlantillaSmsEnum.EtiquetaEnum,String>();
-                        //mapParametros.put(PlantillaSmsEnum.EtiquetaEnum.EMPRESA,session.getEmpresa().getNombreLegal());
-                        
-                        if(ControladorPlantillaSms.enviarMensajeConPlantilla(controlador.getNumeroTelefono(),mensajeEnviar,controlador.getPlantillaTags()))
-                        {
-                            DialogoCodefac.mensaje("Correcto","El mensaje fue enviado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
-                        }
-                        else
-                        {
-                            DialogoCodefac.mensaje("Incorrecto","El servicio de Sms no esta diponible",DialogoCodefac.MENSAJE_INCORRECTO);
-                        }                        
-
-                    } catch (ServicioCodefacException ex) {
-                        Logger.getLogger(ComponenteEnvioSmsPanel.class.getName()).log(Level.SEVERE, null, ex);
-                        DialogoCodefac.mensaje("Error", ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+                //TODO: Validar que no envie a los que tiene numeros
+                for (ComponenteEnvioSmsData componente : controlador.getDataSms()) {
+                    
+                    if (componente.getNumeroTelefono().isEmpty()) {
+                        DialogoCodefac.mensaje("Error", "No se puede enviar un mensaje si no esta ingresado el telefono ", DialogoCodefac.MENSAJE_INCORRECTO);
+                        return;
                     }
                     
+                                            
+                    if(mensajeEnviar.length()<=ParametrosSistemaCodefac.LIMITE_CARACTERES_SMS)
+                    {
+                        try {
+                            //Map<PlantillaSmsEnum.EtiquetaEnum,String> mapParametros=new HashMap<PlantillaSmsEnum.EtiquetaEnum,String>();
+                            //mapParametros.put(PlantillaSmsEnum.EtiquetaEnum.EMPRESA,session.getEmpresa().getNombreLegal());
+
+                            if(ControladorPlantillaSms.enviarMensajeConPlantilla(componente.getNumeroTelefono(),mensajeEnviar,componente.getPlantillaTags()))
+                            {
+                                DialogoCodefac.mensaje("Correcto","El mensaje fue enviado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+                            }
+                            else
+                            {
+                                DialogoCodefac.mensaje("Incorrecto","El servicio de Sms no esta diponible",DialogoCodefac.MENSAJE_INCORRECTO);
+                            }                        
+
+                        } catch (ServicioCodefacException ex) {
+                            Logger.getLogger(ComponenteEnvioSmsPanel.class.getName()).log(Level.SEVERE, null, ex);
+                            DialogoCodefac.mensaje("Error", ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+                        }
+
+                    }
+                    else
+                    {
+                        DialogoCodefac.mensaje("Incorrecto","El tamaño maximo del mensaje es de "+ParametrosSistemaCodefac.LIMITE_CARACTERES_SMS+" , y tu mensaje tiene "+mensajeEnviar.length(),DialogoCodefac.MENSAJE_INCORRECTO);
+                    }                   
+                    
+                    
                 }
-                else
-                {
-                    DialogoCodefac.mensaje("Incorrecto","El tamaño maximo del mensaje es de "+ParametrosSistemaCodefac.LIMITE_CARACTERES_SMS+" , y tu mensaje tiene "+mensajeEnviar.length(),DialogoCodefac.MENSAJE_INCORRECTO);
-                }
+
+                
                 
             }
         });

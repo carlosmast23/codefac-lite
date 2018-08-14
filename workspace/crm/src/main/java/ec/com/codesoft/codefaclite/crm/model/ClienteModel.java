@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.crm.model;
 
+import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteEnvioSmsData;
 import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteEnvioSmsInterface;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
@@ -585,7 +586,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     private void excluirValidaciones() {
        listaExclusionComponentes.add(getPnlSms().getTxtMensajeTexto());
     }
-
+    
     @Override
     public boolean getValidacionEnvioSms() {
         if (!estadoFormulario.equals(ESTADO_EDITAR)) {
@@ -595,20 +596,23 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         return true;
     }
 
-    @Override
-    public String getNumeroTelefono() {
-        return persona.getTelefonoCelular();
-    }
-
-    @Override
     public Map<PlantillaSmsEnum.EtiquetaEnum, String> getPlantillaTags() {
         Map<PlantillaSmsEnum.EtiquetaEnum, String> mapParametros = new HashMap<PlantillaSmsEnum.EtiquetaEnum, String>();
         mapParametros.put(PlantillaSmsEnum.EtiquetaEnum.EMPRESA, session.getEmpresa().getNombreLegal());
         return mapParametros;
+    }
+    
+    @Override
+    public List<ComponenteEnvioSmsData> getDataSms() {                
+        ComponenteEnvioSmsData componenteEnvioSmsData=new ComponenteEnvioSmsData(persona.getTelefonoCelular(),getPlantillaTags());
+        List<ComponenteEnvioSmsData> dataList=new ArrayList<ComponenteEnvioSmsData>();
+        dataList.add(componenteEnvioSmsData);
+        return dataList;
     }
 
     @Override
     public VentanaEnum getVentanaEnum() {
         return VentanaEnum.CLIENTE;
     }
+    
 }

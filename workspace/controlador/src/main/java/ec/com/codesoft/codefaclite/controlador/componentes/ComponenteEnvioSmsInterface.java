@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.controlador.componentes;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PlantillaSmsEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,9 +16,8 @@ import java.util.Map;
  */
 public interface ComponenteEnvioSmsInterface {
     
+    public List<ComponenteEnvioSmsData> getDataSms();
     public abstract boolean getValidacionEnvioSms();
-    public abstract String getNumeroTelefono();
-    public abstract Map<PlantillaSmsEnum.EtiquetaEnum,String> getPlantillaTags();
     public abstract VentanaEnum getVentanaEnum();
     
 }

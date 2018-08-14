@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.gestionacademica.model;
 
+import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteEnvioSmsData;
 import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteEnvioSmsInterface;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
@@ -503,12 +504,13 @@ public class EstudianteModel extends EstudiantePanel implements ComponenteEnvioS
         }
     }
 
+    /*
     @Override
     public String getNumeroTelefono() {
         return estudiante.getCelular();
-    }
+    }*/
 
-    @Override
+    //@Override
     public Map<PlantillaSmsEnum.EtiquetaEnum, String> getPlantillaTags() {
         Map<PlantillaSmsEnum.EtiquetaEnum, String> mapParametros=new HashMap<PlantillaSmsEnum.EtiquetaEnum,String>();
         mapParametros.put(PlantillaSmsEnum.EtiquetaEnum.EMPRESA,session.getEmpresa().getNombreLegal());
@@ -535,6 +537,15 @@ public class EstudianteModel extends EstudiantePanel implements ComponenteEnvioS
     @Override
     public VentanaEnum getVentanaEnum() {
         return VentanaEnum.ESTUDIANTES;
+    }
+
+    @Override
+    public List<ComponenteEnvioSmsData> getDataSms() {
+        //TODO: Aumentar el numero para el segundo representante
+        ComponenteEnvioSmsData componenteEnvioSmsData = new ComponenteEnvioSmsData(estudiante.getRepresentante().getTelefonoCelular(), getPlantillaTags());
+        List<ComponenteEnvioSmsData> dataList = new ArrayList<ComponenteEnvioSmsData>();
+        dataList.add(componenteEnvioSmsData);
+        return dataList;
     }
     
 }

@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.gestionacademica.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
+import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteEnvioSmsPanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ComponenteSecundarioAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
@@ -24,6 +25,8 @@ import javax.swing.JTextArea;
  * @author Carlos
  */
 public abstract class NotificacionesDeudasPanel extends ControladorCodefacInterface {
+    
+    private ComponenteEnvioSmsPanel pnlSms=new ComponenteEnvioSmsPanel();
 
     /**
      * Creates new form NotificacionesDeudasPanel
@@ -538,6 +541,11 @@ public abstract class NotificacionesDeudasPanel extends ControladorCodefacInterf
 
     public void setBtnImprimir(JButton btnImprimir) {
         this.btnImprimir = btnImprimir;
+    }
+
+    @ComponenteSecundarioAnotacion(nombreCategoria = "Servicio Mensajeria")
+    public ComponenteEnvioSmsPanel getPnlSms() {
+        return pnlSms;
     }
     
     
