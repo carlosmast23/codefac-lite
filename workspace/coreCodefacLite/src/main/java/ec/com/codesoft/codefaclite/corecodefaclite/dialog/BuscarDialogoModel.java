@@ -13,6 +13,8 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -73,7 +75,8 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         //crearConsulta("");
         ejecutarConsulta();
         //cargarDatos(listaResultados);
-        establecerPropiedadesIniciales();
+        establecerPropiedadesIniciales();        
+        
     }
     
     /**
@@ -245,6 +248,23 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
     
     private void initListener()
     {        
+        //Todo agregado artificio para setear el focus porque no funciona con un tema
+        addComponentListener(new ComponentListener() {
+            @Override
+            public void componentResized(ComponentEvent e) {}
+
+            @Override
+            public void componentMoved(ComponentEvent e) {}
+
+            @Override
+            public void componentShown(ComponentEvent e) {
+                getTxtBuscar().requestFocus();
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {}
+        });
+        
         getTxtBuscar().addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {}
@@ -374,6 +394,17 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
                         getTxtBuscar().requestFocus();
                     }
                 }
+                
+                if(e.getKeyCode()==KeyEvent.VK_LEFT)
+                {
+                   getBtnAtras().doClick();
+                }
+                
+                if(e.getKeyCode()==KeyEvent.VK_RIGHT)
+                {
+                   getBtnSiguiente().doClick();
+                }
+                
             }
 
             @Override

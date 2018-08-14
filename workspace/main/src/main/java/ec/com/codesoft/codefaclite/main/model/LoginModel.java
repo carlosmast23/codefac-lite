@@ -21,6 +21,8 @@ import java.awt.Frame;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,6 +52,22 @@ public class LoginModel extends LoginFormDialog{
         
         //Setear la versión del sistema
         getLblVersion().setText("Versión:"+ParametrosSistemaCodefac.VERSION+"   ");
+        
+        addComponentListener(new ComponentListener() { //Artificio para setear en los dialogs el focus
+            @Override
+            public void componentResized(ComponentEvent e) {}
+
+            @Override
+            public void componentMoved(ComponentEvent e) {}
+
+            @Override
+            public void componentShown(ComponentEvent e) {
+                getTxtUsuario().requestFocus();
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {}
+        });
         
     }
 
