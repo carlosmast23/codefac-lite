@@ -841,6 +841,7 @@ public class Main {
         loginModel.setVisible(true);
         Usuario usuarioLogin = loginModel.getUsuarioLogin();
         frameAplicacion.dispose();
+        loginModel.getTxtUsuario().requestFocus();
         return usuarioLogin;
     }
 

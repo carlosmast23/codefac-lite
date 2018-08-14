@@ -73,16 +73,17 @@ public class LoginFormDialog extends javax.swing.JDialog {
         txtClave.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         btnIngresar.setBackground(new java.awt.Color(255, 255, 255));
-        btnIngresar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        btnIngresar.setText("I N G R E S A R");
+        btnIngresar.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
+        btnIngresar.setText("INGRESAR");
         btnIngresar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIngresarActionPerformed(evt);
             }
         });
 
-        btnSalir.setBackground(new java.awt.Color(153, 0, 0));
-        btnSalir.setForeground(new java.awt.Color(255, 255, 255));
+        btnSalir.setBackground(new java.awt.Color(255, 255, 255));
+        btnSalir.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
+        btnSalir.setForeground(new java.awt.Color(153, 0, 0));
         btnSalir.setText("S A L I R");
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -122,7 +123,7 @@ public class LoginFormDialog extends javax.swing.JDialog {
                                     .addGroup(panelPrincipalLayout.createSequentialGroup()
                                         .addComponent(btnIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(btnSalir, javax.swing.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE))))
+                                        .addComponent(btnSalir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                             .addComponent(lblPiePagina, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(101, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelPrincipalLayout.createSequentialGroup()

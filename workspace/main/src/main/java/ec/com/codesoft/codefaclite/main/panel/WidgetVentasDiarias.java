@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.main.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.main.model.ObjetoEscritorioAbstract;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwingX;
 import javax.swing.JButton;
 import javax.swing.JDesktopPane;
 import javax.swing.JLabel;
@@ -28,6 +29,7 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
     public WidgetVentasDiarias(JDesktopPane parentPanel) {
         super(parentPanel);
         initComponents();
+        UtilidadesSwingX.placeHolder("Descripción",txtDescripcionProducto);
     }
 
     /**
@@ -45,19 +47,16 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         jPanel2 = new javax.swing.JPanel();
         jTabbedPanel = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
         txtDescripcionProducto = new javax.swing.JTextField();
         txtCantidadProdiucto = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         txtValorUnitarioProducto = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         btnFacturar = new javax.swing.JButton();
         btnAgregarProducto = new javax.swing.JButton();
         btnBuscarProducto = new javax.swing.JButton();
-        jLabel5 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         btnEliminarProducto = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
@@ -73,6 +72,7 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         lblValorTotal = new javax.swing.JLabel();
         lblIva12 = new javax.swing.JLabel();
 
+        setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         setLayout(new java.awt.BorderLayout());
 
         panelTitulo.setBackground(new java.awt.Color(40, 161, 207));
@@ -93,59 +93,51 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jLabel4.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
-        jLabel4.setText("Descripción:");
+        txtDescripcionProducto.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        jPanel1.add(jLabel4, gridBagConstraints);
-
-        txtDescripcionProducto.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(4, 8, 10, 5);
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
         jPanel1.add(txtDescripcionProducto, gridBagConstraints);
 
-        txtCantidadProdiucto.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        txtCantidadProdiucto.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
-        gridBagConstraints.insets = new java.awt.Insets(4, 8, 10, 5);
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
         jPanel1.add(txtCantidadProdiucto, gridBagConstraints);
 
-        jLabel3.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel3.setText("Cantidad:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
         jPanel1.add(jLabel3, gridBagConstraints);
 
-        jLabel2.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel2.setText("Valor Unitario:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
+        jPanel1.add(jLabel2, gridBagConstraints);
+
+        txtValorUnitarioProducto.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 7;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        jPanel1.add(jLabel2, gridBagConstraints);
-
-        txtValorUnitarioProducto.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
-        gridBagConstraints.insets = new java.awt.Insets(4, 8, 10, 5);
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
         jPanel1.add(txtValorUnitarioProducto, gridBagConstraints);
 
         jLabel6.setText("         ");
@@ -155,14 +147,6 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
         jPanel1.add(jLabel6, gridBagConstraints);
-
-        jLabel7.setText("         ");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
-        jPanel1.add(jLabel7, gridBagConstraints);
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
         jPanel5.setLayout(new java.awt.GridBagLayout());
@@ -174,51 +158,40 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         jPanel1.add(jPanel5, gridBagConstraints);
 
         btnFacturar.setBackground(new java.awt.Color(255, 255, 255));
-        btnFacturar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        btnFacturar.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         btnFacturar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/guardar.png"))); // NOI18N
         btnFacturar.setText("Facturar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 8;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
-        gridBagConstraints.insets = new java.awt.Insets(120, 20, 20, 20);
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
         jPanel1.add(btnFacturar, gridBagConstraints);
 
         btnAgregarProducto.setBackground(new java.awt.Color(255, 255, 255));
-        btnAgregarProducto.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
-        btnAgregarProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/Document.png"))); // NOI18N
+        btnAgregarProducto.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnAgregarProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add2.png"))); // NOI18N
         btnAgregarProducto.setText("Agregar");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 9;
-        gridBagConstraints.gridwidth = 8;
+        gridBagConstraints.gridwidth = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(14, 0, 100, 0);
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
         jPanel1.add(btnAgregarProducto, gridBagConstraints);
 
         btnBuscarProducto.setBackground(new java.awt.Color(255, 255, 255));
-        btnBuscarProducto.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        btnBuscarProducto.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnBuscarProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/Zoom.png"))); // NOI18N
         btnBuscarProducto.setText("Buscar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 8;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 20, 10);
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
         jPanel1.add(btnBuscarProducto, gridBagConstraints);
-
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/general/tienda1p.png"))); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 8;
-        gridBagConstraints.gridheight = 10;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
-        jPanel1.add(jLabel5, gridBagConstraints);
 
         jTabbedPanel.addTab("Producto", new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/camion.png")), jPanel1); // NOI18N
 
@@ -230,33 +203,15 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         btnEliminarProducto.setText("Eliminar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 0);
         jPanel4.add(btnEliminarProducto, gridBagConstraints);
 
         jPanel6.setLayout(new java.awt.GridBagLayout());
 
-        TblDetalleFactura.setBackground(new java.awt.Color(40, 161, 207));
-        TblDetalleFactura.setFont(new java.awt.Font("Arial", 0, 10)); // NOI18N
-        TblDetalleFactura.setForeground(new java.awt.Color(255, 255, 255));
-        TblDetalleFactura.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        TblDetalleFactura.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
-        TblDetalleFactura.setFocusable(false);
-        TblDetalleFactura.setGridColor(new java.awt.Color(205, 205, 205));
-        TblDetalleFactura.setPreferredSize(new java.awt.Dimension(260, 60));
-        TblDetalleFactura.setSelectionBackground(new java.awt.Color(188, 217, 245));
-        TblDetalleFactura.setSelectionForeground(new java.awt.Color(0, 0, 0));
         jScrollPane1.setViewportView(TblDetalleFactura);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -268,6 +223,7 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
         gridBagConstraints.weightx = 0.1;
@@ -350,9 +306,9 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         jPanel3.add(lblIva12, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridheight = 4;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 10);
         jPanel4.add(jPanel3, gridBagConstraints);
@@ -463,10 +419,7 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -475,7 +428,6 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPanel;
     private javax.swing.JLabel lblIva12;
     private javax.swing.JLabel lblSubtotal0;

@@ -2162,20 +2162,23 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 }
             });
             getjDesktopPane1().add(widgetVirtualMall);
-            widgetVirtualMall.setVisible(true);
+            widgetVirtualMall.setVisible(false); //TODO: Por el momento dejo desactivado este componente porque no estamos usando
             
             /***
              * Agregar el widget de Ventas diarias
              */
             mapBuscar = new HashMap<>();
             mapBuscar.put("nombre", "WidgetVentasDiarias");
-            int xVd=servicio.obtenerPorMap(mapBuscar).get(0).x;
-            int yVd=servicio.obtenerPorMap(mapBuscar).get(0).y;
+            //int xVd=servicio.obtenerPorMap(mapBuscar).get(0).x;
+            //int yVd=servicio.obtenerPorMap(mapBuscar).get(0).y;
+            
+            int xVd=100;
+            int yVd=100;
             
             widgetVentasDiarias = new VentasDiariasModel(getjDesktopPane1());
             widgetVentasDiarias.panelPadre=this;
             widgetVentasDiarias.setPreferredSize(new Dimension(xVd,yVd));
-            widgetVentasDiarias.setBounds(xVd,xVd,220,330);
+            widgetVentasDiarias.setBounds(xVd,xVd,250,330);
             
             widgetVentasDiarias.addListenerIcono(new IconoInterfaz() {
                 @Override
