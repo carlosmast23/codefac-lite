@@ -142,6 +142,7 @@ public class GeneralPanelForm extends javax.swing.JFrame  {
         jToolBar2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 0));
         jToolBar2.setFloatable(false);
         jToolBar2.setRollover(true);
+        jToolBar2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         btnHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/home.png"))); // NOI18N
         btnHome.setToolTipText("Ir al menu principal");

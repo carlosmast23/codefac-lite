@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.model;
 
+import com.seaglasslookandfeel.SeaGlassLookAndFeel;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
@@ -208,11 +209,23 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         camposValidar.add(getTxtDescuento());
         //Obtener el estado de validacion de los campos
         for (JTextField campo : camposValidar) {
-            if (!campo.getBackground().equals(Color.white)) {
+            Color color=campo.getBackground();
+            //System.out.println(color.getRed()+"-"+color.getGreen()+"-"+color.getBlue());
+            //SeaGlassLookAndFeel.
+            if (!compararColores(color,Color.white)) {
                 b = false;
             }
         }
         return b;
+    }
+    
+    private boolean compararColores(Color color1,Color color2) //TODO: Artificio para comparar colores cuando se manejan templates no compara directo los objetos
+    {
+        if(color1.getRed()==color2.getRed() && color1.getGreen()==color2.getGreen() && color1.getBlue()==color2.getBlue())
+        {
+            return true;
+        }
+        return false;
     }
 
     private void addListenerButtons() {        
