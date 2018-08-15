@@ -5,7 +5,6 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.model;
 
-import com.seaglasslookandfeel.SeaGlassLookAndFeel;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
@@ -1739,7 +1738,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     public void definirFechaMinFacturacion() {
 
         getjDateFechaEmision().setDate(new java.util.Date());
-        ((JTextField) this.getjDateFechaEmision().getDateEditor()).setEditable(false);
+        //this.getjDateFechaEmision().setEditable(false);
+        //((JTextField) this.getjDateFechaEmision().getDateEditor()).setEditable(false);
 
         this.fechaMax = new java.util.Date();
 

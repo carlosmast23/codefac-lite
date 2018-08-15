@@ -13,6 +13,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import javax.swing.JDesktopPane;
 import javax.swing.JPanel;
+import org.jdesktop.swingx.JXTitledPanel;
 
 /**
  *
@@ -42,7 +43,17 @@ public abstract class ObjetoEscritorioAbstract extends JPanel{
         //agregarListener();
     }
     
-    
+    /**
+     * Metodo pendiente para agregar el titulo de un panel
+     * TODO: terminar de imlementra
+     */
+    private void agregarTituloPantalla()
+    {
+        //JXTitledPanel tPanel = new JXTitledPanel("Encabezado", cPanel);
+        //tPanel.setTitlePainter(pintor);
+        //tPanel.setTitleForeground(FG_COLOR);
+
+    }
     
     protected void agregarListenerMovimiento()
     {

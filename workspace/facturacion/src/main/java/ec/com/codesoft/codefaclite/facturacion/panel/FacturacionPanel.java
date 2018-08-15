@@ -27,6 +27,7 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
+import org.jdesktop.swingx.JXDatePicker;
 
 /**
  *
@@ -150,7 +151,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         jLabel35 = new javax.swing.JLabel();
         jLabel36 = new javax.swing.JLabel();
         lblSecuencial = new javax.swing.JLabel();
-        jDateFechaEmision = new com.toedter.calendar.JDateChooser();
         jLabel38 = new javax.swing.JLabel();
         jLabel39 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
@@ -169,6 +169,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         cmbDocumento = new javax.swing.JComboBox<>();
         jLabel28 = new javax.swing.JLabel();
         cmbTipoDocumento = new javax.swing.JComboBox<>();
+        jDateFechaEmision = new org.jdesktop.swingx.JXDatePicker();
         panelTabDatos = new javax.swing.JTabbedPane();
         panelProductos = new javax.swing.JPanel();
         panelDatosEmpresa1 = new javax.swing.JPanel();
@@ -825,14 +826,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 5, 10);
         panelDatosFactura.add(lblSecuencial, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(1, 2, 5, 10);
-        panelDatosFactura.add(jDateFechaEmision, gridBagConstraints);
 
         jLabel38.setText("             ");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -984,6 +977,12 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.05;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 5, 10);
         panelDatosFactura.add(cmbTipoDocumento, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 11;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(1, 2, 5, 10);
+        panelDatosFactura.add(jDateFechaEmision, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1237,7 +1236,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JComboBox<Persona> cmbRepresentante;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
     private javax.swing.JCheckBox jCheckBox1;
-    private com.toedter.calendar.JDateChooser jDateFechaEmision;
+    private org.jdesktop.swingx.JXDatePicker jDateFechaEmision;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1584,13 +1583,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         this.lblSecuencial = lblSecuencial;
     }
 
-    public JDateChooser getjDateFechaEmision() {
-        return jDateFechaEmision;
-    }
 
-    public void setjDateFechaEmision(JDateChooser jDateFechaEmision) {
-        this.jDateFechaEmision = jDateFechaEmision;
-    }
 
     public JLabel getLblEstadoFactura() {
         return lblEstadoFactura;
@@ -1670,6 +1663,12 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     public void setTxtCodigoDetalle(JTextField txtCodigoDetalle) {
         this.txtCodigoDetalle = txtCodigoDetalle;
     }
+
+    public JXDatePicker getjDateFechaEmision() {
+        return jDateFechaEmision;
+    }
+    
+    
     
     
 }
