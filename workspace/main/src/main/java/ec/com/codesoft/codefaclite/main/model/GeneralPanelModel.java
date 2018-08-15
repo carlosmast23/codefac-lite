@@ -1179,7 +1179,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private void agregarListenerMenu(ControladorCodefacInterface panel,boolean maximisado)
     {
         try {
-            //Anular el metodo de cierre automatico para contralar manualmente
+            //Anular el metodo de cierre automatico para controlar manualmente
             panel.setDefaultCloseOperation(JInternalFrame.DO_NOTHING_ON_CLOSE);
             /**
              * Agregar variables de session a la pantalla

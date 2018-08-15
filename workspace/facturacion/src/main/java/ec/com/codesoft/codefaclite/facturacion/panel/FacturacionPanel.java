@@ -1667,6 +1667,11 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     public JXDatePicker getjDateFechaEmision() {
         return jDateFechaEmision;
     }
+
+    public JPanel getPanelFormasPago() {
+        return PanelFormasPago;
+    }
+    
     
     
     

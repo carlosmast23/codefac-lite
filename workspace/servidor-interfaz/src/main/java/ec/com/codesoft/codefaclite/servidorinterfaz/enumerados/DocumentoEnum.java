@@ -22,6 +22,16 @@ public enum DocumentoEnum {
             new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION,ModuloCodefacEnum.COMPRA},
             true,
             true),
+    
+    /**
+     * Documento no valido por el SRI //Ver si hago una clasificacion para diferencia este tipo de documentos
+     */
+    PROFORMA("Proforma",
+            "PROF",
+            DocumentoCategoriaEnum.COMPROBANTES_VENTA,
+            new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},
+            false,
+            false),
     /**
      * Nota de Venta para los contribuyentes que estan en modalidad RIDE
      */
@@ -75,6 +85,8 @@ public enum DocumentoEnum {
             new ModuloCodefacEnum[]{},
             true,
             false),;
+    
+    
     
     
     //Tiquetes emitidos por máquinas registradoras;
