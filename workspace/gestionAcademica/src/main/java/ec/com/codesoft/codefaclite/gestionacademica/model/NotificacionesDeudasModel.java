@@ -31,6 +31,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudi
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaMes;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PlantillaSmsEnum;
@@ -284,6 +285,7 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
                     Map<String, Object> mapParametros = new HashMap<String, Object>();
                     mapParametros.put("periodo", periodo);
                     mapParametros.put("catalogoProducto", catalogoProducto);
+                    mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
 
                     List<RubrosNivel> listaRubros = ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorMap(mapParametros);
 

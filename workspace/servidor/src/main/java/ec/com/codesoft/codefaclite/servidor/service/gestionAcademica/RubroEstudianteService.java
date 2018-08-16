@@ -162,6 +162,9 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         EntityTransaction transaccion = getTransaccion();
         transaccion.begin();
         for (RubroEstudiante rubroEstudiante : rubrosEstudiantes) {
+            rubroEstudiante.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
+            rubroEstudiante.setFechaGenerado(UtilidadesFecha.getFechaHoy());
+            rubroEstudiante.setEstadoFactura(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR.getLetra());
             entityManager.persist(rubroEstudiante);
         }
         entityManager.flush();
@@ -182,6 +185,11 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
     public List<RubroEstudiante> buscarRubrosMes(EstudianteInscrito est,Periodo periodo, CatalogoProducto catalogoProducto, List<RubroPlantillaMes> meses) throws RemoteException 
     {
         return rubroEstudianteFacade.buscarRubrosMes(est,periodo, catalogoProducto, meses);
+    }
+    
+    public Long contarRubrosEstudiantePorRubroNivel(RubrosNivel rubroNivel) throws RemoteException
+    {
+        return getFacade().contarRubrosEstudiantePorRubroNivelFacade(rubroNivel);
     }
 
 }

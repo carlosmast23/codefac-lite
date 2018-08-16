@@ -235,4 +235,13 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
             return null;
         }
     }
+    
+    public Long contarRubrosEstudiantePorRubroNivelFacade(RubrosNivel rubroNivel)
+    {
+        String queryString = "SELECT count(1) FROM RubroEstudiante u WHERE u.estado=?1 and u.rubroNivel=?2 ";
+        Query query = getEntityManager().createQuery(queryString);
+        query.setParameter(1, GeneralEnumEstado.ACTIVO.getEstado());
+        query.setParameter(2,rubroNivel);
+        return (Long) query.getSingleResult();
+    }
 }

@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoRubroEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
@@ -92,7 +93,19 @@ public class RubrosPeriodoModel extends RubrosPeriodoPanel{
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //eliminar solo si esta en el modo correcto
+        if(estadoFormulario.equals(ESTADO_EDITAR))
+        {
+            try {
+                ServiceFactory.getFactory().getRubrosNivelServiceIf().eliminarRubroNivel(rubrosNivel);
+                DialogoCodefac.mensaje("Correcto","El rubro del periodo fue eliminado correctado", DialogoCodefac.MENSAJE_CORRECTO);
+            } catch (RemoteException ex) {
+                Logger.getLogger(RubrosPeriodoModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+                Logger.getLogger(RubrosPeriodoModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     @Override
@@ -217,6 +230,7 @@ public class RubrosPeriodoModel extends RubrosPeriodoPanel{
         //rubrosNivel.setTipoRubro(tipoRubroEnum.getLetra());
         rubrosNivel.setDiasCredito(Integer.parseInt(getTxtDiasCredito().getText()));
         rubrosNivel.setValor(new BigDecimal(getTxtValor().getText()));
+        rubrosNivel.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
         //rubrosNivel.setProducto(GETCMB);
     }
 

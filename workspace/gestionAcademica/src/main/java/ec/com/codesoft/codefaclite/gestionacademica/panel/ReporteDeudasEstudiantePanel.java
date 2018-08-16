@@ -85,8 +85,8 @@ public abstract class ReporteDeudasEstudiantePanel extends ControladorCodefacInt
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jScrollPane1, gridBagConstraints);
 
-        lblEstudiante.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        lblEstudiante.setText("Estudiante");
+        lblEstudiante.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblEstudiante.setText("Estudiante:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -145,7 +145,7 @@ public abstract class ReporteDeudasEstudiantePanel extends ControladorCodefacInt
         gridBagConstraints.gridy = 2;
         getContentPane().add(jLabel1, gridBagConstraints);
 
-        lblperiodo.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        lblperiodo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblperiodo.setText("Periodo:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;

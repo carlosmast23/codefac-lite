@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -309,6 +310,7 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
             Map<String,Object> parametrosMap=new HashMap<String,Object>();
             parametrosMap.put("periodo",periodo);
             parametrosMap.put("nivel",null);
+            parametrosMap.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
             
             //Agregar todos los rubros que no estan asigandos a un nivel
             List<RubrosNivel> rubrosGeneral=ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorMap(parametrosMap);
@@ -321,6 +323,7 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
             
             parametrosMap.put("periodo",periodo);
             parametrosMap.put("nivel",estudiante.getNivelAcademico().getNivel());
+            parametrosMap.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
             
             //Agregar solo los niveles disponibles para el curso del estudiante en especifico
             List<RubrosNivel> rubrosNivel=ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorMap(parametrosMap);

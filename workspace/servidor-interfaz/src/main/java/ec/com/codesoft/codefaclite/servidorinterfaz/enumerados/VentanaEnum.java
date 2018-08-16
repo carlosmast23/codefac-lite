@@ -333,4 +333,11 @@ public enum VentanaEnum {
         return null;
     }
 
+    @Override
+    public String toString() {
+        return nombre;
+    }
+    
+    
+
 }

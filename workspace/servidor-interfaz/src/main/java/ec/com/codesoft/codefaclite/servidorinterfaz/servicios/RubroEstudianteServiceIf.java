@@ -51,4 +51,7 @@ public interface RubroEstudianteServiceIf extends ServiceAbstractIf<RubroEstudia
     public List<Object[]> obtenerRubroPeriodoGrupo(Periodo periodo,Date fechaInicio,Date fechaFin) throws RemoteException;
 
     public List<RubroEstudiante> buscarRubrosMes(EstudianteInscrito est,Periodo periodo, CatalogoProducto catalogoProducto, List<RubroPlantillaMes> meses) throws java.rmi.RemoteException;
+    
+    public Long contarRubrosEstudiantePorRubroNivel(RubrosNivel rubroNivel) throws RemoteException;
+    
 }

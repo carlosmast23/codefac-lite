@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Vector;
 
 /**
@@ -36,11 +37,14 @@ public class RubroPeriodoBusquedaDialogo implements InterfaceModelFind<RubrosNiv
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        String queryString = "SELECT u FROM RubrosNivel u WHERE u.periodo=?2 and ";
+        //RubrosNivel rn;
+        //rn.getEstado();
+        String queryString = "SELECT u FROM RubrosNivel u WHERE u.periodo=?2 and u.estado=?3 and ";
         queryString += " ( LOWER(u.nombre) like ?1 )";
         QueryDialog queryDialog = new QueryDialog(queryString);
         queryDialog.agregarParametro(1,filter);
         queryDialog.agregarParametro(2,periodoFiltro);
+        queryDialog.agregarParametro(3,GeneralEnumEstado.ACTIVO.getEstado());
         return queryDialog;
     }
 

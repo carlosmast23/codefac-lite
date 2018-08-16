@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -65,6 +66,10 @@ public class RubrosNivel implements Serializable{
 
     @Column(name = "VALOR")    
     private BigDecimal valor;
+    
+    @Column(name = "ESTADO")    
+    private String estado;
+
 
     public RubrosNivel() {
     }
@@ -151,6 +156,15 @@ public class RubrosNivel implements Serializable{
     public void setAnio(Integer anio) {
         this.anio = anio;
     }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+    
     
     
     
@@ -161,6 +175,11 @@ public class RubrosNivel implements Serializable{
     public MesEnum getMesEnum()
     {
         return MesEnum.obtenerPorNumero(mesNumero);
+    }
+    
+    public GeneralEnumEstado getEstadoEnum()
+    {
+        return GeneralEnumEstado.getEnum(estado);
     }
 
     @Override

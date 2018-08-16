@@ -6,6 +6,15 @@
 package ec.com.codesoft.codefaclite.main.init;
 
 //import com.sun.xml.internal.ws.client.ClientTransportException;
+import com.jtattoo.plaf.acryl.AcrylLookAndFeel;
+import com.jtattoo.plaf.aero.AeroLookAndFeel;
+import com.jtattoo.plaf.aluminium.AluminiumLookAndFeel;
+import com.jtattoo.plaf.fast.FastLookAndFeel;
+import com.jtattoo.plaf.graphite.GraphiteLookAndFeel;
+import com.jtattoo.plaf.mcwin.McWinLookAndFeel;
+import com.jtattoo.plaf.mint.MintLookAndFeel;
+import com.jtattoo.plaf.smart.SmartLookAndFeel;
+import com.jtattoo.plaf.texture.TextureLookAndFeel;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.panelessecundariomodel.AyudaCodefacModel;
@@ -1290,6 +1299,23 @@ public class Main {
     public static void setearEstiloSistema(EstiloCodefacEnum estiloCodefacEnum)
     {
         try {
+        
+            Properties props = new Properties();
+            props.put("logoString", "Codefac");
+
+            
+            TextureLookAndFeel.setCurrentTheme(new Properties(props));
+            AeroLookAndFeel.setCurrentTheme(new Properties(props));
+            //SeaGlassLookAndFeel.setCurrentTheme(props);
+            McWinLookAndFeel.setCurrentTheme(new Properties(props));
+            MintLookAndFeel.setCurrentTheme(new Properties(props));
+            GraphiteLookAndFeel.setCurrentTheme(new Properties(props));
+            FastLookAndFeel.setCurrentTheme(new Properties(props));
+            AluminiumLookAndFeel.setCurrentTheme(new Properties(props));
+            AeroLookAndFeel.setCurrentTheme(new Properties(props));
+            AcrylLookAndFeel.setCurrentTheme(new Properties(props));
+            SmartLookAndFeel.setCurrentTheme(new Properties(props));
+            
             UIManager.setLookAndFeel(estiloCodefacEnum.getClassName());
             //repaint();
         } catch (ClassNotFoundException ex) {

@@ -258,6 +258,12 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         });
         
     }
+    /*
+    public Long obtenerSecuencialProforma() throws java.rmi.RemoteException
+    {
+        return 0;
+    }
+*/
     
 
 }

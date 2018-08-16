@@ -94,4 +94,6 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         return query.getResultList();
 
     }
+    
+    //public Long obtenerSecuencialPresupuestos
 }

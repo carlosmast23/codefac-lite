@@ -95,6 +95,8 @@ create table RUBROS_NIVEL(
     CATALOGO_PRODUCTO_ID BIGINT,
     TIPO_RUBRO varchar(1),
     VALOR decimal(7,2),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.6.3)*/
+    ESTADO varchar(1),
     primary key (ID)
 );
 

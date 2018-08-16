@@ -9,6 +9,16 @@ package ec.com.codesoft.codefaclite.main.model;
 
 import com.healthmarketscience.rmiio.RemoteInputStream;
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
+import com.jtattoo.plaf.acryl.AcrylLookAndFeel;
+import com.jtattoo.plaf.aero.AeroLookAndFeel;
+import com.jtattoo.plaf.aluminium.AluminiumLookAndFeel;
+import com.jtattoo.plaf.fast.FastLookAndFeel;
+import com.jtattoo.plaf.graphite.GraphiteLookAndFeel;
+import com.jtattoo.plaf.mcwin.McWinLookAndFeel;
+import com.jtattoo.plaf.mint.MintLookAndFeel;
+import com.jtattoo.plaf.smart.SmartLookAndFeel;
+import com.jtattoo.plaf.texture.TextureLookAndFeel;
+import com.seaglasslookandfeel.SeaGlassLookAndFeel;
 import ec.com.codesoft.codefaclite.configuraciones.model.CalculadoraModel;
 import ec.com.codesoft.codefaclite.configuraciones.model.ComprobantesConfiguracionModel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
@@ -106,6 +116,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -138,6 +149,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.plaf.SplitPaneUI;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
+import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.text.JTextComponent;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -2941,8 +2953,24 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     {
         EstiloCodefacEnum estiloCodefacEnum=EstiloCodefacEnum.findByNombre(nombreTema);
         try {
+            Properties props = new Properties();
+            props.put("logoString", "Codefac");
+            
+            TextureLookAndFeel.setCurrentTheme(new Properties(props));
+            AeroLookAndFeel.setCurrentTheme(new Properties(props));
+            //SeaGlassLookAndFeel.setCurrentTheme(props);
+            McWinLookAndFeel.setCurrentTheme(new Properties(props));
+            MintLookAndFeel.setCurrentTheme(new Properties(props));
+            GraphiteLookAndFeel.setCurrentTheme(new Properties(props));
+            FastLookAndFeel.setCurrentTheme(new Properties(props));
+            AluminiumLookAndFeel.setCurrentTheme(new Properties(props));
+            AeroLookAndFeel.setCurrentTheme(new Properties(props));
+            AcrylLookAndFeel.setCurrentTheme(new Properties(props));
+            SmartLookAndFeel.setCurrentTheme(new Properties(props));
+            
             UIManager.setLookAndFeel(estiloCodefacEnum.getClassName());
-            SwingUtilities.updateComponentTreeUI( this );
+
+            SwingUtilities.updateComponentTreeUI(this);
             repaint();
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);

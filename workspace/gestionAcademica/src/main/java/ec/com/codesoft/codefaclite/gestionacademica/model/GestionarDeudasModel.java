@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -201,6 +202,7 @@ public class GestionarDeudasModel extends GestionarDeudasPanel{
                         Map<String, Object> mapParametros = new HashMap<String, Object>();
                         mapParametros.put("nivel", null);
                         mapParametros.put("periodo", nivelSeleccionado.getPeriodo());
+                        mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
                         List<RubrosNivel> rubrosSinNivel = ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorMap(mapParametros);
                         for (RubrosNivel rubrosNivel : rubrosSinNivel) {
                             getCmbRubrosNivel().addItem(rubrosNivel);
@@ -209,6 +211,7 @@ public class GestionarDeudasModel extends GestionarDeudasPanel{
                         mapParametros.clear();
                         mapParametros.put("nivel", nivelSeleccionado.getNivel());
                         mapParametros.put("periodo", nivelSeleccionado.getPeriodo());
+                        mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
                         List<RubrosNivel> rubros = ServiceFactory.getFactory().getRubrosNivelServiceIf().obtenerPorMap(mapParametros);
 
                         //Agregar todos los rubros disponibles para el nivels

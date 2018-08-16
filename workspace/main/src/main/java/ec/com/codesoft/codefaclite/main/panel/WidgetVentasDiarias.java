@@ -79,7 +79,7 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         panelTitulo.setForeground(new java.awt.Color(255, 255, 51));
         panelTitulo.setLayout(new javax.swing.BoxLayout(panelTitulo, javax.swing.BoxLayout.LINE_AXIS));
 
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("  Ventas Diarias");
         panelTitulo.add(jLabel1);

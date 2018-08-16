@@ -6,12 +6,16 @@
 package ec.com.codesoft.codefaclite.servidor.service.gestionAcademica;
 
 import ec.com.codesoft.codefaclite.servidor.facade.gestionAcademica.RubrosNivelFacade;
+import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaMes;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RubrosNivelServiceIf;
 import java.rmi.RemoteException;
@@ -53,6 +57,7 @@ public class RubrosNivelService extends ServiceAbstract<RubrosNivel,RubrosNivelF
         mapParametros.put("catalogoProducto.tipoCod", tipoEnum.getCodigo());
         mapParametros.put("nivel", nivel);
         mapParametros.put("periodo",periodo);
+        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
         
         List<RubrosNivel> rubrosDelNivel = getFacade().findByMap(mapParametros);
 
@@ -60,6 +65,7 @@ public class RubrosNivelService extends ServiceAbstract<RubrosNivel,RubrosNivelF
         mapParametros.put("catalogoProducto.tipoCod", tipoEnum.getCodigo());
         mapParametros.put("nivel", null);
         mapParametros.put("periodo", periodo);
+        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
 
         List<RubrosNivel> rubrosTodosLosNiveles = getFacade().findByMap(mapParametros);
         rubrosTodosLosNiveles.addAll(rubrosDelNivel);
@@ -101,6 +107,29 @@ public class RubrosNivelService extends ServiceAbstract<RubrosNivel,RubrosNivelF
         {
             return new ArrayList<RubrosNivel>();
         }
+    }
+    
+    public void eliminarRubroNivel(RubrosNivel rubrosNivel) throws RemoteException,ServicioCodefacException
+    {
+        //RubrosNivelService rubrosNivelService;
+        RubroEstudianteService servicio=new RubroEstudianteService();
+        Long cantidadRegistros=servicio.contarRubrosEstudiantePorRubroNivel(rubrosNivel);
+        if(cantidadRegistros==0)
+        {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion() {
+                    rubrosNivel.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
+                    entityManager.merge(rubrosNivel);
+                }
+            });
+        
+        }
+        else
+        {
+            throw new ServicioCodefacException("El rubro no se puede eliminar porque existen estudiantes asignados este valor");
+        }       
+        
     }
     
     
