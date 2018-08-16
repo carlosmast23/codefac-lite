@@ -53,6 +53,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JComponent;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -664,18 +665,25 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
 
     @Override
     public boolean getValidacionEnvioSms() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return true; //TODO: por el momento no hago ninguna validacion
     }
 
 
     @Override
     public VentanaEnum getVentanaEnum() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return VentanaEnum.NOTIFICACION_DEUDAS;
     }
 
     @Override
     public List<ComponenteEnvioSmsData> getDataSms() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        List<ComponenteEnvioSmsData> lista=new ArrayList<ComponenteEnvioSmsData>();
+        for (NotificacionDeudaImprimir notificaciones : notificacionesDeudaImprimir) {
+            ComponenteEnvioSmsData componente=new ComponenteEnvioSmsData(LISTA, plantillaTags);
+        }
+        
+        return lista;
+        
     }
 
 }
