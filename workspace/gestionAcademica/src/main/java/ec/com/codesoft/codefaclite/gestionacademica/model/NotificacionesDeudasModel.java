@@ -679,7 +679,7 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
         
         List<ComponenteEnvioSmsData> lista=new ArrayList<ComponenteEnvioSmsData>();
         for (NotificacionDeudaImprimir notificaciones : notificacionesDeudaImprimir) {
-            ComponenteEnvioSmsData componente=new ComponenteEnvioSmsData(LISTA, plantillaTags);
+            //ComponenteEnvioSmsData componente=new ComponenteEnvioSmsData(LISTA, plantillaTags);
         }
         
         return lista;

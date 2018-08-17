@@ -42,6 +42,7 @@ import ec.com.codesoft.codefaclite.main.panel.publicidad.Publicidad;
 import ec.com.codesoft.codefaclite.main.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.main.test.TestPruebaRMI;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import ec.com.codesoft.codefaclite.servicios.controller.ControllerServiceUtil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
@@ -554,84 +555,7 @@ public class Main {
     }
 
     public static void cargarRecursosServidor() {
-        try {
-            //AbstractFacade.cargarEntityManager();
-
-            Map<Class, Class> mapRecursos = new HashMap<Class, Class>();
-
-            mapRecursos.put(ProductoService.class, ProductoServiceIf.class);
-            mapRecursos.put(PersonaService.class, PersonaServiceIf.class);
-            mapRecursos.put(AccesoDirectoService.class, AccesoDirectoServiceIf.class);
-            mapRecursos.put(BodegaService.class, BodegaServiceIf.class);
-            mapRecursos.put(CategoriaProductoService.class, CategoriaProductoServiceIf.class);
-            mapRecursos.put(CompraDetalleService.class, CompraDetalleServiceIf.class);
-            mapRecursos.put(CompraService.class, CompraServiceIf.class);
-            mapRecursos.put(ComprobanteFisicoDisenioService.class, ComprobanteFisicoDisenioServiceIf.class);
-            mapRecursos.put(EmpresaService.class, EmpresaServiceIf.class);
-            mapRecursos.put(FacturacionService.class, FacturacionServiceIf.class);
-            mapRecursos.put(ImpuestoDetalleService.class, ImpuestoDetalleServiceIf.class);
-            mapRecursos.put(ImpuestoService.class, ImpuestoServiceIf.class);
-            mapRecursos.put(KardexDetalleService.class, KardexDetalleServiceIf.class);
-            mapRecursos.put(KardexItemEspecificoService.class, KardexItemEspecificoServiceIf.class);
-            mapRecursos.put(KardexService.class, KardexServiceIf.class);
-            mapRecursos.put(NotaCreditoService.class, NotaCreditoServiceIf.class);
-            mapRecursos.put(ParametroCodefacService.class, ParametroCodefacServiceIf.class);
-            mapRecursos.put(PerfilService.class, PerfilServiceIf.class);
-            mapRecursos.put(ProductoEnsambleService.class, ProductoEnsambleServiceIf.class);
-            mapRecursos.put(ProductoProveedorService.class, ProductoProveedorServiceIf.class);
-            mapRecursos.put(SriIdentificacionService.class, SriIdentificacionServiceIf.class);
-            mapRecursos.put(SriService.class, SriServiceIf.class);
-            mapRecursos.put(UsuarioServicio.class, UsuarioServicioIf.class);
-            mapRecursos.put(UtilidadesService.class, UtilidadesServiceIf.class);
-            mapRecursos.put(ComprobantesService.class, ComprobanteServiceIf.class);
-            mapRecursos.put(RecursosService.class, RecursosServiceIf.class);
-            mapRecursos.put(AulaService.class, AulaServiceIf.class);
-            mapRecursos.put(EstudianteService.class, EstudianteServiceIf.class);
-            mapRecursos.put(NivelService.class, NivelServiceIf.class);
-            mapRecursos.put(PeriodoService.class, PeriodoServiceIf.class);
-            mapRecursos.put(NivelAcademicoService.class, NivelAcademicoServiceIf.class);
-            mapRecursos.put(PermisoVentanaService.class, PermisoVentanaServiceIf.class);
-            mapRecursos.put(EstudianteInscritoService.class,EstudianteInscritoServiceIf.class);
-            mapRecursos.put(RubrosNivelService.class,RubrosNivelServiceIf.class);
-            mapRecursos.put(RubroEstudianteService.class,RubroEstudianteServiceIf.class);
-            mapRecursos.put(NacionalidadService.class,NacionalidadServiceIf.class);
-            mapRecursos.put(CatalogoProductoService.class,CatalogoProductoServiceIf.class);
-            mapRecursos.put(CarteraService.class,CarteraServiceIf.class);
-            mapRecursos.put(CarteraDetalleService.class,CarteraDetalleServiceIf.class);
-            mapRecursos.put(CarteraCruceService.class, CarteraCruceServiceIf.class);
-            mapRecursos.put(RubroPlantillaService.class, RubroPlantillaServiceIf.class);
-            mapRecursos.put(RubroPlantillaEstudianteService.class, RubroPlantillaEstudianteServiceIf.class);
-            mapRecursos.put(PerfilService.class, PerfilServiceIf.class);
-            mapRecursos.put(PerfilUsuarioService.class, PerfilUsuarioServiceIf.class);
-            mapRecursos.put(SriFormaPagoService.class, SriFormaPagoServiceIf.class);
-            mapRecursos.put(SriRetencionIvaService.class, SriRetencionIvaServiceIf.class);
-            mapRecursos.put(SriRetencionRentaService.class, SriRetencionRentaServiceIf.class);
-            mapRecursos.put(RetencionService.class, RetencionServiceIf.class);
-            mapRecursos.put(SriRetencionService.class,SriRetencionServiceIf.class);
-            mapRecursos.put(OrdenCompraService.class,OrdenCompraServiceIf.class);
-            mapRecursos.put(OrdenCompraDetalleService.class,OrdenCompraDetalleServiceIf.class);
-            mapRecursos.put(DepartamentoService.class,DepartamentoServiceIf.class);
-            mapRecursos.put(EmpleadoService.class,EmpleadoServiceIf.class);
-            mapRecursos.put(OrdenTrabajoService.class,OrdenTrabajoServiceIf.class);
-            mapRecursos.put(OrdenTrabajoDetalleService.class,OrdenTrabajoDetalleServiceIf.class);
-            mapRecursos.put(PresupuestoService.class, PresupuestoServiceIf.class);
-            mapRecursos.put(PresupuestoDetalleService.class, PresupuestoDetalleServiceIf.class);
-            mapRecursos.put(TransportistaService.class, TransportistaServiceIf.class);
-            
-            mapRecursos.put(DestinatarioGuiaRemisionService.class, DestinatarioGuiaRemisionServiceIf.class);
-            mapRecursos.put(DetalleProductoGuiaRemisionService.class, DetalleProductoGuiaRemisionServiceIf.class);
-            mapRecursos.put(GuiaRemisionService.class, GuiaRemisionServiceIf.class);
-            mapRecursos.put(GuiaRemisionAdicionalService.class, GuiaRemisionAdicionalServiceIf.class);
-            mapRecursos.put(SmsService.class, SmsServiceIf.class);
-            
-            ServiceControllerServer.cargarRecursos(mapRecursos);
-            LOG.log(Level.INFO,"Servidor Iniciado");
-
-        } catch (PersistenceException ex) {
-            Logger.getLogger(TestPruebaRMI.class.getName()).log(Level.SEVERE, null, ex);
-        } //catch (PersistenciaDuplicadaException ex) {
-        //    Logger.getLogger(TestPruebaRMI.class.getName()).log(Level.SEVERE, null, ex);
-        //}
+        ControllerServiceUtil.cargarRecursosServidor();
     }
 
     public static void cargarRecursosCliente(String ipServidor) {
