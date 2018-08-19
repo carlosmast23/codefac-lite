@@ -1,0 +1,35 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition  template="template/principal_template.xhtml">
+
+        <ui:define name="titulo_contenido">
+            Login
+        </ui:define>
+
+        <ui:define name="contenido">
+
+            <div style="display:block; text-align:center;" >
+
+                <h:panelGrid columns="2" cellpadding="5" width="100" style="text-align: center" >
+                    <h:outputLabel for="username" value="Usuario:" />
+                    <p:inputText id="username"  required="true" label="username" />
+
+                    <h:outputLabel for="password" value="Constraseña:" />
+                    <p:password id="password"  required="true" label="password" />
+
+                    <f:facet name="footer">
+                        <p:commandButton value="Ingresar" action="#{loginMb.login()}" />
+                    </f:facet>  
+                </h:panelGrid>
+
+            </div> 
+        </ui:define>
+    </ui:composition>
+
+</html>
+

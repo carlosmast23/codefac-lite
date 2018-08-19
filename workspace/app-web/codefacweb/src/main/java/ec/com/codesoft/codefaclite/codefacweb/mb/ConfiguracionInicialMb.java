@@ -25,11 +25,11 @@ public class ConfiguracionInicialMb implements Serializable{
     
     public String conectarServidor()
     {
-        //ServiceFactory.newController(ipServidor);
-        
+        ServiceFactory.newController(ipServidor);   
         FacesContext context = FacesContext.getCurrentInstance();         
         context.addMessage(null, new FacesMessage("Correcto",  "El servidor fue conectado correctamente") );
-        return "menu";
+        //return "principal.xhtml";
+        return "empleado";
     }
 
     public String getIpServidor() {

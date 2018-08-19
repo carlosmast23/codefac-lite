@@ -17,9 +17,9 @@
         <h:body style="font-size: 11px">
             <h:form>
 
-                <p:layout fullPage="true">
+                <p:layout fullPage="true" >
 
-                    <p:layoutUnit position="north" resizable="true" closable="true" collapsible="true" >
+                    <p:layoutUnit position="north" resizable="true" closable="true" collapsible="true" size="16%"  >
                         <p:growl id="messages"/>
 
                         <p:menubar style="z-index:1000 !important;">
@@ -34,8 +34,9 @@
                             </p:submenu>
 
                             <p:submenu label="Control Empleado" icon="ui-icon-pencil">
-                                <p:menuitem value="Undo" url="#" icon="ui-icon-arrowreturnthick-1-w" />
-                                <p:menuitem value="Redo" url="#" icon="ui-icon-arrowreturnthick-1-e" />
+                                <p:submenu label="Proceso" icon="ui-icon-contact">
+                                    <p:menuitem value="Empleado" action="empleado" />
+                                </p:submenu>
                             </p:submenu>
 
                             <p:submenu label="Ayuda" icon="ui-icon-help">
@@ -65,15 +66,32 @@
                                 <p:commandButton type="button" value="Salir" icon="ui-icon-extlink" />
                             </f:facet>
                         </p:menubar>
+
+                        <p:panel style="text-align: center">
+                            <p:commandButton icon="home-icon" class="button-menu" title="Home" action="indexCodefac" />
+                            
+                            <p:commandButton icon="new-icon" class="button-menu" title="Nuevo" process="@this" update="panelContenido">
+                                <p:resetInput target="panelContenido"/>
+                            </p:commandButton>
+                            
+                            <p:commandButton icon="save-icon" class="button-menu" title="Grabar" disabled="false" actionListener="#{controllerCodefacMb.generalAbstractMb.grabar()}" />
+                            <p:commandButton icon="print-icon" class="button-menu" title="Imprimir" disabled="true" />
+                            <p:commandButton icon="find-icon" class="button-menu" title="Buscar" disabled="true" />
+                            <p:commandButton icon="refresh-icon" class="button-menu" title="Refrescar" disabled="true" />
+                            <ui:insert name="btnAyuda">
+                                <p:commandButton icon="help-icon" class="button-menu" title="Ayuda" actionListener="#{controllerCodefacMb.mostrarAyuda()}" update="panelSecundario" process="@this" disabled="false" />
+                            </ui:insert>
+                        </p:panel>
+
                     </p:layoutUnit>
 
                     <p:layoutUnit position="south" size="30" closable="false" collapsible="true" style="padding: 0px;border: 0px;height: 0px">
-                        <div style="text-align: right;background-color: rgb(62,93,162);color: white;padding: 2px;height: 22px">
+                        <div style="text-align: center;background-color: rgb(62,93,162);color: white;padding: 2px;height: 22px">
                             Todos los derechos reservador Codefac 2018
                         </div>
                     </p:layoutUnit>
 
-                    <p:layoutUnit position="west" size="175" header="Barra Tareas" collapsible="true" style="height: auto">
+                    <p:layoutUnit position="west" size="175" header="Barra Tareas" collapsible="true" style="height: auto;border:1px;border-style: ridge">
                         <h:graphicImage library="img" name="logoCodefac.gif" style="height: 30%" />
                         <p:menu toggleable="true">
                             <p:submenu label="Mensajeria">
@@ -90,8 +108,8 @@
                         </p:menu>
                     </p:layoutUnit>
 
-                    <p:layoutUnit position="east" size="270" header="Menu" collapsible="true" >
-                        <p:tabView dynamic="true" cache="true" effect="fold">
+                    <p:layoutUnit position="east" size="270" header="Menu" collapsible="true" style="border: 1px;border-style: ridge" >
+                        <p:tabView id="panelSecundario" dynamic="true" cache="true" effect="fold"  activeIndex="#{controllerCodefacMb.indiceTabSecundario}">
                             <p:tab title="Panel">
                                 <h:panelGrid columns="2" cellpadding="10">
                                     <h:outputText
@@ -99,9 +117,9 @@
                                 </h:panelGrid>
                             </p:tab>
                             <p:tab title="Ayuda">
-                                <h:panelGrid columns="2" cellpadding="10">
-                                    <h:outputText value="Segundo Panel" />
-                                </h:panelGrid>
+                                <iframe id="iframeCenter" src="#{controllerCodefacMb.generalAbstractMb.linkAyuda()}"  
+                                        height="800px" frameborder="0">  
+                                </iframe>   
                             </p:tab>
                             <p:tab title="Validacion">
                                 <h:panelGrid columns="2" cellpadding="10">
@@ -109,35 +127,32 @@
                                 </h:panelGrid>
                             </p:tab>
                         </p:tabView>
+
                     </p:layoutUnit>
 
-                    <p:layoutUnit position="center">
-                        <p:panel header="Crear un nuevo libro" style="margin-bottom:20px">
-                            <h:panelGrid columns="2" cellpadding="5">
-                                <h:outputLabel value="Titulo : *" for="txt_title"></h:outputLabel>
-                                <p:inputText id="txt_title" value="" required="true"/>
+                    <p:layoutUnit position="center" style="border:1px;border-style: none">
+                        <p:panel id="panelContenido">
+                            <f:facet name="header">
+                                <ui:insert name="titulo_contenido">
+                                    Sin titulo por defecto
+                                </ui:insert>                                
+                            </f:facet>
 
-                                <h:outputLabel value="Libro : *" for="txt_author"></h:outputLabel>
-                                <p:inputText id="txt_author" value="" required="true"/>
+                            <div  style="padding: 10px">
+                                <ui:insert name="contenido">
+                                    Contenido por defecto de la plantilla  
+                                </ui:insert>
+                            </div>
 
-                                <p:commandButton id="btn_reset" value="Enviar" type="reset"/>
-                            </h:panelGrid>
+                            <f:facet name="actions">
+                                <h:commandLink styleClass="ui-panel-titlebar-icon ui-corner-all ui-state-default"><h:outputText styleClass="ui-icon ui-icon-help" /></h:commandLink>
+                                <h:commandLink styleClass="ui-panel-titlebar-icon ui-corner-all ui-state-default"><h:outputText styleClass="ui-icon ui-icon-star" /></h:commandLink>
+                            </f:facet>
                         </p:panel>
                     </p:layoutUnit>
 
                 </p:layout>
-                
-                <p:dock position="bottom" proximity="160"  >
-                    <p:menuitem value="Home"  icon="/resources/img/iconos/menu/home-icon.png" url="#" style="color: rgb(62,93,162)" />
-                    <p:menuitem value="Nuevo"  icon="/resources/img/iconos/menu/new_icon.png" url="#" style="color: rgb(62,93,162)" />
-                    <p:menuitem value="Grabar"  icon="/resources/img/iconos/menu/save-icon.png" url="#" style="color: rgb(62,93,162)"/>
-                    <p:menuitem value="Imprimir"  icon="/resources/img/iconos/menu/print-icon.png" url="#" style="color: rgb(62,93,162)"/>
-                    <p:menuitem value="Buscar"  icon="/resources/img/iconos/menu/find_icon.png" url="#" style="color: rgb(62,93,162)"/>
-                    <p:menuitem value="Refrescar"  icon="/resources/img/iconos/menu/refresh_icon.png" url="#" style="color: rgb(62,93,162)"/>
-                    <p:menuitem value="Ayuda"  icon="/resources/img/iconos/menu/help_icon.png" url="#" style="color: rgb(62,93,162)"/>
-                    
-                    <!-- more menuitems -->
-                </p:dock>
+
             </h:form>
 
         </h:body>

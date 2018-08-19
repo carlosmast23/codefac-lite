@@ -264,6 +264,15 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         return 0;
     }
 */
+
+    @Override
+    public List<Factura> obtenerFacturasPorIdentificacion(String identificacion) throws RemoteException {
+        //Factura f;
+        //f.getIdentificacion();
+       Map<String,Object> mapParametros=new HashMap<String,Object>();
+       mapParametros.put("identificacion",identificacion);
+       return getFacade().findByMap(mapParametros);
+    }
     
 
 }

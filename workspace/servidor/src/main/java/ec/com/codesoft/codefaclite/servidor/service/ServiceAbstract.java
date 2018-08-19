@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
@@ -23,7 +24,7 @@ import org.eclipse.persistence.exceptions.DatabaseException;
  *
  * @author Carlos
  */
-public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
+public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject implements Serializable
 {
 
     private static final Logger LOG = Logger.getLogger(ServiceAbstract.class.getName());
