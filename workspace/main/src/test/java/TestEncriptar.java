@@ -1,6 +1,8 @@
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -14,7 +16,13 @@ import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
  */
 public class TestEncriptar {
     public static void main(String[] args) {
-        String datosEncriptado=UtilidadesEncriptar.encriptar("1702mgwk",ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
-        System.out.println(datosEncriptado); 
+        try {
+            //String datosEncriptado=UtilidadesEncriptar.encriptar("1702mgwk",ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
+            //System.out.println(datosEncriptado);
+            String datosSinEncriptar=UtilidadesEncriptar.desencriptar("AOgt56Wg0Z/AO/VRy7q+dQ\\=\\=", ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
+            System.out.println(datosSinEncriptar);
+        } catch (Exception ex) {
+            Logger.getLogger(TestEncriptar.class.getName()).log(Level.SEVERE, null, ex);
+        }
    }
 }

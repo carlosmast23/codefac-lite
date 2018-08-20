@@ -383,8 +383,7 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
             public void actionPerformed(ActionEvent e) {
                 //enviarComunicados();
                 hiloNotificaciones = new Thread(instanceThis);
-                hiloNotificaciones.start();
-                DialogoCodefac.mensaje("Correcto", "Las notificaciones se estan enviado , puede revisar en el monitor", DialogoCodefac.MENSAJE_CORRECTO);
+                hiloNotificaciones.start();                
             }
         });
 
@@ -509,6 +508,16 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
         if (listaRubros.size() > 0) {
             try {
                 List<RubroEstudiante> rubrosEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().obtenerRubrosEstudiantesPorRubros(listaRubros);
+                
+                if(rubrosEstudiante.size()==0)
+                {
+                    DialogoCodefac.mensaje("Advertencia","No existen estudiantes registrados con los rubros ingresados, \nno hay datos para enviar al correo",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    return;
+                }
+                else
+                {
+                    DialogoCodefac.mensaje("Correcto", "Las notificaciones se estan enviado , puede revisar en el monitor", DialogoCodefac.MENSAJE_CORRECTO);
+                }
 
                 MonitorComprobanteData monitorData = getMonitorComprobanteData();
                 MonitorComprobanteModel.getInstance().mostrar();
