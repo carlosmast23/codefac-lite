@@ -67,6 +67,7 @@
                             </f:facet>
                         </p:menubar>
 
+                        <!-- BOTONES DE LAS ACCCIONES GENERALES !-->
                         <p:panel style="text-align: center">
                             <p:commandButton icon="home-icon" class="button-menu" title="Home" action="indexCodefac" />
                             
@@ -76,7 +77,11 @@
                             
                             <p:commandButton icon="save-icon" class="button-menu" title="Grabar" disabled="false" actionListener="#{controllerCodefacMb.generalAbstractMb.grabar()}" />
                             <p:commandButton icon="print-icon" class="button-menu" title="Imprimir" disabled="true" />
-                            <p:commandButton icon="find-icon" class="button-menu" title="Buscar" disabled="true" />
+                            
+                            <p:commandButton icon="find-icon" class="button-menu" title="Buscar" actionListener="#{controllerCodefacMb.abrirDialogoBusqueda}" >
+                                <p:ajax event="dialogReturn" listener="#{controllerCodefacMb.onObjectChosen}" update="panelContenido" />
+                            </p:commandButton>
+                            
                             <p:commandButton icon="refresh-icon" class="button-menu" title="Refrescar" disabled="true" />
                             <ui:insert name="btnAyuda">
                                 <p:commandButton icon="help-icon" class="button-menu" title="Ayuda" actionListener="#{controllerCodefacMb.mostrarAyuda()}" update="panelSecundario" process="@this" disabled="false" />

@@ -30,6 +30,6 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>faces/sistema/empleado/empleado.xhtml</welcome-file>
+        <welcome-file>faces/configuraciones.xhtml</welcome-file>
     </welcome-file-list>
 </web-app>

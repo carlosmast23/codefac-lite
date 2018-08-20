@@ -14,13 +14,15 @@ import java.io.Serializable;
 public abstract class GeneralAbstractMb implements Serializable{
     public abstract void grabar();
     /*public abstract void editar();
-    public abstract void imprimir();
-    public abstract void buscar();*/
-    public  String linkAyuda()
+    public abstract void imprimir();*/
+    public abstract void buscar();
+    public abstract void cargarBusqueda(Object obj);
+    public String linkAyuda()
     {
         System.out.println("ayuda presionada");
         return "hola";
     }
    
+    
     
 }

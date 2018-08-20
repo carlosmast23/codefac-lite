@@ -11,12 +11,13 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Vector;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfacesPropertisFindWeb;
 
 /**
  *
  * @author Carlos
  */
-public class EmpleadoBusquedaDialogo implements InterfaceModelFind<Empleado>
+public class EmpleadoBusquedaDialogo implements InterfaceModelFind<Empleado>,InterfacesPropertisFindWeb
 {
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
@@ -49,6 +50,16 @@ public class EmpleadoBusquedaDialogo implements InterfaceModelFind<Empleado>
         }else{
             dato.add("Sin departamento");
         }  
+    }
+    
+    @Override
+    public Vector<String> getNamePropertysObject()
+    {
+        Vector<String> propiedades = new Vector<String>();
+        propiedades.add("identificacion");
+        propiedades.add("nombres");
+        propiedades.add("departamento");
+        return propiedades;
     }
     
 }

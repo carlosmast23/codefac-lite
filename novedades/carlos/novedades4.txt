@@ -73,3 +73,4 @@ Agregar un campo cargando antes de abrir cada ventana cuando se demora para que 
 Revisar que cuando solo se cierra la aplicacion sigue enviado mensajes uspuestamente , pero se supone que el celular me responde un mensaje para que me confirme que se envio el mensaje, pero aunque ya esta cerrado la palicacion en el ecelular me aparece como que me esta enviado una respuesta , ver que devuelve, y ver si hay como controlar tambien cuando escribo en el socket hacia el cliente
 Investigar si necesito crear las Ordenes de venta (Pedidos)
 En el proyecto Web cuando trata de usar la propiedad de getByMap para las facturas service no funciona , pero otras entidades si funciona como por ejemplo los usuarios
+En el modulo web hacer 2 buscadores uno cuando implemente las propiedades y otro simple cuando no lo haga de esa manera

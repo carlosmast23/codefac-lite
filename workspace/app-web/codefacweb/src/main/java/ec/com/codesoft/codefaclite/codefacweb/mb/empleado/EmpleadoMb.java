@@ -84,6 +84,16 @@ public class EmpleadoMb extends GeneralAbstractMb implements Serializable{
         this.empleado = empleado;
     }
 
+    @Override
+    public void buscar() {
+        
+    }
+
+    @Override
+    public void cargarBusqueda(Object obj) {
+        this.empleado=(Empleado) obj;
+    }
+
     
     
 }

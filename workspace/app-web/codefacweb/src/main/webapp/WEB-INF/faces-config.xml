@@ -4,6 +4,13 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
 
+    <!-- Configuracion necesaria para implementar la funcionalidad de trabajar con dialogo dinamicos!-->
+    <application>
+        <action-listener>org.primefaces.application.DialogActionListener</action-listener>
+        <navigation-handler>org.primefaces.application.DialogNavigationHandler</navigation-handler>
+        <view-handler>org.primefaces.application.DialogViewHandler</view-handler>
+    </application>
+    
     <navigation-rule>
         <navigation-case>
             <from-outcome>menu</from-outcome>
@@ -23,6 +30,11 @@
         <navigation-case>
             <from-outcome>empleado</from-outcome>
             <to-view-id>faces/sistema/empleado/empleado.xhtml</to-view-id>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>dialogo_busqueda</from-outcome>
+            <to-view-id>faces/template/dialogo_busqueda.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
 </faces-config>
