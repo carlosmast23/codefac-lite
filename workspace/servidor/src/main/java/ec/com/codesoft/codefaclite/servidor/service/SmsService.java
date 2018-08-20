@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 import ec.com.codesoft.codefaclite.servicios.ServidorSMS;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SmsServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
@@ -23,10 +24,11 @@ public class SmsService extends UnicastRemoteObject implements SmsServiceIf{
     public void enviarMensaje(String numero , String mensaje)throws RemoteException,ServicioCodefacException
     {
         ServidorSMS servidorsms=ServidorSMS.getInstance();
+        mensaje=UtilidadesTextos.quitaDiacriticos(mensaje); //Funcion que permite quitar acentuasiones y simbolo especiales que pueden generar problemas
         
         //Si no se puede enviar el mensaje manda una excecion al cliente
         if(!servidorsms.enviarMensaje(numero, mensaje))
-        {
+        {            
             throw new ServicioCodefacException("No se puedo enviar el mensaje, ocurrio un error con el servidor de mensajeria");
         }
     }

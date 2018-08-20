@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.text.Normalizer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -225,5 +226,15 @@ public abstract class UtilidadesTextos {
         ingresoInfo.setText(cadena);
         ingresoInfo.setCaretPosition(pos);
     }
+    /**
+     * Quitar tildes y simbolos especiales que pueden genera problemas al enviar el mensaje
+     * @param s
+     * @return 
+     */
+    public static String quitaDiacriticos(String s) {
+    s = Normalizer.normalize(s, Normalizer.Form.NFD);
+    s = s.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+    return s;
+}
     
 }
