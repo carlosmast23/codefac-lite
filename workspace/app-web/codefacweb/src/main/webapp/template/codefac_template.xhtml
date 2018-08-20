@@ -76,11 +76,18 @@
                             </p:commandButton>
                             
                             <p:commandButton icon="save-icon" class="button-menu" title="Grabar" disabled="false" actionListener="#{controllerCodefacMb.generalAbstractMb.grabar()}" />
-                            <p:commandButton icon="print-icon" class="button-menu" title="Imprimir" disabled="true" />
                             
+                            <!-- IMPRIMI BOTON -->
+                            <p:commandButton icon="print-icon" class="button-menu" title="Imprimir" />
+                            
+                            <!-- BUSCAR BOTON-->
                             <p:commandButton icon="find-icon" class="button-menu" title="Buscar" actionListener="#{controllerCodefacMb.abrirDialogoBusqueda}" >
                                 <p:ajax event="dialogReturn" listener="#{controllerCodefacMb.onObjectChosen}" update="panelContenido" />
                             </p:commandButton>
+                            
+                            <!-- ELIMINAR BOTON -->
+                            <p:commandButton icon="delete-icon" class="button-menu" title="Eliminar" actionListener="#{controllerCodefacMb.delete()}" />
+                                
                             
                             <p:commandButton icon="refresh-icon" class="button-menu" title="Refrescar" disabled="true" />
                             <ui:insert name="btnAyuda">

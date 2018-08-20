@@ -52,6 +52,12 @@ public class ControllerCodefacMb implements Serializable{
         generalAbstractMb.grabar();
     }
     
+    public void delete()
+    {
+        System.err.println("Metodo para eliminar desde el controlador");
+        generalAbstractMb.eliminar();
+    }
+    
      
     public void abrirDialogoBusqueda()
     {
@@ -61,7 +67,7 @@ public class ControllerCodefacMb implements Serializable{
         //Establecer objeto de la clase que tiene la implemetacion del dialogo de busqueda que necesito para construir el dialogo web
         //TODO: Solucion temporal porque es una gasto innesario de memoria , buscar otra forma
         Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
-        sessionMap.put("busquedaClase", new EmpleadoBusquedaDialogo());
+        sessionMap.put("busquedaClase",generalAbstractMb.obtenerDialogoBusqueda());
         
         //Esstablecer porpiedades que se van a enviar al dialogo en map
         Map<String,Object> options = new HashMap<String, Object>();

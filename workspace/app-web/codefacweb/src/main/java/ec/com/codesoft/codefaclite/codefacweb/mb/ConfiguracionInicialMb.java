@@ -29,7 +29,7 @@ public class ConfiguracionInicialMb implements Serializable{
         FacesContext context = FacesContext.getCurrentInstance();         
         context.addMessage(null, new FacesMessage("Correcto",  "El servidor fue conectado correctamente") );
         //return "principal.xhtml";
-        return "empleado";
+        return "principal.xhtml";
     }
 
     public String getIpServidor() {

@@ -6,6 +6,8 @@
 package ec.com.codesoft.codefaclite.codefacweb.mb.empleado;
 
 import ec.com.codesoft.codefaclite.codefacweb.core.GeneralAbstractMb;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EmpleadoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -23,44 +25,23 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean
 @ViewScoped
-public class EmpleadoMb extends GeneralAbstractMb implements Serializable{
+public class EmpleadoMb extends GeneralAbstractMb implements Serializable {
+
     private Empleado empleado;
-    
+
     @PostConstruct
-    public void init()
-    {
-        empleado=new Empleado();
-    }
-/*
-    @Override
-    public void grabar() {
-        System.out.println("llamando al metodo grabar");
+    public void init() {
+        empleado = new Empleado();
     }
 
-    @Override
-    public void editar() {
-        System.out.println("llamando al metodo editar");
-    }
-
-    @Override
-    public void imprimir() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void buscar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-*/
     @Override
     public String linkAyuda() {
         System.out.println("mandando ayuda");
         //return "http://www.cf.codesoft-ec.com/ayuda";
         return "http://www.al-code.com/";
     }
-    
-    public void ayuda()
-    {
+
+    public void ayuda() {
         System.out.println("Si funciona esto si veo la luz");
     }
 
@@ -76,6 +57,31 @@ public class EmpleadoMb extends GeneralAbstractMb implements Serializable{
         }
     }
 
+    @Override
+    public void buscar() {
+
+    }
+
+    @Override
+    public void cargarBusqueda(Object obj) {
+        this.empleado = (Empleado) obj;
+    }
+
+    @Override
+    public InterfaceModelFind obtenerDialogoBusqueda() {
+        return new EmpleadoBusquedaDialogo();
+    }
+
+    @Override
+    public void eliminar() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    /**
+     * METODOS GET AND SET
+     * @return 
+     */
+
     public Empleado getEmpleado() {
         return empleado;
     }
@@ -84,16 +90,4 @@ public class EmpleadoMb extends GeneralAbstractMb implements Serializable{
         this.empleado = empleado;
     }
 
-    @Override
-    public void buscar() {
-        
-    }
-
-    @Override
-    public void cargarBusqueda(Object obj) {
-        this.empleado=(Empleado) obj;
-    }
-
-    
-    
 }

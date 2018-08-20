@@ -6,11 +6,11 @@
       xmlns:p="http://primefaces.org/ui">
 
     <ui:composition  template="template/principal_template.xhtml">
-        
+
         <ui:define name="titulo_contenido">
             Consultar Facturas
         </ui:define>
-        
+
         <ui:define name="contenido">
 
             <h:form >
@@ -21,8 +21,8 @@
                     <p:inputText value="#{consultaFacturasMb.identificacion}"/>
                     <p:commandButton value="Buscar" actionListener="#{consultaFacturasMb.consultarCedula()}" update="tablaFacturas" />
                 </h:panelGrid>
-                
-                 <p:spacer  height="10" />
+
+                <p:spacer  height="10" />
 
                 <p:dataTable var="factura" value="#{consultaFacturasMb.listaFacturas}" rows="10"
                              paginator="true"
@@ -37,12 +37,20 @@
                         <h:outputText value="#{factura.secuencial}" />
                     </p:column>
 
+                    <p:column headerText="Secuencial">
+                        <h:outputText value="#{factura.secuencial}" />
+                    </p:column>
+
                     <p:column headerText="Razon Social">
                         <h:outputText value="#{factura.razonSocial}" />
                     </p:column>
 
                     <p:column headerText="Total">
                         <h:outputText value="#{factura.total}" />
+                    </p:column>
+
+                    <p:column style="width:32px;text-align: center">
+                        <p:commandButton icon="ui-icon-print" actionListener="#{consultaFacturasMb.imprimirFactura(factura)}" onclick="this.form.target='_blank'" ajax="false" />
                     </p:column>
 
                 </p:dataTable>

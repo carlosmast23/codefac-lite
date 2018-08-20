@@ -55,7 +55,7 @@ public class DialogoBuscarMb implements Serializable {
     public void buscarDatos(InterfaceModelFind busquedaClase) {
         try {
             
-            InterfaceModelFind empleadoBusquedaDialogo = new EmpleadoBusquedaDialogo();
+            InterfaceModelFind empleadoBusquedaDialogo = busquedaClase;
             QueryDialog queryDialog = empleadoBusquedaDialogo.getConsulta("%%");
             datosBusqueda = ServiceFactory.getFactory().getUtilidadesServiceIf().consultaGeneralDialogos(queryDialog.query, queryDialog.getParametros(), 0, 100);
 

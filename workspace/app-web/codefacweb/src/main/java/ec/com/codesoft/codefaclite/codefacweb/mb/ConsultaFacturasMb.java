@@ -5,12 +5,15 @@
  */
 package ec.com.codesoft.codefaclite.codefacweb.mb;
 
+import ec.com.codesoft.codefaclite.codefacweb.mb.sistema.UtilidadesWeb;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.UsuarioServicioIf;
+import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
+import java.io.IOException;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -22,6 +25,8 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperPrint;
 
 /**
  *
@@ -29,19 +34,18 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean
 @ViewScoped
-public class ConsultaFacturasMb implements Serializable{
+public class ConsultaFacturasMb implements Serializable {
+
     private String identificacion;
-    
+
     private List<Factura> listaFacturas;
-    
+
     @PostConstruct
-    public void init()  
-    {
-        
+    public void init() {
+
     }
-    
-    public void consultarCedula()
-    {
+
+    public void consultarCedula() {
         try {
             //Factura f;
             //f.getIdentificacion();
@@ -55,8 +59,8 @@ public class ConsultaFacturasMb implements Serializable{
             //Usuarios
             mapParametros = new HashMap<String, Object>();
             mapParametros.put("nick", "root");
-            UsuarioServicioIf usuarioServiceIf=ServiceFactory.getFactory().getUsuarioServicioIf();
-            List<Usuario> usuarios= usuarioServiceIf.obtenerPorMap(mapParametros);
+            UsuarioServicioIf usuarioServiceIf = ServiceFactory.getFactory().getUsuarioServicioIf();
+            List<Usuario> usuarios = usuarioServiceIf.obtenerPorMap(mapParametros);
             for (Usuario usuario : usuarios) {
                 System.out.println(usuario.getNick());
             }
@@ -68,6 +72,29 @@ public class ConsultaFacturasMb implements Serializable{
         }
     }
 
+    public void imprimirFactura(Factura factura) {
+        try {           
+            System.out.println("consultando RIDE factura..");
+            byte[] byteReporte = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(factura.getClaveAcceso());
+            JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(byteReporte);
+            UtilidadesWeb.exportarPDF(jasperPrint);
+            System.out.println("Imprimiendo factura..");
+        } catch (RemoteException ex) {
+            Logger.getLogger(ConsultaFacturasMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ConsultaFacturasMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ConsultaFacturasMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JRException ex) {
+            Logger.getLogger(ConsultaFacturasMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * METODOS GET AND SET
+     *
+     * @return
+     */
     public String getIdentificacion() {
         return identificacion;
     }
@@ -83,6 +110,5 @@ public class ConsultaFacturasMb implements Serializable{
     public void setListaFacturas(List<Factura> listaFacturas) {
         this.listaFacturas = listaFacturas;
     }
-    
-    
+
 }

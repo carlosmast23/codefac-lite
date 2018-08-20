@@ -6,14 +6,9 @@
 
     <h:head>
         <title>Buscador</title>
-        <style type="text/css">
-            .ui-widget {
-                font-size: 90%;
-            }
-        </style>
     </h:head>
 
-    <h:body style="font-size: 12px"> 
+    <h:body style="font-size: 12px;"> 
         <h:form>
             <p:dataTable 
                 id="tablaBusqueda" 
@@ -21,6 +16,7 @@
                 value="#{dialogoBuscarMb.datosBusqueda}" 
                 rowIndexVar="indice" 
                 paginator="true"
+                style="width: 100%;height: 100%"
                 >
                 <!--
                 <f:facet name="header">
