@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.gestionacademica.model;
 
-import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteEnvioSmsData;
+import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.componentes.ComponenteEnvioSmsData;
 import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteEnvioSmsInterface;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.gestionacademica.panel.EstudiantePanel;
 import ec.com.codesoft.codefaclite.gestionacademica.reportdata.ReporteAcademicoData;
 import ec.com.codesoft.codefaclite.inventario.busqueda.RepresentanteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.callback.EnvioMensajesCallBackInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Nacionalidad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
@@ -546,6 +547,11 @@ public class EstudianteModel extends EstudiantePanel implements ComponenteEnvioS
         List<ComponenteEnvioSmsData> dataList = new ArrayList<ComponenteEnvioSmsData>();
         dataList.add(componenteEnvioSmsData);
         return dataList;
+    }
+
+    @Override
+    public EnvioMensajesCallBackInterface getInterfaceCallback() {
+        return null;
     }
     
 }

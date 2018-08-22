@@ -6,7 +6,7 @@
 package ec.com.codesoft.codefaclite.gestionacademica.model;
 
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
-import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteEnvioSmsData;
+import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.componentes.ComponenteEnvioSmsData;
 import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteEnvioSmsInterface;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
@@ -17,10 +17,12 @@ import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.CARPETA_RIDE;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.UtilidadesComprobantes;
+import ec.com.codesoft.codefaclite.gestionacademica.callback.EnvioMensajesCallBack;
 import ec.com.codesoft.codefaclite.gestionacademica.other.EstudianteDeudaData;
 import ec.com.codesoft.codefaclite.gestionacademica.other.NotificacionDeudaImprimir;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.NotificacionesDeudasPanel;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.callback.EnvioMensajesCallBackInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.CorreoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
@@ -728,6 +730,16 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
         
         return lista;
         
+    }
+
+    @Override
+    public EnvioMensajesCallBackInterface getInterfaceCallback() {
+        try {
+            return new EnvioMensajesCallBack();
+        } catch (RemoteException ex) {
+            Logger.getLogger(NotificacionesDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
 }

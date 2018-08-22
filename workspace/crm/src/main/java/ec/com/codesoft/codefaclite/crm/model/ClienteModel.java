@@ -5,7 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.crm.model;
 
-import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteEnvioSmsData;
+import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.componentes.ComponenteEnvioSmsData;
 import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteEnvioSmsInterface;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.crm.panel.ClienteForm;
 import ec.com.codesoft.codefaclite.crm.reportdata.DataEjemploReporte;
 import ec.com.codesoft.codefaclite.crm.test.EjemploCrm;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.callback.EnvioMensajesCallBackInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
@@ -613,6 +614,11 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
     @Override
     public VentanaEnum getVentanaEnum() {
         return VentanaEnum.CLIENTE;
+    }
+
+    @Override
+    public EnvioMensajesCallBackInterface getInterfaceCallback() {
+        return null;
     }
     
 }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.controlador.componentes;
+package ec.com.codesoft.codefaclite.corecodefaclite.ayuda.componentes;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PlantillaSmsEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;

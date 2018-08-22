@@ -5,6 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.controlador.componentes;
 
+import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.componentes.ComponenteEnvioSmsData;
+import ec.com.codesoft.codefaclite.servidorinterfaz.callback.EnvioMensajesCallBackInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PlantillaSmsEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import java.util.List;
@@ -19,5 +21,10 @@ public interface ComponenteEnvioSmsInterface {
     public List<ComponenteEnvioSmsData> getDataSms();
     public abstract boolean getValidacionEnvioSms();
     public abstract VentanaEnum getVentanaEnum();
+    /**
+     * Interfaz que envia el metodo para mostrar el estado del proceso en pantalla si manda null, solo se ejcuta el proceso por detras
+     * @return 
+     */
+    public abstract EnvioMensajesCallBackInterface getInterfaceCallback();
     
 }

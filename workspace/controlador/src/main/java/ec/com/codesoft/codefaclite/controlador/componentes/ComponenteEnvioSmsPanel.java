@@ -5,19 +5,24 @@
  */
 package ec.com.codesoft.codefaclite.controlador.componentes;
 
+import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.componentes.ComponenteEnvioSmsData;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.sms.ControladorPlantillaSms;
 import static ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface.ESTADO_EDITAR;
+import ec.com.codesoft.codefaclite.servidorinterfaz.callback.EnvioMensajesCallBackInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.PlantillaSmsEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SmsServiceIf;
 import java.awt.Color;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -148,56 +153,54 @@ public class ComponenteEnvioSmsPanel extends javax.swing.JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 
-                if(!controlador.getValidacionEnvioSms())
-                {
-                    return; //Si la validacion es falsa  no continuar
-                }
-                
-                if(txtMensajeTexto.getText().isEmpty())
-                {
-                    DialogoCodefac.mensaje("Error","Porfavor ingrese un texto para enviar",DialogoCodefac.MENSAJE_INCORRECTO);
-                    return;
-                }
-                
-                   
-                String mensajeEnviar=txtMensajeTexto.getText();                
-                
-                //TODO: Validar que no envie a los que tiene numeros
-                for (ComponenteEnvioSmsData componente : controlador.getDataSms()) {
-                    
-                    if (componente.getNumeroTelefono().isEmpty()) {
-                        DialogoCodefac.mensaje("Error", "No se puede enviar un mensaje si no esta ingresado el telefono ", DialogoCodefac.MENSAJE_INCORRECTO);
+                try {
+                    SmsServiceIf servidorSms=ServiceFactory.getFactory().getSmsServiceIf();
+                    if(!servidorSms.isServicioDisponible())
+                    {
+                        DialogoCodefac.mensaje("Error","Problemas con el servicio SMS , no se pueden enviar los mensajes",DialogoCodefac.MENSAJE_INCORRECTO);
                         return;
                     }
                     
-                                            
-                    if(mensajeEnviar.length()<=ParametrosSistemaCodefac.LIMITE_CARACTERES_SMS)
+                    String mensajeEnviar=txtMensajeTexto.getText();
+                    if(mensajeEnviar.length()>=ParametrosSistemaCodefac.LIMITE_CARACTERES_SMS)
                     {
-                        try {
-                            //Map<PlantillaSmsEnum.EtiquetaEnum,String> mapParametros=new HashMap<PlantillaSmsEnum.EtiquetaEnum,String>();
-                            //mapParametros.put(PlantillaSmsEnum.EtiquetaEnum.EMPRESA,session.getEmpresa().getNombreLegal());
+                        DialogoCodefac.mensaje("Error","El mensaje es superior de la cantidad de palabras permitidas", DialogoCodefac.MENSAJE_INCORRECTO);
+                        return;
+                    }
+                    
+                    
+                    if(!controlador.getValidacionEnvioSms())
+                    {
+                        return; //Si la validacion es falsa  no continuar
+                    }
 
-                            if(ControladorPlantillaSms.enviarMensajeConPlantilla(componente.getNumeroTelefono(),mensajeEnviar,componente.getPlantillaTags()))
-                            {
-                                DialogoCodefac.mensaje("Correcto","El mensaje fue enviado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
-                            }
-                            else
-                            {
-                                DialogoCodefac.mensaje("Incorrecto","El servicio de Sms no esta diponible",DialogoCodefac.MENSAJE_INCORRECTO);
-                            }                        
-
-                        } catch (ServicioCodefacException ex) {
-                            Logger.getLogger(ComponenteEnvioSmsPanel.class.getName()).log(Level.SEVERE, null, ex);
-                            DialogoCodefac.mensaje("Error", ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
-                        }
-
+                    if(txtMensajeTexto.getText().isEmpty())
+                    {
+                        DialogoCodefac.mensaje("Error","Porfavor ingrese un texto para enviar",DialogoCodefac.MENSAJE_INCORRECTO);
+                        return;                   
+                    }
+                    
+                    
+                   
+                    
+                    //Validar que exista datos
+                    if(controlador.getDataSms().size()==0)
+                    {
+                        DialogoCodefac.mensaje("Incorrecto","El servicio de Sms no esta diponible",DialogoCodefac.MENSAJE_INCORRECTO);
+                        return;
                     }
                     else
                     {
-                        DialogoCodefac.mensaje("Incorrecto","El tamaño maximo del mensaje es de "+ParametrosSistemaCodefac.LIMITE_CARACTERES_SMS+" , y tu mensaje tiene "+mensajeEnviar.length(),DialogoCodefac.MENSAJE_INCORRECTO);
-                    }                   
+                        DialogoCodefac.mensaje("Correcto","Los mensajes estan siendo procesadas",DialogoCodefac.MENSAJE_CORRECTO);
+                    }
                     
+                    //Metodo que se encarga de contruir el mensaje y enviar
+                    ControladorPlantillaSms.enviarMensajesConPlantilla(controlador.getDataSms(), mensajeEnviar,controlador.getInterfaceCallback());                    
                     
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ComponenteEnvioSmsPanel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(ComponenteEnvioSmsPanel.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
                 

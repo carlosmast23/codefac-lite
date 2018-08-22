@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servicios.ServidorSMS;
+import ec.com.codesoft.codefaclite.servidorinterfaz.callback.EnvioMensajesCallBackInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SmsServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
@@ -24,8 +25,11 @@ public class SmsService extends UnicastRemoteObject implements SmsServiceIf{
     public SmsService() throws RemoteException {
     }
     
-    public void enviarMensajes(Map<String,String> mensajesMap) throws RemoteException,ServicioCodefacException
-    {        
+    public void enviarMensajes(Map<String,String> mensajesMap,EnvioMensajesCallBackInterface callback) throws RemoteException,ServicioCodefacException
+    {
+        int totalMensajes=mensajesMap.size();
+        int numeroMensaje=1;
+                
         for (Map.Entry<String, String> entry : mensajesMap.entrySet()) {
             try {
                 String numero = entry.getKey();
@@ -35,6 +39,13 @@ public class SmsService extends UnicastRemoteObject implements SmsServiceIf{
                 
                 if(mensajesMap.size()>0)
                     Thread.sleep(2000); //  Esperar para enviar cada 2 segundos los mensajes TODO: Esta opcion debe ser personalizada
+                
+                //Enviar el porcentaje del total hasta el momento avanzado
+                if(callback!=null)
+                {
+                    double porcentajeUnitario=(double)numeroMensaje++/(double)totalMensajes;
+                    callback.procesando((int)porcentajeUnitario*100);
+                }
                 
             } catch (InterruptedException ex) {
                 Logger.getLogger(SmsService.class.getName()).log(Level.SEVERE, null, ex);
