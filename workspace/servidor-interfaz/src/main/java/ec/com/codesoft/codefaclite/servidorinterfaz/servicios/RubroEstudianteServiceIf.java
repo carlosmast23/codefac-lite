@@ -54,4 +54,6 @@ public interface RubroEstudianteServiceIf extends ServiceAbstractIf<RubroEstudia
     
     public Long contarRubrosEstudiantePorRubroNivel(RubrosNivel rubroNivel) throws RemoteException;
     
+    public void actualizarRubrosEstudiante(List<RubroEstudiante> rubroEstudiantes) throws RemoteException;
+    
 }

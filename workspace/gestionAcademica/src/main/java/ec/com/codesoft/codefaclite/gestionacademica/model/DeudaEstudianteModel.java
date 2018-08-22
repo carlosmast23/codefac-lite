@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +32,8 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -51,11 +54,19 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
     private List<RubroEstudiante> rubrosEstudianteEliminado;
 
     
+    private final Integer COLUMNA_OBJETO=0;
+    private final Integer COLUMNA_VALOR=3;
+    
+    
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         listenerBotones();
-        listenerCombos();        
+        listenerCombos();    
+        listenerTablas();
+        
+        //Quitar validaciones para esta pantalla
+        validacionDatosIngresados=false;
     }
 
     @Override
@@ -65,10 +76,17 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
+        
+        List<RubroEstudiante> rubrosActualizar = getRubroEstudianteSinAcciones();        
+       
         List<RubroEstudiante> rubrosEstudianteNuevos=getRubroEstudianteSinGrabar();
-        if(rubrosEstudianteNuevos.size()>0 || rubrosEstudianteEliminado.size()>0)
+        
+        if(rubrosEstudianteNuevos.size()>0 || rubrosEstudianteEliminado.size()>0 || rubrosActualizar.size()>0)
         {
             try {
+                
+                ServiceFactory.getFactory().getRubroEstudianteServiceIf().actualizarRubrosEstudiante(rubrosActualizar);
+                
                 //Graba los nuevos rubros y elimina rubros seleccionados
                 ServiceFactory.getFactory().getRubroEstudianteServiceIf().crearRubrosEstudiantes(rubrosEstudianteNuevos);
                 
@@ -100,6 +118,29 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
             }
         }
         return rubrosEstudianteNuevos;
+    }
+    
+    /**
+     * Esta lista devuelve todos los datos que van a ser creados ni eliminados
+     * TODO: mejorar esta lista para obtener solo los datos modificados que no van a ser eliminados
+     * @return 
+     */
+    private List<RubroEstudiante> getRubroEstudianteSinAcciones()
+    {
+        List<RubroEstudiante> rubrosEstudianteSinAcciones=new ArrayList<RubroEstudiante>();
+        for (RubroEstudiante rubroEstudiante : rubrosEstudiante) {
+            //Si estan con id null significa que aun no estan grabados
+            if(rubroEstudiante.getId()!=null)
+            {
+                if(!rubrosEstudianteEliminado.contains(rubroEstudiante))
+                {
+                    System.out.println("valor->"+rubroEstudiante.getValor());
+                    rubrosEstudianteSinAcciones.add(rubroEstudiante);
+                }
+                
+            }
+        }
+        return rubrosEstudianteSinAcciones;
     }
 
     @Override
@@ -244,7 +285,7 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 int filaTabla=getTblDatos().getSelectedRow();
-                RubroEstudiante rubroEstudiante=(RubroEstudiante) getTblDatos().getValueAt(filaTabla,0);
+                RubroEstudiante rubroEstudiante=(RubroEstudiante) getTblDatos().getValueAt(filaTabla,COLUMNA_OBJETO);
 
                 if(rubroEstudiante!=null)
                 {
@@ -288,7 +329,7 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
                     fila.add(rubroEstudiante);
                     fila.add(rubroEstudiante.getEstudianteInscrito().getEstudiante().getNombreCompleto());
                     fila.add(rubroEstudiante.getRubroNivel().getNombre());
-                    fila.add(rubroEstudiante.getRubroNivel().getValor().toString());
+                    fila.add(rubroEstudiante.getValor());
                     
                      modeloTabla.addRow(fila);
                 }
@@ -301,6 +342,51 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
         
         //Ocultar columnas que no se deben mostrar al usuario
         UtilidadesTablas.ocultarColumna(getTblDatos(),0);
+        
+        
+        //Listener de la tabla creada
+        modeloTabla.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                int fila= e.getFirstRow();
+                int colummna=e.getColumn();
+                
+                //Solo editar el valor del objeto si es de la columna del valor
+                if(colummna==COLUMNA_VALOR)
+                {
+                    
+                    RubroEstudiante rubroEstudiante=(RubroEstudiante) getTblDatos().getModel().getValueAt(fila,COLUMNA_OBJETO);
+                    
+                    try
+                    {
+                        
+                        BigDecimal nuevoValor = new BigDecimal(getTblDatos().getValueAt(fila, COLUMNA_VALOR).toString());
+                        
+                        //Verificar que los valores ingresados y del objeto son diferente para actualizar
+                        if (nuevoValor.compareTo(rubroEstudiante.getValor()) != 0) {
+                            
+                            if (rubroEstudiante.getValor().compareTo(rubroEstudiante.getSaldo()) == 0) 
+                            {
+                                rubroEstudiante.setValor(nuevoValor);
+                                rubroEstudiante.setSaldo(nuevoValor);
+                            }
+                            else
+                            {
+                                DialogoCodefac.mensaje("Advertencia", "No se puede modificar el rubro porque tiene valores que le afectan ", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                                getTblDatos().getModel().setValueAt(rubroEstudiante.getValor().toString(),fila,COLUMNA_VALOR);
+                            }
+                            
+                        }
+                    }
+                    catch(java.lang.NumberFormatException nfe)
+                    {
+                        getTblDatos().getModel().setValueAt(rubroEstudiante.getValor().toString(),fila,COLUMNA_VALOR);
+                        nfe.printStackTrace();
+                    }
+
+                }
+            }
+        });
 
     }
     
@@ -383,6 +469,10 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
     @Override
     public void cargarDatosPantalla(Object entidad) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void listenerTablas() {
+        
     }
     
 }

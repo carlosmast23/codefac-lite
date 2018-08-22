@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidor.service.gestionAcademica;
 
 import ec.com.codesoft.codefaclite.servidor.facade.gestionAcademica.RubroEstudianteFacade;
+import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
@@ -138,6 +139,18 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         }
         return null;
     }
+    
+    public void actualizarRubrosEstudiante(List<RubroEstudiante> rubroEstudiantes) throws RemoteException {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() {
+                for (RubroEstudiante rubroEstudiante : rubroEstudiantes) {
+                    entityManager.merge(rubroEstudiante);                    
+                }
+            }
+        });
+    }
+
 
     public void crearRubrosEstudiantes(List<EstudianteInscrito> estudiantes, RubrosNivel rubroNivel) throws RemoteException {
         EntityTransaction transaccion = getTransaccion();
