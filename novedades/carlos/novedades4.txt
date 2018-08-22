@@ -75,3 +75,4 @@ Investigar si necesito crear las Ordenes de venta (Pedidos)
 En el proyecto Web cuando trata de usar la propiedad de getByMap para las facturas service no funciona , pero otras entidades si funciona como por ejemplo los usuarios
 En el modulo web hacer 2 buscadores uno cuando implemente las propiedades y otro simple cuando no lo haga de esa manera
 En el reporte de ventas esta de ordenar por el impreso
+Ver si se puede hacer unos scripts que se ejecuten siempre para corregir datos en especial cuando son migrados , por ejemplo en MyGoldeWorld algunos clientes migrados no tenias estado
