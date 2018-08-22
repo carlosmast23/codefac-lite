@@ -15,7 +15,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteServiceIf;
 import java.rmi.RemoteException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,9 +37,18 @@ public class EstudianteService extends ServiceAbstract<Estudiante, EstudianteFac
     public List<Estudiante> estudianteSinMatriculaPorPeriodo(Periodo periodo) throws RemoteException {
         return estudianteFacade.getEstudiantesSinMatricula(periodo);
     }
+    
 
     public List<Estudiante> estudianteNuevosSinMatricula() throws RemoteException {
         return estudianteFacade.getEstudiantesNuevos();
+    }
+    
+    public List<Estudiante> obtenerEstudiantesActivos() throws RemoteException
+    {
+        Map<String,Object> mapParametros=new HashMap<String, Object>();
+        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        return getFacade().findByMap(mapParametros);
+                
     }
 
     public void eliminarEstudiante(Estudiante e)  throws RemoteException ,ServicioCodefacException {

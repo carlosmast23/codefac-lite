@@ -61,12 +61,9 @@ public class ReporteDialogo extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(jLabel1, gridBagConstraints);
 
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
-        btnPdf.setBackground(new java.awt.Color(255, 255, 255));
         btnPdf.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/medianos/pdf.png"))); // NOI18N
         btnPdf.setToolTipText("Pdf");
         btnPdf.setFocusable(false);
@@ -74,7 +71,6 @@ public class ReporteDialogo extends javax.swing.JDialog {
         btnPdf.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(btnPdf);
 
-        btnExcel.setBackground(new java.awt.Color(255, 255, 255));
         btnExcel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/medianos/excel.png"))); // NOI18N
         btnExcel.setToolTipText("Excel");
         btnExcel.setFocusable(false);
@@ -82,7 +78,6 @@ public class ReporteDialogo extends javax.swing.JDialog {
         btnExcel.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(btnExcel);
 
-        btnSalir.setBackground(new java.awt.Color(255, 255, 255));
         btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/medianos/salir.png"))); // NOI18N
         btnSalir.setToolTipText("Salir");
         btnSalir.setFocusable(false);
@@ -123,11 +118,11 @@ public class ReporteDialogo extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();

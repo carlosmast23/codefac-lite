@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "CLIENTE")
 @XmlRootElement
-public class Persona implements Serializable, Comparable<Persona>{
+public class Persona implements Serializable, Comparable<Persona> {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -60,23 +60,22 @@ public class Persona implements Serializable, Comparable<Persona>{
     private String correoElectronico;
     @Column(name = "ESTADO")
     private String estado;
-    
+
     @Column(name = "TIPO_IDENTIFICACION")
     private String tipoIdentificacion;
 
     @Column(name = "OBLIGADO_LLEVAR_CONTABILIDAD")
-    private String obligadoLlevarContabilidad;    
-    
+    private String obligadoLlevarContabilidad;
+
     @JoinColumn(name = "NACIONALIDAD_ID")
     @ManyToOne
     private Nacionalidad nacionalidad;
-    
+
     @JoinColumn(name = "SRI_FORMA_PAGO_ID")
     private SriFormaPago sriFormaPago;
-    
+
     //@JoinColumn(name = "SRI_IDENTIFICACION_ID")
     //private SriIdentificacion sriTipoIdentificacion;
-    
     /**
      * Variable para identificar el tipo de la persona, si es proveedor ,
      * cliente, o ambos
@@ -215,11 +214,9 @@ public class Persona implements Serializable, Comparable<Persona>{
     //public SriIdentificacion getSriTipoIdentificacion() {
     //    return sriTipoIdentificacion;
     //}
-
     //public void setSriTipoIdentificacion(SriIdentificacion sriTipoIdentificacion) {
     //    this.sriTipoIdentificacion = sriTipoIdentificacion;
     //}
-
     public String getObligadoLlevarContabilidad() {
         return obligadoLlevarContabilidad;
     }
@@ -235,8 +232,6 @@ public class Persona implements Serializable, Comparable<Persona>{
     public void setTipoIdentificacion(String tipoIdentificacion) {
         this.tipoIdentificacion = tipoIdentificacion;
     }
-    
-    
 
     ///Metodos personalizados
     public String getNombresCompletos() {
@@ -244,39 +239,38 @@ public class Persona implements Serializable, Comparable<Persona>{
         String apellidosTmp = (apellidos != null) ? apellidos : "";
         return nombresTmp + " " + apellidosTmp;
     }
-    
-    public String getTelefonosTodos()
-    {
-        String telefonos="";
-       
-        if (telefonoConvencional!=null && !telefonoConvencional.equals("")) {
-            telefonos=telefonoConvencional;
-        }
-        
-        if (telefonoCelular!=null && !telefonoCelular.equals("")) {
-            //Si ya existe un telefono anterior agregado aumento el separador
-            if(!telefonos.equals(""))
-            {
-                telefonos=telefonos+"/";
-            }
-            
-            telefonos=telefonos+telefonoCelular;
-        }
-        
-        return telefonos;
-        
+
+    public String getNombreSimple() {
+        return apellidos.split(" ")[0] + " " + nombres.split(" ")[0];
     }
-    
-    public TipoIdentificacionEnum getTipoIdentificacionEnum()
-    {
+
+    public String getTelefonosTodos() {
+        String telefonos = "";
+
+        if (telefonoConvencional != null && !telefonoConvencional.equals("")) {
+            telefonos = telefonoConvencional;
+        }
+
+        if (telefonoCelular != null && !telefonoCelular.equals("")) {
+            //Si ya existe un telefono anterior agregado aumento el separador
+            if (!telefonos.equals("")) {
+                telefonos = telefonos + "/";
+            }
+
+            telefonos = telefonos + telefonoCelular;
+        }
+
+        return telefonos;
+
+    }
+
+    public TipoIdentificacionEnum getTipoIdentificacionEnum() {
         return TipoIdentificacionEnum.obtenerPorLetra(tipoIdentificacion);
     }
-    
-    
+
     public EnumSiNo getObligadoLlevarContabilidadEnum() {
         return EnumSiNo.getEnumByLetra(obligadoLlevarContabilidad);
     }
-
 
     @Override
     public int hashCode() {
@@ -309,21 +303,20 @@ public class Persona implements Serializable, Comparable<Persona>{
 
     @Override
     public String toString() {
-        return identificacion+" - "+getNombresCompletos();
+        return identificacion + " - " + getNombresCompletos();
     }
 
     @Override
     public int compareTo(Persona o) {
-      return this.getIdCliente().compareTo(o.getIdCliente());
+        return this.getIdCliente().compareTo(o.getIdCliente());
     }
-    
-    public enum TipoIdentificacionEnum
-    {
-        RUC("R","Ruc"),
-        CEDULA("C","Cédula"),
-        PASAPORTE("P","Pasaporte"),
-        CLIENTE_FINAL("F","Consumidor Final");
-        
+
+    public enum TipoIdentificacionEnum {
+        RUC("R", "Ruc"),
+        CEDULA("C", "Cédula"),
+        PASAPORTE("P", "Pasaporte"),
+        CLIENTE_FINAL("F", "Consumidor Final");
+
         private String letra;
         private String nombre;
 
@@ -339,12 +332,10 @@ public class Persona implements Serializable, Comparable<Persona>{
         public String getNombre() {
             return nombre;
         }
-        
-        public static TipoIdentificacionEnum obtenerPorLetra(String letra)
-        {
+
+        public static TipoIdentificacionEnum obtenerPorLetra(String letra) {
             for (Persona.TipoIdentificacionEnum tipoIdentificacion : TipoIdentificacionEnum.values()) {
-                if(tipoIdentificacion.getLetra().equals(letra))
-                {
+                if (tipoIdentificacion.getLetra().equals(letra)) {
                     return tipoIdentificacion;
                 }
             }
@@ -355,8 +346,7 @@ public class Persona implements Serializable, Comparable<Persona>{
         public String toString() {
             return nombre;
         }
-        
-        
+
     }
 
 }

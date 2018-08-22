@@ -50,6 +50,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        btnReporteLista = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         lblCodSistema = new javax.swing.JLabel();
@@ -119,6 +120,9 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
         txtObsDiscapacidad = new javax.swing.JTextArea();
         jLabel6 = new javax.swing.JLabel();
         lblEspacio5 = new javax.swing.JLabel();
+
+        btnReporteLista.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/32Pixeles/reporte.png"))); // NOI18N
+        btnReporteLista.setText("Listado Estudiantes");
 
         setClosable(true);
         setIconifiable(true);
@@ -703,6 +707,7 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnBuscarRepresentante;
     private javax.swing.JButton btnEliminarRepre1;
     private javax.swing.JButton btnEliminarRepre2;
+    private javax.swing.JButton btnReporteLista;
     private javax.swing.JComboBox<EnumSiNo> cmbDiscapacidad;
     private javax.swing.JComboBox<GeneralEnumEstado> cmbEstado;
     private javax.swing.JComboBox<String> cmbEtnia;
@@ -1022,6 +1027,12 @@ public abstract class EstudiantePanel extends ControladorCodefacInterface {
     public ComponenteEnvioSmsPanel getPnlEnvioSmsPanel() {
         return pnlEnvioSmsPanel;
     }
+
+    @ComponenteSecundarioAnotacion(nombreCategoria = "Reportes")
+    public JButton getBtnReporteLista() {
+        return btnReporteLista;
+    }
+    
     
     
     

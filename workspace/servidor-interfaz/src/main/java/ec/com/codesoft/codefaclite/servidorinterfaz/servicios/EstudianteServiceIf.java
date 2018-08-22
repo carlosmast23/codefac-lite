@@ -19,4 +19,5 @@ public interface EstudianteServiceIf extends ServiceAbstractIf<Estudiante>{
     public List<Estudiante> estudianteSinMatriculaPorPeriodo(Periodo periodo)throws RemoteException;
     public List<Estudiante> estudianteNuevosSinMatricula() throws RemoteException;
     public void eliminarEstudiante(Estudiante e)  throws RemoteException ,ServicioCodefacException;
+    public List<Estudiante> obtenerEstudiantesActivos() throws RemoteException;
 }

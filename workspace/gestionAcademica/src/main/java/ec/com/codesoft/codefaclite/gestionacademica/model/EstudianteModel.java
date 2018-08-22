@@ -8,6 +8,8 @@ package ec.com.codesoft.codefaclite.gestionacademica.model;
 import ec.com.codesoft.codefaclite.corecodefaclite.ayuda.componentes.ComponenteEnvioSmsData;
 import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteEnvioSmsInterface;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.excel.Excel;
+import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
@@ -16,6 +18,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.gestionacademica.busqueda.EstudianteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.EstudiantePanel;
+import ec.com.codesoft.codefaclite.gestionacademica.reportdata.EstudianteData;
 import ec.com.codesoft.codefaclite.gestionacademica.reportdata.ReporteAcademicoData;
 import ec.com.codesoft.codefaclite.inventario.busqueda.RepresentanteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
@@ -36,12 +39,16 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RecursosServiceIf;
 import static ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha.hoy;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -383,6 +390,21 @@ public class EstudianteModel extends EstudiantePanel implements ComponenteEnvioS
 
     private void agregarListenerBotones() {
         
+        getBtnReporteLista().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    imprimirListaEstudiantes();
+                } catch (IOException ex) {
+                    Logger.getLogger(EstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalArgumentException ex) {
+                    Logger.getLogger(EstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(EstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        
         getBtnBuscarRepresentante().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -500,6 +522,72 @@ public class EstudianteModel extends EstudiantePanel implements ComponenteEnvioS
                                
                 }
             });
+        } catch (RemoteException ex) {
+            Logger.getLogger(EstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void imprimirListaEstudiantes() throws IOException, FileNotFoundException, IllegalArgumentException, IllegalAccessException
+    {
+        try {
+            InputStream path = RecursoCodefac.JASPER_ACADEMICO.getResourceInputStream("listado_estudiantes.jrxml");
+            Map parameters = new HashMap();
+            List<EstudianteData> data = new ArrayList<EstudianteData>();
+            EstudianteServiceIf service=ServiceFactory.getFactory().getEstudianteServiceIf();
+            List<Estudiante> estudiantes=service.obtenerTodos(); //Todo: Obtener filtrar solo por clientes
+            
+            for (Estudiante estudiante : estudiantes) {
+                EstudianteData estudianteData=new EstudianteData();
+                estudianteData.setIdentificacion(estudiante.getCedula());
+                estudianteData.setNombresCompletos(estudiante.getNombreCompleto());
+                
+                Persona representantePrincipal=estudiante.getRepresentante();
+                
+                if(representantePrincipal!=null)
+                {
+                    estudianteData.setRepresentante(representantePrincipal.getNombresCompletos());
+                    estudianteData.setTelefono(representantePrincipal.getTelefonosTodos());
+                }
+                else
+                {
+                    estudianteData.setRepresentante("");
+                    estudianteData.setTelefono("");
+                }
+                
+                data.add(estudianteData);
+            }
+            
+            Collections.sort(data, new Comparator<EstudianteData>()
+            {
+                public int compare(EstudianteData obj1, EstudianteData obj2)
+                {
+                    return obj1.getNombresCompletos().compareTo(obj2.getNombresCompletos());
+                }
+            });
+            
+            DialogoCodefac.dialogoReporteOpciones( new ReporteDialogListener() {
+                @Override
+                public void excel() {
+                    try{
+                        Excel excel = new Excel();
+                        String nombreCabeceras[] = {"Identificación", "Nombres completos","Representante", "Telf Representante"};
+                        excel.gestionarIngresoInformacionExcel(nombreCabeceras, data);
+                        excel.abrirDocumento();
+                    }
+                    catch(Exception exc)
+                    {
+                        exc.printStackTrace();
+                        DialogoCodefac.mensaje("Error","El archivo Excel se encuentra abierto",DialogoCodefac.MENSAJE_INCORRECTO);
+                    }  
+                }
+
+                @Override
+                public void pdf() {
+                    ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Clientes ");                    
+                }
+            });
+            
+            
         } catch (RemoteException ex) {
             Logger.getLogger(EstudianteModel.class.getName()).log(Level.SEVERE, null, ex);
         }
