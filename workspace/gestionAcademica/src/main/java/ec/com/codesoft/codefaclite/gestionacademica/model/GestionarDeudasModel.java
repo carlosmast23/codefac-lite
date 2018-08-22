@@ -174,8 +174,9 @@ public class GestionarDeudasModel extends GestionarDeudasPanel{
                     Periodo periodoSeleccionado = (Periodo) getCmbPeriodo().getSelectedItem();
                     Map<String, Object> mapParametros = new HashMap<String, Object>();
                     mapParametros.put("periodo", periodoSeleccionado);
+                    mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
                     List<NivelAcademico> niveles= ServiceFactory.getFactory().getNivelAcademicoServiceIf().obtenerPorMap(mapParametros);
-                    
+
                     //Cargar todos los niveles disponibles para ese periodo activo
                     getCmbNivelAcademico().removeAllItems();
                     for (NivelAcademico nivel : niveles) {

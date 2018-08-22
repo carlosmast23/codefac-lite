@@ -26,6 +26,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlanti
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaMes;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
@@ -690,7 +691,9 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
              * TODO: Vericar la modalidad cuando recien se crea y cuando ya existe datos
              */
             Map<String,Object> mapParametroMap=new HashMap<String,Object>();
-            mapParametroMap.put("periodo",periodo);            
+            mapParametroMap.put("periodo",periodo);  
+            mapParametroMap.put("estado",GeneralEnumEstado.ACTIVO.getEstado()); 
+            
             List<NivelAcademico> niveles=ServiceFactory.getFactory().getNivelAcademicoServiceIf().obtenerPorMap(mapParametroMap);            
             getCmbCursoSinRegistrar().removeAllItems();
             for (NivelAcademico nivelAcademico : niveles) {

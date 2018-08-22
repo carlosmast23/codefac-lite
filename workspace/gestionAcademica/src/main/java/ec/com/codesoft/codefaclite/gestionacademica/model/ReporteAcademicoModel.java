@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteI
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteInscritoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelAcademicoServiceIf;
 import java.awt.event.ActionEvent;
@@ -210,6 +211,7 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
             NivelAcademicoServiceIf servicio = ServiceFactory.getFactory().getNivelAcademicoServiceIf();
             Map<String, Object> mapBusqueda = new HashMap<String, Object>();
             mapBusqueda.put("periodo", periodo);
+            mapBusqueda.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
             
             List<NivelAcademico> resultados = servicio.obtenerPorMap(mapBusqueda);
             comboNivel.removeAllItems();

@@ -71,7 +71,7 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
         setPreferredSize(new java.awt.Dimension(900, 600));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        lblperiodo.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        lblperiodo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblperiodo.setText("Periodo:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -97,7 +97,7 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(cmbNivelAcademico, gridBagConstraints);
 
-        lblBuscar.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        lblBuscar.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         lblBuscar.setText("Nivel:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -174,7 +174,7 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(chkTodosRubros, gridBagConstraints);
 
-        jLabel4.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel4.setText("Tipo Rubro:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -219,7 +219,7 @@ public abstract class ReporteDeudasPanel extends ControladorCodefacInterface {
         btnEliminarMes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/cancel-ico.png"))); // NOI18N
         jPanel1.add(btnEliminarMes, new java.awt.GridBagConstraints());
 
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel1.setText("Filtro Por Mes:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
