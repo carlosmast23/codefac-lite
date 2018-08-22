@@ -168,8 +168,10 @@ public class RubroPlantilla implements Serializable{
         Integer mesInicial=UtilidadesFecha.obtenerMes(fechaInicio);
         Integer mesFinal=UtilidadesFecha.obtenerMes(fechaFinal);
         
+        Integer mesInicialContador=mesInicial;
+        
         for (int anio = anioInicial; anio <= anioFinal; anio++) {
-            for (int mes =mesInicial;mes<=12;mes++) 
+            for (int mes =mesInicialContador;mes<=12;mes++) 
             {
                 RubroPlantillaMes rpm=new RubroPlantillaMes();
                 rpm.setAnio(anio);
@@ -185,9 +187,9 @@ public class RubroPlantilla implements Serializable{
                     {
                         break;
                     }
-                }                
-
+                }
             }
+            mesInicialContador=1;// Seteo en 0 porque despues de la primera vez los meses empiezan desde enero
         }
         
         return rubrosMes;
