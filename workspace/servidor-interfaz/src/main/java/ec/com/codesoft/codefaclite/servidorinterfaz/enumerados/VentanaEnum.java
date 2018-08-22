@@ -52,7 +52,7 @@ public enum VentanaEnum {
     NIVEL_ACADEMICO("ec.com.codesoft.codefaclite.gestionacademica.model.NivelAcademicoModel", "NIAC", "Cursos", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.GESTIONAR,null),
     ESTUDIANTES("ec.com.codesoft.codefaclite.gestionacademica.model.EstudianteModel", "ESTU", "Estudiante", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.GESTIONAR,null),
     RUBRO_ACADEMICO("ec.com.codesoft.codefaclite.gestionacademica.model.RubrosPeriodoModel", "RUAC", "Rubro", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.DEUDAS_ACADEMICOS,null),
-    GESTIONAR_ACADEMICO("ec.com.codesoft.codefaclite.gestionacademica.model.GestionarDeudasModel", "RUAC", "Deudas Curso", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.DEUDAS_ACADEMICOS,null),
+    GESTIONAR_ACADEMICO("ec.com.codesoft.codefaclite.gestionacademica.model.GestionarDeudasModel", "GEAC", "Deudas Curso", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.DEUDAS_ACADEMICOS,null),
     FACTURA_ACADEMICO_LOTE("ec.com.codesoft.codefaclite.facturacion.model.FacturaAcademicoLoteModel", "FACL", "Factura Lote", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.PROCESOS,null),
     REPORTE_MATRICULA("ec.com.codesoft.codefaclite.gestionacademica.model.ReporteAcademicoModel", "RMAT", "Reporte Matricula", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.REPORTES,null),
     REPORTE_DEUDAS("ec.com.codesoft.codefaclite.gestionacademica.model.ReporteDeudasModel", "RDES", "Reporte Deudas", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.REPORTES,null),

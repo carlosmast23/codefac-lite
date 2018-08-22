@@ -2375,9 +2375,18 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     {
         List<JMenu> menus=new ArrayList<JMenu>();
         
+        for (ModuloCodefacEnum moduloSistema : ModuloCodefacEnum.values()) {
+            System.out.println("MOdulo prueba:"+moduloSistema.getNombre());
+        }
+        
                 
         for (ModuloCodefacEnum moduloSistema : ModuloCodefacEnum.values()) {
-
+            
+                if(moduloSistema.equals(ModuloCodefacEnum.GESTIONA_ACADEMICA))
+                {
+                    System.out.println("MODO CONSTRUYENDO:"+moduloSistema.getNombre());
+                }
+                
                 JMenu menuModulo = new JMenu(moduloSistema.getNombre());
                 menuModulo.setIcon(moduloSistema.getIcono());
                 menuModulo.setFont(new Font("Arial",2,15));

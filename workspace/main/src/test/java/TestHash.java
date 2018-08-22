@@ -13,9 +13,10 @@ import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesHash;
  */
 public class TestHash {
     public static void main(String[] args) {
-        String clave="1234";
+        String clave="123";
         String hash=UtilidadesHash.generarHashBcrypt(clave);
+        
         System.out.println(hash);
-        System.out.println(UtilidadesHash.verificarHashBcrypt(clave,hash));
+        System.out.println(UtilidadesHash.verificarHashBcrypt("123","$2a$12$q0x9uYw.x1/YJhDspUskeex3OmRfanR9PV9/N4/oybydkm3ztpGK2"));
     }
 }
