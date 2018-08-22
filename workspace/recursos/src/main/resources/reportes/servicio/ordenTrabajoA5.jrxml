@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="421" pageHeight="595" columnWidth="381" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
 	<property name="ireport.zoom" value="2.1398375295825907"/>
-	<property name="ireport.x" value="222"/>
+	<property name="ireport.x" value="78"/>
 	<property name="ireport.y" value="0"/>
 	<style name="style1">
 		<conditionalStyle>
@@ -126,7 +126,7 @@
 				<text><![CDATA[Código:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="70" y="40" width="90" height="12" uuid="deed9b40-fb1e-4271-8427-d09f34d11985"/>
+				<reportElement x="70" y="40" width="205" height="12" uuid="deed9b40-fb1e-4271-8427-d09f34d11985"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>

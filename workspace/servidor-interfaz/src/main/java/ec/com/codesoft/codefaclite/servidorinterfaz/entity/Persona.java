@@ -254,7 +254,7 @@ public class Persona implements Serializable, Comparable<Persona> {
         if (telefonoCelular != null && !telefonoCelular.equals("")) {
             //Si ya existe un telefono anterior agregado aumento el separador
             if (!telefonos.equals("")) {
-                telefonos = telefonos + "/";
+                telefonos = telefonos + " - ";
             }
 
             telefonos = telefonos + telefonoCelular;
