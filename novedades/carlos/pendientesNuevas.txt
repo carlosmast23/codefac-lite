@@ -1,0 +1,4 @@
+Revisar sistema modulo academico para mañana
+Actualizar la version
+Ordenar los reportes de ventas por preimpreso
+Poder buscar por cliente las ordenes de compra y presupuestos

@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.gestionacademica.other;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +21,9 @@ public class NotificacionDeudaImprimir
     private String representante;
     private String nota;
     private String total;
+    
+    //Datos adicionales
+    public Estudiante estudiante;
     
     //private Map<String,Object> parametrosPorAlumno;
     

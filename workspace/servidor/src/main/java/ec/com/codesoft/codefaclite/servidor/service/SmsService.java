@@ -11,6 +11,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SmsServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -19,6 +22,25 @@ import java.rmi.server.UnicastRemoteObject;
 public class SmsService extends UnicastRemoteObject implements SmsServiceIf{ 
 
     public SmsService() throws RemoteException {
+    }
+    
+    public void enviarMensajes(Map<String,String> mensajesMap) throws RemoteException,ServicioCodefacException
+    {        
+        for (Map.Entry<String, String> entry : mensajesMap.entrySet()) {
+            try {
+                String numero = entry.getKey();
+                String mensaje = entry.getValue();
+                
+                enviarMensaje(numero, mensaje);
+                
+                if(mensajesMap.size()>0)
+                    Thread.sleep(2000); //  Esperar para enviar cada 2 segundos los mensajes TODO: Esta opcion debe ser personalizada
+                
+            } catch (InterruptedException ex) {
+                Logger.getLogger(SmsService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
     }
     
     public void enviarMensaje(String numero , String mensaje)throws RemoteException,ServicioCodefacException

@@ -21,7 +21,7 @@ public enum PlantillaSmsEnum {
     NOTIFICACION_ESTUDIANTE("Notificación ",EtiquetaEnum.EMPRESA.getTag()+" le informa \nque el estudiante "+EtiquetaEnum.ESTUDIANTE_NOMBRE.getTag()+"\n tiene que venir con el representante",new VentanaEnum[]{VentanaEnum.ESTUDIANTES}),
     NOTIFICACION_DEUDA_ESTUDIANTE("Notificación deuda",EtiquetaEnum.EMPRESA.getTag()+" le informa \nque el estudiante "+EtiquetaEnum.ESTUDIANTE_NOMBRE.getTag()+"\n tiene valores pendientes por pagar",new VentanaEnum[]{VentanaEnum.ESTUDIANTES}),
     
-    NOTIFICACION_DEUDA_GRUPO("Notificación deuda",EtiquetaEnum.EMPRESA.getTag()+" le informa \nque el estudiante "+EtiquetaEnum.ESTUDIANTE_NOMBRE.getTag()+"\n tiene un valor pendiente de "+EtiquetaEnum.VALOR_PENDIENTE.getTag()+" , porfavor acercarse a cancelar.Saludos",new VentanaEnum[]{VentanaEnum.NOTIFICACION_DEUDAS});
+    NOTIFICACION_DEUDA_GRUPO("Notificación deuda",EtiquetaEnum.EMPRESA.getTag()+" le informa \nque el estudiante "+EtiquetaEnum.ESTUDIANTE_NOMBRE.getTag()+"\n tiene un valor pendiente de "+EtiquetaEnum.VALOR_PENDIENTE.getTag()+" ,\n porfavor acercarse a cancelar.Saludos",new VentanaEnum[]{VentanaEnum.NOTIFICACION_DEUDAS});
 
     /**
      * Lista donde estan disponibles las plantillas

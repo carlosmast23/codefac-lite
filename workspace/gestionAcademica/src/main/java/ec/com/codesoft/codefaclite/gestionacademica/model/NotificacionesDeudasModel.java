@@ -50,6 +50,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
@@ -153,6 +154,7 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
     private void cargarDatosReporte()
     {
         try {
+            notificacionesDeudaImprimir=new ArrayList<NotificacionDeudaImprimir>();
             List<RubroEstudiante> rubrosEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().obtenerRubrosEstudiantesPorRubros(listaRubros);            
             Map<EstudianteInscrito, List<RubroEstudiante>> mapRubrosEstudiante = convertirMapRubrosEstudiante(rubrosEstudiante);
             /**
@@ -185,6 +187,7 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
                 ndi.setRepresentante((estudianteInscrito.getEstudiante().getRepresentante() == null) ? "" : estudianteInscrito.getEstudiante().getRepresentante().getNombresCompletos());
                 ndi.setNota("");
                 ndi.setTotal(total.toString());
+                ndi.estudiante=estudianteInscrito.getEstudiante();
                 notificacionesDeudaImprimir.add(ndi);
             }
         } catch (RemoteException ex) {
@@ -660,6 +663,7 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
 
     private void iniciarVariables() {
         modeloLista=new DefaultListModel();
+        getPnlSms().setControlador(this); //Iniciar panel de envio de mensajes con el controlador de sms
     }
 
     @Override
@@ -672,6 +676,7 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    
     @Override
     public boolean getValidacionEnvioSms() {
         return true; //TODO: por el momento no hago ninguna validacion
@@ -686,9 +691,39 @@ public class NotificacionesDeudasModel extends NotificacionesDeudasPanel impleme
     @Override
     public List<ComponenteEnvioSmsData> getDataSms() {
         
+        List<String> listaNoEnviado=new ArrayList<String>();
+        
         List<ComponenteEnvioSmsData> lista=new ArrayList<ComponenteEnvioSmsData>();
         for (NotificacionDeudaImprimir notificaciones : notificacionesDeudaImprimir) {
-            //ComponenteEnvioSmsData componente=new ComponenteEnvioSmsData(LISTA, plantillaTags);
+            
+            Map<PlantillaSmsEnum.EtiquetaEnum,String>mapParametros=new HashMap<PlantillaSmsEnum.EtiquetaEnum,String>();
+            mapParametros.put(PlantillaSmsEnum.EtiquetaEnum.ESTUDIANTE_NOMBRE,notificaciones.estudiante.getNombreSimple());
+            mapParametros.put(PlantillaSmsEnum.EtiquetaEnum.VALOR_PENDIENTE,notificaciones.getTotal());
+            
+            String numeroRepresentante=(notificaciones.estudiante.getRepresentante()!=null)?notificaciones.estudiante.getRepresentante().getTelefonoCelular():"";
+            if(!numeroRepresentante.equals(""))
+            {
+                ComponenteEnvioSmsData componenteSms = new ComponenteEnvioSmsData(numeroRepresentante, mapParametros);
+                lista.add(componenteSms);
+            }
+            else
+            {
+                listaNoEnviado.add(notificaciones.estudiante.getNombreSimple());
+            }
+        }
+        
+        /**
+         * Lista de estudiantes que no se puede enviar porque no tienen asigando un representante con numero de celular
+         */
+        if(listaNoEnviado.size()>0)
+        {
+            String mensaje="Los siguiente estudiantes no se pueden enviar las notificaciones SMS:\n";
+            
+            for (String noEnviados : listaNoEnviado) {
+                mensaje+="-"+noEnviados+"\n";
+            }
+            
+            DialogoCodefac.mensaje("Sms no enviados",mensaje,DialogoCodefac.MENSAJE_ADVERTENCIA);
         }
         
         return lista;
