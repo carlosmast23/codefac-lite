@@ -103,11 +103,28 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
             entityManager.persist(ordenTrabajo);
             entityManager.flush();
             transaction.commit();
+            
+            SmsService smsService=new SmsService();
+            for (OrdenTrabajoDetalle detalle : ordenTrabajo.getDetalles()) {
+                if(detalle.getEmpleado()!=null)
+                {
+                    if(detalle.getEmpleado().getTelefonoCelular()!=null && !detalle.getEmpleado().getTelefonoCelular().equals(""))
+                    {
+                        smsService.enviarMensaje(detalle.getEmpleado().getTelefonoCelular(),"Nueva orden "+ordenTrabajo.getId()+ ","+detalle.getTitulo()+", Cliente:"+ordenTrabajo.getCliente().getNombreSimple());
+                    }
+                    
+                }
+            }
+            
         }
         catch (DatabaseException ex) {
             transaction.rollback();
             Logger.getLogger(OrdenTrabajoService.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        } catch (RemoteException ex) { 
+            Logger.getLogger(OrdenTrabajoService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(OrdenTrabajoService.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         return ordenTrabajo;
     }

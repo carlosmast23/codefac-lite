@@ -77,3 +77,5 @@ En el modulo web hacer 2 buscadores uno cuando implemente las propiedades y otro
 En el reporte de ventas esta de ordenar por el impreso
 Ver si se puede hacer unos scripts que se ejecuten siempre para corregir datos en especial cuando son migrados , por ejemplo en MyGoldeWorld algunos clientes migrados no tenias estado
 Ver una manera de cambiar el valor de los rubros de algunos estudiantes.
+Hacer que cuando una ventana se abre como dialogo no se abran las pantallas secundarias
+Hacer que el tema de enviar los sms funcione en segundo plano , mejor hacer otro metodo con hilos
