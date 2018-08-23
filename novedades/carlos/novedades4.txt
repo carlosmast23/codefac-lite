@@ -79,3 +79,4 @@ Ver si se puede hacer unos scripts que se ejecuten siempre para corregir datos e
 Ver una manera de cambiar el valor de los rubros de algunos estudiantes.
 Hacer que cuando una ventana se abre como dialogo no se abran las pantallas secundarias
 Hacer que el tema de enviar los sms funcione en segundo plano , mejor hacer otro metodo con hilos
+Modificar el reporte de facturas para que aparescan ordenados por el preimpreso
