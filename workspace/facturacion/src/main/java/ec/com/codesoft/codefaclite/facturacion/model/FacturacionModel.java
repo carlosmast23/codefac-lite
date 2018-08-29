@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfazPostConstructPa
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteFacturacionBusqueda;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.EstudianteBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusquedaPresupuesto;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.RubroEstudianteBusqueda;
@@ -127,7 +128,7 @@ import org.jdesktop.swingx.prompt.PromptSupport;
 public class FacturacionModel extends FacturacionPanel implements InterfazPostConstructPanel{
 
     //private Persona persona;
-    private Factura factura;
+    protected Factura factura;
     private Estudiante estudiante;
     //private DefaultTableModel modeloTablaFormasPago;
     private DefaultTableModel modeloTablaDetallesProductos;
@@ -781,25 +782,31 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         this.productoSeleccionado=productoSeleccionado;
         setearValoresProducto(productoSeleccionado.getValorUnitario(), productoSeleccionado.getNombre(),productoSeleccionado.getCodigoPersonalizado());
     }
+    
+    public void validacionesGrabar() throws ExcepcionCodefacLite
+    {
+        if (!verificarSumaFormaPago()) {
+            throw new ExcepcionCodefacLite("Formas de pago erroneas");
+        }
+
+        if (factura.getCliente() == null) {
+            DialogoCodefac.mensaje("Alerta", "Necesita seleccionar un cliente", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            throw new ExcepcionCodefacLite("Necesita seleccionar un Cliente");
+        }
+
+        if (factura.getDetalles().isEmpty()) {
+            DialogoCodefac.mensaje("Alerta", "No se puede facturar sin detalles", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            throw new ExcepcionCodefacLite("Necesita seleccionar detalles ");
+        }
+
+    }
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
 
         try {
-            if (!verificarSumaFormaPago()) {
-                throw new ExcepcionCodefacLite("Formas de pago erroneas");
-            }
             
-            if (factura.getCliente() == null) {
-                DialogoCodefac.mensaje("Alerta", "Necesita seleccionar un cliente", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                throw new ExcepcionCodefacLite("Necesita seleccionar un Cliente");
-            }
-            
-            if (factura.getDetalles().isEmpty()) {
-                DialogoCodefac.mensaje("Alerta", "No se puede facturar sin detalles", DialogoCodefac.MENSAJE_ADVERTENCIA);
-                throw new ExcepcionCodefacLite("Necesita seleccionar detalles ");
-            }
-            
+            validacionesGrabar();
             
             Boolean respuesta = DialogoCodefac.dialogoPregunta("Alerta", "Estas seguro que desea facturar?", DialogoCodefac.MENSAJE_ADVERTENCIA);
             if (!respuesta) {
@@ -1015,11 +1022,17 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     public void actualizar() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    public InterfaceModelFind getBusquedaInterface()
+    {
+        FacturaBusqueda facturaBusqueda = new FacturaBusqueda();
+        return facturaBusqueda;
+    }
 
     @Override
     public void buscar() throws ExcepcionCodefacLite {
-        FacturaBusqueda facturaBusqueda = new FacturaBusqueda();
-        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(facturaBusqueda);
+        InterfaceModelFind busquedaInterface=getBusquedaInterface();
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaInterface);
         buscarDialogoModel.setVisible(true);
         Factura facturaTmp = (Factura) buscarDialogoModel.getResultado();
         if (facturaTmp != null) {
@@ -1610,7 +1623,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getTxtCantidad().selectAll();
     }
 
-    private void setearValoresDefaultFactura() {
+    protected void setearValoresDefaultFactura() {
         /**
          * Todo: Carlos Pato
          */
@@ -2106,7 +2119,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         
         //Agregar los tipos de documentos disponibles
-
         getCmbTipoDocumento().removeAllItems();
         List<TipoDocumentoEnum> tipoDocumentos= TipoDocumentoEnum.obtenerTipoDocumentoPorModulo(ModuloCodefacEnum.FACTURACION,session.getModulos());
         for (TipoDocumentoEnum tipoDocumento : tipoDocumentos) {

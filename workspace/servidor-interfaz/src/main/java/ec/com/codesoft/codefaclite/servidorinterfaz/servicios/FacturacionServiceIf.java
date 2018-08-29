@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.List;
 
@@ -27,4 +28,6 @@ public interface FacturacionServiceIf extends ServiceAbstractIf<Factura>
     public List<Factura> obtenerFacturasActivas() throws java.rmi.RemoteException;
     public String getPreimpresoSiguiente() throws java.rmi.RemoteException;
     public void eliminarFactura(Factura factura) throws java.rmi.RemoteException;
+    public Integer obtenerSecuencialProformas() throws RemoteException;
+    public Factura grabarProforma(Factura proforma) throws RemoteException;
 }

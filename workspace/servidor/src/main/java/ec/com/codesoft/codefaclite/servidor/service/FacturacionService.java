@@ -57,6 +57,30 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         this.parametroService = new ParametroCodefacService();
 
     }
+    
+    
+    
+    public Factura grabarProforma(Factura proforma) throws RemoteException
+    {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() {
+                try 
+                {
+                    proforma.setCodigoDocumento(DocumentoEnum.PROFORMA.getCodigo());
+                    grabarDetallesFactura(proforma);
+                    //entityManager.flush(); //Hacer que el nuevo objeto tenga el id para retornar
+                } 
+                catch (RemoteException ex) 
+                {
+                    Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        
+        return proforma;
+    }
+    
 
     public Factura grabar(Factura factura) {
         EntityTransaction transaction= entityManager.getTransaction();
@@ -68,9 +92,22 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             
             ComprobantesService servicioComprobante = new ComprobantesService();
             servicioComprobante.setearSecuencialComprobanteSinTransaccion(factura);            
-
+            grabarDetallesFactura(factura);
+            grabarCartera(factura);
             
-            factura.setEstadoNotaCredito(Factura.EstadoNotaCreditoEnum.SIN_ANULAR.getEstado());            
+        transaction.commit();
+        } catch (DatabaseException ex) {
+            transaction.rollback();
+            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return factura;
+    }
+    
+    private void grabarDetallesFactura(Factura factura) throws RemoteException
+    {
+         factura.setEstadoNotaCredito(Factura.EstadoNotaCreditoEnum.SIN_ANULAR.getEstado());            
             //facturaFacade.create(factura);
             entityManager.persist(factura);
             entityManager.flush();
@@ -99,18 +136,13 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 
             }
             
-            //Grabar en la cartera si todo el proceso anterior fue correcto
-            CarteraService carteraService=new CarteraService();
-            carteraService.grabarDocumentoCartera(factura, Cartera.TipoCarteraEnum.CLIENTE);
-            
-        transaction.commit();
-        } catch (DatabaseException ex) {
-            transaction.rollback();
-            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
-            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return factura;
+    }
+    
+    private void grabarCartera(Factura factura) throws RemoteException
+    {
+        //Grabar en la cartera si todo el proceso anterior fue correcto
+        CarteraService carteraService = new CarteraService();
+        carteraService.grabarDocumentoCartera(factura, Cartera.TipoCarteraEnum.CLIENTE);
     }
     
     private void afectarPresupuesto(FacturaDetalle detalle)
@@ -274,5 +306,11 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
        return getFacade().findByMap(mapParametros);
     }
     
+    @Override
+    public Integer obtenerSecuencialProformas() throws RemoteException
+    {
+        Integer secuencial=getFacade().getSecuencialProforma();
+        return (secuencial!=null)?(secuencial+1):1; //Si no existe ningun valor por defecto retorna 1
+    }
 
 }

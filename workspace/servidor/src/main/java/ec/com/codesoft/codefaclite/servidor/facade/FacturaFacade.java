@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.facade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import java.sql.Date;
 import java.util.List;
 import javax.persistence.NoResultException;
@@ -95,5 +96,20 @@ public class FacturaFacade extends AbstractFacade<Factura> {
 
     }
     
+      public Integer getSecuencialProforma() {
+        try {
+            //Factura f;
+            //f.getCodigoDocumento();
+            //f.getSecuencial()
+            
+            String queryString = "SELECT max(u.secuencial) FROM Factura u WHERE  u.codigoDocumento=?1";
+            Query query = getEntityManager().createQuery(queryString);
+            query.setParameter(1, DocumentoEnum.PROFORMA.getCodigo());
+
+            return (Integer) query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
     //public Long obtenerSecuencialPresupuestos
 }

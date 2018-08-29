@@ -27,7 +27,7 @@ public enum DocumentoEnum {
      * Documento no valido por el SRI //Ver si hago una clasificacion para diferencia este tipo de documentos
      */
     PROFORMA("Proforma",
-            "PROF",
+            "PRO",
             DocumentoCategoriaEnum.COMPROBANTES_VENTA,
             new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},
             false,
