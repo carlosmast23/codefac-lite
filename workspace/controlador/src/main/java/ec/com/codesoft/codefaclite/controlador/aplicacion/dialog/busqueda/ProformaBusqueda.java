@@ -22,7 +22,7 @@ public class ProformaBusqueda implements InterfaceModelFind<Factura>{
     @Override
     public Vector<ColumnaDialogo> getColumnas() {
         Vector<ColumnaDialogo> titulo = new Vector<>();
-        titulo.add(new ColumnaDialogo("Id", 0.2d));
+        titulo.add(new ColumnaDialogo("Secuencial", 0.2d));
         titulo.add(new ColumnaDialogo("cliente", 0.3d));
         titulo.add(new ColumnaDialogo("documento", 0.15d));
         titulo.add(new ColumnaDialogo("estado", 0.15d));
@@ -49,8 +49,9 @@ public class ProformaBusqueda implements InterfaceModelFind<Factura>{
 
     @Override
     public void agregarObjeto(Factura t, Vector dato) {
-        dato.add(t.getId());
-        System.out.println(t.getPreimpreso());
+        
+        dato.add(t.getSecuencial());
+        //System.out.println(t.getPreimpreso());
         dato.add(t.getCliente().getRazonSocial());
         DocumentoEnum documentoEnum= DocumentoEnum.obtenerDocumentoPorCodigo(t.getCodigoDocumento());        
         dato.add(documentoEnum.getNombre()); //TODO: Veri si para cosnultar por documento sea una propiedad intrinsica de la factura        

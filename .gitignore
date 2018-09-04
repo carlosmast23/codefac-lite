@@ -63,3 +63,6 @@ workspace/main/codefac.ini
 /workspace/app-web/controladorBean/target/
 /workspace/app-web/codefacweb/target/
 /workspace/app-web/recursosWeb/target/
+/workspace/app-web/virtualmall/virtualmall-ejb/target/
+/workspace/app-web/virtualmall/virtualmall-web/target/
+/workspace/app-web/virtualmall/virtualmall-ear/target/

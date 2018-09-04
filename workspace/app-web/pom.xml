@@ -11,7 +11,7 @@
     <modules>
         <module>codefacweb</module>
         <module>recursosWeb</module>
-    </modules>
+  </modules>
   
     <dependencies>
         <dependency>
