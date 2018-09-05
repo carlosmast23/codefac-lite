@@ -248,6 +248,7 @@ public class GestionarDeudasModel extends GestionarDeudasPanel{
             if (nivelAcademico != null && rubroNivel != null) {
                 Map<String, Object> mapParametros = new HashMap<String, Object>();
                 mapParametros.put("nivelAcademico", nivelAcademico);
+                mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
                 List<EstudianteInscrito> estudiantesInscritos = ServiceFactory.getFactory().getEstudianteInscritoServiceIf().obtenerPorMap(mapParametros);
                
                 for (EstudianteInscrito estudiantesInscrito : estudiantesInscritos) {
