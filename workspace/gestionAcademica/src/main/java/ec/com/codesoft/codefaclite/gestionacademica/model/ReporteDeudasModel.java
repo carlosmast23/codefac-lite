@@ -5,6 +5,9 @@
  */
 package ec.com.codesoft.codefaclite.gestionacademica.model;
 
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.excel.Excel;
+import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
@@ -33,6 +36,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -222,8 +226,33 @@ public class ReporteDeudasModel extends ReporteDeudasPanel {
             } else {
                 parameters.put("nivelacademico", "TODOS");
             }
+            
+            ///// Imprimir reporte de excel o pdf
+            DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
+                @Override
+                public void excel() {
+                    try {
+                        Excel excel = new Excel();
+                        String nombreCabeceras[] = {"Identificación", "Estudiante", "Nivel Academico", "Rubro", "Valor"};
+                        excel.gestionarIngresoInformacionExcel(nombreCabeceras,data);
+                        excel.abrirDocumento();
+                    } catch (IOException ex) {
+                        Logger.getLogger(ReporteDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IllegalArgumentException ex) {
+                        Logger.getLogger(ReporteDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IllegalAccessException ex) {
+                        Logger.getLogger(ReporteDeudasModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
 
-            ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Deudas");
+                @Override
+                public void pdf() {
+                    ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, "Reporte Deudas");
+                }
+            });
+                    
+
+            
         } catch (RemoteException ex) {
             Logger.getLogger(ReporteAcademicoModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {

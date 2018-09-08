@@ -5,11 +5,17 @@
  */
 package ec.com.codesoft.codefaclite.gestionacademica.reportdata;
 
+import ec.com.codesoft.codefaclite.controlador.excel.Excel;
+import ec.com.codesoft.codefaclite.controlador.excel.ExcelDatosInterface;
+import ec.com.codesoft.codefaclite.controlador.excel.TipoDato;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author CodesoftDesarrollo
  */
-public class ReporteDeudasData {
+public class ReporteDeudasData implements ExcelDatosInterface{
 
     private String nivelAcademicoEstudiante;
     private String cedulaEstudiante;
@@ -65,6 +71,17 @@ public class ReporteDeudasData {
 
     public void setValor(String valor) {
         this.valor = valor;
+    }
+
+    @Override
+    public List<TipoDato> getDatos() {
+        List<TipoDato> tiposDatos = new ArrayList<TipoDato>();        
+        tiposDatos.add(new TipoDato(this.cedulaEstudiante,Excel.TipoDataEnum.TEXTO));        
+        tiposDatos.add(new TipoDato(this.estudiante, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.nivelAcademicoEstudiante,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.rubro, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.valor, Excel.TipoDataEnum.NUMERO));        
+        return tiposDatos;
     }
     
     
