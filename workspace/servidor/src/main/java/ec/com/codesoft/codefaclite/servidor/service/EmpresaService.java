@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.EmpresaFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -31,27 +32,39 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
     
     public Empresa grabar(Empresa p)
     {
-        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
-            @Override
-            public void transaccion() {
-                try {
-                    entityManager.persist(p);
-                } catch (DatabaseException ex) {
-                    Logger.getLogger(EmpresaService.class.getName()).log(Level.SEVERE, null, ex);
+        try {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion() {
+                    try {
+                        entityManager.persist(p);
+                    } catch (DatabaseException ex) {
+                        Logger.getLogger(EmpresaService.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
-            }
-        });
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(EmpresaService.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return p;
     }
     
     public void editar(Empresa p)
     {
-        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
-            @Override
-            public void transaccion() {
-                entityManager.merge(p);
-            }
-        });
+        try
+        {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion() {
+                    entityManager.merge(p);
+                }
+            });
+        }
+        catch(ServicioCodefacException e)
+        {
+            e.printStackTrace();
+        }
+        
     }
     
     public void eliminar(Empresa p)

@@ -18,15 +18,19 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlanti
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaMes;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RubroEstudianteServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.rmi.RemoteException;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
@@ -85,6 +89,61 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         }
         transaccion.commit();
     }
+    
+    public void eliminarMesRubroPlantilla(RubroPlantillaMes rubroPlantillaMes) throws RemoteException, ServicioCodefacException
+    {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException {
+                try {
+                    RubrosNivel rubroNivel=rubroPlantillaMes.getRubroNivel();
+                    
+                    if(rubroNivel==null)
+                    {
+                        throw new ServicioCodefacException("Error no se puede eliminar porque no esta atado a ningun rubro");
+                    }
+                    
+                    RubroEstudianteService servicio=new RubroEstudianteService();
+                    
+                    List<RubrosNivel> rubrosNivelList=new ArrayList<RubrosNivel>();
+                    rubrosNivelList.add(rubroNivel);
+                    
+                    //Obtener todos los rubrosEstudiantes vinculados al rubro nivel creado por la plantilla
+                    List<RubroEstudiante> rubrosEstudiante=servicio.obtenerRubrosEstudiantesPorRubros(rubrosNivelList);
+                    
+                    for (RubroEstudiante rubroEstudiante : rubrosEstudiante) {
+                        
+                        //TODO: Ahorita solo estoy verificando que solo no tenga nnguna factura para anular , pero verificar si tambien me toca verificar el estado del rubro estudiante
+                        if(rubroEstudiante.getEstadoFactura().equals(RubroEstudiante.FacturacionEstadoEnum.FACTURADO.getLetra()))
+                        {
+                            String mensajeException="No se puede procesar porque el estudiante :"+rubroEstudiante.getEstudianteInscrito().getEstudiante().getNombreSimple();
+                            mensajeException+="\n con el rubro "+rubroNivel.getNombre()+" , porque se encuentra facturado";
+                            throw new ServicioCodefacException(mensajeException); //Auotmaticamente genera el rollback cuando lanzo esta excepcion
+                        }
+                        //Cambiar el estado a eliminado del rubroEstudiante
+                        rubroEstudiante.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
+                        entityManager.merge(rubroEstudiante);
+                    }
+                    
+                    //Eliminar el rubro del nivel generado
+                    rubroNivel.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
+                    entityManager.merge(rubroNivel);
+                    
+                    //Eliminar el rubro plantilla del mes
+                    RubroPlantillaMes entityPersistent=entityManager.merge(rubroPlantillaMes);
+                    entityPersistent.getRubroPlantilla().getMesesGenerados().remove(entityPersistent); //Eliminar de la referencia de la lista
+                    entityManager.remove(entityPersistent); //eliminar de la persistenca
+                    
+                } catch (RemoteException ex) {
+                    Logger.getLogger(RubroEstudianteService.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                    
+        
+            }
+        });
+        
+    }
 
     public RubroPlantilla crearRubroEstudiantesDesdePlantila(RubroPlantilla rubroPlantilla, MesEnum mesEnum, String nombreRubroMes,Integer anio) throws RemoteException {
         try {
@@ -101,6 +160,7 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
             rubroNivel.setValor(rubroPlantilla.getValor());
             rubroNivel.setMesNumero(mesEnum.getNumero());
             rubroNivel.setAnio(anio);
+            //rubroNivel.setReferenciaPlantilla(rubroPlantilla);
 
             entityManager.persist(rubroNivel);
 
@@ -124,6 +184,7 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
             rubroPlantillaMes.setAnio(anio);
             rubroPlantillaMes.setNumeroMes(mesEnum.getNumero());
             rubroPlantillaMes.setRubroPlantilla(rubroPlantilla);
+            rubroPlantillaMes.setRubroNivel(rubroNivel);
             entityManager.persist(rubroPlantillaMes);
             
             rubroPlantilla.addMesGenerado(rubroPlantillaMes);
@@ -141,14 +202,18 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
     }
     
     public void actualizarRubrosEstudiante(List<RubroEstudiante> rubroEstudiantes) throws RemoteException {
-        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
-            @Override
-            public void transaccion() {
-                for (RubroEstudiante rubroEstudiante : rubroEstudiantes) {
-                    entityManager.merge(rubroEstudiante);                    
+        try {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion() {
+                    for (RubroEstudiante rubroEstudiante : rubroEstudiantes) {                    
+                        entityManager.merge(rubroEstudiante);
+                    }
                 }
-            }
-        });
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(RubroEstudianteService.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 

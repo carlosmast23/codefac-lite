@@ -27,6 +27,12 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
 
     public UtilidadesService() throws RemoteException {
     }
+    
+    //TODO: Verificar porque no esta funcionando este metodo
+    public Object mergeEntity(Object entity) throws java.rmi.RemoteException 
+    {
+        return AbstractFacade.entityManager.merge(entity);
+    }
 
     public List<Object> consultaGeneralDialogos(String query, Map<Integer, Object> map, int limiteMinimo, int limiteMaximo) throws java.rmi.RemoteException {
         return AbstractFacade.findStaticDialog(query, map, limiteMinimo, limiteMaximo);

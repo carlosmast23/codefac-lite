@@ -30,6 +30,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RubroEstudianteServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -43,12 +44,16 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import org.eclipse.persistence.sessions.factories.SessionFactory;
 
 /**
  *
@@ -792,6 +797,41 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
                 }
             }
         });
+        
+        
+        //Agregar un menu de opciones a la lista de mese generados
+        JPopupMenu popupMenu = new JPopupMenu();
+        JMenuItem menuItemAdd = new JMenuItem("Eliminar");
+        popupMenu.add(menuItemAdd);        
+        getLstMesesGenerados().setComponentPopupMenu(popupMenu);
+        menuItemAdd.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                RubroPlantillaMes rubroPlantillaMes=getLstMesesGenerados().getSelectedValue();
+                if(rubroPlantillaMes!=null)
+                {
+                    try {
+                        ServiceFactory.getFactory().getRubroEstudianteServiceIf().eliminarMesRubroPlantilla(rubroPlantillaMes);
+                        DialogoCodefac.mensaje("Correcto","El rubro fue eliminado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+                        //Volver a consultar rubro plantilla con los datos modificados de la base
+                        //rubroPlantilla=(RubroPlantilla) ServiceFactory.getFactory().getUtilidadesServiceIf().mergeEntity(rubroPlantilla);
+                        rubroPlantilla=ServiceFactory.getFactory().getRubroPlantillaServiceIf().buscarPorId(rubroPlantilla.getId());                        
+                        cargarDatos();
+                        //as
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(RubroPlantillaModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(RubroPlantillaModel.class.getName()).log(Level.SEVERE, null, ex);
+                        DialogoCodefac.mensaje("Incorrecto",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+                    }
+                }
+                
+            }
+        });
+        
+
+        
+        
     }
     
     private void cambiarSeleccionaTabla(JTable tabla,Boolean seleccion)

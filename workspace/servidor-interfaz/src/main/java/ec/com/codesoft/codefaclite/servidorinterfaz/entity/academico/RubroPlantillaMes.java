@@ -37,7 +37,14 @@ public class RubroPlantillaMes implements Serializable {
 
     @JoinColumn(name = "RUBRO_PLANTILLA_ID")
     private RubroPlantilla rubroPlantilla;
-
+    
+    /**
+     * Rubro para saber el nivel con rubro de nivel esta ligado para poder reacer alguna operación como por ejemplo eliminar
+     */
+    @JoinColumn(name = "RUBRO_NIVEL_ID")
+    private RubrosNivel rubroNivel;
+    
+    
     public RubroPlantillaMes() {
     }
 
@@ -72,6 +79,16 @@ public class RubroPlantillaMes implements Serializable {
     public void setRubroPlantilla(RubroPlantilla rubroPlantilla) {
         this.rubroPlantilla = rubroPlantilla;
     }
+
+    public RubrosNivel getRubroNivel() {
+        return rubroNivel;
+    }
+
+    public void setRubroNivel(RubrosNivel rubroNivel) {
+        this.rubroNivel = rubroNivel;
+    }
+    
+    
     
     
     

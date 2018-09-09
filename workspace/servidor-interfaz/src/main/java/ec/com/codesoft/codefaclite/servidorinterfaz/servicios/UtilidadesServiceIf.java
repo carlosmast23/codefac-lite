@@ -18,6 +18,13 @@ import java.util.Map;
  */
 public interface UtilidadesServiceIf extends Remote
 {
+    /**
+     * Metodo que me permite sincronizar con la persistencia el objecto actual
+     * @param entity
+     * @return
+     * @throws java.rmi.RemoteException 
+     */
+    public Object mergeEntity(Object entity) throws java.rmi.RemoteException;
     public List<Object> consultaGeneralDialogos(String query, Map<Integer, Object> map, int limiteMinimo, int limiteMaximo) throws java.rmi.RemoteException;
     public Long consultaTamanioGeneralDialogos(String query, Map<Integer, Object> map) throws java.rmi.RemoteException;
     public boolean verificarConexionesServidor() throws java.rmi.RemoteException;

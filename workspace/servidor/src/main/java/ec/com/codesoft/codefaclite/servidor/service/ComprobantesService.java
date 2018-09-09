@@ -221,50 +221,54 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
     private void cambiarEstadoLoteAutorizaciones(List<Autorizacion> autorizaciones,ComprobanteEntity.ComprobanteEnumEstado enumEstado)
     {
 
-        //Grabar el estado del comprobante consultado
-        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
-            @Override
-            public void transaccion() {
-                try {
-
-                    for (Autorizacion autorizacion : autorizaciones) {
-                        if (autorizacion.getEstado().equals("AUTORIZADO")) {
-                            String numeroAutorizacion = autorizacion.getNumeroAutorizacion();
-                            ClaveAcceso claveAcceso = new ClaveAcceso(numeroAutorizacion);
-                            ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity comprobante = null; //comprobante
-
-                            Map<String, Object> mapParametro = new HashMap<>();
-                            mapParametro.put("claveAcceso", numeroAutorizacion);
-
-                            switch (claveAcceso.getTipoComprobante()) {
-                                case FACTURA:
-                                    FacturacionService serviceFactura = new FacturacionService();
-                                    comprobante = serviceFactura.obtenerPorMap(mapParametro).get(0);
-                                    break;
-
-                                case NOTA_CREDITO:
-                                    NotaCreditoService serviceNotaCredito = new NotaCreditoService();
-                                    comprobante = serviceNotaCredito.obtenerPorMap(mapParametro).get(0);
-                                    break;
-
-                                case COMPROBANTE_RETENCION:
-                                    RetencionService serviceRetencion = new RetencionService();
-                                    comprobante = serviceRetencion.obtenerPorMap(mapParametro).get(0);
-                                    break;
+        try {
+            //Grabar el estado del comprobante consultado
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion() {
+                    try {
+                        
+                        for (Autorizacion autorizacion : autorizaciones) {
+                            if (autorizacion.getEstado().equals("AUTORIZADO")) {
+                                String numeroAutorizacion = autorizacion.getNumeroAutorizacion();
+                                ClaveAcceso claveAcceso = new ClaveAcceso(numeroAutorizacion);
+                                ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity comprobante = null; //comprobante
+                                
+                                Map<String, Object> mapParametro = new HashMap<>();
+                                mapParametro.put("claveAcceso", numeroAutorizacion);
+                                
+                                switch (claveAcceso.getTipoComprobante()) {
+                                    case FACTURA:
+                                        FacturacionService serviceFactura = new FacturacionService();
+                                        comprobante = serviceFactura.obtenerPorMap(mapParametro).get(0);
+                                        break;
+                                        
+                                    case NOTA_CREDITO:
+                                        NotaCreditoService serviceNotaCredito = new NotaCreditoService();
+                                        comprobante = serviceNotaCredito.obtenerPorMap(mapParametro).get(0);
+                                        break;
+                                        
+                                    case COMPROBANTE_RETENCION:
+                                        RetencionService serviceRetencion = new RetencionService();
+                                        comprobante = serviceRetencion.obtenerPorMap(mapParametro).get(0);
+                                        break;
+                                }
+                                
+                                comprobante.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+                                entityManager.merge(comprobante);
                             }
 
-                            comprobante.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
-                            entityManager.merge(comprobante);
                         }
 
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
-                } catch (RemoteException ex) {
-                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
-            }
-        });
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
     
@@ -623,12 +627,16 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                     factura.setClaveAcceso(comprobanteElectronico.getClaveAcceso());
                     factura.setEstado(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR.getEstado());
                     
-                    ejecutarTransaccion(new MetodoInterfaceTransaccion() {
-                        @Override
-                        public void transaccion() {
-                            entityManager.merge(factura);
-                        }
-                    });                    
+                    try {
+                        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                            @Override
+                            public void transaccion() {
+                                entityManager.merge(factura);
+                            }                    
+                        });
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     
                     byte[] serializedPrint= getReporteComprobante(comprobanteElectronico.getClaveAcceso());                   
                     callbackClientObject.termino(serializedPrint);
@@ -696,12 +704,16 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
     {
         comprobanteOriginal.setEstado(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR.getEstado());
         
-        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
-            @Override
-            public void transaccion() {
-                entityManager.merge(comprobanteOriginal);
-            }
-        });        
+        try {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion() {
+                    entityManager.merge(comprobanteOriginal);
+                }        
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
                 //Agregar el listener
         comprobanteElectronico.addActionListerComprobanteElectronico(new ListenerComprobanteElectronico() {
@@ -751,15 +763,19 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                     {
                         comprobanteOriginal.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
 
-                        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
-                            @Override
-                            public void transaccion() {
-                                entityManager.merge(comprobanteOriginal);
-                            }
-                        });
-                        
-                        //Enviar mensaje
-                        //ServidorSMS.getInstance().enviarMensaje("994905332","La factura"+clave.secuencial+" fue enviada a su correo");
+                        try {
+                            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                                @Override
+                                public void transaccion() {
+                                    entityManager.merge(comprobanteOriginal);
+                                }
+                            });
+                            
+                            //Enviar mensaje
+                            //ServidorSMS.getInstance().enviarMensaje("994905332","La factura"+clave.secuencial+" fue enviada a su correo");
+                        } catch (ServicioCodefacException ex) {
+                            Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                     
                     //Si se genera la etapa firmar entonces seteo la clave de acceso
@@ -777,6 +793,8 @@ public class ComprobantesService extends ServiceAbstract implements ComprobanteS
                     
                     
                 } catch (RemoteException ex) {
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 

@@ -8,6 +8,8 @@ package ec.com.codesoft.codefaclite.servidor.service;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
+import ec.com.codesoft.codefaclite.servidor.util.ExcepcionDataBaseEnum;
+import ec.com.codesoft.codefaclite.servidor.util.UtilidadesExcepciones;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -102,18 +104,46 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
      * @param interfaz
      * @throws PersistenceException 
      */
-    protected void ejecutarTransaccion(MetodoInterfaceTransaccion interfaz) throws PersistenceException
+    protected void ejecutarTransaccion(MetodoInterfaceTransaccion interfaz) throws ServicioCodefacException
    {
         EntityTransaction transaccion = entityManager.getTransaction();
         try {            
             transaccion.begin();
             interfaz.transaccion();
             transaccion.commit();
-        } catch (PersistenceException ex) { //Hacer un RoolBack cuando es un error relacionado con la persistencia
+        }catch (RemoteException ex) { //Hacer un RoolBack cuando no exista comunicacion con el servidor
             if (transaccion.isActive()) {
                 transaccion.rollback();
             }
+            ex.printStackTrace();
+            throw new ServicioCodefacException("Error de conexión con el servidor");
+        }catch (ServicioCodefacException ex) { //Hacer un RoolBack cuando sea un error personalizado
+            if (transaccion.isActive()) {
+                transaccion.rollback();
+            }
+            ex.printStackTrace();
             throw ex;
+        }catch (PersistenceException ex) { //Hacer un RoolBack cuando es un error relacionado con la persistencia
+            ex.printStackTrace();
+            //verifica que la transaccion esta activa para hacer un rollback
+            //Nota: Algunas veces el commit automaticamente hace un rollback es decir no es necesario hacer rollback y la sesion ya no esta activa
+            if(transaccion.isActive())
+            {
+                transaccion.rollback();
+            }
+            
+            ExcepcionDataBaseEnum excepcionEnum=UtilidadesExcepciones.analizarExcepcionDataBase(ex);
+            //Logger.getLogger(PersonaService.class.getName()).log(Level.SEVERE, null, ex);
+            if(excepcionEnum.equals(ExcepcionDataBaseEnum.CLAVE_DUPLICADO))
+            {
+                throw new ServicioCodefacException(ExcepcionDataBaseEnum.CLAVE_DUPLICADO.getMensaje());
+            }
+            else
+            {
+                throw new ServicioCodefacException(ExcepcionDataBaseEnum.DESCONOCIDO.getMensaje());
+            }  
+            
+            
         } catch(Exception e) //Hacer un RollBack si se produce cualquier error
         {
              if (transaccion.isActive()) {
@@ -121,6 +151,7 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
             }
             e.printStackTrace();
             LOG.log(Level.SEVERE,e.getMessage()); //Todo: Mejorar esta parte porque deberia imprimir toda la pila de error y ademas deberia poder comunicar el error a la capa superior
+            throw new ServicioCodefacException(e.getMessage());
             //throw e;
         }
     }

@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.ParametroCodefacFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -58,31 +59,35 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
      */
     public void editarParametros(Map<String ,ParametroCodefac> parametro) throws java.rmi.RemoteException
     {
-        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
-            @Override
-            public void transaccion() {
-                for (Map.Entry<String, ParametroCodefac> entry : parametro.entrySet()) {
-                    //String key = entry.getKey();
-                    ParametroCodefac value = entry.getValue();
-                    
-                    if(value.getId()==null) //Si no existe el dato lo grabo
-                    {
-                        entityManager.persist(value);
+        try {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion() {
+                    for (Map.Entry<String, ParametroCodefac> entry : parametro.entrySet()) {
+                        //String key = entry.getKey();
+                        ParametroCodefac value = entry.getValue();
+                        
+                        if(value.getId()==null) //Si no existe el dato lo grabo
+                        {
+                            entityManager.persist(value);
+                        }
+                        else //Si existe el dato solo lo edito
+                        {
+                            entityManager.merge(value);
+                        }
+                        
                     }
-                    else //Si existe el dato solo lo edito
-                    {
-                        entityManager.merge(value);
-                    }
-                    
                 }
-            }
-        });
-        /*
-           for (Map.Entry<String, ParametroCodefac> entry : parametro.entrySet()) {
+            });
+            /*
+            for (Map.Entry<String, ParametroCodefac> entry : parametro.entrySet()) {
             String key = entry.getKey();
             ParametroCodefac value = entry.getValue();
             parametroCodefacFacade.edit(value);
-        }*/
+            }*/
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ParametroCodefacService.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public ParametroCodefac grabar(ParametroCodefac parametro) throws java.rmi.RemoteException

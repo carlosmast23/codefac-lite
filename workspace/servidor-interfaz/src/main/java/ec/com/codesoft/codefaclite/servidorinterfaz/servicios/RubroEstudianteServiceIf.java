@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudi
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantilla;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaMes;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -55,5 +56,7 @@ public interface RubroEstudianteServiceIf extends ServiceAbstractIf<RubroEstudia
     public Long contarRubrosEstudiantePorRubroNivel(RubrosNivel rubroNivel) throws RemoteException;
     
     public void actualizarRubrosEstudiante(List<RubroEstudiante> rubroEstudiantes) throws RemoteException;
+    
+    public void eliminarMesRubroPlantilla(RubroPlantillaMes rubroPlantillaMes) throws RemoteException, ServicioCodefacException;
     
 }

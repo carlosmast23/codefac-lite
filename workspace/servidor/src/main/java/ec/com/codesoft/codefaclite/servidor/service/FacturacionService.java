@@ -25,6 +25,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle.E
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.math.BigDecimal;
@@ -62,21 +63,25 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     
     public Factura grabarProforma(Factura proforma) throws RemoteException
     {
-        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
-            @Override
-            public void transaccion() {
-                try 
-                {
-                    proforma.setCodigoDocumento(DocumentoEnum.PROFORMA.getCodigo());
-                    grabarDetallesFactura(proforma);
-                    //entityManager.flush(); //Hacer que el nuevo objeto tenga el id para retornar
-                } 
-                catch (RemoteException ex) 
-                {
-                    Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+        try {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion() {
+                    try
+                    {
+                        proforma.setCodigoDocumento(DocumentoEnum.PROFORMA.getCodigo());
+                        grabarDetallesFactura(proforma);
+                        //entityManager.flush(); //Hacer que el nuevo objeto tenga el id para retornar
+                    }
+                    catch (RemoteException ex)
+                    {
+                        Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
-            }
-        });
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         return proforma;
     }
@@ -269,25 +274,29 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     
     public void eliminarFactura(Factura factura)
     {
-        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
-            @Override
-            public void transaccion() {
-                try {
-                    factura.setEstado(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado()); //Cambio el estado de las facturas a eliminad
-                    entityManager.merge(factura); //actualizar los datos de la factura
-                    
-                    NotaCreditoService servicioNotaCredito=new NotaCreditoService();
-                    for (FacturaDetalle detalle : factura.getDetalles()) {
-                        //Anulo los datos segun el tipo de modulo relacionado
-                        servicioNotaCredito.anularProcesoFactura(detalle.getTipoDocumentoEnum(),detalle.getReferenciaId(),detalle.getTotal());
+        try {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion() {
+                    try {
+                        factura.setEstado(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado()); //Cambio el estado de las facturas a eliminad
+                        entityManager.merge(factura); //actualizar los datos de la factura
+                        
+                        NotaCreditoService servicioNotaCredito=new NotaCreditoService();
+                        for (FacturaDetalle detalle : factura.getDetalles()) {
+                            //Anulo los datos segun el tipo de modulo relacionado
+                            servicioNotaCredito.anularProcesoFactura(detalle.getTipoDocumentoEnum(),detalle.getReferenciaId(),detalle.getTotal());
+                        }
+                        
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     
-                } catch (RemoteException ex) {
-                    Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
-            }
-        });
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
     /*
