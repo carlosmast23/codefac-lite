@@ -227,6 +227,9 @@ public class DeudaEstudianteModel extends DeudaEstudiantePanel{
                         
                         Map<String,Object> parametroMap=new HashMap<String,Object>();
                         parametroMap.put("estudianteInscrito",estudianteInscrito);
+                        parametroMap.put("estadoFactura",RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR.getLetra());
+                        parametroMap.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+                        
                         
                         List<RubroEstudiante> listaRubros=ServiceFactory.getFactory().getRubroEstudianteServiceIf().obtenerPorMap(parametroMap);
                         rubrosEstudiante=listaRubros; 
