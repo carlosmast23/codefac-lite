@@ -11,6 +11,8 @@ create table
     SRI_FORMA_PAGO( 
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1) , 
     NOMBRE varchar(256),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.6.6)*/
+    ALIAS  varchar(128), 
     CODIGO varchar(30), 
     FECHA_INICIO date, 
     FECHA_FIN date,

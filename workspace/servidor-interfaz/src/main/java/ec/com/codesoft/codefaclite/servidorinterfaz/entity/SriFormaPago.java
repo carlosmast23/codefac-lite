@@ -18,26 +18,29 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "SRI_FORMA_PAGO")
-public class SriFormaPago implements Serializable{
+public class SriFormaPago implements Serializable {
+
     @Id
     @Column(name = "ID")
     private long id;
-    
+
     @Column(name = "NOMBRE")
     private String nombre;
-    
-    @Column(name = "CODIGO")    
+
+    @Column(name = "ALIAS")
+    private String alias;
+
+    @Column(name = "CODIGO")
     private String codigo;
 
-    @Column(name = "FECHA_INICIO")       
+    @Column(name = "FECHA_INICIO")
     private Date fechaInicio;
-    
-    @Column(name = "FECHA_FIN")        
+
+    @Column(name = "FECHA_FIN")
     private Date fechaFin;
 
-    public SriFormaPago() 
-    {
-        
+    public SriFormaPago() {
+
     }
 
     public long getId() {
@@ -80,9 +83,19 @@ public class SriFormaPago implements Serializable{
         this.fechaFin = fechaFin;
     }
 
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
+    
+    
+
     @Override
     public String toString() {
-        return nombre ;
+        return alias;
     }
 
     @Override
@@ -109,9 +122,5 @@ public class SriFormaPago implements Serializable{
         }
         return true;
     }
-    
-    
-    
-    
-    
+
 }

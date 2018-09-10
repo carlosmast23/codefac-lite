@@ -112,12 +112,10 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         btnAgregarFormaPago = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblFormasPago = new javax.swing.JTable();
-        btnQuitarDetalleFormaPago = new javax.swing.JButton();
         PanelDatosAdicionales = new javax.swing.JPanel();
         btnAgregarDatosAdicionales = new javax.swing.JButton();
         jScrollPane5 = new javax.swing.JScrollPane();
         tblDatosAdicionales = new javax.swing.JTable();
-        btnQuitarDatosAdicionales = new javax.swing.JButton();
         PanelValores = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
@@ -431,14 +429,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.weighty = 0.1;
         PanelFormasPago.add(jScrollPane3, gridBagConstraints);
 
-        btnQuitarDetalleFormaPago.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/cerrar-ico.png"))); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        PanelFormasPago.add(btnQuitarDetalleFormaPago, gridBagConstraints);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
@@ -478,14 +468,6 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         PanelDatosAdicionales.add(jScrollPane5, gridBagConstraints);
-
-        btnQuitarDatosAdicionales.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/cerrar-ico.png"))); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        PanelDatosAdicionales.add(btnQuitarDatosAdicionales, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -1227,9 +1209,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnBuscarEstudiante;
     private javax.swing.JButton btnCrearProducto;
     private javax.swing.JButton btnEditarDetalle;
-    private javax.swing.JButton btnQuitarDatosAdicionales;
     private javax.swing.JButton btnQuitarDetalle;
-    private javax.swing.JButton btnQuitarDetalleFormaPago;
     private javax.swing.JCheckBox checkPorcentaje;
     private javax.swing.JCheckBox chkFiltroPresupuestoCliente;
     private javax.swing.JComboBox<DocumentoEnum> cmbDocumento;
@@ -1449,13 +1429,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         return txtDescripcion;
     }
 
-    public JButton getBtnQuitarDetalleFormaPago() {
-        return btnQuitarDetalleFormaPago;
-    }
 
-    public void setBtnQuitarDetalleFormaPago(JButton btnQuitarFormaPago) {
-        this.btnQuitarDetalleFormaPago = btnQuitarFormaPago;
-    }
 
     public void setTxtDescripcion(JTextField txtDescripcion) {
         this.txtDescripcion = txtDescripcion;
@@ -1671,7 +1645,8 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     public JPanel getPanelFormasPago() {
         return PanelFormasPago;
     }
-    
+
+   
     
     
     

@@ -110,7 +110,9 @@ import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.event.TableModelEvent;
@@ -158,6 +160,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         addListenerCombos();
         addListenerCamposTexto();
         addListenerTablas();
+        addPopUpListener();
         initComponenesGraficos();
         initModelTablaFormaPago();
         initModelTablaDetalleFactura();
@@ -338,19 +341,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         System.out.println("No existe forma de pago");
                     }
 
-                }
-            }
-        });
-
-        getBtnQuitarDetalleFormaPago().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int filaFormaPago=getTblFormasPago().getSelectedRow();
-                if(filaFormaPago>=0)
-                {
-                    factura.getFormaPagos().remove(filaFormaPago);
-                    //verificarSumaFormaPago();
-                    cargarFormasPagoTabla();
                 }
             }
         });
@@ -1221,6 +1211,19 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
         return permisos;
     }
+    
+    private DefaultTableModel initModelTablaFormaPago() {
+        Vector<String> titulo = new Vector<>();
+        titulo.add("forma pago");
+        titulo.add("Valor");
+        //titulo.add("Tipo");
+        //titulo.add("Tiempo");
+
+        DefaultTableModel modeloTablaFormasPago = new DefaultTableModel(titulo, 0);
+        getTblFormasPago().setModel(modeloTablaFormasPago);
+        return modeloTablaFormasPago;
+    }
+
 
     private void cargarFormasPagoTabla() {
 
@@ -1230,25 +1233,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         List<FormaPago> formasPago = factura.getFormaPagos();
         for (FormaPago formaPago : formasPago) {
             Vector<String> fila = new Vector<>();
-            fila.add(formaPago.getSriFormaPago().getNombre());
+            fila.add(formaPago.getSriFormaPago().getAlias());
             fila.add(formaPago.getTotal().toString());
-            fila.add(formaPago.getUnidadTiempo());
-            fila.add(formaPago.getPlazo() + "");
+            //fila.add(formaPago.getUnidadTiempo());
+            //fila.add(formaPago.getPlazo() + "");
             modeloTablaFormasPago.addRow(fila);
         }
         getTblFormasPago().setModel(modeloTablaFormasPago);
-    }
-
-    private DefaultTableModel initModelTablaFormaPago() {
-        Vector<String> titulo = new Vector<>();
-        titulo.add("forma pago");
-        titulo.add("Valor");
-        titulo.add("Tipo");
-        titulo.add("Tiempo");
-
-        DefaultTableModel modeloTablaFormasPago = new DefaultTableModel(titulo, 0);
-        getTblFormasPago().setModel(modeloTablaFormasPago);
-        return modeloTablaFormasPago;
     }
 
     private void initModelTablaDetalleFactura() {
@@ -1265,12 +1256,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
 
     private void initModelTablaDatoAdicional() {
-        Vector<String> titulo = new Vector<>();
-        titulo.add("Nombre");
-        titulo.add("Valor");
+        //Vector<String> titulo = new Vector<>();
+        //titulo.add("Objecto");
+        //titulo.add("Nombre");
+        //titulo.add("Valor");
 
-        this.modeloTablaDatosAdicionales = new DefaultTableModel(titulo, 0);
+        this.modeloTablaDatosAdicionales=UtilidadesTablas.crearModeloTabla(new String[]{"","Nombre","Valor"},new Class[]{FacturaAdicional.class,String.class,String.class});
+        //this.modeloTablaDatosAdicionales = new DefaultTableModel(titulo, 0);
         getTblDatosAdicionales().setModel(modeloTablaDatosAdicionales);
+        
+        UtilidadesTablas.ocultarColumna(getTblDatosAdicionales(),0); //Ocultar la fila del objeto para poder volver a modificar
     }
 
     /**
@@ -1281,6 +1276,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         for (FacturaAdicional datoAdicional : factura.getDatosAdicionales()) {
             Vector dato = new Vector();
+            dato.add(datoAdicional);
             dato.add(datoAdicional.getCampo());
             dato.add(datoAdicional.getValor());
             
@@ -2456,6 +2452,51 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     private void setearValoresVista() {
         UtilidadesSwingX.placeHolder("Identificación", getTxtCliente());
+    }
+
+    private void addPopUpListener() {
+        JPopupMenu jPopupMenu=new JPopupMenu();
+        JMenuItem jMenuItemDatoAdicional=new JMenuItem("Eliminar");
+        jMenuItemDatoAdicional.addActionListener(new ActionListener() 
+        {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int filaSeleccionada=getTblDatosAdicionales().getSelectedRow();
+                if(filaSeleccionada>=0)
+                {
+                    FacturaAdicional facturaAdicional=(FacturaAdicional)getTblDatosAdicionales().getValueAt(filaSeleccionada,0); //Obtener el objeto de la columna
+                    factura.getDatosAdicionales().remove(facturaAdicional);
+                    cargarTablaDatosAdicionales();//Volver a cargar los datos adicionales en la tabla de la vista
+                }
+            }
+        });
+        
+        jPopupMenu.add(jMenuItemDatoAdicional);
+        getTblDatosAdicionales().setComponentPopupMenu(jPopupMenu);
+        
+        
+        //Agregar pop up para la tabla de formas de pago
+        JPopupMenu jPopupMenu2=new JPopupMenu();
+        JMenuItem jMenuItemFormaPago=new JMenuItem("Eliminar");
+        jMenuItemFormaPago.addActionListener(new ActionListener() 
+        {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int filaSeleccionada=getTblFormasPago().getSelectedRow();
+                if(filaSeleccionada>=0)
+                {
+                    factura.getFormaPagos().remove(filaSeleccionada);
+                    cargarFormasPagoTabla();
+                }
+            }
+        });
+        
+        jPopupMenu2.add(jMenuItemFormaPago);
+        getTblFormasPago().setComponentPopupMenu(jPopupMenu2);
+        
+        
+
+                
     }
     
     

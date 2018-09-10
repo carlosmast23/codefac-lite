@@ -41,6 +41,7 @@ public class FormaPagoDialogModel extends FormaPagoDialog{
             SriServiceIf service=ServiceFactory.getFactory().getSriServiceIf();
             List<SriFormaPago> formasPagoSri=service.obtenerFormasPagoActivo();
             getCmbFormaPagoSri().removeAllItems();
+            
             for (SriFormaPago sriFormaPago : formasPagoSri) {
                 getCmbFormaPagoSri().addItem(sriFormaPago);
             }

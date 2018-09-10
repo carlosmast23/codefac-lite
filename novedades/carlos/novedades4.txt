@@ -83,3 +83,4 @@ Modificar el reporte de facturas para que aparescan ordenados por el preimpreso
 Ver si se agrega un reporte para los representates donde estene relacionados con los clientes
 En el reporte de las deudas pendientes
 Agregar la funcionalidad para eliminar todas las deudas solo seleccionado el rubro
+al momento de eliminar el dato adicional hacer validaciones para no poder eliminar algunos requeridos por ejemplo el codigo del estudiante
