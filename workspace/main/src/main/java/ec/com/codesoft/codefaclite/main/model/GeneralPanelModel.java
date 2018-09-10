@@ -584,8 +584,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         ControladorCodefacInterface ventana= (ControladorCodefacInterface) menuControlador.getInstance();
                         if(!verificarPantallaCargada(ventana))
                         {
-                            //Este artificio se realiza porque cuando se reutilizaba un referencia de la pantalla generaba problemas con los dialogos
+                            //Este artificio se realiza porque cuando se reutilizaba un referencia de la pantalla generaba problemas con los dialogos7
                             ventana= (ControladorCodefacInterface) menuControlador.createNewInstance();
+                            ventana.reconstruirPantalla(); //Metodo adicional que construye las pantallas laterales
                             agregarListenerMenu(ventana,menuControlador.isMaximizado());                    
                         }                        
                         else
@@ -1200,7 +1201,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             panel.estadoFormulario= ControladorCodefacInterface.ESTADO_GRABAR;
             panel.panelPadre=generalPanelModel;
             panel.session=sessionCodefac;
-            panel.reconstruirPantalla(); //Metodo adicional que construye las pantallas laterales
+            //panel.reconstruirPantalla(); //Metodo adicional que construye las pantallas laterales
             
             try
             {
