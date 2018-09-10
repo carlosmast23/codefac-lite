@@ -35,9 +35,9 @@ import ec.com.codesoft.codefaclite.ws.codefac.webservice.VerificarsoporteRespons
 public class Test {
     public static void main(String[] args) {
         //obtenerLicencia();
-        //setearLicencia();
+        setearLicencia();
         //obtenerNumeroMaquinasLicencia();
-        setearTipoLicencia();
+        //setearTipoLicencia();
         //obtenerTipoLicencia();
         //verificar();
         //devolverEstado();
@@ -81,8 +81,8 @@ public class Test {
        
         ActualizarlicenciaRequestType parametros=new ActualizarlicenciaRequestType();
         //parametros.setEmail("carlosmast2301@hotmail.es");
-        //parametros.setEmail("treborvtc@outlook.com");
-        parametros.setEmail("trebortc@hotmail.com");
+        parametros.setEmail("treborvtc@outlook.com");
+        //parametros.setEmail("trebortc@hotmail.com");
         parametros.setLicencia("");
 
         ActualizarlicenciaResponseType respuesta=soapServerPort.actualizarlicencia(parametros);
@@ -96,7 +96,7 @@ public class Test {
        
         ActualizartipolicenciaRequestType parametros=new ActualizartipolicenciaRequestType();
         //parametros.setEmail("carlosmast2301@hotmail.es");
-        parametros.setEmail("trebortc@hotmail.coms");
+        parametros.setEmail("treborvtc@outlook.com");
         parametros.setTipo("p");
         ActualizartipolicenciaResponseType respuesta=soapServerPort.actualizartipolicencia(parametros);
         System.out.println(respuesta.getReturn());

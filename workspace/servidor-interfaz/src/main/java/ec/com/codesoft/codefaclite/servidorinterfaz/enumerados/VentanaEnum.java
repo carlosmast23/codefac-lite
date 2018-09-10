@@ -78,8 +78,8 @@ public enum VentanaEnum {
     TRANSPORTISTA("ec.com.codesoft.codefaclite.transporte.model.TransportistaModel", "TRTA", "Transportista", ModuloCodefacEnum.TRANSPORTE, CategoriaMenuEnum.GESTIONAR,true, new ModuloCodefacEnum[]{},TipoLicenciaEnum.PRO,null),
     GUIA_REMISION("ec.com.codesoft.codefaclite.transporte.model.GuiaRemisionModel", "GURE", "Guía de Remisión", ModuloCodefacEnum.TRANSPORTE, CategoriaMenuEnum.PROCESOS,true, new ModuloCodefacEnum[]{},TipoLicenciaEnum.PRO,KeyEvent.VK_R),
     REPORTE_GUIAREMISIO("ec.com.codesoft.codefaclite.transporte.model.GuiasRemisionReporteModel", "RGUR", "Reporte Guia Remision", ModuloCodefacEnum.TRANSPORTE, CategoriaMenuEnum.REPORTES,true, new ModuloCodefacEnum[]{},TipoLicenciaEnum.PRO,null),
-    PROFORMA_VENTA("ec.com.codesoft.codefaclite.facturacion.model.ProformaModel", "PROF", "Proforma", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.PROCESOS,true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null);
-
+    PROFORMA_VENTA("ec.com.codesoft.codefaclite.facturacion.model.ProformaModel", "PROF", "Proforma", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.PROCESOS,true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null),
+    REPORTE_ACADEMICO_CLIENTE("ec.com.codesoft.codefaclite.gestionacademica.model.ClienteReporte", "RACL", "Reporte Cliente", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.REPORTES,null);
     
     private VentanaEnum(String clase, String codigo, String nombre, ModuloCodefacEnum modulo, CategoriaMenuEnum categoriaMenu,Integer teclaAtajo) {
         this.claseNombre = clase;
