@@ -49,6 +49,7 @@ public abstract class PlanCuentasPanel extends ControladorCodefacInterface {
         lblEspacio2 = new javax.swing.JLabel();
         jToolBar1 = new javax.swing.JToolBar();
         btnGuardar = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -132,6 +133,12 @@ public abstract class PlanCuentasPanel extends ControladorCodefacInterface {
         btnGuardar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(btnGuardar);
 
+        btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/edit-icon.png"))); // NOI18N
+        btnEditar.setFocusable(false);
+        btnEditar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnEditar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnEditar);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -152,6 +159,7 @@ public abstract class PlanCuentasPanel extends ControladorCodefacInterface {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JComboBox<EnumSiNo> cmbImputable;
     private javax.swing.JLabel jLabel1;
@@ -206,6 +214,14 @@ public abstract class PlanCuentasPanel extends ControladorCodefacInterface {
 
     public void setTxtNombre(JTextField txtNombre) {
         this.txtNombre = txtNombre;
+    }
+
+    public JButton getBtnEditar() {
+        return btnEditar;
+    }
+
+    public void setBtnEditar(JButton btnEditar) {
+        this.btnEditar = btnEditar;
     }
 
     

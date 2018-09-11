@@ -7,11 +7,13 @@ package ec.com.codesoft.codefaclite.contabilidad.model;
 
 import ec.com.codesoft.codefaclite.contabilidad.other.NodoTreeCuenta;
 import ec.com.codesoft.codefaclite.contabilidad.panel.PlanCuentasPanel;
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Cuenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PlanCuenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
@@ -51,10 +53,17 @@ public class PlanCuentasModel extends PlanCuentasPanel {
      */
     private NodoTreeCuenta nodoCuentaRaiz;
     
+    /**
+     * Nodo de la cuenta seleccionada para editar o grabar
+     */
+    private NodoTreeCuenta nodoCuentaSeleccionada;
+    
+    
 
     @Override
     public void iniciar() throws ExcepcionCodefacLite, RemoteException {
         
+        listenerBotones();
         listenerPopUp();
         listenerTree();
         componentesIniciales();
@@ -131,6 +140,12 @@ public class PlanCuentasModel extends PlanCuentasPanel {
         return buscarNodo(nodoRaiz,cuenta);
     }
     
+    /**
+     * Busco un nodo en el arbol jtree
+     * @param nodo
+     * @param cuentaBuscar
+     * @return 
+     */
     private  NodoTreeCuenta buscarNodo(TreeNode nodo, Cuenta cuentaBuscar) {
 
         if (nodo.getChildCount() >= 0) {
@@ -320,22 +335,39 @@ public class PlanCuentasModel extends PlanCuentasPanel {
         getCmbImputable().removeAllItems();
         getCmbImputable().addItem(EnumSiNo.SI);
         getCmbImputable().addItem(EnumSiNo.NO);
+        getBtnEditar().setEnabled(false);
+        getBtnGuardar().setEnabled(false);
     }
 
     private void listenerPopUp() {
         JPopupMenu jpopMenu=new JPopupMenu();
         JMenuItem nuevoItem=new JMenuItem("Nuevo");
         JMenuItem eliminarItem=new JMenuItem("Eliminar");
+        JMenuItem editarItem=new JMenuItem("Editar");
         jpopMenu.add(nuevoItem);
+        jpopMenu.add(editarItem);
         jpopMenu.add(eliminarItem);
         
         nuevoItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                DefaultMutableTreeNode nodoSeleccinado=(DefaultMutableTreeNode) getTreePlanCuentas().getSelectionPath().getLastPathComponent();
+                NodoTreeCuenta nodoSeleccionado=(NodoTreeCuenta) getTreePlanCuentas().getSelectionPath().getLastPathComponent();                
+                //DefaultMutableTreeNode nodoNuevo = new DefaultMutableTreeNode("nuevo");
+                //modeloTree.insertNodeInto(nodoNuevo,nodoSeleccinado,0);*/
+                nodoCuentaSeleccionada=nodoSeleccionado;
+                getBtnGuardar().setEnabled(true);
                 
-                DefaultMutableTreeNode nodoNuevo = new DefaultMutableTreeNode("nuevo");
-                modeloTree.insertNodeInto(nodoNuevo,nodoSeleccinado,0);
+                
+            }
+        });
+        
+        editarItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                NodoTreeCuenta nodoSeleccionado=(NodoTreeCuenta) getTreePlanCuentas().getSelectionPath().getLastPathComponent();   
+                nodoCuentaSeleccionada=nodoSeleccionado;
+                getBtnEditar().setEnabled(true);
+                
                 
             }
         });
@@ -343,8 +375,10 @@ public class PlanCuentasModel extends PlanCuentasPanel {
         eliminarItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                DefaultMutableTreeNode nodoSeleccinado=(DefaultMutableTreeNode) getTreePlanCuentas().getSelectionPath().getLastPathComponent();                
-                modeloTree.removeNodeFromParent(nodoSeleccinado);
+                
+                NodoTreeCuenta nodoSeleccionado=(NodoTreeCuenta) getTreePlanCuentas().getSelectionPath().getLastPathComponent();                
+                //a
+                
             }
         });
         
@@ -361,6 +395,49 @@ public class PlanCuentasModel extends PlanCuentasPanel {
                 //nodoSeleccionado.get
             }
         });
+    }
+
+    private void listenerBotones() {
+        getBtnEditar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(getBtnEditar().isEnabled())
+                {
+                    setearDatosPantalla(nodoCuentaSeleccionada.cuenta);
+                    DialogoCodefac.mensaje("Correcto","La cuenta se edito correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+                    construirArbolPlanCuentas();
+                    getBtnEditar().setEnabled(false);
+                }
+            }
+        });
+        
+        
+        getBtnGuardar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //Solo dejar agregar si esta activo el boton
+                if(getBtnGuardar().isEnabled())
+                {
+                    Cuenta cuenta=new Cuenta();
+                    setearDatosPantalla(cuenta);
+                    cuenta.setCuentaPadre(nodoCuentaSeleccionada.cuenta); //Setear la cuenta del padre
+                    planCuenta.getCuentas().add(cuenta);
+                    DialogoCodefac.mensaje("Correcto","La cuenta se agrego correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+                    construirArbolPlanCuentas();
+                    getBtnGuardar().setEnabled(false);
+                   
+                }
+            }
+        });
+    }
+    
+    private void setearDatosPantalla(Cuenta cuenta)
+    {
+        cuenta.setCodigo(getTxtCodigo().getText());
+        cuenta.setNombre(getTxtNombre().getText());
+        EnumSiNo estadoEnum = (EnumSiNo) getCmbImputable().getSelectedItem();
+        cuenta.setImputable(estadoEnum.getLetra());
+        
     }
 
 }
