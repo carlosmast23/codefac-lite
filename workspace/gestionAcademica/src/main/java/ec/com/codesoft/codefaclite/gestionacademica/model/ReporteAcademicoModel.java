@@ -35,6 +35,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -144,8 +145,9 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
                 public void excel() {
                     try {
                         Excel excel = new Excel();
-                        String[] nombreCabeceras = {" Cédula ", " Nombres ", " Apellidos "," Email "," Telefono "," Representante "};
-                        excel.gestionarIngresoInformacionExcel(nombreCabeceras, data);
+                        String[] nombreCabeceras = {" Nivel "," Cédula ", " Nombres ", " Apellidos "," Email "," Telefono "," Representante "};
+                        List<ReporteAcademicoData> dat = ordenarDetallesEnFuncionDeCliente(data);
+                        excel.gestionarIngresoInformacionExcel(nombreCabeceras, dat);
                         excel.abrirDocumento();
                     } catch (IOException ex) {
                         Logger.getLogger(ReporteAcademicoData.class.getName()).log(Level.SEVERE, null, ex);
@@ -308,6 +310,50 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
         defaultTodos=new NivelAcademico();
         defaultTodos.setNombre("TODOS");
         
+    }
+    
+    public List<ReporteAcademicoData> ordenarDetallesEnFuncionDeCliente(List<ReporteAcademicoData> data)
+    {  
+        List<ReporteAcademicoData> dataTemp= new ArrayList<>();
+        Map <String, List<ReporteAcademicoData>> dataEstudiantesCurso;
+        //Metodo que permite ordentar los maps por las proveedores
+        dataEstudiantesCurso = new TreeMap<String,List<ReporteAcademicoData>>(new Comparator<String>() {
+            @Override
+            public int compare(String c1, String c2) {
+                return c1.compareTo(c2);
+            }
+        });
+
+        for(ReporteAcademicoData rd : data)
+        {
+            if(dataEstudiantesCurso.get(rd.getNivelAcademicoEstudiante()) == null)
+            {
+                List<ReporteAcademicoData> estudiantesCurso = new ArrayList<ReporteAcademicoData>();
+                estudiantesCurso.add(rd); //Agrego el dato a la nueva lista
+                dataEstudiantesCurso.put(rd.getNivelAcademicoEstudiante(),estudiantesCurso); //Agredo el proveedor, con el detalle
+            }
+            else
+            {
+                dataEstudiantesCurso.get(rd.getNivelAcademicoEstudiante()).add(rd);
+            }
+        }
+        boolean b = true;
+        for (Map.Entry<String, List<ReporteAcademicoData>> entry : dataEstudiantesCurso.entrySet()) {
+            String key = entry.getKey();
+            List<ReporteAcademicoData> value = entry.getValue();
+            for (ReporteAcademicoData reporteAcademicoData : value) 
+            {
+                if(b){
+                    dataTemp.add(new ReporteAcademicoData("","","","","","",key));
+                    b = false;
+                }
+                reporteAcademicoData.setNivelAcademicoEstudiante("");
+                dataTemp.add(reporteAcademicoData);
+            }
+            b = true;
+        }
+        
+        return dataTemp;
     }
 
     @Override
