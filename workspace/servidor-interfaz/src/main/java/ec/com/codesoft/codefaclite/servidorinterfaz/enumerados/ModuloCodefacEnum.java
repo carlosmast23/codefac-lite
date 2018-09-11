@@ -15,6 +15,7 @@ import javax.swing.ImageIcon;
  * @author Carlos
  */
 public enum ModuloCodefacEnum {
+    CONTABILIDAD("Contabilidad","CONT","o","modulo_contabilidad",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/contabilidad.png")),
     FACTURACION("Facturacion","FAC","f","modulo_facturacion",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/facturacion.png")),
     CRM("Crm","CRM","c","modulo_crm",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/crm.png")),
     SERVICIOS("Servicios","SER","s","modulo_servicios",RecursoCodefac.IMAGENES_ICONOS.getResourceURL("modulos/servicios.png")),
