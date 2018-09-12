@@ -83,7 +83,9 @@ public enum VentanaEnum {
     PLAN_CUENTAS("ec.com.codesoft.codefaclite.contabilidad.model.PlanCuentasModel", "PLCU", "Plan de Cuentas", ModuloCodefacEnum.CONTABILIDAD, CategoriaMenuEnum.GESTIONAR,null),
     ASIENTOS("ec.com.codesoft.codefaclite.contabilidad.model.AsientoModel", "ASIE", "Asientos", ModuloCodefacEnum.CONTABILIDAD, CategoriaMenuEnum.PROCESOS,null),
     CARTERA_CUENTAS_X_COBRAR("ec.com.codesoft.codefaclite.cartera.model.CuentasPorCobrarReporteModel", "CXCR", "Reporte Cuentas por Cobrar", ModuloCodefacEnum.CARTERA, CategoriaMenuEnum.REPORTES,null),
-    CARTERA_CUENTAS_X_PAGAR("ec.com.codesoft.codefaclite.cartera.model.CuentasPorPagarReporteModel", "CXPR", "Reporte Cuentas por Pagar", ModuloCodefacEnum.CARTERA, CategoriaMenuEnum.REPORTES,null);
+    CARTERA_CUENTAS_X_PAGAR("ec.com.codesoft.codefaclite.cartera.model.CuentasPorPagarReporteModel", "CXPR", "Reporte Cuentas por Pagar", ModuloCodefacEnum.CARTERA, CategoriaMenuEnum.REPORTES,null),
+    MOVIMIENTO_CARTERA("ec.com.codesoft.codefaclite.cartera.model.MovimientoCarteraModel", "MOCA", "Movimiento de Cartera", ModuloCodefacEnum.CARTERA, CategoriaMenuEnum.REPORTES,null);
+    
     private VentanaEnum(String clase, String codigo, String nombre, ModuloCodefacEnum modulo, CategoriaMenuEnum categoriaMenu,Integer teclaAtajo) {
         this.claseNombre = clase;
         this.codigo = codigo;

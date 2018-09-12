@@ -206,6 +206,11 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel{
         
         //Agregar tipo de hoja para el reporte de la orden de trabajo
         FormatoHojaEnum formatoHojaEnum=(FormatoHojaEnum) getCmbFormatoHojas().getSelectedItem();
+        if(formatoHojaEnum==null)
+        {
+            formatoHojaEnum=FormatoHojaEnum.A4;
+        }
+        
         agregarParametro(ParametroCodefac.FORMATO_ORDEN_TRABAJO,formatoHojaEnum.getLetra());
         
     }

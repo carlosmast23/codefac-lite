@@ -21,5 +21,6 @@ import java.util.List;
 public interface  CarteraServiceIf extends ServiceAbstractIf<Cartera>{
     public Cartera grabarCartera(Cartera cartera,List<CarteraCruce> cruces) throws ServicioCodefacException,java.rmi.RemoteException;
     public List<Cartera> listaCarteraSaldoCero(Persona persona, Date fi, Date ff) throws ServicioCodefacException,java.rmi.RemoteException;
+    public List<CarteraCruce> consultarMovimientoCartera(Persona persona) throws java.rmi.RemoteException;
     
 }

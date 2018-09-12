@@ -27,6 +27,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraServiceIf;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.HashMap;
@@ -46,6 +47,11 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         carteraFacade = new CarteraFacade();
     }
     
+    public List<CarteraCruce> consultarMovimientoCartera(Persona persona) throws java.rmi.RemoteException
+    {
+        return getFacade().getMovimientoCartera(persona);
+    }
+    
     public Cartera grabarCartera(Cartera cartera,List<CarteraCruce> cruces) throws ServicioCodefacException,java.rmi.RemoteException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
@@ -53,6 +59,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             public void transaccion() {
                 
                 Map<Long,CarteraDetalle> mapDetallesGrabados=new HashMap<Long,CarteraDetalle>();
+                
                 //grabar los detalles de la cartera
                 for (CarteraDetalle detalle : cartera.getDetalles()) {
                     Long idTemporal=detalle.getId(); //Valor de id temporal para poder guardar los cruces
@@ -60,9 +67,9 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                     entityManager.persist(detalle);
                     
                     //Grabar los antiguos id con los nuevos que despues me sirve para poder grabar los cruces
-                    mapDetallesGrabados.put(idTemporal,detalle);
-                    
+                    mapDetallesGrabados.put(idTemporal,detalle);                    
                 }
+                
                 
                 //Grabar los cruces con al referencia de los nuevos detalles ya grabados
                 for (CarteraCruce carteraCruce : cruces) {
@@ -73,11 +80,45 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 
                 //grabar la cartera
                 entityManager.persist(cartera);
+                 
+                //Actuaizar Saldo de las entidades de cartera afectada en los cruces
+                actualizarSaldosCarteraSinTrasaccion(cruces);
                 
             }
         });
         
         return cartera;
+    }
+    
+    private void actualizarSaldosCarteraSinTrasaccion(List<CarteraCruce> cruces)
+    {
+        if(cruces.size()>0)
+        {
+            //TODO: En los 2 casos asumo que los cruces siempre son con 2 carteras , pero analizar si pueden haber mas de 2 carteras que esten siendo afectadas
+            Cartera carteraAfectada=cruces.get(0).getCarteraAfectada(); //Solo busco el primer dato de la cartera que afecta porque en los demas debe apuntar al mismo
+            Cartera carteraQueAfecta= cruces.get(0).getCarteraDetalle().getCartera();
+            
+            ///Generar el valor del saldo 
+            BigDecimal valorCruzadoCarteraAfectada=  getFacade().obtenerValorCruceCarteraAfecta(carteraAfectada);
+            carteraAfectada.setSaldo(carteraAfectada.getTotal().subtract(valorCruzadoCarteraAfectada));            
+            entityManager.merge(carteraAfectada);
+            
+            //Generar el valor del saldo del documento que esta afectando
+            BigDecimal valorCruzadoCarteraQueAfecta=  getFacade().obtenerValorCruceCarteraAfectados(carteraQueAfecta);
+            carteraQueAfecta.setSaldo(carteraQueAfecta.getTotal().subtract(valorCruzadoCarteraQueAfecta));            
+            entityManager.merge(carteraQueAfecta);
+            
+            
+            //Modificar los saldos de los detalles
+            for (CarteraCruce cruce : cruces) 
+            {
+                //Recalcular los saldo de cada detalle
+                BigDecimal valorCruzadoDetalle=getFacade().obtenerValorCruceCarteraDetalle(cruce.getCarteraDetalle());
+                cruce.getCarteraDetalle().setSaldo(cruce.getCarteraDetalle().getTotal().subtract(valorCruzadoDetalle));
+                entityManager.merge(cruce.getCarteraDetalle());
+            }
+        }
+        
     }
     
     /**
