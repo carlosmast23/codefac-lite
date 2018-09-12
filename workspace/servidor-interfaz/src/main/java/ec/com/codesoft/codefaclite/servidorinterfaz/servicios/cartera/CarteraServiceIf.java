@@ -6,10 +6,12 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraCruce;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceAbstractIf;
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -18,5 +20,6 @@ import java.util.List;
  */
 public interface  CarteraServiceIf extends ServiceAbstractIf<Cartera>{
     public Cartera grabarCartera(Cartera cartera,List<CarteraCruce> cruces) throws ServicioCodefacException,java.rmi.RemoteException;
+    public List<Cartera> listaCarteraSaldoCero(Persona persona, Date fi, Date ff) throws ServicioCodefacException,java.rmi.RemoteException;
     
 }

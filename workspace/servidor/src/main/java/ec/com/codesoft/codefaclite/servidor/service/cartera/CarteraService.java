@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RetencionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
@@ -27,6 +28,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraServiceIf;
 import java.rmi.RemoteException;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,9 +38,12 @@ import java.util.Map;
  * @author Carlos
  */
 public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> implements CarteraServiceIf{
-
+    
+    CarteraFacade carteraFacade;
+    
     public CarteraService() throws RemoteException {
         super(CarteraFacade.class);
+        carteraFacade = new CarteraFacade();
     }
     
     public Cartera grabarCartera(Cartera cartera,List<CarteraCruce> cruces) throws ServicioCodefacException,java.rmi.RemoteException
@@ -173,4 +178,9 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             
 
     }
+    
+    public List<Cartera> listaCarteraSaldoCero(Persona persona, Date fi, Date ff) throws ServicioCodefacException, RemoteException {
+        return carteraFacade.getCarteraSaldoCero(persona, fi, ff);
+    }
+            
 }
