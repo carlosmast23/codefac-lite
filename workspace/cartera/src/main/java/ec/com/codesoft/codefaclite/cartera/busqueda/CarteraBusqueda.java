@@ -20,6 +20,11 @@ import java.util.Vector;
  */
 public class CarteraBusqueda implements InterfaceModelFind<Cartera> 
 {
+    /**
+     * Variable para filtrar solo los que tengan saldo pendiente
+     */
+    private Boolean soloConSaldoPendiente;
+    
     private Boolean buscarTipoCliente;
     private Boolean buscarTipoProveedor;
     private Persona persona;
@@ -29,14 +34,16 @@ public class CarteraBusqueda implements InterfaceModelFind<Cartera>
         this.buscarTipoCliente = false;
         this.buscarTipoProveedor = false;
         this.documentosEnum = null;    
+        this.soloConSaldoPendiente=false;
     }
 
     
-    public CarteraBusqueda(Boolean buscarTipoCliente, Boolean buscarTipoProveedor, List<DocumentoEnum> documentosEnum, Persona persona) {
+    public CarteraBusqueda(Boolean buscarTipoCliente, Boolean buscarTipoProveedor, List<DocumentoEnum> documentosEnum, Persona persona,Boolean soloConSaldoPendiente ) {
         this.buscarTipoCliente = buscarTipoCliente;
         this.buscarTipoProveedor = buscarTipoProveedor;
         this.documentosEnum = documentosEnum;
         this.persona=persona;
+        this.soloConSaldoPendiente=soloConSaldoPendiente;
     }
 
     @Override
@@ -107,6 +114,12 @@ public class CarteraBusqueda implements InterfaceModelFind<Cartera>
         if(persona!=null)
         {
             queryString=queryString+" AND  u.persona=?5 ";
+        }
+        
+        //Consulta adicional cuando necesita consultar solo los que tienen saldo faltante
+        if(soloConSaldoPendiente)
+        {
+            queryString=queryString+" AND  u.saldo>0 ";
         }
         
         queryString += " AND ( LOWER(u.persona.razonSocial) like ?1 or u.persona.identificacion like ?1 or CAST(u.secuencial CHAR(64)) like ?1 )";

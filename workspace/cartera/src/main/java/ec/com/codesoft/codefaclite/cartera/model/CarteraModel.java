@@ -495,11 +495,11 @@ public class CarteraModel extends CarteraPanel{
                 //Abrir el buscar de cartera dependiendo si son documento para el cliente o proveedor
                 Cartera.TipoCarteraEnum tipoCarteraEnum = (Cartera.TipoCarteraEnum) getCmbTipoCartera().getSelectedItem();
                 if (tipoCarteraEnum != null) {
-                    CarteraBusqueda carteraBusqueda; 
+                    CarteraBusqueda carteraBusqueda;
                     if(tipoCarteraEnum.equals(Cartera.TipoCarteraEnum.CLIENTE))
-                        carteraBusqueda= new CarteraBusqueda(true, false, DocumentoEnum.obtenerPorCategoria(DocumentoCategoriaEnum.COMPROBANTES_VENTA),(cartera.getPersona()!=null)?cartera.getPersona():null);
+                        carteraBusqueda= new CarteraBusqueda(true, false, DocumentoEnum.obtenerPorCategoria(DocumentoCategoriaEnum.COMPROBANTES_VENTA),(cartera.getPersona()!=null)?cartera.getPersona():null,true);
                     else
-                        carteraBusqueda= new CarteraBusqueda(false,true, DocumentoEnum.obtenerPorCategoria(DocumentoCategoriaEnum.COMPROBANTES_VENTA),(cartera.getPersona()!=null)?cartera.getPersona():null);
+                        carteraBusqueda= new CarteraBusqueda(false,true, DocumentoEnum.obtenerPorCategoria(DocumentoCategoriaEnum.COMPROBANTES_VENTA),(cartera.getPersona()!=null)?cartera.getPersona():null,true);
                     
                     BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(carteraBusqueda);
                     buscarDialogoModel.setVisible(true);
