@@ -203,7 +203,7 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
                 if (compraInventario != null) {
                     String preimpreso=compraInventario.getPreimpreso();
                     String proveedor =compraInventario.getProveedor().getRazonSocial();
-                    getTxtCompraSeleccionada().setText(preimpreso+"-"+proveedor);
+                    getTxtCompraSeleccionada().setText(preimpreso+" - "+proveedor);
                     cargarKardexDetalleCompra();
                     actualizarTablaComprasPendientes();
                 }

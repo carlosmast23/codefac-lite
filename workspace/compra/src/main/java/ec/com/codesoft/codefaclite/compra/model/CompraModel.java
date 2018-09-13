@@ -170,7 +170,7 @@ public class CompraModel extends CompraPanel{
 //        compra.setSecuencial(Integer.parseInt(getTcmbTipoDocumentoxtSecuencial().getText()));
         compra.setPuntoEmision(getTxtFPreimpreso().getText().substring(0,3));
         compra.setPuntoEstablecimiento(getTxtFPreimpreso().getText().substring(4,7));
-        compra.setSecuencial(Integer.parseInt(getTxtFPreimpreso().getText().substring(8, 11)));
+        compra.setSecuencial(Integer.parseInt(getTxtFPreimpreso().getText().substring(8, 17)));
         compra.setRazonSocial("");
         compra.setTelefono("");
         compra.setTipoFacturacion(""); //TODO: Establecer el metodo de facturacion manual y electronica
