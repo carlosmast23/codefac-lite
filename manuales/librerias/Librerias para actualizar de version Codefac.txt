@@ -1,0 +1,25 @@
+Ingresar al proyectoy dirigirse:
+proyecto servidor-interfaz
+	- package -> ec.com.codesoft.codefaclite.servidorinterfaz.info
+		- Y abrir la interfaz -> ParametrosSistemaCodefac
+			 Modificar: public static final ModoSistemaEnum MODO=ModoSistemaEnum.PRODUCCION;
+
+El proyecto principal maven realizar
+mavenCodefacLite -> Compilar (clean and build)
+
+Ir a:
+	C:\Users\DesarrolloSoftware\Documents\NetBeansProjects\codefac-lite\workspace\main\target
+	CMD ->  ls > librerias.txt
+	Abrir librerias.txt y eliminar linea con librerias.txt
+
+Directorio a trabajar: 
+	C:\xampp\htdocs\codefac_pagina\uploads\versiones
+	Mantener : ultimaVersion.codefac y updater y todo lo demas eliminar
+	Copiar de: C:\Users\DesarrolloSoftware\Documents\NetBeansProjects\codefac-lite\workspace\main\target\lib
+	a C:\xampp\htdocs\codefac_pagina\uploads\versiones
+	
+	Copiar C:\Users\DesarrolloSoftware\Documents\NetBeansProjects\codefac-lite\workspace\main\target\main-1.0-SNAPSHOT
+	a C:\xampp\htdocs\codefac_pagina\uploads\versiones y renombrar el archivo a codefac
+
+	Abrir el documento <<ultimaVersion>> y colocar la versión que se trabajo
+	
