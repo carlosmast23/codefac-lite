@@ -79,7 +79,7 @@ public enum VentanaEnum {
     GUIA_REMISION("ec.com.codesoft.codefaclite.transporte.model.GuiaRemisionModel", "GURE", "Guía de Remisión", ModuloCodefacEnum.TRANSPORTE, CategoriaMenuEnum.PROCESOS,true, new ModuloCodefacEnum[]{},TipoLicenciaEnum.PRO,KeyEvent.VK_R),
     REPORTE_GUIAREMISIO("ec.com.codesoft.codefaclite.transporte.model.GuiasRemisionReporteModel", "RGUR", "Reporte Guia Remision", ModuloCodefacEnum.TRANSPORTE, CategoriaMenuEnum.REPORTES,true, new ModuloCodefacEnum[]{},TipoLicenciaEnum.PRO,null),
     PROFORMA_VENTA("ec.com.codesoft.codefaclite.facturacion.model.ProformaModel", "PROF", "Proforma", ModuloCodefacEnum.FACTURACION, CategoriaMenuEnum.PROCESOS,true, new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION},TipoLicenciaEnum.PRO,null),
-    REPORTE_ACADEMICO_CLIENTE("ec.com.codesoft.codefaclite.gestionacademica.model.ClienteReporte", "RACL", "Reporte Cliente", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.REPORTES,null),
+    REPORTE_ACADEMICO_CLIENTE("ec.com.codesoft.codefaclite.gestionacademica.model.ClienteReporte", "RACL", "Reporte Representante", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.REPORTES,null),
     PLAN_CUENTAS("ec.com.codesoft.codefaclite.contabilidad.model.PlanCuentasModel", "PLCU", "Plan de Cuentas", ModuloCodefacEnum.CONTABILIDAD, CategoriaMenuEnum.GESTIONAR,null),
     ASIENTOS("ec.com.codesoft.codefaclite.contabilidad.model.AsientoModel", "ASIE", "Asientos", ModuloCodefacEnum.CONTABILIDAD, CategoriaMenuEnum.PROCESOS,null),
     CARTERA_CUENTAS_X_COBRAR("ec.com.codesoft.codefaclite.cartera.model.CuentasPorCobrarReporteModel", "CXCR", "Reporte Cuentas por Cobrar", ModuloCodefacEnum.CARTERA, CategoriaMenuEnum.REPORTES,null),
