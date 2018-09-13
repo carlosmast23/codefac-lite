@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Estudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ProductoEnumEstado;
 import java.util.Vector;
 
@@ -42,13 +43,14 @@ public class RubroEstudianteBusqueda implements InterfaceModelFind<RubroEstudian
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        String queryString = "SELECT u FROM RubroEstudiante u WHERE u.estudianteInscrito.estudiante=?1 and ( u.estadoFactura=?2 OR  u.estadoFactura=?3) and ";
+        String queryString = "SELECT u FROM RubroEstudiante u WHERE u.estado=?5 and u.estudianteInscrito.estudiante=?1 and ( u.estadoFactura=?2 OR  u.estadoFactura=?3) and ";
         queryString += " ( LOWER(u.rubroNivel.nombre) like ?4 )";
         QueryDialog queryDialog = new QueryDialog(queryString);
         queryDialog.agregarParametro(1, estudiante);
         queryDialog.agregarParametro(2,RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR.getLetra());
         queryDialog.agregarParametro(3,RubroEstudiante.FacturacionEstadoEnum.FACTURA_PARCIAL.getLetra());
         queryDialog.agregarParametro(4,filter);
+        queryDialog.agregarParametro(5,GeneralEnumEstado.ACTIVO.getEstado());
         return queryDialog;
     }
 

@@ -78,10 +78,11 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
             academico = "1=1";
         }
         try {
-            String queryString = "SELECT u FROM RubroEstudiante u WHERE u.estudianteInscrito.nivelAcademico.periodo=?2 AND " + academico;
+            String queryString = "SELECT u FROM RubroEstudiante u WHERE u.estado=?3 and u.estudianteInscrito.nivelAcademico.periodo=?2 AND " + academico;
             //String queryString = "SELECT u FROM RubroEstudiante u " ;
             Query query = getEntityManager().createQuery(queryString);
             query.setParameter(2,periodo);
+            query.setParameter(3,GeneralEnumEstado.ACTIVO.getEstado());
             
             if (estudiante != null) {
                 query.setParameter(1, estudiante);

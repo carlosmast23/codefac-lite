@@ -160,6 +160,7 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
             rubroNivel.setValor(rubroPlantilla.getValor());
             rubroNivel.setMesNumero(mesEnum.getNumero());
             rubroNivel.setAnio(anio);
+            rubroNivel.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
             //rubroNivel.setReferenciaPlantilla(rubroPlantilla);
 
             entityManager.persist(rubroNivel);

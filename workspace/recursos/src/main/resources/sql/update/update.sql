@@ -52,5 +52,8 @@ UPDATE SRI_FORMA_PAGO SET ALIAS='Tarjeta crédito' WHERE CODIGO='19';
 UPDATE SRI_FORMA_PAGO SET ALIAS='Otros' WHERE CODIGO='20';
 /*@AGREGAR_SCRIPT (VERSION_SISTEMA=1.2.6.6)*/
 UPDATE SRI_FORMA_PAGO SET ALIAS='Endoso títulos' WHERE CODIGO='21';
+/*@AGREGAR_SCRIPT (VERSION_SISTEMA=1.2.6.6)*/
+UPDATE RUBROS_NIVEL SET ESTADO='A' WHERE ESTADO IS NULL;/*Actualizando rubros del nivel que se crearon desde la plantilla y se estaban generando sin estado*/
+
 
 
