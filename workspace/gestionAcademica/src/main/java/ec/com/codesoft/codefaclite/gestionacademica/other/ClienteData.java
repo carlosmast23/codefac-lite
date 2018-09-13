@@ -100,9 +100,9 @@ public class ClienteData implements ExcelDatosInterface
         tiposDatos.add(new TipoDato(this.identificacion,Excel.TipoDataEnum.TEXTO));        
         tiposDatos.add(new TipoDato(this.nombresCompletos, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.nombresCompletosEstudiante,Excel.TipoDataEnum.TEXTO));
-        tiposDatos.add(new TipoDato(this.nombreLegal,Excel.TipoDataEnum.TEXTO));
-        tiposDatos.add(new TipoDato(this.telefono, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.telefono,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.direccion, Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.email, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.curso, Excel.TipoDataEnum.TEXTO));
         
         return tiposDatos;

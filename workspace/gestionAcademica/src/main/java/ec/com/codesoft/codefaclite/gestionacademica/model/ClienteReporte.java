@@ -62,6 +62,7 @@ public class ClienteReporte extends ControladorCodefacInterface{
                 
                 String nombreRepresentante1="s/n";
                 String nombreRepresentante2="s/n";
+                
                 ClienteData clienteData;
                 
                 if(est.getEstudiante().getRepresentante()!=null)
@@ -69,28 +70,30 @@ public class ClienteReporte extends ControladorCodefacInterface{
                 
                 if(est.getEstudiante().getRepresentante2() != null)
                     nombreRepresentante2 = est.getEstudiante().getRepresentante2().getNombresCompletos();
-                
-                    clienteData = new ClienteData();
-                    clienteData.setDireccion(est.getEstudiante().getRepresentante().getDireccion());
-                    clienteData.setEmail(est.getEstudiante().getRepresentante().getCorreoElectronico());
-                    clienteData.setIdentificacion(est.getEstudiante().getRepresentante().getIdentificacion());
-                    clienteData.setNombresCompletos(est.getEstudiante().getRepresentante().getRazonSocial());
-                    clienteData.setNombreLegal(est.getEstudiante().getRepresentante().getNombreLegal());
-                    clienteData.setTelefono(est.getEstudiante().getRepresentante().getTelefonoCelular());
-                    clienteData.setNombresCompletosEstudiante(est.getEstudiante().getNombreCompleto());
-                    clienteData.setCurso(est.getNivelAcademico().getNombre());
-                    data.add(clienteData);
+                    
+                    if(!nombreRepresentante1.equals("s/n")){
+                        clienteData = new ClienteData();
+                        clienteData.setDireccion("" + est.getEstudiante().getRepresentante().getDireccion());
+                        clienteData.setEmail("" + est.getEstudiante().getRepresentante().getCorreoElectronico());
+                        clienteData.setIdentificacion("" + est.getEstudiante().getRepresentante().getIdentificacion());
+                        clienteData.setNombresCompletos("" + est.getEstudiante().getRepresentante().getRazonSocial());
+                        clienteData.setNombreLegal("" + est.getEstudiante().getRepresentante().getNombreLegal());
+                        clienteData.setTelefono("" + est.getEstudiante().getRepresentante().getTelefonoCelular());
+                        clienteData.setNombresCompletosEstudiante("" + est.getEstudiante().getNombreCompleto());
+                        clienteData.setCurso("" + est.getNivelAcademico().getNombre());
+                        data.add(clienteData);
+                    }
                     
                     if(!nombreRepresentante2.equals("s/n")){
                         clienteData = new ClienteData();
-                        clienteData.setDireccion(est.getEstudiante().getRepresentante2().getDireccion());
-                        clienteData.setEmail(est.getEstudiante().getRepresentante2().getCorreoElectronico());
-                        clienteData.setIdentificacion(est.getEstudiante().getRepresentante2().getIdentificacion());
-                        clienteData.setNombresCompletos(est.getEstudiante().getRepresentante2().getRazonSocial());
-                        clienteData.setNombreLegal(est.getEstudiante().getRepresentante2().getNombreLegal());
-                        clienteData.setTelefono(est.getEstudiante().getRepresentante2().getTelefonoCelular());
-                        clienteData.setNombresCompletosEstudiante("");
-                        clienteData.setCurso(est.getNivelAcademico().getNombre());
+                        clienteData.setDireccion("" + est.getEstudiante().getRepresentante2().getDireccion());
+                        clienteData.setEmail("" + est.getEstudiante().getRepresentante2().getCorreoElectronico());
+                        clienteData.setIdentificacion("" +est.getEstudiante().getRepresentante2().getIdentificacion());
+                        clienteData.setNombresCompletos("" +est.getEstudiante().getRepresentante2().getRazonSocial());
+                        clienteData.setNombreLegal("" + est.getEstudiante().getRepresentante2().getNombreLegal());
+                        clienteData.setTelefono("" + est.getEstudiante().getRepresentante2().getTelefonoCelular());
+                        clienteData.setNombresCompletosEstudiante("" + est.getEstudiante().getNombreCompleto());
+                        clienteData.setCurso("" + est.getNivelAcademico().getNombre());
                         data.add(clienteData);
                     }
 
@@ -110,7 +113,7 @@ public class ClienteReporte extends ControladorCodefacInterface{
                 public void excel() {
                     try{
                         Excel excel = new Excel();
-                        String nombreCabeceras[] = {"Identificación", "Nombres completos","Nombre Legal", "Telefono", "Dirección","Email"};
+                        String nombreCabeceras[] = {"Identificación", "Representante", "Estudiante", "Telefono", "Dirección", "Email","Curso"};
                         excel.gestionarIngresoInformacionExcel(nombreCabeceras, data);
                         excel.abrirDocumento();
                     }

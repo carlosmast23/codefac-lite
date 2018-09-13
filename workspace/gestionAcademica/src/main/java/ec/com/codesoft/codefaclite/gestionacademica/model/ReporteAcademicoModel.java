@@ -343,11 +343,6 @@ public class ReporteAcademicoModel extends ReporteAcademicoPanel {
             List<ReporteAcademicoData> value = entry.getValue();
             for (ReporteAcademicoData reporteAcademicoData : value) 
             {
-                if(b){
-                    dataTemp.add(new ReporteAcademicoData("","","","","","",key));
-                    b = false;
-                }
-                reporteAcademicoData.setNivelAcademicoEstudiante("");
                 dataTemp.add(reporteAcademicoData);
             }
             b = true;
