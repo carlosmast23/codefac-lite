@@ -104,6 +104,7 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
             
         }
         
+        ///Funcionalidad que permite eliminar perfiles que fueron eliminados
         if(usuarioOriginal.getPerfilesUsuario()!=null)
         {
             for (PerfilUsuario perfilUsuario : usuarioOriginal.getPerfilesUsuario()) {
@@ -118,6 +119,23 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
             }
         }
         
+        //Funcionalidad que permite agregar nuevos perfiles agregados
+        if(entity.getPerfilesUsuario()!=null)
+        {
+            for (PerfilUsuario perfilUsuario : entity.getPerfilesUsuario()) {
+
+                //Si en el objeto origina no tiene el perfil lo agrego
+                if(!usuarioOriginal.getPerfilesUsuario().contains(perfilUsuario))
+                {
+                    //Elimino de la persistencia
+                    entityManager.persist(perfilUsuario);
+                }
+
+            }
+        }
+        
+        //Actualizo el objeto editado
+        entityManager.merge(entity);
         //Actualizo las referencia del nuevo objecto a editar
         //entity.setClave(UtilidadesHash.generarHashBcrypt(entity.getClave()));
         //entityManager.merge(entity);
