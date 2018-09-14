@@ -54,6 +54,8 @@ UPDATE SRI_FORMA_PAGO SET ALIAS='Otros' WHERE CODIGO='20';
 UPDATE SRI_FORMA_PAGO SET ALIAS='Endoso títulos' WHERE CODIGO='21';
 /*@AGREGAR_SCRIPT (VERSION_SISTEMA=1.2.6.6)*/
 UPDATE RUBROS_NIVEL SET ESTADO='A' WHERE ESTADO IS NULL;/*Actualizando rubros del nivel que se crearon desde la plantilla y se estaban generando sin estado*/
+/*@AGREGAR_SCRIPT (VERSION_SISTEMA=1.2.6.7)*/
+UPDATE RUBRO_PLANTILLA SET ESTADO='A' WHERE ESTADO IS NULL;/*Actualizar con el estado activo a todos los rubros de la plantilla creados*/
 
 
 

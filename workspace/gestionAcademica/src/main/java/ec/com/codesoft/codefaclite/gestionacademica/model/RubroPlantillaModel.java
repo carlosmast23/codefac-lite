@@ -96,7 +96,7 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
@@ -130,7 +130,35 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //Solo me permite eliminar si algun dato esta cargado
+        try
+        {
+            if(estadoFormulario.equals(ESTADO_EDITAR))
+            {
+                //Verifica que no exista ningun rubro del mes generado
+                if (rubroPlantilla.getMesesGenerados() == null || rubroPlantilla.getMesesGenerados().size() == 0) {
+                    ServiceFactory.getFactory().getRubroPlantillaServiceIf().eliminar(rubroPlantilla);
+                    DialogoCodefac.mensaje("Correcto", "La plantilla fue eliminada correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+                } 
+                else 
+                {
+                    // En esta condición se ingresa cuando ya existen rubros generados
+                    Boolean isEliminar = DialogoCodefac.dialogoPregunta("Pregunta", "Ya existen rubros generados con esta plantilla, esta seguro que desea eliminar?", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    if (isEliminar) {
+                        ServiceFactory.getFactory().getRubroPlantillaServiceIf().eliminar(rubroPlantilla);
+                        DialogoCodefac.mensaje("Correcto", "La plantilla fue eliminada correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+                    }
+                    else
+                    {
+                        throw new ExcepcionCodefacLite("Cancelado metodo eliminar");
+                   }
+                }
+            }
+        }
+        catch(RemoteException re)
+        {
+            re.printStackTrace();
+        }
     }
 
     @Override
@@ -625,6 +653,8 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
         getTblDatosRegistrados().setModel(new DefaultTableModel());
         
         getCmbPeriodo().setSelectedIndex(0);
+        
+        getjTabPanel().setSelectedIndex(0);
     }
 
     private void setearVariables() {

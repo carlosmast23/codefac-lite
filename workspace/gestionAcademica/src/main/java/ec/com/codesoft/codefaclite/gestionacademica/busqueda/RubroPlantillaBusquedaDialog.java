@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.QueryDialog;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantilla;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.util.Vector;
 
 /**
@@ -36,11 +37,13 @@ public class RubroPlantillaBusquedaDialog implements InterfaceModelFind<RubroPla
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        String queryString = "SELECT u FROM RubroPlantilla u WHERE u.periodo=?2 AND ";
+        
+        String queryString = "SELECT u FROM RubroPlantilla u WHERE u.estado=?3 and u.periodo=?2 AND ";
         queryString += " ( LOWER(u.nombre) like ?1 )";
         QueryDialog queryDialog = new QueryDialog(queryString);
         queryDialog.agregarParametro(1,filter);
         queryDialog.agregarParametro(2,periodoSeleccion);
+        queryDialog.agregarParametro(3,GeneralEnumEstado.ACTIVO.getEstado()); //Agregado filtro de solo los activos
         return queryDialog;
         
     }

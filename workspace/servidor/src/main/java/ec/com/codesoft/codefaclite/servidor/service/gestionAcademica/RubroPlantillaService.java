@@ -6,12 +6,17 @@
 package ec.com.codesoft.codefaclite.servidor.service.gestionAcademica;
 
 import ec.com.codesoft.codefaclite.servidor.facade.gestionAcademica.RubroPlantillaFacade;
+import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantilla;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.gestionacademica.RubroPlantillaServiceIf;
 import java.rmi.RemoteException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityTransaction;
 
 
@@ -24,12 +29,27 @@ public class RubroPlantillaService extends ServiceAbstract<RubroPlantilla,RubroP
     public RubroPlantillaService() throws RemoteException {
         super(RubroPlantillaFacade.class);
     }
+
+    @Override
+    public RubroPlantilla grabar(RubroPlantilla entity) throws ServicioCodefacException, RemoteException {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                entity.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
+                entityManager.persist(entity);
+            }
+        });
+        return entity;
+    }
+    
+    
     
     public void grabarConDetalles(RubroPlantilla rubroPlantilla) throws RemoteException
     {
         EntityTransaction transaccion = getTransaccion();
         transaccion.begin();
         
+        rubroPlantilla.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
         List<RubroPlantillaEstudiante> detalles = rubroPlantilla.getDetalles();
 
         for (RubroPlantillaEstudiante detalle : detalles) {
@@ -81,5 +101,23 @@ public class RubroPlantillaService extends ServiceAbstract<RubroPlantilla,RubroP
         
         transaccion.commit();
     }
+
+    @Override
+    public void eliminar(RubroPlantilla entity) throws RemoteException {
+        try {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion() throws ServicioCodefacException, RemoteException {
+                    entity.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
+                    entityManager.merge(entity);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(RubroPlantillaService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    
     
 }

@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
@@ -53,6 +54,9 @@ public class RubroPlantilla implements Serializable{
 
     @JoinColumn(name = "PERIODO_ID")
     private Periodo periodo;
+    
+    @JoinColumn(name = "ESTADO")
+    private String estado;
  
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "rubroPlantilla",fetch = FetchType.EAGER)
     private List<RubroPlantillaEstudiante> detalles;
@@ -127,8 +131,19 @@ public class RubroPlantilla implements Serializable{
     public void setMesesGenerados(List<RubroPlantillaMes> mesesGenerados) {
         this.mesesGenerados = mesesGenerados;
     }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
     
-    
+    public GeneralEnumEstado getEstadoEnum()
+    {
+        return GeneralEnumEstado.getEnum(estado);
+    }
     
     //Metodo personalizados
     

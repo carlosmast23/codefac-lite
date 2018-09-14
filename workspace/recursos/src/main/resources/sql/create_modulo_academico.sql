@@ -123,6 +123,8 @@ create table RUBRO_PLANTILLA(
     VALOR decimal(7,2),
     DIAS_CREDITO int,
     ESTADO_FACTURA varchar(1),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.6.7)*/
+    ESTADO varchar(1),
     RUBRO_NIVEL_ID BIGINT,
     ESTUDIANTE_INSCRITO_ID BIGINT,
     primary key (ID)
