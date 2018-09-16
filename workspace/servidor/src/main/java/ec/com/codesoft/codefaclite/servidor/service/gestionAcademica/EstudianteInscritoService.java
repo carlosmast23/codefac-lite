@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteI
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteInscritoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
@@ -63,10 +64,15 @@ public class EstudianteInscritoService extends ServiceAbstract<EstudianteInscrit
         EntityTransaction transaccion = getTransaccion();        
         transaccion.begin();
         
+        RubroPlantillaEstudiante rpe;
+        
         for (EstudianteInscrito estudianteInscrito : estudiantesEliminar) 
         {
             estudianteInscrito=entityManager.merge(estudianteInscrito);
-            estudianteInscrito.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());            
+            estudianteInscrito.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());           
+            
+            //Buscar los rubroPlantillaEstudiante para tambien actualizar el objecto que tiene referencia
+            
         }
         
         transaccion.commit();

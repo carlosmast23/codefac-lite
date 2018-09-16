@@ -680,7 +680,7 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
         }
         else
         {
-            estudiantesRegistradosMap=construirMapEstudiantesInscritos(rubroPlantilla.getDetalles());
+            estudiantesRegistradosMap=construirMapEstudiantesInscritos(rubroPlantilla.getDetallesActivos());
         }
         
         cargarComboNivelesInscritos();

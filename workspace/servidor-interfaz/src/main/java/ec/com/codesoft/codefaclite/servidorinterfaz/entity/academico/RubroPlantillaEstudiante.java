@@ -7,12 +7,14 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico;
 
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -31,7 +33,9 @@ public class RubroPlantillaEstudiante implements Serializable{
     @JoinColumn(name = "RUBRO_PLANTILLA_ID")
     private RubroPlantilla rubroPlantilla;
     
+    
     @JoinColumn(name = "ESTUDIANTE_INSCRITO_ID")
+    @OneToOne(cascade = CascadeType.MERGE) //Con esta relacion se actualiza la referencia del padre cuando edito el estudiante Inscrito
     private EstudianteInscrito estudianteInscrito;
 
     public Long getId() {

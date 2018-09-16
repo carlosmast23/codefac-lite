@@ -145,7 +145,23 @@ public class RubroPlantilla implements Serializable{
         return GeneralEnumEstado.getEnum(estado);
     }
     
-    //Metodo personalizados
+    // METODO PERSONALIZADO //////////////////
+    
+    /**
+     * Metodo que devuelve solo los detalles de estudiantes activos inscritos en la plantilla
+     * @return 
+     */
+    public List<RubroPlantillaEstudiante> getDetallesActivos() {
+        List<RubroPlantillaEstudiante> listaResultado=new ArrayList<RubroPlantillaEstudiante>();
+        
+        for (RubroPlantillaEstudiante detalle : detalles) {
+            if(detalle.getEstudianteInscrito().getEnumEstado().equals(GeneralEnumEstado.ACTIVO))
+            {
+                listaResultado.add(detalle);
+            }
+        }   
+        return listaResultado;
+    }
     
     public void adddDetalle(RubroPlantillaEstudiante detalle)
     {

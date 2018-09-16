@@ -166,6 +166,13 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
             entityManager.persist(rubroNivel);
 
             for (RubroPlantillaEstudiante estudiateInscrito : rubroPlantilla.getDetalles()) {
+                
+                //Cuando el estudiante inscrito esta con estado inactivo no genera la deuda para ese estudiante
+                if(!estudiateInscrito.getEstudianteInscrito().getEnumEstado().equals(GeneralEnumEstado.ACTIVO))
+                {
+                    continue; //Pasa al siguiente registro
+                }
+                
                 RubroEstudiante rubroEstudiante = new RubroEstudiante();
                 
                 rubroEstudiante.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
