@@ -73,6 +73,7 @@ public class UtilidadesServidor {
     };
 
     public static InputStream[] querys = {
+        RecursoCodefac.SQL.getResourceInputStream("function/funcion_normalizar_texto.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_comprobante_fisico_disenio.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_modulo_academico.sql"),
         RecursoCodefac.SQL.getResourceInputStream("create_cliente.sql"),

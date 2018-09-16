@@ -37,7 +37,7 @@ public class EstudianteBusquedaDialogo implements InterfaceModelFind<Estudiante>
         //ei.getNivelAcademico().getEstado()
         
         String queryString = "SELECT u FROM Estudiante u WHERE (u.estado=?1) AND ";
-        queryString += "( LOWER(CONCAT(u.nombres,' ',u.apellidos)) LIKE LOWER(?2) OR LOWER(u.cedula) LIKE LOWER(?2) ) ";
+        queryString += "( function ('TEXTO_ESTANDAR',LOWER(CONCAT(u.nombres,' ',u.apellidos))) LIKE LOWER(?2) OR LOWER(u.cedula) LIKE LOWER(?2) ) ";
         //queryString +=" AND (SELECT COUNT(1) FROM EstudianteInscrito ei WHERE ei.nivelAcademico.periodo=?3 and ei.estado<>?4 and ei.estudiante=u)=0 ";
         
         QueryDialog queryDialog = new QueryDialog(queryString);

@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.panel.DialogoBuscadorForm;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.InterfaceModelFind;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.FuncionesSistemaCodefac;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesDerby;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -58,6 +59,11 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
     private InterfaceModelFind model;
     private Object resultado;
     private List<Object> listaResultados;
+    
+    /**
+     * Variable que me permite configurar si la variable de busqueda quiero que normalize sin acentos o buscar de forma identica a lo escrito
+     */
+    private boolean normalizarTextoBusqueda;
 
     /*
     public BuscarDialogoModel(DefaultTableModel modeloTablaBuscar) 
@@ -76,7 +82,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         ejecutarConsulta();
         //cargarDatos(listaResultados);
         establecerPropiedadesIniciales();        
-        
+        normalizarTextoBusqueda=false;
     }
     
     /**
@@ -86,6 +92,8 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
     {
         try {
             String filtro=getTxtBuscar().getText().toLowerCase();
+            filtro=(normalizarTextoBusqueda)?UtilidadesDerby.normalizarTextoDerby(filtro):filtro;
+            
             QueryDialog queryDialog=this.model.getConsulta("%"+filtro+"%");
             //queryDialog.agregarParametro(1000,"%"+filtro+"%");
             
@@ -151,6 +159,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
     {
         try {
             String filtro=getTxtBuscar().getText().toLowerCase();
+            filtro=(normalizarTextoBusqueda)?UtilidadesDerby.normalizarTextoDerby(filtro):filtro;
             QueryDialog queryDialog=this.model.getConsulta("%"+filtro+"%");
             //queryDialog.agregarParametro(1000,"%"+filtro+"%");
             String query=queryDialog.query;
@@ -450,5 +459,17 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         }
 
     }
+
+    public boolean getNormalizarTextoBusqueda() {
+        return normalizarTextoBusqueda;
+    }
+
+    public void setNormalizarTextoBusqueda(boolean normalizarTextoBusqueda) {
+        this.normalizarTextoBusqueda = normalizarTextoBusqueda;
+    }
+    
+    
+
+    
     
 }

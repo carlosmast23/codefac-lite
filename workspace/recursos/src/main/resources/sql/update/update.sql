@@ -57,5 +57,7 @@ UPDATE RUBROS_NIVEL SET ESTADO='A' WHERE ESTADO IS NULL;/*Actualizando rubros de
 /*@AGREGAR_SCRIPT (VERSION_SISTEMA=1.2.6.7)*/
 UPDATE RUBRO_PLANTILLA SET ESTADO='A' WHERE ESTADO IS NULL;/*Actualizar con el estado activo a todos los rubros de la plantilla creados*/
 
-
-
+/*@AGREGAR_SCRIPT (VERSION_SISTEMA=1.2.6.7)*/
+CREATE FUNCTION TEXTO_ESTANDAR(texto VARCHAR(5000)) RETURNS VARCHAR(5000) 
+    PARAMETER STYLE JAVA NO SQL LANGUAGE JAVA 
+    EXTERNAL NAME 'ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesDerby.normalizarTextoDerby'; /*Agregar funcion para normalizar los texto y poder hacer busquedas sin importar acentos*/

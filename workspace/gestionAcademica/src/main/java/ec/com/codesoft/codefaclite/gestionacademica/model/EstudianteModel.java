@@ -379,6 +379,8 @@ public class EstudianteModel extends EstudiantePanel implements ComponenteEnvioS
     public BuscarDialogoModel obtenerDialogoBusqueda() {
         EstudianteBusquedaDialogo aulaBusquedaDialogo = new EstudianteBusquedaDialogo();
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(aulaBusquedaDialogo);
+        buscarDialogoModel.setNormalizarTextoBusqueda(true); //Activo que al buscar no se active los acentos
+        
         return buscarDialogoModel;
     }
 

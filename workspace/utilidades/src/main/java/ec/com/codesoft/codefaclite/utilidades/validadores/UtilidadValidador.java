@@ -11,6 +11,7 @@ package ec.com.codesoft.codefaclite.utilidades.validadores;
  */
 public abstract class UtilidadValidador {
     
+    
     public static String normalizarTexto(String s) {
         
         //Si la variable es nula devolver en blanco
@@ -32,6 +33,11 @@ public abstract class UtilidadValidador {
         return output.replaceAll(regex, "");
     }
     
+    /**
+     * Funcion que me permite quitar caracteres especiales de una cadenas obiando simbolos como @ y .
+     * @param s
+     * @return 
+     */
     public static String normalizarTextoCorreo(String s) {
 
         // Cadena de caracteres original a sustituir.
