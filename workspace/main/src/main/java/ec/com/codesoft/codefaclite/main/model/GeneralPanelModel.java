@@ -1022,12 +1022,13 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
      * @param validacionDatosIngresados variable para saber si quiere validar si existen datos 
      */
     private void listenerBuscar(JInternalFrame frame,BusquedaCodefacInterface busquedaInterface)
-    {
-        try
+    {        
+        ControladorCodefacInterface frameInterface=(ControladorCodefacInterface) frame;
+        
+        //Variable para devolver al estado original si cancela o lanza una excepcion la busqueda        
+        String estadoFomularioTemp=frameInterface.estadoFormulario;
+            try
                 {
-                    //JInternalFrame frame= getjDesktopPane1().getSelectedFrame();
-                    ControladorCodefacInterface frameInterface=(ControladorCodefacInterface) frame;
-                    
                     /**
                      * Si ciclo de vida esta desactivado controlo manualmente el
                      * ciclo de vida
@@ -1037,10 +1038,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                         return;
                     }
 
-                                       
+                    
+                    frameInterface.estadoFormulario= ControladorCodefacInterface.ESTADO_EDITAR;                   
                     busquedaInterface.buscar();
                     
-                    frameInterface.estadoFormulario= ControladorCodefacInterface.ESTADO_EDITAR;
+                    
                     limpiarCamposValidacion(frameInterface);
                     mostrarPanelSecundario(false);
                     String tituloOriginal = getTituloOriginal(frame.getTitle());
@@ -1049,6 +1051,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 }
                 catch (ExcepcionCodefacLite ex) 
                 {
+                    frameInterface.estadoFormulario=estadoFomularioTemp; //Regresa al estado original si se lanza alguna excepcion
                     LOG.log(Level.WARNING,ex.getMessage());
                     Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
                     //Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
