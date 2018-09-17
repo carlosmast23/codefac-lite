@@ -10,7 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.report.ReporteCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.gestionacademica.busqueda.EstudianteBusquedaDialogo;
-import ec.com.codesoft.codefaclite.gestionacademica.busqueda.EstudianteInscritoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EstudianteInscritoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.ReporteDeudasEstudiantePanel;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.ReporteDeudasPanel;
 import ec.com.codesoft.codefaclite.gestionacademica.reportdata.ReporteDeudasData;

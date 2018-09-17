@@ -11,7 +11,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterfac
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.gestionacademica.busqueda.EstudianteBusquedaDialogo;
-import ec.com.codesoft.codefaclite.gestionacademica.busqueda.EstudianteInscritoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EstudianteInscritoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.gestionacademica.busqueda.EstudianteMatriculaBusquedaDialogo;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.MatriculaEstudiantePanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;

@@ -82,7 +82,9 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         EntityTransaction transaccion = getTransaccion();
         transaccion.begin();
         for (RubroEstudiante rubrosEstudiante : rubrosEstudiantes) {
+            //Solo elimina los rubros de los que esten sin facturar
             if (rubrosEstudiante.getEstadoFacturaEnum().equals(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR)) {
+                rubrosEstudiante.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
                 rubrosEstudiante = entityManager.merge(rubrosEstudiante);
                 entityManager.remove(rubrosEstudiante);
             }
@@ -100,7 +102,11 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
                     
                     if(rubroNivel==null)
                     {
-                        throw new ServicioCodefacException("Error no se puede eliminar porque no esta atado a ningun rubro");
+                        RubroPlantillaMes entityPersistent=entityManager.merge(rubroPlantillaMes);
+                        entityPersistent.getRubroPlantilla().getMesesGenerados().remove(entityPersistent); //Eliminar de la referencia de la lista
+                        entityManager.remove(entityPersistent); //eliminar de la persistenca
+                        
+                        return ;//Si no estado atado a un rubro nivel entonces solo borro la referencia , pero al usuario le toca borrar manualmente las referencias creadas
                     }
                     
                     RubroEstudianteService servicio=new RubroEstudianteService();
@@ -248,10 +254,14 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         EntityTransaction transaccion = getTransaccion();
         transaccion.begin();
         for (RubroEstudiante rubroEstudiante : rubrosEstudiantes) {
-            rubroEstudiante.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
-            rubroEstudiante.setFechaGenerado(UtilidadesFecha.getFechaHoy());
-            rubroEstudiante.setEstadoFactura(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR.getLetra());
-            entityManager.persist(rubroEstudiante);
+            //Solo valido que creen rubros que no exitan es decir que no tengan id
+            if(rubroEstudiante.getId()==null)
+            {
+                rubroEstudiante.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
+                rubroEstudiante.setFechaGenerado(UtilidadesFecha.getFechaHoy());
+                rubroEstudiante.setEstadoFactura(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR.getLetra());
+                entityManager.persist(rubroEstudiante);
+            }
         }
         entityManager.flush();
         transaccion.commit();

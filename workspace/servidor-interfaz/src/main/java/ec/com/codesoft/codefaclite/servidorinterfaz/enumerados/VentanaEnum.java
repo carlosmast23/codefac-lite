@@ -84,6 +84,7 @@ public enum VentanaEnum {
     ASIENTOS("ec.com.codesoft.codefaclite.contabilidad.model.AsientoModel", "ASIE", "Asientos", ModuloCodefacEnum.CONTABILIDAD, CategoriaMenuEnum.PROCESOS,null),
     CARTERA_CUENTAS_X_COBRAR("ec.com.codesoft.codefaclite.cartera.model.CuentasPorCobrarReporteModel", "CXCR", "Reporte Cuentas por Cobrar", ModuloCodefacEnum.CARTERA, CategoriaMenuEnum.REPORTES,null),
     CARTERA_CUENTAS_X_PAGAR("ec.com.codesoft.codefaclite.cartera.model.CuentasPorPagarReporteModel", "CXPR", "Reporte Cuentas por Pagar", ModuloCodefacEnum.CARTERA, CategoriaMenuEnum.REPORTES,null),
+    DEUDA_POR_RUBRO("ec.com.codesoft.codefaclite.gestionacademica.model.DeudaPorRubroModel", "DPRU", "Deuda por rubro", ModuloCodefacEnum.GESTIONA_ACADEMICA, CategoriaMenuEnum.DEUDAS_ACADEMICOS,null),
     MOVIMIENTO_CARTERA("ec.com.codesoft.codefaclite.cartera.model.MovimientoCarteraModel", "MOCA", "Movimiento de Cartera", ModuloCodefacEnum.CARTERA, CategoriaMenuEnum.REPORTES,null);
     
     private VentanaEnum(String clase, String codigo, String nombre, ModuloCodefacEnum modulo, CategoriaMenuEnum categoriaMenu,Integer teclaAtajo) {

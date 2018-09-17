@@ -10,7 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
-import ec.com.codesoft.codefaclite.gestionacademica.busqueda.EstudianteInscritoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.EstudianteInscritoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.gestionacademica.busqueda.NivelBusquedaDialogo;
 import ec.com.codesoft.codefaclite.gestionacademica.busqueda.RubroPlantillaBusquedaDialog;
 import ec.com.codesoft.codefaclite.gestionacademica.panel.RubroPlantillaPanel;
@@ -135,6 +135,12 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
         {
             if(estadoFormulario.equals(ESTADO_EDITAR))
             {
+                
+                if(!DialogoCodefac.dialogoPregunta("Pregunta","Esta seguro que desea borrar el plantilla?",DialogoCodefac.MENSAJE_INCORRECTO))
+                {
+                    throw new ExcepcionCodefacLite("Cancelado metodo eliminar");
+                }
+                
                 //Verifica que no exista ningun rubro del mes generado
                 if (rubroPlantilla.getMesesGenerados() == null || rubroPlantilla.getMesesGenerados().size() == 0) {
                     ServiceFactory.getFactory().getRubroPlantillaServiceIf().eliminar(rubroPlantilla);
@@ -842,7 +848,12 @@ public class RubroPlantillaModel extends RubroPlantillaPanel{
                 {
                     try {
                         ServiceFactory.getFactory().getRubroEstudianteServiceIf().eliminarMesRubroPlantilla(rubroPlantillaMes);
-                        DialogoCodefac.mensaje("Correcto","El rubro fue eliminado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+                        
+                        if(rubroPlantillaMes.getRubroNivel()!=null)
+                            DialogoCodefac.mensaje("Correcto","El rubro fue eliminado correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+                        else
+                            DialogoCodefac.mensaje("Advertencia","El rubro del mes fue eliminado,\n pero las deudas de los estudiantes tiene que ser borradas manualmente", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                       
                         //Volver a consultar rubro plantilla con los datos modificados de la base
                         //rubroPlantilla=(RubroPlantilla) ServiceFactory.getFactory().getUtilidadesServiceIf().mergeEntity(rubroPlantilla);
                         rubroPlantilla=ServiceFactory.getFactory().getRubroPlantillaServiceIf().buscarPorId(rubroPlantilla.getId());                        
