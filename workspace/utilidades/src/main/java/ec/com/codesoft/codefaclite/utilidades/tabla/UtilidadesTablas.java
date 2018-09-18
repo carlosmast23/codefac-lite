@@ -8,12 +8,17 @@ package ec.com.codesoft.codefaclite.utilidades.tabla;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+import org.jdesktop.swingx.JXComboBox;
 
 /**
  *
@@ -93,9 +98,36 @@ public abstract class UtilidadesTablas {
              public Class getColumnClass(int columnIndex) {
                 return tipoDatoFilas [columnIndex];
             }
+             
         };    
          return defaultTableModel;
     }
+    
+    
+    public static DefaultTableModel crearModeloTabla(String titulos[],Class[] tipoDatoFilas,Boolean[] puedeEditar)
+    {
+         DefaultTableModel defaultTableModel=new javax.swing.table.DefaultTableModel(titulos,0) 
+         {
+             public Class getColumnClass(int columnIndex) {
+                 return tipoDatoFilas[columnIndex];
+             }
+
+             @Override
+             public boolean isCellEditable(int row, int column) {
+                 if(column>=puedeEditar.length)
+                 {
+                    return true; //Si no existe datos para alguna columna por defecto queda como editable
+                 }
+                 else
+                 {
+                    return puedeEditar[column];
+                 }
+             }
+             
+        };    
+         return defaultTableModel;
+    }
+
     
     public static void cambiarColorFila(JTable table) {
         Enumeration<TableColumn> en = table.getColumnModel().getColumns();
@@ -118,6 +150,21 @@ public abstract class UtilidadesTablas {
     public static void bloquerTodasColumnasTabla(JTable table)
     {
         
+    }
+    
+    public static void cambiarTipoColumna(JTable jTable,Integer columna,JComboBox jComboBox)
+    {
+        jTable.getColumnModel().getColumn(columna).setCellEditor(new DefaultCellEditor(jComboBox));
+    }
+    
+    public static void cambiarTipoColumna(JTable jTable,Integer columna,JTextField jTextField)
+    {
+        jTable.getColumnModel().getColumn(columna).setCellEditor(new DefaultCellEditor(jTextField));
+    }
+    
+    public static void cambiarTipoColumna(JTable jTable,Integer columna,JCheckBox jCheckBox)
+    {
+        jTable.getColumnModel().getColumn(columna).setCellEditor(new DefaultCellEditor(jCheckBox));
     }
     
     public static void cambiarTamanioColumnas(JTable table , Integer[] valoresColumnas)

@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -55,6 +56,12 @@ public class KardexDetalle implements Serializable {
     
     @Column(name = "PRECIO_TOTAL")
     private BigDecimal precioTotal;
+    
+    @Column(name = "FECHA_CREACION")
+    private Date fechaCreacion;
+    
+    @Column(name = "FECHA_INGRESO")
+    private Date fechaIngreso;
     
 
     @JoinColumn(name = "KARDEX_ID")
@@ -134,6 +141,24 @@ public class KardexDetalle implements Serializable {
     public void setDetallesEspecificos(List<KardexItemEspecifico> detallesEspecificos) {
         this.detallesEspecificos = detallesEspecificos;
     }
+
+    public Date getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(Date fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    public Date getFechaIngreso() {
+        return fechaIngreso;
+    }
+
+    public void setFechaIngreso(Date fechaIngreso) {
+        this.fechaIngreso = fechaIngreso;
+    }
+    
+    
     
     
     

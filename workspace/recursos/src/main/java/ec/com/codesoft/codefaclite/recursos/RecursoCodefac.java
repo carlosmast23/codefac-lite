@@ -24,6 +24,7 @@ public enum RecursoCodefac {
     IMAGENES_REDES_SOCIALES("img/redes_sociales"),
     IMAGENES_PUBLICIDAD("img/publicidad"),
     SQL("sql"),
+    JASPER_INVENTARIO("reportes/inventario"),
     JASPER_CRM("reportes/crm"),
     JASPER_TRANSPORTE("reportes/transporte"),
     JASPER_FACTURACION("reportes/facturacion"),

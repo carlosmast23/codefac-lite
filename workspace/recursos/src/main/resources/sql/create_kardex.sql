@@ -21,6 +21,10 @@ create table KARDEX_DETALLE(
     CANTIDAD Integer,
     PRECIO_UNITARIO decimal(7,2),
     PRECIO_TOTAL decimal(7,2),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.6.8)*/
+    FECHA_CREACION date,
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.6.8)*/
+    FECHA_INGRESO date,
     primary key (ID)
 );
 

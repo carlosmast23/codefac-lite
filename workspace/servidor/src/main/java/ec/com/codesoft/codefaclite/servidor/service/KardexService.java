@@ -220,7 +220,10 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             }
             
             if(compra!=null)
+            {
                 compra.setInventarioIngreso(EnumSiNo.SI.getLetra());
+                em.merge(compra);
+            }
 
             transaction.commit(); //si todo sale bien ejecuto en la base de datos
             

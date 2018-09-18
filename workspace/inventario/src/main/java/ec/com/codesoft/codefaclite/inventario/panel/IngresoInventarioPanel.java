@@ -5,12 +5,15 @@
  */
 package ec.com.codesoft.codefaclite.inventario.panel;
 
+import com.toedter.calendar.JDateChooser;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import org.jdesktop.swingx.JXDatePicker;
 
 /**
  *
@@ -22,7 +25,7 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
      * Creates new form IngresoInventario
      */
     public IngresoInventarioPanel() {
-        initComponents();
+        initComponents();        
     }
 
     /**
@@ -38,7 +41,6 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
         jLabel1 = new javax.swing.JLabel();
         txtCompraSeleccionada = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblTblCompra = new javax.swing.JTable();
         jLabel10 = new javax.swing.JLabel();
@@ -47,6 +49,7 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
         cmbBodega = new javax.swing.JComboBox<>();
         btnBuscarCompraPendiente = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        cmbFechaIngreso = new org.jdesktop.swingx.JXDatePicker();
 
         setClosable(true);
         setIconifiable(true);
@@ -74,18 +77,12 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
         getContentPane().add(txtCompraSeleccionada, gridBagConstraints);
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel4.setText("Fecha Ingreso:");
+        jLabel4.setText("Fecha Ingreso por defecto:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel4, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 30;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jDateChooser1, gridBagConstraints);
 
         jScrollPane1.setViewportView(tblTblCompra);
 
@@ -118,7 +115,7 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
         getContentPane().add(jLabel11, gridBagConstraints);
 
         jLabel12.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel12.setText("Bodega:");
+        jLabel12.setText("Bodega Por Defecto:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -147,6 +144,11 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.2;
         getContentPane().add(jLabel2, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        getContentPane().add(cmbFechaIngreso, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -155,7 +157,7 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarCompraPendiente;
     private javax.swing.JComboBox<Bodega> cmbBodega;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
+    private org.jdesktop.swingx.JXDatePicker cmbFechaIngreso;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -198,6 +200,16 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
     public void setCmbBodega(JComboBox<Bodega> cmbBodega) {
         this.cmbBodega = cmbBodega;
     }
+
+    public JXDatePicker getCmbFechaIngreso() {
+        return cmbFechaIngreso;
+    }
+
+    public void setCmbFechaIngreso(JXDatePicker cmbFechaIngreso) {
+        this.cmbFechaIngreso = cmbFechaIngreso;
+    }
+
+    
     
     
 

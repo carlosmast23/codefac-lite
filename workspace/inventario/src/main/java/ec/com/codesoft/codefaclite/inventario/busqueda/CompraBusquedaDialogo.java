@@ -56,8 +56,8 @@ public class CompraBusquedaDialogo implements InterfaceModelFind<Compra>
 
     @Override
     public QueryDialog getConsulta(String filter) {
-        /*
-        Compra compra;
+        
+        /*Compra compra;
         compra.getSecuencial();
         compra.setInventarioIngreso();
         compra.getCodigoTipoDocumento();*/
