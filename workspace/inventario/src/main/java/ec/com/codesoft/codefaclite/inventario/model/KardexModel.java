@@ -329,8 +329,8 @@ public class KardexModel extends KardexPanel{
     
     private void construirModeloTabla()
     {
-        String[] titulo={"#","Documento","Preimpreso","Proveedor","Cant","P.Unit","P.Total","Cant","P.Unit","P.Total","Cant","P.Unit","P.Total"};
-        String[] primeraFila={" ","KARDEX","","","","INGRESO","","","EGRESO","","","SALDO",""};
+        String[] titulo={"#","Fecha","Documento","Preimpreso","Proveedor","Cant","P.Unit","P.Total","Cant","P.Unit","P.Total","Cant","P.Unit","P.Total"};
+        String[] primeraFila={" ","","KARDEX","","","","INGRESO","","","EGRESO","","","SALDO",""};
         
         DefaultTableModel modeloTabla=new DefaultTableModel(primeraFila,0);
         modeloTabla.addRow(titulo);
@@ -340,6 +340,7 @@ public class KardexModel extends KardexPanel{
             
             Vector fila =new Vector();
             fila.add(indice++);
+            fila.add(kardexData.getFecha());
             
             fila.add(kardexData.getDocumento());
             fila.add(kardexData.getPreimpreso());

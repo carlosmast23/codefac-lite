@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -84,6 +85,10 @@ public class KardexItemEspecifico implements Serializable {
         this.kardexDetalle = kardexDetalle;
     }
 
+    public GeneralEnumEstado getEstadoEnum()
+    {
+        return GeneralEnumEstado.getEnum(estado);
+    }
     
 
 }

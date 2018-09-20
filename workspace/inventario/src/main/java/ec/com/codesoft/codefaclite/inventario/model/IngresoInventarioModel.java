@@ -13,6 +13,8 @@ import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLit
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.inventario.busqueda.CompraBusquedaDialogo;
 import ec.com.codesoft.codefaclite.inventario.busqueda.ProveedorBusquedaDialogo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.auxiliar.KardexDetalleTmp;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.auxiliar.KardexItemEspecificoTemp;
 import ec.com.codesoft.codefaclite.inventario.panel.IngresoInventarioPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
@@ -25,12 +27,17 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,12 +49,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.JXComboBox;
 
@@ -57,15 +65,14 @@ import org.jdesktop.swingx.JXComboBox;
  */
 public class IngresoInventarioModel extends IngresoInventarioPanel {
 
-    private static final Integer COLUMNA_BODEGA = 0;
-    private static final Integer COLUMNA_FECHA = COLUMNA_BODEGA+1;
-    private static final Integer COLUMNA_CANTIDAD = COLUMNA_FECHA+1;
-    private static final Integer COLUMNA_DESCRIPCION = COLUMNA_CANTIDAD+1;
-    private static final Integer COLUMNA_COSTO_UNITARIO = COLUMNA_DESCRIPCION+1;
-    private static final Integer COLUMNA_COSTO_TOTAL = COLUMNA_COSTO_UNITARIO+1;
-    private static final Integer COLUMNA_GARANTIA = COLUMNA_COSTO_TOTAL+1;
-    private static final Integer COLUMNA_CODIGO_UNITARIO = COLUMNA_GARANTIA+1;
-    private static final Integer COLUMNA_OBSERVACION_KARDEX = COLUMNA_CODIGO_UNITARIO+1;
+    /**
+     * Variable temporal para solo generar los detalles del kardex a generar
+     */
+    private List<KardexDetalle> detallesKardexFinal;
+    /**
+     * Listado de todos los detalles de los kardex que se crearon
+     */
+    private Map<KardexDetalleTmp, CompraDetalle> detallesKardex;
     
     /**
      * Referencia de la compra que se carga para agregar al inventario
@@ -73,22 +80,18 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
     private Compra compraInventario;
     
     /**
-     * Listado de todos los detalles de los kardex que se crearons
+     * Combo box que me permite servir de modelo para que puedan seleccionar en las tablas
      */
-    private Map<KardexDetalle,CompraDetalle> detallesKardex;
-    
     private JComboBox<Bodega> cmbBodegaSeleccion;
-    
-    private JComboBox<EnumSiNo> cmbSiNo;
     
     
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
-        agregarListenerBotones();
-        agregarListenerCombos();
-        agregarListenerDatos();
-        agregarPopUps();
-        valoresIniciales();
+      listenerBotones();
+      listenerTablas();
+      listenerCombos();
+      valoresIniciales();
+      agregarPopUps();
     }
 
     @Override
@@ -98,66 +101,37 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
 
     @Override
     public void grabar() throws ExcepcionCodefacLite {
-        setearValoresKardex();
-        if(validarItems())
-        {
-            try {
-                KardexServiceIf servicioKardex=ServiceFactory.getFactory().getKardexServiceIf();
-                Bodega bodega= (Bodega) getCmbBodega().getSelectedItem();
-                servicioKardex.ingresarInventario(detallesKardex,bodega);
-                DialogoCodefac.mensaje("Correcto","Los producto fueron agregados correctamente al kardex",DialogoCodefac.MENSAJE_CORRECTO);
-            //} 
-            //catch (ServicioCodefacException ex) 
-            //{
-            //    DialogoCodefac.mensaje("Incorrecto","No se pudo agregar los productos al inventario",DialogoCodefac.MENSAJE_INCORRECTO);
-            //    Logger.getLogger(IngresoInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
-            //    throw new ExcepcionCodefacLite("Cancelar grabar");
-            } catch (RemoteException ex) {
-                Logger.getLogger(IngresoInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
-                throw new ExcepcionCodefacLite("Cancelar grabar");
-            } catch (ServicioCodefacException ex) {
-                Logger.getLogger(IngresoInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        else
-        {
-            throw new ExcepcionCodefacLite("Error al validar");
-        }
-        
-    }
-    
-    /**
-     * Validar los items del kardex que este ingresado el codigo especifico
-     * @return 
-     */
-    private boolean validarItems()
-    {
-        boolean validado=true;
-        
-        List<CompraDetalle> detalles= compraInventario.getDetalles();
-        
-        for (Map.Entry<KardexDetalle, CompraDetalle> entry : detallesKardex.entrySet()) {
-            KardexDetalle key = entry.getKey();
-            CompraDetalle value = entry.getValue();
+        try {
+            int datosNoSeleccionados=generarKardexDetalleSeleccionados();
             
-            //Verificar que existan detalles
-            if(key.getDetallesEspecificos()!=null)
+            if(datosNoSeleccionados>0)
             {
-                for(KardexItemEspecifico item: key.getDetallesEspecificos())
-                {
-                    //Verificar que los detalles ingresados tengan un codigo especifico del prodcto para contralar el inventario
-                    if(item.getCodigoEspecifico().equals(""))
+                boolean respuesta=DialogoCodefac.dialogoPregunta("Advertencia","Hay datos que no esta seleccionados para el ingreso. \nDesea continuar de todos modos?",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    if(!respuesta)
                     {
-                        DialogoCodefac.mensaje("Error Validación","El producto "+value.getProductoProveedor().getProducto().getNombre()+" requiere un código individual",DialogoCodefac.MENSAJE_ADVERTENCIA);                    
-                        validado=false;
-                        break;
+                        throw new  ExcepcionCodefacLite("Cancelado por el usuario");
                     }
-                }
-            }            
+            }
+            
+            if (validarKardexGrabar()) //Validación para ver que todos los datos esten ingresados para grabar
+            {
+                ServiceFactory.getFactory().getKardexServiceIf().ingresarInventario(detallesKardexFinal);
+                DialogoCodefac.mensaje("Correcto", "El producto fue ingresado correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+            }
+            else
+            {
+                throw new ExcepcionCodefacLite("Cancelado guardar por el usuario");
+            }
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(IngresoInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            ex.printStackTrace();
+            DialogoCodefac.mensaje("Error", ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+            throw new ExcepcionCodefacLite("Cancelado guardar por el usuario");
         }
 
-        return validado;        
-    }
+    }   
     
     @Override
     public void editar() throws ExcepcionCodefacLite {
@@ -186,8 +160,15 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
 
     @Override
     public void limpiar() {
-        limpiarVariables();
-        limpiarVentana();
+      getTblCompra().setModel(new DefaultTableModel());
+      getTblGarantiaProductos().setModel(new DefaultTableModel());
+      getTxtCompraSeleccionada().setText("");
+      crearCabeceraComboBox();
+      getCmbFechaIngreso().setDate(new Date());
+      compraInventario=null;
+      detallesKardex=null;
+      detallesKardexFinal=null;
+      
     }
 
 //    @Override
@@ -217,45 +198,63 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    private void agregarListenerBotones() {
+  
+    @Override
+    public BuscarDialogoModel obtenerDialogoBusqueda() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void cargarDatosPantalla(Object entidad) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void listenerBotones() {
         getBtnBuscarCompraPendiente().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                limpiar();
                 CompraBusquedaDialogo buscarBusquedaDialogo = new CompraBusquedaDialogo();
                 BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
                 buscarDialogo.setVisible(true);
                 compraInventario = (Compra) buscarDialogo.getResultado();
                 if (compraInventario != null) {
-                    String preimpreso=compraInventario.getPreimpreso();
-                    String proveedor =compraInventario.getProveedor().getRazonSocial();
-                    getTxtCompraSeleccionada().setText(preimpreso+" - "+proveedor);
+                    //Imprimir un formato el campo de texto para saber cual es la compra seleccionada
+                    String preimpreso = compraInventario.getPreimpreso();
+                    String proveedor = compraInventario.getProveedor().getRazonSocial();
+                    getTxtCompraSeleccionada().setText(preimpreso + " - " + proveedor);
+                    
                     cargarKardexDetalleCompra();
-                    actualizarTablaComprasPendientes();
+                    construirTablaDetalleCompra();
                 }
-                
             }
         });
-        
     }
     
+    /**
+     * Crear los detalles de los kardex individuales 
+     */
     private void cargarKardexDetalleCompra()
     {
-         List<CompraDetalle> detalles=compraInventario.getDetalles();
+        detallesKardex=new HashMap<KardexDetalleTmp,CompraDetalle>();
+         
+        List<CompraDetalle> detalles=compraInventario.getDetalles();
         for (CompraDetalle detalle : detalles) {
-            KardexDetalle kardexDetalle = new KardexDetalle();
+            KardexDetalleTmp kardexDetalle = new KardexDetalleTmp();
             kardexDetalle.setCantidad(detalle.getCantidad());
             kardexDetalle.setCodigoTipoDocumento(compraInventario.getCodigoTipoDocumento());
             kardexDetalle.setReferenciaDocumentoId(compraInventario.getId());
             kardexDetalle.setPrecioUnitario(detalle.getPrecioUnitario());
             kardexDetalle.setPrecioTotal(detalle.getTotal());
+            kardexDetalle.setFechaIngreso(UtilidadesFecha.getFechaHoy()); //Setear por defecto con la fecha de hoy
+            kardexDetalle.seleccion=true;
                                     
             if (detalle.getProductoProveedor().getProducto().getGarantiaEnum().equals(EnumSiNo.SI)) {
                 for (int i = 0; i < detalle.getCantidad(); i++) {
-                    KardexItemEspecifico item=new KardexItemEspecifico();
+                    KardexItemEspecificoTemp item=new KardexItemEspecificoTemp();
                     item.setCodigoEspecifico("");
-                    item.setEstado("a");
+                    item.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
                     item.setObservaciones("");
+                    item.seleccion=true;
                     kardexDetalle.addDetalle(item);
                 }
             }
@@ -267,213 +266,455 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
         
     }
     
-    private void actualizarTablaComprasPendientes()
+    private void construirTablaDetalleCompra()
     {
-        String titulo[]={"Bodega","Fecha","Cantidad","Descripcion","Costo Unitario","Costo Total","garantia","Codigo Unitario","Observacion Kardex"};
+        Date fechaPorDefecto=getCmbFechaIngreso().getDate();
         
+        String titulo[]={"","Ingresar","Bodega","Fecha","Descripcion","Cantidad","Costo Unitario","Costo Total","garantia"};        
         Class clases[] = {
+            KardexDetalleTmp.class,
+            Boolean.class,
             Bodega.class,
             Date.class,
             String.class,
             String.class,
             String.class,
             String.class,
-            String.class,
-            String.class,
             String.class};
-
-        //DefaultTableModel modelTable=new DefaultTableModel(titulo,0);
-        DefaultTableModel modelTable=UtilidadesTablas.crearModeloTabla(titulo,clases,new Boolean[]{true,false,false,false,false,false,false});
         
-        for (Map.Entry<KardexDetalle, CompraDetalle> entry : detallesKardex.entrySet()) 
+        DefaultTableModel modelTable=UtilidadesTablas.crearModeloTabla(titulo,clases,new Boolean[]{false,true,true,false,false,false,false,false,false});
+        
+        //Agregar los detalles a la tabla principal
+        if(detallesKardex!=null)
         {
-            KardexDetalle kardexDetalle = entry.getKey();
-            CompraDetalle compraDetalle = entry.getValue();
-            
-            List<KardexItemEspecifico> detallesItem=kardexDetalle.getDetallesEspecificos();
-            if(detallesItem==null)
+            for (Map.Entry<KardexDetalleTmp, CompraDetalle> entry : detallesKardex.entrySet()) 
             {
-                Vector<Object> vector = new Vector<Object>();
-                vector.add(null);
-                vector.add(getCmbFechaIngreso().getDate());
-                vector.add(compraDetalle.getCantidad() + "");
-                vector.add(compraDetalle.getDescripcion() + "");
-                vector.add(compraDetalle.getPrecioUnitario() + "");
-                vector.add(compraDetalle.getTotal() + "");
-                vector.add(compraDetalle.getProductoProveedor().getProducto().getGarantiaEnum().getNombre() + "");
-                vector.add("");
-                vector.add("");
-                modelTable.addRow(vector);                
-            }
-            else
-            {                
-                for (int i = 0; i <detallesItem.size() ; i++) {
-                    Vector<Object> vector = new Vector<Object>();
-                    vector.add(null);
-                    vector.add(getCmbFechaIngreso().getDate());
-                    vector.add("1");
-                    vector.add(compraDetalle.getDescripcion() + "");
-                    vector.add(compraDetalle.getPrecioUnitario() + "");
-                    vector.add(compraDetalle.getPrecioUnitario() + "");
-                    vector.add(compraDetalle.getProductoProveedor().getProducto().getGarantiaEnum().getNombre() + "");
-                    vector.add("");
-                    vector.add("");
-                    modelTable.addRow(vector);
-                    
-                }
-                
+                KardexDetalleTmp kardexDetalle = entry.getKey();
+                CompraDetalle compraDetalle = entry.getValue();
+
+                Object[] fila={
+                    kardexDetalle,
+                    kardexDetalle.seleccion,
+                    kardexDetalle.bodega,
+                    kardexDetalle.getFechaIngreso(),
+                    compraDetalle.getDescripcion(),
+                    kardexDetalle.getCantidad(),
+                    kardexDetalle.getPrecioUnitario(),
+                    kardexDetalle.getPrecioTotal(),
+                    compraDetalle.getProductoProveedor().getProducto().getGarantiaEnum().getNombre()
+                };
+
+                modelTable.addRow(fila);
             }
         }
         
-        getTblTblCompra().setModel(modelTable);
-        //Bloquear columnas que no se pueden editar
-        UtilidadesTablas.cambiarTipoColumna(getTblTblCompra(),COLUMNA_BODEGA,cmbBodegaSeleccion);
-        //UtilidadesTablas.cambiarTipoColumna(getTblTblCompra(), COLUMNA_GARANTIA,);
-        //UtilidadesTablas.cambiarTipoColumna(getTblTblCompra(),COLUMNA_CANTIDAD,new JTextField());
-        Map<Integer,Integer> mapTamaniosTabla=new HashMap<Integer,Integer>();
-        mapTamaniosTabla.put(COLUMNA_CANTIDAD, 20);
-        mapTamaniosTabla.put(COLUMNA_FECHA, 30);
-        mapTamaniosTabla.put(COLUMNA_GARANTIA, 10);
+        getTblCompra().setModel(modelTable);
         
-        UtilidadesTablas.definirTamanioColumnasPorMap(getTblTblCompra(),mapTamaniosTabla);
+        //Ocultar la primera columna
+        UtilidadesTablas.ocultarColumna(getTblCompra(),0);
         
-    }
+        Map<Integer, Integer> mapTamaniosTabla = new HashMap<Integer, Integer>();
+        //mapTamaniosTabla.put(ColumnaDetalleCompraEnum.COLUMNA_INGRESAR.numero, 1);
+        //mapTamaniosTabla.put(ColumnaDetalleCompraEnum.COLUMNA_CANTIDAD.numero, 1);
+        //mapTamaniosTabla.put(ColumnaDetalleCompraEnum.COLUMNA_COSTO_UNITARIO.numero, 1);
+        //mapTamaniosTabla.put(ColumnaDetalleCompraEnum.COLUMNA_COSTO_TOTAL.numero, 1);
+        //mapTamaniosTabla.put(3, 150);
+        //mapTamaniosTabla.put(ColumnaDetalleCompraEnum.COLUMNA_FECHA.numero, 10);
+        //mapTamaniosTabla.put(ColumnaDetalleCompraEnum.COLUMNA_GARANTIA.numero, 1);
 
-    private void agregarListenerCombos() {
-        getCmbBodega().addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                if(getCmbBodega().getSelectedIndex()>=0)
-                {
-                    Bodega bodegaDefecto=(Bodega) getCmbBodega().getSelectedItem();
-                    DefaultTableModel modeloTabla=(DefaultTableModel) getTblTblCompra().getModel();
-                    
-                    for (int i = 0; i <modeloTabla.getRowCount(); i++) {
-                        modeloTabla.setValueAt(bodegaDefecto, i,COLUMNA_BODEGA);
-                    }
-                    
-                }
-            }
-        });
+        
+        UtilidadesTablas.definirTamanioColumnasPorMap(getTblCompra(),mapTamaniosTabla);
+        
+        //Modificado campo para poder agregar las bodegas como combobox en las tablas
+        UtilidadesTablas.cambiarTipoColumna(getTblCompra(),ColumnaDetalleCompraEnum.COLUMNA_BODEGA.numero,cmbBodegaSeleccion);
+        
+        
+        //Agregar listener al modelo
+        modelTable.addTableModelListener(listenerDetalleCompra);
     }
+    
+    
+    
+    private TableModelListener listenerDetalleCompra=new TableModelListener() {
+        @Override
+        public void tableChanged(TableModelEvent e) {
+            
+            int filaModificada=e.getFirstRow();
+            int columnaModificada=e.getColumn();
+            
+            DefaultTableModel tablaModelo=(DefaultTableModel) e.getSource();
+            ColumnaDetalleCompraEnum enumerador=ColumnaDetalleCompraEnum.getEnum(columnaModificada);
+            KardexDetalleTmp kardexDetalle=(KardexDetalleTmp)tablaModelo.getValueAt(filaModificada,ColumnaDetalleCompraEnum.COLUMNA_KARDEX.numero);
+            
+            CompraDetalle compraDetalle=detallesKardex.get(kardexDetalle);
+            
+            if(compraDetalle.getProductoProveedor().getProducto().getGarantiaEnum().equals(EnumSiNo.NO))
+            {
+                switch (enumerador) {
+                    case COLUMNA_INGRESAR:
+                        boolean seleccion=(boolean) tablaModelo.getValueAt(filaModificada,ColumnaDetalleCompraEnum.COLUMNA_INGRESAR.numero);
+                        kardexDetalle.seleccion=seleccion;
+                        break;
+                        
+                    case COLUMNA_BODEGA:
+                        Bodega bodega=(Bodega) tablaModelo.getValueAt(filaModificada,ColumnaDetalleCompraEnum.COLUMNA_BODEGA.numero);
+                        kardexDetalle.bodega=bodega;                        
+                        break;
+
+                    case COLUMNA_FECHA:
+                        java.sql.Date fechaModificada=(java.sql.Date) tablaModelo.getValueAt(filaModificada,ColumnaDetalleCompraEnum.COLUMNA_FECHA.numero);
+                        kardexDetalle.setFechaIngreso(fechaModificada);
+                }
+                        
+            }
+            else
+            {
+                switch (enumerador) {
+                    case COLUMNA_INGRESAR:
+                        boolean seleccion=(boolean) tablaModelo.getValueAt(filaModificada,ColumnaDetalleCompraEnum.COLUMNA_INGRESAR.numero);
+                        cambiarSeleccionItems(kardexDetalle.getDetallesEspecificos(),seleccion);
+                        break;
+                        
+                    case COLUMNA_BODEGA:
+                        Bodega bodega=(Bodega) tablaModelo.getValueAt(filaModificada,ColumnaDetalleCompraEnum.COLUMNA_BODEGA.numero);
+                        kardexDetalle.bodega=bodega;          
+                        construirTablaProductosConGarantia(kardexDetalle);
+                        break;
+                        
+                    case COLUMNA_FECHA:
+                        java.sql.Date fechaModificada = (java.sql.Date) tablaModelo.getValueAt(filaModificada, ColumnaDetalleCompraEnum.COLUMNA_FECHA.numero);
+                        kardexDetalle.setFechaIngreso(fechaModificada);
+                }            
+            }
+            
+            construirTablaProductosConGarantia(kardexDetalle);
+        }
+    };
+    
+    
+    private void cambiarSeleccionItems(List<KardexItemEspecifico> listaItems,boolean seleccion)
+    {
+        if(listaItems!=null)
+        {
+            for (KardexItemEspecifico item : listaItems) {
+                KardexItemEspecificoTemp itemTemp=(KardexItemEspecificoTemp) item;
+                itemTemp.seleccion=seleccion;
+            }
+        }
+    }
+    
+    private void construirTablaProductosConGarantia(KardexDetalle kardexDetalle)
+    {
+
+        String titulo[]={"","Ingresar","Bodega","Observación","CodigoUnitario"};        
+        Class clases[] = {
+            KardexItemEspecificoTemp.class,
+            Boolean.class,
+            Bodega.class,
+            String.class,
+            String.class};
+        
+        DefaultTableModel modelTable=UtilidadesTablas.crearModeloTabla(titulo,clases,new Boolean[]{false,true,true,true,true});
+        
+        if(kardexDetalle.getDetallesEspecificos()!=null)
+        {
+            for (KardexItemEspecifico item : kardexDetalle.getDetallesEspecificos()) {
+                KardexItemEspecificoTemp itemTemp=(KardexItemEspecificoTemp) item;
+                Object[] fila=
+                {
+                    itemTemp,
+                    itemTemp.seleccion,
+                    ((KardexDetalleTmp)item.getKardexDetalle()).bodega,
+                    itemTemp.getObservaciones(),
+                    itemTemp.getCodigoEspecifico()
+                };
+                modelTable.addRow(fila);
+            }
+        }
+        
+        getTblGarantiaProductos().setModel(modelTable);       
+        
+        //Ocultar la primera columna
+        UtilidadesTablas.ocultarColumna(getTblGarantiaProductos(),0);
+        
+        //Modificado campo para poder agregar las bodegas como combobox en las tablas
+        UtilidadesTablas.cambiarTipoColumna(getTblGarantiaProductos(),ColumnaGarantiaEnum.COLUMNA_BODEGA.numero,cmbBodegaSeleccion);
+        
+        modelTable.addTableModelListener(listenerGarantiaCompra);
+    }
+    
+        
+    private TableModelListener listenerGarantiaCompra=new TableModelListener() {
+        @Override
+        public void tableChanged(TableModelEvent e) {
+            
+            int filaModificada=e.getFirstRow();
+            int columnaModificada=e.getColumn();
+            
+            DefaultTableModel tablaModelo=(DefaultTableModel) e.getSource();
+            ColumnaGarantiaEnum enumerador=ColumnaGarantiaEnum.getEnum(columnaModificada);
+            KardexItemEspecificoTemp kardexItem=(KardexItemEspecificoTemp)tablaModelo.getValueAt(filaModificada,ColumnaGarantiaEnum.COLUMNA_ITEM.numero);
+            
+            switch(enumerador)
+            {
+                case COLUMNA_INGRESAR:
+                    boolean seleccion=(boolean) tablaModelo.getValueAt(filaModificada,columnaModificada);
+                    kardexItem.seleccion=seleccion;
+                    //recalcularCantidadKardexDetalle(kardexItem);
+                    //System.out.println("seteado ingreso");
+                    break;
+                
+                case COLUMNA_BODEGA:
+                    Bodega bodega=(Bodega) tablaModelo.getValueAt(filaModificada,columnaModificada);
+                    cambiarEstadoBodegaItemGarantia(kardexItem,bodega);
+                    //TODO:falta implementar para guardar el campo bodega
+                    break;
+                    
+                case COLUMNA_CODIGO_UNITARIO:
+                    String codigoUnitario= tablaModelo.getValueAt(filaModificada,columnaModificada).toString();
+                    kardexItem.setCodigoEspecifico(codigoUnitario);
+                    System.out.println("seteado codigo unitario");
+                    break;
+                    
+                case COLUMNA_OBSERVACION:
+                    String observacion= tablaModelo.getValueAt(filaModificada,columnaModificada).toString();
+                    kardexItem.setObservaciones(observacion);
+                    System.out.println("seteado observacion");
+                    break;
+                
+            }
+        }
+    };
+    
+    private void recalcularCantidadKardexDetalle(KardexItemEspecificoTemp item)
+    {
+        KardexDetalle KardexDetalle=item.getKardexDetalle();
+        KardexDetalle.recalcularTotal();
+    }
+    
+    
+    private void cambiarEstadoBodegaItemGarantia(KardexItemEspecifico kardexItemEspecifico,Bodega bodega)
+    {
+        CompraDetalle compraDetalleTemp=detallesKardex.get(kardexItemEspecifico.getKardexDetalle());
+        
+        KardexDetalle kardeDetalleBuscando=null;
+        for (Map.Entry<KardexDetalleTmp, CompraDetalle> entry : detallesKardex.entrySet()) 
+        {
+            KardexDetalleTmp kardexDetalle = entry.getKey();
+            CompraDetalle compraDetalle = entry.getValue();
+        
+            //Buscar si existe una kardex detalle con la bodega y el producto correcto
+            if(kardexDetalle.bodega==bodega && compraDetalleTemp.equals(compraDetalle))
+            {
+                kardeDetalleBuscando=kardexDetalle;
+                        break;
+            }
+        
+        }
+        
+        ////<---------- Agregar el item especifico al nuevo kardex detalle o si no existe lo creo <-------------///
+        if(kardeDetalleBuscando!=null)
+        {
+            //Si pertenece a otro kardex detalle elimino del primero y agrego al segundo
+            if(!kardeDetalleBuscando.equals(kardexItemEspecifico.getKardexDetalle()))
+            {
+               intercambiarItemsKardex(kardexItemEspecifico,kardeDetalleBuscando);
+            }
+            //Si la referencia del kardex detalle es el mismo no hago nada
+        }
+        else
+        {
+            try {
+                KardexDetalle nuevoKardexDetalle=(KardexDetalle) kardexItemEspecifico.getKardexDetalle().clone(); //Copiar un nuevo kardex detalle
+                nuevoKardexDetalle.setDetallesEspecificos(new ArrayList<KardexItemEspecifico>());
+                
+                KardexDetalleTmp nuevoKardexDetalleTmp=(KardexDetalleTmp) nuevoKardexDetalle;
+                nuevoKardexDetalleTmp.seleccion=true;
+                nuevoKardexDetalleTmp.bodega=bodega;
+                
+                intercambiarItemsKardex(kardexItemEspecifico,nuevoKardexDetalleTmp);
+                
+                detallesKardex.put(nuevoKardexDetalleTmp,compraDetalleTemp);                
+                
+            } catch (CloneNotSupportedException ex) {
+                Logger.getLogger(IngresoInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
+            }          
+            
+        }
+        construirTablaDetalleCompra();
+    }
+    
+    private void intercambiarItemsKardex(KardexItemEspecifico kardexItemEspecifico, KardexDetalle kardexDetalleNuevo)
+    {
+        //Elimino la referencia del padre actual
+        KardexDetalle kardexDetalleAntiguo=kardexItemEspecifico.getKardexDetalle();
+        kardexDetalleAntiguo.getDetallesEspecificos().remove(kardexItemEspecifico); 
+
+        //Agrego a la nueva referencia al nuevo padre del kardex
+        kardexDetalleNuevo.addDetalle(kardexItemEspecifico);
+        kardexItemEspecifico.setKardexDetalle(kardexDetalleNuevo);
+        
+        /***
+         * RECALCULAR LOS SALDOS DEL KARDEX ANTIGUO Y EL NUEVO 
+         */
+        kardexDetalleAntiguo.setCantidad(kardexDetalleAntiguo.getDetallesEspecificos().size());
+        kardexDetalleAntiguo.recalcularTotal();
+        
+        kardexDetalleNuevo.setCantidad(kardexDetalleNuevo.getDetallesEspecificos().size());
+        kardexDetalleNuevo.recalcularTotal();
+        
+        /**
+         * VERIFICAR SI SE TIENE QUE ELIMINAR EL DETALLE KARDEX ANTIGUO SI YA NO TIENE ITEMS
+         */
+        
+        if(kardexDetalleAntiguo.getDetallesEspecificos().size()==0)
+        {
+            detallesKardex.remove(kardexDetalleAntiguo);
+        }
+        
+    }
+    
 
     private void valoresIniciales() {
-        try {            
+        getCmbFechaIngreso().setDate(new Date());
+        
+        try {
             //crear el combo box de las opciones de seleccion de la tabla
             cmbBodegaSeleccion = new JComboBox<Bodega>();
-            
+
             getCmbBodega().removeAllItems();
-            BodegaServiceIf servicioBodega=ServiceFactory.getFactory().getBodegaServiceIf();
-            List<Bodega> bodegas=servicioBodega.obtenerTodos();
+            BodegaServiceIf servicioBodega = ServiceFactory.getFactory().getBodegaServiceIf();
+            List<Bodega> bodegas = servicioBodega.obtenerTodos();
             for (Bodega bodega : bodegas) {
                 getCmbBodega().addItem(bodega);
                 cmbBodegaSeleccion.addItem(bodega); //Combo para la seleccion de la tabla
             }
-            
+
             //No seleccionar ninguna opcion del combo box por defecto
             crearCabeceraComboBox();
-            
-            /**
-             * Crear los valores del combo del enum de si o no para ver si quieren manejar garantia
-             */
-            cmbSiNo=new JComboBox<EnumSiNo>();
-            cmbSiNo.addItem(EnumSiNo.NO);
-            cmbSiNo.addItem(EnumSiNo.SI);
-            
-            
+
         } catch (RemoteException ex) {
             Logger.getLogger(IngresoInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-
     }
 
-    /**
-     * Metodo que limpia las variables internas
-     */
-    private void limpiarVariables() {
-        this.detallesKardex=new HashMap<KardexDetalle,CompraDetalle>();
-        compraInventario=null;
-    }
-
-    /**
-     * Setea los valores de la tabla al Kardex
-     */
-    private void setearValoresKardex() {
-        int filaTabla=0;
-         for (Map.Entry<KardexDetalle, CompraDetalle> entry : detallesKardex.entrySet()) 
-        {
-            KardexDetalle kardexDetalle = entry.getKey();
-            CompraDetalle compraDetalle = entry.getValue();
-            
-            List<KardexItemEspecifico> detallesItem=kardexDetalle.getDetallesEspecificos();
-            if(detallesItem==null)
-            {
-                //TODO: Verificar si por algun motivo se puede modificar los datos normales de la compra detalles
-                String codigoUnitario=getTblTblCompra().getModel().getValueAt(filaTabla,COLUMNA_CODIGO_UNITARIO).toString();
-                String observacionKardex=getTblTblCompra().getModel().getValueAt(filaTabla,COLUMNA_OBSERVACION_KARDEX).toString();                            
-                filaTabla++;
-            }
-            else
-            {                
-                for (int i = 0; i <detallesItem.size() ; i++) {
-                    
-                    //TODO: Verificar si por algun motivo se puede modificar los datos normales de la compra detalles
-                    String codigoUnitario = getTblTblCompra().getModel().getValueAt(filaTabla, COLUMNA_CODIGO_UNITARIO).toString();
-                    String observacionKardex = getTblTblCompra().getModel().getValueAt(filaTabla, COLUMNA_OBSERVACION_KARDEX).toString();  
-                    KardexItemEspecifico kardexEspecifico= detallesItem.get(i);
-                    kardexEspecifico.setCodigoEspecifico(codigoUnitario);
-                    kardexEspecifico.setObservaciones(observacionKardex);
-                    filaTabla++;                                        
-                }
-                
-            }
-        }
-    }
-
-    @Override
-    public BuscarDialogoModel obtenerDialogoBusqueda() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void cargarDatosPantalla(Object entidad) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private void limpiarVentana() {
-        getCmbFechaIngreso().setDate(new Date());
-        crearCabeceraComboBox();
-        //getCmbBodega().setSelectedIndex(-1);
-        getTxtCompraSeleccionada().setText("");
-        getTblTblCompra().setModel(new DefaultTableModel());
-    }
     
     private void crearCabeceraComboBox()
     {
         UtilidadesComboBox.crearCabeceraComboBox(getCmbBodega(),"Seleccione una bodega :");        
     }
 
-    private void agregarPopUps() {
+    private void listenerTablas() {
+        getTblCompra().addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int filaSeleccionado=getTblCompra().getSelectedRow();
+                
+                if(filaSeleccionado>=0)
+                {
+                    DefaultTableModel modeloTabla=(DefaultTableModel) getTblCompra().getModel();
+                    KardexDetalle kardexDetalle=(KardexDetalle) modeloTabla.getValueAt(filaSeleccionado,ColumnaDetalleCompraEnum.COLUMNA_KARDEX.numero);
+                    construirTablaProductosConGarantia(kardexDetalle);
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
+    }
+
+    private void listenerCombos() {
+        
+        //Seleccionar todos los productos con la bodega por defecto
+        
+        getCmbBodega().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                //Validacion para evitar que no ingrese cuando no esta seleccionado una bodega
+                if(getCmbBodega().getSelectedIndex()<0)
+                {
+                    return ;
+                }
+                
+                Bodega bodegaSeleccionada=(Bodega) getCmbBodega().getSelectedItem();
+                
+                
+                //Acceder solo si selecciona una bodega
+                if(bodegaSeleccionada!=null && detallesKardex!=null)
+                {
+                    for (Map.Entry<KardexDetalleTmp, CompraDetalle> entry : detallesKardex.entrySet()) {
+                        KardexDetalleTmp kardexDetalle = entry.getKey();
+                        //CompraDetalle compraDetalle = entry.getValue();
+                        kardexDetalle.bodega=bodegaSeleccionada;
+
+                    }
+                    construirTablaDetalleCompra();
+                
+                }
+                
+               
+            }
+        });
+        
+        getCmbFechaIngreso().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Date fechaSeleccionada=getCmbFechaIngreso().getDate();
+                //Acceder solo si selecciona una bodega
+                if(fechaSeleccionada!=null && detallesKardex!=null)
+                {
+                    for (Map.Entry<KardexDetalleTmp, CompraDetalle> entry : detallesKardex.entrySet()) {
+                        KardexDetalleTmp kardexDetalle = entry.getKey();
+                        //CompraDetalle compraDetalle = entry.getValue();
+                        kardexDetalle.setFechaIngreso(new java.sql.Date(fechaSeleccionada.getTime()));
+
+                    }
+                    construirTablaDetalleCompra();
+                
+                }
+            }
+        });
+        
+
+    }
+    
+    private void agregarPopUps() 
+    {
         JPopupMenu jpopMenu=new JPopupMenu();
         JMenuItem menuItem=new JMenuItem("Cambiar Fecha");
         
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int filaSeleccionada=getTblTblCompra().getSelectedRow();
+                                
+                int filaSeleccionada=getTblCompra().getSelectedRow();
                 
                 if(filaSeleccionada>=0)
                 {
-                    DefaultTableModel modeloTabla=(DefaultTableModel) getTblTblCompra().getModel();
+                    DefaultTableModel modeloTabla=(DefaultTableModel) getTblCompra().getModel();
                     DialogoFecha dialogoFecha = new DialogoFecha();
                     dialogoFecha.setVisible(true);
                     
                     if (dialogoFecha.getFechaResultado()!=null) 
                     {
-                        //System.out.println(COLUMNA_FECHA+"<---");
-                        modeloTabla.setValueAt(dialogoFecha.getFechaResultado(),filaSeleccionada,COLUMNA_FECHA);
-                        //System.out.println("seteado fecha nueva");
+                        java.sql.Date fechaNueva=new java.sql.Date(dialogoFecha.getFechaResultado().getTime());
+                        //KardexDetalle kardexDetalle=(KardexDetalle) modeloTabla.getValueAt(filaSeleccionada,ColumnaDetalleCompraEnum.COLUMNA_KARDEX.numero);
+                        //kardexDetalle.setFechaIngreso(fechaNueva);
+                        
+                        modeloTabla.setValueAt(fechaNueva, filaSeleccionada, ColumnaDetalleCompraEnum.COLUMNA_FECHA.numero);
+                        
                     }
                 }
                 else
@@ -484,23 +725,182 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
         });
         
         jpopMenu.add(menuItem);
-        getTblTblCompra().setComponentPopupMenu(jpopMenu);
+        getTblCompra().setComponentPopupMenu(jpopMenu);
         
         
-    }
-
-    private void agregarListenerDatos() {
-        getCmbFechaIngreso().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                DefaultTableModel modeloTabla=(DefaultTableModel) getTblTblCompra().getModel();
-                Date fechaDefecto=getCmbFechaIngreso().getDate();
-                for (int i = 0; i < modeloTabla.getRowCount(); i++) {
-                    modeloTabla.setValueAt(fechaDefecto,i,COLUMNA_FECHA);
-                }
-            }
-        });
     }
     
+    /**
+     * Funcion que me permite generar solo los detalles del kardex seleccionados
+     * @return devuelve el numero de items no seleccionados
+     */
+    private int generarKardexDetalleSeleccionados()
+    {
+        int datosEliminados=0; //TODO: Optimizar como contar los datos eliminados porque por ejemplo en los productos que tienen garantia solo debe contar una vez por los detalles especificos
+        detallesKardexFinal=new ArrayList<KardexDetalle>();
+        
+        for (Map.Entry<KardexDetalleTmp, CompraDetalle> entry : detallesKardex.entrySet()) {
+            KardexDetalleTmp kardexDetalle = entry.getKey();
+            CompraDetalle compraDetalle = entry.getValue();
+            
+            //Solo agregar los detalles seleccionados
+            if(kardexDetalle.seleccion)
+            {
+                //Crear una variable referencial de tipo Kardex para que sepa la bodega y el producto que esta relacionado este producto
+                //TODO: Esta no parece ser la mejor manera pero es un artificio que me ahorra mucha programacion adicional
+                
+                Kardex kardex=new Kardex();
+                kardex.setBodega(kardexDetalle.bodega);
+                kardex.setProducto(compraDetalle.getProductoProveedor().getProducto());
+                
+                KardexDetalle kardexDetalleNuevo=kardexDetalle.obtenerObjetoOriginal();                
+                kardexDetalleNuevo.setKardex(kardex);
+                
+               detallesKardexFinal.add(kardexDetalleNuevo);
+                
+                //Si existen mas items especificos los guardo
+                if(kardexDetalle.getDetallesEspecificos()!=null && kardexDetalle.getDetallesEspecificos().size()>0)
+                {
+                    ArrayList<KardexItemEspecifico> detalleItemsNuevo=new ArrayList<KardexItemEspecifico>();
+                    for (KardexItemEspecifico item : kardexDetalle.getDetallesEspecificos()) {
+                        KardexItemEspecificoTemp itemTemp=(KardexItemEspecificoTemp) item;
+                        
+                        if(itemTemp.seleccion)
+                        {
+                            KardexItemEspecifico itemNuevo=itemTemp.obtenerObjetoOriginal();
+                            itemNuevo.setKardexDetalle(kardexDetalleNuevo); //Seteado el objeto nuevo                            
+                            detalleItemsNuevo.add(itemNuevo);
+                            
+                        }
+                        else
+                        {
+                            datosEliminados++;
+                        }
+                    }
+                    
+                    kardexDetalleNuevo.setDetallesEspecificos(detalleItemsNuevo);
+                    kardexDetalleNuevo.recalcularTotal();
+                    
+                }
+            }
+            else
+            {
+                datosEliminados++;
+            }
+
+        }
+        return datosEliminados;
+    }
+    
+    /**
+     * Validacion para saber si todos los datos necesarios para grabar fueron ingresados
+     * @return 
+     */
+    private boolean validarKardexGrabar()
+    {
+        if(detallesKardexFinal==null || detallesKardexFinal.size()==0)
+        {
+            DialogoCodefac.mensaje("Error","No se puede ingresar porque no existen detalles",DialogoCodefac.MENSAJE_INCORRECTO);
+            return false;
+        }
+        
+        for (KardexDetalle kardexDetalle : detallesKardexFinal) {
+            
+            
+            if(kardexDetalle.getFechaIngreso()==null)
+            {
+                DialogoCodefac.mensaje("Error Validar","Ingrese la fecha para el producto "+kardexDetalle.getKardex().getProducto().getNombre(),DialogoCodefac.MENSAJE_INCORRECTO);
+                return false;
+            }
+            
+            if(kardexDetalle.getKardex().getBodega()==null)
+            {
+                DialogoCodefac.mensaje("Error Validar","Ingrese la bodega para el producto "+kardexDetalle.getKardex().getProducto().getNombre(),DialogoCodefac.MENSAJE_INCORRECTO);
+                return false;
+            }
+            
+            //Validacion cuando son productos con garantia
+            if(kardexDetalle.getDetallesEspecificos()!=null)
+            {
+                for (KardexItemEspecifico itemEspecifico : kardexDetalle.getDetallesEspecificos()) {
+                    
+                    
+                    if(itemEspecifico.getCodigoEspecifico().equals(""))
+                    {
+                        DialogoCodefac.mensaje("Error Validacion","Ingrese el codigo del producto especifico "+kardexDetalle.getKardex().getProducto().getNombre(),DialogoCodefac.MENSAJE_INCORRECTO);                
+                        return false;
+                    }
+                    
+                    
+                }
+            }
+            
+        }
+        
+        return true;
+    }
+
+    
+    public enum ColumnaDetalleCompraEnum
+    {
+        COLUMNA_KARDEX(0),
+        COLUMNA_INGRESAR(COLUMNA_KARDEX.numero+1),
+        COLUMNA_BODEGA(COLUMNA_INGRESAR.numero+1),
+        COLUMNA_FECHA(COLUMNA_BODEGA.numero+1),
+        COLUMNA_CANTIDAD(COLUMNA_FECHA.numero+1),
+        COLUMNA_DESCRIPCION(COLUMNA_CANTIDAD.numero+1),
+        COLUMNA_COSTO_UNITARIO(COLUMNA_DESCRIPCION.numero+1),
+        COLUMNA_COSTO_TOTAL(COLUMNA_COSTO_UNITARIO.numero+1),
+        COLUMNA_GARANTIA(COLUMNA_COSTO_TOTAL.numero+1)
+        ;
+
+        private ColumnaDetalleCompraEnum(int numero) {
+            this.numero = numero;
+        }       
+    
+        public int numero;
+        
+        public static ColumnaDetalleCompraEnum getEnum(int numero)
+        {
+            for (ColumnaDetalleCompraEnum value : ColumnaDetalleCompraEnum.values()) 
+            {
+                if(value.numero==numero)
+                {
+                    return value;
+                }
+            }
+            return null;
+        }
+    }
+    
+    public enum ColumnaGarantiaEnum
+    {
+        COLUMNA_ITEM(0),
+        COLUMNA_INGRESAR(COLUMNA_ITEM.numero+1),
+        COLUMNA_BODEGA(COLUMNA_INGRESAR.numero+1),
+        COLUMNA_OBSERVACION(COLUMNA_BODEGA.numero+1),
+        COLUMNA_CODIGO_UNITARIO(COLUMNA_OBSERVACION.numero+1);
+
+        private ColumnaGarantiaEnum(int numero) {
+            this.numero = numero;
+        }       
+    
+        public int numero;
+        
+        public static ColumnaGarantiaEnum getEnum(int numero)
+        {
+            for (ColumnaGarantiaEnum value : ColumnaGarantiaEnum.values()) 
+            {
+                if(value.numero==numero)
+                {
+                    return value;
+                }
+            }
+            return null;
+        }
+    }
+    
+        
+   
 }
 

@@ -28,7 +28,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "KARDEX_DETALLE")
-public class KardexDetalle implements Serializable {
+public class KardexDetalle implements Serializable ,Cloneable {
 
     @Id
     @Column(name = "ID")
@@ -176,9 +176,23 @@ public class KardexDetalle implements Serializable {
         
     }
     
+    public void recalcularTotal()
+    {
+        this.cantidad=(getDetallesEspecificos()!=null)?getDetallesEspecificos().size():0;
+        this.precioTotal=precioUnitario.multiply(new BigDecimal(cantidad));
+    }
+    
+    
     public TipoDocumentoEnum getCodigoTipoDocumentoEnum()
     {
         return TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(codigoTipoDocumento);
     }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone(); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
     
 }

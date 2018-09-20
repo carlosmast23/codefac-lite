@@ -42,7 +42,7 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
         txtCompraSeleccionada = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblTblCompra = new javax.swing.JTable();
+        tblCompra = new javax.swing.JTable();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
@@ -50,6 +50,12 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
         btnBuscarCompraPendiente = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         cmbFechaIngreso = new org.jdesktop.swingx.JXDatePicker();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblGarantiaProductos = new javax.swing.JTable();
+        lblEspacio2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
 
         setClosable(true);
         setIconifiable(true);
@@ -79,17 +85,17 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel4.setText("Fecha Ingreso por defecto:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel4, gridBagConstraints);
 
-        jScrollPane1.setViewportView(tblTblCompra);
+        jScrollPane1.setViewportView(tblCompra);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
@@ -100,16 +106,16 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel10.setText("Total:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel10, gridBagConstraints);
 
         jLabel11.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel11, gridBagConstraints);
@@ -145,10 +151,57 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
         gridBagConstraints.weightx = 0.2;
         getContentPane().add(jLabel2, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         getContentPane().add(cmbFechaIngreso, gridBagConstraints);
+
+        jScrollPane2.setViewportView(tblGarantiaProductos);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jScrollPane2, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        getContentPane().add(lblEspacio2, gridBagConstraints);
+
+        jLabel3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel3.setText("Detalles de la Compra");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
+        getContentPane().add(jLabel3, gridBagConstraints);
+
+        jLabel5.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel5.setText("Productos con Garantia");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
+        getContentPane().add(jLabel5, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 8;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(25, 5, 5, 5);
+        getContentPane().add(jSeparator1, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -163,9 +216,15 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblTblCompra;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JLabel lblEspacio2;
+    private javax.swing.JTable tblCompra;
+    private javax.swing.JTable tblGarantiaProductos;
     private javax.swing.JTextField txtCompraSeleccionada;
     // End of variables declaration//GEN-END:variables
 
@@ -185,12 +244,12 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
         this.txtCompraSeleccionada = txtCompraSeleccionada;
     }
 
-    public JTable getTblTblCompra() {
-        return tblTblCompra;
+    public JTable getTblCompra() {
+        return tblCompra;
     }
 
-    public void setTblTblCompra(JTable tblTblCompra) {
-        this.tblTblCompra = tblTblCompra;
+    public void setTblCompra(JTable tblCompra) {
+        this.tblCompra = tblCompra;
     }
 
     public JComboBox<Bodega> getCmbBodega() {
@@ -209,6 +268,15 @@ public abstract class IngresoInventarioPanel extends ControladorCodefacInterface
         this.cmbFechaIngreso = cmbFechaIngreso;
     }
 
+    public JTable getTblGarantiaProductos() {
+        return tblGarantiaProductos;
+    }
+
+    public void setTblGarantiaProductos(JTable tblGarantiaProductos) {
+        this.tblGarantiaProductos = tblGarantiaProductos;
+    }
+
+    
     
     
     
