@@ -6,18 +6,24 @@
 package ec.com.codesoft.codefaclite.inventario.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
+import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.inventario.panel.GestionInventarioPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -54,8 +60,16 @@ public class GestionInventarioModel extends GestionInventarioPanel{
 
     @Override
     public void grabar() throws ExcepcionCodefacLite, RemoteException {
-        //a
-        //ServiceFactory.getFactory().getKardexServiceIf().ingresarInventario(detalles);
+        
+        try {
+            setearVariables();
+            ServiceFactory.getFactory().getKardexServiceIf().ingresarInventario(kardexDetalle);
+            DialogoCodefac.mensaje("Correcto","El proceso de grabo correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(GestionInventarioModel.class.getName()).log(Level.SEVERE, null, ex);
+            DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
+            throw new ExcepcionCodefacLite("Error");
+        }
     }
 
     @Override
@@ -90,7 +104,14 @@ public class GestionInventarioModel extends GestionInventarioPanel{
 
     @Override
     public Map<Integer, Boolean> permisosFormulario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Integer, Boolean> permisos = new HashMap<Integer, Boolean>();
+        permisos.put(GeneralPanelInterface.BOTON_NUEVO, true);
+        permisos.put(GeneralPanelInterface.BOTON_GRABAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_BUSCAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_ELIMINAR, true);
+        permisos.put(GeneralPanelInterface.BOTON_IMPRIMIR, true);
+        permisos.put(GeneralPanelInterface.BOTON_AYUDA, true);
+        return permisos;
     }
 
     @Override
@@ -156,8 +177,18 @@ public class GestionInventarioModel extends GestionInventarioPanel{
     {
         kardexDetalle=new KardexDetalle();
         kardexDetalle.setCantidad(Integer.parseInt(getTxtCantidad().getText()));
-        //kardexDetalle.getCo
-        //kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.);
+        kardexDetalle.setPrecioUnitario(new BigDecimal(getTxtPrecio().getText()));
+        kardexDetalle.recalcularTotal();
+        
+        
+        Kardex kardex=new Kardex();
+        
+        Bodega bodegaSeleccionada=(Bodega)getCmbBodega().getSelectedItem();
+        kardex.setBodega(bodegaSeleccionada);
+        kardex.setProducto(productoSeleccionado);
+    
+        kardexDetalle.setKardex(kardex);
+        
     }
     
    

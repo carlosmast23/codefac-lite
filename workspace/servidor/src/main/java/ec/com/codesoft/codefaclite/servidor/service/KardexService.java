@@ -157,6 +157,16 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         }
     }
     
+    public void ingresarInventario(KardexDetalle detalle) throws java.rmi.RemoteException,ServicioCodefacException
+    {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                grabarKardexDetallSinTransaccion(detalle);
+            }
+        });
+    }
+    
     public void ingresarInventario(List<KardexDetalle> detalles) throws java.rmi.RemoteException,ServicioCodefacException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
@@ -164,69 +174,68 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             public void transaccion() throws ServicioCodefacException, RemoteException {
                 
                 for (KardexDetalle detalle : detalles) {
-                    
-                    //Buscar si ya existe el kardex o si no existe los creamos
-                    Map<String, Object> map = new HashMap<String, Object>();
-                    map.put("bodega", detalle.getKardex().getBodega());
-                    map.put("producto", detalle.getKardex().getProducto());
-                    
-                    
-                    List<Kardex> kardexList = obtenerPorMap(map);
-                    
-                    Kardex kardex=null;
-                    if(kardexList==null | kardexList.size()==0)
-                    {
-                        //Si no existe completo los datos para crear el kardex
-                        kardex=detalle.getKardex();
-                        //kardex.setBodega(bodega);
-                        kardex.setFechaCreacion(UtilidadesFecha.getFechaHoy());
-                        kardex.setFechaModificacion(UtilidadesFecha.getFechaHoy());
-                        kardex.setPrecioPromedio(BigDecimal.ZERO);
-                        kardex.setPrecioTotal(BigDecimal.ZERO);
-                        kardex.setPrecioUltimo(BigDecimal.ZERO);
-                        //kardex.setProducto(value.getProductoProveedor().getProducto());
-                        kardex.setStock(0);
-                        kardex.setReserva(0);
-                        em.persist(kardex); //grabando la persistencia
-                    }            
-                    else
-                    {
-                        //Si existe el kardex solo creo
-                        kardex=kardexList.get(0);
-                    }
-                    
-                    detalle.setKardex(kardex);
-                    kardex.addDetalleKardex(detalle);
-                    em.persist(detalle);
-                    //em.persist(kardexDetalle); //grabando el kardex detalle
-
-                    //Esto va a depender del tipo de flujo del inventario es decir para saber si la suma o resta pero por defecto
-                    // el metodo es solo de ingreso asi que no considero el otro caso
-                    kardex.setStock(kardex.getStock() + detalle.getCantidad());
-                    kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(detalle.getPrecioUnitario()).divide(new BigDecimal("2"), 2, RoundingMode.HALF_UP));
-                    kardex.setPrecioTotal(kardex.getPrecioTotal().add(detalle.getPrecioTotal()));
-                    kardex.setPrecioUltimo(detalle.getPrecioUnitario());
-                    kardex = em.merge(kardex);
-                    
-                    //Actualizar la compra de referencia para saber que ya fue ingresada
-                    
-                    switch(detalle.getCodigoTipoDocumentoEnum())
-                    {
-                        case COMPRA_INVENTARIO:
-                            //Actualizar referencia de la compra para que sepa que ya fue ingresado la mercaderia
-                            //TODO:Mejorar esta parte porque esta grabando muchas veces lo mismo cuando hay varios detalles apuntando a la misma compra
-                            CompraService compraService=new CompraService();
-                            Compra compra=compraService.buscarPorId(detalle.getReferenciaDocumentoId());
-                            compra.setInventarioIngreso(EnumSiNo.SI.getLetra());
-                            em.merge(compra);
-                            break;
-                    
-                    }
+                    grabarKardexDetallSinTransaccion(detalle);
                     
                 }
                 
             }
         });
+    }
+    
+    
+    private void grabarKardexDetallSinTransaccion(KardexDetalle detalle) throws RemoteException, RemoteException
+    {
+        //Buscar si ya existe el kardex o si no existe los creamos
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("bodega", detalle.getKardex().getBodega());
+        map.put("producto", detalle.getKardex().getProducto());
+
+        List<Kardex> kardexList = obtenerPorMap(map);
+
+        Kardex kardex = null;
+        if (kardexList == null | kardexList.size() == 0) {
+            //Si no existe completo los datos para crear el kardex
+            kardex = detalle.getKardex();
+            //kardex.setBodega(bodega);
+            kardex.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+            kardex.setFechaModificacion(UtilidadesFecha.getFechaHoy());
+            kardex.setPrecioPromedio(BigDecimal.ZERO);
+            kardex.setPrecioTotal(BigDecimal.ZERO);
+            kardex.setPrecioUltimo(BigDecimal.ZERO);
+            //kardex.setProducto(value.getProductoProveedor().getProducto());
+            kardex.setStock(0);
+            kardex.setReserva(0);
+            em.persist(kardex); //grabando la persistencia
+        } else {
+            //Si existe el kardex solo creo
+            kardex = kardexList.get(0);
+        }
+
+        detalle.setKardex(kardex);
+        kardex.addDetalleKardex(detalle);
+        em.persist(detalle);
+        //em.persist(kardexDetalle); //grabando el kardex detalle
+
+        //Esto va a depender del tipo de flujo del inventario es decir para saber si la suma o resta pero por defecto
+        // el metodo es solo de ingreso asi que no considero el otro caso
+        kardex.setStock(kardex.getStock() + detalle.getCantidad());
+        kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(detalle.getPrecioUnitario()).divide(new BigDecimal("2"), 2, RoundingMode.HALF_UP));
+        kardex.setPrecioTotal(kardex.getPrecioTotal().add(detalle.getPrecioTotal()));
+        kardex.setPrecioUltimo(detalle.getPrecioUnitario());
+        kardex = em.merge(kardex);
+
+        //Actualizar la compra de referencia para saber que ya fue ingresada
+        switch (detalle.getCodigoTipoDocumentoEnum()) {
+            case COMPRA_INVENTARIO:
+                //Actualizar referencia de la compra para que sepa que ya fue ingresado la mercaderia
+                //TODO:Mejorar esta parte porque esta grabando muchas veces lo mismo cuando hay varios detalles apuntando a la misma compra
+                CompraService compraService = new CompraService();
+                Compra compra = compraService.buscarPorId(detalle.getReferenciaDocumentoId());
+                compra.setInventarioIngreso(EnumSiNo.SI.getLetra());
+                em.merge(compra);
+                break;
+
+        }
     }
     
     /**
