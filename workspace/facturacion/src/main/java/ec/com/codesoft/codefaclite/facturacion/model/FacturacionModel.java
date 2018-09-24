@@ -813,7 +813,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             factura=servicio.grabar(factura);
             
             facturaProcesando = factura;
-
+            
             
             //Si la factura en manual no continua el proceso de facturacion electronica
             if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(ComprobanteEntity.TipoEmisionEnum.NORMAL.getLetra()))

@@ -7,8 +7,10 @@ package ec.com.codesoft.codefaclite.main.panel;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.main.model.ObjetoEscritorioAbstract;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesSwingX;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -57,6 +59,7 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         btnFacturar = new javax.swing.JButton();
         btnAgregarProducto = new javax.swing.JButton();
         btnBuscarProducto = new javax.swing.JButton();
+        cmbTipoDocumento = new javax.swing.JComboBox<>();
         jPanel4 = new javax.swing.JPanel();
         btnEliminarProducto = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
@@ -97,7 +100,7 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
         gridBagConstraints.weightx = 0.1;
@@ -106,8 +109,9 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
 
         txtCantidadProdiucto.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
@@ -133,8 +137,9 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
 
         txtValorUnitarioProducto.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
@@ -153,7 +158,7 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         jPanel1.add(jPanel5, gridBagConstraints);
 
@@ -164,7 +169,7 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
         jPanel1.add(btnFacturar, gridBagConstraints);
@@ -174,9 +179,9 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         btnAgregarProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add2.png"))); // NOI18N
         btnAgregarProducto.setText("Agregar");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 9;
-        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
@@ -189,9 +194,17 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
         jPanel1.add(btnBuscarProducto, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
+        jPanel1.add(cmbTipoDocumento, gridBagConstraints);
 
         jTabbedPanel.addTab("Producto", new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/camion.png")), jPanel1); // NOI18N
 
@@ -407,12 +420,21 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         this.txtValorUnitarioProducto = txtValorUnitarioProducto;
     }
 
+    public JComboBox<TipoDocumentoEnum> getCmbTipoDocumento() {
+        return cmbTipoDocumento;
+    }
+
+    public void setCmbTipoDocumento(JComboBox<TipoDocumentoEnum> cmbTipoDocumento) {
+        this.cmbTipoDocumento = cmbTipoDocumento;
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable TblDetalleFactura;
     private javax.swing.JButton btnAgregarProducto;
     private javax.swing.JButton btnBuscarProducto;
     private javax.swing.JButton btnEliminarProducto;
     private javax.swing.JButton btnFacturar;
+    private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel15;
