@@ -79,6 +79,17 @@ public enum TipoDocumentoEnum {
             "Egreso Inventario Ensamble",
             TipoDocumentoEnum.AFECTA_INVENTARIO_NEGATIVO),
     
+    AGREGAR_MERCADERIA_MANUAL(ModuloCodefacEnum.INVENTARIO,
+            "AMM",
+            "Ingreso Inventario Manual",
+            TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO),
+    
+    QUITAR_MERCADERIA_MANUAL(ModuloCodefacEnum.INVENTARIO,
+            "QMM",
+            "Eliminar Inventario Manual",
+            TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO),
+    
+    
     /**
      * Tipo de documento utilizado para facturar desde el modulo acaemico
      */
