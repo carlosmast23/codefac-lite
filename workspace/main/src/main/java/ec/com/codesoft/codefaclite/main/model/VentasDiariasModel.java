@@ -25,7 +25,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -182,7 +185,6 @@ public class VentasDiariasModel extends WidgetVentasDiarias
                     cargarCliente();
                     definirFechaFacturacion();
                     FacturacionModel facturacionModel = new FacturacionModel();
-
                         panelPadre.crearVentanaCodefac(facturacionModel, true);
                         try {
                             facturacionModel.setFactura(factura);
@@ -205,10 +207,20 @@ public class VentasDiariasModel extends WidgetVentasDiarias
         fila = -1;
         banderaProducto = false;
         factura.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+        
+        //Agregar los 2 tipos de documentos disponibles para ventas diarias
+        getCmbTipoDocumento().removeAllItems();
+        List<TipoDocumentoEnum> tipoDocumentos= new ArrayList<>();
+        tipoDocumentos.add(TipoDocumentoEnum.LIBRE);
+        tipoDocumentos.add(TipoDocumentoEnum.INVENTARIO);
+        for (TipoDocumentoEnum tipoDocumento : tipoDocumentos) {
+            getCmbTipoDocumento().addItem(tipoDocumento);
+        }
     }
     
-    public void agregarDetallesFactura (FacturaDetalle facturaDetalle)
+    public boolean agregarDetallesFactura (FacturaDetalle facturaDetalle)
     {
+
         try {
             boolean agregar = true;
             if (facturaDetalle != null) {
@@ -216,29 +228,43 @@ public class VentasDiariasModel extends WidgetVentasDiarias
             } else {
                 facturaDetalle = new FacturaDetalle();
             }
+            CatalogoProducto catalogoProducto=null;
+            //Seleccionar la referencia dependiendo del tipo de documento
+            TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+            facturaDetalle.setTipoDocumento(tipoDocumentoEnum.getCodigo());
             
+            switch (tipoDocumentoEnum) 
+            {
+                case INVENTARIO: 
+                case LIBRE:
+                    facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
+                    catalogoProducto = ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getReferenciaId()).getCatalogoProducto();
+                    break;
+            }
+            if(catalogoProducto==null)
+            {
+                DialogoCodefac.mensaje("Advertencia","No esta definido el Catalogo Producto ,donde se especifica los impuestos para facturar ",DialogoCodefac.MENSAJE_INCORRECTO);
+                return false;
+            }
+            //Cargo la informacion del producto 
             facturaDetalle.setCantidad(new BigDecimal(getTxtCantidadProducto().getText()));
             facturaDetalle.setDescripcion(getTxtDescripcionProducto().getText());
             BigDecimal valorTotalUnitario = new BigDecimal(getTxtValorUnitarioProducto().getText());
             facturaDetalle.setPrecioUnitario(valorTotalUnitario.setScale(2, BigDecimal.ROUND_HALF_UP));
-            facturaDetalle.setReferenciaId(productoSeleccionado.getIdProducto());
             //facturaDetalle.setProducto(productoSeleccionado);
             facturaDetalle.setValorIce(BigDecimal.ZERO);
             facturaDetalle.setDescuento(BigDecimal.ZERO);
-            
-            //Calular el total despues del descuento porque necesito esa valor para grabar
+
+            //Calular el total despues del descuento porque necesito ese valor para grabar
             BigDecimal setTotal = facturaDetalle.getCantidad().multiply(facturaDetalle.getPrecioUnitario()).subtract(facturaDetalle.getDescuento());
             facturaDetalle.setTotal(setTotal.setScale(2, BigDecimal.ROUND_HALF_UP));
-            /**
-             * Revisar este calculo del iva para no calcular 2 veces al mostrar
-             */
-            Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getId());
-            if (producto.getCatalogoProducto().getIva().getTarifa().equals(0)) {
-                facturaDetalle.setIva(BigDecimal.ZERO);
-            } else {
-                BigDecimal iva = facturaDetalle.getTotal().multiply(obtenerValorIva()).setScale(2, BigDecimal.ROUND_HALF_UP);
-                facturaDetalle.setIva(iva);
-            }
+            
+            if (catalogoProducto.getIva().getTarifa().equals(0)) {
+                    facturaDetalle.setIva(BigDecimal.ZERO);
+                } else {
+                    BigDecimal iva = facturaDetalle.getTotal().multiply(obtenerValorIva()).setScale(2, BigDecimal.ROUND_HALF_UP);
+                    facturaDetalle.setIva(iva);
+                }
             //Solo agregar si se enviar un dato vacio
             if (agregar) {
                 factura.addDetalle(facturaDetalle);
@@ -249,8 +275,11 @@ public class VentasDiariasModel extends WidgetVentasDiarias
         } catch (RemoteException ex) {
             Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+       
+        return true;
     }
     
+
     public void limpiarValoresCamposTextos()
     {
         getTxtCantidadProducto().setText("");
@@ -288,7 +317,7 @@ public class VentasDiariasModel extends WidgetVentasDiarias
         try {
             PersonaServiceIf cliente = ServiceFactory.getFactory().getPersonaServiceIf();
             Map<String,Object> clienteMap = new HashMap<String, Object>();
-            clienteMap.put("razonSocial", "Cliente Final");
+            clienteMap.put("razonSocial", "Consumidor Final");
             this.factura.setCliente(cliente.obtenerPorMap(clienteMap).get(0));
         } catch (RemoteException ex) {
             Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -332,15 +361,11 @@ public class VentasDiariasModel extends WidgetVentasDiarias
         
         
         for (FacturaDetalle facturaDetalle : facturaDetalles) {
-            try {
-                Producto producto=ServiceFactory.getFactory().getProductoServiceIf().buscarPorId(facturaDetalle.getId());
-                if (producto. getCatalogoProducto().getIva().getTarifa() == 12) {
+                if (!facturaDetalle.getIva().equals(BigDecimal.ZERO)) {
                     this.factura.setSubtotalImpuestos(factura.getSubtotalImpuestos().add(facturaDetalle.getPrecioUnitario().multiply(facturaDetalle.getCantidad())));      
                 }
                 this.factura.setSubtotalSinImpuestos(this.factura.getSubtotalSinImpuestos().add(facturaDetalle.getPrecioUnitario().multiply(facturaDetalle.getCantidad())));
-            } catch (RemoteException ex) {
-                Logger.getLogger(VentasDiariasModel.class.getName()).log(Level.SEVERE, null, ex);
-            }
+           
         }
         
         this.factura.setSubtotalImpuestos(factura.getSubtotalImpuestos().setScale(2, BigDecimal.ROUND_HALF_UP));
