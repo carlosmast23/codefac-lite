@@ -32,7 +32,7 @@ public class SriRetencionRenta implements Serializable {
     private Long id;
 
     @Column(name = "CODIGO_SRI")
-    private Integer codigo;
+    private String codigo;
 
     @Column(name = "NOMBRE")
     private String nombre;
@@ -61,11 +61,11 @@ public class SriRetencionRenta implements Serializable {
         this.id = id;
     }
 
-    public Integer getCodigo() {
+    public String getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(Integer codigo) {
+    public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
 

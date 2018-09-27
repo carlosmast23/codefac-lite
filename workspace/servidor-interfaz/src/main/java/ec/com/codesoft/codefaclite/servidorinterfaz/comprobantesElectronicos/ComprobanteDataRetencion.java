@@ -136,8 +136,10 @@ public class ComprobanteDataRetencion implements ComprobanteDataInterface,Serial
             
             //Todo: por el momento solo guardo el 001 porque solo se emiten retenciones de facturas, pero este campo deberia guardarse para los ats supongo
             detalleComprobante.setCodDocSustento("01");
-            detalleComprobante.setNumDocSustento(retencion.getCompra().getPreimpreso().replace("-",""));
-            detalleComprobante.setFechaEmisionDocSustento(UtilidadesFecha.formatDate(retencion.getCompra().getFechaFactura(),"dd/MM/yyyy"));
+            detalleComprobante.setNumDocSustento(retencion.getPreimpresoDocumento());
+            //detalleComprobante.setNumDocSustento(retencion.getCompra().getPreimpreso().replace("-",""));
+            detalleComprobante.setFechaEmisionDocSustento(UtilidadesFecha.formatDate(retencion.getFechaEmisionDocumento(),"dd/MM/yyyy"));
+            //detalleComprobante.setFechaEmisionDocSustento(UtilidadesFecha.formatDate(retencion.getCompra().getFechaFactura(),"dd/MM/yyyy"));
             
             detalles.add(detalleComprobante);                                
         }

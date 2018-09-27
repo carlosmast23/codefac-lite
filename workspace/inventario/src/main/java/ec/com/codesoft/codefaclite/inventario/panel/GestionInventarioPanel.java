@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
+import org.jdesktop.swingx.JXDatePicker;
 
 /**
  *
@@ -273,6 +274,7 @@ public abstract class GestionInventarioPanel extends ControladorCodefacInterface
         this.txtCantidad = txtCantidad;
     }
 
+    @LimpiarAnotacion
     public JTextField getTxtPrecio() {
         return txtPrecio;
     }
@@ -281,6 +283,15 @@ public abstract class GestionInventarioPanel extends ControladorCodefacInterface
         this.txtPrecio = txtPrecio;
     }
 
+    public JXDatePicker getCmbFechaIngreso() {
+        return cmbFechaIngreso;
+    }
+
+    public void setCmbFechaIngreso(JXDatePicker cmbFechaIngreso) {
+        this.cmbFechaIngreso = cmbFechaIngreso;
+    }
+
+    
     
     
 

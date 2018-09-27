@@ -17,12 +17,16 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FechaFormatoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -95,6 +99,9 @@ public class GestionInventarioModel extends GestionInventarioPanel{
     @Override
     public void limpiar() {
         productoSeleccionado=null;
+        getCmbFechaIngreso().setDate(UtilidadesFecha.getFechaHoy());
+        getCmbBodega().setSelectedIndex(0);
+        getCmbTipoDocumento().setSelectedIndex(0);
     }
 
     @Override
@@ -178,7 +185,16 @@ public class GestionInventarioModel extends GestionInventarioPanel{
         kardexDetalle=new KardexDetalle();
         kardexDetalle.setCantidad(Integer.parseInt(getTxtCantidad().getText()));
         kardexDetalle.setPrecioUnitario(new BigDecimal(getTxtPrecio().getText()));
-        kardexDetalle.recalcularTotal();
+        kardexDetalle.recalcularTotalSinGarantia();
+        
+        //Setear el documento que esta usando el usuario 
+        TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+        kardexDetalle.setCodigoTipoDocumento(tipoDocumentoEnum.getCodigo());
+        
+        //Fecha de ingreso 
+        java.util.Date fechaUtil=getCmbFechaIngreso().getDate();
+        kardexDetalle.setFechaIngreso(new java.sql.Date(fechaUtil.getTime()));
+        
         
         
         Kardex kardex=new Kardex();

@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
@@ -48,6 +49,12 @@ public class Retencion extends ComprobanteEntity implements Serializable {
 
     @Column(name = "FECHA_EMISION")
     private Date fechaEmision;
+    
+    @Column(name = "PREIMPRESO_COMPRA")
+    private String preimpresoDocumento;
+
+    @Column(name = "FECHA_EMISION_COMPRA")
+    private Date fechaEmisionDocumento;
 
     @JoinColumn(name = "PROVEEDOR_ID")
     @ManyToOne
@@ -56,6 +63,12 @@ public class Retencion extends ComprobanteEntity implements Serializable {
     @JoinColumn(name = "COMPRA_ID")
     @ManyToOne
     private Compra compra;
+    
+    /**
+     * Variable para saber de que tipo es la retencion ejemplo si es libre o tiene referencias
+     */
+    @Column(name = "TIPO_DOCUMENTO")
+    private String tipoDocumento;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "retencion", fetch = FetchType.EAGER)
     private List<RetencionDetalle> detalles;
@@ -124,6 +137,24 @@ public class Retencion extends ComprobanteEntity implements Serializable {
         this.tipoClienteId = tipoClienteId;
     }
 
+    public String getPreimpresoDocumento() {
+        return preimpresoDocumento;
+    }
+
+    public void setPreimpresoDocumento(String preimpresoDocumento) {
+        this.preimpresoDocumento = preimpresoDocumento;
+    }
+
+    public Date getFechaEmisionDocumento() {
+        return fechaEmisionDocumento;
+    }
+
+    public void setFechaEmisionDocumento(Date fechaEmisionDocumento) {
+        this.fechaEmisionDocumento = fechaEmisionDocumento;
+    }
+    
+    
+
     public List<RetencionAdicional> getDatosAdicionales() {
         return datosAdicionales;
     }
@@ -179,6 +210,21 @@ public class Retencion extends ComprobanteEntity implements Serializable {
 
         this.datosAdicionales.add(retencionAdicional);
 
+    }
+
+    public String getTipoDocumento() {
+        return tipoDocumento;
+    }
+
+    public void setTipoDocumento(String tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
+    }
+    
+    
+    
+    public TipoDocumentoEnum getTipoDocumentoEnum()
+    {
+        return TipoDocumentoEnum.obtenerTipoDocumentoPorCodigo(tipoDocumento);
     }
 
     public RetencionAdicional obtenerDatoAdicionalPorCampo(String nombre) {

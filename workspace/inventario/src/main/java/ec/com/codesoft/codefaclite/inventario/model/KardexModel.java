@@ -228,97 +228,50 @@ public class KardexModel extends KardexPanel{
         
         listaKardex=new ArrayList<KardexData>();
         List<KardexDetalle> detalles=kardex.getDetallesKardex();
-        for (int i = 0; i < detalles.size(); i++) {
-            try {
-                KardexData kardexData=new KardexData();
-                //Vector<String> fila=new Vector<String>();
-                KardexDetalle kardexDetalle=detalles.get(i);
-                
-                //fila.add(i+""); //numeracion
-                kardexData.setDocumento(kardexDetalle.getCodigoTipoDocumentoEnum().getNombre());
-                //fila.add(kardexDetalle.getCodigoTipoDocumentoEnum().getNombre()); //tipo del documento
-                TipoDocumentoEnum tipoDocumentoEnum=kardexDetalle.getCodigoTipoDocumentoEnum();
-                
-                if(i==0) //Si es el primer registro el precio es el mismo
-                {
-                    precioUnitarioPromedio=kardexDetalle.getPrecioUnitario();
-                }
-                else //Cuando es el segundo registro empiezo a calcular el promedio
-                {
-                    precioUnitarioPromedio=precioUnitarioPromedio.add(kardexDetalle.getPrecioUnitario()).divide(new BigDecimal("2"),3,RoundingMode.HALF_UP);
-                }
-                
-                
-                switch(tipoDocumentoEnum.getModuloEnum())
-                {
-                    case FACTURACION:
-                        cantidadAcumulada-=kardexDetalle.getCantidad();
-                        precioTotalAcumulado=precioTotalAcumulado.subtract(kardexDetalle.getPrecioTotal());
-                        
-                        FacturacionServiceIf servicio=ServiceFactory.getFactory().getFacturacionServiceIf();
-                        Map<String,Object> mapParametros=new HashMap<String,Object>();
-                        mapParametros.put("id",kardexDetalle.getReferenciaDocumentoId());
-                        Factura factura=servicio.obtenerPorMap(mapParametros).get(0);
-                        kardexData.setPreimpreso(factura.getPreimpreso());
-                        //fila.add(factura.getPreimpreso());
-                        kardexData.setProveedor(factura.getCliente().getRazonSocial());
-                        //fila.add(factura.getCliente().getRazonSocial());
-                        completarFila(kardexData, tipoDocumentoEnum.getModuloEnum(), kardexDetalle, cantidadAcumulada, precioUnitarioPromedio, precioTotalAcumulado,false);
-                        break;
-                        
-                    case COMPRA:
-                        cantidadAcumulada+=kardexDetalle.getCantidad();
-                        precioTotalAcumulado=precioTotalAcumulado.add(kardexDetalle.getPrecioTotal());
-                        
-                        CompraServiceIf servicio2=ServiceFactory.getFactory().getCompraServiceIf();
-                        Map<String,Object> mapParametros2=new HashMap<String,Object>();
-                        mapParametros2.put("id",kardexDetalle.getReferenciaDocumentoId());
-                        Compra compra=servicio2.obtenerPorMap(mapParametros2).get(0);
-                        kardexData.setPreimpreso(compra.getPreimpreso());
-                        //fila.add(compra.getPreimpreso());
-                        kardexData.setProveedor(compra.getProveedor().getRazonSocial());
-                        //fila.add(compra.getProveedor().getRazonSocial());
-                        completarFila(kardexData, tipoDocumentoEnum.getModuloEnum(), kardexDetalle, cantidadAcumulada, precioUnitarioPromedio, precioTotalAcumulado,true);
-                        break;
-                        
-                        
-                    case INVENTARIO:
-                        
-                        kardexData.setDocumento("Interno"); //Todo: Revisar porque mas abajo dos paametros agregados
-                        
-                        if(tipoDocumentoEnum.equals(TipoDocumentoEnum.ENSAMBLE_INGRESO))
-                        {
-                            cantidadAcumulada += kardexDetalle.getCantidad();
-                            precioTotalAcumulado = precioTotalAcumulado.add(kardexDetalle.getPrecioTotal());
-                            
-                            /*fila.add("");
-                            fila.add("Interno");*/
-                            completarFila(kardexData, tipoDocumentoEnum.getModuloEnum(), kardexDetalle, cantidadAcumulada, precioUnitarioPromedio, precioTotalAcumulado,true);
-                            break;
-                        }
-                        else
-                        {
-                            cantidadAcumulada -= kardexDetalle.getCantidad();
-                            precioTotalAcumulado = precioTotalAcumulado.subtract(kardexDetalle.getPrecioTotal());
-                            
-                            /*fila.add("");
-                            fila.add("Interno");*/
-                            completarFila(kardexData, tipoDocumentoEnum.getModuloEnum(), kardexDetalle, cantidadAcumulada, precioUnitarioPromedio, precioTotalAcumulado,false);
-                            break;
-                            
-                        }
-                        
-                }
-                
-                listaKardex.add(kardexData);//Agregar los items a la lista de consulta
-                
-                
-            } catch (RemoteException ex) {
-                Logger.getLogger(KardexModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ServicioCodefacException ex) {
-                Logger.getLogger(KardexModel.class.getName()).log(Level.SEVERE, null, ex);
+        for (int i = 0; i < detalles.size(); i++) 
+        {
+            KardexData kardexData = new KardexData();
+            //Vector<String> fila=new Vector<String>();
+            KardexDetalle kardexDetalle = detalles.get(i);
+
+            //fila.add(i+""); //numeracion
+            kardexData.setDocumento(kardexDetalle.getCodigoTipoDocumentoEnum().getNombre());
+            //fila.add(kardexDetalle.getCodigoTipoDocumentoEnum().getNombre()); //tipo del documento
+            TipoDocumentoEnum tipoDocumentoEnum = kardexDetalle.getCodigoTipoDocumentoEnum();
+
+            if (i == 0) //Si es el primer registro el precio es el mismo
+            {
+                precioUnitarioPromedio = kardexDetalle.getPrecioUnitario();
+            } else //Cuando es el segundo registro empiezo a calcular el promedio
+            {
+                precioUnitarioPromedio = precioUnitarioPromedio.add(kardexDetalle.getPrecioUnitario()).divide(new BigDecimal("2"), 3, RoundingMode.HALF_UP);
             }
-                    
+
+            //llenar los datos adionales
+            kardexData.setPreimpreso(kardexDetalle.getPreimpreso());
+
+            kardexData.setProveedor(kardexDetalle.getRazonSocial());
+
+            //Restar o sumar la cantidad segun omo afecte el detalle en los kardex
+            if (!kardexDetalle.getCodigoTipoDocumentoEnum().getSignoInventario().equals(TipoDocumentoEnum.NO_AFECTA_INVETARIO)) {
+                //Cuando el inventario afecta de forma positiva
+                if (kardexDetalle.getCodigoTipoDocumentoEnum().getSignoInventario().equals(TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO)) {
+
+                    cantidadAcumulada += kardexDetalle.getCantidad();
+                    precioTotalAcumulado = precioTotalAcumulado.add(kardexDetalle.getPrecioTotal());
+                    completarFila(kardexData, tipoDocumentoEnum.getModuloEnum(), kardexDetalle, cantidadAcumulada, precioUnitarioPromedio, precioTotalAcumulado, true);
+                } else //Cuando afecta de forma negativa
+                {
+
+                    cantidadAcumulada -= kardexDetalle.getCantidad();
+                    precioTotalAcumulado = precioTotalAcumulado.subtract(kardexDetalle.getPrecioTotal());
+                    completarFila(kardexData, tipoDocumentoEnum.getModuloEnum(), kardexDetalle, cantidadAcumulada, precioUnitarioPromedio, precioTotalAcumulado, false);
+                }
+            }
+
+            listaKardex.add(kardexData);//Agregar los items a la lista de consulta
+                
+                                
         }
         
         construirModeloTabla();

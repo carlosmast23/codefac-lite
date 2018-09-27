@@ -42,10 +42,10 @@ create table SRI_RETENCION_RENTA
 (
     ID BIGINT not null GENERATED ALWAYS AS IDENTITY( START WITH 1),
     RETENCION_ID BIGINT,
-    NOMBRE varchar(60),
+    NOMBRE varchar(256),
     CODIGO_SRI varchar(4),
     PORCENTAJE integer,
-    DESCRIPCION varchar(120),
+    DESCRIPCION varchar(512),
     FECHA_INICIO date,
     FECHA_FIN date,
     primary key(ID)

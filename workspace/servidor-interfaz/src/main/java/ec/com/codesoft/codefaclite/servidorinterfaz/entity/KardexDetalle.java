@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -62,6 +63,23 @@ public class KardexDetalle implements Serializable ,Cloneable {
     
     @Column(name = "FECHA_INGRESO")
     private Date fechaIngreso;
+    
+    @Column(name = "RAZON_SOCIAL")
+    private String razonSocial;
+    
+    @Column(name = "NOMBRE_LEGAL")
+    private String nombreLegal;
+    
+    @Column(name = "SECUENCIAL")
+    protected Integer secuencial;
+
+    @Column(name = "PUNTO_ESTABLECIMIENTO")
+    protected String puntoEstablecimiento;
+
+    @Column(name = "PUNTO_EMISION")
+    protected String puntoEmision;
+    
+    
     
 
     @JoinColumn(name = "KARDEX_ID")
@@ -157,6 +175,47 @@ public class KardexDetalle implements Serializable ,Cloneable {
     public void setFechaIngreso(Date fechaIngreso) {
         this.fechaIngreso = fechaIngreso;
     }
+
+    public String getRazonSocial() {
+        return razonSocial;
+    }
+
+    public void setRazonSocial(String razonSocial) {
+        this.razonSocial = razonSocial;
+    }
+
+    public String getNombreLegal() {
+        return nombreLegal;
+    }
+
+    public void setNombreLegal(String nombreLegal) {
+        this.nombreLegal = nombreLegal;
+    }
+
+    public Integer getSecuencial() {
+        return secuencial;
+    }
+
+    public void setSecuencial(Integer secuencial) {
+        this.secuencial = secuencial;
+    }
+
+    public String getPuntoEstablecimiento() {
+        return puntoEstablecimiento;
+    }
+
+    public void setPuntoEstablecimiento(String puntoEstablecimiento) {
+        this.puntoEstablecimiento = puntoEstablecimiento;
+    }
+
+    public String getPuntoEmision() {
+        return puntoEmision;
+    }
+
+    public void setPuntoEmision(String puntoEmision) {
+        this.puntoEmision = puntoEmision;
+    }
+    
     
     
     
@@ -176,9 +235,20 @@ public class KardexDetalle implements Serializable ,Cloneable {
         
     }
     
+    public String getPreimpreso()
+    {
+       return UtilidadesTextos.llenarCarateresIzquierda(puntoEmision,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(puntoEstablecimiento,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(secuencial+"",9,"0");
+    }
+    
     public void recalcularTotal()
     {
         this.cantidad=(getDetallesEspecificos()!=null)?getDetallesEspecificos().size():0;
+        this.precioTotal=precioUnitario.multiply(new BigDecimal(cantidad));
+    }
+    
+    public void recalcularTotalSinGarantia()
+    {
+        //this.cantidad=(getDetallesEspecificos()!=null)?getDetallesEspecificos().size():0;
         this.precioTotal=precioUnitario.multiply(new BigDecimal(cantidad));
     }
     

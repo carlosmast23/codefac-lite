@@ -534,7 +534,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 2);
         PanelValores.add(jLabel15, gridBagConstraints);
 
-        jLabel16.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel16.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         jLabel16.setText("IVA 12%");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -557,12 +557,11 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 11;
-        gridBagConstraints.gridheight = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 2);
         PanelValores.add(jLabel18, gridBagConstraints);
 
-        lblValorTotal.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        lblValorTotal.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         lblValorTotal.setText("VALOR TOTAL");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -643,7 +642,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 10);
         PanelValores.add(lblValorIce, gridBagConstraints);
 
-        lblIva12.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblIva12.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         lblIva12.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblIva12.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -755,7 +754,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         PanelValores.add(jPanel1, gridBagConstraints);
 
         txtValorTotal.setColumns(5);
-        txtValorTotal.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtValorTotal.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         txtValorTotal.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtValorTotal.setText("0.00");
         txtValorTotal.setBorder(javax.swing.BorderFactory.createEtchedBorder(null, new java.awt.Color(255, 0, 0)));

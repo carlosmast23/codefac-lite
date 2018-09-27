@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RetencionServiceIf;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -35,32 +36,44 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
     }
 
     public Retencion grabar(Retencion entity) throws ServicioCodefacException, RemoteException {
+        
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion() throws ServicioCodefacException, RemoteException {
+                
+                //Verificar si es una retencion libre o tiene una referencia
+                if(entity.getTipoDocumentoEnum().equals(TipoDocumentoEnum.LIBRE))
+                {
+                    entity.setCompra(null); //Si es libre es decir que no guarda referencia y por tal motivo elimino porque solo debe estar enviado una temporal
+                }
+                
+                ParametroCodefacService parametroService = new ParametroCodefacService();
+                ParametroCodefac parametro = null;
+                if (parametroService.getParametroByNombre(ParametroCodefac.TIPO_FACTURACION).valor.equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra())) {
+                    //factura.setTipoFacturacion(TipoFacturacionEnumEstado.ELECTRONICA.getLetra());
+                    parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_RETENCION);
+                } else {
+                    //Estableciendo estado de facturacion manual
+                    entity.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+                    parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_RETENCION_FISICA);
+                }
 
-        EntityTransaction transaction = getTransaccion();
-        transaction.begin();
+                for (RetencionDetalle retencionDetalle : entity.getDetalles()) {
+                    entityManager.persist(retencionDetalle);
+                }
 
-        ParametroCodefacService parametroService = new ParametroCodefacService();
-        ParametroCodefac parametro = null;
-        if (parametroService.getParametroByNombre(ParametroCodefac.TIPO_FACTURACION).valor.equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra())) {
-            //factura.setTipoFacturacion(TipoFacturacionEnumEstado.ELECTRONICA.getLetra());
-            parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_RETENCION);
-        } else {
-            //Estableciendo estado de facturacion manual
-            entity.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
-            parametro = parametroService.getParametroByNombre(ParametroCodefac.SECUENCIAL_RETENCION_FISICA);
-        }
+                entityManager.persist(entity);
 
-        for (RetencionDetalle retencionDetalle : entity.getDetalles()) {
-            entityManager.persist(retencionDetalle);
-        }
+                //Aumentar el secuencial para facturar
+                parametro.valor = (Integer.parseInt(parametro.valor) + 1) + "";
+                entityManager.merge(parametro);
 
-        entityManager.persist(entity);
+            }
+        });
 
-        //Aumentar el secuencial para facturar
-        parametro.valor = (Integer.parseInt(parametro.valor) + 1) + "";
-        entityManager.merge(parametro);
-
-        transaction.commit();
+        //EntityTransaction transaction = getTransaccion();
+        //transaction.begin();        
+        //transaction.commit();
         return entity;
     }
 

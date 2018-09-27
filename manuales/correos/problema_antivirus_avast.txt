@@ -1,0 +1,26 @@
+Problema: Caused by: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+Solucion:
+Abra Avast 
+
+
+2. Haga clic en 'Configuración' (esquina superior derecha de la página) 
+
+
+3. Haga clic en 'Solución de problemas' 
+
+
+4. Haga clic en 'Redirigir configuración' 
+
+
+5. Borre todo número de puerto de cada campo 
+
+
+6. Marque 'Ignorar comunicación local' 
+
+
+7. Haga clic en 'Aceptar' 
+
+
+8. Cierre Avast ¡ 
+
+Problema resuelto!

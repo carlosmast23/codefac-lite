@@ -27,6 +27,15 @@ public enum TipoDocumentoEnum {
             TipoDocumentoEnum.NO_AFECTA_INVETARIO,
             new ModuloCodefacEnum[]{ModuloCodefacEnum.FACTURACION}),
     
+        /**
+     * Tipo de documento general que uso para clasificar alguna compra como por ejemplo en las retenciones
+     */
+    COMPRA(ModuloCodefacEnum.COMPRA, 
+            "COG", 
+            "Compra", 
+            TipoDocumentoEnum.NO_AFECTA_INVETARIO,
+            new ModuloCodefacEnum[]{ModuloCodefacEnum.COMPRA}),
+    
     /**
      * Tipo de documento que afecta al stock de los productos
      */
@@ -81,13 +90,13 @@ public enum TipoDocumentoEnum {
     
     AGREGAR_MERCADERIA_MANUAL(ModuloCodefacEnum.INVENTARIO,
             "AMM",
-            "Ingreso Inventario Manual",
+            "Ingreso Manual",
             TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO),
     
     QUITAR_MERCADERIA_MANUAL(ModuloCodefacEnum.INVENTARIO,
             "QMM",
-            "Eliminar Inventario Manual",
-            TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO),
+            "Eliminar Manual",
+            TipoDocumentoEnum.AFECTA_INVENTARIO_NEGATIVO),
     
     
     /**
@@ -159,6 +168,12 @@ public enum TipoDocumentoEnum {
     public ModuloCodefacEnum[] getModulosPermisos() {
         return modulosPermisos;
     }
+
+    public String getSignoInventario() {
+        return signoInventario;
+    }
+    
+    
     
     
     
