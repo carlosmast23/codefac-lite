@@ -376,7 +376,7 @@ public class CompraModel extends CompraPanel{
         getCmbRetencionIva().removeAllItems();
         SriRetencionIvaServiceIf sriRetencionIvaService = ServiceFactory.getFactory().getSriRetencionIvaServiceIf();
         try{
-            List<SriRetencionIva> tipoRetencionesIva = sriRetencionIvaService.obtenerTodos();
+            List<SriRetencionIva> tipoRetencionesIva = sriRetencionIvaService.obtenerTodosOrdenadoPorCodigo();
             for (SriRetencionIva tipoRetencione : tipoRetencionesIva) {
                 getCmbRetencionIva().addItem(tipoRetencione);
             }
@@ -390,7 +390,7 @@ public class CompraModel extends CompraPanel{
         getCmbRetencionRenta().removeAllItems();
         SriRetencionRentaServiceIf sriRetencionRentaService = ServiceFactory.getFactory().getSriRetencionRentaServiceIf();
         try{
-            List<SriRetencionRenta> tipoRetencionesRenta = sriRetencionRentaService.obtenerTodos();
+            List<SriRetencionRenta> tipoRetencionesRenta = sriRetencionRentaService.obtenerTodosOrdenadoPorCodigo();
             for (SriRetencionRenta sriRetencionRenta : tipoRetencionesRenta) {
                 getCmbRetencionRenta().addItem(sriRetencionRenta);
             }
