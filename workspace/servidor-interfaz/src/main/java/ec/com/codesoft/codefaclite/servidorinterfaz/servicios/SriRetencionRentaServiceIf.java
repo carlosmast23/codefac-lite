@@ -6,11 +6,13 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
+import java.rmi.RemoteException;
+import java.util.List;
 
 /**
  *
  * @author Carlos
  */
 public interface SriRetencionRentaServiceIf extends ServiceAbstractIf<SriRetencionRenta>{
-    
+    public List<SriRetencionRenta> obtenerTodosOrdenadoPorCodigo() throws RemoteException;
 }

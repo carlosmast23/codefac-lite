@@ -682,7 +682,7 @@ public class RetencionModel extends RetencionPanel{
             //Agregar los tipos de retencion Iva
             getCmbRetencionIva().removeAllItems();
             SriRetencionIvaServiceIf sriRetencionIvaService = ServiceFactory.getFactory().getSriRetencionIvaServiceIf();
-            List<SriRetencionIva> tipoRetencionesIva = sriRetencionIvaService.obtenerTodos();
+            List<SriRetencionIva> tipoRetencionesIva = sriRetencionIvaService.obtenerTodosOrdenadoPorCodigo();
             for (SriRetencionIva tipoRetencione : tipoRetencionesIva)
             {
                 getCmbRetencionIva().addItem(tipoRetencione);
@@ -691,7 +691,7 @@ public class RetencionModel extends RetencionPanel{
             //Agregar los tipos de retencion renta
             getCmbRetencionRenta().removeAllItems();
             SriRetencionRentaServiceIf sriRetencionRentaService = ServiceFactory.getFactory().getSriRetencionRentaServiceIf();
-            List<SriRetencionRenta> tipoRetencionesRenta = sriRetencionRentaService.obtenerTodos();
+            List<SriRetencionRenta> tipoRetencionesRenta = sriRetencionRentaService.obtenerTodosOrdenadoPorCodigo();
             for (SriRetencionRenta sriRetencionRenta : tipoRetencionesRenta) 
             {
                 getCmbRetencionRenta().addItem(sriRetencionRenta);

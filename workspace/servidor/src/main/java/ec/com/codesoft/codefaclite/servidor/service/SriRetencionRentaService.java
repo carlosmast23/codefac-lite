@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.SriRetencionRentaFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
 import java.rmi.RemoteException;
+import java.util.List;
 
 /**
  *
@@ -18,6 +19,11 @@ public class SriRetencionRentaService extends ServiceAbstract<SriRetencionRenta,
 
     public SriRetencionRentaService() throws RemoteException {
         super(SriRetencionRentaFacade.class);
+    }
+    
+    public List<SriRetencionRenta> obtenerTodosOrdenadoPorCodigo() throws RemoteException
+    {
+        return getFacade().obtenerTodosOrdenadoPorCodigoFacade();
     }
     
 }

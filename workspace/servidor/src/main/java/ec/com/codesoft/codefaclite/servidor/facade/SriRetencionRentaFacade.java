@@ -6,6 +6,10 @@
 package ec.com.codesoft.codefaclite.servidor.facade;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
+import java.rmi.RemoteException;
+import java.util.List;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
 
 /**
  *
@@ -15,6 +19,20 @@ public class SriRetencionRentaFacade extends AbstractFacade<SriRetencionRenta>{
 
     public SriRetencionRentaFacade() {
         super(SriRetencionRenta.class);
+    }
+    
+    public List<SriRetencionRenta> obtenerTodosOrdenadoPorCodigoFacade() throws RemoteException
+    {
+        //SriRetencionRenta srr;
+        //srr.getCodigo().get
+        try {
+            
+            String queryString = "SELECT u FROM SriRetencionRenta u order by u.codigo desc";
+            Query query = getEntityManager().createQuery(queryString);
+            return (List<SriRetencionRenta>) query.getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
     
 }

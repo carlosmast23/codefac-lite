@@ -197,7 +197,7 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weightx = 0.05;
         jPanel1.add(lblEspacio6, gridBagConstraints);
 
         jLabel17.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
