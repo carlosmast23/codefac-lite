@@ -147,10 +147,13 @@ public class RetencionModel extends RetencionPanel{
                 throw new ExcepcionCodefacLite("Cancelado eliminar");
             }
             else
-            {
-                
-            
-            
+            {   
+                try {
+                    ServiceFactory.getFactory().getRetencionServiceIf().eliminar(retencion);
+                    DialogoCodefac.mensaje("Correcto","El dato fue eliminado correctamente", DialogoCodefac.MENSAJE_CORRECTO);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
             
         }

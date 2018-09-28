@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.facade.RetencionFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
@@ -15,11 +16,14 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.RetencionServiceIf;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityTransaction;
 
 /**
@@ -76,6 +80,23 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
         //transaction.commit();
         return entity;
     }
+
+    @Override
+    public void eliminar(Retencion entity) throws RemoteException {
+        try {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion() throws ServicioCodefacException, RemoteException {
+                    entity.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
+                    entityManager.merge(entity);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(RetencionService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
 
     public List<RetencionDetalle> obtenerRetencionesReporte(Persona persona, Date fi, Date ff, SriRetencionIva iva, SriRetencionRenta renta,String tipo) {
         return retencionFacade.lista(persona, fi, ff, iva, renta,tipo);
