@@ -292,6 +292,42 @@ public class Retencion extends ComprobanteEntity implements Serializable {
     public String getPeriodoFiscal() {
         return UtilidadesFecha.obtenerMesStr(fechaEmision) + "/" + UtilidadesFecha.obtenerAnioStr(fechaEmision);
     }
+    
+    //TODO: Analizar un codigo unico para usar tambien la funcionalidad de la pantalla de factura
+    public void addDatosAdicionalCorreo(String correo,FacturaAdicional.Tipo tipoCorreo,FacturaAdicional.CampoDefectoEnum campoDefecto)
+    {
+        RetencionAdicional retencionAdicional=new RetencionAdicional();
+        retencionAdicional.setCampo(campoDefecto.getNombre());
+        retencionAdicional.setRetencion(this);
+        retencionAdicional.setTipo(tipoCorreo.getLetra());
+        retencionAdicional.setValor(correo);
+        
+        if (this.datosAdicionales == null) {
+            this.datosAdicionales = new ArrayList<RetencionAdicional>();
+        }
+        
+        //Buscar si existe un correo anterior para nombrar de forma secuencial
+        Integer numeroMaximo=0;
+        for (RetencionAdicional datoAdicional : datosAdicionales) {            
+            if(datoAdicional.getTipo().equals(tipoCorreo.getLetra()))
+            {
+                if(datoAdicional.getNumero()>numeroMaximo)
+                {
+                    numeroMaximo=datoAdicional.getNumero();
+                }
+            }
+        }
+        
+        retencionAdicional.setNumero(numeroMaximo+1);
+        //Modificar el nombre si el correo es mas de 2
+        if(retencionAdicional.getNumero()>1)
+        {
+            retencionAdicional.setCampo(campoDefecto.getNombre()+" "+retencionAdicional.getNumero());
+        }
+
+        this.datosAdicionales.add(retencionAdicional);
+    
+    }
 
 
 }

@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.facturacion.model;
+package ec.com.codesoft.codefaclite.controlador.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
-import ec.com.codesoft.codefaclite.facturacion.panel.DatoAdicionalDialog;
+import ec.com.codesoft.codefaclite.controlador.panel.DatoAdicionalDialog;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;

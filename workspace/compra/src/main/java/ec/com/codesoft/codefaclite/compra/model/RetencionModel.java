@@ -11,6 +11,8 @@ import ec.com.codesoft.codefaclite.compra.callback.RetencionImplCallBack;
 import ec.com.codesoft.codefaclite.compra.panel.RetencionPanel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
+import ec.com.codesoft.codefaclite.controlador.model.DatoAdicionalModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.corecodefaclite.views.GeneralPanelInterface;
@@ -18,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.comprobantesElectronicos.Com
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
@@ -44,6 +47,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import static java.awt.image.ImageObserver.ERROR;
+import static java.awt.image.ImageObserver.WIDTH;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -55,6 +60,8 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JasperPrint;
 
@@ -79,6 +86,7 @@ public class RetencionModel extends RetencionPanel{
     @Override
     public void iniciar() throws ExcepcionCodefacLite {
         listener();        
+        listenerPopups();
         cargarDatosIniciales();
     }
 
@@ -98,7 +106,7 @@ public class RetencionModel extends RetencionPanel{
             
             setearDatos();
             retencion=ServiceFactory.getFactory().getRetencionServiceIf().grabar(retencion);
-            DialogoCodefac.mensaje("Correcto","La retenecion fue grabada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
+            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
                     
             RetencionImplCallBack ric=new RetencionImplCallBack(retencion, this);
             ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
@@ -114,7 +122,7 @@ public class RetencionModel extends RetencionPanel{
             DialogoCodefac.mensaje("Error","Error al grabar los datos",DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {
-            DialogoCodefac.mensaje("Error","No existe comunicación con el servidor",DialogoCodefac.MENSAJE_INCORRECTO);
+            DialogoCodefac.mensaje(MensajeCodefacSistema.ErrorComunicacion.ERROR_COMUNICACION_SERVIDOR);
             Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -187,12 +195,18 @@ public class RetencionModel extends RetencionPanel{
                 JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(byteReporte);
                 panelPadre.crearReportePantalla(jasperPrint,retencion.getPreimpreso());
             } catch (RemoteException ex) {
+                DialogoCodefac.mensaje(MensajeCodefacSistema.ErrorComunicacion.ERROR_COMUNICACION_SERVIDOR);
                 Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
                 Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+        else
+        {
+            DialogoCodefac.mensaje(MensajeCodefacSistema.Impresiones.IMPRESION_SECCION_INCORRECTA);
+            
         }
     }
 
@@ -308,52 +322,66 @@ public class RetencionModel extends RetencionPanel{
         listenerBotones();
         listenerTabla();
     }
+    
+    private void actualizarDato(CompraDetalle compraDetalle,Boolean actualizar)
+    {
+         //Setear la fecha de la facutura
+        //TODO:pendiente
+
+        /////------> CREAR EL DETALLE DE LA COMPRA <--------------/////////
+        
+        //CompraDetalle compraDetalle = new CompraDetalle();
+        //compraDetalle.setDescripcion(getTxtDescripcion().getText());
+        compraDetalle.setCantidad(1);
+
+        //TODO: Revisar si solo una base imponible o debo usar 2 para mas precion con productos que no distintas base de retencion        
+        BigDecimal baseImponible = new BigDecimal(getTxtBaseImponible().getText());
+        SriRetencionIva sriRetencionIva = (SriRetencionIva) getCmbRetencionIva().getSelectedItem();
+        SriRetencionRenta sriRetencionRenta = (SriRetencionRenta) getCmbRetencionRenta().getSelectedItem();
+
+        compraDetalle.setPrecioUnitario(baseImponible);
+        compraDetalle.setDescuento(BigDecimal.ZERO);
+        ParametroCodefac parametroCodefacIva = session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO);
+        BigDecimal ivaActual = new BigDecimal(parametroCodefacIva.getValor().toString());
+
+        BigDecimal valorSriRetencionIVA = baseImponible.multiply(ivaActual).multiply(sriRetencionIva.getPorcentaje()).divide(new BigDecimal("10000"), 2, BigDecimal.ROUND_HALF_UP);
+        //compraDetalle.setValorSriRetencionIVA(baseImponible.multiply(sriRetencionIva.getPorcentaje()).divide(new BigDecimal("100"),BigDecimal.ROUND_HALF_UP));
+        compraDetalle.setValorSriRetencionIVA(valorSriRetencionIVA);
+        compraDetalle.setValorSriRetencionRenta(baseImponible.multiply(sriRetencionRenta.getPorcentaje()).divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP));
+
+        compraDetalle.setSriRetencionIva(sriRetencionIva);
+        compraDetalle.setSriRetencionRenta(sriRetencionRenta);
+
+        //Si solo se esta editado el objecto no se agrega nuevamente
+        if(!actualizar)
+        {
+            retencion.getCompra().addDetalle(compraDetalle);
+        }
+
+        cargarDatosCompra();
+
+        //retencion.getCompra().addDetalle(detalle);
+    }
 
     private void listenerBotones() {
         
         getBtnEditar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+                int filaSeleccionada = getTblDetalleRetenciones().getSelectedRow();
+                if (filaSeleccionada >= 0) {
+                    DefaultTableModel modeloTabla = (DefaultTableModel) getTblDetalleRetenciones().getModel();
+                    CompraDetalle compraDetalle=(CompraDetalle) modeloTabla.getValueAt(filaSeleccionada,0);
+                    actualizarDato(compraDetalle,true);
+                }
             }
         });
         
         getBtnAgregar().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                   
-                                //Setear la fecha de la facutura
-                //TODO:pendiente
+                   actualizarDato(new CompraDetalle(),false);
                 
-                
-                /////------> CREAR EL DETALLE DE LA COMPRA <--------------/////////
-                CompraDetalle compraDetalle=new CompraDetalle();
-                //compraDetalle.setDescripcion(getTxtDescripcion().getText());
-                compraDetalle.setCantidad(1);
-                
-                //TODO: Revisar si solo una base imponible o debo usar 2 para mas precion con productos que no distintas base de retencion        
-                BigDecimal baseImponible=new BigDecimal(getTxtBaseImponible().getText());
-                SriRetencionIva sriRetencionIva=(SriRetencionIva) getCmbRetencionIva().getSelectedItem();
-                SriRetencionRenta sriRetencionRenta=(SriRetencionRenta) getCmbRetencionRenta().getSelectedItem();
-                
-                compraDetalle.setPrecioUnitario(baseImponible);
-                compraDetalle.setDescuento(BigDecimal.ZERO);
-                ParametroCodefac parametroCodefacIva=session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO);
-                BigDecimal ivaActual=new BigDecimal(parametroCodefacIva.getValor().toString());
-                
-                BigDecimal valorSriRetencionIVA=baseImponible.multiply(ivaActual).multiply(sriRetencionIva.getPorcentaje()).divide(new BigDecimal("10000"),2,BigDecimal.ROUND_HALF_UP);
-                //compraDetalle.setValorSriRetencionIVA(baseImponible.multiply(sriRetencionIva.getPorcentaje()).divide(new BigDecimal("100"),BigDecimal.ROUND_HALF_UP));
-                compraDetalle.setValorSriRetencionIVA(valorSriRetencionIVA);
-                compraDetalle.setValorSriRetencionRenta(baseImponible.multiply(sriRetencionRenta.getPorcentaje()).divide(new BigDecimal("100"),2,BigDecimal.ROUND_HALF_UP));
-                
-                compraDetalle.setSriRetencionIva(sriRetencionIva);
-                compraDetalle.setSriRetencionRenta(sriRetencionRenta);
-                
-                retencion.getCompra().addDetalle(compraDetalle);
-                
-                cargarDatosCompra();
-                
-                //retencion.getCompra().addDetalle(detalle);
             }
         });
         
@@ -407,6 +435,40 @@ public class RetencionModel extends RetencionPanel{
             }
             
         });
+        
+        getBtnAgregarDatosAdicionales().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                DatoAdicionalModel datoAdicional=new DatoAdicionalModel();
+                datoAdicional.setVisible(true);
+                
+                String valor=datoAdicional.valor;
+                String campo=datoAdicional.campo;
+                
+                FacturaAdicional.Tipo tipoEnum=datoAdicional.tipo;
+                
+                if(retencion!=null && valor!=null && tipoEnum!=null)
+                {
+                    if(tipoEnum.equals(FacturaAdicional.Tipo.TIPO_CORREO))
+                    {
+                        retencion.addDatosAdicionalCorreo(valor,FacturaAdicional.Tipo.TIPO_CORREO,ComprobanteAdicional.CampoDefectoEnum.CORREO);
+                    }
+                    else
+                    {
+                        RetencionAdicional dato=new RetencionAdicional();
+                        dato.setCampo(campo);
+                        dato.setTipo(tipoEnum.getLetra());
+                        dato.setNumero(0);
+                        dato.setValor(valor);
+                                
+                        retencion.addDatoAdicional(dato);
+                    }
+                    cargarTablaDatosAdicionales(retencion);
+                }
+                
+            }
+        });
     }
     
     private void setearDatosCompraRetencion()
@@ -432,19 +494,25 @@ public class RetencionModel extends RetencionPanel{
     
     private void cargarTablaDatosAdicionales(Retencion retencion)
     {
-        String[] titulo={"Nombre","Valor"};
-        DefaultTableModel modelTable=new DefaultTableModel(titulo,0);
+        //String[] titulo={"Nombre","Valor"};
+        //DefaultTableModel modelTable=new DefaultTableModel(titulo,0);
+        DefaultTableModel modelTable=UtilidadesTablas.crearModeloTabla(new String[]{"","Nombre","Valor"},new Class[]{RetencionAdicional.class,String.class,String.class});
+                
         
         if(retencion.getDatosAdicionales()!=null)
         {
             for (RetencionAdicional retencionAdicional :  retencion.getDatosAdicionales())
             {
-                String[] fila={retencionAdicional.getCampo(),retencionAdicional.getValor()};
+                Object[] fila={retencionAdicional,retencionAdicional.getCampo(),retencionAdicional.getValor()};
                 modelTable.addRow(fila);
             }
         }
         
+        
         getTblDatosAdicionales().setModel(modelTable);
+        UtilidadesTablas.ocultarColumna(getTblDatosAdicionales(),0);
+        UtilidadesTablas.cambiarTamanioColumnas(getTblDatosAdicionales(),new Integer[]{0,40,100});
+        
     }
     
     /**
@@ -714,15 +782,8 @@ public class RetencionModel extends RetencionPanel{
                     CompraDetalle compraDetalle=(CompraDetalle) modeloTabla.getValueAt(filaSeleccionada,0); //Obtiene el valor de la fila seleccioanda
                     getCmbRetencionIva().setSelectedItem(compraDetalle.getSriRetencionIva());
                     getCmbRetencionRenta().setSelectedItem(compraDetalle.getSriRetencionRenta());
-                    /*
-                    for (int i = 0; i < modeloTabla.getRowCount(); i++) {
-                        CompraDetalle compraDetalle=(CompraDetalle) modeloTabla.getValueAt(0,i);
-                        
-                        if()
-                        
-                        getCmbRetencionIva().setSelectedItem(compraDetalle.getSriRetencionIva());
-                        getCmbRetencionRenta().setSelectedItem(compraDetalle.getSriRetencionRenta());
-                    }*/
+                    getTxtBaseImponible().setText(compraDetalle.getBaseImponibleRenta().toString());
+
                 }
             }
 
@@ -816,6 +877,65 @@ public class RetencionModel extends RetencionPanel{
             }
         }
         return true;
+    }
+
+    private void listenerPopups() {
+        
+        /**
+         * POP DE LA TABLA DE LAS RETENCIONES
+         */
+        JPopupMenu jpopMenu=new JPopupMenu();
+        JMenuItem jmenuEliminar = new JMenuItem("Eliminar");
+        jpopMenu.add(jmenuEliminar);
+        
+        jmenuEliminar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                int filaSeleccionada=getTblDetalleRetenciones().getSelectedRow();
+                if(filaSeleccionada>=0)
+                {
+                    
+                    CompraDetalle compraDetalle=(CompraDetalle) getTblDetalleRetenciones().getValueAt(filaSeleccionada,0);
+                    retencion.getCompra().getDetalles().remove(compraDetalle);
+                    cargarTablaRetencion();
+                }
+                else
+                {
+                    DialogoCodefac.mensaje("Advertencia","Seleccione una fila para eliminar",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                }
+                
+            }
+        });
+        
+        getTblDetalleRetenciones().setComponentPopupMenu(jpopMenu);
+        
+        /**
+         * POP UP PARA LA TABLA DE LOS DATOS ADICIONALES
+         */
+        jpopMenu=new JPopupMenu();
+        jmenuEliminar = new JMenuItem("Eliminar");
+        jpopMenu.add(jmenuEliminar);
+        
+        jmenuEliminar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int filaSeleccionada=getTblDatosAdicionales().getSelectedRow();
+                if(filaSeleccionada>=0)
+                {
+                    RetencionAdicional retencionAdicional=(RetencionAdicional)getTblDatosAdicionales().getValueAt(filaSeleccionada,0); //Obtener el objeto de la columna
+                    retencion.getDatosAdicionales().remove(retencionAdicional);
+                    cargarTablaDatosAdicionales(retencion);//Volver a cargar los datos adicionales en la tabla de la vista
+                    
+                }
+                else
+                {
+                    DialogoCodefac.mensaje("Advertencia","Seleccione una fila para eliminar",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                }
+            }
+        });
+        getTblDatosAdicionales().setComponentPopupMenu(jpopMenu);
+        
     }
 
 }

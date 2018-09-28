@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.controlador.dialog;
 
+import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogModel;
 import ec.com.codesoft.codefaclite.controlador.panel.DialogoCargando;
@@ -22,6 +23,11 @@ public abstract class DialogoCodefac {
     public static final Integer MENSAJE_CORRECTO=1;
     public static final Integer MENSAJE_INCORRECTO=2;
     public static final Integer MENSAJE_ADVERTENCIA=3;
+    
+    public static void mensaje(CodefacMsj codefacMsj) 
+    {
+        mensaje(codefacMsj.titulo,codefacMsj.mensaje,codefacMsj.modoMensaje);
+    }
     
     
     public static void mensaje(String titulo,String mensaje,Integer tipoMensaje)

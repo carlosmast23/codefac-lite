@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.facturacion.panel;
+package ec.com.codesoft.codefaclite.controlador.panel;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import javax.swing.JButton;
@@ -53,7 +53,7 @@ public class DatoAdicionalDialog extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Datos Adicionales");
         setType(java.awt.Window.Type.UTILITY);
-        getContentPane().setLayout(new java.awt.GridLayout());
+        getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
         jPanel1.setPreferredSize(new java.awt.Dimension(251, 179));
         jPanel1.setLayout(new java.awt.GridBagLayout());

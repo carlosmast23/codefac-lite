@@ -95,7 +95,6 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         btnAgregarDatosAdicionales = new javax.swing.JButton();
         jScrollPane5 = new javax.swing.JScrollPane();
         tblDatosAdicionales = new javax.swing.JTable();
-        btnQuitarDatosAdicionales = new javax.swing.JButton();
         PanelDatosAdicionales1 = new javax.swing.JPanel();
         cmbRetencionIva = new javax.swing.JComboBox<>();
         jLabel22 = new javax.swing.JLabel();
@@ -551,14 +550,6 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         gridBagConstraints.weighty = 0.1;
         PanelDatosAdicionales.add(jScrollPane5, gridBagConstraints);
 
-        btnQuitarDatosAdicionales.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/cerrar-ico.png"))); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        PanelDatosAdicionales.add(btnQuitarDatosAdicionales, gridBagConstraints);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 1;
@@ -747,7 +738,6 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnBuscarFacturaCompra;
     private javax.swing.JButton btnBuscarProveedor;
     private javax.swing.JButton btnEditar;
-    private javax.swing.JButton btnQuitarDatosAdicionales;
     private org.jdesktop.swingx.JXDatePicker cmbFechaDocumento;
     private javax.swing.JComboBox<SriRetencionIva> cmbRetencionIva;
     private javax.swing.JComboBox<SriRetencionRenta> cmbRetencionRenta;
@@ -892,14 +882,6 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
 
     public void setBtnAgregarDatosAdicionales(JButton btnAgregarDatosAdicionales) {
         this.btnAgregarDatosAdicionales = btnAgregarDatosAdicionales;
-    }
-
-    public JButton getBtnQuitarDatosAdicionales() {
-        return btnQuitarDatosAdicionales;
-    }
-
-    public void setBtnQuitarDatosAdicionales(JButton btnQuitarDatosAdicionales) {
-        this.btnQuitarDatosAdicionales = btnQuitarDatosAdicionales;
     }
 
     public JButton getBtnBuscarFacturaCompra() {
