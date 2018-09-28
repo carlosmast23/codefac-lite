@@ -26,6 +26,11 @@ import javax.persistence.Table;
 @Table(name = "SRI_RETENCION_IVA")
 public class SriRetencionIva implements Serializable{
     
+    /**
+     * Variable estatica para guardar la referencia del registro que no debe generar iva en las retenciones
+     */
+    public static final Integer CODIGO_IVA_NO_APLICA=0;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")

@@ -139,7 +139,25 @@ public class RetencionModel extends RetencionPanel{
 
     @Override
     public void eliminar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(estadoFormulario==ESTADO_EDITAR)
+        {
+            Boolean respuesta=DialogoCodefac.dialogoPregunta("Eliminar","Esta seguro que desea eliminar?",DialogoCodefac.MENSAJE_INCORRECTO);
+            if(!respuesta)
+            {
+                throw new ExcepcionCodefacLite("Cancelado eliminar");
+            }
+            else
+            {
+                
+            
+            
+            }
+            
+        }
+        else
+        {
+            DialogoCodefac.mensaje("Error","Cargue un registro para eliminar",DialogoCodefac.MENSAJE_INCORRECTO);
+        }
     }
 
     @Override
@@ -637,17 +655,22 @@ public class RetencionModel extends RetencionPanel{
         if(retencion.getCompra().getDetalles()!=null)
         {
             for (CompraDetalle compraDetalle : retencion.getCompra().getDetalles()) {
-                //Todo: Falta hacer validaciones cuando hay detalles que no requerien enviar retencion con iva 0
+                
+                //Validaciones cuando hay detalles que no requerien enviar retencion con iva 0
+                if(!compraDetalle.getSriRetencionIva().getCodigo().equals(SriRetencionIva.CODIGO_IVA_NO_APLICA))
+                {
+                    //Detalle para la retencion del iva
+                    RetencionDetalle retencionDetalleIva = new RetencionDetalle();
+                    retencionDetalleIva.setBaseImponible(compraDetalle.getBaseImponibleIva());
+                    retencionDetalleIva.setCodigoSri(compraDetalle.getSriRetencionIva().getRetencion().getCodigo());
+                    retencionDetalleIva.setCodigoRetencionSri(compraDetalle.getSriRetencionIva().getCodigo().toString());
+                    retencionDetalleIva.setPorcentajeRetener(compraDetalle.getSriRetencionIva().getPorcentaje().setScale(2, BigDecimal.ROUND_HALF_UP));
+                    retencionDetalleIva.setRetencion(retencion);
+                    retencionDetalleIva.setValorRetenido(compraDetalle.getValorSriRetencionIVA());
+                    System.out.println(compraDetalle.getValorSriRetencionIVA());       
+                    retencion.addDetalle(retencionDetalleIva);
+                }
 
-                //Detalle para la retencion del iva
-                RetencionDetalle retencionDetalleIva=new RetencionDetalle();
-                retencionDetalleIva.setBaseImponible(compraDetalle.getBaseImponibleIva());
-                retencionDetalleIva.setCodigoSri(compraDetalle.getSriRetencionIva().getRetencion().getCodigo());
-                retencionDetalleIva.setCodigoRetencionSri(compraDetalle.getSriRetencionIva().getCodigo().toString());
-                retencionDetalleIva.setPorcentajeRetener(compraDetalle.getSriRetencionIva().getPorcentaje().setScale(2,BigDecimal.ROUND_HALF_UP));
-                retencionDetalleIva.setRetencion(retencion);
-                retencionDetalleIva.setValorRetenido(compraDetalle.getValorSriRetencionIVA());
-                System.out.println(compraDetalle.getValorSriRetencionIVA());
 
                 //Detalle para la retencion de la renta
                 RetencionDetalle retencionDetalleRenta=new RetencionDetalle();
@@ -658,7 +681,7 @@ public class RetencionModel extends RetencionPanel{
                 retencionDetalleRenta.setRetencion(retencion);
                 retencionDetalleRenta.setValorRetenido(compraDetalle.getValorSriRetencionRenta());
 
-                retencion.addDetalle(retencionDetalleIva);
+                
                 retencion.addDetalle(retencionDetalleRenta);
             }
         }
@@ -765,6 +788,17 @@ public class RetencionModel extends RetencionPanel{
         {
             DialogoCodefac.mensaje("Error","No se puede enviar retenciones sin detalles", DialogoCodefac.MENSAJE_INCORRECTO);
             return false;
+        }
+        
+        TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
+        if(tipoDocumentoEnum.equals(TipoDocumentoEnum.LIBRE))
+        {
+            //System.out.println("<<"+getTxtPreimpreso().getText().replaceAll("-","")+"<<");
+            if(getTxtPreimpreso().getText().replaceAll("-","").trim().length()==0)
+            {
+                DialogoCodefac.mensaje("Error","El preimpreso de la compra no debe ser vacio",DialogoCodefac.MENSAJE_INCORRECTO);
+                return false;
+            }
         }
         return true;
     }
