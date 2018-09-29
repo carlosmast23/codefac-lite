@@ -16,6 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -95,7 +96,7 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         btnAgregarDatosAdicionales = new javax.swing.JButton();
         jScrollPane5 = new javax.swing.JScrollPane();
         tblDatosAdicionales = new javax.swing.JTable();
-        PanelDatosAdicionales1 = new javax.swing.JPanel();
+        PanelDatosDetalles = new javax.swing.JPanel();
         cmbRetencionIva = new javax.swing.JComboBox<>();
         jLabel22 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
@@ -560,9 +561,9 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 2);
         getContentPane().add(PanelDatosAdicionales, gridBagConstraints);
 
-        PanelDatosAdicionales1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Retenciones", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 11))); // NOI18N
-        PanelDatosAdicionales1.setEnabled(false);
-        PanelDatosAdicionales1.setLayout(new java.awt.GridBagLayout());
+        PanelDatosDetalles.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Retenciones", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 11))); // NOI18N
+        PanelDatosDetalles.setEnabled(false);
+        PanelDatosDetalles.setLayout(new java.awt.GridBagLayout());
 
         cmbRetencionIva.setEditable(true);
         cmbRetencionIva.setEnabled(false);
@@ -572,7 +573,7 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        PanelDatosAdicionales1.add(cmbRetencionIva, gridBagConstraints);
+        PanelDatosDetalles.add(cmbRetencionIva, gridBagConstraints);
 
         jLabel22.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel22.setText("IVA:");
@@ -581,7 +582,7 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        PanelDatosAdicionales1.add(jLabel22, gridBagConstraints);
+        PanelDatosDetalles.add(jLabel22, gridBagConstraints);
 
         jLabel19.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel19.setText("RENTA:");
@@ -590,7 +591,7 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        PanelDatosAdicionales1.add(jLabel19, gridBagConstraints);
+        PanelDatosDetalles.add(jLabel19, gridBagConstraints);
 
         cmbRetencionRenta.setEditable(true);
         cmbRetencionRenta.setEnabled(false);
@@ -600,14 +601,14 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        PanelDatosAdicionales1.add(cmbRetencionRenta, gridBagConstraints);
+        PanelDatosDetalles.add(cmbRetencionRenta, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.ipadx = 100;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        PanelDatosAdicionales1.add(txtBaseImponible, gridBagConstraints);
+        PanelDatosDetalles.add(txtBaseImponible, gridBagConstraints);
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
@@ -629,14 +630,14 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        PanelDatosAdicionales1.add(jToolBar1, gridBagConstraints);
+        PanelDatosDetalles.add(jToolBar1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        getContentPane().add(PanelDatosAdicionales1, gridBagConstraints);
+        getContentPane().add(PanelDatosDetalles, gridBagConstraints);
 
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
@@ -730,7 +731,7 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PanelDatosAdicionales;
-    private javax.swing.JPanel PanelDatosAdicionales1;
+    private javax.swing.JPanel PanelDatosDetalles;
     private javax.swing.JPanel PanelDatosNotaCredito;
     private javax.swing.JPanel PanelValores;
     private javax.swing.JButton btnAgregar;
@@ -1005,6 +1006,11 @@ public abstract class RetencionPanel extends ControladorCodefacInterface {
     public void setTxtPreimpreso(JFormattedTextField txtPreimpreso) {
         this.txtPreimpreso = txtPreimpreso;
     }
+
+    public JPanel getPanelDatosDetalles() {
+        return PanelDatosDetalles;
+    }
+    
     
     
     

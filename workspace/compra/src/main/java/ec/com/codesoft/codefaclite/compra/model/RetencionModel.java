@@ -92,7 +92,7 @@ public class RetencionModel extends RetencionPanel{
 
     @Override
     public void nuevo() throws ExcepcionCodefacLite {
-        
+        getPanelDatosDetalles().setVisible(true);
     }
 
     @Override
@@ -144,7 +144,9 @@ public class RetencionModel extends RetencionPanel{
 
     @Override
     public void editar() throws ExcepcionCodefacLite {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.NO_PERMITE_EDITAR);
+        throw new ExcepcionCodefacLite("Edicion no permitida");
+        
     }
 
     @Override
@@ -229,6 +231,7 @@ public class RetencionModel extends RetencionPanel{
             Compra compra =new Compra();
             //Todo: Completar la funcionalidad para la busqueda
             cargarDatosRetencion();
+            getPanelDatosDetalles().setVisible(false);
             
         }
         else
@@ -290,6 +293,10 @@ public class RetencionModel extends RetencionPanel{
         getCmbRetencionRenta().setSelectedIndex(0);
         
         cargarDatosEmpresa();
+        
+        
+
+        
     }
 
 //    @Override
@@ -364,6 +371,9 @@ public class RetencionModel extends RetencionPanel{
 
         //retencion.getCompra().addDetalle(detalle);
     }
+    
+    //private void setearValorRetencion()
+    //{}
 
     private void listenerBotones() {
         
@@ -426,6 +436,8 @@ public class RetencionModel extends RetencionPanel{
                 if (compraTmp != null) 
                 {                    
                     retencion.setCompra(compraTmp);
+                    retencion.setProveedor(compraTmp.getProveedor());
+                    setearDatosCompraRetencion();
                                         
                     cargarDatosCompra();
                     //Cargar dato por defecto del correo
@@ -475,6 +487,7 @@ public class RetencionModel extends RetencionPanel{
     
     private void setearDatosCompraRetencion()
     {
+        //retencion.setCompra(retencion.getCompra());
         retencion.setTelefono(retencion.getCompra().getProveedor().getTelefonoConvencional());
         retencion.setPreimpresoDocumento(retencion.getCompra().getPreimpreso());
         retencion.setRazonSocial(retencion.getProveedor().getNombresCompletos());
@@ -539,6 +552,8 @@ public class RetencionModel extends RetencionPanel{
         //Validar que solo cambia la forma de cargar cuando se carga en modo de edicion
         if(estadoFormulario.equals(ESTADO_EDITAR))
         {
+            cargarTablaSinReferencias();
+            /*
             if(retencion.getTipoDocumentoEnum().equals(TipoDocumentoEnum.LIBRE))
             {
                 cargarTablaSinReferencias();
@@ -546,7 +561,7 @@ public class RetencionModel extends RetencionPanel{
             else
             {
                 cargarTablayTotalesRetenciones();
-            }
+            }*/
         }
         else
         {
@@ -723,8 +738,21 @@ public class RetencionModel extends RetencionPanel{
         retencion.setObligadoLlevarContabilidad(session.getEmpresa().getObligadoLlevarContabilidad());
         TipoDocumentoEnum tipoDocumentoEnum=(TipoDocumentoEnum) getCmbTipoDocumento().getSelectedItem();
         retencion.setTipoDocumento(tipoDocumentoEnum.getCodigo());
-        retencion.setPreimpresoDocumento(getTxtPreimpreso().getText().replaceAll("-",""));
-        retencion.setFechaEmisionDocumento(new java.sql.Date(getCmbFechaDocumento().getDate().getTime()));
+        
+        if(tipoDocumentoEnum.equals(TipoDocumentoEnum.LIBRE))
+        {
+            //Si el tipo es libre seteo con los datos de la interfaz grafica
+            retencion.setPreimpresoDocumento(getTxtPreimpreso().getText().replaceAll("-",""));
+            retencion.setFechaEmisionDocumento(new java.sql.Date(getCmbFechaDocumento().getDate().getTime()));
+        }
+        else
+        {
+            retencion.setPreimpresoDocumento(retencion.getCompra().getPreimpreso().replaceAll("-",""));
+            retencion.setFechaEmisionDocumento(retencion.getCompra().getFechaFactura());
+        }
+                
+        
+        
         
         //Cuando la facturacion es electronica
         if(session.getParametrosCodefac().get(ParametroCodefac.TIPO_FACTURACION).getValor().equals(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.getLetra()))
