@@ -100,6 +100,15 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
                 public void transaccion() throws ServicioCodefacException, RemoteException {
                     entity.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
                     entityManager.merge(entity);
+                    
+                    //Si el documento es diferente de compras cambiar el estado a no enviado la retencion
+                    if(!entity.getTipoDocumentoEnum().equals(TipoDocumentoEnum.LIBRE))
+                    {
+                        Compra compra=entity.getCompra();
+                        compra.setEstadoRetencion(Compra.RetencionEnumCompras.NO_EMITIDO.getEstado());
+                        entityManager.merge(compra);
+                        
+                    }
                 }
             });
         } catch (ServicioCodefacException ex) {
