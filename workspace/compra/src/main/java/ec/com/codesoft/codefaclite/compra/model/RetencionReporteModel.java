@@ -532,6 +532,21 @@ public class RetencionReporteModel extends RetencionReportePanel {
     }
 
     private void listenerBotones() {
+        
+        getBtnLimpiarFechaInicial().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getDateFechaInicio().setDate(null);
+            }
+        });
+        
+        getBtnLimpiarFechaFinal().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getDateFechaFin().setDate(null);
+            }
+        });
+        
         getBtnBuscarProveedor().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -551,12 +566,20 @@ public class RetencionReporteModel extends RetencionReportePanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+
                     if (getDateFechaInicio().getDate() != null) {
                         fechaInicio = new Date(getDateFechaInicio().getDate().getTime());
+                    } else {
+                        fechaInicio = null;
                     }
+
                     if (getDateFechaFin().getDate() != null) {
                         fechaFin = new Date(getDateFechaFin().getDate().getTime());
+                    } else {
+                        fechaFin = null;
                     }
+
+                    
                     if (banderaIva == false) {
                         sriRetencionIva = (SriRetencionIva) getCmbRetencionIva().getSelectedItem();
                     }

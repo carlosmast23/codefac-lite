@@ -67,6 +67,8 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         lblEspacio1 = new javax.swing.JLabel();
         lblEspacio3 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+        btnLimpiarFechaInicial = new javax.swing.JButton();
+        btnLimpiarFechaFinal = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -218,7 +220,7 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
         gridBagConstraints.gridy = 8;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 70;
         gridBagConstraints.weightx = 0.2;
@@ -231,7 +233,7 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
         gridBagConstraints.gridy = 10;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -244,7 +246,7 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel6, gridBagConstraints);
@@ -255,7 +257,7 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
         gridBagConstraints.gridy = 9;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel7, gridBagConstraints);
@@ -310,6 +312,22 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel8, gridBagConstraints);
+
+        btnLimpiarFechaInicial.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/clear.png"))); // NOI18N
+        btnLimpiarFechaInicial.setToolTipText("limpiar fecha");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 11;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(btnLimpiarFechaInicial, gridBagConstraints);
+
+        btnLimpiarFechaFinal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/clear.png"))); // NOI18N
+        btnLimpiarFechaFinal.setToolTipText("limpiar fecha");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 11;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(btnLimpiarFechaFinal, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -434,11 +452,29 @@ public abstract class RetencionReportePanel extends ControladorCodefacInterface 
         this.cmbTipo = cmbTipo;
     }
 
+    public JButton getBtnLimpiarFechaFinal() {
+        return btnLimpiarFechaFinal;
+    }
+
+    public void setBtnLimpiarFechaFinal(JButton btnLimpiarFechaFinal) {
+        this.btnLimpiarFechaFinal = btnLimpiarFechaFinal;
+    }
+
+    public JButton getBtnLimpiarFechaInicial() {
+        return btnLimpiarFechaInicial;
+    }
+
+    public void setBtnLimpiarFechaInicial(JButton btnLimpiarFechaInicial) {
+        this.btnLimpiarFechaInicial = btnLimpiarFechaInicial;
+    }
+
     
         
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnBuscarProveedor;
+    private javax.swing.JButton btnLimpiarFechaFinal;
+    private javax.swing.JButton btnLimpiarFechaInicial;
     private javax.swing.JCheckBox chkTodos;
     private javax.swing.JCheckBox chkTodosIva;
     private javax.swing.JCheckBox chkTodosRenta;

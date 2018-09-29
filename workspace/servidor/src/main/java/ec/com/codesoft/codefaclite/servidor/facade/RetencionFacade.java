@@ -30,7 +30,7 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
     
     public List<RetencionDetalle> obtenerRetencionesReportesFacade(Persona persona, Date fi, Date ff, SriRetencionIva iva, SriRetencionRenta renta, SriRetencion sriRetencion) {
         RetencionDetalle rd;
-        //rd.getCodigoSri();
+        //rd.getCodigoRetencionSri();
         //rd.getCodigoRetencionSri();
         //rd.getRetencion().getFechaEmision();
         //rd.getRetencion().getProveedor();
@@ -56,6 +56,16 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
             queryString+=" and d.codigoSri=?5 ";
         }
         
+        if(iva!=null)
+        {
+            queryString+=" and d.codigoRetencionSri=?6 ";
+        }
+        
+        if(renta!=null)
+        {
+            queryString+=" and d.codigoRetencionSri=?7 ";
+        }
+        
         
         Query query = getEntityManager().createQuery(queryString);
         query.setParameter(1,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
@@ -79,6 +89,17 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
         {
             query.setParameter(5,sriRetencion.getCodigo());
         }
+        
+        if(iva!=null)
+        {
+            query.setParameter(6,iva.getCodigo().toString());
+        }
+        
+        if(renta!=null)
+        {
+            query.setParameter(7,renta.getCodigo().toString());
+        }
+        
         
         
         
