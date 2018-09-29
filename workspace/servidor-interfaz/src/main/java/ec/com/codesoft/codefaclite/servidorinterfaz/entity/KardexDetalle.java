@@ -237,7 +237,14 @@ public class KardexDetalle implements Serializable ,Cloneable {
     
     public String getPreimpreso()
     {
-       return UtilidadesTextos.llenarCarateresIzquierda(puntoEmision,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(puntoEstablecimiento,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(secuencial+"",9,"0");
+        if (secuencial == null) 
+        {
+            return "";
+        }
+        else
+        {
+            return UtilidadesTextos.llenarCarateresIzquierda(puntoEmision,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(puntoEstablecimiento,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(secuencial+"",9,"0");
+        }
     }
     
     public void recalcularTotal()

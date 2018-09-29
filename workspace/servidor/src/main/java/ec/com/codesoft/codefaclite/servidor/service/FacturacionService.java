@@ -27,6 +27,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudi
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -206,11 +207,17 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 //TODO: Analizar caso cuando se resta un producto especifico
                 Kardex kardex= kardexs.get(0);
                 KardexDetalle kardexDetalle=new KardexDetalle();
+                kardexDetalle.setFechaCreacion(UtilidadesFecha.getFechaHoy());
+                kardexDetalle.setFechaIngreso(UtilidadesFecha.getFechaHoy());
                 kardexDetalle.setCantidad(detalle.getCantidad().intValue());
-                kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.INVENTARIO.getCodigo());
+                kardexDetalle.setCodigoTipoDocumento(TipoDocumentoEnum.VENTA_INVENTARIO.getCodigo());
                 kardexDetalle.setPrecioTotal(detalle.getTotal());
                 kardexDetalle.setPrecioUnitario(detalle.getPrecioUnitario());
                 kardexDetalle.setReferenciaDocumentoId(detalle.getFactura().getId());
+                kardexDetalle.setPuntoEmision(detalle.getFactura().getPuntoEmision());
+                kardexDetalle.setPuntoEstablecimiento(detalle.getFactura().getPuntoEstablecimiento());
+                kardexDetalle.setSecuencial(detalle.getFactura().getSecuencial());
+                
                 kardex.addDetalleKardex(kardexDetalle);
                 
                 //Actualizar los valores del kardex

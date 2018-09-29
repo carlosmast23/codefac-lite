@@ -15,6 +15,7 @@ import java.util.Map;
  * Estos documentos son internos del sistema y me permite clasificar a que proceso
  * pertenece o con cual modulo se debe relacionar
  * @author Carlos
+ * @nota No mover los codigos anteriores porque en la basese de datos ya estan referenciados a las mismas
  */
 public enum TipoDocumentoEnum {
     
@@ -91,6 +92,11 @@ public enum TipoDocumentoEnum {
     AGREGAR_MERCADERIA_MANUAL(ModuloCodefacEnum.INVENTARIO,
             "AMM",
             "Ingreso Manual",
+            TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO),
+    
+    VENTA_INVENTARIO(ModuloCodefacEnum.INVENTARIO,
+            "VEI",
+            "Venta inventario",
             TipoDocumentoEnum.AFECTA_INVENTARIO_POSITIVO),
     
     QUITAR_MERCADERIA_MANUAL(ModuloCodefacEnum.INVENTARIO,
