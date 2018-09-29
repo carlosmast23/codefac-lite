@@ -414,9 +414,25 @@ public class Compra implements Serializable {
        return UtilidadesTextos.llenarCarateresIzquierda(puntoEmision,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(puntoEstablecimiento,3,"0")+"-"+UtilidadesTextos.llenarCarateresIzquierda(secuencial+"",9,"0");
     }
     
+    public RetencionEnumCompras getEstadoRetencionEnum()
+    {
+        return RetencionEnumCompras.getEnum(estadoRetencion);
+    }
+    
     public enum RetencionEnumCompras
     {
-        EMITIDO("E", "Emitido"), NO_EMITIDO("N", "No emitido"), SIN_CONTABILIDAD("S","Sin contabilidad");
+        /**
+         * Estado para saber si un documento ya fue enviada la retencion
+         */
+        EMITIDO("E", "Emitido"), 
+        /**
+         * Estado que indica que el documento tiene pendiente enviar la retencion
+         */
+        NO_EMITIDO("N", "No emitido"), 
+        /**
+         * Estado que 
+         */
+        SIN_CONTABILIDAD("S","Sin contabilidad");
         
         private final String estado;
         private final String nombre;

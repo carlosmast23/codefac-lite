@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.facade.RetencionFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
@@ -49,7 +50,14 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
                 //Verificar si es una retencion libre o tiene una referencia
                 if(entity.getTipoDocumentoEnum().equals(TipoDocumentoEnum.LIBRE))
                 {
-                    entity.setCompra(null); //Si es libre es decir que no guarda referencia y por tal motivo elimino porque solo debe estar enviado una temporal
+                    entity.setCompra(null); //Si es libre es decir que no guarda referencia y por tal motivo elimino la compra porque solo debe estar enviado una temporal
+                }
+                else
+                {
+                    //Actualizar la referencia de la compra para saber que la retencion ya fue enviada y no cargar de nuevo
+                    Compra compra=entity.getCompra();
+                    compra.setEstadoRetencion(Compra.RetencionEnumCompras.EMITIDO.getEstado());
+                    entityManager.merge(compra);
                 }
                 
                 ParametroCodefacService parametroService = new ParametroCodefacService();
@@ -72,6 +80,8 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
                 //Aumentar el secuencial para facturar
                 parametro.valor = (Integer.parseInt(parametro.valor) + 1) + "";
                 entityManager.merge(parametro);
+                
+                
 
             }
         });
